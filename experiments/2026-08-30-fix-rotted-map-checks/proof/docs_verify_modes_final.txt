@@ -10,3 +10,21 @@ docs_verify --audit: 1 finding(s)
 --- --coverage  rc=1
 SEAM-scratch-x-workflow.md: no Sweep: header (add when next touched)
 docs_verify --coverage: 7 seam(s) swept, 19 without a Sweep: header, 2 finding(s)
+
+=== 2026-08-30, post-review round: re-run after the D1 resolver repair ===
+--self-test  rc=0
+                  true`
+        docs_verify --audit: 2 finding(s)
+    docs_verify --self-test: ok
+--links  rc=0
+    docs_verify --links: 0 dangling reference(s), 70 document(s)
+--audit  rc=1
+    SEAM-llm-x-rules.md:54: unparseable check: a column-0 `check: opener must close with a trailing backtick, on its own line or at the end of a later line, before the next opener or the end of the file. Opener reads: '`check: test "$(python -c "import ast,pathlib; T=[ast.parse(p.read_text()) for p in pathlib.Path(\'sr'
+    docs_verify --audit: 1 finding(s)
+--coverage  rc=1
+    SEAM-schools-x-scratch.md: enforcement site not named: src/deepreason/informal/trial.py
+    SEAM-scratch-x-workflow.md: no Sweep: header (add when next touched)
+    docs_verify --coverage: 7 seam(s) swept, 19 without a Sweep: header, 2 finding(s)
+
+map-wide counts through the parser: documents 70, total checks 1250, multi-line 75
+SEAM-llm-x-verification.md Verify: ring -> 38 passed in 1.21s

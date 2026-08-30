@@ -62,3 +62,11 @@ INV-signal-contract.md:378  PASS     0.0s  ! test -d .claude/skills/dr-signals
 INV-signal-contract.md:396  PASS     1.5s  grep -q "def _lease_ceiling" src/deepreason/controller.py && pyt
 # 27 checks, 0 failed: []
 
+
+=== 2026-08-30, post-review round: SEAM-llm-x-verification.md, every check, serially ===
+  :36   rc=0     0.3s  python -c "
+  :149  rc=0     0.3s  python -c "
+  :198  rc=0     2.2s  python -m pytest tests/test_split_leg_recording.py::test_a_split
+  :262  rc=0     2.3s  python -m pytest tests/test_split_leg_recording.py::test_a_stand
+  :306  rc=0     4.1s  python experiments/2026-08-30-fix-rotted-map-checks/proof/d1_cro
+  5 checks, 0 failed: []

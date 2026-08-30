@@ -9,6 +9,15 @@ This document stands alone. It states what was asked, what was done for each of
 D1–D4, the before/after transcript for every repaired check, the cone as
 measured, every bubbled stop, and the residue.
 
+**Second round, 2026-08-30.** Independent reviewers re-ran this lane's claims
+after delivery `7fbbf2bc2` and confirmed three MAJOR defects and four minor
+ones. None was refuted; all reproduced on first attempt. §11 is the ledger of
+that round, and §§2, 7.2, 7.2a, 7.3, 7.4, 7.6, 7.7, 8, 9 and 10 carry the
+corrections in place rather than only at the end. The two that matter: D1's
+crossing check enforced two import forms out of six, and this lane's
+`docs_verify` baseline recorded the lowest of four observations as a fixed
+value.
+
 ---
 
 ## 1. What was asked
@@ -390,9 +399,10 @@ After — `proof/docs_verify_after.txt`, run on this branch:
 **All four targets are gone from the failure set.** No target's line number
 appears in the after list under any number.
 
-FINAL, and the authoritative one — `proof/docs_verify_final.txt`, run last, on
-the complete tree including the baseline and delivery edits, with the box far
-quieter:
+FINAL for the first round — `proof/docs_verify_final.txt`, run last, on the
+complete tree including the baseline and delivery edits, with the box quieter
+than the previous two runs but NOT idle (§11.3 corrects the commit message
+that called it a quiet box):
 
     docs_verify [full]: 70 documents, 1249 checks, 4 workers
     docs_verify: 5 failed
@@ -404,8 +414,42 @@ quieter:
     INV-frozen-surfaces.md:181      transport_failure census   (pre-existing)
 
 Five, matching `docs/AUDIT_BASELINES.md`'s updated table ROW FOR ROW. Both
-`SUB-application.md` rows passed in this run, which is what identifies them as
-contention artifacts rather than findings.
+`SUB-application.md` rows passed in this run.
+
+**That was one observation, and one observation was not enough.** An
+independent reviewer ran the same command on the same branch and got SIX, with
+`SUB-application.md:421` reporting `TIMEOUT after 300s`. §11.2 records the
+finding; this section records the replication it forced.
+
+### 7.2a Two fresh full runs, back to back, on the final tree
+
+`proof/docs_verify_replicate_1.txt`, `proof/docs_verify_replicate_2.txt` —
+started one after the other by a single script so nothing this lane ran could
+overlap itself, on the tree that carries every repair including the D1
+resolver fix:
+
+    RUN 1   start 04:04:50 UTC   finish 04:20:31 UTC   15 m 41 s
+            70 documents, 1250 checks, 4 workers        5 failed
+            load average 1.87 at start, 4.81 at finish
+
+    RUN 2   start 04:20:31 UTC   finish 04:33:45 UTC   13 m 14 s
+            70 documents, 1250 checks, 4 workers        5 failed
+            load average 4.81 at start, 3.77 at finish
+
+Both returned the SAME five rows — `SEAM-llm-x-rules.md:54`, the three
+`CON-run-identity.md` git-history rows, `INV-frozen-surfaces.md:181` — and
+neither `SUB-application.md` row appeared in either. BOTH runs are recorded,
+not the lower, because recording the lower is what produced the finding in the
+first place. Neither box was idle: other lanes worked throughout, and the load
+averages above are quoted rather than hidden.
+
+**What two 5s do NOT establish.** They do not make 5 the total. The reviewer's
+6 is equally real and its cause is measured: `:421` costs 161–213 s against a
+300 s ceiling and the documented command runs 4 workers on 4 CPUs, so the row
+is genuinely two-valued on this container. `docs/AUDIT_BASELINES.md` now
+records the total as **5 or 6** with `:421` as a named CONTAINER-CONDITIONAL
+row and a one-command disposition, which is what the instrument actually
+produces here.
 
 ### 7.3 Both runs were contended, and this is stated rather than hidden
 
@@ -418,22 +462,37 @@ re-run serially on the same tree minutes later:
     SUB-application.md:421   TIMEOUT after 300s (loaded)  ->  PASS in 195 s serial
     SUB-application.md:395   1 failed, 1 passed (loaded)  ->  PASS serial
 
-`SUB-application.md:421` was already parked as P19 with a measured 160.88 s on
-an idle box; `:395`'s test is a restart-timing test. Both passed in the FINAL
-run above, on the same tree, which settles it. `docs/AUDIT_BASELINES.md` now
-records both, with the rule that a `docs_verify` total taken under concurrent
-load is not admissible as a baseline.
+**This paragraph's reasoning was half right and is corrected here.** `:395`
+really is load: it costs 23.2 s and 23.0 s in two fresh serial trials
+(`proof/sub_application_check_timings.txt`) and has no margin problem at all.
+`:421` is NOT the same thing, and blaming foreign load for it was wrong. It
+costs 161–213 s across five independent serial timings against docs_verify's
+own 300 s ceiling, while the documented command runs `min(16, os.cpu_count())`
+= 4 workers on this 4-CPU box — so it self-contends, and needs no other lane
+to time out. Passing in three consecutive runs does not settle a row that a
+fourth run failed.
 
-**So the honest failure sets are 9 before and 5 after**, both on a shallow
-clone; 6 and 2 on a full clone by subtracting the three git-history rows, which
-is arithmetic and not a measurement here. The BEFORE figure of 9 is the loaded
-run's 10 minus the one contention row, corroborated by this lane's committed
-reconnaissance, which measured the same nine ids on the same tree. The AFTER
-figure of 5 was measured directly.
+`docs/AUDIT_BASELINES.md` now records `:421` as a CONTAINER-CONDITIONAL
+expected failure with its measured margin, and states the admissibility rule
+in a form this container can actually meet: no full run here has been taken on
+a proven-idle box, so a total is admissible only as a RANGE with the
+conditional row named, and every delta is disposed of by re-running the
+specific failing check alone before it is rowed. The narrowing question is
+`PARKED.md` P-D8.
+
+**So the honest failure sets are 9 before and 5-or-6 after**, both on a
+shallow clone; 6 and 2-or-3 on a full clone by subtracting the three
+git-history rows, which is arithmetic and not a measurement here. The BEFORE
+figure of 9 is the loaded run's 10 minus the one contention row, corroborated
+by this lane's committed reconnaissance, which measured the same nine ids on
+the same tree. The AFTER figure was measured directly three times as 5 (§7.2,
+§7.2a) and once, independently, as 6; the sixth row is `:421` and §7.2a says
+why both are true.
 
 ### 7.4 The other modes — `proof/docs_verify_modes_final.txt`
 
-Re-run after every edit, with each exit code captured BEFORE any pipe:
+Re-run after every edit, INCLUDING the post-review round, with each exit code
+captured BEFORE any pipe:
 
     --self-test  rc=0   ok
     --links      rc=0   0 dangling reference(s), 70 document(s)
@@ -442,7 +501,8 @@ Re-run after every edit, with each exit code captured BEFORE any pipe:
 
 `--audit` and `--coverage` exit non-zero for findings that were already there
 and are not this lane's. `proof/docs_verify_modes.txt` holds the same four
-modes measured mid-tranche; the numbers did not move between them.
+modes measured mid-tranche; the numbers did not move between them, and did not
+move again after the review round's edits.
 
 `--coverage`'s finding count did not move, which is the condition D1-e had to
 satisfy while settling the `Sweep:` ratchet by withholding the header.
@@ -450,11 +510,13 @@ satisfy while settling the `Sweep:` ratchet by withholding the header.
 Map-wide check counts, measured directly through the parser:
 
     multi-line checks: 75   (SCHEMA.md's own self-test pins this at >= 70)
-    total checks:    1249    documents: 70
+    total checks:    1250    documents: 70
 
-The net movement is **+1 check**: three checks were replaced in place (D1, D3,
-D4), one was re-pinned in place (D2), and one was added (the twin-pin check in
-`INV-frozen-surfaces.md`'s new Traps entry).
+The net movement is **+2 checks**: three checks were replaced in place (D1, D3,
+D4), one was re-pinned in place (D2), one was added (the twin-pin check in
+`INV-frozen-surfaces.md`'s new Traps entry), and one was added in the review
+round (the sixteen-form crossing table in `SEAM-llm-x-verification.md`'s new
+`Traps` entry, 4.3 s).
 
 ### 7.5 Per-check verdicts for `INV-frozen-surfaces.md` — the lane's stop condition
 
@@ -495,7 +557,11 @@ if `origin/main` resolves:
     CON-discharge-channel.md     21 checks, 0 failed
     INV-signal-contract.md       27 checks, 0 failed
 
-Every one run serially on this tree, after the repairs.
+Every one run serially on this tree, after the repairs. Re-run serially again
+after the review round, when `SEAM-llm-x-verification.md` gained its fifth
+check:
+
+    SEAM-llm-x-verification.md    5 checks, 0 failed   (:36 :149 :198 :262 :306)
 
 ### 7.7 `docs/AUDIT_BASELINES.md`
 
@@ -505,11 +571,39 @@ edit REDUCES the expected-failure list from six rows to two, adds a "REPAIRED
 2026-08-30 and no longer expected — a failure here is a REGRESSION" paragraph
 naming all four so a future audit cannot read the reduction as drift, refreshes
 the stale line numbers (`657`→ gone, `222`→ gone, `200/202/204`→`211/213/215`),
-refreshes the counts (1212/69 → 1249/70), and records the contention rows above.
+refreshes the counts (1212/69 → 1250/70), and records the contention rows above.
 
 The four repaired rows leave the baseline because they were REPAIRED and
 measured green, not because a number was edited to match a wish. The two rows
 that remain, remain.
+
+**Corrected in the review round, and this is the substantive half.** The first
+version of the entry recorded "2 failed on a full clone, 5 failed on a shallow
+one" as a fixed value, from ONE observation of an instrument that had returned
+four different totals that evening — and it recorded the lowest. It now
+records:
+
+- the total as a RANGE, **5 or 6** shallow / 2 or 3 full, because that is what
+  the documented command produces here;
+- a THIRD expected-failure row, `SUB-application.md:421`, classed
+  CONTAINER-CONDITIONAL, carrying its five measured serial timings
+  (160.88 / 182.8 / 186.9 / 195 / 213.1 s), the 300 s ceiling it runs against,
+  and the worker arithmetic (`min(16, os.cpu_count())` = 4 on 4 CPUs) that
+  makes the command self-contend;
+- a one-command disposition for that row, so an auditor settles it before
+  rowing a delta rather than after;
+- every total ever observed on this container, including the two that were
+  higher than the one first written down;
+- `:395` separated from `:421` as a different class — 23.2 s and 23.0 s
+  serially, load-sensitive, no margin problem;
+- and an ADMISSIBILITY rule this container can actually meet, replacing "a
+  total taken under concurrent load is not admissible as a baseline" — which
+  no run here, including the ones behind these figures, has ever satisfied.
+
+The range is not a weakening of the baseline. A baseline whose stated value
+the documented command does not reproduce is not a stronger claim than a range
+with a named cause; it is a claim that generates false findings on every
+future audit run.
 
 ---
 
@@ -528,9 +622,17 @@ Measured, not asserted — `git diff --name-only 152c7e204..HEAD`:
     experiments/2026-08-30-fix-rotted-map-checks/PARKED.md
     experiments/2026-08-30-fix-rotted-map-checks/proof/*
 
+The review round added three proof artifacts to that list —
+`d1_crossing_forms.py`, `docs_verify_replicate_1.txt`,
+`docs_verify_replicate_2.txt`, `sub_application_check_timings.txt` — and
+touched no document outside `SEAM-llm-x-verification.md`,
+`docs/AUDIT_BASELINES.md` and this directory.
+
 **Zero `src/`. Zero `tests/`. Zero `tools/`.** The frozen-surface branch
 tripwire passes with `origin/main` resolvable, and no path in the diff matches
-any of the seven frozen paths or the frozen-adjacent one.
+any of the seven frozen paths or the frozen-adjacent one. Every mutation in the
+review round was run in a scratch mirror of `src/`, and each transcript ends
+with `diff -rq` against the real tree plus `git status --short src tests`.
 
 Every mutation proof in this tranche was run in a scratch copy — of `src/`
 selected by `PYTHONPATH`, or of `docs/map` with `tests/` symlinked — and each
@@ -546,7 +648,7 @@ claims were checked on:
 
 | document | stamp | what was re-run |
 |---|---|---|
-| `SEAM-llm-x-verification.md` | `814268b46` → `152c7e204` | all 4 checks, serially |
+| `SEAM-llm-x-verification.md` | `814268b46` → `152c7e204` | all 5 checks, serially (4 before the review round, 5 after) |
 | `INV-frozen-surfaces.md` | `a40450f1c` → `152c7e204` | all 50 checks, serially |
 | `CON-discharge-channel.md` | `a5a435e3e` → `152c7e204` | all 21 checks, serially |
 | `INV-signal-contract.md` | `6c65f95e8` → `152c7e204` | all 27 checks, serially |
