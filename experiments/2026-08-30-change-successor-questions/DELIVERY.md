@@ -20,8 +20,9 @@ package `__init__` that is the whole interface consumers may use. `signals.py`
 declares the two receipt families with a real unit and a real staleness.
 `ontology/problem.py`'s "INERT VOCABULARY: producers = 0" comment is rewritten
 to say what is now true and what did not change. Five new test files carry 42
-tests, and eight mutation transcripts under `proof/` show each of them going red
-against the behaviour it guards. Six map documents move in the same commit,
+tests, and six mutation transcripts under `proof/` show each of those five files
+going red against the behaviour it guards; a seventh records the one predicted
+fixture change. Six map documents move in the same commit,
 including a new `DR-CON-successor-questions` and its INDEX row.
 
 Three of the operator's five parked questions are still open, and two of them
@@ -38,7 +39,7 @@ test is left RED on purpose rather than rewritten by an implementer.
 | R | Operator's words (short) | Disposition | Proof |
 |---|---|---|---|
 | R1 | "an optional field the LLM can fill in. Not enforceable." | done | `tests/test_successor_law_line.py` (8 tests, 4 pins); pins 1 and 2 mutation-proved in `proof/law_line_pin1_red.txt`, `proof/law_line_pin2_red.txt` |
-| R2 | "it goes to scratchpad by default, linked to the problem it was proposed under and visible by conjecturers" | done-with-assumption A1/A2/A3 — mechanism built and measured end to end; NO PRODUCTION DISPATCH SITE until Q3 | `tests/test_successor_questions.py` (8 tests, visibility measured through `plan_conjecture_context`); `proof/route_mutants_red.txt` |
+| R2 | "it goes to scratchpad by default, linked to the problem it was proposed under and visible by conjecturers" | done-with-assumption A1/A2/A3 — mechanism built and measured end to end; NO PRODUCTION DISPATCH SITE until Q3 | `tests/test_successor_questions.py` (9 tests, visibility measured through `plan_conjecture_context`); `proof/route_mutants_red.txt` |
 | R3 | "must function like a plugin that allows for movement elsewhere as well" | done | `tests/test_successor_registry.py` (10 tests); adding a row needs no consumer edit, mutation-proved in `proof/registry_modularity_red.txt` |
 | R4 | "build the wiring to mint ... Switch off by default" | done-with-assumption A5 — the road, the gate and the warning are built and proven; the per-run SWITCH is blocked on Q1 | `tests/test_successor_minting.py` (12 tests); `proof/minting_mutants_red.txt` |
 | R5 | (standing C8) a minted problem must never outrank the seed question | done for the TIE, parked for STRICT (Q4) | `tests/test_successor_rank_tie.py` (3 tests, both selection modes); `proof/rank_tie_red.txt` |
