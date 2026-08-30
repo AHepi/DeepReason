@@ -37,6 +37,12 @@ S3b: `test -s .../proof/law_line_pin1_red.txt` -> exit 0 : PASS
      The transcript shows the pin failing with
      `AssertionError: [('src/deepreason/scheduler/scheduler.py', 'deepreason.successor')]`
      under a mutant that reads the registry inside the LIVENESS_QUEUE rank key.
+     QUALIFIED 2026-08-30 (audit F7): that mutant IMPORTS the package by name
+     and moves no ranking, so the transcript proves the pin catches a SPELLING,
+     not that the law holds. The behavioural mutant — one that reads the routed
+     scratch block and really does move problem selection — left this pin and
+     all 42 tests green. `test_a_routed_question_does_not_move_problem_selection`
+     is what closes that gap.
 S3c: `test -s .../proof/law_line_pin2_red.txt` -> exit 0 : PASS
      `AssertionError: ['rank_bonus']` under a numeric field added to the model.
 
@@ -82,8 +88,9 @@ S13c: `python -m pytest tests/test_successor_minting.py -q` -> `12 passed in 0.1
 
 S16a: the pinned SpawnTrigger member-list + value assertion -> exit 0, printed
 `S16 ACCEPT ok` : PASS
-S16b: `git diff -- src/deepreason/ontology/problem.py | grep '^-[^-]'` -> eight
-comment lines and ONE code line. HONEST DEVIATION, stated rather than glossed:
+S16b: `git diff -- src/deepreason/ontology/problem.py | grep '^-[^-]'` -> EIGHT
+LINES IN TOTAL: seven comment lines and ONE code line. (Corrected 2026-08-30,
+audit F19: this read "eight comment lines and ONE code line", which is nine.) HONEST DEVIATION, stated rather than glossed:
 the accept criterion read "only comment lines removed, zero code lines", and the
 enum assignment line `SUCCESSOR = "successor"` appears in the diff because its
 TRAILING COMMENT ("retained for replay only") was removed — that comment had
@@ -118,8 +125,10 @@ lane owes the fan-in instead is an exact statement of what it expects to be red,
 so the difference between "predicted" and "surprising" is decidable there:
 
 **ONE test is expected RED: `tests/test_decommissioned_pipeline_stays_out.py::test_no_source_file_produces_a_successor_problem`.**
-Everything else in that file and all five tests in
-`tests/test_h1_no_spawn_from_refutation.py` are expected GREEN.
+Everything else in that file and all FOUR tests in
+`tests/test_h1_no_spawn_from_refutation.py` are expected GREEN. (Corrected
+2026-08-30, audit F17: this read "all five tests"; `grep -c "^def test_"` on
+that file returns 4.)
 
     baseline, before this tranche (SPEC.md M2):
       python -m pytest tests/test_decommissioned_pipeline_stays_out.py \
@@ -176,30 +185,59 @@ touched, and none names a vacuous check : PASS
 
 docs_verify --links: `0 dangling reference(s), 71 document(s)` : PASS
 
-`Verified-at:` was advanced to `3688713ee` on all seven touched documents
+`Verified-at:` is `bc3175394` on all seven touched documents
 (`CON-successor-questions`, `CON-criticism-source`,
 `CON-problem-layer-lifecycle`, `CON-scheduler-ranking`,
-`SEAM-ontology-x-rules`, `SEAM-rules-x-scratch`, `INDEX`) because their checks
-were actually re-run — the run pasted above executes every check in every
-document, and none of the seven appears in its failure list. The stamp names
-the commit the tree was based on, which is the convention every other document
-in `docs/map/` follows.
+`SEAM-ontology-x-rules`, `SEAM-rules-x-scratch`, `INDEX`), a commit that
+actually contains the successor package, the test files and the documents, and
+every check in all seven was re-run against it.
+
+CORRECTED 2026-08-30 (audit F31). This section previously said the stamp was
+advanced to `3688713ee` and defended it: "The stamp names the commit the tree
+was based on, which is the convention every other document in `docs/map/`
+follows." That defence was wrong on the repo's own rule and the stamp was
+FALSE, not merely stale. At `3688713ee` the successor package, the five test
+files and `CON-successor-questions.md` ITSELF do not exist — the documents'
+own `Verify:` line exits 4 there with "file or directory not found" — so those
+checks cannot have been run at that commit. `SCHEMA.md` defines the field as
+"short commit the claims were last checked against" and its rule 2 says to
+stamp the commit being made. CLAUDE.md: a stale stamp is honest, a false one is
+not.
 docs_verify --coverage: not run — no seam gained an enforcement site in this
 tranche (`crit.py`, `spawn.py` and `scheduler.py` all take a zero-line diff)
 docs_verify --stale: not run; `Verified-at:` advanced only where checks were
 re-run, and the six documents this tranche touches are exactly those.
 
-new checks added by this change: 17, counted mechanically rather than by hand —
+new checks added by this change: 24, counted mechanically rather than by hand —
 
     $ git diff 3688713ee..HEAD -- docs/map | grep -c '^+`check:'
-    17
+    24
 
-Twelve in `CON-successor-questions.md` (the modularity claim, the row-id
-absence, the interface `__all__`, the law line, the empty permitted-exception
-list, the link, the visibility, the shipped defaults, and four Traps checks)
-and five across the amended documents (`CON-criticism-source.md` row + trap,
-`SEAM-rules-x-scratch.md` rule 6 + trap, `CON-problem-layer-lifecycle.md` H1,
-`SEAM-ontology-x-rules.md` trap, `CON-scheduler-ranking.md` × 2).
+CORRECTED 2026-08-30 (audit F10, F30, F35). This read "17 ... Twelve in
+`CON-successor-questions.md` ... and five across the amended documents". The
+total 17 was reproducible; the SPLIT was wrong in both components and correct
+only by coincidence — the new document contributed NINE tool-visible checks and
+the amended documents eight. The sentence also said "five amended" where six
+were amended, and counted "four Traps checks" where the mechanical command it
+cites saw one.
+
+The reason for the gap was not arithmetic. FIVE of the new document's `check:`
+spans were INDENTED, and `tools/docs_verify.py` anchors the opener at column 0
+and drops an indented one silently — no check and no error, as its own
+self-test asserts. The document wrote fourteen checks, ran nine, and read as
+fully authenticated. All five are now at column 0 and pass.
+
+Per document, re-derived through the verifier's own parser:
+
+    CON-successor-questions      16 written, 16 parsed
+    CON-criticism-source         17          17
+    CON-problem-layer-lifecycle  22          22
+    CON-scheduler-ranking        15          15
+    SEAM-ontology-x-rules        17          17
+    SEAM-rules-x-scratch         22          22
+    INDEX                         1           1
+    ------------------------------------------------
+    total                       110         110   (0 dropped, 0 parse errors)
 
 record observables added vs sweep probes: two typed Measure families
 (`successor-question:` with three dispositions, and `successor-problem-minted`),
@@ -236,13 +274,26 @@ registry reads its selector by `getattr` and the shipped defaults hold. That is
 why the channel is provably correct today without the grant, and why the grant
 buys the ability to CHANGE a default rather than the ability to have one.
 
-## Verdict: PASS-WITH-DECLARED-RED
+## Verdict: PASS-WITH-DECLARED-RED, AND SUPERSEDED IN PART
 
 One test is red, it was predicted in writing before the code existed, and its
 fix is blocked on an operator decision this lane is forbidden to make. Every
 other acceptance check in scope passes. The diff-budget gate returns EXCEEDED
-(2486 vs 1169) and that is recorded, not trimmed away — see DELIVERY.md
-residue 3.
+(3222 vs 1169 at the delivered head, 5829 after the audit; the "2486" recorded
+here as delivered is not reproducible — audit F14) and that is recorded, not
+trimmed away — see DELIVERY.md residue 3.
+
+SUPERSEDED IN PART, 2026-08-30. This verdict was reached by the lane on its own
+evidence, without the adversarial skeptic pass every other lane in its batch
+received. That pass has now run and returned **35 reproduced findings, 3 of
+them blocking** (`FINDINGS.md`). It did not overturn the verdict — the shipped
+CODE was clean, and every penalty the skeptics built had to be added by them —
+but it falsified a good deal of the EVIDENCE recorded in this document, and
+each falsified claim is corrected in place above with its original wording kept
+beside it. A reader who trusted this document as it stood on 2026-08-30 would
+have believed the "never penalized" law was proven when it was only spelled,
+and that a map document was fully authenticated when five of its checks never
+ran. Accepted does not mean true.
 
 FAIL detail: `tests/test_decommissioned_pipeline_stays_out.py::test_no_source_file_produces_a_successor_problem`,
 `AssertionError: ['src/deepreason/successor/mint.py:88']`, caused deliberately
@@ -380,5 +431,14 @@ fixing it.
 One caution worth stating for whoever picks it up: the shell idiom
 `python -u scripts/wheel_operational_smoke.py 2>&1 | tail -8; echo "EXIT=$?"`
 reports TAIL's status, not the smoke's, and prints `EXIT=0` over a failed run.
-The measurement above was taken by redirecting to a file and capturing `$?`
-directly.
+
+CORRECTED 2026-08-30 (audit F21): the sentence that stood here — "The
+measurement above was taken by redirecting to a file and capturing `$?`
+directly" — is FALSE of the branch transcript. `proof/wheel_operational_smoke_branch.txt`
+ends in `OPERATIONAL_SMOKE_EXIT=0`, which is precisely the artefact this caution
+warns about; only the base transcript carries a real `EXIT=1`. The CONCLUSION
+survives — re-measured on the repaired tree with the status captured directly,
+the smoke exits **1** at `"stage":"continuation_resume"` with
+`"failure_kind":"assertion_failed"`, identical to base. What was wrong was the
+evidence, not the finding. The correction is appended to the transcript itself
+rather than overwriting it.
