@@ -1,0 +1,7 @@
+scratch import resolves to: /tmp/tmp6az1akcv/src/deepreason/__init__.py
+[0] unmutated scratch:                                   rc=0  
+[1] M1 carriage removed (P15 returns):                   rc=1    File "<string>", line 10, in <module> | AssertionError: carriage no longer restores the configured value -- P15 may have regressed; re-read this section
+[2] M2 pop removed (the echo leaks the field):           rc=1    File "<string>", line 9, in <module> | AssertionError
+[3] scratch restored:                                    rc=0  
+=== repo src/ untouched ===
+(clean)

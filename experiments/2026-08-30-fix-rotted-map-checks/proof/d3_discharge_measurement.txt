@@ -1,0 +1,14 @@
+=== D3 proof ===
+[1] BROKEN FORM (committed fixture, local toolchain): rc=1    Value error, V6_SIMULATION_TOOLCHAIN_REQUIRED: policy must bind one frozen toolchain [type=value_error] |     For further information visit https://errors.pydantic.dev/2.13/v/value_error
+[2] REPAIRED FORM (policy-tracking toolchain):        rc=0  
+=== what the repaired check now measures ===
+code default            : discharge-required.v1
+source config           : off
+in engine_config_json   : False
+rebuilt via manifest    : off
+compile notices         : [('ENGINE_CONFIG_FIELD_NOT_CARRIED', '/engine_config/DISCHARGE_POLICY')]
+engaged toolchain id    : python@deepreason-public-contained.v1
+policy names toolchain  : python@deepreason-public-contained.v1
+
+[3] REPAIRED FORM against an unmutated scratch src:   rc=0  
+[4] M1 (sanity: an inert edit must stay green):        rc=0  
