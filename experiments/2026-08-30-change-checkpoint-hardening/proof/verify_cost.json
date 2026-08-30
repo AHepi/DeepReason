@@ -1,0 +1,131 @@
+{
+  "max_events": 300,
+  "rows": [
+    {
+      "root": "experiments/2026-08-26-pc2-rematch/run_h3",
+      "events": 27,
+      "seconds": 0.69,
+      "ms_per_event": 25.7,
+      "violations": [],
+      "error": null
+    },
+    {
+      "root": "experiments/2026-08-26-pc2-rematch/retired-transport-timeout180-run-42ad288038dd606c",
+      "events": 31,
+      "seconds": 0.74,
+      "ms_per_event": 23.7,
+      "violations": [],
+      "error": null
+    },
+    {
+      "root": "experiments/2026-08-26-pc2-rematch/retired-truncation-cap32768-run-58fb0d20488be869",
+      "events": 62,
+      "seconds": 1.8,
+      "ms_per_event": 29.0,
+      "violations": [
+        "attempt-accounting",
+        "attempt-blobs",
+        "attempt-order",
+        "repair-metadata",
+        "repair-metadata",
+        "attempt-accounting",
+        "attempt-blobs",
+        "attempt-order",
+        "repair-metadata",
+        "repair-metadata",
+        "attempt-accounting",
+        "attempt-blobs",
+        "attempt-order",
+        "repair-metadata",
+        "repair-metadata"
+      ],
+      "error": null
+    },
+    {
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d",
+      "events": 64,
+      "seconds": 3.07,
+      "ms_per_event": 48.0,
+      "violations": [],
+      "error": null
+    },
+    {
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d",
+      "events": 79,
+      "seconds": 4.59,
+      "ms_per_event": 58.1,
+      "violations": [],
+      "error": null
+    },
+    {
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d",
+      "events": 114,
+      "seconds": 8.1,
+      "ms_per_event": 71.0,
+      "violations": [],
+      "error": null
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a",
+      "events": 161,
+      "seconds": 5.62,
+      "ms_per_event": 34.9,
+      "violations": [],
+      "error": null
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7",
+      "events": 188,
+      "seconds": 11.38,
+      "ms_per_event": 60.5,
+      "violations": [],
+      "error": null
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100",
+      "events": 276,
+      "seconds": 13.04,
+      "ms_per_event": 47.3,
+      "violations": [],
+      "error": null
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5",
+      "events": 280,
+      "seconds": 15.3,
+      "ms_per_event": 54.6,
+      "violations": [],
+      "error": null
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5",
+      "events": 285,
+      "seconds": 16.77,
+      "ms_per_event": 58.8,
+      "violations": [],
+      "error": null
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107",
+      "events": 294,
+      "seconds": 17.23,
+      "ms_per_event": 58.6,
+      "violations": [
+        "foreign-criticism",
+        "foreign-criticism",
+        "foreign-criticism",
+        "foreign-criticism",
+        "foreign-criticism"
+      ],
+      "error": null
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be",
+      "events": 300,
+      "seconds": 18.88,
+      "ms_per_event": 62.9,
+      "violations": [],
+      "error": null
+    }
+  ]
+}

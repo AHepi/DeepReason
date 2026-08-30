@@ -1,0 +1,128 @@
+{
+  "detected": 12,
+  "outcomes": {
+    "current_valid_committed / None": 4,
+    "invalid_incomplete / TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH": 12
+  },
+  "population": 16,
+  "rows": [
+    {
+      "authority_current_valid": true,
+      "authority_detail_code": null,
+      "authority_status": "current_valid_committed",
+      "forge_detected": false,
+      "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc"
+    },
+    {
+      "authority_current_valid": true,
+      "authority_detail_code": null,
+      "authority_status": "current_valid_committed",
+      "forge_detected": false,
+      "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c"
+    },
+    {
+      "authority_current_valid": true,
+      "authority_detail_code": null,
+      "authority_status": "current_valid_committed",
+      "forge_detected": false,
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7"
+    },
+    {
+      "authority_current_valid": false,
+      "authority_detail_code": "TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH",
+      "authority_status": "invalid_incomplete",
+      "forge_detected": true,
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949"
+    },
+    {
+      "authority_current_valid": false,
+      "authority_detail_code": "TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH",
+      "authority_status": "invalid_incomplete",
+      "forge_detected": true,
+      "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+    },
+    {
+      "authority_current_valid": false,
+      "authority_detail_code": "TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH",
+      "authority_status": "invalid_incomplete",
+      "forge_detected": true,
+      "root": "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf"
+    },
+    {
+      "authority_current_valid": false,
+      "authority_detail_code": "TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH",
+      "authority_status": "invalid_incomplete",
+      "forge_detected": true,
+      "root": "experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332"
+    },
+    {
+      "authority_current_valid": false,
+      "authority_detail_code": "TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH",
+      "authority_status": "invalid_incomplete",
+      "forge_detected": true,
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5"
+    },
+    {
+      "authority_current_valid": false,
+      "authority_detail_code": "TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH",
+      "authority_status": "invalid_incomplete",
+      "forge_detected": true,
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00"
+    },
+    {
+      "authority_current_valid": false,
+      "authority_detail_code": "TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH",
+      "authority_status": "invalid_incomplete",
+      "forge_detected": true,
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107"
+    },
+    {
+      "authority_current_valid": true,
+      "authority_detail_code": null,
+      "authority_status": "current_valid_committed",
+      "forge_detected": false,
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a"
+    },
+    {
+      "authority_current_valid": false,
+      "authority_detail_code": "TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH",
+      "authority_status": "invalid_incomplete",
+      "forge_detected": true,
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a"
+    },
+    {
+      "authority_current_valid": false,
+      "authority_detail_code": "TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH",
+      "authority_status": "invalid_incomplete",
+      "forge_detected": true,
+      "root": "experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346"
+    },
+    {
+      "authority_current_valid": false,
+      "authority_detail_code": "TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH",
+      "authority_status": "invalid_incomplete",
+      "forge_detected": true,
+      "root": "experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847"
+    },
+    {
+      "authority_current_valid": false,
+      "authority_detail_code": "TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH",
+      "authority_status": "invalid_incomplete",
+      "forge_detected": true,
+      "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5"
+    },
+    {
+      "authority_current_valid": false,
+      "authority_detail_code": "TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH",
+      "authority_status": "invalid_incomplete",
+      "forge_detected": true,
+      "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c"
+    }
+  ],
+  "undetected": [
+    "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+    "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a"
+  ]
+}
