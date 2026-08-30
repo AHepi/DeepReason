@@ -1,0 +1,18 @@
+=== D4 proof ===
+[1] BROKEN FORM (raw getsource text):                  rc=1    File "<string>", line 7, in <module> | AssertionError: LINEAGE_POLICIES
+[2] REPAIRED FORM (comments/docstrings stripped, AST): rc=0  
+LINEAGE_POLICIES in raw source : 1
+  ... and every occurrence is in a comment: True
+LINEAGE_POLICIES in unparsed AST: 0
+wander.decide( survives         : True
+wander.reading_from( survives   : True
+
+scratch import resolves to: /tmp/tmpsnzi442x/src/deepreason/__init__.py
+[3] REPAIRED FORM on an unmutated scratch copy:        rc=0  
+[4] M1 scheduler reaches LINEAGE_POLICIES by id:       rc=1    File "<string>", line 15, in <module> | AssertionError: LINEAGE_POLICIES
+[5] M2 reading_from call renamed away:                 rc=1    File "<string>", line 13, in <module> | AssertionError
+[6] M3 docstring names the symbols (must stay GREEN):  rc=0  
+    same M3 tree under the BROKEN form (must be RED):  rc=1    File "<string>", line 7, in <module> | AssertionError: wander_cap_v1
+[7] scratch restored:                                  rc=0  
+=== repo src/ untouched ===
+(clean)

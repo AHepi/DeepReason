@@ -1,5 +1,5 @@
 <!-- DR-INV-signal-contract -->
-Verified-at: 6c65f95e8
+Verified-at: 152c7e204
 Verify: python -m pytest tests/test_signal_contract.py tests/test_allocation_signal_consumption.py -q
 Owns: src/deepreason/signals.py, src/deepreason/allocation.py, src/deepreason/wander.py
 Seams: 
@@ -211,10 +211,18 @@ of cycles and the FROZEN row is untouched — no status, no artifact, no kind.
 
 `check: python -c "from deepreason import wander; from deepreason.config import Config; c = Config(SEED_PROBLEM_BUDGET_FLOOR=0.5); r = wander.reading_from(c, cycles=24, seed_worked=2, capability_cycles=20); assert r.seed_worked + r.other_worked + r.capability_cycles == r.cycles; d = wander.decide(c, r); assert abs(d.share - 0.5) < 1e-9 and d.engaged is False; assert wander.decide(c, wander.reading_from(c, cycles=24, seed_worked=2)).engaged is True"`
 
-Single-line, and that is load-bearing rather than a style choice: `docs_verify`
-parses a `check:` LINE BY LINE (`tools/docs_verify.py:47,75`), so a check
-spanning several lines is silently never run. Several already in this map do.
-Parked: `experiments/2026-08-28-fix-capability-cycle-share/PARKED.md` §Q1.
+Single-line, and that WAS load-bearing rather than a style choice: until
+2026-08-29 `docs_verify` parsed a `check:` line by line, so a check spanning
+several lines was dropped without a word and never once executed — and several
+in this map did span several lines, including three of the four this
+document's neighbours have since had repaired. `_read_block` now reads a multi-line block, and an opener
+the parser cannot close is reported as a loud failure instead of vanishing.
+The parked question that recorded the defect
+(`experiments/2026-08-28-fix-capability-cycle-share/PARKED.md` §Q1) is CLOSED
+by `experiments/2026-08-29-fix-docs-verify-multiline-checks/`. The paragraph
+stays because the history is the point: for the whole life of that parser, a
+claim carrying a check nobody could run read exactly like a claim carrying one
+that passed.
 `check: python -m pytest tests/test_wander_cap.py -q -k "epoch_1 or dilute or order_independent" -q`
 
 **The same strictest row, for the THIRD controller.** Allocation touches
@@ -236,17 +244,30 @@ reach the graph turns the structural check RED.
 `check: ! grep -qE "create_artifact|att_add|dep_add|Warrant|Status|from deepreason|import deepreason" src/deepreason/wander.py`
 
 **The consumer reads the interface and nothing else.** `scheduler.py` calls
-`wander.decide` and `wander.reading_from`; it never names a policy function. A
-scheduler that knew it was running `wander_cap_v1` would have to be edited to
-run anything else, which is the coupling the registry exists to prevent.
+`wander.decide` and `wander.reading_from`; it never names a policy function in
+executable code. A scheduler that knew it was running `wander_cap_v1` would
+have to be edited to run anything else, which is the coupling the registry
+exists to prevent. The qualification matters: the class DOES name
+`LINEAGE_POLICIES` once, in a comment saying that it is selected by id and
+consumed only through `wander.decide`. The claim is about what the code
+reaches, so the check below strips comments and docstrings and asserts over
+the unparsed AST.
 
 `check: python -c "
-import inspect
+import ast, inspect, textwrap
 from deepreason.scheduler.scheduler import Scheduler
-src = inspect.getsource(Scheduler)
-assert 'wander.decide(' in src and 'wander.reading_from(' in src
+# Binds CODE, not source TEXT. A comment in this class names the registry while
+# explaining that the scheduler never reaches it, and a docstring may do the
+# same; an assertion over raw source reads its own explanation as a violation.
+tree = ast.parse(textwrap.dedent(inspect.getsource(Scheduler)))
+for node in ast.walk(tree):
+    body = getattr(node, 'body', None)
+    if isinstance(body, list) and body and isinstance(body[0], ast.Expr) and isinstance(getattr(body[0], 'value', None), ast.Constant) and isinstance(body[0].value.value, str):
+        body.pop(0)
+code = ast.unparse(tree)
+assert 'wander.decide(' in code and 'wander.reading_from(' in code
 for fn in ('wander_cap_v1', 'open_lineage_v1', 'LINEAGE_POLICIES'):
-    assert fn not in src, fn
+    assert fn not in code, fn
 "`
 
 **Selection STAYS read-only.** The decision is computed and STASHED inside
