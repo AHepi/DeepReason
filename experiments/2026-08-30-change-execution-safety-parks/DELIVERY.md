@@ -275,3 +275,139 @@ making.
   (`experiments/2026-08-29-ultracode-batch-2/SETUP.md`: no `OLLAMA_API_KEY`, no
   `env` file). Every measurement here is local process behaviour, which is what
   the property is about.
+
+---
+
+# E2 — P6: the documented gate needs two dependencies the documented install does not declare
+
+Started only after E1 was committed and pushed (`9db91d2cc`), per the lane's
+sequencing rule.
+
+## What was asked
+
+`experiments/2026-08-27-change-execution-safety/PARKED.md:278-288` states the
+defect; the parent's brief narrowed E2 to **DOCS ONLY**, in two parts:
+(a) record the fresh-container install gap where CLAUDE.md's Environment section
+will actually be read, verifying what `pyproject.toml` declares and citing it;
+(b) correct the stale `~3100 passed` baseline by pointing at
+`docs/AUDIT_BASELINES.md` as the LIVING source rather than by writing a number
+that rots again.
+
+## The facts, verified in-tree — not taken from the brief
+
+| claim | verified how |
+|---|---|
+| `pyproject.toml` declares exactly three runtime dependencies: `pydantic>=2.7`, `pyyaml>=6.0`, `fastembed>=0.3` | `pyproject.toml:11-21`, read this session |
+| its `dev` extra is exactly `pytest>=8.0` and `ruff>=0.4` | `pyproject.toml:23-27` |
+| `pyproject.toml` is the SOLE declaration — no `setup.py`, no `setup.cfg` | `ls` on both paths: no such file |
+| `pytest-xdist` is not declared, and is not an import anywhere — the `-n 4` flag alone needs it | absent from `pyproject.toml`; no `xdist` import in `tests/` |
+| `jsonschema` is not declared and is imported at exactly one site | `grep -rn "import jsonschema" tests src tools scripts mini` → one hit, `tests/test_schema_carries_every_prose_rule.py:170` |
+| the gap is measured, not inferred | `experiments/2026-08-27-change-execution-safety/DELIVERY.md:127-152` (`1 failed, 4334 passed`, `ModuleNotFoundError: No module named 'jsonschema'`) and `experiments/2026-08-29-ultracode-batch-2/SETUP.md` (`ModuleNotFoundError: No module named 'xdist'` after the documented install, on the container this batch ran on) |
+| `docs/AUDIT_BASELINES.md`'s full-gate baseline is `0 failed` with NO passed count | `docs/AUDIT_BASELINES.md:14-24` |
+| that file already carries the exact remedy line, and CLAUDE.md never pointed at it | `docs/AUDIT_BASELINES.md:49-56` |
+
+**The gap could NOT be reproduced live in this container, and no attempt was
+made to manufacture one.** Both packages are already installed here —
+`jsonschema 4.26.0`, `xdist 3.8.0`, measured this session. Uninstalling them to
+produce an error would have broken four sibling lanes sharing the box. The claim
+is therefore argued from `pyproject.toml` plus the two recorded reproductions,
+and is labelled as such.
+
+## What shipped
+
+Both edits are to `CLAUDE.md`, and to nothing else.
+
+**(a) Environment section.** The resync block a rolled-back session actually
+pastes gains the install line, plus a paragraph immediately after it that names
+what `pyproject.toml` declares with line numbers, names the two missing
+packages and why each is needed, cites both recorded reproductions, points at
+`docs/AUDIT_BASELINES.md:49-56` for the remedy already written there, and states
+plainly that the declaration is UNFIXED and parked. The paragraph opens by
+answering the reader's question before explaining it: *"That second install line
+is not belt-and-braces; the install above is insufficient for the gate below."*
+
+**(b) Build and test.** `~3100 passed` and `~8 min` are both gone. The block now
+carries the same install line and reads:
+
+    pytest tests/ -q -n 4                       # full gate, ~14 min
+                                                # 0 failed is the baseline.
+                                                # The passed count moves every
+                                                # tranche -- do not pin one
+                                                # here. docs/AUDIT_BASELINES.md
+                                                # is the living source, and
+                                                # names the flaky set too.
+
+**Why a pointer and not a fresh number.** Any literal is stale on arrival: 4334
+(2026-08-27), 4364, 4374 (2026-08-28), 4486 (batch 1's close), 4491 collected in
+this worktree today. `~8 min` was stale by the same mechanism — three recorded
+full-gate runs took 13:43, 14:35 and 16:34. The pointer is phrased as *"0 failed
+is the baseline … AUDIT_BASELINES.md is the living source"*, which is accurate
+today: that file's full-gate bullet states `0 failed` and deliberately carries no
+passed count, so the pointer does not dangle.
+
+## Done-criteria, as measured
+
+    $ grep -c '3100' CLAUDE.md                     0
+    $ grep -c '~8 min' CLAUDE.md                   0
+    $ grep -c 'pytest-xdist' CLAUDE.md             3
+    $ grep -c 'jsonschema' CLAUDE.md               5
+    $ grep -n 'AUDIT_BASELINES' CLAUDE.md          37, 151, 194
+                                                   (151 = Environment, 194 = Build and test)
+
+## The fork this lane priced and did NOT decide
+
+`PARKED.md` **S5** carries it in full, as a ready-to-send prompt with a table.
+In short:
+
+* **Road A — document the gap.** Shipped here. Cost: one doc edit. Leaves the
+  install still insufficient; a fresh container still needs the extra line, it
+  just knows to.
+* **Road B — declare the dependencies** in `pyproject.toml`'s `dev` extra.
+  Outside E2's docs-only scope. This is the root cause, and the census is
+  already done and small: `jsonschema` is the ONLY undeclared third-party import
+  in `tests/` and `mini/`, and `pytest-xdist` is not an import at all.
+* **Road C — delete the redundant bare `import jsonschema`** at
+  `tests/test_schema_carries_every_prose_rule.py:170`, which defeats the
+  `pytest.importorskip("jsonschema", …)` twelve lines below at `:182`. That
+  guard has never been able to run. Deleting the one line makes the suite run
+  without `jsonschema` at all.
+
+They are not exclusive; **B + C together make A merely historical**.
+**Recommendation: do B and C, keep A** — B is the root cause, C is a defect in
+that test on its own terms regardless of what `pyproject.toml` says, and A is
+what a rolled-back container actually reads.
+
+**Road C was NOT implemented.** The parent's brief is explicit that C is a
+`tests/` edit and therefore sits inside E1's scope, and that if implemented it
+must ride E1's commit and be said so. This lane did not implement it, because
+E1's own authority (P4) is "every containment property … is pinned by a
+DIFFERENTIAL", and a `jsonschema` import in a schema-prose test is not a
+containment property — folding it into E1 would have put an unrelated change in
+a commit whose message is about the sandbox. Stated here rather than silently
+dropped: **P6 is PARTIALLY discharged. The gap is documented, not closed.**
+
+## The cone, as measured
+
+    $ git diff --name-only          (after the E1 commit)
+    CLAUDE.md
+    experiments/2026-08-30-change-execution-safety-parks/DELIVERY.md
+
+No frozen path, no `src/`, no `tests/`, no `pyproject.toml`.
+
+## Honest residue for E2
+
+* **The install is still insufficient.** Road A changes what a reader knows, not
+  what `pip` does. Until B ships, every fresh container pays the extra line.
+* **`~14 min` is itself an estimate**, taken from three recorded runs (13:43,
+  14:35, 16:34) and not from a run this lane made. It will drift like `~8 min`
+  did; unlike a passed count, a wall-clock hint has no living source to point at.
+* **`docs/AUDIT_BASELINES.md` was NOT edited.** Recording a freshly measured
+  passed count there was optional and conditional on this tranche running a full
+  gate. It did not. A collection count (4491 in this worktree today) is not a run
+  count, and writing one would have been exactly the rot this edit exists to
+  stop. The baseline stays at `0 failed`.
+* **No `docs_verify` check covers CLAUDE.md**, so neither edit is mechanically
+  enforced. Nothing will go red if `~14 min` rots or if road B lands and leaves
+  the extra install line stranded. The S5 prompt therefore instructs the tranche
+  that ships B to delete the line rather than leave two instructions that
+  disagree.

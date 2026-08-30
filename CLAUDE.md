@@ -130,7 +130,31 @@ background processes and deleting gitignored files. After any gap:
     git log --oneline -1        # stale head? resync:
     git fetch origin <branch> && git checkout -B <branch> origin/<branch>
     which deepreason || pip install -e . --break-system-packages -q
+    python -m pip install pytest pytest-xdist jsonschema \
+        --break-system-packages -q   # the GATE's own deps; see below
     ls experiments/live_research_*/env   # gitignored credential file
+
+**That second install line is not belt-and-braces; the install above is
+insufficient for the gate below.** `pyproject.toml` declares three runtime
+dependencies (`pydantic`, `pyyaml`, `fastembed` — lines 11-21) and a `dev`
+extra of `pytest` and `ruff` only (lines 23-27). The documented gate needs
+two more that appear nowhere in it: `pytest-xdist`, which the `-n 4` flag
+requires and which nothing imports, and `jsonschema`, imported at exactly
+one site (`tests/test_schema_carries_every_prose_rule.py:170`). A fresh
+container that runs only the documented install and then the documented
+gate gets one failure that LOOKS like a code defect and is not. Measured
+twice: `1 failed, 4334 passed` on `ModuleNotFoundError: No module named
+'jsonschema'` (`experiments/2026-08-27-change-execution-safety/
+DELIVERY.md:127-152`), and `ModuleNotFoundError: No module named 'xdist'`
+after the documented install on the 2026-08-29 container
+(`experiments/2026-08-29-ultracode-batch-2/SETUP.md`). The same remedy line
+is already spelled out at `docs/AUDIT_BASELINES.md:49-56`, where it is
+stated as a precondition for trusting any docs_verify total — that file
+also records the cost of getting the interpreter/pip pairing wrong: 502
+failures, none of them real. The declaration itself is UNFIXED and parked
+(`experiments/2026-08-30-change-execution-safety-parks/PARKED.md` S5,
+which prices the three roads); this note documents the gap, it does not
+close it.
 
 The `env` file (OLLAMA_API_KEY=...) is gitignored and never committed;
 recreate it from the operator's handover if missing. Because work can
@@ -158,8 +182,18 @@ says so — `deepreason results` prints `embedder: hashing (fallback)`.
 
     pip install -e . --break-system-packages    # editable install; the
                                                 # CLI and live runs share it
-    pytest tests/ -q -n 4                       # full gate, ~8 min
-                                                # expect ~3100 passed, 0 failed
+    python -m pip install pytest pytest-xdist jsonschema \
+        --break-system-packages                 # the gate's OWN deps --
+                                                # pyproject declares neither
+                                                # xdist nor jsonschema; see
+                                                # the Environment section
+    pytest tests/ -q -n 4                       # full gate, ~14 min
+                                                # 0 failed is the baseline.
+                                                # The passed count moves every
+                                                # tranche -- do not pin one
+                                                # here. docs/AUDIT_BASELINES.md
+                                                # is the living source, and
+                                                # names the flaky set too.
 
 Iterate on the RING, gate at the BOUNDARY. The full suite is a gate, not a
 feedback loop: run the affected test files while iterating, and the whole
