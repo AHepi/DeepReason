@@ -119,10 +119,47 @@ this lane's in-scope list. `src/deepreason/config.py`,
 
 ## Full gate
 
-NOT RUN IN THIS LANE, and deliberately: the batch runs ONE full gate at fan-in
-on an idle box (`experiments/2026-08-29-ultracode-batch-2/SETUP.md`). What this
-lane owes the fan-in instead is an exact statement of what it expects to be red,
-so the difference between "predicted" and "surprising" is decidable there:
+RUN 2026-08-30 by the pickup window, on an idle box, after the audit repairs:
+
+    $ python -m pytest tests/ -q -n 4
+    FAILED tests/test_decommissioned_pipeline_stays_out.py::test_no_source_file_produces_a_successor_problem
+    1 failed, 4541 passed, 6 skipped in 893.56s (0:14:53)
+
+**The one failure is the declared one and there is no other.** The count
+reconciles exactly against the batch's own last measurement: the lanes C/B2
+fan-in recorded 4486 passed; this lane adds 42 tests as delivered and 13 more
+from the audit repair, giving 4541. No assertion was weakened anywhere to reach
+it, and every test the repair added was watched going RED under the mutation it
+guards before it was allowed to count.
+
+    $ python tools/docs_verify.py
+    docs_verify [full]: 71 documents, 1272 checks, 4 workers
+    docs_verify: 10 failed
+
+Judged against `docs/AUDIT_BASELINES.md` IN THIS TREE, which states 6 expected
+failures on a full clone and 9 on a shallow one;
+`git rev-parse --is-shallow-repository` is `true` here, so the baseline is 9.
+Observed 10, and the tenth is declared:
+
+| observed | disposition |
+|---|---|
+| `SEAM-llm-x-verification.md:19` | baseline, claim rotted (parked P1) |
+| `INV-frozen-surfaces.md:734` | baseline, stale digest pin (parked P2); sat at `:657`, moved by document growth |
+| `SEAM-llm-x-rules.md:54` | baseline, check malformed (parked P3) |
+| `INV-signal-contract.md:243` | baseline, check imprecise (parked P4); sat at `:222` |
+| `CON-discharge-channel.md:150` | baseline, check unreachable (parked P5) |
+| `INV-frozen-surfaces.md:181` | baseline, falsified census |
+| `CON-run-identity.md:211`, `:213`, `:215` | baseline, shallow clone only; sat at `:200/:202/:204` |
+| `SUB-rules.md:198` | **the declared red** — it runs the Q5-gated tripwire test |
+
+**Delta beyond the declared red: ZERO.** None of the seven documents this
+tranche touches appears in the failure list. The instrument itself grew with
+the tranche, 69 documents / 1212 checks at the recorded baseline to 71 / 1272
+here — and five of that growth are the checks that were written but never ran
+until the audit repair un-indented them.
+
+The statement below is what the lane owed the fan-in BEFORE this gate ran, and
+is kept because it was written in advance and was correct:
 
 **ONE test is expected RED: `tests/test_decommissioned_pipeline_stays_out.py::test_no_source_file_produces_a_successor_problem`.**
 Everything else in that file and all FOUR tests in
