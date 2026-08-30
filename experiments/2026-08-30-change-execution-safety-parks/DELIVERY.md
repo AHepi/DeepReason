@@ -282,12 +282,14 @@ finding, and it is not this document's** — `SEAM-llm-x-rules.md:54`, an
 unparseable opener last touched by `2bc7cfef9`, outside this batch's diff. The
 `:211` check parses and is not flagged vacuous.
 
-The stamp then moves in a second, stamp-only commit, and the reason is stated
-rather than hidden: the stamp names the commit whose tree the 32 checks ran
-against, and a commit cannot contain its own sha. The map CONTENT — the Trap
-text and the check — ships in the same commit as the tests it guards, which is
-what CLAUDE.md's same-commit law is for; only the self-referential stamp lags by
-one commit.
+The stamp then moves to `8122970b9` in a second, stamp-only commit, and the
+reason is stated rather than hidden: the stamp names the commit whose tree the 32
+checks ran against, and a commit cannot contain its own sha. The checks were
+re-run at `8122970b9` with a clean tree and produced a transcript
+byte-identical to the committed `proof/sub_verification_checks.out`. The map
+CONTENT — the Trap text and the check — ships in the same commit as the tests it
+guards, which is what CLAUDE.md's same-commit law is for; only the
+self-referential stamp lags by one commit.
 
 **The FULL `python tools/docs_verify.py` was attempted and did NOT complete.**
 It ran for 20 minutes and was killed by its own `timeout 1200` (exit 143) with
