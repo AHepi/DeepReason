@@ -53,9 +53,12 @@ level rather than by substring:
       invariants.py            HashingEmbedder              function-local
       verification/report.py   route_fingerprint            function-local
 
-    llm -> verification      0, in every form: absolute, relative, plain import
+    llm -> verification      0, in every form: dotted absolute, dotted
+                             relative, package-leaf absolute, package-leaf
+                             relative, plain import, and each of those written
+                             inside a function
       (prefixes tested: deepreason.invariants, deepreason.verification,
-       deepreason.signals_read)
+       deepreason.signals_read; 16 planted forms, proof/d1_crossing_forms.py)
 
 So the true relationship is **asymmetric, not absent**. The seventh crossing —
 `verification/report.py` — was missed by the predecessor tranche's own finding,
@@ -69,6 +72,17 @@ the empty direction included, because an assertion that something stays absent
 is the only thing that keeps it absent. The document says in prose that the
 set is deliberately brittle, so the next author widens it on purpose rather
 than deleting the check.
+
+**The first version of that replacement check did not enforce what this
+section claimed for it, and that is recorded in full in §11.** It resolved an
+`ImportFrom` on its module path alone, so nine of sixteen planted import forms
+passed it GREEN — including `from deepreason import invariants`, the leaf form
+`src/` itself uses 29 times across 24 files. The state claim above was never
+in doubt (the reverse direction is genuinely empty, re-confirmed under all
+sixteen forms); what was over-claimed was the ENFORCEMENT. The check now
+resolves each alias both ways and carries the module-level/function-local flag
+on every crossing, and the sixteen-form table is committed beside it as
+`proof/d1_crossing_forms.py` and wired in as a check of its own.
 
 **The frozen code was not touched.** Both verification-side files are frozen
 surface 3 and `llm/firewall.py` is frozen-ADJACENT. Removing the import to
@@ -110,6 +124,12 @@ M3 is the one that matters most for the check's durability: a relative import
 (`from ..verification.report import ...`) is exactly what a substring grep
 walks past, and `SCHEMA.md`'s check-writing rule 3 records that this has
 already cost a seam its core dependency-arrow claim once.
+
+**That set of three mutations was not enough, and §11 records why.** All three
+plant a DOTTED module path, which is the form the check's author had in mind;
+none plants the package-leaf form the repo actually uses. The transcript above
+is kept as written and the sixteen-form table is appended beneath it in the
+same file.
 
 ---
 
@@ -540,8 +560,9 @@ and that distinction is stated here rather than smoothed over.
 
 ## 9. Bubbled stops
 
-All seven are in `PARKED.md` in this directory, each a ready-to-send prompt,
-committed and pushed at the moment they were parked.
+All eight are in `PARKED.md` in this directory, each a ready-to-send prompt,
+committed and pushed at the moment they were parked. P-D8 was added, and P-D7
+amended, in the post-review round recorded in §11.
 
 | id | what | why it is not decided here |
 |---|---|---|
@@ -551,7 +572,8 @@ committed and pushed at the moment they were parked.
 | P-D4 | the end-to-end discharge road E56 names as missing | closing F-A is a claim about a road nobody has measured |
 | P-D5 | extending `--audit` to catch D4's shape | analysis complete; implementation is a `src/` change |
 | P-D6 | `SCHEMA.md` says `--audit` mutates the tree; `cmd_audit` never does | editing the contract every map document is written against is a fifth finding |
-| P-D7 | `SUB-llm.md`'s forbidden-package grep omits `invariants` | arguably a separate change; noted in the seam body |
+| P-D7 | `SUB-llm.md`'s forbidden-package grep omits `invariants`, AND is a dotted-prefix pattern that misses the leaf form for the packages it does name | arguably a separate change; noted in the seam body. Amended after review: its original premise about what else would catch an import was false when written (§11.1) |
+| P-D8 | `SUB-application.md:421` costs 161–213 s against a 300 s ceiling, so the documented baseline command self-contends at its own default worker count | narrowing another document's check is a judgment about what someone else's claim is defended by, and that document is not one of this lane's four targets |
 
 ---
 
@@ -562,22 +584,39 @@ committed and pushed at the moment they were parked.
 1. **The four repairs are proven against THIS tree, not against the future.**
    D1's check pins an exact seven-element crossing set and is brittle by
    design; the document says so, but a future author who widens it carelessly
-   turns a strong check into a weak one, and nothing mechanical prevents that.
+   turns a strong check into a weak one. That is now PARTLY mechanical: the
+   check also asserts that exactly one crossing is at module level, so a
+   careless widening that adds a module-level import trips a second assertion
+   with a different message. A careless widening that adds a function-local
+   crossing still only has the author's own care standing behind it.
+
+1b. **D1's enforcement was over-claimed once already, and the correction is
+   §11.1 rather than a footnote.** The first replacement check missed nine of
+   sixteen import forms, including the one `src/` uses 29 times. The state
+   claim survived unchanged; the enforcement claim did not, and the reason it
+   was not caught in-lane is recorded: the mutation set planted only the form
+   its author had in mind. The sixteen-form table is now itself a check, which
+   removes this particular blind spot and no other.
 
 2. **The full-clone figure (2 failed) is arithmetic, not a measurement.** No
    full clone was available. `git fetch --unshallow` was deliberately not run.
    Anyone quoting "2 failed" without saying which clone shape it came from is
    quoting a derivation.
 
-3. **Two of the three full runs were contended.** The BEFORE run overlapped
-   another lane's `docs_verify` and reported one extra row; the middle AFTER
-   run overlapped pytest gates and reported two. The FINAL run was materially
-   quieter and returned exactly the five baseline rows, and the two
-   `SUB-application.md` rows pass serially on the same tree. That is strong
-   evidence about those two rows. It is NOT proof that the box was idle: other
-   lanes were still working, so a genuinely uncontended run belongs to fan-in,
-   and the BEFORE figure of 9 rests partly on subtraction plus the committed
-   reconnaissance rather than on one clean measurement.
+3. **NO full run of this instrument on this container has been uncontended,
+   and the total is not a single number.** Every run recorded here — five of
+   them now, plus one by an independent reviewer — was taken while at least
+   one other lane worked on the same 4-CPU box. More importantly, the
+   documented command SELF-contends: `SUB-application.md:421` costs 161–213 s
+   serially against docs_verify's own 300 s per-check ceiling, and the command
+   runs 4 workers here, so that row can time out with no foreign load at all.
+   The baseline therefore records 5 **or** 6 on a shallow clone with `:421` as
+   a container-conditional row and a one-command disposition, rather than
+   asserting the lowest observation. Calling any of these runs a "quiet box"
+   — as commit `7fbbf2bc2`'s message did — was wrong, and §11.3 corrects it.
+   A genuinely uncontended run still belongs to fan-in, and the BEFORE figure
+   of 9 still rests partly on subtraction plus the committed reconnaissance
+   rather than on one clean measurement.
 
 4. **D3 proves ONE link of the discharge road.** The compile → echo → rebuild
    round trip carries the configured value. The road `ERRATA` E56 names as
@@ -605,12 +644,194 @@ committed and pushed at the moment they were parked.
    "--audit reports 0 findings" is still unachievable, and must record this
    pre-existing finding rather than treat it as its own failure.
 
-9. **Two findings in `docs/map` were REPORTED and not fixed**: `SCHEMA.md`
-   describing an `--audit` behaviour its own tool does not have (P-D6), and
-   `SUB-llm.md`'s forbidden-package grep omitting `invariants` (P-D7). Both are
-   real; both are outside the four this lane was given.
+9. **Three findings in `docs/map` were REPORTED and not fixed**: `SCHEMA.md`
+   describing an `--audit` behaviour its own tool does not have (P-D6),
+   `SUB-llm.md`'s forbidden-package grep (P-D7, now with both of its holes
+   named), and `SUB-application.md:421`'s cost against the check ceiling
+   (P-D8). All three are real; all three are outside the four this lane was
+   given.
+
+11. **`proof/d1_sweep_probe.py`'s measurement is now reproducible; it was not
+    before.** The `candidates=4 enforcement=0` figure that justifies
+    withholding the `Sweep:` header was, until this round, produced by a
+    script that read a hardcoded worktree path — so it measured lane-D no
+    matter where it ran, and would have died outright once that worktree was
+    removed. It is anchored now and proven to see its own tree (§11.4). The
+    figure itself did not move.
 
 10. **No live evidence of any kind.** This batch is offline by construction —
     no `OLLAMA_API_KEY`, no `env` file, no run root touched or created. Every
     number here comes from `docs_verify`, `pytest` through a check, or a
     scratch-copy mutation.
+
+---
+
+## 11. What independent review found, and what was done about it
+
+Three reviewers re-ran this lane's claims after delivery `7fbbf2bc2`. They
+confirmed three MAJOR defects and four minor ones (two of the minors were the
+same defect found twice). Nothing they found was refuted; every finding
+reproduced on first attempt. This section is the honest ledger of that round —
+what was wrong, what changed, and what is still not claimed.
+
+### 11.1 MAJOR — D1's crossing check enforced two import forms out of six
+
+**The finding.** `SEAM-llm-x-verification.md` said `llm/` names the
+verification side "NOWHERE, in any form, absolute or relative"; §2 of this
+document said "0, in every form"; `PARKED.md` P-D7 rested on "the only thing
+that would now catch a new import is this check". The check's `crossings()`
+helper resolved an `ast.ImportFrom` by testing `node.module` against the
+prefix list, and never tested `module + '.' + alias.name`. A package member
+imported BY NAME therefore resolved to bare `deepreason` and matched nothing.
+
+**Why it mattered rather than being a technicality.** That form is the repo's
+own dominant idiom: `from deepreason import <module>` appears **29 times
+across 24 files** in `src/`, and `src/` contains **zero** relative imports, so
+a real reverse crossing written the way this codebase writes imports would
+have walked straight through the guard. The forward direction had the same
+hole, so the "pinned EXACTLY" seven-element set could be widened silently too.
+
+**What was NOT wrong.** The state claim. The reverse direction was empty then
+and is empty now, re-confirmed by AST under all sixteen forms. What was
+over-claimed was the ENFORCEMENT — which is precisely the property §2 sold as
+the value of the repair, so the over-claim is the important half.
+
+**The repair.** `crossings()` now resolves each alias BOTH ways — the module
+path first, then `mod + '.' + alias.name` — and records a fourth tuple
+element saying whether the import sits at module level. That flag pins two
+counted claims that nothing checked before: the body's "one at module level,
+five inside the functions", and `INDEX.md`'s matrix score of 1 for this pair.
+
+**The proof, and why the original proof was not enough.** The first mutation
+set planted three forms, all DOTTED — the shape its author had in mind. The
+replacement is a sixteen-form table, committed as
+`proof/d1_crossing_forms.py`, run as a check of its own from the seam's
+`Traps` section, and anchored to its own file location so it re-derives
+anywhere:
+
+    committed check (7fbbf2bc2)   16 forms planted,  9 MISSED   script exit=1
+    repaired check                16 forms planted,  0 MISSED   script exit=0
+
+The nine the committed check missed: `from deepreason import invariants`,
+`from .. import invariants`, the same two for `verification`, the same for
+`signals_read`, two function-local variants (one planted in a real `llm/`
+file), the forward `from deepreason import llm`, and hoisting
+`verification/report.py`'s crossing to module level. Full transcript, both
+directions, in `proof/d1_seam_crossings.txt` under the 2026-08-30 SECOND ROUND
+heading.
+
+**Prose corrected rather than narrowed.** "In any form" still stands, because
+the check now covers the forms. A paragraph beneath the check states that "in
+any form" is a claim about the RESOLVER and says what it cost; a new `Traps`
+entry records the defect with its lesson — *a mutation set that plants only
+the form the author had in mind measures the author, not the check*.
+
+**P-D7 amended, not quietly fixed.** Its premise was false when written. The
+entry now says so, and carries a SECOND hole the same review exposed:
+`SUB-llm.md`'s negative grep is itself a dotted-prefix pattern, so widening
+its package list alone would not catch the leaf form either. Both holes are in
+the prompt.
+
+### 11.2 MAJOR — the docs_verify baseline rested on one unreplicated observation
+
+**The finding.** `docs/AUDIT_BASELINES.md` recorded "2 failed on a full clone,
+5 failed on a shallow one". The first independent run of the documented
+command on the same branch returned **6**, with `SUB-application.md:421`
+reporting `TIMEOUT after 300s`. Counting this lane's own three runs, the
+instrument returned four different totals in one evening — 10, 7, 5 and 6 —
+and the lane wrote the single LOWEST observation into a precedence-2 authority
+whose own table says "a delta from THIS list is a finding".
+
+**The reviewer also killed this lane's excuse.** §7.3 attributed the `:421`
+timeout to foreign load. It measured `:421` at 213.1 s serially against
+docs_verify's own 300 s ceiling — a 1.4x margin — while the documented command
+runs `min(16, os.cpu_count())` = **4** workers on this 4-CPU box. The
+documented command therefore SELF-CONTENDS: no foreign gate is required for
+that row to time out.
+
+**What was measured in response**, five independent serial timings of `:421`
+across two days on this container:
+
+    160.88 s   2026-08-29, idle box        (this lane, recorded 2026-08-29)
+    182.8  s   2026-08-30                  (this round, trial 1)
+    186.9  s   2026-08-30                  (this round, trial 2)
+    195    s   2026-08-30                  (this lane, first round)
+    213.1  s   2026-08-30                  (independent reviewer)
+
+54% to 71% of its own ceiling before it shares four CPUs with three other
+checks. `:395`, the other contended row, cost 23.2 s and 23.0 s in the same
+pair of trials — it is not in the same class and its earlier failure really
+was load.
+
+**What changed in the baseline.** See §7 below, rewritten. In one sentence:
+`SUB-application.md:421` is now recorded as a CONTAINER-CONDITIONAL expected
+failure with its measured margin and its disposition command, so the baseline
+states what the documented command actually produces here — 5 **or** 6 on a
+shallow clone — instead of the luckiest of four observations. Two fresh full
+runs were taken and BOTH are recorded, not the lower.
+
+**What was NOT done, and why it is parked.** The reviewer's alternative repair
+was to narrow `:421` to the claim it tests. That check belongs to
+`SUB-application.md`, which is not one of this lane's four targets, and
+narrowing it is a judgment about what someone else's claim is defended by —
+exactly the kind of decision this batch's rules say to bubble. It is
+`PARKED.md` **P-D8**, with the five timings, the arithmetic, the constraint
+that the narrowed set must be shown RED on the reverted code shape, and the
+two alternatives (pin a worker count; raise the ceiling) priced.
+
+### 11.3 minor — "quiet box" was a label the record did not support
+
+Commit `7fbbf2bc2`'s message called its final measurement "(quiet box,
+complete tree)" while residue item 3 of this document, added in the same
+commit, said of that same run "It is NOT proof that the box was idle: other
+lanes were still working", §7.3 said "The brief required the authoritative run
+to have the box to itself. It did not", and the `AUDIT_BASELINES.md` edit in
+the same commit stated that "a docs_verify total taken under concurrent load
+is not admissible as a baseline". The commit recorded a baseline from a run it
+simultaneously declared inadmissible.
+
+**Corrected here, as an honest-ledger entry rather than a re-measurement.**
+A commit message cannot be amended once pushed, so it is corrected in place:
+that measurement is described everywhere in this document and in
+`AUDIT_BASELINES.md` as **materially quieter, not proven idle**, and
+`AUDIT_BASELINES.md` now says beside the figures what load they were taken
+under. The reviewer was right that the two statements could not both stand.
+
+### 11.4 minor — a committed proof script that could not be re-derived anywhere else
+
+`proof/d1_sweep_probe.py` hardcoded `REPO = pathlib.Path('/home/user/dr-lanes/
+lane-D')` — an ephemeral worktree. Run from any other checkout it silently
+measured the lane worktree instead of the tree under audit; once the worktree
+is removed at fan-in it raises `FileNotFoundError`. In a repo whose documents
+are authenticated by re-derivation, that is a stale stamp with a shebang.
+
+Fixed: `REPO = pathlib.Path(__file__).resolve().parents[3]`. Proven, not
+asserted — a real enforcement site was planted in a scratch mirror of the tree
+and the script was run FROM that mirror:
+
+    same planted mirror, committed (hardcoded) probe   candidates=4 enforcement=0
+    same planted mirror, anchored probe                candidates=5 enforcement=1
+    hardcoded probe with the worktree gone             FileNotFoundError
+    anchored probe, real tree, from repo root and /    candidates=4 enforcement=0
+
+The `candidates=4 enforcement=0` measurement that justifies WITHHOLDING the
+`Sweep:` header (D1-e) is therefore reproducible after merge, which it was not
+before. `proof/d1_sweep_candidates.txt` is unchanged because the fixed script
+returns the same values on the real tree — that identity is the point of the
+last row above.
+
+`proof/d1_crossing_forms.py`, new in this round, is anchored the same way and
+was run from two different working directories to prove it.
+
+### 11.5 minor — the module-level split was pinned for one file only
+
+Moving `verification/report.py`'s `route_fingerprint` import from
+function-local to module level left the check GREEN while two claims written
+in the same commit became false: the body's "one at module level, five inside
+the functions", and `INDEX.md:122`'s matrix score of 1, which counts
+module-level imports only. Fixed by the fourth tuple element described in
+§11.1 — the split is now pinned for every crossing on the verification side,
+not just for `invariants.py`. Mutations S1 (hoist `report.py`'s) and S2 (sink
+`invariants.py`'s) are both RED in the sixteen-form table; S1 was GREEN
+before.
+

@@ -42,35 +42,42 @@ def crossings(targets, prefixes):
         top = pathlib.Path(target)
         for path in (sorted(top.rglob('*.py')) if top.is_dir() else [top]):
             parts = list(path.relative_to(SRC).with_suffix('').parts)[:-1]
-            for node in ast.walk(ast.parse(path.read_text())):
+            tree = ast.parse(path.read_text())
+            toplevel = {id(n) for n in tree.body}
+            for node in ast.walk(tree):
+                at_module_level = id(node) in toplevel
                 if isinstance(node, ast.Import):
                     for alias in node.names:
                         if any(alias.name == q or alias.name.startswith(q + '.') for q in prefixes):
-                            out.add(str(path) + '::' + alias.name + '::' + alias.name)
+                            out.add((str(path), alias.name, alias.name, at_module_level))
                     continue
                 if not isinstance(node, ast.ImportFrom):
                     continue
                 base = '.'.join(parts[:len(parts) - node.level + 1]) if node.level else ''
                 mod = base + '.' + node.module if (base and node.module) else (base or node.module or '')
-                if any(mod == q or mod.startswith(q + '.') for q in prefixes):
-                    for alias in node.names:
-                        out.add(str(path) + '::' + mod + '::' + alias.name)
+                for alias in node.names:
+                    # A leaf import names its module in the ALIAS, not in the
+                    # module path: resolving only the path leaves
+                    # 'from deepreason import invariants' invisible here.
+                    for cand in (mod, (mod + '.' + alias.name) if mod else alias.name):
+                        if any(cand == q or cand.startswith(q + '.') for q in prefixes):
+                            out.add((str(path), cand, alias.name, at_module_level))
+                            break
     return out
 forward = crossings(('src/deepreason/invariants.py', 'src/deepreason/verification', 'src/deepreason/signals_read.py'), ('deepreason.llm',))
 expected = {
-    'src/deepreason/invariants.py::deepreason.llm.contracts::ConjecturerOutput',
-    'src/deepreason/invariants.py::deepreason.llm.embedder::HashingEmbedder',
-    'src/deepreason/invariants.py::deepreason.llm.firewall::route_fingerprint',
-    'src/deepreason/invariants.py::deepreason.llm.wire::AliasTable',
-    'src/deepreason/invariants.py::deepreason.llm.wire::ReferenceFreeConjecturerWireContract',
-    'src/deepreason/invariants.py::deepreason.llm.wire::wire_contract_for',
-    'src/deepreason/verification/report.py::deepreason.llm.firewall::route_fingerprint',
+    ('src/deepreason/invariants.py', 'deepreason.llm.contracts', 'ConjecturerOutput', False),
+    ('src/deepreason/invariants.py', 'deepreason.llm.embedder', 'HashingEmbedder', False),
+    ('src/deepreason/invariants.py', 'deepreason.llm.firewall', 'route_fingerprint', True),
+    ('src/deepreason/invariants.py', 'deepreason.llm.wire', 'AliasTable', False),
+    ('src/deepreason/invariants.py', 'deepreason.llm.wire', 'ReferenceFreeConjecturerWireContract', False),
+    ('src/deepreason/invariants.py', 'deepreason.llm.wire', 'wire_contract_for', False),
+    ('src/deepreason/verification/report.py', 'deepreason.llm.firewall', 'route_fingerprint', False),
 }
 assert forward == expected, sorted(forward ^ expected)
+assert len([c for c in forward if c[3]]) == 1, sorted(c for c in forward if c[3])
 back = crossings(('src/deepreason/llm',), ('deepreason.invariants', 'deepreason.verification', 'deepreason.signals_read'))
 assert back == set(), sorted(back)
-module_level = [n for n in ast.parse(pathlib.Path('src/deepreason/invariants.py').read_text()).body if isinstance(n, ast.ImportFrom) and (n.module or '').startswith('deepreason.llm')]
-assert [n.module for n in module_level] == ['deepreason.llm.firewall'], [n.module for n in module_level]
 "`
 
 The set is pinned EXACTLY, in both directions, and the empty direction is
@@ -80,10 +87,27 @@ That is the design (`SCHEMA.md`: counts are claims): widen the set in the same
 commit that adds the import, and add a row above saying what the new crossing
 re-derives. Do not delete the check to make it quiet.
 
+**"In any form" is a claim about the RESOLVER, and it cost this check a
+repair.** An `ImportFrom` can name its module in the module path
+(`from deepreason.invariants import verify_root`) or in the ALIAS
+(`from deepreason import invariants`), and only the first is what
+`node.module` holds. The check's first form resolved the path alone, so five
+of the nine reverse forms below — including the leaf form `src/` itself uses
+29 times across 24 files, and the relative `from .. import invariants` — went
+straight through it while the prose above claimed they could not. Each alias
+is now resolved BOTH ways. The fourth element of every tuple is the
+module-level/function-local flag, which pins the sentence at the top of this
+document and `INDEX.md`'s matrix score of 1 for this pair: hoisting
+`verification/report.py`'s function-local import to module level is a change
+to a counted claim and now turns the check red.
+
 **Nothing else polices the reverse direction properly.** `DR-SUB-llm`'s own
 negative grep forbids `llm/` from importing a list of packages, and that list
 names `verification` but not `invariants` — so an `llm/` module importing
-`deepreason.invariants` would pass it and be caught only here. No test in
+`deepreason.invariants` would pass it and be caught only here. That grep is
+also a dotted-prefix pattern, so it misses the leaf form for `verification`
+too; widening its list would not close the hole on its own
+(`experiments/2026-08-30-fix-rotted-map-checks/PARKED.md` P-D7). No test in
 `tests/` asserts either direction.
 
 **This document exists because that traffic is invisible where people look for
@@ -258,3 +282,25 @@ assert 'attempt_trace.extend' not in src
   function, ask who reads it, not who imports you. And when a claim's own
   check has never run, the claim has never been tested. Corrected 2026-08-30,
   `experiments/2026-08-30-fix-rotted-map-checks/`.
+
+- **A check that names an import FORM is a claim about its resolver, and this
+  one asserted more than it resolved.** The replacement check written the same
+  day pinned both directions and said "in any form, absolute or relative" —
+  but it matched an `ImportFrom` on `node.module` alone, so every import whose
+  module sits in the ALIAS resolved to bare `deepreason` and matched nothing.
+  Nine reverse forms were planted against it: `from deepreason import
+  invariants`, `from .. import invariants`, the same two for `verification`
+  and `signals_read`, and their function-local variants all passed GREEN,
+  while the three dotted forms the original mutation set had exercised went
+  red. `from deepreason import <module>` is not an exotic spelling here: it
+  appears 29 times across 24 files in `src/`, which contains no relative
+  imports at all. The forward direction had the same hole (`from deepreason
+  import llm` added an unpinned eighth crossing, GREEN), and the
+  module-level/function-local split was pinned for `invariants.py` only, so
+  hoisting `verification/report.py`'s import changed two counted claims
+  silently. The lesson is narrower than "test your checks": a mutation set
+  that plants only the form the author had in mind measures the author, not
+  the check — enumerate the forms the CLAIM covers and plant every one. Found
+  by independent review, fixed 2026-08-30, same tranche; the sixteen-form
+  table is the check's own proof and is committed beside it.
+`check: python experiments/2026-08-30-fix-rotted-map-checks/proof/d1_crossing_forms.py`

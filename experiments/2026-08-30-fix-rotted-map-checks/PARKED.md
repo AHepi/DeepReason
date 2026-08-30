@@ -1,7 +1,8 @@
 # PARKED — Lane D, batch 2 — stops bubbled, never resolved in-batch
 
-Seven items. Each is a ready-to-send prompt: paste one whole into an executor
-window. Nothing here was decided by this lane.
+Eight items. Each is a ready-to-send prompt: paste one whole into an executor
+window. Nothing here was decided by this lane. P-D8 was added, and P-D7
+amended, on 2026-08-30 after independent review of the delivered work.
 
 Anchor: branch `claude/b2-lane-D`, based on `origin/main` `84514a028`. Every
 line number below was measured on 2026-08-30 and will move as documents are
@@ -212,27 +213,110 @@ single-line form without re-counting.
 
 ---
 
-## P-D7 — `SUB-llm.md`'s negative grep has a hole, and it is the only other thing policing this seam
+## P-D7 — `SUB-llm.md`'s negative grep has TWO holes, and it is the only other thing policing this seam
 
 Noted in `SEAM-llm-x-verification.md`'s body as part of D1. Widening the grep
 is arguably a separate change, so it is parked rather than folded in.
 
+**Amended 2026-08-30 after independent review.** This entry first said "the
+only thing that would now catch a new import is `SEAM-llm-x-verification.md`'s
+crossing check". That premise was FALSE WHEN WRITTEN: the crossing check
+resolved an `ImportFrom` on its module path alone, so it missed
+`from deepreason import invariants` and four sibling forms — nine of sixteen
+planted forms passed it. The check was repaired in this tranche and the
+sixteen-form table (`proof/d1_crossing_forms.py`) now shows every form red, so
+the premise is true as of the repair. The second hole below was found in the
+same review and is still open.
+
 ```
 docs/map/SUB-llm.md carries a check forbidding src/deepreason/llm/ from
 importing a named list of packages: harness, scheduler, rules, adjudication,
-capture, informal, verification, amendment. The list omits `invariants`, so an
-llm/ module doing `from deepreason.invariants import verify_root` passes it.
+capture, informal, verification, amendment. It has two independent holes.
+
+(1) The list omits `invariants`, so an llm/ module doing
+    `from deepreason.invariants import verify_root` passes it.
+
+(2) The pattern is `^[[:space:]]*(from|import) +deepreason\.(...)\b`, which
+    requires the package to sit in the DOTTED path. So even for the packages
+    it does name, the leaf form `from deepreason import verification` passes
+    it -- and src/ uses that leaf form 29 times across 24 files while
+    containing no relative imports at all, so it is the form a real regression
+    would most likely take. Widening the LIST alone does not close hole (2).
 
 Measured 2026-08-30: the reverse direction of the llm x verification seam is
-currently EMPTY in every form, and the only thing that would now catch a new
-import is SEAM-llm-x-verification.md's crossing check, added the same day.
+EMPTY in every form tested (16 forms, proof/d1_crossing_forms.py), and after
+this tranche's repair SEAM-llm-x-verification.md's crossing check catches all
+sixteen. SUB-llm.md's grep catches only the dotted ones for the packages it
+names.
 
-Widen SUB-llm.md's forbidden list to include invariants (and consider
-signals_read, which SUB-verification.md also Owns). Prove it: show the widened
-grep RED on a planted `from deepreason.invariants import verify_root` in a
-scratch copy of an llm/ module, and GREEN on the real tree. Do not edit
-src/deepreason/llm/ -- llm/firewall.py is frozen-adjacent and nothing here
-needs a code change.
+Fix both: add `invariants` (and consider `signals_read`, which
+SUB-verification.md also Owns) to the list, AND make the pattern reach the
+leaf form -- either a second alternation branch
+`from +deepreason +import +(...)`, or an AST resolver like the one
+SEAM-llm-x-verification.md now carries. Prove it with the same sixteen-form
+table: every form RED against the widened grep, and GREEN on the real tree.
+Do not edit src/deepreason/llm/ -- llm/firewall.py is frozen-adjacent and
+nothing here needs a code change.
+```
+
+---
+
+## P-D8 — `SUB-application.md:421` is a 300-second check that costs 161-213 seconds, and the audit baseline pays for it
+
+Raised by independent review of this lane's own baseline edit, and NOT decided
+here: narrowing another document's check changes what that claim is defended
+by, which is a judgment about someone else's claim and outside this lane's
+four targets. The baseline now records the row honestly instead
+(`docs/AUDIT_BASELINES.md`, CONTAINER-CONDITIONAL row); this prompt asks
+whether the underlying cost should be removed.
+
+```
+docs/map/SUB-application.md carries a check (the one anchored on
+"fence_seq > current_resume.resume_event_seq") that ends with
+
+    python -m pytest tests/test_continuation.py \
+                     tests/test_v6_resumed_terminal_revalidation.py -q
+
+i.e. two entire test FILES. Measured cost of that check alone, run serially on
+the 4-CPU cloud container, five independent measurements across two days:
+
+    160.88 s   2026-08-29, idle box
+    182.8  s   2026-08-30
+    186.9  s   2026-08-30
+    195    s   2026-08-30
+    213.1  s   2026-08-30, independent reviewer
+
+docs_verify's per-check ceiling is 300 s (tools/docs_verify.py:185) and its
+default worker count is min(16, os.cpu_count()) = 4 here. So this one check
+sits at 54-71% of its own ceiling BEFORE sharing 4 CPUs with 3 other checks,
+and the documented baseline command self-contends: the check has been observed
+to report `TIMEOUT after 300s` with no foreign load required. That makes the
+instrument's TOTAL two-valued on this container, which is exactly what an
+audit baseline must not be.
+
+docs_verify's own timeout message prescribes the repair: "this check is too
+expensive; narrow it to the claim it actually tests". Decide whether to do
+that, and if so, what the claim actually is. The claim in the document is
+about ONE branch -- prepare_continuation's `current_resume is not None`
+recovery branch, measured on grounded-extension run 8e22d0431fd2b98d -- while
+the check runs both files whole.
+
+Constraints on whoever takes this:
+  - Do NOT weaken the defense to make a number stable. If the narrowed set
+    would not have caught the original defect, do not narrow it.
+  - Prove the narrowed set is not a loosening: show it RED on the reverted
+    code shape (restore the `!=` inequality and drop the grep guard), and
+    GREEN on the real tree, in the same commit.
+  - Re-time the narrowed check and record the new margin against 300 s.
+  - Whatever is decided, update docs/AUDIT_BASELINES.md's CONTAINER-CONDITIONAL
+    row in the same commit -- it is the thing this cost is currently being
+    paid out of.
+
+Alternatives if narrowing is refused: pin a worker count in the documented
+baseline command so the total is reproducible (costs wall time -- a 4-worker
+run is ~29 minutes here, and -j 1 would be roughly 4x that), or raise
+CHECK_TIMEOUT_S, which is a tools/ change and masks cost rather than removing
+it.
 ```
 
 ---

@@ -1,5 +1,7 @@
 import re, pathlib
-REPO = pathlib.Path('/home/user/dr-lanes/lane-D')
+# Anchored to this file, not to the worktree it was written in: an
+# artifact whose purpose is re-derivation must re-derive where it lands.
+REPO = pathlib.Path(__file__).resolve().parents[3]
 src = REPO / 'src' / 'deepreason'
 body = (REPO / 'docs/map/SEAM-llm-x-verification.md').read_text()
 sources = [(f, f.read_text(errors='ignore')) for f in sorted(src.rglob('*.py')) if '__pycache__' not in str(f)]
