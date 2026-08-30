@@ -132,8 +132,12 @@ does `run_report` emit `hv`/`reach` keys for an artifact that was never
 sampled or never reached?
 
 Evidence: experiments/2026-08-27-audit-formalism-optional/SITES.md rows for
-measures/reach.py:137 and scheduler.py:1330 (the latter's line has rotted to
-:1345); experiments/2026-08-30-defect-formalism-rank-penalty/
+measures/reach.py:137 and scheduler.py:1330. Cite those two sites by SYMBOL,
+not by line: the audit's own line numbers had already rotted when this bullet
+was written, and this bullet's first correction of them rotted again inside
+this same lane. `grep -n "if not carried:" src/deepreason/measures/reach.py`
+and `grep -n "if is_hv_floor(kappa):" src/deepreason/scheduler/scheduler.py`
+find them on any tree (:131 and :1357 on this one); experiments/2026-08-30-defect-formalism-rank-penalty/
 proof/footprint_2026-08-30.txt shows hv and reach at 0.0 for all 291
 survivors across both roots measured.
 

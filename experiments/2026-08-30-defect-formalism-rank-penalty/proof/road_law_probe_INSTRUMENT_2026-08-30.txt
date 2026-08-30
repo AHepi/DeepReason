@@ -1,0 +1,31 @@
+road_law_probe.py — the SHIPPED column can no longer fail quietly.
+
+Skeptic finding: the SHIPPED column (the only part that reads the real
+tree) was wrapped in a bare 'except Exception' that printed one line and
+returned 0, so a tree whose run_report raises produced a run that looked
+complete and still printed a full modelled table. The modelled rows are a
+re-implementation and print identically on every tree, so that degraded
+output carried no information about the tree at all.
+
+=== [1] SHIPPED TREE — unchanged output, exit 0 ===
+
+SHIPPED (the tree this script was run against):
+    L1 equal standing        PASS  frontier=['formal', 'prose']
+    L2 kind-blindness        PASS  prose_on_frontier: with_formal_channel=True without=True  (with=['pass', 'prose'])
+    L3 no reverse weight     PASS  frontier=['formal_partial', 'prose']
+    L4 axis keeps meaning    PASS  frontier=['passed']
+    -> the shipped tree matches road: (a) not-measured
+EXIT=0
+
+=== [2] A TREE WHOSE run_report RAISES — now loud, exit 2 ===
+(mutant: one 'raise RuntimeError' inserted at the top of run_report)
+    raise RuntimeError("simulated breakage in the shipped tree")
+RuntimeError: simulated breakage in the shipped tree
+
+VERDICT: INSTRUMENT_BROKEN (RuntimeError: simulated breakage in the shipped tree)
+The SHIPPED column could not be computed; the modelled rows
+above say nothing about this tree. Believe none of it.
+EXIT=2
+
+The exit code now matches proof_equal_standing.py's convention
+(0 = result, 1 = the other result, 2 = INSTRUMENT_BROKEN).

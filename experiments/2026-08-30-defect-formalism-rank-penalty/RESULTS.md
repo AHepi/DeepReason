@@ -76,9 +76,14 @@ superseded authority and must be put to the operator beside the amendment.
 
 ### The residue — what this does NOT show
 
-- **It does not show the decision was made.** Road (a) is built and parked. If
-  the operator answers "b" or "c", commit `fe6b29ed2` is discarded. The
-  measurements and the law analysis survive that outcome; the code does not.
+- **It does not show the decision was made.** Road (a) is built and parked. The
+  measurements and the law analysis survive an answer of "b" or "c"; the code
+  does not. Dropping it is one act — `drop_road_a.sh` — and NOT one revert:
+  `fe6b29ed2` holds the code, but two `docs/map/SUB-scheduler.md` `check:`
+  lines that depend on it were added by the delivery commit `ce362b2e3`, so
+  reverting `fe6b29ed2` alone leaves both RED. This segment claimed the
+  single-commit version until a skeptic re-ran it; corrected 2026-08-30,
+  evidence in `proof/drop_road_a_2026-08-30.txt`.
 
 - **It does not show the 146 excluded conjectures were any good.** The finding is
   that they were excluded for their KIND, not that they deserved to be
@@ -93,8 +98,11 @@ superseded authority and must be put to the operator beside the amendment.
   aggregate, and it must not be reported as one.
 
 - **This is a behaviour change and no live run has observed it.**
-  `frontier_delta` is a `StopMetrics` input (`scheduler.py:3003`,
-  `runtime/stop.py:34/164`, `frontier_delta_max` defaulting to 0), so a run whose
+  `frontier_delta` is a `StopMetrics` input (`Scheduler._stop_metrics`, at the
+  `frontier_delta=len(before["frontier"] ^ after["frontier"])` assignment;
+  `runtime/stop.py:34/164`, `frontier_delta_max` defaulting to 0 — cited by
+  symbol because the `scheduler.py:3003` this segment first carried was the
+  PRE-fix line and was stale when written), so a run whose
   survivors include commitment-free artifacts publishes a longer frontier AND can
   stop at a different cycle. That is derived from the wiring and DISCLOSED; it is
   not measured. No live run was launched by this lane.
@@ -128,5 +136,66 @@ superseded authority and must be put to the operator beside the amendment.
 - **The full gate and `docs_verify` were not run by this lane.** Ring only, per
   the batch's load rule — four lanes on a 4-CPU box, and a measurement taken
   under load is not a measurement. Each new or changed map `check:` was run
-  individually instead (all six exit 0), and no `Verified-at:` stamp was
-  advanced, because this lane did not re-run those documents' full check sets.
+  individually instead (SEVEN of them, all exit 0), and no `Verified-at:` stamp
+  was advanced, because this lane did not re-run those documents' full check
+  sets.
+
+---
+
+## 2026-08-30 (later the same day) — re-run by independent skeptics, and repaired
+
+Reviewers who did not write this tranche re-ran its claims. **Two MAJOR defects
+and six minor ones were confirmed, all in the TRANCHE'S OWN CLAIMS AND
+INSTRUMENTS, none in the shipped behaviour of road (a).** Every one was
+reproduced here before it was fixed; none was refuted. `DELIVERY.md` §11 holds
+the finding-by-finding record.
+
+**What the record shows.**
+
+- The park was not droppable in one act. `git revert --no-edit fe6b29ed2` in a
+  throwaway clone exits 0 and leaves two `docs/map/SUB-scheduler.md` `check:`
+  lines RED (exit 4 and exit 1), because the delivery commit `ce362b2e3` that
+  followed added a `pareto_scores` grep and a
+  `tests/test_formalism_optional_rank.py` node id to them. Three documents
+  claimed otherwise. Repaired by `drop_road_a.sh`, which removes both halves,
+  refuses on a moved tree, and re-runs those two checks: after it,
+  `docs/map/`, `src/` and `tests/` are byte-identical to the park base
+  `736b50839` and both checks exit 0
+  (`proof/drop_road_a_2026-08-30.txt`).
+
+- A map Traps entry, and `capture/pareto.py`'s own docstring, blamed a guard
+  that was dead code. Deleting `bool(shared)` leaves every attached check green
+  (`5 passed`, exit 0), and an exhaustive enumeration over all 64 point shapes
+  the three axes admit finds zero pairs where the guard changes the answer. The
+  guard was deleted; the wording now names the STRICTNESS clause that actually
+  carries the property, and the two mutations that turn the check RED were run
+  BEFORE the sentence was written — `5 failed` and `3 failed`
+  (`proof/pareto_mutation_2026-08-30.txt`).
+
+- Both rings were re-run after the repairs: 117 + 129 = **246 passed, 0
+  failed**, at load average 5.3 → 9.4 on a 4-CPU box.
+
+- All SEVEN added-or-changed map `check:` lines were re-run verbatim from a
+  mechanically enumerated diff: all exit 0
+  (`proof/map_checks_2026-08-30.txt`).
+
+**The residue this segment adds.**
+
+- **`tests/test_mcp_run.py` is load-flaky, and no one has fixed it.** A reviewer
+  measured `2 failed, 115 passed` in RING 1 under contention and reproduced the
+  same failures on the PRE-FIX tree; this lane's two re-runs under comparable
+  load were green, and the file alone is `7 passed`. Intermittent, not
+  deterministic, and outside this lane's cone. Re-run those two node ids in
+  isolation at fan-in before charging a red to any lane.
+
+- **Two wrong statements survive in `fe6b29ed2`'s commit message** — the
+  `scheduler.py:3003` pointer and the `bool(shared)` attribution — because
+  editing a commit message rewrites the hash `STOP.md` hands the operator. The
+  corrections live in the map, in `DELIVERY.md` §11, and here; the commit
+  message cannot be corrected in place, and pretending otherwise would be worse
+  than saying so.
+
+- **The default fan-in action still integrates road (a).** A merge of this
+  branch IS an answer of "a". This lane cannot decide that; what it can do, and
+  now has done, is make the other answer cost one command instead of a repair
+  tranche.

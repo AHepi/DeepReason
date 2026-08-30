@@ -44,12 +44,18 @@ Four probes, each a direct consequence of a quoted clause:
       fixing it.
 
 Run:  python experiments/2026-08-30-defect-formalism-rank-penalty/road_law_probe.py
-Exit 0 always -- the table is the output. The SHIPPED column is computed from
-the real `capture.pareto.frontier` and the real `run_report` scoring rule, so
-it re-reads whichever road the tree currently implements.
+Exit 0 -- the table is the output. The SHIPPED column is computed from the
+real `capture.pareto.frontier` and the real `run_report` scoring rule, so it
+re-reads whichever road the tree currently implements.
+
+Exit 2, VERDICT: INSTRUMENT_BROKEN -- the SHIPPED column could not be built.
+The modelled rows are a re-implementation and print identically on every tree,
+so a run without the SHIPPED column says nothing about the tree it ran on and
+must not be read as a completed one.
 """
 
 import sys
+import traceback
 
 AXES = ["hv", "reach", "coverage"]
 
@@ -274,8 +280,16 @@ def main():
             ok, detail = probe(road_shipped)
             shipped_row.append((probe_name, ok, detail))
     except Exception as error:                          # pragma: no cover
-        print(f"SHIPPED column unavailable ({type(error).__name__}: {error})")
-        return 0
+        # The SHIPPED column is the only part of this script that reads the
+        # tree; the modelled rows are a re-implementation and are identical on
+        # every tree. A run without it therefore carries no information about
+        # the tree, so it must not exit 0 and be mistaken for a complete one.
+        traceback.print_exc()
+        print()
+        print(f"VERDICT: INSTRUMENT_BROKEN ({type(error).__name__}: {error})")
+        print("The SHIPPED column could not be computed; the modelled rows")
+        print("above say nothing about this tree. Believe none of it.")
+        return 2
     print("SHIPPED (the tree this script was run against):")
     for probe_name, ok, detail in shipped_row:
         print(f"    {probe_name:<24} {'PASS' if ok else 'FAIL'}  {detail}")

@@ -164,13 +164,28 @@ answers your own question — "should *nothing to check* and *checked and failed
 share a coordinate?" — with a clean **no** that does not immediately create the
 mirror-image conflation at the top of the scale.
 
-It is **built and parked, not integrated**, on branch `claude/b2-lane-C` as its
-own clearly-labelled commit (`fe6b29ed2`, whose subject line begins "BUILT AND
-PARKED, NOT INTEGRATED"), with 246 tests passing across the 18 files that touch
-this machinery. Answering "a" is a merge.
-Answering "b" or "c" discards that commit and costs a fresh tranche; nothing
+It is **built and parked, not integrated**, on branch `claude/b2-lane-C`, in a
+clearly-labelled commit (`fe6b29ed2`, whose subject line begins "BUILT AND
+PARKED, NOT INTEGRATED") plus one later commit that repairs it, with 246 tests
+passing across the 18 files that touch this machinery. Answering "a" is a merge.
+
+Answering "b" or "c" throws the road away and costs a fresh tranche; nothing
 about this lane's measurements or law analysis is wasted in that case, because
-they apply to whichever road you pick.
+they apply to whichever road you pick. **Throwing it away is one command, and
+this document first told you it was one revert — that was wrong, and an
+independent skeptic caught it.** The road's code is in `fe6b29ed2`, but two
+lines in `docs/map/SUB-scheduler.md` that TEST for that code were added by the
+delivery commit after it. (A map "check:" line is a shell command the map runs
+against the code to prove its own sentences are still true; when the code it
+names is gone, the command fails and the map reads RED.) Reverting `fe6b29ed2`
+on its own therefore leaves two failing map checks behind. Run instead:
+
+    bash experiments/2026-08-30-defect-formalism-rank-penalty/drop_road_a.sh
+
+It removes both halves together, refuses to touch a tree that has moved
+underneath it, and re-runs those two checks to prove they are green before it
+reports DROPPED. Verified by actually running it, on a throwaway clone, with
+the transcript kept: `proof/drop_road_a_2026-08-30.txt`.
 
 ---
 

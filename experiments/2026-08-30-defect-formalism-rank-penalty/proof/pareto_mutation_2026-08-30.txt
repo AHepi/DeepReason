@@ -1,0 +1,51 @@
+MUTATION PROOF for docs/map/SUB-periphery.md's frontier Traps entry and the
+capture/pareto.frontier docstring, re-derived 2026-08-30 after the skeptics
+showed the previous wording named a mutation its check could not detect.
+
+The check under test (SUB-periphery.md, verbatim):
+  python -m pytest tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured tests/test_loop.py::test_loop_end_to_end -q
+
+=== [0] SHIPPED tree — the check must be GREEN ===
+.....                                                                    [100%]
+5 passed in 0.22s
+exit: 0
+
+=== [1] MUTANT C — the strictness term any(a[x] > b[x]) deleted (the mutation the entry now names) ===
+FAILED tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured[scored0-expected0]
+FAILED tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured[scored1-expected1]
+FAILED tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured[scored2-expected2]
+FAILED tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured[scored3-expected3]
+FAILED tests/test_loop.py::test_loop_end_to_end - AssertionError: assert [] =...
+5 failed in 0.40s
+exit: 1
+
+=== [2] MUTANT D — an empty shared list short-circuited to True (the other spelling of the same error) ===
+tests/test_loop.py:111: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured[scored0-expected0]
+FAILED tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured[scored1-expected1]
+FAILED tests/test_loop.py::test_loop_end_to_end - AssertionError: assert [] =...
+3 failed, 2 passed in 0.38s
+exit: 1
+
+=== [3] WHY THE OLD WORDING WAS WRONG — the guard it named was dead code ===
+The retired sentence claimed a "shared axes only" rule written without the
+bool(shared) term "silently makes every P1 survivor dominate every other".
+It does not. With shared == [], all(...) is True and any(...) is False, so
+dominance is already False without the term. Deleting it changes nothing:
+
+MUTANT A — the delivered tree with ONLY 'bool(shared) and' removed, run
+against the very check the Traps entry attaches:
+.....                                                                    [100%]
+5 passed in 0.20s
+exit: 0   <-- GREEN: the named guard states no constraint the check enforces
+
+Exhaustive control over every point shape the axes admit (64 points: the
+empty dict plus every subset of (hv, reach, coverage) at 0.0/0.5/1.0):
+points enumerated: 64
+pairs where the bool(shared) guard changes the answer: []
+
+CONCLUSION. bool(shared) was deleted as dead code; the docstring and the
+SUB-periphery.md Traps entry now attribute the no-shared-axis property to
+the strictness clause, and name mutants C and D above, which the attached
+check actually turns red.

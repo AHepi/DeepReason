@@ -19,18 +19,16 @@ def frontier(scored: list[tuple[object, dict[str, float]]], axes: list[str]) -> 
     formally-backed sibling dominate it — forbidden by
     DUAL_MODE_CONJECTURE_PREPLAN.md R-g, "its absence confers no disadvantage".
 
-    Two points sharing no axis therefore never dominate each other, which is
-    what keeps `loop.py`'s P1 frontier — every survivor scored `{}` — equal to
-    the survivor set.
+    Dominance is STRICT, and that is what carries the no-shared-axis case:
+    `any(...)` is False over an empty `shared`, so two points sharing no axis
+    never dominate each other. `loop.py` scores every P1 survivor `{}` and
+    needs that frontier to equal the survivor set, so an edit that drops the
+    strictness term — or short-circuits an empty `shared` to True — empties it.
     """
 
     def dominates(a: dict[str, float], b: dict[str, float]) -> bool:
         shared = [x for x in axes if x in a and x in b]
-        return (
-            bool(shared)
-            and all(a[x] >= b[x] for x in shared)
-            and any(a[x] > b[x] for x in shared)
-        )
+        return all(a[x] >= b[x] for x in shared) and any(a[x] > b[x] for x in shared)
 
     return [
         item

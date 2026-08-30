@@ -220,8 +220,14 @@ TARGETS would be unique for every content-addressed artifact, so SC would read
   this function is the second-order one: two points that share NO axis must
   still never dominate each other, because `loop.py` passes `{}` for every
   survivor at P1 and relies on the resulting frontier equalling the survivor
-  set. A "shared axes only" rule written without that guard silently makes
-  every P1 survivor dominate every other.
+  set. What carries that is the STRICTNESS clause `any(a[x] > b[x] for x in
+  shared)`, which is False over an empty `shared` — the check below is RED
+  under both spellings of the real error (deleting that clause: `5 failed`;
+  short-circuiting an empty `shared` to `True`: `3 failed`) and GREEN under a
+  deleted `bool(shared)` guard, which is why the delivered code carries no such
+  guard and why an earlier wording of this entry, which named one, was wrong.
+  Mutants and transcript:
+  `experiments/2026-08-30-defect-formalism-rank-penalty/proof/pareto_mutation_2026-08-30.txt`.
 `check: python -m pytest tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured tests/test_loop.py::test_loop_end_to_end -q`
 - **Adding one MCP tool moves FOUR pins, and no gate runs two of them.**
   `tests/test_mcp.py::SUPPORTED_TOOLS` and
