@@ -305,60 +305,120 @@ edits.
 
 ---
 
-## F8 — DIFF BUDGET EXCEEDED, a stop this lane may not decide for itself
+## F8 — DIFF BUDGET: raised, then WITHDRAWN by this lane's own revert
 
-WHAT: `tools/diff_budget.py` reads `EXCEEDED` against the ceiling SPEC.md
-declared for this tranche. SPEC.md's own rule says that verdict "is a STOP
-decided above this lane, per the batch-1 record", so it is parked here rather
-than resolved by trimming. Measured at delivery, against tranche base
-`84514a0280f45d29e5066bb3be3d273ba73798db`:
+WHAT: with the integrity gate armed, `tools/diff_budget.py` read `EXCEEDED`
+against SPEC.md's declared ceiling, and SPEC.md's own rule says that verdict is
+"a STOP decided above this lane". It was parked. The gate was then reverted
+(F9), and the same command now reads `WITHIN`. The fork is therefore NOT live
+and needs no operator time — recorded rather than deleted, because the reading
+it raised will recur the next time a tranche ships a large test module.
 
-    {"areas": {"src": 103, "tests": 397, "docs/map": 65},
-     "total_insertions": 565, "ceiling": 400, "verdict": "EXCEEDED"}
+    with the gate armed:
+      {"areas": {"src": 103, "tests": 397, "docs/map": 65},
+       "total_insertions": 565, "ceiling": 400, "verdict": "EXCEEDED"}
+    as delivered:
+      {"areas": {"src": 41, "tests": 224, "docs/map": 52},
+       "total_insertions": 317, "ceiling": 400, "verdict": "WITHIN"}
 
-The overshoot is entirely OUTSIDE production code. `src` came in at 103
-insertions against a SPEC estimate of 102 — the four source edits landed
-almost exactly as designed. `tests` came in at 397 against an estimate of 200,
-because SPEC.md budgeted 150 lines for a NEW test module that has to carry six
-mutation-proven tests, each selecting its witnesses from committed roots and
-each explaining what would make it vacuous. Nothing was trimmed to fit the
-number: a test whose comment explaining the mutation is deleted is a test the
-next reader cannot maintain, and this repo's recorded failure mode is vacuous
-tests, not verbose ones.
+The observation worth keeping: when it was exceeded, `src` was 103 against a
+SPEC estimate of 102 — the production surface landed ON estimate — and the
+entire overshoot was test code, budgeted at 150 lines for a NEW module carrying
+six mutation-proven tests that each select witnesses from committed roots and
+each explain what would make them vacuous. If the ceiling is meant as a
+blast-radius instrument it should be measured over `src`; if it is meant as a
+review-cost instrument the total is right and the template under-budgets tests.
+Nothing was trimmed to hit the number either way.
+
+---
+
+## F9 — THE INTEGRITY GATE ITSELF: built, measured, and NOT shipped
+
+WHAT: SPEC.md items S1-S4 — `continue` and `amend` re-derive the record through
+`verify_root` and refuse typed — were implemented exactly as specified and
+WORKED on the tamper proof (one flipped endpoint byte ->
+`CONTINUE_RECORD_NOT_VERIFIED: attempt-route, frozen-route` and
+`AMEND_RECORD_NOT_VERIFIED`; the intact copy passed through). The ring then
+turned EIGHT tests red where SPEC.md predicted one, and three of the eight
+cannot be repaired as fixtures without changing what they assert. SPEC.md's own
+pre-registered rule (P-FIX-3) calls that a STOP and a re-plan, and forbids both
+weakening an assertion and exempting test roots. The gate was therefore
+reverted. Full classification: `proof/gate_collisions.md`.
+
+The one-sentence finding: `verify_root`'s violation set answers a BROADER
+question than the operator's law. It reports every invariant over the session,
+including states that are legitimate and transient (a staged amendment
+mid-recovery, `amendment-chain`), states that the next operator action exists
+to REPAIR (a bound but unintroduced source, `attached-evidence` — `amend` is
+the repair), and roots that are merely INCOMPLETE rather than tampered with
+(`run-input`, `run-manifest-hash`, `terminal-authority`, and `open` for any
+non-v6 manifest).
 
 ```
-Route: no workflow. This is a one-line ruling for the monitor or the operator.
+Route: dr-change-orchestrator, starting at dr-spec-change (REQUEST.md and the
+measurements already exist at experiments/2026-08-30-change-checkpoint-hardening).
 
-DECIDE: does the ultracode diff-budget ceiling apply to TEST and MAP lines, or
-only to production `src` lines?
+One goal: land the integrity gate the 2026-08-29 P2 law asks for -- "continue
+/amend are gated on the record verifying intact ... tampering with a record
+must not buy a resumable run" -- WITHOUT locking out the roads that repair an
+invalid record.
 
-The measurement that forces the question
-(experiments/2026-08-30-change-checkpoint-hardening, lane A of batch 2):
+DECIDE FIRST, because it is a design decision and the last tranche refused to
+make it silently:
 
-    src        103 insertions  (SPEC.md estimated 102)
-    tests      397 insertions  (SPEC.md estimated 200)
-    docs/map    65 insertions  (SPEC.md estimated  58)
-    total      565             ceiling 400  ->  EXCEEDED
+  Q-A. WHAT DOES "FAILS REPLAY VALIDATION" MEAN FOR THE GATE?
+     (i)  every verify_root violation (what SPEC.md chose, what the last
+          tranche built, and what collided with eight tests); or
+     (ii) the SECURITY channel only -- verification/report.py's _SECURITY_CHECKS:
+          attempt-route, capability-authority, capability-compiled-authority,
+          capability-grant, capability-work-order, frozen-route, school-route.
+          MEASURED: the one-byte endpoint forge lands in exactly this channel
+          (attempt-route, frozen-route), and NONE of the eight collisions does
+          -- amendment-chain, attached-evidence, run-input, run-manifest-hash,
+          terminal-authority and open are all channelled `integrity`.
+          NOTE: naming a channel means reading _SECURITY_CHECKS, which lives in
+          src/deepreason/verification/report.py -- FROZEN SURFACE 3. Consuming
+          the membership by import is a read, not an edit; ADDING to it is not.
+          Say which, in SPEC.md, before any code.
+     (iii) something else, stated as a rule and not as a list.
 
-Both readings are defensible:
-  (a) the ceiling is a blast-radius instrument, and blast radius is
-      production surface -- so it should be measured over `src` alone, where
-      this lane came in ON estimate;
-  (b) the ceiling is a review-cost instrument, and a 400-line test module is
-      400 lines a reviewer must read -- so the total is the right measure and
-      SPEC.md simply under-budgeted the tests.
+  Q-B. IS `amend` GATED AT ALL? The law names it. But amend is also the REPAIR
+     verb: test_amend_admits_a_bound_but_unintroduced_source is a regression
+     test for a real committed run whose bound sources were never introduced,
+     and amend is what fixes it; and a partially applied amendment is completed
+     by re-running amend, which is the documented recovery for
+     CONTINUE_AMENDMENT_INCOMPLETE. A defensible reading is that `continue` is
+     the resumption gate and amending a tampered root buys nothing runnable,
+     because `continue` still refuses. That reading contradicts the law's
+     literal words, so the operator has to make it.
 
-If (a): change the ceiling's `--paths` in the tranche template to `src`, and
-say so where the batch-1 withheld lanes are recorded, so the next lane does
-not stop on the same reading.
-If (b): the ceiling stands, this tranche is over it, and the disposition is
-whether to split the delivered work into two tranches after the fact -- which
-buys nothing here, since both commits are already self-contained and gated.
+  Q-C. DO INCOMPLETE ROOTS FAIL THE GATE? Every production root that reaches a
+     stop carries run-input.json, run-manifest.sha256 and a published terminal.
+     Two hand-built unit fixtures do not, and one CANNOT (its manifest is
+     schema v1, which verify_root refuses to open at all). Under (ii) this
+     question disappears; under (i) it decides whether two fixtures get rebuilt
+     or two tests get retired.
 
-Evidence: run
-  python tools/diff_budget.py 84514a0280f45d29e5066bb3be3d273ba73798db \
-    --ceiling 400 --paths src tests docs/map
-and
-  python tools/diff_budget.py 84514a0280f45d29e5066bb3be3d273ba73798db \
-    --ceiling 400 --paths src
+THEN build, with these already done and re-runnable:
+- experiments/2026-08-30-change-checkpoint-hardening/proof/forge_one_byte.py
+  -- the tamper proof, six surfaces, intact vs forged, on a committed root.
+- .../proof/gate_probe.py, census.py, forge_probe.py, verify_cost.py
+  -- the 59-root census, the 16-root gap, the 4 roots where a forged stored
+  verdict is undetected, and the price of re-deriving.
+- .../proof/gate_collisions.md -- the eight collisions, each classified as
+  fixable-by-placement, fixable-as-a-fixture, or not fixable.
+- .../proof/RED-checkpoint-hardening.txt and GREEN-checkpoint-hardening.txt
+  -- the gate's own mutation proof, from when it was armed.
+- git show 5fccb1e91 -- the reverted implementation, both verbs, ~60 lines.
+
+PLACEMENT, already measured: `continue`'s gate belongs last among the
+preconditions and before the run-stops/ archive (that position kept every other
+CONTINUE_ code intact). `amend`'s belongs LAST in _amend_locked, immediately
+before directory.mkdir -- at its SPEC'd position inside _require_terminal_stop
+it shadowed AMEND_PENDING_CONFLICT and AMEND_EVIDENCE_NOT_AUTHORIZED, which
+SPEC.md S2's own rationale said must not happen.
+
+End state: the gate armed, the tamper proof green, the ring green with no
+assertion weakened, and CON-run-identity.md's Traps entry REWRITTEN (never
+deleted) to say the gate landed.
 ```

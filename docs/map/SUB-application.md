@@ -331,17 +331,17 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   `runtime/continuation.py`), never a proxy for it.
   P2 UPDATED 2026-08-30 (`experiments/2026-08-30-change-checkpoint-hardening`),
   and only in part. The operator ruled on the law, not on this question: a
-  stop that cannot assure continuability must RECORD that fact typed, and
-  `continue`/`amend` are now gated on the record verifying intact. So the two
-  ordinary failure terminals here carry
+  stop that cannot assure continuability must RECORD that fact typed. So the
+  two failure terminals here now carry
   `TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL` and
-  `TERMINAL_NO_CHECKPOINT_WRITTEN` on the same
-  `terminal_lifecycle_refusal` key, and 16 committed roots of that shape stop
-  being silent about it. STILL OPEN, and still the operator's: whether
-  unfinished authority — or a failure terminal at all — OUGHT to permit
-  continuation. Widening `RESUMABLE_STOP_REASONS` would overturn owner
-  decision 4a of 2026-07-27 ("Failure terminals stay non-resumable") and was
-  parked, not decided.
+  `TERMINAL_NO_CHECKPOINT_WRITTEN` on the same `terminal_lifecycle_refusal`
+  key, and 16 committed roots of that shape stop being silent about it. TWO
+  halves stay open, both parked with measurements in that tranche's
+  `PARKED.md`: whether unfinished authority — or a failure terminal at all —
+  OUGHT to permit continuation (widening `RESUMABLE_STOP_REASONS` would
+  overturn owner decision 4a of 2026-07-27, "Failure terminals stay
+  non-resumable"); and the integrity gate the same law asks for, which was
+  built, measured, and NOT shipped — see `DR-CON-run-identity`'s Traps.
 `check: ! grep -A1 "except ValueError:" src/deepreason/application/text_runs.py | grep -q "return None$" && grep -q "except UnfinishedWorkflowAuthorityError as refused:" src/deepreason/application/text_runs.py && grep -q "TERMINAL_LIFECYCLE_REFUSAL_SCHEMA = \"deepreason-terminal-lifecycle-refusal-v1\"" src/deepreason/application/text_runs.py && grep -q "def _continuation_authority(harness)" src/deepreason/application/results.py && python -m pytest tests/test_terminal_lifecycle_refusal_is_recorded.py tests/test_results_command.py::test_terminal_readiness_answers_the_amend_question -q`
 - **A failure terminal that says nothing is indistinguishable from one that
   can be picked up again.** Both worker-failure branches used to publish

@@ -160,22 +160,6 @@ and stop digests (`CONTINUE_CHECKPOINT_REQUIRED`,
 
 `check: python -c "import pathlib;s=pathlib.Path('src/deepreason/runtime/continuation.py').read_text();assert all(c in s for c in ('CONTINUE_AMENDMENT_INCOMPLETE','CONTINUE_STOP_REQUIRED','CONTINUE_STOP_DIGEST_MISMATCH','CONTINUE_CHECKPOINT_REQUIRED','CONTINUE_CHECKPOINT_MISMATCH','CONTINUE_RUN_ACTIVE'))"`
 
-**Both continuation verbs are integrity-gated, and on the same predicate.**
-Operator law 2026-08-29: "I don't want a jailbroken run to be continuable."
-`prepare_continuation` and `amend` each re-derive the record through
-`verify_root` — `continue` as its LAST precondition and before its first write,
-so a refused root is byte-unchanged and every earlier refusal keeps its own
-code; `amend` inside `_require_terminal_stop`, AFTER the authority check, so a
-root that never reached a terminal keeps `AMEND_NOT_AT_TERMINAL`. Failure is
-`CONTINUE_RECORD_NOT_VERIFIED: <check names>` and
-`AMEND_RECORD_NOT_VERIFIED`. The verdict is RE-DERIVED, never read from
-`REPLAY_VALIDATION.json`: that file is a cache of a verdict taken over the log
-and is unchanged by a log edited afterwards. One definition serves both verbs
-(`record_verification_refusal` in `runtime/continuation.py`), because two
-copies of one rule is the drift this gate exists to prevent.
-
-`check: python -c "import pathlib;c=pathlib.Path('src/deepreason/runtime/continuation.py').read_text();a=pathlib.Path('src/deepreason/amendment/apply.py').read_text();assert 'def record_verification_refusal(' in c and 'from deepreason.invariants import verify_root' in c;assert 'CONTINUE_RECORD_NOT_VERIFIED' in c and '_assert_record_verified(root_path)' in c;assert 'from deepreason.runtime.continuation import record_verification_refusal' in a and 'AMEND_RECORD_NOT_VERIFIED' in a"`
-
 **An amendment supersedes the question and the evidence, never the authority.**
 The successor epoch's manifest is the parent's copied verbatim — the two
 digests are equal by construction — so routing, policy and budget authority
@@ -238,7 +222,6 @@ them, including the two that were never renamed.
 | what a re-prepared identity re-validates | `preparation.py` `RunPreparationService._load_existing` | `tests/test_run_preparation_service.py::test_preparation_is_idempotent_without_requalification_or_rewrites` |
 | the refusal when a root has already run | `application/text_runs.py` `TextRunApplicationService._launch` | `tests/test_application_text_runs_d0.py` |
 | what `continue` demands before resuming | `runtime/continuation.py` `prepare_continuation` | `tests/test_continuation.py` |
-| whether a record still verifies before either verb acts | `runtime/continuation.py` `record_verification_refusal` — ONE definition, consumed by `amendment/apply.py` too | `tests/test_checkpoint_hardening.py` |
 | the amendment record's shape or chaining rules | `amendment/models.py` `RunAmendmentV1` | `tests/test_amendment_chain_integrity.py` |
 | what an amendment may supersede, and its staging order | `amendment/apply.py` `_amend_locked`, `_stage_epoch_documents` | `tests/test_amendment_epochs.py` |
 | the progress/status file contract | `runtime/progress.py` `ProgressSink` | `tests/test_progress.py` |
@@ -275,20 +258,28 @@ them, including the two that were never renamed.
   negation for that reason: a scheduler call reappearing in `cli/main.py`
   is the defect returning.
 `check: ! grep -q "run_scheduler" src/deepreason/cli/main.py && grep -q "start_manifest_run" src/deepreason/cli/main.py && grep -q "^def finalize_stopped_root(" src/deepreason/application/text_runs.py && grep -q '"finalize"' src/deepreason/cli/main.py && python -m pytest tests/test_lifecycle_operation_parity.py -q`
-- **Assuming terminal authority notices a forged record.** It does not.
-  Measured 2026-08-30 on committed root
+- **Assuming terminal authority notices a forged record. It does not, and
+  neither verb consults the replay verdict at all.** Measured 2026-08-30 on
+  committed root
   `experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d`:
   flipping ONE byte of the provider endpoint recorded in `log.jsonl` leaves
-  `derive_terminal_authority` reporting `current_valid_committed`, while
-  `verify_root` reports `frozen-route` and `attempt-route` — both
-  SECURITY-channel findings. Before the 2026-08-30 integrity gate
-  (`experiments/2026-08-30-change-checkpoint-hardening`) that root was
-  amendable, and 16 of 59 committed roots passed amend's whole precondition
-  while their own `REPLAY_VALIDATION.json` published `valid: false`. The stored
-  verdict is not the fallback either: on 4 of those 16 a canonical forge of
-  `valid: true` was undetected, because `derive_terminal_authority` skips
+  `derive_terminal_authority` reporting `current_valid_committed` and `amend`
+  PASSING, while `verify_root` reports `frozen-route` and `attempt-route` —
+  both SECURITY-channel findings. Across the whole record, 16 of 59 committed
+  roots pass amend's entire precondition while their own
+  `REPLAY_VALIDATION.json` publishes `valid: false`. The stored verdict is not
+  a sound fallback either: on 4 of those 16 a canonical forge of `valid: true`
+  was undetected, because `derive_terminal_authority` skips
   `_validate_result_projection_binding` whenever the published result equals
-  the fail-closed pending projection. Re-derivation is the only sound source.
+  the fail-closed pending projection. STILL OPEN: the integrity gate the
+  2026-08-29 law asks for is NOT shipped. It was built and measured in
+  `experiments/2026-08-30-change-checkpoint-hardening` and PARKED, because an
+  unconditional `verify_root` refusal also refuses states the product supports
+  on purpose — a partially applied amendment mid-recovery, a bound but
+  unintroduced source that `amend` exists to admit, and any root that is not a
+  complete v6 record. Instruments and the full collision list are in that
+  tranche's `proof/`.
+`check: python -c "import pathlib,json; c=pathlib.Path('src/deepreason/runtime/continuation.py').read_text(); a=pathlib.Path('src/deepreason/amendment/apply.py').read_text(); assert 'verify_root' not in c and 'verify_root' not in a, 'the integrity gate landed: REWRITE this Traps entry, never delete it'; rows=json.loads(pathlib.Path('experiments/2026-08-30-change-checkpoint-hardening/proof/forge.json').read_text()); assert rows['undetected'] == 4 and rows['population'] == 16"`
 - **Changing the budget to "re-run the same question".** Budget is inside the
   identity digest, so a different `--cycles` mints a different root and a fresh
   qualification-cached preparation. That is often what an operator wanted, and

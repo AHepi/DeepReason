@@ -1,0 +1,7 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+E   assert True is False
+/home/user/dr-lanes/lane-A/tests/test_results_command.py:533: assert True is False
+=========================== short test summary info ============================
+FAILED tests/test_results_command.py::test_terminal_readiness_answers_the_rederived_verdict_under_verify
+1 failed in 7.05s
