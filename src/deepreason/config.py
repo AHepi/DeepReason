@@ -22,6 +22,9 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from deepreason.authority import TextAuthorityMode
+from deepreason.successor.registry import (
+    DEFAULT_DESTINATION_ID as _DEFAULT_SUCCESSOR_DESTINATION,
+)
 
 
 _ENV_IDENTIFIER = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
@@ -425,6 +428,34 @@ class Config(BaseModel):
     # rather than argued: with this off, no pack byte, no wire byte and no
     # label moves.
     DISCHARGE_POLICY: str = "discharge-required.v1"
+    # The successor-question channel's two per-run switches (operator law,
+    # 2026-08-29: "maximum configurable surface"). Both are read ONLY through
+    # `deepreason.successor.registry` -- `resolve` for the destination,
+    # `minting_enabled` for the gate -- so a consumer never branches on a field
+    # name and adding a destination stays a registration rather than a knob
+    # (`DR-CON-successor-questions`, `DR-INV-signal-contract`).
+    #
+    # A selector naming no registered destination is NOT refused at compile: it
+    # falls back to the shipped default and is disclosed by
+    # `unknown_destination_notices` (the all-configurations law). Turning the
+    # gate on is likewise never refused and never silent -- it emits the
+    # operator's own warning text (`minting_notices`, and a typed receipt on
+    # the run's own record).
+    #
+    # Both names avoid `stance`, `lineage`, `crossover` and `reseed`, which
+    # `DR-SEAM-manifest-x-schools` forbids from appearing in `run_manifest.py`
+    # -- and every `Config` field appears there by name in the drop list.
+    # The shipped default is taken FROM the registry rather than repeated as a
+    # literal here. `tests/test_successor_registry.py::test_a_row_id_literal_
+    # appears_in_the_registry_and_nowhere_else` is what forces it, and the
+    # reason is the modularity law rather than the test: a row id written in
+    # two places is a default that can silently disagree with the row it names.
+    # `deepreason.successor.registry` imports nothing from `deepreason` at
+    # module scope, so this direction is acyclic.
+    SUCCESSOR_QUESTION_DESTINATION: str = Field(
+        default_factory=lambda: _DEFAULT_SUCCESSOR_DESTINATION
+    )
+    SUCCESSOR_MINTING_ENABLED: bool = False
     # The §14 capture diagnostics. The window is a count of SEQUENCE NUMBERS,
     # never of wall-clock time and never of events: W_m(n) = {max(1, n-m+1) ..
     # n}. CAPTURE_W above is a different instrument's event window and the two

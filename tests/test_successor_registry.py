@@ -334,3 +334,80 @@ def test_the_declared_interface_is_exactly_six_names():
         "unknown_destination_notices",
     }, s.__all__
     assert len(s.__all__) == 6, s.__all__
+
+
+def test_every_gate_row_names_a_real_config_field():
+    """Regression (audit F12, parked as P9B-8, unblocked by the 2026-08-30
+    frozen-surface-4 grant): the shipped `minting.v1` row declared an
+    `enforcement` naming `Config.SUCCESSOR_MINTING_ENABLED`, an attribute
+    `Config` did not carry and — forbidding extras — could not be given. The
+    string was true of nothing, and `enforcement` is the field whose whole job
+    is to say where a row is actually READ, so a declaration could claim a
+    switch no consumer consults.
+
+    Parked rather than fixed at delivery for a stated reason: the natural check
+    could not PASS while no successor `Config` field existed, and writing a
+    check that must fail — or weakening it until it passes — would both have
+    been worse than recording the gap. The grant lands the fields, so the check
+    lands in the SAME commit, which is what `PARKED.md` P9B-8 requires.
+
+    GATE rows only. A destination row's `enforcement` names a call chain
+    (`route -> ScratchService.create_block`), not a field, so applying this to
+    `DESTINATIONS` would assert something that was never claimed.
+    """
+    from deepreason.config import Config
+    from deepreason.successor.registry import GATES
+
+    for row in GATES.values():
+        named = [w.strip(".,;'\"()") for w in row.enforcement.split()]
+        fields = [w for w in named if w.isupper() and "_" in w]
+        assert fields, (row.id, "a gate row must name the Config field it reads")
+        for field in fields:
+            assert field in Config.model_fields, (row.id, field)
+
+
+def test_both_switches_are_real_config_surface_and_not_a_getattr_default():
+    """The grant's behavioural half: before it, `Config` forbade extras and
+    carried no successor field, so a real run could not CHANGE either default —
+    only a duck-typed stub could (audit F16). R4's per-run switch and R6's
+    configurable surface were parked on exactly this.
+
+    Both halves are asserted: the SHIPPED defaults are unchanged (scratchpad,
+    minting off), and a run that sets each field is actually read by the
+    registry's own two consumers rather than falling through to the row
+    default.
+    """
+    from deepreason.config import Config
+    from deepreason.successor.registry import (
+        DEFAULT_DESTINATION_ID,
+        SuccessorDeclaration,
+        minting_enabled,
+        register_destination,
+        resolve,
+        unregister_destination,
+    )
+
+    assert Config().SUCCESSOR_QUESTION_DESTINATION == DEFAULT_DESTINATION_ID
+    assert Config().SUCCESSOR_MINTING_ENABLED is False
+    assert resolve(Config()).id == DEFAULT_DESTINATION_ID
+    assert minting_enabled(Config()) is False
+
+    on = Config().model_copy(update={"SUCCESSOR_MINTING_ENABLED": True})
+    assert minting_enabled(on) is True
+
+    register_destination(
+        SuccessorDeclaration(
+            id="elsewhere.v1",
+            routes="a registered alternative, for this test only",
+            default=False,
+            enforcement="deepreason.successor.route.route",
+            authority="test fixture",
+        )
+    )
+    try:
+        aimed = Config().model_copy(
+            update={"SUCCESSOR_QUESTION_DESTINATION": "elsewhere.v1"}
+        )
+        assert resolve(aimed).id == "elsewhere.v1"
+    finally:
+        unregister_destination("elsewhere.v1")

@@ -1,0 +1,35 @@
+total column-0 check openers parsed in INV-frozen-surfaces: 53
+the grant block's own checks, parsed: 3
+==================================================================
+line 600, exit=0
+python -c "
+import inspect
+from deepreason.run_manifest import _versioned_source_config_data as f
+src = inspect.getsource(f).splitlines()
+for field in ('SUCCESSOR_QUESTION_DESTINATION', 'SUCCESSOR_MINTING_ENABLED'):
+    q = chr(34)
+    want = '    data.pop(' + q + field + q + ', None)'
+    found = [ln for ln in src if ln.strip() == want.strip()]
+    assert found == [want], (field, found)
+"
+==================================================================
+line 610, exit=0
+python -c "
+import json
+from deepreason.config import Config
+from deepreason.run_manifest import source_config_hash, _unconditionally_dropped_config_fields
+from deepreason.qualification import qualification_subject_digest
+from tests.test_reusable_qualification import _manifest, _profile
+h = [source_config_hash(Config(), schema_version=v) for v in (1, 2, 3, 4, 5, 6)]
+assert h[0] == h[1] == '6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81', h
+assert h[2] == h[3] == h[4] == h[5] == '2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5', h
+p = _profile()
+assert qualification_subject_digest(_manifest(p), p) == '02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713'
+assert not [k for k in json.loads(_manifest(p).engine_config_json) if k.startswith('SUCCESSOR_')]
+assert {'SUCCESSOR_QUESTION_DESTINATION', 'SUCCESSOR_MINTING_ENABLED'} <= set(_unconditionally_dropped_config_fields())
+"
+==================================================================
+line 624, exit=0
+python -m pytest tests/test_successor_registry.py tests/test_manifest_config_disclosure.py -q
+STDOUT: ...............................                                          [100%]
+31 passed in 2.81s

@@ -1,0 +1,40 @@
+The Q1 grant block's own `check:` line, PROVEN RED before it was written down
+Tree: 907d260b9 plus the granted edit in the working tree.
+
+The mutation is the exact arrangement the 2026-08-26 entry records as the one
+a naive `grep -q 'data.pop("X"' ` PASSES while v6's hash has already moved:
+an EIGHT-SPACE, guard-scoped pop, which CONTAINS the four-space string as a
+substring. The check compares each line at its exact indent through
+inspect.getsource, so it must see the difference.
+
+=== CONTROL -- the real tree (both pops unconditional, four spaces) ===
+  the indent check: exit 0
+  exit=0
+  v1/v2 : 6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81
+  v3-v6 : 2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5
+
+=== MUTANT -- both pops guard-scoped to `if schema_version < 4:`, eight spaces ===
+
+  first, that a NAIVE substring check does NOT notice:
+    grep -q 'data.pop("SUCCESSOR_MINTING_ENABLED", None)'  ->  exit 0  (PASSES, wrongly)
+
+  and that the shipped hash HAS in fact moved at v4-v6:
+    v1/v2 : 6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81   (unchanged -- the guard still covers these)
+    v3    : 2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5
+    v4-v6 : 5b898a28b29ee901c097321b3e5dc96c84f186ef39ef877c3481357b5335fbab   <-- MOVED
+
+  the grant block's INDENT check, against the same mutant:
+Traceback (most recent call last):
+  File "<string>", line 9, in <module>
+AssertionError: ('SUCCESSOR_QUESTION_DESTINATION', ['        data.pop("SUCCESSOR_QUESTION_DESTINATION", None)'])
+    exit=1  <-- RED, which is the point
+
+  and the grant block's DIGEST check, against the same mutant:
+Traceback (most recent call last):
+  File "<string>", line 5, in <module>
+AssertionError: ['6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81', '6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81', '2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5', '5b898a28b29ee901c097321b3e5dc96c84f186ef39ef877c3481357b5335fbab', '5b898a28b29ee901c097321b3e5dc96c84f186ef39ef877c3481357b5335fbab', '5b898a28b29ee901c097321b3e5dc96c84f186ef39ef877c3481357b5335fbab']
+    exit=1  <-- RED too: two independent checks, one mutant
+
+=== CONTROL AGAIN -- mutant reverted ===
+  v3-v6 back to 2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5
+  grep -c '^    data.pop(' -> 27

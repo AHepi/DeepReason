@@ -246,7 +246,7 @@ def _carried(manifest):
 
 
 def test_every_dropped_field_the_managed_path_can_set_round_trips():
-    """R1. At HEAD before this tranche the answer was 0 of 25."""
+    """R1. At HEAD before the carriage tranche the answer was 0 of 25."""
 
     dropped = _unconditionally_dropped_config_fields()
     explicit = {
@@ -256,6 +256,14 @@ def test_every_dropped_field_the_managed_path_can_set_round_trips():
         "ENGAGED_CRITICISM_AUTHORITY": "defended_trial",
         "SEED_PROBLEM_BUDGET_FLOOR": 0.75,
         "SPLIT_BUDGET_SEAT_PROTOCOL": "on",
+        # Every string-valued dropped field needs a row here, because the
+        # generic perturbation below is `default + 1` and a str has no such
+        # value. Added 2026-08-30 with the successor destination selector;
+        # that tranche's SPEC.md P-FIX-4 predicted no fixture would move and
+        # was wrong about this one. The update EXTENDS coverage -- the new
+        # field is now asserted to round-trip like the other 24 -- rather than
+        # relaxing anything.
+        "SUCCESSOR_QUESTION_DESTINATION": "elsewhere.v1-probe",
     }
     carried = 0
     for field in dropped:
@@ -278,7 +286,12 @@ def test_every_dropped_field_the_managed_path_can_set_round_trips():
         manifest = _manifest(_profile(), config_updates={field: want})
         assert getattr(config_from_run_manifest(manifest), field) == want, field
         carried += 1
-    assert carried == len(dropped) - 1 == 24
+    # 26 = the 27 unconditionally dropped fields minus host-owned
+    # CHANNELS_DISABLED. Was 24 (of 25) until the successor channel's two
+    # switches landed under the 2026-08-30 frozen-surface-4 grant. The literal
+    # is kept beside the derived value on purpose: `len(dropped) - 1` alone
+    # would stay true if the drop set silently SHRANK.
+    assert carried == len(dropped) - 1 == 26
 
 
 def test_carriage_moves_no_qualification_subject_digest_it_did_not_already_move():

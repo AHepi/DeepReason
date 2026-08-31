@@ -1,0 +1,71 @@
+Q1 GRANTED CONTACT -- the two measurements, taken AFTER the edit
+Tree: 907d260b9 plus the granted edit in the working tree.
+Disposition written first, at proof-time HEAD 907d260b9 (FIX.md, committed
+before a line of this edit existed).
+
+=== MEASUREMENT 1 -- the qualification subject digest is UNMOVED ===
+(the recipe's whole point: a Config field NOT dropped here moves every
+ subject digest and every frozen manifest golden -- measured 2026-08-22,
+ b9038b84 -> a5d81e5d, and the full gate red in ~40 places)
+
+  source_config_hash, per schema version
+    v1  6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81  IDENTICAL
+    v2  6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81  IDENTICAL
+    v3  2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5  IDENTICAL
+    v4  2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5  IDENTICAL
+    v5  2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5  IDENTICAL
+    v6  2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5  IDENTICAL
+
+  qualification subject digest over the committed fixture
+    before  02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713
+    after   02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713
+    verdict UNMOVED
+
+  neither field reaches engine_config_json:
+    leaked = [] (none)
+
+=== MEASUREMENT 2 -- both new fields are DISCLOSED BY CARRIAGE, exactly
+    like any other dropped field ===
+
+  the DERIVED drop set (never restated beside the drop list) carries both:
+    SUCCESSOR_QUESTION_DESTINATION     True
+    SUCCESSOR_MINTING_ENABLED          True
+  drop set size: 27
+
+  a run that CHANGES each switch: one notice each, the value carried back,
+  and the subject digest still unmoved:
+
+    SUCCESSOR_MINTING_ENABLED = True
+      notice code    : ENGINE_CONFIG_FIELD_NOT_CARRIED
+      notice value   : true
+      carried back   : True   round-trips: True
+      subject digest : UNMOVED
+
+    SUCCESSOR_QUESTION_DESTINATION = 'elsewhere.v1'
+      notice code    : ENGINE_CONFIG_FIELD_NOT_CARRIED
+      notice value   : "elsewhere.v1"
+      carried back   : 'elsewhere.v1'   round-trips: True
+      subject digest : UNMOVED
+
+  and a run that changes NEITHER emits no successor notice at all:
+     [] (none)
+
+=== the SHAPE of the edit ===
+$ grep -c '^    data\.pop(' src/deepreason/run_manifest.py      # 25 -> 27
+27
+$ git diff -- src/deepreason/run_manifest.py | grep -c '^-[^-]'   # deletions
+0
+$ git diff --numstat -- src/deepreason/run_manifest.py src/deepreason/config.py
+19	0	src/deepreason/config.py
+12	0	src/deepreason/run_manifest.py
+
+  SPEC.md S15's accept says `2\t0` for run_manifest.py. The measured value is
+  `12\t0`, and the difference is a TEN-LINE COMMENT, not a second change:
+  two data.pop lines plus the justification every one of the 25 pops above
+  them carries. Zero deletions, both pops unconditional and at four spaces.
+  Stated rather than left for a reader to reconcile -- the prior grants
+  record theirs the same way ('Insertions only -- 9 and 0' for ONE pop
+  line, i.e. eight lines of comment).
+
+$ sh -c '! grep -qiE "\bstance\b|lineage|crossover|reseed" src/deepreason/run_manifest.py'
+  exit=0 -- DR-SEAM-manifest-x-schools still holds against both new field names

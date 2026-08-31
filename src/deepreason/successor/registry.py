@@ -50,13 +50,17 @@ class SuccessorDeclaration:
     otherwise". ``enforcement`` names where the row is actually READ, and where
     a switch cannot yet be SET it must say so rather than name one that does not
     exist -- the failure mode this repo has already paid for once, in an
-    allocation controller whose 47 decisions reached no dispatch. That is a
-    convention a row's author keeps, NOT an enforced property: no test and no
-    map check reads a `SuccessorDeclaration`'s ``enforcement``, so a false string
-    here goes unnoticed until a reader follows it. `DR-INV-evidence-channels`
-    carries the check this registry still lacks -- it asserts every channel row's
-    toggle is a real `Config` field, which is the assertion no gate row here
-    could satisfy while Q1 is unanswered.
+    allocation controller whose 47 decisions reached no dispatch. Since the
+    2026-08-30 frozen-surface-4 grant this is ENFORCED for gate rows rather
+    than merely conventional:
+    ``tests/test_successor_registry.py::test_every_gate_row_names_a_real_config_field``
+    asserts that every UPPER_CASE word a gate row's ``enforcement`` names is a
+    real ``Config`` field, which is the shape `DR-INV-evidence-channels`
+    already carries for channel rows and which no gate row could satisfy while
+    Q1 was unanswered (audit F12: the shipped row named
+    ``Config.SUCCESSOR_MINTING_ENABLED``, an attribute ``Config`` did not carry
+    and, forbidding extras, could not be given). DESTINATION rows are still
+    only conventional here: theirs name a call chain rather than a field.
 
     ``routes`` is producer-agnostic on purpose: it says what the row DOES, never
     which subsystem proposed the question, because a consumer that has to know
@@ -112,10 +116,10 @@ GATES: dict[str, SuccessorDeclaration] = {
         enforcement=(
             "deepreason.successor.mint.mint -> registry.minting_enabled -> "
             f"getattr(config, {SUCCESSOR_MINTING_FIELD!r}, this row's default). "
-            f"deepreason.config.Config declares no {SUCCESSOR_MINTING_FIELD} "
-            "field and forbids extras, so no run configured through it can "
-            "switch this gate on until the Q1 frozen-surface-4 grant lands "
-            "(PARKED.md Q1); today only a duck-typed configuration object can"
+            f"deepreason.config.Config.{SUCCESSOR_MINTING_FIELD} is the real "
+            "field a run sets, added under the 2026-08-30 frozen-surface-4 "
+            "grant; the getattr default remains the answer for a duck-typed "
+            "configuration object that carries no such attribute"
         ),
         authority='operator 2026-08-29: "Switch off by default"',
         # The operator named the TEXT, not the idea, so it is carried verbatim

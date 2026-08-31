@@ -543,6 +543,93 @@ assert qualification_subject_digest(on, p) == base, 'carriage moved a subject di
 assert config_from_run_manifest(on).JUDGE_SEATS_ENABLED is True, 'the value is not carried'
 "`
 
+**Granted contact, 2026-08-30 — the successor channel's two per-run switches
+(Q1).** The monitor GRANTED this contact on the record, in the recipe's own
+terms: the frozen-surface-4 grant for the two `Config` fields is granted **per
+the documented recipe**, which is the operator's 2026-08-26 sentence quoted
+above — *"a Config field is not done WITHOUT that line"*. Requested, before a
+line of code existed, at
+`experiments/2026-08-30-change-successor-questions/FIX.md`, with
+`tools/blast_radius.py`'s own `CONTACT` verdict pasted and both rows disposed
+one at a time; the SPEC that forecast it is that tranche's `SPEC.md` Q1.
+
+What it unblocks: until it landed, `Config` carried NO successor field and
+FORBIDS extras, so `resolve` and `minting_enabled` read their selector by
+`getattr` and a real run could not CHANGE either default — the destination was
+re-aimable only against a duck-typed stub, and the minting gate could not be
+switched on at all. The channel's shipped defaults were correct; its
+configurability did not exist (audit F16).
+
+What moved: TWO `data.pop` lines in `_versioned_source_config_data` —
+`SUCCESSOR_QUESTION_DESTINATION` and `SUCCESSOR_MINTING_ENABLED` — joining the
+twenty-five already there. **Insertions only, 12 and 0** (two pops and their
+ten-line justification; `SPEC.md` S15's accept says `2	0`, which counts the
+pops and not the comment, and that tranche's `proof/q1_grant_measurements.txt`
+states the difference rather than leaving it to be reconciled). No schema, no
+validator, no Pydantic model, no check name, no record format, no serializer
+branch — so §4's named mistake, "reading the model and not the validator",
+cannot arise: no validator is in the diff.
+
+Both pops are UNCONDITIONAL and at exactly four spaces, which is the
+`DISCHARGE_POLICY` entry's fourth rider rather than a style choice.
+
+Preservation is MEASURED, per version, not argued. Before and after the edit:
+
+```
+schema  before                                                             after
+1,2     6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81   identical
+3-6     2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5   identical
+
+qualification subject digest over the committed fixture
+        02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713   identical
+```
+
+Zero digest motion, so no home owes a ~14-minute battery. And the effect IS
+disclosed rather than merely hidden: both fields join the DERIVED drop set, so
+a run that changes either gets an `ENGINE_CONFIG_FIELD_NOT_CARRIED` notice
+carrying the value, and `config_from_run_manifest` carries it back — measured
+for both fields at `proof/q1_grant_measurements.txt`, subject digest still
+unmoved in each case. That is the 2026-08-29 carriage grant doing its job on a
+field added after it, which is exactly what deriving the drop set from the drop
+list was for.
+
+Surface 5 is reached and NOT edited: no new notice CODE exists, so the
+seven-line strip in `qualification_subject_payload` already removes these
+notices for the same reason it removes every other one.
+
+`check: python -c "
+import inspect
+from deepreason.run_manifest import _versioned_source_config_data as f
+src = inspect.getsource(f).splitlines()
+for field in ('SUCCESSOR_QUESTION_DESTINATION', 'SUCCESSOR_MINTING_ENABLED'):
+    q = chr(34)
+    want = '    data.pop(' + q + field + q + ', None)'
+    found = [ln for ln in src if ln.strip() == want.strip()]
+    assert found == [want], (field, found)
+"`
+`check: python -c "
+import json
+from deepreason.config import Config
+from deepreason.run_manifest import source_config_hash, _unconditionally_dropped_config_fields
+from deepreason.qualification import qualification_subject_digest
+from tests.test_reusable_qualification import _manifest, _profile
+h = [source_config_hash(Config(), schema_version=v) for v in (1, 2, 3, 4, 5, 6)]
+assert h[0] == h[1] == '6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81', h
+assert h[2] == h[3] == h[4] == h[5] == '2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5', h
+p = _profile()
+assert qualification_subject_digest(_manifest(p), p) == '02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713'
+assert not [k for k in json.loads(_manifest(p).engine_config_json) if k.startswith('SUCCESSOR_')]
+assert {'SUCCESSOR_QUESTION_DESTINATION', 'SUCCESSOR_MINTING_ENABLED'} <= set(_unconditionally_dropped_config_fields())
+"`
+`check: python -m pytest tests/test_successor_registry.py tests/test_manifest_config_disclosure.py -q`
+
+The first check compares each line at its EXACT indent through
+`inspect.getsource`, and it is captured RED under an eight-space guard-scoped
+mutant at
+`experiments/2026-08-30-change-successor-questions/proof/frozen_grant_check_red.txt`
+BEFORE it was written down — the arrangement a naive `grep -q` passes while
+v6's hash has already moved.
+
 ### 5. Anything altering qualification subject digests — `qualification.py`
 
 The qualification cache keys on a subject digest built from the manifest, the

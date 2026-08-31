@@ -2501,6 +2501,18 @@ def _versioned_source_config_data(
     data.pop("CAPTURE14_SC_CEILING", None)
     data.pop("CAPTURE14_ENTER_K", None)
     data.pop("CAPTURE14_EXIT_K", None)
+    # The successor-question channel's two per-run switches (granted contact
+    # 2026-08-30, DR-INV-frozen-surfaces). Here for the reason every gate above
+    # is: each is consulted at a site INSIDE the run -- `registry.resolve` and
+    # `registry.minting_enabled` -- and neither is ever written to the
+    # manifest. Their effect IS recorded, per proposal rather than per
+    # manifest, by the `successor-question:` and `successor-problem-minted`
+    # receipts. UNCONDITIONAL and at four spaces: scoping such a pop to a
+    # schema range was refuted by two v5 goldens (2026-08-26), and an
+    # eight-space guard-scoped pop passes a naive substring check while v6's
+    # hash has already moved.
+    data.pop("SUCCESSOR_QUESTION_DESTINATION", None)
+    data.pop("SUCCESSOR_MINTING_ENABLED", None)
     return data
 
 
