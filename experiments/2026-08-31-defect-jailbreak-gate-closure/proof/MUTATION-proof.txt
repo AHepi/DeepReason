@@ -1,0 +1,12 @@
+baseline (all must be True): {'tripwire': True, 'code_count': True, 'gate_tests': True, 'collision_guard': True}
+-- neutralise the gate (always allow)
+   killed: ['behaviour', 'gate_tests']
+-- drop continue's call site
+   killed: ['behaviour', 'gate_tests', 'tripwire']
+-- drop amend's call site
+   killed: ['code_count', 'gate_tests', 'tripwire']
+-- widen the channel filter to every violation
+   killed: ['collision_guard']
+baseline_all_green: True
+every_mutation_detected: True
+written: /home/user/DeepReason/experiments/2026-08-31-defect-jailbreak-gate-closure/proof/mutation_proof.json

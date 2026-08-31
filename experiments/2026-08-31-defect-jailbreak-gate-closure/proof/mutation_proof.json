@@ -1,0 +1,93 @@
+{
+  "baseline": {
+    "code_count": true,
+    "collision_guard": true,
+    "gate_tests": true,
+    "tripwire": true
+  },
+  "baseline_all_green": true,
+  "every_mutation_detected": true,
+  "mutations": [
+    {
+      "detected": true,
+      "expected_killed_at_least": [
+        "behaviour",
+        "gate_tests"
+      ],
+      "file": "src/deepreason/runtime/continuation.py",
+      "killed": [
+        "behaviour",
+        "gate_tests"
+      ],
+      "name": "neutralise the gate (always allow)",
+      "observed_green": {
+        "behaviour": false,
+        "code_count": true,
+        "collision_guard": true,
+        "gate_tests": false,
+        "tripwire": true
+      }
+    },
+    {
+      "detected": true,
+      "expected_killed_at_least": [
+        "gate_tests",
+        "tripwire"
+      ],
+      "file": "src/deepreason/runtime/continuation.py",
+      "killed": [
+        "behaviour",
+        "gate_tests",
+        "tripwire"
+      ],
+      "name": "drop continue's call site",
+      "observed_green": {
+        "behaviour": false,
+        "code_count": true,
+        "collision_guard": true,
+        "gate_tests": false,
+        "tripwire": false
+      }
+    },
+    {
+      "detected": true,
+      "expected_killed_at_least": [
+        "code_count",
+        "gate_tests",
+        "tripwire"
+      ],
+      "file": "src/deepreason/amendment/apply.py",
+      "killed": [
+        "code_count",
+        "gate_tests",
+        "tripwire"
+      ],
+      "name": "drop amend's call site",
+      "observed_green": {
+        "behaviour": true,
+        "code_count": false,
+        "collision_guard": true,
+        "gate_tests": false,
+        "tripwire": false
+      }
+    },
+    {
+      "detected": true,
+      "expected_killed_at_least": [
+        "collision_guard"
+      ],
+      "file": "src/deepreason/runtime/continuation.py",
+      "killed": [
+        "collision_guard"
+      ],
+      "name": "widen the channel filter to every violation",
+      "observed_green": {
+        "behaviour": true,
+        "code_count": true,
+        "collision_guard": false,
+        "gate_tests": true,
+        "tripwire": true
+      }
+    }
+  ]
+}
