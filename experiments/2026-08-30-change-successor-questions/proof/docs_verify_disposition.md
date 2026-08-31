@@ -114,3 +114,29 @@ baseline entry.** It does not belong in `docs/AUDIT_BASELINES.md`, because on
 ## Run 2 — after the four repairs
 
 See `docs_verify_run2.txt`, appended below by the same command.
+## Run 2 — after the four repairs
+
+```
+docs_verify [full]: 71 documents, 1290 checks, 4 workers
+FAIL CON-run-identity.md:211
+FAIL CON-run-identity.md:213
+FAIL CON-run-identity.md:215
+FAIL INV-frozen-surfaces.md:181
+FAIL INV-frozen-surfaces.md:297
+FAIL SEAM-llm-x-rules.md:54
+docs_verify: 6 failed
+```
+
+**6 failed, and every one is disposed above:** the five BASELINE rows
+(`SEAM-llm-x-rules.md:54`, `INV-frozen-surfaces.md:181`, and the three
+`CON-run-identity.md` git-history rows a shallow clone always shows), plus
+`INV-frozen-surfaces.md:297` — the branch tripwire correctly reporting the
+GRANTED surface-4 contact, which is self-clearing on merge.
+
+**No delta beyond the recorded list.** All four findings this integration
+caused are repaired; `SUB-application.md:421`, the container-conditional
+timing row the baseline permits, did not trip in either run.
+
+The corpus grew rather than shrank: 71 documents and 1290 checks against
+the baseline's 70 and 1250 — lane B's new document plus the checks this
+integration added to five others. Nothing was removed to get here.
