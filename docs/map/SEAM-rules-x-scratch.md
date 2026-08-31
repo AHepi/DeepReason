@@ -222,12 +222,20 @@ compare it.
    scratch module at any scope, and neither `render_crit_pack` nor
    `render_batch_crit_pack` gained a parameter. WHO performs the write — the
    criticism rule itself, or something that is not criticism reading what
-   criticism recorded — is a SEPARATE question the law does not settle, and it
-   is parked for the operator in
-   `experiments/2026-08-30-change-successor-questions/PARKED.md` as Q3. Until
-   it is answered, nothing under `rules/` names the channel, and that emptiness
-   is itself checked.
+   criticism recorded — was a SEPARATE question the law did not settle, parked
+   for the operator as Q3. **ANSWERED 2026-08-30: ROAD B.** A reader outside
+   `rules/` (`successor/reader.py`) walks what criticism already recorded and
+   routes it, so THIS RULE IS NOT OVERTURNED — the criticism side was not
+   widened at all. `rules/crit.py` takes a ZERO-LINE DIFF against `main`, no
+   module under `rules/` names `deepreason.successor` at any scope, and both
+   facts are measured rather than asserted
+   (`tests/test_successor_dispatch.py::test_rules_crit_takes_a_zero_line_diff`
+   and `::test_no_module_under_rules_imports_the_successor_package`). Road A —
+   a `_file_successor_question` helper beside `_file_attribution` in `crit.py`
+   — would have passed every mechanical check on this page while being a
+   workaround of this rule's letter, and was NOT taken.
 `check: python -m pytest tests/test_successor_law_line.py::test_nothing_that_labels_ranks_or_admits_reads_a_successor_question tests/test_successor_law_line.py::test_the_channel_has_no_permitted_exception_inside_a_deciding_package tests/test_prose_refutation_boundaries.py -q && test "$(grep -c scratch src/deepreason/rules/crit.py)" -eq 2`
+`check: python -m pytest tests/test_successor_dispatch.py::test_rules_crit_takes_a_zero_line_diff tests/test_successor_dispatch.py::test_no_module_under_rules_imports_the_successor_package -q`
 
 What breaks first, in the order you will see it: `ConjectureContextStale` if you
 plan at the wrong fence; `"final Conj pack must contain the exact advisory

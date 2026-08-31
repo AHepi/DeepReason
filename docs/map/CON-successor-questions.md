@@ -21,19 +21,63 @@ questions: optional to propose, routed by pluggable destination, minting gated
 off-by-default"), captured verbatim in
 `experiments/2026-08-30-change-successor-questions/REQUEST.md`.
 
-NOTHING IN PRODUCTION CALLS THIS YET. The channel is built, tested and
-mutation-proved, but no module outside `src/deepreason/successor/` imports it,
-so a live run today records the field on the criticism output contract and
-routes nothing: no block is written, no conjecturer meets it, no receipt is
-recorded. Everything this document describes is the library as it behaves when
-called, and today only tests call it. What is missing is one dispatch site, and
-WHERE that site may live is exactly the tranche's parked operator question Q3
-(may criticism write to the workshop?) in
-`experiments/2026-08-30-change-successor-questions/PARKED.md`. The check below
-goes RED on the day a production module imports this package, which is the day
-this paragraph must be rewritten.
+THE CHANNEL IS LIVE. Rewritten 2026-08-30, and the paragraph it replaces said
+the opposite: "NOTHING IN PRODUCTION CALLS THIS YET ... a live run today records
+the field on the criticism output contract and routes nothing." That was true
+as delivered and stopped being true when the operator answered Q3.
 
-`check: ! grep -rqE "deepreason\.successor|from deepreason import successor" --include=*.py src/deepreason --exclude-dir=successor && python -c "import deepreason.successor"`
+Q3 asked WHERE the one dispatch site may live — may the criticism side write to
+the workshop? — and the answer is **ROAD B**: a reader OUTSIDE `rules/` walks
+what criticism already recorded and routes what it finds
+(`src/deepreason/successor/reader.py`). So `DR-SEAM-rules-x-scratch`'s
+asymmetry survives as written rather than being overturned: `rules/crit.py`
+takes a ZERO-LINE DIFF, and nothing under `rules/` names this package at all.
+
+**How it reaches production without any decider naming it.** The two run paths
+— `scheduler/scheduler.py::Scheduler._arg_crit` and `loop.py` — fire a HOOK
+POINT after each criticism pass (`aftercycle.run_after_criticism`) and name no
+channel at all. They have to: `tests/test_successor_law_line.py` forbids every
+DECIDING package, the scheduler included, from naming this machinery, with an
+EMPTY permitted-exception list, and that rule is about COUPLING rather than
+spelling — so the answer is to have no coupling, not an exception. A build with
+the hook unregistered runs cycles identically.
+
+`aftercycle` DECLARES its hooks and resolves them lazily rather than letting
+each package register itself on import, and that was measured rather than
+preferred: with self-registration, importing `deepreason.scheduler.scheduler`
+alone left the registry EMPTY, so the channel was armed only on import orders
+that happened to touch `deepreason.config` first. A channel that works by
+import accident is the defect this dispatch site exists to close.
+
+So exactly TWO modules outside the package name it, and neither is a caller:
+`aftercycle.py` holds the declared import path, and `config.py` imports the
+registry's `DEFAULT_DESTINATION_ID` so a row id has one owner rather than two.
+The check below pins that list and pins the absence under `rules/`.
+
+`check: python -c "
+import pathlib, re
+root = pathlib.Path('src/deepreason')
+pattern = re.compile(r'deepreason\.successor|from deepreason import successor')
+found = sorted(
+    str(p) for p in root.rglob('*.py')
+    if 'successor/' not in str(p).replace(chr(92), '/')
+    and pattern.search(p.read_text(encoding='utf-8'))
+)
+assert found == ['src/deepreason/aftercycle.py', 'src/deepreason/config.py'], found
+assert not [f for f in found if '/rules/' in f], found
+"`
+`check: python -m pytest tests/test_successor_dispatch.py -q`
+
+**What the reader can and cannot resolve, stated because it bounds one road.**
+The question is a wire field, so the model's own JSON survives as the raw
+completion blob; what does NOT survive is the call-local `AliasTable` that maps
+`SRC_001` to a real target id. The PROBLEM is therefore always resolvable and
+the TARGET is not: every artifact one criticism call attacks comes from one
+problem's candidate set, so any target of that call yields the same problem
+through `state.addr`. Routing needs only the problem and is fully live;
+minting needs `from: [problem, target]`, so a call that criticised several
+artifacts records a typed `ROUTED_TARGET_UNRESOLVED` and mints nothing. It
+never guesses a target, and it never falls silent about not having one.
 
 Three things it is deliberately NOT:
 
@@ -91,10 +135,12 @@ callers of the admission gate — name no part of this machinery, and the
 permitted-exception list is EMPTY. The package list is not a hand-maintained
 reading: `test_every_caller_of_the_admission_gate_is_inside_a_deciding_package`
 censuses every caller of `anti_relapse.check` under `src/deepreason` and reddens
-if one appears in a package the absence check does not scan. That emptiness is
-the current answer to the tranche's parked Q3 (may the criticism side write to
-the workshop?): until an operator answers it, nothing inside `rules/` dispatches
-this channel.
+if one appears in a package the absence check does not scan. That emptiness
+SURVIVED the answer to Q3, which is the point of road B: the dispatch site is a
+reader outside `rules/`, so nothing inside `rules/` dispatches this channel and
+nothing that decides reads the field. Before 2026-08-30 the emptiness meant
+"the question is unanswered"; now it means "the answer preserved the
+asymmetry", and the assertion is the same either way.
 
 `check: python -m pytest tests/test_successor_law_line.py::test_nothing_that_labels_ranks_or_admits_reads_a_successor_question tests/test_successor_law_line.py::test_every_caller_of_the_admission_gate_is_inside_a_deciding_package -q`
 
@@ -147,7 +193,7 @@ assert d is not None and GATE_WARNING_RECEIPT.startswith(d.name)
 assert d.unit != 'unspecified' and d.staleness != 'unspecified'
 "`
 
-`check: python -c "import deepreason.successor as s; assert set(s.__all__) == {'resolve','route','mint','unknown_destination_notices','SUCCESSOR_DESTINATION_REGISTRY_VERSION','DESTINATIONS'}, s.__all__; assert callable(s.minting_notices)"`
+`check: python -c "import deepreason.successor as s; assert set(s.__all__) == {'resolve','route','mint','dispatch_recorded_proposals','unknown_destination_notices','SUCCESSOR_DESTINATION_REGISTRY_VERSION','DESTINATIONS'}, s.__all__; assert callable(s.minting_notices) and callable(s.recorded_proposals)"`
 
 ## State it owns
 

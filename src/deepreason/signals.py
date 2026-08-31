@@ -826,6 +826,27 @@ _DISCHARGE_SIGNALS: tuple[SignalDeclaration, ...] = (
 
 _DECLARED_PREFIXES: tuple[SignalDeclaration, ...] = (
     SignalDeclaration(
+        name="successor-dispatch:",
+        unit="event",
+        semantics="how one RECORDED successor question was DISPATCHED by the "
+                  "reader that walks the criticism record (suffix = the typed "
+                  "disposition -- ROUTED when it was sent to the selected "
+                  "destination and its originating target was resolvable, "
+                  "ROUTED_TARGET_UNRESOLVED when it was sent but the call "
+                  "criticised several artifacts so the minting road had no "
+                  "single target to name, UNLINKED when no target of the call "
+                  "addressed any problem; inputs: [signal, "
+                  "<call seq>:<index within that call>, problem id] and "
+                  "[signal, <call seq>:<index>] for UNLINKED). The key is what "
+                  "makes dispatch idempotent across a resume: a second walk of "
+                  "the same record dispatches nothing. It is evidence about "
+                  "the DISPATCH and nothing else -- not evidence that the "
+                  "question is worth asking, not evidence about the criticism "
+                  "that proposed it, and never a reward, a penalty or an input "
+                  "to rank, admission or status",
+        staleness="permanent",
+    ),
+    SignalDeclaration(
         name="successor-minting-gate:",
         unit="event",
         semantics="the successor MINTING GATE's state, disclosed on the record "

@@ -9,6 +9,10 @@ happens to it is configuration:
   the question was proposed under.
 - `mint` is the second road -- the proposal becomes a problem -- and it is off
   unless a run switches it on.
+- `dispatch_recorded_proposals` is the PRODUCTION entry: a reader outside
+  `rules/` that walks what criticism already recorded and routes what it
+  finds. It is idempotent over an unchanged record, so a resumed run
+  re-dispatches nothing.
 - `unknown_destination_notices` discloses a selector naming no registered row,
   and `minting_notices` discloses the gate's own warning when it is on. Neither
   ever refuses.
@@ -33,17 +37,27 @@ from deepreason.successor.registry import (
     unregister_destination,
     writer_for,
 )
+from deepreason.successor.reader import (
+    dispatch_recorded_proposals,
+    recorded_proposals,
+)
 from deepreason.successor.route import route
 
-# The DECLARED interface. `minting_notices` and the registration helpers are
-# reachable beside it as ordinary module attributes; this tuple is the surface a
-# consumer may rely on. It is pinned by the `__all__` check in
-# docs/map/CON-successor-questions.md, which tools/docs_verify.py runs, and by
-# tests/test_successor_registry.py::test_the_declared_interface_is_exactly_six_names,
+# The DECLARED interface. `minting_notices`, `recorded_proposals` and the
+# registration helpers are reachable beside it as ordinary module attributes;
+# this tuple is the surface a consumer may rely on. It is pinned by the
+# `__all__` check in docs/map/CON-successor-questions.md, which
+# tools/docs_verify.py runs, and by
+# tests/test_successor_registry.py::test_the_declared_interface_is_exactly_seven_names,
 # so dropping a name here goes red in both instruments.
+#
+# `dispatch_recorded_proposals` joined it on 2026-08-30 (Q3 road B): it is the
+# name a production caller uses, so it is part of the contract rather than an
+# implementation detail beside it.
 __all__ = [
     "DESTINATIONS",
     "SUCCESSOR_DESTINATION_REGISTRY_VERSION",
+    "dispatch_recorded_proposals",
     "mint",
     "resolve",
     "route",

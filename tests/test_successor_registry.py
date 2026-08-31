@@ -332,21 +332,27 @@ def test_a_row_id_literal_appears_in_the_registry_and_nowhere_else():
         assert holders == ["src/deepreason/successor/registry.py"], (row_id, holders)
 
 
-def test_the_declared_interface_is_exactly_six_names():
+def test_the_declared_interface_is_exactly_seven_names():
     """Regression (audit F29): the `__all__` tuple was documented as pinned by
     this file and was not; a mutation dropping two names left all 42 tests of
-    the tranche green, and only docs_verify would have caught it."""
+    the tranche green, and only docs_verify would have caught it.
+
+    Six until 2026-08-30, when Q3 road B added the production entry
+    `dispatch_recorded_proposals`. A name a production caller uses belongs in
+    the contract, not beside it.
+    """
     import deepreason.successor as s
 
     assert set(s.__all__) == {
         "DESTINATIONS",
         "SUCCESSOR_DESTINATION_REGISTRY_VERSION",
+        "dispatch_recorded_proposals",
         "mint",
         "resolve",
         "route",
         "unknown_destination_notices",
     }, s.__all__
-    assert len(s.__all__) == 6, s.__all__
+    assert len(s.__all__) == 7, s.__all__
 
 
 def test_every_gate_row_names_a_real_config_field():

@@ -1,0 +1,65 @@
+Q3 ROAD B -- the production dispatch site, each behaviour proven able to fail
+Tree: be8882069 plus the Q3 edit in the working tree.
+
+=== CONTROL -- the real tree ===
+15 passed in 0.47s
+
+=== MUTANT 1 -- the batch shape is not read (only the single contract) ===
+FAILED tests/test_successor_dispatch.py::test_the_batch_shape_is_read_case_by_case
+FAILED tests/test_successor_dispatch.py::test_an_unresolvable_target_still_routes_and_says_so
+2 failed, 13 passed in 0.45s
+
+=== MUTANT 2 -- dispatch is NOT idempotent (the record is not consulted) ===
+FAILED tests/test_successor_dispatch.py::test_dispatch_is_idempotent_over_an_unchanged_record
+FAILED tests/test_successor_dispatch.py::test_a_second_criticism_is_picked_up_by_the_next_walk
+2 failed, 13 passed in 0.65s
+
+=== MUTANT 3 -- an unresolvable target is GUESSED instead of disclosed ===
+FAILED tests/test_successor_dispatch.py::test_an_unresolvable_target_still_routes_and_says_so
+1 failed, 14 passed in 0.49s
+
+=== MUTANT 4 -- an unlinkable proposal is silently dropped, not disclosed ===
+FAILED tests/test_successor_dispatch.py::test_a_question_with_no_resolvable_problem_is_disclosed_not_dropped
+1 failed, 14 passed in 0.47s
+
+=== MUTANT 5 -- the reader MOVES into src/deepreason/rules/ ===
+(a first pass cleaned this mutant with `git checkout --`, which also reverted
+ the tranche's own uncommitted __init__.py edit and left the next section
+ running against a broken import. That pass is discarded, not kept; cleanup
+ is a file copy now. A second pass filtered the output for 'failed|passed'
+ and so printed NOTHING for this mutant, because a moved module fails at
+ COLLECTION rather than in a test body -- also recorded, because a mutation
+ transcript that prints nothing is indistinguishable from one that passed.)
+
+      from deepreason.successor.reader import DISPATCH_RECEIPT_PREFIX
+  E   ModuleNotFoundError: No module named 'deepreason.successor.reader'
+  =========================== short test summary info ============================
+  ERROR tests/test_successor_dispatch.py
+  !!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+  1 error in 0.24s
+
+  With the package interface repointed so the suite can at least import,
+  the two LOCATION tests are what fail:
+  FAILED tests/test_successor_dispatch.py::test_the_dispatch_site_is_outside_rules
+  FAILED tests/test_successor_dispatch.py::test_no_module_under_rules_imports_the_successor_package
+  2 failed, 13 passed in 0.62s
+
+=== CONTROL AGAIN -- every mutant reverted ===
+  ...............                                                          [100%]
+  15 passed in 0.53s
+
+git status --short src/deepreason/rules/ :
+  (nothing listed = rules/ is byte-unchanged, which is road B's whole claim)
+
+git diff --stat origin/main -- src/deepreason/rules/crit.py :
+  (nothing listed = the ZERO-LINE DIFF the tranche asserts)
+
+=== RING over the Q3-affected subsystems, on the integrated tree ===
+$ python -m pytest tests/test_successor_*.py tests/test_scheduler.py \
+    tests/test_loop.py tests/test_crit_batch.py \
+    tests/test_prose_refutation_boundaries.py \
+    tests/test_h1_no_spawn_from_refutation.py \
+    tests/test_decommissioned_pipeline_stays_out.py \
+    tests/test_signals.py tests/test_signal_contract.py -q
+....................................                                     [100%]
+180 passed in 16.05s

@@ -12,6 +12,7 @@ from deepreason.llm.endpoints import EndpointError
 from deepreason.ontology.state import Status
 from deepreason.rules.conj import conj
 from deepreason.rules.crit import crit_argumentative, crit_program
+from deepreason.aftercycle import run_after_criticism
 
 
 def run_problem(harness, problem_id: str, adapter, config, cycles: int = 1) -> dict:
@@ -37,6 +38,18 @@ def run_problem(harness, problem_id: str, adapter, config, cycles: int = 1) -> d
                 except (SchemaRepairError, EndpointError) as e:
                     harness.record_llm_calls([getattr(e, "spend", None)], "dropped-call")
                     diagnostics.append({"cycle": cycle, "dropped": str(e)})
+        # A criticism pass just finished. Whatever reads the record afterwards
+        # is registered in `aftercycle`, not named here -- the same hook point
+        # the scheduler fires, so the two run paths behave alike and neither
+        # couples to a channel. Advisory: a hook that raises is recorded in the
+        # diagnostics and never kills the cycle.
+        run_after_criticism(
+            harness,
+            config,
+            on_error=lambda name, e: diagnostics.append(
+                {"cycle": cycle, "after-criticism-hook-failed": name, "error": str(e)}
+            ),
+        )
     survivors = [
         aid
         for aid, pid in harness.state.addr

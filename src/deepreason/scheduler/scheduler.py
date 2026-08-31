@@ -1515,6 +1515,35 @@ class Scheduler:
                 crit_argumentative_batch(harness, batch, self.adapter, config)
             except (SchemaRepairError, EndpointError) as e:
                 self._drop(e)
+        self._run_after_criticism_hooks()
+
+    def _run_after_criticism_hooks(self) -> None:
+        """Announce that a criticism pass finished, and run whatever listens.
+
+        A HOOK POINT, not a feature. This scheduler names no channel and can
+        reach none: `aftercycle` holds the registry, and a build with no hook
+        registered runs cycles identically. That is what lets the post-criticism
+        readers exist at all — `tests/test_successor_law_line.py` forbids every
+        DECIDING package, this one included, from naming the successor
+        machinery, with an EMPTY permitted-exception list, and the rule is about
+        COUPLING rather than spelling, so the answer is to have no coupling
+        rather than an exception.
+
+        Fired after each criticism pass rather than once at the end, so a run
+        that stops mid-way has already filed what it heard, and so a block
+        written now is visible to the next cycle's conjecturer.
+
+        A hook that raises is DROPPED onto the record like any other dropped
+        call and never propagates: these are advisory channels, and an advisory
+        channel must not be able to kill a reasoning cycle.
+        """
+        from deepreason.aftercycle import run_after_criticism
+
+        run_after_criticism(
+            self.harness,
+            self.config,
+            on_error=lambda name, exc: self._drop(exc),
+        )
 
     def _foreign_criticism_coverage(self) -> dict[str, set[str]]:
         """Reconstruct completed foreign-school exposure from durable receipts."""
