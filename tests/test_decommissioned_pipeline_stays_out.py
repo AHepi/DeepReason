@@ -7,9 +7,17 @@ and be able to mint their own evidence." Corrected the same day: "Sorry not
 scratch pad. that doesn't mint evidence" — scratch is protected LIVE and
 ADVISORY, minting no evidence, exactly as `advisory_non_grounding` states.
 
+SUPERSEDED IN ONE PLACE ONLY, and the scope is the operator's own, confirmed
+2026-08-30 (CLAUDE.md, the P9 law): "The P9 law of 2026-08-29 supersedes the
+2026-08-15 decommissioning ruling FOR THE SUCCESSOR TRIGGER ALONE — one
+producer, outside rules/, gated by a per-run flag defaulting OFF — while the
+website development pipeline itself stays decommissioned." Everything else in
+this file is untouched by that sentence, and the four protected-channel tests
+below are byte-unchanged.
+
 Two halves, and the second is the one that costs something to get wrong: the
-remnant is gone, AND every protected channel still compiles, dispatches, and
-mints its own records.
+remnant is confined, AND every protected channel still compiles, dispatches,
+and mints its own records.
 """
 
 import pytest
@@ -17,26 +25,54 @@ import pytest
 from deepreason.ontology import SpawnTrigger
 
 
-# --- the remnant is gone, and cannot come back quietly ----------------------
+# --- the remnant is confined, and cannot spread quietly ---------------------
 
 
-def test_the_successor_trigger_is_inert_vocabulary():
-    """The member is RETAINED and nothing produces it.
+def test_the_successor_trigger_is_declared_vocabulary():
+    """The member is RETAINED, and what it may mean is the NEXT test's job.
 
-    Deleting it was measured (Road A) and costs four tests that replay pre-v2
-    roots -- a cost the 2026-08-14 law permits but which buys nothing here,
-    because zero producers is what actually keeps the pipeline decommissioned.
-    The member is a dead name; the invariant that matters is the next test.
+    Renamed 2026-08-30 from `..._is_inert_vocabulary`: "inert" meant producers
+    = 0, and under the operator's P9 law that is no longer true. This test
+    never asserted inertness -- it asserts the member exists -- so the rename
+    corrects a docstring that had become false, not an assertion.
+
+    Deleting the member was measured (Road A) and costs four tests that replay
+    pre-v2 roots -- a cost the 2026-08-14 law permits but which buys nothing
+    here, because WHERE the one producer lives, and behind which gate, is what
+    now keeps the pipeline decommissioned. That is the invariant, and it is
+    the next test.
     """
     assert hasattr(SpawnTrigger, "SUCCESSOR")
 
 
 def test_no_source_file_produces_a_successor_problem():
-    """THE load-bearing invariant: producers = 0.
+    """THE load-bearing invariant, narrowed by the operator and not by an
+    implementer: producers = EXACTLY ONE, at one named path, outside `rules/`,
+    behind a flag that is off.
 
-    The pipeline stays decommissioned because nothing mints a successor
-    problem, not because the vocabulary lost a word. If a producer comes back,
-    this fails -- which is the alarm that matters.
+    Operator law, 2026-08-29, confirmed in scope 2026-08-30: "The P9 law of
+    2026-08-29 supersedes the 2026-08-15 decommissioning ruling FOR THE
+    SUCCESSOR TRIGGER ALONE -- one producer, outside rules/, gated by a per-run
+    flag defaulting OFF -- while the website development pipeline itself stays
+    decommissioned."
+
+    This is a STRICTLY MORE SPECIFIC claim than the "zero" it replaces, not a
+    weaker one. Three mutations turn it red, and all three were run before this
+    docstring was written
+    (`experiments/2026-08-30-change-successor-questions/proof/q5_scope_mutants_red.txt`):
+
+      1. a SECOND producer anywhere under `src/deepreason` -- the list stops
+         being the one path;
+      2. the one producer MOVING into `src/deepreason/rules/` -- the path
+         changes, and the `rules/` clause below is what names why that matters;
+      3. the gate DEFAULTING ON -- `minting_enabled` over a default `Config`
+         reads the real field once it exists and the registry row's own default
+         until then, so either way of shipping an on-by-default gate is red.
+
+    What is NOT superseded, and is asserted here rather than assumed: the
+    producer is not reachable from `scan_spawns` (H1's deletion, checked by
+    `tests/test_h1_no_spawn_from_refutation.py`), and the four protected
+    channels below are byte-unchanged.
     """
     import pathlib
 
@@ -51,7 +87,34 @@ def test_no_source_file_produces_a_successor_problem():
         # The enum's own declaration is the one legal mention.
         if "ontology/problem.py" not in str(path)
     ]
-    assert hits == [], hits
+    # Mutation 1: a second producer appears -> this list grows and the equality
+    # fails. Mutation 2: the producer moves -> the path is different and the
+    # equality fails. Compared on PATHS rather than path:line so an edit above
+    # the producer does not manufacture a false alarm about a move.
+    assert [h.rsplit(":", 1)[0] for h in hits] == [
+        "src/deepreason/successor/mint.py"
+    ], hits
+
+    # The law's own words: "outside rules/". Redundant with the equality above
+    # only while that equality holds; stated separately because it is the
+    # clause the operator wrote, and a future widening of the path list must
+    # trip over it explicitly rather than slide past a rewritten literal.
+    assert not any(h.startswith("src/deepreason/rules/") for h in hits), hits
+
+    # The law's other words: "gated by a per-run flag defaulting OFF".
+    # `minting_enabled` is the one reader of that gate. It resolves to the real
+    # `Config` field where one exists and to the registry row's declared
+    # default otherwise, so BOTH ways of shipping an on-by-default gate are red
+    # here.
+    from deepreason.config import Config
+    from deepreason.successor.registry import (
+        GATES,
+        MINTING_GATE_ID,
+        minting_enabled,
+    )
+
+    assert GATES[MINTING_GATE_ID].default is False
+    assert minting_enabled(Config()) is False
 
 
 # --- the four protected channels, one green cited row each -------------------

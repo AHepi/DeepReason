@@ -188,14 +188,39 @@ pipeline decommissioned is the absent producer, not the absent name.
   format contract and bred prose that `skeleton_wf` refuted, cascading
   successors. Remove-arbitrariness carries the ROOT description; a 200k resume
   where `ra:` had no anchor wandered into unrelated abstract mathematics.
-  **The successor side of this trap is closed at the root**: H1 (Rung 3a)
-  deleted the loop, and Rung 3d deleted `SpawnTrigger.SUCCESSOR` itself. The
-  enum member briefly survived because `easy.py::seed_component` still stamped
-  it on a staged-pipeline component repair problem — until the operator ruled
-  that the website pipeline was already decommissioned and that producer was a
-  REMNANT of it, not a feature. Producers reached zero and the member went with
-  them. There is no successor trigger to nest, to spawn, or to revive.
+  **The successor side of this trap is closed at the root, and REOPENED under a
+  gate that is off — the difference is the whole entry.** H1 (Rung 3a) deleted
+  the loop, and Rung 3d deleted the last producer of `SpawnTrigger.SUCCESSOR`.
+  The enum member briefly survived because `easy.py::seed_component` still
+  stamped it on a staged-pipeline component repair problem — until the operator
+  ruled that the website pipeline was already decommissioned and that producer
+  was a REMNANT of it, not a feature. Producers reached zero.
+  REWRITTEN 2026-08-30, and the sentence it replaces ("Producers reached zero
+  and the member went with them. There is no successor trigger to nest, to
+  spawn, or to revive.") is now FALSE in its second half: the operator's P9 law
+  of 2026-08-29, scope-confirmed 2026-08-30, supersedes the 2026-08-15 ruling
+  FOR THIS TRIGGER ALONE. There is now EXACTLY ONE producer,
+  `successor/mint.py`, and what keeps the trap closed is no longer the count
+  zero but three properties the guard test asserts together: the producer is
+  outside `rules/`, it is unreachable from `scan_spawns` (so H1's deletion is
+  untouched — nothing mints from a refutation), and its per-run gate is OFF by
+  default. The nesting failure this trap describes needs a producer that fires
+  WITHOUT anyone asking; this one fires only on a field a critic chose to fill,
+  in a run that switched the gate on. The website development pipeline itself
+  stays decommissioned, and the four protected-channel tests in the same file
+  are byte-unchanged.
 `check: python -m pytest tests/test_h1_no_spawn_from_refutation.py tests/test_decommissioned_pipeline_stays_out.py -q`
+`check: python -c "
+import pathlib
+hits = sorted({
+    str(path)
+    for path in pathlib.Path('src/deepreason').rglob('*.py')
+    for line in path.read_text().splitlines()
+    if ('SpawnTrigger.SUCCESSOR' in line or 'trigger\": \"successor' in line)
+    if 'ontology/problem.py' not in str(path)
+})
+assert hits == ['src/deepreason/successor/mint.py'], hits
+"`
 - **A degraded anti-relapse gate must fail OPEN, with a receipt.** Missing
   domain, embedder, or `NEAR_DUP_EPS` degrades to hash-only and appends a
   `relapse-gate-degraded` record; the bronze run's gate instead compared every

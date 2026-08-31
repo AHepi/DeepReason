@@ -1,0 +1,47 @@
+Q5 SCOPE CORRECTION -- the rewritten tripwire, proven able to fail three ways
+Tree: 862cb7628 plus the Q5 edit in the working tree.
+Node: tests/test_decommissioned_pipeline_stays_out.py::test_no_source_file_produces_a_successor_problem
+Each mutant is applied to the working tree, measured, then reverted; none is committed.
+RE-RUN 2026-08-30: a first pass staged mutant 2's rename with `git mv`, so the
+cleanup left it in place and mutant 3 ran against a broken import. That pass's
+mutant-3 red was NOT evidence and is discarded rather than kept; every section
+below is from the clean re-run, and the tree was verified empty before it started.
+
+=== CONTROL -- the real tree ===
+......                                                                   [100%]
+6 passed in 0.13s
+
+=== MUTANT 1 -- a SECOND producer appears, in a file the scan already reads ===
+(appended to src/deepreason/scheduler/scheduler.py)
+E       assert ['src/deeprea...scheduler.py'] == ['src/deeprea...ssor/mint.py']
+E         
+E         Left contains one more item: 'src/deepreason/scheduler/scheduler.py'
+E         Use -v to get more diff
+FAILED tests/test_decommissioned_pipeline_stays_out.py::test_no_source_file_produces_a_successor_problem
+1 failed in 0.11s
+
+=== MUTANT 2 -- the ONE producer MOVES into src/deepreason/rules/ ===
+E       assert ['src/deeprea...ssor_mint.py'] == ['src/deeprea...ssor/mint.py']
+E         
+E         At index 0 diff: 'src/deepreason/rules/successor_mint.py' != 'src/deepreason/successor/mint.py'
+E         Use -v to get more diff
+FAILED tests/test_decommissioned_pipeline_stays_out.py::test_no_source_file_produces_a_successor_problem
+1 failed in 0.11s
+
+  tree restored before mutant 3 -- git status --short src/ :
+  (nothing listed = clean)
+
+=== MUTANT 3 -- the gate DEFAULTS ON (the registry row's own default flipped) ===
+        assert not any(h.startswith("src/deepreason/rules/") for h in hits), hits
+>       assert GATES[MINTING_GATE_ID].default is False
+E       assert True is False
+E        +  where True = SuccessorDeclaration(id='minting.v1', routes='a filled question may additionally MINT a problem carrying the SUCCESSOR...uthority='operator 2026-08-29: "Switch off by default"', warning='may cause critics to fully consume conjecturer role').default
+FAILED tests/test_decommissioned_pipeline_stays_out.py::test_no_source_file_produces_a_successor_problem
+1 failed in 0.14s
+
+=== CONTROL AGAIN -- tree restored, both guard files green ===
+..........                                                               [100%]
+10 passed in 0.30s
+
+git status --short src/ :
+(nothing listed above = every mutant reverted, none committed)

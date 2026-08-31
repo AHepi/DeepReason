@@ -1,0 +1,10 @@
+The two `check:` lines on the rewritten SUB-rules.md Traps entry, run verbatim.
+
+$ python -m pytest tests/test_h1_no_spawn_from_refutation.py tests/test_decommissioned_pipeline_stays_out.py -q
+..........                                                               [100%]
+10 passed in 0.30s
+exit=0
+
+$ <the one-producer path census>
+one producer: ['src/deepreason/successor/mint.py']
+exit=0

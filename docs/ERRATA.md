@@ -1910,3 +1910,47 @@ measurement on a FULL clone (this container is shallow) to restate both halves
 of the sentence at once.
 
 Evidence: `experiments/2026-08-29-defect-qualification-circuit-breaker/proof/docs_verify_disposition.md`.
+
+---
+
+## E65 — E31's closing claim ("no source file mints a successor problem") is superseded by an operator law, and the map sentence it rested on was FALSE for one commit
+
+**What the entries say.** E31 (2026-08-16) recorded that Rung 3d removed the
+last producer of `SpawnTrigger.SUCCESSOR` and that "no source file mints a
+successor problem — asserted by
+`tests/test_decommissioned_pipeline_stays_out.py::test_no_source_file_produces_a_successor_problem`".
+`docs/map/SUB-rules.md`'s nesting trap said the same thing in stronger words:
+"Producers reached zero and the member went with them. There is no successor
+trigger to nest, to spawn, or to revive."
+
+**What the record shows.** Both were true when written and both are now
+superseded — not refuted. The operator's P9 law of 2026-08-29, scope-confirmed
+2026-08-30 (CLAUDE.md), supersedes the 2026-08-15 decommissioning ruling FOR
+THE SUCCESSOR TRIGGER ALONE: one producer, `src/deepreason/successor/mint.py`,
+outside `rules/`, gated by a per-run flag defaulting OFF. The website
+development pipeline itself stays decommissioned.
+
+E31 is HISTORY and is not edited — it correctly records the state at Rung 3d,
+and this entry is the pointer that stops a later reader trusting its closing
+sentence as current. `SUB-rules.md` is a MAP document, whose claims are meant
+to describe the code as it is, so its sentence was rewritten in place (per the
+never-delete-a-Traps-entry rule, with the superseded wording quoted inside the
+rewrite) in the same commit as the producer's arrival.
+
+**The reusable half, which is E31's own lesson turned around.** E31 warned
+that "an entry explaining why something SURVIVED a deletion is dated by the
+survival". The symmetric trap is this one: an entry asserting a COUNT — zero
+producers, one call site, no path — is dated by the count, and a law that
+changes the count leaves the entry as the last place the old number is still
+asserted. The repair in both directions is the same: assert the PROPERTY that
+makes the count matter, not the count. The rewritten guard test does exactly
+that — it names the one path, asserts it is outside `rules/`, and asserts the
+gate is off — so a second producer, a move into `rules/`, or an on-by-default
+gate each fails it, and all three were proven by mutation
+(`experiments/2026-08-30-change-successor-questions/proof/q5_scope_mutants_red.txt`).
+
+**Where corrected.** `docs/map/SUB-rules.md` (rewritten Traps entry, with two
+`check:` lines, one of them the one-producer path census),
+`tests/test_decommissioned_pipeline_stays_out.py` (scope correction, module
+and test docstrings), `src/deepreason/ontology/problem.py` (already rewritten
+by the successor-questions tranche).
