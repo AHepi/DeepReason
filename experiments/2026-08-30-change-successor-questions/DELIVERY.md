@@ -344,7 +344,19 @@ delivered DELIVERY.md above was written while three questions were open.
    new STRING field (the generic perturbation is `default + 1`, which a `str`
    has not) and the total `24 -> 26`. Every field still round-trips and the new
    one is now asserted to.
-5. **`aftercycle.py` is new machinery this tranche did not plan.** A direct
+5. **The reader's per-cycle cost was a defect, found in this integration's own
+   work and fixed before the boundary.** `dispatch_recorded_proposals` fires
+   after every criticism pass, and its first shape walked the log three times
+   and reopened the raw completion blob of every criticism call on every cycle
+   — O(cycles x calls) blob reads over a run. No test caught it because it is
+   not a correctness bug; it was found by reading the diff adversarially. Fixed
+   with one log pass and a `successor-dispatch-call-done` receipt that lets a
+   later walk skip a finished call before the read. Measured both ways
+   (`proof/q3_dispatch_cost.txt`): with 40 calls on the record the second walk
+   read 40 blobs before and 0 after. A call that failed part-way gets no
+   receipt and is retried, so the bookkeeping cannot lose work — that is its
+   own test, and both properties are mutation-proven.
+6. **`aftercycle.py` is new machinery this tranche did not plan.** A direct
    `scheduler -> deepreason.successor` call turned the law-line test red, and
    its permitted-exception list is empty and checked. The hook point removes
    the coupling instead of excusing it, which is the modularity law's own

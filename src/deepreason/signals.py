@@ -826,6 +826,23 @@ _DISCHARGE_SIGNALS: tuple[SignalDeclaration, ...] = (
 
 _DECLARED_PREFIXES: tuple[SignalDeclaration, ...] = (
     SignalDeclaration(
+        name="successor-dispatch-call-done",
+        unit="event",
+        semantics="one criticism call's successor questions have ALL been "
+                  "dispatched (inputs: [signal, the call event's seq]). It "
+                  "exists so a later walk can skip that call WITHOUT reopening "
+                  "its raw completion blob: the dispatcher runs after every "
+                  "criticism pass, and re-reading every historical completion "
+                  "each time is quadratic I/O over a run. A call that failed "
+                  "part-way through gets NO occurrence and is retried, so the "
+                  "absence of one means 'not finished', never 'nothing to "
+                  "do'. It is evidence about BOOKKEEPING and nothing else -- "
+                  "not evidence that anything was routed (the "
+                  "successor-dispatch: receipts say that), and never an input "
+                  "to rank, admission or status",
+        staleness="permanent",
+    ),
+    SignalDeclaration(
         name="successor-dispatch:",
         unit="event",
         semantics="how one RECORDED successor question was DISPATCHED by the "

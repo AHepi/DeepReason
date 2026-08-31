@@ -50,6 +50,14 @@ from deepreason.ontology.event import Rule
 # at an emit site.
 DISPATCH_RECEIPT_PREFIX = "successor-dispatch:"
 
+# Written once per criticism call whose proposals have ALL been disposed of.
+# It is what lets a later walk skip that call without opening its raw blob
+# again: this reader fires every cycle, and re-reading every historical
+# completion each time is quadratic I/O over a run. A call that failed
+# part-way through gets NO receipt and is retried on the next walk, which is
+# the behaviour a partial failure should have.
+CALL_FINISHED_RECEIPT = "successor-dispatch-call-done"
+
 # The wire role whose completions may carry the field. Both criticism contracts
 # — the compact/atomic single critic and the batch — dispatch under it.
 _CRITIC_ROLE = "argumentative_critic"
@@ -102,47 +110,72 @@ def _questions_in(raw: bytes) -> list[str]:
     return found
 
 
-def _scrutiny_targets_by_source(harness) -> dict[int, set[str]]:
-    """(call seq) -> targets, from the `source:<seq>` suffix `_observe_case`
-    appends when the caller passes one. Present on the transactional batch
-    path and absent otherwise, which is why it is one input among several
-    rather than the resolution."""
-    by_source: dict[int, set[str]] = {}
+@dataclass(frozen=True)
+class _RecordIndex:
+    """Everything this reader needs from the log, built in ONE pass.
+
+    Three separate walks was the first shape and it was wrong for a reason
+    that only shows up in a long run: this reader fires after EVERY criticism
+    pass, so a per-cycle walk of a growing log is quadratic in the number of
+    cycles. One pass, and the calls already disposed of are known before any
+    blob is opened.
+    """
+
+    scrutiny_by_source: dict[int, set[str]]
+    critic_to_targets: dict[str, set[str]]
+    dispatched_keys: set[str]
+    finished_calls: set[int]
+
+
+def _index(harness) -> _RecordIndex:
+    scrutiny_by_source: dict[int, set[str]] = {}
+    critic_to_targets: dict[str, set[str]] = {}
+    dispatched_keys: set[str] = set()
+    finished_calls: set[int] = set()
     for event in harness.log.read():
         inputs = list(event.inputs)
-        if len(inputs) >= 4 and inputs[0] == _SCRUTINY and inputs[3].startswith("source:"):
+        if not inputs:
+            continue
+        if inputs[0] == _SCRUTINY and len(inputs) >= 3:
+            # (critic artifact) -> every artifact it criticised. A SET, not a
+            # single id: one critic artifact can carry scrutiny of several
+            # targets, and collapsing that to the first would turn an
+            # unresolvable link into a confident WRONG one, which is the
+            # failure this channel must not have.
+            critic_to_targets.setdefault(inputs[2], set()).add(inputs[1])
+            # The `source:<seq>` suffix `_observe_case` appends when its caller
+            # passes one. Present on the transactional batch path and absent
+            # otherwise, which is why it is one input among several rather than
+            # the resolution.
+            if len(inputs) >= 4 and inputs[3].startswith("source:"):
+                try:
+                    seq = int(inputs[3].split(":", 1)[1])
+                except ValueError:
+                    continue
+                scrutiny_by_source.setdefault(seq, set()).add(inputs[1])
+        elif inputs[0] == CALL_FINISHED_RECEIPT and len(inputs) >= 2:
             try:
-                seq = int(inputs[3].split(":", 1)[1])
+                finished_calls.add(int(inputs[1]))
             except ValueError:
                 continue
-            by_source.setdefault(seq, set()).add(inputs[1])
-    return by_source
-
-
-def _critic_to_targets(harness) -> dict[str, set[str]]:
-    """(critic artifact) -> every artifact it criticised.
-
-    A SET, not a single id: one critic artifact can carry scrutiny of several
-    targets, and collapsing that to the first would silently turn an
-    unresolvable link into a confident wrong one — which is the failure this
-    channel must not have, because the wrong problem is worse than no problem.
-
-    Both channels, for the reason `discharge.channel` reads both: an
-    `observe_only` criticism mints no warrant and leaves only a scrutiny
-    Measure, so a reader consulting warrants alone would miss the population
-    that was never routed anywhere.
-    """
-    mapping: dict[str, set[str]] = {}
-    for event in harness.log.read():
-        inputs = list(event.inputs)
-        if len(inputs) >= 3 and inputs[0] == _SCRUTINY:
-            mapping.setdefault(inputs[2], set()).add(inputs[1])
+        elif inputs[0].startswith(DISPATCH_RECEIPT_PREFIX) and len(inputs) >= 2:
+            dispatched_keys.add(inputs[1])
+    # The warrant channel, for the reason `discharge.channel` reads both: an
+    # `observe_only` criticism mints no warrant and leaves only a scrutiny
+    # Measure, so a reader consulting warrants alone would miss the population
+    # that was never routed anywhere -- and one consulting only scrutiny would
+    # miss every criticism that actually attacked.
     for artifact_id, artifact in harness.state.artifacts.items():
         for warrant_id in artifact.warrants:
             warrant = harness.warrants.get(warrant_id)
             if warrant is not None and getattr(warrant, "target", None):
-                mapping.setdefault(artifact_id, set()).add(warrant.target)
-    return mapping
+                critic_to_targets.setdefault(artifact_id, set()).add(warrant.target)
+    return _RecordIndex(
+        scrutiny_by_source=scrutiny_by_source,
+        critic_to_targets=critic_to_targets,
+        dispatched_keys=dispatched_keys,
+        finished_calls=finished_calls,
+    )
 
 
 def _first_problem(harness, target_id: str) -> str | None:
@@ -169,16 +202,26 @@ def recorded_proposals(harness) -> tuple[RecordedProposal, ...]:
     """Every successor question on the record, with what could be resolved.
 
     Read-only over the log, the state and the blob store. Calling it twice
-    returns the same tuple; it writes nothing.
+    returns the same tuple; it writes nothing. This is the COMPLETE reading and
+    opens every criticism blob, which is what a caller asking "what is on the
+    record" wants; `dispatch_recorded_proposals` uses the cheaper incremental
+    form below.
     """
-    scrutiny_by_source = _scrutiny_targets_by_source(harness)
-    critic_to_targets = _critic_to_targets(harness)
+    return _proposals(harness, _index(harness), skip_finished=False)
+
+
+def _proposals(harness, index, *, skip_finished: bool) -> tuple[RecordedProposal, ...]:
     proposals: list[RecordedProposal] = []
     for event in harness.log.read():
         call = event.llm
         if event.rule != Rule.CRIT or call is None or call.role != _CRITIC_ROLE:
             continue
         if not call.raw_ref:
+            continue
+        if skip_finished and event.seq in index.finished_calls:
+            # Disposed of on an earlier walk. Skipping it BEFORE the blob read
+            # is the whole point: the check below is what keeps a per-cycle
+            # dispatch from re-opening every historical completion.
             continue
         try:
             raw = harness.blobs.get(call.raw_ref)
@@ -189,7 +232,9 @@ def recorded_proposals(harness) -> tuple[RecordedProposal, ...]:
         questions = _questions_in(raw)
         if not questions:
             continue
-        targets = _targets_of_call(harness, event, scrutiny_by_source, critic_to_targets)
+        targets = _targets_of_call(
+            harness, event, index.scrutiny_by_source, index.critic_to_targets
+        )
         # One resolvable target is enough for the PROBLEM, because a criticism
         # call's targets are drawn from one problem's candidate set; it is not
         # enough for the TARGET unless it is the only one.
@@ -198,26 +243,17 @@ def recorded_proposals(harness) -> tuple[RecordedProposal, ...]:
             None,
         )
         target_id = next(iter(targets)) if len(targets) == 1 else None
-        for index, question in enumerate(questions):
+        for position, question in enumerate(questions):
             proposals.append(
                 RecordedProposal(
                     call_seq=event.seq,
-                    index=index,
+                    index=position,
                     question=question,
                     problem_id=problem_id,
                     target_id=target_id,
                 )
             )
     return tuple(proposals)
-
-
-def _dispatched_keys(harness) -> set[str]:
-    keys = set()
-    for event in harness.log.read():
-        inputs = list(event.inputs)
-        if inputs and inputs[0].startswith(DISPATCH_RECEIPT_PREFIX) and len(inputs) >= 2:
-            keys.add(inputs[1])
-    return keys
 
 
 def dispatch_recorded_proposals(harness, config) -> int:
@@ -234,9 +270,12 @@ def dispatch_recorded_proposals(harness, config) -> int:
     from deepreason.successor.mint import mint
     from deepreason.successor.route import route
 
-    already = _dispatched_keys(harness)
+    index = _index(harness)
+    already = set(index.dispatched_keys)
     dispatched = 0
-    for proposal in recorded_proposals(harness):
+    finished: set[int] = set()
+    for proposal in _proposals(harness, index, skip_finished=True):
+        finished.add(proposal.call_seq)
         key = f"{proposal.call_seq}:{proposal.index}"
         if key in already:
             continue
@@ -281,4 +320,9 @@ def dispatch_recorded_proposals(harness, config) -> int:
             )
         already.add(key)
         dispatched += 1
+    for call_seq in sorted(finished):
+        # Written only after every proposal of that call came through the loop
+        # without raising. A call that failed part-way gets no receipt and is
+        # retried on the next walk.
+        harness.record_measure(inputs=[CALL_FINISHED_RECEIPT, str(call_seq)])
     return dispatched

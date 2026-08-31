@@ -68,6 +68,19 @@ assert not [f for f in found if '/rules/' in f], found
 "`
 `check: python -m pytest tests/test_successor_dispatch.py -q`
 
+**What an idle walk costs, because this reader fires every cycle.** One log
+pass builds every index it needs, and a `successor-dispatch-call-done` receipt
+lets a later walk skip a finished call BEFORE opening its raw blob. The first
+shape did neither: it walked the log three times and reopened every historical
+completion on every cycle, which is O(cycles x calls) blob reads over a run.
+Measured both ways at
+`experiments/2026-08-30-change-successor-questions/proof/q3_dispatch_cost.txt`
+— with 40 calls on the record the second walk read 40 blobs before the fix and
+0 after. A call that failed part-way through gets NO receipt and is retried, so
+the bookkeeping cannot lose work.
+
+`check: python -m pytest tests/test_successor_dispatch.py::test_a_second_walk_reopens_no_criticism_blob tests/test_successor_dispatch.py::test_a_call_that_failed_part_way_is_retried_not_marked_done -q`
+
 **What the reader can and cannot resolve, stated because it bounds one road.**
 The question is a wire field, so the model's own JSON survives as the raw
 completion blob; what does NOT survive is the call-local `AliasTable` that maps
@@ -241,6 +254,7 @@ makes — and appears in the rendered pack's ordered block refs.
 | Send questions somewhere other than the scratchpad | register a row + writer via `registry.register_destination`; select it by `Config.SUCCESSOR_QUESTION_DESTINATION` — a REAL field since the 2026-08-30 grant, so a real run can re-aim the destination (until then `Config` forbade extras and only a duck-typed object could) | `tests/test_successor_registry.py::test_adding_a_destination_requires_no_edit_to_any_consumer`, `::test_both_switches_are_real_config_surface_and_not_a_getattr_default` |
 | Change what the scratchpad block looks like | `route.py::_write_scratch_block` — body shape only; never a new `ScratchBlockBodyV1` field | `tests/test_successor_questions.py` |
 | Change what a run is TOLD when it opens the minting gate | the `warning` field on the `minting.v1` row in `registry.py` — never a paraphrase at an emit site | `tests/test_successor_minting.py::test_enabling_the_gate_discloses_the_operators_own_warning` |
+| Add a reader that walks the record after criticism | `aftercycle.py`'s `_DECLARED_HOOKS`, and give it its own done-receipt if it opens blobs — a per-cycle walk that reopens history is quadratic over a run | `tests/test_successor_dispatch.py::test_a_second_walk_reopens_no_criticism_blob` |
 | Add or re-declare a receipt this channel emits | declare it in `signals.py` under `DR-REC-add-signal`, never the emit site | its EXISTENCE, unit and staleness are pinned by `tests/test_successor_registry.py::test_both_receipt_families_are_declared_signals`, not by `tests/test_signal_contract.py`, which stays green when a declaration is deleted outright |
 | Give the channel ANOTHER per-run switch | `config.py` + a matching unconditional four-space `data.pop` in `run_manifest.py::_versioned_source_config_data` — frozen surface 4, grant REQUIRED first, and the disposition written before the edit (the 2026-08-30 grant block in `DR-INV-frozen-surfaces` is the worked example) | `tests/test_manifest_config_disclosure.py`, `tests/test_successor_registry.py::test_every_gate_row_names_a_real_config_field` |
 | Add a SECOND reader that runs after each criticism pass | register it in `aftercycle.py`'s `_DECLARED_HOOKS` — never a call in `scheduler.py` or `loop.py`, which name the hook point and must not name a channel | `tests/test_successor_dispatch.py::test_no_deciding_package_names_the_hooks_channel`, `::test_the_channel_is_armed_whatever_the_import_order` |

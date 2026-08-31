@@ -32,6 +32,8 @@ from __future__ import annotations
 import json
 import subprocess
 
+import pytest
+
 from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.ontology import Commitment, Problem, ProblemProvenance, Rule
@@ -503,3 +505,102 @@ def test_a_failing_hook_is_reported_and_never_kills_the_cycle(tmp_path):
 
     assert "test-explodes" in failed, failed
     assert seen and seen[0][0] == "test-explodes", seen
+
+
+# --- the walk does not get more expensive every cycle ----------------------- #
+
+
+def test_a_second_walk_reopens_no_criticism_blob(tmp_path):
+    """MEASURED, because the first shape of this reader was quadratic.
+
+    The dispatcher fires after EVERY criticism pass, so a walk that reopens
+    every historical completion costs O(calls) blob reads per cycle and
+    O(cycles x calls) over a run. With ten calls already dispatched, a second
+    walk must read NONE of their blobs -- it skips them on the
+    `successor-dispatch-call-done` receipt, before the read.
+
+    Counted by wrapping the blob store, so this is a measurement of what the
+    code did rather than an argument about what it should do.
+    """
+    harness = Harness(tmp_path / "run")
+    _seed(harness)
+    for n in range(10):
+        target = _target(harness, f"the tide peaks {n} times daily")
+        _record_criticism(
+            harness,
+            target.id,
+            {"attack": True, "successor_question": f"{QUESTION} ({n})"},
+            case=f"fails at neap {n}",
+        )
+
+    reads: list[str] = []
+    real_get = harness.blobs.get
+
+    def _counting_get(ref):
+        reads.append(ref)
+        return real_get(ref)
+
+    harness.blobs.get = _counting_get
+    try:
+        first = dispatch_recorded_proposals(harness, _Defaults())
+        first_reads = len(reads)
+        reads.clear()
+        second = dispatch_recorded_proposals(harness, _Defaults())
+        second_reads = len(reads)
+    finally:
+        harness.blobs.get = real_get
+
+    assert first == 10, first
+    assert first_reads >= 10, first_reads      # positive anchor: it did read them
+    assert second == 0, second
+    assert second_reads == 0, second_reads     # and reads none of them again
+
+
+def test_a_call_that_failed_part_way_is_retried_not_marked_done(tmp_path):
+    """The bookkeeping receipt must not be a way to lose work. It is written
+    only after every proposal of a call came through the loop, so a call that
+    raised half way gets none and is walked again."""
+    harness = Harness(tmp_path / "run")
+    _seed(harness)
+    target = _target(harness)
+    _record_criticism(
+        harness,
+        target.id,
+        {
+            "cases": [
+                {"target_alias": "SRC_001", "attack": True, "successor_question": QUESTION},
+                {"target_alias": "SRC_001", "attack": True, "successor_question": OTHER_QUESTION},
+            ]
+        },
+    )
+
+    calls = {"n": 0}
+
+    def _explode_on_the_second(harness_, config, **kwargs):
+        calls["n"] += 1
+        if calls["n"] == 2:
+            raise RuntimeError("the destination fell over mid-walk")
+        return None
+
+    # `import deepreason.successor.route` does NOT reach the module: the
+    # package's own `from deepreason.successor.route import route` binds the
+    # FUNCTION to that attribute and shadows the submodule. `sys.modules` is
+    # the unambiguous handle.
+    import sys
+
+    route_module = sys.modules["deepreason.successor.route"]
+
+    original = route_module.route
+    route_module.route = _explode_on_the_second
+    try:
+        with pytest.raises(RuntimeError):
+            dispatch_recorded_proposals(harness, _Defaults())
+    finally:
+        route_module.route = original
+
+    done = _receipts(harness, "successor-dispatch-call-done")
+    assert done == [], "a part-way failure must not be marked finished"
+
+    # And the next walk picks the call back up: the first proposal is already
+    # keyed as dispatched, the second is not.
+    assert dispatch_recorded_proposals(harness, _Defaults()) == 1

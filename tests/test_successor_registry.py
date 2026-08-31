@@ -121,6 +121,27 @@ def test_both_receipt_families_are_declared_signals():
     assert gate.unit and gate.unit != "unspecified", gate.unit
     assert gate.staleness and gate.staleness != "unspecified", gate.staleness
 
+    # The dispatcher's two families (Q3 road B): the per-proposal disposition
+    # and the per-call bookkeeping receipt that keeps the walk from being
+    # quadratic. Both are EMITTED, so both must be DECLARED.
+    from deepreason.successor.reader import (
+        CALL_FINISHED_RECEIPT,
+        DISPATCH_RECEIPT_PREFIX,
+    )
+
+    for disposition in ("ROUTED", "ROUTED_TARGET_UNRESOLVED", "UNLINKED"):
+        found = declaration(DISPATCH_RECEIPT_PREFIX + disposition)
+        assert found is not None, DISPATCH_RECEIPT_PREFIX + disposition
+        assert found.name == DISPATCH_RECEIPT_PREFIX, (disposition, found.name)
+        assert found.unit and found.unit != "unspecified", found.unit
+        assert found.staleness and found.staleness != "unspecified", found.staleness
+
+    done = declaration(CALL_FINISHED_RECEIPT)
+    assert done is not None, CALL_FINISHED_RECEIPT
+    assert done.name == CALL_FINISHED_RECEIPT, done.name
+    assert done.unit and done.unit != "unspecified", done.unit
+    assert done.staleness and done.staleness != "unspecified", done.staleness
+
 
 def test_the_registry_is_versioned_as_a_whole():
     """The VERSIONED layer of the signal contract: what the rows MEAN moves

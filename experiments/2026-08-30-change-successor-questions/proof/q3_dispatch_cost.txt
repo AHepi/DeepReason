@@ -1,0 +1,48 @@
+THE READER'S PER-CYCLE COST -- a defect this integration found in its own
+work, measured before and after
+Tree: 7899b4a37 plus the fix in the working tree.
+
+THE DEFECT. `dispatch_recorded_proposals` fires after EVERY criticism pass.
+The first shape walked the log THREE times per call and opened the raw
+completion blob of EVERY criticism call on EVERY cycle. Over a run that is
+O(cycles x calls) blob reads -- on a 200-cycle run with a few calls per
+cycle, hundreds of thousands of reads for work already done. Not a
+correctness bug, which is why no test caught it; found by reading the diff
+adversarially before the boundary.
+
+THE FIX. One log pass builds every index the walk needs, and a
+`successor-dispatch-call-done` receipt lets a later walk skip a finished
+call BEFORE opening its blob. A call that failed part-way gets no receipt
+and is retried, so the receipt cannot lose work.
+
+=== MEASURED, by counting blob reads through a wrapped store ===
+BEFORE = the same tree with the skip disabled, i.e. the pre-fix behaviour.
+AFTER  = the shipped tree. Both columns are measured; neither is asserted.
+
+  [BEFORE]  10 calls on the record:  walk1 dispatched  10 reads  10 | walk2 dispatched   0 reads  10 | walk3 dispatched   0 reads  10
+  [BEFORE]  40 calls on the record:  walk1 dispatched  40 reads  40 | walk2 dispatched   0 reads  40 | walk3 dispatched   0 reads  40
+  [AFTER ]  10 calls on the record:  walk1 dispatched  10 reads  10 | walk2 dispatched   0 reads   0 | walk3 dispatched   0 reads   0
+  [AFTER ]  40 calls on the record:  walk1 dispatched  40 reads  40 | walk2 dispatched   0 reads   0 | walk3 dispatched   0 reads   0
+
+  Before the fix, every later walk re-read all N blobs. After it, none. An
+  idle walk now costs one log pass and zero I/O, so the per-cycle cost stops
+  growing with the length of the run.
+  Pinned by tests/test_successor_dispatch.py::test_a_second_walk_reopens_no_criticism_blob,
+  which carries a positive anchor (walk 1 MUST read them) so it cannot pass by
+  the reader having stopped reading anything at all.
+
+=== MUTANT -- the skip is removed (the pre-fix behaviour) ===
+FAILED tests/test_successor_dispatch.py::test_a_second_walk_reopens_no_criticism_blob
+1 failed, 20 passed in 2.29s
+
+=== MUTANT -- the done receipt is written even on a part-way failure ===
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-68/test_a_call_that_failed_part_w0')
+    def test_a_call_that_failed_part_way_is_retried_not_marked_done(tmp_path):
+FAILED tests/test_successor_dispatch.py::test_a_call_that_failed_part_way_is_retried_not_marked_done
+1 failed, 20 passed in 2.34s
+
+=== CONTROL -- both mutants reverted ===
+.....................                                                    [100%]
+21 passed in 2.40s
+git status --short src/deepreason/successor/ :
+   M src/deepreason/successor/reader.py
