@@ -1,0 +1,17 @@
+--- intact ---
+  stored_replay_valid: True
+  verify_root_violations: []
+  results_amend_ready_default: True
+  results_amend_ready_verify: True
+  amend: ACCEPTED epoch=1
+  continue: ACCEPTED seq=0
+--- forged ---
+  stored_replay_valid: True
+  verify_root_violations: ['attempt-route', 'frozen-route']
+  results_amend_ready_default: True
+  results_amend_ready_verify: False
+  amend: REFUSED AmendmentError: AMEND_RECORD_NOT_VERIFIED: the record does not verify on the security channel: attempt-route, frozen-route
+  continue: REFUSED ValueError: CONTINUE_RECORD_NOT_VERIFIED: the record does not verify on the security channel: attempt-route, frozen-route
+edit: {'offset': 11656, 'from': 'a', 'to': '7'}
+jailbreak_open: False
+written: /home/user/DeepReason/experiments/2026-08-30-change-checkpoint-hardening/proof/forge_amend_ready.json

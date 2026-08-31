@@ -62,7 +62,9 @@ def observe(root: Path) -> dict:
     from deepreason.invariants import verify_root
 
     try:  # the shipped helper once the gate has landed
-        from deepreason.runtime.continuation import security_channel_violations
+        from deepreason.runtime.continuation import (
+            record_security_checks as security_channel_violations,
+        )
 
         shipped = True
     except ImportError:  # before the gate lands, evaluate its definition

@@ -20,10 +20,12 @@ sequence — the fence. Events below a fence answer to the parent epoch's
 documents, events at or above it to the successor's, which is what keeps replay
 validation piecewise and lets an unamended root read exactly as it always did.
 The package refuses far more than it accepts: one entry point writes, and
-twenty-two typed, durable refusal codes guard it. A crash mid-amendment leaves
+twenty-three typed, durable refusal codes guard it — the twenty-third,
+`AMEND_RECORD_NOT_VERIFIED`, is the 2026-08-29 security clause: a record whose
+re-derived verdict carries a SECURITY-channel finding buys no epoch. A crash mid-amendment leaves
 a staged epoch that `continue` declines to run past rather than a half-state it
 silently accepts.
-`check: python -c 'import re,pathlib; d=pathlib.Path("src/deepreason/amendment"); codes=set(); [codes.update(re.findall(r"AmendmentError\(\s*\"([A-Z][A-Z_]+)\"", (d/n).read_text())) for n in ("apply.py","state.py","models.py")]; assert len(codes)==22, sorted(codes); assert {"AMENDMENT_EPOCH_OUT_OF_RANGE","AMEND_PENDING_CONFLICT","AMEND_NOT_AT_TERMINAL"} <= codes'`
+`check: python -c 'import re,pathlib; d=pathlib.Path("src/deepreason/amendment"); codes=set(); [codes.update(re.findall(r"AmendmentError\(\s*\"([A-Z][A-Z_]+)\"", (d/n).read_text())) for n in ("apply.py","state.py","models.py")]; assert len(codes)==23, sorted(codes); assert {"AMENDMENT_EPOCH_OUT_OF_RANGE","AMEND_PENDING_CONFLICT","AMEND_NOT_AT_TERMINAL","AMEND_RECORD_NOT_VERIFIED"} <= codes'`
 
 Nothing here rewrites a byte. Documents are created through `mkstemp` +
 `os.replace`, the chain is opened append-only, and a staged document that
@@ -113,7 +115,7 @@ its own document.
 |---|---|---|
 | amendment x rules | undocumented | `rules/conj.py` imports `dossier_union`/`epoch_problem_ids` directly — what a conjecture may cite after an amendment is this package's decision |
 | amendment x harness | undocumented | `amend_run` appends exactly two record kinds through the ordinary `Harness` API (`register_problem` for the reshaped question, `attach_bound_evidence` for supplemental sources) — nothing else may cross a terminal horizon this way |
-| amendment x verification | undocumented, one-directional | `invariants.py`'s `_amendment_epochs` decides whether the LEDGER honours the fences this package declares; this package validates only the chain's own shape and imports nothing from `invariants.py` at all |
+| amendment x verification | undocumented, one-directional | `invariants.py`'s `_amendment_epochs` decides whether the LEDGER honours the fences this package declares; this package validates the chain's own shape AND, since 2026-08-31, refuses to open an epoch on a record whose re-derived verdict carries a SECURITY-channel finding — through `runtime.continuation.record_verification_refusal`, so it still imports nothing from `invariants.py` directly |
 | amendment x manifest | undocumented | `RunAmendmentV1` carries `parent_manifest_digest`/`successor_manifest_digest` (always equal — an amendment never moves routing/policy/budget authority) and `_amend_locked` consults the v6/`RunInputManifestV2` guards before staging |
 | amendment x periphery | undocumented | the supplemental evidence dossier (`evidence-dossier.json`, `attach_bound_evidence`) is `DR-SUB-periphery`'s `evidence/` subsystem — an amendment's whole "more evidence" half lives on that side |
 | amendment x application | undocumented | whether a continuation actually runs the reshaped question is decided in `application/text_runs.py`'s epoch-workload branch, which imports `current_epoch`/`epoch_workload_path` from here |
@@ -141,8 +143,13 @@ its own document.
 
 Validation in this package is deliberately **local**: `load_amendments` proves
 the chain is well shaped, and whether the ledger obeys the fences it declares is
-`verify_root`'s question. The package imports nothing from `invariants.py`.
-`check: python -c 'import pathlib; d=pathlib.Path("src/deepreason/amendment"); assert all("deepreason.invariants" not in (d/n).read_text() for n in ("apply.py","state.py","models.py")); assert "Whether the ledger honours those" in (d/"state.py").read_text(); assert "def _amendment_epochs(" in pathlib.Path("src/deepreason/invariants.py").read_text()'`
+`verify_root`'s question. The package imports nothing from `invariants.py`. The
+one place that question is ASKED here is the 2026-08-29 security gate at the end
+of `_amend_locked`, and it is asked through
+`runtime.continuation.record_verification_refusal` rather than by importing the
+verifier — one definition serves `amend` and `continue`, so the two verbs cannot
+drift into asking different questions of the same record.
+`check: python -c 'import pathlib; d=pathlib.Path("src/deepreason/amendment"); assert all("deepreason.invariants" not in (d/n).read_text() for n in ("apply.py","state.py","models.py")); assert "record_verification_refusal" in (d/"apply.py").read_text(); assert "Whether the ledger honours those" in (d/"state.py").read_text(); assert "def _amendment_epochs(" in pathlib.Path("src/deepreason/invariants.py").read_text()'`
 
 ## Traps
 

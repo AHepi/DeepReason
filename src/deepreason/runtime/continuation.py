@@ -23,6 +23,65 @@ class ContinuationRequest(BaseModel):
     tokens: Limit
 
 
+def security_channel_checks(violations) -> list[str]:
+    """The SECURITY-channel check names among a ``verify_root`` violation list.
+
+    Membership is READ from the verification subsystem, never redefined here:
+    that package owns the channel taxonomy, and a second copy of the list would
+    drift the moment a check is added there.  Reading it is a read of frozen
+    surface 3; adding to it would not be.
+
+    The narrowing is the point.  ``verify_root`` reports every invariant over the
+    session, and only this channel means the record claims an authority it was
+    not granted or its route provenance does not reconstruct -- i.e. tampering.
+    The other channels mean incomplete, unfinished, weakly grounded or slow, and
+    three of those name states the next operator action exists to REPAIR.
+    """
+
+    from deepreason.verification.report import _SECURITY_CHECKS
+
+    return sorted(
+        {
+            str(item.get("check"))
+            for item in (violations or [])
+            if str(item.get("check")) in _SECURITY_CHECKS
+        }
+    )
+
+
+def record_security_checks(root: Path | str) -> list[str]:
+    """Re-derive ``root``'s verdict and return its SECURITY-channel checks.
+
+    RE-DERIVES rather than reading ``REPLAY_VALIDATION.json``: the published
+    verdict is part of the record and forges with it -- measured on a one-byte
+    endpoint forgery whose stored verdict still read ``valid: true``.
+    """
+
+    from deepreason.invariants import verify_root
+
+    return security_channel_checks(verify_root(Path(root)).get("violations"))
+
+
+def record_verification_refusal(root: Path | str) -> str | None:
+    """The typed refusal detail for ``root``, or None when it may proceed.
+
+    One definition serves both verbs so ``continue`` and ``amend`` cannot drift
+    into asking different questions of the same record.  Fail-closed: a
+    re-derivation that cannot complete is a refusal, not a pass.
+    """
+
+    try:
+        checks = record_security_checks(root)
+    except Exception as error:  # noqa: BLE001 - an unverifiable record is a refusal
+        return f"record verification did not complete: {type(error).__name__}"
+    if not checks:
+        return None
+    return (
+        "the record does not verify on the security channel: "
+        + ", ".join(checks)
+    )
+
+
 def _digest(value: dict) -> str:
     return hashlib.sha256(
         json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
@@ -428,6 +487,13 @@ def prepare_continuation(
     cycle_limit, cycle_diagnostic = parse_limit(cycles, optional=False)
     token_limit, token_diagnostic = parse_limit(tokens)
     request = ContinuationRequest(cycles=cycle_limit, tokens=token_limit)
+
+    # Last precondition, and deliberately after the argument parse and before
+    # the first write: a tampered record must not grow a run-stops/ entry, and a
+    # typo in --cycles must not first buy a multi-minute re-derivation.
+    refusal = record_verification_refusal(root_path)
+    if refusal is not None:
+        raise ValueError(f"CONTINUE_RECORD_NOT_VERIFIED: {refusal}")
 
     # Preserve a legacy/latest stop before the mutable latest pointer changes
     # on a later stop.

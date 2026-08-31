@@ -524,6 +524,16 @@ def _amend_locked(
         _discard_staged_epoch(directory)
         record = build(_now())
 
+    # Last precondition in _amend_locked, and immediately before the first
+    # epoch write. NOT inside _require_terminal_stop: from there it shadows
+    # AMEND_PENDING_CONFLICT and AMEND_EVIDENCE_NOT_AUTHORIZED, which name the
+    # more specific reason the operator can act on.
+    from deepreason.runtime.continuation import record_verification_refusal
+
+    refusal = record_verification_refusal(root)
+    if refusal is not None:
+        raise AmendmentError("AMEND_RECORD_NOT_VERIFIED", refusal)
+
     directory.mkdir(parents=True, exist_ok=True)
     _stage_epoch_documents(
         directory,

@@ -1,0 +1,12 @@
+tests/test_jailbreak_gate.py:249: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_jailbreak_gate.py::test_the_forged_record_is_detected_only_by_re_derivation
+FAILED tests/test_jailbreak_gate.py::test_continue_refuses_a_forged_record_and_names_the_checks
+FAILED tests/test_jailbreak_gate.py::test_amend_refuses_a_forged_record_and_names_the_checks
+FAILED tests/test_jailbreak_gate.py::test_a_refused_verb_writes_nothing_into_the_tampered_root
+FAILED tests/test_jailbreak_gate.py::test_an_intact_record_still_amends_and_continues
+FAILED tests/test_jailbreak_gate.py::test_a_record_that_is_merely_incomplete_still_passes_the_gate
+FAILED tests/test_jailbreak_gate.py::test_results_verify_stops_calling_a_forged_root_amend_ready
+FAILED tests/test_jailbreak_gate.py::test_results_verify_leaves_an_intact_root_amend_ready
+ERROR tests/test_jailbreak_gate.py::test_the_gate_agrees_with_the_reports_own_channel_classification
+8 failed, 1 error in 42.52s

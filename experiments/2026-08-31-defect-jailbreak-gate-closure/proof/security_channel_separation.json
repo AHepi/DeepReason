@@ -8,22 +8,22 @@
     "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d": {
       "all_verify_root_checks": [],
       "gate_refuses": false,
-      "predicate_source": "definition",
-      "seconds": 4.1,
+      "predicate_source": "shipped",
+      "seconds": 3.89,
       "security_channel": []
     },
     "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d": {
       "all_verify_root_checks": [],
       "gate_refuses": false,
-      "predicate_source": "definition",
-      "seconds": 10.77,
+      "predicate_source": "shipped",
+      "seconds": 10.46,
       "security_channel": []
     },
     "experiments/2026-08-26-pc2-rematch/retired-transport-timeout180-run-42ad288038dd606c": {
       "all_verify_root_checks": [],
       "gate_refuses": false,
-      "predicate_source": "definition",
-      "seconds": 0.97,
+      "predicate_source": "shipped",
+      "seconds": 0.92,
       "security_channel": []
     },
     "experiments/2026-08-26-pc2-rematch/retired-truncation-cap32768-run-58fb0d20488be869": {
@@ -34,14 +34,14 @@
         "repair-metadata"
       ],
       "gate_refuses": false,
-      "predicate_source": "definition",
-      "seconds": 2.33,
+      "predicate_source": "shipped",
+      "seconds": 2.27,
       "security_channel": []
     },
     "experiments/2026-08-26-pc2-rematch/run_h3": {
       "all_verify_root_checks": [],
       "gate_refuses": false,
-      "predicate_source": "definition",
+      "predicate_source": "shipped",
       "seconds": 0.78,
       "security_channel": []
     },
@@ -50,15 +50,15 @@
         "foreign-criticism"
       ],
       "gate_refuses": false,
-      "predicate_source": "definition",
-      "seconds": 22.3,
+      "predicate_source": "shipped",
+      "seconds": 20.76,
       "security_channel": []
     },
     "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a": {
       "all_verify_root_checks": [],
       "gate_refuses": false,
-      "predicate_source": "definition",
-      "seconds": 7.75,
+      "predicate_source": "shipped",
+      "seconds": 6.97,
       "security_channel": []
     }
   },
@@ -70,8 +70,8 @@
         "frozen-route"
       ],
       "gate_refuses": true,
-      "predicate_source": "definition",
-      "seconds": 18.61,
+      "predicate_source": "shipped",
+      "seconds": 18.04,
       "security_channel": [
         "attempt-route",
         "frozen-route"
@@ -80,8 +80,8 @@
     "intact": {
       "all_verify_root_checks": [],
       "gate_refuses": false,
-      "predicate_source": "definition",
-      "seconds": 18.95,
+      "predicate_source": "shipped",
+      "seconds": 18.15,
       "security_channel": []
     }
   }
