@@ -1,0 +1,42 @@
+FULL GATE at the integration boundary
+Tree: 7899b4a37 (all five answers + both lanes landed)
+Box: 4 CPUs, idle, one instrument at a time.
+
+$ python -m pytest tests/ -q -n 4
+4588 passed, 6 skipped in 968.59s (0:16:08)
+
+BASELINE at batch-2 close: 4495 passed, 6 skipped.
+DELTA: +93 passed, skips UNCHANGED at 6, 0 failed.
+
+The +93, accounted for file by file rather than asserted. Every file below
+is one that does NOT exist on origin/main, so its whole count is new:
+  tests/test_formalism_optional_rank.py         11  new
+  tests/test_successor_law_line.py              12  new
+  tests/test_successor_minting.py               18  new
+  tests/test_successor_questions.py              9  new
+  tests/test_successor_registry.py              15  new
+  tests/test_successor_rank_tie.py               4  new
+  tests/test_successor_wire_carry.py             5  new
+  tests/test_successor_dispatch.py              19  new
+  TOTAL                                         93
+
+  93 = 93. The delta is exactly these eight files and nothing else, so no
+  pre-existing test changed its verdict and none was removed.
+
+=== FINAL FULL GATE, on the delivered tree ===
+Tree: 41efd6d9c
+$ python -m pytest tests/ -q -n 4
+4590 passed, 6 skipped in 1063.52s (0:17:43)
+
+Two gates were run, and this is the second, because the reader's
+efficiency fix landed AFTER the first. Both are recorded:
+  gate 1, at 7899b4a37 : 4588 passed, 6 skipped, 0 failed
+  gate 2, at 41efd6d9c : 4590 passed, 6 skipped
+
+DELTA gate 1 -> gate 2: +2 passed, skips unchanged.
+tests/test_successor_dispatch.py collects 21 now and collected 19 at gate 1;
+the +2 are its two new tests -- the blob-read count and the part-way-failure
+retry. No other file moved.
+
+Against the recorded baseline (4495 passed, 6 skipped at batch-2 close):
+  +95 passed, 6 skipped UNCHANGED, 0 failed.

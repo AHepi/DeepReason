@@ -362,3 +362,24 @@ delivered DELIVERY.md above was written while three questions were open.
    the coupling instead of excusing it, which is the modularity law's own
    shape — but it is a new registry, and a second post-criticism reader is now
    a registration in a place no map document owned before this commit.
+
+
+### The boundary instruments, both run, both disposed
+
+| instrument | result | verdict |
+|---|---|---|
+| full gate, `pytest tests/ -q -n 4` | **4590 passed, 6 skipped, 0 failed** | baseline 4495 + 6 skipped → **+95 passed, skips unchanged**, and the +95 is accounted for file by file in `proof/gate_summary.txt`: eight test files that do not exist on `origin/main`, summing to exactly 95. No pre-existing test changed its verdict. |
+| full `docs_verify` (FULL, not `--fast`) | **6 failed** over 71 documents / 1290 checks | 5 are the recorded baseline rows (this container is a shallow clone, which is what puts the three `CON-run-identity.md` rows on the list); the 6th is `INV-frozen-surfaces.md:297`, the branch tripwire correctly reporting the GRANTED surface-4 contact. **No delta beyond the recorded list.** |
+
+TWO gates were run and both are recorded, because the reader's efficiency fix
+landed after the first: `4588` at `7899b4a37` and `4590` at `41efd6d9c`. The +2
+are that fix's own two tests and nothing else.
+
+The first `docs_verify` returned **10**, i.e. five findings. Four were caused by
+this integration and are repaired; the fifth is the tripwire, which is
+self-clearing on merge and deliberately NOT added to
+`docs/AUDIT_BASELINES.md`. The whole disposition, including a repair that
+failed once by matching its own text, is in
+`proof/docs_verify_disposition.md`. Nothing was weakened to reach the second
+run: the corpus GREW, from the baseline's 70 documents / 1250 checks to 71 /
+1290.
