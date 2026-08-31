@@ -32,7 +32,12 @@ into `workflow-checkpoint.json`, is a function of the seqs at which control
 events landed.
 `check: python -W ignore -c "import inspect,tempfile,pathlib,pytest;from deepreason.harness import Harness;from deepreason.ontology.event import Rule;from deepreason.control_events import ControlEventPayloadV3;c=inspect.getsource(Harness._commit);i=[c.index(x) for x in ('self.log.append(event)','except Exception:','self._reset()','for durable in self.log.read():','raise')];assert i==sorted(i),i;d=pathlib.Path(tempfile.mkdtemp())/'run';h=Harness(d);h.record_measure(inputs=['x']);o='sha256:'+'2'*64;p=ControlEventPayloadV3(action='work_transition',decision_ref=o,inputs=['sha256:'+'1'*64,'t'],outputs=[o]);pytest.raises(Exception,h._commit,Rule.CONTROL,inputs=list(p.inputs),outputs=list(p.outputs),control=p);assert list(h.workflow_state.event_inputs_by_seq)==[0],h.workflow_state.event_inputs_by_seq;assert len(list(h.log.read()))==1 and h._next_seq==1"`
 
-Fifty-nine files under `src/deepreason` name both sides. Eight call a
+SIXTY files under `src/deepreason` name both sides — fifty-nine until
+2026-08-30, when `aftercycle.py` joined the census by NAMING the six deciding
+packages (`workflow` and `workflows` among them) in a docstring. It imports
+nothing from either side, which is worth stating because this census counts
+WORD MENTIONS and the two clauses after it count edges: a file can join this
+number without adding a single dependency, and this one did. Eight call a
 Control-minting seam. Four — this document's `Owns:` set — carry the agreement,
 and the dependency arrow between the two packages is absolute in one direction:
 no module under `workflow/` names
@@ -40,7 +45,7 @@ no module under `workflow/` names
 always inside a function body. That deferral is not isolation — `storage/
 objects.py` imports `workflow.models` at module scope to register the schemas,
 so importing the harness loads the workflow package anyway.
-`check: python -c "import re,pathlib;t=pathlib.Path('src/deepreason/harness.py').read_text();assert not re.search(r'^(from|import) deepreason\.workflow',t,re.M);assert sorted(set(re.findall(r'from deepreason\.workflow\.(\w+) import',t)))==['criticism','models','replay','transaction']" && python -c "import sys,importlib;importlib.import_module('deepreason.workflow.replay');assert 'deepreason.harness' not in sys.modules" && python -c "import sys,importlib;importlib.import_module('deepreason.harness');assert 'deepreason.workflow.models' in sys.modules" && grep -q "^from deepreason.workflow.models import" src/deepreason/storage/objects.py && ! grep -rq "deepreason\.harness" --include=*.py src/deepreason/workflow/ && grep -q "self.harness.record_transaction_transition(" src/deepreason/workflow/transaction_service.py && test "$(for f in $(grep -rl harness --include=*.py src/deepreason); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 59 && test "$(grep -rlE "record_control_transition|record_transaction_transition|record_lifecycle_transition|record_resume_transition|record_terminal_commitment|bind_transaction_manifest" --include=*.py src/deepreason | wc -l)" -eq 8`
+`check: python -c "import re,pathlib;t=pathlib.Path('src/deepreason/harness.py').read_text();assert not re.search(r'^(from|import) deepreason\.workflow',t,re.M);assert sorted(set(re.findall(r'from deepreason\.workflow\.(\w+) import',t)))==['criticism','models','replay','transaction']" && python -c "import sys,importlib;importlib.import_module('deepreason.workflow.replay');assert 'deepreason.harness' not in sys.modules" && python -c "import sys,importlib;importlib.import_module('deepreason.harness');assert 'deepreason.workflow.models' in sys.modules" && grep -q "^from deepreason.workflow.models import" src/deepreason/storage/objects.py && ! grep -rq "deepreason\.harness" --include=*.py src/deepreason/workflow/ && grep -q "self.harness.record_transaction_transition(" src/deepreason/workflow/transaction_service.py && test "$(for f in $(grep -rl harness --include=*.py src/deepreason); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 60 && test "$(grep -rlE "record_control_transition|record_transaction_transition|record_lifecycle_transition|record_resume_transition|record_terminal_commitment|bind_transaction_manifest" --include=*.py src/deepreason | wc -l)" -eq 8`
 
 The action vocabulary is closed and covered in both directions: each of the
 eight `ControlEventPayloadV3` actions is minted by a harness seam and dispatched

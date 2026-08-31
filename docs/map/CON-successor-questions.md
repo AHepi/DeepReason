@@ -302,7 +302,7 @@ makes — and appears in the rendered pack's ordered block refs.
   where a manifest-launched run has it reconstructed anyway, so there is one
   answer rather than two that can disagree. Found and fixed 2026-08-30 in this
   tranche's own `docs_verify` run, before the branch was handed on.
-`check: test "$(for f in $(grep -rl harness --include=*.py src/deepreason); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 59 && test "$(for f in $(grep -rl scratch src/deepreason --include=*.py); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 48 && ! grep -q "_workflow_manifest" src/deepreason/successor/route.py && grep -q "getattr(config, \"scratchpad\", None)" src/deepreason/successor/route.py`
+`check: test "$(for f in $(grep -rl harness --include=*.py src/deepreason); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 60 && test "$(for f in $(grep -rl scratch src/deepreason --include=*.py); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 49 && ! grep -q "_workflow_manifest" src/deepreason/successor/route.py && grep -q "getattr(config, \"scratchpad\", None)" src/deepreason/successor/route.py`
 
 - **`ScratchAuthoringService.author_block` is the wrong door.** Its
   `block_role` is a closed `Literal["conjecturer","synthesizer"]` that enters

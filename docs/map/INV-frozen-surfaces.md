@@ -1021,8 +1021,21 @@ docstring, statically derivable from the tree at grant time.
   and re-pinned by `experiments/2026-08-30-fix-rotted-map-checks/`. Two rules
   come out of it: when a granted contact moves a digest, grep THIS FILE for the
   old value in the same commit that updates the tests; and a document that
-  pins one expression twice owes a check that the two agree, which is the
-  check below.
+  pins one expression more than once owes a check that the pins agree, which is
+  the check below.
+
+  REWRITTEN 2026-08-30. That check asserted `len(pins) == 2`, and the
+  2026-08-30 successor grant added a THIRD pin of the same live value — so an
+  exactly-correct addition turned it red. A count is dated by the count
+  (`docs/ERRATA.md` E65): the check now asserts the two PROPERTIES the
+  paragraph above actually states — that the value is pinned at least twice,
+  and that the documented PREDECESSOR digest survives in no check in this file.
+  The second clause is rule one, encoded, and it is the one that would have
+  caught the two-day staleness this Traps entry records; the first is a
+  positive anchor, so the check cannot pass by there being no pins at all.
+  The predecessor value is spelled in two halves inside the check for a reason
+  that is not cosmetic: written whole, the check's own text contains it and the
+  scan matches ITSELF, which is how the first version of this rewrite failed.
 `check: python -c "
 import sys
 sys.path.insert(0, 'tools')
@@ -1033,5 +1046,8 @@ p = _profile()
 live = qualification_subject_digest(_manifest(p), p)
 doc = dv.parse(dv.MAP_DIR / 'INV-frozen-surfaces.md')
 pins = [n for n, c in doc.checks if live in c]
-assert len(pins) == 2, (live, pins)
+assert len(pins) >= 2, (live, pins)
+old = 'b9038b84efdea313c3f3f2a8862d8acf1' + '80d3938ab3d1bf3588c3585dfe07386'
+stale = [n for n, c in doc.checks if old in c]
+assert stale == [], stale
 "`
