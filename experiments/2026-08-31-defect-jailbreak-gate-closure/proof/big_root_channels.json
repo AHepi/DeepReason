@@ -1,0 +1,46 @@
+{
+  "root": "/home/user/DeepReason/experiments/2026-08-12-live-grounded-extension-expansion/run",
+  "verify_root_violations": [],
+  "report_security_count": 495,
+  "report_security_by_check": {
+    "run-result-verification": 1,
+    "transaction-authority": 494
+  },
+  "report_security_by_source": {
+    "terminal": 1,
+    "derived": 494
+  },
+  "report_security_samples": [
+    {
+      "check": "run-result-verification",
+      "source": "terminal",
+      "detail": "RunResult v2 records a security-invalid verification summary"
+    },
+    {
+      "check": "transaction-authority",
+      "source": "derived",
+      "detail": "work sha256:00e7f63d7366 exceeds frozen authority: unknown v6 task kind 'defended_trial_step'"
+    },
+    {
+      "check": "transaction-authority",
+      "source": "derived",
+      "detail": "work sha256:00f565e983d8 exceeds frozen authority: unknown v6 task kind 'defended_trial_step'"
+    },
+    {
+      "check": "transaction-authority",
+      "source": "derived",
+      "detail": "work sha256:011921e50281 exceeds frozen authority: unknown v6 task kind 'defended_trial_step'"
+    },
+    {
+      "check": "transaction-authority",
+      "source": "derived",
+      "detail": "work sha256:019473106f8c exceeds frozen authority: unknown v6 task kind 'defended_trial_step'"
+    },
+    {
+      "check": "transaction-authority",
+      "source": "derived",
+      "detail": "work sha256:020b126f9552 exceeds frozen authority: unknown v6 task kind 'defended_trial_step'"
+    }
+  ],
+  "security_valid": false
+}

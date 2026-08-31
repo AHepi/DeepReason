@@ -1,0 +1,88 @@
+{
+  "edit": {
+    "from": "a",
+    "offset": 11656,
+    "to": "7"
+  },
+  "lawful": {
+    "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d": {
+      "all_verify_root_checks": [],
+      "gate_refuses": false,
+      "predicate_source": "definition",
+      "seconds": 4.1,
+      "security_channel": []
+    },
+    "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d": {
+      "all_verify_root_checks": [],
+      "gate_refuses": false,
+      "predicate_source": "definition",
+      "seconds": 10.77,
+      "security_channel": []
+    },
+    "experiments/2026-08-26-pc2-rematch/retired-transport-timeout180-run-42ad288038dd606c": {
+      "all_verify_root_checks": [],
+      "gate_refuses": false,
+      "predicate_source": "definition",
+      "seconds": 0.97,
+      "security_channel": []
+    },
+    "experiments/2026-08-26-pc2-rematch/retired-truncation-cap32768-run-58fb0d20488be869": {
+      "all_verify_root_checks": [
+        "attempt-accounting",
+        "attempt-blobs",
+        "attempt-order",
+        "repair-metadata"
+      ],
+      "gate_refuses": false,
+      "predicate_source": "definition",
+      "seconds": 2.33,
+      "security_channel": []
+    },
+    "experiments/2026-08-26-pc2-rematch/run_h3": {
+      "all_verify_root_checks": [],
+      "gate_refuses": false,
+      "predicate_source": "definition",
+      "seconds": 0.78,
+      "security_channel": []
+    },
+    "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107": {
+      "all_verify_root_checks": [
+        "foreign-criticism"
+      ],
+      "gate_refuses": false,
+      "predicate_source": "definition",
+      "seconds": 22.3,
+      "security_channel": []
+    },
+    "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a": {
+      "all_verify_root_checks": [],
+      "gate_refuses": false,
+      "predicate_source": "definition",
+      "seconds": 7.75,
+      "security_channel": []
+    }
+  },
+  "separates": true,
+  "tampered": {
+    "forged": {
+      "all_verify_root_checks": [
+        "attempt-route",
+        "frozen-route"
+      ],
+      "gate_refuses": true,
+      "predicate_source": "definition",
+      "seconds": 18.61,
+      "security_channel": [
+        "attempt-route",
+        "frozen-route"
+      ]
+    },
+    "intact": {
+      "all_verify_root_checks": [],
+      "gate_refuses": false,
+      "predicate_source": "definition",
+      "seconds": 18.95,
+      "security_channel": []
+    }
+  }
+}
