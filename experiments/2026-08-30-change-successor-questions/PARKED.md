@@ -11,9 +11,28 @@ recorded loss).
 
 ---
 
-## P9B-1 .. P9B-5 — the operator decision block
+## P9B-1 .. P9B-5 — the operator decision block: ALL FIVE ANSWERED 2026-08-30
 
-WHAT: five questions the implementer may not decide. Q1 and Q5 BLOCK spec items
+**CLOSED.** Every question below has an answer, and each was implemented on the
+integration branch `claude/deepreason-lane-c-b-integration-cq3u80`. The block
+is kept verbatim rather than deleted, because it is what the answers answer.
+
+| Q | answer | where it landed |
+|---|---|---|
+| Q1 frozen surface 4 | **GRANT**, per the documented recipe | two `Config` fields + two `data.pop` lines; `FIX.md` disposed it before the edit; the sixth grant block in `docs/map/INV-frozen-surfaces.md`; the subject digest UNMOVED (`proof/q1_grant_measurements.txt`) |
+| Q2 where the warning is printed | **ROAD B** | declared on the registry row AND written to the run's own record by `mint.py::_record_gate_warning_once`; no second frozen contact (`proof/q2_warning_mutants_red.txt`) |
+| Q3 may criticism write to the workshop | **ROAD B** | `successor/reader.py`, a reader outside `rules/`; `rules/crit.py` takes a zero-line diff; fired through the `aftercycle` hook point so no DECIDING package names the channel (`proof/q3_dispatch_mutants_red.txt`) |
+| Q4 how strong is "never outrank the seed" | **TIE** | shipped as it stands; strict domination parked as P9B-6 below, prompt ready |
+| Q5 confirm the supersession sentence | **CONFIRM** | the tripwire corrected in SCOPE, not weakened; three mutants red (`proof/q5_scope_mutants_red.txt`) |
+
+Consequences of the answers for the two status notes further down this file:
+Q1's grant means the `getattr` defaults are now real `Config` surface, so S14,
+S15, S19 and S24 are discharged and P9B-8's check landed with the fields; Q3's
+answer means the router HAS a production caller, so the tranche's largest
+residue is closed and A1/A2/A3 are discharged. Both notes are annotated in
+place below rather than rewritten.
+
+WHAT (as parked): five questions the implementer may not decide. Q1 and Q5 BLOCK spec items
 outright (S14, S15, S19, S24); Q3 makes S9 and S13 provisional; Q2 and Q4 change
 what gets built, not whether. Full reasoning, both roads and a recommendation
 for each are in `SPEC.md`; the block below is the shortest answerable form.
@@ -68,10 +87,22 @@ Q5 CONFIRM THIS SUPERSESSION SENTENCE (it rewrites a tripwire founded on your
 
 ## P9B-6 — strict domination of the seed question over minted problems
 
-WHAT: `Scheduler._select_problem`'s rank key gives the seed question the
+**STATUS 2026-08-30: this park is now LIVE AND STANDING, by the operator's own
+answer.** Q4 was answered **TIE**: ship the rank-tie guarantee as it stands and
+park strict domination as its own tranche. So nothing below is conditional any
+more — it is the parked tranche, and the prompt beneath it is ready to send.
+
+What shipped instead: the tie guarantee, unchanged code, proven non-vacuously
+per selection mode. `src/deepreason/scheduler/scheduler.py` matches no changed
+line naming `SpawnTrigger.SEED` against `main`, and deleting either mode's own
+seed term turns three tests red — both mutants re-run on the integrated tree at
+`proof/q4_rank_tie_mutants_red.txt`. The non-vacuous fixture audit F11 forced
+(a successor whose id sorts BEFORE the seed's) is KEPT.
+
+WHAT REMAINS: `Scheduler._select_problem`'s rank key gives the seed question the
 tie-break but not strict priority; a freshly minted problem that has never been
 worked can outrank a seed that has. This tranche proves the tie half (S18) and
-does not touch the scheduler. Only becomes work if Q4 answers STRICT.
+does not touch the scheduler.
 
 Ready-to-send prompt for its future runner:
 
@@ -114,6 +145,10 @@ untouched. Two consequences of the parks are now facts on the branch rather
 than forecasts, and both are recorded here so the operator's answer is priced
 against what actually exists.
 
+> ANNOTATED 2026-08-30: both notes below were written while Q1 and Q3 were
+> open. Both are now DISCHARGED — Q1 GRANTED, Q3 ROAD B — and the notes are
+> kept as the record of what the parks cost, not as current status.
+
 **Q1 (frozen surface 4) is still unanswered, and the channel works without it.**
 `resolve` and `minting_enabled` read their selector by `getattr(config, FIELD,
 <default>)`, so the shipped defaults are correct with NO `Config` field in
@@ -133,6 +168,20 @@ largest residue, and the fix is one dispatch site whose LOCATION is exactly what
 Q3 decides.
 
 ---
+
+## P9B-7 — one guard test is left RED, by design and by the rules — CLOSED 2026-08-30
+
+**CLOSED.** Q5 was answered CONFIRM and the four-line edit below was applied,
+plus the two docstrings and one extra clause the operator's own wording asks
+for ("outside rules/", "gated by a per-run flag defaulting OFF"). The test is
+green by SCOPE CORRECTION and is strictly more specific than the "zero" it
+replaced: a second producer, a move into `rules/`, or an on-by-default gate
+each turn it red, and all three were proven by mutation before the docstring
+was written (`proof/q5_scope_mutants_red.txt`). The delivered edit also renamed
+`test_the_successor_trigger_is_inert_vocabulary`, whose docstring had become
+false; the entry below predicted that rename would be deferred, and it was not.
+
+The original park, kept verbatim:
 
 ## P9B-7 — one guard test is left RED, by design and by the rules
 
@@ -193,6 +242,19 @@ transcripts that declared a diff and carried none, one void exit capture), and
 in `DELIVERY.md`/`VALIDATION.md` (ten falsified numbers, each corrected with
 its original wording kept beside it). One is parked below, and it is parked
 because it is an operator decision rather than a defect.
+
+### P9B-8 — a registry row may still declare an `enforcement` nothing performs — CLOSED 2026-08-30
+
+**CLOSED.** Q1 was GRANTED, the two `Config` fields exist, and the check below
+landed IN THE SAME COMMIT as those fields, exactly as this entry required. It
+ships slightly stronger than the sketch: it also asserts that a gate row names
+at least one field, so a row whose `enforcement` names none cannot pass by
+having nothing to check. It is scoped to GATE rows, because a destination row's
+`enforcement` names a call chain rather than a field — stated in the test, so
+the scope is not mistaken for an oversight. The registry's own docstring no
+longer says the property is unenforced.
+
+The original park, kept verbatim:
 
 ### P9B-8 — a registry row may still declare an `enforcement` nothing performs
 

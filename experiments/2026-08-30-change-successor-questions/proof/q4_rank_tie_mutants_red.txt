@@ -1,0 +1,65 @@
+Q4 = TIE -- the rank-tie guarantee ships as it stands, each mode's term
+proven to die on its OWN deletion
+Tree: 0b62724a1.
+
+The operator's answer is TIE: take the guarantee that is already true and
+park STRICT domination as its own tranche. Nothing in the scheduler moves
+-- src/deepreason/scheduler/scheduler.py's rank keys take a zero-line diff
+for Q4 (the only edit this integration made to that file is item 4's hook
+point, which touches no rank term).
+
+Audit F11 found the LIVENESS_QUEUE arm of this proof VACUOUS as delivered:
+it passed with that mode's seed term deleted. The repair installed a
+fixture carrying a successor whose id sorts BEFORE the seed's, so each
+mode's term now dies on its own deletion. That fixture is KEPT, and this
+transcript re-proves it on the integrated tree.
+
+=== CONTROL -- the real tree ===
+....                                                                     [100%]
+4 passed in 0.28s
+
+=== MUTANT 1 -- the LIVENESS_QUEUE seed term deleted (line 1194) ===
+FAILED tests/test_successor_rank_tie.py::test_a_minted_successor_loses_the_rank_tie_to_the_seed_question
+FAILED tests/test_successor_rank_tie.py::test_the_rank_term_follows_the_trigger_and_not_the_id
+FAILED tests/test_successor_rank_tie.py::test_the_seed_term_appears_once_per_selection_mode
+3 failed, 1 passed in 0.28s
+
+=== MUTANT 2 -- the round-robin pool's seed term deleted (line 1216) ===
+FAILED tests/test_successor_rank_tie.py::test_a_minted_successor_loses_the_rank_tie_to_the_seed_question
+FAILED tests/test_successor_rank_tie.py::test_the_rank_term_follows_the_trigger_and_not_the_id
+FAILED tests/test_successor_rank_tie.py::test_the_seed_term_appears_once_per_selection_mode
+3 failed, 1 passed in 0.38s
+
+=== CONTROL AGAIN -- both mutants reverted ===
+.....                                                                    [100%]
+5 passed in 0.41s
+
+The claim "no rank term moved", CHECKED rather than asserted.
+
+$ git diff origin/main -- src/deepreason/scheduler/scheduler.py \
+    | grep -E '^[-+].*SpawnTrigger\.SEED'
+  (nothing listed above = not one line naming SpawnTrigger.SEED moved, so
+   neither selection mode's seed term changed)
+
+A first pass used a looser filter that also matched the word 'rank' and
+returned TWO lines while the transcript said 'nothing listed'. Both are
+lane C's pareto_scores DOCSTRING -- "which weights rank on conjecture
+KIND" and "pins which axes" -- and neither is a rank term. Recorded
+rather than quietly re-filtered.
+
+$ git diff --stat origin/main -- src/deepreason/scheduler/scheduler.py
+   src/deepreason/scheduler/scheduler.py | 105 +++++++++++++++++++++++-----------
+   1 file changed, 73 insertions(+), 32 deletions(-)
+  THREE hunks, not the two an earlier draft of this line claimed:
+
+    @@ -199,6 +199,49 @@   lane C: pareto_scores, the new seam
+    @@ -208,42 +251,11 @@  lane C: run_report, which now calls it
+    @@ -1503,6 +1515,35 @@ item 4: the after-criticism hook point
+
+  None is in `_select_problem`, whose two rank keys live near lines 1194 and
+  1216 and appear in no hunk. That, and the SpawnTrigger.SEED filter above,
+  are what carry the claim.
+
+$ git diff origin/main -- src/deepreason/scheduler/scheduler.py \
+    | grep -cE '^@@'    # hunk count
+  3

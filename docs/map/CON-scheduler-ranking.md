@@ -45,11 +45,23 @@ worked, therefore maximally aged — can out-AGE a seed that HAS been worked.
 That is true of every mid-run trigger and is not new with SUCCESSOR; what is
 new is that a critic's own words can now create one. The only mitigation on the
 tree is the wander cap, which is a CANDIDACY gate under
-`SEED_PROBLEM_BUDGET_FLOOR` and not a rank term. Whether the operator wants
-STRICT DOMINATION instead of the tie guarantee is parked, with both readings
-priced, in `experiments/2026-08-30-change-successor-questions/PARKED.md` (Q4,
-prompt P9B-6); closing it means changing this socket's rank key, which is what
-the two checks above exist to make expensive.
+`SEED_PROBLEM_BUDGET_FLOOR` and not a rank term.
+
+**The operator answered Q4 on 2026-08-30: TIE.** Take the guarantee that is
+already true; park STRICT DOMINATION as its own tranche
+(`experiments/2026-08-30-change-successor-questions/PARKED.md` P9B-6, which
+carries a ready-to-send prompt). So this socket's rank key is unchanged and
+stays unchanged: `git diff origin/main -- src/deepreason/scheduler/scheduler.py`
+matches no line naming `SpawnTrigger.SEED`, measured at
+`.../proof/q4_rank_tie_mutants_red.txt`. Closing the residue later means
+changing this socket, which is what the two checks above exist to make
+expensive — the answer bought a decision, not a change.
+
+The tie proof is non-vacuous per selection mode, and that too was earned rather
+than assumed: audit F11 found the `LIVENESS_QUEUE` arm passed with that mode's
+own seed term deleted. The fixture now carries a successor whose id sorts
+BEFORE the seed's, so deleting either mode's term alone turns three tests red —
+both mutants re-run on the integrated tree in the same transcript.
 `check: python -m pytest tests/test_successor_rank_tie.py::test_the_successor_still_gets_worked_once_the_question_has_been -q`
 
 Import-role admission records (attached-source records, source-
