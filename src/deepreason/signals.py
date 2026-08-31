@@ -826,6 +826,23 @@ _DISCHARGE_SIGNALS: tuple[SignalDeclaration, ...] = (
 
 _DECLARED_PREFIXES: tuple[SignalDeclaration, ...] = (
     SignalDeclaration(
+        name="successor-minting-gate:",
+        unit="event",
+        semantics="the successor MINTING GATE's state, disclosed on the record "
+                  "the first time it is consulted while ON (suffix = the state; "
+                  "only ENABLED is emitted, because a run that changed nothing "
+                  "has nothing to disclose -- inputs: [signal, the operator's "
+                  "warning text verbatim]). Exactly one occurrence per run: it "
+                  "is idempotent by searching the record, so a resumed run does "
+                  "not re-disclose and does not fall silent either. It is "
+                  "evidence about the CONFIGURATION and nothing else: not "
+                  "evidence that anything was minted, not evidence about any "
+                  "criticism, and never an input to rank, admission or status. "
+                  "Its ABSENCE means the gate was off, which is the shipped "
+                  "default",
+        staleness="permanent",
+    ),
+    SignalDeclaration(
         name="successor-question:",
         unit="event",
         semantics="how one PROPOSED successor question was DISPOSED (suffix = "

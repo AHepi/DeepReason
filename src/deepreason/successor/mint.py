@@ -28,7 +28,11 @@ import hashlib
 
 from deepreason.canonical import canonical_json
 from deepreason.ontology.problem import Problem, ProblemProvenance, SpawnTrigger
-from deepreason.successor.registry import minting_enabled
+from deepreason.successor.registry import (
+    GATES,
+    MINTING_GATE_ID,
+    minting_enabled,
+)
 
 # The historical short prefix for this trigger, kept rather than re-spelled: a
 # committed root already carries `succ:` problem ids and `rules/conj.py`'s
@@ -36,8 +40,45 @@ from deepreason.successor.registry import minting_enabled
 # never a problem id, so reusing the prefix moves nothing.
 SUCCESSOR_PROBLEM_PREFIX = "succ:"
 
-# The receipt family; its meaning is declared once in `signals.py`.
+# The receipt families; their meanings are declared once in `signals.py`.
 MINT_RECEIPT = "successor-problem-minted"
+
+# Q2 ROAD B. The operator's law names the WARNING TEXT, not the idea, and the
+# ungated-seats law (2026-08-28) says switching a gate on is never a refusal and
+# never SILENT. Road B puts the words in the two places that survive: declared
+# on the gate's registry row (`minting_notices`, the compile-time reading) and
+# written to the run's OWN APPEND-ONLY RECORD here, which is the only admissible
+# evidence about what a run did. Road A -- appending them to the manifest's
+# stderr notice stream -- would have cost a second frozen-surface-4 line and was
+# not taken; `run_manifest.py` gains nothing beyond the two `data.pop` lines of
+# the Q1 grant.
+GATE_WARNING_RECEIPT = "successor-minting-gate:ENABLED"
+
+
+def _record_gate_warning_once(harness) -> None:
+    """Write the operator's warning to the record, the first time the gate is
+    consulted while ON.
+
+    Idempotent by SEARCHING THE RECORD rather than by a flag on this module: a
+    resumed run rebuilds no module state, and a warning that vanished across a
+    resume would make the record say the gate was silently on for the second
+    half of the run. Same reason `discharge.channel.discharged_handles` reads
+    its Measures back instead of keeping a set.
+
+    A read-only harness cannot be written to, and this is a DISCLOSURE rather
+    than a decision -- refusing to read a record because the disclosure could
+    not be appended would be the wrong trade, so the append is best-effort and
+    its absence changes no behaviour.
+    """
+    for event in harness.log.read():
+        if event.inputs and event.inputs[0] == GATE_WARNING_RECEIPT:
+            return
+    try:
+        harness.record_measure(
+            inputs=[GATE_WARNING_RECEIPT, GATES[MINTING_GATE_ID].warning]
+        )
+    except Exception:  # a read-only view: disclose where we can, never refuse
+        return
 
 
 def successor_problem_id(problem_id: str, target_id: str, question: str) -> str:
@@ -66,6 +107,11 @@ def mint(harness, config, *, problem_id, target_id, question):
     """
     if not minting_enabled(config):
         return None
+    # The gate is ON. Disclose that on the record BEFORE anything else, and
+    # before the empty-field early return below: the operator's warning is
+    # about the CONFIGURATION, so a run that switched the gate on and then
+    # received no proposals must still say so.
+    _record_gate_warning_once(harness)
     text = (question or "").strip()
     if not text or not problem_id or not target_id:
         return None

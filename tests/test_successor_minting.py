@@ -77,6 +77,16 @@ def _seed(harness) -> Problem:
     )
 
 
+def _gate_warning_receipts(harness):
+    return [
+        list(event.inputs)
+        for event in harness.log.read()
+        if event.rule == Rule.MEASURE
+        and event.inputs
+        and event.inputs[0] == "successor-minting-gate:ENABLED"
+    ]
+
+
 def _mint_receipts(harness):
     return [
         list(event.inputs)
@@ -277,3 +287,79 @@ def test_scan_spawns_mints_no_successor_from_a_refutation(tmp_path):
     )
     assert minted == [], minted
     assert set(harness.state.problems) == before
+
+
+# --- Q2 ROAD B: the warning reaches the run's OWN RECORD -------------------- #
+
+
+def test_switching_the_gate_on_writes_the_operators_warning_to_the_record(tmp_path):
+    """Q2 ROAD B, the durable half. `minting_notices` is the COMPILE-time
+    reading of the same declaration and has no production caller; the record is
+    the only admissible evidence about what a run did, so the words have to
+    land there or the disclosure is a promise rather than a fact.
+
+    The receipt carries the operator's text VERBATIM, because the law names the
+    text and not the idea.
+    """
+    harness = Harness(tmp_path / "run")
+    _seed(harness)
+
+    mint(harness, _On(), problem_id=PROBLEM_ID, target_id=TARGET_ID,
+         question=QUESTION)
+
+    receipts = _gate_warning_receipts(harness)
+    assert receipts == [["successor-minting-gate:ENABLED", WARNING]], receipts
+
+
+def test_the_warning_is_written_even_when_no_question_was_ever_proposed(tmp_path):
+    """The warning is about the CONFIGURATION, not about any proposal. A run
+    that switched the gate on and received nothing must still say so, or the
+    record understates the configuration in exactly the case where a reader
+    would most want to know it was open."""
+    harness = Harness(tmp_path / "run")
+    _seed(harness)
+
+    assert mint(harness, _On(), problem_id=PROBLEM_ID, target_id=TARGET_ID,
+                question="   ") is None
+    assert _mint_receipts(harness) == []
+    assert _gate_warning_receipts(harness) == [
+        ["successor-minting-gate:ENABLED", WARNING]
+    ]
+
+
+def test_the_warning_is_written_exactly_once_however_often_the_gate_is_consulted(tmp_path):
+    """Idempotent by SEARCHING THE RECORD, not by module state: a resumed run
+    rebuilds no flag, and a warning that vanished across a resume would make
+    the record say the gate was silently on for the second half."""
+    harness = Harness(tmp_path / "run")
+    _seed(harness)
+
+    for question in (QUESTION, QUESTION + " really?", "", QUESTION + " and?"):
+        mint(harness, _On(), problem_id=PROBLEM_ID, target_id=TARGET_ID,
+             question=question)
+
+    assert len(_gate_warning_receipts(harness)) == 1, _gate_warning_receipts(harness)
+
+
+def test_a_run_that_left_the_gate_off_writes_no_warning_to_the_record(tmp_path):
+    """Never silence when a gate is switched ON; never noise when it is not.
+    An absent receipt is what says the gate was off."""
+    harness = Harness(tmp_path / "run")
+    _seed(harness)
+
+    mint(harness, _Off(), problem_id=PROBLEM_ID, target_id=TARGET_ID,
+         question=QUESTION)
+
+    assert _gate_warning_receipts(harness) == []
+
+
+def test_the_recorded_warning_and_the_declared_warning_are_the_same_string():
+    """Two places carry the operator's words -- the registry row and the
+    record -- and this is what stops them drifting apart. Neither is allowed to
+    paraphrase: a reader checking either against CLAUDE.md must find the same
+    sentence."""
+    from deepreason.successor.registry import GATES, MINTING_GATE_ID
+
+    declared = GATES[MINTING_GATE_ID].warning
+    assert declared == WARNING
+    assert WARNING in minting_notices(_On())[0].message

@@ -1,0 +1,60 @@
+Q2 ROAD B -- the enablement warning, proven to reach BOTH declared places
+Tree: 3c219dbf3 plus the Q2 edit in the working tree.
+
+The operator's law names the TEXT: 'may cause critics to fully consume
+conjecturer role'. Road B carries it on the destination registry's gate row
+AND on the run's own append-only record. Road A -- one more line inside
+run_manifest.py -- was NOT taken: no second frozen contact.
+
+=== CONTROL -- the real tree ===
+.....................................                                    [100%]
+37 passed in 5.03s
+
+=== MUTANT A -- the record write is DELETED (the gate goes silent on the
+    record, exactly the state the lane shipped in) ===
+FAILED tests/test_successor_minting.py::test_switching_the_gate_on_writes_the_operators_warning_to_the_record
+FAILED tests/test_successor_minting.py::test_the_warning_is_written_even_when_no_question_was_ever_proposed
+FAILED tests/test_successor_minting.py::test_the_warning_is_written_exactly_once_however_often_the_gate_is_consulted
+3 failed, 15 passed in 0.31s
+
+=== MUTANT B -- the warning text is PARAPHRASED on the registry row ===
+FAILED tests/test_successor_minting.py::test_enabling_the_gate_discloses_the_operators_own_warning
+FAILED tests/test_successor_minting.py::test_the_warning_text_is_the_operators_words_on_the_registry_row
+FAILED tests/test_successor_minting.py::test_switching_the_gate_on_writes_the_operators_warning_to_the_record
+FAILED tests/test_successor_minting.py::test_the_warning_is_written_even_when_no_question_was_ever_proposed
+FAILED tests/test_successor_minting.py::test_the_recorded_warning_and_the_declared_warning_are_the_same_string
+5 failed, 13 passed in 0.33s
+
+=== MUTANT C -- the write is made NON-idempotent (a module flag instead of
+    a record search would behave this way across a resume) ===
+FAILED tests/test_successor_minting.py::test_the_warning_is_written_exactly_once_however_often_the_gate_is_consulted
+1 failed, 17 passed in 0.35s
+
+=== MUTANT D -- the signal family is UNDECLARED (a receipt with no
+    declared unit, semantics or staleness) ===
+
+  FIRST PASS, recorded because it is the finding and not a slip: with the
+  signal declaration deleted, `tests/test_signal_contract.py` and
+  `tests/test_signals.py` were `19 passed`. NOTHING in this repo asserts that
+  an EMITTED receipt tag is DECLARED -- the contract tests check that
+  declarations are well formed and that POLICY-referenced signals exist, never
+  that an emit site's tag resolves. So the declaration was decorative.
+
+  A channel's own tests are therefore the only place that property can be
+  pinned, which is what lane B already did for its two receipts
+  (test_successor_registry.py:88-109). The gate-warning family now joins them.
+  RE-RUN with the pin in place:
+
+  FAILED tests/test_successor_registry.py::test_both_receipt_families_are_declared_signals
+  1 failed, 33 passed in 6.06s
+
+  RED, as it should have been the first time. The pin is a strictly new
+  assertion, not a relaxed one: it did not exist before, and adding it is what
+  makes the declaration load-bearing.
+
+=== CONTROL AGAIN -- every mutant reverted ===
+  ....................................................                     [100%]
+  52 passed in 7.27s
+  git status --short src/ (only the tranche's own uncommitted Q2 edit):
+     M src/deepreason/signals.py
+     M src/deepreason/successor/mint.py

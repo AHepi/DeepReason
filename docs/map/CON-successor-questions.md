@@ -98,7 +98,7 @@ this channel.
 
 `check: python -m pytest tests/test_successor_law_line.py::test_nothing_that_labels_ranks_or_admits_reads_a_successor_question tests/test_successor_law_line.py::test_every_caller_of_the_admission_gate_is_inside_a_deciding_package -q`
 
-## Entry points (library surface; no production caller yet)
+## Entry points (library surface)
 
 - `deepreason.successor.resolve(config)` — the destination row a run selects;
   an unregistered id falls back to the shipped default and discloses.
@@ -112,6 +112,40 @@ this channel.
 - `deepreason.successor.unknown_destination_notices(config)` and
   `minting_notices(config)` — typed `CompileNoticeV1` disclosures. Neither ever
   refuses.
+
+**Where the minting gate's warning actually lands (Q2, answered ROAD B,
+2026-08-30).** The operator's law names the TEXT, "may cause critics to fully
+consume conjecturer role", not the idea, so it is carried verbatim in two
+places and paraphrased in neither: DECLARED on the `minting.v1` registry row,
+and WRITTEN TO THE RUN'S OWN APPEND-ONLY RECORD by
+`mint.py::_record_gate_warning_once` the first time the gate is consulted while
+on. The record is the durable half — `minting_notices` is the compile-time
+reading of the same declaration and still has no caller inside `src/`.
+
+Three properties, each with a mutant behind it
+(`experiments/2026-08-30-change-successor-questions/proof/q2_warning_mutants_red.txt`):
+the receipt is written even when NO question was ever proposed, because the
+warning is about the configuration rather than about any proposal; it is
+written EXACTLY ONCE, idempotent by searching the record rather than by a
+module flag, so a resumed run neither re-discloses nor falls silent; and an
+ABSENT receipt is what says the gate was off.
+
+Road A — appending the words to the manifest's stderr notice stream — was NOT
+taken. It would have cost a second line inside `run_manifest.py`, i.e. a second
+frozen-surface-4 contact, and the Q1 grant covers exactly two `data.pop` lines
+and nothing else.
+
+`check: python -m pytest tests/test_successor_minting.py -q`
+`check: python -c "
+from deepreason.signals import declaration
+from deepreason.successor.mint import GATE_WARNING_RECEIPT
+from deepreason.successor.registry import GATES, MINTING_GATE_ID
+text = 'may cause critics to fully consume conjecturer role'
+assert GATES[MINTING_GATE_ID].warning == text, GATES[MINTING_GATE_ID].warning
+d = declaration(GATE_WARNING_RECEIPT)
+assert d is not None and GATE_WARNING_RECEIPT.startswith(d.name)
+assert d.unit != 'unspecified' and d.staleness != 'unspecified'
+"`
 
 `check: python -c "import deepreason.successor as s; assert set(s.__all__) == {'resolve','route','mint','unknown_destination_notices','SUCCESSOR_DESTINATION_REGISTRY_VERSION','DESTINATIONS'}, s.__all__; assert callable(s.minting_notices)"`
 

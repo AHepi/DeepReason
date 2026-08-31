@@ -108,6 +108,19 @@ def test_both_receipt_families_are_declared_signals():
     assert minted.unit and minted.unit != "unspecified", minted.unit
     assert minted.staleness and minted.staleness != "unspecified", minted.staleness
 
+    # The gate-warning family (Q2 road B). Added 2026-08-30 because deleting
+    # its declaration outright left every signal test GREEN -- nothing in the
+    # repo asserts that an EMITTED receipt tag is declared, so a channel's own
+    # tests are the only place that property can be pinned. Recorded as a
+    # general gap in DELIVERY.md rather than closed repo-wide here.
+    from deepreason.successor.mint import GATE_WARNING_RECEIPT
+
+    gate = declaration(GATE_WARNING_RECEIPT)
+    assert gate is not None, GATE_WARNING_RECEIPT
+    assert GATE_WARNING_RECEIPT.startswith(gate.name), (GATE_WARNING_RECEIPT, gate.name)
+    assert gate.unit and gate.unit != "unspecified", gate.unit
+    assert gate.staleness and gate.staleness != "unspecified", gate.staleness
+
 
 def test_the_registry_is_versioned_as_a_whole():
     """The VERSIONED layer of the signal contract: what the rows MEAN moves
