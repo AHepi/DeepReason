@@ -199,3 +199,48 @@ the finding-by-finding record.
   branch IS an answer of "a". This lane cannot decide that; what it can do, and
   now has done, is make the other answer cost one command instead of a repair
   tranche.
+
+---
+
+## 2026-08-30 — the park is closed, and the road is integrated
+
+The operator answered `STOP.md` with one word: **"yes"**. Road (a) is no longer
+BUILT AND PARKED; it is SHIPPED. `DELIVERY.md` §12 carries that answer as the
+merge authority and states what it does and does not settle.
+
+**What the record shows.** Re-measured on the INTEGRATED tree rather than
+inherited from the lane branch, because the integrated tree is the one that
+ships (`proof/INTEGRATION_2026-08-30.txt`):
+
+| instrument | lane branch | integrated tree |
+|---|---|---|
+| the 11 red-before/green-after tests | 11 passed | 11 passed |
+| MUTANT 1 — a fourth Pareto axis in `Config.PARETO_AXES` | 1 failed, 10 passed | 1 failed, 10 passed |
+| MUTANT 2 — the penalty reintroduced on an empty battery | 4 failed, 7 passed | 4 failed, 7 passed |
+| RING 1 — 12 files that recompute or consume a frontier | 117 passed | 117 passed |
+| RING 2 — the stop-decision consumers | 129 passed | 129 passed |
+| **ring total** | **246 passed, 0 failed** | **246 passed, 0 failed** |
+
+Nothing was red on the integrated tree that was green on the lane branch, so
+nothing was adapted, narrowed, or quietly repaired at the merge. Both mutants
+were reverted before commit and the tree was clean.
+
+`tests/test_mcp_run.py` — finding 6's load-flaky file — was GREEN here, on an
+idle box running one instrument at a time. That is the condition finding 6 says
+the file needs, so it confirms that diagnosis rather than refuting it; the
+durable repair is still owed by a tranche that owns the file.
+
+**The residue, unchanged by the answer.** Everything §10 records still stands:
+`hv` and `reach` keep the same 0.0-default shape and were NOT fixed (parked as
+L3 — do not read the coverage repair as having closed the class); this is a
+BEHAVIOUR change that can move a run's stop cycle through `frontier_delta`, and
+no live run has been performed to observe it; the recomputed frontier over the
+2026-08-12 historical root now differs from the frontier that root stored, which
+the 2026-08-14 operator law disposes of in advance and which moved no committed
+byte; and the penalty does not generalise across the pooled record, where prose
+was slightly AHEAD of formal.
+
+**What the record still cannot settle**, and this is the honest close: whether
+the 146 conjectures the old rule excluded were any good. What was wrong was that
+they were excluded for their KIND. Accepted does not mean true, and neither does
+"on the frontier".

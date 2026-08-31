@@ -238,11 +238,12 @@ makes — and appears in the rendered pack's ordered block refs.
 
 | To do this | Edit | Test |
 |---|---|---|
-| Send questions somewhere other than the scratchpad | register a row + writer via `registry.register_destination`; select it by `SUCCESSOR_QUESTION_DESTINATION` — NOTE: no `Config` field carries this selector yet (Q1 pending); a real `Config` refuses it with `extra_forbidden`, so today only a non-`Config` configuration object can select a row | `tests/test_successor_registry.py::test_adding_a_destination_requires_no_edit_to_any_consumer` |
+| Send questions somewhere other than the scratchpad | register a row + writer via `registry.register_destination`; select it by `Config.SUCCESSOR_QUESTION_DESTINATION` — a REAL field since the 2026-08-30 grant, so a real run can re-aim the destination (until then `Config` forbade extras and only a duck-typed object could) | `tests/test_successor_registry.py::test_adding_a_destination_requires_no_edit_to_any_consumer`, `::test_both_switches_are_real_config_surface_and_not_a_getattr_default` |
 | Change what the scratchpad block looks like | `route.py::_write_scratch_block` — body shape only; never a new `ScratchBlockBodyV1` field | `tests/test_successor_questions.py` |
 | Change what a run is TOLD when it opens the minting gate | the `warning` field on the `minting.v1` row in `registry.py` — never a paraphrase at an emit site | `tests/test_successor_minting.py::test_enabling_the_gate_discloses_the_operators_own_warning` |
 | Add or re-declare a receipt this channel emits | declare it in `signals.py` under `DR-REC-add-signal`, never the emit site | its EXISTENCE, unit and staleness are pinned by `tests/test_successor_registry.py::test_both_receipt_families_are_declared_signals`, not by `tests/test_signal_contract.py`, which stays green when a declaration is deleted outright |
-| Give the channel a per-run switch | `config.py` + the matching unconditional `data.pop` in `run_manifest.py::_versioned_source_config_data` — frozen surface 4, grant REQUIRED first | `tests/test_manifest_config_disclosure.py` |
+| Give the channel ANOTHER per-run switch | `config.py` + a matching unconditional four-space `data.pop` in `run_manifest.py::_versioned_source_config_data` — frozen surface 4, grant REQUIRED first, and the disposition written before the edit (the 2026-08-30 grant block in `DR-INV-frozen-surfaces` is the worked example) | `tests/test_manifest_config_disclosure.py`, `tests/test_successor_registry.py::test_every_gate_row_names_a_real_config_field` |
+| Add a SECOND reader that runs after each criticism pass | register it in `aftercycle.py`'s `_DECLARED_HOOKS` — never a call in `scheduler.py` or `loop.py`, which name the hook point and must not name a channel | `tests/test_successor_dispatch.py::test_no_deciding_package_names_the_hooks_channel`, `::test_the_channel_is_armed_whatever_the_import_order` |
 
 ## Traps
 

@@ -5,10 +5,21 @@ branch, integrated SERIALLY into `claude/deepreason-ultracode-batch-2-l9vj55`.
 Setup baselines, measured before any lane started, are in `SETUP.md`; the
 committed reconnaissance every lane implemented from is in `recon/`.
 
-**Three lanes are DELIVERED and integrated. One is PARKED with its road built.
-One was HANDED OFF mid-batch at the operator's instruction.** Nothing was
-worked around, no assertion was weakened, and NO frozen surface was touched by
-any lane — the batch changed exactly ONE source file in total.
+**ALL FIVE LANES ARE NOW DELIVERED AND INTEGRATED.** Rewritten 2026-08-30; the
+sentence it replaces read "Three lanes are DELIVERED and integrated. One is
+PARKED with its road built. One was HANDED OFF mid-batch at the operator's
+instruction," and that was true until the operator answered. Lane C's fork was
+answered "yes" (land it) and lane B's five questions were answered Q1 GRANT /
+Q2 ROAD B / Q3 ROAD B / Q4 TIE / Q5 CONFIRM. Both landed on
+`claude/deepreason-lane-c-b-integration-cq3u80`; see §4 below.
+
+Nothing was worked around and no assertion was weakened. **One frozen surface
+was touched, and only under a written grant**: surface 4, two `data.pop` lines,
+disposed in `FIX.md` before the edit and recorded as the sixth granted contact
+in `docs/map/INV-frozen-surfaces.md`, with the qualification subject digest
+measured UNMOVED. The sentence this replaces said "NO frozen surface was
+touched by any lane — the batch changed exactly ONE source file in total"; that
+was the state at batch close and is no longer the state after integration.
 
 **The batch's main result held for a third program running.** Every lane that
 faced independent skeptics shipped work that passed its own review and its own
@@ -29,8 +40,8 @@ reading it.
 | **D** | `2026-08-30-fix-rotted-map-checks` | **DELIVERED, integrated** | 27 paths | **none — docs/map only** | 4 rotted checks repaired, each shown failing on the broken form and passing on the repaired one; every check in `INV-frozen-surfaces.md` re-run SERIALLY (50 checks, 1 pre-existing failure); expected-failure list reduced and re-baselined in this lane's own commit |
 | **E** | `2026-08-30-change-execution-safety-parks` | **DELIVERED, integrated** | 17 paths | **none — tests + docs only** | 10 confession-shaped assertions replaced by 7 differentials, 5 of them two-armed, each mutation-proven RED against a weakened condition; ring 55 passed |
 | **A** | `2026-08-30-change-checkpoint-hardening` | **PARTIAL, integrated** | 35 paths | `application/text_runs.py` (the batch's only source change) | ring #4 207 passed 0 failed; 2 blocking skeptic findings fixed; limb three PARKED as F9 with a measured acceptance target |
-| **C** | `2026-08-30-defect-formalism-rank-penalty` | **PARKED, NOT integrated** (road built) | 31 paths | `scheduler/scheduler.py`, `capture/pareto.py` — on branch `claude/b2-lane-C` only | 11 tests RED before / GREEN after on its own branch; both architecture tests mutation-proven; `drop_road_a.sh` makes landing or discarding it one verified act |
-| **B** | `2026-08-30-change-successor-questions` | **HANDED OFF** to a fresh window (operator instruction, mid-batch) | 36 paths | `llm/contracts.py`, `llm/wire.py`, `ontology/problem.py`, `signals.py`, new `successor/` — on branch `claude/b2-lane-B` only | 42 tests pass with `PYTHONPATH` at its own `src/`; ONE test RED by design, gated on operator question Q5; **no skeptic pass ran** |
+| **C** | `2026-08-30-defect-formalism-rank-penalty` | **DELIVERED, integrated** (operator answered "yes" 2026-08-30) | 31 paths | `scheduler/scheduler.py`, `capture/pareto.py` — landed on `claude/deepreason-lane-c-b-integration-cq3u80` | re-verified on the INTEGRATED tree, not inherited: 11 tests pass; MUTANT 1 (a fourth Pareto axis) `1 failed, 10 passed`; MUTANT 2 (the penalty reintroduced) `4 failed, 7 passed`; ring 246 passed 0 failed / 18 files — identical to the lane branch, so nothing was adapted at the merge (`proof/INTEGRATION_2026-08-30.txt`). `drop_road_a.sh` NOT run: it is the discard path and the operator chose landing |
+| **B** | `2026-08-30-change-successor-questions` | **DELIVERED, integrated** (all five operator questions answered 2026-08-30) | 36 paths + 6 | `llm/contracts.py`, `llm/wire.py`, `ontology/problem.py`, `signals.py`, `config.py`, `run_manifest.py` (the granted contact), `loop.py`, `scheduler/scheduler.py`, new `successor/` and new `aftercycle.py` — landed on `claude/deepreason-lane-c-b-integration-cq3u80` | the skeptic pass DID run in the pickup window: 35 findings, 34 repaired (`FINDINGS.md`). Then the five answers: Q5 CONFIRM (the RED guard test corrected in SCOPE, 3 mutants red), Q1 GRANT (frozen surface 4, subject digest UNMOVED), Q2 ROAD B (the warning on the record, 4 mutants), Q3 ROAD B (a production caller at last; `rules/crit.py` zero-line diff, 5 mutants), Q4 TIE (2 mutants). Ring 180 passed 0 failed |
 
 Integration order was D, E, A — cheapest first, so a late failure could not
 strand finished work. C and B are not integrated; see §3 and §4.
@@ -143,7 +154,13 @@ and it is recorded here rather than softened.
 
 ---
 
-## 4. The two lanes that are not integrated
+## 4. The two lanes that were not integrated at batch close — BOTH NOW LANDED
+
+> **RESOLVED 2026-08-30.** The operator answered both. Lane C: **"yes"** — land
+> road (a). Lane B: **Q1 GRANT / Q2 ROAD B / Q3 ROAD B / Q4 TIE / Q5 CONFIRM**.
+> Both are integrated on `claude/deepreason-lane-c-b-integration-cq3u80`, and
+> §4b below records what landing cost and found. The two sections that follow
+> are kept as written, because they are what the answers answered.
 
 **Lane C — PARKED on an operator fork, road built.** The batch asked for both
 unlawful-penalty sites fixed. The brief the batch designated as its authority
@@ -165,6 +182,15 @@ INTEGRATED", with `drop_road_a.sh` making the discard a single verified act.
 Branch `claude/b2-lane-C` at `039cac0ae`, pushed. The operator's "yes" is a
 merge; their "no" costs nothing.
 
+> **The answer was "yes."** Merged and re-verified on the INTEGRATED tree
+> rather than inherited: 11 tests pass, MUTANT 1 `1 failed, 10 passed`, MUTANT 2
+> `4 failed, 7 passed`, ring `246 passed, 0 failed` across 18 files — the same
+> numbers the lane branch measured, so nothing was adapted at the merge
+> (`experiments/2026-08-30-defect-formalism-rank-penalty/proof/INTEGRATION_2026-08-30.txt`).
+> `drop_road_a.sh` was NOT run and must not be: it is the discard path.
+> `test_mcp_run.py`, the load-flaky file of that lane's finding 6, was GREEN on
+> an idle box, which confirms the diagnosis rather than refuting it.
+
 **Lane B — HANDED OFF mid-batch at the operator's instruction.** Branch
 `claude/b2-lane-B` at `fdfe8a6e4`, pushed, clean tree, full artifact set, and no
 frozen contact — it found a lawful road avoiding `run_manifest.py`, so the
@@ -173,6 +199,55 @@ frozen-surface-4 grant it forecast was requested but not needed.
 that **no adversarial skeptic pass ran on it**, so its claims are self-reported.
 One test is RED by design, gated on operator question Q5, and the branch cannot
 be integrated while it is.
+
+> **Both blockers are gone.** The skeptic pass DID run, in the pickup window:
+> 35 reproduced findings, 3 blocking, 34 repaired
+> (`experiments/2026-08-30-change-successor-questions/FINDINGS.md`). The RED
+> test is green by SCOPE CORRECTION under Q5 — exactly one producer, at one
+> named path, outside `rules/`, with the gate off — and all three ways it must
+> still fail were proven by mutation. The integrated stack is
+> `claude/lane-b-stack-window-9teltn` @ `561c0e1b7`.
+
+---
+
+## 4b. What landing them cost, and what it found
+
+**One frozen surface was touched, under a written grant.** Surface 4: two
+`data.pop` lines for the successor channel's two `Config` fields, disposed in
+`FIX.md` BEFORE the edit with `blast_radius.py`'s own CONTACT verdict pasted,
+and recorded as the sixth granted contact in `docs/map/INV-frozen-surfaces.md`
+with three re-runnable checks. The measurement the grant exists for: all six
+`source_config_hash` values and the committed fixture's qualification subject
+digest are BYTE-IDENTICAL, so no home owes a battery. The grant's own check was
+captured RED first, under an eight-space guard-scoped mutant that reproduces
+the recorded 2026-08-26 trap exactly — a naive `grep -q` passes it while v4-v6's
+hash has already moved to `5b898a28b29ee901`.
+
+**The batch's main result held a fourth and fifth time.** Two more claims that
+looked settled were wrong until something re-ran them:
+
+- Lane B's channel was armed by IMPORT ACCIDENT. With the successor package
+  registering its own hook, `import deepreason.scheduler.scheduler` alone left
+  the hook registry EMPTY — the channel would have been silently dead on some
+  import orders, which is the very defect Q3 was answered to close. Found by a
+  subprocess probe, not by reading.
+- "Goes to scratchpad by default" is the DESTINATION default;
+  `Config().scratchpad.enabled` is `False` in the shipped defaults, so an
+  unconfigured run gets a typed UNAVAILABLE receipt rather than a block. Found
+  by a test that asserted the comfortable reading and failed.
+
+**Two existing tests refused a first attempt and were not weakened.** A direct
+`scheduler -> deepreason.successor` call turned the law-line rule red (deciding
+packages may not name that machinery; the permitted-exception list is empty and
+checked), so the coupling was removed via a hook point rather than excused. And
+`Config` defaulting to the literal `"scratchpad.v1"` gave that row id a second
+owner and turned the registry's one-owner test red, so the default is taken
+from the registry instead.
+
+**One prediction in lane B's SPEC was wrong.** P-FIX-4 said no other fixture
+would move; `test_every_dropped_field_the_managed_path_can_set_round_trips`
+did. Two extensions, not relaxations: a probe value for the new string field,
+and the total `24 -> 26`.
 
 ---
 

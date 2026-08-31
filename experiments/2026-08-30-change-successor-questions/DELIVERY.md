@@ -232,3 +232,121 @@ test with its ready-to-apply edit (P9B-7).
 
 recommended next: **Q3**. It is the only park that stands between a channel that
 is proven and a channel that fires, and both of its roads are already priced.
+
+---
+
+## The five operator answers, and what each one closed — 2026-08-30
+
+Branch: `claude/deepreason-lane-c-b-integration-cq3u80`, which merged this
+lane's stack (`claude/lane-b-stack-window-9teltn` @ `561c0e1b7`) onto `main`
+alongside lane C. Everything below was implemented AFTER the merge, on the
+integrated tree, in the order the operator's instruction set: Q5, then Q1, then
+Q2, then Q3, then Q4.
+
+| Q | answer | commit | proof |
+|---|---|---|---|
+| Q5 | **CONFIRM** | `22ffca6b8` | `proof/q5_scope_mutants_red.txt`, `proof/q5_map_checks.txt` |
+| Q1 | **GRANT** | `907d260b9` (FIX.md, before the edit) + `3c219dbf3` | `proof/q1_grant_measurements.txt`, `proof/frozen_grant_check_red.txt`, `proof/q1_grant_checks_parsed_and_run.txt` |
+| Q2 | **ROAD B** | `be8882069` | `proof/q2_warning_mutants_red.txt` |
+| Q3 | **ROAD B** | `0b62724a1` | `proof/q3_dispatch_mutants_red.txt` |
+| Q4 | **TIE** | `1141da349` | `proof/q4_rank_tie_mutants_red.txt` |
+
+### Which parked assumptions are now DISCHARGED, and which remain
+
+This is the section a reader should check the residue against, because the
+delivered DELIVERY.md above was written while three questions were open.
+
+**DISCHARGED by Q3 (the reader outside `rules/`):**
+
+- **A1** — "goes to scratchpad" = one ordinary scratch block via
+  `ScratchService.create_block`. Discharged: the production walk creates
+  exactly that block, measured in
+  `tests/test_successor_dispatch.py::test_a_recorded_question_reaches_the_scratchpad_linked_to_its_problem`
+  rather than by a hand call to `route`.
+- **A2** — "linked to the problem it was proposed under" =
+  `ScratchProvenanceV1.origin`. Discharged: the same test asserts
+  `provenance.origin == <problem id>` on the block a production dispatch wrote.
+- **A3** — "the problem it was proposed under" = the first problem the
+  criticised target addresses. Discharged AND now load-bearing: the reader
+  computes it from `state.addr` in registration order (`_first_problem`), which
+  is the expression `views/evidence.py` already uses and is deterministic on
+  replay. It is no longer an assumption about what a caller would pass — it is
+  what the one caller computes.
+
+**DISCHARGED by Q1 (the frozen-surface-4 grant):**
+
+- **S14, S15, S24** — the two `Config` fields, their two `data.pop` lines and
+  the sixth grant block in `docs/map/INV-frozen-surfaces.md`. All landed.
+- **S19** — landed earlier, under Q5, and its gate-default clause now reads the
+  REAL field: `minting_enabled(Config())` resolves to
+  `Config.SUCCESSOR_MINTING_ENABLED` where before it fell through to the
+  registry row's default.
+- **A5** — "a per-run flag is a `Config` field, not a manifest field — and
+  until Q1 is answered there is no field at all". Half discharged and half
+  confirmed: the fields exist and a run can now set them (R4's switch and R6's
+  configurable surface are real), and they are still `Config` fields rather
+  than manifest fields, which is what the drop lines preserve.
+- **R3's downgrade** — the plugin point was provable only against a `_Selects`
+  STUB because `Config` forbids extras. Discharged:
+  `test_both_switches_are_real_config_surface_and_not_a_getattr_default`
+  re-aims the destination through a real `Config`.
+- **P9B-8** (audit F12) — "every gate row names a real `Config` field" landed in
+  the same commit as the fields, as `PARKED.md` required.
+
+**NOT discharged, and stated as residue:**
+
+- **A4** (the default row id is `scratchpad.v1`) and **A6** (the minted id keeps
+  the `succ:` prefix) stand as shipped; neither was questioned.
+- **A7** — "never outrank" taken as the rank TIE. The operator ANSWERED this
+  (Q4 = TIE), so it is no longer an assumption; it is a decision, and strict
+  domination is a standing parked tranche (`PARKED.md` P9B-6).
+- **A8** — the criticism pack is still NOT told the field exists. Unchanged and
+  deliberate: "not enforceable" reads against an invitation.
+- **The `hv`/`reach` 0.0-default shape** is lane C's residue, not this one's,
+  and remains open (that tranche's L3).
+- **The diff-budget verdict is still EXCEEDED**, and this integration adds to
+  it rather than reducing it.
+
+### Residue this integration ADDED, stated rather than left to be found
+
+1. **The reader cannot resolve a TARGET for a multi-target criticism call.**
+   The call-local `AliasTable` that maps `SRC_001` to a real id is never
+   recorded, so the PROBLEM always resolves and the TARGET resolves only when
+   the call criticised exactly one artifact. Routing needs only the problem and
+   is fully live; MINTING needs `from: [problem, target]`, so a multi-target
+   call records `successor-dispatch:ROUTED_TARGET_UNRESOLVED` and mints
+   nothing. It never guesses. Minting is off by default, so this bounds a road
+   a run has to switch on — but it IS a bound, and a future tranche wanting
+   full minting coverage has to record the alias table or an equivalent join.
+2. **"Scratchpad by default" is the DESTINATION default, not an enabled
+   workspace.** `Config().scratchpad.enabled` is `False` in the shipped
+   defaults, so an unconfigured run routes to a destination that cannot accept
+   the question and gets a typed `successor-question:UNAVAILABLE` receipt. That
+   is correct behaviour under the all-configurations law — disclose, never
+   discard — but it means the phrase in the operator's law is satisfied by
+   SELECTION, and the block only appears on a run whose workspace is on. Both
+   halves are measured in `tests/test_successor_dispatch.py`.
+3. **Nothing in this repo asserts that an EMITTED receipt tag is DECLARED** —
+   and this is NOT a new finding, which the first draft of this bullet got
+   wrong. Lane B's own audit repair already recorded it, in
+   `CON-successor-questions.md`'s "add or re-declare a receipt" row: the
+   existence of a declaration is pinned "not by `tests/test_signal_contract.py`,
+   which stays green when a declaration is deleted outright" (commit
+   `d0797191d`). What this integration adds is an independent reproduction on a
+   NEW receipt family — mutant D deleted the `successor-minting-gate:`
+   declaration and `test_signal_contract.py` plus `test_signals.py` were still
+   `19 passed` — and the missing pin for it, so all four of this channel's
+   receipts are now covered by the channel's own tests. The general gap is
+   still NOT closed; it belongs to a tranche that owns `signals.py`.
+4. **`SPEC.md`'s P-FIX-4 was wrong**, and one fixture moved that it predicted
+   would not: `test_every_dropped_field_the_managed_path_can_set_round_trips`.
+   Two updates, both extensions rather than relaxations — a probe value for the
+   new STRING field (the generic perturbation is `default + 1`, which a `str`
+   has not) and the total `24 -> 26`. Every field still round-trips and the new
+   one is now asserted to.
+5. **`aftercycle.py` is new machinery this tranche did not plan.** A direct
+   `scheduler -> deepreason.successor` call turned the law-line test red, and
+   its permitted-exception list is empty and checked. The hook point removes
+   the coupling instead of excusing it, which is the modularity law's own
+   shape — but it is a new registry, and a second post-criticism reader is now
+   a registration in a place no map document owned before this commit.
