@@ -26,10 +26,10 @@ of the things this run exists to measure. The reverse would be a defect.
 | phase | state |
 |---|---|
 | design frozen (PREREG.md) | DONE — 2026-09-01 |
-| configuration compiled and preflighted | DONE — 49/49 gates, 0 failures |
-| offline cycle soak on the launch shape | see FINDINGS.md F1 |
-| live run | pending |
-| live census | pending |
+| configuration compiled and preflighted | DONE — 50/50 gates, 0 failures |
+| offline cycle soak on the launch shape | DONE — GREEN, exit 0, 24/24 cycles |
+| live run | DONE — 5 cycles, `failed` / `operational_failure`, verify_root 0 violations |
+| live census | DONE — 13 modules FIRED, 11 did-not-fire, each with its typed reason |
 
 ---
 
@@ -78,26 +78,70 @@ not in the harness, and does not touch what the live run can do.
 
 ## Column 2 — FIRED LIVE
 
-*Pending the live run. `module_census.py` fills this from the typed record;
-`module_census.json` is the machine-readable form and this table is its
-reading.*
+Run `4565139800f5ca020e2b74acff45355c1277a9d510068a8e8b4ed65813f1a49c`,
+2026-09-01, 5 cycles, 1 093 086 / 3 000 000 tokens, `state: failed`,
+`stop_reason: operational_failure`, **`verify_root` violations: 0**.
+Read by `module_census.py` from the typed record; the machine-readable form is
+`module_census.json`.
+
+**13 FIRED · 11 did-not-fire.** Every "did-not-fire" below carries the typed
+reason, and four of them trace to one line of code (F2).
+
+| module | live | typed evidence |
+|---|---|---|
+| conjecture | **FIRED** | 7 `Conj` events, 47 conjecturer calls across BOTH seats (deepseek 30, glm-5.3 17) |
+| criticism | **FIRED** | 5 `Crit` events, 12 argumentative_critic calls |
+| defender seat | **FIRED** | 8 `defender.direct.v1` calls on glm-5.3 |
+| judge ensemble | **FIRED** | 4 `judgeruling.direct.v1` calls — 2 on qwen3.5:397b, 2 on gpt-oss:120b, cross-family |
+| **defended trial** | **FIRED** | 6 `trial-declined`, **0 `scrutiny`**, first trial seqs 359/404/405. Declines: ensemble-split 2, execution-backed 4 |
+| adjudication / status authority | **FIRED** | 25 events carry `status_changed` |
+| research capability | **FIRED** | `research-awaiting-agent` ×1; 8 research problems on the frontier |
+| premise channel | **FIRED** | `premise.batch-translation-offered.v1` ×6, `premise.work-invited.v1` ×2, `premise-answer:DECLINED` ×7 |
+| discharge channel | **FIRED** | `discharge-reask` ×6, `discharge-undischarged` ×19 |
+| near-duplicate / anti-relapse gate | **FIRED** | `relapse.log.jsonl` written — the gate ran armed at the calibrated eps, where P-S1 left 100% unscreened |
+| allocation controller / signals | **FIRED** | `seat-truncation` ×17, `seat-repair` ×17, `seed-lineage-share` ×6, `wander-throttled` ×1, `controller-authority` ×1 |
+| split-budget seat protocol | **FIRED** | 36 `reason` legs + 36 `extract` legs |
+| capture / Pareto frontier | **FIRED** | seven `capture14.*` signals ×6 each |
+| replay validation | **FIRED** | `verify_root` — **0 violations** on a failed run |
+| variator / hv | did-not-fire | **NO `hv_set`. 0 variator calls, 19 deferrals** (`hv-floor` 8, `hv-spot-check` 10, `premise-demarcation-variation` 1). F2 |
+| reach | did-not-fire | NO `reach_set`. Not deferred — `reach_sweep` ran every cycle and no artifact passed a foreign problem's qualifying criteria. An empirical zero, not a structural one |
+| pairwise discrimination | did-not-fire | no `pairwise-observation`; 1 `pairwise-discrimination/judge` deferral. F2 |
+| simulation capability | did-not-fire | no `simulation-*` signal. The channel compiled ON with a contained runner and a 12/12 budget; 5 cycles produced no typed simulation proposal |
+| scratchpad | did-not-fire | no event carries a scratch payload |
+| successor questions | did-not-fire | no `successor-*` signal. Expected: `SUCCESSOR_MINTING_ENABLED` is OFF by the operator's own default |
+| attached evidence / dossier | did-not-fire | channel OPEN, dossier EMPTY by design (PREREG §4 R6). Nothing to cite is the typed reason, not a malfunction |
+| school convergence / reseed | did-not-fire | tripwires armed at calibrated thresholds and did not fire — the healthy reading |
+| config referee | did-not-fire | armed at cadence 6; the run died at cycle 5, one cycle short of its first firing |
+| grounded bridge | did-not-fire | `BRIDGE_REASONING_NOT_COMPLETED: canonical run state is failed`. The mode was `grounded_two_stage` and the ladder DID call the composition step — the refusal is downstream of the run's failure, not of P-S1's missing configuration. F4 |
+
+### What this column settles
+
+**The two P-S1 failures the tranche was built to close are closed, and the
+record says so with typed events rather than with configuration.** P-S1 filed
+140 criticisms as `scrutiny` observations and never summoned a judge. This run
+filed **zero** scrutiny, ran the defended-trial circuit six times, and summoned
+both cross-family judges. The explicit criticism policy is what did it.
+
+**And the live result is more interesting than "it worked".** All six trials
+DECLINED — two on ensemble split (the two judges disagreed), four on
+execution-backed grounds. Zero verdicts. That is the frozen cross-family
+unanimous configuration behaving exactly as the amended judge law
+(CLAUDE.md, 2026-08-28) says it does: under-convicting rather than
+prosecuting indiscriminately. Six trials is far too small a sample to confirm
+anything, and it is recorded as an observation, not a measurement.
 
 ---
 
 ## The three known-open defects this run MEASURES and does not fix
 
-*Pending the live run. Baselines from P-S1, for comparison:*
-
-| # | defect | P-S1 baseline | P-A1 |
+| # | defect | P-S1 baseline | **P-A1 measured** |
 |---|---|---|---|
-| D1 | coverage charging counterconditions — the frontier inversion | frontier sorted on coverage alone (hv and reach never measured) | pending |
-| D2 | criticism → new-problem trigger rate | 0 of 1,293 | pending |
-| D3 | premise-channel citation rate | 1 CITED vs 122 DECLINED | pending |
+| D1 | coverage charging counterconditions — the frontier inversion | frontier sorted on coverage alone | **14 frontier members: 1 seed (7%), 13 harness-minted (93%) — 8 research, 3 connection, 2 discrimination.** The inversion is NOT diluted: `hv` was absent (F2) and `reach` measured zero, so the frontier sorted on coverage alone here too |
+| D2 | criticism → new-problem trigger rate | 0 of 1,293 | **0 of 5 `Crit` events / 12 critic calls.** All 14 spawns were harness-minted (conn/research/disc); none successor-triggered. Expected — `SUCCESSOR_MINTING_ENABLED` is OFF by the operator's default — so this run neither confirms nor refutes the defect |
+| D3 | premise-channel citation rate | 1 CITED vs 122 DECLINED | **0 CITED, 0 UNCITED, 7 DECLINED** of 2 invitations and 6 batch-translation offers. Same direction as P-S1, smaller sample |
 
-A second, independent confirmation of the D1 mechanism is already on the
-record: running `module_census.py` against the committed P-R1 root
-(`experiments/2026-08-25-poietics-program/run`) reports 117 variator
-deferrals — `hv-floor` 42, `hv-spot-check` 74,
-`premise-demarcation-variation` 1 — and **zero** `hv_set` and **zero**
-`reach_set` events. P-S1 was not a one-off; the same null criticism policy
-produced the same starved frontier on a different tranche.
+A second, independent confirmation of the D1 mechanism is on the record:
+`module_census.py` against the committed P-R1 root reports 117 variator
+deferrals and zero `hv_set` / `reach_set` events. P-S1 was not a one-off, and
+neither is P-A1 — three roots now show the same shape, and F2 explains all
+three with one unconditional line.

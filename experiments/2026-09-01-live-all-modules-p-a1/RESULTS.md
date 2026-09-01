@@ -160,7 +160,83 @@ it.
 
 ## 2026-09-01 · Segment 4 — the live run
 
-*Pending. This segment records the typed terminal (state, `stop_reason`,
-cycles, tokens), the `verify_root` verdict, the bridge's own JSON, the module
-census, and the three measured known-open defects. It is written from
-`module_census.json` and the audit artifacts, never from the run's prose.*
+**What the record shows.** Run
+`4565139800f5ca020e2b74acff45355c1277a9d510068a8e8b4ed65813f1a49c`, launched
+08:59:30, terminated 15:12:45.
+
+```
+state              failed
+stop_reason        operational_failure
+message            V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY -- route seat has
+                   terminally exhausted its smallest authorized contract
+cycles completed   5 of 24
+tokens             1 093 086 / 3 000 000
+artifacts          25 accepted / 4 refuted / 0 suspended
+verify_root        0 violations
+qualification      23/23 pairs, 460 cases, 454 first-pass valid, 460 eventual,
+                   6 repairs, 0 scope violations, no circuit openings
+```
+
+**The tranche's own question is answered, and answered positively.** P-S1 ran
+this configuration's ancestor and filed 140 criticisms as `scrutiny`
+observations without ever summoning a judge. This run filed **zero** scrutiny.
+It ran the defended-trial circuit six times and summoned both cross-family
+judges. Thirteen of twenty-four modules fired with typed evidence, and every
+one of the eleven that did not carries a typed reason rather than a silence.
+The explicit criticism policy is what did it — the same one line of manifest
+data that also granted the defender, judge and variator seats their
+behavioural contracts.
+
+**And the live adjudication result is more interesting than success.** All six
+trials DECLINED — two on ensemble split (the two judges disagreed), four on
+execution-backed grounds. Zero verdicts. That is the frozen cross-family
+unanimous configuration behaving as the amended judge law (2026-08-28)
+describes it: under-convicting rather than prosecuting indiscriminately. Six
+trials is far too small a sample to confirm anything and is recorded as an
+observation, not a measurement.
+
+**Why it stopped at cycle 5.** glm-5.3 conjecturer seat 1 exhausted its
+smallest authorized contract: five `conjecturer.turn.v6` attempts, a compact
+recovery, a decomposition to `conjecturer.atomic-candidate.v1`, two more
+attempts, and nothing smaller to fall back to. The recovery ladder worked
+exactly as designed and then ran out of rungs. **The other conjecturer seat was
+healthy throughout** — deepseek seat 0 made 30 successful calls and never
+failed once — but one seat's exhaustion terminates the whole run (F4).
+
+**Three measured defects, all recorded as they came out:**
+
+| # | measured |
+|---|---|
+| D1 frontier inversion | 14 members: **1 seed (7%), 13 harness-minted (93%)** — 8 research, 3 connection, 2 discrimination. NOT diluted: `hv` absent (F2), `reach` zero, so it sorted on coverage alone |
+| D2 criticism → new problem | **0** of 5 `Crit` events. All 14 spawns harness-minted. Expected — minting is OFF by the operator's default — so this neither confirms nor refutes |
+| D3 premise citation | **0 CITED, 7 DECLINED.** Same direction as P-S1's 1-vs-122, smaller sample |
+
+**Five findings, none of them fixed here.** F1 the soak stub could not exercise
+two shipped modules; F2 `hv` is unreachable on any v6 run under any
+configuration; F3 qualification does not parallelize across endpoints; F4 one
+seat's exhaustion kills the run AND the failed terminal is not continuable,
+violating the 2026-08-29 continuation law; F5 glm-5.3 at the raised cap takes
+~20 minutes per conjecture.
+
+**Residue, and it is substantial.**
+
+The run did not answer the operator's seed question, and nothing here claims it
+did. Five cycles on a genuinely open problem in random-graph dynamics produced
+25 accepted artifacts whose CONTENT this tranche has not assessed and whose
+acceptance means only that they survived the criticism actually mounted at
+them. Accepted does not mean true.
+
+Six modules that were correctly configured never got the chance to fire:
+simulation proposed nothing in five cycles, the scratchpad recorded nothing,
+the config referee was one cycle short of its first firing at cadence 6, and
+the bridge refused downstream of the failure. Whether any of them would have
+fired in a run that reached cycle 24 is UNKNOWN, and a run that dies at cycle 5
+cannot settle it. Capability-channel use is stochastic across identical runs
+(CLAUDE.md), so one live miss is inconclusive for that path.
+
+The cap-scaling hypothesis in F5 rests on one glm-5.3 sample against three
+deepseek samples, with two confounds — the cap raise and the glm-5.2/5.3
+version change — and no controlled comparison. It is a lead, not a result.
+
+And the run is not continuable, so none of the above can be settled by
+resuming this root. A future attempt starts over.

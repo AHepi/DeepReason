@@ -334,3 +334,144 @@ which is precisely why this window records it rather than touching it.
 in doubt. The projected duration built on it (~79 min for this configuration)
 rests on the loaded timings above and is therefore soft; the run's actual
 elapsed time, recorded in RESULTS.md, is the only figure worth trusting.
+
+---
+
+## F4 (2026-09-01) — one seat's contract exhaustion kills the whole run, and the failed terminal is not continuable
+
+**Status: OPEN, two defects in one stop. The second one violates a standing
+operator law.**
+
+**How the run died, from the typed record and not from theory.**
+
+```
+run-status.json  state: failed
+                 stop_reason: operational_failure
+                 message: V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at
+                          /workflow/insufficient_capability_by_route_seat:
+                          route seat has terminally exhausted its smallest
+                          authorized contract
+                 cycle: 5      tokens: 1 093 086 / 3 000 000
+verify_root      violations: 0
+```
+
+`run/objects/workflow-route-seat-insufficient-capability-v1/` names the seat
+exactly:
+
+```
+route_lease   role=conjecturer  seat=1  endpoint_id=ollama-glm-5.3
+reason        smallest_authorized_contract_schema_exhausted
+contract_id   conjecturer.atomic-candidate.v1
+attempted     conjecturer.turn.v6 x5  ->  conjecturer.atomic-candidate.v1 x2
+              (one compact-recovery transition, one decomposition transition)
+maximum_provider_calls 5   observed_provider_calls 2   maximum_schema_repairs 4
+```
+
+So the harness did everything it was designed to do: glm-5.3 seat 1 kept
+producing output its contract could not accept, the recovery ladder walked it
+down — compact recovery, then decomposition to atomic candidates — and when
+the SMALLEST authorized contract also failed, the seat had no capability left.
+
+**Defect 1: one seat's exhaustion terminates the whole run.** The other
+conjecturer seat was healthy: deepseek seat 0 made 30 successful
+`conjecturer.turn.v6` calls and never failed once. The run held 25 accepted
+artifacts, a working defended-trial circuit and 0 `verify_root` violations. A
+two-seat ensemble has no seat-level degradation path — no "retire this seat and
+continue on the other", no typed disclosure that the ensemble is now one seat
+wide. The whole run dies with the weakest seat. That is worth questioning
+precisely because the operator's ungated-seats law (2026-08-28) invites putting
+ANY model in ANY seat: a configuration surface that welcomes heterogeneous
+seats but terminates on the first seat that cannot hold its contract makes
+heterogeneity structurally risky in a way no notice warns about.
+
+**Defect 2, and this one is a law violation.** The operator's law of
+2026-08-29, verbatim: *"clean stop. with an assurance that continuing is
+possible. Too often an operational failure overlooks securing enough
+checkpoints to allow relaunches or forgets to ensure continuing is possible
+that trigger corrupted stops."* Its operational reading, ledgered in CLAUDE.md:
+**EVERY terminal — clean or failed — must leave checkpoints sufficient for
+relaunch, and a stop that cannot assure continuability is itself a defect.**
+
+`deepreason results` on this root:
+
+```
+stop reason is resumable: no
+carries the lifecycle decision `continue` resumes from: no
+the run recorded this reason for refusing that receipt:
+    TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL
+ready for `deepreason amend` / `deepreason continue`: no
+```
+
+Five cycles of work, 1.09 M tokens, 25 accepted artifacts, a clean replay
+verdict — and no operation can touch it. This is exactly the corrupted stop the
+law was written against, and it is not a jailbroken record being correctly
+refused: `verify_root` reports **0 violations**, so the integrity gate the same
+law demands has nothing to complain about. The record is intact AND unusable.
+
+**What it cost downstream, measured rather than asserted.** The grounded bridge
+was configured correctly (`grounded_two_stage`) and the ladder DID call the
+composition step — the two halves of P-S1's `bridge_events: 0` are both closed.
+It still produced nothing, for a third reason neither P-S1 nor this tranche
+anticipated:
+
+```
+BRIDGE_REASONING_NOT_COMPLETED: canonical run state is failed
+```
+
+So the bridge row in MODULE_COVERAGE.md reads `did-not-fire`, and the typed
+reason is downstream of F4 rather than of any configuration this window chose.
+Had the run terminated cleanly at its cycle budget, the composition step would
+have had a completed run to compose from.
+
+**Not fixed here.** RUN tranche, no authority over `src/`. Both defects belong
+to `DR-SUB-workflow` × `DR-SUB-scheduler`, and defect 2 additionally touches
+terminalization, which the operations-parity law routes through one shared
+path.
+
+**Residue.** Defect 1 is proven for THIS shape — a two-seat conjecturer
+ensemble where one seat exhausts. It is NOT established that every role behaves
+this way, nor that a seat-level degradation path would be safe: continuing on
+one seat silently changes the topology the manifest froze, and the honest fix
+may be a typed disclosure plus a clean stop rather than silent continuation.
+Defect 2 is proven outright by the run's own refusal string.
+
+---
+
+## F5 (2026-09-01) — glm-5.3 at a 49 152-token cap takes ~20 minutes per conjecture, and the cap raise is the likely cause
+
+**Status: OPEN as a calibration finding. Measured on the live record, idle of
+any competing instrument.**
+
+Per-call latency for `conjecturer.turn.v6`, same contract, same question, same
+run, read from consecutive `log.jsonl` timestamps:
+
+| seat | latency |
+|---|---|
+| deepseek-v4-pro:0813 seat 0 | 28 s, 5 s, 4 s |
+| **glm-5.3 seat 1** | **1 216 s (20.3 min)** |
+
+The call SUCCEEDED — no timeout, no typed failure, no transport fault. This is
+generation speed, not breakage.
+
+**The likely cause is this tranche's own cap raise.** The tranche instruction
+asked for a completion cap high enough that hidden reasoning could not consume
+it, and `run-config.yaml` accordingly set `max_tokens: 49152` against P-C2b's
+evidenced 32768. P-C2b measured glm-5.2 at 32768 taking 737 s / 420 s / 460 s.
+Scaling roughly with the cap lands near 20 minutes, which is what was observed.
+PREREG §3 recorded this as residue before the launch — *"1800 is an
+EXTRAPOLATION from the 32768 measurement, not a measurement at 49152"* — and
+the extrapolation held for the TIMEOUT (nothing timed out) while
+under-predicting the WALL CLOCK.
+
+**Consequence, and it is the reason this run reached only 5 of 24 cycles in
+five hours.** glm-5.3 held six seats. At ~20 minutes per generation call, a
+24-cycle run is a 16–24 hour proposition at best. The operator was given the
+measurement and the priced roads and chose to let it run and report at a
+checkpoint; the run then died at cycle 5 on F4 before the pacing mattered.
+
+**Residue.** ONE glm-5.3 sample at 49152, and three deepseek samples. The
+cap-scaling hypothesis is CONSISTENT with P-C2b's numbers and is NOT
+established — no controlled A/B at 32768 versus 49152 on this question was
+run, and glm-5.3 may simply be slower than the glm-5.2 those numbers came
+from. Two confounds, one sample: this is a lead for a calibration tranche, not
+a finding anyone should tune a config on.
