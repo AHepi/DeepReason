@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The stated 'refuted if' condition is not a usable refutation test for the claimed contradiction. It says the relation is refuted if a positive fraction of the exp(Θ(n)) perfect-matching mixed states have nonvanishing basins. If 'nonvanishing' means merely nonzero, then exponentially small basins count as nonvanishing, so the condition is satisfied even while the target's own claim that these basins are exponentially small remains true. If 'nonvanishing' instead means bounded away from zero, then a positive fraction of exp(Θ(n)) states would require total basin measure greater than 1 for large n, making the condition impossible. Either way, the clause fails to specify a genuine state of affairs that would refute the contradiction.",
+      "counterexample": [
+        "Let each perfect-matching mixed state have a basin of size exp(-Θ(n)). Then all exp(Θ(n)) states have nonvanishing basins, so the stated refutation condition is met, yet the target's claim of exponentially small basins is still true."
+      ]
+    }
+  ]
+}
