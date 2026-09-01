@@ -1,0 +1,85 @@
+authoritative command:
+python tools/docs_verify.py
+
+parser correction:
+python tools/docs_verify.py --full
+exited 2 before verification because this checkout has no --full option.
+The tool's help defines the plain command above as authoritative: every check,
+no cache. No result was inferred from the parser error.
+
+authoritative result:
+71 documents, 1297 checks, 7 failed
+
+changed owner maps:
+docs/map/CON-criticism-source.md
+docs/map/CON-conjecture-kinds.md
+docs/map/CON-authority.md
+
+owner-map result:
+No authoritative failure names a changed owner map. Their exact newly recorded
+checks were also run directly and passed with, respectively:
+5 passed, 7 deselected
+4 passed
+3 passed
+
+failure dispositions:
+
+1. docs/map/SEAM-llm-x-rules.md:54
+   result: unparseable check
+   disposition: AUDIT_BASELINES.md baseline, malformed check with a lost
+   closing backtick; parked there as P3. Unchanged by this tranche.
+
+2. docs/map/INV-frozen-surfaces.md:181
+   result: the committed transport_failure census is not zero
+   disposition: AUDIT_BASELINES.md baseline, pre-existing rotted claim parked
+   there as P-D3. Unchanged by this tranche.
+
+3. docs/map/INV-frozen-surfaces.md:422
+   result: test_the_shipped_qualification_subject_digest_does_not_move failed
+   disposition: operator-recorded KNOWN-NOT-YOURS environment condition. The
+   shipped expectation begins 83454b08365d while this container's subject
+   begins 8d26382b23cd because the qualification payload freezes the absolute
+   Python toolchain path and version. The shipped pin and test were not edited,
+   skipped, xfailed, or routed around.
+
+4. docs/map/INV-signal-contract.md:89
+   result: test_the_shipped_qualification_subject_digest_does_not_move failed
+   disposition: the same operator-recorded KNOWN-NOT-YOURS qualification-path
+   condition as row 3, reached by a second map check. No frozen surface moved.
+
+5. docs/map/SEAM-rules-x-workflow.md:57
+   result: /bin/sh: bc: not found
+   disposition: explicit operator-disposed container-only RED. Installing the
+   real utility first exited 100 with "Unable to locate package bc"; refreshing
+   the package index then exited 100 after the container refused setgroups,
+   setegid, and seteuid and the HTTP method exited 112. No shim, skipped check,
+   inferred pass, or edit to this unrelated map was made.
+
+6. docs/map/SEAM-scheduler-x-workflow.md:170
+   result: test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal
+   failed because result_packages was empty
+   isolated result: 1 failed in 1.51s; the durable capability transition was
+   typed DENIED with reason runner_unavailable, and the real network-denial
+   probe returned ().
+   base control: an independent detached worktree at tranche base
+   2ec5512499a06b528664538c828d9d33e73a594b, with PYTHONPATH bound to that
+   worktree, reproduced the same empty result_packages failure: 1 failed in
+   1.88s. The temporary worktree was clean and removed.
+   disposition: pre-existing non-owner environment RED carried under R12. It
+   is not a pass and authorized no scheduler, runner, containment, or test edit.
+
+7. docs/map/SUB-application.md:460
+   result: TIMEOUT after 300s under the four-worker verifier
+   isolated exact check:
+   grep -q "fence_seq > current_resume.resume_event_seq" src/deepreason/runtime/continuation.py && ! grep -q 'or fence.get("event_seq") != current_resume.resume_event_seq' src/deepreason/runtime/continuation.py && python -m pytest tests/test_continuation.py tests/test_v6_resumed_terminal_revalidation.py -q
+   isolated result: 15 passed in 114.50s (0:01:54)
+   disposition: AUDIT_BASELINES.md container-conditional row cleared by its
+   required serial rerun.
+
+owner-map delta: none
+unresolved new finding: none
+
+The two environment RED classes above remain visible and are not reported as
+passes: real bc is unavailable, and the contained simulation runner is
+unavailable. "No unresolved new finding" means neither was introduced by the
+criticism-source change; it does not mean the container satisfied those checks.

@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=13 blockers=none
+State: next=14 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -120,8 +120,10 @@ order. One step per `dr-execute-step` invocation.
       proof: exact grep guards plus the two-file pytest command exited 0 with
       `15 passed in 114.50s (0:01:54)`.
 
-- [ ] 13. (S5) Record the full map result and per-row baseline dispositions.
+- [x] 13. (S5) Record the full map result and per-row baseline dispositions.
       done-when: `grep -q 'owner-map delta: none' experiments/2026-09-01-change-open-criticism-interface/proof/docs-verify.txt && grep -q 'unresolved new finding: none' experiments/2026-09-01-change-open-criticism-interface/proof/docs-verify.txt` exits 0.
+      proof: done criterion exited 0; all seven rows are recorded without
+      turning the two environment RED classes into passes.
 
 - [ ] 14. (S1, S2, S3, S4, S5) Run the full test gate.
       done-when: `python -m pytest tests/ -q -n 4` ends with 0 failed; paste its final line in this checklist.
