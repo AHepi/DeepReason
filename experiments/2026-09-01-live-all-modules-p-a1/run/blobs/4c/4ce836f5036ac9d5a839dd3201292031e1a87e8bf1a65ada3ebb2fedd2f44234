@@ -1,0 +1,193 @@
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0; it is exp(-Θ(n)). The finite obstruction structures are locally stable mixed configurations in which the bichromatic edges form a matching and every monochromatic component has minimum degree at least 2; equivalently, there is a perfect matching M' extending M such that G-M' is a 2-factor whose cycles are monochromatic. The expected number of such obstructions scales as exp(Θ(n)), so their prevalence is exponential in n.",
+      "mechanism": "The bichromatic edge set evolves by random star-toggling: a vertex with two bichromatic incident edges replaces them by the third, and a vertex with three deletes all three. This decreases the number of bichromatic edges monotonically. The absorbing states are exactly matchings. Since a random 3-regular graph has exp(Θ(n)) perfect matchings and each perfect matching yields 2^{c(M)} stable colorings by monochromatically coloring the cycles of G-M, the number of mixed absorbing states is exp(Θ(n)). The empty matching (consensus) is only one state, so the process is exponentially more likely to be trapped in a mixed matching.",
+      "counterconditions": [
+        "Fails if the random 3-regular graph has no perfect matching whose complement is a 2-factor with many cycles (impossible whp), or if the basin of consensus is exponentially larger than the basin of mixed states.",
+        "Fails if the process is not monotone in bichromatic edges."
+      ],
+      "typicality": 0.7,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as expected number and exp(Θ(n))."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as expected number and exp(Θ(n))."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes limit-verdict terms such as tends to 0 and exp(-Θ(n))."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes limit-verdict terms such as tends to 0 and exp(-Θ(n))."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "In the limit n → ∞, the consensus probability is o(1), not bounded away from 0. The locally stable mixed configurations are exactly the 2-colorings where each vertex has at most one opposite-colored neighbor; the opposite-colored edges form a matching, and each monochromatic induced subgraph has minimum degree 2. Their expected count is Θ(exp(c n)) for some c>0, and the probability of consensus is exp(-Θ(n)).",
+      "mechanism": "The dynamics is a random sequential toggling of the bichromatic edge set. The potential |E_b| decreases by 1 or 3 per flip. The process stops when E_b is a matching. The number of matchings of size α n in a random 3-regular graph is exp(n f(α)) with f(α)>0 for some α>0. The entropy of these mixed absorbing states dominates the two consensus states, so the harmonic measure of consensus is exponentially small.",
+      "counterconditions": [
+        "Overturned if the actual number of stable mixed configurations is polynomial in n, or if the process has a strong drift that avoids all mixed matchings.",
+        "Overturned if simulations show consensus probability bounded away from 0."
+      ],
+      "typicality": 0.6,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as expected count and Θ(exp(c n))."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as expected count and Θ(exp(c n))."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes limit-verdict terms such as n → ∞ and o(1)."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes limit-verdict terms such as n → ∞ and o(1)."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "As n grows, the probability of consensus tends to 1 (1 - o(1)). The only locally stable mixed configurations are fragile structures requiring a perfect matching whose complement is a 2-factor with a bipartite cycle graph; their expected number is exp(-Θ(n)) in the random 3-regular graph, so they vanish. The scaling law for their prevalence is o(1) per vertex.",
+      "mechanism": "Random 3-regular graphs are expanders. A stable mixed configuration forces a cut matching and monochromatic components of minimum degree 2, which is a rigid global constraint. The probability that a random 3-regular graph admits such a configuration is exponentially small. The majority dynamics on an expander rapidly eliminates bichromatic edges; the potential decreases to 0 whp.",
+      "counterconditions": [
+        "Fails if random 3-regular graphs have exponentially many perfect matchings with 2-factor complements (they do), or if the process gets trapped in a matching.",
+        "Fails if the number of stable mixed configurations is exp(Θ(n))."
+      ],
+      "typicality": 0.4,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as expected number and exp(-Θ(n))."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as expected number and exp(-Θ(n))."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes limit-verdict terms such as tends to 1 and 1 - o(1)."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes limit-verdict terms such as tends to 1 and 1 - o(1)."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The limiting probability of consensus is a constant strictly between 0 and 1. The obstruction structures are locally stable mixed configurations where bichromatic edges form a matching; their prevalence scales as Θ(n) expected number, and the consensus probability converges to a constant c in (0,1) determined by the largest eigenvalue of the toggling chain on the line graph.",
+      "mechanism": "The process splits into a fast phase that reduces the bichromatic edge set to a random matching, and a slow phase that is a random walk on matchings. The two consensus states and the mixed matchings form absorbing classes. The probability of consensus is the harmonic measure of the empty matching, which converges to a constant because the number of mixed matchings of size α n is exp(n f(α)) and the process's basin weights balance the entropy.",
+      "counterconditions": [
+        "Overturned if the entropy of mixed matchings dominates or is dominated; fails if the consensus probability is exp(-Θ(n)) or 1-o(1)."
+      ],
+      "typicality": 0.3,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as prevalence and Θ(n) expected number."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as prevalence and Θ(n) expected number."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes limit-verdict terms such as limiting and constant strictly between."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes limit-verdict terms such as limiting and constant strictly between."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "As n → ∞, the probability of consensus tends to 0, and the obstruction structures are frozen 2-factors: a perfect matching M such that G-M is a disjoint union of cycles, with each cycle monochromatic. The expected number of such frozen configurations is exp(n s + o(n)) with s = (1/2) ln(4/3) ≈ 0.143, so their prevalence is exponential. The consensus probability is exp(-Θ(n)).",
+      "mechanism": "Each perfect matching of the random 3-regular graph gives a 2-factor. Coloring each cycle monochromatically yields a stable mixed configuration. The number of perfect matchings is exp(Θ(n)), and the typical number of cycles is linear, so the count is exp(n s). The process's monotone potential makes these absorbing states dominate.",
+      "counterconditions": [
+        "The constant s is a heuristic; overturned if the actual exponent differs or if the process's basin weights favor consensus."
+      ],
+      "typicality": 0.2,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as expected number and exp(n s + o(n))."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as expected number and exp(n s + o(n))."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes limit-verdict terms such as n → ∞ and tends to 0."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes limit-verdict terms such as n → ∞ and tends to 0."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The probability of consensus tends to 0, but the obstruction is not just matchings: it is the presence of a nonempty 2-core in the bichromatic edge graph. The expected number of such obstructions scales like Θ(n) per vertex, and the consensus probability is exp(-Ω(n)).",
+      "mechanism": "The bichromatic edge set evolves by deleting edges at vertices of degree 2 or 3. This is equivalent to the K-core destruction on the line graph. The process stops when the bichromatic edge set is a matching, which is the 1-core of the line graph. The random initial edge set has a giant 2-core, which leaves a linear-sized matching.",
+      "counterconditions": [
+        "Fails if the 2-core is empty; fails if the process does not leave a linear matching."
+      ],
+      "typicality": 0.1,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as expected number and Θ(n) per vertex."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as expected number and Θ(n) per vertex."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes limit-verdict terms such as tends to 0 and exp(-Ω(n))."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes limit-verdict terms such as tends to 0 and exp(-Ω(n))."
+        }
+      ],
+      "optional_refs": []
+    }
+  ]
+}

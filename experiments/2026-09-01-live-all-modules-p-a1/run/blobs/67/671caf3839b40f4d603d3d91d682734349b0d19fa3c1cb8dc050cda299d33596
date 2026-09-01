@@ -1,0 +1,31 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0; it is exp(-Θ(n)). The finite obstruction structures are locally stable mixed configurations in which the bichromatic edges form a matching and every monochromatic component has minimum degree at least 2; equivalently, there is a perfect matching M' extending M such that G-M' is a 2-factor whose cycles are monochromatic. The expected number of such obstructions scales as exp(Θ(n)), so their prevalence is exponential in n.",
+      "mechanism": "The bichromatic edge set evolves by random star-toggling: a vertex with two bichromatic incident edges replaces them by the third, and a vertex with three deletes all three. This decreases the number of bichromatic edges monotonically. The absorbing states are exactly matchings. Since a random 3-regular graph has exp(Θ(n)) perfect matchings and each perfect matching yields 2^{c(M)} stable colorings by monochromatically coloring the cycles of G-M, the number of mixed absorbing states is exp(Θ(n)). The empty matching (consensus) is only one state, so the process is exponentially more likely to be trapped in a mixed matching.",
+      "counterconditions": [
+        "Fails if the random 3-regular graph has no perfect matching whose complement is a 2-factor with many cycles (impossible whp), or if the basin of consensus is exponentially larger than the basin of mixed states.",
+        "Fails if the process is not monotone in bichromatic edges."
+      ],
+      "typicality": 0.7,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as expected number and exp(Θ(n))."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes scaling-law terms such as expected number and exp(Θ(n))."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Breaking with the criticized candidate; this candidate explicitly includes limit-verdict terms such as tends to
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}
