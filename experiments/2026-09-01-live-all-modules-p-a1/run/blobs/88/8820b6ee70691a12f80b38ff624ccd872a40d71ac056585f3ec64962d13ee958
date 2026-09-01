@@ -1,0 +1,134 @@
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The finite obstruction structures are exactly the locally stable mixed configurations: two-colorings in which every vertex agrees with at least two of its three neighbors, equivalently the bichromatic edges form a matching. Their expected number in a random 3-regular graph is exp(Θ(n)); in fact it is at least exp(n/2 + o(n)) because every 2-factor with its cycles colored monochromatically is such an obstruction.",
+      "mechanism": "The number of bichromatic edges is a Lyapunov function: an update flips a vertex only when it has at most one same-color neighbor, and such a flip strictly decreases the cut size. Thus the process is a downhill walk in cut size and gets absorbed either at consensus (cut size 0) or at a locally stable mixed configuration. Stable mixed configurations are local minima of cut size. A 2-factor of the 3-regular graph leaves a perfect matching; coloring each cycle monochromatically gives every vertex two same-color cycle neighbors and at most one cross matching edge, so it is stable. Random 3-regular graphs have exp(n/2 + o(n)) 2-factors, and each 2-factor with c cycles gives 2^c colorings, so the expected number of obstructions is exponential. With exponentially many absorbing obstructions and one consensus state, the downhill dynamics from a uniform random coloring reaches consensus with probability exp(-Θ(n)) → 0.",
+      "counterconditions": [
+        "If the number of 2-factors in random 3-regular graphs were subexponential, the exponential prevalence law would fail.",
+        "If the basins of stable mixed configurations were exponentially small relative to the consensus basin, consensus probability could be bounded away from 0.",
+        "If the graph were not 3-regular or the update were synchronous, the cut-size Lyapunov argument would not apply."
+      ],
+      "typicality": 0.9,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-scaling-law; this candidate supplies an explicit expected-number scaling law exp(Θ(n)) via 2-factor counting."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-scaling-law; this candidate states the prevalence as exp(n/2 + o(n))."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-limit-verdict; this candidate states the explicit asymptotic verdict P(consensus) → 0."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-limit-verdict; this candidate gives the limit verdict that consensus probability tends to 0."
+        }
+      ],
+      "optional_refs": ["SRC_014"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The obstruction structures are locally stable mixed configurations where each vertex has at most one opposite-color neighbor, so the bichromatic edges form a matching. A falsifiable quantitative law is that the expected number of such obstructions scales as Θ(√n), dominated by balanced colorings with a perfect matching of cross edges.",
+      "mechanism": "First-moment/mean-field count: for a fixed balanced color class, each vertex has probability 1/2 to have at most one cross edge, giving an expected number of balanced stable colorings of order 1/√n; summing over the n possible imbalances yields Θ(√n). Since this expected number grows without bound, stable mixed configurations exist whp, and the downhill cut-size process is trapped before reaching zero cut with probability tending to 1.",
+      "counterconditions": [
+        "The mean-field independence approximation may underestimate dependencies; a rigorous configuration-model count could shift the exponent from √n to exponential.",
+        "If stable configurations are dominated by 2-factor constructions, the prevalence is exp(Θ(n)) rather than Θ(√n).",
+        "If the basins of the Θ(√n) obstructions are negligible, consensus probability need not tend to 0."
+      ],
+      "typicality": 0.25,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-scaling-law; this candidate supplies the explicit scaling law Θ(√n)."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-scaling-law; this candidate gives a falsifiable expected-count law Θ(√n)."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-limit-verdict; this candidate states P(consensus) → 0."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-limit-verdict; this candidate gives the explicit limit verdict 0."
+        }
+      ],
+      "optional_refs": ["SRC_014"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to a constant strictly between 0 and 1. The finite obstruction structures are locally stable mixed configurations with bichromatic edges forming a matching; their expected number is exp(Θ(n)), but their combined basin has only constant probability, so the process has a non-vanishing chance to reach consensus.",
+      "mechanism": "The cut size is a Lyapunov function, so the process is a random walk on cut size with absorbing states at 0 and at stable mixed configurations. Although stable mixed configurations are exponentially numerous, each has a very small basin because reaching one requires a precise matching of cross edges. The probability of hitting the consensus basin before any obstruction basin is a constant determined by the ratio of basin sizes, not vanishing.",
+      "counterconditions": [
+        "If the total basin of stable mixed configurations grows with n, the consensus probability would tend to 0.",
+        "If the consensus basin is exponentially small, the probability would tend to 0.",
+        "If the number of stable mixed configurations is only Θ(√n), the constant-between verdict may fail."
+      ],
+      "typicality": 0.15,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-scaling-law; this candidate supplies the explicit prevalence exp(Θ(n))."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-scaling-law; this candidate gives an exponential expected-count law."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-limit-verdict; this candidate states the explicit verdict of a constant strictly between 0 and 1."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-limit-verdict; this candidate gives a non-vanishing constant limit."
+        }
+      ]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 1. The only finite obstruction structures are locally stable mixed configurations, but their expected number is exp(-Θ(n)) in a random 3-regular graph, so whp none exist and the cut-size Lyapunov process reaches zero cut.",
+      "mechanism": "A stable mixed configuration requires every vertex to have at most one cross edge. In a random 3-regular graph this is a very rare event: the cross edges must form a matching, which is exponentially unlikely. The expected number of such configurations is exp(-Θ(n)), so whp the only absorbing states are unanimous. Since the cut size strictly decreases, the process reaches consensus with probability 1 - o(1).",
+      "counterconditions": [
+        "If 2-factors in random 3-regular graphs are exponentially many, then stable mixed configurations are exponentially many, not rare.",
+        "If stable mixed configurations exist whp, consensus probability cannot tend to 1.",
+        "If the cut-size process can get trapped in non-absorbing cycles, the Lyapunov argument would be incomplete."
+      ],
+      "typicality": 0.1,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-scaling-law; this candidate supplies the explicit prevalence exp(-Θ(n))."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-scaling-law; this candidate gives a rare-obstruction scaling law."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-limit-verdict; this candidate states P(consensus) → 1."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate that failed pa1-limit-verdict; this candidate gives the explicit limit verdict 1."
+        }
+      ]
+    }
+  ]
+}
