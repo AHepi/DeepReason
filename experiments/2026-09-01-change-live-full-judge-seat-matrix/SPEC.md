@@ -249,6 +249,13 @@ live process stops globally only for missing credential, credential leakage,
 domain-digest mismatch, or corrupt driver state. A case-level refusal or model
 failure is recorded and the queue continues.
 
+Before the first live completion, `matrix.py soak` constructs an
+experiment-owned `cycle_soak.SoakCase`, injects it into the soak driver's case
+table in memory, and runs the unchanged `scripts/cycle_soak.py` machinery for
+eight deterministic cycles on a Kimi-K3-free defended-court configuration. The
+committed soak driver is imported and not edited. A green unrelated case is not
+accepted as coverage for this launch shape.
+
 `RESULTS.md` leads with current exact counts and a table of configuration
 outcomes. It distinguishes direct full-court reachability, managed-launch
 reachability, qualification/contract compatibility, semantic trial outcome,
@@ -262,6 +269,13 @@ Accept:
 ```text
 python experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py summarize
 EXPECTED=<n> TERMINAL=<n> POSSIBLE=<n> IMPOSSIBLE=<n> PROVIDER_INDETERMINATE=<n> PENDING=<n> PEAK_IN_FLIGHT<=3
+```
+
+Launch gate:
+
+```text
+python -u experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py soak
+SOAK_VERDICT=PASS CASE=judge-matrix CYCLES=8
 ```
 
 ### S7 — branch isolation
@@ -441,17 +455,18 @@ Implementation budget, excluding ledger/proof/result artifacts:
 
 ```text
 matrix/domain + safety + resume: 260 lines
-shipped-court live adapter:       230 lines
+shipped-court live adapter:       270 lines
 tests:                            190 lines
-total:                            680 lines
-python -c "print(sum([260,230,190]))" -> 680
+total:                            720 lines
+python -c "print(sum([260,270,190]))" -> 720
 ```
 
-Because 680 exceeds the workflow's approximately 300-line single-change
+Because 720 exceeds the workflow's approximately 300-line single-change
 ceiling, implementation is split into two ordered code checkpoints with an
 independent commit and validation after each: domain/safety/resume first
 (estimated 300 including its tests), shipped-court live adapter second
-(estimated 380 including its tests). No paid call occurs between them. The
+(estimated 420 including its tests and the experiment-owned soak wrapper). No
+paid call occurs between them. The
 campaign launch and result ledger are a third evidence-only checkpoint.
 
 Frozen surfaces edited: none. Estimated code commits: two. Evidence commits:
