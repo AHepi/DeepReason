@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=3 blockers=none
+State: next=4 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -28,8 +28,9 @@ order. One step per `dr-execute-step` invocation.
       proof: `done-criterion exit: 0`; transcript records pytest exit 2 and
       the exact pre-feature import refusal.
 
-- [ ] 3. (S4) [COMMIT] Commit and push the tests plus base RED checkpoint.
+- [x] 3. (S4) [COMMIT] Commit and push the tests plus base RED checkpoint.
       done-when: `test "$(git rev-parse HEAD)" = "$(git rev-parse origin/codex/open-criticism-contracts-20260901)"` exits 0 after commit `test: pin contribution-only criticism contract`.
+      proof: post-push equality command exit 0.
 
 - [ ] 4. (S1, S2, S3, S5, S6) Land the alphaXiv-disposed contribution-only module
       as one mapped behavior change, running each proposed map check before
