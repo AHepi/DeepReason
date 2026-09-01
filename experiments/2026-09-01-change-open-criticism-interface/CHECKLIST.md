@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=8 blockers=none
+State: next=9 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -57,8 +57,10 @@ order. One step per `dr-execute-step` invocation.
       proof: the exact recorded commands exited 0 with `5 passed, 7 deselected`,
       `4 passed`, and `3 passed`, respectively.
 
-- [ ] 8. (S3, S4) Run the defended-trial independence regression ring.
+- [x] 8. (S3, S4) Run the defended-trial independence regression ring.
       done-when: `python -m pytest tests/test_criticism_source_contract.py tests/test_judge_canary_dispatch.py tests/test_v6_manifest_defended_trial.py -q` reports 0 failed.
+      proof: `15 passed in 6.00s`; the unchanged canary and defended-manifest
+      controls remained GREEN beside all source outcomes.
 
 - [ ] 9. (S1, S2, S3, S4, S5, S6) Re-run actual blast-radius and insertion-budget gates.
       done-when: `python tools/blast_radius.py --files src/deepreason/criticism_source.py tests/test_criticism_source_contract.py docs/map/CON-criticism-source.md docs/map/CON-conjecture-kinds.md docs/map/CON-authority.md --symbols describe_criticism_sources invoke_criticism_source` reports `"frozen_surface_verdict": "CLEAR"`, and `python tools/diff_budget.py 7d266f85cc6bd4548fde8ce05012b4a49329e209 --ceiling 280 --paths src/deepreason/criticism_source.py tests/test_criticism_source_contract.py docs/map/CON-criticism-source.md docs/map/CON-conjecture-kinds.md docs/map/CON-authority.md` reports a non-exceeded verdict.
