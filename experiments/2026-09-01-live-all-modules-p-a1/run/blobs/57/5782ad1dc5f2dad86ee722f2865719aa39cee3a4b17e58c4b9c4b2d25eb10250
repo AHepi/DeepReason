@@ -1,0 +1,31 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+The user is asking me to serialize only — return one JSON value matching the schema. The deliberation so far is empty ("(nothing)"). This is "STEP 2 OF 2 - SERIALIZE ONLY."
+
+The schema requires either a "candidate" (ReasoningCandidateProposal) or an "abstention" (ConjectureAbstentionV1) — exactly one.
+
+Since there's no deliberation, no context, no source materials, no evidence dossier blocks, and no criticisms to discharge, the honest response is an abstention. A candidate would require:
+- claim, mechanism, counterconditions, typicality — with no context, I can't ground any claim.
+- Evidence refs would need hex block ids from an admitted dossier — I have none.
+- Optional refs would be aliases SRC_001..SRC_013 — I have no idea which ones are relevant.
+
+The ConjectureAbstentionV1 has search_signal enum: "need_context", "stuck", "capability_mismatch". With no deliberation and no context provided, "need_context" seems most appropriate. There's also an optional "note" field (string 1-8192 chars or null).
+
+The top-level object must be:
+{"abstention": {"note": "...", "search_signal": "need_context"}}
+
+Additional properties are false at the top level, so only "abstention" or "candidate". The allOf oneOf requires exactly one of them. Since I'm abstaining, I include only "abstention".
+
+Let me write a note explaining why: no deliberation context, no admitted dossier blocks, no source materials available to ground a candidate. Keep it concise and honest.
+
+The abstention schema:
+- note: anyOf string (1-8192) or null, default null
+- search_signal: default "stuck", enum ["need_context", "stuck", "capability_mismatch"]
+
+I'll pick "need_context" since the deliberation is empty — no context was provided to reason over. Actually, could argue "stuck" (the default). But "need_context" is more precise: there's literally nothing to reason about — no source memories, no dossier, no open criticisms. The schema for candidate requires source_memory_refs, evidence block hex ids, etc. I can't fabricate those.
+
+Note should be brief: "No deliberation content and no admitted dossier blocks or source context were provided, so no candidate can be grounded. Requesting context before proposing
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.atomic-candidate.v1", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}
