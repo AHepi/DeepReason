@@ -70,6 +70,7 @@ FRONTIER = REPO / "experiments" / "2026-08-25-change-constructive-frontier"
 REMATCH = REPO / "experiments" / "2026-08-26-pc2-rematch"
 SYMMETRIC = REPO / "experiments" / "2026-08-27-pc2b-symmetric-reasoning"
 SPLIT_LEGS = REPO / "experiments" / "2026-08-27-defect-split-leg-recording"
+ALL_MODULES = REPO / "experiments" / "2026-09-01-live-all-modules-p-a1"
 
 # The deepest cycle any of the four recorded deaths reached.  A soak that
 # stops at or below this depth has not looked where they died.
@@ -293,6 +294,32 @@ CASES: dict[str, SoakCase] = {
         builder_dir=FRONTIER,
         attached_evidence=False,
         delegates_to_builder=True,
+        default_cycles=24,
+        default_token_budget=3_000_000,
+    ),
+    "pa1": SoakCase(
+        id="pa1",
+        description=(
+            "the P-A1 all-modules shape: FOUR models across eleven roles "
+            "(a two-seat deepseek/glm-5.3 conjecturer ensemble, deepseek "
+            "critic, glm-5.3 defender, a cross-family qwen3.5/gpt-oss judge "
+            "ensemble), an EXPLICIT defended-trial criticism policy, the "
+            "grounded two-stage bridge, route-bound schools, both evidence "
+            "channels on with a raised simulation budget, the config referee "
+            "armed, and NEAR_DUP_EPS calibrated rather than None"
+        ),
+        config_path=ALL_MODULES / "run-config.yaml",
+        builder="build_manifest_pa1",
+        builder_dir=ALL_MODULES,
+        # The dossier is EMPTY but the CHANNEL is on, and the builder owns
+        # that distinction along with the explicit criticism policy, the
+        # engaged capability preset and the route-bound control plane. The
+        # default root-construction path can express none of them, and an
+        # instrument that soaks the wrong shape is worse than no instrument
+        # because it reports green.
+        attached_evidence=True,
+        delegates_to_builder=True,
+        # The LAUNCH's own depth and budget, not a sample of them.
         default_cycles=24,
         default_token_budget=3_000_000,
     ),
