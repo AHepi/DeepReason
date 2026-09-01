@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=2 blockers=step 2 expected ModuleNotFoundError, but Python emitted equivalent ImportError
+State: next=2 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -18,11 +18,13 @@ order. One step per `dr-execute-step` invocation.
 
 - [ ] 2. (S4) Run the new test on the pre-feature tree and record the base RED
       transcript.
-      done-when: `grep -q 'ModuleNotFoundError.*deepreason.criticism_source' experiments/2026-09-01-change-open-criticism-interface/proof/base-red.txt && grep -q 'exit: [^0]' experiments/2026-09-01-change-open-criticism-interface/proof/base-red.txt` exits 0.
+      done-when: `grep -q "ImportError: cannot import name 'criticism_source'" experiments/2026-09-01-change-open-criticism-interface/proof/base-red.txt && grep -q 'exit: [^0]' experiments/2026-09-01-change-open-criticism-interface/proof/base-red.txt` exits 0.
       mismatch: pytest exited 2 before collection as required, but
       `from deepreason import criticism_source` spells the missing module as
       `ImportError: cannot import name 'criticism_source' from 'deepreason'`;
-      the planned `ModuleNotFoundError` grep therefore exits 1.
+      the planned `ModuleNotFoundError` grep therefore exited 1. Re-plan:
+      accept the exact emitted `ImportError` spelling; the required nonzero
+      pre-feature collection failure is unchanged.
 
 - [ ] 3. (S4) [COMMIT] Commit and push the tests plus base RED checkpoint.
       done-when: `test "$(git rev-parse HEAD)" = "$(git rev-parse origin/codex/open-criticism-contracts-20260901)"` exits 0 after commit `test: pin contribution-only criticism contract`.
