@@ -281,7 +281,78 @@ Q5: M1's minimum field set names "where the trace lands per value". Whether
 
 ## Amendments
 
-(append-only; later operator messages land here as R7... or "R2a supersedes
-R2", each with its verbatim quote)
+Append-only. Later operator messages land here verbatim BEFORE anything acts on
+them (`dr-change-orchestrator`, the ledger rule).
 
-None as of capture.
+### Amendment 1 — 2026-09-01, the three stop questions answered
+
+The window's C8 named three decisions this window may not take alone. They were
+put to the operator as one batched question. The answers, verbatim:
+
+Q1 (what one model's settings document is called and looks like) — answered:
+
+> "model-profiles/glm-5.3/agent.md"
+
+Q2 (where those documents live, and who can add one without touching the repo)
+— answered:
+
+> "Home directory only, nothing ships"
+
+Q3 (what happens when a run config asks for a thinking value the model's
+document does not list) — answered:
+
+> "These questions miss the point. Harness is supposed to accommodate all
+>  possible future models and configurations"
+
+New requirements, taken from those words:
+
+R7 (artifact): "model-profiles/glm-5.3/agent.md"
+   — one DIRECTORY per model id, and the document inside it is named
+   `agent.md`. Answers Q1 and settles the naming collision the question
+   raised. Supersedes nothing; it decides what REQUEST.md left open.
+
+R8 (behavior): "Home directory only, nothing ships"
+   — the harness reads model documents from the operator's home directory and
+   ships none of its own. Answers Q2.
+
+R9 (behavior, and a correction to the monitor's reading): "These questions
+   miss the point. Harness is supposed to accommodate all possible future
+   models and configurations"
+   — answers Q3 by rejecting its premise. R9 SUPERSEDES the monitor's M4 in
+   full ("never send a value the profile does not declare ... is replaced by
+   the profile's nearest declared value"): a model document may not restrict,
+   substitute for, or veto any configured value. It supplies a value only
+   where the harness would otherwise supply one of its own.
+
+**The window owns this round trip.** The question was asked, and should not
+have been: the operator's all-configurations law of 2026-08-12 and the
+ungated-seats law of 2026-08-28 already decide it, and `dr-ask-the-right-
+question` requires a fork the record kills to be decided and noted rather than
+asked. R9 is therefore recorded as a correction of the monitor's M4 and of this
+window's framing, not as a new operator decision. The record answered first.
+
+### Consequences that follow immediately from R8 and R9
+
+Recorded here because they change what SPEC.md may design, and they were not
+visible before the answers:
+
+1. With nothing shipped, a fresh container has NO documents, so every model is
+   an unknown model. The unknown-model path of M3 is therefore the DEFAULT
+   path, not an edge case: knobs omitted, split protocol stood down, typed
+   notice — which is exactly what R2 ("would this work for all unknown models
+   as well?") asks for, applied to every model until a human writes a
+   document.
+2. The `model-profile-missing` disclosure may NOT be a `CompileNoticeV1`.
+   Measured, not assumed: `qualification.py:264-273` puts every compile notice
+   except `ENGINE_CONFIG_FIELD_NOT_CARRIED` into `manifest_behavior`, which
+   `qualification_subject_digest` digests, and `run_manifest.py:1207-1221`
+   records that this was measured both ways when the `value` field was added.
+   Under R8 that notice would fire on every run in a fresh container and move
+   the shipped qualification subject digest — a frozen surface (CLAUDE.md:
+   "Anything altering qualification subject digests"). The disclosure goes on
+   the run's own record instead, which is the road the window already
+   preferred in C2.
+3. The five authored documents (M5) still have to exist somewhere a human can
+   copy them from. They are committed as reference copies that the loader
+   never reads; installing one is a human act.
+

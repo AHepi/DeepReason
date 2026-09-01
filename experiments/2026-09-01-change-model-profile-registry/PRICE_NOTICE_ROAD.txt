@@ -1,0 +1,6 @@
+schema_version 6
+manifest sha BASE    1950b3d0ee2281137ee3a54def61252b129a955ff30a938feb9044d5ed7ff628
+profile from experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/provider.yaml
+subject BASE         b3f807f386f29cd83e69993beaed2a91723fc14d59eb93b5122c68acc2eee79b
+manifest sha +NOTICE b6afc4045d8125bea069c6cbb9452eaca5ac787692074ab0bd1d9d69003febea
+subject      +NOTICE 29bcca270c006ec5687037b20eab597942fb0261e107ffe58186e4ad20d43bd8
