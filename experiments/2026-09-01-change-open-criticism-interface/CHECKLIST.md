@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=15 blockers=none
+State: next=16 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -134,11 +134,14 @@ order. One step per `dr-execute-step` invocation.
       `src/deepreason/__init__.py`; restoration produced `1 passed in 1.92s`.
       The implementation budget is now exactly `280/280`, still `WITHIN`.
 
-- [ ] 15. (S1, S2, S3, S4, S5) Re-run the contract module, exact owner-map
+- [x] 15. (S1, S2, S3, S4, S5) Re-run the contract module, exact owner-map
       checks, defended-trial ring, blast radius, and diff budget after the
       audit hardening.
       done-when: every targeted command exits 0, blast radius remains `CLEAR`,
       and the diff budget remains within 280 lines.
+      proof: contract `13 passed`; owner maps `6 passed, 7 deselected`, `4
+      passed`, and `3 passed`; defended ring `16 passed`; blast radius `CLEAR`
+      with empty frozen and frozen-adjacent contacts; budget `280/280 WITHIN`.
 
 - [ ] 16. (S1, S2, S3, S4, S5) Run the full test gate.
       done-when: `python -m pytest tests/ -q -n 4` ends with 0 failed; paste its final line in this checklist.

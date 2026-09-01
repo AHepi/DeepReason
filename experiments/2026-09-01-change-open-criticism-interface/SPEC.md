@@ -315,14 +315,16 @@ Declared diff-budget areas are `src/deepreason/criticism_source.py`,
 `tests/test_criticism_source_contract.py`, `docs/map/CON-criticism-source.md`,
 `docs/map/CON-conjecture-kinds.md`, and `docs/map/CON-authority.md`.
 
-Itemized insertion ceilings are: contracts, protocol, registry, invocation,
-and explanation 140; tests 105; owner-map additions 35.
+Final itemized insertions are: contracts, protocol, registry, invocation, and
+explanation 140; tests 118; owner-map additions 22. The independent audit's
+13-line reverse-import law line consumed the maps' unused allowance without
+moving the 280-line ceiling.
 
 Arithmetic, pasted:
 
 ```text
-$ python3 -c "items=[140,105,35]; print(items, sum(items))"
-[140, 105, 35] 280
+$ python3 -c "items=[140,118,22]; print(items, sum(items))"
+[140, 118, 22] 280
 ```
 
 Budget: at most 280 inserted lines in the declared areas, with five post-spec
