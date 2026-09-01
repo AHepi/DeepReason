@@ -1,0 +1,6 @@
+{
+  "abstention": {
+    "search_signal": "need_context",
+    "note": "No deliberation context was provided (empty input). There are no source memories, admitted dossier blocks, prior claims, or open criticisms available from which to ground a candidate's claim, mechanism, counterconditions, evidence refs, or analogy. Emitting a proposal under these conditions would be ungrounded conjecture rather than reasoning, so I abstain and signal that context is needed before any candidate can responsibly be serialized."
+  }
+}
