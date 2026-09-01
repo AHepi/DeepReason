@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=10 blockers=none
+State: next=10 blockers=apt package index cannot locate bc; re-plan required
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -69,6 +69,9 @@ order. One step per `dr-execute-step` invocation.
 
 - [ ] 10. (S5) Restore the verifier's missing `bc` environment dependency.
       done-when: `bc --version` exits 0 and prints its version.
+      attempt: `apt-get install -y bc` exited 100 with
+      `E: Unable to locate package bc`; the environment remains unchanged and
+      the step is unchecked pending a package-index disposition.
       discovery: the authoritative map run completed `71 documents, 1297
       checks` with `7 failed`. None names this tranche's three owner maps.
       mismatch: command exited 2 before verification because this checkout's
