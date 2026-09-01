@@ -1,0 +1,20 @@
+MUTATION_PROOF_V1
+phase=GREEN
+production_base=3cb51b14e4c7c74cc4d058b467588c1c55cc3eab
+source_sha256.src/deepreason/run_manifest.py=6c739dab9f76d660c7a4ab8a8b195dad2517b95e9cb239dd30e71c192a8a2705
+source_sha256.src/deepreason/v6_policy.py=553e02809ed5b72cf878085a4d713f72bf2b5e915bc11e041b944e6fa089fe3a
+source_sha256.src/deepreason/preparation.py=bcb9dade2cba92190df041ce4c744f7e4c92de91108aee84a0daaad701ec0adc
+test_file_sha256.tests/test_judge_canary_compile_gap.py=b48fd1cb441b49873aa8fb4cb4b23d689dfe20ee94ec42989fce32d8da02903a
+test_file_sha256.tests/test_v6_policy_preset.py=e114ddb84c8acf0b90be3aadbb15bb1ea97fc4241a544374f726676ee49c7a04
+test_file_sha256.tests/test_v6_engaged_public_defaults.py=e5410010a960ed4b1b084c452b4d6e07b4efcec766de9e89f800397d1f86ac35
+command=python -m pytest tests/test_judge_canary_compile_gap.py tests/test_v6_policy_preset.py::test_manifest_compiler_delegates_omitted_policy_to_shared_derivation tests/test_v6_engaged_public_defaults.py::test_engaged_criticism_authority_reachable_with_the_master_gate -q
+exit=0
+
+......                                                                   [100%]
+6 passed in 0.98s
+
+The same-byte `test_judge_canary_compile_gap.py` produced two RED failures at
+the anchor and four GREEN passes here. The supplemental shared-helper checks
+produced two RED failures at the anchor and two GREEN passes here. Together
+they prove the behavior changed at both the public compile contract and the
+single-derivation seam while the explicit/default controls stayed pinned.

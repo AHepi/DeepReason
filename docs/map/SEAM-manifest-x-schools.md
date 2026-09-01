@@ -49,7 +49,7 @@ live where a reader expects it.
 | Referee seat | `referee.py` | `run_config_referee` | picks `min(binding.school_id)` off the manifest — the one school id chosen without consulting the roster |
 | Qualification inventory | `run_manifest.py`, `cli/doctor.py` | `_route_seat_behavioral_contract_assignments`, `production_contract_pairs` | which critic seats get probed comes from the criticism bindings; defender/judge/variator seats (2026-08-13) are granted and probed unconditionally by route presence instead — `ARGUMENTATIVE_AUTHORITY` is a runtime `Config` value never written to the manifest, so which run will actually reach the trial is not knowable at compile time |
 | Replay | `invariants.py` | `verify_root` (`school-route`, `foreign-criticism`) | every `SchoolRouteReceiptV1` re-derived against the bindings; coverage counted against `minimum_foreign_school_coverage` |
-| The only in-tree author | `v6_policy.py` | `engaged_criticism_policy`, `PUBLIC_SCHOOL_COUNT` | binds all four public schools to the single critic seat, `observe_only` by default; an optional `seat_map` (Step 44b, Amendment 11/R27) lets named schools diverge to a distinct seat, still dormant unless `preparation.py` supplies one |
+| The only in-tree author | `v6_policy.py` | `engaged_criticism_policy`, `configured_criticism_policy`, `PUBLIC_SCHOOL_COUNT` | the standalone public preset binds four schools by default; configured compilation binds exactly `Config.N_SCHOOLS`; both use the single critic seat and `observe_only` unless configured otherwise; an optional `seat_map` lets managed preparation diverge named schools |
 
 Two of those rows have no test anywhere in `tests/`: nothing imports
 `resolve_conjecture_route` or `compile_criticism_assignments`, so their claims
@@ -164,12 +164,13 @@ routing tweak — it is a cache miss and a full battery (`DR-SUB-manifest`).
 
 `check: python -c "from deepreason.config import Config; from deepreason.run_manifest import compile_run_manifest, CriticismPolicyV1 as C, SchoolRoleBindingV1 as B; from deepreason.cli.doctor import production_contract_pairs as P; from tests.test_v6_transaction_qualification import STAMP, _control, _criticism_policy, _route; roles={'conjecturer':[_route('conjecturer-route')],'argumentative_critic':[_route('critic-route-%d'%s,s) for s in range(3)]}; comp=lambda p: compile_run_manifest(Config(N_SCHOOLS=3,roles=roles),schema_version=6,workload_profile='text',rubric_policy='forbid',compiled_at=STAMP,control_plane_policy=_control(),criticism_policy=p,run_input_digest='a'*64); shared=C(minimum_foreign_school_coverage=2,bindings=tuple(B(school_id='school-%d'%i,role='argumentative_critic',seat=0,endpoint_id='critic-route-0') for i in range(3)),max_batch_size=4,target_eligibility='accepted_school_artifacts',authority='observe_only',allow_shared=True); seats=lambda m: sorted({x.seat for x in P(m) if x.role=='argumentative_critic'}); a,b=comp(_criticism_policy()),comp(shared); assert seats(a)==[0,1,2] and len(P(a))==8; assert seats(b)==[0] and len(P(b))==4; assert a.sha256!=b.sha256"`
 
-The one in-tree author of a criticism policy hard-codes the roster size it
-expects to meet. `PUBLIC_SCHOOL_COUNT` and `Config().N_SCHOOLS` are two
-constants in two modules that must be equal or every public run fails at
-compile with `V4_CRITICISM_BINDING_INCOMPLETE`.
+The standalone public constructor retains its four-school preset default.
+Configured compilation instead passes `Config.N_SCHOOLS` through the shared
+helper, so a three-school topology receives three bindings rather than failing
+with `V4_CRITICISM_SCHOOL_UNKNOWN`. The managed and direct compile paths share
+that helper; the inline preparation copy is gone.
 
-`check: python -c "from deepreason.config import Config; from deepreason.v6_policy import PUBLIC_SCHOOL_COUNT as P, engaged_criticism_policy as E; assert Config().N_SCHOOLS==P; p=E('ep'); assert {b.school_id for b in p.bindings}=={'school-%d'%i for i in range(P)}; assert {b.role for b in p.bindings}=={'argumentative_critic'} and {b.seat for b in p.bindings}=={0}; assert p.authority=='observe_only' and p.allow_shared and p.minimum_foreign_school_coverage==1" && grep -q "else engaged_criticism_policy(" src/deepreason/preparation.py && grep -q "config.ENGAGED_CRITICISM_AUTHORITY" src/deepreason/preparation.py`
+`check: python -c "from deepreason.config import Config; from deepreason.v6_policy import PUBLIC_SCHOOL_COUNT as P, engaged_criticism_policy as E, configured_criticism_policy as C; assert Config().N_SCHOOLS==P; p=E('ep'); q=C(Config(N_SCHOOLS=3, LEGACY_CRITICISM_ENABLED=False), 'ep'); assert {b.school_id for b in p.bindings}=={'school-%d'%i for i in range(P)}; assert {b.school_id for b in q.bindings}=={'school-0','school-1','school-2'}; assert {b.role for b in q.bindings}=={'argumentative_critic'} and {b.seat for b in q.bindings}=={0}; assert p.authority=='observe_only' and q.authority=='observe_only' and p.allow_shared and q.allow_shared" && grep -q "criticism_policy=configured_criticism_policy(" src/deepreason/preparation.py && python -m pytest tests/test_judge_canary_compile_gap.py::test_three_school_omission_derives_matching_policy_and_trial_grants -q`
 
 ## What is deliberately absent
 

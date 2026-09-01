@@ -1,0 +1,28 @@
+MUTATION_PROOF_V1
+phase=RED
+production_tree=3cb51b14e4c7c74cc4d058b467588c1c55cc3eab
+test_file_sha256.tests/test_v6_policy_preset.py=e114ddb84c8acf0b90be3aadbb15bb1ea97fc4241a544374f726676ee49c7a04
+test_file_sha256.tests/test_v6_engaged_public_defaults.py=e5410010a960ed4b1b084c452b4d6e07b4efcec766de9e89f800397d1f86ac35
+source_path=/workspace/scratch/ee299635b3c6/anchor-red/src
+command=PYTHONPATH=<source_path> python -m pytest tests/test_v6_policy_preset.py::test_manifest_compiler_delegates_omitted_policy_to_shared_derivation tests/test_v6_engaged_public_defaults.py::test_engaged_criticism_authority_reachable_with_the_master_gate -q
+exit=1
+
+FF                                                                       [100%]
+
+FAILED tests/test_v6_policy_preset.py::test_manifest_compiler_delegates_omitted_policy_to_shared_derivation
+  AttributeError: module 'deepreason.v6_policy' has no attribute
+  'configured_criticism_policy'
+
+FAILED tests/test_v6_engaged_public_defaults.py::test_engaged_criticism_authority_reachable_with_the_master_gate
+  AttributeError: module 'deepreason.preparation' has no attribute
+  'configured_criticism_policy'
+
+2 failed in 0.77s
+
+The import banner printed before the run resolved `deepreason` from the exact
+anchored source tree, not the editable working tree:
+
+    /workspace/scratch/ee299635b3c6/anchor-red/src/deepreason/__init__.py
+
+Both checks fail specifically because the shared derivation seam does not
+exist at the anchor. Their GREEN run therefore cannot be vacuous.

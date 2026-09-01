@@ -82,6 +82,18 @@ Compilation, binding, reconstruction (`run_manifest.py`):
   `route_sha256`, and both refuse outright when their plan is absent.
 `check: for s in compile_run_manifest bind_run_manifest persist_run_manifest load_run_manifest write_run_manifest config_from_run_manifest materialize_run_config role_matrix render_role_matrix preflight_payload preflight_harness resolve_route_seat_base_profile resolve_route_seat_behavioral_capability resolve_route_seat_contract_decomposition; do grep -q "^def $s(" src/deepreason/run_manifest.py || exit 1; done && python -c "import inspect, deepreason.run_manifest as m; sig = lambda f: list(inspect.signature(f).parameters); assert sig(m.resolve_route_seat_base_profile) == [\"manifest\", \"role\", \"seat\", \"endpoint_id\"], sig(m.resolve_route_seat_base_profile); assert sig(m.resolve_route_seat_behavioral_capability) == [\"manifest\", \"role\", \"seat\", \"endpoint_id\", \"route_sha256\"], sig(m.resolve_route_seat_behavioral_capability); assert sig(m.resolve_route_seat_contract_decomposition) == [\"manifest\", \"role\", \"seat\", \"endpoint_id\", \"route_sha256\", \"source_contract_id\"], sig(m.resolve_route_seat_contract_decomposition)" && grep -q "return manifest.model_profile" src/deepreason/run_manifest.py`
 
+For schema v6, omission of the `criticism_policy` argument is not an implicit
+request for observation-only behavior. After routes are resolved,
+`compile_run_manifest` sends the source `Config` and the actual resolved
+argumentative-critic endpoint through `configured_criticism_policy`, the same
+helper used by managed preparation. This happens only when the argument is
+`None`: an explicit policy, including explicit `observe_only`, always wins.
+The legacy default still derives no engaged policy. A defended configuration
+with an omitted argument is byte-for-byte equal to the same compilation with
+the defended policy explicit, including its defender and judge behavioral
+grants.
+`check: python -m pytest tests/test_judge_canary_compile_gap.py::test_omitted_defended_policy_matches_explicit_and_controls_stay_pinned tests/test_judge_canary_compile_gap.py::test_default_legacy_omission_stays_policy_free -q`
+
 Qualification evidence (`qualification.py`):
 
 - `qualification_subject_digest(manifest, profile)` — the cache key. **Frozen.**

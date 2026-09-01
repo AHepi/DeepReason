@@ -1,0 +1,27 @@
+MUTATION_PROOF_V1
+phase=RED
+production_tree=3cb51b14e4c7c74cc4d058b467588c1c55cc3eab
+test_file_sha256=b48fd1cb441b49873aa8fb4cb4b23d689dfe20ee94ec42989fce32d8da02903a
+test_file_origin=tests/test_judge_canary_compile_gap.py copied unchanged into detached production_tree
+command=PYTHONPATH=<detached-tree>/src:<detached-tree> python -m pytest tests/test_judge_canary_compile_gap.py -q
+exit=1
+
+FF..                                                                     [100%]
+
+FAILED tests/test_judge_canary_compile_gap.py::test_omitted_defended_policy_matches_explicit_and_controls_stay_pinned
+  assertion: omitted_defended.model_dump(mode="json") == explicit_defended.model_dump(mode="json")
+  observed: omitted manifest retained no criticism policy, different notices, and empty trial grants
+
+FAILED tests/test_judge_canary_compile_gap.py::test_three_school_omission_derives_matching_policy_and_trial_grants
+  assertion: omitted.model_dump(mode="json") == explicit.model_dump(mode="json")
+  observed: omitted three-school manifest retained no criticism policy and empty trial grants
+
+PASSED tests/test_judge_canary_compile_gap.py::test_default_legacy_omission_stays_policy_free
+PASSED tests/test_judge_canary_compile_gap.py::test_pre_v6_omission_does_not_derive_policy
+
+2 failed, 2 passed in 0.81s
+
+The first failure occurs after the registered default-observe, explicit-observe,
+and explicit-defended manifest/qualification pins have all passed. The mutation
+is therefore specific to omitted-policy derivation, not a vacuous or globally
+red test.

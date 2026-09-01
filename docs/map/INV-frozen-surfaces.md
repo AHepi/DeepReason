@@ -630,6 +630,44 @@ mutant at
 BEFORE it was written down — the arrangement a naive `grep -q` passes while
 v6's hash has already moved.
 
+**Granted contact, 2026-09-01 — derive an omitted v6 criticism policy from
+configured intent.** The monitor FORECAST surface-4 contact in the tranche
+instruction and granted it conditionally to this ledger's contact discipline.
+The full pre-edit disposition and `tools/blast_radius.py` CONTACT output were
+recorded and pushed in
+`experiments/2026-09-01-defect-judge-canary-compile-gap/FIX.md` before source
+contact. That disposition stopped again when the measured manifest and
+qualification-subject digests moved. The operator then accepted that exact
+price for future compilations of P-C1, P-R1, P-C2-H2, P-C2-H3, split-leg,
+P-C2b, and P-S1, with a fresh qualification battery owed for each new subject.
+
+What moved in surface 4 is one post-route branch in `compile_run_manifest`.
+For schema v6 only, and only when the caller's `criticism_policy` argument is
+`None`, it calls the shared `v6_policy.configured_criticism_policy` helper with
+the source `Config` and actual resolved argumentative-critic endpoint. The
+helper is also the sole derivation path used by managed `preparation.py`; its
+bindings count comes from `Config.N_SCHOOLS`. An explicit policy always wins,
+including explicit `observe_only`, while the default legacy configuration
+still derives `None`. No Pydantic model, validator, `Literal`, serializer,
+loader, replay rule, Config default, or historical manifest changed.
+
+The registered four-row control ended exactly as authorized:
+
+| Control | Manifest SHA | Qualification subject |
+|---|---|---|
+| default explicit observation-only | `de66096f79454255f3b0a4db932186c8573de9000d1ddcc881fc76c6abe45322` | `02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713` |
+| defended Config, policy omitted | `0299510d31e292900b36a7d4e20ad9ab9dee9f976a3b9f69b3cca558a3a41fbb` | `de322caa1c8b9d4fefb598bc158ada98376f9f922191409e6168cfc7450057bb` |
+| defended Config, explicit `observe_only` override | `2fb3ab698ee6777f038adcb9833fb32b628e1b3ec822946fd34975e162f2c58c` | `c4b7ab8ccb3bd123372d9f434b1788a1d257004c22fbba3a63a82baf99d11ab8` |
+| defended Config, explicit defended policy | `0299510d31e292900b36a7d4e20ad9ab9dee9f976a3b9f69b3cca558a3a41fbb` | `de322caa1c8b9d4fefb598bc158ada98376f9f922191409e6168cfc7450057bb` |
+
+Surface 5 is reached by behavior and not edited: these are intentionally new
+manifest subjects, not a qualification-payload exemption. Every committed run
+root remains byte-for-byte historical evidence; none was rewritten,
+relaunched, re-verified, or amended. The P-S1 branch and builder remain
+read-only.
+
+`check: python experiments/2026-09-01-defect-judge-canary-compile-gap/price_compile_gap.py --expect fixed >/dev/null && python -m pytest tests/test_judge_canary_compile_gap.py -q`
+
 ### 5. Anything altering qualification subject digests — `qualification.py`
 
 The qualification cache keys on a subject digest built from the manifest, the

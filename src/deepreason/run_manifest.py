@@ -3930,6 +3930,18 @@ def compile_run_manifest(
             role: tuple(grouped_specs.get(role, ())) for role in role_names
         }
 
+    if schema_version == 6 and criticism_policy is None:
+        # Imported only after this module is initialized: v6_policy owns the
+        # shared derivation helper and imports this module's policy models.
+        from deepreason.config import Config
+        from deepreason.v6_policy import configured_criticism_policy
+
+        critic_routes = roles.get("argumentative_critic", ())
+        resolved_criticism_policy = configured_criticism_policy(
+            Config.model_validate(data),
+            critic_routes[0].endpoint_id if critic_routes else None,
+        )
+
     if rubric_policy == "require_cross_family":
         judge_routes = roles.get("judge", ())
         families = {

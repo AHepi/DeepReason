@@ -34,12 +34,13 @@ from deepreason.capabilities.policy import (
     ResearchCapabilityPolicyV1,
     SimulationCapabilityPolicyV1,
 )
-from deepreason.config import BridgeConfig
+from deepreason.config import BridgeConfig, Config
 from deepreason.run_manifest import (
     ConjectureContextPolicyV1,
     ContractVersionPolicyV3,
     ControlPlanePolicyV3,
     CriticismPolicyV1,
+    RunManifestError,
     SchoolExecutionPolicyV1,
     SchoolRoleBindingV1,
     ScratchAuthoringPolicyV1,
@@ -244,6 +245,7 @@ def engaged_criticism_policy(
     *,
     authority: str = "observe_only",
     seat_map: Mapping[str, tuple[int, str]] | None = None,
+    school_count: int = PUBLIC_SCHOOL_COUNT,
 ) -> CriticismPolicyV1:
     """Bind every seeded public school to the single provider critic seat.
 
@@ -253,6 +255,10 @@ def engaged_criticism_policy(
     foreign school per accepted school artifact keeps the token cost inside
     the public envelope while guaranteeing that semantic criticism actually
     runs; authority stays observe-only.
+
+    ``school_count`` defaults to the four-school public preset. Direct v6
+    compilation supplies the source Config's count so a non-default topology
+    receives bindings for exactly the schools it configured.
 
     ``seat_map`` is Step 44b's criticism-side school-seat opt-in (S2d/R27,
     Amendment 11, 2026-08-10, SPEC.md addendum S18): ``school_id -> (seat,
@@ -276,12 +282,40 @@ def engaged_criticism_policy(
                 seat=seat_map.get(f"school-{index}", (0, endpoint_id))[0],
                 endpoint_id=seat_map.get(f"school-{index}", (0, endpoint_id))[1],
             )
-            for index in range(PUBLIC_SCHOOL_COUNT)
+            for index in range(school_count)
         ),
         max_batch_size=4,
         target_eligibility="accepted_school_artifacts",
         authority=authority,
         allow_shared=True,
+    )
+
+
+def configured_criticism_policy(
+    config: Config,
+    endpoint_id: str | None,
+    *,
+    seat_map: Mapping[str, tuple[int, str]] | None = None,
+) -> CriticismPolicyV1 | None:
+    """Derive the one engaged criticism policy selected by ``config``."""
+
+    if config.LEGACY_CRITICISM_ENABLED:
+        return None
+    if endpoint_id is None:
+        raise RunManifestError(
+            "V6_ENGAGED_CRITICISM_ROUTE_REQUIRED",
+            "school-routed criticism requires an argumentative_critic route",
+            "/roles/argumentative_critic",
+        )
+    return engaged_criticism_policy(
+        endpoint_id,
+        authority=(
+            config.ENGAGED_CRITICISM_AUTHORITY
+            if config.ADJUDICATION_STATUS_AUTHORITY_ENABLED
+            else "observe_only"
+        ),
+        seat_map=seat_map,
+        school_count=config.N_SCHOOLS,
     )
 
 
@@ -721,6 +755,7 @@ __all__ = [
     "PUBLIC_SIMULATION_TOOLCHAIN_ID",
     "conservative_control_plane_policy_v3",
     "conservative_policy_digest",
+    "configured_criticism_policy",
     "engaged_attached_evidence_policy",
     "engaged_bridge_source",
     "engaged_config_referee_policy",
