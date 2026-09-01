@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=10 blockers=apt package index cannot locate bc; re-plan required
+State: next=10 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -67,11 +67,11 @@ order. One step per `dr-execute-step` invocation.
       proof: blast radius `CLEAR`, frozen and frozen-adjacent contact lists
       empty; insertion budget `267/280`, verdict `WITHIN`.
 
-- [ ] 10. (S5) Restore the verifier's missing `bc` environment dependency.
-      done-when: `bc --version` exits 0 and prints its version.
+- [ ] 10. (S5) Refresh the container's supported package index for `bc`.
+      done-when: `apt-cache show bc` exits 0 and prints a package stanza.
       attempt: `apt-get install -y bc` exited 100 with
       `E: Unable to locate package bc`; the environment remains unchanged and
-      the step is unchecked pending a package-index disposition.
+      the first plan could not meet its done criterion.
       discovery: the authoritative map run completed `71 documents, 1297
       checks` with `7 failed`. None names this tranche's three owner maps.
       mismatch: command exited 2 before verification because this checkout's
@@ -82,26 +82,29 @@ order. One step per `dr-execute-step` invocation.
       second re-plan: the full result contains two recorded map baselines, the
       operator-recorded environment-sensitive qualification test through two
       maps, missing `bc`, one unrelated scheduler test failure, and the
-      recorded conditional continuation timeout. Steps 10-14 dispose every
+      recorded conditional continuation timeout. Steps 10-15 dispose every
       non-owner row under `AUDIT_BASELINES.md` rather than weakening a check.
 
-- [ ] 11. (S5) Re-run the `SEAM-rules-x-workflow` check after `bc` is present.
+- [ ] 11. (S5) Install the real `bc` package from the refreshed index.
+      done-when: `bc --version` exits 0 and prints its version.
+
+- [ ] 12. (S5) Re-run the `SEAM-rules-x-workflow` check after `bc` is present.
       done-when: the exact column-0 check at
       `docs/map/SEAM-rules-x-workflow.md:57` exits 0.
 
-- [ ] 12. (S5) Re-run the scheduler delta candidate without docs-verifier load.
+- [ ] 13. (S5) Re-run the scheduler delta candidate without docs-verifier load.
       done-when: `python -m pytest tests/test_v6_engaged_public_defaults.py::test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal -q` exits 0.
 
-- [ ] 13. (S5) Re-run the continuation conditional row without docs-verifier load.
+- [ ] 14. (S5) Re-run the continuation conditional row without docs-verifier load.
       done-when: the exact column-0 check at `docs/map/SUB-application.md:460`
       exits 0 inside its 300-second ceiling.
 
-- [ ] 14. (S5) Record the full map result and per-row baseline dispositions.
+- [ ] 15. (S5) Record the full map result and per-row baseline dispositions.
       done-when: `grep -q 'owner-map delta: none' experiments/2026-09-01-change-open-criticism-interface/proof/docs-verify.txt && grep -q 'unresolved new finding: none' experiments/2026-09-01-change-open-criticism-interface/proof/docs-verify.txt` exits 0.
 
-- [ ] 15. (S1, S2, S3, S4, S5) Run the full test gate.
+- [ ] 16. (S1, S2, S3, S4, S5) Run the full test gate.
       done-when: `pytest tests/ -q -n 4` ends with 0 failed; paste its final line in this checklist.
 
-- [ ] 16. (S1, S2, S3, S4, S5, S6) [COMMIT] Commit and push implementation, maps, mutation
+- [ ] 17. (S1, S2, S3, S4, S5, S6) [COMMIT] Commit and push implementation, maps, mutation
       proofs, and completed checklist.
       done-when: `git status --porcelain` is empty and `git rev-parse HEAD origin/codex/open-criticism-contracts-20260901` prints one hash twice after commit `change: add contribution-only criticism socket`.
