@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=7 blockers=none
+State: next=8 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -52,8 +52,10 @@ order. One step per `dr-execute-step` invocation.
       proof: deliberate `priority` field produced the manifest-field failure
       with exit 1; restoring the field census returned `1 passed` with exit 0.
 
-- [ ] 7. (S5) Execute every newly recorded owner-map check.
+- [x] 7. (S5) Execute every newly recorded owner-map check.
       done-when: the three exact `check:` commands added to `CON-criticism-source.md`, `CON-conjecture-kinds.md`, and `CON-authority.md` each exit 0.
+      proof: the exact recorded commands exited 0 with `5 passed, 7 deselected`,
+      `4 passed`, and `3 passed`, respectively.
 
 - [ ] 8. (S3, S4) Run the defended-trial independence regression ring.
       done-when: `python -m pytest tests/test_criticism_source_contract.py tests/test_judge_canary_dispatch.py tests/test_v6_manifest_defended_trial.py -q` reports 0 failed.
