@@ -103,3 +103,16 @@ def test_module_has_no_deepreason_dependency() -> None:
     imports = [n.module or "" for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)]
     imports += [a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names]
     assert not [name for name in imports if name == "deepreason" or name.startswith("deepreason.")]
+
+
+def test_registry_is_deliberately_unwired_from_shipped_graph() -> None:
+    offenders = []
+    for path in Path("src/deepreason").rglob("*.py"):
+        if path.name == "criticism_source.py":
+            continue
+        tree = ast.parse(path.read_text())
+        imports = [a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names]
+        imports += [f"{n.module}.{a.name}" for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) for a in n.names]
+        if any(name.startswith("deepreason.criticism_source") for name in imports):
+            offenders.append(str(path))
+    assert offenders == []

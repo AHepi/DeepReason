@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=14 blockers=none
+State: next=15 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -125,9 +125,37 @@ order. One step per `dr-execute-step` invocation.
       proof: done criterion exited 0; all seven rows are recorded without
       turning the two environment RED classes into passes.
 
-- [ ] 14. (S1, S2, S3, S4, S5) Run the full test gate.
-      done-when: `python -m pytest tests/ -q -n 4` ends with 0 failed; paste its final line in this checklist.
+- [x] 14. (S4) Close and mutation-prove the independent audit's reverse-import
+      law-line gap.
+      done-when: the new shipped-graph import test is RED when a temporary
+      `deepreason.criticism_source` import is added outside the module, GREEN
+      after restoration, and both results are appended to `proof/mutations.txt`.
+      proof: deliberate import produced `1 failed in 1.46s` and named
+      `src/deepreason/__init__.py`; restoration produced `1 passed in 1.92s`.
+      The implementation budget is now exactly `280/280`, still `WITHIN`.
 
-- [ ] 15. (S1, S2, S3, S4, S5, S6) [COMMIT] Commit and push implementation, maps, mutation
+- [ ] 15. (S1, S2, S3, S4, S5) Re-run the contract module, exact owner-map
+      checks, defended-trial ring, blast radius, and diff budget after the
+      audit hardening.
+      done-when: every targeted command exits 0, blast radius remains `CLEAR`,
+      and the diff budget remains within 280 lines.
+
+- [ ] 16. (S1, S2, S3, S4, S5) Run the full test gate.
+      done-when: `python -m pytest tests/ -q -n 4` ends with 0 failed; paste its final line in this checklist.
+      initial result before audit hardening: `12 failed, 4576 passed, 26
+      skipped in 658.73s (0:10:58)`. The qualification and scheduler rows were
+      already controlled. Independent detached-base controls reproduced all
+      ten remaining failures: two installed-module isolation failures, two
+      AF_UNIX permission failures, four trusted-check containment failures,
+      one network-runner notice cardinality failure, and one absolute Python
+      toolchain-path mismatch. None is reported as GREEN.
+
+- [ ] 17. (S1, S2, S3, S4, S5, S6) Validate requirement reconciliation and
+      create the delivery artifacts without broadening phase one.
+      done-when: `VALIDATION.md`, `DELIVERY.md`, and any non-empty parked work
+      record the exact implemented boundary, evidence, assumptions, and RED
+      environment rows.
+
+- [ ] 18. (S1, S2, S3, S4, S5, S6) [COMMIT] Commit and push implementation, maps, mutation
       proofs, and completed checklist.
       done-when: `git status --porcelain` is empty and `git rev-parse HEAD origin/codex/open-criticism-contracts-20260901` prints one hash twice after commit `change: add contribution-only criticism socket`.

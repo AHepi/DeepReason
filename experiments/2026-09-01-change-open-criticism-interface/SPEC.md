@@ -25,9 +25,11 @@ import verdict and counterexample vocabulary with authority consequences.
 After: the host binds an immutable target containing opaque text and a codec.
 A returned contribution contains opaque text and a codec, but no target
 selector. No contract can express representation kind, formalism, verdict,
-status, warrant, authority, score, rank, weight, confidence, severity,
+status, warrant, run authority, score, rank, weight, confidence, severity,
 threshold, priority, admission, or candidate visibility. The source manifest's
-only authority-related value is the one-value ceiling `contribution_only`.
+fixed, non-configurable `authority_ceiling="contribution_only"` and the
+host-written `authority_explanation` are capability-boundary metadata: neither
+can select, grant, or downgrade run authority.
 Operational completion, decline, unavailability, and error are host-written
 invocation outcomes, not epistemic assessments.
 
@@ -93,7 +95,10 @@ scheduler, `capture.pareto`, admission, measures, Config, run-manifest,
 qualification, verification, or Harness. Plain prose, mathematical notation,
 JSON-looking text, and code-looking text cross the same opaque field
 byte-for-byte without parsing or classification. Invocation alone has no graph
-effect because this tranche contains no graph consumer.
+effect because this tranche contains no graph consumer. The phase-one
+architecture test walks every other shipped Python module and refuses any
+import of this socket, so “deliberately unwired” is a pinned boundary rather
+than a current observation.
 
 The regression ring also runs the unchanged defended-trial manifest and stub
 canary tests. Their continued success proves this isolated socket has not made
