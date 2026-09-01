@@ -38,6 +38,20 @@ The omitted and explicit-defended manifests are byte-for-byte equal. Both observ
 
 `PREREG.md` was frozen and pushed in `926e77f9b`. R4 was not run because the operator supplied no post-freeze API key.
 
+**Addendum (monitor, 2026-09-01, after this document was written):** the
+operator supplied the key and R4 ran — registered outcome 1, within every
+frozen limit. See `R4_LIVE.txt` (filed verbatim): fresh ephemeral home, one
+scheduler cycle, four live provider calls in the registered order
+(`deepseek-v4-pro:0813` critic → `glm-5.2` defender → `qwen3.5:397b` judge:0 →
+`gpt-oss:120b` judge:1), all authorized/`provider_result`/`completed`,
+`first_refusal: null`, attempt 1 with the pre-authorized repeat unused,
+credential not persisted. The live target stayed `accepted`: the cross-family
+unanimous judges ruled and did not convict, consistent with the measured
+under-conviction of that configuration
+(docs/RESEARCH_JUDGE_BLINDING_2026-08-22.md). Reachability was the registered
+claim and is now live-proven; useful live judge discrimination remains
+unproven, as the closing paragraph below already states.
+
 ## Boundary
 
 Full gate: `python -m pytest tests/ -q -n 4` -> `15 failed, 4561 passed, 26 skipped in 1967.82s (0:32:47)`. Twelve nodes reproduced against untouched `3cb51b14e`; two MCP nodes and the parallel-gate three-root concurrency timeout were timing-flaky and passed fresh isolated reruns. No failure asserts Road B, but this container did not meet the required zero-failure boundary.

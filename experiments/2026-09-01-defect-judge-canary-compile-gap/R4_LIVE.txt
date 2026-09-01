@@ -1,0 +1,18 @@
+R4 LIVE CANARY — 2026-09-01T07:01:51Z
+prereg commit: 926e77f9b9789a4a853826f9e46cf64369af92ed
+attempt: 1; repeat used: no
+fresh DEEPREASON_HOME: yes (ephemeral; no committed root contacted)
+scheduler cycles: 1
+manifest sha256: 62bf8ae70c01fd628c7890d5f8484f44bb231343887947cf0b96e2975f3da991
+criticism policy authority: defended_trial
+live provider calls: 4
+
+argumentative_critic[0] deepseek-v4-pro:0813 criticism/primary authorized provider_result completed
+defender[0] glm-5.2 defended_trial_step/defender authorized provider_result completed
+judge[0] qwen3.5:397b defended_trial_step/judge:0 authorized provider_result completed
+judge[1] gpt-oss:120b defended_trial_step/judge:1 authorized provider_result completed
+
+first_refusal: null
+target before: accepted; formally backed: false
+target after: accepted
+credential persisted: no
