@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=5 blockers=none
+State: next=6 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -40,9 +40,11 @@ order. One step per `dr-execute-step` invocation.
       `4 passed`, and `3 passed`; diff budget `267/280 WITHIN`; blast-radius
       verdict `CLEAR` with no frozen or frozen-adjacent contacts.
 
-- [ ] 5. (S4) Produce the forbidden-contribution-score mutation proof and
+- [x] 5. (S4) Produce the forbidden-contribution-score mutation proof and
       restore GREEN.
       done-when: `grep -q 'score mutant exit: [^0]' experiments/2026-09-01-change-open-criticism-interface/proof/mutations.txt && grep -q 'score restore exit: 0' experiments/2026-09-01-change-open-criticism-interface/proof/mutations.txt` exits 0.
+      proof: deliberate `score` field produced the exact-field failure with
+      exit 1; restoring the field census returned `1 passed` with exit 0.
 
 - [ ] 6. (S4) Produce the forbidden-manifest-priority mutation proof and
       restore GREEN.

@@ -1,0 +1,21 @@
+MUTATION PROOFS — contribution-only criticism-source contract
+
+score mutant
+mutation: add `score: float | None = None` to CriticismContributionV1
+command: python -m pytest tests/test_criticism_source_contract.py::test_contract_fields_are_closed_contract -q
+score mutant exit: 1
+output:
+F                                                                        [100%]
+E       AssertionError: assert {'codec', 'content', 'score'} == {'codec', 'content'}
+E         Extra items in the left set:
+E         'score'
+FAILED tests/test_criticism_source_contract.py::test_contract_fields_are_closed_contract
+1 failed in 0.18s
+
+score restore
+mutation removed: `score: float | None = None`
+command: python -m pytest tests/test_criticism_source_contract.py::test_contract_fields_are_closed_contract -q
+score restore exit: 0
+output:
+.                                                                        [100%]
+1 passed in 0.09s
