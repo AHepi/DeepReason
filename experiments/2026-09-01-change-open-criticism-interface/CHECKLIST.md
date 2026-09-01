@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=1 blockers=none
+State: next=2 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -10,10 +10,11 @@ Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
 
-- [ ] 1. (S1, S2, S3, S4) Add the closed-contract,
+- [x] 1. (S1, S2, S3, S4) Add the closed-contract,
       representation-neutral, registry,
       invocation, description, and architecture tests.
       done-when: `test -f tests/test_criticism_source_contract.py && grep -q 'test_contract_fields_are_closed' tests/test_criticism_source_contract.py && grep -q 'test_arbitrary_content_crosses_without_classification' tests/test_criticism_source_contract.py` exits 0.
+      proof: `105 tests/test_criticism_source_contract.py`; `done-criterion exit: 0`.
 
 - [ ] 2. (S4) Run the new test on the pre-feature tree and record the base RED
       transcript.
