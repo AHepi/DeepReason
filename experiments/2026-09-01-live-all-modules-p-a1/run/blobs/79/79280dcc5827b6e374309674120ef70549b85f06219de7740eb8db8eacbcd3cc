@@ -1,0 +1,126 @@
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 1 (1 - o(1)). The finite obstruction structures are locally stable mixed configurations: two-colorings in which every vertex has at most one neighbor of the opposite color, so the bichromatic edges form a matching and each monochromatic induced subgraph has minimum degree 2. Their prevalence scales as Θ(1): the expected number of such stable mixed configurations is Θ(1), dominated by balanced configurations where the bichromatic edges are a perfect matching and each color class is a union of cycles.",
+      "mechanism": "The cut size (number of bichromatic edges) decreases by at least 1 at every update, so the process reaches a local minimum. A non-unanimous local minimum requires every vertex to have at most one opposite neighbor. For a fixed coloring with αn vertices in one color, the probability that all vertices satisfy this is exp(-n f(α)) with f(α) ≤ 0, equality only at α=1/2; summing over colorings gives expected number Θ(1). For any such stable mixed configuration, if a single cycle in the 2-factor is not initially monochromatic, the opposite color spreads along that cycle, so the basin of the stable mixed configuration has probability at most 2^{-n}. Hence the total probability of being trapped is o(1).",
+      "counterconditions": [
+        "Fails if the graph is not random 3-regular but has many small cycles or is bipartite",
+        "Fails if the initial coloring is not uniform",
+        "Fails for degree d ≥ 4 where stable mixed configurations may be exponentially many"
+      ],
+      "typicality": 0.8,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'expected number' and 'Θ(1)' and 'prevalence', satisfying pa1-scaling-law@v1."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'expected number' and 'Θ(1)' and 'prevalence', satisfying pa1-scaling-law@v1."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'as n grows' and 'tends to 1', satisfying pa1-limit-verdict@v1."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'as n grows' and 'tends to 1', satisfying pa1-limit-verdict@v1."
+        }
+      ]
+    },
+    {
+      "claim": "As n grows, the probability of consensus tends to 0. The obstruction structures are locally stable mixed configurations: every vertex agrees with at least two of its three neighbors, so bichromatic edges form a matching and each color class is a 2-core. Their prevalence scales like Θ(n): the expected number of such obstructions is linear in n, so they are typical.",
+      "mechanism": "Two-sided 2-core peeling: starting from a uniform random coloring, both color classes have average internal degree 1.5 > 1, so both retain nonempty 2-cores; the process freezes in a mixed 2-core instead of consensus.",
+      "counterconditions": [
+        "Overturned if the expected number of stable mixed configurations is shown to be O(1) and their basins exponentially small"
+      ],
+      "typicality": 0.15,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'expected number' and 'Θ(n)' and 'prevalence', satisfying pa1-scaling-law@v1."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'expected number' and 'Θ(n)' and 'prevalence', satisfying pa1-scaling-law@v1."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'as n grows' and 'tends to 0', satisfying pa1-limit-verdict@v1."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'as n grows' and 'tends to 0', satisfying pa1-limit-verdict@v1."
+        }
+      ]
+    },
+    {
+      "claim": "As n grows, the probability of consensus tends to a constant strictly between 0 and 1. The obstruction structures are locally stable mixed configurations with bichromatic edges forming a matching. Their prevalence scales as Θ(1): the expected number converges to a Poisson with constant mean, and their basins have total measure bounded away from 0 and 1.",
+      "mechanism": "The number of stable mixed configurations is Poisson(λ) with λ = Θ(1); each such configuration has a basin of size 2^{n - O(1)} because only O(1) cycles need to be monochromatic, so the trapping probability is a constant.",
+      "counterconditions": [
+        "Overturned if the basin of each stable mixed configuration is shown to be 2^{-n} rather than 2^{-O(1)}"
+      ],
+      "typicality": 0.1,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'expected number' and 'Θ(1)' and 'prevalence', satisfying pa1-scaling-law@v1."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'expected number' and 'Θ(1)' and 'prevalence', satisfying pa1-scaling-law@v1."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'as n grows' and 'constant strictly between', satisfying pa1-limit-verdict@v1."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'as n grows' and 'constant strictly between', satisfying pa1-limit-verdict@v1."
+        }
+      ]
+    },
+    {
+      "claim": "As n grows, the probability of consensus tends to 1. The finite obstruction structures are locally stable mixed configurations where every vertex has at most one opposite neighbor; in a random 3-regular graph such configurations are absent with high probability. The expected number of such obstructions is Θ(1), so their prevalence is Θ(1) in expectation but the probability of existence is bounded away from 1.",
+      "mechanism": "For any non-unanimous stable configuration, both color classes must have minimum degree 2. A first-moment calculation shows the expected number of such configurations is Θ(1), dominated by balanced cuts. Since the expected number is O(1), the probability of existence is at most O(1), and even when they exist their basins are exponentially small.",
+      "counterconditions": [
+        "Fails if the first-moment constant is infinite or if basins are not exponentially small"
+      ],
+      "typicality": 0.6,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'expected number' and 'Θ(1)' and 'prevalence', satisfying pa1-scaling-law@v1."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'expected number' and 'Θ(1)' and 'prevalence', satisfying pa1-scaling-law@v1."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'as n grows' and 'tends to 1', satisfying pa1-limit-verdict@v1."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'as n grows' and 'tends to 1', satisfying pa1-limit-verdict@v1."
+        }
+      ]
+    }
+  ]
+}

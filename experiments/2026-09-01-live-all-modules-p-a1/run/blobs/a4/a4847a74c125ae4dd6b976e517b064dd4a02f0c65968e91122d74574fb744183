@@ -1,0 +1,31 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 1 (1 - o(1)). The finite obstruction structures are locally stable mixed configurations: two-colorings in which every vertex has at most one neighbor of the opposite color, so the bichromatic edges form a matching and each monochromatic induced subgraph has minimum degree 2. Their prevalence scales as Θ(1): the expected number of such stable mixed configurations is Θ(1), dominated by balanced configurations where the bichromatic edges are a perfect matching and each color class is a union of cycles.",
+      "mechanism": "The cut size (number of bichromatic edges) decreases by at least 1 at every update, so the process reaches a local minimum. A non-unanimous local minimum requires every vertex to have at most one opposite neighbor. For a fixed coloring with αn vertices in one color, the probability that all vertices satisfy this is exp(-n f(α)) with f(α) ≤ 0, equality only at α=1/2; summing over colorings gives expected number Θ(1). For any such stable mixed configuration, if a single cycle in the 2-factor is not initially monochromatic, the opposite color spreads along that cycle, so the basin of the stable mixed configuration has probability at most 2^{-n}. Hence the total probability of being trapped is o(1).",
+      "counterconditions": [
+        "Fails if the graph is not random 3-regular but has many small cycles or is bipartite",
+        "Fails if the initial coloring is not uniform",
+        "Fails for degree d ≥ 4 where stable mixed configurations may be exponentially many"
+      ],
+      "typicality": 0.8,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'expected number' and 'Θ(1)' and 'prevalence', satisfying pa1-scaling-law@v1."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "This candidate explicitly contains 'expected number' and 'Θ(1)' and 'prevalence', satisfying pa1-scaling-law@v1."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "rebutted
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}
