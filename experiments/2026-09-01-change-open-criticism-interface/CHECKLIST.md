@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=16 blockers=none
+State: next=17 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -143,7 +143,7 @@ order. One step per `dr-execute-step` invocation.
       passed`, and `3 passed`; defended ring `16 passed`; blast radius `CLEAR`
       with empty frozen and frozen-adjacent contacts; budget `280/280 WITHIN`.
 
-- [ ] 16. (S1, S2, S3, S4, S5) Run the full test gate.
+- [x] 16. (S1, S2, S3, S4, S5) Run the full test gate.
       done-when: `python -m pytest tests/ -q -n 4` ends with 0 failed; paste its final line in this checklist.
       initial result before audit hardening: `12 failed, 4576 passed, 26
       skipped in 658.73s (0:10:58)`. The qualification and scheduler rows were
@@ -152,6 +152,11 @@ order. One step per `dr-execute-step` invocation.
       AF_UNIX permission failures, four trusted-check containment failures,
       one network-runner notice cardinality failure, and one absolute Python
       toolchain-path mismatch. None is reported as GREEN.
+      final result: original done criterion NOT MET: `12 failed, 4577 passed,
+      26 skipped in 673.01s (0:11:13)`. The extra audit law line added one
+      pass and no failure. The same twelve failures are recorded in
+      `proof/full-gate.txt`; all ten not previously controlled reproduced at
+      the tranche base, and all remain RED under R12.
 
 - [ ] 17. (S1, S2, S3, S4, S5, S6) Validate requirement reconciliation and
       create the delivery artifacts without broadening phase one.

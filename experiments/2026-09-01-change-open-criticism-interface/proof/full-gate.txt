@@ -1,0 +1,64 @@
+command:
+python -m pytest tests/ -q -n 4
+
+final result:
+12 failed, 4577 passed, 26 skipped in 673.01s (0:11:13)
+
+done criterion:
+NOT MET: the command did not end with 0 failed. No failure was skipped,
+xfail-marked, edited, or reported as GREEN.
+
+change-owned result:
+tests/test_criticism_source_contract.py contributed 13 passes. The final total
+contains one more pass than the pre-hardening run (4577 versus 4576) and the
+same twelve failures. The defended-trial ring independently passed 16 tests.
+
+failure attribution:
+
+1-2. tests/test_campaign_cli.py, two installed-module tests
+HEAD: the child interpreter uses -I, clears PYTHONPATH, and cannot find the
+editable user-site deepreason install.
+BASE: both failures reproduced at 2ec5512499a06b528664538c828d9d33e73a594b
+under the same /opt/codex primary interpreter, with the same
+ModuleNotFoundError before campaign behavior.
+
+3. test_the_shipped_qualification_subject_digest_does_not_move
+HEAD: expected 83454b08365d...; this container produced 8d26382b23cd....
+DISPOSITION: operator-recorded KNOWN-NOT-YOURS absolute Python toolchain path
+and version condition. The shipped test and pin remain unchanged.
+
+4-5. tests/test_brokered_simulation.py, two AF_UNIX tests
+HEAD: socket.socket(AF_UNIX, SOCK_STREAM) raised PermissionError [Errno 1].
+BASE: both reproduced at the tranche base before broker behavior; exact base
+line `2 failed in 0.11s`.
+
+6. test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal
+HEAD: scheduler recorded DENIED / runner_unavailable and no result package.
+BASE: same empty result-package failure reproduced in a detached worktree;
+exact base line `1 failed in 1.88s`.
+
+7. test_an_unknown_runner_compiles_and_is_disclosed_never_refused
+HEAD: the host adds SIMULATION_RUNNER_UNAVAILABLE beside the expected unknown
+runner notice because no real network-denial namespace is available.
+BASE: identical two-notice cardinality failure reproduced at the tranche base.
+
+8. test_the_grounded_tranche_config_enters_through_the_new_door
+HEAD: compiled toolchain is /opt/codex/.../python3.12 with digest 06006911...;
+the committed fixture is /usr/bin/python3.11 with digest 5bbd3c1b....
+BASE: the exact path and digest mismatch reproduced at the tranche base.
+Rows 7-8 together ended `2 failed in 0.98s` in their base control.
+
+9-12. trusted workload code/formal checks
+HEAD: expected pass/7/overrun/pass became fail/1/fail/fail under this
+container's nested containment restrictions.
+BASE: all four shapes reproduced unchanged at the tranche base; exact base
+line `4 failed in 1.78s`.
+
+base-control hygiene:
+Every detached worktree was bound to the base source through PYTHONPATH,
+remained clean, and was removed. No historical root was changed. These controls
+establish non-attribution to this tranche; they do not make the failed checks
+pass.
+
+unresolved change-owned failure: none
+environment/base failures still RED: 12
