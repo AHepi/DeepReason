@@ -57,3 +57,39 @@ reverse-import restore exit: 0
 output:
 .                                                                        [100%]
 1 passed in 1.92s
+
+relative reverse-import mutant
+mutation: add `from . import criticism_source` to src/deepreason/__init__.py
+command: python -m pytest tests/test_criticism_source_contract.py::test_registry_is_deliberately_unwired_from_shipped_graph -q
+relative reverse-import mutant exit: 1
+output:
+F                                                                        [100%]
+E       AssertionError: assert ['src/deepreason/__init__.py'] == []
+FAILED tests/test_criticism_source_contract.py::test_registry_is_deliberately_unwired_from_shipped_graph
+1 failed in 1.56s
+
+relative reverse-import restore
+mutation removed: `from . import criticism_source`
+command: python -m pytest tests/test_criticism_source_contract.py::test_registry_is_deliberately_unwired_from_shipped_graph tests/test_criticism_source_contract.py::test_module_has_no_deepreason_dependency -q
+relative reverse-import restore exit: 0
+output:
+..                                                                       [100%]
+2 passed in 1.52s
+
+outbound relative dependency mutant
+mutation: add `from . import config` to src/deepreason/criticism_source.py
+command: python -m pytest tests/test_criticism_source_contract.py::test_module_has_no_deepreason_dependency -q
+outbound relative dependency mutant exit: 1
+output:
+F                                                                        [100%]
+E       AssertionError: assert not [(1, '')]
+FAILED tests/test_criticism_source_contract.py::test_module_has_no_deepreason_dependency
+1 failed in 0.10s
+
+outbound relative dependency restore
+mutation removed: `from . import config`
+command: python -m pytest tests/test_criticism_source_contract.py::test_module_has_no_deepreason_dependency -q
+outbound relative dependency restore exit: 0
+output:
+.                                                                        [100%]
+1 passed in 0.05s

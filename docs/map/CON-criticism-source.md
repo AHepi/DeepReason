@@ -22,9 +22,10 @@ concern (which governs ALL text adjudication, not only criticism's).
 
 `criticism_source.py` is a second, deliberately unwired socket for optional
 sources. The host binds the target; a named source may return only opaque
-content and a codec. Registry construction and invocation are explicit, and
-local decline, absence, or failure neither selects another source nor changes
-the graph.
+content and a codec as transport data, with no dedicated epistemic or
+authority-control field. Registry construction and invocation are explicit,
+and local decline, absence, or failure neither selects another source nor
+changes the graph.
 `check: python -m pytest tests/test_criticism_source_contract.py -q -k 'registry or operational_result or independent or host_bound'`
 
 ## The socket contract — what it promises, what it is handed, what it must never do

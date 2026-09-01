@@ -24,7 +24,9 @@ import verdict and counterexample vocabulary with authority consequences.
 
 After: the host binds an immutable target containing opaque text and a codec.
 A returned contribution contains opaque text and a codec, but no target
-selector. No contract can express representation kind, formalism, verdict,
+selector. Contribution, target, and result contracts have no dedicated,
+machine-interpreted epistemic or run-control field. Arbitrary content and its
+codec remain transport data: they may say anything, but cannot bind verdict,
 status, warrant, run authority, score, rank, weight, confidence, severity,
 threshold, priority, admission, or candidate visibility. The source manifest's
 fixed, non-configurable `authority_ceiling="contribution_only"` and the
@@ -89,16 +91,17 @@ passes with the exact host-owned text and stable digest.
 
 S4 (R1-R9, C1, C2):
 `tests/test_criticism_source_contract.py` supplies the law-line and architecture
-proofs. The new module may import only neutral standard-library utilities and
-Pydantic. It may not import adjudication, authority, trial, warrants,
+proofs. The new module may import only its explicitly enumerated neutral
+standard-library utilities and Pydantic; relative imports are refused. It may
+not import adjudication, authority, trial, warrants,
 scheduler, `capture.pareto`, admission, measures, Config, run-manifest,
 qualification, verification, or Harness. Plain prose, mathematical notation,
 JSON-looking text, and code-looking text cross the same opaque field
 byte-for-byte without parsing or classification. Invocation alone has no graph
 effect because this tranche contains no graph consumer. The phase-one
-architecture test walks every other shipped Python module and refuses any
-import of this socket, so “deliberately unwired” is a pinned boundary rather
-than a current observation.
+architecture test walks every other shipped Python module, resolves absolute
+and relative imports, and refuses any import of this socket, so “deliberately
+unwired” is a pinned boundary rather than a current observation.
 
 The regression ring also runs the unchanged defended-trial manifest and stub
 canary tests. Their continued success proves this isolated socket has not made
@@ -109,16 +112,23 @@ Mutation proof: after GREEN, add a forbidden `score` field to
 `CriticismContributionV1` and show the exact-field contract RED; restore and
 show GREEN. Then add a forbidden `priority` field to
 `CriticismSourceManifestV1` and show the manifest-field contract RED; restore
-and show GREEN. Record both RED/GREEN transcripts in this tranche. The import
-error against the pre-feature tree is recorded as base RED but is not accepted
-as either mutation proof.
+and show GREEN. Then mutation-prove both import directions with a relative
+import from the shipped graph and a relative DeepReason dependency from the
+new module. Record every RED/GREEN transcript in this tranche. The import error
+against the pre-feature tree is recorded as base RED but is not accepted as a
+mutation proof.
+
+Because the public module changes wheel layout, `scripts/wheel_smoke.py` pins
+its wheel path and imports it inside the clean installed environment. The
+provider-facing operational surface does not move, so the operational smoke is
+not owed.
 
 Accept:
 `python -m pytest tests/test_criticism_source_contract.py tests/test_judge_canary_dispatch.py tests/test_v6_manifest_defended_trial.py -q`
-passes, and both deliberate-mutant transcripts contain a nonzero RED run
-followed by a zero-exit GREEN run.
+and `python scripts/wheel_smoke.py` pass, and every deliberate-mutant transcript
+contains a nonzero RED run followed by a zero-exit GREEN run.
 
-S5 (R1-R10, R12, C1-C3):
+S5 (R1-R10, C1-C3):
 `docs/map/CON-criticism-source.md` owns the new module and contribution-only
 contract; `docs/map/CON-conjecture-kinds.md` gains its representation-neutral
 law line; `docs/map/CON-authority.md` records that the source ceiling cannot
@@ -130,22 +140,19 @@ No compatibility layer, digest preservation, historical-root rewrite, source
 default, Config default, or run-authority change is added for C1-C3.
 
 Accept:
-`python tools/docs_verify.py` completes in authoritative no-cache mode, no
-failure names any changed owner map, and every non-owner failure is either in
-`docs/AUDIT_BASELINES.md`, the operator-recorded qualification-path condition,
-the operator-disposed missing-`bc` environment condition, or passes its
-required isolated re-run. Any other isolated failure is a finding and stops
-delivery. The missing-`bc` disposition permits only transparent recording: no
-shim, map-check edit, skipped check, or inferred pass.
+`python tools/docs_verify.py` completes in authoritative no-cache mode with
+zero failed checks. Recorded baselines and isolated base controls inform
+attribution but do not satisfy this gate. The missing-`bc` disposition permits
+only transparent recording: no shim, map-check edit, skipped check, inferred
+pass, or delivery through a RED result.
 
 Validation finding: the scheduler candidate's isolated rerun does not pass.
 It records a typed `DENIED` transition with reason `runner_unavailable` because
 this container's real network-namespace probe returns unavailable. An
 independent detached-worktree control reproduces the same empty result-package
-failure at tranche base `2ec5512499a06b528664538c828d9d33e73a594b`. Under R12
-this pre-existing non-owner environment row is carried explicitly as RED; it
-is not counted as a pass and authorizes no scheduler, runner, containment, or
-test change.
+failure at tranche base `2ec5512499a06b528664538c828d9d33e73a594b`. This is a
+pre-existing non-owner environment row, but it remains a blocking RED rather
+than a pass and authorizes no scheduler, runner, containment, or test change.
 
 Execution correction: the repository's verifier defines plain invocation as
 “authoritative: every check, no cache” and has no `--full` parser option. The
@@ -163,6 +170,37 @@ authority that the operator did not request.
 Accept: this SPEC's Research disposition contains an alphaXiv source for every
 adopted or rejected external mechanism and states the evidence limit that keeps
 it advisory.
+
+## Operator-supplied review disposition
+
+`candidate-set-reduction-under-an-unreliable-eliminator.md`: adopted is the
+negative boundary that an indiscriminate criticism signal supplies no reliable
+selection information and therefore must not eliminate, rank, suppress, alter
+admission/status, or shrink visibility. Rejected are voting, thresholds,
+consensus priors, learned reranking, and coverage optimisation as core policy.
+Clustering or reduction remains bounded to an independently named, explicitly
+selected downstream module; it is not a meaning of “contribution.”
+
+`artifact-requirement-gaming.md`: adopted are honest typed decline,
+unavailable, and error outcomes, plus the separation between a valid transport
+envelope and epistemic merit. Rejected are artifact quotas, visible proxy
+scores, self-attestation, and any inference from schema compliance to truth.
+Execution receipts and artifact-specific verifiers are bounded to optional
+downstream modules and never outrank valid prose.
+
+`asymmetry-in-test-suite-certification(1).md`: adopted is narrow,
+operator-and-scope-specific RED/GREEN evidence for named constraints. Rejected
+are suite-wide certification, assertion-density or test-distance heuristics,
+predictive scores, and any promotion from mutation survival or coverage to
+epistemic status. Static/provenance screens remain bounded opt-in audit tools.
+
+`self-confirming-checks.md`: adopted are mutation-proven law lines, positive
+liveness, both dependency directions, and host-written operational outcomes.
+Rejected are aggregate kill-score targets, universal formal batteries,
+mandatory reference models, and formal checks as truth/status gates. Larger
+mutation batteries and external audits remain bounded optional verification
+modules; the current checks establish only the enumerated constraints on this
+tree.
 
 ## Research disposition
 
@@ -214,9 +252,11 @@ A4 (Q4): decided by the blast-radius instrument — the planned topology is
 `CLEAR`, with empty frozen and frozen-adjacent contact lists. No grant is
 required.
 
-A5 (R4, R5): representation neutrality here means the boundary neither asks
-for nor derives a representation category. It does not mechanically decide
-whether prose, notation, code, or any other text is valid.
+A5 (R4, R5): representation neutrality here means the boundary has no
+dedicated, machine-interpreted representation or epistemic-control field.
+Opaque content and its codec are transport data. The boundary neither derives
+a category nor mechanically decides whether prose, notation, code, or any
+other text is valid.
 
 ## Questions for operator (STOP if non-empty)
 
@@ -308,28 +348,35 @@ The new test hits are EXPECTED TO MOVE with the implementation. There are no
 pre-existing consumers. Manual `rg` over the base found no exact occurrence of
 the planned class or function names; the only partial-name hits were existing
 `ForeignCriticismTargetV1` references, which are unrelated and MUST NOT MOVE.
+The symbol-based preflight could not foresee a new module path, so its
+`wheel_smoke_pins` list was empty. Validation corrected that limitation by
+pinning `deepreason/criticism_source.py` and its clean-environment import in the
+basic wheel smoke.
 
 ## Budget
 
 Declared diff-budget areas are `src/deepreason/criticism_source.py`,
 `tests/test_criticism_source_contract.py`, `docs/map/CON-criticism-source.md`,
-`docs/map/CON-conjecture-kinds.md`, and `docs/map/CON-authority.md`.
+`docs/map/CON-conjecture-kinds.md`, `docs/map/CON-authority.md`, and
+`scripts/wheel_smoke.py`.
 
 Final itemized insertions are: contracts, protocol, registry, invocation, and
-explanation 140; tests 118; owner-map additions 22. The independent audit's
-13-line reverse-import law line consumed the maps' unused allowance without
-moving the 280-line ceiling.
+explanation 140; tests 114; owner-map additions 24; wheel pin and installed
+import 2. The strengthened two-direction import law lines and packaging proof
+remain inside the original 280-line ceiling.
 
 Arithmetic, pasted:
 
 ```text
-$ python3 -c "items=[140,118,22]; print(items, sum(items))"
-[140, 118, 22] 280
+$ python3 -c "items=[140,114,24,2]; print(items, sum(items))"
+[140, 114, 24, 2] 280
 ```
 
-Budget: at most 280 inserted lines in the declared areas, with five post-spec
-phase commits: plan; tests plus base RED; implementation plus maps plus mutation
-proofs; validation; delivery. Tranche artifacts are excluded from the
-code-and-map line budget. Frozen surfaces touched: none.
+Budget: at most 280 inserted lines in the declared areas. The original
+five-commit phase forecast was not met: interruptions and evidence checkpoints
+produced 27 commits after the spec through the independent validation review.
+That history is retained rather than rewritten; corrective commits remain
+additive. Tranche artifacts are excluded from the code-and-map line budget.
+Frozen surfaces touched: none.
 
 Rubric: 6/6 yes.

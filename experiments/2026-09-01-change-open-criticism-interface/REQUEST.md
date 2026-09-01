@@ -15,6 +15,13 @@ the four review documents and the accepted design response.
 
 R1 (behavior): "using these for improvements"
 
+The four supplied review inputs named by "these" are
+`candidate-set-reduction-under-an-unreliable-eliminator.md`,
+`artifact-requirement-gaming.md`,
+`asymmetry-in-test-suite-certification(1).md`, and
+`self-confirming-checks.md`. Each requires an explicit adopted, rejected, or
+bounded disposition before delivery.
+
 R2 (behavior): "maximum modularity and configurability is essential"
 
 R3 (behavior): "usability by other humans"
@@ -90,9 +97,9 @@ unrequested authority or optimization target.
 
 > You ran out of credit. Keep going
 
-R12 (process): continue the tranche after recording that the container cannot
-install the real `bc` utility. Subsequent non-owner validation failures may be
-carried only when an isolated control reproduces the same failure at the
-tranche base and the evidence is recorded as a failure, never a pass. This
-does not authorize a shim, weakening or editing an unrelated check, changing
-the implemented contract, or repairing an out-of-scope subsystem.
+R12 (process): resume the interrupted tranche after recording that the
+container cannot install the real `bc` utility. This authorization is limited
+to continuing past that unavailable prerequisite while preserving its result
+as RED. It does not convert any unrelated RED gate row into PASS, authorize
+carrying one into delivery, or permit a shim, weakened check, out-of-scope
+repair, or change to the implemented contract.

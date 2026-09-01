@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=17 blockers=none
+State: next=11 blockers=authoritative-docs-and-full-gate-red
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -94,10 +94,11 @@ order. One step per `dr-execute-step` invocation.
       recorded conditional continuation timeout. Steps 10-14 dispose every
       non-owner row under `AUDIT_BASELINES.md` rather than weakening a check.
       operator disposition: after the package manager itself proved
-      unavailable, “Keep going” authorizes carrying the real-`bc` row as an
-      explicit environment-only finding. It does not turn that row GREEN.
+      unavailable, “Keep going” authorizes continuing validation while the
+      real-`bc` row remains an explicit environment-only RED. It does not turn
+      that row GREEN or authorize delivery through it.
 
-- [x] 11. (S5) Re-run the scheduler delta candidate without docs-verifier load.
+- [ ] 11. (S5) Re-run the scheduler delta candidate without docs-verifier load.
       done-when: `python -m pytest tests/test_v6_engaged_public_defaults.py::test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal -q` exits 0.
       result: original done criterion NOT MET: `1 failed in 1.51s`; the
       capability transition was typed `DENIED` with reason
@@ -107,8 +108,9 @@ order. One step per `dr-execute-step` invocation.
       `2ec5512499a06b528664538c828d9d33e73a594b`, with `PYTHONPATH` bound to
       that worktree, reproduced the same empty `result_packages` failure:
       `1 failed in 1.88s`. The temporary worktree was removed cleanly.
-      disposition: pre-existing non-owner environment RED carried under R12;
-      no scheduler, runner, containment, or test change, and no inferred pass.
+      disposition: pre-existing non-owner environment RED, but still blocking;
+      R12 does not apply to it. No scheduler, runner, containment, or test
+      change, and no inferred pass.
       environment mismatch: on resume, `python` initially lacked pytest; the
       repository-prescribed `python -m pip install -e . pytest pytest-xdist
       jsonschema --break-system-packages` shape restored the test runner before
@@ -130,9 +132,12 @@ order. One step per `dr-execute-step` invocation.
       done-when: the new shipped-graph import test is RED when a temporary
       `deepreason.criticism_source` import is added outside the module, GREEN
       after restoration, and both results are appended to `proof/mutations.txt`.
-      proof: deliberate import produced `1 failed in 1.46s` and named
-      `src/deepreason/__init__.py`; restoration produced `1 passed in 1.92s`.
-      The implementation budget is now exactly `280/280`, still `WITHIN`.
+      proof: the original absolute import produced `1 failed in 1.46s` and
+      named `src/deepreason/__init__.py`; restoration produced `1 passed in
+      1.92s`. The hardened relative reverse import also produced `1 failed in
+      1.56s`, then `2 passed in 1.52s` after restoration. A relative outbound
+      dependency produced `1 failed in 0.10s`, then `1 passed in 0.05s` after
+      restoration.
 
 - [x] 15. (S1, S2, S3, S4, S5) Re-run the contract module, exact owner-map
       checks, defended-trial ring, blast radius, and diff budget after the
@@ -140,10 +145,11 @@ order. One step per `dr-execute-step` invocation.
       done-when: every targeted command exits 0, blast radius remains `CLEAR`,
       and the diff budget remains within 280 lines.
       proof: contract `13 passed`; owner maps `6 passed, 7 deselected`, `4
-      passed`, and `3 passed`; defended ring `16 passed`; blast radius `CLEAR`
-      with empty frozen and frozen-adjacent contacts; budget `280/280 WITHIN`.
+      passed`, and `3 passed`; defended ring `16 passed`; basic wheel smoke
+      passed; blast radius `CLEAR` with empty frozen and frozen-adjacent
+      contacts; budget `280/280 WITHIN`.
 
-- [x] 16. (S1, S2, S3, S4, S5) Run the full test gate.
+- [ ] 16. (S1, S2, S3, S4, S5) Run the full test gate.
       done-when: `python -m pytest tests/ -q -n 4` ends with 0 failed; paste its final line in this checklist.
       initial result before audit hardening: `12 failed, 4576 passed, 26
       skipped in 658.73s (0:10:58)`. The qualification and scheduler rows were
@@ -152,11 +158,12 @@ order. One step per `dr-execute-step` invocation.
       AF_UNIX permission failures, four trusted-check containment failures,
       one network-runner notice cardinality failure, and one absolute Python
       toolchain-path mismatch. None is reported as GREEN.
-      final result: original done criterion NOT MET: `12 failed, 4577 passed,
-      26 skipped in 673.01s (0:11:13)`. The extra audit law line added one
-      pass and no failure. The same twelve failures are recorded in
+      final result after relative-import and wheel-pin hardening: original done
+      criterion NOT MET: `12 failed, 4577 passed, 26 skipped in 708.99s
+      (0:11:48)`. The extra audit law line added one pass and no failure. The
+      same twelve failures are recorded in
       `proof/full-gate.txt`; all ten not previously controlled reproduced at
-      the tranche base, and all remain RED under R12.
+      the tranche base. All twelve remain blocking RED; R12 does not apply.
 
 - [ ] 17. (S1, S2, S3, S4, S5, S6) Validate requirement reconciliation and
       create the delivery artifacts without broadening phase one.

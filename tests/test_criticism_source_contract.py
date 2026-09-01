@@ -1,4 +1,5 @@
 import ast
+import importlib.util
 from pathlib import Path
 
 import pytest
@@ -9,8 +10,7 @@ from deepreason import criticism_source as cs
 
 class _Source:
     def __init__(self, source_id: str, output: object) -> None:
-        self.manifest = cs.CriticismSourceManifestV1(
-            source_id=source_id, version="1", summary=source_id)
+        self.manifest = cs.CriticismSourceManifestV1(source_id=source_id, version="1", summary=source_id)
         self.output = output
         self.seen: list[cs.CriticismTargetV1] = []
 
@@ -24,17 +24,11 @@ class _Source:
 
 
 def test_contract_fields_are_closed_contract() -> None:
-    assert set(cs.CriticismSourceManifestV1.model_fields) == {
-        "schema_version", "source_id", "version", "summary", "authority_ceiling"
-    }
+    assert set(cs.CriticismSourceManifestV1.model_fields) == {"schema_version", "source_id", "version", "summary", "authority_ceiling"}
     assert set(cs.CriticismTargetV1.model_fields) == {"target_id", "content", "codec"}
     assert set(cs.CriticismContributionV1.model_fields) == {"content", "codec"}
-    assert set(cs.CriticismInvocationResultV1.model_fields) == {
-        "source_id", "outcome", "manifest_digest", "contributions", "detail"
-    }
-    assert set(cs.CriticismSourceDescriptionV1.model_fields) == {
-        "source_id", "version", "summary", "manifest_digest", "authority_explanation"
-    }
+    assert set(cs.CriticismInvocationResultV1.model_fields) == {"source_id", "outcome", "manifest_digest", "contributions", "detail"}
+    assert set(cs.CriticismSourceDescriptionV1.model_fields) == {"source_id", "version", "summary", "manifest_digest", "authority_explanation"}
     for model in (cs.CriticismSourceManifestV1, cs.CriticismTargetV1, cs.CriticismContributionV1, cs.CriticismInvocationResultV1, cs.CriticismSourceDescriptionV1):
         assert model.model_config["extra"] == "forbid"
         assert model.model_config["frozen"] is True
@@ -56,11 +50,9 @@ def test_arbitrary_content_crosses_without_classification(content: str) -> None:
 
 @pytest.mark.parametrize("output", ["bare scalar", ({"content": "x", "target_id": "other"},)])
 def test_host_bound_target_and_invalid_output_cannot_redirect(output: object) -> None:
-    source = _Source("bad", output)
-    target = cs.CriticismTargetV1(target_id="bound", content="t")
+    source, target = _Source("bad", output), cs.CriticismTargetV1(target_id="bound", content="t")
     result = cs.invoke_criticism_source(cs.CriticismSourceRegistry((source,)), "bad", target)
-    assert (result.outcome, result.contributions, result.detail) == (
-        "error", (), "CRITICISM_SOURCE_OUTPUT_INVALID")
+    assert (result.outcome, result.contributions, result.detail) == ("error", (), "CRITICISM_SOURCE_OUTPUT_INVALID")
 
 
 def test_registry_is_explicit_and_rejects_duplicates() -> None:
@@ -100,9 +92,10 @@ def test_human_description_is_host_owned_and_deterministic() -> None:
 
 def test_module_has_no_deepreason_dependency() -> None:
     tree = ast.parse(Path("src/deepreason/criticism_source.py").read_text())
-    imports = [n.module or "" for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)]
-    imports += [a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names]
-    assert not [name for name in imports if name == "deepreason" or name.startswith("deepreason.")]
+    allowed = {"__future__", "collections.abc", "hashlib", "json", "pydantic", "types", "typing"}
+    imports = [(n.level, n.module or "") for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)]
+    imports += [(0, a.name) for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names]
+    assert not [(level, name) for level, name in imports if level or name not in allowed]
 
 
 def test_registry_is_deliberately_unwired_from_shipped_graph() -> None:
@@ -112,7 +105,10 @@ def test_registry_is_deliberately_unwired_from_shipped_graph() -> None:
             continue
         tree = ast.parse(path.read_text())
         imports = [a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names]
-        imports += [f"{n.module}.{a.name}" for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) for a in n.names]
-        if any(name.startswith("deepreason.criticism_source") for name in imports):
+        package = ".".join(path.relative_to("src").with_suffix("").parts[:-1])
+        for node in (n for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)):
+            module = importlib.util.resolve_name("." * node.level + (node.module or ""), package) if node.level else node.module or ""
+            imports.extend(f"{module}.{alias.name}" for alias in node.names)
+        if any(name == "deepreason.criticism_source" or name.startswith("deepreason.criticism_source.") for name in imports):
             offenders.append(str(path))
     assert offenders == []

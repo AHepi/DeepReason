@@ -7,7 +7,7 @@ exited 2 before verification because this checkout has no --full option.
 The tool's help defines the plain command above as authoritative: every check,
 no cache. No result was inferred from the parser error.
 
-authoritative result:
+initial authoritative result:
 71 documents, 1297 checks, 7 failed
 
 changed owner maps:
@@ -65,8 +65,8 @@ failure dispositions:
    2ec5512499a06b528664538c828d9d33e73a594b, with PYTHONPATH bound to that
    worktree, reproduced the same empty result_packages failure: 1 failed in
    1.88s. The temporary worktree was clean and removed.
-   disposition: pre-existing non-owner environment RED carried under R12. It
-   is not a pass and authorized no scheduler, runner, containment, or test edit.
+   disposition: pre-existing non-owner environment RED, but still blocking.
+   R12 does not apply; no scheduler, runner, containment, or test edit was made.
 
 7. docs/map/SUB-application.md:460
    result: TIMEOUT after 300s under the four-worker verifier
@@ -83,3 +83,57 @@ The two environment RED classes above remain visible and are not reported as
 passes: real bc is unavailable, and the contained simulation runner is
 unavailable. "No unresolved new finding" means neither was introduced by the
 criticism-source change; it does not mean the container satisfied those checks.
+
+final authoritative rerun after relative-import and wheel-pin hardening:
+command: python tools/docs_verify.py
+docs_verify [full]: 71 documents, 1297 checks, 9 workers
+
+FAIL SEAM-llm-x-rules.md:54
+result: unparseable column-0 check; opener has no trailing backtick before the
+next opener or end of file.
+
+FAIL INV-frozen-surfaces.md:181
+command: test "$(find experiments runs -path '*workflow-provider-attempt-v1/*.json' -exec grep -l 'transport_failure' {} + 2>/dev/null | wc -l)" -eq 0
+result: nonzero exit with no stdout.
+
+FAIL INV-frozen-surfaces.md:422
+command suffix: python -m pytest tests/test_allocation_signal_consumption.py::test_the_shipped_qualification_subject_digest_does_not_move -q
+result: 1 failed in 0.24s.
+
+FAIL INV-signal-contract.md:89
+command: python -m pytest tests/test_allocation_signal_consumption.py::test_the_shipped_qualification_subject_digest_does_not_move -q
+result: 1 failed in 0.32s.
+
+FAIL SEAM-rules-x-workflow.md:57
+result: `/bin/sh: 1: bc: not found`; the following `test` receives an illegal
+empty number.
+
+FAIL SEAM-scheduler-x-workflow.md:170
+command suffix: python -m pytest tests/test_v6_engaged_public_defaults.py::test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal -q
+result: 1 failed in 1.93s.
+
+docs_verify: 6 failed
+
+final changed-owner exact checks after hardening:
+CON-criticism-source: 6 passed, 7 deselected
+CON-conjecture-kinds: 4 passed
+CON-authority: 3 passed
+
+The seventh row in the initial run, SUB-application.md:460, did not recur in
+this final run and its direct serial control remains `15 passed in 114.50s`.
+The six surviving rows are unchanged baseline/environment failures and remain
+blocking RED. This transcript supersedes the initial run for the final count;
+the initial run is retained as history rather than rewritten.
+
+final auxiliary modes:
+python tools/docs_verify.py --audit
+docs_verify --audit: 1 finding(s)
+
+python tools/docs_verify.py --links
+docs_verify --links: 0 dangling reference(s), 71 document(s)
+
+python tools/docs_verify.py --coverage
+docs_verify --coverage: 7 seam(s) swept, 19 without a Sweep: header, 2 finding(s)
+
+python tools/docs_verify.py --stale
+docs_verify --stale: 46 document(s) worth re-reading
