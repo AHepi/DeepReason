@@ -1,0 +1,32 @@
+BASELINE_V1
+production_base=dd0916fb5211d014a6723a74100b29877f0bea93
+captured=2026-09-01, before any source change in this tranche
+
+--- pre-authorized red baseline 1: the shipped qualification subject digest ---
+.                                                                        [100%]
+1 passed, 1 skipped, 4600 deselected in 10.15s
+--- CORRECTION: baseline 1 is GREEN on this container, not red ---
+C6 pre-authorized test_the_shipped_qualification_subject_digest_does_not_move
+as a known-not-yours red. Measured here, before any edit, it PASSES:
+  tests/test_allocation_signal_consumption.py::test_the_shipped_qualification_subject_digest_does_not_move PASSED
+  1 passed, 1 skipped, 4600 deselected
+So the pre-authorization does not apply: if this test goes red later in
+this tranche it is THIS TRANCHE'S doing and must be explained, not waived.
+Recorded here so no later step can waive it by citing C6.
+
+--- unrelated skip, present before any edit ---
+SKIPPED [1] tests/test_browser.py:8: could not import 'playwright'
+
+--- pre-authorized red baseline 2: the bc-dependent map check ---
+$ which bc  ->  /usr/bin/bc  (exit 0)
+map checks whose command mentions bc: 0
+The full docs_verify baseline is NOT captured here on purpose: another
+worker-spawning instrument was live in this container at this moment, and
+dr-drive-harness 5b says a measurement taken under load is not a
+measurement. It is captured at step 25, run alone on an idle box.
+
+--- SUMMARY: NEITHER pre-authorized waiver applies on this container ---
+C6 named two known-not-yours reds. Measured before any edit, both are false
+here: `bc` is installed at /usr/bin/bc, and the shipped-qualification-subject
+test passes. This tranche therefore claims NEITHER waiver. Every red in the
+step-25 map check and the step-27 gate is this tranche's to explain or fix.
