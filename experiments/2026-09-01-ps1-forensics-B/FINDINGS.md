@@ -1,7 +1,7 @@
 # P-S1 run forensics — Half B
 
-Date: 2026-09-01 UTC  
-Analysis base: `origin/main@3cb51b14e4c7c74cc4d058b467588c1c55cc3eab`  
+Date: 2026-09-01 UTC
+Analysis base: `origin/main@3cb51b14e4c7c74cc4d058b467588c1c55cc3eab`
 Read-only evidence ref: `origin/claude/deepreason-p-s1-commitments-wowcib@6338c48cbd4cc7b257a9b45ad45f412bd2527dec`
 
 ## Evidence scope and names
