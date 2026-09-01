@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=11 blockers=none
+State: next=12 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -97,8 +97,22 @@ order. One step per `dr-execute-step` invocation.
       unavailable, “Keep going” authorizes carrying the real-`bc` row as an
       explicit environment-only finding. It does not turn that row GREEN.
 
-- [ ] 11. (S5) Re-run the scheduler delta candidate without docs-verifier load.
+- [x] 11. (S5) Re-run the scheduler delta candidate without docs-verifier load.
       done-when: `python -m pytest tests/test_v6_engaged_public_defaults.py::test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal -q` exits 0.
+      result: original done criterion NOT MET: `1 failed in 1.51s`; the
+      capability transition was typed `DENIED` with reason
+      `runner_unavailable`, and the container's real network-denial probe
+      returned `()`.
+      base control: an independent detached worktree at tranche base
+      `2ec5512499a06b528664538c828d9d33e73a594b`, with `PYTHONPATH` bound to
+      that worktree, reproduced the same empty `result_packages` failure:
+      `1 failed in 1.88s`. The temporary worktree was removed cleanly.
+      disposition: pre-existing non-owner environment RED carried under R12;
+      no scheduler, runner, containment, or test change, and no inferred pass.
+      environment mismatch: on resume, `python` initially lacked pytest; the
+      repository-prescribed `python -m pip install -e . pytest pytest-xdist
+      jsonschema --break-system-packages` shape restored the test runner before
+      either attributed run.
 
 - [ ] 12. (S5) Re-run the continuation conditional row without docs-verifier load.
       done-when: the exact column-0 check at `docs/map/SUB-application.md:460`

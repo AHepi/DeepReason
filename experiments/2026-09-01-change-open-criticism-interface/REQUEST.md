@@ -91,6 +91,8 @@ unrequested authority or optimization target.
 > You ran out of credit. Keep going
 
 R12 (process): continue the tranche after recording that the container cannot
-install the real `bc` utility. This disposes the missing-utility row as an
-explicit environment-only finding; it does not authorize a shim, weakening or
-editing the unrelated map check, or changing the implemented contract.
+install the real `bc` utility. Subsequent non-owner validation failures may be
+carried only when an isolated control reproduces the same failure at the
+tranche base and the evidence is recorded as a failure, never a pass. This
+does not authorize a shim, weakening or editing an unrelated check, changing
+the implemented contract, or repairing an out-of-scope subsystem.

@@ -133,6 +133,15 @@ required isolated re-run. Any other isolated failure is a finding and stops
 delivery. The missing-`bc` disposition permits only transparent recording: no
 shim, map-check edit, skipped check, or inferred pass.
 
+Validation finding: the scheduler candidate's isolated rerun does not pass.
+It records a typed `DENIED` transition with reason `runner_unavailable` because
+this container's real network-namespace probe returns unavailable. An
+independent detached-worktree control reproduces the same empty result-package
+failure at tranche base `2ec5512499a06b528664538c828d9d33e73a594b`. Under R12
+this pre-existing non-owner environment row is carried explicitly as RED; it
+is not counted as a pass and authorizes no scheduler, runner, containment, or
+test change.
+
 Execution correction: the repository's verifier defines plain invocation as
 “authoritative: every check, no cache” and has no `--full` parser option. The
 earlier flag spelling exited before verification and did not test this item.
