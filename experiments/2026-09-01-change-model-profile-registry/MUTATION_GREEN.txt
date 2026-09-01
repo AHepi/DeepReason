@@ -1,0 +1,42 @@
+MUTATION_PROOF_V1
+phase=GREEN
+production_base=18208049cefbe46cc036d2c2699340e60206282f
+mutation=none -- the planted bypass reverted, tree byte-identical to the committed one
+source_sha256.src/deepreason/llm/split.py=39db9c3640d954403528dbbc3ae9c207b38ace5a05ace605a0cc695f57156ec1
+test_file_sha256.tests/test_model_profile_registry.py=2ab526117e1109c46fd7fc70bbf531ae4ce5ef055e8d4f13620297291c410ea4
+test_file_sha256.tests/test_split_budget_protocol.py=c86751214cb311e04064dcd4fc40d3700dd2dc424f557d273164ead9a360cfcd
+test_file_sha256.tests/test_providers.py=47ce4b2196b927f3d85d43bace6915c984f5241c27c683cd4b73455e8a3a55d2
+command=python -m pytest tests/test_model_profile_registry.py tests/test_split_budget_protocol.py tests/test_providers.py -q
+exit=0
+
+.........................................................                [100%]
+57 passed in 3.39s
+
+The four RED failures and the 57 GREEN passes come from BYTE-IDENTICAL test
+files (compare the test_file_sha256 lines above with MUTATION_RED.txt's). One
+line of production source separates them.
+
+What each of the four proves, so the count is not the argument:
+
+  test_the_extraction_leg_sends_what_the_document_declares
+      S2. Two documents differing only in extraction_value must put two
+      different values on the wire. Under the bypass both send "none" -- the
+      whole modularity claim collapses to a constant, which is what it was.
+  test_a_document_may_declare_that_the_knob_is_omitted
+      S2. `extraction_value: null` means SEND NOTHING, and is distinct from a
+      document that says nothing. The bypass sends "none" for both.
+  test_a_model_that_cannot_stop_thinking_still_splits_and_discloses
+      S3. glm-5.3's own case: the leg must carry the declared "low" while the
+      record discloses that thinking could not be stopped. The bypass sends
+      the value that produced 0/8 clean content.
+  test_adding_a_model_needs_no_source_edit
+      S7. The architecture check. A model described from scratch, never named
+      anywhere in the tree, must reach the wire with src/ byte-unchanged.
+      Under the bypass its declared value is discarded, so describing a model
+      no longer changes anything -- which is the bypass being detected as a
+      bypass rather than as a wrong value.
+
+Not proven by this pair, and not claimed: that the split protocol produces
+better ANSWERS on glm-5.3. That is a live measurement, forbidden to this
+tranche (C5, "Any new live reasoning run"), and P-S1's committed 0/8-vs-8/8
+table remains the evidence for it.

@@ -1,0 +1,34 @@
+MUTATION_PROOF_V1
+phase=RED
+production_base=18208049cefbe46cc036d2c2699340e60206282f
+mutation=src/deepreason/llm/split.py: extract_reasoning=facts.extraction_value -> the literal "none"
+mutation_rationale=this restores, in one line, exactly the defect the tranche removed: the emission leg sending a repo-wide constant instead of what the model's own document declares. A detached checkout of the pre-tranche tree would have failed on ModuleNotFoundError instead, which proves nothing about behaviour.
+source_sha256.src/deepreason/llm/split.py=a70ee34c77e609b4793303925b91c5f99006f9b658b249a3a9a9cf7fdfc85b20
+test_file_sha256.tests/test_model_profile_registry.py=2ab526117e1109c46fd7fc70bbf531ae4ce5ef055e8d4f13620297291c410ea4
+test_file_sha256.tests/test_split_budget_protocol.py=c86751214cb311e04064dcd4fc40d3700dd2dc424f557d273164ead9a360cfcd
+test_file_sha256.tests/test_providers.py=47ce4b2196b927f3d85d43bace6915c984f5241c27c683cd4b73455e8a3a55d2
+command=python -m pytest tests/test_model_profile_registry.py tests/test_split_budget_protocol.py tests/test_providers.py -q
+exit=1
+
+    
+        # And it reaches the wire through the ordinary interface, unedited.
+        from deepreason.llm.split import plan_split
+    
+        plan = plan_split(
+            mode="on", ceiling=4096, extraction_tokens=512,
+            provider="ollama", reasoning="high", profile=resolved,
+        )
+>       assert plan.armed and plan.extract_reasoning == "whatever-it-takes"
+E       AssertionError: assert (True and 'none' == 'whatever-it-takes'
+E        +  where True = SplitPlan(armed=True, reason_max_tokens=3584, extract_max_tokens=512, extract_reasoning='none', notice='split-budget:extraction-leg-cannot-stop-thinking', disclosed=True).armed
+E         
+E         - whatever-it-takes
+E         + none)
+
+tests/test_model_profile_registry.py:567: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_model_profile_registry.py::test_the_extraction_leg_sends_what_the_document_declares
+FAILED tests/test_model_profile_registry.py::test_a_document_may_declare_that_the_knob_is_omitted
+FAILED tests/test_model_profile_registry.py::test_a_model_that_cannot_stop_thinking_still_splits_and_discloses
+FAILED tests/test_model_profile_registry.py::test_adding_a_model_needs_no_source_edit
+4 failed, 53 passed in 3.33s
