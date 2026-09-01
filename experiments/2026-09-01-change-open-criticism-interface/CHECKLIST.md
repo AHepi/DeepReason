@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=2 blockers=none
+State: next=3 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -16,7 +16,7 @@ order. One step per `dr-execute-step` invocation.
       done-when: `test -f tests/test_criticism_source_contract.py && grep -q 'test_contract_fields_are_closed' tests/test_criticism_source_contract.py && grep -q 'test_arbitrary_content_crosses_without_classification' tests/test_criticism_source_contract.py` exits 0.
       proof: `105 tests/test_criticism_source_contract.py`; `done-criterion exit: 0`.
 
-- [ ] 2. (S4) Run the new test on the pre-feature tree and record the base RED
+- [x] 2. (S4) Run the new test on the pre-feature tree and record the base RED
       transcript.
       done-when: `grep -q "ImportError: cannot import name 'criticism_source'" experiments/2026-09-01-change-open-criticism-interface/proof/base-red.txt && grep -q 'exit: [^0]' experiments/2026-09-01-change-open-criticism-interface/proof/base-red.txt` exits 0.
       mismatch: pytest exited 2 before collection as required, but
@@ -25,6 +25,8 @@ order. One step per `dr-execute-step` invocation.
       the planned `ModuleNotFoundError` grep therefore exited 1. Re-plan:
       accept the exact emitted `ImportError` spelling; the required nonzero
       pre-feature collection failure is unchanged.
+      proof: `done-criterion exit: 0`; transcript records pytest exit 2 and
+      the exact pre-feature import refusal.
 
 - [ ] 3. (S4) [COMMIT] Commit and push the tests plus base RED checkpoint.
       done-when: `test "$(git rev-parse HEAD)" = "$(git rev-parse origin/codex/open-criticism-contracts-20260901)"` exits 0 after commit `test: pin contribution-only criticism contract`.
