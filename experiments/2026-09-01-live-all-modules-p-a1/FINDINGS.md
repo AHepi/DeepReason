@@ -265,3 +265,72 @@ consequence for judge participation is stated but not yet measured live: the
 but the DEFENDED-TRIAL circuit reached through the criticism policy is a
 different path and this finding says nothing about it. The live run is what
 settles that.
+
+---
+
+## F3 (2026-09-01) — qualification does not parallelize across endpoints, so a multi-model configuration pays each model's battery end to end
+
+**Status: OPEN as a documentation and operations gap. Raised by the operator,
+who observed that qualification is divided by seat allocation and asked why
+four models were nonetheless taking so long.**
+
+**The operator's premise is correct.** Pairs ARE seat-divided: each endpoint
+qualifies only the contracts its own seats hold. Measured on this run's
+compiled manifest, 23 pairs over four endpoints —
+
+```
+ollama-deepseek-v4-pro-0813   10 pairs      ollama-qwen3.5-397b   1 pair
+ollama-glm-5.3                11 pairs      ollama-gpt-oss-120b   1 pair
+```
+
+No endpoint runs the whole battery. The division works.
+
+**What the division does NOT buy is time.** `cli/doctor.py:1515-1520`:
+
+```python
+for pair in pairs:              # STRICTLY SEQUENTIAL over all 23
+    cases = _case_block(pair)   # 20 cases, parallel at min(workers, 20)
+```
+
+Concurrency applies WITHIN a pair, never across pairs, so the four endpoints
+never overlap. Total wall clock is the SUM over models, not the max — a
+four-model configuration pays four batteries end to end even though each one
+is correctly narrowed to its own contracts. Adding a model to a configuration
+adds its whole battery to the critical path.
+
+**CLAUDE.md's "~14 min, ~1160 calls" figure is silent on this**, and every
+tranche that measured it was single-model with `reasoning: "none"`. A reader
+budgeting a four-model run from that line will under-budget by roughly the
+model count, and again by whatever thinking multiplies per call. This run is
+the first to find out; the number is not wrong, its scope is unstated.
+
+**A second, smaller contributor is this tranche's own ladder.**
+`pa1_run.sh` exports `DEEPREASON_QUALIFY_CONCURRENCY=2`, from the Ollama Cloud
+operations rule about owning the concurrency limit client-side. The SHIPPED
+default is 4 (`doctor.DEFAULT_QUALIFICATION_CONCURRENCY`). Within-pair width is
+`min(workers, PRODUCTION_CASES_PER_PAIR)`, so 2 halves the only parallelism the
+battery has. That was this window's choice, not a harness defect, and it
+roughly doubled the wall clock of the run in flight.
+
+**Measurement discipline, and this window's own violation of it.** Two
+per-case timings were taken to answer the operator's question — deepseek
+4.2 s, glm-5.3 37.2 s per `conjecturer.turn.v6` case — and BOTH were taken
+while the battery was running, competing for the same account concurrency.
+`dr-drive-harness` §5b is explicit: "A surprising measurement taken under load
+is not a measurement. Re-run idle before recording it, and say which run you
+recorded." So the glm/deepseek ratio is SUGGESTIVE AND NOT ESTABLISHED, and it
+is recorded here as such rather than quoted as a fact. A clean per-seat
+latency measurement, taken on an idle box, is owed to whichever tranche next
+budgets a multi-model battery.
+
+**What would fix the operational half** (not attempted here, no authority):
+qualification could run pair blocks across DISTINCT endpoints concurrently,
+since distinct endpoints are distinct rate-limit subjects on this provider and
+the circuit breaker is already per-endpoint. That is a design question for its
+own tranche, touching `DR-SUB-manifest` (qualification is frozen surface 5) —
+which is precisely why this window records it rather than touching it.
+
+**Residue.** The sequential-pair loop is proven by reading the code and is not
+in doubt. The projected duration built on it (~79 min for this configuration)
+rests on the loaded timings above and is therefore soft; the run's actual
+elapsed time, recorded in RESULTS.md, is the only figure worth trusting.
