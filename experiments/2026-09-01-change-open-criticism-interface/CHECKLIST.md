@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=6 blockers=none
+State: next=7 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -46,9 +46,11 @@ order. One step per `dr-execute-step` invocation.
       proof: deliberate `score` field produced the exact-field failure with
       exit 1; restoring the field census returned `1 passed` with exit 0.
 
-- [ ] 6. (S4) Produce the forbidden-manifest-priority mutation proof and
+- [x] 6. (S4) Produce the forbidden-manifest-priority mutation proof and
       restore GREEN.
       done-when: `grep -q 'priority mutant exit: [^0]' experiments/2026-09-01-change-open-criticism-interface/proof/mutations.txt && grep -q 'priority restore exit: 0' experiments/2026-09-01-change-open-criticism-interface/proof/mutations.txt` exits 0.
+      proof: deliberate `priority` field produced the manifest-field failure
+      with exit 1; restoring the field census returned `1 passed` with exit 0.
 
 - [ ] 7. (S5) Execute every newly recorded owner-map check.
       done-when: the three exact `check:` commands added to `CON-criticism-source.md`, `CON-conjecture-kinds.md`, and `CON-authority.md` each exit 0.
