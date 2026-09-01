@@ -75,4 +75,13 @@ Q4: Can the first increment be completed without contact with any frozen surface
 
 ## Amendments
 
-(none yet)
+### 2026-09-01 — alphaXiv option-discovery rule
+
+> I forgot to tell you to use alphaXiv plugin whenever exploring options.
+> There may already be solutions that have been tested.
+
+R11 (process): "use alphaXiv plugin whenever exploring options"
+
+C4: alphaXiv literature discovery precedes option selection so tested prior
+mechanisms can inform the choice; retrieved mechanisms remain evidence, not an
+unrequested authority or optimization target.
