@@ -1,0 +1,76 @@
+{
+  "candidates": [
+    {
+      "content": "Kind: abstraction. 3d82a99f1546 abstracts SRC_005 by extracting the covering principle that in random 3-regular majority dynamics, consensus failure is controlled by the critical 2-core size Θ(n^{1/3}) of an initial color class, not by the exponential number of perfect matchings. It is refuted if 3d82a99f1546 does not generalize SRC_005's 2-core obstruction to a wider class of monotone local majority processes or if it predicts consensus probability bounded away from 0.",
+      "typicality": 0.72,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "rebutted",
+          "note": "relation-form is satisfied: content contains 'refuted if' and 'abstracts'. The prior failure on 9386cd16d1f1 does not apply to this candidate."
+        }
+      ]
+    },
+    {
+      "content": "Kind: contradiction. 3d82a99f1546 contradicts SRC_004's exponential-prevalence law exp(Θ(n)) for mixed absorbing states by asserting that the typical obstructions are only Θ(n^{1/3}) 2-cores. It is refuted if the two claims are compatible because SRC_004 counts all stable matchings while 3d82a99f1546 counts only those with non-negligible basins, or if 3d82a99f1546 does not deny the exponential count of stable mixed configurations.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_004", "SRC_005"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "rebutted",
+          "note": "relation-form is satisfied: content contains 'refuted if' and 'contradicts'. The prior failure on 9386cd16d1f1 does not apply to this candidate."
+        }
+      ]
+    },
+    {
+      "content": "Kind: reduction. 3d82a99f1546 reduces to SRC_003's matching-cut characterization: its obstruction criterion is the special case where the bichromatic matching is the boundary of a nonempty 2-core in each color class. It is refuted if 3d82a99f1546's obstruction set is not a subset of SRC_003's locally stable mixed configurations, or if it requires bichromatic edges that do not form a matching.",
+      "typicality": 0.66,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "rebutted",
+          "note": "relation-form is satisfied: content contains 'refuted if' and 'reduces to'. The prior failure on 9386cd16d1f1 does not apply to this candidate."
+        }
+      ]
+    },
+    {
+      "content": "Kind: shared mechanism. 3d82a99f1546 shares mechanism with SRC_005: asynchronous majority updates monotonically decrease bichromatic edges, so absorbing states are exactly local minima where each vertex has at most one opposite-color neighbor. It is refuted if 3d82a99f1546's dynamics lack a nonincreasing bichromatic-edge Lyapunov function or permit flips that increase bichromatic edges.",
+      "typicality": 0.58,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "rebutted",
+          "note": "relation-form is satisfied: content contains 'refuted if' and 'shares mechanism'. The prior failure on 9386cd16d1f1 does not apply to this candidate."
+        }
+      ]
+    },
+    {
+      "content": "Kind: integration. 3d82a99f1546 integrates SRC_003 and SRC_005 by reconciling the exponential number of matching-cut obstructions with the polynomial 2-core obstructions through basin weighting: only the Θ(n^{1/3}) critical 2-cores have non-negligible probability. It is refuted if 3d82a99f1546 does not assign total probability o(1) to the exponentially many non-2-core matching obstructions, or if it treats all stable matchings as equally likely.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "rebutted",
+          "note": "relation-form is satisfied: content contains 'refuted if' and 'integrates'. The prior failure on 9386cd16d1f1 does not apply to this candidate."
+        }
+      ]
+    },
+    {
+      "content": "Kind: dependence. 3d82a99f1546 depends on SRC_005's critical 2-core theorem: its obstruction-size estimate Θ(n^{1/3}) is derived by applying the Binomial(3,1/2) 2-core criticality calculation to each initial color class. It is refuted if 3d82a99f1546's conclusion can be derived without the nonempty-2-core-whp property, or if SRC_005's 2-core size estimate is false.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "rebutted",
+          "note": "relation-form is satisfied: content contains 'refuted if' and 'depends on'. The prior failure on 9386cd16d1f1 does not apply to this candidate."
+        }
+      ]
+    }
+  ]
+}
