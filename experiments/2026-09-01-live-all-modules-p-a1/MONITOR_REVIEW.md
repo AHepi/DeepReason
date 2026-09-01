@@ -60,3 +60,54 @@ PY
 sed -n '696,752p' ../../../../src/deepreason/scheduler/scheduler.py     # F2
 sed -n '962,974p' ../../../../src/deepreason/informal/trial.py          # execution-backed = formal supremacy
 ```
+
+## Addendum, 2026-09-01 — the operator's hypothesis, checked: the glm-5.3 reasoning knob
+
+The operator suspected the glm-5.3 endpoint was coded with the wrong thinking
+value (`none` where `low` belongs). The record and Ollama's own model page
+confirm it, in a sharper form than a seat-config typo:
+
+- Ollama's glm-5.3 page: "`reasoning_effort` accepts `low`, `high`, and
+  `max`, and defaults to `max`." `none` is not in the set. P-S1 measured what
+  `none` does on this model: it does not stop thinking, it stops the
+  SEPARATION, so the trace lands in `message.content` (SEAT_REASONING_FINDINGS.md,
+  0/8 clean at `none`, 8/8 clean at `low`).
+- The split-budget protocol hard-codes `REASONING_OFF = "none"`
+  (`llm/providers.py:70`) onto every extraction leg
+  (`llm/split.py:163`, `extract_reasoning=REASONING_OFF if knob else None`),
+  and the Ollama adapter passes it straight through as `reasoning_effort:
+  "none"`. This is a constant, not a configuration: no run-config value can
+  change what the extraction leg sends. Under the modularity law that is a
+  finding in its own right.
+- P-A1 armed that protocol on glm-5.3 (`reasoning` omitted → `auto` split).
+  Every glm-5.3 extraction-leg raw blob begins with thinking prose ("Let me
+  understand the task…", seqs 386, 583, 629 …), the 512-token leg is cut
+  before any JSON (`natural_stop: false` on 5 of 6), the serialize step
+  fails, compact recovery ratchets the cap down, and the seat exhausts. That
+  is P-S1's M-1 mechanism, verbatim, re-run.
+- The REASON leg ran with the knob omitted, i.e. at glm-5.3's default
+  `max` effort against a 48 640-token budget. That is what pushed those calls
+  past the ~300 s transport wall (F6). `low` would have shortened them by
+  orders of magnitude (P-S1: median 7 vs 64 tokens on a fixed prompt).
+- deepseek is unaffected by the `none` leak (its extraction legs are clean
+  JSON) but its conjecturer extraction legs were still cut at 512 tokens in
+  10 of 13 cases, because the conjecturer schema does not fit in 512:
+  `SPLIT_BUDGET_EXTRACTION_TOKENS` (config.py:744, default 512) was left at
+  a value P-C2b measured for a much smaller planner output.
+
+**The monitor's part.** The P-A1 instruction said "thinking stays ON …
+do not attempt to turn thinking off", read off P-S1's `none` finding. The
+right instruction was the one P-S1's own final run-config already encoded:
+glm-5.3 at `reasoning: "low"`, split protocol OFF. The window followed the
+instruction it was given.
+
+**Fixes, in order.** (1) Config, immediately, no code: glm-5.3 seats at
+`reasoning: "low"`; `SPLIT_BUDGET_SEAT_PROTOCOL: off` (a run-level knob — with
+`auto` on, an explicit `low` still arms the split and the leg still sends
+`none`); if the split is ever re-armed, raise `SPLIT_BUDGET_EXTRACTION_TOKENS`
+to fit the conjecturer schema. (2) Harness, small, non-frozen: the extraction
+leg's off-token must be realized per provider/model through the
+`providers.py` seam (glm-5.3's most-off documented value is `low`) or become
+a configuration value; never a hard-coded `none`. (3) The ~300 s transport
+wall and blind identical retries (F6) stay real and get their own probe, at
+lower priority once `low` keeps glm inside the wall.
