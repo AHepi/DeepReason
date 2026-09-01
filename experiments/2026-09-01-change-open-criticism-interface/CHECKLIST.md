@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=9 blockers=none
+State: next=10 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -62,8 +62,10 @@ order. One step per `dr-execute-step` invocation.
       proof: `15 passed in 6.00s`; the unchanged canary and defended-manifest
       controls remained GREEN beside all source outcomes.
 
-- [ ] 9. (S1, S2, S3, S4, S5, S6) Re-run actual blast-radius and insertion-budget gates.
+- [x] 9. (S1, S2, S3, S4, S5, S6) Re-run actual blast-radius and insertion-budget gates.
       done-when: `python tools/blast_radius.py --files src/deepreason/criticism_source.py tests/test_criticism_source_contract.py docs/map/CON-criticism-source.md docs/map/CON-conjecture-kinds.md docs/map/CON-authority.md --symbols describe_criticism_sources invoke_criticism_source` reports `"frozen_surface_verdict": "CLEAR"`, and `python tools/diff_budget.py 7d266f85cc6bd4548fde8ce05012b4a49329e209 --ceiling 280 --paths src/deepreason/criticism_source.py tests/test_criticism_source_contract.py docs/map/CON-criticism-source.md docs/map/CON-conjecture-kinds.md docs/map/CON-authority.md` reports a non-exceeded verdict.
+      proof: blast radius `CLEAR`, frozen and frozen-adjacent contact lists
+      empty; insertion budget `267/280`, verdict `WITHIN`.
 
 - [ ] 10. (S5) Run the full map gate.
       done-when: `python tools/docs_verify.py --full` reports 0 failed.
