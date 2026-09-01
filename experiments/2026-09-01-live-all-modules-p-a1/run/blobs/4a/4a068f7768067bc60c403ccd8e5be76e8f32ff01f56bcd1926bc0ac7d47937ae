@@ -1,0 +1,10 @@
+{
+  "abstention": {
+    "note": "No admissible evidence blocks are available to ground a conjecture candidate. The dossier contains no source aliases or retrievable context from which to form a responsible, evidence-linked proposal.",
+    "search_signal": "need_context"
+  },
+  "candidates": [],
+  "research_proposals": [],
+  "scratch_proposal": null,
+  "simulation_proposals": []
+}
