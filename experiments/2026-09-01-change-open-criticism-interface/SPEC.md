@@ -100,8 +100,9 @@ JSON-looking text, and code-looking text cross the same opaque field
 byte-for-byte without parsing or classification. Invocation alone has no graph
 effect because this tranche contains no graph consumer. The phase-one
 architecture test walks every other shipped Python module, resolves absolute
-and relative imports, and refuses any import of this socket, so “deliberately
-unwired” is a pinned boundary rather than a current observation.
+and relative imports, and refuses any static import statement for this socket,
+so “deliberately unwired” is a pinned boundary rather than a current
+observation. Dynamic import APIs are not claimed by this law line.
 
 The regression ring also runs the unchanged defended-trial manifest and stub
 canary tests. Their continued success proves this isolated socket has not made
@@ -374,9 +375,8 @@ $ python3 -c "items=[140,114,24,2]; print(items, sum(items))"
 
 Budget: at most 280 inserted lines in the declared areas. The original
 five-commit phase forecast was not met: interruptions and evidence checkpoints
-produced 27 commits after the spec through the independent validation review.
-That history is retained rather than rewritten; corrective commits remain
-additive. Tranche artifacts are excluded from the code-and-map line budget.
-Frozen surfaces touched: none.
+produced many more commits. That history is retained rather than rewritten;
+corrective commits remain additive. Tranche artifacts are excluded from the
+code-and-map line budget. Frozen surfaces touched: none.
 
 Rubric: 6/6 yes.
