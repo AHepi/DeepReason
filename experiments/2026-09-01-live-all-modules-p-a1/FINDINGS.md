@@ -475,3 +475,64 @@ established — no controlled A/B at 32768 versus 49152 on this question was
 run, and glm-5.3 may simply be slower than the glm-5.2 those numbers came
 from. Two confounds, one sample: this is a lead for a calibration tranche, not
 a finding anyone should tune a config on.
+
+---
+
+## F6 (2026-09-01) — the transport-failure monitor watched the wrong surface, and missed a 27% failure rate in the criticism path
+
+**Status: OPEN. An instrument defect in THIS tranche's own monitoring, found
+after the run, by reading the record rather than by the monitor.**
+
+**What the record shows.** `run/objects/criticism-attempt-v1/`:
+
+```
+completed          11
+transport_failure   4        (4 of 15 = 27%)
+```
+
+Two of the four are the same target
+(`4c65c1e95b4d…`) attempted twice, so at least one artifact went
+uncriticised because the transport failed on both attempts at it.
+
+**Why the monitor did not say so.** The tranche instruction was explicit about
+this exact hazard — *"15 of P-S1's 24 cycles ran against a dead provider and no
+summary said so — your monitor must alert on transport-failure signatures, not
+just success."* `monitor.sh` and the live watcher were built for it and both
+missed it, because they classify **`llm.attempt_trace` entries on log events**:
+a call counts as failed only when a trace carries an error AND the event has no
+`output_ref`. A criticism attempt that fails in transport never produces such
+an event at all. It produces a `criticism-attempt-v1` OBJECT with
+`outcome: transport_failure`, on a surface the monitor never opened.
+
+So the monitor reported `calls_FAILED=0` for the whole run, truthfully by its
+own definition and misleadingly in fact. It watched the provider-dispatch
+surface and not the work-outcome surface, and the two disagree precisely where
+a failure is absorbed by a retry that also fails.
+
+**This is the P-S1 shape reproduced inside the instrument built to catch it.**
+P-S1's lesson was "a run can advance while its calls die and no summary says
+so". P-A1's monitor said `0 failed` while 27% of criticism attempts died. The
+generalisation worth keeping: **a failure-rate monitor must read the surface
+that records OUTCOMES, not the surface that records DISPATCHES** — and for this
+harness that means the `*-attempt-v1` object families, not `attempt_trace`
+alone.
+
+**What it cost this run.** Nothing that changes a verdict: the run's terminal
+was `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` on a conjecturer seat (F4), not a
+criticism transport failure, and `verify_root` reports 0 violations. But it
+means the criticism coverage the run achieved was lower than the module census
+implies — 11 completed attempts across 5 `Crit` events, not 15 — and
+MODULE_COVERAGE.md's criticism row should be read with that number beside it.
+
+**The fix, not applied here.** `module_census.py` and `monitor.sh` both belong
+to this tranche, so a fix would be in scope for a follow-up — but this window
+is closing on a delivered tranche and changing the census after its numbers are
+committed would rewrite the evidence rather than extend it. The correct shape
+is an additional census row and monitor clause reading every
+`objects/*-attempt-v1/` family's `outcome` field, so a transport failure is
+counted wherever the harness records one.
+
+**Residue.** The 27% is this run's criticism path only. Whether other
+`*-attempt-v1` families carried unnoticed transport failures in this or any
+earlier root is UNMEASURED — the census never looked, and neither did any
+predecessor's.
