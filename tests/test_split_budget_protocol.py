@@ -48,6 +48,7 @@ from deepreason.llm.split import (
     plan_split,
 )
 from deepreason.storage.blobs import BlobStore
+from deepreason import model_profiles
 
 ANSWER = json.dumps({"prose": "the extracted answer"})
 
@@ -57,6 +58,42 @@ TRUNCATED_TRACE = (
     "Working through it. The claim rests on three supports, of which the "
     "second is the load-bearing one because"
 )
+
+
+# glm-5.2 is the model every mock endpoint below names, and since 2026-09-01
+# what a model does with a reasoning value is read from that model's own
+# document rather than decided by a constant here.  This is glm-5.2's measured
+# shape (P-S1, 5 trials at `none`: 5/5 clean content, 0/5 separate reasoning
+# field, 6 median completion tokens -- so `none` really does disable thinking
+# on THIS model, which is why every assertion in this file about "none means
+# the seat does not think" still says exactly what it said before).
+GLM_52_DOCUMENT = model_profiles.parse_document(
+    "```" + model_profiles.FENCE_INFO + """
+schema: deepreason-model-profile.v1
+model_id: glm-5.2
+measured_on: 2026-08-31
+reasoning:
+  documented_values: [none, low, medium, high, max]
+  extraction_value: none
+  thinking_disablable: true
+  disabling_values: [none]
+  trace_destination: {none: absent, high: side_channel}
+```
+"""
+)
+
+
+@pytest.fixture(autouse=True)
+def _glm_52_is_described():
+    """Every adapter-level test here runs a glm-5.2 seat, so glm-5.2 needs a
+    document -- otherwise the protocol correctly stands down and these tests
+    would be measuring the unknown-model path instead of the one they name."""
+
+    model_profiles.register(GLM_52_DOCUMENT)
+    try:
+        yield
+    finally:
+        model_profiles.unregister("glm-5.2")
 
 
 def _endpoint(
@@ -118,7 +155,7 @@ def test_auto_arms_for_a_reasoning_route_and_not_for_a_non_thinking_one():
 
     thinking = plan_split(
         mode="auto", ceiling=4096, extraction_tokens=512,
-        provider="ollama", reasoning="high",
+        provider="ollama", reasoning="high", profile=GLM_52_DOCUMENT,
     )
     assert thinking.armed
 
@@ -126,7 +163,7 @@ def test_auto_arms_for_a_reasoning_route_and_not_for_a_non_thinking_one():
     # so there is nothing to split.
     off = plan_split(
         mode="auto", ceiling=4096, extraction_tokens=512,
-        provider="ollama", reasoning="none",
+        provider="ollama", reasoning="none", profile=GLM_52_DOCUMENT,
     )
     assert not off.armed
     assert off.notice
@@ -136,7 +173,7 @@ def test_auto_arms_for_a_reasoning_route_and_not_for_a_non_thinking_one():
     # thinking, so "auto" leaves it alone — and says why.
     no_knob = plan_split(
         mode="auto", ceiling=4096, extraction_tokens=512,
-        provider="generic", reasoning=None,
+        provider="generic", reasoning=None, profile=GLM_52_DOCUMENT,
     )
     assert not no_knob.armed
     assert no_knob.notice
@@ -146,14 +183,14 @@ def test_auto_arms_for_a_reasoning_route_and_not_for_a_non_thinking_one():
     # still thinks (llm/providers.py::reasoning_disabled), so auto arms.
     unset = plan_split(
         mode="auto", ceiling=4096, extraction_tokens=512,
-        provider="ollama", reasoning=None,
+        provider="ollama", reasoning=None, profile=GLM_52_DOCUMENT,
     )
     assert unset.armed
 
     # "off" is off whatever the route says.
     assert not plan_split(
         mode="off", ceiling=4096, extraction_tokens=512,
-        provider="ollama", reasoning="high",
+        provider="ollama", reasoning="high", profile=GLM_52_DOCUMENT,
     ).armed
 
 
@@ -172,7 +209,7 @@ def test_neither_leg_nor_their_sum_exceeds_the_route_lease_ceiling(ceiling):
 
     plan = plan_split(
         mode="on", ceiling=ceiling, extraction_tokens=512,
-        provider="ollama", reasoning="high",
+        provider="ollama", reasoning="high", profile=GLM_52_DOCUMENT,
     )
     assert plan.armed
     assert 0 < plan.reason_max_tokens <= ceiling
@@ -192,7 +229,7 @@ def test_a_ceiling_too_small_to_split_is_a_notice_not_a_split():
     for ceiling in (0, 1, 256, 511):
         plan = plan_split(
             mode="on", ceiling=ceiling, extraction_tokens=512,
-            provider="ollama", reasoning="high",
+            provider="ollama", reasoning="high", profile=GLM_52_DOCUMENT,
         )
         assert not plan.armed, ceiling
         assert plan.notice, ceiling
@@ -200,7 +237,7 @@ def test_a_ceiling_too_small_to_split_is_a_notice_not_a_split():
     # An unbounded route cannot be divided into two bounded legs either.
     assert not plan_split(
         mode="on", ceiling=None, extraction_tokens=512,
-        provider="ollama", reasoning="high",
+        provider="ollama", reasoning="high", profile=GLM_52_DOCUMENT,
     ).armed
 
 
@@ -361,7 +398,7 @@ def test_a_provider_that_cannot_disable_thinking_still_compiles(tmp_path):
 
     plan = plan_split(
         mode="on", ceiling=4096, extraction_tokens=512,
-        provider="generic", reasoning=None,
+        provider="generic", reasoning=None, profile=GLM_52_DOCUMENT,
     )
     assert plan.armed
     assert plan.notice
@@ -412,7 +449,7 @@ def test_auto_says_nothing_about_a_seat_that_was_never_a_candidate(tmp_path):
     # The planner still knows why, for a caller that asks.
     plan = plan_split(
         mode="auto", ceiling=4096, extraction_tokens=512,
-        provider="ollama", reasoning="none",
+        provider="ollama", reasoning="none", profile=GLM_52_DOCUMENT,
     )
     assert plan.notice and not plan.disclosed
 
@@ -464,7 +501,7 @@ def test_the_plan_is_a_frozen_value():
 
     plan = plan_split(
         mode="on", ceiling=4096, extraction_tokens=512,
-        provider="ollama", reasoning="high",
+        provider="ollama", reasoning="high", profile=GLM_52_DOCUMENT,
     )
     assert isinstance(plan, SplitPlan)
     with pytest.raises(Exception):
@@ -544,6 +581,7 @@ def test_the_shipped_glm_seat_actually_arms():
         extraction_tokens=512,
         provider=route.provider,
         reasoning=route.reasoning,
+        profile=GLM_52_DOCUMENT,
     )
     assert plan.armed, (route.provider, route.reasoning, route.output_mode)
     assert plan.extract_reasoning == "none"

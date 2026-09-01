@@ -1,6 +1,6 @@
 # Checklist for: "Take this particular task out of the hands of the machine"
 
-State: next=7 blockers=none
+State: next=13 blockers=none (steps 1-12 and 16-22 done; see the execution notes at the foot of this file)
 
 Re-read REQUEST.md (including Amendment 1) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -218,3 +218,35 @@ not stopped on: the `bc`-dependent map check, and
 - [ ] 28. (all) [COMMIT] Push and confirm clean tree.
       done-when: `git status --porcelain` is empty AND `git rev-parse HEAD` ==
       `git rev-parse origin/claude/model-profile-registry-opkgal`.
+
+
+---
+
+## Execution notes (append-only; the plan is not rewritten)
+
+**N1 — order deviation, steps 13-22.** Step 12's done-criterion is a full
+`tools/docs_verify.py` run, which takes many minutes and must run alone on an
+idle box (`dr-drive-harness` §5b). Rather than idle through it, steps 16-22 —
+which are authoring, not measurement — were written during the wait, and every
+test run was held until the instrument finished. Nothing was marked done on an
+unrun criterion. Recorded here rather than by renumbering, because the pasted
+outputs are the audit trail.
+
+**N2 — a consumer the blast-radius gate could not see, and what it forced.**
+SPEC.md's census listed the gate's `consumers` field in full and classified
+every hit. It missed one, and the miss is instructive rather than incidental:
+`cli/main.py::_reasoning_disabled_refusal` imports `reasoning_disabled`
+FUNCTION-LOCALLY (`src/deepreason/cli/main.py:2379`, inside the function body),
+which the gate's import analysis cannot see. `docs/map/INDEX.md`'s own seam
+matrix records this exact blind spot twice — "every import between the sides is
+function-local, which the coupling metric cannot see" — so the census should
+have carried a `grep -rn` cross-check for function-local imports of every
+symbol being deleted, not only for the symbols the gate reported `UNKNOWN`.
+That is the process lesson; the finding itself is S2b below.
+
+**N3 — the shipped test-suite fixtures moved as predicted, and one did not
+move at all.** `tests/test_split_budget_protocol.py`,
+`tests/test_split_leg_recording.py` and `tests/test_providers.py` all needed
+the profile the census predicted. `tests/test_managed_path_config_read.py:133`
+did not appear in the census either: it monkeypatches the CLI refusal by name,
+so renaming the function moved it. Same root cause as N2.

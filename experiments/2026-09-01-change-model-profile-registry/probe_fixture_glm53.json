@@ -1,0 +1,32 @@
+{
+  "note": "P-S1's measured glm-5.3 observations, transcribed as probe trials. 8 trials per value at /v1/chat/completions. Source: git show origin/claude/deepreason-p-s1-commitments-wowcib:experiments/2026-08-31-p-s1-commitments/SEAT_REASONING_FINDINGS.md (blob 00b7914fc66a0bec96e838c3317974e9d2eb9646) section 2. At `low` the table records 8/8 clean content and 3/8 with a separate reasoning field; the 5 trials with no field are recorded here as absent, which is what the document's transport_notes already discloses.",
+  "model_id": "glm-5.3",
+  "trials": {
+    "none": [
+      {"content_clean": false, "reasoning_field": false, "completion_tokens": 64},
+      {"content_clean": false, "reasoning_field": false, "completion_tokens": 64},
+      {"content_clean": false, "reasoning_field": false, "completion_tokens": 64},
+      {"content_clean": false, "reasoning_field": false, "completion_tokens": 64},
+      {"content_clean": false, "reasoning_field": false, "completion_tokens": 64},
+      {"content_clean": false, "reasoning_field": false, "completion_tokens": 64},
+      {"content_clean": false, "reasoning_field": false, "completion_tokens": 64},
+      {"content_clean": false, "reasoning_field": false, "completion_tokens": 64}
+    ],
+    "low": [
+      {"content_clean": true, "reasoning_field": true, "completion_tokens": 7},
+      {"content_clean": true, "reasoning_field": true, "completion_tokens": 7},
+      {"content_clean": true, "reasoning_field": true, "completion_tokens": 7},
+      {"content_clean": true, "reasoning_field": true, "completion_tokens": 7},
+      {"content_clean": true, "reasoning_field": true, "completion_tokens": 7},
+      {"content_clean": true, "reasoning_field": true, "completion_tokens": 7},
+      {"content_clean": true, "reasoning_field": true, "completion_tokens": 7},
+      {"content_clean": true, "reasoning_field": true, "completion_tokens": 7}
+    ],
+    "high": [
+      {"content_clean": true, "reasoning_field": true, "completion_tokens": 61}
+    ],
+    "max": [
+      {"content_clean": true, "reasoning_field": true, "completion_tokens": 61}
+    ]
+  }
+}

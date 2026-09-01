@@ -130,7 +130,7 @@ def test_reason_forwards_the_operator_config_to_preparation(tmp_path, monkeypatc
 
     monkeypatch.setattr(preparation, "RunPreparationService", _CapturingService)
     monkeypatch.setattr(
-        "deepreason.cli.main._reasoning_disabled_refusal", lambda _profile: None
+        "deepreason.cli.main._reasoning_disclosure", lambda _profile: None
     )
 
     args = build_parser().parse_args(

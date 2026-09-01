@@ -133,6 +133,60 @@ assert p.max_output_tokens is None and p.tokens_per_second is None and p.probe i
 assert p.transport_notes == () and p.evidence == ()
 "`
 
+## What reads a profile, and what happens without one
+
+Two consumers, and no others. `llm/adapter.py::_split_plan` resolves the seat's
+model through the interface and hands the profile to `plan_split`, which sends
+`reasoning.extraction_value` on the emission leg and asks
+`reasoning.disabling_values` whether the seat is already thinking-off. And
+`cli/main.py::_reasoning_disclosure` says, at launch, what the configured value
+will do — as a DISCLOSURE. It used to be a refusal (`REASONING_MUST_BE_DISABLED`)
+demanding `reasoning: none`, which on glm-5.3 is the value that breaks it; the
+operator's 2026-08-28 law ("Gates are always optional: with warnings") and
+2026-09-01 answer ("Harness is supposed to accommodate all possible future
+models and configurations") both forbid the veto.
+
+With no document the split protocol stands down with a typed notice and the
+seat runs exactly as it did before the protocol existed. Nothing refuses, and
+nothing is sent that a human did not either configure or declare.
+
+`check: python -c "
+from deepreason.llm.split import plan_split, NOTICE_MODEL_PROFILE_MISSING, NOTICE_PROFILE_DECLARES_NO_REASONING
+import inspect
+from deepreason.llm.adapter import LLMAdapter
+source = inspect.getsource(LLMAdapter._split_plan)
+assert 'model_profiles' in source and 'lease.route.model_id' in source, source
+plan = plan_split(mode='on', ceiling=4096, extraction_tokens=512, provider='ollama', reasoning='high', profile=None)
+assert not plan.armed and plan.notice == NOTICE_MODEL_PROFILE_MISSING and plan.extract_reasoning is None
+quiet = plan_split(mode='auto', ceiling=4096, extraction_tokens=512, provider='ollama', reasoning=None, profile=None)
+assert quiet.notice == NOTICE_MODEL_PROFILE_MISSING and not quiet.disclosed
+assert NOTICE_PROFILE_DECLARES_NO_REASONING != NOTICE_MODEL_PROFILE_MISSING
+"`
+
+`check: python -c "
+import ast, pathlib
+import deepreason.cli.main as main
+text = pathlib.Path(main.__file__).read_text()
+tree = ast.parse(text)
+found = [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == '_reasoning_disclosure']
+assert len(found) == 1, 'positive anchor: exactly one disclosure function'
+function = found[0]
+assert 'model_profiles' in ast.get_source_segment(text, function), 'it must ask the document, not a constant'
+emitted = [
+    node.value
+    for node in ast.walk(function)
+    if isinstance(node, ast.Constant) and isinstance(node.value, str)
+    and node is not function.body[0].value
+]
+assert not any(v.startswith('REASONING_MUST_BE_DISABLED') for v in emitted), 'the launch refusal code is emitted again'
+assert any(v.startswith('MODEL_PROFILE_MISSING') for v in emitted), 'positive anchor: it still discloses'
+callers = [
+    node for node in ast.walk(tree)
+    if isinstance(node, ast.Call) and getattr(node.func, 'id', '') == '_reasoning_disclosure'
+]
+assert len(callers) == 2, callers
+"`
+
 ## Invariants
 
 - `DR-INV-frozen-surfaces` — this concept touches none of the five. It reaches

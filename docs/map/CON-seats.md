@@ -133,9 +133,23 @@ and the controller is clamped to. The protocol stands down — recording a typed
 notice, never refusing — where it cannot be honored: on a repair authorization
 (the workflow authored and bound that exact request), on a route that
 constrains every completion to the contract (there is no room for a
-deliberation leg), on a ceiling too small to divide, and on a provider whose
-neutral reasoning knob has no realization.
-`check: python -m pytest tests/test_split_budget_protocol.py -q && python -c "from deepreason.llm.split import plan_split; p = plan_split(mode='on', ceiling=4096, extraction_tokens=512, provider='ollama', reasoning='high'); assert p.armed and p.reason_max_tokens + p.extract_max_tokens == 4096 and p.reason_max_tokens >= p.extract_max_tokens" && grep -q "NOTICE_REPAIR_BUNDLE" src/deepreason/llm/adapter.py && grep -q "NOTICE_OUTPUT_MECHANISM" src/deepreason/llm/adapter.py`
+deliberation leg), on a ceiling too small to divide, on a provider whose
+neutral reasoning knob has no realization, and — since 2026-09-01 — on a seat
+whose MODEL nobody has described, because the value the emission leg should
+send is that model's own document to state and not this code's to assume
+(`DR-CON-model-profiles`). Under "nothing ships" that last case is the state
+every model is in until a human writes the document.
+`check: python -m pytest tests/test_split_budget_protocol.py::test_neither_leg_nor_their_sum_exceeds_the_route_lease_ceiling tests/test_model_profile_registry.py -q && python -c "
+from deepreason.llm.split import plan_split, NOTICE_MODEL_PROFILE_MISSING
+undescribed = plan_split(mode='on', ceiling=4096, extraction_tokens=512, provider='ollama', reasoning='high', profile=None)
+assert not undescribed.armed and undescribed.notice == NOTICE_MODEL_PROFILE_MISSING and undescribed.disclosed
+try:
+    plan_split(mode='on', ceiling=4096, extraction_tokens=512, provider='ollama', reasoning='high')
+except TypeError as error:
+    assert 'profile' in str(error), error
+else:
+    raise AssertionError('plan_split must not default the profile: a default is the guessing it replaced')
+" && grep -q "NOTICE_REPAIR_BUNDLE" src/deepreason/llm/adapter.py && grep -q "NOTICE_OUTPUT_MECHANISM" src/deepreason/llm/adapter.py`
 
 **`select_lease` is a pure `(role, seat) -> EndpointLease` lookup; nothing
 else keys it.** No call-site identity, workload kind, or profile

@@ -156,3 +156,71 @@ the authoring contract.
 
 END STATE: docs_verify.py green, INDEX.md routing correct, no code change.
 ```
+
+---
+
+## P5 — the SAME hard-coded `reasoning_effort: "none"`, in a file this tranche may not touch
+
+WHAT: `src/deepreason/verification/llm_broker.py:225` builds a request body with
+`"reasoning_effort": "none"` written directly into the payload dict. It does not
+import `llm/providers.py` at all, so it is a SECOND, independent instance of the
+exact defect this tranche was opened to fix — and the registry does not reach it.
+
+Parked, not fixed, for one reason only: `verification/` is frozen surface 3
+(`docs/map/INV-frozen-surfaces.md:47`, "Replay-validation record formats —
+`invariants.py`, `verification/`"), and this tranche's authorization says
+"qualification.py (surface 5), capabilities/state.py, harness.py, invariants.py,
+verification/, and the frozen-adjacent route_fingerprint in llm/firewall.py: NOT
+touched. Any contact is an immediate stop." So it was found, verified
+first-hand, and left exactly as it is.
+
+Found by an independent reconnaissance pass, not by the change itself — the
+blast-radius gate could not see it either, because the file names neither
+`REASONING_OFF` nor `providers`. It is a literal in a dict.
+
+WHAT IT MEANS, honestly. This is the brokered verification path, not the
+reasoning engine: `deepreason reason` does not route through it. So the three
+runs that died are not attributable to this line. But it is the same mistake in
+the same repo, it will behave the same way on glm-5.3 (contaminated content
+rather than disabled thinking), and it is invisible to the registry that now
+governs every other seat.
+
+READY-TO-SEND PROMPT:
+
+```
+Route: dr-change-orchestrator (change family). One goal, one tranche.
+
+GOAL: src/deepreason/verification/llm_broker.py stops hard-coding
+"reasoning_effort": "none" into its request body, and reads the model's own
+document like every other seat does.
+
+FROZEN SURFACE — READ FIRST, THIS IS THE WHOLE DIFFICULTY. verification/ is
+frozen surface 3 (docs/map/INV-frozen-surfaces.md:47). This tranche therefore
+CANNOT begin with an edit. It begins with a priced stop:
+
+1. Run tools/blast_radius.py --files src/deepreason/verification/llm_broker.py
+   --symbols <the payload builder> and paste its frozen_surface_contacts list
+   verbatim into SPEC.md.
+2. Price what actually moves. The frozen claim about verification/ is about
+   REPLAY-VALIDATION RECORD FORMATS. A request-body literal is arguably not a
+   record format at all — but that argument is exactly what an operator grant
+   is for, and it must be made in writing with a measurement, not asserted.
+   The template is experiments/2026-09-01-defect-judge-canary-compile-gap/
+   price_compile_gap.py and the granted-contact blocks at
+   docs/map/INV-frozen-surfaces.md:546-669.
+3. STOP and put the priced grant request to the operator. Do not edit first.
+
+CONTEXT AND THE INTERFACE TO USE:
+- experiments/2026-09-01-change-model-profile-registry/ — the registry, its
+  declared interface (deepreason.model_profiles.resolve), and
+  docs/map/CON-model-profiles.md. Reach it through the interface only; the
+  architecture test in tests/test_model_profile_registry.py goes red otherwise.
+- glm-5.3's own document, docs/model-profiles/glm-5.3/agent.md, records why
+  "none" is the wrong value on that model: 0/8 clean content against 8/8 at
+  "low".
+
+END STATE: either the literal is gone and the broker reads the registry, with an
+operator grant recorded in INV-frozen-surfaces.md the way the 2026-08-30 and
+2026-09-01 grants are; or a written finding that the grant was refused and the
+literal stays, with the reason. Not silence.
+```

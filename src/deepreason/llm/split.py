@@ -21,8 +21,16 @@ Two constraints shape every number here.
   ceiling (``EndpointLease.verify``), and a split that spent both budgets on
   top of each other would escape the bound the controller is clamped to.
 * Nothing here refuses.  A seat that cannot be split -- no reasoning knob, no
-  ceiling, a ceiling too small to divide -- runs exactly as it did before and
-  records a typed notice saying which.
+  ceiling, a ceiling too small to divide, no document describing the model --
+  runs exactly as it did before and records a typed notice saying which.
+
+The value the emission leg sends is READ FROM THE MODEL'S OWN DOCUMENT and is
+never a literal in this file.  It used to be one: `providers.REASONING_OFF`,
+the string "none", on every model.  On glm-5.3 that value does not stop the
+thinking, it stops the SEPARATION -- the trace lands in `message.content` ahead
+of the answer, this leg's budget is spent before any JSON appears, and the cap
+ratchet then shrinks the budget until the seat exhausts.  Three runs died that
+way.  See `DR-CON-model-profiles`.
 
 This module is pure: no I/O, no route, no endpoint, no meter.  It computes a
 plan and renders two request bodies; the adapter owns everything that spends.
@@ -31,12 +39,12 @@ plan and renders two request bodies; the adapter owns everything that spends.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
-from deepreason.llm.providers import (
-    REASONING_OFF,
-    reasoning_disabled,
-    reasoning_knob_available,
-)
+from deepreason.llm.providers import reasoning_knob_available
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from deepreason.model_profiles import ModelProfileV1
 
 SPLIT_LEG_REASON = "reason"
 SPLIT_LEG_EXTRACT = "extract"
@@ -50,6 +58,16 @@ NOTICE_CEILING_TOO_SMALL = "split-budget:ceiling-too-small-to-divide"
 NOTICE_REPAIR_BUNDLE = "split-budget:repair-authorization-is-single-leg"
 NOTICE_ENVELOPE = "split-budget:extraction-request-exceeds-the-frozen-envelope"
 NOTICE_NO_HEADROOM = "split-budget:no-token-headroom-for-the-extraction-leg"
+# Nobody has written this model's document, so nothing knows what its emission
+# leg should send.  Under "nothing ships" (operator, 2026-09-01) this is the
+# DEFAULT state of every model, not an edge case -- which is exactly why the
+# protocol stands down here instead of guessing, and why the notice is
+# disclosed only when a run explicitly asked to split.
+NOTICE_MODEL_PROFILE_MISSING = "split-budget:no-model-profile-for-this-seat"
+# The document exists but says nothing about reasoning.  Distinct from the
+# above on purpose: one says nobody has looked at this model, the other says
+# someone looked and did not record this.
+NOTICE_PROFILE_DECLARES_NO_REASONING = "split-budget:profile-declares-no-reasoning"
 # A route that constrains EVERY completion to the contract has no room for a
 # deliberation leg: the first leg would be schema-bound too, which is the exact
 # coupling the protocol exists to undo. Honoring the frozen output mode matters
@@ -110,14 +128,24 @@ def plan_split(
     extraction_tokens: int,
     provider: str,
     reasoning: str | int | None,
+    profile: "ModelProfileV1 | None",
 ) -> SplitPlan:
     """Divide one completion ceiling into a reasoning leg and an emission leg.
 
     ``mode`` is the run's choice: ``off`` never splits, ``on`` always tries,
-    ``auto`` splits exactly the seats whose route says they think.  Whether a
-    route thinks is the only machine-readable form the question has: the
-    presentation profile tunes rendering and transport and says nothing about
-    reasoning, so the neutral knob plus its provider realization is the test.
+    ``auto`` splits exactly the seats whose route says they think.
+
+    ``profile`` is this model's document, or ``None`` when nobody has written
+    one.  It has NO DEFAULT deliberately: a caller that forgets it gets a
+    ``TypeError`` rather than the guessing this parameter exists to end.  Two
+    questions that used to be answered by a constant are answered by it, and
+    both are per-MODEL facts that no per-provider table can hold:
+
+    * what the emission leg should send -- ``reasoning.extraction_value``;
+    * whether the seat is ALREADY thinking-off, which decides ``auto`` --
+      ``reasoning.disabling_values``.  Unset is still not off, and now
+      "explicitly set to the off token" is not off either unless this model's
+      document says that token disables it.  On glm-5.3 it does not.
     """
 
     if mode not in MODES:
@@ -126,21 +154,39 @@ def plan_split(
         return UNARMED_PLAN
 
     knob = reasoning_knob_available(provider)
-    # Unset is NOT off: a reasoning model with no explicit setting still
-    # thinks, so only an explicit off token takes a seat out of scope.
-    thinking_off = reasoning_disabled(reasoning)
+    facts = getattr(profile, "reasoning", None)
+
+    if mode == "auto" and not knob:
+        return _replace_notice(NOTICE_NO_REASONING_KNOB)
+    if profile is None:
+        return _replace_notice(
+            NOTICE_MODEL_PROFILE_MISSING, disclosed=(mode == "on")
+        )
+    if facts is None:
+        return _replace_notice(
+            NOTICE_PROFILE_DECLARES_NO_REASONING, disclosed=(mode == "on")
+        )
+
+    # Unset is NOT off, and neither is a value this model does not actually
+    # stop thinking for.  Only the document decides.
+    thinking_off = reasoning is not None and str(reasoning).strip() in tuple(
+        facts.disabling_values
+    )
 
     if mode == "auto":
-        if not knob:
-            return _replace_notice(NOTICE_NO_REASONING_KNOB)
         if thinking_off:
             return _replace_notice(NOTICE_NOT_A_REASONING_SEAT)
         notice = ""
     else:
         # Explicitly requested. A provider with no reasoning adapter cannot
-        # carry the request to stop thinking, so the emission leg runs anyway
-        # and the record says what could not be honored.
-        notice = "" if knob else NOTICE_THINKING_NOT_DISABLABLE
+        # carry any reasoning field, and a model whose document says thinking
+        # cannot be disabled will keep thinking on the emission leg whatever
+        # is sent; the leg runs anyway and the record says what could not be
+        # honored.
+        notice = (
+            "" if (knob and facts.thinking_disablable)
+            else NOTICE_THINKING_NOT_DISABLABLE
+        )
 
     if not ceiling or int(ceiling) <= 0:
         return _replace_notice(NOTICE_NO_CEILING, disclosed=(mode == "on"))
@@ -160,7 +206,7 @@ def plan_split(
         armed=True,
         reason_max_tokens=reason,
         extract_max_tokens=extract,
-        extract_reasoning=REASONING_OFF if knob else None,
+        extract_reasoning=facts.extraction_value if knob else None,
         notice=notice,
         disclosed=bool(notice),
     )

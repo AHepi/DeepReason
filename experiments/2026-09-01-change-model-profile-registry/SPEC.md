@@ -318,6 +318,71 @@ accept:
     && python tools/docs_verify.py --audit -> no vacuous/unparseable checks
     && python tools/docs_verify.py --links -> every DR- reference resolves
 
+### S2b (R1, R4, R9; forced by S2) — the launch refusal becomes a disclosure
+
+**Discovered during execution, not at spec time.** Added here rather than done
+silently, because it changes a public CLI behaviour the spec did not forecast.
+
+**File:** `src/deepreason/cli/main.py`.
+
+**What was found.** `_reasoning_disabled_refusal` consumed
+`providers.reasoning_disabled` through a FUNCTION-LOCAL import (line 2379),
+which `tools/blast_radius.py` cannot see, so it appears in no census in this
+document. It gated two commands — `deepreason reason` and the qualification
+battery — and it REFUSED to spend a provider call unless the profile carried
+`reasoning: none`, printing `REASONING_MUST_BE_DISABLED` and returning 1.
+
+**Why it could not simply be left alone.** S2 deletes `reasoning_disabled`
+(required by M2), and this is its only remaining consumer. Something had to
+change; the only question was what.
+
+**Why it became a disclosure rather than a corrected refusal.** Two reasons,
+one factual and one about authority.
+
+1. It was wrong about the fact, in the sharpest possible way. On glm-5.3
+   `reasoning: none` is the value that breaks the model (M1: 0/8 clean). This
+   guard therefore DEMANDED the setting that killed three runs and refused the
+   one that works. A profile-informed refusal would fix that particular error
+   while keeping the shape that produced it.
+2. It was a launch gate vetoing a configuration the operator chose. The
+   operator, 2026-08-28: "Gates are always optional: with warnings." And,
+   2026-09-01, answering this tranche's own question: "Harness is supposed to
+   accommodate all possible future models and configurations." R9 is
+   unambiguous.
+
+**Why this was decided and not asked.** `dr-ask-the-right-question` requires a
+fork the record kills to be decided and noted rather than put to the operator,
+and this window has already spent one operator round trip on a question the
+laws had answered. The dominance test: under "nothing ships", a
+profile-informed REFUSAL cannot evaluate anything for a model with no document
+— which is every model — so it either blocks every run or passes every run;
+passing every run makes it dead code, and blocking every run is the veto R9
+forbids. A disclosure keeps the signal and blocks nothing. It dominates both
+alternatives.
+
+**Honest note on the earlier exemption.** The 2026-08-12 all-configurations
+tranche deliberately PRESERVED `REASONING_MUST_BE_DISABLED` as a launch-time
+refusal, exempt from that law on the grounds that impossibility surfaces at the
+point of use. This item reverses that exemption. It does so on the strength of
+two LATER operator statements (2026-08-28 and 2026-09-01), not by disagreeing
+with the earlier reading — but the operator should know a prior deliberate
+decision was reversed, and can reverse it back with a word.
+
+**After:** `_reasoning_disclosure` prints and the command CONTINUES. Silent
+when the model's document says the configured value disables thinking; a
+`REASONING_STAYS_ON` line when it says otherwise; a `MODEL_PROFILE_MISSING`
+line when no document describes the model. Nothing refuses.
+
+accept:
+    python -c "
+    import ast, pathlib, deepreason.cli.main as main
+    tree = ast.parse(pathlib.Path(main.__file__).read_text())
+    fn = [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == '_reasoning_disclosure']
+    assert len(fn) == 1
+    calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call) and getattr(n.func, 'id', '') == '_reasoning_disclosure']
+    assert len(calls) == 2
+    " -> exits 0, and `docs/map/CON-model-profiles.md`'s disclosure check is green
+
 ## Assumptions (operator may override)
 
 A1 (Q1, settled by R7/R8; this is the residue): the five authored documents

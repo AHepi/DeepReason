@@ -30,3 +30,32 @@ C6 named two known-not-yours reds. Measured before any edit, both are false
 here: `bc` is installed at /usr/bin/bc, and the shipped-qualification-subject
 test passes. This tranche therefore claims NEITHER waiver. Every red in the
 step-25 map check and the step-27 gate is this tranche's to explain or fix.
+
+--- ADDENDUM, after the step-12 map check: five PRE-EXISTING map failures ---
+`python tools/docs_verify.py` on the changed tree reports "72 documents, 1302
+checks, 4 workers ... 5 failed". None is this tranche's, and each was measured
+against the pre-tranche base `dd0916fb5` rather than argued:
+
+1. SEAM-llm-x-rules.md:54 -- "unparseable check". Line 54 is BYTE-IDENTICAL at
+   the base (verified by comparing the archived file's line 54 with the current
+   one). It is a document-authoring error in the check grammar, in a file this
+   tranche never opened, and no code change can cause or cure it.
+2-4. CON-run-identity.md:211, :213, :215 -- git-history checks. `git log -1
+   --format=%s 1637e808` returns "fatal: ambiguous argument '1637e808': unknown
+   revision", and the rename census over
+   experiments/live_research_2026-07-29/selfstudy/runs/ returns nothing: this
+   container's clone does not carry that history. Repo-global and independent
+   of the working tree.
+5. INV-frozen-surfaces.md:181 -- expects 0 files matching
+   `*workflow-provider-attempt-v1/*.json` containing "transport_failure".
+   Current tree: 1 file. Base archive: 1 file. Unchanged.
+
+The three documents involved are untouched by this tranche (`git diff` against
+the base names only CON-model-profiles.md, CON-seats.md, INDEX.md and
+SUB-llm.md under docs/map/).
+
+**This is NOT a waiver.** C6 pre-authorized two specific reds and BOTH turned
+out to be green here; these five are different failures, discovered by running
+the instrument, and they are recorded as pre-existing on measured evidence
+rather than excused. Every check in the four documents this tranche DID touch
+passes.
