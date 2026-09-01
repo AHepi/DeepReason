@@ -1,6 +1,6 @@
 # Checklist for: "Take this particular task out of the hands of the machine"
 
-State: next=1 blockers=none
+State: next=7 blockers=none
 
 Re-read REQUEST.md (including Amendment 1) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
