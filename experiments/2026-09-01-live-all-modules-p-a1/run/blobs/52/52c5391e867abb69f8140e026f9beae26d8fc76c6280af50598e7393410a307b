@@ -1,0 +1,26 @@
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The finite obstruction structures are exactly the locally stable mixed configurations in which the bichromatic edge set is a matching: every vertex has at most one neighbor of the opposite color, so no vertex has two of its three neighbors in the minority. These are matching cuts; removing the bichromatic matching leaves monochromatic components of minimum degree 2. The expected number of such stable mixed configurations is exp(Θ(n)), and the final number of bichromatic edges is Θ(n) with high probability, so the consensus probability is exp(-Ω(n)).",
+      "mechanism": "The number of bichromatic edges is a Lyapunov function: flipping a vertex with two or three opposite neighbors reduces the cut size by 1 or 3. The process therefore descends monotonically to a local minimum where no vertex has two opposite neighbors, i.e., the cut edges form a matching. On a random 3-regular graph there are exponentially many matching cuts, e.g. from perfect matchings whose removal leaves a 2-factor of cycles; the random descent is trapped in one of linear size before eliminating all cut edges.",
+      "counterconditions": [
+        "If the number of reachable linear-size matching cuts is o(1) in the random graph, the consensus probability need not tend to 0.",
+        "If the basin of attraction of the empty cut occupies a 1-o(1) fraction of colorings, the verdict flips to 1.",
+        "If the final matching size is O(1) with high probability, the consensus probability may converge to a constant strictly between 0 and 1."
+      ],
+      "typicality": 0.7,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "departure_declared",
+          "note": "Departing from SRC_005; this candidate supplies a fresh scaling law with exp(Θ(n)) prevalence."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from SRC_006; this candidate supplies a fresh scaling law with exp(Θ(n)) prevalence."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "

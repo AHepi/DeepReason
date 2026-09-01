@@ -1,0 +1,33 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The finite obstruction structures are exactly the locally stable mixed configurations: every vertex has at most one neighbor of the opposite color, so the bichromatic boundary is a matching and each monochromatic induced subgraph has minimum degree at least 2. On a random 3-regular graph the typical obstructions are matching cuts: remove a perfect matching M, the remaining graph is a disjoint union of cycles, and any coloring that is constant on each cycle is stable. Quantitative law: the expected number of such stable mixed configurations is exp(Θ(n)); log E|S|/n converges to a positive constant c*, and the consensus probability is exp(-Θ(n)).",
+      "mechanism": "Each asynchronous update flips a vertex only when at least two of its three neighbors have the opposite color, so the number of bichromatic edges strictly decreases. The process stops exactly when no vertex has two opposite neighbors, i.e. the cut edges form a matching. Random 3-regular graphs have exponentially many perfect matchings; deleting one leaves a 2-regular graph whose cycles can be monochromatically colored, producing exponentially many absorbing mixed states. Their basins cover all but an exponentially small probability, so consensus is exponentially rare.",
+      "counterconditions": [
+        "The limit would be 1 if the graph were an expander with no large matching cuts or if the dynamics were synchronous/biased toward consensus.",
+        "The law fails if the number of stable mixed configurations is subexponential or if their basins have total probability o(1).",
+        "A constant limit would require only O(1) stable mixed states to have nonvanishing basins."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "revised",
+          "note": "This candidate explicitly states the scaling law: expected number of stable mixed configurations is exp(Θ(n)) and prevalence is exponential in n.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "This candidate explicitly includes the quantitative prevalence law exp(Θ(n)) for obstruction structures.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

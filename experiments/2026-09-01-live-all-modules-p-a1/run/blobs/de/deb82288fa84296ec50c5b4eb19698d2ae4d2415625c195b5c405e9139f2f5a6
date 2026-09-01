@@ -1,0 +1,185 @@
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The finite obstruction structures are exactly the locally stable mixed configurations: every vertex has at most one neighbor of the opposite color, so the bichromatic boundary is a matching and each monochromatic induced subgraph has minimum degree at least 2. On a random 3-regular graph the typical obstructions are matching cuts: remove a perfect matching M, the remaining graph is a disjoint union of cycles, and any coloring that is constant on each cycle is stable. Quantitative law: the expected number of such stable mixed configurations is exp(Θ(n)); log E|S|/n converges to a positive constant c*, and the consensus probability is exp(-Θ(n)).",
+      "mechanism": "Each asynchronous update flips a vertex only when at least two of its three neighbors have the opposite color, so the number of bichromatic edges strictly decreases. The process stops exactly when no vertex has two opposite neighbors, i.e. the cut edges form a matching. Random 3-regular graphs have exponentially many perfect matchings; deleting one leaves a 2-regular graph whose cycles can be monochromatically colored, producing exponentially many absorbing mixed states. Their basins cover all but an exponentially small probability, so consensus is exponentially rare.",
+      "counterconditions": [
+        "The limit would be 1 if the graph were an expander with no large matching cuts or if the dynamics were synchronous/biased toward consensus.",
+        "The law fails if the number of stable mixed configurations is subexponential or if their basins have total probability o(1).",
+        "A constant limit would require only O(1) stable mixed states to have nonvanishing basins."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "revised",
+          "note": "This candidate explicitly states the scaling law: expected number of stable mixed configurations is exp(Θ(n)) and prevalence is exponential in n.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "This candidate explicitly includes the quantitative prevalence law exp(Θ(n)) for obstruction structures.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "This candidate explicitly gives the limit verdict: as n grows the consensus probability tends to 0.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "This candidate explicitly states the asymptotic limit verdict 'tends to 0' as n grows.",
+          "where": "claim"
+        }
+      ],
+      "optional_refs": ["SRC_008", "SRC_010"]
+    },
+    {
+      "claim": "As n → ∞ the probability of consensus tends to 0. The locally stable mixed configurations are exactly those where each vertex agrees with the majority of its three neighbors: no vertex has two or three opposite neighbors. Thus the boundary is a matching and every monochromatic component has minimum degree 2; in a random 3-regular graph the dominant obstructions are disjoint monochromatic cycles paired by a perfect matching. Quantitative law: the expected number of such obstructions is exp(Θ(n)); for balanced colorings the exponential rate is at least 0.235 n, so prevalence grows like exp(Θ(n)) and consensus probability is exp(-Θ(n)).",
+      "mechanism": "Cut size decreases by at least one per flip. Stable states are cut-size local minima. A configuration-model first-moment calculation gives E|S| ≥ exp(0.235 n + o(n)) for balanced stable colorings, so there are exponentially many absorbing mixed states. Random descent into one of these absorbing states dominates.",
+      "counterconditions": [
+        "If the graph has no large matching cuts or if stable mixed states have subexponential number, the limit could be 1.",
+        "If the consensus basin is only polynomially small, the decay would be n^{-Ω(1)} rather than exp(-Θ(n)).",
+        "If a constant fraction of starting configurations fall into a finite set of stable mixed states, the limit would be strictly between 0 and 1."
+      ],
+      "typicality": 0.7,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "revised",
+          "note": "This candidate explicitly states the scaling law: expected number of obstructions is exp(Θ(n)) with rate at least 0.235 n.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "This candidate explicitly includes the quantitative prevalence law exp(Θ(n)) for obstruction structures.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "This candidate explicitly gives the limit verdict: as n → ∞ the consensus probability tends to 0.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "This candidate explicitly states the asymptotic limit verdict 'tends to 0' as n grows.",
+          "where": "claim"
+        }
+      ]
+    },
+    {
+      "claim": "As n grows, the probability of consensus tends to 0. Obstructions are locally stable mixed configurations where every vertex has at most one opposite neighbor, so the bichromatic edges form a matching and monochromatic components have minimum degree 2. Prevalence of these obstructions is exponential: expected number exp(Θ(n)). However the consensus basin may be only polynomially small, so the quantitative law is P(consensus) = n^{-Ω(1)} rather than exp(-Θ(n)).",
+      "mechanism": "The process is a random descent in cut size. Although stable mixed states are exponentially numerous, the consensus basin may be a large critical region; the final cut size may be O(1) with probability polynomially small, giving only polynomial decay.",
+      "counterconditions": [
+        "If the consensus basin is exponentially small, the decay is exp(-Θ(n)).",
+        "If stable mixed states have nonvanishing basins, the limit is a constant strictly between 0 and 1.",
+        "If the graph is an expander with no large matching cuts, the limit could be 1."
+      ],
+      "typicality": 0.3,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "revised",
+          "note": "This candidate explicitly states the scaling law: expected number of obstructions is exp(Θ(n)).",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "This candidate explicitly includes the quantitative prevalence law exp(Θ(n)) for obstruction structures.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "This candidate explicitly gives the limit verdict: as n grows the consensus probability tends to 0.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "This candidate explicitly states the asymptotic limit verdict 'tends to 0' as n grows.",
+          "where": "claim"
+        }
+      ]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 1. The finite obstruction structures are locally stable mixed configurations where every vertex has at most one neighbor of the opposite color; these are matching cuts. Their prevalence as initial states is exponentially small: a random coloring is stable with probability exp(-Θ(n)), and although the expected number of stable mixed configurations is exp(Θ(n)), their basins have total probability o(1), so they do not prevent consensus whp.",
+      "mechanism": "Random 3-regular graphs are expanders; majority dynamics rapidly grows the largest monochromatic component. Stable mixed states require a matching cut, which is fragile and has small basin. The process almost always reaches the global minimum cut size zero.",
+      "counterconditions": [
+        "If matching-cut basins are large or if the graph has many small cycles, the limit would be 0.",
+        "The claim fails if the probability of hitting a stable mixed state is bounded away from 0.",
+        "If only O(1) stable mixed states have nonvanishing basins, the limit could be a constant strictly between 0 and 1."
+      ],
+      "typicality": 0.15,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "revised",
+          "note": "This candidate explicitly states the scaling law: expected number of stable mixed configurations is exp(Θ(n)) and initial-state prevalence is exp(-Θ(n)).",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "This candidate explicitly includes the quantitative prevalence law exp(Θ(n)) for obstruction structures.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "This candidate explicitly gives the limit verdict: as n grows the consensus probability tends to 1.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "This candidate explicitly states the asymptotic limit verdict 'tends to 1' as n grows.",
+          "where": "claim"
+        }
+      ]
+    },
+    {
+      "claim": "As n grows, the probability of consensus tends to a constant strictly between 0 and 1. The obstruction structures are locally stable mixed configurations: every vertex has at most one opposite neighbor, so the boundary is a matching and each monochromatic component has minimum degree 2. Prevalence of these obstructions is exp(Θ(n)), but only O(1) of them have nonvanishing basins, so the process has a positive probability of getting trapped and a positive probability of reaching consensus.",
+      "mechanism": "The process is a random descent. A finite number of macroscopic stable mixed configurations, such as two large monochromatic cycles connected by a perfect matching, have basins of size Θ(1), while the consensus basin also has size Θ(1). The exponential number of other stable states have exponentially small basins.",
+      "counterconditions": [
+        "If all stable mixed basins are exponentially small, the limit is 0.",
+        "If the consensus basin dominates, the limit is 1.",
+        "If the number of stable mixed states with nonvanishing basins grows with n, the limit could be 0 or 1 depending on their total basin size."
+      ],
+      "typicality": 0.2,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "revised",
+          "note": "This candidate explicitly states the scaling law: prevalence of obstructions is exp(Θ(n)).",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "This candidate explicitly includes the quantitative prevalence law exp(Θ(n)) for obstruction structures.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "This candidate explicitly gives the limit verdict: as n grows the consensus probability tends to a constant strictly between 0 and 1.",
+          "where": "claim"
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "This candidate explicitly states the asymptotic limit verdict 'constant strictly between 0 and 1' as n grows.",
+          "where": "claim"
+        }
+      ]
+    }
+  ]
+}
