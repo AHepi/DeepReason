@@ -1,0 +1,26 @@
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0.",
+      "mechanism": "The number of bichromatic edges is a Lyapunov function: each update of a vertex to the majority of its three neighbors strictly decreases this energy. The process therefore stops at a locally stable mixed configuration. On a random 3-regular graph there are exponentially many such stable mixed obstructions, so the descent is trapped with probability 1-o(1) and consensus probability vanishes.",
+      "counterconditions": [
+        "If the graph were bipartite or had no cycles, stable mixed obstructions would be absent and consensus could occur.",
+        "If the initial coloring were sufficiently biased, one color could take over before trapping."
+      ],
+      "typicality": 0.9,
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "The finite obstruction structures are exactly the locally stable mixed configurations in which every vertex has at most one neighbor of the opposite color; equivalently, the bichromatic edges form a matching and each monochromatic induced subgraph has minimum degree at least 2. The minimal such structures are prisms: two monochromatic cycles connected by a perfect matching.",
+      "mechanism": "A vertex keeps its color under majority update iff at least two of its three neighbors share its color, so stability forces at most one cross-edge per vertex. In a 3-regular graph this means cross-edges are a matching; removing them leaves components of minimum degree 2, whose finite cores are cycles.",
+      "counterconditions": [
+        "If a vertex has two or more opposite neighbors it is unstable and will flip.",
+        "If the cross-matching is not perfect, some monochromatic components contain degree-3 vertices."
+      ],
+      "typicality": 0.85
+    },
+    {
+      "claim": "The expected number of locally stable mixed configurations scales as exp(Θ(n)); their fraction among all 2^n colorings is exp(-Θ(n)).",
+      "mechanism": "For a fixed coloring, stability is the event that bichromatic edges form a matching. The number of matchings in a random 3-regular graph is exp(c n) with c≈0.58, so the expected number of stable colorings is 2^n * 2^{-3n/2} * exp(c n) = exp((
