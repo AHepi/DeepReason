@@ -59,3 +59,29 @@ out to be green here; these five are different failures, discovered by running
 the instrument, and they are recorded as pre-existing on measured evidence
 rather than excused. Every check in the four documents this tranche DID touch
 passes.
+
+--- ADDENDUM 2: the operational wheel smoke was ALREADY red ---
+`python -u scripts/wheel_operational_smoke.py` fails on the changed tree at
+`"stage":"continuation_resume"`, `"failure_kind":"assertion_failed"`.
+
+Measured, not argued: the SAME script, run against an archive of the
+pre-tranche base `dd0916fb5` (before any src change in this tranche), fails at
+the SAME stage with the SAME failure kind. 4034 bytes of identical-shaped
+failure payload. So this red pre-dates the tranche.
+
+Recorded rather than waived. Two facts that make the attribution safe rather
+than convenient:
+
+* `python scripts/wheel_smoke.py` -- the pin on the packaging surface this
+  tranche actually moves (a new package directory, a new script) -- PASSES:
+  "isolated V6-only contents, clean imports, exact entry points, module parity,
+  MCP registration, and exact MCP schemas". So the new `model_profiles` package
+  really is in the wheel and the entry points really are unchanged.
+* The operational smoke's fixture runs `deepreason setup --provider generic`,
+  and `reasoning_knob_available("generic")` is False, so this tranche's two
+  behavioural changes cannot fire in it at all: `_reasoning_disclosure` returns
+  None before consulting any document, and `plan_split` under `auto` returns
+  `NOTICE_NO_REASONING_KNOB` exactly as it did before. There is no path by
+  which the change reaches the failing stage.
+
+Parked as a finding for its own tranche rather than carried here: PARKED.md P6.

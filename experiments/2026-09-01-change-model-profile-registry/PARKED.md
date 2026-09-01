@@ -224,3 +224,101 @@ operator grant recorded in INV-frozen-surfaces.md the way the 2026-08-30 and
 2026-09-01 grants are; or a written finding that the grant was refused and the
 literal stays, with the reason. Not silence.
 ```
+
+---
+
+## P6 — the operational wheel smoke is red at `continuation_resume`, and nothing runs it
+
+WHAT: `python -u scripts/wheel_operational_smoke.py` fails at
+`"stage":"continuation_resume"` with `"failure_kind":"assertion_failed"` and a
+payload whose every observation is `not_observed`/`null`. It fails IDENTICALLY
+on the pre-tranche base `dd0916fb5`, so it is not this tranche's doing — and no
+gate runs it, which is why it can sit red without anyone noticing.
+
+Found because this tranche runs the smokes by checklist step rather than by
+habit: `dr-drive-harness` §4 calls them "the third instrument, which NO gate
+runs for you". Its sibling `scripts/wheel_smoke.py` passes.
+
+Not fixed here: the failure is in the continuation lifecycle, which this
+tranche does not touch, and diagnosing it is a defect tranche's work.
+
+READY-TO-SEND PROMPT:
+
+```
+Route: deepreason-orchestrator (defect family). One goal, one tranche.
+
+GOAL: `python -u scripts/wheel_operational_smoke.py` exits 0, or its failure is
+diagnosed and recorded as a known limitation of this container with a check
+that says so.
+
+WHY IT MATTERS MORE THAN IT LOOKS: no gate runs this instrument
+(dr-drive-harness section 4), so a red here is invisible until someone runs it
+by hand. It pins the public operational surface over the INSTALLED wheel --
+lifecycle, terminalization, continuation, MCP -- which the ordinary pytest gate
+does not exercise at all.
+
+EVIDENCE (record first, per dr-diagnose):
+- The failure payload is `deepreason-wheel-operational-failure-v4`, printed as
+  a single ::error line. `"stage":"continuation_resume"`,
+  `"failure_kind":"assertion_failed"`, and every lifecycle observation
+  `not_observed` -- so the assertion fired before anything was recorded. Start
+  by finding WHICH assertion: scripts/wheel_operational_smoke.py around
+  2119-2143 carries five candidates, all about `deepreason continue`.
+- Reproduced on the pre-tranche base:
+  experiments/2026-09-01-change-model-profile-registry/BASELINE.txt addendum 2.
+- Bears on the operator's 2026-08-29 law ("every stop secures continuation"):
+  if continuation really is broken over the installed wheel, that law is not
+  being met on the shipped surface.
+
+END STATE: either the smoke exits 0, or a recorded diagnosis naming the cause
+with a committed regression test, plus a decision about whether a gate should
+run this instrument at all.
+```
+
+---
+
+## P7 — a document edited mid-run changes behaviour the run's own stamp denies
+
+WHAT: `model_profiles.resolve` re-reads the documents directory on every split
+plan, while `scheduler._record_module_fingerprints` stamps the registry ONCE at
+run start. So editing an `agent.md` while a run is in flight changes what later
+emission legs send, and the run's record still carries the digest of the
+document that existed at cycle 0. The record would be describing a run that did
+not happen.
+
+Noticed while building this tranche, not requested by any requirement, and
+deliberately not fixed: the fix is a caching or freezing decision with real
+semantics to choose between, and choosing it inside a tranche that was not
+asked to would be scope creep.
+
+It is not a live problem today — nothing edits these files during a run, and a
+human would have to do it deliberately — which is exactly why it should be
+closed before someone does.
+
+READY-TO-SEND PROMPT:
+
+```
+Route: dr-change-orchestrator (change family). One goal, one tranche.
+
+GOAL: a run's model profiles are FIXED for the life of the run, and the digest
+its record stamps is provably the one every seat actually used.
+
+THE CHOICE TO MAKE, which is the whole tranche:
+(a) Freeze at run start -- resolve every profile once, carry the frozen set,
+    and let a mid-run edit take effect on the NEXT run. Matches how the split
+    plan itself is frozen ("the division happens once, before the first leg is
+    sent") and how the manifest freezes a configuration.
+(b) Re-read every time and stamp every time, so the record carries every
+    version that was in force. Honest but noisy, and it makes a run's
+    behaviour depend on a file nobody versioned.
+Recommendation is (a); the operator's 2026-08-28 law ("behaviour path should be
+deterministic, yet also configurable") points the same way -- deterministic
+GIVEN a configuration, configurable BETWEEN runs.
+
+EVIDENCE: src/deepreason/model_profiles/registry.py (`_load` runs per call);
+src/deepreason/scheduler/scheduler.py::_record_module_fingerprints (stamps
+once); docs/map/CON-model-profiles.md for the interface the fix must not widen.
+
+END STATE: a test that edits a document mid-run and proves the run's behaviour
+did not change, plus the map document updated in the same commit.
+```

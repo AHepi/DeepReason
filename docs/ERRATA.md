@@ -1954,3 +1954,66 @@ gate each fails it, and all three were proven by mutation
 `tests/test_decommissioned_pipeline_stays_out.py` (scope correction, module
 and test docstrings), `src/deepreason/ontology/problem.py` (already rewritten
 by the successor-questions tranche).
+
+---
+
+## E66 — "`none` is not in the set" conflates a rejection with a bad answer, and the difference is the whole design
+
+**What the documents say.** `experiments/2026-09-01-live-all-modules-p-a1/MONITOR_REVIEW.md`
+(addendum of 2026-09-01, at commit `e9eb97e77`) opens its diagnosis with:
+"Ollama's glm-5.3 page: ``reasoning_effort`` accepts ``low``, ``high``, and
+``max``, and defaults to ``max``. ``none`` is not in the set." The executor
+window for `experiments/2026-09-01-change-model-profile-registry/` carried the
+same sentence forward as its own evidence, and it is quoted verbatim in that
+tranche's REQUEST.md.
+
+`docs/map/SUB-llm.md`'s "Unset reasoning is not off" trap said the sibling
+thing about the code: "``reasoning_disabled`` encodes that only the neutral
+``"none"`` token is off."
+
+**What the record shows.** Two different sets are being collapsed into one, and
+the sentence implies a refusal that never happened.
+
+`git show origin/claude/deepreason-p-s1-commitments-wowcib:experiments/2026-08-31-p-s1-commitments/SEAT_REASONING_FINDINGS.md`
+(blob `00b7914fc66a0bec96e838c3317974e9d2eb9646`) §1 records that Ollama's
+documentation for `/v1/chat/completions` lists `reasoning_effort` with values
+`"high" | "medium" | "low" | "max" | "none"`, names `"none"` as the way to
+disable reasoning, and that the provider "confirms it recognises the parameter:
+an invalid value is rejected with a typed error naming the legal set."
+
+glm-5.3 at `none` was NOT rejected. It answered, eight times out of eight, with
+the reasoning trace in `message.content` ahead of the answer (§2: 0/8 clean at
+`none`, 8/8 clean at `low`). The API parameter's vocabulary contains `none`;
+the glm-5.3 model page's listed values do not; the model accepts it on the wire
+regardless; and what is wrong with it is behavioural.
+
+**Why it matters, rather than being a wording quibble.** The two readings imply
+different designs, and the wrong one is smaller. If `none` were REJECTED, a
+model document would only need a list of accepted values, and a harness could
+validate against it. Because `none` is accepted and behaves badly, a list of
+accepted values is not enough: a document must carry what the provider
+DOCUMENTS and, separately, what each value MEASURABLY DOES. Collapsing those
+two is exactly the reasoning that produced `REASONING_OFF = "none"` as a
+repo-wide constant in the first place — one list, one answer, every model.
+
+**Where it is corrected.** `docs/map/SUB-llm.md`'s trap was rewritten in place
+in the same commit as the code (the never-delete-a-Traps-entry rule, with the
+superseded wording quoted inside the rewrite).
+`docs/map/CON-model-profiles.md` carries the distinction as a named trap
+("Two documents about 'accepted values', and both are right"), and the shipped
+`docs/model-profiles/glm-5.3/agent.md` separates `documented_values` from
+`trace_destination` for this reason, stated in its prose.
+
+`MONITOR_REVIEW.md` is NOT edited: it is a dated review of one run, and its
+central diagnosis — that the harness sent glm-5.3 a value that puts the trace
+in the content, and that this is what exhausted the seat — is correct and is
+what the tranche acted on. This entry is the pointer that stops a later reader
+carrying its opening sentence forward as a fact about what the provider
+accepts.
+
+**The reusable half.** "X is not accepted" and "X gives a bad answer" are
+different claims with different remedies, and a provider that accepts a value
+tells you nothing about whether the model can use it. When a document says a
+value is out of range, check whether anything was ever REFUSED — a typed
+rejection is evidence; an inference from a documentation table is not.
+

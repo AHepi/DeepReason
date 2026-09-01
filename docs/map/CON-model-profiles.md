@@ -1,5 +1,5 @@
 <!-- DR-CON-model-profiles -->
-Verified-at: dd0916fb5
+Verified-at: 229804d93
 Verify: python -m pytest tests/test_model_profiles_document.py tests/test_model_profile_registry.py -q
 Owns: src/deepreason/model_profiles/
 Seams: 

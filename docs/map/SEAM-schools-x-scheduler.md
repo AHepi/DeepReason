@@ -1,5 +1,5 @@
 <!-- DR-SEAM-schools-x-scheduler -->
-Verified-at: bdc476e8
+Verified-at: 229804d93
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capture/schools.py, src/deepreason/scheduler/scheduler.py, src/deepreason/capture/ladder.py
 Sides: DR-CON-schools, DR-SUB-scheduler
@@ -54,7 +54,7 @@ migrated the callers and added the determinism proof.
 | Ladder interventions | `capture/ladder.py` | `respond` | four sites: `roster` then `reseed` on the school-convergence branch, and again on the attractor-orbiting branch |
 | Operator commands | `cli/main.py` | the `schools` and `reseed` subcommands | three sites (`roster` twice, `reseed` once) |
 | Report assembly | `report.py` | the schools section | one `roster` site |
-| Which module built the run | `scheduler/scheduler.py` | `Scheduler._record_module_fingerprints` | `schools.active_backend().fingerprint()` stamped into the log once per `run` with cycles requested, after workflow recovery — **outside** the `N_SCHOOLS > 0` gate, because a run that seeds no schools was still built by the registered backend, and NOT at construction, which must append nothing |
+| Which module built the run | `scheduler/scheduler.py` | `Scheduler._record_module_fingerprints` | `schools.active_backend().fingerprint()` stamped into the log once per `run` with cycles requested, after workflow recovery — **outside** the `N_SCHOOLS > 0` gate, because a run that seeds no schools was still built by the registered backend, and NOT at construction, which must append nothing. **This side owns the `school-population` ROW, not the whole payload:** since 2026-09-01 the same event also carries a `model-profiles` row (`DR-CON-model-profiles`), which is what `ModuleFingerprintV1`'s `registry` field exists for. A change here must not assume the module list has length one |
 | Which provider/model sat in which seat (Rung S5) | `scheduler/scheduler.py` | `Scheduler._record_seat_bindings` | fires from `run` at the identical point as `_record_module_fingerprints` (right after it, same `cycles > 0` guard, never at construction) — but reads a mint-time snapshot file (`preparation.py`'s `seat-bindings.json`) rather than a registry, so it makes NO `active_backend()` call and does not move this document's own call-count checks |
 
 `check: python -c "from deepreason.capture.schools import SCHOOL_POPULATION, DefaultSchoolPopulationBackend, RoundRobinSchoolPopulationBackend, active_backend; assert SCHOOL_POPULATION.ids() == ('default', 'round-robin'); assert isinstance(SCHOOL_POPULATION.get('default').backend, DefaultSchoolPopulationBackend); assert isinstance(SCHOOL_POPULATION.get('round-robin').backend, RoundRobinSchoolPopulationBackend); assert isinstance(active_backend(), DefaultSchoolPopulationBackend)"`
