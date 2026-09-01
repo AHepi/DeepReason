@@ -113,7 +113,7 @@ Accept:
 passes, and both deliberate-mutant transcripts contain a nonzero RED run
 followed by a zero-exit GREEN run.
 
-S5 (R1-R10, C1-C3):
+S5 (R1-R10, R12, C1-C3):
 `docs/map/CON-criticism-source.md` owns the new module and contribution-only
 contract; `docs/map/CON-conjecture-kinds.md` gains its representation-neutral
 law line; `docs/map/CON-authority.md` records that the source ceiling cannot
@@ -128,8 +128,10 @@ Accept:
 `python tools/docs_verify.py` completes in authoritative no-cache mode, no
 failure names any changed owner map, and every non-owner failure is either in
 `docs/AUDIT_BASELINES.md`, the operator-recorded qualification-path condition,
-or passes its required isolated re-run. Any other isolated failure is a
-finding and stops delivery.
+the operator-disposed missing-`bc` environment condition, or passes its
+required isolated re-run. Any other isolated failure is a finding and stops
+delivery. The missing-`bc` disposition permits only transparent recording: no
+shim, map-check edit, skipped check, or inferred pass.
 
 Execution correction: the repository's verifier defines plain invocation as
 “authoritative: every check, no cache” and has no `--full` parser option. The

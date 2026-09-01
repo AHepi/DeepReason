@@ -85,3 +85,12 @@ R11 (process): "use alphaXiv plugin whenever exploring options"
 C4: alphaXiv literature discovery precedes option selection so tested prior
 mechanisms can inform the choice; retrieved mechanisms remain evidence, not an
 unrequested authority or optimization target.
+
+### 2026-09-01 — continue after unavailable package-manager prerequisite
+
+> You ran out of credit. Keep going
+
+R12 (process): continue the tranche after recording that the container cannot
+install the real `bc` utility. This disposes the missing-utility row as an
+explicit environment-only finding; it does not authorize a shim, weakening or
+editing the unrelated map check, or changing the implemented contract.
