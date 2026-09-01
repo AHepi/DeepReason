@@ -1,0 +1,10 @@
+The core issue is whether the Target's reasoning successfully supports its quantitative claim. The Target asserts a specific probability law ("exp(-Θ(n))") derived from a mechanism involving stable states and perfect matchings. The critical link in this derivation is the inference that the expected number of stable states implies their basins cover almost all initial colorings.
+
+The Case for Fail identifies this link as an "unsupported and generally invalid inference." The Defence explicitly concedes this point: "Inferring coverage from a large expected count is invalid as a general rule... That conjunct is unsupported by the artifact, and because of it the law is not established by the artifact. I concede exactly this inference and nothing more."
+
+While the Defence argues the law remains "plausible," it admits the artifact "under-proves" the claim. In the context of a reasoning artifact, presenting a derivation that contains a conceded logical gap preventing the conclusion from following constitutes a decisive fault in the Target. The Case successfully identified this gap, and the Defence confirmed its existence and impact ("the law is not established by the artifact"). Therefore, the Case has established a decisive fault in the Target's reasoning structure.
+
+The decisive point lies in the Defence's concession that the Target's derivation is unsupported, confirming the Case's identification of the fault.
+
+Verdict: fail (the Case establishes a decisive fault).
+Decisive Point: The Defence's admission that the inference is unsupported and the law is not established.
