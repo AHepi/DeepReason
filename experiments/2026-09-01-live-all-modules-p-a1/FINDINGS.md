@@ -113,8 +113,36 @@ as the gap allows:
 - both fixtures are INERT by construction. The referee fixture never reports
   mistuning and never recommends a change, so a soak exercises the dispatch
   path without the referee steering the run it is soaking; the repair fixture
-  takes `correct_wording`, the branch whose obligations are all satisfiable
-  with content that asserts nothing.
+  takes `remove_span`, which carries no substantive field at all.
+
+**The repair fixture took two attempts, and the first one is worth recording
+because it is a trap the schema itself sets.** The first fixture used
+`correct_wording`. It VALIDATED against the advertised contract and the soak
+still failed on exactly that pair — 20 origin `ENDPOINT_HTTP_500`s on the
+glm-5.3 endpoint, `repair_count: 1` and `scope_violations: 1` per case, and
+100 cascade skips behind the reopened circuit breaker. (The referee fixture
+worked first time: qualified pairs went 10 → 17 of 23.)
+
+The cause is a gap between two different notions of "legal". The caller
+NARROWS the contract to one finding status's permitted actions
+(`GroundingRepairWireContractV1(_ALLOWED_BY_STATUS[status])`), but the
+advertised JSON Schema still `$ref`s the FULL `CorrectionMode` enum. So a
+fixture chosen from the schema alone can be structurally valid and still out
+of scope — and `correct_wording` is forbidden under `MISCLASSIFIED`, the
+status the production-contract doctor's own probe uses. It parsed, then
+`_admit_production_probe_output` raised `BRIDGE_REPAIR_ACTION_FORBIDDEN`, the
+case burned a repair turn, and the pair failed.
+
+`remove_span` is the correct fixture for two independent reasons, both
+checked rather than assumed: it is the only action present in EVERY entry of
+`_ALLOWED_BY_STATUS`, so no probe the doctor can construct puts it out of
+scope; and it accepts no substantive field, so it satisfies every conditional
+branch of the schema by carrying nothing. Verified across all five finding
+statuses: valid and in scope for each.
+
+**The reusable half.** A stub fixture derived from an advertised schema is
+not thereby in scope, wherever a caller narrows a contract below what it
+advertises. Schema-validity is a necessary condition, never a sufficient one.
 
 This is instrument maintenance, not a harness change: no `src/` file, no test
 and no frozen surface is touched, and the two branches exist only so that an
