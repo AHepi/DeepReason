@@ -119,11 +119,36 @@ def census(root: Path) -> dict:
     row("judge ensemble", roles.get("judge", 0) > 0,
         f"judge calls={roles.get('judge', 0)}",
         "no judge call in the record")
+    # The defended-trial circuit is proven by its OWN typed vocabulary, not by
+    # inferring from judge-call counts. `informal/trial.py` records
+    # `trial-observation` (a trial ran and produced an outcome),
+    # `trial-declined` (the case did not sustain) and `trial-blocked:<reason>`
+    # (a guard stopped it); `rules/crit.py:811` records `scrutiny` for the
+    # observe_only shape, which is what P-S1 filed 140 of. A run whose
+    # criticisms are ALL scrutiny has an observe-only circuit whatever its
+    # manifest says.
+    trial_observations = signals.get("trial-observation", 0)
+    trial_declined = signals.get("trial-declined", 0)
+    trial_blocked = {k: v for k, v in signals.items() if k.startswith("trial-blocked:")}
+    scrutiny = signals.get("scrutiny", 0)
     row("defended trial (status-changing criticism)",
-        signals.get("scrutiny", 0) < rules.get("Crit", 0) and roles.get("judge", 0) > 0,
-        f"judge calls={roles.get('judge', 0)}, scrutiny observations={signals.get('scrutiny', 0)}, "
-        f"Crit events={rules.get('Crit', 0)}",
-        f"every criticism filed as scrutiny (observe_only shape): scrutiny={signals.get('scrutiny', 0)}")
+        bool(trial_observations or trial_declined or trial_blocked),
+        {"trial-observation": trial_observations,
+         "trial-declined": trial_declined,
+         "trial-blocked": trial_blocked,
+         "scrutiny (observe-only filings)": scrutiny,
+         "judge calls": roles.get("judge", 0),
+         "first trial seqs": first_seqs(
+             ("trial-observation", "trial-declined")
+         )},
+        f"NO trial-observation, trial-declined or trial-blocked event. "
+        f"scrutiny={scrutiny} of {rules.get('Crit', 0)} Crit events -- the "
+        f"observe_only shape P-S1 recorded, judge calls={roles.get('judge', 0)}")
+    row("pairwise discrimination",
+        signals.get("pairwise-observation", 0) > 0,
+        {"pairwise-observation": signals.get("pairwise-observation", 0)},
+        "no pairwise-observation event (F2: the pairwise-discrimination phase "
+        "is one of the eleven deferred on v6)")
     row("adjudication / status authority", bool(status_events),
         f"{len(status_events)} events carry status_changed; first seqs {status_events[:3]}",
         "no event carries status_changed")
@@ -221,9 +246,24 @@ def census(root: Path) -> dict:
             "spawn_events": rules.get("Spawn", 0),
         },
         "D3_premise_citation_rate": {
+            # The disposition is the SUFFIX of `premise-answer:` -- DECLINED,
+            # UNCITED or CITED (signals.py:923-924). `premise-citation:` is a
+            # different signal: it carries the byte-check's own outcome, and
+            # CITED says an array was submitted, never that it verified. Both
+            # are reported, keyed separately, because conflating them is how a
+            # citation rate gets overstated.
             "note": "PREREG §6.3 -- P-S1 measured 1 CITED against 122 DECLINED",
-            "premise_signals": prefixed("premise"),
-            "citation_signals": prefixed("premise-citation"),
+            "invitation_dispositions": {
+                k.split(":", 1)[1]: v
+                for k, v in signals.items()
+                if k.startswith("premise-answer:")
+            },
+            "byte_check_outcomes": {
+                k.split(":", 1)[1]: v
+                for k, v in signals.items()
+                if k.startswith("premise-citation:")
+            },
+            "all_premise_signals": prefixed("premise"),
         },
     }
 
