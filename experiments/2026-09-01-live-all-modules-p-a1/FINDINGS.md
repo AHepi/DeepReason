@@ -95,10 +95,30 @@ The branches are additive: no title they match is matched by any existing
 branch, so every current soak case and the wheel smoke keep their exact
 behaviour.
 
-**Why this window did not apply it.** `scripts/wheel_operational_smoke.py` is
-outside this tranche, and the tranche instruction lists "any needed code edit"
-as a STOP AND ASK condition to be bubbled to the operator and not resolved
-here. Raised 2026-09-01; awaiting the operator's decision.
+**Disposition, 2026-09-01 — APPLIED under the operator's instruction.**
+`scripts/wheel_operational_smoke.py` is outside this tranche, and the tranche
+instruction lists "any needed code edit" as a STOP AND ASK condition. The
+window prepared the question; before it was put, the operator re-sent the
+credential and instructed "Just run it". That is a decision to proceed, and
+the repo's own rule is that a reaffirmed instruction is the operator's call.
+The contact is therefore LEDGERED HERE rather than left silent.
+
+What was changed: two additive `if title == ...` branches in
+`response_for_schema`, placed before the generic fallback. Bounded as tightly
+as the gap allows:
+
+- neither title is matched by any existing branch, so every committed soak
+  case and the wheel smoke keep their exact behaviour;
+- no existing branch, no fallback, and no other function was edited;
+- both fixtures are INERT by construction. The referee fixture never reports
+  mistuning and never recommends a change, so a soak exercises the dispatch
+  path without the referee steering the run it is soaking; the repair fixture
+  takes `correct_wording`, the branch whose obligations are all satisfiable
+  with content that asserts nothing.
+
+This is instrument maintenance, not a harness change: no `src/` file, no test
+and no frozen surface is touched, and the two branches exist only so that an
+OFFLINE stub can answer contracts the harness already ships.
 
 **Residue.** Even with the two fixtures added, a green soak would prove that
 the two contracts can be DISPATCHED and their responses parsed. It would not

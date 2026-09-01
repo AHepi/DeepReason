@@ -1063,6 +1063,38 @@ def response_for_schema(schema: dict, prompt: str) -> dict:
         }
     if title in {"ClusterGuideWireV1", "ClusterGuideMinimalWireV1"}:
         return {"working_focus": "One temporary navigation focus."}
+    if title == "ConfigRefereeWireV1":
+        # The config referee ships OFF (`engaged_config_referee_policy` returns
+        # None on an unset DEEPREASON_CONFIG_REFEREE), so until P-A1 no soak
+        # case granted its contract and the generic synthesiser below was never
+        # asked for one. It cannot produce a value here, and an unsatisfied
+        # fixture is an HTTP 500 that trips the qualification circuit breaker
+        # for the WHOLE endpoint -- 20 failures, then every later case on that
+        # route is skipped as cascade. Conservative by construction: the
+        # fixture never reports mistuning and never recommends a change, so a
+        # soak can exercise the dispatch path without the referee steering it.
+        return {
+            "verdict": "config_effective",
+            "assessment": "The bounded loopback fixture observes no mistuning.",
+            "cited_seqs": [0],
+            "recommendation": "no_change",
+        }
+    if title == "GroundingRepairWireV1":
+        # Same story on the bridge side: the grounding-repair contract is
+        # granted only under `bridge.mode: grounded_two_stage` with
+        # `grounding_review` on, which no committed soak case configured before
+        # P-A1. This schema is the one shape the generic synthesiser provably
+        # cannot handle -- its allOf/if/then branches make `replacement_text`,
+        # `resolution` and `resolution_reason` required or forbidden depending
+        # on `action`, and a walker that fills properties independently cannot
+        # satisfy a cross-field implication. `correct_wording` is the branch
+        # whose obligations are all satisfiable with inert content.
+        return {
+            "action": "correct_wording",
+            "replacement_text": "A conservative restatement.",
+            "resolution": None,
+            "resolution_reason": None,
+        }
     if title == "BoundBridgeCompositionWireV2":
         # Stage-B composition binds every span to one of the ledger handles
         # frozen in the advertised schema; ``answered`` requires at least one

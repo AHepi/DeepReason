@@ -377,8 +377,20 @@ Queued as their own tranches. Touching any of them here destroys attribution.
 event ids MODULE_COVERAGE.md cites. Model prose — including this window's —
 is never evidence.
 
-**The one file outside this tranche directory that this window touches** is
-`scripts/cycle_soak.py`, and only to add one row to its `CASES` registry.
+**Files outside this tranche directory that this window touches.** Two, both
+instruments; neither is a frozen surface and neither is under `src/` or
+`tests/`.
+
+The SECOND was added after the launch gate refused:
+`scripts/wheel_operational_smoke.py` gains two additive fixture branches in
+`response_for_schema`, for `ConfigRefereeWireV1` and `GroundingRepairWireV1`
+— the two advertised wire schemas the offline stub had no answer for. The
+reproduction, the reasoning and the operator's authorization are in
+FINDINGS.md F1; the contact is recorded here so it is visible in the design
+rather than only in the diff.
+
+The FIRST is `scripts/cycle_soak.py`, and only to add one row to its `CASES`
+registry.
 That registry is the instrument's documented extension point: `pr1`, `pc1`,
 `pc2`, `pc2b` and `split-legs` were each added the same way by their own
 tranche, and a case is explicitly "a REAL config shape, not a synthetic one".
