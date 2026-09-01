@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=4 blockers=none
+State: next=5 blockers=none
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -32,10 +32,13 @@ order. One step per `dr-execute-step` invocation.
       done-when: `test "$(git rev-parse HEAD)" = "$(git rev-parse origin/codex/open-criticism-contracts-20260901)"` exits 0 after commit `test: pin contribution-only criticism contract`.
       proof: post-push equality command exit 0.
 
-- [ ] 4. (S1, S2, S3, S5, S6) Land the alphaXiv-disposed contribution-only module
+- [x] 4. (S1, S2, S3, S5, S6) Land the alphaXiv-disposed contribution-only module
       as one mapped behavior change, running each proposed map check before
       recording it.
       done-when: `python -m pytest tests/test_criticism_source_contract.py -q` reports 0 failed and all three owner-map documents contain a new single-line `check:` for the boundary they own.
+      proof: `12 passed in 0.13s`; map checks reported `5 passed, 7 deselected`,
+      `4 passed`, and `3 passed`; diff budget `267/280 WITHIN`; blast-radius
+      verdict `CLEAR` with no frozen or frozen-adjacent contacts.
 
 - [ ] 5. (S4) Produce the forbidden-contribution-score mutation proof and
       restore GREEN.

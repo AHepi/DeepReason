@@ -68,6 +68,12 @@ structure only, at the ontology level, not layered on afterward by any
 consumer.
 `check: python -m pytest tests/test_ontology.py::test_artifact_has_no_kind_field -q`
 
+The optional criticism-source boundary likewise carries no representation
+kind. Prose, notation, JSON-looking text, and code-looking text cross the same
+opaque field without classification; the boundary neither assigns nor reads a
+formalism category.
+`check: python -m pytest tests/test_criticism_source_contract.py::test_arbitrary_content_crosses_without_classification -q`
+
 **What it is handed:** the critic pack (`llm/packs.py::render_crit_pack`)
 renders ONE template for every target; what it SHOWS about kind is entirely
 data-driven — a target's `TARGET COMMITMENTS` list is populated from

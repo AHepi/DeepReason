@@ -30,6 +30,13 @@ An index into the checked claims above and below, for a reader who wants the
 socket's contract without reading the whole document. Every bullet cites a
 check already proven elsewhere in this file.
 
+The optional criticism-source API has a separate one-value capability ceiling,
+`contribution_only`. That word grants no run authority and cannot select
+`observe_only`: source output has no status, warrant, rank, admission, or
+authority field, the module imports no DeepReason decision surface, and the
+host explanation says observation versus defended trial is selected elsewhere.
+`check: python -m pytest tests/test_criticism_source_contract.py::test_contract_fields_are_closed_contract tests/test_criticism_source_contract.py::test_human_description_is_host_owned_and_deterministic tests/test_criticism_source_contract.py::test_module_has_no_deepreason_dependency -q`
+
 **Promises:** everything defaults to `observe_only`, and the calibration
 receipt defaults to absent — a run that configures nothing spends no judge
 tokens on status-bearing text adjudication.
