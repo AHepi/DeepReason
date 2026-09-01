@@ -299,9 +299,9 @@ $ python3 -c "items=[140,105,35]; print(items, sum(items))"
 [140, 105, 35] 280
 ```
 
-Budget: at most 280 inserted lines in the declared areas, with four phase
-commits: specification; plan; implementation plus maps plus proof; validation
-plus delivery. Tranche artifacts are excluded from the code-and-map line
-budget. Frozen surfaces touched: none.
+Budget: at most 280 inserted lines in the declared areas, with five post-spec
+phase commits: plan; tests plus base RED; implementation plus maps plus mutation
+proofs; validation; delivery. Tranche artifacts are excluded from the
+code-and-map line budget. Frozen surfaces touched: none.
 
 Rubric: 6/6 yes.
