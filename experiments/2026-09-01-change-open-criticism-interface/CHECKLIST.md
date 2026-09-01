@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=10 blockers=none
+State: next=10 blockers=docs_verify --full is unsupported; re-plan required
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -69,6 +69,11 @@ order. One step per `dr-execute-step` invocation.
 
 - [ ] 10. (S5) Run the full map gate.
       done-when: `python tools/docs_verify.py --full` reports 0 failed.
+      mismatch: command exited 2 before verification because this checkout's
+      parser has no `--full` option. Its own help names plain
+      `python tools/docs_verify.py` as “authoritative: every check, no cache.”
+      Step remains unchecked pending a plan correction; no map result has
+      been inferred from the argument error.
 
 - [ ] 11. (S1, S2, S3, S4, S5) Run the full test gate.
       done-when: `pytest tests/ -q -n 4` ends with 0 failed; paste its final line in this checklist.
