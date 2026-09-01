@@ -1,0 +1,24 @@
+{
+  "candidates": [
+    {
+      "content": "3d82a99f1546 depends on SRC_012's 2-core obstruction mechanism: the isolated claim's consensus-blocking conclusion is causally downstream of the nonempty Θ(n^{1/3}) 2-cores in the initial color classes. Refuted if the isolated claim remains true when both initial color classes have empty 2-cores, or if SRC_012's 2-core count is not the actual obstruction.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_012"]
+    },
+    {
+      "content": "3d82a99f1546 contradicts SRC_011's exp(-Θ(n)) consensus probability if it asserts only Θ(n^{1/3}) prevalence of obstructions, because SRC_011 counts exponentially many perfect-matching/2-factor stable states. Refuted if the two claims use different update rules or if SRC_011's exponential count is not in the basin of the isolated claim's process.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_011"]
+    },
+    {
+      "content": "3d82a99f1546 shares mechanism with SRC_010's matching-cut stable configurations: both explain consensus failure by the monotone decrease of bichromatic edges to a matching. Refuted if the isolated claim's obstruction does not require bichromatic edges to form a matching, or if its dynamics can increase bichromatic edges.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_010"]
+    },
+    {
+      "content": "3d82a99f1546 reduces to SRC_011's perfect-matching complement 2-factor characterization: the isolated claim's stable mixed states are exactly monochromatic colorings of cycles in G-M for some perfect matching M. Refuted if there exists a stable mixed state in the isolated claim that is not a monochromatic cycle coloring of G-M for any perfect matching M.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_011"]
+    },
+    {
+      "content": "3d82a99f1546 integrates SRC_012's 2-core obstruction with SRC_011's exponential matching-cut count by distinguishing typical initial-color-class 2-cores from the larger set of all stable matchings: the former
