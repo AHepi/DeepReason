@@ -1,0 +1,45 @@
+R2_BOUNDARY_V1
+date=2026-09-01
+base=3cb51b14e4c7c74cc4d058b467588c1c55cc3eab
+
+FOCUSED_RING
+command=python -m pytest tests/test_v6_manifest_defended_trial.py tests/test_manifest_config_disclosure.py tests/test_v6_policy_preset.py tests/test_v6_route_seat_behavioral_capability_plan.py tests/test_v6_engaged_public_defaults.py::test_engaged_criticism_authority_reachable_with_the_master_gate -q
+result=46 passed in 2.44s
+
+FULL_GATE
+command=python -m pytest tests/ -q -n 4
+result=14 failed, 4561 passed, 26 skipped in 1931.30s (0:32:11)
+
+This container cannot produce the repository's zero-failure boundary line.
+Twelve of the fourteen failing nodes reproduced against untouched
+3cb51b14e source and tests in one serial command: the forbidden-to-edit
+qualification pin; two AF_UNIX socket permission failures; two isolated-install
+failures; one pre-existing simulation-notice failure; one absolute-toolchain
+comparison; the pre-existing simulation-result fixture; and four trusted-check
+runner failures under this container's process/seccomp restrictions. The two
+remaining MCP nodes are timing-flaky: one passed against the anchor, one passed
+in its first fresh current-tree rerun, and the other failed once then passed on
+an immediate second fresh current-tree rerun. No failing node asserts Road B's
+derived policy, explicit precedence, school count, or behavioral grants.
+
+The mandated
+tests/test_allocation_signal_consumption.py::test_the_shipped_qualification_subject_digest_does_not_move
+was not edited, skipped, xfailed, or routed around. Untouched 3cb51b14e produced
+the same expected 83454b08365d... versus observed 8d26382b23cd... mismatch.
+
+DOCS_VERIFY_FULL
+command=python tools/docs_verify.py
+result=71 documents, 1294 checks, 7 failed
+
+Failures:
+- SEAM-llm-x-rules.md:54: recorded unparseable-check baseline.
+- INV-frozen-surfaces.md:181: recorded transport-failure census baseline.
+- INV-frozen-surfaces.md:422: the mandated known-not-yours qualification pin.
+- INV-signal-contract.md:89: the same mandated qualification pin.
+- SEAM-rules-x-workflow.md:57: container utility `bc` is absent.
+- SEAM-scheduler-x-workflow.md:170: the simulation-result node reproduced on
+  untouched 3cb51b14e.
+- SUB-application.md:460: documented container-conditional 300-second timeout.
+
+Every check newly written by this tranche passed before it was recorded and
+again afterward. No Road B owner-map check appears in the failure list.

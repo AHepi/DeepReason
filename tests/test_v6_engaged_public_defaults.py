@@ -449,13 +449,22 @@ def test_engaged_criticism_authority_reachable_with_the_master_gate(monkeypatch)
 
     monkeypatch.setattr(preparation_module, "Config", _forced_defended_trial_config)
     captured = {}
-    original_policy = preparation_module.engaged_criticism_policy
+    original_policy = preparation_module.configured_criticism_policy
 
-    def _capturing_policy(endpoint_id, *, authority="observe_only", seat_map=None):
-        captured["authority"] = authority
-        return original_policy(endpoint_id, authority="observe_only", seat_map=seat_map)
+    def _capturing_policy(config, endpoint_id, *, seat_map=None):
+        captured.update(
+            authority=config.ENGAGED_CRITICISM_AUTHORITY,
+            endpoint_id=endpoint_id,
+            school_count=config.N_SCHOOLS,
+        )
+        safe = config.model_copy(
+            update={"ENGAGED_CRITICISM_AUTHORITY": "observe_only"}
+        )
+        return original_policy(safe, endpoint_id, seat_map=seat_map)
 
-    monkeypatch.setattr(preparation_module, "engaged_criticism_policy", _capturing_policy)
+    monkeypatch.setattr(
+        preparation_module, "configured_criticism_policy", _capturing_policy
+    )
     profile = _profile()
 
     build_preparation_manifest(
@@ -464,7 +473,11 @@ def test_engaged_criticism_authority_reachable_with_the_master_gate(monkeypatch)
         compiled_at=STAMP,
     )
 
-    assert captured["authority"] == "defended_trial"
+    assert captured == {
+        "authority": "defended_trial",
+        "endpoint_id": profile.endpoint_id,
+        "school_count": 4,
+    }
 
 
 def test_public_manifest_compiles_the_grounded_two_stage_bridge():

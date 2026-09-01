@@ -2,7 +2,7 @@
 
 Date: 2026-09-01
 
-Status: **STOPPED before source, test, map, canary, or live edits.**
+Status: **Road B authorized; implementation resumed after the priced stop.**
 
 The operator clarified the governing behavior after R1: `observe_only` must be
 an easily reversible choice, never the compiler's involuntary fallback, and a
@@ -14,19 +14,26 @@ clarification makes delivery—not disclosure—the acceptance condition.
 | Road | Behavior | Price | Disposition |
 |---|---|---|---|
 | A — disclose | Adds the exact typed consequence notice but knowingly leaves authority at `observe_only` and trial grants empty. | The new notice changes affected manifest bytes; a new notice code would also enter the qualification subject unless frozen surface 5 were edited, which is forbidden. | Rejected. It makes the miscompile louder but violates the corrected maximum-configurability requirement. |
-| B — derive | When and only when the caller supplies no policy, derives the same configured policy as managed preparation. Explicit policy arguments retain precedence. | Affected defended omissions gain the policy and behavioral grants, moving their manifest and qualification-subject identities. | Semantically selected, but the measurements below trigger the operator's explicit **PRICED STOP**. No implementation authority exists yet. |
+| B — derive | When and only when the caller supplies no policy, derives the same configured policy as managed preparation. Explicit policy arguments retain precedence. | Affected defended omissions gain the policy and behavioral grants, moving their manifest and qualification-subject identities. | Selected. The measurements below triggered a **PRICED STOP**, later cleared by the explicit acceptance recorded next. |
 
-If authorized, Road B will centralize the existing managed-path conditional in
-one shared `v6_policy.py` helper used by both `preparation.py` and
-`compile_run_manifest`. The compiler will call it only for v6, only when the
-argument is `None`, and only after routes are resolved, using the actual
-argumentative-critic endpoint. The helper must parameterize bindings from the
-configured school count rather than blindly assume the public preset's four
-schools; otherwise the three-school R1 fixture refuses with
-`V4_CRITICISM_SCHOOL_UNKNOWN`. The inline preparation conditional will be
-removed, not copied. An explicit `observe_only` policy still wins, the default
-legacy configuration still compiles no engaged policy, and no Config default
-changes.
+## Resume authorization and accepted price
+
+After reading the measurements below, the operator explicitly accepted the
+manifest-SHA and qualification-subject movement for future compilations of
+P-C1, P-R1, P-C2-H2, P-C2-H3, split-leg, P-C2b, and P-S1. Each new subject
+therefore owes a fresh qualification battery. The acceptance authorizes only
+Road B as disposed here: it does not authorize rewriting, relaunching,
+re-verifying, or amending a committed root, and it does not authorize contact
+with any other frozen surface.
+
+The implementation consequently has one derivation function,
+`configured_criticism_policy`, in non-frozen `v6_policy.py`. Managed
+preparation calls it instead of retaining an inline copy. Direct compilation
+calls it only for schema v6, only when the explicit `criticism_policy`
+argument is `None`, and only after routes are resolved, passing the actual
+argumentative-critic endpoint. The helper derives bindings from
+`Config.N_SCHOOLS`. Explicit policies—including explicit `observe_only`—win,
+and the default legacy configuration still produces no engaged policy.
 
 ## Frozen-surface disposition, recorded before any edit
 
@@ -132,9 +139,6 @@ passed. `test_the_shipped_qualification_subject_digest_does_not_move` expected
 `8d26382b23cd…`; the qualification payload freezes this container's absolute
 Python toolchain path/version digest. No workaround or pin edit was attempted.
 
-Implementation, map movement, R3, full gate, and R4 remain stopped. Resumption
-requires an explicit operator decision accepting that future compilations of
-the seven defended-plus-omitted configurations receive new manifest and
-qualification identities and therefore require qualification for those new
-subjects. That acceptance will not authorize rewriting any historical root or
-touching any other frozen surface.
+This was the pre-authorization checkpoint. The explicit resume authorization
+above clears only its digest-price stop; all historical-root and frozen-surface
+prohibitions remain in force.

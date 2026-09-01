@@ -249,6 +249,33 @@ def test_engaged_criticism_authority_config_default_preserves_prior_behavior():
     ) == engaged_criticism_policy("endpoint-under-test")
 
 
+def test_manifest_compiler_delegates_omitted_policy_to_shared_derivation(monkeypatch):
+    import deepreason.v6_policy as policy_module
+    from deepreason.run_manifest import compile_run_manifest
+    from tests.test_judge_canary_compile_gap import _defended_four_school_fixture
+
+    profile, config, kwargs = _defended_four_school_fixture()
+    original = policy_module.configured_criticism_policy
+    calls = []
+
+    def _capturing_policy(source_config, endpoint_id, *, seat_map=None):
+        calls.append((source_config.N_SCHOOLS, endpoint_id, seat_map))
+        return original(source_config, endpoint_id, seat_map=seat_map)
+
+    monkeypatch.setattr(policy_module, "configured_criticism_policy", _capturing_policy)
+    derived = compile_run_manifest(config, **kwargs)
+    explicit = compile_run_manifest(
+        config,
+        criticism_policy=engaged_criticism_policy(
+            profile.endpoint_id, authority="defended_trial"
+        ),
+        **kwargs,
+    )
+
+    assert calls == [(4, profile.endpoint_id, None)]
+    assert derived.model_dump(mode="json") == explicit.model_dump(mode="json")
+
+
 def test_conservative_baseline_remains_closed_and_stable():
     policy = conservative_control_plane_policy_v3()
 

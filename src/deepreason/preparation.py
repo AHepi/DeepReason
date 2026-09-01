@@ -67,9 +67,9 @@ from deepreason.seat_bindings import (
 from deepreason.seat_events import SeatBindingsEventPayloadV1, SeatBindingV1
 from deepreason.v6_policy import (
     POLICY_PRESET_ID,
+    configured_criticism_policy,
     engaged_bridge_source,
     engaged_control_plane_policy_v3,
-    engaged_criticism_policy,
     engaged_inquiry_capability_policy,
     engaged_policy_digest,
     engaged_scratchpad_source,
@@ -553,18 +553,10 @@ def build_preparation_manifest(
         rubric_policy="forbid",
         compiled_at=compiled_at,
         control_plane_policy=control_plane_policy,
-        criticism_policy=(
-            None
-            if config.LEGACY_CRITICISM_ENABLED
-            else engaged_criticism_policy(
-                profile.endpoint_id,
-                authority=(
-                    config.ENGAGED_CRITICISM_AUTHORITY
-                    if config.ADJUDICATION_STATUS_AUTHORITY_ENABLED
-                    else "observe_only"
-                ),
-                seat_map=criticism_seat_map,
-            )
+        criticism_policy=configured_criticism_policy(
+            config,
+            profile.endpoint_id,
+            seat_map=criticism_seat_map,
         ),
         # The channel registry decides which evidence channels this manifest
         # compiles ON, from the SAME config every other setting here comes

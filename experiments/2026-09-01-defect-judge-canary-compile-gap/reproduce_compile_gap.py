@@ -55,7 +55,16 @@ def main() -> None:
         for entry in manifest.route_seat_behavioral_capability_plan.entries
         if entry.role in {"defender", "judge"}
     }
-    effective_authority = _resolve_authority(runtime, None, policy_call=False)
+    policy_authority = (
+        None
+        if manifest.criticism_policy is None
+        else manifest.criticism_policy.authority
+    )
+    effective_authority = _resolve_authority(
+        runtime,
+        policy_authority,
+        policy_call=policy_authority is not None,
+    )
     carried_intent_notice = next(
         notice
         for notice in manifest.compile_notices or ()
@@ -71,6 +80,7 @@ def main() -> None:
     delivered = (
         manifest.criticism_policy is not None
         and manifest.criticism_policy.authority == "defended_trial"
+        and effective_authority == "trial_required"
         and trial_contracts
         and all(trial_contracts.values())
     )

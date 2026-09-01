@@ -107,6 +107,18 @@ silently empties the channel rather than merely altering a diagnostic.
 `check: python -m pytest tests/test_discharge_channel.py::test_an_observe_only_criticism_is_open -q`
 `check: grep -q 'inputs = \["scrutiny", target_id, critic.id\]' src/deepreason/rules/crit.py`
 
+## How compilation chooses this socket's authority
+
+An omitted builder parameter is not an observation-only request. For schema
+v6, `compile_run_manifest` derives the criticism policy from the configured
+authority only after resolving routes, through the same
+`configured_criticism_policy` helper used by managed preparation. The helper
+uses `Config.N_SCHOOLS`, so the three-school R1 topology receives exactly three
+bindings instead of the public preset's four. Explicit policies always win.
+Nothing in `rules/crit.py` changed: it still receives the frozen policy value
+and translates `defended_trial` to `trial_required` at the existing gate.
+`check: python -m pytest tests/test_judge_canary_compile_gap.py::test_three_school_omission_derives_matching_policy_and_trial_grants tests/test_v6_policy_preset.py::test_manifest_compiler_delegates_omitted_policy_to_shared_derivation -q`
+
 ## Traps
 
 See `DR-SUB-rules`'s Traps for package-wide hazards and `DR-CON-authority`'s

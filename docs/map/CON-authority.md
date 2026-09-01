@@ -69,7 +69,7 @@ receipt verifier exists.
 
 | Aspect | File | Symbol |
 |---|---|---|
-| The master reachability gate all six knobs below sit behind (adjudication-judge-seats-optins tranche, S2a/R1, 2026-08-10): each of the six stays independently settable, but stays observe_only-equivalent unless this is ALSO True. Applied at each knob's own operational consumption site, never inside a shared resolution function preflight also reads: `ARGUMENTATIVE_AUTHORITY`/`TEXT_RUBRIC_AUTHORITY`/`PAIRWISE_AUTHORITY`/`INFRASTRUCTURE_REVIEW_AUTHORITY` at `rules/crit.py::_authority`/`authority.py::trial_authority_for`; `ENGAGED_CRITICISM_AUTHORITY` at `preparation.py::build_preparation_manifest` (found missing and fixed while writing this row) | `src/deepreason/config.py` | `ADJUDICATION_STATUS_AUTHORITY_ENABLED` |
+| The master reachability gate all six knobs below sit behind (adjudication-judge-seats-optins tranche, S2a/R1, 2026-08-10): each of the six stays independently settable, but stays observe_only-equivalent unless this is ALSO True. Applied at each knob's own operational consumption site, never inside a shared resolution function preflight also reads: `ARGUMENTATIVE_AUTHORITY`/`TEXT_RUBRIC_AUTHORITY`/`PAIRWISE_AUTHORITY`/`INFRASTRUCTURE_REVIEW_AUTHORITY` at `rules/crit.py::_authority`/`authority.py::trial_authority_for`; `ENGAGED_CRITICISM_AUTHORITY` at `v6_policy.py::configured_criticism_policy`, called by both managed preparation and direct v6 manifest compilation | `src/deepreason/config.py` | `ADJUDICATION_STATUS_AUTHORITY_ENABLED` |
 | Surface-mode enum (what a surface is configured to have) | `src/deepreason/authority.py` | `TextAuthorityMode` — `observe_only`, `calibrated_status` |
 | Call-mode enum (what one trial is handed) | `src/deepreason/authority.py` | `TrialAuthority` — `observe_only`, `status` |
 | The three independently-configured surfaces | `src/deepreason/authority.py` | `AuthoritySurface`, `_SURFACE_FIELDS` |
@@ -80,8 +80,8 @@ receipt verifier exists.
 | The frozen fields compared runtime-vs-manifest | `src/deepreason/authority.py` | `authority_policy_snapshot` |
 | The five per-run knobs | `src/deepreason/config.py` | `ARGUMENTATIVE_AUTHORITY`, `TEXT_RUBRIC_AUTHORITY`, `PAIRWISE_AUTHORITY`, `INFRASTRUCTURE_REVIEW_AUTHORITY`, `CALIBRATION_RECEIPT` |
 | The engaged preset's compiled criticism authority (a sixth, differently-shaped knob: mirrors the manifest's two values directly, no translation) | `src/deepreason/config.py` | `ENGAGED_CRITICISM_AUTHORITY` |
-| Where the knob is threaded into the compiled preset | `src/deepreason/v6_policy.py`, `src/deepreason/preparation.py` | `engaged_criticism_policy`, `build_preparation_manifest` |
-| Whether the engaged preset routes criticism through a school at all (adjudication-judge-seats-optins tranche, S2c/R3, 2026-08-10: True compiles `criticism_policy=None`, Road E's school-free circuit, instead of `engaged_criticism_policy(...)`. **Default flipped to `True` by Amendment 11/R28, 2026-08-10** — operator's words: "Legacy, not schools, should be default for criticism"; schools are a conjecture-side tool, independently modular from criticism; set `False` to opt back into school-routed criticism) | `src/deepreason/config.py`, `src/deepreason/preparation.py` | `LEGACY_CRITICISM_ENABLED` |
+| Where the knob is threaded into the compiled preset | `src/deepreason/v6_policy.py`, `src/deepreason/preparation.py`, `src/deepreason/run_manifest.py` | `configured_criticism_policy`, `build_preparation_manifest`, `compile_run_manifest` |
+| Whether the engaged preset routes criticism through a school at all (adjudication-judge-seats-optins tranche, S2c/R3, 2026-08-10: True makes the shared helper return `criticism_policy=None`, Road E's school-free circuit. **Default flipped to `True` by Amendment 11/R28, 2026-08-10** — operator's words: "Legacy, not schools, should be default for criticism"; schools are a conjecture-side tool, independently modular from criticism; set `False` to opt back into school-routed criticism) | `src/deepreason/config.py`, `src/deepreason/v6_policy.py` | `LEGACY_CRITICISM_ENABLED`, `configured_criticism_policy` |
 | Token budget for observe-only trials | `src/deepreason/config.py` | `ADVISORY_TRIALS_PER_CYCLE` |
 | Prose-criticism vocabulary (manifest side) | `src/deepreason/rules/crit.py` | `_POLICY_AUTHORITIES` |
 | Manifest word → Config word translation | `src/deepreason/rules/crit.py` | `_resolve_authority`, `_authority` |
@@ -117,11 +117,22 @@ manifest-only.
 **`ENGAGED_CRITICISM_AUTHORITY` mirrors the manifest directly — no second
 vocabulary.** Unlike `ARGUMENTATIVE_AUTHORITY`, this knob's value-space is
 exactly `CriticismPolicyV1.authority`'s two values, and
-`engaged_criticism_policy` passes it straight through with no translation
-step, so the knob and the manifest field can never diverge into two closed
-sets sharing one word. The knob defaults to `observe_only`, and passing it
-explicitly reproduces the pre-switch hard-coded call byte-for-byte.
+`configured_criticism_policy` passes it through to
+`engaged_criticism_policy` with no vocabulary translation, so the knob and
+the manifest field cannot diverge into two closed sets sharing one word. The
+knob defaults to `observe_only`, and passing it explicitly reproduces the
+pre-switch hard-coded call byte-for-byte.
 `check: python -m pytest tests/test_v6_policy_preset.py -k test_engaged_criticism_authority_config_default_preserves_prior_behavior -q`
+
+**Omitting a builder argument is not selecting `observe_only`.** For v6 only,
+an omitted `criticism_policy` is derived from the configured gate and authority
+after routes resolve. Managed preparation and direct compilation use the same
+helper; there is no inline second copy. Explicit policy arguments retain
+precedence, including an explicit `observe_only`, and the legacy default still
+produces no engaged policy. The four-row control pins both observation-only
+cases while making omitted defended compilation byte-equal to explicit
+defended compilation.
+`check: python -m pytest tests/test_judge_canary_compile_gap.py::test_omitted_defended_policy_matches_explicit_and_controls_stay_pinned tests/test_v6_engaged_public_defaults.py::test_engaged_criticism_authority_reachable_with_the_master_gate -q`
 
 **Neither vocabulary may be handed the other's word**, but only one of the two
 refusals says which vocabulary the value belongs to. `_resolve_authority` does:
@@ -209,9 +220,10 @@ touch.
 `check: python -m pytest tests/test_manifest_integration.py -k 'calibration_receipt or frozen_text_authority' -q`
 `check: python -c "from deepreason.config import Config; from deepreason.run_manifest import compile_run_manifest; m = compile_run_manifest(Config(ARGUMENTATIVE_AUTHORITY='trial_required'), schema_version=2, workload_profile='text', rubric_policy='forbid'); assert [n.code for n in m.compile_notices] == ['CALIBRATION_RECEIPT_REQUIRED'], m.compile_notices"`
 
-**V6 refuses `defended_trial` at manifest compile**, not during dispatch: the
-mode has no transactional dispatch contract, so the failure belongs to
-compilation rather than to a half-spent cycle.
+**V6 compiles `defended_trial` with transactional defender and judge
+contracts.** The former `V6_DEFENDED_TRIAL_TRANSACTION_CONTRACT_REQUIRED`
+refusal was retired when those dispatches gained v6 authorization; the
+manifest test pins the resulting grants before a run can spend a call.
 `check: python -m pytest tests/test_v6_manifest_defended_trial.py -q`
 
 **A jolt pilot may hold no authority at all.** All four authority fields —
