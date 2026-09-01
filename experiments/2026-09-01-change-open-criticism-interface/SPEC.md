@@ -125,8 +125,12 @@ No compatibility layer, digest preservation, historical-root rewrite, source
 default, Config default, or run-authority change is added for C1-C3.
 
 Accept:
-`python tools/docs_verify.py --full`
+`python tools/docs_verify.py`
 reports zero failures.
+
+Execution correction: the repository's verifier defines plain invocation as
+“authoritative: every check, no cache” and has no `--full` parser option. The
+earlier flag spelling exited before verification and did not test this item.
 
 S6 (R11, C4):
 Every option-discovery pass uses alphaXiv before selection and records which
