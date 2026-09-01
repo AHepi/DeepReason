@@ -1,0 +1,7 @@
+Return exactly one repair.patch.v1 JSON object. Choose one authorized path and one add, remove, or replace operation. Do not return the surrounding object. Frozen subtree hashes are immutable. If several diagnostics are listed, repair only one now; separate later attempts will address the remaining diagnostics.
+
+CURRENT JSON:
+{"contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}
+
+DIAGNOSTIC ENVELOPE:
+{"authorized_pointers": ["/contract"], "baseline_sha256": "fd2722d9bc19b12f40ed5a34255b3a9d86e1f192573e3650f6b2135b2f635a73", "contract": "conjecturer.turn.v6", "diagnostics": [{"allowed": "", "code": "extra_forbidden", "message": "extra field at /contract", "path": "/contract"}], "frozen_subtree_hashes": [{"path": "/error", "sha256": "69d33eece43ed741b808af8e93e614fb2948ac2f7c8f530702877c961eea1e17"}, {"path": "/path", "sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"}, {"path": "/repair_scope", "sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"}, {"path": "/skeleton", "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"}], "schema": "repair.diagnostic-envelope.v2"}
