@@ -1,6 +1,6 @@
 # Checklist for: contribution-only criticism-source socket
 
-State: next=10 blockers=none
+State: next=10 blockers=STOP: bc package index refresh lacks container privileges
 
 Map scope: `DR-CON-criticism-source`, `DR-CON-conjecture-kinds`,
 `DR-CON-authority`, and the unchanged boundary
@@ -69,6 +69,11 @@ order. One step per `dr-execute-step` invocation.
 
 - [ ] 10. (S5) Refresh the container's supported package index for `bc`.
       done-when: `apt-cache show bc` exits 0 and prints a package stanza.
+      second attempt: `apt-get update` exited 100 before download because the
+      container refused `setgroups`, `setegid`, and `seteuid`; its HTTP method
+      then exited 112. This is the second failed attempt at step 10, so the
+      executor stop condition now requires an operator decision. No shim,
+      map-check edit, or other workaround was made.
       attempt: `apt-get install -y bc` exited 100 with
       `E: Unable to locate package bc`; the environment remains unchanged and
       the first plan could not meet its done criterion.
