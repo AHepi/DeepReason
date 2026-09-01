@@ -1,0 +1,285 @@
+{
+ "deferred_model_phases": {
+  "hv-floor/variator": 8,
+  "hv-spot-check/variator": 10,
+  "pairwise-discrimination/judge": 1,
+  "premise-demarcation-variation/variator": 1
+ },
+ "events": 661,
+ "llm_calls_by_role": {
+  "argumentative_critic": 12,
+  "conjecturer": 47,
+  "defender": 8,
+  "judge": 4
+ },
+ "measured": {
+  "D1_frontier_composition": {
+   "frontier_txt": "see frontier.txt (the typed surface)",
+   "members": [],
+   "note": "PREREG \u00a76.1 -- how many frontier members answer the operator's seed question vs a harness-minted problem",
+   "problems_spawned": 14,
+   "seed_problem_id": "question-933313a5d9ca6dd86f3052aec6e1f05f"
+  },
+  "D2_criticism_to_new_problem_trigger_rate": {
+   "criticisms": 5,
+   "note": "PREREG \u00a76.2 -- P-S1 measured 0 of 1,293",
+   "spawn_events": 14,
+   "successor_signals": {}
+  },
+  "D3_premise_citation_rate": {
+   "all_premise_signals": {
+    "premise-answer:DECLINED": 7,
+    "premise.batch-translation-offered.v1": 6,
+    "premise.work-invited.v1": 2
+   },
+   "byte_check_outcomes": {},
+   "invitation_dispositions": {
+    "DECLINED": 7
+   },
+   "note": "PREREG \u00a76.3 -- P-S1 measured 1 CITED against 122 DECLINED"
+  }
+ },
+ "modules": [
+  {
+   "evidence": "Conj events=7, conjecturer calls=47",
+   "module": "conjecture (rules/conj)",
+   "verdict": "FIRED"
+  },
+  {
+   "evidence": "Crit events=5, argumentative_critic calls=12",
+   "module": "criticism (rules/crit)",
+   "verdict": "FIRED"
+  },
+  {
+   "evidence": "defender calls=8",
+   "module": "defender seat",
+   "verdict": "FIRED"
+  },
+  {
+   "evidence": "judge calls=4",
+   "module": "judge ensemble",
+   "verdict": "FIRED"
+  },
+  {
+   "evidence": {
+    "first trial seqs": [
+     359,
+     404,
+     405
+    ],
+    "judge calls": 4,
+    "scrutiny (observe-only filings)": 0,
+    "trial-blocked": {},
+    "trial-declined": 6,
+    "trial-observation": 0
+   },
+   "module": "defended trial (status-changing criticism)",
+   "verdict": "FIRED"
+  },
+  {
+   "evidence": "no pairwise-observation event (F2: the pairwise-discrimination phase is one of the eleven deferred on v6)",
+   "module": "pairwise discrimination",
+   "verdict": "did-not-fire"
+  },
+  {
+   "evidence": "25 events carry status_changed; first seqs [6, 7, 8]",
+   "module": "adjudication / status authority",
+   "verdict": "FIRED"
+  },
+  {
+   "evidence": "NO hv_set in the record; variator calls=0; deferrals=19",
+   "module": "variator / hv measurement",
+   "verdict": "did-not-fire"
+  },
+  {
+   "evidence": "NO reach_set in the record",
+   "module": "reach measurement",
+   "verdict": "did-not-fire"
+  },
+  {
+   "evidence": "no event carries a scratch payload",
+   "module": "scratchpad (advisory workshop)",
+   "verdict": "did-not-fire"
+  },
+  {
+   "evidence": "no successor-* signal in the record",
+   "module": "successor questions",
+   "verdict": "did-not-fire"
+  },
+  {
+   "evidence": "no simulation-* signal; deferrals={('premise-demarcation-variation', 'variator'): 1, ('hv-spot-check', 'variator'): 10, ('pairwise-discrimination', 'judge'): 1, ('hv-floor', 'variator'): 8}",
+   "module": "simulation capability",
+   "verdict": "did-not-fire"
+  },
+  {
+   "evidence": {
+    "research-awaiting-agent": 1
+   },
+   "module": "research capability",
+   "verdict": "FIRED"
+  },
+  {
+   "evidence": "the channel is OPEN but the dossier is EMPTY by design (PREREG \u00a74 R6): nothing to cite is the typed reason, not a malfunction",
+   "module": "attached evidence / dossier",
+   "verdict": "did-not-fire"
+  },
+  {
+   "evidence": {
+    "premise-answer:DECLINED": 7,
+    "premise.batch-translation-offered.v1": 6,
+    "premise.work-invited.v1": 2
+   },
+   "module": "premise channel",
+   "verdict": "FIRED"
+  },
+  {
+   "evidence": {
+    "discharge-reask": 6,
+    "discharge-undischarged": 19
+   },
+   "module": "discharge channel",
+   "verdict": "FIRED"
+  },
+  {
+   "evidence": {
+    "relapse.log.jsonl": true,
+    "signals": {}
+   },
+   "module": "near-duplicate / anti-relapse gate",
+   "verdict": "FIRED"
+  },
+  {
+   "evidence": "no school-convergence or reseed signal (the tripwires are armed and did not fire)",
+   "module": "school convergence / reseed",
+   "verdict": "did-not-fire"
+  },
+  {
+   "evidence": {
+    "allocation.seat-repair.v1": 17,
+    "allocation.seat-truncation.v1": 17,
+    "allocation.seed-lineage-share.v1": 6,
+    "allocation.wander-throttled.v1": 1,
+    "controller-authority": 1
+   },
+   "module": "allocation controller / signals",
+   "verdict": "FIRED"
+  },
+  {
+   "evidence": "no config-referee signal in the record",
+   "module": "config referee",
+   "verdict": "did-not-fire"
+  },
+  {
+   "evidence": {
+    "extract": 36,
+    "reason": 36
+   },
+   "module": "split-budget seat protocol",
+   "verdict": "FIRED"
+  },
+  {
+   "evidence": {
+    "capture14.attack-target-entropy.v1": 6,
+    "capture14.criticism-debt.v1": 6,
+    "capture14.exogenous-grounding-ratio.v1": 6,
+    "capture14.hysteresis-mode.v1": 1,
+    "capture14.reinstatement-rate.v1": 6,
+    "capture14.stream-contraction.v1": 6,
+    "capture14.validity-attack-rate.v1": 6
+   },
+   "module": "capture / Pareto frontier",
+   "verdict": "FIRED"
+  },
+  {
+   "evidence": "bridge build produced no readable JSON -- see bridge-build.stderr.log",
+   "module": "grounded bridge (ledger + composition)",
+   "verdict": "did-not-fire"
+  },
+  {
+   "evidence": {
+    "violations": 0
+   },
+   "module": "replay validation (verify_root)",
+   "verdict": "FIRED"
+  }
+ ],
+ "objects": {
+  "artifact": 33,
+  "commitment": 24,
+  "criticism-assignment-v1": 14,
+  "criticism-attempt-v1": 15,
+  "criticism-coverage-debt-v1": 26,
+  "problem": 14,
+  "warrant": 5,
+  "workflow-compact-recovery-transition-v1": 1,
+  "workflow-context-exposure-v2": 71,
+  "workflow-context-pack-plan-v1": 71,
+  "workflow-contract-decomposition-transition-v1": 1,
+  "workflow-dispatch-authorization-v1": 71,
+  "workflow-model-classification-binding-v1": 1,
+  "workflow-provider-attempt-v1": 71,
+  "workflow-route-seat-insufficient-capability-v1": 1,
+  "workflow-route-seat-model-classification-plan-v1": 1,
+  "workflow-run-terminal-commitment-v1": 1,
+  "workflow-run-terminal-result-draft-v1": 1,
+  "workflow-semantic-admission-v1": 55,
+  "workflow-token-reservation-v2": 71,
+  "workflow-work-lifecycle-transition-v1": 335,
+  "workflow-work-preparation-v1": 72,
+  "workflow-work-terminal-v1": 66
+ },
+ "root": "/home/user/DeepReason/experiments/2026-09-01-live-all-modules-p-a1/run",
+ "rules": {
+  "Conj": 7,
+  "Control": 338,
+  "Crit": 5,
+  "Measure": 260,
+  "Refl": 8,
+  "Register": 29,
+  "Spawn": 14
+ },
+ "run_state": "failed",
+ "stop_reason": "operational_failure",
+ "top_signals": {
+  "allocation.seat-repair.v1": 17,
+  "allocation.seat-truncation.v1": 17,
+  "allocation.seed-lineage-share.v1": 6,
+  "capture14.attack-target-entropy.v1": 6,
+  "capture14.criticism-debt.v1": 6,
+  "capture14.exogenous-grounding-ratio.v1": 6,
+  "capture14.reinstatement-rate.v1": 6,
+  "capture14.stream-contraction.v1": 6,
+  "capture14.validity-attack-rate.v1": 6,
+  "criticism.assignment.v1": 14,
+  "criticism.attack-target-entropy.v1": 6,
+  "criticism.attempt.v1": 15,
+  "criticism.coverage-debt.v1": 46,
+  "cycle": 6,
+  "discharge-reask": 6,
+  "discharge-undischarged": 19,
+  "foreign-criticism-coverage.v1": 11,
+  "premise-answer:DECLINED": 7,
+  "premise.batch-translation-offered.v1": 6,
+  "problem.independence-resolution-rate.v1": 6,
+  "problem.thrash.v1": 6,
+  "question-933313a5d9ca6dd86f3052aec6e1f05f": 6,
+  "sha256:03858eddc3e584760e21302572567d5354d6a77e11dc2ddbb01619350e878423": 5,
+  "sha256:0c83b7af569d775d360a5de4749975877d346bfebd3b6e26e9b05e73408d6c5e": 5,
+  "sha256:246b751b83efb8a03725329026f2f79ee078d9871e788cf2ac527eaa665fe15d": 5,
+  "sha256:55449f7d1266b92e5c56a1857785946405b41844271135713c916c6a4e7522df": 5,
+  "sha256:55577cf4f7acbdb2b437158e783c3c5c2ab969f703e1986c42d761b2d2b90559": 5,
+  "sha256:62e7f87572171c344f40f1ee7bb0e25a24eee0be56fb8f11e7aee97ff2c71766": 5,
+  "sha256:6e6bb575f4294daaaf76023d46d6cc05661c6c3834e51ab75762834fb135023e": 5,
+  "sha256:92a9e88bac637a2f0a737b0be2e0b072ec2097c3eecfd5e58d1dc52d146757d3": 5,
+  "sha256:941212b7124a32ced88cf6b580c4c7a79382764a0d298b418fdec29758a9bd23": 5,
+  "sha256:990ca77bf75afe617ce53fbd074667fbab4f758d2083f8ed16a0b430bb11d0a5": 5,
+  "sha256:a999a82ee700e0db056df431140327d104dace60a738541af53c685b240e3fff": 5,
+  "sha256:aed5d674a9d57e6a1e12c28aecc53a8885937062a03472f1920d9c265254e364": 5,
+  "sha256:c46f72cf6ab6d1df4c447b01e793af3042a3aeb2bad4de306010c99c787e841b": 5,
+  "sha256:d8c6c621b708a2947727cb4e392f2e2fb5a28300e320b4db285cb3332a9120c5": 6,
+  "sha256:e6b2e2cd2c8bb77a4693a52033e935feff1f42559fcd1f3a47ae3018e7cfbb0b": 5,
+  "sha256:f0fe3cd4e56b96cf74b98126373d6209b109787fa076e908d56ee31182b77668": 5,
+  "trial-declined": 6,
+  "v6-model-phase-deferred.v1": 20
+ }
+}

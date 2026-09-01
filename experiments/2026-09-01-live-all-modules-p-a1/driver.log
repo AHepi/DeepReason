@@ -325,3 +325,38 @@ PREFLIGHT OK: 50 checks, 0 failures
 [2026-09-01T08:59:40Z] === QUALIFY: production-contract doctor (concurrency=2), full battery expected ===
 [2026-09-01T10:10:57Z] QUALIFY OK rc=0
 [2026-09-01T10:10:57Z] === REASON: run --budget cycles=24 --token-budget 3000000 ===
+[2026-09-01T15:12:45Z] REASON rc=5 -- see /home/user/DeepReason/experiments/2026-09-01-live-all-modules-p-a1/reason.{log,stderr.log} (a non-zero rc here can still be a typed stop; audit before treating it as failure)
+[2026-09-01T15:12:45Z] REASON stop_reason=operational_failure
+[2026-09-01T15:12:45Z] === BRIDGE: build the grounded final output for question-933313a5d9ca6dd86f3052aec6e1f05f ===
+[2026-09-01T15:12:52Z] BRIDGE BUILD rc=1 -- see /home/user/DeepReason/experiments/2026-09-01-live-all-modules-p-a1/bridge-build.{json,stderr.log}
+[2026-09-01T15:12:59Z] === AUDIT: verify_root + findings + results + capture + frontier ===
+[2026-09-01T15:14:29Z] === CENSUS: module coverage + the three measured known-open defects ===
+  conjecture (rules/conj)            FIRED        Conj events=7, conjecturer calls=47
+  criticism (rules/crit)             FIRED        Crit events=5, argumentative_critic calls=12
+  defender seat                      FIRED        defender calls=8
+  judge ensemble                     FIRED        judge calls=4
+  defended trial (status-changing criticism) FIRED        {'first trial seqs': [359, 404, 405], 'judge calls': 4, 'scrutiny (observe-only filings)': 0, 'trial-blocked': {}, 'trial-declined': 6, 'trial-observation': 0}
+  pairwise discrimination            did-not-fire no pairwise-observation event (F2: the pairwise-discrimination phase is one of the eleven deferred on v6)
+  adjudication / status authority    FIRED        25 events carry status_changed; first seqs [6, 7, 8]
+  variator / hv measurement          did-not-fire NO hv_set in the record; variator calls=0; deferrals=19
+  reach measurement                  did-not-fire NO reach_set in the record
+  scratchpad (advisory workshop)     did-not-fire no event carries a scratch payload
+  successor questions                did-not-fire no successor-* signal in the record
+  simulation capability              did-not-fire no simulation-* signal; deferrals={('premise-demarcation-variation', 'variator'): 1, ('hv-spot-check', 'variator'): 10, ('pairwise-discrimination', 'judge'): 1, ('hv-floor', 'variator'): 8}
+  research capability                FIRED        {'research-awaiting-agent': 1}
+  attached evidence / dossier        did-not-fire the channel is OPEN but the dossier is EMPTY by design (PREREG §4 R6): nothing to cite is the typed reason, not a malfunction
+  premise channel                    FIRED        {'premise-answer:DECLINED': 7, 'premise.batch-translation-offered.v1': 6, 'premise.work-invited.v1': 2}
+  discharge channel                  FIRED        {'discharge-reask': 6, 'discharge-undischarged': 19}
+  near-duplicate / anti-relapse gate FIRED        {'relapse.log.jsonl': True, 'signals': {}}
+  school convergence / reseed        did-not-fire no school-convergence or reseed signal (the tripwires are armed and did not fire)
+  allocation controller / signals    FIRED        {'allocation.seat-repair.v1': 17, 'allocation.seat-truncation.v1': 17, 'allocation.seed-lineage-share.v1': 6, 'allocation.wander-throttled.v1': 1, 'controller-authority': 1}
+  config referee                     did-not-fire no config-referee signal in the record
+  split-budget seat protocol         FIRED        {'extract': 36, 'reason': 36}
+  capture / Pareto frontier          FIRED        {'capture14.attack-target-entropy.v1': 6, 'capture14.criticism-debt.v1': 6, 'capture14.exogenous-grounding-ratio.v1': 6, 'capture14.hysteresis-mode.v1': 1, 'capture14.reinstatement-rate.v1': 6, 'capture14.stream-contraction.v1': 6, 'capture14.validity-attack-rate.v1': 6}
+  grounded bridge (ledger + composition) did-not-fire bridge build produced no readable JSON -- see bridge-build.stderr.log
+  replay validation (verify_root)    FIRED        {'violations': 0}
+  --- measured known-open defects ---
+  D1_frontier_composition: {'frontier_txt': 'see frontier.txt (the typed surface)', 'members': [], 'note': "PREREG §6.1 -- how many frontier members answer the operator's seed question vs a harness-minted problem", 'problems_spawned': 14, 'seed_problem_id': 'question-933313a5d9ca6dd86f3052aec6e1f05f'}
+  D2_criticism_to_new_problem_trigger_rate: {'criticisms': 5, 'note': 'PREREG §6.2 -- P-S1 measured 0 of 1,293', 'spawn_events': 14, 'successor_signals': {}}
+  D3_premise_citation_rate: {'all_premise_signals': {'premise-answer:DECLINED': 7, 'premise.batch-translation-offered.v1': 6, 'premise.work-invited.v1': 2}, 'byte_check_outcomes': {}, 'invitation_dispositions': {'DECLINED': 7}, 'note': 'PREREG §6.3 -- P-S1 measured 1 CITED against 122 DECLINED'}
+[2026-09-01T15:14:29Z] === DONE: judge only typed outcomes -- state, stop_reason, verify_root, the record ===
