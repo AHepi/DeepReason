@@ -228,6 +228,32 @@ phase needing it defers `transaction-contract-unavailable`.
 
 ### R4 — The Pareto axes: hv and reach must be able to measure
 
+> **AMENDMENT 1 (2026-09-01, before launch) — R4's conclusion is WITHDRAWN as
+> falsified; see FINDINGS.md F2.** The paragraphs below are kept unedited
+> because they record what this tranche believed when it froze its design, and
+> a pre-registration that is quietly rewritten by its own results is not a
+> pre-registration.
+>
+> What survives: the missing behavioural-contract grant WAS a real defect and
+> P-A1 closes it. `variator[0]` holds `variator.direct.v1`.
+>
+> What is falsified: the inference that closing it would let `hv` measure.
+> `Scheduler._defer_untransactional_v6_phase` returns True for EVERY v6
+> manifest unconditionally — it never reads a contract grant — and both
+> producers of `hv_set` sit behind it. **`hv` is structurally unreachable on
+> any v6 run, under any configuration.** The offline soak confirms it
+> empirically: this configuration carries the grant P-S1 lacked and still
+> records zero `hv_set` events.
+>
+> `reach` is NOT affected: `reach_sweep` is deterministic, makes no provider
+> call, and sits behind no gate. Its zero counts on P-S1 and P-R1 are an
+> empirical outcome, not a structural block.
+>
+> The tranche instruction forecast this disposition for R4 — *"If no
+> configuration grants it, STOP and report the same way."* It is reported as a
+> MODULARITY-LAW FINDING (F2) and not fixed: this is a RUN tranche with no
+> authority over `src/`.
+
 P-S1 sorted on coverage alone because the variator seat was denied a
 transaction contract 171 times. **The cause is the same null criticism policy
 as R1**, and one fix closes both: `_route_seat_behavioral_contract_assignments`
@@ -405,7 +431,18 @@ rather than discovered in the diff.
 ## §8 Launch gates — the run does not start until all of these hold
 
 1. `python -u scripts/cycle_soak.py --case pa1` exits GREEN.
-2. The soak shows `hv` and `reach` emitting non-`none` signals (R4).
+2. ~~The soak shows `hv` and `reach` emitting non-`none` signals (R4).~~
+   **WITHDRAWN, 2026-09-01, before launch — unsatisfiable by construction.**
+   FINDINGS.md F2 proves `hv` cannot be emitted by any v6 run under any
+   configuration, so this gate could only ever have been passed by a run that
+   was not the run this tranche is for. Withdrawing it is not a relaxation of
+   the launch discipline: the gate was written on an inference the soak
+   falsified, and a gate that cannot be satisfied by a correct configuration
+   is a broken gate, not a standard. **The replacement obligation is
+   MEASUREMENT, not passage:** the live run records the `hv_set` count, the
+   `reach_set` count, and every `v6-model-phase-deferred.v1` marker with its
+   phase and role, and MODULE_COVERAGE.md reports them as the typed reason
+   those modules did not fire.
 3. The soak shows zero unexpected `ALLOCATION_OPEN_LOOP` notices (R7).
 4. `preflight_pa1.py` passes: question digest, criteria discrimination table,
    the six carriage assertions, defended-trial authority, non-empty

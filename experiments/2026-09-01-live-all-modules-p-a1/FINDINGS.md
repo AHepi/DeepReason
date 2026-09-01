@@ -152,3 +152,116 @@ OFFLINE stub can answer contracts the harness already ships.
 the two contracts can be DISPATCHED and their responses parsed. It would not
 prove that a real model produces useful referee verdicts or grounding repairs
 — that is what the live run is for, and no soak can stand in for it.
+
+---
+
+## F2 (2026-09-01) — `hv` is structurally unreachable on ANY v6 run, under any configuration
+
+**Status: OPEN, and this is a MODULARITY-LAW FINDING.** The tranche instruction
+forecast this exact disposition for requirement R4: *"Find the configuration
+that grants that contract ... If no configuration grants it, STOP and report
+the same way."* No configuration grants it. Reported, not fixed.
+
+**The correction this makes to R4, stated plainly.** P-A1 was designed on the
+inference that P-S1's 171 `transaction-contract-unavailable` deferrals were
+caused by its null criticism policy — because that policy is what gates the
+defender/judge/**variator** behavioural-contract grants
+(`run_manifest.py:2059-2077`). That inference was **half right and its
+conclusion was wrong**. The missing grant was a real defect and P-A1 closes it:
+`variator[0]` now holds `variator.direct.v1`. But the grant is not what the
+scheduler consults, so closing it does not make `hv` measure.
+
+**What the record shows.** `Scheduler._defer_untransactional_v6_phase`
+(`scheduler/scheduler.py:696-752`) is the gate in front of every legacy model
+phase. Its entire decision is:
+
+```python
+manifest = self.run_manifest
+if manifest is None or manifest.schema_version != 6:
+    return False
+...
+return True
+```
+
+It returns True for **every** v6 manifest. It never reads
+`route_seat_behavioral_capability_plan`, never reads a contract grant, never
+reads a route, never reads a Config field. There is no value any configuration
+can carry that changes its answer. The only branch that reaches the phase is
+`schema_version != 6` — and the operations-parity law (2026-08-13, ONE run
+path) makes v6 the only path a current run takes.
+
+**The two producers of `hv_set` are both behind it**, so `hv` cannot be
+measured on a v6 run at all:
+
+| producer | call site | gate |
+|---|---|---|
+| `run_hv_floor` | `scheduler.py:1358` (`_criticize`) | `hv-floor` / variator |
+| `hv_spot_check` | `scheduler.py:2947` (`_lazy_hv`) | `hv-spot-check` / variator |
+
+**`reach` is NOT affected, and that distinction matters.** `reach_sweep`
+(`measures/reach.py:110`, called at `scheduler.py:2229` and `2479`) is
+deterministic, makes no provider call, and sits in front of no gate. It runs
+every cycle. P-S1's and P-R1's zero `reach_set` counts are therefore an
+ordinary empirical outcome — no artifact passed a foreign problem's qualifying
+criteria — and not a structural block. Correcting this half of the diagnosis is
+the difference between "measure it again on a richer run" and "no run can
+measure it".
+
+**Eleven phases die on this line, not one.** Every model phase the gate
+covers is dead on v6, whatever the configuration says:
+
+```
+hv-floor                      variator        rubric-trial              judge
+hv-spot-check                 variator        property-design           property_designer
+premise-demarcation-variation variator        property-relevance-trial  judge
+premise-rent                  variator        paraphrase-audit-judgment judge
+paraphrase-audit-variation    variator        pairwise-discrimination   (judge)
+experiment-generator-authoring conjecturer    vision-criticism          vision_critic
+```
+
+So the run-config fields `HV_K`, `HV_MIN`, `AUDIT_PERIOD`, `GEN_PROPOSE_PERIOD`,
+`GEN_MAX`, `PROP_PROPOSE_PERIOD`, `PROP_MAX`, `VISION_CRIT_PER_CYCLE` and
+`ADVISORY_TRIALS_PER_CYCLE` are all live-looking knobs over phases that cannot
+fire. The operator's modularity law (2026-08-26) says every behaviour a run can
+vary must be reachable as configuration and that "enforced" means a check that
+can fail. Here there is no such check, and a whole family of behaviours is
+unreachable while its knobs still parse, compile and appear in the manifest.
+
+**Evidence, three independent roots.**
+
+| root | variator deferrals | `hv_set` events | `reach_set` events |
+|---|---|---|---|
+| P-S1 (reported in the tranche instruction) | 171 | 0 | 0 |
+| P-R1 `experiments/2026-08-25-poietics-program/run` | 117 (`hv-floor` 42, `hv-spot-check` 74, `premise-demarcation-variation` 1) | 0 | 0 |
+| P-C2b `experiments/2026-08-27-pc2b-symmetric-reasoning/run` | — | 0 | 0 |
+| P-A1 offline soak (this tranche, contract grant PRESENT) | `premise-demarcation-variation` 1 and counting | 0 | 0 |
+
+The last row is the load-bearing one: it carries the behavioural-contract grant
+P-S1 lacked, and `hv` is still zero. The grant was necessary and is not
+sufficient.
+
+**Consequence for the Pareto frontier.** `PARETO_AXES` is
+`["hv", "reach", "coverage"]` and the manifest carries it unchanged, but on any
+v6 run `hv` is always absent (`state.hv.get(artifact_id, 0.0)` →
+`scheduler.py:232`), so the frontier sorts on `reach` and `coverage` alone —
+and on a run where no artifact reaches a foreign problem, on `coverage` alone.
+This is the actual mechanism behind the "frontier inversion" the tranche
+instruction lists as known-open defect D1. It is not diluted by having the
+contract grant; it is unchanged by it.
+
+**Not fixed here, and deliberately.** This is a RUN tranche with no authority
+to edit `src/`. The fix is also not obvious enough to be safe: the deferral
+exists because "RunManifest v6 makes the adapter fail closed on every unbound
+provider dispatch", so simply removing it would trip that global guard and fail
+whole roots. The real repair is to make the gate consult the behavioural
+contract grant it was written to stand in for — which is a design question for
+its own tranche, touching `DR-SUB-scheduler` × `DR-SUB-workflow`.
+
+**Residue.** This finding is proven for `hv` and for the eleven phase names
+above by code reading plus four roots. It is NOT proven that every one of those
+eleven phases is otherwise sound — only that none of them can run. And the
+consequence for judge participation is stated but not yet measured live: the
+`rubric-trial` phase is deferred, so `ADVISORY_TRIALS_PER_CYCLE` cannot fire,
+but the DEFENDED-TRIAL circuit reached through the criticism policy is a
+different path and this finding says nothing about it. The live run is what
+settles that.
