@@ -107,8 +107,8 @@ changes no shipped behavior or owner agreement.
       `PREREG=33afd81aac209cdf280faf7bd59ff0a194d2abcf8794cd620f61172ab0e77ae6`
       and `MATRIX_DOMAIN=1be915b5cccb5164b17691cb6602fa630d26603064d0096f4b3600fd2975442d`.
       New hashes are
-      `FULL_CROSS_PREREG=efd5221ed6bec6a34eb6e6cb97d05163d02f73524410ddeca4038a977da14c0a`
-      and `FULL_CROSS_DOMAIN=328b74d4c03408d9ba51b4cf013d64dee1ac7903b05a33b512dc7a8f287815ed`.
+      `FULL_CROSS_PREREG=a8ffe20ea6d7f060a92d4da385c3bcc679c396f35f31de6e46e373883fdaf76c`
+      and `FULL_CROSS_DOMAIN=148793d2bd570869a5e2be7b1d1a3845c1fb69095ac987e4396f3c99b9d9322e`.
 
 - [x] 12B. (S1, S2, S6) [COMMIT] Push the superseding preregistration, domain,
       scope correction, and forward budget before generator implementation.
@@ -120,7 +120,11 @@ changes no shipped behavior or owner agreement.
       `5caeea7501a2e229334e23d9e02bc1fad3ee4195`; local HEAD equalled origin;
       original preregistration and domain Git blobs remained
       `dcd444bc2fa53adcf2f1d3c4da406188ef70ae8a` and
-      `08e99f1aa4a48d841775498a22d1c6d630b826ea`.
+      `08e99f1aa4a48d841775498a22d1c6d630b826ea`. Pre-implementation
+      computability correction pushed at
+      `685b1c8c9a5566e6cfc70d7ba845a9d294b6f7eb`; it replaces an impossible
+      whole-fixture preflight set digest with exact count/ordinal boundaries
+      plus a complete tiny Cartesian oracle.
 
 - [ ] 12C. (S2, S3, S5) Add full-cross count, literal Cartesian membership,
       per-seat independence, case-id, ban, and resume tests before implementation.
