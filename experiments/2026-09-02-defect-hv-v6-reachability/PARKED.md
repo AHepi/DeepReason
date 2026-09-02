@@ -273,3 +273,111 @@ PRICED STOP, and price it rather than route around it.
 OUT OF SCOPE: the dispatch gate (fixed); the nine other gated phases; the
 frontier sort.
 ```
+
+---
+
+## P6 — promote `v6_transactional_phase_call` out of `informal/trial.py`
+
+WHAT: the shared v6 dispatch helper is generalised IN PLACE in
+`src/deepreason/informal/trial.py` (three keyword parameters, a public alias),
+because `informal/` and `measures/` are both owned by `DR-SUB-evaluation` so hv
+crosses no seam to import it. The nine follow-up phases live in `rules/`,
+`scratch/` and `informal/audits.py`, so the first of those that is converted
+from OUTSIDE `DR-SUB-evaluation` needs the helper in a neutral home —
+`src/deepreason/workflow/`, which the seam says owns "by what recorded authority
+any of it may touch a provider". That is a 212-line pure relocation and belongs
+in its own commit where a reviewer can verify by diffing that nothing moved but
+the lines.
+
+```
+EXECUTOR WINDOW — REFACTOR TRANCHE: move v6_transactional_phase_call to the
+workflow plane
+=========================================================================
+Read CLAUDE.md fully, then load deepreason-orchestrator, dr-drive-harness and
+dr-explain-to-operator. Start at dr-set-goal (class: regression-risk -- nothing
+is broken; this is a relocation that must prove it changed nothing).
+
+THE MOVE: src/deepreason/informal/trial.py:61-272 defines
+`_v6_transactional_trial_call`, aliased public as `v6_transactional_phase_call`
+by experiments/2026-09-02-defect-hv-v6-reachability/. It is fully parameterised
+(task_payload_schema, trigger_prefix, reason_prefix) and has two consumers:
+trial.py's own five call sites and measures/hv.py. Move it verbatim to
+src/deepreason/workflow/phase_dispatch.py and leave a re-export in trial.py so
+no caller changes.
+
+GOAL (for dr-set-goal to bound): the function's body is byte-identical after the
+move. Falsifiable offline: a test comparing inspect.getsource of the moved
+function against the pre-move text committed as a fixture in the tranche
+directory; plus the full gate at 0 failed with no test edited.
+
+WHY NOT SOONER: mixing a 212-line relocation with a behavioural change makes the
+behavioural change unreviewable. That was the explicit reason this was parked.
+
+READ FIRST: docs/map/SEAM-scheduler-x-workflow.md (its check counts
+`deepreason.workflow` occurrences in scheduler.py and will move),
+docs/map/SUB-workflow.md, docs/map/SUB-evaluation.md. The map moves in the same
+commit.
+
+OUT OF SCOPE: any change to the helper's behaviour or parameters; converting any
+phase.
+```
+
+---
+
+## P7 — convert `hv-floor` to v6 transactional dispatch (the Road A follow-up)
+
+WHAT: `experiments/2026-09-02-defect-hv-v6-reachability/` FIX.md §7 recommended
+Road B — convert `hv-spot-check` only — because `run_hv_floor` is not a ranking
+measure: on `hv < hv_min` it calls `register_fail_warrant` and REFUTES its
+target, and `rules/spawn.py:150-172` pins an `hv-floor` criterion onto every
+connection problem the harness mints. Converting it therefore changes refutation
+outcomes on ordinary runs, which the tranche brief made an explicit STOP AND ASK
+and which no offline instrument can adjudicate. Priced from the record: on
+`2026-08-12-live-grounded-extension-expansion/run`, 53 connection problems and
+95 distinct artifacts had their `hv-floor` criterion deferred.
+
+THE CODE CHANGE IS ONE TABLE ROW. `LEGACY_PHASE_CONTRACTS["hv-floor"].dispatch`
+goes from `"unconverted"` to `"v6_transactional"`, and `run_hv_floor` passes the
+self-detected manifest to `_sample_edits` exactly as `hv_spot_check` already
+does. The evidence question is the whole tranche.
+
+```
+EXECUTOR WINDOW — RUN-AND-DECIDE TRANCHE: should a v6 run's pinned `hv-floor`
+criterion be evaluated again?
+=========================================================================
+Read CLAUDE.md fully, then load deepreason-orchestrator, dr-drive-harness and
+dr-explain-to-operator. Start at dr-set-goal.
+
+THE SITUATION: `run_hv_floor` (src/deepreason/measures/hv.py:267) evaluates the
+`hv-floor` criterion that `rules/spawn.py:150-172` pins onto every connection
+problem, and on hv < hv_min it mints a demonstrative fail warrant -- it REFUTES.
+Since RunManifest v6 became the only run path, the deferral gate has suppressed
+that evaluation on every run; experiments/2026-09-02-defect-hv-v6-reachability/
+made the gate configuration-driven but left this one phase `unconverted` on
+purpose, because turning it back on changes what gets refuted and no offline
+instrument can say whether the resulting refutations are sound.
+
+Today the deferred criterion is COMPLETELY INERT: an `hv-floor` commitment is
+not registry-evaluable, so `crit_program` skips it, and `pareto_scores`'
+coverage denominator does not count it. A pinned criterion currently costs
+nothing and proves nothing. That is the argument FOR turning it on.
+
+GOAL (for dr-set-goal to bound): produce evidence on which the operator can rule.
+Flip the one table row, then run a SHORT live run (or an offline soak on a shape
+that spawns connection problems) that actually produces some hv-floor FAIL
+warrants, and read them: are the refuted relations genuinely poor, or is the
+floor refuting sound work? Record the verdict either way -- "the criterion
+refutes soundly" and "the criterion over-refutes" are both complete outcomes,
+and so is "no artifact reached the floor, inconclusive".
+
+STOP AND ASK BEFORE MAKING THE FLIP PERMANENT: the operator decides whether
+reinstated refutations are wanted. Present the sampled warrants, not a summary.
+
+READ FIRST: experiments/2026-09-02-defect-hv-v6-reachability/FIX.md section 7
+(the pricing and the two roads) and docs/map/SUB-evaluation.md's Traps entry on
+zero-sample vacuous passes -- `run_hv_floor` returns OVERRUN on no edits
+precisely so a floor is never passed from no evidence.
+
+OUT OF SCOPE: the gate, the registry, the helper, the other nine phases -- all
+delivered or parked separately.
+```
