@@ -395,3 +395,4 @@ NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SPLIT_BUDGET_SEAT_PROTOCOL='off' is not 
 PREFLIGHT OK: 61 checks, 0 failures
 [2026-09-02T17:44:54Z] PREFLIGHT OK rc=0
 [2026-09-02T17:44:54Z] === QUALIFY: production-contract doctor (concurrency=2), full battery expected ===
+[2026-09-02T19:20:57Z] QUALIFY FAILED rc=1 -- see /home/user/DeepReason/experiments/2026-09-02-live-p-a2-corrected/qualify.json and /home/user/DeepReason/experiments/2026-09-02-live-p-a2-corrected/qualify.stderr.log
