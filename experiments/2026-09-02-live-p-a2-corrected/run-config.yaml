@@ -130,7 +130,52 @@ roles:
   vision_critic: *glm53
   # `grounding_reviewer` is this run's bridge reviewer_role (see `bridge`
   # below): the seat that reviews the composed output's grounding.
-  grounding_reviewer: *glm53
+  #
+  # C1-EXCEPTION (operator ruling, 2026-09-02, after P-A2 epoch 1 refused
+  # qualification on exactly this seat). This is the ONE glm-5.3 seat that
+  # does NOT carry `reasoning: "low"`, and the exception is measured rather
+  # than assumed. Epoch 1 qualified 22 of 23 pairs; the single failure was
+  # this seat's `groundingrepairwirev1.direct.v1`, 5 of 20 against a
+  # threshold of 19, where P-A1 scored 20 of 20.
+  #
+  # `isolate_grounding_repair.py` then exercised ONLY that pair across six
+  # configurations, ten cases each -- 60 live calls -- and separated the
+  # three fields P-A2 moved at once:
+  #
+  #     low   / 32768 / split off    2/10      unset / 49152 / split auto  10/10
+  #     low   / 32768 / split auto   3/10      unset / 49152 / split off   10/10
+  #     low   / 49152 / split off    4/10      unset / 32768 / split off   10/10
+  #
+  # Perfect separation on the reasoning knob alone: every `low` cell fails,
+  # every default-effort cell passes, while the cap and the split protocol
+  # vary freely WITHIN each group and change nothing. So C3 and C4 are
+  # exonerated for this contract and C1 is the sole cause. The last cell is
+  # this seat's exact shape and scored 10/10.
+  #
+  # Why the exception is narrow rather than a revert: `low` is
+  # measured-CORRECT for the generation seats -- six other glm-5.3 contracts
+  # qualify 20/20 under it -- and those are the seats P-A1's ~300 s
+  # transport wall actually hit. This seat is a bridge seat exercised at
+  # terminal, not in the cycle loop, so restoring its effort re-invites the
+  # wall on the lowest-volume seat in the run.
+  #
+  # The cap stays 32768 with the other glm seats (C4 is untouched): the
+  # measurement says the cap is irrelevant to this contract, so moving it
+  # too would be an unmeasured second difference.
+  grounding_reviewer:
+    endpoint: https://ollama.com/v1
+    endpoint_id: ollama-glm-5.3
+    provider: ollama
+    model: glm-5.3
+    model_revision: glm-5.3
+    family: glm
+    api_key_env: OLLAMA_API_KEY
+    context_window_tokens: 131072
+    max_tokens: 32768
+    timeout_s: 1800
+    output_mode: json_object
+    # `reasoning` DELIBERATELY OMITTED -- the model's documented default is
+    # `max`, and that is the only setting measured to satisfy this contract.
 
   # --- adjudication side: the two judges the operator named --------------
   # TWO seats, two genuinely distinct families, which is what

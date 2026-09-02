@@ -430,13 +430,41 @@ def main() -> int:
         len(glm_routes) == 6,
         [(role, seat) for role, seat, _ in glm_routes],
     )
-    # C1/C2. Omitted is not off: this model defaults to `max` effort, which is
-    # what P-A1 ran and what crossed the ~300 s transport wall.
+    # C1/C2, WITH THE MEASURED EXCEPTION. Omitted is not off: this model
+    # defaults to `max` effort, which is what P-A1 ran and what crossed the
+    # ~300 s transport wall. Every glm-5.3 seat carries `low` EXCEPT
+    # `grounding_reviewer`, whose contract `low` provably cannot satisfy
+    # (epoch 1: 5/20 at `low`, 10/10 at default, isolated across 60 live
+    # calls -- FINDINGS.md F4, operator ruling 2026-09-02).
+    #
+    # The exception is gated in BOTH directions on purpose. A generation seat
+    # that lost `low` would silently re-invite the transport wall this run
+    # exists to avoid; the reviewer seat carrying `low` would reproduce
+    # epoch 1's refusal after another 96-minute battery.
+    generation_glm = [
+        (role, seat, route)
+        for role, seat, route in glm_routes
+        if role != "grounding_reviewer"
+    ]
+    reviewer_glm = [
+        (role, seat, route)
+        for role, seat, route in glm_routes
+        if role == "grounding_reviewer"
+    ]
     check(
         "§3 C1",
-        'every glm-5.3 seat carries reasoning "low" EXPLICITLY',
-        bool(glm_routes) and all(r.reasoning == "low" for _, _, r in glm_routes),
-        sorted({str(r.reasoning) for _, _, r in glm_routes}),
+        'every GENERATION glm-5.3 seat carries reasoning "low" EXPLICITLY',
+        len(generation_glm) == 5
+        and all(r.reasoning == "low" for _, _, r in generation_glm),
+        f"{len(generation_glm)} seats: "
+        f"{sorted({str(r.reasoning) for _, _, r in generation_glm})}",
+    )
+    check(
+        "§3 C1x",
+        "the grounding_reviewer seat runs at the model's DEFAULT effort "
+        "(the only setting measured to satisfy its contract)",
+        len(reviewer_glm) == 1 and reviewer_glm[0][2].reasoning is None,
+        f"reasoning={reviewer_glm[0][2].reasoning!r}" if reviewer_glm else "seat missing",
     )
     # `none` is not in this model's documented set and moves the trace into
     # the content rather than stopping it (P-S1: 0/8 clean). Gated explicitly
@@ -454,7 +482,8 @@ def main() -> int:
     # C4. The P-C2b-measured ceiling, not P-A1's extrapolated 49152.
     check(
         "§3 C4",
-        "every glm-5.3 seat caps completion at 32768",
+        "every glm-5.3 seat caps completion at 32768 (the C1 exception "
+        "does NOT move the cap -- the cap is measured irrelevant here)",
         bool(glm_routes) and all(r.max_tokens == 32768 for _, _, r in glm_routes),
         sorted({r.max_tokens for _, _, r in glm_routes}),
     )

@@ -96,6 +96,70 @@ would not see them:**
    `preflight_pa2.py` asserts the value on the **rebuilt runtime Config**,
    not on the YAML.
 
+### AMENDMENT 1 — 2026-09-02, after epoch 1 refused qualification
+
+**Frozen before epoch 2's first live call; epoch 1's own text above is
+unchanged.** A pre-registration that is quietly edited after a failure is
+worth nothing, so this is recorded as an amendment with its cause, its
+evidence and its cost.
+
+**What happened.** Epoch 1 (manifest `e958a37b`, root retired as
+`unqualified-epoch1-run-e958a37b`) never reached a reasoning cycle. The
+ladder stopped at the qualification gate after 96 minutes: **22 of 23 pairs
+qualified**, and the single failure was
+`grounding_reviewer / groundingrepairwirev1.direct.v1 / glm-5.3` at **5 of
+20** against a threshold of 19, where P-A1 scored 20 of 20. Every other pair
+was 20/20 in both runs.
+
+**What the isolation measured** (`isolate_grounding_repair.py`, 6 cells ×
+10 cases = 60 live calls on that one pair, through the doctor's own per-case
+entry point):
+
+| reasoning | cap | split | valid |
+|---|---|---|---|
+| `low` | 32768 | off | 2/10 |
+| `low` | 32768 | auto | 3/10 |
+| `low` | 49152 | off | 4/10 |
+| unset (`max`) | 49152 | auto | 10/10 |
+| unset (`max`) | 49152 | off | 10/10 |
+| unset (`max`) | 32768 | off | 10/10 |
+
+Perfect separation on the reasoning knob; the cap and the split protocol vary
+freely within each group and change nothing. **C3 and C4 are exonerated for
+this contract; C1 is the sole cause.**
+
+**The amendment (operator ruling, 2026-09-02).** C1 now reads: *the five
+GENERATION glm-5.3 seats carry `reasoning: "low"`; the `grounding_reviewer`
+seat runs at the model's default effort.* C2, C3, C4 and C5 are unchanged,
+and the cap stays 32768 on all six seats because the measurement says the cap
+is irrelevant here and moving it would be an unmeasured second difference.
+
+**What this costs the comparison, stated plainly.** The correction is no
+longer uniform across glm-5.3 seats, so P-A2 no longer tests "glm-5.3 at
+`low`" as a single proposition. It tests the narrower and now better-evidenced
+one: **`low` on the seats that generate, default effort on the seat whose
+contract `low` cannot satisfy.** P2's transport prediction is unaffected in
+substance — the ~300 s wall was measured on the conjecturer and defender
+seats, both of which keep `low` — but it gains one seat that may legitimately
+run long, and the delivery must not count a slow `grounding_reviewer` call as
+a refutation of C1 on the generation seats.
+
+**A new prediction, registered now rather than claimed later.**
+
+> **P6 — the exception qualifies.** Epoch 2's qualification reaches
+> **23 of 23 pairs**, and `groundingrepairwirev1.direct.v1` on glm-5.3
+> returns to ≥19 of 20.
+>
+> Refuted if any pair fails. If the grounding-repair pair fails again at
+> default effort, the isolation was wrong and the cause is not the reasoning
+> knob — that would be a finding against F4 and a STOP, not a third attempt.
+
+**Cost of the amendment:** the route change mints a new qualification subject
+digest, so the full ~96-minute battery re-runs; nothing is cached from
+epoch 1. Epoch 1's own artifacts are preserved unedited.
+
+---
+
 ### What is held CONSTANT from P-A1 (and gated, so it cannot drift)
 
 Seats (deepseek-v4-pro:0813 + glm-5.3 on all generation seats, deepseek
