@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=11 blockers=none
+State: next=12 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -82,8 +82,12 @@ changes no shipped behavior or owner agreement.
       `AttributeError` for one of the deliberately absent experiment APIs;
       full output in `proof/court-tests-red.txt`.
 
-- [ ] 11. (S4, S6) [COMMIT] Push the RED shipped-court tests and proof.
+- [x] 11. (S4, S6) [COMMIT] Push the RED shipped-court tests and proof.
       done-when: the GitHub branch contains the new tests and `proof/court-tests-red.txt`, and local HEAD equals origin.
+
+      proof: `COURT_RED_PHASE_PUSHED=YES` at
+      `7c54681cf5dac8fa43aa8b983908b53ea48fb477`; local HEAD equalled origin;
+      worktree empty after synchronization.
 
 - [ ] 12. (S4) Implement exact defended v6 manifest compilation and deterministic full-court driving through the shipped argumentative-trial path.
       done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'topology or typed or managed or sequence'` ends with 0 failed.
