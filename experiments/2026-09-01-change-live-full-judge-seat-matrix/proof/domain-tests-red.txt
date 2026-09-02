@@ -1,0 +1,107 @@
+$ python -m pytest tests/test_live_full_judge_seat_matrix.py -q
+EEEEEEEEEE                                                               [100%]
+==================================== ERRORS ====================================
+____________ ERROR at setup of test_domain_fixture_counts_are_exact ____________
+
+    @pytest.fixture(scope="module")
+    def matrix():
+        if not MATRIX_PATH.is_file():
+>           pytest.fail(f"absent experiment module: {MATRIX_PATH}")
+E           Failed: absent experiment module: /workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py
+
+tests/test_live_full_judge_seat_matrix.py:25: Failed
+_ ERROR at setup of test_domain_mini_catalog_is_literal_cartesian_and_ordered __
+
+    @pytest.fixture(scope="module")
+    def matrix():
+        if not MATRIX_PATH.is_file():
+>           pytest.fail(f"absent experiment module: {MATRIX_PATH}")
+E           Failed: absent experiment module: /workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py
+
+tests/test_live_full_judge_seat_matrix.py:25: Failed
+________ ERROR at setup of test_structural_domain_ids_and_frozen_digest ________
+
+    @pytest.fixture(scope="module")
+    def matrix():
+        if not MATRIX_PATH.is_file():
+>           pytest.fail(f"absent experiment module: {MATRIX_PATH}")
+E           Failed: absent experiment module: /workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py
+
+tests/test_live_full_judge_seat_matrix.py:25: Failed
+____ ERROR at setup of test_catalog_raw_identity_and_kimi_k3_normalization _____
+
+    @pytest.fixture(scope="module")
+    def matrix():
+        if not MATRIX_PATH.is_file():
+>           pytest.fail(f"absent experiment module: {MATRIX_PATH}")
+E           Failed: absent experiment module: /workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py
+
+tests/test_live_full_judge_seat_matrix.py:25: Failed
+______ ERROR at setup of test_reasoning_validates_exact_final_wire_fields ______
+
+    @pytest.fixture(scope="module")
+    def matrix():
+        if not MATRIX_PATH.is_file():
+>           pytest.fail(f"absent experiment module: {MATRIX_PATH}")
+E           Failed: absent experiment module: /workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py
+
+tests/test_live_full_judge_seat_matrix.py:25: Failed
+__ ERROR at setup of test_authority_and_contracts_are_guarded_before_dispatch __
+
+    @pytest.fixture(scope="module")
+    def matrix():
+        if not MATRIX_PATH.is_file():
+>           pytest.fail(f"absent experiment module: {MATRIX_PATH}")
+E           Failed: absent experiment module: /workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py
+
+tests/test_live_full_judge_seat_matrix.py:25: Failed
+_ ERROR at setup of test_concurrency_never_exceeds_three_when_more_workers_requested _
+
+    @pytest.fixture(scope="module")
+    def matrix():
+        if not MATRIX_PATH.is_file():
+>           pytest.fail(f"absent experiment module: {MATRIX_PATH}")
+E           Failed: absent experiment module: /workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py
+
+tests/test_live_full_judge_seat_matrix.py:25: Failed
+_____ ERROR at setup of test_machine_wide_lock_refuses_second_coordinator ______
+
+    @pytest.fixture(scope="module")
+    def matrix():
+        if not MATRIX_PATH.is_file():
+>           pytest.fail(f"absent experiment module: {MATRIX_PATH}")
+E           Failed: absent experiment module: /workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py
+
+tests/test_live_full_judge_seat_matrix.py:25: Failed
+_ ERROR at setup of test_credential_serialization_is_allowlisted_and_secret_scanned _
+
+    @pytest.fixture(scope="module")
+    def matrix():
+        if not MATRIX_PATH.is_file():
+>           pytest.fail(f"absent experiment module: {MATRIX_PATH}")
+E           Failed: absent experiment module: /workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py
+
+tests/test_live_full_judge_seat_matrix.py:25: Failed
+_ ERROR at setup of test_terminal_writes_are_atomic_immutable_and_resume_rotates _
+
+    @pytest.fixture(scope="module")
+    def matrix():
+        if not MATRIX_PATH.is_file():
+>           pytest.fail(f"absent experiment module: {MATRIX_PATH}")
+E           Failed: absent experiment module: /workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py
+
+tests/test_live_full_judge_seat_matrix.py:25: Failed
+=========================== short test summary info ============================
+ERROR tests/test_live_full_judge_seat_matrix.py::test_domain_fixture_counts_are_exact
+ERROR tests/test_live_full_judge_seat_matrix.py::test_domain_mini_catalog_is_literal_cartesian_and_ordered
+ERROR tests/test_live_full_judge_seat_matrix.py::test_structural_domain_ids_and_frozen_digest
+ERROR tests/test_live_full_judge_seat_matrix.py::test_catalog_raw_identity_and_kimi_k3_normalization
+ERROR tests/test_live_full_judge_seat_matrix.py::test_reasoning_validates_exact_final_wire_fields
+ERROR tests/test_live_full_judge_seat_matrix.py::test_authority_and_contracts_are_guarded_before_dispatch
+ERROR tests/test_live_full_judge_seat_matrix.py::test_concurrency_never_exceeds_three_when_more_workers_requested
+ERROR tests/test_live_full_judge_seat_matrix.py::test_machine_wide_lock_refuses_second_coordinator
+ERROR tests/test_live_full_judge_seat_matrix.py::test_credential_serialization_is_allowlisted_and_secret_scanned
+ERROR tests/test_live_full_judge_seat_matrix.py::test_terminal_writes_are_atomic_immutable_and_resume_rotates
+10 errors in 0.09s
+
+exit 1

@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=3 blockers=none
+State: next=4 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -28,8 +28,12 @@ changes no shipped behavior or owner agreement.
       PRIMARY_LIVE_TOTAL=5416400`;
       `DOMAIN_FILE_SHA256=1be915b5cccb5164b17691cb6602fa630d26603064d0096f4b3600fd2975442d`.
 
-- [ ] 3. (S2, S3, S5) Write domain, exclusion, digest, concurrency, credential, and resume tests before implementation.
+- [x] 3. (S2, S3, S5) Write domain, exclusion, digest, concurrency, credential, and resume tests before implementation.
       done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q` -> nonzero with failures caused by the absent experiment module, saved verbatim in `proof/domain-tests-red.txt`.
+
+      proof: exit 1; `10 errors in 0.09s`; every error is `Failed: absent
+      experiment module: .../matrix.py`; full output in
+      `proof/domain-tests-red.txt`.
 
 - [ ] 4. (S1, S2, S3, S5) [COMMIT] Push the preregistration, domain, and RED test proof.
       done-when: the GitHub branch contains `PREREG.md`, `MATRIX_DOMAIN.json`, the test file, and `proof/domain-tests-red.txt`, and local HEAD equals `origin/codex/live-full-judge-seat-matrix-20260901`.
