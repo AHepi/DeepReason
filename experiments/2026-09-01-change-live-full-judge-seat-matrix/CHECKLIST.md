@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=12G blockers=none
+State: next=13 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -167,8 +167,12 @@ changes no shipped behavior or owner agreement.
       `total_insertions=1784`, `ceiling=2200`, `verdict=WITHIN`. Full output
       is in `proof/full-cross-tests-green.txt`.
 
-- [ ] 12G. (S2, S3, S5) [COMMIT] Push the full-cross generator and GREEN proof.
+- [x] 12G. (S2, S3, S5) [COMMIT] Push the full-cross generator and GREEN proof.
       done-when: local HEAD equals origin and the worktree is empty.
+
+      proof: `FULL_CROSS_GREEN_PUSHED=YES` at
+      `270be24a10ff05ae5d73eb616a4e0d554c58ccec`; local HEAD equalled origin;
+      worktree empty.
 
 - [ ] 13. (S6) Implement the experiment-owned Kimi-K3-free `cycle_soak.SoakCase` wrapper without editing `scripts/cycle_soak.py`.
       done-when: `python -u experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py soak` prints `SOAK_VERDICT=PASS CASE=judge-matrix CYCLES=8`.
