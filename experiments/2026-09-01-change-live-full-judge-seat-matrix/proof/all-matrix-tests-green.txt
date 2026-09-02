@@ -2,6 +2,6 @@ Command:
 python -m pytest tests/test_live_full_judge_seat_matrix.py -q
 
 .........................................                                [100%]
-41 passed in 8.17s
+41 passed in 8.37s
 
 Exit code: 0

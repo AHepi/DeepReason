@@ -1,0 +1,19 @@
+Command:
+python -m pytest tests/ -q -n 4
+
+Final failure list (verbatim):
+FAILED tests/test_campaign_cli.py::test_installed_campaign_module_help_has_no_source_tree_dependency
+FAILED tests/test_campaign_cli.py::test_installed_campaign_module_audits_one_existing_root
+FAILED tests/test_allocation_signal_consumption.py::test_the_shipped_qualification_subject_digest_does_not_move
+FAILED tests/test_brokered_simulation.py::test_a_program_can_ask_the_broker_and_is_bounded_by_it
+FAILED tests/test_brokered_simulation.py::test_the_broker_pins_the_model_and_caps_the_calls
+FAILED tests/test_simulation_runner_default.py::test_an_unknown_runner_compiles_and_is_disclosed_never_refused
+FAILED tests/test_single_run_path.py::test_the_grounded_tranche_config_enters_through_the_new_door
+FAILED tests/test_v6_engaged_public_defaults.py::test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal
+FAILED tests/test_workload_code.py::test_failed_declared_check_is_an_ordinary_fail
+FAILED tests/test_workload_code.py::test_trusted_check_runs_after_patch_and_is_content_addressed
+FAILED tests/test_workload_formal.py::test_check_limit_is_positive_and_enforced_as_finite_result_items
+FAILED tests/test_workload_formal.py::test_trusted_code_check_has_no_network_when_seccomp_is_available
+12 failed, 4618 passed, 26 skipped in 675.16s (0:11:15)
+
+Exit code: 1

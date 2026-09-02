@@ -1,0 +1,86 @@
+Command:
+python tools/docs_verify.py
+
+Result:
+docs_verify [full]: 71 documents, 1297 checks, 9 workers
+FAIL SEAM-llm-x-rules.md:54: unparseable check
+FAIL INV-frozen-surfaces.md:181: existing transport_failure artifact census is nonzero
+FAIL INV-frozen-surfaces.md:422: test_the_shipped_qualification_subject_digest_does_not_move
+FAIL INV-frozen-surfaces.md:669: historical origin/claude/deepreason-p-s1-commitments-wowcib ref unavailable
+FAIL INV-signal-contract.md:89: test_the_shipped_qualification_subject_digest_does_not_move
+FAIL SEAM-rules-x-workflow.md:57: /bin/sh: 1: bc: not found
+FAIL SEAM-scheduler-x-workflow.md:170: test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal
+docs_verify: 7 failed
+
+Command:
+python tools/docs_verify.py --audit
+
+Result:
+SEAM-llm-x-rules.md:54: unparseable check: a column-0 `check: opener must close with a trailing backtick, on its own line or at the end of a later line, before the next opener or the end of the file.
+docs_verify --audit: 1 finding(s)
+
+Command:
+python tools/docs_verify.py --links
+
+Result:
+docs_verify --links: 0 dangling reference(s), 71 document(s)
+
+Command:
+python tools/docs_verify.py --coverage
+
+Result:
+SEAM-periphery-x-verification.md: enforcement site not named: src/deepreason/amendment/apply.py
+SEAM-schools-x-scratch.md: enforcement site not named: src/deepreason/informal/trial.py
+docs_verify --coverage: 7 seam(s) swept, 19 without a Sweep: header, 2 finding(s)
+
+Command:
+python tools/docs_verify.py --stale
+
+Complete stale document census:
+CON-authority.md
+CON-capability-lifecycle.md
+CON-conjecture-kinds.md
+CON-conjecture-source.md
+CON-criticism-source.md
+CON-packs-and-token-economy.md
+CON-run-identity.md
+CON-scheduler-ranking.md
+CON-schools.md
+CON-seats.md
+CON-successor-questions.md
+INV-evidence-channels.md
+INV-frozen-surfaces.md
+INV-signal-contract.md
+REC-change-a-seam.md
+SEAM-adjudication-x-authority.md
+SEAM-bridge-x-llm.md
+SEAM-calculus-x-rules.md
+SEAM-capabilities-x-rules.md
+SEAM-evaluation-x-ontology.md
+SEAM-evaluation-x-rules.md
+SEAM-harness-x-verification.md
+SEAM-harness-x-workflow.md
+SEAM-llm-x-rules.md
+SEAM-llm-x-scheduler.md
+SEAM-llm-x-workflow.md
+SEAM-manifest-x-schools.md
+SEAM-periphery-x-verification.md
+SEAM-rules-x-workflow.md
+SEAM-scheduler-x-rules.md
+SEAM-scheduler-x-workflow.md
+SEAM-schools-x-scheduler.md
+SEAM-schools-x-scratch.md
+SEAM-scratch-x-workflow.md
+SUB-amendment.md
+SUB-application.md
+SUB-evaluation.md
+SUB-evidence.md
+SUB-harness.md
+SUB-llm.md
+SUB-manifest.md
+SUB-ontology.md
+SUB-periphery.md
+SUB-rules.md
+SUB-scheduler.md
+SUB-workflow.md
+docs_verify --stale: 46 document(s) worth re-reading

@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=28 blockers=none
+State: next=33 blockers=full-repository-gate-red,authoritative-docs-red,full-cross-pending
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -327,20 +327,54 @@ changes no shipped behavior or owner agreement.
       measured code/test total was `4073/5000 WITHIN`. Both frozen domain file
       digests remained unchanged.
 
-- [ ] 28. (S7) Prove branch isolation and no merge with `main`.
+- [x] 28. (S7) Prove branch isolation and no merge with `main`.
       done-when: `git rev-list --merges 00f10dde8c734e2f874358f9e2a375bb63aa4a35..HEAD` is empty and the current branch is `codex/live-full-judge-seat-matrix-20260901`.
 
-- [ ] 29. (S1-S7) Run the full matrix regression file.
+      proof: current branch was exactly
+      `codex/live-full-judge-seat-matrix-20260901`; merge count from the frozen
+      base through HEAD was `0`; local HEAD and the isolated origin ref both
+      equalled `8f566fec96f3e42259983ced09932423ded850cd`. No local `main`
+      ref exists, and the untouched cached `origin/main` ref remained
+      `971860c42a70b7b4f3d76e3ef995906b098c64c4`.
+
+- [x] 29. (S1-S7) Run the full matrix regression file.
       done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q` ends with 0 failed.
+
+      proof: exit 0; `41 passed in 8.37s`; full output is retained in
+      `proof/all-matrix-tests-green.txt`.
 
 - [ ] 30. (S1-S7) Run the full repository gate while no live worker or docs verifier is running.
       done-when: `python -m pytest tests/ -q -n 4` ends with 0 failed; any baseline failure is recorded verbatim and routes to validation FAIL, never skipped or edited around.
 
+      result: original done criterion NOT MET; exit 1 with `12 failed, 4618
+      passed, 26 skipped in 675.16s (0:11:15)`. None of the failures is in the
+      41/41-green campaign file. The exact twelve-node failure list and final
+      line are retained verbatim in `proof/full-repository-tests-fail.txt`.
+      They match the repository's already-recorded environment/digest/default
+      baseline classes, but remain blocking RED and route step 32 to FAIL; no
+      retry, waiver, or source/test edit turns them green.
+
 - [ ] 31. (S1-S7) Run the authoritative documentation verifier while the machine is otherwise idle.
       done-when: `python tools/docs_verify.py` reports 0 failed, `--audit` 0 findings, `--links` 0 dangling, and `--coverage` 0 findings; every `--stale` row is disposed in validation.
 
-- [ ] 32. (S1-S7) Produce `VALIDATION.md` with every acceptance output and an R-by-R reconciliation.
+      result: original done criterion NOT MET. The isolated authoritative run
+      reported `71 documents, 1297 checks` and `7 failed`; `--audit` reported
+      `1 finding(s)`; `--links` reported `0 dangling reference(s)`;
+      `--coverage` reported `2 finding(s)`; and `--stale` reported `46
+      document(s) worth re-reading`. Exact failing rows and the complete stale
+      document census are retained in `proof/docs-verify-fail.txt`. All 46
+      stale rows route to explicit step-32 disposition; none is silently
+      cleared, repaired, or treated as campaign proof.
+
+- [x] 32. (S1-S7) Produce `VALIDATION.md` with every acceptance output and an R-by-R reconciliation.
       done-when: `grep -q '^## Verdict: PASS$' experiments/2026-09-01-change-live-full-judge-seat-matrix/VALIDATION.md` exits 0, or a truthful FAIL document is pushed and execution stops for replanning.
+
+      proof: `VALIDATION.md` records `## Verdict: FAIL`, reconciles R1-R12
+      and C1-C8, retains every acceptance output, disposes all 46 stale rows,
+      and names the full-repository, documentation, and full-cross blockers.
+      The isolated branch checkpoint containing this row is pushed before any
+      step-33 final-evidence action; execution stops except for that required
+      evidence checkpoint and credential teardown.
 
 - [ ] 33. (S1-S7) [COMMIT] Push the final evidence checkpoint.
       done-when: `git status --porcelain` is empty, local HEAD equals `origin/codex/live-full-judge-seat-matrix-20260901`, and `main` has not been updated or merged.
