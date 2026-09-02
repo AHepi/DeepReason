@@ -1,0 +1,58 @@
+Live check of the v6 transactional hv dispatch, 2026-09-02.
+Provider: Ollama Cloud, glm-5.2 at https://ollama.com/v1 (endpoint_id ollama-glm-5.2).
+Qualification stubbed; everything from InquiryTransactionService.prepare to the
+provider socket is live. Three runs, recorded in order because the first two are
+what taught the third.
+
+=== RUN 3 — THE ONE TO READ (neural embedder armed) ========================
+adapter transactional     True
+embedder                  NeuralEmbedder (nomic-ai/nomic-embed-text-v1.5)
+variator[0] grant         ['variator.direct.v1']
+variator route            ollama-glm-5.2 / glm-5.2
+
+hv_spot_check on a live variator seat ...
+  -> hv=0.0  hv_set events=1  llm attached=False
+run_hv_floor, EASY-TO-VARY relation (no battery) ...
+  -> verdict=fail  status=Status.REFUTED  warrants=1
+     s_hat=1.0  kernel=mu  edits sampled=8
+run_hv_floor, HARD-TO-VARY relation (k-energy battery) ...
+  -> verdict=pass  status=Status.ACCEPTED  hv=0.5
+
+v6 work items (DEFENDED_TRIAL_STEP)  3, all variator.direct.v1 / hv-variation-step.v1
+verify_root violations               0
+
+This is `hv` working as the spec intends, live: the relation that ANY edit can
+imitate is refuted (s_hat 1.0 -- every one of eight live edits survived), the
+relation whose battery the edits break passes, and its hv comes out at 0.5 --
+an intermediate value, not a degenerate 0.0 or 1.0. The token accounting is
+right: the hv_set Measure event carries no `llm`, because the transaction
+records the spend.
+
+=== RUNS 1 AND 2 — the hashing fallback, kept because they mislead ==========
+Both ran WITHOUT warming the embedder, so `_equivalent` fell back to hashing.
+
+RUN 1: hv_spot_check hv=0.0; run_hv_floor (no battery) -> FAIL, s_hat 1.0.
+       2 work items. verify_root 0 violations.
+RUN 2: hv_spot_check hv=0.0; run_hv_floor (no battery) -> PASS, hv 1.0;
+       with battery -> FAIL. 3 work items. verify_root 0 violations.
+
+The SAME no-battery target came back FAIL in run 1 and PASS in run 2, and run 2
+additionally got the battery case backwards. An edit survives only if it passes
+the battery AND is judged INEQUIVALENT to the original, so the equivalence
+surrogate decides half of every verdict -- and on the hashing fallback it
+decides it badly. Run 3, with the neural backend, gets both cases right.
+
+THE RULE THIS ESTABLISHES: a live `hv` number taken without
+`deepreason embedder-warmup` is not a measurement. CLAUDE.md already says to
+warm the embedder in the setup phase of any session that runs the harness; this
+is what skipping it costs -- not an error, not a fallback notice anyone would
+chase, just verdicts that quietly flip.
+
+=== A SCAFFOLD TRAP, worth keeping (cost this check one run to find) ========
+A root whose `run-manifest.json` is not ON DISK makes `verify_root` return early
+with an empty controller-v3 context, so every transactional call fails
+`workflow-call-pairing` with "transaction call is not its durable provider
+result". Three violations, all meaningless, and they read exactly like a
+dispatch defect. The root must be built properly -- run input first, manifest
+compiled against its digest, both bound -- before verify_root says anything
+about a transaction at all.

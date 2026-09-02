@@ -73,8 +73,8 @@ table of phase → (role, authorizing contracts, dispatch); the gate consults it
 before recording debt and returns `False` when the seat holds a listed contract.
 `measures/hv.py` self-detects the bound manifest and routes its variator call
 through `informal/trial.py`'s existing v6 bracket, generalised by three keyword
-parameters rather than copied. `hv-spot-check` is converted; the other ten rows
-are not.
+parameters rather than copied. `hv-spot-check` is converted here, and
+`hv-floor` after the operator ruling in Segment 5; the other nine rows are not.
 
 **The deferral branch is byte-identical.** Same marker string, same six-element
 `inputs`, same `transaction-contract-unavailable` reason, same dedup set. A
@@ -85,7 +85,7 @@ element rather than as a set.
 **Two design points the code cannot show, and both were proven by mutation
 rather than argued.**
 
-*The `dispatch` field, not the grant, is what converts a phase.* Ten rows have
+*The `dispatch` field, not the grant, is what converts a phase.* Nine rows have
 no dispatch written. Opening the gate on the grant alone would send them to a
 provider unbound and trip the fail-closed adapter guard the gate exists to
 respect — turning a silent inertness into a killed root. Mutation M8 (revert
@@ -212,3 +212,110 @@ tranche may be read to have proven.
   rather than shaved.
 - **`reach` untouched**, as instructed. Its zeros are empirical, not structural;
   parked P3.
+
+
+---
+
+## 2026-09-02 · Segment 5 — the operator overturns the stop, and `hv-floor` goes on
+
+**What happened.** VERIFY.md handed the operator the `hv-floor` road with both
+options priced and Road B (leave it off) recommended. They ruled the other way,
+verbatim:
+
+> "It used to be on. And it's absolutely necessary. So switch it on. And you can
+> test whether it works as intended"
+
+**The first sentence is a correction, and it is the important part.** This
+tranche framed converting `hv-floor` as INTRODUCING refutation that no
+configuration had asked for. That framing was wrong. `hv-floor` dispatched on
+every pre-v6 run; it stopped only when operations parity (2026-08-13) made v6
+the only path and the gate's `schema_version` escape went dead — while
+`rules/spawn.py` went on pinning its criterion onto every connection problem the
+harness minted. The 95 deferred targets on the grant-bearing root were not 95
+artifacts spared a new test. They were 95 criteria pinned and never evaluated.
+Restoring the evaluation is the fix, not a widening of it.
+
+**What shipped.** `LEGACY_PHASE_CONTRACTS["hv-floor"].dispatch` becomes
+`TRANSACTIONAL` and `run_hv_floor` self-detects the bound manifest exactly as
+`hv_spot_check` does. Two of eleven phases are now converted; nine remain.
+
+**The obligation the ruling carried — "test whether it works as intended" — is
+not the dispatch test.** Four offline tests drive the criterion to each of its
+verdicts through a real transaction: FAIL refutes and mints exactly one warrant
+with `s_hat` in its trace; PASS records the estimate and leaves the target
+ACCEPTED with no warrant; zero samples return OVERRUN rather than passing
+vacuously from no evidence (the trap `DR-SUB-evaluation` records); and no status
+moves on an artifact that carries no `hv-floor` commitment. Eleven mutations now
+go RED, including flipping the row back and reverting `run_hv_floor`'s dispatch.
+
+**FIX.md §4's blanket claim is retired and replaced, not quietly dropped.**
+"Nothing in this change may alter what counts as accepted, refuted, or
+warranted" held for `hv_spot_check` and cannot hold for `hv-floor` — refuting is
+the point. The claim that replaces it is bounded and testable: a status moves
+ONLY for an artifact carrying an `hv-floor` commitment, and only from that
+commitment's own verdict.
+
+---
+
+## 2026-09-02 · Segment 6 — the live check, and what one live run can say
+
+**What the record shows.** Against glm-5.2 on Ollama Cloud, with the variator
+seat holding `variator.direct.v1`, five live transactional variator calls across
+two runs — every one under contract `variator.direct.v1`, work kind
+`DEFENDED_TRIAL_STEP`, payload schema `hv-variation-step.v1` — and **`verify_root`
+clean, 0 violations, on both roots**. Both producers reached typed outcomes:
+`hv_spot_check` recorded an `hv_set` event carrying no `llm` (the transaction is
+the accounting, as designed), and `run_hv_floor` reached FAIL with a minted
+warrant in one run and PASS with a recorded estimate in the other.
+
+**The value is sample-dependent, and that is inherent.** `hv` samples k edits
+from a live variator and scores their survival, so a different sample is a
+different number — which is why `hv_spot_check`'s own docstring calls it "a
+spot-check, re-estimable later". One live run is evidence that the path works
+and is not a measurement of any particular artifact's `hv`. A tranche that reads
+a single live `hv` as a verdict on a claim has over-read it.
+
+**The disagreement had a cause, and finding it is the useful part of this
+segment.** Runs 1 and 2 ran WITHOUT warming the neural embedder, so
+`_equivalent` fell back to hashing. An edit survives only if it passes the
+battery AND is judged INEQUIVALENT to the original, so the equivalence surrogate
+decides half of every verdict — and on the hashing fallback it decides it badly.
+A third run with `deepreason embedder-warmup` done first
+(`NeuralEmbedder`, `nomic-ai/nomic-embed-text-v1.5`) gets both cases right and is
+the run to read:
+
+| target | verdict | status | hv |
+|---|---|---|---|
+| easy-to-vary relation, no battery | **fail** (`s_hat` 1.0, 8 live edits, all survived) | REFUTED, 1 warrant | — |
+| hard-to-vary relation, `k-energy` battery | **pass** | ACCEPTED | **0.5** |
+| `hv_spot_check` target | — | — | 0.0, one `hv_set` event, `llm` not attached |
+
+`verify_root`: 0 violations. That is `hv` behaving as spec §16 intends, live: the
+relation any edit can imitate falls, the relation whose battery the edits break
+survives, and the surviving one's `hv` is an intermediate 0.5 rather than a
+degenerate 0.0 or 1.0.
+
+**The rule this establishes, and it generalises past this tranche:** a live `hv`
+number taken without warming the embedder is not a measurement. CLAUDE.md
+already says to warm it in the setup phase of any session that runs the harness.
+This is what skipping it costs — no error, no fallback notice anyone would
+chase, just verdicts that quietly flip.
+
+**What the live check does NOT show.** It drives the two producers directly. It
+does not show a live SCHEDULER reaching `_lazy_hv` or the `hv-floor` arm on its
+own, which needs a run deep enough to produce an ACCEPTED-and-addressed artifact
+or a connection problem. That remains unproven live, and the offline soaks
+established why no stub-driven soak can supply it.
+
+**A scaffold trap worth keeping, because it cost this check a run and reads
+exactly like a defect.** A root whose `run-manifest.json` is not ON DISK makes
+`verify_root` return early with an empty controller-v3 context, so every
+transactional call fails `workflow-call-pairing` with "transaction call is not
+its durable provider result". Three violations, all meaningless. The root must
+be built properly — run input first, manifest compiled against its digest, both
+bound — before `verify_root` says anything about a transaction at all.
+
+**Credential hygiene.** The operator's key was written to
+`experiments/2026-09-02-defect-hv-v6-reachability/env`, confirmed matched by
+`.gitignore:47` (`experiments/*/env`) with `git check-ignore` before use, and
+never committed.

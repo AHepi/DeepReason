@@ -271,3 +271,84 @@ lesson: a Traps entry recording a JUDGEMENT ages against laws it never mentions,
 and this one was falsified twice by two operator laws thirteen days apart
 without a line of the code it described changing — so no check could have caught
 it.
+
+
+---
+
+# Addendum, 2026-09-02 — the operator ruled `hv-floor` ON, and it was tested
+
+The one open decision in this document is closed. Operator, verbatim: *"It used
+to be on. And it's absolutely necessary. So switch it on. And you can test
+whether it works as intended"*. The diff-budget item was answered "accept it;
+count executable lines in future".
+
+**The ruling corrects this document's framing, not just its outcome.** VERIFY.md
+and FIX.md §7 both described converting `hv-floor` as changing what runs refute
+"with no configuration having asked". That is wrong: it dispatched on every
+pre-v6 run and stopped only when the gate's `schema_version` escape went dead
+under operations parity, while `rules/spawn.py` kept pinning its criterion onto
+every connection problem. The 95 deferred targets were criteria pinned and never
+evaluated. See RESULTS.md Segment 5.
+
+## What was added
+
+`LEGACY_PHASE_CONTRACTS["hv-floor"].dispatch` -> `TRANSACTIONAL`, and
+`run_hv_floor` self-detects the bound manifest as `hv_spot_check` does. Two of
+eleven phases converted; nine remain.
+
+## Criterion 4 — restated, because the blanket claim no longer holds
+
+    python -m pytest tests/test_hv_v6_reachability.py -q
+    29 passed
+
+The claim "hv changes no status" was true only while `hv-floor` was off.
+Refuting is now the point, so the guard that replaces it is the bounded one, and
+it is a real check rather than a weaker one:
+
+| test | asserts |
+|---|---|
+| `..._refutes_an_easy_to_vary_relation_through_a_v6_transaction` | FAIL -> REFUTED, exactly one warrant, `s_hat` in its trace, one `DEFENDED_TRIAL_STEP` work item under `variator.direct.v1` |
+| `..._passes_a_hard_to_vary_relation_and_records_the_estimate` | PASS -> ACCEPTED, `state.hv` = 1.0, **no** warrant |
+| `..._overruns_rather_than_passing_from_zero_samples` | zero samples -> OVERRUN, no `hv_set`, no warrant, no status move |
+| `..._moves_no_status_on_an_artifact_that_carries_no_hv_floor` | of every artifact that existed before the call, only the one carrying the criterion moves |
+
+Mutation proofs now number **eleven**: M10 (flip the row back to `UNCONVERTED`)
+and M11 (revert `run_hv_floor`'s dispatch) both go RED, the latter with
+`WorkflowAuthorizationError: RunManifest v6 provider dispatch requires a bound
+transaction`.
+
+## The live check — taken, and clean
+
+    python -u experiments/2026-09-02-defect-hv-v6-reachability/live_hv_check.py
+    variator route            ollama-glm-5.2 / glm-5.2
+    variator[0] grant         ['variator.direct.v1']
+    hv_spot_check   -> hv=0.0  hv_set events=1  llm attached=False
+    run_hv_floor    -> verdict=pass  status=ACCEPTED  hv=1.0     (run 2)
+    run_hv_floor    -> verdict=fail  status=REFUTED  warrants=1  (run 1, same target)
+    v6 work items (DEFENDED_TRIAL_STEP)  3, all variator.direct.v1 / hv-variation-step.v1
+    verify_root violations               0
+
+Five live transactional variator calls across two runs; `verify_root` clean on
+both roots. Full output at `live_hv_check_OUTPUT.txt`, machine-readable at
+`live_hv_check.json`.
+
+**The finding that matters, and it is not a defect.** The SAME target came back
+FAIL in run 1 and PASS in run 2. `hv` samples k edits from a live variator and
+scores their survival, so a different sample is a different number — its own
+docstring calls it "a spot-check, re-estimable later". One live run proves the
+PATH works; it is not a measurement of any artifact's `hv`. A later tranche that
+reads a single live `hv` as a verdict on a claim has over-read it.
+
+**What the live check does not show:** a live SCHEDULER reaching `_lazy_hv` or
+the `hv-floor` arm by itself. That needs a run deep enough to produce an
+ACCEPTED-and-addressed artifact or a connection problem, and remains unproven
+live. Segment 3 establishes why no stub-driven soak can supply it either.
+
+**Credential hygiene:** the operator's key went to
+`experiments/2026-09-02-defect-hv-v6-reachability/env`, confirmed matched by
+`.gitignore:47` with `git check-ignore` before use, and never committed.
+
+## Verdict, unchanged: PASS — now on the whole goal
+
+Both producers of `hv_set` dispatch on a granted seat and defer, byte-identically,
+on an ungranted one. GOAL.md's scope was "the two producers"; both are delivered.

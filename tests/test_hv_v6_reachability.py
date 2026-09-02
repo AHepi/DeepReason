@@ -31,7 +31,7 @@ from types import SimpleNamespace
 import pytest
 
 from deepreason.harness import Harness
-from deepreason.measures.hv import hv_spot_check
+from deepreason.measures.hv import hv_spot_check, run_hv_floor
 from deepreason.ontology import Provenance, Status
 from deepreason.scheduler.scheduler import Scheduler
 from deepreason.workflow.legacy_phase_contracts import (
@@ -119,6 +119,33 @@ def test_a_granted_variator_seat_dispatches_hv_under_v6():
 
     assert scheduler._defer_untransactional_v6_phase("hv-spot-check", "variator", "A") is False
     assert _markers(scheduler) == []
+
+
+def test_a_granted_variator_seat_dispatches_hv_floor_under_v6():
+    """`hv-floor` is converted too, on the operator's ruling of 2026-09-02.
+
+    Their words: "It used to be on. And it's absolutely necessary. So switch it
+    on." It dispatched on every pre-v6 run and stopped only because this gate's
+    `schema_version` escape went dead, while `rules/spawn.py` kept pinning its
+    criterion onto every connection problem -- so the criteria were pinned and
+    never evaluated.
+    """
+
+    scheduler = _scheduler(_manifest(_plan(("variator", 0, ("variator.direct.v1",)))))
+
+    assert scheduler._defer_untransactional_v6_phase("hv-floor", "variator", "A", "k") is False
+    assert _markers(scheduler) == []
+
+
+def test_an_ungranted_variator_seat_still_defers_hv_floor():
+    """Converted does not mean ungated: no grant, no dispatch, same notice."""
+
+    scheduler = _scheduler(_manifest(_plan(("variator", 0, ()))))
+
+    assert scheduler._defer_untransactional_v6_phase("hv-floor", "variator", "A", "k") is True
+    assert _markers(scheduler) == [
+        (MARKER, "hv-floor", "variator", "A", "k", "transaction-contract-unavailable")
+    ]
 
 
 def test_a_compact_variator_seat_is_granted_by_the_other_contract_id():
@@ -212,7 +239,6 @@ def test_a_non_v6_manifest_is_untouched_by_the_consultation():
 @pytest.mark.parametrize(
     "phase,role,contract",
     [
-        ("hv-floor", "variator", "variator.direct.v1"),
         ("premise-demarcation-variation", "variator", "variator.direct.v1"),
         ("paraphrase-audit-variation", "variator", "variator.direct.v1"),
         ("rubric-trial", "judge", "judgeruling.direct.v1"),
@@ -247,10 +273,12 @@ def test_flipping_a_row_to_transactional_is_what_opens_its_gate():
 
     from dataclasses import replace
 
-    row = LEGACY_PHASE_CONTRACTS["hv-floor"]
+    row = LEGACY_PHASE_CONTRACTS["premise-demarcation-variation"]
     manifest = _manifest(_plan(("variator", 0, ("variator.direct.v1",))))
 
-    assert seat_may_dispatch_legacy_phase(manifest, phase="hv-floor", role="variator") is False
+    assert seat_may_dispatch_legacy_phase(
+        manifest, phase="premise-demarcation-variation", role="variator"
+    ) is False
 
     converted = replace(row, dispatch=TRANSACTIONAL)
     assert converted.contract_ids & {"variator.direct.v1"}
@@ -601,3 +629,192 @@ def test_hv_measures_end_to_end_through_a_real_v6_transaction(tmp_path):
     # The transaction is the token accounting; the Measure event must not
     # carry the call as well, or replay double-counts the spend.
     assert measured[0].llm is None
+
+
+# --- 8: does hv-floor still WORK, not merely dispatch? --------------------- #
+#
+# The operator's ruling of 2026-09-02 switched `hv-floor` on with an explicit
+# obligation attached -- "you can test whether it works as intended". Dispatch
+# is not the claim. The claim is that the criterion still reaches its three
+# verdicts correctly through a v6 transaction, mints a warrant only on FAIL,
+# and refuses to pass vacuously. These mirror `tests/test_hv.py`'s pre-v6
+# fixtures deliberately: same shapes, same expectations, now through the real
+# transactional boundary.
+
+
+def _hv_floor_target(harness, config, *, battery=()):
+    """A relation carrying an hv-floor criterion, as `rules/spawn.py` pins it."""
+
+    from deepreason.measures.hv import hv_floor_commitment
+    from deepreason.ontology import Interface, Ref
+
+    from tests.conftest import art
+
+    a = art(harness, "theory A: energy is conserved")
+    b = art(harness, "theory B: entropy increases")
+    floor = hv_floor_commitment(config)
+    harness.register_commitment(floor)
+    relation = harness.create_artifact(
+        "energy conservation bounds entropy production in closed systems",
+        interface=Interface(
+            commitments=[*battery, floor.id],
+            refs=[
+                Ref(target=a.id, role="dependence"),
+                Ref(target=b.id, role="dependence"),
+            ],
+        ),
+        provenance=Provenance(role="synthesizer"),
+    )
+    return relation, floor
+
+
+def _v6_hv_floor_harness(tmp_path, name, edits):
+    _config_value, manifest = _hv_grant_manifest()
+    harness = Harness(tmp_path / name)
+    _bind = __import__(
+        "tests.test_v6_compact_recovery_transition", fromlist=["_bind_classification"]
+    )._bind_classification
+    _bind(harness, manifest)
+    adapter = _v6_variator_adapter(harness, manifest, edits)
+    return harness, adapter
+
+
+def test_hv_floor_refutes_an_easy_to_vary_relation_through_a_v6_transaction(tmp_path):
+    """FAIL: every edit survives, so s_hat = 1, hv = 0 < hv_min. Refuted.
+
+    This is the verdict the deferral suppressed on every v6 run since
+    operations parity, and it is the one that MOVES A STATUS -- which is
+    exactly what the operator authorised.
+    """
+
+    from deepreason.config import Config
+    from deepreason.programs import FAIL
+    from deepreason.workflow.models import WorkflowTaskKind
+
+    config = Config(HV_K=4, HV_MIN=0.5)
+    harness, adapter = _v6_hv_floor_harness(
+        tmp_path,
+        "hv-floor-fail",
+        ["both involve heat", "both involve momentum",
+         "both involve fields", "both involve chemistry"],
+    )
+    relation, floor = _hv_floor_target(harness, config)
+
+    verdict = run_hv_floor(harness, adapter, relation.id, floor)
+
+    assert verdict == FAIL
+    assert harness.state.status[relation.id] == Status.REFUTED
+    warrant = next(w for w in harness.warrants.values() if w.target == relation.id)
+    assert warrant.commitment == floor.id
+    trace = json.loads(harness.blobs.get(warrant.trace_ref))
+    assert trace["s_hat"] == 1.0 and trace["k"] == 4
+
+    # The call went through the transaction, not around it.
+    work = [
+        item
+        for item in harness.workflow_state.transaction_work.values()
+        if item.preparation.task_kind == WorkflowTaskKind.DEFENDED_TRIAL_STEP
+    ]
+    assert len(work) == 1
+    assert work[0].preparation.contract_id == "variator.direct.v1"
+
+
+def test_hv_floor_passes_a_hard_to_vary_relation_and_records_the_estimate(tmp_path):
+    """PASS: the edits break the battery, so s_hat = 0, hv = 1.0 >= hv_min.
+
+    The accepting verdict must also land its `hv_set` estimate, or the frontier
+    gains its axis back for refuted artifacts only.
+    """
+
+    from deepreason.config import Config
+    from deepreason.ontology import Commitment
+    from deepreason.programs import PASS
+
+    config = Config(HV_K=3, HV_MIN=0.5)
+    harness, adapter = _v6_hv_floor_harness(
+        tmp_path,
+        "hv-floor-pass",
+        ["momentum bounds it", "chemistry bounds it", "fields bound it"],
+    )
+    harness.register_commitment(
+        Commitment(
+            id="k-energy",
+            eval="predicate:'energy' in content and 'entropy' in content",
+        )
+    )
+    relation, floor = _hv_floor_target(harness, config, battery=["k-energy"])
+
+    verdict = run_hv_floor(harness, adapter, relation.id, floor)
+
+    assert verdict == PASS
+    assert harness.state.status[relation.id] == Status.ACCEPTED
+    assert harness.state.hv[relation.id] == 1.0
+    assert not [w for w in harness.warrants.values() if w.target == relation.id]
+
+
+def test_hv_floor_overruns_rather_than_passing_from_zero_samples(tmp_path):
+    """OVERRUN: no edits means hv is UNMEASURED, never a vacuous PASS.
+
+    `DR-SUB-evaluation`'s Traps records why: falling through would record
+    s_hat = 0, hence hv = 1.0, hence a PASS from no evidence at all. The v6
+    dispatch must not quietly reopen that hole.
+
+    `HV_K=0` is how the branch is reached IN CONTRACT: `VariatorOutput` requires
+    at least one edit, so a zero-edit response is a schema violation rather than
+    a sample of none, and `edits[:0]` is the honest empty sample. All
+    configurations are allowed, so a run may carry it.
+    """
+
+    from deepreason.config import Config
+    from deepreason.programs import OVERRUN
+
+    config = Config(HV_K=0, HV_MIN=0.5)
+    harness, adapter = _v6_hv_floor_harness(
+        tmp_path, "hv-floor-overrun", ["an edit the criterion will never see"]
+    )
+    relation, floor = _hv_floor_target(harness, config)
+    before = dict(harness.state.status)
+
+    verdict = run_hv_floor(harness, adapter, relation.id, floor)
+
+    assert verdict == OVERRUN
+    assert relation.id not in harness.state.hv
+    assert not [w for w in harness.warrants.values() if w.target == relation.id]
+    assert dict(harness.state.status) == before
+
+
+def test_hv_floor_moves_no_status_on_an_artifact_that_carries_no_hv_floor(tmp_path):
+    """The bounded evidence claim, now that hv-floor is on.
+
+    FIX.md's blanket "hv changes no status" no longer holds -- refuting is the
+    point. What must still hold is that it refutes ONLY where a run's own
+    configuration pinned the criterion. Every artifact without an `hv-floor`
+    commitment keeps its status through the whole episode.
+    """
+
+    from deepreason.config import Config
+
+    from tests.conftest import art
+
+    config = Config(HV_K=4, HV_MIN=0.5)
+    harness, adapter = _v6_hv_floor_harness(
+        tmp_path,
+        "hv-floor-bounded",
+        ["both involve heat", "both involve momentum",
+         "both involve fields", "both involve chemistry"],
+    )
+    bystander = art(harness, "an unrelated claim about tides")
+    relation, floor = _hv_floor_target(harness, config)
+    before = dict(harness.state.status)
+
+    run_hv_floor(harness, adapter, relation.id, floor)
+
+    after = dict(harness.state.status)
+    # Only artifacts that already existed: minting a fail warrant legitimately
+    # creates the nu validity node and the critic, and a new artifact having a
+    # status is not a status that MOVED.
+    moved = {aid for aid in before if before[aid] != after.get(aid)}
+    assert moved == {relation.id}, (
+        f"hv-floor moved a status it has no criterion over: {moved - {relation.id}}"
+    )
+    assert after[bystander.id] == before[bystander.id]

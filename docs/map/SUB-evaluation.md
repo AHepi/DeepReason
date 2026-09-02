@@ -205,11 +205,16 @@ land in the caller's content-addressed blob store as `trace_ref` digests.
   does NOT pass a manifest** — it serves `premise-demarcation-variation`, a
   phase this tranche did not convert, and giving `_sample_edits` a
   self-detecting default rather than a keyword would have converted it silently.
-  `run_hv_floor` also does not pass one, for a different and stronger reason:
-  it mints a demonstrative fail warrant on `hv < hv_min` and `rules/spawn.py`
-  pins its criterion onto every connection problem, so converting it changes
-  what a run REFUTES. That is an operator ruling, parked, not an implementer's
-  call.
+  `run_hv_floor` DOES pass one, but only after an OPERATOR RULING, because it
+  mints a demonstrative fail warrant on `hv < hv_min` and `rules/spawn.py` pins
+  its criterion onto every connection problem — so switching it on changes what
+  a run REFUTES. The ruling's own reason is the durable part: it dispatched on
+  every pre-v6 run and stopped only when the scheduler's `schema_version` escape
+  went dead, while the criterion kept being pinned. Pinned and never evaluated
+  is the state the fix ends. A conversion that decides status owes tests that
+  the phase still reaches EVERY verdict correctly — FAIL mints a warrant, PASS
+  records the estimate, and zero samples OVERRUN rather than passing vacuously —
+  not merely that the call dispatches.
 `check: python -c "
 import inspect
 from deepreason.measures import hv
@@ -217,8 +222,9 @@ sample = inspect.signature(hv._sample_edits).parameters
 assert 'manifest' in sample and sample['manifest'].default is None
 src = inspect.getsource(hv._sample_edits)
 assert 'v6_transactional_phase_call' in src and 'llm_call = None' in src
-assert 'manifest=' not in inspect.getsource(hv.run_hv_floor)
+assert 'manifest=_v6_manifest(adapter)' in inspect.getsource(hv.run_hv_floor)
 assert 'manifest=_v6_manifest(adapter)' in inspect.getsource(hv.hv_spot_check)
+assert 'manifest=' not in inspect.getsource(hv.VariationSampler)
 "`
 
 

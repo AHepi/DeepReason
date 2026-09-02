@@ -5,10 +5,10 @@ seat it names holds a behavioural contract grant the declared table says that
 phase requires — and defers with today's typed notice, byte-identical, when it
 does not.**
 
-Status: **DESIGN COMPLETE, ONE OPERATOR DECISION OUTSTANDING.** Everything below
-is settled except which of two roads `hv-floor` takes (§7). The brief made that
-an explicit STOP AND ASK, and the record says the stop is real rather than
-procedural. No production code has been changed.
+Status: **DELIVERED.** §§1-6 shipped as designed. The one open decision — which
+of two roads `hv-floor` takes (§7) — was put to the operator and ruled Road A;
+§10 records the ruling, the correction it makes to §7's framing, and what it
+obliged. Both producers of `hv_set` are converted.
 
 ---
 
@@ -77,7 +77,7 @@ contract set, dispatch):
 
 | phase | role | contracts | dispatch |
 |---|---|---|---|
-| `hv-floor` | `variator` | `variator.direct.v1`, `variator.compact.v1` | see §7 |
+| `hv-floor` | `variator` | `variator.direct.v1`, `variator.compact.v1` | `v6_transactional` (§7, then §10: the operator ruled it ON) |
 | `hv-spot-check` | `variator` | `variator.direct.v1`, `variator.compact.v1` | `v6_transactional` |
 | `premise-demarcation-variation` | `variator` | (variator pair) | `unconverted` |
 | `paraphrase-audit-variation` | `variator` | (variator pair) | `unconverted` |
@@ -390,3 +390,48 @@ surface is contacted. On the orchestrator's own rule that is clear to proceed to
 terms this design meets exactly ("any change that would alter
 acceptance/refutation on a fixed stub"). The stop is therefore taken on the
 `hv-floor` row only, with a recommendation, and everything else proceeds.
+
+---
+
+## 10. OPERATOR RULING, 2026-09-02 — §7 decided: Road A
+
+The stop in §7 was put to the operator with both roads priced and Road B
+recommended. Their answer, verbatim:
+
+> "It used to be on. And it's absolutely necessary. So switch it on. And you
+> can test whether it works as intended"
+
+Three things in that sentence, taken in order.
+
+**"It used to be on."** True, and it is the fact that settles the design
+question rather than the risk question. Before operations parity (2026-08-13)
+made RunManifest v6 the only path a run takes, the gate's `schema_version != 6`
+branch was a live escape and `run_hv_floor` dispatched on every non-v6 run. The
+gate did not decide that `hv-floor` should stop refuting; it stopped refuting as
+a side effect of a safety net becoming a lock. So converting it RESTORES prior
+behaviour rather than introducing new behaviour — which is the opposite of how
+FIX.md §7 framed it, and the correction is the operator's.
+
+**"It's absolutely necessary."** The operator's ruling on whether an `hv-floor`
+criterion, pinned by `rules/spawn.py` onto every connection problem, should be
+evaluated. It should. The 95 deferred targets on the grant-bearing root are 95
+criteria that were pinned and never checked.
+
+**"And you can test whether it works as intended."** The obligation this ruling
+carries: not merely that the call dispatches, but that the criterion still
+reaches its three verdicts correctly and mints a warrant only on FAIL.
+
+**What changes:** `LEGACY_PHASE_CONTRACTS["hv-floor"].dispatch` becomes
+`TRANSACTIONAL`, and `run_hv_floor` self-detects the bound manifest exactly as
+`hv_spot_check` already does. Nothing else in §§1-6 moves.
+
+**What §4's claim now means, restated so it is not over-read.** FIX.md's
+"evidence untouched" claim held for `hv_spot_check` because it writes only
+`state.hv`. It does NOT hold for `hv-floor`, and must not be asserted for it:
+`run_hv_floor` mints a demonstrative fail warrant on `hv < hv_min`, so enabling
+it changes what a run refutes — which is precisely what the operator has
+authorised. The test replacing the blanket claim asserts the bounded one: a
+status moves ONLY for an artifact carrying an `hv-floor` commitment, and only
+from that commitment's own FAIL verdict.
+
+**PARKED P7 is therefore closed by this ruling, not by a follow-up tranche.**

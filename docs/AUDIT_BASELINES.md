@@ -22,6 +22,21 @@ Recorded 2026-08-12 at main 074ef1549.
   Known-flaky under `-n 4`, green in serial re-run: 3 tests in
   `tests/test_mcp_run.py`, 2 in `tests/test_mcp_scratch_bridge.py`
   (thread-join timing).
+- **diff_budget** (`python tools/diff_budget.py <base> --ceiling N --paths …`):
+  the verdict is `WITHIN`/`EXCEEDED` against RAW INSERTIONS in the named paths,
+  and a ceiling set on an estimate of CODE will be exceeded by documentation.
+  Operator ruling 2026-09-02: **count executable lines when setting a ceiling**,
+  and read an `EXCEEDED` verdict against the measured split before treating it
+  as a finding. Worked instance: tranche
+  `experiments/2026-09-02-defect-hv-v6-reachability/` returned
+  `{"total_insertions": 210, "ceiling": 150, "verdict": "EXCEEDED"}` over four
+  files of which roughly 95 lines were executable and 115 were module and
+  function docstrings, comments and blanks — the docstrings stating constraints
+  the code cannot show, which the tranche's own `REC-` recipe then points a
+  future reader at. The instrument is not wrong; a ceiling that counts prose as
+  code is. The tool has no `--executable-only` mode today, so the disposal is by
+  hand: measure the split before rowing the verdict.
+
 - **docs_verify** (`python tools/docs_verify.py`): **1291 checks over 71
   documents** as of 2026-08-31 (was 1250 over 70 when this entry was written;
   the total moves with every tranche that adds a check and is NOT a pinned

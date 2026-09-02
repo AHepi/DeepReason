@@ -68,12 +68,13 @@ LEGACY_PHASE_CONTRACTS: Mapping[str, LegacyPhaseContractRow] = MappingProxyType(
         row.phase: row
         for row in (
             _row("hv-spot-check", "variator", _VARIATOR, TRANSACTIONAL),
-            # hv-floor is NOT a ranking measure: on `hv < hv_min` it mints a
-            # demonstrative fail warrant, and `rules/spawn.py` pins its
-            # criterion onto every connection problem — so converting it
-            # changes what a run refutes.  Held at UNCONVERTED pending the
-            # operator ruling that tranche 2026-09-02 stopped for.
-            _row("hv-floor", "variator", _VARIATOR, UNCONVERTED),
+            # hv-floor is not a ranking measure: on `hv < hv_min` it mints a
+            # demonstrative fail warrant, so it decides status.  It dispatched
+            # on every pre-v6 run and stopped only because this gate's
+            # `schema_version` escape went dead, and `rules/spawn.py` pins its
+            # criterion onto every connection problem — so leaving it deferred
+            # leaves those criteria pinned and never evaluated.
+            _row("hv-floor", "variator", _VARIATOR, TRANSACTIONAL),
             _row("premise-demarcation-variation", "variator", _VARIATOR, UNCONVERTED),
             _row("paraphrase-audit-variation", "variator", _VARIATOR, UNCONVERTED),
             _row("rubric-trial", "judge", _JUDGE, UNCONVERTED),

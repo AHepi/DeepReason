@@ -324,7 +324,30 @@ phase.
 
 ---
 
-## P7 — convert `hv-floor` to v6 transactional dispatch (the Road A follow-up)
+## P7 — CLOSED 2026-09-02 by operator ruling, not parked
+
+**Status: DELIVERED in this tranche.** The stop was put to the operator with
+both roads priced; they ruled Road A, verbatim: *"It used to be on. And it's
+absolutely necessary. So switch it on. And you can test whether it works as
+intended"*. `hv-floor` is converted, and the obligation the ruling carried — test
+that it WORKS, not merely that it dispatches — is discharged by four offline
+verdict tests (FAIL refutes and mints one warrant; PASS records the estimate and
+leaves the target ACCEPTED; zero samples OVERRUN rather than passing vacuously;
+no status moves on an artifact carrying no `hv-floor` criterion) plus a live
+check against glm-5.2 that reached both verdicts with `verify_root` clean.
+
+The correction the operator's first sentence makes is the one worth keeping:
+`hv-floor` **used to be on**. It dispatched on every pre-v6 run and stopped only
+because the gate's `schema_version` escape went dead under operations parity,
+while `rules/spawn.py` kept pinning its criterion onto every connection problem.
+So the tranche's own framing — that switching it on introduces new refutation —
+was wrong; it RESTORES evaluation of criteria that were pinned and never
+checked. The original parked prompt is kept below, struck through, because the
+reasoning it contains is the reasoning the ruling overturned and a later reader
+should be able to see both.
+
+~~Original park (superseded):~~ convert `hv-floor` to v6 transactional dispatch
+
 
 WHAT: `experiments/2026-09-02-defect-hv-v6-reachability/` FIX.md §7 recommended
 Road B — convert `hv-spot-check` only — because `run_hv_floor` is not a ranking

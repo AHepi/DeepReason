@@ -209,11 +209,13 @@ cell names a symbol the check greps for.
   deduplicated by the `(phase, role, target_ref, obligation_ref)` tuple, so
   every count above under-states the calls and the true rate is unrecoverable
   from the record. Second, **opening the gate on the grant alone would be worse
-  than the defect**: ten rows still have no dispatch written, and letting them
+  than the defect**: nine rows still have no dispatch written, and letting them
   through would send them to a provider unbound and trip the fail-closed guard
   the gate exists to respect — so the row's `dispatch` field, not the presence
   of a grant, is what converts a phase, and `REC-give-a-legacy-phase-v6-
-  transactional-dispatch.md` is the one-phase-per-tranche path. Third,
+  transactional-dispatch.md` is the one-phase-per-tranche path. `hv-spot-check`
+  and `hv-floor` are the two converted, and `hv-floor` only on an OPERATOR
+  RULING, because it mints a fail warrant and therefore decides status. Third,
   `premise-rent` is a `target_ref`, not a phase: both the 2026-09-01 P-A1
   write-up and this tranche's own instruction listed twelve phase names against
   eleven call sites on that misreading, and the record's own six-element

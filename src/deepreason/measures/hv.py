@@ -315,7 +315,9 @@ def run_hv_floor(harness, adapter, target_id: str, commitment: Commitment, embed
         return programs.FAIL  # verdict already on the record
     k = int(commitment.budget.extra.get("k", 5))
     hv_min = float(commitment.budget.extra.get("hv_min", "0.5"))
-    text, battery, edits, kernel, llm_call = _sample_edits(harness, adapter, target, k)
+    text, battery, edits, kernel, llm_call = _sample_edits(
+        harness, adapter, target, k, manifest=_v6_manifest(adapter)
+    )
     if not edits:
         # No bounded edits sampled => hv is UNMEASURED. Falling through would
         # record s_hat=0 -> hv=1.0, vacuously PASSing the floor from zero

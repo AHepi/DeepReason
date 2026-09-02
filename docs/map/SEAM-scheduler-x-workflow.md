@@ -297,13 +297,21 @@ Deleting `self._recover_workflow_prefixes()` from `run()` fails
   (`experiments/2026-09-02-defect-hv-v6-reachability/`): the gate consults
   `workflow/legacy_phase_contracts.py`, a declared VERSIONED table of
   phase → (role, authorizing contracts, dispatch), and returns False when the
-  seat holds one. `hv-spot-check` is converted; the other ten rows are still
-  `UNCONVERTED` and still defer, deliberately — a row let through without a
-  written dispatch path would reach a provider unbound and trip the fail-closed
-  adapter guard this whole seam exists to respect. Converting the rest is
+  seat holds one. **`hv-spot-check` and `hv-floor` are converted**; the other
+  nine rows are still `UNCONVERTED` and still defer, deliberately — a row let
+  through without a written dispatch path would reach a provider unbound and
+  trip the fail-closed adapter guard this whole seam exists to respect.
+  Converting the rest is
   `REC-give-a-legacy-phase-v6-transactional-dispatch.md`, one phase per tranche.
-  The trap that remains: the ten unconverted rows still look configurable from a
-  run-config, and only the registry says otherwise.
+  `hv-floor` was converted on an OPERATOR RULING and is the worked example of
+  why a conversion is not always an implementer's call: it mints a demonstrative
+  fail warrant, so switching it on changes what a run REFUTES. The tranche
+  stopped and priced both roads; the operator ruled it on with the reason that
+  settles it — it dispatched on every pre-v6 run and stopped only because this
+  gate's `schema_version` escape went dead, while `rules/spawn.py` kept pinning
+  its criterion onto every connection problem. The criteria were pinned and
+  never evaluated. The trap that remains: the nine unconverted rows still look
+  configurable from a run-config, and only the registry says otherwise.
 
   Argumentative criticism is a genuine exception, not
   a third case: with a manifest `criticism_policy` present, `_arg_crit`

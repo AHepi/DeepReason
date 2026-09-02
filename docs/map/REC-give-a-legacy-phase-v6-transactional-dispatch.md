@@ -10,7 +10,7 @@ Eleven optional model phases sit behind
 `Scheduler._defer_untransactional_v6_phase`. Until 2026-09-02 that gate decided
 on `schema_version` alone, so all eleven were dead on every current run; it now
 consults a declared table and opens for a phase whose seat holds the grant it
-needs. **One of the eleven is converted.** This is the path for the next one.
+needs. **Two of the eleven are converted.** This is the path for the next one.
 
 One phase per tranche. A tranche that converts two has no way to say which one
 broke the gate.
@@ -133,18 +133,22 @@ module get the same treatment.
   does not break the corpus.
 - **Convert a phase whose dispatch would change what counts as accepted,
   refuted, or warranted, without an operator ruling.** `hv-floor` is the worked
-  example and it is why this clause exists: it mints a demonstrative fail
-  warrant, and `rules/spawn.py` pins its criterion onto every connection
-  problem, so converting it changes refutation outcomes with no configuration
-  having asked. It stayed `UNCONVERTED` for exactly that reason
-  (`experiments/2026-09-02-defect-hv-v6-reachability/` FIX.md §7). Check the
-  phase's own module for a `register_fail_warrant`, a `set_status`, or a
-  warrant mint before you assume a phase is inert.
+  example, and the way it was handled is the pattern: it mints a demonstrative
+  fail warrant, and `rules/spawn.py` pins its criterion onto every connection
+  problem, so converting it changes refutation outcomes. The tranche STOPPED,
+  priced both roads, and the operator ruled it on
+  (`experiments/2026-09-02-defect-hv-v6-reachability/` FIX.md §7 and §10:
+  "It used to be on. And it's absolutely necessary. So switch it on. And you
+  can test whether it works as intended"). Two obligations follow from that
+  shape. Check the phase's own module for a `register_fail_warrant`, a
+  `set_status`, or a warrant mint before you assume a phase is inert — and
+  where you find one, the conversion owes tests that the phase still reaches
+  every one of its verdicts correctly, not merely that the call dispatches.
 
 `check: python -c "
 from deepreason.workflow.legacy_phase_contracts import LEGACY_PHASE_CONTRACTS, TRANSACTIONAL
 converted = [r.phase for r in LEGACY_PHASE_CONTRACTS.values() if r.dispatch == TRANSACTIONAL]
-assert converted == ['hv-spot-check'], converted
+assert sorted(converted) == ['hv-floor', 'hv-spot-check'], converted
 assert all(r.contract_ids for r in LEGACY_PHASE_CONTRACTS.values() if r.dispatch == TRANSACTIONAL)
 assert len(LEGACY_PHASE_CONTRACTS) == 11, len(LEGACY_PHASE_CONTRACTS)
 "`
