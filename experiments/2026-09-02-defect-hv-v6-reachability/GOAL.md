@@ -3,7 +3,7 @@
 Class: defect
 
 Observed: on every committed v6 run, `hv` is never measured — the P-R1 root
-`experiments/2026-08-25-poietics-program/run` carries 5 414 log events and
+`experiments/2026-08-25-poietics-program/run` carries 2 707 log events and
 **zero** with a non-empty `state_diff.hv_set` (and zero non-empty `reach_set`),
 measured by re-reading `log.jsonl` read-only:
 
@@ -16,7 +16,7 @@ measured by re-reading `log.jsonl` read-only:
         hv += bool(sd.get("hv_set")); reach += bool(sd.get("reach_set"))
     print(n, hv, reach)
     PY
-    # -> 5414 0 0        (measured 2026-09-02, this container)
+    # -> 2707 0 0        (measured 2026-09-02, this container)
 
 The operator's tranche brief reports the same shape on two further roots —
 P-S1 `9e48a36b1dec91ee` (171 variator deferrals) and P-A1 `4565139800f5ca02`

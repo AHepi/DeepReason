@@ -18,7 +18,7 @@ dead code and the safety net into a permanent lock.
 Evidence:
 
   - **`experiments/2026-08-25-poietics-program/run` (P-R1) `log.jsonl`** ->
-    5 414 events, **0** with a non-empty `state_diff.hv_set`, and **117**
+    2 707 events, **0** with a non-empty `state_diff.hv_set`, and **117**
     `v6-model-phase-deferred.v1` Measure events, every one of them role
     `variator` with reason `transaction-contract-unavailable`:
     `hv-spot-check` 74, `hv-floor` 42, `premise-demarcation-variation` 1.
@@ -179,3 +179,61 @@ Confirmed still true at `scheduler.py:724`. It is independent of this tranche's
 goal (registering the signal would not make `hv` measure, and making `hv` measure
 would not register the signal) and is filed in PARKED.md as P4 rather than
 folded in.
+
+---
+
+## Corrections to this document, 2026-09-02, from a wider census run after it was written
+
+Recorded as amendments rather than by silent edit, except the arithmetic error,
+which is corrected in place above because leaving a wrong number in the evidence
+list would be worse than showing the edit.
+
+**C1 — P-R1's event count was wrong by exactly 2x, and is corrected above.**
+The Evidence list and GOAL.md said 5 414 events. The true figure is **2 707**
+(`wc -l experiments/2026-08-25-poietics-program/run/log.jsonl` -> 2707). The
+error was mine: the first census script counted a `Counter` that carried two
+keys per event, so `sum(values())` doubled. Every other number in this document
+came from later scripts and is unaffected — the 117 deferrals, the phase split
+(74/42/1), the role, and the reason code all reproduce. The independent
+reproduction artifact `repro_record.py` printed 2707 for this root from the
+start, so the artifact was right and only the prose was wrong.
+
+**C2 — a deferral RECORD is not a deferral CALL.** The gate deduplicates by the
+4-tuple `(phase, role, target_ref, obligation_ref)` and keeps a per-Scheduler
+`seen` set (`scheduler.py:724-733`), so "117 deferrals" means 117 DISTINCT
+tuples, not 117 gate invocations. The true call count is higher and is not
+recoverable from the record. Every count in this document and in
+`repro_record.py` is a record count; none is a call count. The direction of the
+error is safe — records under-count calls, so the defect is at least as large as
+stated — but the sentence "hv was asked for 116 times" above should be read as
+"hv was asked for on 116 distinct targets".
+
+**C3 — P-R1 is a CONTROL, not the defect row, and the decisive root is a
+different one on `main`.** P-R1's own manifest gives `variator[0]` an EMPTY
+contract list (`criticism_policy: null`), so on that root the missing grant is a
+SECOND, independent blocker sitting in front of the gate. Deferring there is
+correct behaviour. The root that isolates this defect —
+found after this document was first written, and now the primary evidence in
+REPRO.md — is `experiments/2026-08-12-live-grounded-extension-expansion/run`:
+`state=completed`, `stop_reason=budget_exhausted`,
+`criticism_policy.authority = defended_trial`, `variator[0]` holding
+`variator.direct.v1`, **336** hv deferrals (`hv-spot-check` 241, `hv-floor` 95)
+and **zero** `hv_set`. It is on `main`, needs no branch and no soak, and it is
+what makes the diagnosis decisive rather than merely consistent.
+
+**C4 — the census is wider than this document claimed.** Across all committed
+run roots: **zero** roots with a v6 manifest carry any `hv_set` event, and the
+only roots that carry one at all have `schema_version` 1 or 2. The v6 subset
+measured by `repro_record.py` is 50 roots, 56 501 events, 2 661 hv deferral
+records, 0 measurements.
+
+**C5 — two mechanisms downstream of the deferral, worth knowing before designing
+the fix.** First, `_hv_skipped` (`scheduler.py:2952`) is an in-memory set on the
+Scheduler instance, not durable: once an artifact is deferred it is blacklisted
+for the life of the process and never re-checked, but a resume starts the
+blacklist empty while the deduplicated marker set is rebuilt from the log — so
+resume changes which artifacts are re-attempted. Second, an `hv-floor`
+commitment is NOT registry-evaluable, so `crit_program` skips it and
+`pareto_scores`' coverage denominator does not count it. A deferred `hv-floor`
+therefore neither refutes its target nor lowers its coverage: it is completely
+inert, which is why nothing downstream ever complained.
