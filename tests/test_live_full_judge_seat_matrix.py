@@ -855,6 +855,67 @@ def test_live_global_endpoint_gate_never_exceeds_three_calls(matrix):
     assert state == {"active": 0, "peak": 3}
 
 
+def test_live_baseline_case_drives_critic_defender_and_both_judges(
+    matrix, monkeypatch, tmp_path
+):
+    from deepreason.llm.endpoints import MockEndpoint
+    from deepreason.run_manifest import infer_model_family
+
+    responses = {
+        "critic": '{"attack":true,"case":"boundary condition is omitted"}',
+        "defender": '{"answer":"the boundary condition is enforced"}',
+        "judge:0": '{"verdict":"fail","decisive_point":"boundary condition"}',
+        "judge:1": '{"verdict":"fail","decisive_point":"boundary condition"}',
+    }
+
+    def fake_live_endpoint(seat, *, criticism_authority, environ):
+        assert criticism_authority == "defended_trial"
+        assert environ == {"OLLAMA_API_KEY": "test-only-secret"}
+        endpoint = MockEndpoint(
+            [responses[seat["role"]]] * (3 if seat["role"] == "critic" else 1),
+            name="https://ollama.com/v1",
+            model=seat["model_id"],
+            max_tokens=8_192,
+        )
+        endpoint.provider = "ollama"
+        endpoint.family = infer_model_family(seat["model_id"], "ollama")
+        endpoint.model_revision = None
+        endpoint.reasoning = seat["reasoning"]["value"]
+        endpoint.json_mode = seat["output_mode"] == "json_object"
+        endpoint.output_mechanism = seat["output_mechanism"]
+        endpoint.request_logprobs = False
+        endpoint.temperature = None
+        endpoint.context_window_tokens = 131_072
+        endpoint.timeout_s = 300
+        return matrix.LiveEndpointBinding(
+            role=seat["role"],
+            model_profile=seat["model_profile"],
+            endpoint=matrix.BoundedLiveEndpoint(endpoint),
+        )
+
+    monkeypatch.setattr(matrix, "build_live_endpoint", fake_live_endpoint)
+    frozen = matrix.freeze_catalog(["baseline-model"])
+    row = next(matrix.iter_seat_cases(
+        frozen["model_ids"], catalog_sha256=frozen["catalog_sha256"]
+    ))
+    result = matrix.run_live_seat_case(
+        row,
+        tmp_path / "live-case",
+        secret="test-only-secret",
+        domain_sha256="1" * 64,
+        branch_commit="2" * 40,
+    )
+    assert result["status"] == "trial_outcome"
+    assert result["dispatch_extent"][0] == "critic"
+    assert result["dispatch_extent"][-3:] == ["defender", "judge:0", "judge:1"]
+    assert result["critic_compatibility"]["status"] == "mechanically_compatible", result["critic_compatibility"]["first_boundary"]["message"]
+    assert result["fixed_case_court_reachability"]["status"] == "trial_outcome"
+    assert result["full_dispatch_reached"] is True
+    assert b"test-only-secret" not in matrix.safe_live_result_bytes(
+        result, secret="test-only-secret"
+    )
+
+
 def test_live_result_classification_preserves_the_first_typed_boundary(matrix):
     extent = ["critic", "defender"]
     typed = matrix.MatrixRefusal("V6_ROUTE_REFUSED", "verbatim refusal")

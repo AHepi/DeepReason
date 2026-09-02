@@ -542,17 +542,38 @@ final cumulative ceiling:               3200 lines
 The separate `soak_builder.py` is included in the final measurement; omitting
 it from the budget merely because it is modular would be artifact gaming.
 
-Because 3200 exceeds the workflow's approximately 300-line single-change
-ceiling, implementation is split into two ordered code checkpoints with an
+The step-24 preflight then exposed a real omission in the assembled-runner
+forecast: step 17 had frozen the endpoint and receipt primitives, but no
+executable probe command, baseline live-court coordinator, or terminal result
+loader existed. The 3200-line ceiling is therefore retired before the first
+live full-court request rather than evaded by moving those mechanisms to an
+uncounted module. The measured probe/live coordinator plus its end-to-end
+fake-provider court contract gives this final forward budget:
+
+```text
+measured runner/soak/tests at step 24: 3693 lines
+full-cross resume and summarizer:       650 lines
+monitor and result-ledger controls:     350 lines
+readability contingency:               307 lines
+final cumulative ceiling:              5000 lines
+```
+
+The expanded ceiling changes no domain, provider, reasoning, concurrency,
+authority, or completion rule. It prices the missing executable orchestration
+and continues to count every experiment code and test file.
+
+Because the implementation exceeds the workflow's approximately 300-line single-change
+ceiling, implementation is split into ordered code checkpoints with an
 independent commit and validation after each: domain/safety/resume first
 (ceiling 540 including the already-measured 217-line test contract), then the
 shipped court, then the full-cross generator, then catalog/soak/live adapters
-(cumulative ceiling 3200). No paid call occurs between them. The campaign
+(originally measured at cumulative ceiling 3200), followed by the now-explicit
+launch coordinator checkpoint (cumulative ceiling 5000). The campaign
 launch and result ledger are a separate evidence checkpoint.
 
-Frozen surfaces edited: none. Estimated code commits: two. Evidence commits:
-preregistration, authenticated catalog freeze, prefix checkpoints, and final or
-stopped result segments.
+Frozen surfaces edited: none. Evidence and code checkpoints include
+preregistration, domain/court/full-cross implementation, authenticated catalog,
+launch orchestration, prefix checkpoints, and final or stopped result segments.
 
 Rubric: 9/9 yes — every R is mapped; every named mechanism is traced to a
 shipped path; exact finite and unbounded domains are distinguished; options are

@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=23 blockers=none
+State: next=24 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -255,8 +255,18 @@ changes no shipped behavior or owner agreement.
       `77a5a11f946b21e82488ddc66473f1bfa50c6bd6c394fd420ad1baacc81754b4`;
       local HEAD equalled origin before the first completion request.
 
-- [ ] 23. (S3, S5) Run explicit none/low/medium reasoning probes for every catalog model at a maximum of three calls in flight.
+- [x] 23. (S3, S5) Run explicit none/low/medium reasoning probes for every catalog model at a maximum of three calls in flight.
       done-when: `python experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py probe` reports one terminal probe row per model/setting, `PEAK_IN_FLIGHT<=3`, no high/max/xhigh wire value, and no secret-leak finding.
+
+      proof: exit 0; `PROBE_EXPECTED=54`; `PROBE_TERMINAL=54`;
+      `PROBE_USABLE=41`; `PROVIDER_INDETERMINATE=13`;
+      `PEAK_IN_FLIGHT=3`; `PEAK_IN_FLIGHT<=3`;
+      `FORBIDDEN_REASONING=0`; `SECRET_LEAK=0`. The immutable safe receipt
+      records only parser/schema outcomes, response key names, and trace
+      byte-count/digest metadata; it stores no raw trace, response prose, or
+      credential material. Populated trace metadata was observed for 4
+      `none`, 15 `low`, and 17 `medium` rows without reinterpreting the
+      requested setting.
 
 - [ ] 24. (S4, S5, S6) Run one serial live full-court smoke after the green soak.
       done-when: `python experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py live --limit 1 --workers 1` records critic, defender, judge 0, and judge 1 dispatches or the first typed refusal verbatim.
