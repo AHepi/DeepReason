@@ -527,12 +527,27 @@ This correction prices exact configuration membership and readable,
 non-self-confirming receipts. It is not permission to compress code, bypass
 the measured paths, or omit tests.
 
-Because 2200 exceeds the workflow's approximately 300-line single-change
+After the full-cross GREEN checkpoint, the measured code-and-test total is
+`1784` lines rather than the forecast `1315`. Before the soak or live adapter
+is edited, the remaining forward budget is corrected again:
+
+```text
+measured domain/court/full-cross/tests: 1784 lines
+soak wrapper + delegated builder:        300 lines
+catalog/live/summarizer + tests:          900 lines
+readability contingency:                 216 lines
+final cumulative ceiling:               3200 lines
+```
+
+The separate `soak_builder.py` is included in the final measurement; omitting
+it from the budget merely because it is modular would be artifact gaming.
+
+Because 3200 exceeds the workflow's approximately 300-line single-change
 ceiling, implementation is split into two ordered code checkpoints with an
 independent commit and validation after each: domain/safety/resume first
 (ceiling 540 including the already-measured 217-line test contract), then the
 shipped court, then the full-cross generator, then catalog/soak/live adapters
-(cumulative ceiling 2200). No paid call occurs between them. The campaign
+(cumulative ceiling 3200). No paid call occurs between them. The campaign
 launch and result ledger are a separate evidence checkpoint.
 
 Frozen surfaces edited: none. Estimated code commits: two. Evidence commits:

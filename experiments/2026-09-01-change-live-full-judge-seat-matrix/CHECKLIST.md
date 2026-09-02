@@ -181,10 +181,10 @@ changes no shipped behavior or owner agreement.
       done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q` ends with 0 failed, saved in `proof/all-matrix-tests-green.txt`.
 
 - [ ] 15. (S3, S4, S5, S6) Run the actual-file blast-radius gate over the assembled runner.
-      done-when: `python tools/blast_radius.py --files experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py tests/test_live_full_judge_seat_matrix.py` reports both frozen contact lists empty and verdict CLEAR.
+      done-when: `python tools/blast_radius.py --files experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py experiments/2026-09-01-change-live-full-judge-seat-matrix/soak_builder.py tests/test_live_full_judge_seat_matrix.py` reports both frozen contact lists empty and verdict CLEAR.
 
 - [ ] 16. (S3, S4, S5, S6) Measure checkpoint-two diff budget.
-      done-when: `python tools/diff_budget.py 70e9c73ed0a5630994613afea74c80de6bf59302 --ceiling 2200 --paths experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py tests/test_live_full_judge_seat_matrix.py` reports `WITHIN`.
+      done-when: `python tools/diff_budget.py 70e9c73ed0a5630994613afea74c80de6bf59302 --ceiling 3200 --paths experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py experiments/2026-09-01-change-live-full-judge-seat-matrix/soak_builder.py tests/test_live_full_judge_seat_matrix.py` reports `WITHIN`.
 
 - [ ] 17. (S3, S4, S5, S6) [COMMIT] Push the assembled runner, soak proof, and full matrix-test GREEN proof.
       done-when: local HEAD equals the GitHub branch head and `git status --porcelain` is empty.
