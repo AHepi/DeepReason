@@ -121,10 +121,30 @@ def _variator_pack(text: str, battery_desc: list[str], k: int, struct: bool) -> 
     return "\n".join(lines)
 
 
-def _sample_edits(harness, adapter, artifact: Artifact, k: int):
+def _v6_manifest(adapter):
+    """The bound v6 manifest, or None outside RunManifest v6 authority.
+
+    Mirrors ``informal/trial.py::_v6_trial_manifest`` and ``rules/crit.py``:
+    the RULE self-detects, because the scheduler's call to it must stay
+    keyword-free (DR-SEAM-scheduler-x-rules).
+    """
+
+    if not getattr(adapter, "transaction_authority_required", False):
+        return None
+    return adapter.bound_v6_manifest()
+
+
+def _sample_edits(harness, adapter, artifact: Artifact, k: int, *, manifest=None):
     """Returns (text, battery, edits, kernel, llm_call). Kernel selection
     (§6/§10.7): mu_struct whenever the content parses as a skeleton —
-    rewording-only variation is banned as the sole kernel for skeletons."""
+    rewording-only variation is banned as the sole kernel for skeletons.
+
+    ``manifest`` is the bound v6 manifest (or None, the default — the
+    demarcation sampler never passes it): when set, the variator call is
+    authorized through the shared v6 transactional bracket, and ``llm_call``
+    comes back None because the transaction is then the token accounting.
+    Attaching the same call to ``event.llm`` as well would count it twice
+    (``Harness.record_llm_calls``: every call reaches the log exactly once)."""
     from deepreason.informal.skeleton import parse_skeleton
 
     text = programs.content_text(artifact, harness.blobs)
@@ -133,7 +153,25 @@ def _sample_edits(harness, adapter, artifact: Artifact, k: int):
     pack = _variator_pack(
         text, [harness.commitments[c].eval for c in battery], k, kernel == "mu_struct"
     )
-    output, llm_call = adapter.call("variator", pack, VariatorOutput)
+    if manifest is not None:
+        from deepreason.informal.trial import v6_transactional_phase_call
+
+        output, _call = v6_transactional_phase_call(
+            harness,
+            adapter,
+            manifest,
+            role="variator",
+            target_id=artifact.id,
+            step="hv-variation",
+            pack=pack,
+            output_model=VariatorOutput,
+            task_payload_schema="hv-variation-step.v1",
+            trigger_prefix="hv",
+            reason_prefix="hv",
+        )
+        llm_call = None
+    else:
+        output, llm_call = adapter.call("variator", pack, VariatorOutput)
     return text, battery, [e.content for e in output.edits[:k]], kernel, llm_call
 
 
@@ -173,7 +211,9 @@ def hv_spot_check(harness, adapter, artifact_id: str, k: int, embedder=None) -> 
     if not adapter.has_role("variator"):
         return None
     artifact = harness.state.artifacts[artifact_id]
-    text, battery, edits, _kernel, llm_call = _sample_edits(harness, adapter, artifact, k)
+    text, battery, edits, _kernel, llm_call = _sample_edits(
+        harness, adapter, artifact, k, manifest=_v6_manifest(adapter)
+    )
     if not edits:
         harness.record_llm_calls([llm_call], "hv-nomeasure")
         return None

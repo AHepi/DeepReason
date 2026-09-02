@@ -1,0 +1,52 @@
+# hv-reachability tranche: the SOLO shape that grants its variator seat.
+#
+# Identical to experiments/2026-08-22-live-reach-rich-run/run-config.yaml --
+# eleven canonical roles on one glm-5.2 route -- except for the three fields
+# at the bottom, which are the whole of the wiring that mints a behavioural
+# contract grant for the variator seat.
+#
+# Why those three and no others: `_route_seat_behavioral_contract_assignments`
+# (run_manifest.py) grants the defender/judge/variator trial contracts only
+# when `criticism_policy.authority == "defended_trial"`, and the compiled
+# criticism policy is None while LEGACY_CRITICISM_ENABLED is true and
+# observe_only while ADJUDICATION_STATUS_AUTHORITY_ENABLED is false. So the
+# three move together or the grant is not minted at all.
+#
+# This is a SOLO shape on purpose. JUDGE_SEATS_ENABLED stays false: the
+# operator's solo-run law says sole-model operation must not be locked out of
+# a capability, and `hv` invokes the variator role and no judge. A soak that
+# needed judge seats to measure hv would be soaking the wrong claim.
+
+roles:
+  conjecturer: &solo_glm
+    endpoint: https://ollama.com/v1
+    endpoint_id: ollama-glm-5.2
+    provider: ollama
+    model: glm-5.2
+    model_revision: glm-5.2
+    family: glm
+    api_key_env: OLLAMA_API_KEY
+    context_window_tokens: 131072
+    max_tokens: 32768
+    reasoning: "none"
+    timeout_s: 180
+    output_mode: json_object
+  argumentative_critic: *solo_glm
+  defender: *solo_glm
+  variator: *solo_glm
+  judge: *solo_glm
+  summarizer: *solo_glm
+  synthesizer: *solo_glm
+  vision_critic: *solo_glm
+  property_designer: *solo_glm
+  thesis: *solo_glm
+  grounding_reviewer: *solo_glm
+
+JUDGE_SEATS_ENABLED: false
+SCHOOL_SEATS_ENABLED: false
+RESEARCH_BACKEND: null
+
+# The three that mint the variator grant.
+LEGACY_CRITICISM_ENABLED: false
+ADJUDICATION_STATUS_AUTHORITY_ENABLED: true
+ENGAGED_CRITICISM_AUTHORITY: defended_trial

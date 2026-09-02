@@ -710,10 +710,21 @@ class Scheduler:
 
         Return True only for v6, so historical schedulers retain their
         byte-for-byte call paths and behavior.
+
+        Which v6 phases are debt and which dispatch is CONFIGURATION, read from
+        the manifest's own behavioral grants through the declared table in
+        ``workflow/legacy_phase_contracts.py``. Deciding it here, from literals,
+        is the defect that made eleven phases unreachable on every v6 run.
         """
+
+        from deepreason.workflow.legacy_phase_contracts import (
+            seat_may_dispatch_legacy_phase,
+        )
 
         manifest = self.run_manifest
         if manifest is None or manifest.schema_version != 6:
+            return False
+        if seat_may_dispatch_legacy_phase(manifest, phase=phase, role=role):
             return False
 
         bounded = tuple(

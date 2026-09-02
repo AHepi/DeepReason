@@ -1,5 +1,5 @@
 <!-- DR-SEAM-scheduler-x-workflow -->
-Verified-at: 033b4b263
+Verified-at: 66e56fe88
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/scheduler/scheduler.py, src/deepreason/workflow/lifecycle.py, src/deepreason/workflow/shadow.py, src/deepreason/workflow/trace.py, src/deepreason/workflow/criticism.py
 Sides: DR-SUB-scheduler, DR-SUB-workflow
@@ -39,12 +39,15 @@ imported `workflow.lifecycle` for `RESUMABLE_STOP_REASONS`, and the embedder
 tranche added a DOCSTRING there naming the scheduler as the producer of the
 `embedder` Measure events its reader consumes. Prose, not an import — the
 load-bearing clauses of this check (which module owns the criticism planners,
-and that `workflow/` never imports `scheduler`) are unchanged. Five files
+and that `workflow/` never imports `scheduler`) are unchanged. The scheduler's own mentions went from sixteen to seventeen on 2026-09-02:
+the deferral gate now consults `workflow/legacy_phase_contracts.py` for whether a
+legacy phase's seat carries the grant it needs, so the decision is manifest data
+instead of a literal. Five files
 carry the agreement — and one of them,
 `workflow/criticism.py`, never names the scheduler at all, so a grep-shaped
 search for this seam misses the module whose planners nothing but the scheduler
 calls.
-`check: test "$(for f in $(grep -rl "deepreason\.workflow" --include=*.py src/deepreason); do grep -qlE "scheduler" "$f" && echo x; done | wc -l)" -eq 14 && test "$(grep -rlE "plan_foreign_criticism|compile_criticism_assignments" --include=*.py src/deepreason | grep -v "workflow/criticism.py")" = "src/deepreason/scheduler/scheduler.py" && ! grep -rq "deepreason\.scheduler" --include=*.py src/deepreason/workflow/ && test "$(grep -c "deepreason\.workflow" src/deepreason/scheduler/scheduler.py)" -eq 16 && test "$(grep -cE "^from deepreason\.workflow" src/deepreason/scheduler/scheduler.py)" -eq 2 && grep -q "^def plan_foreign_criticism(" src/deepreason/workflow/criticism.py && ! grep -q "scheduler" src/deepreason/workflow/criticism.py && grep -q "plan_foreign_criticism(manifest" src/deepreason/scheduler/scheduler.py`
+`check: test "$(for f in $(grep -rl "deepreason\.workflow" --include=*.py src/deepreason); do grep -qlE "scheduler" "$f" && echo x; done | wc -l)" -eq 14 && test "$(grep -rlE "plan_foreign_criticism|compile_criticism_assignments" --include=*.py src/deepreason | grep -v "workflow/criticism.py")" = "src/deepreason/scheduler/scheduler.py" && ! grep -rq "deepreason\.scheduler" --include=*.py src/deepreason/workflow/ && test "$(grep -c "deepreason\.workflow" src/deepreason/scheduler/scheduler.py)" -eq 17 && test "$(grep -cE "^from deepreason\.workflow" src/deepreason/scheduler/scheduler.py)" -eq 2 && grep -q "^def plan_foreign_criticism(" src/deepreason/workflow/criticism.py && ! grep -q "scheduler" src/deepreason/workflow/criticism.py && grep -q "plan_foreign_criticism(manifest" src/deepreason/scheduler/scheduler.py`
 
 ## Where it is expressed
 
@@ -53,6 +56,7 @@ calls.
 | Construction guard | `scheduler/scheduler.py` | `Scheduler.__init__`, first branch | a v6 manifest with an adapter that lacks `transaction_authority_required` raises before any state is read |
 | Authority binding | `scheduler/scheduler.py` | `adapter.bind_v6_authority(harness, run_manifest)` | one adapter, one harness, one manifest — fixed at construction, not per call |
 | Dispatch gate | `scheduler/scheduler.py` | the `run_manifest=` argument of `conj(...)` | whether the rule opens a transaction at all; `None` for any non-active mode |
+| Legacy-phase authority | `scheduler/scheduler.py`, `workflow/legacy_phase_contracts.py` | `_defer_untransactional_v6_phase` → `seat_may_dispatch_legacy_phase` | whether an optional legacy model phase is completion DEBT or a dispatch: the seat's manifest grant decides, not `schema_version` |
 | Preparation ordering | `scheduler/scheduler.py` | `context_plan = None` under v6 | controller-v3 appends preparation before its pure planners, so the scheduler must not pre-plan context |
 | Transaction bracket | `rules/conj.py`, `rules/crit.py`, `scratch/authoring.py`, `referee.py` | `InquiryTransactionService(...)` | the rule that makes the call opens and settles it |
 | Recovery entry | `scheduler/scheduler.py` | `run` → `_recover_workflow_prefixes` (latched by `_workflow_recovery_done`) | no cycle starts over an open work order; leftover authority raises |
@@ -274,10 +278,34 @@ Deleting `self._recover_workflow_prefixes()` from `run()` fails
   "assumed". The generalisation is the same one `DR-SEAM-llm-x-workflow` records
   about `retry_max`: an assertion whose violating case no fixture produces is
   tested by nothing.
-- **Under v6 the local criticism ladder is empty, and that is not a bug.**
+- **Under v6 the local criticism ladder was empty because the gate read
+  `schema_version` and nothing else — and that WAS a bug.** This entry used to
+  read "and that is not a bug", and it was wrong from 2026-08-26, the day the
+  operator's modularity law made "reachable as configuration" the standard.
   `_criticize`'s HV-floor and rubric arms, pairwise discrimination, experiment
-  and property design, audit, vision and lazy HV all record deferral debt
-  instead of dispatching. Argumentative criticism is a genuine exception, not
+  and property design, audit, vision and lazy HV all recorded deferral debt
+  instead of dispatching, on EVERY v6 run, whatever the configuration said —
+  because `_defer_untransactional_v6_phase` returned True for every v6 manifest
+  before reading any other value. Since operations parity (2026-08-13) makes v6
+  the only path a current run takes, the `schema_version != 6` escape was dead
+  code and the safety net was a permanent lock. Measured across 50 committed v6
+  roots: 2 661 `hv` deferral records, 0 `hv_set` measurements, including 336
+  deferrals on grounded-extension run `8e22d0431fd2b98d`
+  (`experiments/2026-08-12-live-grounded-extension-expansion/run`), which
+  completed cleanly with `variator[0]` holding `variator.direct.v1` — the exact
+  grant the gate stands in for. PARTLY FIXED 2026-09-02
+  (`experiments/2026-09-02-defect-hv-v6-reachability/`): the gate consults
+  `workflow/legacy_phase_contracts.py`, a declared VERSIONED table of
+  phase → (role, authorizing contracts, dispatch), and returns False when the
+  seat holds one. `hv-spot-check` is converted; the other ten rows are still
+  `UNCONVERTED` and still defer, deliberately — a row let through without a
+  written dispatch path would reach a provider unbound and trip the fail-closed
+  adapter guard this whole seam exists to respect. Converting the rest is
+  `REC-give-a-legacy-phase-v6-transactional-dispatch.md`, one phase per tranche.
+  The trap that remains: the ten unconverted rows still look configurable from a
+  run-config, and only the registry says otherwise.
+
+  Argumentative criticism is a genuine exception, not
   a third case: with a manifest `criticism_policy` present, `_arg_crit`
   delegates the entire phase to `_foreign_arg_crit` and returns — the
   transactional path — and a v6 manifest *without* a criticism policy now
@@ -291,3 +319,19 @@ Deleting `self._recover_workflow_prefixes()` from `run()` fails
   seats] disconnected") traced to. Argumentative criticism is now the ONLY
   local-ladder phase that never defers under v6.
 `check: python -c 'import inspect; from deepreason.scheduler.scheduler import Scheduler as S; a = inspect.getsource(S._arg_crit); assert a.index("manifest foreign criticism has no runtime critic role") < a.index("self._foreign_arg_crit()") < a.index("crit_argumentative_batch("); assert "if criticism_policy is not None:\n            self._foreign_arg_crit()\n            return" in a; assert "argumentative-criticism" not in a' && python -m pytest tests/test_v6_scheduler_model_phase_deferral.py::test_legacy_argumentative_criticism_dispatches_under_v6 tests/test_v6_scheduler_model_phase_deferral.py::test_v6_audit_vision_and_lazy_hv_defer_without_dispatch tests/test_v6_scheduler_model_phase_deferral.py::test_v6_pairwise_discrimination_never_reaches_unbound_judge -q`
+The gate's answer is manifest data: the same phase on the same role gets a
+different answer from a granted and an ungranted seat, and the phase-to-contract
+mapping is named nowhere in the scheduler.
+`check: python -m pytest tests/test_hv_v6_reachability.py -q && python -c "
+import ast, inspect, textwrap
+from deepreason.scheduler.scheduler import Scheduler
+from deepreason.workflow.legacy_phase_contracts import LEGACY_PHASE_CONTRACTS
+body = ast.parse(textwrap.dedent(inspect.getsource(Scheduler._defer_untransactional_v6_phase)))
+assert any(
+    isinstance(n, ast.Call) and isinstance(n.func, ast.Name)
+    and n.func.id == 'seat_may_dispatch_legacy_phase'
+    for n in ast.walk(body)
+)
+text = open('src/deepreason/scheduler/scheduler.py').read()
+assert not [c for r in LEGACY_PHASE_CONTRACTS.values() for c in r.contract_ids if c in text]
+"`

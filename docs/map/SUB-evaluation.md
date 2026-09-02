@@ -1,5 +1,5 @@
 <!-- DR-SUB-evaluation -->
-Verified-at: e3a6cadf5
+Verified-at: 66e56fe88
 Verify: python -m pytest tests/test_oracle.py tests/test_hv.py tests/test_informal.py tests/test_trial.py tests/test_standards.py tests/test_audits.py tests/test_dataset_oracle.py -q
 Owns: src/deepreason/programs.py, src/deepreason/oracle.py, src/deepreason/oracle_sandbox.py, src/deepreason/measures/, src/deepreason/informal/
 Seams: DR-SEAM-evaluation-x-rules, DR-SEAM-evaluation-x-ontology
@@ -185,6 +185,42 @@ land in the caller's content-addressed blob store as `trace_ref` digests.
 `check: grep -q "_STRUCTURAL_PROGRAMS = frozenset(" src/deepreason/measures/reach.py && grep -q "def _substantive(commitment) -> bool:" src/deepreason/measures/reach.py && grep -q "_EQUIV_BATTERY_CAP = 12" src/deepreason/measures/hv.py && grep -q "def _equivalence_battery(harness, artifact)" src/deepreason/measures/hv.py && grep -q "def _sample_edits(" src/deepreason/measures/hv.py && grep -q "def _equivalent(" src/deepreason/measures/hv.py && grep -q "HV_K: int = 8" src/deepreason/config.py && grep -q "HV_MIN: float | None = None" src/deepreason/config.py && grep -q "def _paraphrase_screen(" src/deepreason/informal/trial.py && grep -q "def _trial_steps(" src/deepreason/informal/trial.py && grep -q "class TrialAuthority" src/deepreason/authority.py && grep -q 'PARAPHRASE_AUDIT = Commitment(id="audit:paraphrase-invariance"' src/deepreason/informal/audits.py && grep -q "def bump(case: str, kind: str, weight: int = 1) -> None:" src/deepreason/informal/appellate.py && grep -q "^class Skeleton(BaseModel):" src/deepreason/informal/skeleton.py && grep -q "def _eval_kind_is_safe(cls, v: str) -> str:" src/deepreason/informal/skeleton.py`
 
 ## Traps
+
+- **`hv` could not be measured on any v6 run, and the reason was not in this
+  subsystem.** `_sample_edits` (`measures/hv.py`) is the single variator
+  dispatch behind both `hv_set` producers, and it was never reached: the
+  scheduler's v6 deferral gate fenced `hv-floor` and `hv-spot-check` on
+  `schema_version` alone. Across 50 committed v6 roots the census is 2 661 `hv`
+  deferral records and 0 measurements. FIXED 2026-09-02
+  (`experiments/2026-09-02-defect-hv-v6-reachability/`, gate side) — see
+  `DR-SUB-scheduler`'s Traps for the gate; what changed HERE is that
+  `_sample_edits` takes a `manifest=` keyword and, when set, routes the
+  variator call through `informal/trial.py::v6_transactional_phase_call`.
+  Two things a converting tranche must not get wrong. First, **the returned
+  `llm_call` is `None` under v6 and that is load-bearing**: the transaction
+  records the spend, so also attaching the call to `event.llm` double-counts it
+  against `Harness.record_llm_calls`'s stated rule that every call reaches the
+  log exactly once. Returning `None` makes all five downstream record sites
+  correct with no edit to any of them. Second, **`VariationSampler` deliberately
+  does NOT pass a manifest** — it serves `premise-demarcation-variation`, a
+  phase this tranche did not convert, and giving `_sample_edits` a
+  self-detecting default rather than a keyword would have converted it silently.
+  `run_hv_floor` also does not pass one, for a different and stronger reason:
+  it mints a demonstrative fail warrant on `hv < hv_min` and `rules/spawn.py`
+  pins its criterion onto every connection problem, so converting it changes
+  what a run REFUTES. That is an operator ruling, parked, not an implementer's
+  call.
+`check: python -c "
+import inspect
+from deepreason.measures import hv
+sample = inspect.signature(hv._sample_edits).parameters
+assert 'manifest' in sample and sample['manifest'].default is None
+src = inspect.getsource(hv._sample_edits)
+assert 'v6_transactional_phase_call' in src and 'llm_call = None' in src
+assert 'manifest=' not in inspect.getsource(hv.run_hv_floor)
+assert 'manifest=_v6_manifest(adapter)' in inspect.getsource(hv.hv_spot_check)
+"`
+
 
 - **`overrun` is not `fail`, and the difference is the whole containment
   story.** A sandbox kill, a resource watchdog, an unusable checker, a missing

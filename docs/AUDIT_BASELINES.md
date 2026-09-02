@@ -59,6 +59,19 @@ Recorded 2026-08-12 at main 074ef1549.
   A PASS means the ceiling and the row is `baseline`; a FAIL means the claim
   moved and it IS a finding. The same command settles `:395` — see below.
 
+  Plus, on a container that has not fetched every branch a check reads, 1
+  more: `INV-frozen-surfaces.md`'s judge-canary row runs
+  `experiments/2026-09-01-defect-judge-canary-compile-gap/price_compile_gap.py`,
+  which does `git show origin/claude/deepreason-p-s1-commitments-wowcib:…`.
+  A container cloned for a different branch does not have that ref and the
+  check dies with `exit status 128`, which looks exactly like a code failure
+  and is not. `git fetch origin claude/deepreason-p-s1-commitments-wowcib`
+  makes it pass; measured 2026-09-02
+  (`experiments/2026-09-02-defect-hv-v6-reachability/`). This row is the same
+  class as the three below — an ENVIRONMENT precondition, not a claim that
+  rotted — and it is listed separately because it is not fixed by
+  `--unshallow`.
+
   Plus, on a SHALLOW clone only, 3 more: `CON-run-identity.md:211`,
   `:213`, `:215` are git-history checks that need the full history.
   All three PASS after `git fetch --unshallow`; measured 2026-08-29,

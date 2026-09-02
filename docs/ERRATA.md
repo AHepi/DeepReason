@@ -2027,3 +2027,71 @@ number, and the CONTAINER-CONDITIONAL row is retired — this tranche narrowed
 that check from two whole pytest files to four node ids, taking it from
 160-213 s (54-71% of docs_verify's 300 s ceiling) to **1 s**, so it no longer
 has a margin problem to be conditional about.
+
+## E68 — `SEAM-scheduler-x-workflow.md` recorded the empty v6 criticism ladder as "not a bug", and it had been one since 2026-08-26
+
+**What the document said.** That document's `Traps` opened an entry with:
+*"Under v6 the local criticism ladder is empty, and that is not a bug.
+`_criticize`'s HV-floor and rubric arms, pairwise discrimination, experiment and
+property design, audit, vision and lazy HV all record deferral debt instead of
+dispatching."* The claim is repeated in effect by `SUB-scheduler.md`'s
+formalism-rank-penalty entry, which rowed `hv` and `reach` as a STRUCTURAL-GAP
+that was "not reachable as a penalty in any committed root".
+
+**What the record shows.** The sentence was accurate as a description of the
+CODE from the day the gate was written, and it was a correct engineering
+judgement then: RunManifest v6 makes the adapter fail closed on any unbound
+provider dispatch, so typed completion debt is better than a killed root, and
+the gate's `schema_version != 6` branch was a real escape while non-v6 runs
+existed. Two later events made it false as a JUDGEMENT, and neither prompted a
+re-read of this entry:
+
+1. **Operations parity, 2026-08-13** (`docs/ERRATA.md` E26 and CLAUDE.md's own
+   law) made v6 the only path a current run takes. The escape branch became
+   dead code and the safety net became a permanent lock.
+2. **The modularity law, 2026-08-26** ("every behaviour a run can vary is
+   reachable as CONFIGURATION … and 'enforced' means a check that can fail")
+   made "eleven configurable phases no configuration can reach, with nothing
+   going red" a defect by definition.
+
+Measured 2026-09-02 over the committed corpus: **50 v6 roots, 56 501 log events,
+2 661 `hv` deferral records, 0 `hv_set` measurements** — no v6 root in the
+repository has ever measured `hv`. The decisive row is
+`experiments/2026-08-12-live-grounded-extension-expansion/run` (grounded-extension
+run `8e22d0431fd2b98d`): `state=completed`, `stop_reason=budget_exhausted`,
+`criticism_policy.authority = defended_trial`, `variator[0]` holding
+`variator.direct.v1` — the exact behavioural grant the gate exists to stand in
+for — and 336 `hv` deferrals against zero measurements. Reproducible with
+`python experiments/2026-09-02-defect-hv-v6-reachability/repro_record.py`.
+
+**A second, smaller correction in the same area, and it is not the map's.** The
+2026-09-01 P-A1 write-up (`experiments/2026-09-01-live-all-modules-p-a1/`
+FINDINGS.md F2, RESULTS.md segment 3) states "eleven phases" and then lists
+TWELVE names. The extra name is `premise-rent`, which is the `target_ref`
+argument at `scheduler.py:2582-2585`, not a phase. The tranche instruction that
+commissioned the fix inherited the same list, and also counted twelve call sites
+where there are eleven (the twelfth `grep` hit is the `def`). The record settles
+both independently of the code: the deferral marker's `inputs` are
+`[marker, phase, role, target_ref, obligation_ref, reason]`, and `premise-rent`
+sits in the fourth slot. Those documents are EXPERIMENT artifacts — dated records
+of what a tranche measured — so they are not rewritten in place; this entry is
+the pointer that stops a later reader carrying the count forward.
+
+**Where corrected.** `docs/map/SEAM-scheduler-x-workflow.md` and
+`docs/map/SUB-scheduler.md`, in the fixing tranche's own commit
+(`experiments/2026-09-02-defect-hv-v6-reachability/`). Per the map's rule the
+Traps entry was REWRITTEN, not deleted: it now opens "and that WAS a bug", says
+when it stopped being true, and carries the census. The fix is partial by
+design — `hv-spot-check` dispatches, the other ten rows still defer — so both
+documents state which phases remain, and
+`docs/map/REC-give-a-legacy-phase-v6-transactional-dispatch.md` is the path for
+each.
+
+**The generalisable lesson, which is why this is an ERRATA entry and not just a
+Traps rewrite.** A `Traps` entry that records a JUDGEMENT ("that is not a bug")
+rather than a MEASUREMENT ages against laws it never mentions. This one was
+falsified twice, by two operator laws thirteen days apart, and neither
+falsification touched a line of the code it described — so no check could have
+caught it and no test went red. Where a Traps entry must carry a judgement,
+name the standard it is judged against, so a later reader can see when the
+standard moved.

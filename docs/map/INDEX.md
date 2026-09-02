@@ -1,5 +1,5 @@
 <!-- DR-INDEX -->
-Verified-at: bc3175394
+Verified-at: 66e56fe88
 Verify: python tools/docs_verify.py --links
 
 # The map — start here
@@ -87,6 +87,7 @@ than you need.
 | `INV-reference-menu.md` | the one authority for every legal handle set, and why a menu may never decide validity |
 | `INV-render-layout.md` | where a rendered prompt puts what it carries, and the policy that decides |
 | `REC-change-a-seam.md` | the recipe for the commonest large change, worked on schools × scratchpad |
+| `REC-give-a-legacy-phase-v6-transactional-dispatch.md` | how to convert one of the eleven optional model phases the v6 deferral gate fences, one per tranche |
 
 ## Seam matrix
 
