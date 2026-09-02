@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=18 blockers=none
+State: next=23 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -215,20 +215,45 @@ changes no shipped behavior or owner agreement.
       bindings, three-call gate, typed classifications, and leak-safe
       receipts; local HEAD equalled origin and the worktree was empty.
 
-- [ ] 18. (S4) Re-run the unchanged shipped judge control ring.
+- [x] 18. (S4) Re-run the unchanged shipped judge control ring.
       done-when: `python -m pytest tests/test_judge_ensemble_boundary.py tests/test_judge_canary_dispatch.py tests/test_judge_canary_compile_gap.py -q` ends with 13 passed, 0 failed.
 
-- [ ] 19. (S2, S4) Run the frozen offline structural matrix to its exact terminal-set check.
+      proof: exit 0; `13 passed in 2.50s`; the unchanged ensemble,
+      dispatch, and compile-gap control ring remains GREEN.
+
+- [x] 19. (S2, S4) Run the frozen offline structural matrix to its exact terminal-set check.
       done-when: `python experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py structural` prints `STRUCTURAL_EXPECTED=<n> STRUCTURAL_TERMINAL=<same n> DUPLICATE=0 MISSING=0`.
 
-- [ ] 20. (S1, S3, S5) Confirm the live credential is securely mounted without displaying it.
+      proof: exit 0; `STRUCTURAL_EXPECTED=452`;
+      `STRUCTURAL_TERMINAL=452`; `DUPLICATE=0`; `MISSING=0`. The matrix
+      regression remained GREEN at `37 passed in 7.18s` after wiring the
+      experiment-only command.
+
+- [x] 20. (S1, S3, S5) Confirm the live credential is securely mounted without displaying it.
       done-when: `python -c "import os; raise SystemExit(0 if os.environ.get('OLLAMA_API_KEY') else 2)"` exits 0 and no credential bytes appear in output or tracked files.
 
-- [ ] 21. (S1, S2) Discover the authenticated Ollama catalog without making a chat completion.
+      proof: environment-only presence check exited 0 with no output;
+      an exact in-memory scan of every tracked working-tree file reported
+      `TRACKED_SECRET_SCAN=PASS`. No credential bytes or credential hash were
+      printed, written, or committed.
+
+- [x] 21. (S1, S2) Discover the authenticated Ollama catalog without making a chat completion.
       done-when: `python experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py catalog` writes canonical `CATALOG.json`, excludes only typed Kimi-K3 rows, and prints its model count and digest without credential material.
 
-- [ ] 22. (S1, S2, S3) [COMMIT] Freeze and push the authenticated catalog before any completion request.
+      proof: authenticated models-only GET exited 0;
+      `CATALOG_MODELS=18`; `EXCLUDED=1`;
+      `CATALOG_SHA256=77a5a11f946b21e82488ddc66473f1bfa50c6bd6c394fd420ad1baacc81754b4`.
+      Independent byte-canonicality, UTF-8 ordering, duplicate, digest, and
+      normalized typed-exclusion checks reported `CATALOG_VERIFY=PASS`. No
+      chat completion was made.
+
+- [x] 22. (S1, S2, S3) [COMMIT] Freeze and push the authenticated catalog before any completion request.
       done-when: the GitHub branch contains `CATALOG.json`, local HEAD equals origin, and `git grep -n 'kimi.k3' -- experiments/2026-09-01-change-live-full-judge-seat-matrix/CATALOG.json` finds only typed exclusion rows.
+
+      proof: `AUTHENTICATED_CATALOG_PUSHED=YES`; the branch snapshot has 18
+      included raw ids, one `KIMI_K3_FORBIDDEN` row, and digest
+      `77a5a11f946b21e82488ddc66473f1bfa50c6bd6c394fd420ad1baacc81754b4`;
+      local HEAD equalled origin before the first completion request.
 
 - [ ] 23. (S3, S5) Run explicit none/low/medium reasoning probes for every catalog model at a maximum of three calls in flight.
       done-when: `python experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py probe` reports one terminal probe row per model/setting, `PEAK_IN_FLIGHT<=3`, no high/max/xhigh wire value, and no secret-leak finding.

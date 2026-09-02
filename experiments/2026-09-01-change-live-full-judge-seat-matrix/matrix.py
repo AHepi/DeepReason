@@ -1460,6 +1460,65 @@ def _enumerate_full_cross_fixture() -> None:
     )
 
 
+def _run_structural() -> int:
+    domain = load_domain(Path(__file__).with_name("MATRIX_DOMAIN.json"))
+    expected = sum(group["expected_count"] for group in domain["structural_domains"])
+    terminal_ids = structural_case_ids(domain)
+    unique = set(terminal_ids)
+    duplicate = len(terminal_ids) - len(unique)
+    missing = max(0, expected - len(unique))
+    extra = max(0, len(unique) - expected)
+    print(
+        f"STRUCTURAL_EXPECTED={expected} STRUCTURAL_TERMINAL={len(unique)} "
+        f"DUPLICATE={duplicate} MISSING={missing}"
+    )
+    return int(bool(duplicate or missing or extra))
+
+
+def _run_catalog() -> int:
+    import urllib.error
+    import urllib.request
+
+    secret = os.environ.get("OLLAMA_API_KEY")
+    if not secret:
+        raise MatrixRefusal("OLLAMA_API_KEY_MISSING")
+    request = urllib.request.Request(
+        "https://ollama.com/v1/models",
+        headers={
+            "Accept": "application/json",
+            "Authorization": f"Bearer {secret}",
+        },
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=60) as response:
+            provider_payload = json.load(response)
+    except urllib.error.HTTPError as error:
+        raise MatrixRefusal("CATALOG_HTTP_ERROR", f"status={error.code}") from None
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as error:
+        raise MatrixRefusal("CATALOG_TRANSPORT_ERROR", type(error).__name__) from None
+    frozen = freeze_authenticated_catalog(provider_payload)
+    document = {
+        "schema": "deepreason.ollama-authenticated-catalog.v1",
+        "source": "https://ollama.com/v1/models",
+        **frozen,
+    }
+    payload = canonical_json(document)
+    if secret.encode("utf-8") in payload:
+        raise MatrixRefusal("SECRET_BEARING_DIAGNOSTIC_WITHHELD")
+    target = Path(__file__).with_name("CATALOG.json")
+    if target.exists() and target.read_bytes() != payload:
+        raise MatrixRefusal("CATALOG_SNAPSHOT_IMMUTABLE")
+    if not target.exists():
+        _atomic_bytes(target, payload)
+    print(
+        f"CATALOG_MODELS={len(frozen['model_ids'])} "
+        f"EXCLUDED={len(frozen['excluded'])} "
+        f"CATALOG_SHA256={frozen['catalog_sha256']}"
+    )
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -1468,6 +1527,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     full_cross_parser = subparsers.add_parser("full-cross-enumerate")
     full_cross_parser.add_argument("--fixture-catalog", action="store_true", required=True)
     subparsers.add_parser("soak")
+    subparsers.add_parser("structural")
+    subparsers.add_parser("catalog")
     args = parser.parse_args(argv)
     if args.command == "enumerate" and args.fixture_catalog:
         _enumerate_fixture()
@@ -1475,6 +1536,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         _enumerate_full_cross_fixture()
     elif args.command == "soak":
         return _run_soak()
+    elif args.command == "structural":
+        return _run_structural()
+    elif args.command == "catalog":
+        return _run_catalog()
     return 0
 if __name__ == "__main__":
     raise SystemExit(main())
