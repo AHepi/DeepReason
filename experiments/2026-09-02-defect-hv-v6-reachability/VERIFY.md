@@ -187,10 +187,11 @@ Not required by the ladder — the fix changed a writer and added a module; no
 reader or validator was touched, and `blast_radius` confirms it — but run as
 insurance:
 
-| root | before | after |
-|---|---|---|
-| `experiments/2026-08-25-poietics-program/run` | (unchanged code path) | `violations: []`, 2707 events |
-| `experiments/2026-08-27-pc2b-symmetric-reasoning/run` | (unchanged) | `violations: []` |
+| root | after the fix |
+|---|---|
+| `experiments/2026-08-12-live-grounded-extension-expansion/run` (the decisive one) | **0 violations**, 12 991 events |
+| `experiments/2026-08-25-poietics-program/run` | **0 violations**, 2 707 events |
+| `experiments/2026-08-27-pc2b-symmetric-reasoning/run` | **0 violations** |
 
 `repro_record.py`'s census over 50 committed roots is byte-identical after the
 fix, and that is the intended result: those roots were written by the defective
