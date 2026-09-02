@@ -275,18 +275,27 @@ them, including the two that were never renamed.
   stored verdict is not a sound fallback either: on four of those sixteen a
   canonical forge of `valid: true` is UNDETECTED, because
   `derive_terminal_authority` skips `_validate_result_projection_binding`
-  whenever the published result equals the fail-closed pending projection. The
-  check below RE-DERIVES that last claim on all four blind witnesses and two
-  detected ones (~33 s) rather than re-reading the stored count, so it goes red
-  the moment the blindness is fixed, widened, or moved. STILL OPEN: the
-  integrity gate the 2026-08-29 law asks for is NOT shipped. It was built and
-  measured in `experiments/2026-08-30-change-checkpoint-hardening` and PARKED,
-  because an unconditional `verify_root` refusal also refuses states the
-  product supports on purpose — a partially applied amendment mid-recovery, a
-  bound but unintroduced source that `amend` exists to admit, and any root that
-  is not a complete v6 record. Instruments and the full collision list are in
-  that tranche's `proof/`.
-`check: python -c "import pathlib; c=pathlib.Path('src/deepreason/runtime/continuation.py').read_text(); a=pathlib.Path('src/deepreason/amendment/apply.py').read_text(); assert 'verify_root' not in c and 'verify_root' not in a, 'the integrity gate landed: REWRITE this Traps entry, never delete it'" && python experiments/2026-08-30-change-checkpoint-hardening/proof/forge_probe.py --witnesses`
+  whenever the published result equals the fail-closed pending projection.
+  FIXED 2026-08-31 (`experiments/2026-08-31-defect-jailbreak-gate-closure`):
+  both verbs now RE-DERIVE the record and refuse typed —
+  `CONTINUE_RECORD_NOT_VERIFIED` and `AMEND_RECORD_NOT_VERIFIED`, each naming
+  the failed checks — placed last among their preconditions and before their
+  first write, so nothing lands in a tampered root. The same probe now reads
+  `jailbreak_open: False` while its intact arm still accepts both verbs.
+  The gate asks a NARROWER question than the 2026-08-30 attempt, which is why
+  that attempt was reverted and this one is not: it refuses on the SECURITY
+  channel only. That was the difference between eight red lifecycle tests and
+  zero. The states the product supports on purpose — a partially applied
+  amendment mid-recovery (`amendment-chain`), a bound but unintroduced source
+  that `amend` exists to admit (`attached-evidence`), and any root that is
+  merely incomplete or not a v6 record (`run-input`, `run-manifest-hash`,
+  `terminal-authority`, `open`) — are all `integrity`, and all still continue
+  and amend. What is NOT gated, and is the honest residue: security findings
+  the report DERIVES rather than replays. On the largest committed root those
+  number 494 and are version skew, not tampering, which is why gating on them
+  was rejected (`experiments/2026-08-31-defect-jailbreak-gate-closure/proof/
+  big_root_channels.json`).
+`check: python -c "import pathlib; c=pathlib.Path('src/deepreason/runtime/continuation.py').read_text(); a=pathlib.Path('src/deepreason/amendment/apply.py').read_text(); assert 'CONTINUE_RECORD_NOT_VERIFIED' in c and 'record_verification_refusal' in c and 'AMEND_RECORD_NOT_VERIFIED' in a, 'the integrity gate was removed from a verb: it is the 2026-08-29 security clause, not a convenience'" && python -m pytest tests/test_jailbreak_gate.py -q`
 - **Changing the budget to "re-run the same question".** Budget is inside the
   identity digest, so a different `--cycles` mints a different root and a fresh
   qualification-cached preparation. That is often what an operator wanted, and

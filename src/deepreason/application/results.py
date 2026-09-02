@@ -43,6 +43,7 @@ ABSENCE_REASONS = frozenset(
         "NO_SURVIVOR_RECORD",
         "NO_TERMINAL_BINDING",
         "REPLAY_STATE_UNREADABLE",
+        "SECURITY_CHANNEL_NOT_REDERIVED",
     }
 )
 
@@ -389,7 +390,12 @@ def embedder_summary_for_root(root: Path | str) -> dict[str, Any]:
 
 
 def _verification(
-    root: Path, replay: dict | None, result: dict | None, *, verify: bool
+    root: Path,
+    replay: dict | None,
+    result: dict | None,
+    *,
+    verify: bool,
+    report=None,
 ) -> dict[str, Any]:
     """The `verify_root` verdict: stored by default, re-derived only on demand.
 
@@ -408,11 +414,6 @@ def _verification(
     """
 
     if verify:
-        # The `invariants` re-export drops the keyword, and an older root with
-        # no published terminal must still be verifiable on demand.
-        from deepreason.verification.report import verify_root_report
-
-        report = verify_root_report(root, allow_missing_terminal=True)
         summary = report.summary_payload()
         return {
             "source": "rederived",
@@ -482,7 +483,7 @@ def _continuation_authority(harness) -> Any:
 
 
 def _terminal(replay: dict | None, stop: dict | None, result: dict | None,
-              harness) -> dict[str, Any]:
+              harness, report=None) -> dict[str, Any]:
     """Whether the root stands where `deepreason amend`/`continue` can act.
 
     Three halves are required and they answer different questions: the replay
@@ -492,6 +493,13 @@ def _terminal(replay: dict | None, stop: dict | None, result: dict | None,
     third is not implied by the other two — a budget-exhausted stop whose
     STOPPED receipt was refused satisfies both of the first two and continues
     from neither.
+
+    A FOURTH half is only knowable on the `--verify` path: whether re-deriving
+    the record produces a SECURITY-channel finding, which is what `continue` and
+    `amend` actually refuse on.  The stored verdict cannot answer it — it forges
+    with the record — so the default path reports a typed absence rather than a
+    guess, and `amend_ready` is a claim about what the two verbs will do only
+    when the answer was actually derived.
     """
 
     from deepreason.workflow.lifecycle import RESUMABLE_STOP_REASONS
@@ -513,13 +521,35 @@ def _terminal(replay: dict | None, stop: dict | None, result: dict | None,
         else _absent("NO_LIFECYCLE_REFUSAL_RECORD")
     )
 
+    if report is None:
+        security: Any = _absent("SECURITY_CHANNEL_NOT_REDERIVED")
+        security_clear = True
+    else:
+        # The report's legacy-source security findings ARE `verify_root`'s
+        # security-channel violations: report.py classifies that stream through
+        # `_legacy_channel` and stamps it `source="legacy"`. Reading them here
+        # keeps `--verify` free of a second full replay, and a test pins the
+        # equality so the two can never quietly disagree.
+        security = sorted(
+            {
+                finding.check
+                for finding in report.security
+                if finding.source == "legacy"
+            }
+        )
+        security_clear = not security
+
     return {
         "valid_typed_terminal": valid_terminal,
         "stop_reason_resumable": resumable,
         "continuation_authority": authority,
         "lifecycle_refusal": refusal_code,
+        "record_security_violations": security,
         "amend_ready": bool(
-            valid_terminal and resumable is True and authority is True
+            valid_terminal
+            and resumable is True
+            and authority is True
+            and security_clear
         ),
         "terminal_epoch": (
             binding.get("terminal_epoch", _absent("NO_TERMINAL_BINDING"))
@@ -650,6 +680,10 @@ def render_results(summary: dict[str, Any]) -> str:
         f"{_show(terminal['continuation_authority'])}",
         f"  the run recorded this reason for refusing that receipt: "
         f"{_show(terminal['lifecycle_refusal'])}",
+        f"  record verifies on the security channel (the replay findings that "
+        f"mean the record was tampered with, rather than merely incomplete; "
+        f"`continue` and `amend` refuse on these and on nothing else): "
+        f"{_show(terminal['record_security_violations'])}",
         f"  ready for `deepreason amend` / `deepreason continue`: "
         f"{_show(terminal['amend_ready'])}",
     ]
@@ -695,6 +729,17 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
         replayed_state = harness.state
     except Exception:  # noqa: BLE001 - a legacy root may defeat the replay reader
         replayed_state = None
+
+    report = None
+    if verify:
+        # Built ONCE and shared: the verdict block and the terminal block ask
+        # the same report different questions, and replaying twice would double
+        # an already O(run length) cost. The `invariants` re-export drops the
+        # keyword, and an older root with no published terminal must still be
+        # verifiable on demand.
+        from deepreason.verification.report import verify_root_report
+
+        report = verify_root_report(root, allow_missing_terminal=True)
     summary: dict[str, Any] = {
         "schema": RESULTS_SCHEMA,
         "root": str(root),
@@ -705,9 +750,11 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
         "artifacts": _artifacts(positions, status, result, replayed_state),
         "adjudication": _adjudication(harness),
         "embedder": embedder_summary(harness),
-        "verification": _verification(root, replay, result, verify=verify),
+        "verification": _verification(
+            root, replay, result, verify=verify, report=report
+        ),
         "amendment": _amendment(root),
-        "terminal": _terminal(replay, stop, result, harness),
+        "terminal": _terminal(replay, stop, result, harness, report=report),
     }
     absences: set[str] = set()
     _collect_absences(summary, absences)

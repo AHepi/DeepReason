@@ -1954,3 +1954,76 @@ gate each fails it, and all three were proven by mutation
 `tests/test_decommissioned_pipeline_stays_out.py` (scope correction, module
 and test docstrings), `src/deepreason/ontology/problem.py` (already rewritten
 by the successor-questions tranche).
+
+## E66 — `gate_collisions.md`'s collision table names the wrong check set for row 2, and its "What DID ship" table is superseded by the gate landing
+
+**What the document says.** `experiments/2026-08-30-change-checkpoint-hardening/proof/gate_collisions.md`
+tabulates, for collision 2
+(`tests/test_continuation.py::test_continue_keeps_manifest_and_appends_after_stop`),
+the check set `run-input, run-manifest-hash, terminal-authority`.
+
+**What the record shows.** That fixture produces the single check `open`, twice,
+with detail `UnsupportedRunManifestVersionError('UNSUPPORTED_RUN_MANIFEST_VERSION
+at /schema_version: RunManifest schema version 1 is unsupported; only schema
+version 6 is accepted')`. `run-input, run-manifest-hash, terminal-authority` is
+measurably the row BELOW it (collision 3,
+`test_typed_resume_opens_child_epoch_and_preserves_parent`). The tabulated cell
+appears to be a copy from the next row; the row's own PROSE says `open` and is
+correct, as is its NOT-FIXABLE classification. Measured 2026-08-31 by
+instrumenting the gate position and logging each evaluation
+(`experiments/2026-08-31-defect-jailbreak-gate-closure`).
+
+Two consequences, both benign for the 2026-08-30 tranche's conclusions and one
+of them load-bearing for this one. First, a related claim in that tranche's
+PARKED.md F9 — that a v1-manifest root makes `verify_root` RAISE, so the gate's
+exception arm would need reshaping — is also wrong in the same direction:
+`invariants.py` catches the error and returns `{"check": "open"}` as a
+VIOLATION (`src/deepreason/invariants.py:954-959`), which a channel filter over
+violations simply drops. No exception-arm special case was needed. Second, the
+union of checks the eight collisions actually produce is larger than the
+document lists: it also contains `attempt-validity` (integrity) and
+`foreign-criticism` (completion). Neither is in `_SECURITY_CHECKS`, so the
+narrowing conclusion is unaffected — but a reader deriving the narrowing from
+that list alone would be working from an incomplete set.
+
+**Also superseded.** That document's closing "What DID ship" table records
+`results_terminal_verify` as the only surface that sees a one-byte forgery, and
+`continue_gate` / `amend_gate` as blind. Both verbs gate as of 2026-08-31, and
+`results --verify` now reports `amend_ready: False` on a forged root rather than
+merely flipping `valid_typed_terminal`. The table is HISTORY and is not edited —
+it correctly records the state at that tranche's close, and this entry is the
+pointer that stops a later reader treating it as current.
+
+**Where corrected.** Here only. `gate_collisions.md` is an EXPERIMENT artifact —
+a dated record of what that tranche measured — not a map document, so it is not
+rewritten in place; the map documents whose claims moved
+(`CON-run-identity.md`, `SUB-amendment.md`, `SUB-application.md`) were rewritten
+in the gate's own commit.
+
+## E67 — `AUDIT_BASELINES.md`'s docs_verify half cites line numbers that no longer name the checks it describes, and its totals have drifted
+
+**What the document says.** `docs/AUDIT_BASELINES.md` records docs_verify as
+"1250 checks over 70 documents", names `SUB-application.md:421` as the
+CONTAINER-CONDITIONAL row that "runs two whole pytest files", and names
+`SUB-application.md:395` as the LOAD row reporting
+`test_restart_recovers_stale_preceding_epoch_without_redispatch`.
+
+**What the record shows.** As of 2026-08-31 the command reports **71 documents,
+1291 checks**. Neither cited line named its check even before this tranche
+touched the file: the two-pytest-file check was at line 460 and the
+`test_restart_recovers…` check at 434 (measured independently 2026-08-31, before
+any edit here). Both numbers then moved again in this tranche's own commit.
+
+The failure LIST is what the baseline is for, and it is still right: the five
+rows it names are exactly the five docs_verify reported here after this
+tranche's map edits, with no delta. The line numbers are the perishable part.
+This is the same lesson as E65, one level up: **a baseline that anchors a claim
+to a line number is dated by every edit above that line.** The durable anchor
+is the check's own text or the claim it defends, not its position.
+
+**Where corrected.** `docs/AUDIT_BASELINES.md`, in this tranche's commit: the
+two SUB-application rows are re-anchored by what they RUN rather than by line
+number, and the CONTAINER-CONDITIONAL row is retired — this tranche narrowed
+that check from two whole pytest files to four node ids, taking it from
+160-213 s (54-71% of docs_verify's 300 s ceiling) to **1 s**, so it no longer
+has a margin problem to be conditional about.

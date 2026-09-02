@@ -1,0 +1,20 @@
+LAWFUL   refuses=False experiments/2026-08-26-pc2-rematch/run_h3
+         all=[] sec=[]
+LAWFUL   refuses=False experiments/2026-08-26-pc2-rematch/retired-transport-timeout180-run-42ad288038dd606c
+         all=[] sec=[]
+LAWFUL   refuses=False experiments/2026-08-26-pc2-rematch/retired-truncation-cap32768-run-58fb0d20488be869
+         all=['attempt-accounting', 'attempt-blobs', 'attempt-order', 'repair-metadata'] sec=[]
+LAWFUL   refuses=False experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d
+         all=[] sec=[]
+LAWFUL   refuses=False experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d
+         all=[] sec=[]
+LAWFUL   refuses=False experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a
+         all=[] sec=[]
+LAWFUL   refuses=False experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107
+         all=['foreign-criticism'] sec=[]
+INTACT   refuses=False experiments/2026-08-27-pc2b-symmetric-reasoning/run
+         all=[] sec=[]
+FORGED   refuses=True  experiments/2026-08-27-pc2b-symmetric-reasoning/run
+         all=['attempt-route', 'frozen-route'] sec=['attempt-route', 'frozen-route']
+separates: True
+written: /home/user/DeepReason/experiments/2026-08-31-defect-jailbreak-gate-closure/proof/security_channel_separation.json

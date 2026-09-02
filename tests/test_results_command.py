@@ -506,6 +506,7 @@ def test_terminal_readiness_answers_the_amend_question():
         "stop_reason_resumable",
         "continuation_authority",
         "lifecycle_refusal",
+        "record_security_violations",
         "amend_ready",
         "terminal_epoch",
     }

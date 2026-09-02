@@ -22,8 +22,10 @@ Recorded 2026-08-12 at main 074ef1549.
   Known-flaky under `-n 4`, green in serial re-run: 3 tests in
   `tests/test_mcp_run.py`, 2 in `tests/test_mcp_scratch_bridge.py`
   (thread-join timing).
-- **docs_verify** (`python tools/docs_verify.py`): **1250 checks over 70
-  documents. On this container's SHALLOW clone the total is 5 OR 6 failed;
+- **docs_verify** (`python tools/docs_verify.py`): **1291 checks over 71
+  documents** as of 2026-08-31 (was 1250 over 70 when this entry was written;
+  the total moves with every tranche that adds a check and is NOT a pinned
+  value — the failure LIST below is what a delta is measured against). On this container's SHALLOW clone the total is 5 OR 6 failed;
   on a full clone, 2 or 3.** The two-valued total is a measured property of
   the documented command on a 4-CPU box, not sloppiness — see the
   CONTAINER-CONDITIONAL row below, which is the whole of the difference.
@@ -49,7 +51,7 @@ Recorded 2026-08-12 at main 074ef1549.
   |---|---|---|
   | `SEAM-llm-x-rules.md:54` | check malformed | a lost closing backtick merged the check with the paragraph after it. Reported as `unparseable check`, and the single finding keeping `--audit` above zero. Parked P3 (`experiments/2026-08-29-fix-docs-verify-multiline-checks/PARKED.md`). |
   | `INV-frozen-surfaces.md:181` | claim rotted | the census asserting ZERO committed `transport_failure` attempts; one exists, in a root committed 2026-08-26. Pre-existing, and its repair is a design fork rather than a count change — parked at `experiments/2026-08-30-fix-rotted-map-checks/PARKED.md` P-D3. |
-  | `SUB-application.md:421` | CONTAINER-CONDITIONAL | present in some runs of the documented command and absent in others, with nothing about the tree changing between them. The check runs two whole pytest files and costs **160.88 s, 182.8 s, 186.9 s, 195 s, 213.1 s** in five independent SERIAL timings across two days here — 54–71% of docs_verify's own 300 s per-check ceiling (`tools/docs_verify.py:185`) BEFORE it shares 4 CPUs with the 3 other workers the same command starts (`min(16, os.cpu_count())` = 4). It can therefore report `TIMEOUT after 300s` with NO foreign load. Parked as P-D8; narrowing it is a decision about what that claim is defended by. |
+  | `SUB-application.md`, the check pairing the `validated_post_terminal_drift` greps with a pytest run | RETIRED as a conditional row, 2026-08-31 | it was conditional because it ran two whole pytest files and cost **160.88 s, 182.8 s, 186.9 s, 195 s, 213.1 s** in five serial timings — 54-71% of docs_verify's own 300 s per-check ceiling (`tools/docs_verify.py:185`) before sharing 4 CPUs with the 3 other workers the same command starts. `experiments/2026-08-31-defect-jailbreak-gate-closure` narrowed it to the four node ids that exercise the claim, measured at **1 s**. A failure here is now a REGRESSION, not a baseline. Anchored by what the check RUNS, not by a line number — see `docs/ERRATA.md` E67. P-D8 is closed by that narrowing. |
 
   **Disposing of the conditional row takes one command**, and an audit must
   run it before rowing a delta: re-run that check alone
