@@ -93,10 +93,14 @@ def run_cell(label: str, reasoning, max_tokens, split, cases: int) -> dict:
     from deepreason.run_manifest import load_run_manifest
 
     config_path = _variant_config(reasoning, max_tokens, split)
-    root = pathlib.Path(tempfile.mkdtemp(prefix="gr-isolate-"))
-    shutil.rmtree(root)
+    # Roots live beside the tranche and are removed after the cell, so a
+    # failed probe leaves nothing behind for a later run to trip over.
+    root = TRANCHE / ".isolate-roots" / label.split()[0]
+    shutil.rmtree(root, ignore_errors=True)
     builder.build(root, config_path=config_path)
-    manifest = load_run_manifest(root)
+    # The FILE, not the root: load_run_manifest stats its argument and a
+    # directory fails the regular-file check as MANIFEST_FILE_UNSAFE.
+    manifest = load_run_manifest(root / "run-manifest.json")
 
     pairs = [p for p in production_contract_pairs(manifest) if p.contract_id == CONTRACT]
     if len(pairs) != 1:
@@ -118,7 +122,7 @@ def run_cell(label: str, reasoning, max_tokens, split, cases: int) -> dict:
             f"code={result.failure_code or '-'}",
             flush=True,
         )
-    shutil.rmtree(root, ignore_errors=True)
+    shutil.rmtree(root.parent, ignore_errors=True)
     config_path.unlink(missing_ok=True)
     return {
         "label": label,

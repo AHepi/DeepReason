@@ -1,0 +1,4 @@
+# Throwaway manifest roots built by isolate_grounding_repair.py, one per
+# cell. The probe removes them when it finishes; this keeps a crashed or
+# still-running probe from offering them to a commit in the meantime.
+.isolate-roots/
