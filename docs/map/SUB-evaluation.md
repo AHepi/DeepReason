@@ -2,8 +2,8 @@
 Verified-at: 66e56fe88
 Verify: python -m pytest tests/test_oracle.py tests/test_hv.py tests/test_informal.py tests/test_trial.py tests/test_standards.py tests/test_audits.py tests/test_dataset_oracle.py -q
 Owns: src/deepreason/programs.py, src/deepreason/oracle.py, src/deepreason/oracle_sandbox.py, src/deepreason/measures/, src/deepreason/informal/
-Seams: DR-SEAM-evaluation-x-rules, DR-SEAM-evaluation-x-ontology
-Seams-undocumented: adjudication x evaluation, authority x evaluation, evaluation x harness, evaluation x llm, evaluation x periphery, evaluation x scheduler, evaluation x schools, evaluation x verification, evaluation x warrants-and-attacks
+Seams: DR-SEAM-evaluation-x-rules, DR-SEAM-evaluation-x-ontology, DR-SEAM-evaluation-x-scheduler
+Seams-undocumented: adjudication x evaluation, authority x evaluation, evaluation x harness, evaluation x llm, evaluation x periphery, evaluation x schools, evaluation x verification, evaluation x warrants-and-attacks
 
 # Evaluation — how a commitment becomes a verdict, and where formal stops and informal begins
 
@@ -16,7 +16,7 @@ Seams-undocumented: adjudication x evaluation, authority x evaluation, evaluatio
 | evaluation x warrants-and-attacks | undocumented | real and already partly evidenced above: `rules/warrants.py` imports `oracle.EXEC_PROGRAMS` and `measures.reach._substantive` directly — the formal/informal boundary that decides what a warrant may attack lives on THIS side, read by that concept's home |
 | authority x evaluation | undocumented | real: `informal/trial.py`, this package's own file, is jointly `Owns:`-listed by `DR-CON-authority` — the trial protocol is exactly where authority's `observe_only`/`status` decision takes effect |
 | evaluation x schools | undocumented | real: `informal/trial.py` is also jointly `Owns:`-listed by `DR-CON-schools` — `critic_school_id` reaches the argument trial and the cross-school substitute guarantee is adjudicated here |
-| evaluation x scheduler | undocumented | real: `Scheduler._criticize` calls this package's `run_trial`/`run_hv_floor` directly, in a fixed cheapest-first order with `crit_program`/`crit_fuzz` |
+| `DR-SEAM-evaluation-x-scheduler` | documented | two families: the scheduler DISPATCHES this package's work (`run_trial`/`run_hv_floor`/`reach_sweep`, cheapest-first), and separately INTERPRETS its verdicts to rank — the second is where `overrun` must not become a penalty |
 | evaluation x llm | undocumented | real: the rubric and argument trials in `informal/trial.py` are LLM-mediated — a trial dispatches through the adapter, not only through `programs.py`'s pure evaluator |
 | adjudication x evaluation | undocumented, likely indirect only | `DR-SUB-adjudication`'s own audited import surface is `ontology` alone (see its Seams table) — a verdict computed here reaches adjudication only via a minted warrant, i.e. through `rules/`, not directly |
 | evaluation x harness | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
@@ -234,6 +234,18 @@ assert 'manifest=' not in inspect.getsource(hv.VariationSampler)
   warrant may be minted from one. `reach._verdict` refuses to CACHE a verdict
   whose trace carries `sandbox_abort`, because caching the availability envelope
   would turn machine flakiness into graph semantics.
+  **The rule is not confined to the warrant plane, and stating it only there is
+  how it was broken for four months.** `scheduler.pareto_scores` kept `overrun`
+  in the `coverage` denominator while counting only `PASS` in the numerator,
+  which mints a de-facto `fail` from an `overrun` in the RANKING plane: an
+  artifact was charged for every countercondition awaiting evidence and every
+  Lean commitment awaiting its verifier. Three live roots
+  (`9e48a36b1dec91ee`, `4565139800f5ca02`, `experiments/2026-08-25-poietics-program/run`)
+  published a frontier that was 100% harness-minted and 0% seed-answering
+  because of it. FIXED 2026-09-02
+  (`experiments/2026-09-02-defect-coverage-pending-commitments/`). Any NEW
+  consumer of `programs.evaluate` inherits this obligation: `overrun` may not
+  count against the content in any plane, arithmetic included.
 `check: python -m pytest "tests/test_oracle.py::test_sandbox_abort_mints_no_fail_warrant" "tests/test_oracle.py::test_fuzz_abort_remains_pending_instead_of_marking_target_clean" -q`
 - **Zero samples must not vacuously pass a floor.** `run_hv_floor` returns
   `overrun` when the variator emitted no edits; falling through would record

@@ -98,22 +98,46 @@ def test_the_writer_publishes_a_survivor_set_the_invariant_already_holds_over(st
 
 
 def test_the_frontier_does_not_move_because_every_dropped_member_was_dominated(state):
-    """No IMPORT survivor carries an `hv` or a `reach` entry, so all 24 are
-    dominated points -- and dropping a dominated point cannot move a Pareto
-    front. Asserted rather than assumed, because the fix would be wrong if it
-    silently reshaped the reported frontier."""
+    """Excluding the 24 IMPORT records does not reshape the frontier: the real
+    artifacts retained are the same set whether or not the imports are scored
+    alongside them.
 
+    Stated as that comparison rather than as "the re-derived frontier equals the
+    one this root published" (its form until 2026-09-02), because the second is
+    not the claim and was hostage to every later scoring change. It broke on the
+    first one: since `experiments/2026-09-02-defect-coverage-pending-commitments/`
+    a commitment that evaluates OVERRUN leaves the coverage denominator, the
+    published frontier of this root re-derives to 58 rather than the 40 stored in
+    its `run-result.json`, and 12 of these 24 imports -- which carry evaluable
+    commitments that all evaluate OVERRUN -- would no longer be dominated points
+    at all. The premise in the old docstring is therefore gone; the claim is not,
+    and a stored result owes a later reader no agreement (operator law
+    2026-08-14). None of it reaches production: `run_report` scores only
+    `counts_as_survivor` members, and imports are never among them."""
+
+    from deepreason.capture.pareto import frontier
     from deepreason.config import Config
-    from deepreason.scheduler.scheduler import run_report
+    from deepreason.scheduler.scheduler import pareto_scores, run_report
 
-    report = run_report(Harness(_root(), read_only=True), Config())
-    stored_frontier = json.loads((_root() / "run-result.json").read_text())["frontier"]
-    assert len(stored_frontier) == 40
-    assert list(report["frontier"]) == list(stored_frontier)
+    harness = Harness(_root(), read_only=True)
+    config = Config()
+    published = json.loads((_root() / "run-result.json").read_text())
     imports = [
-        a for a in json.loads((_root() / "run-result.json").read_text())["survivors"]
+        a for a in published["survivors"]
         if state.artifacts[a].provenance.role == ProvenanceRole.IMPORT
     ]
+    assert len(published["frontier"]) == 40, "a fix never edits a committed root"
+    assert imports, "setup: the root must still carry the members being dropped"
+
+    retained = list(run_report(harness, config)["frontier"])
+    assert not set(retained) & set(imports), "an import reached the reported frontier"
+
+    scored = sorted(set(retained) | set(imports))
+    with_imports = frontier([(a, pareto_scores(harness, a)) for a in scored], config.PARETO_AXES)
+    assert sorted(set(with_imports) - set(imports)) == sorted(retained), (
+        "scoring the imports alongside the survivors changes which real "
+        "artifacts are retained -- the exclusion is reshaping the frontier"
+    )
     assert not [a for a in imports if a in state.hv or a in state.reach]
 
 

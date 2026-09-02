@@ -2160,3 +2160,86 @@ falsification touched a line of the code it described — so no check could have
 caught it and no test went red. Where a Traps entry must carry a judgement,
 name the standard it is judged against, so a later reader can see when the
 standard moved.
+
+## E70 — three documents define the Pareto `coverage` axis as passes over EVALUABLE commitments, and that denominator charged an artifact for every falsifiable claim it made
+
+**What the documents said.** Three committed claims, all consistent with each
+other and all wrong in the same way:
+
+- `docs/map/SUB-scheduler.md`, Entry points: *"`coverage` is omitted for an
+  artifact carrying no evaluable commitment"* — an exhaustive-sounding statement
+  of when the axis declines to score.
+- `docs/map/CON-conjecture-kinds.md`, Traps: *"a `coverage` axis that is
+  `passes/evaluable-commitments` — an artifact carrying no evaluable commitment
+  has no denominator"*.
+- `docs/map/SUB-periphery.md`, Traps: *"On the `coverage` axis that is exactly
+  the set of prose conjectures — nothing evaluable to divide"*. This one is
+  flatly false rather than merely incomplete: it characterises the omitted set
+  as *the prose conjectures*, and a prose conjecture that declares a
+  countercondition is not in it.
+
+The source docstring at `scheduler/scheduler.py::pareto_scores` said the same
+thing, so all four agreed.
+
+**What the record shows.** "Evaluable" and "decided" are different sets, and
+every live artifact lives in the gap between them. A commitment can be
+evaluable, be evaluated, and yield no verdict: `programs.evaluate` returns
+`OVERRUN`, which `SUB-evaluation.md` already defines as the verdict from which
+*"no `fail` warrant may be minted"*. `pareto_scores` nonetheless kept those
+commitments in its denominator while counting only `PASS` in its numerator — so
+an artifact was charged for every countercondition still awaiting evidence, and
+the axis rewarded making no testable claims.
+
+Re-derived read-only from three committed roots
+(`experiments/2026-09-02-defect-coverage-pending-commitments/rescore.py`):
+
+    root                        survivors  frontier  frontier=minted  dominated=seed
+    P-S1 9e48a36b1dec91ee            98        58       58/58 (100%)     40/40 (100%)
+    P-A1 4565139800f5ca02            11         7        7/7  (100%)      4/4  (100%)
+    P-R1 poietics-program            58        40       40/40 (100%)     18/18 (100%)
+
+Zero commitments FAIL on any of the three, across all 156 survivors, so the axis
+carried no quality signal whatever: its entire variance was the count of
+declared counterconditions. The dominated seed-answering artifacts each passed
+FOUR commitments; the frontier members that dominated them each passed TWO. The
+only OVERRUN reason anywhere is `observation requires registered evidence`
+(129 / 10 / 65).
+
+**Why the check did not catch it, which is the transferable part.**
+`tests/test_formalism_optional_rank.py` guards this exact axis and was green
+throughout. It builds its pending commitment as `eval="observation"` — which
+`programs.evaluable` screens out BEFORE the battery, so the empty-battery rule
+protects it. No live artifact carries that spelling:
+`workloads/text.py::draft_countercondition_commitments` rewrites every declared
+`eval: "observation"` into `program:reasoning_observation_pending`, which IS
+evaluable. **A regression test that constructs its own fixture can pin a shape
+the harness normalises away before any artifact carries it**, and no amount of
+re-running it will say so. When guarding a value the harness rewrites, build the
+fixture THROUGH the rewriting function, or assert both spellings.
+
+**Scope of the wrongness.** Wider than the three roots show. Five families of
+evaluable program can return `OVERRUN` and so depress coverage: the observation
+program; the four `lean_*` programs awaiting the pinned external verifier;
+`reasoning-envelope-wf` on a char-limit overrun; the six `promotion_*` blob
+programs; and `dataset_oracle`. The `lean_*` family means the penalty ran in
+BOTH directions of R-g — a formally-backed conjecture was charged for being
+formally backed, whenever its verifier had not yet run.
+
+**Where corrected.** All three map documents plus the `pareto_scores` docstring,
+in the fixing tranche's own commit
+(`experiments/2026-09-02-defect-coverage-pending-commitments/`). The axis is now
+passes over the commitments actually DECIDED; `OVERRUN` leaves the denominator
+and the axis is omitted when nothing was decided, which subsumes the old
+empty-battery rule rather than replacing it. `programs.py`'s module docstring is
+corrected in the same commit: it said the `overrun` verdict is *"reserved for"*
+deterministic budget bounds, while all three of that file's own `overrun`
+literals are the opposite case. The new seam document
+`docs/map/SEAM-evaluation-x-scheduler.md` records what a verdict means to the
+thing that ranks on it — the agreement whose absence allowed this.
+
+**The generalisable lesson.** `SUB-evaluation.md` had stated the governing rule
+for years — *no `fail` may be minted from an `overrun`* — but stated it about
+WARRANTS. The violator was an arithmetic consumer in another subsystem, which
+minted a de-facto fail by division without ever using the word. When a document
+states a rule about one KIND of consumer, ask which other kinds exist: a rule
+phrased semantically does not bind a reader that only counts.
