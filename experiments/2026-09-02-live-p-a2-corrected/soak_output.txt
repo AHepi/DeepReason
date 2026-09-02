@@ -9,3 +9,45 @@ NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: LEGACY_CRITICISM_ENABLED=False is not ca
 NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
 NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SPLIT_BUDGET_SEAT_PROTOCOL='off' is not carried by this manifest's engine config and is restored at run time from this notice
 [soak] built root: manifest 27dae00f0d188437…  criteria ['pa1-limit-verdict@v1', 'pa1-obstruction-structure@v1', 'pa1-scaling-law@v1']
+[soak] QUALIFY FAILED
+
+934f35655f776afe901c3d3dffd66cfcc",
+        "endpoint_id": "ollama-glm-5.3",
+        "evidence_pair_ids": [],
+        "role": "vision_critic",
+        "route_sha256": "b342f30f1bf40443073545d1cc790078e2898b1a5dc15fefcdaa6731053a59c0",
+        "seat": 0,
+        "selected_class": "inactive_no_authorized_contract"
+      }
+    ],
+    "id": "sha256:c30fb8ea6ec67d171a51920d92ad5b7c47ef10769f965676c968568c3d25c9e9",
+    "manifest_digest": "27dae00f0d1884376210275ff230d958c0706cce94d8664843f70990d9b5a446",
+    "qualification_evidence_sha256": "6266283d0ac0e6b5afce44f384646c9e8cfb3754b7813cb1b6cbe555fc3687bb",
+    "schema": "workflow.route-seat-model-classification-plan.v1"
+  },
+  "run_manifest_schema_version": 6,
+  "run_manifest_sha256": "27dae00f0d1884376210275ff230d958c0706cce94d8664843f70990d9b5a446",
+  "schema": "deepreason-production-contract-doctor-v1",
+  "summary": {
+    "alias_failures": 0,
+    "case_count": 460,
+    "eventual_valid_count": 200,
+    "first_pass_valid_count": 200,
+    "pair_count": 23,
+    "qualified": false,
+    "qualified_pair_count": 10,
+    "re_exercised_pair_count": 0,
+    "repair_count": 0,
+    "scope_violations": 0,
+    "semantic_admission_count": 200
+  }
+}
+
+SOAK_PA2_RC=1
+
+===== SOAK hv-grant (grant shape) =====
+[soak] stub provider on 127.0.0.1:39731 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/cycle-soak-1pla8rq1
+[soak] built root: manifest ada36eb62b022456…  criteria ['uhi-energy-balance@v1', 'uhi-nocturnal-release@v1', 'uhi-cross-city-modulator@v1']
+[soak] qualified in 4.5s
+[soak] driving 8 cycles …

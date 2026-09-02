@@ -28,6 +28,75 @@ sys.path.insert(0, str(REPO / "scripts"))
 sys.path.insert(0, str(REPO / "src"))
 
 import cycle_soak  # noqa: E402
+import wheel_operational_smoke as _smoke  # noqa: E402  (the ONE stub)
+
+# ---------------------------------------------------------------------------
+# FINDING F1 (P-A2), and the runtime repair that routes around it
+# ---------------------------------------------------------------------------
+# The offline stub on `main` has no fixture for `ConfigRefereeWireV1` or
+# `GroundingRepairWireV1`, and its generic schema synthesiser cannot produce
+# either. An unsatisfied fixture is an HTTP 500, and a 500 trips the
+# qualification circuit breaker for the WHOLE endpoint -- so those two genuine
+# gaps failed 13 of 23 pairs on the first P-A2 soak, 11 of them as cascade:
+#
+#   config-referee.v1                  ENDPOINT_HTTP_500        x20  (genuine)
+#   groundingrepairwirev1.direct.v1    ENDPOINT_HTTP_500        x20  (genuine)
+#   ...11 further pairs                CIRCUIT_OPEN_ENDPOINT_HTTP_500 (cascade)
+#
+# THIS IS NOT A DEFECT IN P-A2's CONFIGURATION AND NOT ONE THE LIVE RUN CAN
+# HIT: it is the INSTRUMENT lacking a fixture for two contracts that only a
+# maximum-configuration run grants. P-A1 met it first (its FINDINGS.md F1),
+# fixed it in `scripts/wheel_operational_smoke.py`, and that fix never merged
+# to main -- so it recurs for every later tranche that turns those two modules
+# on. It is filed as a FINDING of this tranche; the fix belongs to a change
+# tranche, not to a run tranche.
+#
+# The two values below are P-A1's, VERBATIM, together with the reasoning that
+# earned them -- reused rather than re-derived because P-A1 paid for the
+# lesson and a second guess could only drift from it:
+#
+#   ConfigRefereeWireV1 is conservative by construction: it never reports
+#   mistuning and never recommends a change, so the soak exercises the
+#   dispatch path without the referee steering the run.
+#
+#   GroundingRepairWireV1 -> `remove_span`, and the choice is NOT arbitrary.
+#   STRUCTURALLY it is the one action accepting no substantive field, so it
+#   satisfies every allOf/if/then branch by carrying nothing. IN SCOPE it is
+#   the only action present in EVERY entry of `bridge.repair._ALLOWED_BY_STATUS`
+#   -- the caller narrows the contract to one finding status's permitted
+#   actions while the advertised JSON Schema still `$ref`s the full enum, so a
+#   fixture chosen from the schema alone can be structurally valid and out of
+#   scope. `correct_wording` is exactly that trap: it validates, then
+#   `_admit_production_probe_output` raises BRIDGE_REPAIR_ACTION_FORBIDDEN.
+#
+# The patch is a WRAPPER that delegates everything else to the original. It
+# makes the gate STRONGER, not weaker: two contracts that could not be
+# exercised at all now must return schema-valid, in-scope responses or their
+# pairs still fail. Nothing here can turn a failing pair green by relaxing a
+# check -- there is no check here to relax.
+_ORIGINAL_RESPONSE_FOR_SCHEMA = _smoke.response_for_schema
+
+
+def _response_for_schema_with_pa1_fixtures(schema: dict, prompt: str):
+    title = schema.get("title")
+    if title == "ConfigRefereeWireV1":
+        return {
+            "verdict": "config_effective",
+            "assessment": "The bounded loopback fixture observes no mistuning.",
+            "cited_seqs": [0],
+            "recommendation": "no_change",
+        }
+    if title == "GroundingRepairWireV1":
+        return {"action": "remove_span"}
+    return _ORIGINAL_RESPONSE_FOR_SCHEMA(schema, prompt)
+
+
+# Patched on the MODULE, not on a local name: the stub's request handler calls
+# the bare global `response_for_schema`, resolved in wheel_operational_smoke's
+# namespace at call time, so rebinding the attribute is what actually reaches
+# the server. cycle_soak imports the stub rather than minting a second one, so
+# there is exactly one object to patch.
+_smoke.response_for_schema = _response_for_schema_with_pa1_fixtures
 
 cycle_soak.CASES["pa2"] = cycle_soak.SoakCase(
     id="pa2",
