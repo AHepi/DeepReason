@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=4 blockers=none
+State: next=5 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -35,8 +35,11 @@ changes no shipped behavior or owner agreement.
       experiment module: .../matrix.py`; full output in
       `proof/domain-tests-red.txt`.
 
-- [ ] 4. (S1, S2, S3, S5) [COMMIT] Push the preregistration, domain, and RED test proof.
+- [x] 4. (S1, S2, S3, S5) [COMMIT] Push the preregistration, domain, and RED test proof.
       done-when: the GitHub branch contains `PREREG.md`, `MATRIX_DOMAIN.json`, the test file, and `proof/domain-tests-red.txt`, and local HEAD equals `origin/codex/live-full-judge-seat-matrix-20260901`.
+
+      proof: `RED_PHASE_PUSHED=YES`; all four paths are present at
+      `a31f30eb92d7896e1bfa1175f96c6807d00630c3`; local HEAD equalled origin.
 
 - [ ] 5. (S2, S3, S5) Implement the domain generator, normalized bans, exact case ids, digest binding, atomic result writes, and resume rules in `matrix.py`.
       done-when: `python experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py enumerate --fixture-catalog` prints `CATALOG_MODELS=22 JUDGE_PAIRS=484 CORE_COURTS=10648 NO_VARIATOR=234256 WITH_VARIATOR=5153632 TOTAL=5387888`.
