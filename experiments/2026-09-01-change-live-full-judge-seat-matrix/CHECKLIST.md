@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=13 blockers=none
+State: next=12B blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -97,6 +97,47 @@ changes no shipped behavior or owner agreement.
       callbacks; semantic outcome is read from committed trial measures/state;
       full output in `proof/court-tests-green.txt`.
 
+- [x] 12A. (S1, S2, S6) Write the superseding full-cross preregistration and
+      machine-readable domain before any live completion.
+      done-when: `python -m json.tool experiments/2026-09-01-change-live-full-judge-seat-matrix/FULL_CROSS_DOMAIN.json >/dev/null` exits 0 and the document records fixture total `237110749640940257280`.
+
+      proof: JSON exit 0; independently recomputed `S=1584`,
+      `J2=149596687470624768`, `J3=236961152953469632512`, and
+      `FULL=237110749640940257280`. Original file hashes remain
+      `PREREG=33afd81aac209cdf280faf7bd59ff0a194d2abcf8794cd620f61172ab0e77ae6`
+      and `MATRIX_DOMAIN=1be915b5cccb5164b17691cb6602fa630d26603064d0096f4b3600fd2975442d`.
+      New hashes are
+      `FULL_CROSS_PREREG=efd5221ed6bec6a34eb6e6cb97d05163d02f73524410ddeca4038a977da14c0a`
+      and `FULL_CROSS_DOMAIN=328b74d4c03408d9ba51b4cf013d64dee1ac7903b05a33b512dc7a8f287815ed`.
+
+- [ ] 12B. (S1, S2, S6) [COMMIT] Push the superseding preregistration, domain,
+      scope correction, and forward budget before generator implementation.
+      done-when: local HEAD equals origin and both new files are present on the
+      branch; the original `PREREG.md` and `MATRIX_DOMAIN.json` blobs are
+      unchanged.
+
+- [ ] 12C. (S2, S3, S5) Add full-cross count, literal Cartesian membership,
+      per-seat independence, case-id, ban, and resume tests before implementation.
+      done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'full_cross'` fails only because the new generator APIs are absent, with output saved in `proof/full-cross-tests-red.txt`.
+
+- [ ] 12D. (S2, S3, S5) [COMMIT] Push the full-cross RED tests and mutation proof.
+      done-when: local HEAD equals origin and `proof/full-cross-tests-red.txt`
+      is present on the branch.
+
+- [ ] 12E. (S2, S3, S5) Implement the exact lazy two-/three-judge full-cross
+      generator without filtering any family, preflight, parser, or provider
+      refusal.
+      done-when: the focused `full_cross` tests end with 0 failed and the
+      fixture command prints the exact two-judge, three-judge, and union counts.
+
+- [ ] 12F. (S2, S3, S5) Run full-cross GREEN, actual-file blast radius, and
+      the corrected cumulative 2200-line budget.
+      done-when: GREEN output is saved, both frozen-contact lists are empty,
+      and `tools/diff_budget.py ... --ceiling 2200` reports `WITHIN`.
+
+- [ ] 12G. (S2, S3, S5) [COMMIT] Push the full-cross generator and GREEN proof.
+      done-when: local HEAD equals origin and the worktree is empty.
+
 - [ ] 13. (S6) Implement the experiment-owned Kimi-K3-free `cycle_soak.SoakCase` wrapper without editing `scripts/cycle_soak.py`.
       done-when: `python -u experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py soak` prints `SOAK_VERDICT=PASS CASE=judge-matrix CYCLES=8`.
 
@@ -107,7 +148,7 @@ changes no shipped behavior or owner agreement.
       done-when: `python tools/blast_radius.py --files experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py tests/test_live_full_judge_seat_matrix.py` reports both frozen contact lists empty and verdict CLEAR.
 
 - [ ] 16. (S3, S4, S5, S6) Measure checkpoint-two diff budget.
-      done-when: `python tools/diff_budget.py 70e9c73ed0a5630994613afea74c80de6bf59302 --ceiling 960 --paths experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py tests/test_live_full_judge_seat_matrix.py` reports `WITHIN`.
+      done-when: `python tools/diff_budget.py 70e9c73ed0a5630994613afea74c80de6bf59302 --ceiling 2200 --paths experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py tests/test_live_full_judge_seat_matrix.py` reports `WITHIN`.
 
 - [ ] 17. (S3, S4, S5, S6) [COMMIT] Push the assembled runner, soak proof, and full matrix-test GREEN proof.
       done-when: local HEAD equals the GitHub branch head and `git status --porcelain` is empty.
@@ -139,8 +180,12 @@ changes no shipped behavior or owner agreement.
 - [ ] 26. (S2, S6) Preserve and push the ordered-judge-pair prefix result when terminal or when this session stops monitoring.
       done-when: `RESULTS.md` states exact expected, terminal, possible, impossible, provider-indeterminate, interrupted, and pending counts; no prefix is labelled exhaustive over the full domain.
 
-- [ ] 27. (S2, S6) Continue the immutable queue through defender/judge courts, no-variator courts, and variator courts without changing its domain digest.
-      done-when: `matrix.py summarize` either reports `PENDING=0` or records the exact remaining count and a resumable next case id without mutating terminal results.
+- [ ] 27. (S2, S6) Continue the immutable queue through the named seat-only
+      projections and into the superseding per-seat full cross without changing
+      either domain digest.
+      done-when: `matrix.py summarize` either reports full-cross `PENDING=0` or
+      records the exact remaining count and a resumable next case id; a
+      completed projection is never renamed as completion of the full cross.
 
 - [ ] 28. (S7) Prove branch isolation and no merge with `main`.
       done-when: `git rev-list --merges 00f10dde8c734e2f874358f9e2a375bb63aa4a35..HEAD` is empty and the current branch is `codex/live-full-judge-seat-matrix-20260901`.

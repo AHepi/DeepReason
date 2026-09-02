@@ -30,6 +30,35 @@ configurations. Parser and schema outcomes are recorded separately from a
 secret-scanned prose receipt; mechanical failure never erases prose or becomes
 an epistemic ranking. Traces: C5-C8.
 
+### Superseding scope correction: full finite cross
+
+The operator's clarification that configurations must be crossed as well as
+seat assignments supersedes the earlier independent-sweep interpretation
+before any live completion. `PREREG.md` and `MATRIX_DOMAIN.json` remain
+immutable evidence of that earlier interpretation.
+`FULL_CROSS_PREREG.md` and `FULL_CROSS_DOMAIN.json` govern every future use of
+the phrase “all frozen configurations.”
+
+For each active route seat, the frozen tuple is catalog model × model profile
+(3) × output mode (2) × output mechanism (3) × explicit safe reasoning value
+(4), or `S = 72M` choices. Split protocol (3) is run-level. Judge cardinality
+is frozen at both two and three ordered seats. The no-variator component has
+`3*S^(2+J)` rows; the variator component has `15*S^(3+J)` rows because the five
+registered paraphrase counts are also run-level. At fixture `M=22`, the exact
+two-judge count is `149596687470624768`, the three-judge count is
+`236961152953469632512`, and their union is
+`237110749640940257280`.
+
+The earlier `5416400` rows are retained as useful ordered projections and
+prefixes, not as the full cross. No constraint, family preflight, provider
+probe, parser result, formal model, symmetry argument, or observed outcome may
+delete a registered row. It may only supply that row's typed terminal result.
+Universal exhaustiveness is impossible: Config has 145 leaf settings before
+roles, every route seat adds 17 endpoint fields, and strings, numbers, role
+cardinalities, policy dictionaries, and future provider fields are open-ended.
+Those dimensions remain explicitly `OPEN`; they are never discretized by a
+heuristic and never included in an exhaustiveness claim.
+
 ## Items
 
 ### S1 — frozen research and provider-semantics preregistration
@@ -105,14 +134,15 @@ defender/judge courts fix only critic; all `M^4` no-variator courts follow;
 then the `M^5` variator courts. A `seen` set suppresses cases already emitted
 by an earlier prefix. A prefix is always labelled a prefix.
 
-A separate exact live configuration domain applies one profile uniformly to
+A named early live configuration projection applies one profile uniformly to
 every active seat of a same-model full court. Per model it has 216
 no-variator cases and 1080 variator cases: profile 3 x output mode 2 x output
 mechanism 3 x typed reasoning 4 (`none`, `low`, `medium`, integer 2000) x split
 3, with the variator arm additionally crossing paraphrase -1/0/1/2/3. That is
-1296 per model and 28512 at fixture M=22. Combined with the seat product, the
-fixture primary live domain has 5416400 cases. This does not claim the
-unexecuted Cartesian cross of heterogeneous per-seat transport settings.
+1296 per model and 28512 at fixture M=22. Combined as a disjoint projection
+with the seat-only product, it has 5416400 cases. The superseding full-cross
+domain above independently varies every active seat's transport tuple and is
+the only domain eligible for a full frozen-configuration claim.
 
 The offline structural domain is exactly exhaustive over the following frozen
 finite boundary values:
@@ -321,16 +351,16 @@ git rev-list --merges 00f10dde8c734e2f874358f9e2a375bb63aa4a35..HEAD
 
 ## Assumptions (operator may override)
 
-A1 (Q1): "all" means exact exhaustiveness over a pushed, finite domain digest:
-every current catalog model in all five dispatched role positions, plus an
-exact offline product over every finite control-flow boundary listed in S2.
-Arbitrarily long role lists, arbitrary numbers, arbitrary strings, and future
-models are explicitly unbounded and cannot form a finite global set.
+A1 (Q1): "all" means exact exhaustiveness over the superseding pushed finite
+domain digest: every current catalog model and every frozen safe per-seat
+transport tuple are crossed independently across every active route in the
+two- and three-judge courts. Arbitrarily long role lists, arbitrary numbers,
+arbitrary strings, policy dictionaries, and future models remain explicitly
+open and cannot form a finite global set.
 
-A2 (Q1): the two initial judge positions are the full-court boundary because
-the requested canary names both initial judges and their order. Three-judge
-behavior is included in the offline boundary suite; arbitrary judge count is
-unbounded and not misreported as exhaustively live-tested.
+A2 (Q1): both the two-judge and three-judge shipped topologies enter the live
+full cross. Arbitrary judge count remains unbounded and is not misreported as
+exhaustively live-tested.
 
 A3 (Q2): the prior credential handoff authorizes live Ollama use but not secret
 persistence. Because this process currently has no safe credential source, live
@@ -465,40 +495,45 @@ two-seat shapes.
 
 | Road | Scope | Price | Disposition |
 |---|---|---|---|
-| A — exact full live product | `M^4 + M^5`, every ordered role assignment, no sampling | 5,387,888 cases and up to 47,319,712 logical calls at M=22; months to years at three in flight | CHOSEN as the immutable long queue because R2/R9/R10 explicitly ask for all |
+| A — seat-only live product | `M^4 + M^5`, every ordered role assignment at fixed transport defaults | 5,387,888 cases and up to 47,319,712 logical calls at M=22 | CHOSEN as an early projection; superseded as an “all configurations” claim |
 | B — core court only | every defender/judge0/judge1 assignment, fixed critic/variator | 10,648 cases at M=22; useful but does not test every critic and variator assignment | CHOSEN only as an early complete prefix of A, never as final exhaustiveness |
 | C — ordered judge pairs only | 484 cases at M=22 | fastest possible/impossible judge-topology map, but omits defender/critic/variator assignments | CHOSEN only as the first prefix of A |
 | D — family/equivalence sample | one or a few representatives per topology class | cheap | REJECTED for the live matrix because it contradicts R10; retained only for mathematically unbounded offline axes and labelled control-flow coverage |
+| E — frozen full cross | independent `72M` tuple at every active seat, split 3, judges 2/3, optional variator, paraphrase 5 | 237,110,749,640,940,257,280 rows at M=22; roughly 2.5 trillion years even at an impossible one request-second per row and three in flight | CHOSEN as the immutable membership registry; reports remain pending rather than claiming completion |
 
-The recommendation is A with C then B as deterministic queue order. It obeys
-the operator's literal request while yielding useful evidence long before the
-tail can finish.
+The recommendation is E, with C, B, and A retained as deterministic early
+projections. Queue order changes neither membership nor the completion rule.
 
 ## Budget
 
-Implementation budget, excluding ledger/proof/result artifacts. The RED test
-checkpoint measured 217 test lines before implementation; the original
-190-line test estimate and 300-line first checkpoint were therefore
-arithmetically impossible. The live transport domain added after independent
-preregistration audit also requires a typed second-domain iterator and report
-namespace. The corrected pre-implementation ledger is:
+Implementation budget, excluding ledger/proof/result artifacts. Checkpoint one
+measured 491 lines. The shipped-court implementation then required durable
+workflow-derived dispatch receipts, semantic outcome derivation, a second
+callback receipt, managed-path execution, and prose/parser separation; after
+its GREEN boundary the cumulative code-and-test total is 1,015 lines. The
+original 960-line cumulative estimate is therefore retired before the
+full-cross generator, soak wrapper, or live adapter is implemented. The new
+forward budget is:
 
 ```text
-matrix/domain + safety + resume: 300 lines
-shipped-court, catalog, soak,
-and live adapters:               443 lines
-tests:                           217 lines
-total:                           960 lines
-python -c "print(sum([300,443,217]))" -> 960
+measured domain/court/tests:     1015 lines
+full-cross generator/tests:       300 lines
+catalog, soak, live adapters:     735 lines
+contingency for readable typing:  150 lines
+total ceiling:                   2200 lines
 ```
 
-Because 960 exceeds the workflow's approximately 300-line single-change
+This correction prices exact configuration membership and readable,
+non-self-confirming receipts. It is not permission to compress code, bypass
+the measured paths, or omit tests.
+
+Because 2200 exceeds the workflow's approximately 300-line single-change
 ceiling, implementation is split into two ordered code checkpoints with an
 independent commit and validation after each: domain/safety/resume first
 (ceiling 540 including the already-measured 217-line test contract), then the
-shipped-court/catalog/live adapter (cumulative ceiling 960, including its tests
-and the experiment-owned soak wrapper). No paid call occurs between them. The
-campaign launch and result ledger are a third evidence-only checkpoint.
+shipped court, then the full-cross generator, then catalog/soak/live adapters
+(cumulative ceiling 2200). No paid call occurs between them. The campaign
+launch and result ledger are a separate evidence checkpoint.
 
 Frozen surfaces edited: none. Estimated code commits: two. Evidence commits:
 preregistration, authenticated catalog freeze, prefix checkpoints, and final or

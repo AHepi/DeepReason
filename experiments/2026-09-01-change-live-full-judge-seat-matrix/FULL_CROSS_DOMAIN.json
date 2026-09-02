@@ -1,0 +1,230 @@
+{
+  "schema": "deepreason.full-cross-judge-domain.v1",
+  "repository": "AHepi/DeepReason",
+  "branch": "codex/live-full-judge-seat-matrix-20260901",
+  "purpose": "exact fully crossed finite live domain; supersedes the earlier separate seat and uniform-transport live projection",
+  "supersedes_live_projection": {
+    "files_preserved": [
+      "PREREG.md",
+      "MATRIX_DOMAIN.json"
+    ],
+    "early_projection_fixture_total": 5416400,
+    "disposition": "named early projection only; not this domain and not an all-configurations claim"
+  },
+  "claim_boundary": {
+    "allowed_claim": "exhaustive only over this literal finite domain and its recorded digest",
+    "universal_all": "impossible",
+        "config_leaf_settings_before_roles": 145,
+    "endpoint_spec_fields_per_seat": 17,
+    "unbounded_axes": [
+      "role list lengths",
+      "role names",
+      "strings",
+      "numbers",
+      "policy dictionaries",
+      "future fields"
+    ],
+    "forbidden_reductions": [
+      "constraint filtering",
+      "optimization",
+      "ranking",
+      "sampling",
+      "symmetry reduction",
+      "formal oracle over prose",
+      "statistical tightening",
+      "heuristic pruning"
+    ]
+  },
+  "catalog_rule": {
+    "source": "authenticated https://ollama.com/v1/models",
+    "inclusion": "every returned raw model id",
+    "identity": "raw model id; normalization is exclusion-only",
+    "duplicate_raw_id": "refuse catalog freeze",
+    "normalization": "re.sub('[^a-z0-9]', '', unicodedata.normalize('NFKC', model_id).casefold())",
+    "only_exclusion": "normalized id contains kimik3",
+    "positive_vectors": [
+      "kimi-k3",
+      "KIMI K3:cloud",
+      "kimi_k3/cloud",
+      "ollama/kimi-k3"
+    ],
+    "negative_vectors": [
+      "kimi-k2.6",
+      "kimi-k2.7-code",
+      "minimax-m3",
+      "glm-5.3"
+    ]
+  },
+  "finite_axes": {
+    "judge_count": [2, 3],
+    "split_protocol": ["auto", "on", "off"],
+    "model_profile_per_seat": ["compact", "standard", "frontier"],
+    "output_mode_per_seat": ["text", "json_object"],
+    "output_mechanism_per_seat": [
+      "native_json_schema",
+      "grammar",
+      "json_text"
+    ],
+    "reasoning_per_seat": [
+      {"kind": "string", "value": "none"},
+      {"kind": "string", "value": "low"},
+      {"kind": "string", "value": "medium"},
+      {"kind": "integer", "value": 2000}
+    ],
+    "paraphrase_count_with_variator": [-1, 0, 1, 2, 3],
+    "paraphrase_count_without_variator": null
+  },
+  "seat_tuple": {
+    "ordered_fields": [
+      "model_id",
+      "model_profile",
+      "output_mode",
+      "output_mechanism",
+      "reasoning"
+    ],
+    "model_cardinality_symbol": "M",
+    "formula": "S = M*3*2*3*4 = 72M"
+  },
+  "court_components": [
+    {
+      "judge_count": 2,
+      "without_variator": {
+        "ordered_roles": ["critic", "defender", "judge:0", "judge:1"],
+        "formula": "3*S^(2+J)",
+        "fixture_M22_count": 18886086033408
+      },
+      "with_variator": {
+        "ordered_roles": ["critic", "defender", "judge:0", "judge:1", "variator"],
+        "formula": "15*S^(3+J)",
+        "fixture_M22_count": 149577801384591360
+      },
+      "formula": "3*S^4 + 15*S^5",
+      "fixture_M22_total": 149596687470624768
+    },
+    {
+      "judge_count": 3,
+      "without_variator": {
+        "ordered_roles": ["critic", "defender", "judge:0", "judge:1", "judge:2"],
+        "formula": "3*S^(2+J)",
+        "fixture_M22_count": 29915560276918272
+      },
+      "with_variator": {
+        "ordered_roles": ["critic", "defender", "judge:0", "judge:1", "judge:2", "variator"],
+        "formula": "15*S^(3+J)",
+        "fixture_M22_count": 236931237393192714240
+      },
+      "formula": "3*S^5 + 15*S^6",
+      "fixture_M22_total": 236961152953469632512
+    }
+  ],
+  "cardinality": {
+    "per_judge_count_formula": "3*S^(2+J) + 15*S^(3+J)",
+    "total_formula": "sum(J in {2,3}, 3*S^(2+J) + 15*S^(3+J)), S=72M",
+    "fixture_models": 22,
+    "fixture_seat_tuples": 1584,
+    "fixture_judge2_total": 149596687470624768,
+    "fixture_judge3_total": 236961152953469632512,
+    "fixture_total": 237110749640940257280
+  },
+  "case_identity": {
+    "schema_literal": "deepreason.full-cross-judge-case.v1",
+    "top_level_fields": [
+      "schema",
+      "catalog_sha256",
+      "judge_count",
+      "split_protocol",
+      "paraphrase_count",
+      "seats"
+    ],
+    "seat_fields": [
+      "role",
+      "model_id",
+      "model_profile",
+      "output_mode",
+      "output_mechanism",
+      "reasoning"
+    ],
+    "seat_order": "critic, defender, judge:0, judge:1, optional judge:2, optional variator",
+    "reasoning_shape": "{kind: string|integer, value: matching typed value}",
+    "canonical_json": "json.dumps(payload, sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False).encode('utf-8')",
+    "case_id_algorithm": "'sha256:' + hashlib.sha256(canonical_json_bytes).hexdigest()",
+    "set_digest_algorithm": "SHA-256 over UTF-8-bytewise-sorted case ids, each prefixed by its unsigned 8-byte big-endian byte length",
+    "completeness_oracle": "independent literal Cartesian generator; cardinality, uniqueness, and case-id set digest must match before dispatch"
+  },
+  "request_integrity": {
+    "criticism_authority": "defended_trial",
+    "observe_only": "integrity_stop before provider dispatch",
+        "reasoning_field": "required in every final body; string settings preserve their value and integer 2000 maps through the shipped adapter to wire string low while remaining a distinct typed case-id input",
+    "banned_reasoning_strings_casefolded": ["high", "max", "xhigh"],
+    "kimi_check": "repeat exclusion normalization on every final body's exact model field",
+    "constraint_filtering": false,
+    "probe_failure_removes_case": false
+  },
+  "concurrency": {
+    "coordinators": 1,
+    "machine_wide_nonblocking_lock": "/tmp/deepreason-ollama-full-judge-seat-matrix.lock",
+    "maximum_provider_calls_in_flight": 3,
+    "mechanism": "one shared threading.BoundedSemaphore(3) around every endpoint complete call, including retries, repairs, split legs, and private endpoints"
+  },
+  "registered_terminal_outcomes": {
+    "configuration_refused": "shipped compile/runtime refusal before provider-dependent prose could decide the case",
+    "trial_outcome": "semantic result from the shipped defended court",
+    "provider_indeterminate": "provider-dependent transport, availability, envelope, parse, timeout, silence, or related boundary",
+    "unexpected_error": "unregistered driver failure; preserve first boundary and block PASS"
+  },
+  "registered_nonterminal_states": {
+    "integrity_stop": "global invariant failure; freeze prior records and stop provider contact",
+    "interrupted": "attempt ended with registered cases still unterminated",
+    "pending": "no immutable terminal record exists for this case id"
+  },
+  "evidence_rules": {
+    "first_typed_boundary": "preserve stage, exception type, typed code, pointer, exact message, and dispatch extent verbatim when present",
+    "raw_prose": "stored separately from parser, schema, and fallback receipts",
+    "hidden_reasoning_trace": "never store text; record key presence, byte count, and digest only",
+    "formalism_over_prose": false,
+    "refusal_remains_in_denominator": true,
+    "resource_exhaustion": "report exact completed-id set and exact pending remainder; never claim exhaustiveness"
+  },
+  "research_disposition": [
+    {
+      "id": "2604.08633",
+      "adopt": "finite scope, isolation, typed outcomes, reproducible traces",
+      "reject": "coverage-guided BFS, random insertion, abstraction or duplicate reduction, contract exclusions"
+    },
+    {
+      "id": "2603.22093",
+      "adopt": "separate bounds, canonical ids, completeness relative only to bounds",
+      "reject": "SMT pruning, symmetry or subsumption reduction, heuristic queue, satisfying-only output"
+    },
+    {
+      "id": "2607.18265",
+      "adopt": "frozen inventory, exact ordered pair enumeration, per-option receipts",
+      "reject": "compression, embedding pruning, ranking, schema-as-truth"
+    },
+    {
+      "id": "2608.00243",
+      "adopt": "exact seat orders and separate receipts",
+      "reject": "routing, optimization, statistical confidence"
+    },
+    {
+      "id": "2607.08535",
+      "adopt": "separate raw prose, parser, and fallback receipts",
+      "reject": "accuracy ranking and learned evaluator preference"
+    },
+    {
+      "id": "2606.22329",
+      "adopt": "both judge orders and raw outputs",
+      "reject": "degraded-gold labels, composite scores, score-driven routing"
+    },
+    {
+      "id": "2607.17083",
+      "adopt": "negative precedent that pairwise minima and heuristic profiles are not a full product, and post-hoc constraint fixes are unsafe",
+      "reject": "pairwise substitution, constrained reduction, optimal subsets"
+    },
+    {
+      "id": "1807.03975",
+      "adopt": "tiny exact Cartesian mutation oracle and cardinality equality",
+      "reject": "random domains, trial counts, shrinking as campaign evidence"
+    }
+  ]
+}
