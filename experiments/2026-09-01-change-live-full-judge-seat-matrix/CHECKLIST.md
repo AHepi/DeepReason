@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=6 blockers=none
+State: next=7 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -48,8 +48,12 @@ changes no shipped behavior or owner agreement.
       exit 0; focused file `10 passed in 0.09s`; two-model emitted prefixes
       `judge_pairs=4 core_courts=4 no_variator=8 with_variator=32`.
 
-- [ ] 6. (S2, S3, S5) Run the actual-file blast-radius gate over the domain implementation.
+- [x] 6. (S2, S3, S5) Run the actual-file blast-radius gate over the domain implementation.
       done-when: `python tools/blast_radius.py --files experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py tests/test_live_full_judge_seat_matrix.py` reports `"frozen_surface_contacts": []`, `"frozen_adjacent_contacts": []`, and `"frozen_surface_verdict": "CLEAR"`.
+
+      proof: `frozen_surface_contacts=[]`;
+      `frozen_adjacent_contacts=[]`; `frozen_surface_verdict=CLEAR`;
+      consumers and reachability are empty.
 
 - [ ] 7. (S2, S3, S5) Prove the domain/safety/resume tests GREEN.
       done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'domain or authority or kimi or reasoning or concurrency or credential or resume or digest'` ends with 0 failed, saved in `proof/domain-tests-green.txt`.
