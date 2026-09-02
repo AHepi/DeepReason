@@ -628,6 +628,11 @@ class Scheduler:
             ModuleFingerprintsEventPayloadV1,
         )
 
+        from deepreason.model_profiles import (
+            MODEL_PROFILE_REGISTRY_VERSION,
+            registry_fingerprint,
+        )
+
         backend = schools.active_backend()
         fingerprint = backend.fingerprint()
         module_id = str(fingerprint.get("backend") or type(backend).__name__)
@@ -637,7 +642,25 @@ class Scheduler:
                     [
                         ModuleFingerprintV1.of(
                             "school-population", module_id, fingerprint
-                        )
+                        ),
+                        # Which model documents existed when this run ran, and
+                        # which could not be read.  A SECOND registry row on
+                        # the existing payload, which `ModuleFingerprintV1`
+                        # declares as its extension point in terms ("further
+                        # registries can be stamped later without a schema
+                        # change") -- so this reaches the append-only record
+                        # without touching a manifest, a compile notice, or
+                        # any frozen surface.
+                        #
+                        # A COUNT OF ZERO IS THE POINT, not an empty case:
+                        # nothing ships, so a run that knew nothing about any
+                        # model must say so on its own record. That stamp is
+                        # the run-level `model-profile-missing` disclosure.
+                        ModuleFingerprintV1.of(
+                            "model-profiles",
+                            MODEL_PROFILE_REGISTRY_VERSION,
+                            registry_fingerprint(),
+                        ),
                     ]
                 )
             )

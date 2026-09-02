@@ -1,9 +1,9 @@
 <!-- DR-SUB-llm -->
-Verified-at: d40d3de3e
+Verified-at: 229804d93
 Verify: python -m pytest tests/test_llm.py tests/test_model_firewall.py tests/test_wire_contracts.py tests/test_llm_repair_capabilities.py tests/test_adapter_attempt_logging.py tests/test_compact_profiles.py tests/test_providers.py tests/test_budget.py -q
 Owns: src/deepreason/llm/
 Seams: DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules, DR-SEAM-bridge-x-llm, DR-SEAM-llm-x-scheduler, DR-SEAM-llm-x-verification
-Seams-undocumented: capabilities x llm, harness x llm, llm x ontology, llm x schools, llm x scratch
+Seams-undocumented: capabilities x llm, harness x llm, llm x model-profiles, llm x ontology, llm x schools, llm x scratch
 
 # The LLM boundary — one bounded `pack -> schema-valid JSON` function on a frozen route
 
@@ -89,17 +89,20 @@ reference-bearing field contain", which both `packs.py` (the prompt menu) and
   provider-wide ceiling, booked before dispatch and shrunk to reported usage.
 - `plan_split(...)` → `SplitPlan`, `deliberation_request`, `extraction_request`
   — the split-budget seat protocol: one seat call becomes a deliberation leg at
-  `B_r` and a non-thinking emission leg at `B_a`, against the same route, lease
-  and authorization, with `B_r + B_a == ceiling`. Pure: it plans and renders,
-  and `LLMAdapter._dispatch_split` spends and records both legs as
-  `LLMSplitLegV1` on the attempt they produce.
+  `B_r` and a lower-reasoning emission leg at `B_a`, against the same route,
+  lease and authorization, with `B_r + B_a == ceiling`. Pure: it plans and
+  renders, and `LLMAdapter._dispatch_split` spends and records both legs as
+  `LLMSplitLegV1` on the attempt they produce. The value the emission leg sends
+  is READ from the model's own document (`profile`, a required keyword with no
+  default) and is never a literal in `llm/`; a model nobody has described
+  stands the protocol down. See `DR-CON-model-profiles`.
 - `reject_model_control_fields` / `sanitize_model_control_fields_for_repair` /
   `route_fingerprint` / `select_lease` / `resolve_school_role_lease` — the
   route-and-authority firewall.
 - `probe_capabilities` + `select_profile`, and `build_embedder` — setup-time
   measurement of a route, and the non-generator embedding role.
 `check: grep -q "^class LLMAdapter:" src/deepreason/llm/adapter.py && grep -q "^def build_adapter(" src/deepreason/llm/adapter.py && for s in call preview_request bind_v6_authority profile_for base_profile_for rehydrate_compact_recovery require_cross_family_judges judge_seats has_role ensemble_size is_single_model _render_request; do grep -q "^    def $s(" src/deepreason/llm/adapter.py || exit 1; done && grep -q "^class EndpointLease:" src/deepreason/llm/firewall.py && for s in reject_model_control_fields sanitize_model_control_fields_for_repair route_fingerprint leases_from_manifest leases_from_endpoints select_lease resolve_school_role_lease require_cross_family_judge_ensemble require_cross_school_judge_ensemble is_single_family_run is_single_model_run route_from_endpoint; do grep -q "^def $s(" src/deepreason/llm/firewall.py || exit 1; done`
-`check: for s in wire_contract_for minimal_example; do grep -q "^def $s(" src/deepreason/llm/wire.py || exit 1; done && grep -q "^class WireContract(" src/deepreason/llm/wire.py && grep -q "^class AliasTable:" src/deepreason/llm/wire.py && grep -q "^def render_role_prompt(" src/deepreason/llm/roles.py && for s in render_conj_pack render_crit_pack render_batch_crit_pack render_experiment_pack render_property_pack render_cx_retry_pack apply_model_profile aliases_for_pack; do grep -q "^def $s(" src/deepreason/llm/packs.py || exit 1; done && for s in select_output_mechanism parse_one_json_value diagnostic_from_error diagnostic_envelope_from_error apply_repair_patch minimal_skeleton; do grep -q "^def $s(" src/deepreason/llm/repair.py || exit 1; done && for c in BoundedRepairSession V6PatchRepairSession OutputMechanism; do grep -q "^class $c" src/deepreason/llm/repair.py || exit 1; done && for s in get_profile select_profile apply_profile_to_config clip_pack; do grep -q "^def $s(" src/deepreason/llm/profiles.py || exit 1; done && grep -q "^class TokenMeter:" src/deepreason/llm/budget.py && grep -q "^class Reservation:" src/deepreason/llm/budget.py && grep -q "^def conservative_prompt_bound(" src/deepreason/llm/budget.py && for s in request_with_retries resolve_model list_models mean_surprisal; do grep -q "^def $s(" src/deepreason/llm/endpoints.py || exit 1; done && grep -q "^class OpenAICompatEndpoint:" src/deepreason/llm/endpoints.py && grep -q "^class MockEndpoint:" src/deepreason/llm/endpoints.py && for s in reasoning_body infer_provider reasoning_disabled reasoning_knob_available; do grep -q "^def $s(" src/deepreason/llm/providers.py || exit 1; done && grep -q "^def probe_capabilities(" src/deepreason/llm/capabilities.py && grep -q "^class CapabilityCache:" src/deepreason/llm/capabilities.py && grep -q "^def build_embedder(" src/deepreason/llm/embedder.py && grep -q "^def generate_specs(" src/deepreason/llm/specs.py`
+`check: for s in wire_contract_for minimal_example; do grep -q "^def $s(" src/deepreason/llm/wire.py || exit 1; done && grep -q "^class WireContract(" src/deepreason/llm/wire.py && grep -q "^class AliasTable:" src/deepreason/llm/wire.py && grep -q "^def render_role_prompt(" src/deepreason/llm/roles.py && for s in render_conj_pack render_crit_pack render_batch_crit_pack render_experiment_pack render_property_pack render_cx_retry_pack apply_model_profile aliases_for_pack; do grep -q "^def $s(" src/deepreason/llm/packs.py || exit 1; done && for s in select_output_mechanism parse_one_json_value diagnostic_from_error diagnostic_envelope_from_error apply_repair_patch minimal_skeleton; do grep -q "^def $s(" src/deepreason/llm/repair.py || exit 1; done && for c in BoundedRepairSession V6PatchRepairSession OutputMechanism; do grep -q "^class $c" src/deepreason/llm/repair.py || exit 1; done && for s in get_profile select_profile apply_profile_to_config clip_pack; do grep -q "^def $s(" src/deepreason/llm/profiles.py || exit 1; done && grep -q "^class TokenMeter:" src/deepreason/llm/budget.py && grep -q "^class Reservation:" src/deepreason/llm/budget.py && grep -q "^def conservative_prompt_bound(" src/deepreason/llm/budget.py && for s in request_with_retries resolve_model list_models mean_surprisal; do grep -q "^def $s(" src/deepreason/llm/endpoints.py || exit 1; done && grep -q "^class OpenAICompatEndpoint:" src/deepreason/llm/endpoints.py && grep -q "^class MockEndpoint:" src/deepreason/llm/endpoints.py && for s in reasoning_body infer_provider reasoning_knob_available; do grep -q "^def $s(" src/deepreason/llm/providers.py || exit 1; done && python -c "import ast,pathlib,sys; tree=ast.parse(pathlib.Path('src/deepreason/llm/providers.py').read_text()); names={n.id for n in ast.walk(tree) if isinstance(n,ast.Name)} | {n.name for n in ast.walk(tree) if isinstance(n,ast.FunctionDef)}; sys.exit(1 if ('REASONING_OFF' in names or 'reasoning_disabled' in names) else 0)" && grep -q "^def probe_capabilities(" src/deepreason/llm/capabilities.py && grep -q "^class CapabilityCache:" src/deepreason/llm/capabilities.py && grep -q "^def build_embedder(" src/deepreason/llm/embedder.py && grep -q "^def generate_specs(" src/deepreason/llm/specs.py`
 
 `ROLES` is the §9 generator roster (8 entries, `embedder` among them and
 deliberately template-less). `TEMPLATES` is larger, because `template_role`
@@ -154,13 +157,14 @@ through the caller, including on the failure paths.
 
 | To change... | Edit | Test |
 |---|---|---|
-| Add a provider, or how its reasoning knob is spelled | `llm/providers.py`: `REASONING_ADAPTERS`, `infer_provider`, `reasoning_knob_available` | `tests/test_providers.py` |
+| Add a provider, or how its reasoning knob is SPELLED on the wire | `llm/providers.py`: `REASONING_ADAPTERS`, `infer_provider`, `reasoning_knob_available` | `tests/test_providers.py::test_knob_availability_is_a_provider_fact_and_stays_here` |
+| What a reasoning value MEANS on one model — whether it disables thinking, where the trace lands, what the emission leg should send | that model's own document at `$DEEPREASON_HOME/model-profiles/<id>/agent.md`. **NO source edit** — see `DR-CON-model-profiles` | `tests/test_providers.py::test_what_off_means_is_a_model_fact_and_lives_in_the_model_document`, `tests/test_model_profile_registry.py` |
 | Point a role at a different model/endpoint | the role table (config §15 or `RunManifest.roles`); `_endpoint_from_spec` needs no edit | `tests/test_providers.py::test_role_table_is_the_model_change_plug` |
 | A role's prompt wording, or add an auxiliary `template_role` | `llm/roles.py`: `TEMPLATES`, `COMPACT_TEMPLATES` | `tests/test_compact_profiles.py::test_compact_prompt_has_one_example_and_no_operator_context` |
 | What a role's JSON must contain | the canonical model in `llm/contracts.py` + its wire model and branch in `wire_contract_for` | `tests/test_wire_contracts.py::test_role_wire_contracts_compile_to_existing_canonical_models` |
 | Move a rule from prompt prose into the schema | `llm/wire.py` primitives: `present_and_nonempty`, `absent_or_empty`, `outcome_shape_schema`, `discriminated_shape_schema`, `restrict_discriminator_values`, `prune_property` | `tests/test_schema_carries_every_prose_rule.py` |
 | Which transport a role gets at a given profile | `wire_contract_for`; `ProfileSpec.direct_contracts` in `llm/profiles.py` | `tests/test_compact_profiles.py::test_alias_dependent_hot_roles_fail_closed_without_a_table` |
-| Whether a seat splits its completion budget, or the budgets it splits into | `llm/split.py`: `plan_split`, `MIN_EXTRACT_TOKENS`; `Config.SPLIT_BUDGET_SEAT_PROTOCOL` / `SPLIT_BUDGET_EXTRACTION_TOKENS` | `tests/test_split_budget_protocol.py::test_neither_leg_nor_their_sum_exceeds_the_route_lease_ceiling` |
+| Whether a seat splits its completion budget, or the budgets it splits into | `llm/split.py`: `plan_split`, `MIN_EXTRACT_TOKENS`; `Config.SPLIT_BUDGET_SEAT_PROTOCOL` / `SPLIT_BUDGET_EXTRACTION_TOKENS`; and whether the seat's model has a document at all | `tests/test_split_budget_protocol.py::test_neither_leg_nor_their_sum_exceeds_the_route_lease_ceiling` |
 | What a split leg records, or when the protocol stands down | `LLMAdapter._split_plan` / `_dispatch_split`; `LLMSplitLegV1` in `ontology/event.py`; the `NOTICE_` constants in `llm/split.py` | `tests/test_split_budget_protocol.py::test_a_provider_that_cannot_disable_thinking_still_compiles`, `tests/test_split_leg_recording.py::test_a_split_call_records_two_legs_on_one_attempt` |
 | Anything a split call writes into the RECORD | `LLMSplitLegV1` and the `split-legs` family that reads it — see DR-SEAM-llm-x-verification BEFORE either side | `tests/test_split_leg_recording.py::test_verify_root_accepts_a_thinking_on_record` |
 | Repair protocol shape or attempt ceiling | `BoundedRepairSession` (legacy, `retry_max` capped at 2) or `V6PatchRepairSession` (one authorization per attempt) | `tests/test_llm_repair_capabilities.py::test_repair_exhaustion_is_bounded_even_with_large_retry_max` |
@@ -242,17 +246,51 @@ assert _failure_code(refusal) != _failure_code(quota), 'the two conditions must 
   `diagnostic_ref` and the blob under `blobs/` gives the verbatim error and the
   rejected value; read that before theorising about JSON Schema expressiveness.
 `check: grep -q "def _note_repeated_state" src/deepreason/llm/repair.py && grep -q "diagnostic_ref=self.blobs.put" src/deepreason/llm/adapter.py && python -m pytest tests/test_v6_patch_repair_and_wire.py::test_a_repair_that_cycles_is_named_in_the_exhaustion_reason -q`
-- **Unset reasoning is not off.** In coin canonicity `run-c5f901f3` the live
+- **Unset reasoning is not off — and neither is `"none"`, on every model.**
+  Two failures, four years of runs apart in cost, and the second one is why the
+  first one's fix had to move.
+  **The original (2026-08).** In coin canonicity `run-c5f901f3` the live
   profile carried `reasoning=None`, which sends no reasoning field at all;
   glm-5.2 then thought by default, the first conjecture turn returned
   `completion_tokens` exactly equal to the 24576 cap, and no candidate was
-  emitted. `reasoning_disabled` encodes that only the neutral `"none"` token is
-  off, and `reasoning_knob_available` decides from the adapter table rather
-  than by probing — a provider whose adapter is the no-op cannot be asked at
-  all. The DeepSeek effort table is the sibling hazard: an earlier version
-  collapsed `low`/`medium` up to `high`, silently billing maximum-cost
-  reasoning for the cheapest configured setting.
-`check: python -m pytest tests/test_providers.py::test_thinking_off_rule_knows_where_the_knob_is_real_and_what_off_means tests/test_review_fixes.py::test_deepseek_low_effort_stays_cheap -q`
+  emitted. That claim still holds and is still asserted.
+  **What was wrong with the fix, and when (2026-09-01).** The fix was
+  `reasoning_disabled(value)`, comparing against `REASONING_OFF = "none"` — one
+  answer for every model. On glm-5.3 it is FALSE: `reasoning_effort: "none"`
+  does not stop the thinking there, it stops the SEPARATION, so the trace lands
+  in `message.content` ahead of the answer (0/8 clean at `none` against 8/8 at
+  `low`, and `none` is also the dearer of the two at 64 median completion
+  tokens against 7). `llm/split.py` sent that constant on every emission leg of
+  every model, and it killed three runs: P-S1 `MISTAKES.md` M-1 (the 512-token
+  emission leg at cycle 0) and M-16 (the cap ratchet's 1,953-token floor at
+  cycle 11), then P-A1 run `4565139800f5ca02` re-running M-1's mechanism
+  verbatim. A launch refusal in `cli/main.py` made it worse by DEMANDING
+  `reasoning: none` before it would spend a call.
+  **FIXED 2026-09-01** by `DR-CON-model-profiles`: the constant and the
+  predicate are gone, what a value means on a model is that model's own
+  document to say, and the refusal became a disclosure. `reasoning_knob_available`
+  stays here and stays a provider fact — a provider whose adapter is the no-op
+  cannot carry any reasoning field at all.
+  The DeepSeek effort table is the sibling hazard, unchanged: an earlier
+  version collapsed `low`/`medium` up to `high`, silently billing
+  maximum-cost reasoning for the cheapest configured setting.
+`check: python -m pytest tests/test_providers.py::test_knob_availability_is_a_provider_fact_and_stays_here tests/test_providers.py::test_what_off_means_is_a_model_fact_and_lives_in_the_model_document tests/test_review_fixes.py::test_deepseek_low_effort_stays_cheap -q`
+- **A per-model fact answered by a per-provider table is invisible until it
+  kills something.** The shape, so the next one is caught earlier: the claim
+  reads as vocabulary ("`none` means off"), it is stated once in a constant,
+  every model inherits it, and it is right about most of them. `llm/providers.py`
+  is the PROVIDER seam — what the wire carries — and it must never acquire a
+  model id, a model table, or a claim about what a value does.
+`check: python -c "
+import ast, pathlib
+tree = ast.parse(pathlib.Path('src/deepreason/llm/providers.py').read_text())
+names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
+assert 'REASONING_OFF' not in names, 'the per-model constant is back'
+assert 'REASONING_ADAPTERS' in names, 'positive anchor: the provider table is still here'
+funcs = {n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+assert 'reasoning_disabled' not in funcs
+assert {'reasoning_body', 'reasoning_knob_available', 'infer_provider'} <= funcs, funcs
+"`
 - **Retrying an identical wait after a read timeout fails identically.** Two
   variator calls were dropped live after four 120s waits while ~110s
   generations were succeeding at the same endpoint. `TIMEOUT_FACTORS = (1, 2)`

@@ -1,0 +1,87 @@
+BASELINE_V1
+production_base=dd0916fb5211d014a6723a74100b29877f0bea93
+captured=2026-09-01, before any source change in this tranche
+
+--- pre-authorized red baseline 1: the shipped qualification subject digest ---
+.                                                                        [100%]
+1 passed, 1 skipped, 4600 deselected in 10.15s
+--- CORRECTION: baseline 1 is GREEN on this container, not red ---
+C6 pre-authorized test_the_shipped_qualification_subject_digest_does_not_move
+as a known-not-yours red. Measured here, before any edit, it PASSES:
+  tests/test_allocation_signal_consumption.py::test_the_shipped_qualification_subject_digest_does_not_move PASSED
+  1 passed, 1 skipped, 4600 deselected
+So the pre-authorization does not apply: if this test goes red later in
+this tranche it is THIS TRANCHE'S doing and must be explained, not waived.
+Recorded here so no later step can waive it by citing C6.
+
+--- unrelated skip, present before any edit ---
+SKIPPED [1] tests/test_browser.py:8: could not import 'playwright'
+
+--- pre-authorized red baseline 2: the bc-dependent map check ---
+$ which bc  ->  /usr/bin/bc  (exit 0)
+map checks whose command mentions bc: 0
+The full docs_verify baseline is NOT captured here on purpose: another
+worker-spawning instrument was live in this container at this moment, and
+dr-drive-harness 5b says a measurement taken under load is not a
+measurement. It is captured at step 25, run alone on an idle box.
+
+--- SUMMARY: NEITHER pre-authorized waiver applies on this container ---
+C6 named two known-not-yours reds. Measured before any edit, both are false
+here: `bc` is installed at /usr/bin/bc, and the shipped-qualification-subject
+test passes. This tranche therefore claims NEITHER waiver. Every red in the
+step-25 map check and the step-27 gate is this tranche's to explain or fix.
+
+--- ADDENDUM, after the step-12 map check: five PRE-EXISTING map failures ---
+`python tools/docs_verify.py` on the changed tree reports "72 documents, 1302
+checks, 4 workers ... 5 failed". None is this tranche's, and each was measured
+against the pre-tranche base `dd0916fb5` rather than argued:
+
+1. SEAM-llm-x-rules.md:54 -- "unparseable check". Line 54 is BYTE-IDENTICAL at
+   the base (verified by comparing the archived file's line 54 with the current
+   one). It is a document-authoring error in the check grammar, in a file this
+   tranche never opened, and no code change can cause or cure it.
+2-4. CON-run-identity.md:211, :213, :215 -- git-history checks. `git log -1
+   --format=%s 1637e808` returns "fatal: ambiguous argument '1637e808': unknown
+   revision", and the rename census over
+   experiments/live_research_2026-07-29/selfstudy/runs/ returns nothing: this
+   container's clone does not carry that history. Repo-global and independent
+   of the working tree.
+5. INV-frozen-surfaces.md:181 -- expects 0 files matching
+   `*workflow-provider-attempt-v1/*.json` containing "transport_failure".
+   Current tree: 1 file. Base archive: 1 file. Unchanged.
+
+The three documents involved are untouched by this tranche (`git diff` against
+the base names only CON-model-profiles.md, CON-seats.md, INDEX.md and
+SUB-llm.md under docs/map/).
+
+**This is NOT a waiver.** C6 pre-authorized two specific reds and BOTH turned
+out to be green here; these five are different failures, discovered by running
+the instrument, and they are recorded as pre-existing on measured evidence
+rather than excused. Every check in the four documents this tranche DID touch
+passes.
+
+--- ADDENDUM 2: the operational wheel smoke was ALREADY red ---
+`python -u scripts/wheel_operational_smoke.py` fails on the changed tree at
+`"stage":"continuation_resume"`, `"failure_kind":"assertion_failed"`.
+
+Measured, not argued: the SAME script, run against an archive of the
+pre-tranche base `dd0916fb5` (before any src change in this tranche), fails at
+the SAME stage with the SAME failure kind. 4034 bytes of identical-shaped
+failure payload. So this red pre-dates the tranche.
+
+Recorded rather than waived. Two facts that make the attribution safe rather
+than convenient:
+
+* `python scripts/wheel_smoke.py` -- the pin on the packaging surface this
+  tranche actually moves (a new package directory, a new script) -- PASSES:
+  "isolated V6-only contents, clean imports, exact entry points, module parity,
+  MCP registration, and exact MCP schemas". So the new `model_profiles` package
+  really is in the wheel and the entry points really are unchanged.
+* The operational smoke's fixture runs `deepreason setup --provider generic`,
+  and `reasoning_knob_available("generic")` is False, so this tranche's two
+  behavioural changes cannot fire in it at all: `_reasoning_disclosure` returns
+  None before consulting any document, and `plan_split` under `auto` returns
+  `NOTICE_NO_REASONING_KNOB` exactly as it did before. There is no path by
+  which the change reaches the failing stage.
+
+Parked as a finding for its own tranche rather than carried here: PARKED.md P6.

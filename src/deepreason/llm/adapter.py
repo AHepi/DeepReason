@@ -989,12 +989,25 @@ class LLMAdapter:
             # -format field, which the deliberation leg omits per request while
             # the emission leg carries the route's mode in full.
             return stand_down(NOTICE_OUTPUT_MECHANISM)
+        # The model's own document, or None when nobody has written one.
+        # Resolved HERE rather than inside `plan_split` because that module is
+        # pure -- no I/O, no route, no endpoint -- and reading a directory is
+        # I/O.  The registry is reached through its declared interface only
+        # (`DR-CON-model-profiles`); this is the single site in `llm/` that
+        # resolves a model to its facts.
+        from deepreason.model_profiles import resolve as resolve_model_profile
+
         return plan_split(
             mode=self.split_budget_mode,
             ceiling=getattr(endpoint, "max_tokens", lease.route.max_tokens),
             extraction_tokens=self.split_extraction_tokens,
             provider=lease.route.provider,
             reasoning=lease.route.reasoning,
+            # `Route.model_id`, read as an attribute and not through a
+            # defaulted getattr: a getattr default turns a renamed field into
+            # "no model profile" -- a silent stand-down that looks exactly
+            # like an undescribed model. Caught here by exactly that mistake.
+            profile=resolve_model_profile(lease.route.model_id),
         )
 
     def _dispatch_split(

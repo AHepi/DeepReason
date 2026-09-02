@@ -37,6 +37,7 @@ from deepreason.llm.split import (
 )
 from deepreason.ontology import Problem, ProblemProvenance
 from deepreason.ontology.event import LLMAttempt, LLMSplitLegV1
+from deepreason import model_profiles
 from deepreason.rules.conj import conj
 from deepreason.run_manifest import Route, RunManifest, persist_run_manifest
 from tests.test_process_metadata import _patch_legacy_manifest_consumers
@@ -47,6 +48,37 @@ VALID = json.dumps({"candidates": [{"content": "keep", "typicality": 0.5}]})
 INVALID = '{"candidates":[{"content":"keep","typicality":2}]}'
 TRACE = "Working the problem. The load-bearing support is the second, because"
 
+
+
+
+# Both endpoints below name glm-5.2, and since 2026-09-01 what a model does
+# with a reasoning value is read from that model's own document rather than
+# decided by a constant.  Without a document the protocol correctly stands
+# down, and these tests would be recording the unknown-model path instead of
+# the split they exist to record (`DR-CON-model-profiles`).
+GLM_52_DOCUMENT = model_profiles.parse_document(
+    "```" + model_profiles.FENCE_INFO + """
+schema: deepreason-model-profile.v1
+model_id: glm-5.2
+measured_on: 2026-08-31
+reasoning:
+  documented_values: [none, low, medium, high, max]
+  extraction_value: none
+  thinking_disablable: true
+  disabling_values: [none]
+  trace_destination: {none: absent, high: side_channel}
+```
+"""
+)
+
+
+@pytest.fixture(autouse=True)
+def _glm_52_is_described():
+    model_profiles.register(GLM_52_DOCUMENT)
+    try:
+        yield
+    finally:
+        model_profiles.unregister("glm-5.2")
 
 def _manifest(endpoint):
     route = Route(

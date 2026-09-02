@@ -102,37 +102,94 @@ def test_endpoint_family_defaults_to_lease_inference():
     assert ep2.family == "custom"
 
 
-def test_thinking_off_rule_knows_where_the_knob_is_real_and_what_off_means():
-    """Regression (coin canonicity run-c5f901f3): the live profile carried
-    reasoning=None, which sends no reasoning field, and glm-5.2 thought by
-    default — the first conjecture turn returned completion_tokens exactly
-    equal to the 24576 cap and produced no candidate. Unset is not off, and
-    the binding rule has to encode that distinction.
+def test_knob_availability_is_a_provider_fact_and_stays_here():
+    """What the WIRE can carry is decided by the adapter table, not by probing.
+
+    This is the half of the old `thinking_off` rule that is genuinely about
+    providers. The other half -- what a value MEANS on a given model -- moved
+    to that model's own document on 2026-09-01; see the test below.
     """
 
-    from deepreason.llm.providers import (
-        reasoning_disabled,
-        reasoning_knob_available,
-    )
+    from deepreason.llm.providers import reasoning_knob_available
 
-    # Availability is decided by the adapter table, not by probing.
     assert reasoning_knob_available("ollama")
     assert reasoning_knob_available("openai")
     assert reasoning_knob_available("deepseek")
     assert not reasoning_knob_available("generic")
     assert not reasoning_knob_available("some-unlisted-provider")
 
-    # Unset is NOT off; only the neutral off token is.
-    assert not reasoning_disabled(None)
-    assert reasoning_disabled("none")
-    assert reasoning_disabled(" NONE ")
-    assert not reasoning_disabled("low")
-    assert not reasoning_disabled("high")
-    # An int budget is a budget, never a disable.
-    assert not reasoning_disabled(0)
-    assert not reasoning_disabled(2000)
-
-    # The off token reaches the wire as each provider's most-off setting.
+    # The neutral off token reaches the wire as each provider's own most-off
+    # spelling. What the MODEL then does with it is not this table's claim.
     assert reasoning_body("ollama", "none") == {"reasoning_effort": "none"}
     assert reasoning_body("openai", "none") == {"reasoning_effort": "minimal"}
     assert reasoning_body("generic", "none") == {}
+
+
+def test_what_off_means_is_a_model_fact_and_lives_in_the_model_document():
+    """Regression (coin canonicity run-c5f901f3): the live profile carried
+    reasoning=None, which sends no reasoning field, and glm-5.2 thought by
+    default — the first conjecture turn returned completion_tokens exactly
+    equal to the 24576 cap and produced no candidate. Unset is not off.
+
+    That claim is unchanged and is asserted below. What changed on 2026-09-01
+    is WHERE it is decided. `providers.reasoning_disabled` used to answer it
+    from a constant, for every model at once, and it was wrong about glm-5.3:
+    `none` there does not stop the thinking, it stops the SEPARATION (0/8
+    clean content against 8/8 at `low`). Two models, two answers, one
+    question — so the question belongs to each model's own document.
+    """
+
+    from deepreason import model_profiles
+    from deepreason.llm.split import (
+        NOTICE_NOT_A_REASONING_SEAT,
+        plan_split,
+    )
+
+    def _document(model_id, disabling):
+        return model_profiles.parse_document(
+            "```" + model_profiles.FENCE_INFO + f"""
+schema: deepreason-model-profile.v1
+model_id: {model_id}
+measured_on: 2026-08-31
+reasoning:
+  documented_values: [none, low, high, max]
+  extraction_value: low
+  thinking_disablable: {"true" if disabling else "false"}
+  disabling_values: {disabling}
+  trace_destination: {{low: side_channel}}
+```
+"""
+        )
+
+    # glm-5.2: `none` really does disable thinking (P-S1, 5/5 clean content
+    # with no reasoning field). The seat is out of scope for the split.
+    glm_52 = _document("glm-5.2", "[none]")
+    off = plan_split(
+        mode="auto", ceiling=4096, extraction_tokens=512,
+        provider="ollama", reasoning="none", profile=glm_52,
+    )
+    assert not off.armed and off.notice == NOTICE_NOT_A_REASONING_SEAT
+
+    # Unset is STILL not off, on either model: no reasoning field is sent and
+    # a reasoning model thinks by default.
+    unset = plan_split(
+        mode="auto", ceiling=4096, extraction_tokens=512,
+        provider="ollama", reasoning=None, profile=glm_52,
+    )
+    assert unset.armed
+
+    # glm-5.3: the SAME configured value, a different measured answer. Nothing
+    # a per-provider table could have known.
+    glm_53 = _document("glm-5.3", "[]")
+    still_thinking = plan_split(
+        mode="auto", ceiling=4096, extraction_tokens=512,
+        provider="ollama", reasoning="none", profile=glm_53,
+    )
+    assert still_thinking.armed
+
+    # An int budget is a budget, never a disable — on any model.
+    for budget in (0, 2000):
+        assert plan_split(
+            mode="auto", ceiling=4096, extraction_tokens=512,
+            provider="ollama", reasoning=budget, profile=glm_52,
+        ).armed

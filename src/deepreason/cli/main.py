@@ -1946,12 +1946,14 @@ def _qualify_one_profile(profile_path, *, args, seat_bindings=None) -> dict | No
         raise QualificationError(
             "PROVIDER_CREDENTIAL_MISSING", "configured provider credential is absent"
         )
-    # The battery spends provider calls, so it is a launch too: qualifying
-    # a thinking-on profile would certify behavior the run may not use.
-    refusal = _reasoning_disabled_refusal(profile_path)
-    if refusal is not None:
-        print(refusal, file=sys.stderr)
-        return None
+    # The battery spends provider calls, so it is a launch too: it certifies
+    # the behavior the run will actually have. It therefore DISCLOSES what the
+    # reasoning setting will do and qualifies the configuration as given --
+    # certifying the configuration the operator chose is the point, and
+    # refusing to certify one is the gate the 2026-08-28 law removed.
+    disclosure = _reasoning_disclosure(profile_path)
+    if disclosure is not None:
+        print(disclosure, file=sys.stderr)
     from deepreason.config import load as load_config
 
     # The battery this warms must be the battery `deepreason reason --config`
@@ -2363,20 +2365,34 @@ def _cmd_admit(args) -> int:
     return 0
 
 
-def _reasoning_disabled_refusal(provider_profile) -> str | None:
-    """Refuse to spend provider calls while hidden reasoning is left on.
+def _reasoning_disclosure(provider_profile) -> str | None:
+    """Say what this seat's reasoning setting will do — and never refuse.
 
-    Binding rule: when the provider realizes the neutral reasoning knob, the
-    profile must switch it off. Unset is not off — a reasoning model with no
-    reasoning field sent thinks by default and can burn the entire completion
-    cap before emitting a token (recorded: a conjecture turn returning
-    completion_tokens exactly equal to the cap, with no candidate).
+    This was a launch REFUSAL (`REASONING_MUST_BE_DISABLED`) demanding
+    `reasoning: none` from any profile whose provider realizes the knob. It was
+    wrong in two ways at once, and the second is why it is a warning now.
 
-    Enforced at LAUNCH, never on load: an already-committed profile stays
-    readable, so every existing run root still reopens and replays.
+    It was wrong about the FACT. "Unset is not off" is true, but "none is off"
+    is a per-MODEL claim it decided with a per-vocabulary constant. On glm-5.3
+    `reasoning_effort: "none"` does not stop the thinking, it stops the
+    SEPARATION: the trace lands in `message.content` ahead of the answer, 0/8
+    clean against 8/8 at `low`. So the refusal actively forced the one setting
+    that breaks that model and refused the one that works.
+
+    It was wrong about its own AUTHORITY. The operator, 2026-08-28: "Gates are
+    always optional: with warnings"; and 2026-09-01: "Harness is supposed to
+    accommodate all possible future models and configurations." A launch gate
+    that vetoes a configuration the operator chose is not this harness's to
+    keep, whatever it believes about the value.
+
+    So it discloses. Silent when this model's own document says the configured
+    value disables thinking; loud when the document says it does not; loud in a
+    different way when no document describes the model at all, because then
+    nobody knows and saying so is the honest answer.
     """
 
-    from deepreason.llm.providers import reasoning_disabled, reasoning_knob_available
+    from deepreason.llm.providers import reasoning_knob_available
+    from deepreason.model_profiles import resolve as resolve_model_profile
     from deepreason.provider_profile import resolve_provider_profile
 
     try:
@@ -2387,14 +2403,28 @@ def _reasoning_disabled_refusal(provider_profile) -> str | None:
         return None
     if not reasoning_knob_available(profile.provider):
         return None
-    if reasoning_disabled(profile.reasoning):
+
+    document = resolve_model_profile(profile.model_id)
+    facts = getattr(document, "reasoning", None)
+    if facts is None:
+        return (
+            "MODEL_PROFILE_MISSING: no model profile document describes "
+            f"{profile.model_id!r}, so nothing here can say "
+            f"whether reasoning={profile.reasoning!r} leaves hidden reasoning "
+            "on. The run proceeds and sends exactly what you configured. To "
+            "have this answered, write "
+            "$DEEPREASON_HOME/model-profiles/<model-id>/agent.md."
+        )
+    if str(profile.reasoning).strip() in tuple(facts.disabling_values):
         return None
     return (
-        "REASONING_MUST_BE_DISABLED: provider "
-        f"{profile.provider!r} realizes the reasoning knob and this profile "
-        f"has reasoning={profile.reasoning!r}, which does not switch thinking "
-        "off (unset sends no reasoning field, so the model thinks by "
-        "default). Re-run setup with --reasoning none."
+        "REASONING_STAYS_ON: "
+        f"{profile.model_id!r}'s profile (measured "
+        f"{document.measured_on.isoformat()}) does not list "
+        f"reasoning={profile.reasoning!r} among the values that disable "
+        f"thinking ({list(facts.disabling_values) or 'none of them'}). Hidden "
+        "reasoning can consume the whole completion cap before a token is "
+        "emitted. The run proceeds; this is a disclosure, not a refusal."
     )
 
 
@@ -2420,10 +2450,9 @@ def _cmd_reason(args) -> int:
     if args.root != ".deepreason":
         print("PUBLIC_REASON_ROOT_FORBIDDEN: managed run paths are host-owned", file=sys.stderr)
         return 1
-    refusal = _reasoning_disabled_refusal(getattr(args, "provider_profile", None))
-    if refusal is not None:
-        print(refusal, file=sys.stderr)
-        return 1
+    disclosure = _reasoning_disclosure(getattr(args, "provider_profile", None))
+    if disclosure is not None:
+        print(disclosure, file=sys.stderr)
     cycles = args.cycles if args.cycles is not None else PUBLIC_DEFAULT_CYCLES
     tokens = (
         args.token_budget
