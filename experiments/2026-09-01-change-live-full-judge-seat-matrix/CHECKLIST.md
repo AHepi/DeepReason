@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=9 blockers=none
+State: next=10 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -68,8 +68,12 @@ changes no shipped behavior or owner agreement.
       proof: `matrix.py=274`, `test_live_full_judge_seat_matrix.py=217`,
       `total_insertions=491`, `ceiling=540`, `verdict=WITHIN`.
 
-- [ ] 9. (S2, S3, S5) [COMMIT] Push the domain/safety/resume implementation and GREEN proof.
+- [x] 9. (S2, S3, S5) [COMMIT] Push the domain/safety/resume implementation and GREEN proof.
       done-when: local HEAD equals the GitHub branch head and `git status --porcelain` is empty.
+
+      proof: `DOMAIN_PHASE_PUSHED=YES` at
+      `9dff8518d5c94de6a0500181570f4c2b2eca9d35`; local HEAD equalled origin;
+      worktree empty.
 
 - [ ] 10. (S4, S6) Add shipped-court, topology, managed-path, typed-boundary, sequence, and soak tests before live implementation.
       done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'topology or typed or managed or sequence or soak'` -> nonzero for missing implementation, saved in `proof/court-tests-red.txt`.
