@@ -44,11 +44,11 @@ Provider behavior is interpreted from first-party Ollama documentation:
 The following alphaXiv work informed coverage only. It does not supply an
 optimization target or a preference ordering:
 
-| Source | Frozen coverage consequence |
-|---|---|
-| <https://www.alphaxiv.org/abs/2607.08535> | Preserve parse/fallback records and keep evaluator replacements distinct. |
-| <https://www.alphaxiv.org/abs/2606.22329> | Treat reversed judge-seat order as a different case. |
-| <https://www.alphaxiv.org/abs/2608.00243> | Include homogeneous and heterogeneous judge panels. |
+| Paper (retrieved 2026-09-01) | Frozen coverage consequence | Registered check |
+|---|---|---|
+| 2607.08535, *When the Judge Changes, So Does the Measurement* | Preserve parse/fallback records and keep evaluator replacements distinct. | `test_prose_and_parser_receipts_are_separate` |
+| 2606.22329, *BabelJudge* | Treat reversed judge-seat order as a different case. | `test_domain_preserves_ordered_judge_swaps` |
+| 2608.00243, *More Debate, Same Evidence* | Include homogeneous and heterogeneous judge panels. | `test_structural_domain_has_homogeneous_and_heterogeneous_panels` |
 
 No heuristic learned from these papers is used to discard, rank, prioritize by
 predicted merit, or statistically tighten a configuration.
@@ -61,6 +61,12 @@ Before the first completion, the authenticated `GET /v1/models` response from
 Kimi-K3 exclusion. No chat-capability prefilter exists: an unreachable,
 non-chat, or strict-JSON-incompatible model remains in every applicable case
 and yields a typed provider outcome.
+
+Raw returned model ids are identity and are never normalized for case ids.
+Exact duplicate ids refuse catalog freeze. Distinct raw ids that normalize to
+the same non-Kimi string remain distinct cases. The raw fixture-id list is
+UTF-8-bytewise sorted before hashing; its canonical-list SHA-256 is
+`eaf7a61a8fdb4f7231dcac8f0fa2898ce48249b6c16dcfbe6e1cdea61a79ca64`.
 
 Kimi normalization is exactly
 `re.sub('[^a-z0-9]', '', unicodedata.normalize('NFKC', id).casefold())`.
@@ -89,8 +95,9 @@ adds every variator court. Generation keeps one `seen` set of canonical case
 ids, so rows already emitted by an earlier prefix are not repeated. These are
 useful milestones in one full set; no prefix is called exhaustive.
 
-A live case id is `sha256:` plus the SHA-256 of RFC-8785-style canonical JSON
-(UTF-8, sorted keys, no insignificant whitespace) over
+A live case id is `sha256:` plus the SHA-256 of the exact Python serialization
+`json.dumps(payload, sort_keys=True, separators=(",", ":"),
+ensure_ascii=False, allow_nan=False).encode("utf-8")` over
 `{schema, catalog_sha256, critic, defender, judge0, judge1, variator}`. The
 schema literal is `deepreason.full-judge-seat-case.v1`; variator absence is JSON
 `null`. The expected set is regenerated independently as the literal Cartesian
@@ -124,6 +131,22 @@ Arbitrary strings, arbitrary list lengths, arbitrary numeric values, future
 provider settings, and future catalog models are unbounded. Reports therefore
 say `exhaustive over frozen domain <digest>` and list these unbounded axes;
 they never translate boundary coverage or pairwise coverage into "all".
+
+The API-backed configuration sweep is a second exact live domain, separate
+from the heterogeneous seat-assignment product. For each catalog model it puts
+that model uniformly in every active court seat and crosses three model
+profiles, two output modes, three output mechanisms, four typed reasoning
+values (`"none"`, `"low"`, `"medium"`, and integer `2000`), and three split
+protocols. The no-variator arm has 216 cases per model. The variator arm also
+crosses paraphrase counts -1, 0, 1, 2, and 3, for 1080 per model. Total is 1296
+per model, 28512 at fixture M=22. These are real full-court provider cases, not
+offline stand-ins.
+
+The transport sweep is not crossed with every heterogeneous `M^4+M^5` seat
+assignment, and transport settings are uniform across active seats. That
+unexecuted heterogeneous per-seat Cartesian cross is explicitly unbounded by
+this preregistration and is never included in an "all configurations" claim.
+The combined primary live domain is 5416400 cases at fixture M=22.
 
 ## Campaign-integrity invariants
 
@@ -166,18 +189,22 @@ including the duration of its internal retries and any private endpoint.
 Probe, qualification, and trial phases do not overlap. Peak endpoint calls in
 flight must be at most three.
 
-The frozen full-court route uses base URL `https://ollama.com/v1`, provider
+The frozen baseline seat-product route uses base URL `https://ollama.com/v1`, provider
 `ollama`, `reasoning_effort=low`, split protocol off, JSON-text contracts,
 timeout 300 seconds, two paraphrases, context ceiling 131072, and per-seat
 completion cap 8192. The shipped transport performs at most four sequential
 HTTP attempts per endpoint call; the manifest grants at most two schema-repair
 calls after an initial call. Thus one logical seat call has a conservative
 twelve-HTTP-attempt ceiling. At roster size `M`, the registered upper bound is
-`12*(4*M^4 + 9*M^5) + 168*M`: full fixed-case courts, three probes per model,
+`12*(4*M^4 + 9*M^5) + 168*M`: baseline fixed-case courts, three probes per model,
 and two anchor-role natural-critic topology arms. At fixture `M=22` this is
-567840240 HTTP attempts. The offline soak makes no provider request. Actual
-counts are expected to be lower and are recorded; no retry, repair, or natural
-arm is omitted from the bound.
+567840240 HTTP attempts. This is not a campaign-wide ceiling: the additional
+live transport domain includes the shipped negative-paraphrase boundary, whose
+Python slice can consume a provider-dependent number of returned edits. Its
+per-request token, timeout, transport-retry, and repair bounds remain finite,
+but this preregistration does not invent an edit-count bound. The offline soak
+makes no provider request. Actual counts are recorded. Reports call
+567840240 the baseline-seat upper bound, never the whole campaign bound.
 
 ## Frozen call sequence
 
@@ -194,20 +221,29 @@ paraphrases are returned. Repairs and split legs are typed additional attempts,
 not additional seat configurations. A variator may validly return fewer than
 requested paraphrases; assertions follow the returned count.
 
+The fixed structural court uses three schools: target school `school-0`, critic
+school `school-1`, and spare `school-2`, with explicit school-to-critic-seat
+bindings and minimum foreign coverage one. The explicit manifest value
+`defended_trial` resolves in `rules/crit.py` to `trial_required`, which invokes
+`run_argument_trial_from_case(..., authority="status")`. Tests assert this
+whole mapping rather than equating the three vocabularies.
+
 ## Registered outcomes
 
-Each frozen case id has one primary status. Terminal statuses are mutually
-exclusive; `pending` is the absence of a terminal record:
+Each frozen case id has one mutually exclusive immutable terminal status:
 
 | Outcome | Registered meaning |
 |---|---|
 | `configuration_refused` | A deterministic shipped compile/runtime refusal decided the configuration before provider-dependent content could. |
 | `trial_outcome` | A semantic court result such as defence sustained, ensemble split, referential-integrity refusal, or paraphrase flip; not configuration impossibility. |
 | `provider_indeterminate` | Transport failure, timeout, unavailable/non-chat model, malformed provider response, or provider silence. |
-| `integrity_stop` | A registered global invariant failed before further provider contact. |
 | `unexpected_error` | An unregistered driver failure; preserves the first boundary and blocks a PASS claim. |
-| `interrupted` | An attempt ended without a terminal case result; it is preserved and a new numbered attempt is required. |
-| `pending` | No immutable terminal record exists yet; this is never counted as tested. |
+
+Campaign/attempt state is separate from case status. `integrity_stop` means a
+registered global invariant failed before further provider contact;
+`interrupted` means an attempt ended with some cases unterminated and is
+preserved; `pending` means no immutable case terminal exists. None of these is
+counted as a tested case or written as a synthetic case result.
 
 Every terminal record also has a separate `dispatch_extent` field containing
 the exact ordered dispatch stages reached. `full_dispatch_reached` is a derived
@@ -226,6 +262,15 @@ message after secret scanning, and dispatch history. Shipped refusals are
 findings and are never hotfixed in this tranche. Results distinguish direct
 court reachability, managed preparation reachability, contract/qualification
 compatibility, and semantic court outcome.
+
+Every provider response also produces two separate receipts. The prose receipt
+contains an allowlisted non-git blob reference, byte count, and content digest
+after secret scanning, so a human can inspect ordinary prose. The mechanical
+receipt contains parser outcome, schema outcome, fallback events, and the
+structured value when one exists. Parser failure never deletes or overwrites
+the prose receipt and never becomes a configuration refusal. Hidden reasoning
+trace text is the sole exception: only its presence, length, and digest are
+retained.
 
 Completion is exact set equality: the frozen expected case-id set equals the
 terminal case-id set, with no duplicates. Until then, the report publishes

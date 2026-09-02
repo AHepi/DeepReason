@@ -82,4 +82,32 @@ provider contact?
 
 ## Amendments
 
-(none yet)
+Captured from the operator's standing design-law messages that govern this
+campaign:
+
+> What are your thoughts about using these for improvements? Remember maximum
+> modularity and configurability is essential. As well as usability by other
+> humans.
+
+> Hmm. A standing rule is that formalism shouldn't out rank valid prose. And
+> since prose isn't always mechanically valid, I'm afraid that vocabulary will
+> wipe almost everything from the board. Also, the harness is inherently anti
+> inductivist and tries to avoid mechanically defining optimisation targets or
+> statistical tightening of any sort. It's also meant to allow open exploration
+> without the mechanical constraint that may hinder it. Heuristics imply
+> something about the problem space being known, but in popperian epistemology,
+> that's reductionist and inductivist and inherently hinders creativity. Which
+> is what I was trying to create with DeepReason.
+
+These standing laws add traceable constraints C5-C8:
+
+C5: formalism must not outrank valid prose; mechanical probe or parser failure
+is never evidence that prose is epistemically invalid.
+
+C6: no ranking, optimization target, eliminator, heuristic reduction, or
+statistical tightening is introduced by this campaign.
+
+C7: exploration remains open; no observed prefix is used to prune the frozen
+queue.
+
+C8: campaign configuration and reports remain modular and human-readable.

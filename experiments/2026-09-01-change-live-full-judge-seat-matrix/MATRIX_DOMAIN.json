@@ -1,0 +1,318 @@
+{
+  "schema": "deepreason.full-judge-matrix-domain.v1",
+  "repository": "AHepi/DeepReason",
+  "branch": "codex/live-full-judge-seat-matrix-20260901",
+  "source_commit": "ec09b122b26bef2f99f26484ea70d19ad15e798b",
+  "prereg_sha256": "33afd81aac209cdf280faf7bd59ff0a194d2abcf8794cd620f61172ab0e77ae6",
+  "canonical_json": {
+    "python": "json.dumps(payload, sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False).encode('utf-8')",
+    "encoding": "utf-8",
+    "sort_keys": true,
+    "separators": [",", ":"],
+    "ensure_ascii": false,
+    "allow_nan": false
+  },
+  "fixture_catalog": [
+    {"model_id": "glm-5.3", "family": "ollama:glm"},
+    {"model_id": "glm-5.3-flash", "family": "ollama:glm"},
+    {"model_id": "deepseek-v4-flash", "family": "deepseek"},
+    {"model_id": "deepseek-v4-flash:0731", "family": "deepseek"},
+    {"model_id": "gemma4", "family": "gemma"},
+    {"model_id": "gemma4:31b", "family": "gemma"},
+    {"model_id": "glm-5.1", "family": "ollama:glm"},
+    {"model_id": "minimax-m2.7", "family": "ollama:minimax"},
+    {"model_id": "minimax-m3", "family": "ollama:minimax"},
+    {"model_id": "glm-5.2", "family": "ollama:glm"},
+    {"model_id": "kimi-k2.7-code", "family": "ollama:kimi"},
+    {"model_id": "deepseek-v4-pro", "family": "deepseek"},
+    {"model_id": "deepseek-v4-pro:0813", "family": "deepseek"},
+    {"model_id": "kimi-k2.6", "family": "ollama:kimi"},
+    {"model_id": "nemotron-3-ultra", "family": "ollama:nemotron"},
+    {"model_id": "qwen3.5", "family": "qwen"},
+    {"model_id": "qwen3.5:397b", "family": "qwen"},
+    {"model_id": "nemotron-3-super", "family": "ollama:nemotron"},
+    {"model_id": "nemotron-3-nano:30b", "family": "ollama:nemotron"},
+    {"model_id": "mistral-large-3:675b", "family": "mistral"},
+    {"model_id": "gpt-oss:20b", "family": "openai-gpt"},
+    {"model_id": "gpt-oss:120b", "family": "openai-gpt"}
+  ],
+  "catalog_rule": {
+    "source": "authenticated https://ollama.com/v1/models",
+    "inclusion": "every returned model id",
+    "identity": "raw model id; normalization is ban-only",
+    "duplicate_raw_id": "refuse catalog freeze",
+    "fixture_raw_id_list_sha256": "eaf7a61a8fdb4f7231dcac8f0fa2898ce48249b6c16dcfbe6e1cdea61a79ca64",
+    "normalization": "re.sub('[^a-z0-9]', '', unicodedata.normalize('NFKC', model_id).casefold())",
+    "typed_exclusion": "normalized id contains kimik3",
+    "positive_vectors": ["kimi-k3", "KIMI K3:cloud", "kimi_k3/cloud", "ollama/kimi-k3"],
+    "negative_vectors": ["kimi-k2.6", "kimi-k2.7-code", "minimax-m3", "glm-5.3"]
+  },
+  "live_seat_domain": {
+    "schema": "deepreason.full-judge-seat-case.v1",
+    "combination": "cartesian_union",
+    "components": [
+      {
+        "name": "no_variator",
+        "ordered_axes": ["critic", "defender", "judge0", "judge1"],
+        "variator": null,
+        "formula": "M^4"
+      },
+      {
+        "name": "with_variator",
+        "ordered_axes": ["critic", "defender", "judge0", "judge1", "variator"],
+        "formula": "M^5"
+      }
+    ],
+    "case_id_fields": ["schema", "catalog_sha256", "critic", "defender", "judge0", "judge1", "variator"],
+    "case_id_algorithm": "sha256: + sha256(exact_python_canonical_json(case_fields)).hexdigest()",
+    "anchor": "first model id under UTF-8 bytewise sort",
+    "queue_prefixes": [
+      {"name": "judge_pairs", "axes": ["judge0", "judge1"], "fixed": ["critic=anchor", "defender=anchor", "variator=null"], "raw_formula": "M^2", "emitted_formula": "M^2"},
+      {"name": "core_courts", "axes": ["defender", "judge0", "judge1"], "fixed": ["critic=anchor", "variator=null"], "raw_formula": "M^3", "emitted_formula": "M^3-M^2", "deduplicate_seen": true},
+      {"name": "no_variator", "axes": ["critic", "defender", "judge0", "judge1"], "fixed": ["variator=null"], "raw_formula": "M^4", "emitted_formula": "M^4-M^3", "deduplicate_seen": true},
+      {"name": "with_variator", "axes": ["critic", "defender", "judge0", "judge1", "variator"], "raw_formula": "M^5", "emitted_formula": "M^5", "deduplicate_seen": true}
+    ],
+    "fixture_counts": {
+      "models": 22,
+      "judge_pairs": 484,
+      "judge_pairs_emitted": 484,
+      "core_courts": 10648,
+      "core_courts_emitted": 10164,
+      "no_variator": 234256,
+      "no_variator_emitted": 223608,
+      "with_variator": 5153632,
+      "with_variator_emitted": 5153632,
+      "unique_total": 5387888,
+      "logical_call_upper": 47319712,
+      "http_attempt_upper_including_probes_repairs_retries_natural_arms": 567840240
+    },
+    "route_defaults": {
+      "endpoint": "https://ollama.com/v1",
+      "provider": "ollama",
+      "model_profile": "standard",
+      "reasoning_effort": "low",
+      "split_protocol": "off",
+      "output_mechanism": "json_text",
+      "output_mode": "json_object",
+      "timeout_s": 300,
+      "context_window_tokens": 131072,
+      "max_tokens": 8192,
+      "paraphrase_count": 2,
+      "criticism_authority": "defended_trial"
+    }
+  },
+  "live_transport_domain": {
+    "schema": "deepreason.full-judge-transport-case.v1",
+    "purpose": "exact live configuration sweep independent of the all-seat assignment sweep",
+    "court": "same catalog model in critic, defender, judge0, judge1, and optional variator",
+    "combination": "cartesian_union",
+    "shared_axes": {
+      "model_profile": ["compact", "standard", "frontier"],
+      "output_mode": ["text", "json_object"],
+      "output_mechanism": ["native_json_schema", "grammar", "json_text"],
+      "reasoning": [
+        {"kind": "string", "value": "none"},
+        {"kind": "string", "value": "low"},
+        {"kind": "string", "value": "medium"},
+        {"kind": "integer", "value": 2000}
+      ],
+      "split_protocol": ["auto", "on", "off"]
+    },
+    "components": [
+      {"name": "no_variator", "paraphrase_count": null, "cases_per_model": 216},
+      {"name": "with_variator", "paraphrase_count": [-1, 0, 1, 2, 3], "cases_per_model": 1080}
+    ],
+    "case_id_schema": "deepreason.full-judge-transport-case.v1",
+    "cases_per_model": 1296,
+    "fixture_total": 28512,
+    "fixture_combined_primary_live_total": 5416400,
+    "not_claimed": "This independent product is not the Cartesian cross of every transport tuple with every heterogeneous M^4+M^5 seat assignment."
+  },
+  "structural_composition": "disjoint_union",
+  "structural_domains": [
+    {
+      "name": "construction",
+      "combination": "enumerated_cases",
+      "expected_count": 4,
+      "cases": ["managed_preparation", "direct_compilation", "single_model_duplicate_judges", "single_model_foreign_family_judge"]
+    },
+    {
+      "name": "authority_gates",
+      "combination": "cartesian",
+      "expected_count": 8,
+      "axes": {
+        "status_authority": [false, true],
+        "judge_master_gate": [false, true],
+        "legacy_criticism": [false, true],
+        "explicit_policy": ["defended_trial"]
+      }
+    },
+    {
+      "name": "role_cardinality",
+      "combination": "cartesian",
+      "expected_count": 72,
+      "axes": {
+        "critic": [1, 2],
+        "defender": [0, 1, 2],
+        "judge": [0, 1, 2, 3],
+        "variator": [0, 1, 2]
+      }
+    },
+    {
+      "name": "judge_topology",
+      "combination": "enumerated_cases",
+      "expected_count": 11,
+      "cases": [
+        "no_judge",
+        "one_judge_whole_run_single_model",
+        "one_judge_mixed_run",
+        "two_exact_duplicates_whole_run_single_model",
+        "two_exact_duplicates_mixed_run",
+        "two_same_family_distinct_models",
+        "two_cross_family",
+        "three_exact_duplicates",
+        "three_cross_family",
+        "three_same_family_distinct_models",
+        "same_model_id_different_provider_same_family"
+      ]
+    },
+    {
+      "name": "auxiliary_model_diversity",
+      "combination": "cartesian",
+      "expected_count": 8,
+      "axes": {
+        "critic_differs": [false, true],
+        "defender_differs": [false, true],
+        "variator_differs": [false, true]
+      }
+    },
+    {
+      "name": "school_count_coverage",
+      "combination": "enumerated_cases",
+      "expected_count": 15,
+      "cases": [
+        {"n_schools": 0, "coverage": 1},
+        {"n_schools": 1, "coverage": 1},
+        {"n_schools": 1, "coverage": 2},
+        {"n_schools": 2, "coverage": 1},
+        {"n_schools": 2, "coverage": 2},
+        {"n_schools": 2, "coverage": 3},
+        {"n_schools": 3, "coverage": 1},
+        {"n_schools": 3, "coverage": 2},
+        {"n_schools": 3, "coverage": 3},
+        {"n_schools": 3, "coverage": 4},
+        {"n_schools": 4, "coverage": 1},
+        {"n_schools": 4, "coverage": 2},
+        {"n_schools": 4, "coverage": 3},
+        {"n_schools": 4, "coverage": 4},
+        {"n_schools": 4, "coverage": 5}
+      ]
+    },
+    {
+      "name": "four_school_partitions",
+      "combination": "cartesian",
+      "expected_count": 300,
+      "axes": {
+        "partition": [
+          [[0, 1, 2, 3]],
+          [[0], [1, 2, 3]],
+          [[1], [0, 2, 3]],
+          [[2], [0, 1, 3]],
+          [[3], [0, 1, 2]],
+          [[0, 1], [2, 3]],
+          [[0, 2], [1, 3]],
+          [[0, 3], [1, 2]],
+          [[0, 1], [2], [3]],
+          [[0, 2], [1], [3]],
+          [[0, 3], [1], [2]],
+          [[1, 2], [0], [3]],
+          [[1, 3], [0], [2]],
+          [[2, 3], [0], [1]],
+          [[0], [1], [2], [3]]
+        ],
+        "owner_school": [0, 1, 2, 3],
+        "minimum_foreign_school_coverage": [1, 2, 3, 4, 5]
+      }
+    },
+    {
+      "name": "school_binding_invalid",
+      "combination": "enumerated_cases",
+      "expected_count": 6,
+      "cases": ["incomplete_binding", "unknown_school", "duplicate_school", "seat_out_of_range", "endpoint_mismatch", "shared_binding_allow_shared_false"]
+    },
+    {
+      "name": "presentation_contract",
+      "combination": "cartesian",
+      "expected_count": 6,
+      "axes": {
+        "model_profile": ["compact", "standard", "frontier"],
+        "contract": ["direct", "compact"]
+      }
+    },
+    {
+      "name": "output_contract",
+      "combination": "cartesian",
+      "expected_count": 6,
+      "axes": {
+        "output_mode": ["text", "json_object"],
+        "output_mechanism": ["native_json_schema", "grammar", "json_text"]
+      }
+    },
+    {
+      "name": "reasoning_boundary",
+      "combination": "enumerated_cases",
+      "expected_count": 5,
+      "cases": ["none", "low", "medium", "integer_2000_maps_low", "integer_2001_typed_excluded_maps_high"]
+    },
+    {
+      "name": "split_protocol",
+      "combination": "enumerated_cases",
+      "expected_count": 3,
+      "cases": ["auto", "on", "off"]
+    },
+    {
+      "name": "paraphrase_boundary",
+      "combination": "enumerated_cases",
+      "expected_count": 5,
+      "cases": [-1, 0, 1, 2, 3]
+    },
+    {
+      "name": "request_envelope",
+      "combination": "enumerated_cases",
+      "expected_count": 3,
+      "cases": ["below_capacity", "exactly_at_capacity", "above_capacity"]
+    }
+  ],
+  "structural_case_id": {
+    "schema": "deepreason.full-judge-structural-case.v1",
+    "algorithm": "sha256: + sha256(exact_python_canonical_json({schema, group, assignment})).hexdigest()",
+    "assignment_rule": "cartesian axes become one object; enumerated objects are used directly; enumerated scalars become {case: value}",
+    "expected_count": 452,
+    "set_digest_algorithm": "sort case ids by UTF-8 bytes; concatenate uint32 big-endian byte length plus id bytes; sha256",
+    "expected_set_sha256": "b8c2e8c3d1d650c39ef46c59d499c954b36ec9202cddaab740d2c525148cf895"
+  },
+  "safety": {
+    "authority": "defended_trial",
+    "observe_only": "global_integrity_stop_before_dispatch",
+    "forbidden_reasoning_effort": ["high", "max", "xhigh"],
+    "reasoning_field": "reasoning_effort",
+    "max_endpoint_calls_in_flight": 3,
+    "coordinator_lock": "/tmp/deepreason-ollama-full-judge-seat-matrix.lock",
+    "credential_env": "OLLAMA_API_KEY",
+    "credential_persistence": "forbidden"
+  },
+  "unbounded_axes": [
+    "future catalog models",
+    "arbitrary model strings",
+    "arbitrary role-list lengths",
+    "arbitrary school counts",
+    "arbitrary numeric token and temperature values",
+    "future provider request fields",
+    "the unexecuted Cartesian cross of every transport tuple with every heterogeneous seat assignment"
+  ],
+  "digest_rules": {
+    "domain_spec": "sha256 of the exact MATRIX_DOMAIN.json file bytes; stored outside this self-described document",
+    "ordered_queue": "sha256 of length-prefixed case ids in queue order",
+    "unordered_case_set": "sha256 of length-prefixed case ids sorted by UTF-8 bytes"
+  }
+}

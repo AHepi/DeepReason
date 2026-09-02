@@ -26,13 +26,15 @@ configuration refusals.
 
 The campaign is a reachability and configuration census. It does not score,
 rank, optimize, eliminate, or statistically tighten models, prose, seats, or
-configurations.
+configurations. Parser and schema outcomes are recorded separately from a
+secret-scanned prose receipt; mechanical failure never erases prose or becomes
+an epistemic ranking. Traces: C5-C8.
 
 ## Items
 
 ### S1 — frozen research and provider-semantics preregistration
 
-Traces: R6, R7, R12, C2.
+Traces: R6, R7, R12, C2, C5, C6.
 
 Targets: `PREREG.md`, `MATRIX_DOMAIN.json`.
 
@@ -69,7 +71,7 @@ PREREG_OK ... forbidden_reasoning=[] forbidden_models=[] authority=defended_tria
 
 ### S2 — exact finite domains, never representative sampling
 
-Traces: R2, R9, R10, R11.
+Traces: R2, R9, R10, R11, C7, C8.
 
 Targets: `matrix.py`, `MATRIX_DOMAIN.json`.
 
@@ -79,6 +81,8 @@ except an id whose punctuation-insensitive normalized form contains `kimik3`.
 An unreachable or non-chat model remains a case and may return a provider
 refusal; it is not silently filtered. The current documented roster predicts
 22 non-Kimi-K3 model ids, but the authenticated snapshot controls.
+Raw ids are case identity; exact duplicate ids refuse catalog freeze and
+normalization is used only for the Kimi ban.
 
 The live court domain is the exact ordered product:
 
@@ -100,6 +104,15 @@ all `M^2` ordered judge pairs fix critic and defender to it; all `M^3`
 defender/judge courts fix only critic; all `M^4` no-variator courts follow;
 then the `M^5` variator courts. A `seen` set suppresses cases already emitted
 by an earlier prefix. A prefix is always labelled a prefix.
+
+A separate exact live configuration domain applies one profile uniformly to
+every active seat of a same-model full court. Per model it has 216
+no-variator cases and 1080 variator cases: profile 3 x output mode 2 x output
+mechanism 3 x typed reasoning 4 (`none`, `low`, `medium`, integer 2000) x split
+3, with the variator arm additionally crossing paraphrase -1/0/1/2/3. That is
+1296 per model and 28512 at fixture M=22. Combined with the seat product, the
+fixture primary live domain has 5416400 cases. This does not claim the
+unexecuted Cartesian cross of heterogeneous per-seat transport settings.
 
 The offline structural domain is exactly exhaustive over the following frozen
 finite boundary values:
@@ -249,7 +262,7 @@ python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'concurrency or
 
 ### S6 — live launch and human possibility report
 
-Traces: R1, R9, R11, C1, C2.
+Traces: R1, R9, R11, C1, C2, C5, C8.
 
 Targets: `PREREG.md`, `RESULTS.md`, `proof/`, runtime results outside git until
 terminal and redaction-checked.

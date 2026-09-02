@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=2 blockers=none
+State: next=3 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -16,11 +16,17 @@ changes no shipped behavior or owner agreement.
 - [x] 1. (S1) Write the frozen provider/research preregistration.
       done-when: `test -f experiments/2026-09-01-change-live-full-judge-seat-matrix/PREREG.md && grep -q 'Registered outcomes' experiments/2026-09-01-change-live-full-judge-seat-matrix/PREREG.md` -> exit 0.
 
-      proof: exit 0; `PREREG.md:197:## Registered outcomes`;
-      `PREREG_SHA256=dbaf6074608dfd14df507c8ff2764bc4c7aaf39f109569901da73bec5fa4b414`.
+      proof: exit 0; `PREREG.md:231:## Registered outcomes`;
+      `PREREG_SHA256=33afd81aac209cdf280faf7bd59ff0a194d2abcf8794cd620f61172ab0e77ae6`.
 
-- [ ] 2. (S1, S2) Write the canonical finite matrix-domain document.
+- [x] 2. (S1, S2) Write the canonical finite matrix-domain document.
       done-when: `python -m json.tool experiments/2026-09-01-change-live-full-judge-seat-matrix/MATRIX_DOMAIN.json >/dev/null` -> exit 0.
+
+      proof: exit 0; `MATRIX_DOMAIN_JSON=OK`; `STRUCTURAL_COUNT=452
+      UNIQUE=452`; `SET_SHA256=b8c2e8c3d1d650c39ef46c59d499c954b36ec9202cddaab740d2c525148cf895`;
+      `LIVE_SEAT_TOTAL=5387888 LIVE_TRANSPORT_TOTAL=28512
+      PRIMARY_LIVE_TOTAL=5416400`;
+      `DOMAIN_FILE_SHA256=1be915b5cccb5164b17691cb6602fa630d26603064d0096f4b3600fd2975442d`.
 
 - [ ] 3. (S2, S3, S5) Write domain, exclusion, digest, concurrency, credential, and resume tests before implementation.
       done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q` -> nonzero with failures caused by the absent experiment module, saved verbatim in `proof/domain-tests-red.txt`.
