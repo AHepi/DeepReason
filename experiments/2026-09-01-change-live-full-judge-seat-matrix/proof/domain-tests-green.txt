@@ -1,0 +1,5 @@
+$ python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'domain or authority or kimi or reasoning or concurrency or credential or resume or digest'
+.........                                                                [100%]
+9 passed, 1 deselected in 0.09s
+
+exit 0

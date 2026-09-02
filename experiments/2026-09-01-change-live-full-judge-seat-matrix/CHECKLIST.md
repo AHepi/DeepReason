@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=7 blockers=none
+State: next=8 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -55,8 +55,12 @@ changes no shipped behavior or owner agreement.
       `frozen_adjacent_contacts=[]`; `frozen_surface_verdict=CLEAR`;
       consumers and reachability are empty.
 
-- [ ] 7. (S2, S3, S5) Prove the domain/safety/resume tests GREEN.
+- [x] 7. (S2, S3, S5) Prove the domain/safety/resume tests GREEN.
       done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'domain or authority or kimi or reasoning or concurrency or credential or resume or digest'` ends with 0 failed, saved in `proof/domain-tests-green.txt`.
+
+      proof: exit 0; `9 passed, 1 deselected in 0.09s`; full output in
+      `proof/domain-tests-green.txt`. The complete file also passed 10/10 at
+      step 5.
 
 - [ ] 8. (S2, S3, S5) Measure checkpoint-one diff budget.
       done-when: `python tools/diff_budget.py 70e9c73ed0a5630994613afea74c80de6bf59302 --ceiling 540 --paths experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py tests/test_live_full_judge_seat_matrix.py` reports `WITHIN`.
