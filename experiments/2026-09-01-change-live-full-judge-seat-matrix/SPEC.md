@@ -476,22 +476,28 @@ tail can finish.
 
 ## Budget
 
-Implementation budget, excluding ledger/proof/result artifacts:
+Implementation budget, excluding ledger/proof/result artifacts. The RED test
+checkpoint measured 217 test lines before implementation; the original
+190-line test estimate and 300-line first checkpoint were therefore
+arithmetically impossible. The live transport domain added after independent
+preregistration audit also requires a typed second-domain iterator and report
+namespace. The corrected pre-implementation ledger is:
 
 ```text
-matrix/domain + safety + resume: 260 lines
-shipped-court live adapter:       270 lines
-tests:                            190 lines
-total:                            720 lines
-python -c "print(sum([260,270,190]))" -> 720
+matrix/domain + safety + resume: 300 lines
+shipped-court, catalog, soak,
+and live adapters:               443 lines
+tests:                           217 lines
+total:                           960 lines
+python -c "print(sum([300,443,217]))" -> 960
 ```
 
-Because 720 exceeds the workflow's approximately 300-line single-change
+Because 960 exceeds the workflow's approximately 300-line single-change
 ceiling, implementation is split into two ordered code checkpoints with an
 independent commit and validation after each: domain/safety/resume first
-(estimated 300 including its tests), shipped-court live adapter second
-(estimated 420 including its tests and the experiment-owned soak wrapper). No
-paid call occurs between them. The
+(ceiling 540 including the already-measured 217-line test contract), then the
+shipped-court/catalog/live adapter (cumulative ceiling 960, including its tests
+and the experiment-owned soak wrapper). No paid call occurs between them. The
 campaign launch and result ledger are a third evidence-only checkpoint.
 
 Frozen surfaces edited: none. Estimated code commits: two. Evidence commits:
