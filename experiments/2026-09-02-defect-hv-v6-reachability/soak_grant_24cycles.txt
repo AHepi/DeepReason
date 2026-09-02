@@ -1,0 +1,10 @@
+  drive                  753.8s, 27 progress events
+  [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+  [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+  [PASS] A3-verify-root-clean         0 violation(s)
+  [PASS] A4-cycles-reached            reached cycle 24 of 24 requested; the deepest recorded death was cycle 2
+  [PART] D1-seat-contract         seat contracts with repairs
+  [PASS] D2-route-lease           lease-checked routes with tuning
+  [PASS] D3-budget-auth           budget authorization
+  [PASS] D4-reservation-bound     reservation/dispatch bounds
+[soak] exit 0 (clean)
