@@ -6,12 +6,22 @@ import tempfile, threading, unicodedata
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any, Callable, Iterable, Iterator, Mapping, Sequence
+
 SEAT_SCHEMA = "deepreason.full-judge-seat-case.v1"
 STRUCTURAL_SCHEMA = "deepreason.full-judge-structural-case.v1"
 FORBIDDEN_REASONING = frozenset({"high", "max", "xhigh"})
 RESULT_FIELDS = ("case_id", "status", "code", "message", "stage",
                  "exception_type", "pointer", "dispatch_history")
 _CALL_SLOTS = threading.BoundedSemaphore(3)
+
+
+def compile_run_manifest(*args, **kwargs):
+    """Patchable experiment seam around the shipped manifest compiler."""
+    from deepreason.run_manifest import compile_run_manifest as shipped_compile
+
+    return shipped_compile(*args, **kwargs)
+
+
 class MatrixRefusal(RuntimeError):
     """Typed campaign refusal whose stable code is present in ``str(exc)``."""
     def __init__(self, code: str, message: str = "") -> None:
@@ -252,6 +262,394 @@ def mark_interrupted(attempt: str | os.PathLike[str]) -> None:
         Path(attempt) / "INTERRUPTED.json",
         {"status": "interrupted", "message": "Attempt retained unchanged; resume rotates."},
     )
+
+
+_COURT_STAMP = "2026-09-01T00:00:00Z"
+_COURT_CASE = "The proposal omits the boundary condition required by its own mechanism."
+_COURT_DEFENCE = "The boundary condition is enforced by the mechanism."
+_COURT_POINT = "boundary condition"
+
+
+def _court_route(endpoint_id: str, role: str, seat: int = 0) -> dict[str, Any]:
+    return {
+        "endpoint_id": endpoint_id,
+        "endpoint": f"mock://{endpoint_id}",
+        "model": f"offline-{role}-{seat}",
+        "provider": "mock",
+        "family": f"offline-{role}-{seat}",
+        "max_tokens": 256,
+        "context_window_tokens": 262_144,
+    }
+
+
+def compile_stubbed_court(*, judge_count: int,
+                          with_variator: bool = False,
+                          paraphrase_count: int = 2) -> dict[str, Any]:
+    """Compile one explicit defended court through the shipped v6 compiler."""
+    from deepreason.config import Config
+    from deepreason.v6_policy import (
+        conservative_control_plane_policy_v3,
+        engaged_criticism_policy,
+    )
+
+    if isinstance(judge_count, bool) or judge_count < 1:
+        raise MatrixRefusal("JUDGE_COUNT_INVALID")
+    roles: dict[str, Any] = {
+        "conjecturer": [_court_route("court-conjecturer", "conjecturer")],
+        "argumentative_critic": [_court_route("court-critic", "critic")],
+        "defender": [_court_route("court-defender", "defender")],
+        "judge": [
+            _court_route(f"court-judge-{seat}", "judge", seat)
+            for seat in range(judge_count)
+        ],
+    }
+    if with_variator:
+        roles["variator"] = [_court_route("court-variator", "variator")]
+    config = Config(
+        N_SCHOOLS=2,
+        RETRY_MAX=0,
+        VS_K=1,
+        FUZZ_N=0,
+        SPEC_INJECTION=False,
+        CONTROLLER=False,
+        RECRIT_STANDING=False,
+        NEAR_DUP_EPS=None,
+        TRIAL_PARAPHRASE_N=paraphrase_count,
+        ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+        ENGAGED_CRITICISM_AUTHORITY="defended_trial",
+        LEGACY_CRITICISM_ENABLED=False,
+        JUDGE_SEATS_ENABLED=True,
+        roles=roles,
+    )
+    policy = engaged_criticism_policy(
+        "court-critic", authority="defended_trial", school_count=config.N_SCHOOLS
+    )
+    manifest = compile_run_manifest(
+        config,
+        schema_version=6,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=_COURT_STAMP,
+        control_plane_policy=conservative_control_plane_policy_v3(),
+        criticism_policy=policy,
+        run_input_digest="f" * 64,
+    )
+    return {"config": config, "manifest": manifest}
+
+
+def _managed_profile(*, distinct: bool = False):
+    from deepreason.provider_profile import ProviderProfileV1
+
+    suffix = "distinct" if distinct else "baseline"
+    return ProviderProfileV1.create(
+        provider="openai",
+        endpoint=f"https://{suffix}.example.test/v1",
+        model_id=f"managed-{suffix}",
+        model_revision="fixture-1",
+        family=f"managed-family-{suffix}",
+        context_window_tokens=131_072,
+        maximum_completion_tokens=4_096,
+        credential_env=f"DEEPREASON_MANAGED_{suffix.upper()}_TEST_KEY",
+    )
+
+
+def classify_managed_path(*, diverse_nonjudge: bool) -> dict[str, Any]:
+    """Exercise and report the managed builder's first shipped trial boundary.
+
+    The attack is obtained through a real adapter call owned by this
+    compatibility fixture.  The shipped managed manifest is then bound and
+    exercised from that precomputed case, matching the production hand-off
+    between criticism and ``run_argument_trial_from_case``.
+    """
+    from deepreason.config import Config
+    from deepreason.harness import Harness
+    from deepreason.informal.trial import run_argument_trial_from_case
+    from deepreason.llm.adapter import LLMAdapter
+    from deepreason.llm.contracts import ArgumentativeCriticOutput
+    from deepreason.llm.endpoints import MockEndpoint
+    from deepreason.llm.firewall import JudgeEnsemblePolicyError, leases_from_manifest
+    from deepreason.ontology import Provenance
+    from deepreason.preparation import build_preparation_manifest
+
+    base = _managed_profile()
+    config = Config(
+        ADJUDICATION_STATUS_AUTHORITY_ENABLED=True,
+        ENGAGED_CRITICISM_AUTHORITY="defended_trial",
+        LEGACY_CRITICISM_ENABLED=False,
+        JUDGE_SEATS_ENABLED=True,
+    )
+    bindings = {"conjecturer": _managed_profile(distinct=True)} if diverse_nonjudge else None
+    manifest = build_preparation_manifest(
+        base,
+        question="Where does the managed defended court first stop?",
+        compiled_at=_COURT_STAMP,
+        config=config,
+        seat_bindings=bindings,
+    )
+    with tempfile.TemporaryDirectory(prefix="deepreason-managed-court-") as directory:
+        harness = Harness(Path(directory) / "run")
+        target = harness.create_artifact(
+            "A mechanism with an explicit boundary.",
+            provenance=Provenance(role="conjecturer", school="school-0"),
+        )
+        dispatch_history: list[str] = []
+        critic_route = manifest.roles["argumentative_critic"][0]
+        critic_endpoint = MockEndpoint(
+            lambda _prompt: (
+                dispatch_history.append("critic")
+                or json.dumps({"attack": True, "case": _COURT_CASE})
+            ),
+            name=critic_route.base_url, model=critic_route.model_id,
+            max_tokens=critic_route.max_tokens,
+        )
+        critic_output, _critic_call = LLMAdapter(
+            {"argumentative_critic": critic_endpoint}, harness.blobs, retry_max=0,
+        ).call("argumentative_critic", "TARGET:\nA mechanism with an explicit boundary.",
+               ArgumentativeCriticOutput)
+        route = manifest.roles["judge"][0]
+        defender_route = manifest.roles["defender"][0]
+        adapter = LLMAdapter(
+            {
+                "defender": MockEndpoint(
+                    lambda _prompt: json.dumps({"answer": _COURT_DEFENCE}),
+                    name=defender_route.base_url, model=defender_route.model_id,
+                    max_tokens=defender_route.max_tokens,
+                ),
+                "judge": MockEndpoint(
+                    lambda _prompt: json.dumps({
+                        "verdict": "fail", "decisive_point": "boundary"
+                    }),
+                    name=route.base_url, model=route.model_id, max_tokens=route.max_tokens,
+                ),
+            },
+            harness.blobs,
+            model_profile=manifest.model_profile,
+            leases=leases_from_manifest(manifest),
+            transaction_authority_required=True,
+        )
+        _bind_court_classification(harness, manifest)
+        adapter.bind_v6_authority(harness, manifest)
+        diagnostics: list[dict[str, Any]] = []
+        try:
+            run_argument_trial_from_case(
+                harness, adapter, config, target.id, critic_output.case,
+                authority="status", critic_school_id="school-1",
+                diagnostics=diagnostics,
+            )
+            code = diagnostics[-1]["declined"]
+        except JudgeEnsemblePolicyError as error:
+            code = error.code
+    return {
+        "construction": "managed_preparation",
+        "status": "configuration_refused",
+        "stage": "trial_preflight",
+        "code": code,
+        "dispatch_history": dispatch_history,
+    }
+
+
+def _bind_court_classification(harness, manifest) -> None:
+    from deepreason.cli.doctor import ProductionContractCaseResultV1, run_production_contract_doctor
+
+    def admitted(_manifest, _pair, index):
+        return ProductionContractCaseResultV1(
+            case_id=f"case-{index + 1:03d}", first_pass_valid=True,
+            eventual_valid=True, repair_count=0, semantic_admission=True,
+        )
+
+    harness.bind_model_classification(
+        manifest, run_production_contract_doctor(manifest, case_executor=admitted)
+    )
+
+
+def _court_endpoint(route, calls: list[str], label: Callable[[int], str], response: str):
+    from deepreason.llm.endpoints import MockEndpoint
+
+    count = 0
+    def respond(_prompt: str) -> str:
+        nonlocal count
+        calls.append(label(count))
+        count += 1
+        return response
+    return MockEndpoint(
+        respond, name=route.base_url, model=route.model_id, max_tokens=route.max_tokens
+    )
+
+
+def _court_dispatch_extent(harness) -> list[str]:
+    """Read successful court dispatches from shipped durable workflow work."""
+    extent: list[str] = []
+    for work in harness.workflow_state.transaction_work.values():
+        provider = work.provider_attempts.get(work.preparation.attempt_index)
+        if provider is None or provider.outcome != "provider_result":
+            continue
+        role = work.preparation.route_lease.role
+        payload = work.preparation.task_payload_value
+        if role == "argumentative_critic" and payload.get("schema") == "criticism.semantic-task.v1":
+            extent.append("critic")
+        elif payload.get("schema") == "defended-trial-step.v1":
+            extent.append(str(payload["step"]))
+    return extent
+
+
+def _court_outcome(harness, target_id: str) -> str:
+    """Read a semantic trial result from committed measures or target state."""
+    for event in reversed(list(harness.log.read())):
+        inputs = list(event.inputs)
+        if len(inputs) >= 3 and inputs[:2] == ["trial-declined", target_id]:
+            return str(inputs[2])
+        if len(inputs) >= 2 and inputs[1] == target_id and str(inputs[0]).startswith("trial-blocked:"):
+            return str(inputs[0])
+    status = harness.state.status.get(target_id)
+    if status is not None and status.value == "refuted":
+        return "case-sustained"
+    raise MatrixRefusal("COURT_OUTCOME_UNRECORDED")
+
+
+def run_stubbed_court(home: str | os.PathLike[str], *, judge_count: int,
+                      returned_paraphrases: Sequence[str] | None,
+                      judge_verdict: str = "fail") -> dict[str, Any]:
+    """Drive one shipped scheduler cycle and retain its typed court boundary."""
+    from deepreason.harness import Harness
+    from deepreason.llm.adapter import LLMAdapter, WorkflowAuthorizationError
+    from deepreason.llm.budget import TokenMeter
+    from deepreason.llm.firewall import (
+        JudgeEnsemblePolicyError,
+        JudgeSchoolEnsemblePolicyError,
+        SchoolRouteResolutionError,
+        leases_from_manifest,
+    )
+    from deepreason.ontology import Problem, ProblemProvenance, Provenance
+    from deepreason.rules.warrants import formally_backed
+    from deepreason.run_manifest import RunManifestError
+    from deepreason.scheduler.scheduler import Scheduler
+    from deepreason.workflow.transaction import WorkBudgetDenied
+
+    root = Path(home)
+    if root.exists():
+        raise MatrixRefusal("COURT_HOME_NOT_FRESH")
+    paraphrases = None if returned_paraphrases is None else tuple(returned_paraphrases)
+    built = compile_stubbed_court(
+        judge_count=judge_count, with_variator=paraphrases is not None,
+        paraphrase_count=len(paraphrases or ()),
+    )
+    config, manifest = built["config"], built["manifest"]
+    root.mkdir(parents=True)
+    calls: list[str] = []
+    harness = Harness(root / "run")
+    _bind_court_classification(harness, manifest)
+    harness.register_problem(Problem(
+        id="pi-full-judge-court", description="exercise one defended court",
+        provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+    ))
+    target = harness.create_artifact(
+        "A mechanism whose validity depends on an explicit boundary condition.",
+        provenance=Provenance(role="conjecturer", school="school-0"),
+    )
+    target_formally_backed = formally_backed(harness, target.id)
+    routes = manifest.roles
+    critic_response = json.dumps({
+        "cases": [{"target_alias": "SRC_001", "attack": True, "case": _COURT_CASE}]
+    })
+    endpoints: dict[str, Any] = {
+        "conjecturer": _court_endpoint(
+            routes["conjecturer"][0], calls, lambda _n: "conjecturer",
+            json.dumps({"candidates": [{
+                "content": "A mechanism whose validity depends on an explicit boundary condition.",
+                "typicality": 0.5,
+            }]}),
+        ),
+        "argumentative_critic": [_court_endpoint(
+            routes["argumentative_critic"][0], calls, lambda _n: "critic", critic_response,
+        )],
+        "defender": [_court_endpoint(
+            routes["defender"][0], calls, lambda _n: "defender",
+            json.dumps({"answer": _COURT_DEFENCE}),
+        )],
+        "judge": [
+            _court_endpoint(
+                route, calls,
+                lambda n, seat=seat: (
+                    f"judge:{seat}" if n == 0 else f"judge:paraphrase:{n - 1}:{seat}"
+                ),
+                json.dumps({"verdict": judge_verdict, "decisive_point": _COURT_POINT}),
+            )
+            for seat, route in enumerate(routes["judge"])
+        ],
+    }
+    if paraphrases is not None:
+        endpoints["variator"] = [_court_endpoint(
+            routes["variator"][0], calls, lambda _n: "variator",
+            json.dumps({"edits": [{"content": text} for text in paraphrases]}),
+        )]
+    adapter = LLMAdapter(
+        endpoints, harness.blobs, retry_max=0, model_profile=manifest.model_profile,
+        leases=leases_from_manifest(manifest), transaction_authority_required=True,
+        meter=TokenMeter(1_000_000),
+    )
+    typed_refusals = (
+        RunManifestError, SchoolRouteResolutionError, JudgeEnsemblePolicyError,
+        JudgeSchoolEnsemblePolicyError, WorkflowAuthorizationError, WorkBudgetDenied,
+    )
+    first_refusal = None
+    try:
+        Scheduler(harness, adapter, config, workload_profile="text",
+                  run_manifest=manifest).step()
+    except typed_refusals as error:
+        first_refusal = {
+            "stage": "trial_preflight",
+            "code": getattr(error, "code", type(error).__name__),
+            "message": str(error),
+            "exception_type": type(error).__name__,
+        }
+    callback_extent = [
+        call for call in calls
+        if call == "critic" or call == "defender" or call == "variator"
+        or call.startswith("judge:")
+    ]
+    extent = _court_dispatch_extent(harness)
+    if callback_extent != extent:
+        raise MatrixRefusal(
+            "DISPATCH_RECEIPT_MISMATCH",
+            f"callback={callback_extent!r}; workflow={extent!r}",
+        )
+    if first_refusal is not None:
+        return {
+            "status": "configuration_refused", "first_refusal": first_refusal,
+            "dispatch_extent": extent, "target_formally_backed": target_formally_backed,
+        }
+    outcome = _court_outcome(harness, target.id)
+    return {
+        "status": "trial_outcome", "outcome_code": outcome, "first_refusal": None,
+        "dispatch_extent": extent, "target_formally_backed": target_formally_backed,
+        "variator_reachability": (
+            "not_exercised_by_outcome" if outcome == "defence-sustained" and paraphrases is not None
+            else "exercised" if paraphrases is not None else "not_configured"
+        ),
+    }
+
+
+def persist_response_receipts(root: str | os.PathLike[str], prose: str, *,
+                              parser_outcome: str, schema_outcome: str,
+                              fallback_events: Sequence[str]) -> dict[str, Any]:
+    """Persist human prose independently from its mechanical parse receipt."""
+    target = Path(root)
+    prose_bytes = prose.encode("utf-8")
+    blob_ref = "response-prose.txt"
+    _atomic_bytes(target / blob_ref, prose_bytes)
+    prose_receipt = {
+        "blob_ref": blob_ref, "byte_count": len(prose_bytes),
+        "sha256": hashlib.sha256(prose_bytes).hexdigest(),
+    }
+    parser_receipt = {
+        "parser_outcome": parser_outcome, "schema_outcome": schema_outcome,
+        "fallback_events": list(fallback_events), "structured_value": None,
+    }
+    _atomic_bytes(target / "prose-receipt.json", canonical_json(prose_receipt))
+    _atomic_bytes(target / "parser-receipt.json", canonical_json(parser_receipt))
+    return {"prose_receipt": prose_receipt, "parser_receipt": parser_receipt}
+
+
 def _enumerate_fixture() -> None:
     domain = load_domain(Path(__file__).with_name("MATRIX_DOMAIN.json"))
     model_count = len(domain["fixture_catalog"])

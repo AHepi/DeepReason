@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=12 blockers=none
+State: next=13 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -89,8 +89,13 @@ changes no shipped behavior or owner agreement.
       `7c54681cf5dac8fa43aa8b983908b53ea48fb477`; local HEAD equalled origin;
       worktree empty after synchronization.
 
-- [ ] 12. (S4) Implement exact defended v6 manifest compilation and deterministic full-court driving through the shipped argumentative-trial path.
+- [x] 12. (S4) Implement exact defended v6 manifest compilation and deterministic full-court driving through the shipped argumentative-trial path.
       done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'topology or typed or managed or sequence'` ends with 0 failed.
+
+      proof: exit 0; `7 passed, 11 deselected in 7.04s`; dispatch extent is
+      read from durable shipped workflow work and cross-checked against endpoint
+      callbacks; semantic outcome is read from committed trial measures/state;
+      full output in `proof/court-tests-green.txt`.
 
 - [ ] 13. (S6) Implement the experiment-owned Kimi-K3-free `cycle_soak.SoakCase` wrapper without editing `scripts/cycle_soak.py`.
       done-when: `python -u experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py soak` prints `SOAK_VERDICT=PASS CASE=judge-matrix CYCLES=8`.

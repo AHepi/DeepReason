@@ -1,0 +1,5 @@
+$ python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'topology or typed or managed or sequence'
+.......                                                                  [100%]
+7 passed, 11 deselected in 7.04s
+
+exit 0
