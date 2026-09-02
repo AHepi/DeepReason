@@ -1,0 +1,25 @@
+Command:
+python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k soak
+
+Result on 13d80b170232379e90c598ffb2d1ef17100f20de before soak implementation:
+
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__ test_soak_wrapper_registers_experiment_case_without_editing_shipped_driver __
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+
+    def test_soak_wrapper_registers_experiment_case_without_editing_shipped_driver(matrix):
+        driver = ROOT / "scripts/cycle_soak.py"
+        before = driver.read_bytes()
+>       cycle_soak, case = matrix.install_soak_case()
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'install_soak_case'
+
+tests/test_live_full_judge_seat_matrix.py:433: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_live_full_judge_seat_matrix.py::test_soak_wrapper_registers_experiment_case_without_editing_shipped_driver
+1 failed, 27 deselected in 0.07s
+
+Exit status: 1
+RED_CAUSE=ABSENT_EXPERIMENT_SOAK_WRAPPER
