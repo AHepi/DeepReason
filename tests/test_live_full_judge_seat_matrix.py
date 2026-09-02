@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import itertools
 import json
@@ -17,6 +18,7 @@ ROOT = Path(__file__).parents[1]
 TRANCHE = ROOT / "experiments/2026-09-01-change-live-full-judge-seat-matrix"
 MATRIX_PATH = TRANCHE / "matrix.py"
 DOMAIN_PATH = TRANCHE / "MATRIX_DOMAIN.json"
+FULL_CROSS_DOMAIN_PATH = TRANCHE / "FULL_CROSS_DOMAIN.json"
 
 
 @pytest.fixture(scope="module")
@@ -38,6 +40,99 @@ def domain(matrix):
 
 def refusal(matrix, code):
     return pytest.raises(matrix.MatrixRefusal, match=code)
+
+
+def _narrow_full_cross_domain(domain, **axis_overrides):
+    """Return a small literal subdomain without mutating the frozen fixture."""
+    narrowed = json.loads(json.dumps(domain))
+    narrowed["finite_axes"].update(axis_overrides)
+    return narrowed
+
+
+def _literal_full_cross_payloads(domain, model_ids, catalog_sha256):
+    """Independent, deliberately simple Cartesian membership oracle."""
+    axes = domain["finite_axes"]
+    ordered_models = sorted(model_ids, key=lambda value: value.encode("utf-8"))
+    seat_tuples = [
+        {
+            "model_id": model_id,
+            "model_profile": profile,
+            "output_mode": output_mode,
+            "output_mechanism": output_mechanism,
+            "reasoning": reasoning,
+        }
+        for model_id, profile, output_mode, output_mechanism, reasoning
+        in itertools.product(
+            ordered_models,
+            axes["model_profile_per_seat"],
+            axes["output_mode_per_seat"],
+            axes["output_mechanism_per_seat"],
+            axes["reasoning_per_seat"],
+        )
+    ]
+    payloads = []
+    for judge_count in axes["judge_count"]:
+        judge_roles = [f"judge:{seat}" for seat in range(judge_count)]
+        for with_variator in (False, True):
+            roles = ["critic", "defender", *judge_roles]
+            paraphrases = [None]
+            if with_variator:
+                roles.append("variator")
+                paraphrases = axes["paraphrase_count_with_variator"]
+            for split_protocol, paraphrase_count, assignments in itertools.product(
+                axes["split_protocol"],
+                paraphrases,
+                itertools.product(seat_tuples, repeat=len(roles)),
+            ):
+                payloads.append({
+                    "schema": "deepreason.full-cross-judge-case.v1",
+                    "catalog_sha256": catalog_sha256,
+                    "judge_count": judge_count,
+                    "split_protocol": split_protocol,
+                    "paraphrase_count": paraphrase_count,
+                    "seats": [
+                        {"role": role, **assignment}
+                        for role, assignment in zip(roles, assignments)
+                    ],
+                })
+    return payloads
+
+
+def _literal_case_id(payload):
+    encoded = json.dumps(
+        payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
+        allow_nan=False,
+    ).encode("utf-8")
+    return "sha256:" + hashlib.sha256(encoded).hexdigest()
+
+
+def _full_cross_identity(row):
+    return {
+        key: row[key]
+        for key in (
+            "schema", "catalog_sha256", "judge_count", "split_protocol",
+            "paraphrase_count", "seats",
+        )
+    }
+
+
+def _read_frozen_full_cross_domain():
+    return json.loads(FULL_CROSS_DOMAIN_PATH.read_text(encoding="utf-8"))
+
+
+def _minimal_full_cross_domain(domain, **overrides):
+    axes = {
+        "judge_count": [2, 3],
+        "split_protocol": ["off"],
+        "model_profile_per_seat": ["standard"],
+        "output_mode_per_seat": ["json_object"],
+        "output_mechanism_per_seat": ["json_text"],
+        "reasoning_per_seat": [{"kind": "string", "value": "low"}],
+        "paraphrase_count_with_variator": [0],
+        "paraphrase_count_without_variator": None,
+    }
+    axes.update(overrides)
+    return _narrow_full_cross_domain(domain, **axes)
 
 
 def test_domain_fixture_counts_are_exact(matrix, domain):
@@ -341,3 +436,273 @@ def test_soak_wrapper_registers_experiment_case_without_editing_shipped_driver(m
     assert isinstance(case, cycle_soak.SoakCase)
     assert case.id == "judge-matrix" and case.default_cycles == 8
     assert "kimik3" not in matrix.normalize_model_id(case.description)
+
+
+def test_full_cross_domain_loader_preserves_the_frozen_document(matrix):
+    assert matrix.load_full_cross_domain(FULL_CROSS_DOMAIN_PATH) == (
+        _read_frozen_full_cross_domain()
+    )
+
+
+def test_full_cross_fixture_counts_are_exact_for_both_judge_topologies(matrix):
+    domain = _read_frozen_full_cross_domain()
+    assert matrix.full_cross_seat_tuple_count(domain, model_count=22) == 1_584
+    assert matrix.full_cross_counts(domain, model_count=22) == {
+        "seat_tuples": 1_584,
+        "judge_count_2": 149_596_687_470_624_768,
+        "judge_count_3": 236_961_152_953_469_632_512,
+        "total": 237_110_749_640_940_257_280,
+    }
+
+
+def test_full_cross_tiny_domain_is_the_literal_cartesian_product(matrix):
+    frozen = _read_frozen_full_cross_domain()
+    domain = _minimal_full_cross_domain(
+        frozen,
+        split_protocol=["auto", "off"],
+        model_profile_per_seat=["compact", "frontier"],
+        paraphrase_count_with_variator=[-1, 2],
+    )
+    catalog_sha256 = "a" * 64
+    rows = list(matrix.iter_full_cross_cases(
+        domain, ["model-a"], catalog_sha256=catalog_sha256,
+        criticism_authority="defended_trial",
+    ))
+    expected_payloads = _literal_full_cross_payloads(
+        domain, ["model-a"], catalog_sha256
+    )
+    expected_ids = {_literal_case_id(payload) for payload in expected_payloads}
+    actual_ids = {row["case_id"] for row in rows}
+
+    assert matrix.full_cross_counts(domain, model_count=1) == {
+        "seat_tuples": 2,
+        "judge_count_2": 160,
+        "judge_count_3": 320,
+        "total": 480,
+    }
+    assert len(rows) == len(actual_ids) == len(expected_ids) == 480
+    assert actual_ids == expected_ids
+    assert {_literal_case_id(_full_cross_identity(row)) for row in rows} == actual_ids
+    assert {row["judge_count"] for row in rows} == {2, 3}
+    assert {row["split_protocol"] for row in rows} == {"auto", "off"}
+    assert {row["paraphrase_count"] for row in rows if row["seats"][-1]["role"] == "variator"} == {-1, 2}
+    assert {row["paraphrase_count"] for row in rows if row["seats"][-1]["role"] != "variator"} == {None}
+    assert all(row["criticism_authority"] == "defended_trial" for row in rows)
+
+
+def test_full_cross_ordered_judge_reversal_changes_case_identity(matrix):
+    domain = _minimal_full_cross_domain(
+        _read_frozen_full_cross_domain(), judge_count=[2]
+    )
+    rows = list(matrix.iter_full_cross_cases(
+        domain, ["same-family/model-a", "same-family/model-b"],
+        catalog_sha256="b" * 64, criticism_authority="defended_trial",
+    ))
+
+    def find(judge0, judge1):
+        for row in rows:
+            seats = {seat["role"]: seat for seat in row["seats"]}
+            if (
+                row["paraphrase_count"] is None
+                and seats["critic"]["model_id"] == "same-family/model-a"
+                and seats["defender"]["model_id"] == "same-family/model-a"
+                and seats["judge:0"]["model_id"] == judge0
+                and seats["judge:1"]["model_id"] == judge1
+            ):
+                return row
+        pytest.fail("literal ordered judge assignment was filtered")
+
+    forward = find("same-family/model-a", "same-family/model-b")
+    reverse = find("same-family/model-b", "same-family/model-a")
+    assert forward["case_id"] != reverse["case_id"]
+    assert forward["seats"][2]["role"] == reverse["seats"][2]["role"] == "judge:0"
+
+
+def test_full_cross_one_seat_transport_and_typed_reasoning_change_ids(matrix):
+    domain = _minimal_full_cross_domain(
+        _read_frozen_full_cross_domain(),
+        judge_count=[2],
+        model_profile_per_seat=["compact", "frontier"],
+        reasoning_per_seat=[
+            {"kind": "string", "value": "low"},
+            {"kind": "integer", "value": 2_000},
+        ],
+    )
+    rows = list(matrix.iter_full_cross_cases(
+        domain, ["model-a"], catalog_sha256="c" * 64,
+        criticism_authority="defended_trial",
+    ))
+
+    def find(critic_profile, critic_reasoning):
+        for row in rows:
+            if row["paraphrase_count"] is not None:
+                continue
+            seats = row["seats"]
+            critic, rest = seats[0], seats[1:]
+            if (
+                critic["model_profile"] == critic_profile
+                and critic["reasoning"] == critic_reasoning
+                and all(seat["model_profile"] == "compact" for seat in rest)
+                and all(
+                    seat["reasoning"] == {"kind": "string", "value": "low"}
+                    for seat in rest
+                )
+            ):
+                return row
+        pytest.fail("independent critic transport assignment was filtered")
+
+    string_low = {"kind": "string", "value": "low"}
+    integer_low = {"kind": "integer", "value": 2_000}
+    baseline = find("compact", string_low)
+    profile_change = find("frontier", string_low)
+    typed_change = find("compact", integer_low)
+    assert len({baseline["case_id"], profile_change["case_id"], typed_change["case_id"]}) == 3
+    assert baseline["seats"][1:] == profile_change["seats"][1:] == typed_change["seats"][1:]
+    assert matrix.build_provider_body("model-a", "low")["reasoning_effort"] == "low"
+    assert matrix.build_provider_body("model-a", 2_000)["reasoning_effort"] == "low"
+
+
+def test_full_cross_requires_explicit_defended_authority_before_enumeration(matrix):
+    domain = _minimal_full_cross_domain(
+        _read_frozen_full_cross_domain(), judge_count=[2]
+    )
+    accepted = matrix.iter_full_cross_cases(
+        domain, ["model-a"], catalog_sha256="d" * 64,
+        criticism_authority="defended_trial",
+    )
+    assert next(accepted)["criticism_authority"] == "defended_trial"
+    for authority in (None, "observe_only", "trial_required"):
+        with refusal(matrix, "FULL_CROSS_REQUIRES_DEFENDED_TRIAL"):
+            next(matrix.iter_full_cross_cases(
+                domain, ["model-a"], catalog_sha256="d" * 64,
+                criticism_authority=authority,
+            ))
+
+    tampered = json.loads(json.dumps(domain))
+    tampered["request_integrity"]["criticism_authority"] = "observe_only"
+    with refusal(matrix, "FULL_CROSS_REQUIRES_DEFENDED_TRIAL"):
+        next(matrix.iter_full_cross_cases(
+            tampered, ["model-a"], catalog_sha256="d" * 64,
+            criticism_authority="defended_trial",
+        ))
+
+
+def test_full_cross_has_no_family_or_preflight_membership_filter(matrix):
+    domain = _minimal_full_cross_domain(_read_frozen_full_cross_domain())
+    safe_models = ["same-family/model-a", "same-family/model-b"]
+    rows = list(matrix.iter_full_cross_cases(
+        domain, [*safe_models, "KIMI K3:cloud"], catalog_sha256="e" * 64,
+        criticism_authority="defended_trial",
+    ))
+    expected = _literal_full_cross_payloads(domain, safe_models, "e" * 64)
+    assert len(rows) == len(expected) == 144
+    assert {row["case_id"] for row in rows} == {
+        _literal_case_id(payload) for payload in expected
+    }
+    assert {
+        seat["model_id"] for row in rows for seat in row["seats"]
+    } == set(safe_models)
+    assert any(
+        row["seats"][2]["model_id"] == row["seats"][3]["model_id"]
+        for row in rows
+    )
+    assert all(
+        "kimik3" not in matrix.normalize_model_id(seat["model_id"])
+        for row in rows for seat in row["seats"]
+    )
+
+
+def test_full_cross_direct_ordinal_round_trips_each_component_boundary(
+    matrix, monkeypatch
+):
+    domain = _minimal_full_cross_domain(
+        _read_frozen_full_cross_domain(),
+        split_protocol=["auto", "off"],
+        model_profile_per_seat=["compact", "frontier"],
+        paraphrase_count_with_variator=[-1, 2],
+    )
+    models, catalog_sha256 = ["model-a"], "6" * 64
+    literal = _literal_full_cross_payloads(domain, models, catalog_sha256)
+    case_at = matrix.full_cross_case_at
+    case_ordinal = matrix.full_cross_case_ordinal
+    monkeypatch.setattr(
+        matrix, "iter_full_cross_cases",
+        lambda *args, **kwargs: pytest.fail("direct ordinal API walked the iterator"),
+    )
+
+    # J2/no-variator [0, 32), J2/variator [32, 160),
+    # J3/no-variator [160, 224), and J3/variator [224, 480).
+    for ordinal in (0, 31, 32, 159, 160, 223, 224, 479):
+        row = case_at(
+            domain, models, ordinal,
+            catalog_sha256=catalog_sha256,
+            criticism_authority="defended_trial",
+        )
+        assert row["ordinal"] == ordinal
+        assert _full_cross_identity(row) == literal[ordinal]
+        assert row["case_id"] == _literal_case_id(literal[ordinal])
+        assert case_ordinal(domain, models, row) == ordinal
+
+
+def test_full_cross_direct_fixture_tail_does_not_enumerate_its_prefix(
+    matrix, monkeypatch
+):
+    domain = _read_frozen_full_cross_domain()
+    models = [
+        entry["model_id"]
+        for entry in json.loads(DOMAIN_PATH.read_text(encoding="utf-8"))[
+            "fixture_catalog"
+        ]
+    ]
+    total = domain["cardinality"]["fixture_total"]
+    case_at = matrix.full_cross_case_at
+    case_ordinal = matrix.full_cross_case_ordinal
+    monkeypatch.setattr(
+        matrix, "iter_full_cross_cases",
+        lambda *args, **kwargs: pytest.fail("fixture tail walked its prior cases"),
+    )
+    tail = case_at(
+        domain, models, total - 1,
+        catalog_sha256="7" * 64,
+        criticism_authority="defended_trial",
+    )
+    assert tail["ordinal"] == total - 1
+    assert tail["judge_count"] == 3
+    assert tail["split_protocol"] == "off"
+    assert tail["paraphrase_count"] == 3
+    assert [seat["role"] for seat in tail["seats"]] == [
+        "critic", "defender", "judge:0", "judge:1", "judge:2", "variator",
+    ]
+    expected_model = sorted(models, key=lambda value: value.encode("utf-8"))[-1]
+    assert all(seat["model_id"] == expected_model for seat in tail["seats"])
+    assert all(seat["model_profile"] == "frontier" for seat in tail["seats"])
+    assert all(seat["output_mode"] == "json_object" for seat in tail["seats"])
+    assert all(seat["output_mechanism"] == "json_text" for seat in tail["seats"])
+    assert all(
+        seat["reasoning"] == {"kind": "integer", "value": 2_000}
+        for seat in tail["seats"]
+    )
+    assert case_ordinal(domain, models, tail) == total - 1
+
+
+def test_full_cross_lazy_ordinals_resume_the_same_stable_sequence(matrix):
+    domain = _minimal_full_cross_domain(
+        _read_frozen_full_cross_domain(),
+        split_protocol=["auto", "off"],
+        model_profile_per_seat=["compact", "frontier"],
+        paraphrase_count_with_variator=[-1, 2],
+    )
+    kwargs = {
+        "catalog_sha256": "f" * 64,
+        "criticism_authority": "defended_trial",
+    }
+    generated = matrix.iter_full_cross_cases(domain, ["model-a"], **kwargs)
+    assert iter(generated) is generated
+    whole = list(generated)
+    assert [row["ordinal"] for row in whole] == list(range(480))
+    assert list(matrix.iter_full_cross_cases(
+        domain, ["model-a"], start_ordinal=137, stop_ordinal=149, **kwargs,
+    )) == whole[137:149]
+    assert list(matrix.iter_full_cross_cases(
+        domain, ["model-a"], start_ordinal=480, **kwargs,
+    )) == []

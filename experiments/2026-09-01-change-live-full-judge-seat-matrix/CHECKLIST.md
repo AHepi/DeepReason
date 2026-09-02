@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=12C blockers=none
+State: next=12D blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -126,9 +126,15 @@ changes no shipped behavior or owner agreement.
       whole-fixture preflight set digest with exact count/ordinal boundaries
       plus a complete tiny Cartesian oracle.
 
-- [ ] 12C. (S2, S3, S5) Add full-cross count, literal Cartesian membership,
+- [x] 12C. (S2, S3, S5) Add full-cross count, literal Cartesian membership,
       per-seat independence, case-id, ban, and resume tests before implementation.
       done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'full_cross'` fails only because the new generator APIs are absent, with output saved in `proof/full-cross-tests-red.txt`.
+
+      proof: exit 1; `10 failed, 18 deselected in 0.16s`; every failure is an
+      `AttributeError` for an absent registered full-cross API. The tests include
+      direct fixture-tail ordinal lookup with the iterator monkeypatched to
+      fail, so a linear resume implementation cannot satisfy the contract.
+      Full output is in `proof/full-cross-tests-red.txt`.
 
 - [ ] 12D. (S2, S3, S5) [COMMIT] Push the full-cross RED tests and mutation proof.
       done-when: local HEAD equals origin and `proof/full-cross-tests-red.txt`

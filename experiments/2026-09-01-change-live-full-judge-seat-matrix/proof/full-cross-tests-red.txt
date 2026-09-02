@@ -1,0 +1,189 @@
+FFFFFFFFFF                                                               [100%]
+=================================== FAILURES ===================================
+_________ test_full_cross_domain_loader_preserves_the_frozen_document __________
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+
+    def test_full_cross_domain_loader_preserves_the_frozen_document(matrix):
+>       assert matrix.load_full_cross_domain(FULL_CROSS_DOMAIN_PATH) == (
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            _read_frozen_full_cross_domain()
+        )
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'load_full_cross_domain'
+
+tests/test_live_full_judge_seat_matrix.py:442: AttributeError
+______ test_full_cross_fixture_counts_are_exact_for_both_judge_topologies ______
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+
+    def test_full_cross_fixture_counts_are_exact_for_both_judge_topologies(matrix):
+        domain = _read_frozen_full_cross_domain()
+>       assert matrix.full_cross_seat_tuple_count(domain, model_count=22) == 1_584
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'full_cross_seat_tuple_count'
+
+tests/test_live_full_judge_seat_matrix.py:449: AttributeError
+_________ test_full_cross_tiny_domain_is_the_literal_cartesian_product _________
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+
+    def test_full_cross_tiny_domain_is_the_literal_cartesian_product(matrix):
+        frozen = _read_frozen_full_cross_domain()
+        domain = _minimal_full_cross_domain(
+            frozen,
+            split_protocol=["auto", "off"],
+            model_profile_per_seat=["compact", "frontier"],
+            paraphrase_count_with_variator=[-1, 2],
+        )
+        catalog_sha256 = "a" * 64
+>       rows = list(matrix.iter_full_cross_cases(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            domain, ["model-a"], catalog_sha256=catalog_sha256,
+            criticism_authority="defended_trial",
+        ))
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'iter_full_cross_cases'
+
+tests/test_live_full_judge_seat_matrix.py:467: AttributeError
+_________ test_full_cross_ordered_judge_reversal_changes_case_identity _________
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+
+    def test_full_cross_ordered_judge_reversal_changes_case_identity(matrix):
+        domain = _minimal_full_cross_domain(
+            _read_frozen_full_cross_domain(), judge_count=[2]
+        )
+>       rows = list(matrix.iter_full_cross_cases(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            domain, ["same-family/model-a", "same-family/model-b"],
+            catalog_sha256="b" * 64, criticism_authority="defended_trial",
+        ))
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'iter_full_cross_cases'
+
+tests/test_live_full_judge_seat_matrix.py:497: AttributeError
+______ test_full_cross_one_seat_transport_and_typed_reasoning_change_ids _______
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+
+    def test_full_cross_one_seat_transport_and_typed_reasoning_change_ids(matrix):
+        domain = _minimal_full_cross_domain(
+            _read_frozen_full_cross_domain(),
+            judge_count=[2],
+            model_profile_per_seat=["compact", "frontier"],
+            reasoning_per_seat=[
+                {"kind": "string", "value": "low"},
+                {"kind": "integer", "value": 2_000},
+            ],
+        )
+>       rows = list(matrix.iter_full_cross_cases(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            domain, ["model-a"], catalog_sha256="c" * 64,
+            criticism_authority="defended_trial",
+        ))
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'iter_full_cross_cases'
+
+tests/test_live_full_judge_seat_matrix.py:531: AttributeError
+___ test_full_cross_requires_explicit_defended_authority_before_enumeration ____
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+
+    def test_full_cross_requires_explicit_defended_authority_before_enumeration(matrix):
+        domain = _minimal_full_cross_domain(
+            _read_frozen_full_cross_domain(), judge_count=[2]
+        )
+>       accepted = matrix.iter_full_cross_cases(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            domain, ["model-a"], catalog_sha256="d" * 64,
+            criticism_authority="defended_trial",
+        )
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'iter_full_cross_cases'
+
+tests/test_live_full_judge_seat_matrix.py:569: AttributeError
+_________ test_full_cross_has_no_family_or_preflight_membership_filter _________
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+
+    def test_full_cross_has_no_family_or_preflight_membership_filter(matrix):
+        domain = _minimal_full_cross_domain(_read_frozen_full_cross_domain())
+        safe_models = ["same-family/model-a", "same-family/model-b"]
+>       rows = list(matrix.iter_full_cross_cases(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            domain, [*safe_models, "KIMI K3:cloud"], catalog_sha256="e" * 64,
+            criticism_authority="defended_trial",
+        ))
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'iter_full_cross_cases'
+
+tests/test_live_full_judge_seat_matrix.py:593: AttributeError
+______ test_full_cross_direct_ordinal_round_trips_each_component_boundary ______
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f80550cad80>
+
+    def test_full_cross_direct_ordinal_round_trips_each_component_boundary(
+        matrix, monkeypatch
+    ):
+        domain = _minimal_full_cross_domain(
+            _read_frozen_full_cross_domain(),
+            split_protocol=["auto", "off"],
+            model_profile_per_seat=["compact", "frontier"],
+            paraphrase_count_with_variator=[-1, 2],
+        )
+        models, catalog_sha256 = ["model-a"], "6" * 64
+        literal = _literal_full_cross_payloads(domain, models, catalog_sha256)
+>       case_at = matrix.full_cross_case_at
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'full_cross_case_at'
+
+tests/test_live_full_judge_seat_matrix.py:626: AttributeError
+______ test_full_cross_direct_fixture_tail_does_not_enumerate_its_prefix _______
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f80550c9a90>
+
+    def test_full_cross_direct_fixture_tail_does_not_enumerate_its_prefix(
+        matrix, monkeypatch
+    ):
+        domain = _read_frozen_full_cross_domain()
+        models = [
+            entry["model_id"]
+            for entry in json.loads(DOMAIN_PATH.read_text(encoding="utf-8"))[
+                "fixture_catalog"
+            ]
+        ]
+        total = domain["cardinality"]["fixture_total"]
+>       case_at = matrix.full_cross_case_at
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'full_cross_case_at'
+
+tests/test_live_full_judge_seat_matrix.py:658: AttributeError
+________ test_full_cross_lazy_ordinals_resume_the_same_stable_sequence _________
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+
+    def test_full_cross_lazy_ordinals_resume_the_same_stable_sequence(matrix):
+        domain = _minimal_full_cross_domain(
+            _read_frozen_full_cross_domain(),
+            split_protocol=["auto", "off"],
+            model_profile_per_seat=["compact", "frontier"],
+            paraphrase_count_with_variator=[-1, 2],
+        )
+        kwargs = {
+            "catalog_sha256": "f" * 64,
+            "criticism_authority": "defended_trial",
+        }
+>       generated = matrix.iter_full_cross_cases(domain, ["model-a"], **kwargs)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'iter_full_cross_cases'
+
+tests/test_live_full_judge_seat_matrix.py:699: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_live_full_judge_seat_matrix.py::test_full_cross_domain_loader_preserves_the_frozen_document
+FAILED tests/test_live_full_judge_seat_matrix.py::test_full_cross_fixture_counts_are_exact_for_both_judge_topologies
+FAILED tests/test_live_full_judge_seat_matrix.py::test_full_cross_tiny_domain_is_the_literal_cartesian_product
+FAILED tests/test_live_full_judge_seat_matrix.py::test_full_cross_ordered_judge_reversal_changes_case_identity
+FAILED tests/test_live_full_judge_seat_matrix.py::test_full_cross_one_seat_transport_and_typed_reasoning_change_ids
+FAILED tests/test_live_full_judge_seat_matrix.py::test_full_cross_requires_explicit_defended_authority_before_enumeration
+FAILED tests/test_live_full_judge_seat_matrix.py::test_full_cross_has_no_family_or_preflight_membership_filter
+FAILED tests/test_live_full_judge_seat_matrix.py::test_full_cross_direct_ordinal_round_trips_each_component_boundary
+FAILED tests/test_live_full_judge_seat_matrix.py::test_full_cross_direct_fixture_tail_does_not_enumerate_its_prefix
+FAILED tests/test_live_full_judge_seat_matrix.py::test_full_cross_lazy_ordinals_resume_the_same_stable_sequence
+10 failed, 18 deselected in 0.16s
