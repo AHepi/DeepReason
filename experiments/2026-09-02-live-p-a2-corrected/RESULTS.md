@@ -143,3 +143,65 @@ whether a real model produces useful referee verdicts or grounding repairs —
 only the live run speaks to that, and no soak can stand in for it. The soak
 also reproduces ONE of the four 2026-08-22 operational deaths and asserts the
 other three, so green is not full coverage.
+
+---
+
+## 2026-09-02 · Segment 4 — the gate refused one seat, and the cause is the reasoning knob alone
+
+**What the record shows.** The live run never reached a reasoning cycle. The
+ladder stopped at qualification after 96 minutes with **22 of 23 pairs
+qualified, 445 of 460 cases** — the gate doing precisely its job, refusing a
+seat that cannot fill its contract *before* the run spends a token budget on
+it. Compared pair-by-pair against P-A1's own `qualify.json` (23/23, 460/460),
+**exactly one pair moved**: `grounding_reviewer /
+groundingrepairwirev1.direct.v1 / glm-5.3`, from 20/20 to **5/20** against a
+threshold of 19, with 15 `VALUE_ERROR` and 31 repair attempts spent.
+
+Every other pair is 20/20 in BOTH runs, including six other glm-5.3 contracts
+and four glm-5.3 scratch contracts. The corrections did not broadly degrade
+this model; they cost exactly one contract.
+
+**Which correction — measured across 60 live calls, not argued.** P-A2 moved
+three things about that seat at once, so the isolation probe exercised only
+that pair through the doctor's own per-case entry point:
+
+| cell | reasoning | cap | split | valid |
+|---|---|---|---|---|
+| A | `low` | 32768 | off | **2/10** |
+| C | `low` | 32768 | auto | **3/10** |
+| E | `low` | 49152 | off | **4/10** |
+| B | unset (`max`) | 49152 | auto | **10/10** |
+| D | unset (`max`) | 49152 | off | **10/10** |
+| F | unset (`max`) | 32768 | off | **10/10** |
+
+**Perfect separation on the reasoning knob.** Every `low` cell fails at 2–4 of
+10; every default-effort cell passes 10 of 10, while the cap and the split
+protocol vary freely within each group and change nothing. Cell B reproduces
+P-A1 exactly, which is what makes the comparison admissible: the cause is this
+tranche's change, not provider drift.
+
+**Two hypotheses refuted, both of them the monitor's own, and both stated to
+the operator before the measurement came back.** First, that turning the
+split-budget protocol off was the culprit — refuted by cell D (split off,
+10/10) against cell C (split on, 3/10). Second, that this was F1's
+forbidden-action trap reaching a live model — refuted by the record's own
+`scope_violations: 0`, since `BRIDGE_REPAIR_ACTION_FORBIDDEN` is classified as
+a scope violation and would have been counted as one.
+
+**What it means, and what it does not.** It does NOT mean `low` was the wrong
+correction: `low` is measured-correct for the generation seats, where six
+glm-5.3 contracts qualify 20/20 and where P-A1's transport wall actually was.
+It means the reasoning knob is **not uniform across contracts on one model**.
+The committed profile's headline — *"set this seat's `reasoning` to `low`"* —
+is right for generation and wrong for at least one structured-repair contract,
+whose schema makes three fields required or forbidden depending on the chosen
+action. Every failing case spends both repair attempts and still ends invalid,
+which is a structural miss rather than a truncation.
+
+**Residue.** This is 60 calls on ONE contract and ONE model; it does not say
+which other contracts have the same sensitivity, and it does not identify the
+exact field the model gets wrong — no raw response is persisted by the doctor,
+by design, and this tranche did not add one. The five pre-registered
+predictions P1–P5 are **unscored**: none of them can be evaluated, because no
+reasoning cycle ran. That is recorded as an unscored outcome, not as a
+negative one.

@@ -1,49 +1,25 @@
 [
  {
   "cases": 10,
-  "cell": "A",
-  "eventual_valid": 2,
+  "cell": "E",
+  "eventual_valid": 4,
   "failure_codes": {
-   "VALUE_ERROR": 8
+   "VALUE_ERROR": 6
   },
-  "first_pass_valid": 2,
-  "label": "pa2-current    (low / 32768 / split off)",
-  "max_tokens": 32768,
+  "first_pass_valid": 3,
+  "label": "low-big-cap    (low / 49152 / split off)",
+  "max_tokens": 49152,
   "reasoning": "low",
   "split": "off"
  },
  {
   "cases": 10,
-  "cell": "B",
+  "cell": "F",
   "eventual_valid": 10,
   "failure_codes": {},
   "first_pass_valid": 10,
-  "label": "pa1-baseline   (unset / 49152 / split auto)",
-  "max_tokens": 49152,
-  "reasoning": null,
-  "split": "auto"
- },
- {
-  "cases": 10,
-  "cell": "C",
-  "eventual_valid": 3,
-  "failure_codes": {
-   "VALUE_ERROR": 7
-  },
-  "first_pass_valid": 3,
-  "label": "low-only       (low / 32768 / split auto)",
+  "label": "maxeffort-cap  (unset / 32768 / split off)",
   "max_tokens": 32768,
-  "reasoning": "low",
-  "split": "auto"
- },
- {
-  "cases": 10,
-  "cell": "D",
-  "eventual_valid": 10,
-  "failure_codes": {},
-  "first_pass_valid": 10,
-  "label": "split-off-only (unset / 49152 / split off)",
-  "max_tokens": 49152,
   "reasoning": null,
   "split": "off"
  }
