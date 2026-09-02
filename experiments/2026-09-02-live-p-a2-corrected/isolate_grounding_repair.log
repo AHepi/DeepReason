@@ -1,0 +1,25 @@
+
+=== CELL A: pa2-current    (low / 32768 / split off) ===
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SUMMONS_PER_CYCLE=2 is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SPLIT_BUDGET_SEAT_PROTOCOL='off' is not carried by this manifest's engine config and is restored at run time from this notice
+Traceback (most recent call last):
+  File "/home/user/DeepReason/experiments/2026-09-02-live-p-a2-corrected/isolate_grounding_repair.py", line 163, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/user/DeepReason/experiments/2026-09-02-live-p-a2-corrected/isolate_grounding_repair.py", line 145, in main
+    results.append({"cell": key, **run_cell(label, reasoning, max_tokens, split, args.cases)})
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/DeepReason/experiments/2026-09-02-live-p-a2-corrected/isolate_grounding_repair.py", line 99, in run_cell
+    manifest = load_run_manifest(root)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/DeepReason/src/deepreason/run_manifest.py", line 4454, in load_run_manifest
+    raw = _read_bounded_regular(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/DeepReason/src/deepreason/run_manifest.py", line 4203, in _read_bounded_regular
+    raise RunManifestError(
+deepreason.run_manifest.RunManifestError: MANIFEST_FILE_UNSAFE at /gr-isolate-8s3g98kf: manifest control file must be a bounded regular non-symlink file
