@@ -756,6 +756,119 @@ def test_full_cross_lazy_ordinals_resume_the_same_stable_sequence(matrix):
     )) == []
 
 
+def test_full_cross_resume_loader_finds_sparse_gap_without_prefix_walk(
+    matrix, tmp_path, monkeypatch
+):
+    domain = _minimal_full_cross_domain(_read_frozen_full_cross_domain())
+    models, catalog_sha256 = ["model-a"], "2" * 64
+    domain_sha256 = "1" * 64
+    root = tmp_path / "live-full-cross"
+    attempt = matrix.prepare_attempt(
+        root,
+        domain_sha256=domain_sha256,
+        catalog_sha256=catalog_sha256,
+    )
+    cases = {
+        ordinal: matrix.full_cross_case_at(
+            domain,
+            models,
+            ordinal,
+            catalog_sha256=catalog_sha256,
+            criticism_authority="defended_trial",
+        )
+        for ordinal in (0, 2)
+    }
+    for ordinal, case in cases.items():
+        receipt = {
+            "case_id": case["case_id"],
+            "ordinal": ordinal,
+            "status": "trial_outcome" if ordinal == 0 else "configuration_refused",
+            "catalog_sha256": catalog_sha256,
+            "domain_sha256": domain_sha256,
+            "branch_commit": "3" * 40,
+            "case_payload": case,
+            "criticism_authority": "defended_trial",
+            "full_dispatch_reached": ordinal == 0,
+        }
+        matrix._atomic_bytes(
+            attempt / "results" / f"{case['case_id'].removeprefix('sha256:')}.json",
+            matrix.safe_live_result_bytes(receipt),
+        )
+    matrix.mark_interrupted(attempt)
+    terminals = matrix._load_full_cross_terminals(
+        root,
+        domain=domain,
+        model_ids=models,
+        domain_sha256=domain_sha256,
+        catalog_sha256=catalog_sha256,
+    )
+    monkeypatch.setattr(
+        matrix,
+        "iter_full_cross_cases",
+        lambda *args, **kwargs: pytest.fail("resume summary walked the prefix"),
+    )
+    summary = matrix.full_cross_resume_summary(
+        domain,
+        models,
+        catalog_sha256=catalog_sha256,
+        terminals=terminals,
+    )
+    expected_next = matrix.full_cross_case_at(
+        domain,
+        models,
+        1,
+        catalog_sha256=catalog_sha256,
+        criticism_authority="defended_trial",
+    )
+    assert summary == {
+        "expected": 4,
+        "terminal": 2,
+        "possible": 1,
+        "impossible": 1,
+        "provider_indeterminate": 0,
+        "unexpected_error": 0,
+        "interrupted": 0,
+        "pending": 2,
+        "next_ordinal": 1,
+        "next_case_id": expected_next["case_id"],
+    }
+
+
+def test_full_cross_frozen_summary_is_exact_and_constant_time(matrix, monkeypatch):
+    domain = _read_frozen_full_cross_domain()
+    catalog = json.loads((TRANCHE / "CATALOG.json").read_text(encoding="utf-8"))
+    monkeypatch.setattr(
+        matrix,
+        "iter_full_cross_cases",
+        lambda *args, **kwargs: pytest.fail("frozen summary walked the full cross"),
+    )
+    summary = matrix.full_cross_resume_summary(
+        domain,
+        catalog["model_ids"],
+        catalog_sha256=catalog["catalog_sha256"],
+        terminals={},
+    )
+    first = matrix.full_cross_case_at(
+        domain,
+        catalog["model_ids"],
+        0,
+        catalog_sha256=catalog["catalog_sha256"],
+        criticism_authority="defended_trial",
+    )
+    assert summary == {
+        "expected": 71_141_539_390_075_109_376,
+        "terminal": 0,
+        "possible": 0,
+        "impossible": 0,
+        "provider_indeterminate": 0,
+        "unexpected_error": 0,
+        "interrupted": 0,
+        "pending": 71_141_539_390_075_109_376,
+        "next_ordinal": 0,
+        "next_case_id": first["case_id"],
+    }
+
+
 def test_live_authenticated_catalog_keeps_every_non_kimi_raw_id(matrix):
     response = {
         "object": "list",

@@ -60,6 +60,11 @@ The next frozen row is ordinal 9,
 with judge 0 `deepseek-v4-flash:0731` and judge 1 `kimi-k2.6`. Kimi K3 remains
 the sole typed catalog exclusion; Kimi K2.6 is in scope.
 
+The superseding full-cross queue begins independently at ordinal 0,
+`sha256:1b50183d2639aadf2f05611d440a9036c564a7c9b537e2be93410a0bc5b4c25e`.
+Direct mixed-radix decoding identifies this row without enumerating any earlier
+case.
+
 Two retained attempt roots (`attempt-0001` and `attempt-0003`) are closed with
 interruption markers so resume rotates to a fresh immutable root. During the
 first prefix launch, an external monitor misread a PID from a nested namespace
@@ -87,6 +92,6 @@ The prefix used one coordinator with three worker threads and the shared hard
 bound `PEAK_IN_FLIGHT<=3`. No high, max, xhigh, omitted/default, observe-only,
 or Kimi-K3 road was dispatched. The credential was held only in process memory.
 An exact-byte scan of tracked files and the ignored runtime root found zero
-credential-bearing files. All 39 campaign regression tests pass, the frozen
-surface gate is clear, and the cumulative code/test change is 3,745 of the
+credential-bearing files. All 41 campaign regression tests pass, the frozen
+surface gate is clear, and the cumulative code/test change is 4,073 of the
 5,000-line ceiling.

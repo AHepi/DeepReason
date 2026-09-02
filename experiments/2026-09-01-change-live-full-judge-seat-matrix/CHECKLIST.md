@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=27 blockers=none
+State: next=28 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -309,12 +309,23 @@ changes no shipped behavior or owner agreement.
       PENDING=315`; the exact-byte credential scan reported
       `SECRET_SCAN=PASS LEAK_FILES=0`.
 
-- [ ] 27. (S2, S6) Continue the immutable queue through the named seat-only
+- [x] 27. (S2, S6) Continue the immutable queue through the named seat-only
       projections and into the superseding per-seat full cross without changing
       either domain digest.
       done-when: `matrix.py summarize` either reports full-cross `PENDING=0` or
       records the exact remaining count and a resumable next case id; a
       completed projection is never renamed as completion of the full cross.
+
+      proof: the constant-time direct-ordinal summarizer reported
+      `judge-pairs 9/324`, `core-courts 9/5832`, `no-variator 9/104976`, and
+      `seat-only 9/1994544`. The superseding cross reported
+      `EXPECTED=71141539390075109376 TERMINAL=0
+      PENDING=71141539390075109376 NEXT_ORDINAL=0` and next case
+      `sha256:1b50183d2639aadf2f05611d440a9036c564a7c9b537e2be93410a0bc5b4c25e`.
+      Sparse-resume and frozen-domain constant-time regressions brought the
+      campaign file to 41/41 green; blast radius remained `CLEAR` and the
+      measured code/test total was `4073/5000 WITHIN`. Both frozen domain file
+      digests remained unchanged.
 
 - [ ] 28. (S7) Prove branch isolation and no merge with `main`.
       done-when: `git rev-list --merges 00f10dde8c734e2f874358f9e2a375bb63aa4a35..HEAD` is empty and the current branch is `codex/live-full-judge-seat-matrix-20260901`.

@@ -2243,31 +2243,36 @@ def _live_source_commit(repo: Path) -> str:
     return _require_hex(commit, 40, "BRANCH_COMMIT_INVALID")
 
 
+def _attempt_is_quarantined(attempt: Path) -> bool:
+    integrity_stop = attempt / "INTEGRITY_STOP.json"
+    if not integrity_stop.exists():
+        return False
+    try:
+        stop = json.loads(integrity_stop.read_text(encoding="utf-8"))
+    except (ValueError, UnicodeError) as error:
+        raise MatrixRefusal(
+            "LIVE_INTEGRITY_STOP_CORRUPT", integrity_stop.name,
+        ) from error
+    if (
+        not isinstance(stop, Mapping)
+        or stop.get("schema") != "deepreason.live_attempt_integrity_stop.v1"
+        or stop.get("status") != "quarantined"
+        or stop.get("result_disposition") != "preserved_excluded"
+    ):
+        raise MatrixRefusal("LIVE_INTEGRITY_STOP_CORRUPT", integrity_stop.name)
+    return True
+
+
 def _load_live_terminals(
-    root: Path, *, domain_sha256: str, catalog_sha256: str, secret: str,
+    root: Path, *, domain_sha256: str, catalog_sha256: str,
+    secret: str | None,
 ) -> dict[str, dict[str, Any]]:
     terminals: dict[str, dict[str, Any]] = {}
     for path in sorted(root.glob("attempt-*/results/*.json")):
-        integrity_stop = path.parents[1] / "INTEGRITY_STOP.json"
-        if integrity_stop.exists():
-            try:
-                stop = json.loads(integrity_stop.read_text(encoding="utf-8"))
-            except (ValueError, UnicodeError) as error:
-                raise MatrixRefusal(
-                    "LIVE_INTEGRITY_STOP_CORRUPT", integrity_stop.name,
-                ) from error
-            if (
-                not isinstance(stop, Mapping)
-                or stop.get("schema") != "deepreason.live_attempt_integrity_stop.v1"
-                or stop.get("status") != "quarantined"
-                or stop.get("result_disposition") != "preserved_excluded"
-            ):
-                raise MatrixRefusal(
-                    "LIVE_INTEGRITY_STOP_CORRUPT", integrity_stop.name,
-                )
+        if _attempt_is_quarantined(path.parents[1]):
             continue
         payload = path.read_bytes()
-        if secret.encode("utf-8") in payload:
+        if secret and secret.encode("utf-8") in payload:
             raise MatrixRefusal("SECRET_BEARING_DIAGNOSTIC_WITHHELD")
         try:
             row = json.loads(payload)
@@ -2289,6 +2294,135 @@ def _load_live_terminals(
             raise MatrixRefusal("LIVE_RESULT_DUPLICATE", case_id)
         terminals[case_id] = dict(row)
     return terminals
+
+
+def _load_full_cross_terminals(
+    root: Path, *, domain: Mapping[str, Any], model_ids: Sequence[str],
+    domain_sha256: str, catalog_sha256: str, secret: str | None = None,
+) -> dict[int, dict[str, Any]]:
+    """Load exact full-cross receipts without walking any uncompleted prefix."""
+    _require_hex(domain_sha256, 64, "FULL_CROSS_DOMAIN_DIGEST_INVALID")
+    _validate_full_cross_catalog_digest(catalog_sha256)
+    result_paths = sorted(root.glob("attempt-*/results/*.json"))
+    binding_path = root / "binding.json"
+    if binding_path.exists():
+        try:
+            binding = json.loads(binding_path.read_text(encoding="utf-8"))
+        except (ValueError, UnicodeError) as error:
+            raise MatrixRefusal("FULL_CROSS_BINDING_CORRUPT") from error
+        if not isinstance(binding, Mapping):
+            raise MatrixRefusal("FULL_CROSS_BINDING_CORRUPT")
+        if binding.get("domain_sha256") != domain_sha256:
+            raise MatrixRefusal("DOMAIN_DIGEST_MISMATCH")
+        if binding.get("catalog_sha256") != catalog_sha256:
+            raise MatrixRefusal("CATALOG_DIGEST_MISMATCH")
+    elif result_paths:
+        raise MatrixRefusal("FULL_CROSS_BINDING_MISSING")
+
+    terminals: dict[int, dict[str, Any]] = {}
+    case_ids: set[str] = set()
+    for path in result_paths:
+        if _attempt_is_quarantined(path.parents[1]):
+            continue
+        payload = path.read_bytes()
+        if secret and secret.encode("utf-8") in payload:
+            raise MatrixRefusal("SECRET_BEARING_DIAGNOSTIC_WITHHELD")
+        try:
+            row = json.loads(payload)
+        except (ValueError, UnicodeError) as error:
+            raise MatrixRefusal("FULL_CROSS_RESULT_CORRUPT", path.name) from error
+        case_payload = row.get("case_payload") if isinstance(row, Mapping) else None
+        ordinal = row.get("ordinal") if isinstance(row, Mapping) else None
+        if (
+            not isinstance(row, Mapping)
+            or row.get("status") not in _LIVE_TERMINAL_STATUSES
+            or row.get("domain_sha256") != domain_sha256
+            or row.get("catalog_sha256") != catalog_sha256
+            or not isinstance(case_payload, Mapping)
+            or case_payload.get("schema") != FULL_CROSS_CASE_SCHEMA
+            or not isinstance(ordinal, int)
+            or isinstance(ordinal, bool)
+        ):
+            raise MatrixRefusal("FULL_CROSS_RESULT_CORRUPT", path.name)
+        try:
+            expected = full_cross_case_at(
+                domain,
+                model_ids,
+                ordinal,
+                catalog_sha256=catalog_sha256,
+                criticism_authority="defended_trial",
+            )
+        except MatrixRefusal as error:
+            raise MatrixRefusal("FULL_CROSS_RESULT_CORRUPT", path.name) from error
+        case_id = row.get("case_id")
+        if (
+            dict(case_payload) != expected
+            or case_id != expected["case_id"]
+            or path.name != f"{case_id.removeprefix('sha256:')}.json"
+        ):
+            raise MatrixRefusal("FULL_CROSS_RESULT_CORRUPT", path.name)
+        if ordinal in terminals or case_id in case_ids:
+            raise MatrixRefusal("FULL_CROSS_RESULT_DUPLICATE", str(ordinal))
+        terminals[ordinal] = dict(row)
+        case_ids.add(case_id)
+    return terminals
+
+
+def full_cross_resume_summary(
+    domain: Mapping[str, Any], model_ids: Sequence[str], *,
+    catalog_sha256: str, terminals: Mapping[int, Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Summarize exact set completion and identify the first missing ordinal."""
+    models = _full_cross_models(model_ids)
+    expected = full_cross_counts(domain, model_count=len(models))["total"]
+    ordinals = set(terminals)
+    if any(
+        isinstance(ordinal, bool)
+        or not isinstance(ordinal, int)
+        or not 0 <= ordinal < expected
+        for ordinal in ordinals
+    ):
+        raise MatrixRefusal("FULL_CROSS_RESULT_ORDINAL_INVALID")
+    terminal = len(ordinals)
+    if terminal > expected:
+        raise MatrixRefusal("FULL_CROSS_RESULT_COUNT_INVALID")
+    next_ordinal = 0
+    while next_ordinal in ordinals:
+        next_ordinal += 1
+    next_case = None
+    if next_ordinal < expected:
+        next_case = full_cross_case_at(
+            domain,
+            models,
+            next_ordinal,
+            catalog_sha256=catalog_sha256,
+            criticism_authority="defended_trial",
+        )
+    return {
+        "expected": expected,
+        "terminal": terminal,
+        "possible": sum(
+            row.get("status") == "trial_outcome"
+            and row.get("full_dispatch_reached") is True
+            for row in terminals.values()
+        ),
+        "impossible": sum(
+            row.get("status") == "configuration_refused"
+            for row in terminals.values()
+        ),
+        "provider_indeterminate": sum(
+            row.get("status") == "provider_indeterminate"
+            for row in terminals.values()
+        ),
+        "unexpected_error": sum(
+            row.get("status") == "unexpected_error"
+            for row in terminals.values()
+        ),
+        "interrupted": 0,
+        "pending": expected - terminal,
+        "next_ordinal": next_ordinal if next_case is not None else None,
+        "next_case_id": next_case["case_id"] if next_case is not None else None,
+    }
 
 
 def _unexpected_live_result(
@@ -2390,6 +2524,84 @@ def _iter_live_scope(
         if allowed is not None and row["prefix"] not in allowed:
             return
         yield row
+
+
+def _run_summary() -> int:
+    tranche = Path(__file__).resolve().parent
+    catalog = json.loads((tranche / "CATALOG.json").read_text(encoding="utf-8"))
+    model_ids = catalog.get("model_ids")
+    if (
+        catalog.get("schema") != "deepreason.ollama-authenticated-catalog.v1"
+        or not isinstance(model_ids, list)
+        or freeze_catalog(model_ids)["model_ids"] != model_ids
+        or hashlib.sha256(canonical_json(model_ids)).hexdigest()
+        != catalog.get("catalog_sha256")
+    ):
+        raise MatrixRefusal("CATALOG_SNAPSHOT_INVALID")
+
+    seat_domain_path = tranche / "MATRIX_DOMAIN.json"
+    seat_domain_sha256 = hashlib.sha256(seat_domain_path.read_bytes()).hexdigest()
+    load_domain(seat_domain_path)
+    seat_terminals = _load_live_terminals(
+        tranche / "home/live-seat-matrix",
+        domain_sha256=seat_domain_sha256,
+        catalog_sha256=catalog["catalog_sha256"],
+        secret=None,
+    )
+    anchor = model_ids[0]
+    projection_predicates = {
+        "judge-pairs": lambda row: (
+            row.get("critic") == anchor
+            and row.get("defender") == anchor
+            and row.get("variator") is None
+        ),
+        "core-courts": lambda row: (
+            row.get("critic") == anchor and row.get("variator") is None
+        ),
+        "no-variator": lambda row: row.get("variator") is None,
+        "seat-only": lambda row: True,
+    }
+    for name, predicate in projection_predicates.items():
+        expected = _live_scope_count(len(model_ids), name)
+        terminal = sum(
+            predicate(row["case_payload"]) for row in seat_terminals.values()
+        )
+        print(
+            f"PROJECTION={name} EXPECTED={expected} TERMINAL={terminal} "
+            f"PENDING={expected - terminal}"
+        )
+
+    full_cross_path = tranche / "FULL_CROSS_DOMAIN.json"
+    full_cross_bytes = full_cross_path.read_bytes()
+    full_cross_domain = load_full_cross_domain(full_cross_path)
+    full_cross_terminals = _load_full_cross_terminals(
+        tranche / "home/live-full-cross",
+        domain=full_cross_domain,
+        model_ids=model_ids,
+        domain_sha256=hashlib.sha256(full_cross_bytes).hexdigest(),
+        catalog_sha256=catalog["catalog_sha256"],
+    )
+    summary = full_cross_resume_summary(
+        full_cross_domain,
+        model_ids,
+        catalog_sha256=catalog["catalog_sha256"],
+        terminals=full_cross_terminals,
+    )
+    next_ordinal = (
+        str(summary["next_ordinal"])
+        if summary["next_ordinal"] is not None else "none"
+    )
+    next_case_id = summary["next_case_id"] or "none"
+    print(
+        f"EXPECTED={summary['expected']} TERMINAL={summary['terminal']} "
+        f"POSSIBLE={summary['possible']} IMPOSSIBLE={summary['impossible']} "
+        f"PROVIDER_INDETERMINATE={summary['provider_indeterminate']} "
+        f"UNEXPECTED_ERROR={summary['unexpected_error']} "
+        f"INTERRUPTED={summary['interrupted']} PENDING={summary['pending']} "
+        f"NEXT_ORDINAL={next_ordinal} NEXT_CASE_ID={next_case_id} "
+        "PEAK_IN_FLIGHT<=3 SCOPE=full-cross"
+    )
+    return 0
 
 
 def _run_live(*, limit: int | None, workers: int, through: str | None) -> int:
@@ -2517,6 +2729,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     subparsers.add_parser("structural")
     subparsers.add_parser("catalog")
     subparsers.add_parser("probe")
+    subparsers.add_parser("summarize")
     live_parser = subparsers.add_parser("live")
     live_parser.add_argument("--limit", type=int)
     live_parser.add_argument("--workers", type=int, default=3)
@@ -2534,6 +2747,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _run_catalog()
     elif args.command == "probe":
         return _run_probe()
+    elif args.command == "summarize":
+        return _run_summary()
     elif args.command == "live":
         return _run_live(
             limit=args.limit, workers=args.workers, through=args.through,
