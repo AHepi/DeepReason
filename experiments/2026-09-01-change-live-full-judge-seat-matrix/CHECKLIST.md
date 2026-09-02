@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=12D blockers=none
+State: next=12E blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -136,9 +136,13 @@ changes no shipped behavior or owner agreement.
       fail, so a linear resume implementation cannot satisfy the contract.
       Full output is in `proof/full-cross-tests-red.txt`.
 
-- [ ] 12D. (S2, S3, S5) [COMMIT] Push the full-cross RED tests and mutation proof.
+- [x] 12D. (S2, S3, S5) [COMMIT] Push the full-cross RED tests and mutation proof.
       done-when: local HEAD equals origin and `proof/full-cross-tests-red.txt`
       is present on the branch.
+
+      proof: `FULL_CROSS_RED_PUSHED=YES` at
+      `9c3a0bc1ec5ed96340438e40cf4221f078cb571f`; local HEAD equalled origin;
+      worktree empty.
 
 - [ ] 12E. (S2, S3, S5) Implement the exact lazy two-/three-judge full-cross
       generator without filtering any family, preflight, parser, or provider
