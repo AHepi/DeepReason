@@ -1,0 +1,66 @@
+$ python -u experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py soak
+[soak] stub provider on 127.0.0.1:43171 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/cycle-soak-6cr67lbg
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+[soak] built root: manifest 8266c0c0fb09a869…  criteria []
+[soak] qualified in 2.4s
+[soak] driving 8 cycles …
+
+========================================================================
+CYCLE SOAK -- case judge-matrix
+========================================================================
+  manifest sha256        8266c0c0fb09a86934bb02e386adf8e1f4dfa3b0b809444b624db510e2e87bab
+  criteria
+  attached evidence      True
+  cycles requested       8
+  qualification          rc=0 (2.4s)
+  drive                  102.9s, 11 progress events
+
+-- S1 run assertions ---------------------------------------------------
+  [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+  [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+  [PASS] A3-verify-root-clean         0 violation(s)
+  [PASS] A4-cycles-reached            reached cycle 8 of 8 requested; the deepest recorded death was cycle 2
+
+-- S2/S4 seam coverage -------------------------------------------------
+  [PART] D1-seat-contract         seat contracts with repairs
+         reason: seat contracts exercised, but zero repair tasks recorded: an un-induced stub always returns a schema-valid response, so no repair is ever requested. Re-run with --induce-repairs N (and --induce-repair-kind unparseable, or alternate, to reach whole_object_syntax as well as patch)
+         reached: {'workflow-contract-decomposition-transition-v1': 0, 'workflow-provider-attempt-v1': 31}
+  [PASS] D2-route-lease           lease-checked routes with tuning
+         reached: {'workflow-provider-attempt-v1': 31}
+  [PASS] D3-budget-auth           budget authorization
+         reached: {'workflow-dispatch-authorization-v1': 31}
+  [PASS] D4-reservation-bound     reservation/dispatch bounds
+         reached: {'workflow-token-reservation-v2': 31}
+
+-- record census -------------------------------------------------------
+      37  artifact
+       7  commitment
+       1  criticism-assignment-v1
+       1  criticism-attempt-v1
+       2  criticism-coverage-debt-v1
+      10  problem
+       2  warrant
+      31  workflow-context-exposure-v2
+      47  workflow-context-pack-plan-v1
+      31  workflow-dispatch-authorization-v1
+       1  workflow-model-classification-binding-v1
+      31  workflow-provider-attempt-v1
+       1  workflow-route-seat-model-classification-plan-v1
+       1  workflow-run-terminal-commitment-v1
+       1  workflow-run-terminal-result-draft-v1
+      25  workflow-semantic-admission-v1
+      31  workflow-token-reservation-v2
+     143  workflow-work-lifecycle-transition-v1
+      31  workflow-work-preparation-v1
+      25  workflow-work-terminal-v1
+
+[soak] report /tmp/cycle-soak-6cr67lbg/soak-report.json
+[soak] exit 0 (clean)
+SOAK_VERDICT=PASS CASE=judge-matrix CYCLES=8
+
+exit 0

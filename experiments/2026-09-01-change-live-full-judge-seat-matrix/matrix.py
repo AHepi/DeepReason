@@ -2,7 +2,7 @@
 """Offline domain, safety, and resume primitives for the full-judge matrix."""
 from __future__ import annotations
 import argparse, contextlib, fcntl, hashlib, itertools, json, os, re, struct
-import tempfile, threading, unicodedata
+import sys, tempfile, threading, unicodedata
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any, Callable, Iterable, Iterator, Mapping, Sequence
@@ -1033,6 +1033,58 @@ def persist_response_receipts(root: str | os.PathLike[str], prose: str, *,
     return {"prose_receipt": prose_receipt, "parser_receipt": parser_receipt}
 
 
+def install_soak_case() -> tuple[Any, Any]:
+    """Register this experiment's defended-court case in the shipped soak.
+
+    The committed driver remains byte-unchanged.  Its in-memory case registry
+    is the intended extension seam for a launch-specific configuration whose
+    root construction delegates to this experiment's ``soak_builder``.
+    """
+    tranche = Path(__file__).resolve().parent
+    repo = tranche.parents[1]
+    scripts = repo / "scripts"
+    scripts_text = str(scripts)
+    if scripts_text not in sys.path:
+        sys.path.insert(0, scripts_text)
+
+    import cycle_soak
+
+    case = cycle_soak.SoakCase(
+        id="judge-matrix",
+        description=(
+            "the full judge-matrix launch shape: a defended two-judge "
+            "cross-family court with critic, defender, variator, four "
+            "schools, and attached evidence"
+        ),
+        config_path=(
+            repo
+            / "experiments"
+            / "2026-08-12-live-grounded-extension-expansion"
+            / "run-config.yaml"
+        ),
+        builder="soak_builder",
+        attached_evidence=True,
+        default_cycles=8,
+        builder_dir=tranche,
+        delegates_to_builder=True,
+    )
+    cycle_soak.CASES[case.id] = case
+    return cycle_soak, case
+
+
+def _run_soak() -> int:
+    cycle_soak, case = install_soak_case()
+    result = cycle_soak.main(
+        ["--case", case.id, "--cycles", str(case.default_cycles)]
+    )
+    verdict = "PASS" if result == 0 else "FAIL"
+    print(
+        f"SOAK_VERDICT={verdict} CASE={case.id} "
+        f"CYCLES={case.default_cycles}"
+    )
+    return result
+
+
 def _enumerate_fixture() -> None:
     domain = load_domain(Path(__file__).with_name("MATRIX_DOMAIN.json"))
     model_count = len(domain["fixture_catalog"])
@@ -1066,11 +1118,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     enumerate_parser.add_argument("--fixture-catalog", action="store_true", required=True)
     full_cross_parser = subparsers.add_parser("full-cross-enumerate")
     full_cross_parser.add_argument("--fixture-catalog", action="store_true", required=True)
+    subparsers.add_parser("soak")
     args = parser.parse_args(argv)
     if args.command == "enumerate" and args.fixture_catalog:
         _enumerate_fixture()
     elif args.command == "full-cross-enumerate" and args.fixture_catalog:
         _enumerate_full_cross_fixture()
+    elif args.command == "soak":
+        return _run_soak()
     return 0
 if __name__ == "__main__":
     raise SystemExit(main())

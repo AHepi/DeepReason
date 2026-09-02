@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=13 blockers=none
+State: next=14 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -174,8 +174,15 @@ changes no shipped behavior or owner agreement.
       `270be24a10ff05ae5d73eb616a4e0d554c58ccec`; local HEAD equalled origin;
       worktree empty.
 
-- [ ] 13. (S6) Implement the experiment-owned Kimi-K3-free `cycle_soak.SoakCase` wrapper without editing `scripts/cycle_soak.py`.
+- [x] 13. (S6) Implement the experiment-owned Kimi-K3-free `cycle_soak.SoakCase` wrapper without editing `scripts/cycle_soak.py`.
       done-when: `python -u experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py soak` prints `SOAK_VERDICT=PASS CASE=judge-matrix CYCLES=8`.
+
+      proof: exit 0; `SOAK_VERDICT=PASS CASE=judge-matrix CYCLES=8`;
+      eight of eight managed cycles reached; terminal state `completed` with
+      `stop_reason='budget_exhausted'`; `verify_root` found 0 violations;
+      31 transaction-authorized provider attempts exercised the defended,
+      Kimi-K3-free two-judge launch shape. Full output is in
+      `proof/soak-green.txt`; `scripts/cycle_soak.py` remained byte-unchanged.
 
 - [ ] 14. (S3, S4, S5) Implement live endpoint construction, reasoning probes, the global three-call semaphore, typed result classification, and leak-safe persistence.
       done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q` ends with 0 failed, saved in `proof/all-matrix-tests-green.txt`.
