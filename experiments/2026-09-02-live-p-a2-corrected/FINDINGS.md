@@ -156,6 +156,73 @@ deviation must be written into the pre-registration rather than made quietly.
 
 ---
 
+## F5 — epoch 2 died on an ACCOUNT USAGE LIMIT, not on any contract (STOP)
+
+**Status:** blocking, and not routable by configuration. The operator must
+decide.
+
+**What the record shows.** Epoch 2 launched 22:03:13Z with 62 preflight
+checks and 0 failures, and its qualification refused 26 minutes later —
+against epoch 1's 96. It qualified **5 of 23 pairs, 100 of 460 cases**, and
+the failure code is the same everywhere:
+
+    ENDPOINT_HTTP_429   on ollama-deepseek-v4-pro-0813 and ollama-glm-5.3
+    circuit breaker OPENED on both endpoints at 20 block failures each,
+    skipping 120 cases per opening
+
+The provider's own message, read directly from a single confirming call
+after the run ended:
+
+    HTTP 429 -- "you (aaron_thyne) have reached your session usage limit,
+    upgrade for higher limits ... or add extra usage"
+
+No `retry-after` header is returned. This is an ACCOUNT USAGE CAP, not a
+transient per-second throttle and not a transport fault.
+
+**What this does NOT mean, and the distinction matters.**
+
+- **P6 is UNTESTED, not refuted.** The prediction was that the amended shape
+  qualifies 23 of 23 with the grounding-repair pair back above threshold.
+  That pair did fail — with `ENDPOINT_HTTP_429`, exactly like the twelve
+  other pairs and like contracts that had qualified 20/20 twice already. A
+  battery that cannot reach the provider tests nothing about a schema.
+- **F4 still stands.** Its isolation completed BEFORE the cap was reached and
+  carried its own control: cell B (P-A1's settings) scored 10/10 in the same
+  session as cells A/C/E scoring 2–4/10. A control that passes while its
+  siblings fail cannot be explained by a usage cap that would have failed all
+  four alike.
+- **Nothing about the amended configuration is implicated.** It cleared 62
+  preflight checks and soaked green over 24 cycles before launch.
+
+**Honest accounting of what consumed the budget, including my own part.**
+Three things ran against this account today, in order:
+
+| what | scale |
+|---|---|
+| epoch 1 qualification (full battery, 4 models × 23 pairs × 20 cases) | ~1 100+ completions |
+| the F4 isolation probe (6 cells × 10 cases, with repair attempts) | ~100–180 completions |
+| epoch 2 qualification, until the breaker opened | ~100+ completions |
+
+The two full batteries dominate, but **the isolation probe was mine and it
+was not free.** It was the right call — it converted a bare failure into the
+measured attribution F4 rests on, and the operator's standing law prefers
+generated evidence to agent reasoning — but it is recorded here as a
+contributor rather than left out.
+
+**What it costs to retry.** Nothing in the tranche needs rebuilding: the
+amended configuration is committed, soaked green, and preflight-clean at
+62/62. A relaunch needs only the cap to clear, and then repeats the ~96
+minute qualification (the route change already minted a new subject digest,
+so nothing is cached) plus up to ~5 hours of reasoning.
+
+**Why this window did not retry.** Relaunching into an active cap would fail
+identically and spend the tranche's remaining credibility on a foreseeable
+repeat. The instruction's STOP list names exactly this case: a refusal that
+cannot be routed around by configuration, and any temptation to relaunch
+after a typed failure.
+
+---
+
 ## F2 — `SPLIT_BUDGET_SEAT_PROTOCOL` cannot be read off the configuration file (OBSERVATION, working as designed)
 
 **Status:** not a defect. Recorded because it cost this tranche a probe and

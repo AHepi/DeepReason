@@ -1,0 +1,5329 @@
+{
+  "circuit_breaker": {
+    "code_prefixes": [
+      "ENDPOINT_"
+    ],
+    "enabled": true,
+    "minimum_block_failures": 20,
+    "notices": [],
+    "openings": [
+      {
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "failure_code": "ENDPOINT_HTTP_429",
+        "observed_block_failures": 20,
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "skipped_case_count": 120
+      },
+      {
+        "endpoint_id": "ollama-glm-5.3",
+        "failure_code": "ENDPOINT_HTTP_429",
+        "observed_block_failures": 20,
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "skipped_case_count": 120
+      },
+      {
+        "endpoint_id": "ollama-glm-5.3",
+        "failure_code": "ENDPOINT_HTTP_429",
+        "observed_block_failures": 20,
+        "route_sha256": "f980e8aa5158c2e6c7f0a1aea254ac88fddac90243db7da3ab55647938ab8f94",
+        "skipped_case_count": 20
+      },
+      {
+        "endpoint_id": "ollama-gpt-oss-120b",
+        "failure_code": "ENDPOINT_HTTP_429",
+        "observed_block_failures": 20,
+        "route_sha256": "d0eee7ee858ef814daeaadf03992d0569f763b8c25ab337e296c3f0647de5bff",
+        "skipped_case_count": 0
+      },
+      {
+        "endpoint_id": "ollama-qwen3.5-397b",
+        "failure_code": "ENDPOINT_HTTP_429",
+        "observed_block_failures": 20,
+        "route_sha256": "56fffbf01e94cbde04a29a5f15c687670d814f195bc0c3dce24fd0852372af3a",
+        "skipped_case_count": 0
+      }
+    ]
+  },
+  "eventual_valid_minimum_per_pair": 19,
+  "pair_re_exercise_limit": 3,
+  "pairs": [
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        }
+      ],
+      "eventual_valid_count": 20,
+      "first_pass_valid_count": 20,
+      "pair": {
+        "contract_id": "batch-critic.v2",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "family": "deepseek",
+        "model_id": "deepseek-v4-pro:0813",
+        "model_revision": "deepseek-v4-pro:0813",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:5149c88510b6e090c95939cedb9153196f7498fe58cefad7147a3bef8a793343",
+        "provider": "ollama",
+        "role": "argumentative_critic",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0
+      },
+      "qualified": true,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 20
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        }
+      ],
+      "eventual_valid_count": 20,
+      "first_pass_valid_count": 20,
+      "pair": {
+        "contract_id": "bridge.composition-batch.v1",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "family": "deepseek",
+        "model_id": "deepseek-v4-pro:0813",
+        "model_revision": "deepseek-v4-pro:0813",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:71e1d02c34bf18348dcd8636a588c3bd7bd9a76f48005d5c7b6eafbd2d64c001",
+        "provider": "ollama",
+        "role": "thesis",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0
+      },
+      "qualified": true,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 20
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        }
+      ],
+      "eventual_valid_count": 20,
+      "first_pass_valid_count": 20,
+      "pair": {
+        "contract_id": "bridge.composition.v2",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "family": "deepseek",
+        "model_id": "deepseek-v4-pro:0813",
+        "model_revision": "deepseek-v4-pro:0813",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:0b0527554f98720239692e3db889ba2f1f6224559a9a8d36bb344b3fd708b908",
+        "provider": "ollama",
+        "role": "thesis",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0
+      },
+      "qualified": true,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 20
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": true,
+          "first_pass_valid": false,
+          "repair_count": 1,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        }
+      ],
+      "eventual_valid_count": 20,
+      "first_pass_valid_count": 19,
+      "pair": {
+        "contract_id": "bridge.ledger-batch.v1",
+        "endpoint_id": "ollama-glm-5.3",
+        "family": "glm",
+        "model_id": "glm-5.3",
+        "model_revision": "glm-5.3",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:2dd967a0235f8b442f5bec7b0f67f909818a6365d8bdeccac905db4d2b233607",
+        "provider": "ollama",
+        "role": "summarizer",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 0
+      },
+      "qualified": true,
+      "repair_count": 1,
+      "scope_violations": 0,
+      "semantic_admission_count": 20
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": true,
+          "first_pass_valid": false,
+          "repair_count": 1,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        }
+      ],
+      "eventual_valid_count": 20,
+      "first_pass_valid_count": 19,
+      "pair": {
+        "contract_id": "bridge.ledger.v3",
+        "endpoint_id": "ollama-glm-5.3",
+        "family": "glm",
+        "model_id": "glm-5.3",
+        "model_revision": "glm-5.3",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:08cf1d6676c076a49c765aa316916a98ed38e87ca5356b6fe4ae7672bcba9aff",
+        "provider": "ollama",
+        "role": "summarizer",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 0
+      },
+      "qualified": true,
+      "repair_count": 1,
+      "scope_violations": 0,
+      "semantic_admission_count": 20
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "config-referee.v1",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "family": "deepseek",
+        "model_id": "deepseek-v4-pro:0813",
+        "model_revision": "deepseek-v4-pro:0813",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:096d6406eec72516400843748890018321809b2e8befec63c27b82df5f7bda65",
+        "provider": "ollama",
+        "role": "argumentative_critic",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "conjecturer.atomic-candidate.v1",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "family": "deepseek",
+        "model_id": "deepseek-v4-pro:0813",
+        "model_revision": "deepseek-v4-pro:0813",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:101b121cd890841b8109eb21dab55439350e4e748c479f81c8e86f98d2b92bbf",
+        "provider": "ollama",
+        "role": "conjecturer",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "conjecturer.atomic-candidate.v1",
+        "endpoint_id": "ollama-glm-5.3",
+        "family": "glm",
+        "model_id": "glm-5.3",
+        "model_revision": "glm-5.3",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:f014a4b75c0bf3250d770068d38f76b386a308fad216e00dd85cccafb35a9875",
+        "provider": "ollama",
+        "role": "conjecturer",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 1
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "conjecturer.turn.v6",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "family": "deepseek",
+        "model_id": "deepseek-v4-pro:0813",
+        "model_revision": "deepseek-v4-pro:0813",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:486cd092b4ca9a85527c1338a242dd6415d1b8aa60cfc2bb9829062643dab58d",
+        "provider": "ollama",
+        "role": "conjecturer",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "conjecturer.turn.v6",
+        "endpoint_id": "ollama-glm-5.3",
+        "family": "glm",
+        "model_id": "glm-5.3",
+        "model_revision": "glm-5.3",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:fd8d3d2125febb4d421a6dda8f336aa0b0681aace076bdb2a2bf338dc62ad50c",
+        "provider": "ollama",
+        "role": "conjecturer",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 1
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "critic.atomic-target.v1",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "family": "deepseek",
+        "model_id": "deepseek-v4-pro:0813",
+        "model_revision": "deepseek-v4-pro:0813",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:73c17464dff8f08774f319e1c4bf0de1df65829f7bf769f505cb4e9314ab3e02",
+        "provider": "ollama",
+        "role": "argumentative_critic",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "defender.direct.v1",
+        "endpoint_id": "ollama-glm-5.3",
+        "family": "glm",
+        "model_id": "glm-5.3",
+        "model_revision": "glm-5.3",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:f1eeb017c634dd95b3ca0ef6f99a8ca1a229221080fb0b44a8c39f5b953bd071",
+        "provider": "ollama",
+        "role": "defender",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "groundingrepairwirev1.direct.v1",
+        "endpoint_id": "ollama-glm-5.3",
+        "family": "glm",
+        "model_id": "glm-5.3",
+        "model_revision": "glm-5.3",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:3c0786be2fcacf63fb87d4f936798cf69e6c9bd9f0044f655d098bc7be7f8a6a",
+        "provider": "ollama",
+        "role": "grounding_reviewer",
+        "route_sha256": "f980e8aa5158c2e6c7f0a1aea254ac88fddac90243db7da3ab55647938ab8f94",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "groundingverdictwirev1.direct.v1",
+        "endpoint_id": "ollama-glm-5.3",
+        "family": "glm",
+        "model_id": "glm-5.3",
+        "model_revision": "glm-5.3",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:530ce1bbcf4d6acb150b10a25a8fa1d4fd1b7ef9d845a859ac2496533e328923",
+        "provider": "ollama",
+        "role": "grounding_reviewer",
+        "route_sha256": "f980e8aa5158c2e6c7f0a1aea254ac88fddac90243db7da3ab55647938ab8f94",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "judgeruling.direct.v1",
+        "endpoint_id": "ollama-qwen3.5-397b",
+        "family": "qwen",
+        "model_id": "qwen3.5:397b",
+        "model_revision": "qwen3.5:397b",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:a81a6760b84cda025572083ec194d9edf4956c1eb032a1627967e656def84110",
+        "provider": "ollama",
+        "role": "judge",
+        "route_sha256": "56fffbf01e94cbde04a29a5f15c687670d814f195bc0c3dce24fd0852372af3a",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "judgeruling.direct.v1",
+        "endpoint_id": "ollama-gpt-oss-120b",
+        "family": "openai-gpt",
+        "model_id": "gpt-oss:120b",
+        "model_revision": "gpt-oss:120b",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:2625c4521e71d465a4ac40c7982e76820cbfe3fe7dc9543a5dd86e34d21460db",
+        "provider": "ollama",
+        "role": "judge",
+        "route_sha256": "d0eee7ee858ef814daeaadf03992d0569f763b8c25ab337e296c3f0647de5bff",
+        "seat": 1
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "scratch.block.compact.v1",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "family": "deepseek",
+        "model_id": "deepseek-v4-pro:0813",
+        "model_revision": "deepseek-v4-pro:0813",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:209b362615320c2932860f6e6db4c70180ce5d25a1c17adb6cecd7d15aef4ed0",
+        "provider": "ollama",
+        "role": "conjecturer",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "scratch.block.minimal.v1",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "family": "deepseek",
+        "model_id": "deepseek-v4-pro:0813",
+        "model_revision": "deepseek-v4-pro:0813",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:80e73a1ae9fc2c89c8737659bb2c0be8e72974a5ebcd16094b17008e6a827c7f",
+        "provider": "ollama",
+        "role": "conjecturer",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "scratch.cluster-guide.compact.v1",
+        "endpoint_id": "ollama-glm-5.3",
+        "family": "glm",
+        "model_id": "glm-5.3",
+        "model_revision": "glm-5.3",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:20b0d990cc386ac918d9f8fa60e164d3b2c3b47d7e80c37f8283bd1f1d367f9d",
+        "provider": "ollama",
+        "role": "summarizer",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "scratch.cluster-guide.minimal.v1",
+        "endpoint_id": "ollama-glm-5.3",
+        "family": "glm",
+        "model_id": "glm-5.3",
+        "model_revision": "glm-5.3",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:9670e835a3af855078df925b226c79b5a967ec9756eb9643bfae8e3af8a4249d",
+        "provider": "ollama",
+        "role": "summarizer",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "scratch.link.compact.v1",
+        "endpoint_id": "ollama-glm-5.3",
+        "family": "glm",
+        "model_id": "glm-5.3",
+        "model_revision": "glm-5.3",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:279e3086afa5af3cbcf9bb6f4cae4117723cd7ec01edefb7feff2d6262b87309",
+        "provider": "ollama",
+        "role": "synthesizer",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "scratch.link.minimal.v1",
+        "endpoint_id": "ollama-glm-5.3",
+        "family": "glm",
+        "model_id": "glm-5.3",
+        "model_revision": "glm-5.3",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:46a9bb2cf7bf2a97b4cfef4a876cc95c0224d91f31d413ac9b771ef9977218be",
+        "provider": "ollama",
+        "role": "synthesizer",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    },
+    {
+      "alias_failures": 0,
+      "cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": false,
+          "failure_code": "CIRCUIT_OPEN_ENDPOINT_HTTP_429",
+          "first_pass_valid": false,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": false
+        }
+      ],
+      "eventual_valid_count": 0,
+      "first_pass_valid_count": 0,
+      "pair": {
+        "contract_id": "variator.direct.v1",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "family": "deepseek",
+        "model_id": "deepseek-v4-pro:0813",
+        "model_revision": "deepseek-v4-pro:0813",
+        "output_mechanism": "json_text",
+        "pair_id": "sha256:466bf50ac913726a441400f96f36a303e62b169645db2e63dc2266d61488b29d",
+        "provider": "ollama",
+        "role": "variator",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0
+      },
+      "qualified": false,
+      "repair_count": 0,
+      "scope_violations": 0,
+      "semantic_admission_count": 0
+    }
+  ],
+  "production_contracts": true,
+  "representative_cases_per_pair": 20,
+  "route_seat_model_classification": {
+    "algorithm": "exact-production-contract-qualification.v1",
+    "algorithm_version": 1,
+    "entries": [
+      {
+        "authorized_contract_ids": [
+          "batch-critic.v2",
+          "config-referee.v1",
+          "critic.atomic-target.v1"
+        ],
+        "behavioral_grant_sha256": "10cf487370eac36b57e3f8c81d6ae9fab20a66f98fff292e21b709e34acf4100",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "evidence_pair_ids": [
+          "sha256:096d6406eec72516400843748890018321809b2e8befec63c27b82df5f7bda65",
+          "sha256:5149c88510b6e090c95939cedb9153196f7498fe58cefad7147a3bef8a793343",
+          "sha256:73c17464dff8f08774f319e1c4bf0de1df65829f7bf769f505cb4e9314ab3e02"
+        ],
+        "role": "argumentative_critic",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0,
+        "selected_class": "unqualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [
+          "conjecturer.atomic-candidate.v1",
+          "conjecturer.turn.v6",
+          "scratch.block.compact.v1",
+          "scratch.block.minimal.v1"
+        ],
+        "behavioral_grant_sha256": "dc3cd2af457bacd8ad396b43d62cef69b5b039203d6228e613ceacaaf514fc9d",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "evidence_pair_ids": [
+          "sha256:101b121cd890841b8109eb21dab55439350e4e748c479f81c8e86f98d2b92bbf",
+          "sha256:209b362615320c2932860f6e6db4c70180ce5d25a1c17adb6cecd7d15aef4ed0",
+          "sha256:486cd092b4ca9a85527c1338a242dd6415d1b8aa60cfc2bb9829062643dab58d",
+          "sha256:80e73a1ae9fc2c89c8737659bb2c0be8e72974a5ebcd16094b17008e6a827c7f"
+        ],
+        "role": "conjecturer",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0,
+        "selected_class": "unqualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [
+          "conjecturer.atomic-candidate.v1",
+          "conjecturer.turn.v6"
+        ],
+        "behavioral_grant_sha256": "08edb43036262acb82541eb8090c746aab52e33247803ac4c91ecb7cc446c7d4",
+        "endpoint_id": "ollama-glm-5.3",
+        "evidence_pair_ids": [
+          "sha256:f014a4b75c0bf3250d770068d38f76b386a308fad216e00dd85cccafb35a9875",
+          "sha256:fd8d3d2125febb4d421a6dda8f336aa0b0681aace076bdb2a2bf338dc62ad50c"
+        ],
+        "role": "conjecturer",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 1,
+        "selected_class": "unqualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [
+          "defender.direct.v1"
+        ],
+        "behavioral_grant_sha256": "95e5e8a99f3ba51319a4b990f42b37443ae45c2aeac790233722ea90afaa7543",
+        "endpoint_id": "ollama-glm-5.3",
+        "evidence_pair_ids": [
+          "sha256:f1eeb017c634dd95b3ca0ef6f99a8ca1a229221080fb0b44a8c39f5b953bd071"
+        ],
+        "role": "defender",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 0,
+        "selected_class": "unqualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [
+          "groundingrepairwirev1.direct.v1",
+          "groundingverdictwirev1.direct.v1"
+        ],
+        "behavioral_grant_sha256": "5e2029e3f8b50dbd18353a2a537f2f1e3e33f46a45fcc67acee33ed5446d8e29",
+        "endpoint_id": "ollama-glm-5.3",
+        "evidence_pair_ids": [
+          "sha256:3c0786be2fcacf63fb87d4f936798cf69e6c9bd9f0044f655d098bc7be7f8a6a",
+          "sha256:530ce1bbcf4d6acb150b10a25a8fa1d4fd1b7ef9d845a859ac2496533e328923"
+        ],
+        "role": "grounding_reviewer",
+        "route_sha256": "f980e8aa5158c2e6c7f0a1aea254ac88fddac90243db7da3ab55647938ab8f94",
+        "seat": 0,
+        "selected_class": "unqualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [
+          "judgeruling.direct.v1"
+        ],
+        "behavioral_grant_sha256": "9504aa4305cc4a0f41ed9fa2f5d3329c637c41947118d403c9c90b1ed645c4db",
+        "endpoint_id": "ollama-qwen3.5-397b",
+        "evidence_pair_ids": [
+          "sha256:a81a6760b84cda025572083ec194d9edf4956c1eb032a1627967e656def84110"
+        ],
+        "role": "judge",
+        "route_sha256": "56fffbf01e94cbde04a29a5f15c687670d814f195bc0c3dce24fd0852372af3a",
+        "seat": 0,
+        "selected_class": "unqualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [
+          "judgeruling.direct.v1"
+        ],
+        "behavioral_grant_sha256": "7f467d1199e760a3ee7bb103e4a8ed7b7fb0077ebf1d0dcb33fdeb5306ace483",
+        "endpoint_id": "ollama-gpt-oss-120b",
+        "evidence_pair_ids": [
+          "sha256:2625c4521e71d465a4ac40c7982e76820cbfe3fe7dc9543a5dd86e34d21460db"
+        ],
+        "role": "judge",
+        "route_sha256": "d0eee7ee858ef814daeaadf03992d0569f763b8c25ab337e296c3f0647de5bff",
+        "seat": 1,
+        "selected_class": "unqualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [],
+        "behavioral_grant_sha256": "e10f0a9d75785f9c70a5ecf5857b111ac0e2e4535df62e0d29ac8a3a841f2438",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "evidence_pair_ids": [],
+        "role": "property_designer",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0,
+        "selected_class": "inactive_no_authorized_contract"
+      },
+      {
+        "authorized_contract_ids": [
+          "bridge.ledger-batch.v1",
+          "bridge.ledger.v3",
+          "scratch.cluster-guide.compact.v1",
+          "scratch.cluster-guide.minimal.v1"
+        ],
+        "behavioral_grant_sha256": "c819b1be8b9623a765cc0b6f2e5127c413a2b2f106c206ac689fee0939688359",
+        "endpoint_id": "ollama-glm-5.3",
+        "evidence_pair_ids": [
+          "sha256:08cf1d6676c076a49c765aa316916a98ed38e87ca5356b6fe4ae7672bcba9aff",
+          "sha256:20b0d990cc386ac918d9f8fa60e164d3b2c3b47d7e80c37f8283bd1f1d367f9d",
+          "sha256:2dd967a0235f8b442f5bec7b0f67f909818a6365d8bdeccac905db4d2b233607",
+          "sha256:9670e835a3af855078df925b226c79b5a967ec9756eb9643bfae8e3af8a4249d"
+        ],
+        "role": "summarizer",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 0,
+        "selected_class": "unqualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [
+          "scratch.link.compact.v1",
+          "scratch.link.minimal.v1"
+        ],
+        "behavioral_grant_sha256": "3ab39258472011ae8b26c8a4b86c3abb65dea064f11feaf4e506449d6781f0e2",
+        "endpoint_id": "ollama-glm-5.3",
+        "evidence_pair_ids": [
+          "sha256:279e3086afa5af3cbcf9bb6f4cae4117723cd7ec01edefb7feff2d6262b87309",
+          "sha256:46a9bb2cf7bf2a97b4cfef4a876cc95c0224d91f31d413ac9b771ef9977218be"
+        ],
+        "role": "synthesizer",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 0,
+        "selected_class": "unqualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [
+          "bridge.composition-batch.v1",
+          "bridge.composition.v2"
+        ],
+        "behavioral_grant_sha256": "4c1d88ddba6a9ad6a6fb188ca5eb49b676faeb6ad54e62edfe6a9557d05e2305",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "evidence_pair_ids": [
+          "sha256:0b0527554f98720239692e3db889ba2f1f6224559a9a8d36bb344b3fd708b908",
+          "sha256:71e1d02c34bf18348dcd8636a588c3bd7bd9a76f48005d5c7b6eafbd2d64c001"
+        ],
+        "role": "thesis",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0,
+        "selected_class": "qualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [
+          "variator.direct.v1"
+        ],
+        "behavioral_grant_sha256": "0ac9e9f11373abc5cb515861d14ec6fe3476b731db3786b802700ba5516ebdc4",
+        "endpoint_id": "ollama-deepseek-v4-pro-0813",
+        "evidence_pair_ids": [
+          "sha256:466bf50ac913726a441400f96f36a303e62b169645db2e63dc2266d61488b29d"
+        ],
+        "role": "variator",
+        "route_sha256": "5e62ebd44dfae46e2dc0de76bff971390abb364096169f2d1280eb97d3e57ce2",
+        "seat": 0,
+        "selected_class": "unqualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [],
+        "behavioral_grant_sha256": "1d6802ebca7032546d8aa6d4a0e00d458d5c93ed728cfb1a87b960d76effb48b",
+        "endpoint_id": "ollama-glm-5.3",
+        "evidence_pair_ids": [],
+        "role": "vision_critic",
+        "route_sha256": "caec95cbd9104efff2445d051a3bea6c58275ec0761045c3c576a8625c5942a3",
+        "seat": 0,
+        "selected_class": "inactive_no_authorized_contract"
+      }
+    ],
+    "id": "sha256:71040a30d2c9905f01a0445d00bdc4a887d7df4e8595f15ee5764b52957f76b8",
+    "manifest_digest": "1b89ed64e050c354aacd4487ab8fd2106837a45620d6464d6fb1d4b481090078",
+    "qualification_evidence_sha256": "8d7135ad0e5b839b931078bd9c7d90ee6273ad73ba70780c049f9ba2d381fbcf",
+    "schema": "workflow.route-seat-model-classification-plan.v1"
+  },
+  "run_manifest_schema_version": 6,
+  "run_manifest_sha256": "1b89ed64e050c354aacd4487ab8fd2106837a45620d6464d6fb1d4b481090078",
+  "schema": "deepreason-production-contract-doctor-v1",
+  "summary": {
+    "alias_failures": 0,
+    "case_count": 460,
+    "eventual_valid_count": 100,
+    "first_pass_valid_count": 98,
+    "pair_count": 23,
+    "qualified": false,
+    "qualified_pair_count": 5,
+    "re_exercised_pair_count": 0,
+    "repair_count": 2,
+    "scope_violations": 0,
+    "semantic_admission_count": 100
+  }
+}

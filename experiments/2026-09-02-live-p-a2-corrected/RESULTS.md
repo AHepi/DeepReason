@@ -205,3 +205,56 @@ by design, and this tranche did not add one. The five pre-registered
 predictions P1–P5 are **unscored**: none of them can be evaluated, because no
 reasoning cycle ran. That is recorded as an unscored outcome, not as a
 negative one.
+
+---
+
+## 2026-09-02 · Segment 5 — the amendment shipped, and epoch 2 died on an account usage cap
+
+**What the record shows.** The operator ruled for the per-seat remedy, and it
+was implemented, gated and rehearsed before relaunch: `grounding_reviewer`
+alone runs at glm-5.3's default effort while the five generation seats keep
+`low`; the cap stays 32768 on all six because the isolation says the cap is
+irrelevant here. The preflight gates the exception **in both directions** — a
+generation seat that lost `low` fails it, and the reviewer seat carrying `low`
+fails it too — and epoch 2 cleared **62 checks, 0 failures**. The amended
+shape soaked GREEN beforehand: 24 of 24 cycles, `completed` /
+`budget_exhausted`, `verify_root` 0 violations.
+
+Epoch 2 launched 22:03:13Z and its qualification refused 26 minutes later,
+against epoch 1's 96. **5 of 23 pairs, 100 of 460 cases**, and one failure
+code throughout: `ENDPOINT_HTTP_429`, with the circuit breaker opening on both
+endpoints at 20 block failures each and skipping 120 cases per opening. One
+confirming call after the run returned the provider's own text: *"you
+(aaron_thyne) have reached your session usage limit"*, with no `retry-after`
+header. **An account usage cap, not a transport fault and not a contract
+failure.**
+
+**P6 is UNTESTED, not refuted — and the distinction is the whole point of
+pre-registering it.** P6 predicted 23 of 23 with the grounding-repair pair
+back above threshold. That pair did fail, but with `ENDPOINT_HTTP_429`,
+exactly like twelve other pairs and like contracts that had already qualified
+20/20 twice. A battery that cannot reach the provider says nothing about a
+schema. Recording this as a refutation would have been the easiest and most
+wrong reading available.
+
+**F4 survives it, on the strength of its own control.** The isolation
+completed before the cap and carried cell B — P-A1's settings — at 10/10 in
+the same session in which cells A, C and E scored 2, 3 and 4 of 10. A usage
+cap would have failed all four alike; a control that passes while its siblings
+fail cannot be explained by one.
+
+**Owning the part that was mine.** Three things ran against the account today:
+epoch 1's full battery (~1 100+ completions), the F4 isolation probe
+(~100–180), and epoch 2 until the breaker opened (~100+). The batteries
+dominate, but the probe was mine and it was not free. It was still the right
+call — it converted a bare failure into a measured attribution, and the
+operator's standing law prefers generated evidence to agent reasoning — but it
+is recorded as a contributor rather than quietly omitted.
+
+**Residue.** P1–P5 remain **unscored**: no reasoning cycle has run in either
+epoch. P6 is unscored too. What this tranche has proven is real but entirely
+pre-cycle: the configuration is correct and gated, the monitor sees what
+P-A1's could not, both soaks are green, and two defects are measured (F4's
+per-contract reasoning sensitivity, F1's recurring stub gap). What it has NOT
+produced is the live before/after against P-A1 that it was built for. Nothing
+in the tranche needs rebuilding to get it — only the cap to clear.
