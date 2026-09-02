@@ -223,6 +223,27 @@ after a typed failure.
 
 ---
 
+## F6 — the snapshot loop can race the operator's own commits after its driver dies (OPERATIONAL, mine)
+
+**Status:** minor, mine, and worth one paragraph so the next window does not
+lose a commit message to it.
+
+`snapshot_loop_pa2.sh` checks whether its driver is still alive only AFTER
+completing a commit-and-push cycle, and it sleeps 300 s between cycles. So
+there is a window of up to five minutes after the ladder exits in which the
+loop is still committing. In that window it (a) took `.git/index.lock` while
+this window was mid-commit, producing a spurious "another git process seems to
+be running", and (b) swept this window's FINDINGS/RESULTS edits into a commit
+titled `P-A2 live-run snapshot`, so the reasoning for F5 landed in the
+artifact but not in the commit message that carries it.
+
+Neither costs evidence — the content is committed and the artifacts are the
+authority, not the message — and the pushed commit was NOT rewritten to fix
+cosmetics. The fix, for whoever writes the next loop: test the driver's
+liveness at the TOP of the loop body, before the commit, not at the bottom.
+
+---
+
 ## F2 — `SPLIT_BUDGET_SEAT_PROTOCOL` cannot be read off the configuration file (OBSERVATION, working as designed)
 
 **Status:** not a defect. Recorded because it cost this tranche a probe and
