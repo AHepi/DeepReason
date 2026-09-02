@@ -145,3 +145,59 @@ tranche — do not manufacture a fix.
 
 OUT OF SCOPE: hv (fixed); the frontier sort; the eleven gated phases.
 ```
+
+---
+
+## P4 — the deferral marker is a signal emitted through a variable, so the registry cannot see it
+
+WHAT: `v6-model-phase-deferred.v1` is bound to a local `marker` variable before
+`record_measure` (`scheduler/scheduler.py:724`), and `tests/test_signals.py`
+AST-scans only *literal* first arguments — so the one signal that stands in for
+an absent transaction is neither scanned nor registered, while
+`verification/report.py` reads it back. Already recorded in
+`docs/map/SEAM-scheduler-x-workflow.md` Traps ("observed on 08dcdf3c ... not
+fixed there or here"), re-confirmed still true this tranche. Independent of the
+hv goal in both directions, so not folded in.
+
+```
+EXECUTOR WINDOW — DEFECT TRANCHE: a signal emitted through a variable is
+invisible to the signal registry
+=========================================================================
+Read CLAUDE.md fully, then load deepreason-orchestrator, dr-drive-harness and
+dr-explain-to-operator. Start at dr-set-goal. Commit and push at every phase
+boundary on your assigned branch.
+
+THE DEFECT: `docs/map/SEAM-scheduler-x-workflow.md`'s Traps records it and the
+code still does it — `scheduler/scheduler.py:724` binds the signal name
+`v6-model-phase-deferred.v1` to a local variable before passing it to
+`record_measure`, and `tests/test_signals.py` scans only literal first
+arguments, so `is_known("v6-model-phase-deferred.v1")` is False while
+`verification/report.py` reads the marker back. The debt is visible in reports
+and invisible to the registry. The trap states the generalisation: ANY signal
+emitted through a variable has the same hole.
+
+THE LAW: the signal registry is a CONTRACT (2026-08-14, operator verbatim) --
+"a signal is anything declaring name, unit, producer-agnostic semantics, and a
+staleness bound; new setups add signals by declaration through this typed
+channel". A signal the registry cannot see has not been declared.
+
+GOAL (for dr-set-goal to bound): make the census that decides registry
+membership see signals emitted through a variable, so
+is_known("v6-model-phase-deferred.v1") is True and the marker carries a
+declaration. Falsifiable offline: a test that goes RED on the current tree
+because the marker is unregistered, GREEN after; plus a scan-level test that
+goes RED if a NEW variable-emitted signal is added without declaration -- the
+class, not the instance, is the deliverable.
+
+READ FIRST: docs/map/INV-signal-contract.md (the three layers: FROZEN change
+protocol, VERSIONED registry and policy, FREE parameters) and
+docs/map/REC-add-signal.md. Follow the recipe rather than improvising.
+
+OUT OF SCOPE: the v6 dispatch gate itself (fixed by
+experiments/2026-09-02-defect-hv-v6-reachability/); any change to what the
+marker MEANS or when it fires.
+
+VALIDATION: full gate 0 failed; docs_verify full mode in the same commit; the
+SEAM-scheduler-x-workflow Traps entry rewritten to say when it was fixed, never
+deleted.
+```
