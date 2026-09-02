@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=33 blockers=full-repository-gate-red,authoritative-docs-red,full-cross-pending
+State: next=replan blockers=full-repository-gate-red,authoritative-docs-red,full-cross-pending
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -376,5 +376,15 @@ changes no shipped behavior or owner agreement.
       step-33 final-evidence action; execution stops except for that required
       evidence checkpoint and credential teardown.
 
-- [ ] 33. (S1-S7) [COMMIT] Push the final evidence checkpoint.
+- [x] 33. (S1-S7) [COMMIT] Push the final evidence checkpoint.
       done-when: `git status --porcelain` is empty, local HEAD equals `origin/codex/live-full-judge-seat-matrix-20260901`, and `main` has not been updated or merged.
+
+      proof: immediately before the final checkpoint, local HEAD and the
+      isolated origin ref both equalled
+      `1eaca70e67cbbd692b8177af71c1f971a3f6b4fb`, the worktree was clean,
+      merge count since the frozen base was `0`, no local `main` ref existed,
+      and cached `origin/main` remained
+      `971860c42a70b7b4f3d76e3ef995906b098c64c4`. The final non-force branch
+      update contains this completed checklist and `VALIDATION.md`; local and
+      remote tree/commit equality and the empty worktree are verified after
+      the update. No merge, rebase, pull, or main-ref update is performed.
