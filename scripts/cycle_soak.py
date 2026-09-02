@@ -70,6 +70,7 @@ FRONTIER = REPO / "experiments" / "2026-08-25-change-constructive-frontier"
 REMATCH = REPO / "experiments" / "2026-08-26-pc2-rematch"
 SYMMETRIC = REPO / "experiments" / "2026-08-27-pc2b-symmetric-reasoning"
 SPLIT_LEGS = REPO / "experiments" / "2026-08-27-defect-split-leg-recording"
+HV_GRANT = REPO / "experiments" / "2026-09-02-defect-hv-v6-reachability"
 
 # The deepest cycle any of the four recorded deaths reached.  A soak that
 # stops at or below this depth has not looked where they died.
@@ -295,6 +296,30 @@ CASES: dict[str, SoakCase] = {
         delegates_to_builder=True,
         default_cycles=24,
         default_token_budget=3_000_000,
+    ),
+    "hv-grant": SoakCase(
+        id="hv-grant",
+        description=(
+            "the SOLO shape that GRANTS its variator seat: the reach-rich "
+            "config with the three fields that mint a behavioural contract "
+            "grant (LEGACY_CRITICISM_ENABLED false, "
+            "ADJUDICATION_STATUS_AUTHORITY_ENABLED true, "
+            "ENGAGED_CRITICISM_AUTHORITY defended_trial), and nothing else "
+            "moved. The one case in this file whose variator[0] holds "
+            "`variator.direct.v1`, and therefore the one that can measure "
+            "`hv` at all -- every other committed case compiles a manifest "
+            "with an EMPTY variator contract list, which is why no soak had "
+            "ever exercised the granted path. `reach-rich` is its control: "
+            "the same eleven roles on the same route, minus those three "
+            "lines"
+        ),
+        config_path=HV_GRANT / "run-config-hv-grant.yaml",
+        # The reach-rich builder, imported rather than copied: the shape under
+        # test differs from reach-rich by three config lines, so a second
+        # builder could only drift away from it.
+        builder="build_manifest",
+        builder_dir=REACH_RICH,
+        attached_evidence=False,
     ),
     "reach-rich": SoakCase(
         id="reach-rich",

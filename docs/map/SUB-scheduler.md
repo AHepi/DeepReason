@@ -1,5 +1,5 @@
 <!-- DR-SUB-scheduler -->
-Verified-at: 6c65f95e8
+Verified-at: 66e56fe88
 Verify: python -m pytest tests/test_scheduler.py tests/test_rotation.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_controller.py tests/test_controller_steering_parity.py -q
 Owns: src/deepreason/scheduler/, src/deepreason/controller.py
 Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow, DR-SEAM-schools-x-scheduler, DR-SEAM-llm-x-scheduler
@@ -180,6 +180,62 @@ cell names a symbol the check greps for.
 
 ## Traps
 
+- **A gate that reads only `schema_version` cannot be opened by any
+  configuration, and eleven phases died on that line.**
+  `_defer_untransactional_v6_phase` (`scheduler.py:696`) computed its whole
+  answer from `manifest.schema_version != 6`, returning True for every v6
+  manifest before reading any other value — no grant, no route, no lease, no
+  `Config` field. It was correct when written: v6 makes the adapter fail closed
+  on any unbound provider dispatch, so typed completion debt beats a killed
+  root. Operations parity (2026-08-13) then made v6 the only path a current run
+  takes, which turned the `!= 6` escape into dead code and the safety net into a
+  permanent lock. The eleven phases — `hv-floor`, `hv-spot-check`,
+  `rubric-trial`, `pairwise-discrimination`, `premise-demarcation-variation`,
+  `paraphrase-audit-variation`, `paraphrase-audit-judgment`,
+  `experiment-generator-authoring`, `property-design`,
+  `property-relevance-trial`, `vision-criticism` — kept their run-config knobs
+  (`HV_K`, `HV_MIN`, `AUDIT_PERIOD`, `GEN_*`, `PROP_*`, `VISION_CRIT_PER_CYCLE`,
+  `ADVISORY_TRIALS_PER_CYCLE`), which parsed, compiled and appeared live over
+  phases that could not fire. Measured across 50 committed v6 roots: **2 661
+  `hv` deferral records, 0 `hv_set` measurements**, including 336 deferrals on
+  grounded-extension run `8e22d0431fd2b98d`
+  (`experiments/2026-08-12-live-grounded-extension-expansion/run`), which
+  completed cleanly with `variator[0]` holding `variator.direct.v1` — the exact
+  grant the gate stands in for. FIXED 2026-09-02
+  (`experiments/2026-09-02-defect-hv-v6-reachability/`): the gate consults
+  `workflow/legacy_phase_contracts.py`, a declared VERSIONED table of
+  phase → (role, authorizing contracts, dispatch). Three traps inside the trap.
+  First, **a deferral RECORD is not a deferral CALL** — the marker is
+  deduplicated by the `(phase, role, target_ref, obligation_ref)` tuple, so
+  every count above under-states the calls and the true rate is unrecoverable
+  from the record. Second, **opening the gate on the grant alone would be worse
+  than the defect**: nine rows still have no dispatch written, and letting them
+  through would send them to a provider unbound and trip the fail-closed guard
+  the gate exists to respect — so the row's `dispatch` field, not the presence
+  of a grant, is what converts a phase, and `REC-give-a-legacy-phase-v6-
+  transactional-dispatch.md` is the one-phase-per-tranche path. `hv-spot-check`
+  and `hv-floor` are the two converted, and `hv-floor` only on an OPERATOR
+  RULING, because it mints a fail warrant and therefore decides status. Third,
+  `premise-rent` is a `target_ref`, not a phase: both the 2026-09-01 P-A1
+  write-up and this tranche's own instruction listed twelve phase names against
+  eleven call sites on that misreading, and the record's own six-element
+  `inputs` tuple settles the slot.
+`check: python -m pytest tests/test_hv_v6_reachability.py -q`
+`check: python -c "
+import ast, pathlib
+tree = ast.parse(pathlib.Path('src/deepreason/scheduler/scheduler.py').read_text())
+calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call)
+         and isinstance(n.func, ast.Attribute)
+         and n.func.attr == '_defer_untransactional_v6_phase']
+from deepreason.workflow.legacy_phase_contracts import LEGACY_PHASE_CONTRACTS
+assert len(calls) == 11, len(calls)
+assert {c.args[0].value for c in calls} == set(LEGACY_PHASE_CONTRACTS)
+assert {(c.args[0].value, c.args[1].value) for c in calls} == {
+    (r.phase, r.role) for r in LEGACY_PHASE_CONTRACTS.values()
+}
+"`
+
+
 - **A Pareto axis whose floor is reachable by carrying no commitment ranks on
   conjecture KIND, and `run_report` did exactly that for four months.**
   `coverage = passes/evaluable if evaluable else 0.0` gave an artifact with
@@ -202,7 +258,11 @@ cell names a symbol the check greps for.
   unmeasured artifact and therefore still carry this shape; the 2026-08-27
   audit rowed them STRUCTURAL-GAP rather than unlawful and neither is
   reachable as a penalty in any committed root, but do not read the coverage
-  repair as having closed the class.
+  repair as having closed the class. `hv` became REACHABLE on 2026-09-02 (the
+  Traps entry above), so a run may now carry a measured `hv` for some artifacts
+  and an absent one for others — the shape `pareto_scores` was taught to handle
+  by omitting an axis it did not measure, and the case worth re-reading that
+  repair for.
 `check: python -m pytest tests/test_formalism_optional_rank.py -q`
 - **The steering controller was attached to every run and could move nothing on
   any of them.** `ops.run_scheduler` builds `Controller(harness, adapter)`

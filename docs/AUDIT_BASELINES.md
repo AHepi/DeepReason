@@ -22,6 +22,21 @@ Recorded 2026-08-12 at main 074ef1549.
   Known-flaky under `-n 4`, green in serial re-run: 3 tests in
   `tests/test_mcp_run.py`, 2 in `tests/test_mcp_scratch_bridge.py`
   (thread-join timing).
+- **diff_budget** (`python tools/diff_budget.py <base> --ceiling N --paths …`):
+  the verdict is `WITHIN`/`EXCEEDED` against RAW INSERTIONS in the named paths,
+  and a ceiling set on an estimate of CODE will be exceeded by documentation.
+  Operator ruling 2026-09-02: **count executable lines when setting a ceiling**,
+  and read an `EXCEEDED` verdict against the measured split before treating it
+  as a finding. Worked instance: tranche
+  `experiments/2026-09-02-defect-hv-v6-reachability/` returned
+  `{"total_insertions": 210, "ceiling": 150, "verdict": "EXCEEDED"}` over four
+  files of which roughly 95 lines were executable and 115 were module and
+  function docstrings, comments and blanks — the docstrings stating constraints
+  the code cannot show, which the tranche's own `REC-` recipe then points a
+  future reader at. The instrument is not wrong; a ceiling that counts prose as
+  code is. The tool has no `--executable-only` mode today, so the disposal is by
+  hand: measure the split before rowing the verdict.
+
 - **docs_verify** (`python tools/docs_verify.py`): **1291 checks over 71
   documents** as of 2026-08-31 (was 1250 over 70 when this entry was written;
   the total moves with every tranche that adds a check and is NOT a pinned
@@ -58,6 +73,19 @@ Recorded 2026-08-12 at main 074ef1549.
   (`python tools/docs_verify.py --failed`, or paste the check's own command).
   A PASS means the ceiling and the row is `baseline`; a FAIL means the claim
   moved and it IS a finding. The same command settles `:395` — see below.
+
+  Plus, on a container that has not fetched every branch a check reads, 1
+  more: `INV-frozen-surfaces.md`'s judge-canary row runs
+  `experiments/2026-09-01-defect-judge-canary-compile-gap/price_compile_gap.py`,
+  which does `git show origin/claude/deepreason-p-s1-commitments-wowcib:…`.
+  A container cloned for a different branch does not have that ref and the
+  check dies with `exit status 128`, which looks exactly like a code failure
+  and is not. `git fetch origin claude/deepreason-p-s1-commitments-wowcib`
+  makes it pass; measured 2026-09-02
+  (`experiments/2026-09-02-defect-hv-v6-reachability/`). This row is the same
+  class as the three below — an ENVIRONMENT precondition, not a claim that
+  rotted — and it is listed separately because it is not fixed by
+  `--unshallow`.
 
   Plus, on a SHALLOW clone only, 3 more: `CON-run-identity.md:211`,
   `:213`, `:215` are git-history checks that need the full history.

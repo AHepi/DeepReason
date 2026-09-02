@@ -70,6 +70,9 @@ def _v6_transactional_trial_call(
     output_model,
     seat: int = 0,
     aliases=None,
+    task_payload_schema: str = "defended-trial-step.v1",
+    trigger_prefix: str = "trial",
+    reason_prefix: str = "trial",
 ):
     """Authorize and terminalize one v6 defended-trial provider boundary.
 
@@ -80,6 +83,12 @@ def _v6_transactional_trial_call(
     sequence. ``step`` uniquely identifies this exact call within one
     trial invocation (``"defender"``, ``"judge:0"``, ...), folded into the
     trigger digest exactly as ``phase`` is for the batch-critic call.
+
+    ``task_payload_schema``, ``trigger_prefix`` and ``reason_prefix`` are the
+    only trial-specific values in the whole bracket, so they are parameters and
+    this is the shared v6 boundary for ANY legacy phase whose seat carries a
+    grant — see ``v6_transactional_phase_call`` below. Their defaults are the
+    trial's own, so every trial call site renders byte-identically.
     """
 
     from deepreason.workflow.models import RouteLeaseRefV1, WorkflowTaskKind
@@ -103,14 +112,14 @@ def _v6_transactional_trial_call(
     profile = adapter.profile_for(role, lease.seat, endpoint_lease=lease)
     contract = wire_contract_for(role, output_model, profile, aliases)
     payload = {
-        "schema": "defended-trial-step.v1",
+        "schema": task_payload_schema,
         "role": role,
         "target_id": target_id,
         "step": step,
     }
     service = InquiryTransactionService(harness, manifest, meter)
     fence = max(0, harness._next_seq - 1)
-    trigger_ref = "trial:" + hashlib.sha256(canonical_json(payload)).hexdigest()
+    trigger_ref = f"{trigger_prefix}:" + hashlib.sha256(canonical_json(payload)).hexdigest()
     preparation = service.prepare(
         task_kind=WorkflowTaskKind.DEFENDED_TRIAL_STEP,
         attempt_index=0,
@@ -178,7 +187,7 @@ def _v6_transactional_trial_call(
     except WorkBudgetDenied:
         raise
     except Exception:
-        abandon(issued=False, reason_code="trial_preissue_failure")
+        abandon(issued=False, reason_code=f"{reason_prefix}_preissue_failure")
         raise
 
     provider = None
@@ -196,7 +205,7 @@ def _v6_transactional_trial_call(
     except EndpointError as error:
         spend = getattr(error, "spend", None)
         if spend is None:
-            abandon(issued=True, reason_code="trial_transport_result_unknown")
+            abandon(issued=True, reason_code=f"{reason_prefix}_transport_result_unknown")
         else:
             diagnostic_ref = (
                 spend.attempt_trace[-1].diagnostic_ref
@@ -214,7 +223,7 @@ def _v6_transactional_trial_call(
                 work_id=preparation.id,
                 attempt_index=preparation.attempt_index,
                 status="transport_failed",
-                reason_code="trial_transport_failure",
+                reason_code=f"{reason_prefix}_transport_failure",
                 usage_status="unknown",
                 provider_attempt=provider,
             )
@@ -232,7 +241,7 @@ def _v6_transactional_trial_call(
             wire_contract=contract,
             endpoint_index=lease.seat,
             endpoint_lease=lease,
-            reason_prefix="trial",
+            reason_prefix=reason_prefix,
         )
         output = repaired.output
         llm_call = repaired.llm_call
@@ -240,7 +249,7 @@ def _v6_transactional_trial_call(
         authorized = repaired.authorized
         provider = repaired.provider_attempt
     except Exception:
-        abandon(issued=True, reason_code="trial_authority_failure")
+        abandon(issued=True, reason_code=f"{reason_prefix}_authority_failure")
         raise
 
     if provider is None:
@@ -262,7 +271,7 @@ def _v6_transactional_trial_call(
         work_id=preparation.id,
         attempt_index=preparation.attempt_index,
         status="completed",
-        reason_code="trial_output_admitted",
+        reason_code=f"{reason_prefix}_output_admitted",
         usage_status="exact",
         prompt_tokens=llm_call.prompt_tokens,
         completion_tokens=llm_call.completion_tokens,
@@ -270,6 +279,15 @@ def _v6_transactional_trial_call(
         admission=admission,
     )
     return output, llm_call
+
+
+# The bracket above is phase-agnostic once its three trial literals are
+# parameters. `measures/hv.py` is the first consumer outside the trial; the
+# public name is what a converting tranche imports, so no caller depends on a
+# private symbol. DR-SUB-evaluation owns both `informal/` and `measures/`, so
+# this crosses no seam; promotion to `workflow/` is parked for the first
+# consumer outside that subsystem.
+v6_transactional_phase_call = _v6_transactional_trial_call
 
 
 def conforming_transcript(blobs, trace_ref: str) -> bool:

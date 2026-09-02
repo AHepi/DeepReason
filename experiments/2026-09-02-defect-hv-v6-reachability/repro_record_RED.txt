@@ -1,0 +1,195 @@
+root                                                                                                                                      grant  events  hv_set  hv_deferred  state
+experiments/2026-08-12-live-grounded-extension-expansion/run                                                                              YES     12991       0          336  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 241, 'hv-floor': 95}
+experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d                                                YES        64       0            0  failed/operational_failure
+experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d                                                YES        79       0            0  failed/operational_failure
+experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d                                                YES       114       0            0  failed/operational_failure
+experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd                                               no      1979       0          119  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 91, 'hv-floor': 28}
+experiments/2026-08-25-poietics-program/run                                                                                                no      2707       0          116  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 74, 'hv-floor': 42}
+experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913                                       no      1760       0          112  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 76, 'hv-floor': 36}
+experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a                                  no       754       0          101  completed/budget_exhausted
+                                                                                                                                                 {'hv-floor': 48, 'hv-spot-check': 53}
+experiments/2026-08-25-change-constructive-frontier/run                                                                                    no      3200       0           92  failed/operational_failure
+                                                                                                                                                 {'hv-spot-check': 92}
+experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7                                       no      1369       0           85  running/None
+                                                                                                                                                 {'hv-spot-check': 58, 'hv-floor': 27}
+experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726                                       no      1294       0           85  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 56, 'hv-floor': 29}
+experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06                                       no      1576       0           83  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 71, 'hv-floor': 12}
+experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1                                       no      1198       0           82  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 53, 'hv-floor': 29}
+experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70                                       no      1245       0           82  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 59, 'hv-floor': 23}
+experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484                                               no      1045       0           80  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 52, 'hv-floor': 28}
+experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc                                                no      1297       0           79  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 62, 'hv-floor': 17}
+experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008                                       no      1549       0           79  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 61, 'hv-floor': 18}
+experiments/2026-08-22-change-epoch3-second-lineage/run                                                                                    no      1548       0           79  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 62, 'hv-floor': 17}
+experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829                                              no      1099       0           74  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 51, 'hv-floor': 23}
+experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7                                       no      1079       0           72  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 48, 'hv-floor': 24}
+experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea                                       no      1381       0           69  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 58, 'hv-floor': 11}
+experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b                                       no      1261       0           66  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 54, 'hv-floor': 12}
+experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949                                 no      1179       0           63  failed/operational_failure
+                                                                                                                                                 {'hv-spot-check': 58, 'hv-floor': 5}
+experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5                                                                       no      1202       0           58  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 52, 'hv-floor': 6}
+experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a                                     no       594       0           57  failed/operational_failure
+                                                                                                                                                 {'hv-floor': 23, 'hv-spot-check': 34}
+experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332                                                      no      1155       0           54  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 42, 'hv-floor': 12}
+experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a                                     no       406       0           53  failed/operational_failure
+                                                                                                                                                 {'hv-floor': 24, 'hv-spot-check': 29}
+experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346                                                                       no       985       0           46  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 40, 'hv-floor': 6}
+experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c                             no       786       0           41  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 35, 'hv-floor': 6}
+experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf                                                                   no       820       0           41  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 35, 'hv-floor': 6}
+experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c                             no       388       0           30  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 18, 'hv-floor': 12}
+experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847                                                                       no       607       0           24  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 24}
+experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c                                                                       no       581       0           24  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 24}
+experiments/2026-08-22-live-reach-rich-run/run                                                                                             no       580       0           23  failed/operational_failure
+                                                                                                                                                 {'hv-spot-check': 23}
+experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4   no       558       0           22  failed/operational_failure
+                                                                                                                                                 {'hv-spot-check': 22}
+experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5                              no       561       0           22  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 22}
+experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00                                                     no       550       0           22  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 22}
+experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0                                                     no       468       0           22  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 16, 'hv-floor': 6}
+experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752                                                 no       600       0           20  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 20}
+experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593                                               no       499       0           19  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 19}
+experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03                                                                       no       508       0           18  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 18}
+experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a                                                   no       486       0           17  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 17}
+experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100                                                        no       276       0           16  running/None
+                                                                                                                                                 {'hv-spot-check': 16}
+experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c              no       430       0           14  failed/operational_failure
+                                                                                                                                                 {'hv-spot-check': 14}
+experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a                                     no       161       0           12  running/None
+                                                                                                                                                 {'hv-floor': 12}
+experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345                                                                       no       373       0           12  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 12}
+experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5                              no       280       0           10  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 10}
+experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5                                               no       285       0           10  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 10}
+experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107                                                     no       294       0           10  failed/operational_failure
+                                                                                                                                                 {'hv-spot-check': 10}
+experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be                                                        no       300       0           10  completed/budget_exhausted
+                                                                                                                                                 {'hv-spot-check': 10}
+
+DEFECT  experiments/2026-08-12-live-grounded-extension-expansion/run
+        variator seat holds ['variator.direct.v1'], the run asked for hv 336 times, and recorded 0 hv_set events.
+CONTROL experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd
+        variator seat holds NO grant; deferring 119 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-25-poietics-program/run
+        variator seat holds NO grant; deferring 116 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913
+        variator seat holds NO grant; deferring 112 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a
+        variator seat holds NO grant; deferring 101 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-25-change-constructive-frontier/run
+        variator seat holds NO grant; deferring 92 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7
+        variator seat holds NO grant; deferring 85 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726
+        variator seat holds NO grant; deferring 85 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06
+        variator seat holds NO grant; deferring 83 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1
+        variator seat holds NO grant; deferring 82 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70
+        variator seat holds NO grant; deferring 82 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484
+        variator seat holds NO grant; deferring 80 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc
+        variator seat holds NO grant; deferring 79 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008
+        variator seat holds NO grant; deferring 79 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-22-change-epoch3-second-lineage/run
+        variator seat holds NO grant; deferring 79 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829
+        variator seat holds NO grant; deferring 74 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7
+        variator seat holds NO grant; deferring 72 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea
+        variator seat holds NO grant; deferring 69 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b
+        variator seat holds NO grant; deferring 66 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949
+        variator seat holds NO grant; deferring 63 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5
+        variator seat holds NO grant; deferring 58 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a
+        variator seat holds NO grant; deferring 57 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332
+        variator seat holds NO grant; deferring 54 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a
+        variator seat holds NO grant; deferring 53 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346
+        variator seat holds NO grant; deferring 46 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c
+        variator seat holds NO grant; deferring 41 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf
+        variator seat holds NO grant; deferring 41 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c
+        variator seat holds NO grant; deferring 30 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847
+        variator seat holds NO grant; deferring 24 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c
+        variator seat holds NO grant; deferring 24 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-22-live-reach-rich-run/run
+        variator seat holds NO grant; deferring 23 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4
+        variator seat holds NO grant; deferring 22 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5
+        variator seat holds NO grant; deferring 22 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00
+        variator seat holds NO grant; deferring 22 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0
+        variator seat holds NO grant; deferring 22 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752
+        variator seat holds NO grant; deferring 20 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593
+        variator seat holds NO grant; deferring 19 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03
+        variator seat holds NO grant; deferring 18 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a
+        variator seat holds NO grant; deferring 17 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100
+        variator seat holds NO grant; deferring 16 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c
+        variator seat holds NO grant; deferring 14 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a
+        variator seat holds NO grant; deferring 12 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345
+        variator seat holds NO grant; deferring 12 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5
+        variator seat holds NO grant; deferring 10 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5
+        variator seat holds NO grant; deferring 10 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107
+        variator seat holds NO grant; deferring 10 hv phases is the CORRECT behaviour and must not change.
+CONTROL experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be
+        variator seat holds NO grant; deferring 10 hv phases is the CORRECT behaviour and must not change.
+
+REPRODUCED: 1 grant-bearing root(s) measured no hv.

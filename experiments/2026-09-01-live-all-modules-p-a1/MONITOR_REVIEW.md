@@ -22,7 +22,7 @@ re-run against the branch.
 
 ## Two findings the window did not make
 
-**F6 — the run's wall clock was a transport failure, not a slow model.**
+**MR-A (was F6 in this review; the P-A1 branch later minted its own F6) — the run's wall clock was a transport failure, not a slow model.**
 Run span 10:11→15:07 (4.94 h). glm-5.3 accounted for 3.99 h of it; 3.27 h
 (66% of the run) was the ten zero-token calls. This is the P-S1 "dead
 provider, no summary said so" signature recurring, on one endpoint only.
@@ -30,7 +30,7 @@ The ~300 s per attempt is a hypothesis worth one cheap experiment: a proxy or
 gateway idle limit on long glm-5.3 thinking at the 49 152 cap (the successful
 glm reason legs all landed at 245–280 s; one at 839 s contradicts a hard cut).
 
-**F7 — the window's own monitor was blind to the signature it was built for.**
+**MR-B (was F7 in this review) — the window's own monitor was blind to the signature it was built for.**
 `monitor.sh` classifies a failed attempt by `t.get("error") or
 t.get("failure") or t.get("status") == "error"`; the attempt trace carries
 none of those keys. The typed signature is `transport_diagnostics` /
@@ -87,7 +87,7 @@ confirm it, in a sharper form than a seat-config typo:
   is P-S1's M-1 mechanism, verbatim, re-run.
 - The REASON leg ran with the knob omitted, i.e. at glm-5.3's default
   `max` effort against a 48 640-token budget. That is what pushed those calls
-  past the ~300 s transport wall (F6). `low` would have shortened them by
+  past the ~300 s transport wall (MR-A). `low` would have shortened them by
   orders of magnitude (P-S1: median 7 vs 64 tokens on a fixed prompt).
 - deepseek is unaffected by the `none` leak (its extraction legs are clean
   JSON) but its conjecturer extraction legs were still cut at 512 tokens in

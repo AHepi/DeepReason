@@ -1,0 +1,17 @@
+--- GRANT PRESENT: experiments/2026-08-12-live-grounded-extension-expansion/run
+    schema_version                 6
+    variator seat behavioural grant ['variator.direct.v1']
+    _defer(...'hv-floor', 'variator')  -> True
+    _defer(...'hv-spot-check', 'variator')  -> False
+    typed deferral markers written  ['hv-floor']
+
+--- CONTROL, no grant: experiments/2026-08-25-poietics-program/run
+    schema_version                 6
+    variator seat behavioural grant NONE
+    _defer(...'hv-floor', 'variator')  -> True
+    _defer(...'hv-spot-check', 'variator')  -> True
+    typed deferral markers written  ['hv-floor', 'hv-spot-check']
+
+CONTROL holds: a seat with no grant defers both hv phases and writes the typed notice. This is the behaviour the fix must PRESERVE.
+
+NOT REPRODUCED: the gate consulted the grant (post-fix behaviour).

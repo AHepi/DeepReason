@@ -1,0 +1,39 @@
+{
+  "embedder": "NeuralEmbedder",
+  "hv_spot_check": {
+    "returned": 0.0,
+    "hv_set_events": 1,
+    "state_hv": 0.0,
+    "llm_attached": false
+  },
+  "run_hv_floor": {
+    "verdict": "fail",
+    "status": "Status.REFUTED",
+    "status_moved": true,
+    "warrants_minted": 1,
+    "state_hv": null,
+    "s_hat": 1.0,
+    "kernel": "mu"
+  },
+  "run_hv_floor_with_battery": {
+    "verdict": "pass",
+    "status": "Status.ACCEPTED",
+    "state_hv": 0.5,
+    "warrants_minted": 0
+  },
+  "work_items": [
+    {
+      "contract_id": "variator.direct.v1",
+      "schema": "hv-variation-step.v1"
+    },
+    {
+      "contract_id": "variator.direct.v1",
+      "schema": "hv-variation-step.v1"
+    },
+    {
+      "contract_id": "variator.direct.v1",
+      "schema": "hv-variation-step.v1"
+    }
+  ],
+  "verify_root_violations": 0
+}

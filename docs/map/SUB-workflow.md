@@ -1,5 +1,5 @@
 <!-- DR-SUB-workflow -->
-Verified-at: 033b4b263
+Verified-at: 66e56fe88
 Verify: python -m pytest tests/test_workflow_reducer_c0.py tests/test_workflow_models_c0.py tests/test_workflow_control_replay_c1.py tests/test_workflow_stop_lifecycle_c4.py tests/test_workflow_resume_lifecycle_c4.py tests/test_workflow_repair_authority_c4.py tests/test_v6_controller3_replay_verification.py -q
 Owns: src/deepreason/workflow/
 Seams: DR-SEAM-harness-x-workflow, DR-SEAM-llm-x-workflow, DR-SEAM-rules-x-workflow, DR-SEAM-scheduler-x-workflow, DR-SEAM-scratch-x-workflow
@@ -105,6 +105,16 @@ are closed, so an unrecognised value is a load error, not a default.
   `nonconjecture_recovery.recover_nonconjecture_admission`,
   `atomic_recovery.recover_atomic_child_output`,
   `repair_transaction.repair_schema_failure` — resume a durable result.
+- `legacy_phase_contracts.seat_may_dispatch_legacy_phase` — whether one of the
+  eleven optional legacy model phases may reach a provider on a given route
+  seat, read from the manifest's own behavioral grants. The scheduler's v6
+  deferral gate is its only consumer, and this module is where the
+  phase → (role, authorizing contracts, dispatch) table is DECLARED, so that
+  decision is configuration rather than a literal in the scheduler. It imports
+  nothing from `run_manifest` — a frozen surface it reads by duck typing, so a
+  reader that names none of its internals cannot drift with them.
+  `REC-give-a-legacy-phase-v6-transactional-dispatch.md` is the conversion
+  recipe.
 - `criticism.plan_foreign_criticism` / `compile_criticism_assignments` /
   `record_completed_criticism_attempt` — deterministic foreign-school criticism
   planning and its `CoverageDebtV1` terminal record.
