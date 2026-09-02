@@ -1,0 +1,322 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-9.1.1, pluggy-1.6.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /home/user/DeepReason
+configfile: pyproject.toml
+plugins: xdist-3.8.0, anyio-4.14.2
+collecting ... collected 10 items
+
+tests/test_provider_transport_faults.py::test_the_backoff_ladder_is_still_the_one_the_record_was_written_under PASSED [ 10%]
+tests/test_provider_transport_faults.py::test_a_zero_byte_wall_is_not_answered_with_an_identical_resend FAILED [ 20%]
+tests/test_provider_transport_faults.py::test_a_shrinking_policy_lets_the_retry_succeed_where_the_first_attempt_died FAILED [ 30%]
+tests/test_provider_transport_faults.py::test_the_total_wall_time_of_a_dead_seat_is_bounded FAILED [ 40%]
+tests/test_provider_transport_faults.py::test_the_endpoint_reports_zero_byte_faults_separately_from_other_faults FAILED [ 50%]
+tests/test_provider_transport_faults.py::test_a_progress_row_carries_per_seat_provider_health FAILED [ 60%]
+tests/test_provider_transport_faults.py::test_a_progress_row_that_measured_nothing_says_so_rather_than_claiming_zero FAILED [ 70%]
+tests/test_provider_transport_faults.py::test_a_progress_row_that_did_measure_names_the_seat_and_its_faults FAILED [ 80%]
+tests/test_provider_transport_faults.py::test_results_reports_provider_health_and_types_its_absence FAILED [ 90%]
+tests/test_provider_transport_faults.py::test_results_renders_a_provider_health_heading FAILED [100%]
+
+=================================== FAILURES ===================================
+________ test_a_zero_byte_wall_is_not_answered_with_an_identical_resend ________
+
+no_backoff_sleep = None
+
+    def test_a_zero_byte_wall_is_not_answered_with_an_identical_resend(
+        no_backoff_sleep,
+    ):
+        """P-A1's ten dead calls each sent the SAME bytes four times into the same
+        wall. A wall is not a transient fault: whatever the policy does — shrink the
+        cap, stand the leg down — the second attempt must differ from the first."""
+        from deepreason.llm.endpoints import EndpointError, OpenAICompatEndpoint
+    
+        server = WallServer()
+        try:
+            endpoint = OpenAICompatEndpoint(
+                server.base_url, "m", timeout_s=30, max_tokens=49152
+            )
+            with pytest.raises(EndpointError):
+                endpoint.complete("PACK")
+        finally:
+            server.close()
+    
+        assert len(server.bodies) >= 2, "expected at least one retry"
+>       assert server.bodies[1] != server.bodies[0], (
+            "the retry resent byte-identical bytes into the same wall: "
+            f"{len(server.bodies)} attempts, "
+            f"{len(set(server.bodies))} distinct request bodies"
+        )
+E       AssertionError: the retry resent byte-identical bytes into the same wall: 4 attempts, 1 distinct request bodies
+E       assert b'{"model": "m", "messages": [{"role": "user", "content": "PACK"}], "max_tokens": 49152}' != b'{"model": "m", "messages": [{"role": "user", "content": "PACK"}], "max_tokens": 49152}'
+
+tests/test_provider_transport_faults.py:149: AssertionError
+_ test_a_shrinking_policy_lets_the_retry_succeed_where_the_first_attempt_died __
+
+fn = <function OpenAICompatEndpoint.complete.<locals>._once at 0x7f52dad3c0e0>
+
+    def request_with_retries(fn):
+        """Run fn(); retry transient network failures with 2s/4s/8s backoff.
+        Non-retryable HTTP errors (auth, bad request) raise immediately."""
+        last: Exception | None = None
+        for delay in (*_BACKOFFS, None):
+            try:
+>               return fn()
+                       ^^^^
+
+src/deepreason/llm/endpoints.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/deepreason/llm/endpoints.py:461: in _once
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.11/urllib/request.py:216: in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.11/urllib/request.py:519: in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.11/urllib/request.py:536: in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+/usr/lib/python3.11/urllib/request.py:496: in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+/usr/lib/python3.11/urllib/request.py:1377: in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.11/urllib/request.py:1352: in do_open
+    r = h.getresponse()
+        ^^^^^^^^^^^^^^^
+/usr/lib/python3.11/http/client.py:1415: in getresponse
+    response.begin()
+/usr/lib/python3.11/http/client.py:330: in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.client.HTTPResponse object at 0x7f52dadcfcd0>
+
+    def _read_status(self):
+        line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+        if len(line) > _MAXLINE:
+            raise LineTooLong("status line")
+        if self.debuglevel > 0:
+            print("reply:", repr(line))
+        if not line:
+            # Presumably, the server closed the connection before
+            # sending a valid response.
+>           raise RemoteDisconnected("Remote end closed connection without"
+                                     " response")
+E           http.client.RemoteDisconnected: Remote end closed connection without response
+
+/usr/lib/python3.11/http/client.py:299: RemoteDisconnected
+
+The above exception was the direct cause of the following exception:
+
+no_backoff_sleep = None
+
+    def test_a_shrinking_policy_lets_the_retry_succeed_where_the_first_attempt_died(
+        no_backoff_sleep,
+    ):
+        """The point of not resending identically: a smaller request can get under
+        a wall the first one could not. Stub answers only a request whose cap has
+        come down."""
+        from deepreason.llm.endpoints import OpenAICompatEndpoint
+    
+        server = WallServer(
+            serve_after=lambda attempt, body: body.get("max_tokens", 0) < 49152
+        )
+        try:
+            endpoint = OpenAICompatEndpoint(
+                server.base_url, "m", timeout_s=30, max_tokens=49152
+            )
+>           assert endpoint.complete("PACK") == "hi"
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_provider_transport_faults.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/deepreason/llm/endpoints.py:504: in complete
+    data = request_with_retries(_once)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fn = <function OpenAICompatEndpoint.complete.<locals>._once at 0x7f52dad3c0e0>
+
+    def request_with_retries(fn):
+        """Run fn(); retry transient network failures with 2s/4s/8s backoff.
+        Non-retryable HTTP errors (auth, bad request) raise immediately."""
+        last: Exception | None = None
+        for delay in (*_BACKOFFS, None):
+            try:
+                return fn()
+            except urllib.error.HTTPError as e:
+                if e.code not in _RETRYABLE_HTTP:
+                    raise EndpointError(
+                        f"HTTP {e.code}: {e.reason}",
+                        http_status=e.code,
+                        condition="http_refusal",
+                    ) from e
+                last = e
+            except (urllib.error.URLError, ConnectionError, TimeoutError, OSError,
+                    http.client.HTTPException) as e:
+                # HTTPException covers IncompleteRead — a mid-stream drop the
+                # OSError net misses (observed live: killed two runs at cycle 1).
+                last = e
+            if delay is None:
+                break
+            time.sleep(delay)
+>       raise EndpointError(
+            f"transport failed after retries: {last}",
+            http_status=getattr(last, "code", None),
+        ) from last
+E       deepreason.llm.endpoints.EndpointError: transport failed after retries: Remote end closed connection without response
+
+src/deepreason/llm/endpoints.py:92: EndpointError
+______________ test_the_total_wall_time_of_a_dead_seat_is_bounded ______________
+
+no_backoff_sleep = None
+
+    def test_the_total_wall_time_of_a_dead_seat_is_bounded(no_backoff_sleep):
+        """Four unbounded attempts made one call cost 1215 s of a 4.94 h run. The
+        policy must bound what a single dead call can spend, in attempts AND in
+        wall time, the way TIMEOUT_FACTORS already bounds the read-timeout branch
+        at 3x (SUB-llm Traps, "Retrying an identical wait ... fails identically")."""
+        from deepreason.llm.endpoints import EndpointError, OpenAICompatEndpoint
+    
+        wall_s = 0.3
+        server = WallServer(wall_s=wall_s)
+        try:
+            endpoint = OpenAICompatEndpoint(
+                server.base_url, "m", timeout_s=30, max_tokens=49152
+            )
+            started = time.monotonic()
+            with pytest.raises(EndpointError):
+                endpoint.complete("PACK")
+            elapsed = time.monotonic() - started
+        finally:
+            server.close()
+    
+>       assert len(server.bodies) <= 3, (
+            f"a zero-byte wall got {len(server.bodies)} identical attempts; "
+            "the read-timeout branch already stops at 2"
+        )
+E       AssertionError: a zero-byte wall got 4 identical attempts; the read-timeout branch already stops at 2
+E       assert 4 <= 3
+E        +  where 4 = len([b'{"model": "m", "messages": [{"role": "user", "content": "PACK"}], "max_tokens": 49152}', b'{"model": "m", "messages": [{"role": "user", "content": "PACK"}], "max_tokens": 49152}', b'{"model": "m", "messages": [{"role": "user", "content": "PACK"}], "max_tokens": 49152}', b'{"model": "m", "messages": [{"role": "user", "content": "PACK"}], "max_tokens": 49152}'])
+E        +    where [b'{"model": "m", "messages": [{"role": "user", "content": "PACK"}], "max_tokens": 49152}', b'{"model": "m", "messages": [{"role": "user", "content": "PACK"}], "max_tokens": 49152}', b'{"model": "m", "messages": [{"role": "user", "content": "PACK"}], "max_tokens": 49152}', b'{"model": "m", "messages": [{"role": "user", "content": "PACK"}], "max_tokens": 49152}'] = <tests.test_provider_transport_faults.WallServer object at 0x7f52dadcb710>.bodies
+
+tests/test_provider_transport_faults.py:199: AssertionError
+___ test_the_endpoint_reports_zero_byte_faults_separately_from_other_faults ____
+
+no_backoff_sleep = None
+
+    def test_the_endpoint_reports_zero_byte_faults_separately_from_other_faults(
+        no_backoff_sleep,
+    ):
+        """`transport_diagnostics` records the string; nothing records the SHAPE.
+        A zero-byte close, a mid-body drop and an HTTP 500 are three different
+        conditions and the surfacing layer needs to tell them apart per seat."""
+        from deepreason.llm.endpoints import EndpointError, OpenAICompatEndpoint
+    
+        server = WallServer()
+        try:
+            endpoint = OpenAICompatEndpoint(server.base_url, "m", timeout_s=30)
+            with pytest.raises(EndpointError):
+                endpoint.complete("PACK")
+        finally:
+            server.close()
+    
+>       assert endpoint.last_zero_byte_returns >= 1
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'OpenAICompatEndpoint' object has no attribute 'last_zero_byte_returns'
+
+tests/test_provider_transport_faults.py:226: AttributeError
+_____________ test_a_progress_row_carries_per_seat_provider_health _____________
+
+    def test_a_progress_row_carries_per_seat_provider_health():
+        """A watcher tails progress.jsonl. P-A1's and P-S1's rows carry one key set
+        of 24 and not one of them matches transport|provider|health|fault, so the
+        outage was structurally unwatchable."""
+        from deepreason.runtime.progress import ProgressEvent
+    
+>       assert "provider_health" in ProgressEvent.model_fields
+E       AssertionError: assert 'provider_health' in {'seq': FieldInfo(annotation=int, required=True, metadata=[Ge(ge=0)]), 'run_id': FieldInfo(annotation=str, required=True, metadata=[MinLen(min_length=1)]), 'state': FieldInfo(annotation=Literal['starting', 'running', 'paused', 'completed', 'failed', 'cancelled'], required=True), 'workload': FieldInfo(annotation=Literal['text', 'code', 'formal', 'website'], required=True), ...}
+E        +  where {'seq': FieldInfo(annotation=int, required=True, metadata=[Ge(ge=0)]), 'run_id': FieldInfo(annotation=str, required=True, metadata=[MinLen(min_length=1)]), 'state': FieldInfo(annotation=Literal['starting', 'running', 'paused', 'completed', 'failed', 'cancelled'], required=True), 'workload': FieldInfo(annotation=Literal['text', 'code', 'formal', 'website'], required=True), ...} = <class 'deepreason.runtime.progress.ProgressEvent'>.model_fields
+
+tests/test_provider_transport_faults.py:245: AssertionError
+_ test_a_progress_row_that_measured_nothing_says_so_rather_than_claiming_zero __
+
+    def test_a_progress_row_that_measured_nothing_says_so_rather_than_claiming_zero():
+        """`a default is not an absence` (SUB-application Traps, the token_spend
+        incident: 20 of 59 roots carry a false zero because a skipped keyword
+        asserted a spend of nought). A row emitted where no seat health was
+        computed must be absent, not an empty health map."""
+        from deepreason.runtime.progress import ProgressEvent
+    
+>       field = ProgressEvent.model_fields["provider_health"]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'provider_health'
+
+tests/test_provider_transport_faults.py:255: KeyError
+______ test_a_progress_row_that_did_measure_names_the_seat_and_its_faults ______
+
+    def test_a_progress_row_that_did_measure_names_the_seat_and_its_faults():
+        """Per seat: attempts, faults, zero-byte returns, last fault kind."""
+        from deepreason.runtime.progress import ProgressEvent
+    
+>       event = ProgressEvent(
+            seq=0,
+            run_id="r",
+            state="running",
+            workload="text",
+            phase="convergence",
+            activity="cycle evaluated",
+            provider_health={
+                "conjecturer#1": {
+                    "attempts": 17,
+                    "faults": 6,
+                    "zero_byte_returns": 6,
+                    "last_fault_kind": "zero_byte_close",
+                }
+            },
+        )
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for ProgressEvent
+E       provider_health
+E         Extra inputs are not permitted [type=extra_forbidden, input_value={'conjecturer#1': {'attem...nd': 'zero_byte_close'}}, input_type=dict]
+E           For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden
+
+tests/test_provider_transport_faults.py:266: ValidationError
+__________ test_results_reports_provider_health_and_types_its_absence __________
+
+    def test_results_reports_provider_health_and_types_its_absence():
+        """`deepreason results` is the ONE retrieval surface (SUB-application).
+        A fact it does not carry is one nobody will find by grepping the root."""
+        from deepreason.application.results import ABSENCE_REASONS, results_summary
+    
+>       assert any("PROVIDER" in reason for reason in ABSENCE_REASONS), (
+            "no absence code can say 'this root recorded no provider attempts'"
+        )
+E       AssertionError: no absence code can say 'this root recorded no provider attempts'
+E       assert False
+E        +  where False = any(<generator object test_results_reports_provider_health_and_types_its_absence.<locals>.<genexpr> at 0x7f52dad1ab50>)
+
+tests/test_provider_transport_faults.py:294: AssertionError
+________________ test_results_renders_a_provider_health_heading ________________
+
+    def test_results_renders_a_provider_health_heading():
+        from deepreason.application.results import render_results, results_summary
+    
+        rendered = render_results(results_summary(_a_root_without_provider_attempts()))
+>       assert "## Provider health" in rendered
+E       assert '## Provider health' in '# Results for /home/user/DeepReason/experiments/2026-08-26-pc2-rematch/run_h3\n  (resolved from a root)\n\n## Question\n  Construct a configuration of 13 points in the unit square achieving the largest minimum triangle area you can; every candidate must state its coordinates and claimed score, and survives only if the checker confirms it. Score = the smallest area among all 286 triangles formed by triples of your 13 points; every point must lie in [0,1]x[0,1] and all 13 points must be distinct. State the construction in exactly this form, one point per line: a line "POINT x y" for each of the 13 points, with x and y written as decimals with at most 6 decimal places, then a final line "CLAIM v" giving your claimed minimum triangle area as a decimal. A claim the checker cannot confirm is refuted.\n\n## Run\n  run id (the deterministic identity of this run): 7f30058aafdd549fbca817074f426809ea44f7840da4ffdab95c64e82c76ed7c\n  state: running\n  stop_reason (the typed reason it ended, never a crash): — not recorded (NO_STOP_RECORD)\n  cycles completed: 0\n  tokens spent vs budget: 0 / 3000000\n  manifest (the compiled configuration the run carries) present: yes, schema version 6\n\n##...(pass --verify to re-derive it instead of reading the stored verdict)\n  violations: — not recorded (NO_REPLAY_VALIDATION_JSON)\n  finding families: — not recorded (NO_REPLAY_VALIDATION_JSON)\n\n## Amendment and terminal readiness\n  amendment epochs (later question/evidence appended without editing anything): 0\n  stands at a valid typed terminal: no (terminal epoch — not recorded (NO_REPLAY_VALIDATION_JSON))\n  stop reason is resumable: — not recorded (NO_STOP_RECORD)\n  carries the lifecycle decision `continue` resumes from (the typed STOPPED receipt; without it `continue` refuses CONTINUE_TYPED_STOP_REQUIRED): no\n  the run recorded this reason for refusing that receipt: — not recorded (NO_LIFECYCLE_REFUSAL_RECORD)\n  record verifies on the security channel (the replay findings that mean the record was tampered with, rather than merely incomplete; `continue` and `amend` refuse on these and on nothing else): — not recorded (SECURITY_CHANNEL_NOT_REDERIVED)\n  ready for `deepreason amend` / `deepreason continue`: no\n\n## Not recorded by this root\n  NO_LIFECYCLE_REFUSAL_RECORD\n  NO_REPLAY_VALIDATION_JSON\n  NO_RUN_RESULT_JSON\n  NO_STOP_RECORD\n  SECURITY_CHANNEL_NOT_REDERIVED'
+
+tests/test_provider_transport_faults.py:306: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_provider_transport_faults.py::test_a_zero_byte_wall_is_not_answered_with_an_identical_resend
+FAILED tests/test_provider_transport_faults.py::test_a_shrinking_policy_lets_the_retry_succeed_where_the_first_attempt_died
+FAILED tests/test_provider_transport_faults.py::test_the_total_wall_time_of_a_dead_seat_is_bounded
+FAILED tests/test_provider_transport_faults.py::test_the_endpoint_reports_zero_byte_faults_separately_from_other_faults
+FAILED tests/test_provider_transport_faults.py::test_a_progress_row_carries_per_seat_provider_health
+FAILED tests/test_provider_transport_faults.py::test_a_progress_row_that_measured_nothing_says_so_rather_than_claiming_zero
+FAILED tests/test_provider_transport_faults.py::test_a_progress_row_that_did_measure_names_the_seat_and_its_faults
+FAILED tests/test_provider_transport_faults.py::test_results_reports_provider_health_and_types_its_absence
+FAILED tests/test_provider_transport_faults.py::test_results_renders_a_provider_health_heading
+========================= 9 failed, 1 passed in 5.99s ==========================
