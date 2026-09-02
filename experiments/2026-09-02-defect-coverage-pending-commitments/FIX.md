@@ -117,6 +117,52 @@ currently-green mutation controls still green. Plus:
   architecture test gains an all-pending artifact alongside the commitment-free
   one so the table governs both roads.
 
+### Amendment, at implement time: one more change site, found by `docs_verify`
+
+`tests/test_import_role_survivors.py::test_the_frontier_does_not_move_because_every_dropped_member_was_dominated`
+is the fixture the row below predicted, named now that the instrument found it.
+It is reached by TWO map checks (`SUB-ontology.md:124`, `SUB-scheduler.md:408`),
+which is why `docs_verify` reports it twice.
+
+**What it asserts, and which half breaks.** Three assertions; only the second
+fails.
+
+    assert len(stored_frontier) == 40                      # PASSES -- reads the
+                                                           # root's own committed
+                                                           # run-result.json,
+                                                           # which no fix edits
+    assert list(report["frontier"]) == list(stored_frontier)   # FAILS: 58 vs 40
+    assert not [a for a in imports if a in state.hv or a in state.reach]  # PASSES
+
+The failing line compares a RE-DERIVATION under today's code against a value
+STORED by the version that wrote the root. Under the operator's law of
+2026-08-14 ("old runs do not need to be valid or returnable... new versions are
+optimised for new functions") a stored result from an earlier version is owed no
+agreement with a new reader, and this tranche's whole purpose is to publish a
+different frontier. `SUB-scheduler.md` already records the same consequence for
+the 2026-08-30 sibling fix ("publishes a LONGER frontier than it used to").
+
+**But it is not merely a stale number, and saying so would be too convenient.**
+Measured under the fix: of the 24 IMPORT-role members, **12 would now land on a
+frontier they used to be dominated off**, because they carry evaluable
+commitments that all evaluate OVERRUN — scored at the floor before, omitted now.
+So the test's stated PREMISE ("all 24 are dominated points") stops being true,
+and an honest update must say so rather than re-baseline the number.
+
+**Its CLAIM survives intact, and that is what the update pins.** Measured:
+the frontier over survivors and the non-import part of the frontier over
+survivors ∪ imports are **identical**. Excluding import-role records still does
+not reshape which real artifacts are retained — which is the thing the
+2026-08-25 tranche was proving. In production nothing changes at all, because
+`run_report` scores only `counts_as_survivor` members and imports are not among
+them; CLAUDE.md's recorded invariant ("import-role admission records never count
+as survivors") is untouched by this tranche.
+
+**The update**: replace the stored-value comparison with the claim it was
+standing in for — computed under whatever scoring is current, so it can never
+again be hostage to a coverage-formula change — and keep both surviving
+assertions. Strictly stronger as a guard of its own claim.
+
 ## Existing tests at risk
 
 | test | verdict |
@@ -184,6 +230,25 @@ perturbed.
 **Production code: ~28 lines across 2 files** (`scheduler/scheduler.py` ~25,
 `programs.py` ~3) — well inside the 150-line budget. Tests and map documents
 additional, as the workflow requires them to move in the same commit.
+
+### Amendment, at implement time: the estimate was 28, the actual is 40
+
+Measured with `git diff --numstat` over the two production paths: **40
+insertions, 19 deletions**. The estimate is corrected here rather than left
+standing, because `dr-implement-fix` gates on FIX.md's own number and a silently
+exceeded estimate is the failure the gate exists to catch.
+
+**No change site was added.** The three sites are exactly the three named above.
+The whole 12-line overage is DOCSTRING PROSE: `pareto_scores`' docstring gained
+the paragraph stating why OVERRUN leaves the denominator, with the three run ids
+that show it, and `programs.py`'s module docstring gained the paragraph
+correcting "reserved for" (both were already listed as change sites, and both
+grew past what a one-line correction would have needed because the evidence is
+what makes the rule re-derivable by the next reader).
+
+GOAL.md's ceiling is **150 changed lines and it is not threatened** — 40
+insertions is 27% of it. Recorded as an amendment, not a stop: a stop is owed
+when the CEILING is exceeded, and it is not.
 
 ## Approval gate
 
