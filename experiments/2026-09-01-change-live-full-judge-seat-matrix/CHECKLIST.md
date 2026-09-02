@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=12B blockers=none
+State: next=12C blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -110,11 +110,17 @@ changes no shipped behavior or owner agreement.
       `FULL_CROSS_PREREG=efd5221ed6bec6a34eb6e6cb97d05163d02f73524410ddeca4038a977da14c0a`
       and `FULL_CROSS_DOMAIN=328b74d4c03408d9ba51b4cf013d64dee1ac7903b05a33b512dc7a8f287815ed`.
 
-- [ ] 12B. (S1, S2, S6) [COMMIT] Push the superseding preregistration, domain,
+- [x] 12B. (S1, S2, S6) [COMMIT] Push the superseding preregistration, domain,
       scope correction, and forward budget before generator implementation.
       done-when: local HEAD equals origin and both new files are present on the
       branch; the original `PREREG.md` and `MATRIX_DOMAIN.json` blobs are
       unchanged.
+
+      proof: `FULL_CROSS_PREREGISTRATION_PUSHED=YES` at
+      `5caeea7501a2e229334e23d9e02bc1fad3ee4195`; local HEAD equalled origin;
+      original preregistration and domain Git blobs remained
+      `dcd444bc2fa53adcf2f1d3c4da406188ef70ae8a` and
+      `08e99f1aa4a48d841775498a22d1c6d630b826ea`.
 
 - [ ] 12C. (S2, S3, S5) Add full-cross count, literal Cartesian membership,
       per-seat independence, case-id, ban, and resume tests before implementation.
