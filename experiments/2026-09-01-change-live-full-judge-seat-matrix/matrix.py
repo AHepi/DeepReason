@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse, contextlib, fcntl, hashlib, itertools, json, os, re, struct
 import sys, tempfile, threading, unicodedata
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Iterable, Iterator, Mapping, Sequence
 
@@ -15,6 +16,8 @@ FORBIDDEN_REASONING = frozenset({"high", "max", "xhigh"})
 RESULT_FIELDS = ("case_id", "status", "code", "message", "stage",
                  "exception_type", "pointer", "dispatch_history")
 _CALL_SLOTS = threading.BoundedSemaphore(3)
+_CALL_COUNTER_LOCK = threading.Lock()
+_CALL_COUNTER = {"active": 0, "peak": 0}
 
 
 def compile_run_manifest(*args, **kwargs):
@@ -465,6 +468,165 @@ def freeze_catalog(model_ids: Iterable[str]) -> dict[str, Any]:
         "excluded": excluded,
         "catalog_sha256": hashlib.sha256(canonical_json(accepted)).hexdigest(),
     }
+
+
+def freeze_authenticated_catalog(response: Mapping[str, Any]) -> dict[str, Any]:
+    """Freeze every authenticated catalog id except the typed Kimi-K3 ban."""
+    if not isinstance(response, Mapping) or not isinstance(response.get("data"), list):
+        raise MatrixRefusal("CATALOG_RESPONSE_INVALID", "data must be a list")
+    model_ids: list[str] = []
+    for index, entry in enumerate(response["data"]):
+        if not isinstance(entry, Mapping) or set(entry).isdisjoint({"id"}):
+            raise MatrixRefusal("CATALOG_RESPONSE_INVALID", f"data[{index}].id absent")
+        model_ids.append(entry["id"])
+    return freeze_catalog(model_ids)
+
+
+@dataclass(frozen=True)
+class LiveEndpointBinding:
+    """One registered seat and its credential-bearing in-memory endpoint."""
+
+    role: str
+    model_profile: str
+    endpoint: Any
+
+
+class BoundedLiveEndpoint:
+    """Keep an endpoint's whole retrying completion under the global ceiling."""
+
+    def __init__(self, endpoint: Any) -> None:
+        self._endpoint = endpoint
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._endpoint, name)
+
+    def complete(self, *args: Any, **kwargs: Any) -> Any:
+        with _CALL_SLOTS:
+            with _CALL_COUNTER_LOCK:
+                _CALL_COUNTER["active"] += 1
+                _CALL_COUNTER["peak"] = max(
+                    _CALL_COUNTER["peak"], _CALL_COUNTER["active"]
+                )
+            try:
+                return self._endpoint.complete(*args, **kwargs)
+            finally:
+                with _CALL_COUNTER_LOCK:
+                    _CALL_COUNTER["active"] -= 1
+
+
+def live_call_counts(*, reset_peak: bool = False) -> dict[str, int]:
+    """Return concurrency evidence without exposing endpoint or credential state."""
+    with _CALL_COUNTER_LOCK:
+        snapshot = dict(_CALL_COUNTER)
+        if reset_peak:
+            _CALL_COUNTER["peak"] = _CALL_COUNTER["active"]
+    return snapshot
+
+
+def _live_reasoning_value(reasoning: Any) -> str | int:
+    if (
+        not isinstance(reasoning, Mapping)
+        or set(reasoning) != {"kind", "value"}
+        or not any(reasoning == registered for registered in _FULL_CROSS_REASONING)
+    ):
+        raise MatrixRefusal("FORBIDDEN_REASONING_EFFORT")
+    return reasoning["value"]
+
+
+def build_live_endpoint(
+    seat: Mapping[str, Any], *, criticism_authority: str | None,
+    environ: Mapping[str, str] | None = None,
+) -> LiveEndpointBinding:
+    """Construct one exact Ollama seat after all pre-dispatch integrity checks."""
+    from deepreason.llm.endpoints import OpenAICompatEndpoint
+    from deepreason.run_manifest import infer_model_family
+
+    if criticism_authority != "defended_trial":
+        raise MatrixRefusal("LIVE_REQUIRES_DEFENDED_TRIAL")
+    required = {
+        "role", "model_id", "model_profile", "output_mode",
+        "output_mechanism", "reasoning",
+    }
+    if not isinstance(seat, Mapping) or set(seat) != required:
+        raise MatrixRefusal("LIVE_SEAT_INVALID")
+    role = seat["role"]
+    profile = seat["model_profile"]
+    mode = seat["output_mode"]
+    mechanism = seat["output_mechanism"]
+    if not isinstance(role, str) or not role:
+        raise MatrixRefusal("LIVE_SEAT_INVALID", "role")
+    if profile not in {"compact", "standard", "frontier"}:
+        raise MatrixRefusal("LIVE_SEAT_INVALID", "model_profile")
+    if mode not in {"text", "json_object"}:
+        raise MatrixRefusal("LIVE_SEAT_INVALID", "output_mode")
+    if mechanism not in {"native_json_schema", "grammar", "json_text"}:
+        raise MatrixRefusal("LIVE_SEAT_INVALID", "output_mechanism")
+    reasoning = _live_reasoning_value(seat["reasoning"])
+    body = build_provider_body(seat["model_id"], reasoning)
+    source = os.environ if environ is None else environ
+    secret = source.get("OLLAMA_API_KEY")
+    if not isinstance(secret, str) or not secret:
+        raise MatrixRefusal("OLLAMA_API_KEY_MISSING")
+    endpoint = OpenAICompatEndpoint(
+        "https://ollama.com/v1", body["model"], api_key=secret,
+        timeout_s=300, max_tokens=8_192, json_mode=mode == "json_object",
+        reasoning=reasoning, provider="ollama", output_mechanism=mechanism,
+    )
+    endpoint.endpoint_id = "https://ollama.com/v1"
+    endpoint.family = infer_model_family(body["model"], "ollama")
+    endpoint.model_revision = None
+    endpoint.context_window_tokens = 131_072
+    return LiveEndpointBinding(
+        role=role, model_profile=profile, endpoint=BoundedLiveEndpoint(endpoint)
+    )
+
+
+_TRACE_KEYS = ("reasoning", "reasoning_content", "thinking")
+
+
+def reasoning_probe_receipt(
+    *, model_id: str, requested_reasoning: str, message: Mapping[str, Any]
+) -> dict[str, Any]:
+    """Record probe structure and trace metadata without persisting trace text."""
+    validate_provider_body({
+        "model": model_id, "reasoning_effort": requested_reasoning,
+    })
+    if requested_reasoning not in {"none", "low", "medium"}:
+        raise MatrixRefusal("PROBE_REASONING_NOT_REGISTERED")
+    if not isinstance(message, Mapping):
+        raise MatrixRefusal("PROBE_MESSAGE_INVALID")
+    content = message.get("content")
+    try:
+        parsed = json.loads(content) if isinstance(content, str) else None
+        parser_outcome = "valid" if isinstance(content, str) else "invalid"
+    except (TypeError, ValueError):
+        parsed, parser_outcome = None, "invalid"
+    schema_outcome = (
+        "valid" if parser_outcome == "valid" and parsed == {"ok": True}
+        else "invalid" if parser_outcome == "valid" else "not_run"
+    )
+    traces: dict[str, dict[str, Any]] = {}
+    for key in _TRACE_KEYS:
+        value = message.get(key)
+        present = key in message and value is not None
+        encoded = value.encode("utf-8") if isinstance(value, str) else b""
+        traces[key] = {
+            "present": present,
+            "byte_count": len(encoded) if present else 0,
+            "sha256": hashlib.sha256(encoded).hexdigest() if present else None,
+        }
+    return {
+        "model_id": model_id,
+        "requested_reasoning": requested_reasoning,
+        "status": (
+            "probe_usable" if parser_outcome == schema_outcome == "valid"
+            else "provider_indeterminate"
+        ),
+        "message_keys": sorted(message, key=lambda key: str(key).encode("utf-8")),
+        "parser_outcome": parser_outcome,
+        "schema_outcome": schema_outcome,
+        "trace_fields": traces,
+    }
 def _seat_case(catalog_sha256: str, critic: str, defender: str, judge0: str,
                judge1: str, variator: str | None, prefix: str) -> dict[str, Any]:
     fields = {"schema": SEAT_SCHEMA, "catalog_sha256": catalog_sha256,
@@ -593,6 +755,193 @@ def safe_result_bytes(result: Mapping[str, Any], *, secret: str | None = None) -
             "status": "unexpected_error", "code": "SECRET_BEARING_DIAGNOSTIC_WITHHELD",
             "message": "Diagnostic withheld because it contained credential bytes."})
     return proposed
+
+
+_LIVE_RESULT_FIELDS = (
+    "case_id", "ordinal", "status", "catalog_sha256", "domain_sha256",
+    "branch_commit", "case_payload", "criticism_authority",
+    "request_body_sha256", "dispatch_extent", "outcome_code",
+    "variator_reachability", "full_dispatch_reached",
+)
+_BOUNDARY_FIELDS = ("stage", "exception_type", "code", "pointer", "message")
+_RESPONSE_METADATA_FIELDS = (
+    "message_keys", "parser_outcome", "schema_outcome", "fallback_events",
+    "finish_reason", "usage",
+)
+
+
+def _safe_response_metadata(value: Any) -> dict[str, Any] | None:
+    if not isinstance(value, Mapping):
+        return None
+    safe = {
+        field: value[field]
+        for field in _RESPONSE_METADATA_FIELDS
+        if field in value
+    }
+    traces = value.get("trace_fields")
+    if isinstance(traces, Mapping):
+        safe["trace_fields"] = {
+            key: {
+                field: metadata[field]
+                for field in ("present", "byte_count", "sha256")
+                if field in metadata
+            }
+            for key, metadata in traces.items()
+            if key in _TRACE_KEYS and isinstance(metadata, Mapping)
+        }
+    return safe
+
+
+def safe_live_result_bytes(
+    result: Mapping[str, Any], *, secret: str | None = None
+) -> bytes:
+    """Serialize only registered live evidence and scan the proposed bytes."""
+    if not isinstance(result, Mapping):
+        raise MatrixRefusal("LIVE_RESULT_INVALID")
+    safe = {
+        field: result[field]
+        for field in _LIVE_RESULT_FIELDS
+        if field in result
+    }
+    boundary = result.get("first_boundary")
+    if isinstance(boundary, Mapping):
+        safe["first_boundary"] = {
+            field: boundary[field] for field in _BOUNDARY_FIELDS if field in boundary
+        }
+    response_metadata = _safe_response_metadata(result.get("response_metadata"))
+    if response_metadata is not None:
+        safe["response_metadata"] = response_metadata
+    proposed = canonical_json(safe)
+    if secret and secret.encode("utf-8") in proposed:
+        proposed = canonical_json({
+            "case_id": str(result.get("case_id", "withheld")),
+            "ordinal": result.get("ordinal"),
+            "status": "unexpected_error",
+            "code": "SECRET_BEARING_DIAGNOSTIC_WITHHELD",
+            "message": "Diagnostic withheld because it contained credential bytes.",
+        })
+    return proposed
+
+
+def classify_live_result(
+    *, error: Exception | None = None, outcome_code: str | None = None,
+    stage: str, dispatch_extent: Sequence[str],
+    provider_dependent: bool = False,
+) -> dict[str, Any]:
+    """Keep the first shipped or provider boundary as a typed terminal fact."""
+    if (error is None) == (outcome_code is None):
+        raise MatrixRefusal("LIVE_RESULT_CLASSIFICATION_INVALID")
+    extent = list(dispatch_extent)
+    if error is None:
+        return {
+            "status": "trial_outcome", "outcome_code": outcome_code,
+            "dispatch_extent": extent, "first_boundary": None,
+        }
+    boundary = {
+        "stage": stage,
+        "exception_type": type(error).__name__,
+        "code": getattr(error, "code", type(error).__name__),
+        "pointer": getattr(error, "pointer", None),
+        "message": str(error),
+    }
+    return {
+        "status": (
+            "provider_indeterminate" if provider_dependent
+            else "configuration_refused"
+        ),
+        "dispatch_extent": extent,
+        "first_boundary": boundary,
+    }
+
+
+def _require_hex(value: Any, length: int, code: str) -> str:
+    if not isinstance(value, str) or re.fullmatch(rf"[0-9a-f]{{{length}}}", value) is None:
+        raise MatrixRefusal(code)
+    return value
+
+
+def build_live_case_receipt(
+    row: Mapping[str, Any], *, domain_sha256: str, branch_commit: str,
+    request_body: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Bind one terminal subject to exact identity and a non-reversible body digest."""
+    if not isinstance(row, Mapping) or row.get("schema") != FULL_CROSS_CASE_SCHEMA:
+        raise MatrixRefusal("FULL_CROSS_CASE_SCHEMA_UNSUPPORTED")
+    if row.get("criticism_authority") != "defended_trial":
+        raise MatrixRefusal("LIVE_REQUIRES_DEFENDED_TRIAL")
+    identity_keys = (
+        "schema", "catalog_sha256", "judge_count", "split_protocol",
+        "paraphrase_count", "seats",
+    )
+    if any(key not in row for key in identity_keys):
+        raise MatrixRefusal("FULL_CROSS_CASE_INVALID")
+    identity = {key: row[key] for key in identity_keys}
+    if row.get("case_id") != _sha256_id(identity):
+        raise MatrixRefusal("FULL_CROSS_CASE_ID_MISMATCH")
+    ordinal = row.get("ordinal")
+    if isinstance(ordinal, bool) or not isinstance(ordinal, int) or ordinal < 0:
+        raise MatrixRefusal("FULL_CROSS_CASE_ORDINAL_OUT_OF_RANGE")
+    _validate_full_cross_catalog_digest(row.get("catalog_sha256"))
+    _require_hex(domain_sha256, 64, "FULL_CROSS_DOMAIN_DIGEST_INVALID")
+    _require_hex(branch_commit, 40, "BRANCH_COMMIT_INVALID")
+    if not isinstance(request_body, Mapping):
+        raise MatrixRefusal("LIVE_REQUEST_BODY_INVALID")
+    validate_provider_body(request_body)
+    return {
+        "case_id": row["case_id"],
+        "ordinal": ordinal,
+        "case_payload": identity,
+        "catalog_sha256": row["catalog_sha256"],
+        "domain_sha256": domain_sha256,
+        "branch_commit": branch_commit,
+        "request_body_sha256": hashlib.sha256(canonical_json(request_body)).hexdigest(),
+        "criticism_authority": "defended_trial",
+    }
+
+
+def next_pending_full_cross_case(
+    domain: Mapping[str, Any], model_ids: Iterable[str], *,
+    terminal_receipts: Iterable[Mapping[str, Any]], start_ordinal: int,
+    catalog_sha256: str, criticism_authority: str | None,
+) -> dict[str, Any] | None:
+    """Validate immutable receipts and directly return the first ordinal gap."""
+    axes = _validate_full_cross_domain(domain)
+    _require_full_cross_authority(domain, criticism_authority)
+    models = _full_cross_models(model_ids)
+    total = full_cross_counts(domain, model_count=len(models))["total"]
+    if (
+        isinstance(start_ordinal, bool) or not isinstance(start_ordinal, int)
+        or not 0 <= start_ordinal <= total
+    ):
+        raise MatrixRefusal("FULL_CROSS_ORDINAL_OUT_OF_RANGE")
+    seen: set[int] = set()
+    for receipt in terminal_receipts:
+        if not isinstance(receipt, Mapping):
+            raise MatrixRefusal("FULL_CROSS_RECEIPT_INVALID")
+        ordinal = receipt.get("ordinal")
+        if (
+            isinstance(ordinal, bool) or not isinstance(ordinal, int)
+            or not 0 <= ordinal < total
+        ):
+            raise MatrixRefusal("FULL_CROSS_RECEIPT_ORDINAL_INVALID")
+        if ordinal in seen:
+            raise MatrixRefusal("FULL_CROSS_RECEIPT_DUPLICATE")
+        expected = full_cross_case_at(
+            domain, models, ordinal, catalog_sha256=catalog_sha256,
+            criticism_authority=criticism_authority,
+        )
+        if receipt.get("case_id") != expected["case_id"]:
+            raise MatrixRefusal("FULL_CROSS_RECEIPT_ID_MISMATCH")
+        seen.add(ordinal)
+    ordinal = start_ordinal
+    while ordinal in seen:
+        ordinal += 1
+    if ordinal == total:
+        return None
+    return full_cross_case_at(
+        domain, models, ordinal, catalog_sha256=catalog_sha256,
+        criticism_authority=criticism_authority,
+    )
 def _atomic_bytes(path: Path, payload: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     descriptor, temp_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)

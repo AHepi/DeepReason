@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=14 blockers=none
+State: next=18 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -184,17 +184,36 @@ changes no shipped behavior or owner agreement.
       Kimi-K3-free two-judge launch shape. Full output is in
       `proof/soak-green.txt`; `scripts/cycle_soak.py` remained byte-unchanged.
 
-- [ ] 14. (S3, S4, S5) Implement live endpoint construction, reasoning probes, the global three-call semaphore, typed result classification, and leak-safe persistence.
+- [x] 14. (S3, S4, S5) Implement live endpoint construction, reasoning probes, the global three-call semaphore, typed result classification, and leak-safe persistence.
       done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q` ends with 0 failed, saved in `proof/all-matrix-tests-green.txt`.
 
-- [ ] 15. (S3, S4, S5, S6) Run the actual-file blast-radius gate over the assembled runner.
+      proof: exit 0; `37 passed in 7.48s`; the authenticated-catalog,
+      exact per-seat transport, defended-authority, explicit reasoning,
+      populated-trace metadata, global three-call ceiling, typed boundary,
+      leak-safe persistence, case-receipt, and direct-resume contracts are
+      GREEN. Full output is in `proof/all-matrix-tests-green.txt`.
+
+- [x] 15. (S3, S4, S5, S6) Run the actual-file blast-radius gate over the assembled runner.
       done-when: `python tools/blast_radius.py --files experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py experiments/2026-09-01-change-live-full-judge-seat-matrix/soak_builder.py tests/test_live_full_judge_seat_matrix.py` reports both frozen contact lists empty and verdict CLEAR.
 
-- [ ] 16. (S3, S4, S5, S6) Measure checkpoint-two diff budget.
+      proof: exit 0; `frozen_surface_contacts=[]`;
+      `frozen_adjacent_contacts=[]`; `reachability=[]`;
+      `frozen_surface_verdict=CLEAR`.
+
+- [x] 16. (S3, S4, S5, S6) Measure checkpoint-two diff budget.
       done-when: `python tools/diff_budget.py 70e9c73ed0a5630994613afea74c80de6bf59302 --ceiling 3200 --paths experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py experiments/2026-09-01-change-live-full-judge-seat-matrix/soak_builder.py tests/test_live_full_judge_seat_matrix.py` reports `WITHIN`.
 
-- [ ] 17. (S3, S4, S5, S6) [COMMIT] Push the assembled runner, soak proof, and full matrix-test GREEN proof.
+      proof: exit 0; `matrix.py=1480`, `soak_builder.py=123`,
+      `test_live_full_judge_seat_matrix.py=984`, `total_insertions=2587`,
+      `ceiling=3200`, `verdict=WITHIN`.
+
+- [x] 17. (S3, S4, S5, S6) [COMMIT] Push the assembled runner, soak proof, and full matrix-test GREEN proof.
       done-when: local HEAD equals the GitHub branch head and `git status --porcelain` is empty.
+
+      proof: `ASSEMBLED_RUNNER_PUSHED=YES`; the branch checkpoint contains
+      the eight-cycle soak proof, 37-test GREEN proof, exact live endpoint
+      bindings, three-call gate, typed classifications, and leak-safe
+      receipts; local HEAD equalled origin and the worktree was empty.
 
 - [ ] 18. (S4) Re-run the unchanged shipped judge control ring.
       done-when: `python -m pytest tests/test_judge_ensemble_boundary.py tests/test_judge_canary_dispatch.py tests/test_judge_canary_compile_gap.py -q` ends with 13 passed, 0 failed.
