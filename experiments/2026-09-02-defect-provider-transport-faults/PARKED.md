@@ -130,3 +130,50 @@ WHAT: recorded by the P-A1 monitor review addendum — deepseek's conjecturer
 extraction legs were cut at 512 tokens in 10 of 13 cases. NOT this tranche's:
 `llm/split.py` and the extraction leg belong to the model-profile window.
 Noted here only so the finding is not lost.
+
+---
+
+## P6 — `dropped-call` is an overloaded signal, and the controller answers it by widening a wait
+
+WHAT: found while diagnosing. `Scheduler._drop` tags every dropped call
+`dropped-call` (`controller.TRANSPORT_DROP_TAG`), which is the same signal the
+allocation controller reads to LENGTHEN the transport timeout. A firewall lease
+refusal therefore lands in the same channel as a genuine transport drop, so the
+controller can answer a lease violation by widening a wait. Already parked once
+at `experiments/2026-08-22-fix-route-lease-maxtokens/FIX.md` and recorded in
+`docs/map/SEAM-llm-x-scheduler.md` Traps. This tranche does NOT add a second
+consumer to that signal; its retry policy reads its own per-call state.
+
+```
+DEFECT TRANCHE: `dropped-call` conflates a firewall lease refusal with a
+transport drop, and the allocation controller widens a wait in response
+
+Read CLAUDE.md fully, then load deepreason-orchestrator, dr-drive-harness and
+dr-explain-to-operator. Start at dr-set-goal.
+
+THE DEFECT, FROM THE RECORD: `docs/map/SEAM-llm-x-scheduler.md` Traps records
+it verbatim — "`Scheduler._drop` tags every dropped call `dropped-call`, which
+is the same signal the controller reads to LENGTHEN the transport timeout.
+After the fix no lawful tune produces such a refusal, so nothing acts on it; if
+a future change reopens a path where a run survives a lease refusal, the
+controller will answer a lease violation by widening a wait. Parked, not fixed."
+Emit sites: `scheduler/scheduler.py:579,583` and `:3253,3255`; declaration
+`signals.py:89` and `:380`; consumer `controller.py:93`.
+
+GOAL (for dr-set-goal to bound): a lease refusal and a transport drop must be
+distinguishable at the signal layer, so no consumer can answer one by acting on
+the other. Success criterion, falsifiable: an offline test drives both paths and
+asserts the controller's timeout widening fires on the transport drop and NOT on
+the lease refusal; mutation-proven RED/GREEN.
+
+DESIGN CONSTRAINTS: this is a signal-registry change — read
+`docs/map/INV-signal-contract.md` and `docs/map/REC-add-signal.md` first, and
+follow REC-add-signal exactly (a producer predicate is half the declaration; a
+name added to POLICY_SIGNALS without its `_PRODUCERS` entry raises KeyError in
+`open_loop_signals`). Allocation touches EFFICIENCY, never EVIDENCE. Frozen
+surfaces untouched.
+
+CONTEXT: `experiments/2026-09-02-defect-provider-transport-faults/` deliberately
+did not add a second consumer to this signal; its retry policy is per-call and
+reads no signal. Read its FIX.md §"signal layer" before designing.
+```
