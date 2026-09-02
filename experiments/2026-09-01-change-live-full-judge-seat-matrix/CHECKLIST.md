@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=8 blockers=none
+State: next=9 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -62,8 +62,11 @@ changes no shipped behavior or owner agreement.
       `proof/domain-tests-green.txt`. The complete file also passed 10/10 at
       step 5.
 
-- [ ] 8. (S2, S3, S5) Measure checkpoint-one diff budget.
+- [x] 8. (S2, S3, S5) Measure checkpoint-one diff budget.
       done-when: `python tools/diff_budget.py 70e9c73ed0a5630994613afea74c80de6bf59302 --ceiling 540 --paths experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py tests/test_live_full_judge_seat_matrix.py` reports `WITHIN`.
+
+      proof: `matrix.py=274`, `test_live_full_judge_seat_matrix.py=217`,
+      `total_insertions=491`, `ceiling=540`, `verdict=WITHIN`.
 
 - [ ] 9. (S2, S3, S5) [COMMIT] Push the domain/safety/resume implementation and GREEN proof.
       done-when: local HEAD equals the GitHub branch head and `git status --porcelain` is empty.
