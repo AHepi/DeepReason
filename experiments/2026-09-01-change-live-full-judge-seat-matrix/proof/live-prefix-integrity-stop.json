@@ -1,0 +1,10 @@
+{
+  "attempt": "attempt-0002",
+  "cause": "external_pid_namespace_misclassification",
+  "checklist_step": 25,
+  "code": "ATTEMPT_MARKED_INTERRUPTED_WHILE_ACTIVE",
+  "disposition": "quarantined",
+  "remediation": "preserve every result file, exclude the attempt from resume accounting, and rotate to a fresh attempt",
+  "schema": "deepreason.live_prefix_integrity_stop.v1",
+  "terminal_files_preserved": 7
+}

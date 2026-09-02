@@ -326,6 +326,40 @@ def test_terminal_writes_are_atomic_immutable_and_resume_rotates(matrix, tmp_pat
         matrix.prepare_attempt(attempts, domain_sha256="domain-a", catalog_sha256="catalog-b")
 
 
+def test_live_resume_excludes_integrity_stopped_attempts(matrix, tmp_path):
+    root = tmp_path / "live-seat-matrix"
+    quarantined = root / "attempt-0001"
+    results = quarantined / "results"
+    results.mkdir(parents=True)
+    case_payload = {"schema": matrix.SEAT_SCHEMA, "ordinal": 0}
+    case_id = matrix._sha256_id(case_payload)
+    matrix.atomic_terminal_write(
+        results / f"{case_id.removeprefix('sha256:')}.json",
+        {
+            "status": "trial_outcome",
+            "domain_sha256": "domain-a",
+            "catalog_sha256": "catalog-a",
+            "case_payload": case_payload,
+            "case_id": case_id,
+        },
+    )
+    matrix._atomic_bytes(
+        quarantined / "INTEGRITY_STOP.json",
+        matrix.canonical_json({
+            "schema": "deepreason.live_attempt_integrity_stop.v1",
+            "status": "quarantined",
+            "result_disposition": "preserved_excluded",
+        }),
+    )
+
+    assert matrix._load_live_terminals(
+        root,
+        domain_sha256="domain-a",
+        catalog_sha256="catalog-a",
+        secret="sentinel-secret-never-persist",
+    ) == {}
+
+
 def test_topology_direct_config_compiles_explicit_defended_two_and_three_judges(
     matrix, monkeypatch
 ):
