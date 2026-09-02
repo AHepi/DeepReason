@@ -8,3 +8,5 @@ NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: LEGACY_CRITICISM_ENABLED=False is not ca
 NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
 NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SPLIT_BUDGET_SEAT_PROTOCOL='off' is not carried by this manifest's engine config and is restored at run time from this notice
 [soak] built root: manifest 3743dcde3b9d732d…  criteria ['pa1-limit-verdict@v1', 'pa1-obstruction-structure@v1', 'pa1-scaling-law@v1']
+[soak] qualified in 15.5s
+[soak] driving 24 cycles …
