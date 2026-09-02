@@ -1,0 +1,24 @@
+Command:
+python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'live_authenticated or live_endpoint or live_glm or live_global or live_result or live_persistence or live_case or live_full_cross_resume'
+
+Result on a1cffb082b790318d6ea02a814ddd28e1dcaf9fd before live-adapter implementation:
+
+FFFFFFFFF                                                                [100%]
+
+All nine failures were AttributeError at the first missing experiment API:
+
+- freeze_authenticated_catalog
+- build_live_endpoint (two tests)
+- reasoning_probe_receipt
+- BoundedLiveEndpoint
+- classify_live_result
+- safe_live_result_bytes
+- build_live_case_receipt
+- next_pending_full_cross_case
+
+No provider call was made. There were no behavioral failures.
+
+9 failed, 28 deselected in 0.21s
+
+Exit status: 1
+RED_CAUSE=ABSENT_LIVE_ADAPTER_APIS

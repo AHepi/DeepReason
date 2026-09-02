@@ -9,6 +9,7 @@ import json
 import sys
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import pytest
@@ -133,6 +134,19 @@ def _minimal_full_cross_domain(domain, **overrides):
     }
     axes.update(overrides)
     return _narrow_full_cross_domain(domain, **axes)
+
+
+def _live_seat(**overrides):
+    seat = {
+        "role": "judge:0",
+        "model_id": "glm-5.3",
+        "model_profile": "frontier",
+        "output_mode": "json_object",
+        "output_mechanism": "native_json_schema",
+        "reasoning": {"kind": "string", "value": "none"},
+    }
+    seat.update(overrides)
+    return seat
 
 
 def test_domain_fixture_counts_are_exact(matrix, domain):
@@ -706,3 +720,265 @@ def test_full_cross_lazy_ordinals_resume_the_same_stable_sequence(matrix):
     assert list(matrix.iter_full_cross_cases(
         domain, ["model-a"], start_ordinal=480, **kwargs,
     )) == []
+
+
+def test_live_authenticated_catalog_keeps_every_non_kimi_raw_id(matrix):
+    response = {
+        "object": "list",
+        "data": [
+            {"id": "not-a-chat-model", "object": "model"},
+            {"id": "KIMI K3:cloud", "object": "model"},
+            {"id": "minimax-m3", "object": "model"},
+            {"id": "kimi-k2.7-code", "object": "model"},
+            {"id": "glm-5.3", "object": "model"},
+        ],
+    }
+    frozen = matrix.freeze_authenticated_catalog(response)
+    assert frozen["model_ids"] == [
+        "glm-5.3", "kimi-k2.7-code", "minimax-m3", "not-a-chat-model",
+    ]
+    assert frozen["excluded"] == [
+        {"model_id": "KIMI K3:cloud", "code": "KIMI_K3_FORBIDDEN"}
+    ]
+    assert frozen["catalog_sha256"] == hashlib.sha256(
+        matrix.canonical_json(frozen["model_ids"])
+    ).hexdigest()
+    duplicate = {"object": "list", "data": [{"id": "same"}, {"id": "same"}]}
+    with refusal(matrix, "DUPLICATE_RAW_MODEL_ID"):
+        matrix.freeze_authenticated_catalog(duplicate)
+
+
+def test_live_endpoint_preserves_each_registered_seat_transport_field(matrix):
+    environment = {"OLLAMA_API_KEY": "in-memory-test-credential"}
+    cases = (
+        ("glm-5.3", "frontier", "json_object", "native_json_schema",
+         {"kind": "string", "value": "none"}, "none"),
+        ("minimax-m3", "compact", "text", "grammar",
+         {"kind": "integer", "value": 2_000}, "low"),
+        ("kimi-k2.7-code", "standard", "json_object", "json_text",
+         {"kind": "string", "value": "medium"}, "medium"),
+    )
+    for model, profile, mode, mechanism, reasoning, wire_reasoning in cases:
+        binding = matrix.build_live_endpoint(
+            _live_seat(
+                model_id=model, model_profile=profile, output_mode=mode,
+                output_mechanism=mechanism, reasoning=reasoning,
+            ),
+            criticism_authority="defended_trial", environ=environment,
+        )
+        assert binding.role == "judge:0"
+        assert binding.model_profile == profile
+        endpoint = binding.endpoint
+        assert endpoint.name == "https://ollama.com/v1"
+        assert endpoint.model == model
+        assert endpoint.provider == "ollama"
+        assert endpoint.reasoning == reasoning["value"]
+        assert endpoint.json_mode is (mode == "json_object")
+        assert endpoint.output_mechanism == mechanism
+        assert endpoint.api_key == environment["OLLAMA_API_KEY"]
+        body = endpoint.build_body(
+            "Return the probe object.", response_schema={"type": "object"},
+            output_mechanism=endpoint.output_mechanism,
+        )
+        assert body["model"] == model
+        assert body["reasoning_effort"] == wire_reasoning
+        if mechanism == "native_json_schema":
+            assert body["response_format"]["type"] == "json_schema"
+        elif mechanism == "grammar":
+            assert "grammar" in body
+        else:
+            assert "grammar" not in body and "response_format" not in body
+
+
+def test_live_endpoint_integrity_rejects_observation_and_unsafe_reasoning(matrix):
+    environment = {"OLLAMA_API_KEY": "in-memory-test-credential"}
+    for authority in (None, "observe_only", "trial_required"):
+        with refusal(matrix, "LIVE_REQUIRES_DEFENDED_TRIAL"):
+            matrix.build_live_endpoint(
+                _live_seat(), criticism_authority=authority, environ=environment,
+            )
+    for reasoning in (
+        {"kind": "string", "value": "high"},
+        {"kind": "string", "value": "xhigh"},
+        {"kind": "string", "value": "max"},
+        {"kind": "integer", "value": 2_001},
+    ):
+        with refusal(matrix, "FORBIDDEN_REASONING_EFFORT"):
+            matrix.build_live_endpoint(
+                _live_seat(reasoning=reasoning),
+                criticism_authority="defended_trial",
+                environ=environment,
+            )
+
+
+def test_live_glm_none_probe_records_populated_trace_without_reinterpreting_it(matrix):
+    trace = "provider returned this trace even though none was requested"
+    receipt = matrix.reasoning_probe_receipt(
+        model_id="glm-5.3",
+        requested_reasoning="none",
+        message={"content": '{"ok":true}', "reasoning_content": trace},
+    )
+    assert receipt["status"] == "probe_usable"
+    assert receipt["requested_reasoning"] == "none"
+    assert receipt["message_keys"] == ["content", "reasoning_content"]
+    assert receipt["parser_outcome"] == receipt["schema_outcome"] == "valid"
+    assert receipt["trace_fields"]["reasoning_content"] == {
+        "present": True,
+        "byte_count": len(trace.encode("utf-8")),
+        "sha256": hashlib.sha256(trace.encode("utf-8")).hexdigest(),
+    }
+    assert trace not in json.dumps(receipt)
+    assert "disabled" not in json.dumps(receipt).casefold()
+
+
+def test_live_global_endpoint_gate_never_exceeds_three_calls(matrix):
+    lock, release = threading.Lock(), threading.Event()
+    state = {"active": 0, "peak": 0}
+
+    class BlockingEndpoint:
+        def complete(self, _prompt):
+            with lock:
+                state["active"] += 1
+                state["peak"] = max(state["peak"], state["active"])
+                if state["peak"] == 3:
+                    release.set()
+            assert release.wait(2)
+            time.sleep(0.01)
+            with lock:
+                state["active"] -= 1
+            return "ok"
+
+    endpoints = [matrix.BoundedLiveEndpoint(BlockingEndpoint()) for _ in range(9)]
+    with ThreadPoolExecutor(max_workers=9) as pool:
+        results = list(pool.map(lambda endpoint: endpoint.complete("probe"), endpoints))
+    assert results == ["ok"] * 9
+    assert state == {"active": 0, "peak": 3}
+
+
+def test_live_result_classification_preserves_the_first_typed_boundary(matrix):
+    extent = ["critic", "defender"]
+    typed = matrix.MatrixRefusal("V6_ROUTE_REFUSED", "verbatim refusal")
+    typed.pointer = "/roles/judge/0"
+    refused = matrix.classify_live_result(
+        error=typed, stage="judge:0", dispatch_extent=extent,
+        provider_dependent=False,
+    )
+    assert refused == {
+        "status": "configuration_refused",
+        "dispatch_extent": extent,
+        "first_boundary": {
+            "stage": "judge:0",
+            "exception_type": "MatrixRefusal",
+            "code": "V6_ROUTE_REFUSED",
+            "pointer": "/roles/judge/0",
+            "message": "V6_ROUTE_REFUSED: verbatim refusal",
+        },
+    }
+    provider = matrix.classify_live_result(
+        error=TimeoutError("provider timed out"), stage="judge:0",
+        dispatch_extent=extent, provider_dependent=True,
+    )
+    assert provider["status"] == "provider_indeterminate"
+    assert provider["first_boundary"]["message"] == "provider timed out"
+    outcome = matrix.classify_live_result(
+        outcome_code="ensemble-split", stage="trial", dispatch_extent=extent,
+    )
+    assert outcome == {
+        "status": "trial_outcome", "outcome_code": "ensemble-split",
+        "dispatch_extent": extent, "first_boundary": None,
+    }
+
+
+def test_live_persistence_allowlist_cannot_store_auth_or_raw_trace(matrix):
+    secret = "credential-sentinel-never-write"
+    trace = "raw hidden trace must not be persisted"
+    result = {
+        "case_id": "sha256:" + "1" * 64,
+        "ordinal": 17,
+        "status": "provider_indeterminate",
+        "catalog_sha256": "2" * 64,
+        "domain_sha256": "3" * 64,
+        "branch_commit": "4" * 40,
+        "dispatch_extent": ["critic", "defender"],
+        "response_metadata": {
+            "message_keys": ["content", "reasoning_content"],
+            "trace_fields": {
+                "reasoning_content": {
+                    "present": True, "byte_count": len(trace.encode()),
+                    "sha256": hashlib.sha256(trace.encode()).hexdigest(),
+                },
+            },
+            "raw_reasoning_trace": trace,
+        },
+        "headers": {"Authorization": f"Bearer {secret}"},
+        "api_key": secret,
+        "raw_request_body": {"authorization": secret},
+    }
+    encoded = matrix.safe_live_result_bytes(result, secret=secret)
+    persisted = json.loads(encoded)
+    assert persisted["case_id"] == result["case_id"]
+    assert persisted["ordinal"] == 17
+    assert persisted["dispatch_extent"] == ["critic", "defender"]
+    assert persisted["response_metadata"]["trace_fields"] == (
+        result["response_metadata"]["trace_fields"]
+    )
+    assert secret.encode() not in encoded
+    assert hashlib.sha256(secret.encode()).hexdigest().encode() not in encoded
+    assert trace.encode() not in encoded
+    assert b"Authorization" not in encoded and b"api_key" not in encoded
+    withheld = json.loads(matrix.safe_live_result_bytes({
+        **result,
+        "first_boundary": {"message": secret, "code": "PROVIDER_ERROR"},
+    }, secret=secret))
+    assert withheld["code"] == "SECRET_BEARING_DIAGNOSTIC_WITHHELD"
+
+
+def test_live_case_receipt_binds_full_cross_identity_without_raw_request(matrix):
+    domain = _minimal_full_cross_domain(_read_frozen_full_cross_domain())
+    row = matrix.full_cross_case_at(
+        domain, ["model-a"], 0, catalog_sha256="8" * 64,
+        criticism_authority="defended_trial",
+    )
+    request_body = {
+        "model": "model-a", "messages": [{"role": "user", "content": "probe"}],
+        "reasoning_effort": "low",
+    }
+    receipt = matrix.build_live_case_receipt(
+        row, domain_sha256="9" * 64, branch_commit="a" * 40,
+        request_body=request_body,
+    )
+    assert receipt["case_id"] == row["case_id"]
+    assert receipt["ordinal"] == 0
+    assert receipt["case_payload"] == _full_cross_identity(row)
+    assert receipt["catalog_sha256"] == "8" * 64
+    assert receipt["domain_sha256"] == "9" * 64
+    assert receipt["branch_commit"] == "a" * 40
+    assert receipt["request_body_sha256"] == hashlib.sha256(
+        matrix.canonical_json(request_body)
+    ).hexdigest()
+    assert "request_body" not in receipt
+    assert receipt["criticism_authority"] == "defended_trial"
+
+
+def test_live_full_cross_resume_validates_receipts_and_returns_first_gap(matrix):
+    domain = _minimal_full_cross_domain(_read_frozen_full_cross_domain())
+    kwargs = {
+        "catalog_sha256": "b" * 64,
+        "criticism_authority": "defended_trial",
+    }
+    rows = list(matrix.iter_full_cross_cases(domain, ["model-a"], **kwargs))
+    terminals = [
+        {"ordinal": row["ordinal"], "case_id": row["case_id"]}
+        for row in rows[:2]
+    ]
+    resumed = matrix.next_pending_full_cross_case(
+        domain, ["model-a"], terminal_receipts=terminals,
+        start_ordinal=0, **kwargs,
+    )
+    assert resumed == rows[2]
+    corrupted = [*terminals, {"ordinal": 2, "case_id": rows[3]["case_id"]}]
+    with refusal(matrix, "FULL_CROSS_RECEIPT_ID_MISMATCH"):
+        matrix.next_pending_full_cross_case(
+            domain, ["model-a"], terminal_receipts=corrupted,
+            start_ordinal=0, **kwargs,
+        )
