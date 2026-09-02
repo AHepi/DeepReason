@@ -149,7 +149,7 @@
     "canonical_json": "json.dumps(payload, sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False).encode('utf-8')",
     "case_id_algorithm": "'sha256:' + hashlib.sha256(canonical_json_bytes).hexdigest()",
     "set_digest_algorithm": "SHA-256 over UTF-8-bytewise-sorted case ids, each prefixed by its unsigned 8-byte big-endian byte length",
-    "completeness_oracle": "independent literal Cartesian generator; cardinality, uniqueness, and case-id set digest must match before dispatch"
+    "completeness_oracle": "before dispatch, exact arbitrary-precision fixture cardinality plus inverse ordinal/payload boundaries; a separate tiny finite domain is fully enumerated and must match a literal Cartesian case-id set and length-prefixed digest; the full fixture set digest is a completion artifact because precomputing it would itself enumerate the campaign"
   },
   "request_integrity": {
     "criticism_authority": "defended_trial",

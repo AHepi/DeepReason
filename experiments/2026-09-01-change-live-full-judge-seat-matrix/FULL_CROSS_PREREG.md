@@ -164,11 +164,19 @@ json.dumps(
 
 The case id is `sha256:` followed by the lowercase hexadecimal SHA-256 of
 those bytes. The catalog digest is part of every id, so a changed roster
-creates a different subject. The generator's length, uniqueness, and
-length-prefixed sorted case-id set digest must equal an independently generated
-literal Cartesian oracle before dispatch. No successful-only `findAll`,
+creates a different subject. Before dispatch, the generator's
+arbitrary-precision length must equal the closed formula,
+ordinal-to-payload and payload-to-ordinal must be inverse at every boundary of
+every component, and a separately written tiny finite domain must be enumerated
+completely and match the literal Cartesian case-id set and length-prefixed set
+digest. Computing the 237-quintillion-row fixture set digest itself before
+dispatch would require enumerating the very campaign the digest is meant to
+precede, so it is not falsely registered as a preflight check. If the full
+campaign ever terminates, its streamed terminal ordinal range and case-id
+receipts become the completion artifact. No successful-only `findAll`,
 deduplication, post-hoc constraint repair, or queue priority may alter that
-set.
+set. These membership checks say nothing about the truth or validity of
+provider prose.
 
 ## Research disposition
 
