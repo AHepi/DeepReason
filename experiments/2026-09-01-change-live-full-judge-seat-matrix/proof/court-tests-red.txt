@@ -1,0 +1,107 @@
+$ python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'topology or typed or managed or sequence or soak'
+FFFFFFFF                                                                 [100%]
+=================================== FAILURES ===================================
+_ test_topology_direct_config_compiles_explicit_defended_two_and_three_judges __
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f78f291a720>
+
+    def test_topology_direct_config_compiles_explicit_defended_two_and_three_judges(
+        matrix, monkeypatch
+    ):
+        from deepreason.config import Config
+
+        observed_policies = []
+>       shipped_compile = matrix.compile_run_manifest
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'compile_run_manifest'
+
+tests/test_live_full_judge_seat_matrix.py:226: AttributeError
+___ test_managed_path_reports_its_shipped_first_boundary_not_direct_success ____
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+
+    def test_managed_path_reports_its_shipped_first_boundary_not_direct_success(matrix):
+>       same_model = matrix.classify_managed_path(diverse_nonjudge=False)
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'classify_managed_path'
+
+tests/test_live_full_judge_seat_matrix.py:253: AttributeError
+_ test_sequence_fixed_ungrounded_court_reaches_each_required_dispatch[None-expected0] _
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-794/test_sequence_fixed_ungrounded0')
+paraphrases = None, expected = ['critic', 'defender', 'judge:0', 'judge:1']
+
+    def test_sequence_fixed_ungrounded_court_reaches_each_required_dispatch(
+        matrix, tmp_path, paraphrases, expected
+    ):
+>       row = matrix.run_stubbed_court(
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'run_stubbed_court'
+
+tests/test_live_full_judge_seat_matrix.py:283: AttributeError
+_ test_sequence_fixed_ungrounded_court_reaches_each_required_dispatch[paraphrases1-expected1] _
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-794/test_sequence_fixed_ungrounded1')
+paraphrases = ('restatement one', 'restatement two')
+
+    def test_sequence_fixed_ungrounded_court_reaches_each_required_dispatch(
+        matrix, tmp_path, paraphrases, expected
+    ):
+>       row = matrix.run_stubbed_court(
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'run_stubbed_court'
+
+tests/test_live_full_judge_seat_matrix.py:283: AttributeError
+_______ test_typed_first_refusal_is_terminal_and_preserves_exact_history _______
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-794/test_typed_first_refusal_is_te0')
+
+    def test_typed_first_refusal_is_terminal_and_preserves_exact_history(matrix, tmp_path):
+>       row = matrix.run_stubbed_court(
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'run_stubbed_court'
+
+tests/test_live_full_judge_seat_matrix.py:295: AttributeError
+______ test_typed_semantic_trial_outcome_is_never_a_configuration_refusal ______
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-794/test_typed_semantic_trial_outc0')
+
+    def test_typed_semantic_trial_outcome_is_never_a_configuration_refusal(matrix, tmp_path):
+>       row = matrix.run_stubbed_court(
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'run_stubbed_court'
+
+tests/test_live_full_judge_seat_matrix.py:306: AttributeError
+_________ test_typed_prose_receipt_survives_parser_failure_separately __________
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-794/test_typed_prose_receipt_survi0')
+
+    def test_typed_prose_receipt_survives_parser_failure_separately(matrix, tmp_path):
+        prose = "A human-readable objection remains available for inspection."
+>       receipts = matrix.persist_response_receipts(
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'persist_response_receipts'
+
+tests/test_live_full_judge_seat_matrix.py:318: AttributeError
+__ test_soak_wrapper_registers_experiment_case_without_editing_shipped_driver __
+
+matrix = <module 'live_full_judge_matrix' from '/workspace/scratch/ee299635b3c6/DeepReason/experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py'>
+
+    def test_soak_wrapper_registers_experiment_case_without_editing_shipped_driver(matrix):
+        driver = ROOT / "scripts/cycle_soak.py"
+        before = driver.read_bytes()
+>       cycle_soak, case = matrix.install_soak_case()
+E       AttributeError: module 'live_full_judge_matrix' has no attribute 'install_soak_case'
+
+tests/test_live_full_judge_seat_matrix.py:338: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_live_full_judge_seat_matrix.py::test_topology_direct_config_compiles_explicit_defended_two_and_three_judges
+FAILED tests/test_live_full_judge_seat_matrix.py::test_managed_path_reports_its_shipped_first_boundary_not_direct_success
+FAILED tests/test_live_full_judge_seat_matrix.py::test_sequence_fixed_ungrounded_court_reaches_each_required_dispatch[None-expected0]
+FAILED tests/test_live_full_judge_seat_matrix.py::test_sequence_fixed_ungrounded_court_reaches_each_required_dispatch[paraphrases1-expected1]
+FAILED tests/test_live_full_judge_seat_matrix.py::test_typed_first_refusal_is_terminal_and_preserves_exact_history
+FAILED tests/test_live_full_judge_seat_matrix.py::test_typed_semantic_trial_outcome_is_never_a_configuration_refusal
+FAILED tests/test_live_full_judge_seat_matrix.py::test_typed_prose_receipt_survives_parser_failure_separately
+FAILED tests/test_live_full_judge_seat_matrix.py::test_soak_wrapper_registers_experiment_case_without_editing_shipped_driver
+8 failed, 10 deselected in 0.13s
+
+exit 1

@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=10 blockers=none
+State: next=11 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -75,8 +75,12 @@ changes no shipped behavior or owner agreement.
       `9dff8518d5c94de6a0500181570f4c2b2eca9d35`; local HEAD equalled origin;
       worktree empty.
 
-- [ ] 10. (S4, S6) Add shipped-court, topology, managed-path, typed-boundary, sequence, and soak tests before live implementation.
+- [x] 10. (S4, S6) Add shipped-court, topology, managed-path, typed-boundary, sequence, and soak tests before live implementation.
       done-when: `python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'topology or typed or managed or sequence or soak'` -> nonzero for missing implementation, saved in `proof/court-tests-red.txt`.
+
+      proof: exit 1; `8 failed, 10 deselected in 0.13s`; every failure is
+      `AttributeError` for one of the deliberately absent experiment APIs;
+      full output in `proof/court-tests-red.txt`.
 
 - [ ] 11. (S4, S6) [COMMIT] Push the RED shipped-court tests and proof.
       done-when: the GitHub branch contains the new tests and `proof/court-tests-red.txt`, and local HEAD equals origin.

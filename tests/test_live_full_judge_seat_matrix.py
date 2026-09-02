@@ -215,3 +215,129 @@ def test_terminal_writes_are_atomic_immutable_and_resume_rotates(matrix, tmp_pat
         matrix.prepare_attempt(attempts, domain_sha256="domain-b", catalog_sha256="catalog-a")
     with refusal(matrix, "CATALOG_DIGEST_MISMATCH"):
         matrix.prepare_attempt(attempts, domain_sha256="domain-a", catalog_sha256="catalog-b")
+
+
+def test_topology_direct_config_compiles_explicit_defended_two_and_three_judges(
+    matrix, monkeypatch
+):
+    from deepreason.config import Config
+
+    observed_policies = []
+    shipped_compile = matrix.compile_run_manifest
+
+    def capture_policy(*args, **kwargs):
+        observed_policies.append(kwargs.get("criticism_policy"))
+        return shipped_compile(*args, **kwargs)
+
+    monkeypatch.setattr(matrix, "compile_run_manifest", capture_policy)
+    for judge_count in (2, 3):
+        built = matrix.compile_stubbed_court(judge_count=judge_count)
+        config, manifest = built["config"], built["manifest"]
+        assert isinstance(config, Config)
+        assert config.ENGAGED_CRITICISM_AUTHORITY == "defended_trial"
+        assert len(config.roles["judge"]) == len(manifest.roles["judge"]) == judge_count
+        assert manifest.criticism_policy.authority == "defended_trial"
+        grants = {
+            (entry.role, entry.seat): {grant.contract_id for grant in entry.contracts}
+            for entry in manifest.route_seat_behavioral_capability_plan.entries
+        }
+        assert "defender.direct.v1" in grants[("defender", 0)]
+        for seat in range(judge_count):
+            assert "judgeruling.direct.v1" in grants[("judge", seat)]
+    assert len(observed_policies) == 2
+    assert all(policy is not None and policy.authority == "defended_trial"
+               for policy in observed_policies)
+
+
+def test_managed_path_reports_its_shipped_first_boundary_not_direct_success(matrix):
+    same_model = matrix.classify_managed_path(diverse_nonjudge=False)
+    diverse = matrix.classify_managed_path(diverse_nonjudge=True)
+    assert same_model == {
+        "construction": "managed_preparation",
+        "status": "configuration_refused",
+        "stage": "trial_preflight",
+        "code": "single-judge-seat",
+        "dispatch_history": ["critic"],
+    }
+    assert diverse["construction"] == "managed_preparation"
+    assert diverse["status"] == "configuration_refused"
+    assert diverse["stage"] == "trial_preflight"
+    assert diverse["code"] == "SECOND_JUDGE_FAMILY_REQUIRED"
+    assert diverse["dispatch_history"] == ["critic"]
+
+
+@pytest.mark.parametrize(
+    ("paraphrases", "expected"),
+    [
+        (None, ["critic", "defender", "judge:0", "judge:1"]),
+        (("restatement one", "restatement two"), [
+            "critic", "defender", "judge:0", "judge:1", "variator",
+            "judge:paraphrase:0:0", "judge:paraphrase:0:1",
+            "judge:paraphrase:1:0", "judge:paraphrase:1:1",
+        ]),
+    ],
+)
+def test_sequence_fixed_ungrounded_court_reaches_each_required_dispatch(
+    matrix, tmp_path, paraphrases, expected
+):
+    row = matrix.run_stubbed_court(
+        tmp_path / ("plain" if paraphrases is None else "varied"),
+        judge_count=2,
+        returned_paraphrases=paraphrases,
+    )
+    assert row["status"] == "trial_outcome"
+    assert row["first_refusal"] is None
+    assert row["target_formally_backed"] is False
+    assert row["dispatch_extent"] == expected
+
+
+def test_typed_first_refusal_is_terminal_and_preserves_exact_history(matrix, tmp_path):
+    row = matrix.run_stubbed_court(
+        tmp_path / "one-judge", judge_count=1, returned_paraphrases=None
+    )
+    assert row["status"] == "configuration_refused"
+    assert row["first_refusal"]["stage"] == "trial_preflight"
+    assert row["first_refusal"]["code"] == "SECOND_JUDGE_FAMILY_REQUIRED"
+    assert "SECOND_JUDGE_FAMILY_REQUIRED" in row["first_refusal"]["message"]
+    assert row["dispatch_extent"] == ["critic"]
+
+
+def test_typed_semantic_trial_outcome_is_never_a_configuration_refusal(matrix, tmp_path):
+    row = matrix.run_stubbed_court(
+        tmp_path / "sustained", judge_count=2,
+        returned_paraphrases=("unreached",), judge_verdict="pass",
+    )
+    assert row["status"] == "trial_outcome"
+    assert row["outcome_code"] == "defence-sustained"
+    assert row["dispatch_extent"] == ["critic", "defender", "judge:0", "judge:1"]
+    assert row["variator_reachability"] == "not_exercised_by_outcome"
+
+
+def test_typed_prose_receipt_survives_parser_failure_separately(matrix, tmp_path):
+    prose = "A human-readable objection remains available for inspection."
+    receipts = matrix.persist_response_receipts(
+        tmp_path, prose, parser_outcome="invalid", schema_outcome="not_run",
+        fallback_events=("json_parse_failed",),
+    )
+    prose_receipt = receipts["prose_receipt"]
+    parser_receipt = receipts["parser_receipt"]
+    assert prose_receipt["byte_count"] == len(prose.encode())
+    assert len(prose_receipt["sha256"]) == 64
+    assert (tmp_path / prose_receipt["blob_ref"]).read_text() == prose
+    assert parser_receipt == {
+        "parser_outcome": "invalid",
+        "schema_outcome": "not_run",
+        "fallback_events": ["json_parse_failed"],
+        "structured_value": None,
+    }
+
+
+def test_soak_wrapper_registers_experiment_case_without_editing_shipped_driver(matrix):
+    driver = ROOT / "scripts/cycle_soak.py"
+    before = driver.read_bytes()
+    cycle_soak, case = matrix.install_soak_case()
+    assert driver.read_bytes() == before
+    assert cycle_soak.CASES["judge-matrix"] is case
+    assert isinstance(case, cycle_soak.SoakCase)
+    assert case.id == "judge-matrix" and case.default_cycles == 8
+    assert "kimik3" not in matrix.normalize_model_id(case.description)
