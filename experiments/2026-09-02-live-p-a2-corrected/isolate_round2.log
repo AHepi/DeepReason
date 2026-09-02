@@ -1,0 +1,17 @@
+
+=== CELL E: low-big-cap    (low / 49152 / split off) ===
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SUMMONS_PER_CYCLE=2 is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SPLIT_BUDGET_SEAT_PROTOCOL='off' is not carried by this manifest's engine config and is restored at run time from this notice
+    case 00: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 01: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 02: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 03: eventual_valid=True first_pass=True repairs=0 code=-
+    case 04: eventual_valid=True first_pass=True repairs=0 code=-
+    case 05: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 06: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 07: eventual_valid=True first_pass=True repairs=0 code=-

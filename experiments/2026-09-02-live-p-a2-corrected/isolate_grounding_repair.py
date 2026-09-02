@@ -55,6 +55,13 @@ CELLS: dict[str, tuple[str, str | None, int, str]] = {
     "B": ("pa1-baseline   (unset / 49152 / split auto)", None, 49152, "auto"),
     "C": ("low-only       (low / 32768 / split auto)", "low", 32768, "auto"),
     "D": ("split-off-only (unset / 49152 / split off)", None, 49152, "off"),
+    # Round 2. Round 1 exonerated the split protocol (D, split OFF, 10/10)
+    # and convicted the pair `low + 32768` (A 2/10, C 3/10). These two cells
+    # separate the reasoning knob from the completion cap, which is the whole
+    # remaining question because the remedy differs: E keeps `low` and
+    # restores P-A1's cap, F keeps the cap and restores the effort.
+    "E": ("low-big-cap    (low / 49152 / split off)", "low", 49152, "off"),
+    "F": ("maxeffort-cap  (unset / 32768 / split off)", None, 32768, "off"),
 }
 
 

@@ -9,3 +9,75 @@ NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried
 NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SPLIT_BUDGET_SEAT_PROTOCOL='off' is not carried by this manifest's engine config and is restored at run time from this notice
     case 00: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
     case 01: eventual_valid=True first_pass=True repairs=0 code=-
+    case 02: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 03: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 04: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 05: eventual_valid=True first_pass=True repairs=0 code=-
+    case 06: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 07: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 08: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 09: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+
+=== CELL B: pa1-baseline   (unset / 49152 / split auto) ===
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SUMMONS_PER_CYCLE=2 is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+    case 00: eventual_valid=True first_pass=True repairs=0 code=-
+    case 01: eventual_valid=True first_pass=True repairs=0 code=-
+    case 02: eventual_valid=True first_pass=True repairs=0 code=-
+    case 03: eventual_valid=True first_pass=True repairs=0 code=-
+    case 04: eventual_valid=True first_pass=True repairs=0 code=-
+    case 05: eventual_valid=True first_pass=True repairs=0 code=-
+    case 06: eventual_valid=True first_pass=True repairs=0 code=-
+    case 07: eventual_valid=True first_pass=True repairs=0 code=-
+    case 08: eventual_valid=True first_pass=True repairs=0 code=-
+    case 09: eventual_valid=True first_pass=True repairs=0 code=-
+
+=== CELL C: low-only       (low / 32768 / split auto) ===
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SUMMONS_PER_CYCLE=2 is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+    case 00: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 01: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 02: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 03: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 04: eventual_valid=True first_pass=True repairs=0 code=-
+    case 05: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 06: eventual_valid=True first_pass=True repairs=0 code=-
+    case 07: eventual_valid=True first_pass=True repairs=0 code=-
+    case 08: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+    case 09: eventual_valid=False first_pass=False repairs=2 code=VALUE_ERROR
+
+=== CELL D: split-off-only (unset / 49152 / split off) ===
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SUMMONS_PER_CYCLE=2 is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SPLIT_BUDGET_SEAT_PROTOCOL='off' is not carried by this manifest's engine config and is restored at run time from this notice
+    case 00: eventual_valid=True first_pass=True repairs=0 code=-
+    case 01: eventual_valid=True first_pass=True repairs=0 code=-
+    case 02: eventual_valid=True first_pass=True repairs=0 code=-
+    case 03: eventual_valid=True first_pass=True repairs=0 code=-
+    case 04: eventual_valid=True first_pass=True repairs=0 code=-
+    case 05: eventual_valid=True first_pass=True repairs=0 code=-
+    case 06: eventual_valid=True first_pass=True repairs=0 code=-
+    case 07: eventual_valid=True first_pass=True repairs=0 code=-
+    case 08: eventual_valid=True first_pass=True repairs=0 code=-
+    case 09: eventual_valid=True first_pass=True repairs=0 code=-
+
+==============================================================================
+cell  configuration                                   valid   1st  codes
+A     pa2-current    (low / 32768 / split off)        2/10      2  {'VALUE_ERROR': 8}
+B     pa1-baseline   (unset / 49152 / split auto)    10/10     10  
+C     low-only       (low / 32768 / split auto)       3/10      3  {'VALUE_ERROR': 7}
+D     split-off-only (unset / 49152 / split off)     10/10     10  
+
+written: /home/user/DeepReason/experiments/2026-09-02-live-p-a2-corrected/isolate_grounding_repair.json
