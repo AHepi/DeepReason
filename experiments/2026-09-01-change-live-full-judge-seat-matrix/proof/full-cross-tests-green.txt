@@ -1,0 +1,14 @@
+$ python -m pytest tests/test_live_full_judge_seat_matrix.py -q -k 'full_cross'
+..........                                                               [100%]
+10 passed, 18 deselected in 0.26s
+
+$ python experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py full-cross-enumerate --fixture-catalog
+FULL_CROSS SEAT_TUPLES=1584 JUDGE_2=149596687470624768 JUDGE_3=236961152953469632512 TOTAL=237110749640940257280
+
+$ python tools/blast_radius.py --files experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py tests/test_live_full_judge_seat_matrix.py
+{"result_type": "BLAST_RADIUS_RESULT_V1", "targets": {"files": ["experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py", "tests/test_live_full_judge_seat_matrix.py"], "symbols": []}, "base": null, "frozen_surface_contacts": [], "frozen_adjacent_contacts": [], "reachability": [], "consumers": {"tests": [], "map_checks": [], "qualification_digest": [], "wheel_smoke_pins": []}, "disclosure_summary": "This change touches none of the five frozen surfaces. 0 test file(s) and 0 map document(s) assert on the touched targets today.", "frozen_surface_verdict": "CLEAR"}
+
+$ python tools/diff_budget.py 70e9c73ed0a5630994613afea74c80de6bf59302 --ceiling 2200 --paths experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py tests/test_live_full_judge_seat_matrix.py
+{"result_type": "DIFF_BUDGET_RESULT_V1", "base": "70e9c73ed0a5630994613afea74c80de6bf59302", "against": null, "areas": {"experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py": 1076, "tests/test_live_full_judge_seat_matrix.py": 708}, "total_insertions": 1784, "ceiling": 2200, "verdict": "WITHIN"}
+
+exit 0

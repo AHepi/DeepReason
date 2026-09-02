@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=12E blockers=none
+State: next=12G blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -144,16 +144,28 @@ changes no shipped behavior or owner agreement.
       `9c3a0bc1ec5ed96340438e40cf4221f078cb571f`; local HEAD equalled origin;
       worktree empty.
 
-- [ ] 12E. (S2, S3, S5) Implement the exact lazy two-/three-judge full-cross
+- [x] 12E. (S2, S3, S5) Implement the exact lazy two-/three-judge full-cross
       generator without filtering any family, preflight, parser, or provider
       refusal.
       done-when: the focused `full_cross` tests end with 0 failed and the
       fixture command prints the exact two-judge, three-judge, and union counts.
 
-- [ ] 12F. (S2, S3, S5) Run full-cross GREEN, actual-file blast radius, and
+      proof: `10 passed, 18 deselected in 0.26s`. The fixture command printed
+      `SEAT_TUPLES=1584`, `JUDGE_2=149596687470624768`,
+      `JUDGE_3=236961152953469632512`, and
+      `TOTAL=237110749640940257280`. Direct mixed-radix lookup and inverse
+      reached the fixture tail without walking the iterator.
+
+- [x] 12F. (S2, S3, S5) Run full-cross GREEN, actual-file blast radius, and
       the corrected cumulative 2200-line budget.
       done-when: GREEN output is saved, both frozen-contact lists are empty,
       and `tools/diff_budget.py ... --ceiling 2200` reports `WITHIN`.
+
+      proof: `frozen_surface_contacts=[]`,
+      `frozen_adjacent_contacts=[]`, `frozen_surface_verdict=CLEAR`;
+      `matrix.py=1076`, `test_live_full_judge_seat_matrix.py=708`,
+      `total_insertions=1784`, `ceiling=2200`, `verdict=WITHIN`. Full output
+      is in `proof/full-cross-tests-green.txt`.
 
 - [ ] 12G. (S2, S3, S5) [COMMIT] Push the full-cross generator and GREEN proof.
       done-when: local HEAD equals origin and the worktree is empty.

@@ -9,6 +9,8 @@ from typing import Any, Callable, Iterable, Iterator, Mapping, Sequence
 
 SEAT_SCHEMA = "deepreason.full-judge-seat-case.v1"
 STRUCTURAL_SCHEMA = "deepreason.full-judge-structural-case.v1"
+FULL_CROSS_DOMAIN_SCHEMA = "deepreason.full-cross-judge-domain.v1"
+FULL_CROSS_CASE_SCHEMA = "deepreason.full-cross-judge-case.v1"
 FORBIDDEN_REASONING = frozenset({"high", "max", "xhigh"})
 RESULT_FIELDS = ("case_id", "status", "code", "message", "stage",
                  "exception_type", "pointer", "dispatch_history")
@@ -57,6 +59,387 @@ def domain_counts(domain: Mapping[str, Any]) -> dict[str, int]:
     seat = seat_counts(model_count)["total"]
     transport = transport_counts(model_count)["total"]
     return {"seat": seat, "transport": transport, "combined": seat + transport}
+
+
+_FULL_CROSS_LITERAL_AXES = {
+    "judge_count": {2, 3},
+    "split_protocol": {"auto", "on", "off"},
+    "model_profile_per_seat": {"compact", "standard", "frontier"},
+    "output_mode_per_seat": {"text", "json_object"},
+    "output_mechanism_per_seat": {"native_json_schema", "grammar", "json_text"},
+    "paraphrase_count_with_variator": {-1, 0, 1, 2, 3},
+}
+_FULL_CROSS_REASONING = (
+    {"kind": "string", "value": "none"},
+    {"kind": "string", "value": "low"},
+    {"kind": "string", "value": "medium"},
+    {"kind": "integer", "value": 2_000},
+)
+
+
+def _full_cross_axis(axes: Mapping[str, Any], name: str) -> list[Any]:
+    values = axes.get(name)
+    if not isinstance(values, list) or not values:
+        raise MatrixRefusal("FULL_CROSS_DOMAIN_INVALID", f"{name} must be nonempty")
+    encoded = [canonical_json(value) for value in values]
+    if len(set(encoded)) != len(encoded):
+        raise MatrixRefusal("FULL_CROSS_DOMAIN_INVALID", f"{name} contains duplicates")
+    return values
+
+
+def _validate_full_cross_domain(domain: Mapping[str, Any]) -> Mapping[str, Any]:
+    if not isinstance(domain, Mapping) or domain.get("schema") != FULL_CROSS_DOMAIN_SCHEMA:
+        raise MatrixRefusal("FULL_CROSS_DOMAIN_SCHEMA_UNSUPPORTED")
+    axes = domain.get("finite_axes")
+    if not isinstance(axes, Mapping):
+        raise MatrixRefusal("FULL_CROSS_DOMAIN_INVALID", "finite_axes is absent")
+    for name, allowed in _FULL_CROSS_LITERAL_AXES.items():
+        values = _full_cross_axis(axes, name)
+        if any(isinstance(value, bool) or value not in allowed for value in values):
+            raise MatrixRefusal("FULL_CROSS_DOMAIN_INVALID", f"{name} left its frozen domain")
+    reasoning = _full_cross_axis(axes, "reasoning_per_seat")
+    if any(
+        not isinstance(value, Mapping)
+        or set(value) != {"kind", "value"}
+        or not any(value == registered for registered in _FULL_CROSS_REASONING)
+        for value in reasoning
+    ):
+        raise MatrixRefusal(
+            "FULL_CROSS_DOMAIN_INVALID", "reasoning_per_seat left its typed frozen domain"
+        )
+    if axes.get("paraphrase_count_without_variator", object()) is not None:
+        raise MatrixRefusal(
+            "FULL_CROSS_DOMAIN_INVALID",
+            "paraphrase_count_without_variator must be null",
+        )
+    return axes
+
+
+def load_full_cross_domain(path: str | os.PathLike[str]) -> dict[str, Any]:
+    """Load the frozen full-cross document without normalizing its ordering."""
+    with Path(path).open(encoding="utf-8") as handle:
+        domain = json.load(handle)
+    _validate_full_cross_domain(domain)
+    return domain
+
+
+def full_cross_seat_tuple_count(domain: Mapping[str, Any], *, model_count: int) -> int:
+    """Return ``S`` using Python's arbitrary-precision integer arithmetic."""
+    axes = _validate_full_cross_domain(domain)
+    if isinstance(model_count, bool) or not isinstance(model_count, int) or model_count < 1:
+        raise MatrixRefusal("EMPTY_MODEL_CATALOG")
+    return model_count * (
+        len(axes["model_profile_per_seat"])
+        * len(axes["output_mode_per_seat"])
+        * len(axes["output_mechanism_per_seat"])
+        * len(axes["reasoning_per_seat"])
+    )
+
+
+def full_cross_counts(domain: Mapping[str, Any], *, model_count: int) -> dict[str, int]:
+    """Return exact per-topology and union cardinalities for this literal domain."""
+    axes = _validate_full_cross_domain(domain)
+    seat_tuples = full_cross_seat_tuple_count(domain, model_count=model_count)
+    split_count = len(axes["split_protocol"])
+    paraphrase_count = len(axes["paraphrase_count_with_variator"])
+    result = {"seat_tuples": seat_tuples}
+    total = 0
+    for judge_count in axes["judge_count"]:
+        count = (
+            split_count * seat_tuples ** (2 + judge_count)
+            + split_count * paraphrase_count * seat_tuples ** (3 + judge_count)
+        )
+        result[f"judge_count_{judge_count}"] = count
+        total += count
+    result["total"] = total
+    return result
+
+
+def _full_cross_models(model_ids: Iterable[str]) -> list[str]:
+    models = freeze_catalog(model_ids)["model_ids"]
+    if not models:
+        raise MatrixRefusal("EMPTY_MODEL_CATALOG")
+    return models
+
+
+def _require_full_cross_authority(
+    domain: Mapping[str, Any], criticism_authority: Any
+) -> None:
+    integrity = domain.get("request_integrity")
+    if (
+        criticism_authority != "defended_trial"
+        or not isinstance(integrity, Mapping)
+        or integrity.get("criticism_authority") != "defended_trial"
+    ):
+        raise MatrixRefusal("FULL_CROSS_REQUIRES_DEFENDED_TRIAL")
+
+
+def _validate_full_cross_catalog_digest(catalog_sha256: Any) -> None:
+    if (
+        not isinstance(catalog_sha256, str)
+        or re.fullmatch(r"[0-9a-f]{64}", catalog_sha256) is None
+    ):
+        raise MatrixRefusal("FULL_CROSS_CATALOG_DIGEST_INVALID")
+
+
+def _full_cross_tuple_axes(
+    axes: Mapping[str, Any], models: Sequence[str]
+) -> tuple[Sequence[Any], ...]:
+    return (
+        models,
+        axes["model_profile_per_seat"],
+        axes["output_mode_per_seat"],
+        axes["output_mechanism_per_seat"],
+        axes["reasoning_per_seat"],
+    )
+
+
+def _decode_mixed_radix(index: int, radices: Sequence[int]) -> list[int]:
+    digits = [0] * len(radices)
+    for position in range(len(radices) - 1, -1, -1):
+        index, digits[position] = divmod(index, radices[position])
+    if index:
+        raise MatrixRefusal("FULL_CROSS_ORDINAL_OUT_OF_RANGE")
+    return digits
+
+
+def _encode_mixed_radix(digits: Sequence[int], radices: Sequence[int]) -> int:
+    value = 0
+    for digit, radix in zip(digits, radices):
+        value = value * radix + digit
+    return value
+
+
+def _full_cross_seat_at(
+    axes: Mapping[str, Any], models: Sequence[str], tuple_index: int, role: str
+) -> dict[str, Any]:
+    tuple_axes = _full_cross_tuple_axes(axes, models)
+    digits = _decode_mixed_radix(tuple_index, [len(axis) for axis in tuple_axes])
+    values = [axis[digit] for axis, digit in zip(tuple_axes, digits)]
+    reasoning = values[4]
+    return {
+        "role": role,
+        "model_id": values[0],
+        "model_profile": values[1],
+        "output_mode": values[2],
+        "output_mechanism": values[3],
+        "reasoning": {"kind": reasoning["kind"], "value": reasoning["value"]},
+    }
+
+
+def _full_cross_roles(judge_count: int, with_variator: bool) -> list[str]:
+    roles = ["critic", "defender", *(f"judge:{seat}" for seat in range(judge_count))]
+    if with_variator:
+        roles.append("variator")
+    return roles
+
+
+def _full_cross_component(
+    axes: Mapping[str, Any], seat_tuple_count: int, ordinal: int
+) -> tuple[int, bool, int]:
+    split_count = len(axes["split_protocol"])
+    paraphrase_count = len(axes["paraphrase_count_with_variator"])
+    remaining = ordinal
+    for judge_count in axes["judge_count"]:
+        for with_variator in (False, True):
+            role_count = 2 + judge_count + int(with_variator)
+            multiplier = split_count * (paraphrase_count if with_variator else 1)
+            size = multiplier * seat_tuple_count**role_count
+            if remaining < size:
+                return judge_count, with_variator, remaining
+            remaining -= size
+    raise MatrixRefusal("FULL_CROSS_ORDINAL_OUT_OF_RANGE")
+
+
+def full_cross_case_at(
+    domain: Mapping[str, Any],
+    model_ids: Iterable[str],
+    ordinal: int,
+    *,
+    catalog_sha256: str,
+    criticism_authority: str | None,
+) -> dict[str, Any]:
+    """Decode one case directly; no earlier case is generated or inspected."""
+    axes = _validate_full_cross_domain(domain)
+    _require_full_cross_authority(domain, criticism_authority)
+    models = _full_cross_models(model_ids)
+    counts = full_cross_counts(domain, model_count=len(models))
+    if (
+        isinstance(ordinal, bool)
+        or not isinstance(ordinal, int)
+        or ordinal < 0
+        or ordinal >= counts["total"]
+    ):
+        raise MatrixRefusal("FULL_CROSS_ORDINAL_OUT_OF_RANGE")
+    _validate_full_cross_catalog_digest(catalog_sha256)
+
+    judge_count, with_variator, local = _full_cross_component(
+        axes, counts["seat_tuples"], ordinal
+    )
+    roles = _full_cross_roles(judge_count, with_variator)
+    assignment_count = counts["seat_tuples"] ** len(roles)
+    if with_variator:
+        per_split = len(axes["paraphrase_count_with_variator"]) * assignment_count
+        split_index, local = divmod(local, per_split)
+        paraphrase_index, assignment_index = divmod(local, assignment_count)
+        paraphrase_count = axes["paraphrase_count_with_variator"][paraphrase_index]
+    else:
+        split_index, assignment_index = divmod(local, assignment_count)
+        paraphrase_count = None
+    tuple_indices = _decode_mixed_radix(
+        assignment_index, [counts["seat_tuples"]] * len(roles)
+    )
+    identity = {
+        "schema": FULL_CROSS_CASE_SCHEMA,
+        "catalog_sha256": catalog_sha256,
+        "judge_count": judge_count,
+        "split_protocol": axes["split_protocol"][split_index],
+        "paraphrase_count": paraphrase_count,
+        "seats": [
+            _full_cross_seat_at(axes, models, tuple_index, role)
+            for role, tuple_index in zip(roles, tuple_indices)
+        ],
+    }
+    return {
+        **identity,
+        "ordinal": ordinal,
+        "case_id": _sha256_id(identity),
+        "criticism_authority": "defended_trial",
+    }
+
+
+def _full_cross_axis_index(axis: Sequence[Any], value: Any, field: str) -> int:
+    for index, candidate in enumerate(axis):
+        if canonical_json(candidate) == canonical_json(value):
+            return index
+    raise MatrixRefusal("FULL_CROSS_CASE_INVALID", f"{field} left its frozen axis")
+
+
+def _full_cross_seat_ordinal(
+    axes: Mapping[str, Any], models: Sequence[str], seat: Mapping[str, Any]
+) -> int:
+    expected = {
+        "role", "model_id", "model_profile", "output_mode", "output_mechanism", "reasoning"
+    }
+    if not isinstance(seat, Mapping) or set(seat) != expected:
+        raise MatrixRefusal("FULL_CROSS_CASE_INVALID", "seat schema mismatch")
+    tuple_axes = _full_cross_tuple_axes(axes, models)
+    fields = ("model_id", "model_profile", "output_mode", "output_mechanism", "reasoning")
+    digits = [
+        _full_cross_axis_index(axis, seat[field], field)
+        for axis, field in zip(tuple_axes, fields)
+    ]
+    return _encode_mixed_radix(digits, [len(axis) for axis in tuple_axes])
+
+
+def full_cross_case_ordinal(
+    domain: Mapping[str, Any], model_ids: Iterable[str], row: Mapping[str, Any]
+) -> int:
+    """Encode a case directly back to its stable mixed-radix ordinal."""
+    axes = _validate_full_cross_domain(domain)
+    if not isinstance(row, Mapping):
+        raise MatrixRefusal("FULL_CROSS_CASE_INVALID")
+    _require_full_cross_authority(domain, row.get("criticism_authority"))
+    if row.get("schema") != FULL_CROSS_CASE_SCHEMA:
+        raise MatrixRefusal("FULL_CROSS_CASE_SCHEMA_UNSUPPORTED")
+    models = _full_cross_models(model_ids)
+    judge_count = row.get("judge_count")
+    judge_index = _full_cross_axis_index(axes["judge_count"], judge_count, "judge_count")
+    seats = row.get("seats")
+    if not isinstance(seats, list):
+        raise MatrixRefusal("FULL_CROSS_CASE_INVALID", "seats must be a list")
+    no_variator_roles = _full_cross_roles(judge_count, False)
+    with_variator = len(seats) == len(no_variator_roles) + 1
+    roles = _full_cross_roles(judge_count, with_variator)
+    if (
+        len(seats) != len(roles)
+        or any(not isinstance(seat, Mapping) for seat in seats)
+        or [seat.get("role") for seat in seats] != roles
+    ):
+        raise MatrixRefusal("FULL_CROSS_CASE_INVALID", "seat roles or order mismatch")
+    paraphrase = row.get("paraphrase_count")
+    if with_variator:
+        paraphrase_index = _full_cross_axis_index(
+            axes["paraphrase_count_with_variator"], paraphrase, "paraphrase_count"
+        )
+    elif paraphrase is None:
+        paraphrase_index = 0
+    else:
+        raise MatrixRefusal("FULL_CROSS_CASE_INVALID", "unexpected paraphrase_count")
+    split_index = _full_cross_axis_index(
+        axes["split_protocol"], row.get("split_protocol"), "split_protocol"
+    )
+    seat_tuple_count = full_cross_seat_tuple_count(domain, model_count=len(models))
+    seat_ordinals = [_full_cross_seat_ordinal(axes, models, seat) for seat in seats]
+    assignment_ordinal = _encode_mixed_radix(
+        seat_ordinals, [seat_tuple_count] * len(seats)
+    )
+
+    ordinal = 0
+    split_count = len(axes["split_protocol"])
+    paraphrase_axis_count = len(axes["paraphrase_count_with_variator"])
+    for prior_judge_count in axes["judge_count"][:judge_index]:
+        ordinal += split_count * seat_tuple_count ** (2 + prior_judge_count)
+        ordinal += (
+            split_count
+            * paraphrase_axis_count
+            * seat_tuple_count ** (3 + prior_judge_count)
+        )
+    no_variator_assignments = seat_tuple_count ** (2 + judge_count)
+    if with_variator:
+        ordinal += split_count * no_variator_assignments
+        assignment_count = seat_tuple_count ** (3 + judge_count)
+        ordinal += (
+            (split_index * paraphrase_axis_count + paraphrase_index) * assignment_count
+            + assignment_ordinal
+        )
+    else:
+        ordinal += split_index * no_variator_assignments + assignment_ordinal
+
+    identity = {
+        key: row.get(key)
+        for key in (
+            "schema", "catalog_sha256", "judge_count", "split_protocol",
+            "paraphrase_count", "seats",
+        )
+    }
+    _validate_full_cross_catalog_digest(identity["catalog_sha256"])
+    if row.get("case_id") != _sha256_id(identity):
+        raise MatrixRefusal("FULL_CROSS_CASE_ID_MISMATCH")
+    if "ordinal" in row and row["ordinal"] != ordinal:
+        raise MatrixRefusal("FULL_CROSS_CASE_ORDINAL_MISMATCH")
+    return ordinal
+
+
+def iter_full_cross_cases(
+    domain: Mapping[str, Any],
+    model_ids: Iterable[str],
+    *,
+    catalog_sha256: str,
+    criticism_authority: str | None,
+    start_ordinal: int = 0,
+    stop_ordinal: int | None = None,
+) -> Iterator[dict[str, Any]]:
+    """Lazily enumerate exactly the requested ordinal interval via direct lookup."""
+    _validate_full_cross_domain(domain)
+    _require_full_cross_authority(domain, criticism_authority)
+    models = list(model_ids)
+    accepted_count = len(_full_cross_models(models))
+    total = full_cross_counts(domain, model_count=accepted_count)["total"]
+    stop = total if stop_ordinal is None else stop_ordinal
+    for name, value in (("start_ordinal", start_ordinal), ("stop_ordinal", stop)):
+        if isinstance(value, bool) or not isinstance(value, int) or not 0 <= value <= total:
+            raise MatrixRefusal("FULL_CROSS_ORDINAL_OUT_OF_RANGE", name)
+    if stop < start_ordinal:
+        raise MatrixRefusal("FULL_CROSS_ORDINAL_RANGE_INVALID")
+    for ordinal in range(start_ordinal, stop):
+        yield full_cross_case_at(
+            domain,
+            models,
+            ordinal,
+            catalog_sha256=catalog_sha256,
+            criticism_authority=criticism_authority,
+        )
 def normalize_model_id(model_id: str) -> str:
     if not isinstance(model_id, str):
         raise MatrixRefusal("MODEL_ID_NOT_STRING")
@@ -659,14 +1042,35 @@ def _enumerate_fixture() -> None:
         f"CORE_COURTS={counts['core_courts']} NO_VARIATOR={counts['no_variator']} "
         f"WITH_VARIATOR={counts['with_variator']} TOTAL={counts['total']}"
     )
+
+
+def _enumerate_full_cross_fixture() -> None:
+    tranche = Path(__file__).parent
+    domain = load_full_cross_domain(tranche / "FULL_CROSS_DOMAIN.json")
+    catalog_domain = load_domain(tranche / "MATRIX_DOMAIN.json")
+    model_count = len(freeze_catalog(
+        entry["model_id"] for entry in catalog_domain["fixture_catalog"]
+    )["model_ids"])
+    counts = full_cross_counts(domain, model_count=model_count)
+    print(
+        f"FULL_CROSS SEAT_TUPLES={counts['seat_tuples']} "
+        f"JUDGE_2={counts['judge_count_2']} JUDGE_3={counts['judge_count_3']} "
+        f"TOTAL={counts['total']}"
+    )
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest="command", required=True)
     enumerate_parser = subparsers.add_parser("enumerate")
     enumerate_parser.add_argument("--fixture-catalog", action="store_true", required=True)
+    full_cross_parser = subparsers.add_parser("full-cross-enumerate")
+    full_cross_parser.add_argument("--fixture-catalog", action="store_true", required=True)
     args = parser.parse_args(argv)
     if args.command == "enumerate" and args.fixture_catalog:
         _enumerate_fixture()
+    elif args.command == "full-cross-enumerate" and args.fixture_catalog:
+        _enumerate_full_cross_fixture()
     return 0
 if __name__ == "__main__":
     raise SystemExit(main())
