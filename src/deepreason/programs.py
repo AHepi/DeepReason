@@ -7,8 +7,17 @@ guard (§3, §10 — P5) and raise NotEvaluable here.
 
 Budget honesty (§0 determinism): a verdict is a pure function of content,
 so wall-clock time never drives it. Registry programs receive the budget
-and may enforce a DETERMINISTIC bound (e.g. step count) internally; the
-``overrun`` verdict is reserved for those (see measures/hv.py).
+and may enforce a DETERMINISTIC bound (e.g. step count) internally, and
+``overrun`` is what they return on it (see measures/hv.py).
+
+``overrun`` is NOT limited to a blown bound, and no consumer may read it as
+one: it is the verdict for EVERY case where this module obtained no verdict
+about the content -- an observation still awaiting registered evidence, a
+proof deferred to the pinned external verifier, a promotion criterion whose
+blobs are absent. All three of this file's own ``overrun`` literals are that
+shape, none of them a bound. What unites them is the reading every consumer
+must take: ``overrun`` is never a refutation and never a warrant, so it must
+not be counted against the content the way ``fail`` is.
 """
 
 import ast

@@ -205,12 +205,24 @@ def pareto_scores(harness, artifact_id: str) -> dict[str, float]:
 
     An OMITTED axis is the typed way to say "not measured"; `capture.pareto.
     frontier` drops an absent axis from that pairwise comparison rather than
-    reading it as 0.0. `coverage` is passes/evaluable-commitments, so an
-    artifact carrying no evaluable commitment has no denominator — writing
-    0.0 there would put "nothing to check" on the same coordinate as "checked
-    and failed everything" and let a formally-backed sibling dominate it,
-    which weights rank on conjecture KIND (DUAL_MODE_CONJECTURE_PREPLAN.md
+    reading it as 0.0. `coverage` is passes over the commitments that were
+    actually DECIDED, so an artifact with nothing decided has no denominator —
+    writing 0.0 there would put "nothing to check" on the same coordinate as
+    "checked and failed everything" and let a formally-backed sibling dominate
+    it, which weights rank on conjecture KIND (DUAL_MODE_CONJECTURE_PREPLAN.md
     R-g; CLAUDE.md's formalism-optional law).
+
+    The same rule governs the DENOMINATOR, which is why OVERRUN leaves it: a
+    verdict of OVERRUN is the harness saying it obtained no verdict, and every
+    other consumer already reads it that way (`rules/act.py` "a spec defect,
+    not the candidate's fault"; `rules/crit.py` twice; `_lean_external_check`'s
+    "never a failed proof"). Counting it as a non-pass makes a falsifiable
+    countercondition cost its own author rank — an artifact that declares
+    three observations awaiting evidence scored 4/7 against a sibling's 2/2 on
+    live roots `9e48a36b1dec91ee`, `4565139800f5ca02` and the poietics run,
+    where every seed-answering artifact was dominated and every frontier member
+    answered a problem the harness minted for itself. A commitment that FAILED
+    was decided, so it stays in the denominator and still lowers the score.
 
     `hv` and `reach` still emit 0.0 for an unmeasured artifact. That is the
     axis family's remaining 0.0-default shape, rowed STRUCTURAL-GAP rather
@@ -223,22 +235,22 @@ def pareto_scores(harness, artifact_id: str) -> dict[str, float]:
 
     state = harness.state
     artifact = state.artifacts[artifact_id]
-    battery = [
-        c
-        for c in artifact.interface.commitments
-        if c in harness.commitments and programs.evaluable(harness.commitments[c])
-    ]
+    decided = []
+    for cid in artifact.interface.commitments:
+        if cid not in harness.commitments:
+            continue
+        commitment = harness.commitments[cid]
+        if not programs.evaluable(commitment):
+            continue
+        verdict, _ = programs.evaluate(commitment, artifact, harness.blobs)
+        if verdict != programs.OVERRUN:
+            decided.append(verdict)
     scores = {
         "hv": state.hv.get(artifact_id, 0.0),
         "reach": state.reach.get(artifact_id, 0.0),
     }
-    if battery:
-        scores["coverage"] = sum(
-            1
-            for c in battery
-            if programs.evaluate(harness.commitments[c], artifact, harness.blobs)[0]
-            == programs.PASS
-        ) / len(battery)
+    if decided:
+        scores["coverage"] = decided.count(programs.PASS) / len(decided)
     return scores
 
 

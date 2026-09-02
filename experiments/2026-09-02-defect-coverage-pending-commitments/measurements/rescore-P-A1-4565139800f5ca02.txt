@@ -1,0 +1,30 @@
+root: 2026-09-01-live-all-modules-p-a1/run
+artifacts 33 | survivors 11 | problems 14
+hv entries 0 (nonzero 0) | reach entries 0 (nonzero 0)
+
+installed-code check: shipped pareto_scores == NEW (OVERRUN leaves the denominator)
+
+PARETO_AXES ['hv', 'reach', 'coverage']
+frontier BEFORE (OVERRUN penalised): 7 of 11
+frontier AFTER  (OVERRUN excluded) : 11 of 11
+  before -- on frontier {'connection': 7}
+            dominated   {'seed': 4}
+  after  -- on frontier {'connection': 7, 'seed': 4}
+            dominated   {}
+
+ before  after  artifact       answers        eval pass fail over  cov-before  cov-after
+----------------------------------------------------------------------------------------
+  FRONT  FRONT  339fb6643f3e   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  57a95f31733e   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  9a43d631a16a   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  a3f08dc9b14d   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  b25c517f58a5   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  d6c150759240   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  fccdd80d8433   connection        2    2    0    0      1.0000     1.0000
+      .  FRONT  3d82a99f1546   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  4c65c1e95b4d   seed              6    4    0    2      0.6667     1.0000  <== MOVED ON
+      .  FRONT  8716c67d0789   seed              6    4    0    2      0.6667     1.0000  <== MOVED ON
+      .  FRONT  f3f96ed708a2   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+
+OVERRUN reason census (all survivors)
+    10  observation requires registered evidence

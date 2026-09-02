@@ -88,8 +88,9 @@ have no kind to read.
 THAT CHECK IS NOT SUFFICIENT AND NEVER WAS, and the gap is the finding this
 clause now carries: kind can be read WITHOUT naming either guard. Two hundred
 lines from `_select_problem`, in the same file, `run_report` ranked survivors
-on a `coverage` axis that is `passes/evaluable-commitments` — an artifact
-carrying no evaluable commitment has no denominator, and writing 0.0 there let
+on a `coverage` axis that was `passes/evaluable-commitments` (since 2026-09-02,
+passes over the commitments actually DECIDED) — an artifact that decided
+nothing has no denominator, and writing 0.0 there let
 `frontier`, which maximises every axis, drop it below a formally-backed
 sibling. Naming a guard is one way to read kind; deriving a score FROM
 `Interface.commitments` is another, and only the second one bit. Since
@@ -240,6 +241,27 @@ decides "is this prose" before criticism runs.
   fix: when checking this concept, ask what a term is DERIVED from, not which
   helper it calls.
 `check: python -m pytest tests/test_formalism_optional_rank.py -q`
+- **The same axis read kind a SECOND way, and this time it penalised the formal
+  side too.** Applying that enduring rule to the denominator, not just the
+  numerator, finds the sibling defect: `coverage` derived its denominator from
+  the count of EVALUABLE commitments, so a commitment that was evaluable but
+  UNDECIDED — verdict `programs.OVERRUN`, "no verdict obtained" — counted
+  against its own artifact. An informal conjecture pays it for every
+  observation-valued countercondition it declares
+  (`program:reasoning_observation_pending`, unconditional OVERRUN), and a
+  FORMAL one pays it for every Lean commitment awaiting the pinned external
+  verifier (the four `lean_*` programs, also unconditional OVERRUN). R-g's
+  "formal backing may confer PROTECTION; its absence confers no disadvantage"
+  was therefore violated in BOTH directions by one arithmetic. Live footprint:
+  three roots — P-S1 `9e48a36b1dec91ee`, P-A1 `4565139800f5ca02`, P-R1
+  `experiments/2026-08-25-poietics-program/run` — where 100% of the Pareto
+  frontier answered harness-minted problems and 100% of the seed-answering
+  artifacts were dominated, with zero FAIL verdicts anywhere to explain it.
+  FIXED 2026-09-02 (`experiments/2026-09-02-defect-coverage-pending-commitments/`).
+  The enduring rule, sharpened: ask what a term is derived from — and then ask
+  the same question of its DENOMINATOR, which is where the count of
+  commitments hides after the numerator has been cleaned up.
+`check: python -m pytest tests/test_coverage_pending_commitments.py -q`
 - **A repair to a kind-conditional rank term is not "put everyone on the
   frontier".** The operator's own question when this was parked was whether
   "nothing to check" and "checked and failed" should share a coordinate

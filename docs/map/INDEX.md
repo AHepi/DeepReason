@@ -120,6 +120,7 @@ traffic at all.
 | 13 | scratch × workflow | `SEAM-scratch-x-workflow.md` |
 | 11 | harness × workflow | `SEAM-harness-x-workflow.md` |
 | 11 | rules × scheduler | `SEAM-scheduler-x-rules.md` |
+| 11 | evaluation × scheduler | `SEAM-evaluation-x-scheduler.md` |
 | 11 | capabilities × workflow | — not yet written |
 | 11 | manifest × workflow | — not yet written |
 | 10 | llm × scratch | — not yet written |

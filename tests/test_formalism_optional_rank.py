@@ -49,6 +49,19 @@ FAILING = "predicate:len(content) > 10**9"
 # 2026-08-30 they are 0.0 for every survivor of both kinds, so no penalty is
 # reachable through them in any committed record. See
 # experiments/2026-08-30-defect-formalism-rank-penalty/PARKED.md L3.
+#
+# "Commitment-free" is the NARROWER of the two roads into this table, and
+# reading it as the only one cost three live roots. The wider statement is
+# "a survivor with nothing DECIDED": an artifact can carry a full battery of
+# evaluable commitments and still have no denominator, because every one of
+# them evaluates OVERRUN — the harness obtained no verdict. This file's own
+# "obs" commitment takes the narrow road (`eval="observation"` is screened out
+# by `programs.evaluable` before the battery); every LIVE artifact takes the
+# wide one, because `workloads/text.py` rewrites a declared `eval:
+# "observation"` into `program:reasoning_observation_pending`, which IS
+# evaluable. The architecture test below now exercises both roads against this
+# one table. See experiments/2026-09-02-defect-coverage-pending-commitments/
+# and tests/test_coverage_pending_commitments.py.
 COMMITMENT_FREE_CAN_REACH_THE_FLOOR = {
     "hv": True,
     "reach": True,
@@ -63,11 +76,21 @@ def _root(tmp_path, batteries: dict[str, list[str]]) -> tuple[Harness, dict[str,
     harness.register_commitment(
         Commitment(id="obs", eval="observation", observation_valued=True)
     )
+    # The spelling a live artifact actually carries: `workloads/text.py` rewrites
+    # a declared `eval: "observation"` into this, and unlike "observation" it IS
+    # evaluable, so it reaches the battery and evaluates OVERRUN.
+    harness.register_commitment(
+        Commitment(
+            id="pending",
+            eval="program:reasoning_observation_pending",
+            observation_valued=True,
+        )
+    )
     problem = harness.register_problem(
         Problem(
             id="p1",
             description="a problem",
-            criteria=["ok", "no", "obs"],
+            criteria=["ok", "no", "obs", "pending"],
             provenance=ProblemProvenance(trigger=SpawnTrigger.SEED),
         )
     )
@@ -150,15 +173,23 @@ def test_architecture_every_pareto_axis_declares_its_commitment_free_state():
     assert set(Config().PARETO_AXES) == set(COMMITMENT_FREE_CAN_REACH_THE_FLOOR)
 
 
-def test_architecture_axes_that_must_not_be_zeroed_are_omitted_instead(tmp_path):
+@pytest.mark.parametrize("road", ["screened-out", "undecidable"])
+def test_architecture_axes_that_must_not_be_zeroed_are_omitted_instead(tmp_path, road):
     """ARCHITECTURE, the enforcing half: every axis annotated False must be
-    ABSENT from a commitment-free survivor's scores (not-measured), and every
-    axis annotated True must be present. An axis that is neither is
-    unannotated, which the test above already caught."""
-    harness, ids = _root(tmp_path, {"prose": ["obs"]})
+    ABSENT from a survivor that decided nothing (not-measured), and every axis
+    annotated True must be present. An axis that is neither is unannotated,
+    which the test above already caught.
+
+    Both roads into "decided nothing", because only the first was covered when
+    the coverage axis inverted three live roots: `screened-out` carries a
+    commitment `programs.evaluable` rejects, so the battery is empty;
+    `undecidable` carries the spelling the harness actually mints, which is
+    evaluable and evaluates OVERRUN. The table must govern both."""
+    battery = {"screened-out": ["obs"], "undecidable": ["pending"]}[road]
+    harness, ids = _root(tmp_path, {"prose": battery})
     scores = pareto_scores(harness, ids["prose"])
     for axis, reachable in COMMITMENT_FREE_CAN_REACH_THE_FLOOR.items():
-        assert (axis in scores) is reachable, (axis, scores)
+        assert (axis in scores) is reachable, (road, axis, scores)
 
 
 @pytest.mark.parametrize(

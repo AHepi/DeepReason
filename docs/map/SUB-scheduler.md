@@ -2,7 +2,7 @@
 Verified-at: 66e56fe88
 Verify: python -m pytest tests/test_scheduler.py tests/test_rotation.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_controller.py tests/test_controller_steering_parity.py -q
 Owns: src/deepreason/scheduler/, src/deepreason/controller.py
-Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow, DR-SEAM-schools-x-scheduler, DR-SEAM-llm-x-scheduler
+Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow, DR-SEAM-schools-x-scheduler, DR-SEAM-llm-x-scheduler, DR-SEAM-evaluation-x-scheduler
 Seams-undocumented: authority x scheduler, capabilities x scheduler, harness x scheduler, manifest x scheduler, scheduler x scratch
 
 # The scheduler — what gets worked on, in what order, under what budget
@@ -28,6 +28,7 @@ behind it; the cheap deterministic work is deliberately not rationed.
 |---|---|---|
 | `DR-SEAM-scheduler-x-rules` | documented | the scheduler decides what is worked on, by whom, how often; the rules decide what that work means epistemically |
 | `DR-SEAM-scheduler-x-workflow` | documented | the scheduler decides what and when; the workflow plane decides by what recorded authority any of it may touch a provider |
+| `DR-SEAM-evaluation-x-scheduler` | documented | the scheduler dispatches evaluation's work AND interprets its verdicts to rank; `overrun` means no verdict was obtained, so it may move no coordinate |
 | authority x scheduler | undocumented | real: `scheduler/scheduler.py` is jointly `Owns:`-listed by `DR-CON-authority` — `Scheduler._criticize`/`Scheduler.step` are named rubric/pairwise call sites for `trial_authority_for` |
 | scheduler x schools | undocumented | real, richly evidenced from the schools side (`DR-CON-schools`'s Where-it-lives table): `Scheduler._school_dict`, `_step`'s `school_leases`, `_foreign_arg_crit`, `_plan_conjecture_context` |
 | capabilities x scheduler | undocumented, asymmetric | real for simulation only (`_simulation_capability_step`); research capability is never reached by the scheduler at all — see `DR-SUB-capabilities`'s Seams table for the full asymmetry and the unrelated same-named subsystem it warns about |
@@ -55,9 +56,14 @@ behind it; the cheap deterministic work is deliberately not rationed.
 - `pareto_scores(harness, artifact_id)` — one survivor's score per Pareto axis,
   with an axis OMITTED where the harness measured nothing. An omitted axis is
   the typed "not measured", which `capture/pareto.frontier` drops out of that
-  pairwise comparison instead of reading as 0.0. `coverage` is omitted for an
-  artifact carrying no evaluable commitment; `hv` and `reach` still emit their
-  0.0 default. Module-level, and the single place the axis rule lives.
+  pairwise comparison instead of reading as 0.0. `coverage` is passes over the
+  commitments that were actually DECIDED: a commitment evaluating `OVERRUN` —
+  the verdict for "this module obtained no verdict" — leaves the denominator,
+  and the axis is omitted entirely for an artifact that decided nothing, which
+  covers both an empty battery and a battery every member of which is
+  undecidable. `hv` and `reach` still emit their 0.0 default. Module-level, and
+  the single place the axis rule lives.
+`check: python -m pytest tests/test_coverage_pending_commitments.py tests/test_formalism_optional_rank.py -q`
 - `run_report(harness, config, *, diagnostics=())` — survivors, the Pareto
   `frontier` over (hv, reach, coverage) via `pareto_scores`, problems, and the
   diagnostics passed in. Attention and reporting only, never a status. Since
@@ -264,6 +270,44 @@ assert {(c.args[0].value, c.args[1].value) for c in calls} == {
   by omitting an axis it did not measure, and the case worth re-reading that
   repair for.
 `check: python -m pytest tests/test_formalism_optional_rank.py -q`
+- **The class was NOT closed, and the third instalment cost three live roots:
+  the axis charged an artifact for every falsifiable claim it made.** The entry
+  above repaired the axis when the battery is EMPTY. It said nothing about a
+  battery that is full and UNDECIDABLE, and that is where the next penalty
+  lived: `coverage` counted `programs.OVERRUN` in its denominator as a
+  non-pass, and OVERRUN is the verdict for "the harness obtained no verdict".
+  An observation-valued countercondition returns it unconditionally
+  (`programs.py::_reasoning_observation_pending`), so declaring a testable
+  claim LOWERED your own rank until evidence arrived. Measured on three
+  committed roots — P-S1 `9e48a36b1dec91ee` (98 survivors, 58 on the
+  frontier), P-A1 `4565139800f5ca02` (11, 7), and the poietics run P-R1
+  `experiments/2026-08-25-poietics-program/run` (58, 40) — the split was
+  TOTAL on every one: every frontier member answered a harness-minted
+  `connection` problem and every dominated artifact answered the operator's
+  seed question. No commitment FAILED anywhere across all 156 survivors, so the
+  axis carried no quality signal at all; its whole variance was the count of
+  declared counterconditions, and the seed answers passed twice as many checks
+  (4 vs 2) as the artifacts that dominated them. FIXED 2026-09-02
+  (`experiments/2026-09-02-defect-coverage-pending-commitments/`): an OVERRUN
+  verdict leaves the denominator, exactly as an unmeasured axis leaves the
+  pairwise comparison. Three enduring lessons. First, the defect is FIVE
+  program families wide, not one — the four `lean_*` programs also return
+  OVERRUN pending their external verifier, so a formally-backed conjecture was
+  being penalised FOR being formal, R-g's protection running backwards.
+  Second, the reason the gate was green for four months is that
+  `test_formalism_optional_rank.py` built its pending commitment as
+  `eval="observation"`, which `programs.evaluable` screens out, while
+  `workloads/text.py` rewrites every live declaration into
+  `program:reasoning_observation_pending`, which it does not: **a regression
+  test that constructs its own fixture can pin a shape the harness rewrites
+  away before any artifact carries it.** Third, this is why the seam matters:
+  the pair scores 11 on `INDEX.md`'s own metric — enough for a row, tying
+  `harness x workflow` — and had none; and the ranking crossing itself is a
+  TWELFTH the metric cannot count at all, because `pareto_scores` reaches the
+  evaluation side by importing the PACKAGE (`from deepreason import programs`)
+  inside a function body, which a `deepreason.<module>` census misses twice
+  over. `DR-SEAM-evaluation-x-scheduler` now exists.
+`check: python -m pytest tests/test_coverage_pending_commitments.py -q`
 - **The steering controller was attached to every run and could move nothing on
   any of them.** `ops.run_scheduler` builds `Controller(harness, adapter)`
   whenever `config.CONTROLLER` is true, and `Scheduler` steps it once per cycle,

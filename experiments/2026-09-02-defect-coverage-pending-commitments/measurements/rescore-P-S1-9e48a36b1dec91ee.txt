@@ -1,0 +1,117 @@
+root: 2026-08-31-p-s1-commitments/completed-epoch2-run-9e48a36b1dec91ee
+artifacts 448 | survivors 98 | problems 1293
+hv entries 0 (nonzero 0) | reach entries 0 (nonzero 0)
+
+installed-code check: shipped pareto_scores == NEW (OVERRUN leaves the denominator)
+
+PARETO_AXES ['hv', 'reach', 'coverage']
+frontier BEFORE (OVERRUN penalised): 58 of 98
+frontier AFTER  (OVERRUN excluded) : 98 of 98
+  before -- on frontier {'connection': 58}
+            dominated   {'seed': 40}
+  after  -- on frontier {'connection': 58, 'seed': 40}
+            dominated   {}
+
+ before  after  artifact       answers        eval pass fail over  cov-before  cov-after
+----------------------------------------------------------------------------------------
+  FRONT  FRONT  00075672e679   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  05908f28b778   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  06f04e11b169   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  09874cf190c4   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  123e8c8a4f0a   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  14c74f7f33a7   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  171f4e883768   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  1fb2528d5d57   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  223dbbf9b7f5   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  259a4f8e28c7   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  27a73728b58e   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  2911b99dfa0a   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  29b584edc1ec   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  3af9e2472de0   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  3d07b76c4240   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  3e7d13ef917f   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  3ff9466e61c1   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  44609aca948f   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  470989dd9106   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  565d1e0b6159   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  58592f2450d0   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  5b7489969bbc   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  5cdc29adf057   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  5cf79fb29e23   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  66445540164d   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  6c556fdad247   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  731cdc06f94d   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  73a837a64f2a   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  82005f4ba221   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  87496b67b4c8   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  884a6fb1f4aa   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  895f62e1b7d3   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  8f07eb09c84b   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  9031ae804c96   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  9073c8882663   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  980b530d5ad5   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  9dc486e553e0   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  a933ddd29bee   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  aa13599fcaf1   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  acbe26da4fe9   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  b2b9bcac2cbe   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  b4738a11f37e   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  bc568b181ec0   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  c1dfdd068183   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  c8b1c08031ac   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  cf5f46e161f2   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  d5112078d455   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  d80f1d81a37e   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  d92cdf99a1da   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  da24ae0ca265   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  dc6087675b44   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  e0392bd9a26c   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  e3711be51ee6   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  e39be2e63c18   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  e789f83c6f0b   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  eba32e70878a   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  ee40ba1e3449   connection        2    2    0    0      1.0000     1.0000
+  FRONT  FRONT  f09aed877859   connection        2    2    0    0      1.0000     1.0000
+      .  FRONT  0c25454806b3   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  0fe3a33846f3   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  12c834aa9eb3   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  1de5aa75d09d   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  1f5df99a3d62   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  226dad04a28b   seed              6    4    0    2      0.6667     1.0000  <== MOVED ON
+      .  FRONT  227c0258600e   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  2777b84f49e7   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  3182b089a389   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  36f05e5d7c6b   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  3be62eb9a618   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  3c00af91ddc0   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  400c1d242fb5   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  4b35434a31d3   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  4c28cd229448   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  63beb2ae5391   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  6cea5115b374   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  6d5776c3e915   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  71fd27eb0307   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  74b79d619599   seed              6    4    0    2      0.6667     1.0000  <== MOVED ON
+      .  FRONT  75a3d4d44c52   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  75bf998dffed   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  75cd9772c902   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  75da1ad094b9   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  770c3869ca93   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  7ff6daf84a4f   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  8039b70ff905   seed              6    4    0    2      0.6667     1.0000  <== MOVED ON
+      .  FRONT  8ba8099e81a4   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  8d9f7ea128d0   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  9406b8b3d02b   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  a46d35e58f42   seed              6    4    0    2      0.6667     1.0000  <== MOVED ON
+      .  FRONT  ae237c51fbbc   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  b13f1ac836a7   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  be9874906918   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  c229a3581735   seed              6    4    0    2      0.6667     1.0000  <== MOVED ON
+      .  FRONT  c74d02226c82   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  dce6c845e597   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+      .  FRONT  e5b9cd4d510c   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+      .  FRONT  e6a3e1c47d73   seed              6    4    0    2      0.6667     1.0000  <== MOVED ON
+      .  FRONT  eee2ad42c796   seed              7    4    0    3      0.5714     1.0000  <== MOVED ON
+
+OVERRUN reason census (all survivors)
+   129  observation requires registered evidence

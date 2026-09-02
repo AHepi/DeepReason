@@ -210,8 +210,12 @@ TARGETS would be unique for every content-addressed artifact, so SC would read
   informal conjectures, not a convenience.** Its docstring said "missing scores
   are 0" and its `dominates` read `a.get(x, 0.0)`, so an artifact the harness
   never measured on an axis was treated as measured AT THE FLOOR of it. On the
-  `coverage` axis that is exactly the set of prose conjectures — nothing
-  evaluable to divide — and a formally-backed sibling therefore dominated an
+  `coverage` axis that is the set of artifacts with nothing to divide — which
+  covers MANY prose conjectures but is not the same set as "the prose ones",
+  a conflation corrected 2026-09-02 and ledgered at `docs/ERRATA.md` E70: a
+  prose conjecture that declares a countercondition carries
+  `program:reasoning_observation_pending`, which IS evaluable, so it was scored
+  at the floor rather than omitted — and a formally-backed sibling therefore dominated an
   otherwise-identical prose one off the published frontier (146 of 233
   survivors on `experiments/2026-08-12-live-grounded-extension-expansion/run`).
   CHANGED 2026-08-30
