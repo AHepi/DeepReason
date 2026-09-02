@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=25 blockers=none
+State: next=27 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -284,11 +284,30 @@ changes no shipped behavior or owner agreement.
       tracked files and the ignored runtime root reported
       `SECRET_SCAN=PASS LEAK_FILES=0`.
 
-- [ ] 25. (S2, S4, S5, S6) Launch the exact ordered-judge-pair prefix with at most three live calls in flight.
+- [x] 25. (S2, S4, S5, S6) Launch the exact ordered-judge-pair prefix with at most three live calls in flight.
       done-when: `matrix.py live --through judge-pairs --workers 3` is launched detached with a PID-specific monitor, and its first checkpoint reports `PEAK_IN_FLIGHT<=3` and an exact expected/pending set.
 
-- [ ] 26. (S2, S6) Preserve and push the ordered-judge-pair prefix result when terminal or when this session stops monitoring.
+      proof: clean source commit
+      `dfe5bebd2dd987e82e050888a9d7c8400819a583` launched one coordinator with
+      worker PID 191 under its Popen-owning PID-specific supervisor. The first
+      checkpoint reported `EXPECTED=324 TERMINAL=1 PENDING=323 DUPLICATE=0
+      PEAK_IN_FLIGHT<=3`. A nested-PID monitor fault in the preceding launch
+      was stopped, preserved as seven files under quarantined `attempt-0002`,
+      and excluded by a new 39/39-green resume regression. No provider call
+      was made from an uncommitted or tree-mismatched source.
+
+- [x] 26. (S2, S6) Preserve and push the ordered-judge-pair prefix result when terminal or when this session stops monitoring.
       done-when: `RESULTS.md` states exact expected, terminal, possible, impossible, provider-indeterminate, interrupted, and pending counts; no prefix is labelled exhaustive over the full domain.
+
+      proof: session-stop checkpoint `EXPECTED=324 TERMINAL=9 POSSIBLE=8
+      IMPOSSIBLE=1 PROVIDER_INDETERMINATE=0 INTERRUPTED=0 PENDING=315
+      DUPLICATE=0 PEAK_IN_FLIGHT<=3`; eight clean replacement receipts are in
+      retained `attempt-0003`, and its interruption marker forces fresh-root
+      resume. `RESULTS.md` labels the result a stopped resumable prefix and
+      reports the superseding full cross as `TERMINAL=0`. Machine-ledger
+      reconciliation printed `PREFIX_LEDGER_VERIFY=PASS CASES=9 EXPECTED=324
+      PENDING=315`; the exact-byte credential scan reported
+      `SECRET_SCAN=PASS LEAK_FILES=0`.
 
 - [ ] 27. (S2, S6) Continue the immutable queue through the named seat-only
       projections and into the superseding per-seat full cross without changing

@@ -1,0 +1,125 @@
+{
+  "attempts": {
+    "clean_interrupted": [
+      "attempt-0001",
+      "attempt-0003"
+    ],
+    "quarantined": {
+      "attempt": "attempt-0002",
+      "code": "ATTEMPT_MARKED_INTERRUPTED_WHILE_ACTIVE",
+      "result_disposition": "preserved_excluded",
+      "terminal_files": 7
+    }
+  },
+  "cases": [
+    {
+      "branch_commit": "d3cbed718d946c0b2cdb2ebef96856673d8127f9",
+      "case_id": "sha256:f7be2b358edcc0c713f8dc02c630688f4624bf6edb86f58754b802872b689150",
+      "full_dispatch_reached": true,
+      "judge0": "deepseek-v4-flash:0731",
+      "judge1": "deepseek-v4-flash:0731",
+      "outcome": "defence-sustained",
+      "status": "trial_outcome"
+    },
+    {
+      "branch_commit": "dfe5bebd2dd987e82e050888a9d7c8400819a583",
+      "case_id": "sha256:ec2dcb46ff46a3dd05b120feb3bb42ea25566171266b179871da36e93aa6a388",
+      "full_dispatch_reached": false,
+      "judge0": "deepseek-v4-flash:0731",
+      "judge1": "deepseek-v4-pro:0813",
+      "outcome": "SECOND_JUDGE_FAMILY_REQUIRED",
+      "status": "configuration_refused"
+    },
+    {
+      "branch_commit": "dfe5bebd2dd987e82e050888a9d7c8400819a583",
+      "case_id": "sha256:4cc5580dd25684965418acba741b73e3cef377cd27a5c115cd66e02e9448b56b",
+      "full_dispatch_reached": true,
+      "judge0": "deepseek-v4-flash:0731",
+      "judge1": "gemma4:31b",
+      "outcome": "ensemble-split",
+      "status": "trial_outcome"
+    },
+    {
+      "branch_commit": "dfe5bebd2dd987e82e050888a9d7c8400819a583",
+      "case_id": "sha256:1cc831eaa44aa1d3b7f1d08cc429f99d173afeda11611f9db16f4898a354173e",
+      "full_dispatch_reached": true,
+      "judge0": "deepseek-v4-flash:0731",
+      "judge1": "glm-5.1",
+      "outcome": "defence-sustained",
+      "status": "trial_outcome"
+    },
+    {
+      "branch_commit": "dfe5bebd2dd987e82e050888a9d7c8400819a583",
+      "case_id": "sha256:f1597450a9fd4c8dafba2faad13ff7c1217e2b4f6df9c3179f20b6f2e40eedd7",
+      "full_dispatch_reached": true,
+      "judge0": "deepseek-v4-flash:0731",
+      "judge1": "glm-5.2",
+      "outcome": "ensemble-split",
+      "status": "trial_outcome"
+    },
+    {
+      "branch_commit": "dfe5bebd2dd987e82e050888a9d7c8400819a583",
+      "case_id": "sha256:a818066aaf41f268edb3e277bd204614c713cbd58519900c1f4dc0fad831fbc2",
+      "full_dispatch_reached": true,
+      "judge0": "deepseek-v4-flash:0731",
+      "judge1": "glm-5.3",
+      "outcome": "defence-sustained",
+      "status": "trial_outcome"
+    },
+    {
+      "branch_commit": "dfe5bebd2dd987e82e050888a9d7c8400819a583",
+      "case_id": "sha256:622630faf726dbf684457272a60fc0df0deb769a40b402a7a0bd564e1f51a44e",
+      "full_dispatch_reached": true,
+      "judge0": "deepseek-v4-flash:0731",
+      "judge1": "glm-5.3-flash",
+      "outcome": "referential-integrity",
+      "status": "trial_outcome"
+    },
+    {
+      "branch_commit": "dfe5bebd2dd987e82e050888a9d7c8400819a583",
+      "case_id": "sha256:6412498fa3727769402a88f4dc6c21fb2fdcee53cc47fd4d0c4f06b63a448e2b",
+      "full_dispatch_reached": true,
+      "judge0": "deepseek-v4-flash:0731",
+      "judge1": "gpt-oss:120b",
+      "outcome": "defence-sustained",
+      "status": "trial_outcome"
+    },
+    {
+      "branch_commit": "dfe5bebd2dd987e82e050888a9d7c8400819a583",
+      "case_id": "sha256:850ecbb99360fae8092ddb20501c87e11f860fa85fc77b3dd8a401697ca7e1bb",
+      "full_dispatch_reached": true,
+      "judge0": "deepseek-v4-flash:0731",
+      "judge1": "gpt-oss:20b",
+      "outcome": "defence-sustained",
+      "status": "trial_outcome"
+    }
+  ],
+  "catalog_model_count": 18,
+  "catalog_sha256": "77a5a11f946b21e82488ddc66473f1bfa50c6bd6c394fd420ad1baacc81754b4",
+  "counts": {
+    "duplicate": 0,
+    "expected": 324,
+    "impossible": 1,
+    "interrupted": 0,
+    "pending": 315,
+    "possible": 8,
+    "provider_indeterminate": 0,
+    "terminal": 9,
+    "unexpected_error": 0
+  },
+  "domain_sha256": "1be915b5cccb5164b17691cb6602fa630d26603064d0096f4b3600fd2975442d",
+  "next": {
+    "case_id": "sha256:8aa2e4b74b70124d7511bea92162ceb0edfeddca14d64934522d64a9b7653ae2",
+    "judge0": "deepseek-v4-flash:0731",
+    "judge1": "kimi-k2.6",
+    "ordinal": 9
+  },
+  "peak_in_flight_bound": 3,
+  "prefix": "judge_pairs",
+  "schema": "deepreason.live_judge_pair_prefix_result.v1",
+  "superseding_full_cross": {
+    "expected": 71141539390075109376,
+    "pending": 71141539390075109376,
+    "terminal": 0
+  }
+}
