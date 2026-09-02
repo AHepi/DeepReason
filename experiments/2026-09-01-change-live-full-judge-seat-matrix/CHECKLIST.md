@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=24 blockers=none
+State: next=25 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -268,8 +268,21 @@ changes no shipped behavior or owner agreement.
       `none`, 15 `low`, and 17 `medium` rows without reinterpreting the
       requested setting.
 
-- [ ] 24. (S4, S5, S6) Run one serial live full-court smoke after the green soak.
+- [x] 24. (S4, S5, S6) Run one serial live full-court smoke after the green soak.
       done-when: `python experiments/2026-09-01-change-live-full-judge-seat-matrix/matrix.py live --limit 1 --workers 1` records critic, defender, judge 0, and judge 1 dispatches or the first typed refusal verbatim.
+
+      proof: exit 0 from clean isolated source commit
+      `d3cbed718d946c0b2cdb2ebef96856673d8127f9`;
+      `LIVE_EXPECTED=1994544`; `LIVE_TERMINAL=1`; `POSSIBLE=1`;
+      `CONFIGURATION_REFUSED=0`; `PROVIDER_INDETERMINATE=0`;
+      `UNEXPECTED_ERROR=0`; `PENDING=1994543`; `PEAK_IN_FLIGHT=1`;
+      `PEAK_IN_FLIGHT<=3`. Case
+      `sha256:f7be2b358edcc0c713f8dc02c630688f4624bf6edb86f58754b802872b689150`
+      ended `trial_outcome` with exact logical attempt history
+      `critic,critic,defender,judge:0,judge:1`; the second critic attempt is
+      the shipped fallback and not another seat. An exact credential scan of
+      tracked files and the ignored runtime root reported
+      `SECRET_SCAN=PASS LEAK_FILES=0`.
 
 - [ ] 25. (S2, S4, S5, S6) Launch the exact ordered-judge-pair prefix with at most three live calls in flight.
       done-when: `matrix.py live --through judge-pairs --workers 3` is launched detached with a PID-specific monitor, and its first checkpoint reports `PEAK_IN_FLIGHT<=3` and an exact expected/pending set.
