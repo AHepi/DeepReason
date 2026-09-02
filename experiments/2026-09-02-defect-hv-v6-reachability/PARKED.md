@@ -201,3 +201,75 @@ VALIDATION: full gate 0 failed; docs_verify full mode in the same commit; the
 SEAM-scheduler-x-workflow Traps entry rewritten to say when it was fixed, never
 deleted.
 ```
+
+---
+
+## P5 — the behavioural grant is minted only under a `defended_trial` criticism policy
+
+WHAT: `run_manifest.py:2059-2065` mints the `defender`/`judge`/`variator`
+behavioural-contract grants only when
+`manifest.criticism_policy.authority == "defended_trial"`. Measured across the
+committed corpus: of 50 v6 roots, exactly 4 hold a `variator` grant, and all
+four are `defended_trial`; every other root — including all five committed
+cycle-soak cases — has `criticism_policy` absent or `observe_only`, so its
+`variator[0]` grant list is empty. After
+`experiments/2026-09-02-defect-hv-v6-reachability/` makes the gate consult the
+grant, `hv` is reachable by configuration, but ONLY through that one policy
+shape. Whether that minting condition is itself too narrow is a question about
+the minting rule, not about the gate, so it is not this tranche's to answer.
+
+WHY IT MAY BE A DEFECT AND NOT A DESIGN: the operator's solo-run law
+(2026-08-09, verbatim: "A solo run with everything on should be an option.
+That's what solo run option should always have been. However, turning on judges
+at all should be done with caution... I would prefer to do without") says
+sole-model operation may never be structurally locked out of any harness
+capability. `hv` is a ranking measure with no judge in it — `run_hv_floor` and
+`hv_spot_check` call the `variator` role and nothing else. If reaching it
+requires a criticism policy that also arms judge seats, then a run that declines
+judges has been locked out of an unrelated capability, which is the shape that
+law forbids. That is an argument, not a verdict: the record has to settle
+whether a `defended_trial` policy actually forces judge participation.
+
+```
+EXECUTOR WINDOW — DEFECT-OR-DESIGN TRANCHE (may end at DIAGNOSIS.md): can a
+solo run with no judges reach `hv`?
+=========================================================================
+Read CLAUDE.md fully, then load deepreason-orchestrator, dr-drive-harness and
+dr-explain-to-operator. Start at dr-set-goal.
+
+THE OBSERVATION, FROM THE RECORD: `run_manifest.py:2059-2065` mints the
+variator behavioural-contract grant only when
+`criticism_policy.authority == "defended_trial"`, and the same condition mints
+the defender and judge grants. Across 50 committed v6 roots, exactly 4 hold a
+variator grant and all 4 are defended_trial (census reproducible with
+`python experiments/2026-09-02-defect-hv-v6-reachability/repro_record.py`).
+Since experiments/2026-09-02-defect-hv-v6-reachability/ made the dispatch gate
+consult that grant, the grant is now what decides whether `hv` measures at all.
+
+THE LAW AT STAKE: the solo-run law (2026-08-09) and the ungated-seats law
+(2026-08-28, operator verbatim: "no limits to what model you place where...
+Gates are always optional: with warnings"). `hv` invokes the variator role and
+no judge. If a run that declines judges cannot reach it, an unrelated
+capability has been gated on a judge-bearing policy.
+
+GOAL (for dr-set-goal to bound): establish whether a v6 configuration with
+JUDGE_SEATS_ENABLED false (or no judge seats at all) can hold a
+`variator.direct.v1` grant. Falsifiable offline: compile such a manifest and
+print its variator grant list. If it is non-empty, there is NO defect -- record
+that verdict and stop; "nothing is broken" is a complete outcome. If it is
+empty, the defect is that grant minting couples an ungated capability to a
+judge-bearing policy, and the fix is in the minting rule.
+
+STOP AND ASK BEFORE IMPLEMENTING: `run_manifest.py` is FROZEN SURFACE 4
+(manifest schemas and validators). Changing what the manifest MINTS is a writer
+change, not a reader fix, and the asymmetry in
+docs/map/INV-frozen-surfaces.md is explicit about which of those is permitted.
+Request the grant in FIX.md BEFORE a line of code, with the writer/reader
+question argued and the qualification-battery consequence measured -- adding a
+contract to a seat ADDS A PAIR to the production-contract battery
+(cli/doctor.py:385-420), which is frozen surface 5. Expect this to be a
+PRICED STOP, and price it rather than route around it.
+
+OUT OF SCOPE: the dispatch gate (fixed); the nine other gated phases; the
+frontier sort.
+```
