@@ -11,13 +11,18 @@ exactly one terminal result. Until that equality holds, the report says how
 many are complete, pending, provider-indeterminate, or interrupted; it never
 renames a prefix or a percentage as exhaustive.
 
-"Possible" means the shipped v6 path reached the configured provider seats and
-produced a typed trial outcome. "Impossible" means the shipped compiler or
-runtime produced a deterministic typed refusal before a provider-dependent
-answer could decide the case. Transport errors, timeouts, malformed model
-responses, and model silence are `provider_indeterminate`, never configuration
-impossibility. Trial outcomes such as `defence-sustained`, `ensemble-split`,
-`referential-integrity`, and `paraphrase-flip` are not configuration refusals.
+"Possible" is a derived human-facing count: the shipped v6 path reached every
+seat unconditionally required by the branch it actually took and produced a
+typed trial outcome. The primary terminal status remains `trial_outcome`, with
+an exact `dispatch_extent`. An early semantic outcome may leave a conditional
+variator unexercised; it is neither a refusal nor proof of variator
+reachability. "Configuration refused" means the shipped compiler or runtime at
+the frozen source commit produced a deterministic typed refusal before a
+provider-dependent answer could decide the case. Transport errors, timeouts,
+malformed model responses, and model silence are `provider_indeterminate`,
+never configuration impossibility. Trial outcomes such as `defence-sustained`,
+`ensemble-split`, `referential-integrity`, and `paraphrase-flip` are not
+configuration refusals.
 
 The campaign is a reachability and configuration census. It does not score,
 rank, optimize, eliminate, or statistically tighten models, prose, seats, or
@@ -69,7 +74,7 @@ Traces: R2, R9, R10, R11.
 Targets: `matrix.py`, `MATRIX_DOMAIN.json`.
 
 The authenticated `GET /v1/models` response is sorted, byte-frozen, and pushed
-before chat completions. Every returned text-chat model enters the roster
+before chat completions. Every returned model id enters the roster
 except an id whose punctuation-insensitive normalized form contains `kimik3`.
 An unreachable or non-chat model remains a case and may return a provider
 refusal; it is not silently filtered. The current documented roster predicts
@@ -90,9 +95,11 @@ and topology class, records natural live-critic behavior without substituting it
 for the guaranteed court arm.
 
 The execution queue is ordered to make useful complete prefixes without
-changing the full set: all `M^2` ordered judge pairs; all `M^3`
-defender/judge courts; all `M^4` no-variator courts; then the remaining `M^5`
-variator courts. A prefix is always labelled a prefix.
+changing the full set. The UTF-8-bytewise first catalog id is the frozen anchor:
+all `M^2` ordered judge pairs fix critic and defender to it; all `M^3`
+defender/judge courts fix only critic; all `M^4` no-variator courts follow;
+then the `M^5` variator courts. A `seen` set suppresses cases already emitted
+by an earlier prefix. A prefix is always labelled a prefix.
 
 The offline structural domain is exactly exhaustive over the following frozen
 finite boundary values:
@@ -142,19 +149,23 @@ manifest authority, defender contract, every judge contract, and the optional
 variator contract before any provider call. Any consumed `observe_only` value
 is a campaign-integrity failure before dispatch; it is not a test case.
 
-Model ids are normalized across case, whitespace, punctuation, tags, and cloud
-suffixes before the Kimi K3 ban is checked. The final serialized provider body,
-not merely the source value, is checked for `high`, `max`, and `xhigh`. Numeric
-reasoning above 2000 is excluded because DeepReason maps it to `high`.
+Model ids are NFKC-normalized, casefolded, and stripped to ASCII alphanumerics
+before the `kimik3` substring ban is checked. The final serialized provider
+body's exact `model` field is rechecked. Only the exact recognized
+`reasoning_effort` field is checked for case-insensitive `high`, `max`, and
+`xhigh`; no whole-body substring scan may reject a model such as MiniMax.
+Numeric reasoning above 2000 is excluded because DeepReason maps it to `high`.
 
 Each roster model receives small, strict-JSON probes under explicit `none`,
-`low`, and `medium`; never omitted, high, max, or xhigh. The result records the
+`low`, and `medium`; never omitted, high, max, or xhigh. Probe validity is exact
+transport success plus parse and validation against the preregistered one-field
+schema; failure never filters a model or its court cases. The result records the
 raw message key set and the presence, length, and digest—not text—of
 `reasoning`, `reasoning_content`, and `thinking`. A GLM-5.3 `none` response with
 a populated trace is recorded as exactly that, not rewritten as disabled.
-Full trials use `none` if the model accepts it and emits a usable form,
-otherwise `low`; GLM-5.3-Flash and GPT-OSS use `low` if `none` is refused or
-incompatible. There is no omitted/default road in live trials.
+Full trials use explicit `low` for every model regardless of probe outcome; a
+refusal is recorded rather than routed around. There is no omitted/default road
+in live trials.
 
 Accept:
 
@@ -207,7 +218,8 @@ Traces: R1, R8, C3, C4.
 
 Targets: `matrix.py`, `tests/test_live_full_judge_seat_matrix.py`.
 
-One coordinator process owns at most three worker threads. A shared
+One coordinator process first takes a non-blocking campaign-wide file lock and
+refuses a second coordinator. It owns at most three worker threads. A shared
 `threading.BoundedSemaphore(3)` wraps every actual
 `OpenAICompatEndpoint.complete` call, including retries and privately created
 doctor endpoints. Qualification/probe and trial phases never overlap. A test

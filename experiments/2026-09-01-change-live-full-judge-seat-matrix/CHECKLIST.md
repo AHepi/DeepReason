@@ -1,6 +1,6 @@
 # Checklist for: test all seat configurations on full judge trial
 
-State: next=1 blockers=none
+State: next=2 blockers=none
 
 Re-read `REQUEST.md` and `SPEC.md` before every step. Execute strictly in
 order. One step per `dr-execute-step` invocation.
@@ -13,8 +13,11 @@ Map scope: `DR-SUB-evaluation`, `DR-SUB-llm`, `DR-SUB-manifest`,
 No map document moves: the campaign adds experiment/test instrumentation and
 changes no shipped behavior or owner agreement.
 
-- [ ] 1. (S1) Write the frozen provider/research preregistration.
+- [x] 1. (S1) Write the frozen provider/research preregistration.
       done-when: `test -f experiments/2026-09-01-change-live-full-judge-seat-matrix/PREREG.md && grep -q 'Registered outcomes' experiments/2026-09-01-change-live-full-judge-seat-matrix/PREREG.md` -> exit 0.
+
+      proof: exit 0; `PREREG.md:197:## Registered outcomes`;
+      `PREREG_SHA256=dbaf6074608dfd14df507c8ff2764bc4c7aaf39f109569901da73bec5fa4b414`.
 
 - [ ] 2. (S1, S2) Write the canonical finite matrix-domain document.
       done-when: `python -m json.tool experiments/2026-09-01-change-live-full-judge-seat-matrix/MATRIX_DOMAIN.json >/dev/null` -> exit 0.
