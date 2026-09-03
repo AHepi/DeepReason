@@ -159,6 +159,25 @@ when replayed.
   declines the receipt, so a refusal claiming it did would be false. Any
   refusal the builder DOES return is recorded exactly as the clean path
   records it.
+**C-amendment (added during dr-implement-fix, 2026-09-03).** Renaming
+`_record_exhaustion_lifecycle_stop` has ONE caller outside `src/` that the
+change-site list missed:
+
+- `tests/test_lifecycle_operation_parity.py:355,370`
+  `test_finalize_resumes_after_an_interrupted_terminalization` imports the
+  helper by name to construct the exact state an interrupted `finalize` left
+  (grounded-extension root, 2026-08-13). It follows the rename and gains the
+  new required `reason="budget_exhausted"` argument — which is the value it
+  was already getting implicitly, so the state it builds is unchanged and its
+  assertions are untouched. This is rename follow-through, not a fixture
+  weakened to obtain green: the test still asserts `refusal is None`, still
+  asserts no second stop event is recorded, and still asserts
+  `current_valid_committed`.
+
+Recorded as an amendment rather than applied silently, per `dr-implement-fix`
+step 1: a change site discovered during implementation stops and amends this
+document before the edit lands.
+
 - `finalize_stopped_root` (`:583`) emits one progress line after
   `terminalize_text_run` returns. Without it a finalized root keeps
   `state: running` in `run-status.json` — reproduced on the stub and matching
