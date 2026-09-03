@@ -1,0 +1,1 @@
+{"decisive_point":"Local stability on a 3-regular graph only requires each vertex to have at most one opposite-color neighbor, i.e. crossing edges form a matching. A vertex with zero crossing edges has all three neighbors in its own color class, so its color class has degree-3 vertices and is not a disjoint union of cycles.","verdict":"fail"}
