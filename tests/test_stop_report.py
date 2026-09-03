@@ -503,3 +503,86 @@ def test_stop_report_refuses_a_path_that_is_neither_root_nor_home(tmp_path):
     with pytest.raises(Exception) as caught:
         stop_report(tmp_path / "nowhere")
     assert "nowhere" in str(caught.value)
+
+
+def test_a_run_config_yaml_is_read_only_when_one_is_passed():
+    """R2: 'NEVER from a run-config YAML unless one is passed explicitly
+    for a DIFF section.'
+
+    Structural, not textual: the yaml import must live inside the single
+    function that builds the diff, so no other code path can reach it.
+    A report derived from the settings file cannot contradict the
+    settings file, which is the whole failure this instrument removes.
+    """
+    import ast
+    import inspect
+
+    from deepreason.application import stop_report as module
+
+    tree = ast.parse(inspect.getsource(module))
+    holders = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, (ast.Import, ast.ImportFrom)):
+            continue
+        names = [alias.name for alias in node.names]
+        if not any(name.split(".")[0] == "yaml" for name in names):
+            continue
+        enclosing = [f.name for f in ast.walk(tree)
+                     if isinstance(f, ast.FunctionDef)
+                     and any(child is node for child in ast.walk(f))]
+        holders.update(enclosing)
+    assert holders == {"_config_diff"}, (
+        "yaml may be read only by the run-config diff, not by any other "
+        f"path; found it reachable from {sorted(holders)}")
+
+
+def test_a_clean_terminal_attributes_no_box(tmp_path):
+    """The operator's 2026-08-29 law: exhaustion is a clean stop.
+
+    Regression (Phase-1 M1-H0, run-fe00609058e1...): a run that reached
+    its budget and finished with 47 admitted conjectures must not have
+    blame manufactured for it out of ordinary in-run schema repairs.
+    """
+    root = _write_root(
+        tmp_path, message="", state="completed", stop_reason="budget_exhausted",
+        refusal="STOPPED_REFUSES_UNFINISHED_WORKFLOW_AUTHORITY",
+        events=[_event(0), _event(1, attempts=[
+            _attempt(valid=False, validation_path="/candidates/0/evidence_refs/1/block")])],
+        qualification=_qualification())
+    report = stop_report(root)
+    boxes = report["sections"]["classification"]["boxes"]
+    assert all(box["verdict"] == "RULED OUT" for box in boxes.values())
+    # The clean stop still has a continuability story, and that is the
+    # part the operator needs.
+    assert report["sections"]["continuability"]["continue"] == "REFUSED"
+
+
+def test_one_seats_pass_never_vindicates_a_different_seats_failure(tmp_path):
+    """Regression (P-A2 epoch 1): 22 of 23 pairs passed and ONE failed.
+
+    Reading the 22 as vindication of the 1 would repeat, in the opposite
+    direction, the misreading this report exists to prevent.
+    """
+    payload = _qualification(first_pass=20, eventual=20, qualified=True)
+    failing = json.loads(json.dumps(payload["pairs"][0]))
+    failing["pair"]["role"] = "grounding_reviewer"
+    failing["pair"]["contract_id"] = "groundingrepairwirev1.direct.v1"
+    failing["first_pass_valid_count"] = 4
+    failing["eventual_valid_count"] = 5
+    failing["qualified"] = False
+    for index, case in enumerate(failing["cases"]):
+        ok = index < 4
+        case["first_pass_valid"] = ok
+        case["eventual_valid"] = index < 5
+    payload["pairs"].append(failing)
+    root = _write_root(
+        tmp_path, message="qualification refused one pair",
+        events=[_event(0), _event(1, attempts=[_attempt(valid=True)])],
+        qualification=payload)
+    report = stop_report(root)
+    assert _ranked(report)[0] == "MODEL"
+    assert _box(report, "MODEL")["verdict"] == "SUPPORTED"
+    supporting = json.dumps(_box(report, "MODEL")["supporting"])
+    assert "grounding_reviewer" in supporting
+    assert "conjecturer" not in supporting, (
+        "the passing seat must not be dragged into the failing seat's box")
