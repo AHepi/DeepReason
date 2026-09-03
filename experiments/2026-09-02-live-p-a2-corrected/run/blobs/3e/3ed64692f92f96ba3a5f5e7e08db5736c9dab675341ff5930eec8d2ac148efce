@@ -1,0 +1,13 @@
+You are the variator (mu): produce bounded edits of the target content. If the content is a JSON skeleton, substitute at role level — swap the mechanism, the causal link, the scope (mu_struct) — never merely reword. For prose, make substantive local edits that change what the claim forbids. Each edit must remain a complete, coherent candidate.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"VariatorEdit": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}}, "required": ["content"], "title": "VariatorEdit", "type": "object"}}, "additionalProperties": false, "description": "Bounded edits under mu / mu_struct (\u00a76): role-level substitutions\n(mechanism, scope, causal link) for skeleton content, substantive local\nedits otherwise \u2014 never mere rewordings.", "properties": {"edits": {"items": {"$ref": "#/$defs/VariatorEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "VariatorOutput", "type": "object"}
+
+TARGET CONTENT:
+KIND: dependence (conditional). SRC_005's consensus→1 claim depends on a hidden premise the other artifacts do not share: that expander spectral expansion of the GRAPH transfers to the DYNAMICS. But majority dynamics is nonlinear and the monotone cut-descent of SRC_001 means expansion only helps if every small cut has few neighbors-in-cut, which is false for matchings: a cut whose crossing edges form a matching is a fixed point regardless of expansion. So SRC_005 is compatible with SRC_003 only in the counting claim (non-expanding structure is rare) and contradicts it in the basin claim. Bold resolution: expansion makes the EMPTY cut's basin large not by eliminating obstructions but by making obstruction basins thin — the process slides PAST stable matchings when the update order is adversarially fast (parallel updates), while it jams under asynchronous updates. Then SRC_001 (asynchronous, jams) and SRC_005 (parallel-ish, escapes) are both correct under their respective schedule assumptions, and the neighbourhood's disagreement is an inheritance of an unstated scheduling assumption. It is REFUTED IF stable matching cuts are absorbing under ANY update schedule — in particular if parallel majority updates cannot move a configuration whose crossing edges form a matching — in which case SRC_005 is simply wrong rather than schedule-dependent.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

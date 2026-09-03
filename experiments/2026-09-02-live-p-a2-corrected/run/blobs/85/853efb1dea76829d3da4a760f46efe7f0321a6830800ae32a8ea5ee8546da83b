@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The relation is unanchored to the required isolated endpoint: it reduces SRC_003's cycle configurations to SRC_001/SRC_004's stable-matching obstructions, but 1191498e4fe5 never appears. Unless SRC_003 is an unstated alias for 1191498e4fe5, this is a relation among other neighbourhood sources, not a connection from the isolated note to its neighbourhood."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target uses its own id as an endpoint ('SRC_002 contradicts both SRC_001/SRC_004 and SRC_005') and never names 1191498e4fe5, so the contradiction is not anchored to the isolated note. Moreover, the stated refuted-if tests a shared monotone-descent premise rather than testing whether SRC_002 is actually compatible with SRC_001/SRC_004 or SRC_005, so the named contradiction is not the claim being refuted."
+    }
+  ]
+}
