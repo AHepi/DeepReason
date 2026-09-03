@@ -44,7 +44,7 @@ anything under `mini/`, and the env-var generator hook in
 | 1. test file byte-identical to `06b0d9fd9`'s | PASS | VERIFY.md §1 |
 | 2. mutation proof re-run ON MAIN, identical test bytes | PASS — 5 passed / 2 failed 3 passed / 5 passed | REPRO.md §Results, `mutation.log` |
 | 3. `pytest tests/ -q -n 4` → 0 failed | **PASS — 4694 passed, 6 skipped, 0 failed** | VERIFY.md §3 |
-| 4. `docs_verify` no delta beyond rows this tranche repairs | <!-- DV1 --> | VERIFY.md §4 |
+| 4. `docs_verify` no delta beyond rows this tranche repairs | PASS — 6 failed, every one a recorded baseline row; the two pre-authorized known-not-mine rows are `SEAM-llm-x-rules.md:54` and `INV-frozen-surfaces.md:181` | VERIFY.md §4 |
 
 ## The map, moved in the same commit
 
@@ -103,4 +103,12 @@ Stated so no later reader over-reads it:
 
 ## Parked
 
-None. Nothing outside the goal was found that needed parking.
+One, and it is a measurement rather than a suspicion — see `PARKED.md`
+P1. `CON-run-identity.md:298`'s check takes **346.78 s standalone on
+this container**, already past `docs_verify`'s own 300 s per-check
+ceiling, so on a box this slow it times out unconditionally rather than
+conditionally. The CLAIM is intact (the check passes; the full gate ran
+the same file green), so this is a check-cost defect of exactly the
+class the 2026-08-31 tranche fixed for `SUB-application.md` by
+narrowing a whole-file pytest run to the four node ids that carry the
+claim. Out of scope here; parked with a ready-to-send prompt.

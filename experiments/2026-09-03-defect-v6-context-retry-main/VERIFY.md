@@ -54,7 +54,68 @@ duration as a regression.
 
 ## 4. docs_verify
 
-<!-- DOCSVERIFY -->
+    $ python tools/docs_verify.py
+    docs_verify [full]: 74 documents, 1320 checks, 4 workers
+    docs_verify: 6 failed
+
+**PASS — no delta from `docs/AUDIT_BASELINES.md`.** Six failures, and
+every one of them is a recorded row. Neither of this tranche's two
+re-expressed checks appears, and neither does `SUB-scheduler.md`'s new
+`Traps` check; all three passed. (The 1320/74 totals are not pinned
+values — AUDIT_BASELINES is explicit that the total moves with every
+tranche that adds a check, and the failure LIST is what a delta is
+measured against.)
+
+Row by row, against the baseline's own classes:
+
+| where | baseline class | disposition |
+|---|---|---|
+| `SEAM-llm-x-rules.md:54` | **known, pre-authorized** — check malformed, a lost closing backtick merges the check with the paragraph after it. Parked P3 (`experiments/2026-08-29-fix-docs-verify-multiline-checks/PARKED.md`) | `baseline` |
+| `INV-frozen-surfaces.md:181` | **known, pre-authorized** — claim rotted: the census asserting zero committed `transport_failure` attempts; one exists, in a root committed 2026-08-26. Its repair is a design fork, parked P-D3 (`experiments/2026-08-30-fix-rotted-map-checks/PARKED.md`) | `baseline` |
+| `CON-run-identity.md:211` | environment — shallow clone, git-history row | `baseline` |
+| `CON-run-identity.md:213` | environment — shallow clone (`unknown revision 1637e808`) | `baseline` |
+| `CON-run-identity.md:215` | environment — shallow clone (`unknown revision f304fec1`) | `baseline` |
+| `CON-run-identity.md:298` | container-conditional — `TIMEOUT after 300s` | `baseline`, DISPOSED by re-run, below |
+
+The two the tranche instruction pre-authorized as known-not-mine are
+the first two: `SEAM-llm-x-rules.md:54` and
+`INV-frozen-surfaces.md:181`. Both are parked elsewhere with named
+owners, and neither is touched here.
+
+The judge-canary row that the baseline lists separately — the
+`INV-frozen-surfaces.md` check running
+`price_compile_gap.py`, which does
+`git show origin/claude/deepreason-p-s1-commitments-wowcib:…` — did NOT
+fire, because that ref was fetched during setup. That is the baseline's
+documented remedy, applied rather than discovered.
+
+### Disposing of the conditional row, per the baseline's own procedure
+
+AUDIT_BASELINES states the disposal in one line: re-run the check
+alone; a PASS means the ceiling and the row is `baseline`, a FAIL means
+the claim moved and it IS a finding. Re-run, verbatim:
+
+    $ python -c "...CONTINUE_RECORD_NOT_VERIFIED / record_verification_refusal
+                 / AMEND_RECORD_NOT_VERIFIED assertions..." \
+        && python -m pytest tests/test_jailbreak_gate.py -q
+    9 passed in 346.78s (0:05:46)
+    rc=0
+
+**PASS.** The 2026-08-29 integrity-gate claim is intact; the check
+timed out on cost, not on truth. Corroborated independently: the full
+gate ran `tests/test_jailbreak_gate.py` inside its 4694 passed / 0
+failed, and nothing this tranche touched is anywhere near
+`runtime/continuation.py` or `amendment/apply.py`.
+
+One thing the re-run shows that the baseline does not yet record, and
+that is worth a future runner's attention rather than mine: **346.78 s
+STANDALONE, with no contention, already exceeds the 300 s per-check
+ceiling** at `tools/docs_verify.py:185`. On this container the row is
+not merely conditional, it is unconditional — it will time out on every
+run here. That is the same class as the `SUB-application.md` row the
+2026-08-31 tranche retired by narrowing a whole-file pytest run to the
+four node ids that exercise the claim. It is NOT this tranche's goal,
+so it is PARKED (`PARKED.md` P1) rather than fixed.
 
 ## What is NOT proven here, stated plainly
 
