@@ -722,3 +722,28 @@ so you do not re-trust them.
   operational health checks, not success conditions; and no design may
   be justified by correctness alone. Ledgered by the monitor at the
   operator's instruction.
+
+- **A seat is a shell: its input and its output define it** (2026-09-03,
+  operator's words verbatim, amending the conjecturer-pluggable-interface
+  tranche as its build was being commissioned: "Is prefer if the
+  conjecturer seat could be used to replace the critic seat. That means
+  an artifact truely is determined by input and output, the artifact is
+  just a shell. I'm thinking in the future that conjecturers will need to
+  be split in two and criticism will need two different types."):
+  what makes a seat a conjecturer or a critic is the BRIEF it is shown
+  and the FORM it is asked to fill, both of which are registered,
+  versioned configuration — never a code path with the seat's name on
+  it. The same machinery renders every seat's brief and selects every
+  seat's form; a seat kind is a registered pairing of a brief layout
+  and a form, so the conjecturer's pairing can be bound where the
+  critic's is today, and a future second conjecturer kind or second
+  criticism kind is added by registering a pairing, not by editing
+  code. SCOPE BOUNDARY, so this is never over-read: the shell is about
+  how content is GENERATED. What counts as evidence — the parse half of
+  every form, admission, rank, immunity, refutation, and the record —
+  does not vary with the shell (the seats-generate-never-evidence law
+  above, and the modularity law's "enforced" clause: an architecture
+  test must go red when a seat's name is read anywhere on the evidence
+  side). First bound implementation: the build of
+  `experiments/2026-09-03-change-conjecturer-pluggable-interface/`,
+  amended the same day to cover the critic seat's brief and form.
