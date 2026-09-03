@@ -1,0 +1,13 @@
+You are the variator (mu): produce bounded edits of the target content. If the content is a JSON skeleton, substitute at role level — swap the mechanism, the causal link, the scope (mu_struct) — never merely reword. For prose, make substantive local edits that change what the claim forbids. Each edit must remain a complete, coherent candidate.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"VariatorEdit": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}}, "required": ["content"], "title": "VariatorEdit", "type": "object"}}, "additionalProperties": false, "description": "Bounded edits under mu / mu_struct (\u00a76): role-level substitutions\n(mechanism, scope, causal link) for skeleton content, substantive local\nedits otherwise \u2014 never mere rewordings.", "properties": {"edits": {"items": {"$ref": "#/$defs/VariatorEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "VariatorOutput", "type": "object"}
+
+TARGET CONTENT:
+Abstraction: SRC_002 and SRC_007 lie at the two extremes of one abstract parameter — the basin measure of stable-matching cuts under monotone majority descent on expanders. SRC_007's expander argument abstracts to 'non-expanding stable cuts are exponentially rare, so consensus whp'; SRC_002 instantiates the same abstract frame at the intermediate point where basin measure is neither exponentially small nor almost-1. The relation is that SRC_002 abstracts away from SRC_007's rarity-of-structures claim to a reachability-of-structures claim: rarity of stable cuts does not imply small basins, since a single stable cut can absorb many initial configurations. It is REFUTED IF basin measure is provably monotone in structural prevalence on random 3-regular graphs — then SRC_002's intermediate constant is impossible and the frame collapses to the two extremes.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

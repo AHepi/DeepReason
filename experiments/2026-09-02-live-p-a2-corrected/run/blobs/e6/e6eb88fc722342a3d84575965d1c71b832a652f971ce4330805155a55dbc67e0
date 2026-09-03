@@ -1,0 +1,24 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": ""
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": ""
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The target names the relation as 'reduction' but describes the reverse direction: it states that SRC_006's perfect matching between opposite-color cycles is a special case of 1191498e4fe5's obstruction set, and the refuted-if condition requires 1191498e4fe5 to derive SRC_006's frozen cycle configurations as a special case of its own obstruction set. That makes 1191498e4fe5 the more general object and SRC_006 the special case, which is abstraction or generalization, not reduction of 1191498e4fe5 to SRC_006."
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": false,
+      "case": ""
+    }
+  ]
+}

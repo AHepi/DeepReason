@@ -1,0 +1,13 @@
+You are the variator (mu): produce bounded edits of the target content. If the content is a JSON skeleton, substitute at role level — swap the mechanism, the causal link, the scope (mu_struct) — never merely reword. For prose, make substantive local edits that change what the claim forbids. Each edit must remain a complete, coherent candidate.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"VariatorEdit": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}}, "required": ["content"], "title": "VariatorEdit", "type": "object"}}, "additionalProperties": false, "description": "Bounded edits under mu / mu_struct (\u00a76): role-level substitutions\n(mechanism, scope, causal link) for skeleton content, substantive local\nedits otherwise \u2014 never mere rewordings.", "properties": {"edits": {"items": {"$ref": "#/$defs/VariatorEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "VariatorOutput", "type": "object"}
+
+TARGET CONTENT:
+Contradiction (counterexample-first): SRC_002's constant-in-(0.05,0.5) limit is directly contradicted by the jamming mechanism shared by SRC_003 and SRC_006 — monotone cut-size descent on a random 3-regular graph jams in a stable matching of crossing edges of LINEAR size whp, not in a Poisson-sparse set of obstructions. The constant-limit picture of SRC_004/SRC_002 implicitly assumes Θ(1) reachable obstructions, but the descent dynamics contradicts this: the final matching density ρ>0 concentrates, so the consensus probability tends to 0, not to 1−q. It is REFUTED IF simulations show the final crossing-edge density is o(n) whp or the basin of the empty cut is bounded away from 0 — exactly SRC_004's countercondition, which would vindicate SRC_002 instead.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

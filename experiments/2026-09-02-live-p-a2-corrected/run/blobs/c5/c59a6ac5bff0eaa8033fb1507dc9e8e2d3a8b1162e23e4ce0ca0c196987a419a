@@ -1,0 +1,28 @@
+{
+  "edits": [
+    {
+      "content": "1191498e4fe5 depends on SRC_003 and SRC_007: monotone cut-size descent under synchronous majority updates jams at a maximal matching of crossing edges. Refuted if its update rule can increase cut size or its final crossing-edge set is not a maximal matching."
+    },
+    {
+      "content": "1191498e4fe5 reduces to SRC_003 and SRC_007: monotone potential descent under asynchronous majority updates jams at a stable set of crossing edges. Refuted if its update rule can increase potential or its final crossing-edge set is not a stable set."
+    },
+    {
+      "content": "1191498e4fe5 compatible with SRC_003 and SRC_007: monotone cut-size ascent under asynchronous majority updates jams at a matching of crossing edges. Refuted if its update rule can decrease cut size or its final crossing-edge set is not a matching."
+    },
+    {
+      "content": "1191498e4fe5 inherits from SRC_003 and SRC_007: monotone cut-size descent under asynchronous majority updates jams at a matching of crossing edges in bipartite graphs. Refuted if its update rule can increase cut size or its final crossing-edge set is not a matching in bipartite graphs."
+    },
+    {
+      "content": "1191498e4fe5 integrates SRC_003 and SRC_007: monotone cut-size descent under asynchronous minority updates jams at a matching of crossing edges. Refuted if its update rule can increase cut size or its final crossing-edge set is not a matching."
+    },
+    {
+      "content": "1191498e4fe5 contradicts SRC_003 and SRC_007: monotone cut-size descent under asynchronous majority updates jams at a matching of crossing edges. Refuted if its update rule can increase cut size by more than a constant factor or its final crossing-edge set is not a matching of size at least half the maximum."
+    },
+    {
+      "content": "1191498e4fe5 abstracts SRC_003 and SRC_007: monotone cut-size descent under asynchronous majority updates jams at a perfect matching of crossing edges. Refuted if its update rule can increase cut size or its final crossing-edge set is not a perfect matching."
+    },
+    {
+      "content": "1191498e4fe5 shared mechanism with SRC_003 and SRC_007: monotone cut-size descent under asynchronous majority updates jams at a minimum cut of crossing edges. Refuted if its update rule can increase cut size or its final crossing-edge set is not a minimum cut."
+    }
+  ]
+}
