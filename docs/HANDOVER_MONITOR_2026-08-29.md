@@ -389,3 +389,20 @@ others: **ask what each instrument does when it cannot see, and
 whether it says so.** When in doubt: the record first, the framework
 second, the operator last — and when you are wrong, one sentence,
 owned, and on to the next thing.
+
+## Addendum 2026-09-03 — monitor relay rule (after the "criticism leaves no trace" relay)
+
+A window's finding is not relayed to the operator until the monitor has
+re-derived its load-bearing claim from the record, or the relay says
+plainly that it was not re-derived. Recorded because the monitor passed
+"a failed criticism leaves no trace" to the operator when the record
+already read for P-A1 held a typed attempt object for every criticism;
+the window's precise claim (no ATTACK EDGE without a warrant) was true
+and the relayed sentence was not. Every status message from here on marks
+each claim as RE-DERIVED or RELAYED.
+
+The operator's diagnosis of the mistake pattern across windows (2026-09-03):
+the first report is written before the run's actual configuration has been
+read; the window then corrects itself, but the wrong cause is what the
+operator saw. The remedy tranche (stop report + refusal to diagnose without
+it) is `experiments/2026-09-03-change-stop-report/` once opened.
