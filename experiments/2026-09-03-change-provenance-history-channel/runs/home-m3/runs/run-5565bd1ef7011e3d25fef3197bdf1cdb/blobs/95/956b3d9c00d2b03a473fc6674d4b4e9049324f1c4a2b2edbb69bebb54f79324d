@@ -1,0 +1,90 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, critical selection mechanism based on 'verisimilitude' (truth-likeness) and the methodological rule to test the most risky predictions, but accepting this costs us the assurance that science converges toward truth in a probabilistic sense, leaving us with only a fallibilist hope rather than a justified expectation.",
+    "mechanism": "The preference is grounded in the logical asymmetry between falsification and verification: while corroboration reports past survival of severe tests, the *preference* acts as a forward-looking methodological rule to select the theory with the highest content and best track record as the best candidate for being close to the truth (verisimilitude), without assigning it higher probability. This avoids induction by treating the preference as a critical choice to expose the theory to new refutations, not as an inference that it will remain true.",
+    "counterconditions": [
+      "If the Tichý/Miller proof holds that verisimilitude cannot be coherently defined for false theories, then the justification collapses unless restricted to a comparative logic of content.",
+      "If Popper's own actions imply an implicit belief in the reliability of corroborated theories (induction by practice), then the distinction between acting on a theory and believing it probable is merely verbal.",
+      "If the 'cost' of abandoning probabilistic convergence renders scientific planning irrational, then the Popperian stance becomes pragmatically self-defeating."
+    ],
+    "typicality": 0.75,
+    "analogy": {
+      "source_memory_refs": [
+        "mem_darwinian_selection_without_progress",
+        "mem_kelly_criterion_risk_management",
+        "mem_legal_presumption_of_innocence"
+      ],
+      "shared_structure": [
+        "Selection based on survival of severe trials rather than positive confirmation.",
+        "Forward-looking utility of choosing the 'fittest' option without guaranteeing future success.",
+        "Distinction between operational preference and ontological certainty."
+      ],
+      "disanalogies": [
+        "Biological evolution has no goal of truth, whereas Popperian science explicitly aims at verisimilitude.",
+        "Legal presumptions are procedural norms, while scientific preference claims epistemic superiority.",
+        "Kelly criterion maximizes expected logarithmic wealth (a probabilistic concept), which Popper explicitly rejects for theory choice."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the fittest organism without knowing the future environment, we act on the best-corroborated theory without assuming nature's uniformity.",
+        "The 'cost' in biology is extinction; in Popperian science, the cost is the acceptance of permanent uncertainty regarding truth."
+      ],
+      "overturn_conditions": [
+        "If biological fitness can be shown to rely on inductive assumptions about environmental stability.",
+        "If the legal system is shown to rely on probabilistic guilt assessments despite procedural denials."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "rebutted",
+        "note": "The mechanism does not redefine preference as mere 'focus of attention' but as a critical methodological rule for action. Preferring a bridge design based on severe testing is not an inductive prediction of safety but a rational decision to subject the highest-content hypothesis to the most stringent practical test, acknowledging that failure remains possible."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The argument strictly separates propensity (an objective physical chance within a theory) from corroboration (a historical report of test performance). The preference relies on the latter to gauge potential verisimilitude, not on propensities to predict future frequencies, thus avoiding the conflation Popper rejected."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0782cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "revised",
+        "note": "Revised to explicitly state that the 'evolutionary' aspect is a metaphor for the logic of criticism, not a redefinition of rationality as adaptive fitness. The core answer remains that the preference is a critical choice to maximize truth-content exposure, directly addressing whether it smuggles induction (it does not, if verisimilitude is accepted as a regulative ideal)."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "rebutted",
+        "note": "The claim explicitly details the cost: the loss of probabilistic assurance and the acceptance of fallibilism where science is a 'voluntary activity' of guessing and criticizing without ultimate justification. This is the price of avoiding induction."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "While the Tichý/Miller proof challenges the formal definition of verisimilitude for false theories, Popperians argue for a qualitative or restricted quantitative logic of content comparison. The defense holds if we accept verisimilitude as a regulative ideal rather than a computable metric, which is consistent with Popper's later concessions."
+      },
+      {
+        "handle": "4fc91b549c7cf6671e60e3d5053e6fa0118bdc941a29b70585c021869b5c1edf",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is explained as adherence to his own methodological rules, not as a psychological slip into induction. He preferred better-corroborated theories because they offered more opportunities for falsification and higher potential verisimilitude, consistent with his philosophical stance against probabilistic justification."
+      },
+      {
+        "handle": "511d2ecaffe3b9a762e5a5863e7ad2628d3a097ab35ff3fec64cad0d00a99a22",
+        "kind": "departure_declared",
+        "note": "Departing from the strict requirement that verisimilitude must be formally definable in all cases to be useful. The candidate asserts that a comparative, intuitive notion of 'closer to the truth' suffices for methodological preference, even if the formal calculus is incomplete."
+      },
+      {
+        "handle": "5d43a9c25315be3dc0114665380b1138afc924713ce907890005aaaa1687ac23",
+        "kind": "rebutted",
+        "note": "The preference is rational within Popper's framework because it maximizes the growth of knowledge and the severity of tests. It is not a 'biological inevitability' but a consciously adopted critical attitude. Popper's engagement was rational because it followed the internal logic of critical rationalism, not external biological drives."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_009"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "checker_specs": []
+  }
+}

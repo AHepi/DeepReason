@@ -393,3 +393,66 @@ risk and that they prefer complete runs to many partial ones. Choosing
 unilaterally between "re-run both M1 arms through the evidence channel with a
 placebo control" and "report M1/M3 as not run" is a budget decision, not a
 technical one.
+
+
+---
+
+## P7 — a NOT-LANDED attack leaves no trace in `att`, so two of the design's
+## measures and one of its query limbs cannot be sourced the way SPEC.md says
+
+Found by testing `measure_criticism.py` against committed roots BEFORE the M3
+arms finished, so this is recorded ahead of the evidence rather than after it.
+
+**The measurement.** Sustain rate — the share of attacked targets that end
+REFUTED — is **1.000 on 6 of 6 roots**, across 630+ attacked targets:
+
+| root | attacked targets | ending REFUTED | sustain rate |
+|---|---|---|---|
+| pc2-rematch | 220 | 220 | 1.000 |
+| constructive-frontier | 163 | 163 | 1.000 |
+| poietics-program | 104 | 104 | 1.000 |
+| epoch3-second-lineage | 26 | 26 | 1.000 |
+| this tranche's H0 | 6 | 6 | 1.000 |
+| this tranche's M1 control | 7 | 7 | 1.000 |
+
+**Why, from the map rather than from the numbers.**
+`DR-CON-warrants-and-attacks` states the chain: an artifact carries a
+registered `Warrant` naming a target, that carriage materializes an edge in
+`att`, and the grounded extension refutes the target if the attacker is itself
+accepted. So an edge is minted only by a WARRANTED attack. Criticism that fails
+to warrant anything produces no edge at all — it is not recorded as a failed
+attack, it is simply absent from `att`.
+
+Stated precisely, because the difference matters: an edge does not GUARANTEE
+refutation — the attacker must itself survive — so 1.000 is an empirical
+saturation, not a theorem. But it is saturated in every committed record this
+tree holds.
+
+**Three consequences, one of which is a SPEC correction.**
+
+1. **M3's sustain rate cannot discriminate.** Both arms will report 1.000. It
+   is a saturated measure, and no critic configuration can move it.
+2. **M3's re-raise rate is structurally n/a.** `PREREG.md` §3 defines a
+   re-raise over objections against a target that was NOT sustained. There are
+   no such targets. The measure is undefined wherever the sustain rate is 1.
+3. **SPEC.md §2's `attacks(X)` limb is wrong as written.** It promises
+   "objections raised against it, each with landed/not-landed". The
+   not-landed half CANNOT be sourced from `att`, because a not-landed attack
+   never enters `att`. Same for the anti-attractor render's second limb,
+   "ATTACKS THAT WERE TRIED AND DID NOT LAND", which printed "(no failed
+   attacks yet)" on every root — that was never a data quirk, it was the
+   design asking `att` for something `att` does not hold.
+
+**What SPEC.md must do about it.** Either source not-landed objections from the
+criticism records themselves (which exist as artifacts whether or not they
+warrant anything — `rules/crit.py` output survives as the raw completion and as
+non-warranting artifacts), or drop the not-landed half from the vocabulary and
+say so. The first is the useful one: an objection that was tried and failed is
+exactly the anti-attractor information R8 asks for, and it is precisely what is
+missing today. Not decided here.
+
+**Effect on M1, stated so it is not over-read.** M1's treatment arm carried a
+history whose "failed attacks" section was empty for this reason. Its measured
+effect therefore comes from the REFUTED-claims limb alone. The anti-attractor
+hypothesis was tested at half strength, and the half that was missing is the
+half R8 most directly names.

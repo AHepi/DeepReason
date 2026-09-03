@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'pragmatic evolutionary imperative' fails to answer the specific dilemma posed in the problem context: whether the preference smuggles back induction. By redefining rationality as 'adaptive fitness,' the target sidesteps Popper's own requirement for a non-inductive *logical* or *methodological* justification (such as verisimilitude or the meta-inductive argument Popper himself considered). The problem asks if the preference is defensible *on Popper's own terms*; answering that it is merely a 'biological inevitability' concedes that it is *not* rationally defensible within his epistemology, thereby failing to provide the 'strongest case' for defensibility and instead offering an error-theory explanation that validates the 'smuggled induction' critique.",
+      "counterexample": null,
+      "premise": "The problem context explicitly asks: 'Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected?'",
+      "premise_evidence": null,
+      "successor_question": "Does framing the preference as a 'biological inevitability' constitute a defense on Popper's terms, or does it admit that no such rational defense exists?"
+    }
+  ]
+}

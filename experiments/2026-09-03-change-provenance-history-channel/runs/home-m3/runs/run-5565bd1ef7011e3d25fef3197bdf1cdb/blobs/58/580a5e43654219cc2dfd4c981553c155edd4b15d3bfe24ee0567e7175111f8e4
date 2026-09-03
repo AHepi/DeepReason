@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's mechanism redefines 'preference' as 'focus of attention,' which fails to address the problem's core concern about action (e.g., building bridges). Popper and scientists prefer corroborated theories because they expect them to work in the future, not merely because they are interesting topics for discussion. By shifting the justification from reliability (which implies predictive success) to social diligence, the target evades the charge of smuggling in induction only by rendering the preference irrelevant to practical decision-making, thus failing to explain why we act on these theories rather than just talk about them.",
+      "counterexample": null,
+      "premise": "Working scientists prefer better-corroborated theories to guide action (like building bridges), expecting future success, not merely to allocate discursive resources.",
+      "premise_evidence": null,
+      "successor_question": "If the preference is only for 'discussion focus' and not 'expected reliability,' how does this view explain the catastrophic consequences engineers face when ignoring corroboration in favor of untested theories?"
+    }
+  ]
+}

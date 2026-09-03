@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' to justify preferring better-corroborated theories without induction, but this fails Popper's own terms because the Tichý/Miller proof demonstrates that verisimilitude cannot be defined or compared within a deterministic framework where all false theories have zero probability content. Since Popper explicitly rejected probabilistic definitions of truth-likeness to avoid induction, and the only remaining non-probabilistic definition (content-based) was proven logically incoherent for comparing false theories, the preference for the 'best-corroborated' theory inevitably smuggles in an inductive assumption: that past severe testing correlates with future success or higher truth-content, which is precisely the principle of uniformity Popper sought to eliminate.",
+      "counterexample": null,
+      "premise": "Popper held that corroboration is not probability and rejected induction; the Tichý/Miller proof shows verisimilitude is undefined for comparing false theories in deterministic frameworks.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot provide a non-inductive basis for theory preference, does Popper's methodology collapse into irrationalism when choosing between equally falsified theories?"
+    }
+  ]
+}

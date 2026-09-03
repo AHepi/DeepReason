@@ -1,0 +1,109 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a rational choice based on 'verisimilitude' (truth-likeness) rather than probability, accepting the cost that verisimilitude remains a regulative ideal without a formal calculus.",
+      "mechanism": "Popper distinguishes between logical probability (which decreases with content) and corroboration (which reports past performance). The preference for acting on the best-tested theory is a methodological rule to select the theory with the highest potential verisimilitude, acknowledging it might still be false. This avoids induction because it does not claim the theory is *likely* true, only that it is the *best available guess* given severe testing.",
+      "counterconditions": [
+        "If the Tichý/Miller proof that verisimilitude is undefined in deterministic frameworks holds universally, this defense collapses.",
+        "If 'acting on' a theory logically entails assigning it higher subjective probability, the distinction fails."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "The mechanism explicitly addresses 'acting on' by framing it as a methodological selection of the best guess (highest verisimilitude) for practical application (e.g., bridge building), not merely shifting attention."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "This does not redefine rationality as adaptive fitness; it defines it as adherence to the critical method which seeks truth-likeness, distinct from evolutionary survival."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Added explicit analysis of costs: accepting this view requires tolerating the lack of a formal metric for verisimilitude and admitting science offers no guarantees, only the best current conjecture."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "Popper's engagement was rational in the sense of following a critical methodology, not a psychological inevitability. The preference is normative (what one ought to do to seek truth), not descriptive."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "Addressed by distinguishing 'action based on best guess' from 'action based on probable success'. One can act on the best-tested theory while maintaining zero belief in its probability."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The resolution lies in verisimilitude, which combines content and truth, resolving the tension between informational content and predictive reliability without invoking probability."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "The criterion is not generic error minimization but specific survival of severe tests aimed at the theory's high-content claims. A trivial theory survives easily but offers no verisimilitude gain."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "While the formal definition of verisimilitude faced technical issues (Tichý/Miller), Popperians argue the *concept* remains valid as a qualitative guide, or that revised definitions (e.g., by Niiniluoto) repair the formal gap."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_001", "SRC_004"]
+    },
+    {
+      "claim": "The preference smuggles induction back in because any decision to 'act on' a theory necessarily assumes the future will resemble the past (uniformity of nature), which is the very principle Popper sought to eliminate.",
+      "mechanism": "To prefer Theory A over Theory B for action implies an expectation that A will perform better in the future. This expectation is an inductive inference from past test results to future performance. Without this inductive leap, past corroboration is historically interesting but practically irrelevant for future action.",
+      "counterconditions": [
+        "If one can act purely on the basis of eliminating error without any expectation of future success.",
+        "If 'preference' is redefined as a non-cognitive volitional act devoid of expectation."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "This candidate argues that 'focus of attention' is insufficient; the core issue is that *any* action implies an inductive expectation of success, which this candidate asserts is unavoidable."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The argument here is that the dilemma is insoluble on Popper's terms precisely because the 'smuggling' is inherent to the concept of rational action itself, not a redefinition of it."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Explicitly states the cost: accepting this view means admitting Popper's project failed to eliminate induction from scientific practice, reducing his system to a description of psychology rather than logic."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "Argues that Popper's own rational engagement proves he tacitly relied on induction, making his philosophical denial inconsistent with his practice."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "Directly addresses 'acting on' by claiming such action is the smoking gun of hidden induction."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Contends that distinguishing content from power fails if the choice to act relies on an inductive bridge between past tests and future utility."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Asserts that even minimizing known error requires assuming that avoiding past errors leads to better future outcomes, which is inductive."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Supports the Tichý/Miller critique by suggesting that without a coherent non-probabilistic measure of truth-likeness, the only remaining basis for preference is inductive habit."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_002", "SRC_005"]
+    },
+    {
+      "claim": "The preference is defensible as a 'critical rationalist' wager: we choose the best-tested theory not because it is likely true, but because it has survived attempts to falsify it, making it the most informative error-eliminated option available.",
+      "mechanism": "This approach treats science as an evolutionary process of conjecture and refutation. Preference is not a judgment of truth probability but a strategic move in a game of error elimination. We act on the survivor because it is the only one not yet shown to be wrong in specific domains, maximizing our exposure to potential new errors (learning).",
+      "counterconditions": [
+        "If the 'survivor' status provides no pragmatic advantage over a random guess in a chaotic universe.",
+        "If the definition of 'severe test' secretly relies on inductive assumptions about test validity."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "Clarifies that 'strategic move' directly informs action (building bridges) by selecting the option with the lowest known risk of specific failure modes, not just attention."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Distinguishes 'error elimination' from 'adaptive fitness'; the goal is truth/logic, not biological survival, though they may correlate."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Cost identified: We must accept that our 'best' theory is merely the least-worst known so far, with no assurance it won't fail tomorrow, demanding constant vigilance."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "Frames Popper's rationality as procedural (following the rules of the game) rather than substantive (believing in the outcome)."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "Action is justified by the negative knowledge gained (we know where it doesn't fail), which is sufficient for engineering safety margins."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "High content is preferred because it exposes more surface area to falsification; surviving such tests yields stronger negative knowledge."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Refines the analogy: it is not negative utilitarianism but 'negative dogmatism'—holding theories tentatively until broken."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Sidesteps the verisimilitude formalism issue by relying on the ordinal ranking of 'survived severe tests' rather than a cardinal measure of truth."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_007", "SRC_010"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view corroboration as a report of past performance only, and 'preference' as a non-rational, psychological commitment required for action, separating the logic of discovery from the psychology of decision.",
+      "mechanism": "Popper strictly separates the logical status of a theory (unproven) from the psychological state of the scientist. The 'preference' is a psychological necessity for acting in an uncertain world, not a logical derivation. It smuggles nothing in because it makes no logical claim about the future; it is a voluntary leap of faith consistent with fallibilism.",
+      "counterconditions": [
+        "If Popper claimed his system provided a complete guide to rational action, not just logical assessment.",
+        "If the 'psychological commitment' cannot be distinguished from implicit probabilistic belief."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_002", "kind": "departure_declared", "note": "Departing from the requirement that the preference must be logically defensible; instead, it is framed as a pragmatic/psychological necessity outside the scope of logical critique."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Accepts that this redefines the scope of 'rationality' in action, limiting it to the critical phase, not the volitional phase."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Cost: Science loses its claim to guide rational action fully, retreating to a logic of criticism while leaving action to irrational (or arational) will."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "Explains Popper's behavior as him wearing two hats: the logician (no induction) and the man (acting on hope/habit)."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "Action is driven by the psychological need to decide, not by a logical proof of superiority."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The distinction holds if we accept that logic governs testing, but psychology governs choosing."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "The criterion for action becomes subjective confidence derived from past survival, not an objective minimization principle."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Irrelevant to this view, as no formal measure of truth is claimed, only a psychological feeling of security."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_003", "SRC_006"]
+    },
+    {
+      "claim": "The preference is defensible via a 'propensity' interpretation of probability, where corroboration measures the objective propensity of a theory to survive tests, distinct from subjective Bayesian probability.",
+      "mechanism": "Popper later explored propensity theory. Corroboration could be seen as evidence of a theory's objective propensity to withstand falsification attempts. This allows a form of 'probability' (propensity) that is not inductive in the Humean sense (subjective expectation) but ontological (a property of the situation/theory).",
+      "counterconditions": [
+        "If propensity interpretations fail to solve the problem of induction regarding single-case events.",
+        "If Popper explicitly rejected applying propensity to theory choice in this manner."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "Propensity provides a metaphysical grounding for why we expect the theory to hold up in action (bridges), linking past tests to future stability objectively."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "This is not 'adaptive fitness' but an objective physical/metaphysical attribute of the theory-world relation."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Cost: Adopting propensity theory commits Popper to a controversial metaphysics of dispositions that many empiricists reject."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "Restores rationality by grounding it in objective propensities rather than psychological quirks."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "Action is rational because it aligns with the objective propensities of the world as revealed by tests."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Propensity bridges the gap between content (complexity) and predictive power (stability)."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Surviving severe tests reveals high propensity, which is more than just 'no known errors'."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Propensity offers an alternative to the failed verisimilitude calculus, potentially rescuing the comparison of theories."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_008", "SRC_012"]
+    }
+  ]
+}

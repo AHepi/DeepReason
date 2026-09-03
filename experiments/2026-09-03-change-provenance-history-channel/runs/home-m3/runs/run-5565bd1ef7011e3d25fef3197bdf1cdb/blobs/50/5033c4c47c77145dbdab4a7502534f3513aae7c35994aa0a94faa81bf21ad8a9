@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a 'critical rational choice' rather than an inductive inference, but accepting this costs the agent any guarantee of future success or increased subjective probability, forcing a leap of faith grounded solely in the logical asymmetry of falsification.",
+    "mechanism": "The mechanism distinguishes between 'inductive support' (which Popper rejects) and 'corroboration as a report of past performance.' The preference is justified not because corroboration predicts the future (induction), but because it identifies the theory that has withstood the most severe attempts at falsification, making it the most 'testable' and thus the most informative candidate for further criticism. Choosing it is a methodological rule to maximize error detection, not a probabilistic bet on truth.",
+    "counterconditions": [
+      "If the agent requires a guarantee that the preferred theory will work in practice (e.g., building a bridge), the Popperian defense fails.",
+      "If 'preference' implies an expectation of higher truth-content that cannot be logically derived from past tests alone without inductive assumptions.",
+      "If the cost of acting on a falsified-but-less-corroborated theory is catastrophic, rendering the 'no guarantee' stance pragmatically unacceptable."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'expectation of success' with 'methodological selection.' Popper's preference addresses action by selecting the theory that offers the best opportunity for learning (highest testability), not by promising the bridge won't fall. The 'focus of attention' is precisely where the highest risk of error lies, which is the only rational place to act if one seeks to avoid error."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The proposal explicitly avoids conflating propensity with corroboration. It relies on 'critical rational choice' based on logical asymmetry (falsifiability), not on any propensity interpretation of probability for theory choice. Propensity applies to singular events within a theory, not the selection of the theory itself."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0782cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "revised",
+        "note": "Revised to clarify that 'adaptive fitness' is not the primary justification. Instead, the justification is 'maximizing testability.' The evolutionary analogy is secondary; the core is that preferring the best-tested theory is the only way to adhere to the goal of eliminating error, which is the definition of rationality in critical rationalism."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Explicitly added the cost analysis: accepting this view costs the agent any objective basis for expecting the future to resemble the past. It forces the acceptance that science is a 'voluntary activity' without safety nets, where acting on the best theory is a decision without a logical guarantee of pragmatic success."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "The proposal does not rely on verisimilitude (truth-likeness) as a measurable quantity to justify preference. It relies on 'corroboration' as a historical record of surviving tests. The Tichý/Miller critique applies to defining verisimilitude formally, but not to the methodological rule of preferring the theory that has survived more severe tests as the best target for future criticism."
+      },
+      {
+        "handle": "4fc91b549c7cf6671e60e3d5053e6fa0118bdc941a29b70585c021869b5c1edf",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is explained as consistent with his philosophy if viewed as a 'rational decision' to adopt the most informative theory, not as an unconscious inductive habit. He preferred them *because* they were more testable, not because he believed they were more probable. The criticism assumes 'preference' must imply 'belief in higher probability,' which Popper denies."
+      },
+      {
+        "handle": "511d2ecaffe3b9a762e5a5863e7ad2628d3a097ab35ff3fec64cad0d00a99a22",
+        "kind": "rebutted",
+        "note": "Similar to the rebuttal for 1988...: The argument does not depend on a formal definition of verisimilitude being computable. It depends on the logical fact that a theory surviving severe tests has demonstrated greater empirical content (and thus greater falsifiability) than one that has not, making it the superior vehicle for scientific progress regardless of its 'truth-likeness' score."
+      },
+      {
+        "handle": "5d43a9c25315be3dc0114665380b1138afc9247dda9fc511e0bb8b1504a0ba48",
+        "kind": "revised",
+        "note": "Clarified that Popper's engagement was rational in the sense of 'critical rationality' (aligning actions with the goal of error elimination), not 'justificatory rationality' (seeking positive proof). The cost is admitting that this form of rationality does not provide the psychological comfort of induction."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_004"],
+      "shared_structure": [
+        "Selection based on past survival rather than predicted future success.",
+        "Distinction between 'being the best available option' and 'being guaranteed to work'.",
+        "Methodological rule vs. ontological claim."
+      ],
+      "disanalogies": [
+        "Natural selection has no conscious goal; Popperian choice is teleological (aimed at truth/error elimination).",
+        "Biological survival is binary (live/die); theory corroboration is gradable (degree of severity passed)."
+      ],
+      "transfer_claims": [
+        "Just as evolution selects traits that survived past environments without guaranteeing future survival, science selects theories that survived past tests without guaranteeing future predictive accuracy.",
+        "The 'rationality' of the choice lies in the process of selection (severe testing), not the outcome."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that past survival logically entails future success in a closed system.",
+        "If the goal of science is redefined from 'error elimination' to 'secure prediction'."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

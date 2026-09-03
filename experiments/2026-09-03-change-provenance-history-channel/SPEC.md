@@ -80,7 +80,7 @@ a query surface and arbitrary code execution wearing a work item's clothes.
 | kind | argument | answers | bound |
 |---|---|---|---|
 | `lineage` | artifact ref | what this artifact was revised from, and what from that | ≤ 8 ancestors |
-| `attacks` | artifact ref | objections raised against it, each with landed/not-landed | ≤ 12 edges |
+| `attacks` | artifact ref | objections raised against it, each with landed/not-landed — **the not-landed half needs a source that is NOT `att`; see PARKED P7** | ≤ 12 edges |
 | `discharges` | artifact ref | objections answered, with the discharge | ≤ 12 |
 | `verdict_history` | artifact ref | status transitions in order, with the warrant that caused each | ≤ 16 transitions |
 | `siblings` | problem ref | other candidates proposed for the same problem | ≤ 12 claims |
@@ -235,6 +235,15 @@ pack budget at all.
 ---
 
 ## 6. The anti-attractor shaping rule (R8) `[PENDING M1]`
+
+**CORRECTION, from PARKED P7, before any of this is implemented.** The rule's
+second limb — failed attacks — cannot be built from `att`. A not-landed attack
+mints no warrant and therefore materializes no edge, so `att` holds only
+attacks that landed; sustain rate is 1.000 across 6 committed roots and 630+
+targets. The limb must be sourced from criticism records that did not warrant
+anything, or dropped and said to be dropped. M1's treatment arm ran with this
+limb empty, so the hypothesis was tested at half strength — and the missing
+half is the one R8 most directly names.
 
 **S15 — exposure is SHAPED, not complete.** Refuted lineages and failed attacks
 are shown; the winning lineage is shown only on explicit request. The

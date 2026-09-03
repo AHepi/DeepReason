@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of truth, but as a strategic commitment to 'verisimilitude' (truth-likeness) within a critical rationalist framework, provided one accepts the cost that this preference is methodological rather than epistemic justification.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which implies induction) and 'methodological rule' (which implies a decision to test the most vulnerable theory). By preferring the theory with higher corroboration, scientists select the theory that has survived the severest tests, thereby maximizing the potential for future falsification if the theory is false. This aligns with the goal of approaching truth (verisimilitude) without claiming probability. The preference is a rule of conduct: 'Act as if the best-tested theory is the closest to truth, while acknowledging it may still be false.'",
+    "counterconditions": [
+      "If the Tichý/Miller proof demonstrates that verisimilitude cannot be coherently defined for false theories, rendering the comparison of 'closeness to truth' impossible.",
+      "If Popper's own actions in choosing theories for practical application (e.g., building bridges) implicitly rely on an inductive assumption that past performance predicts future safety, contradicting his explicit rejection of induction.",
+      "If the distinction between 'psychological inevitability' and 'rational preference' collapses when the agent (Popper himself) explicitly frames the choice as a rational necessity rather than a biological impulse."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "rebutted",
+        "note": "The criticism claims the mechanism redefines preference as 'focus of attention' failing to address action. This is rebutted: the proposed mechanism explicitly frames preference as a 'methodological rule of conduct' for action (building bridges), arguing that acting on the best-tested theory is the only non-inductive way to maximize the chance of success, even if success isn't guaranteed."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The criticism argues conflation of 'propensity' and 'corroboration'. The candidate strictly separates them: propensity is an interpretation of probability *within* a theory (rejected for theory choice), while corroboration is a historical report of test severity used to guide the *selection* of which theory to subject to further testing. No conflation occurs."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0782cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'smuggling induction' charge. The mechanism now clarifies that the preference is not an inference that the theory *will* work (induction), but a decision to bet on the theory that has *not yet failed* under severe conditions, accepting that this bet might lose. This directly answers whether it smuggles induction: it does not, if the agent accepts the possibility of failure despite the preference."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Revised to explicitly detail the 'cost'. The cost is the abandonment of the desire for positive justification or certainty. Accepting this view costs the scientist the comfort of believing their theory is 'probable' or 'safe'; they must act with the constant awareness that the next test could destroy the theory, even if it is the best currently available."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "While the Tichý/Miller proof challenges the *formal definition* of verisimilitude, the candidate relies on the *intuitive/methodological* use of verisimilitude as a regulative ideal. Popper himself acknowledged the formal difficulties but maintained the concept as necessary for explaining scientific progress. The defense holds if one accepts verisimilitude as a meta-scientific goal rather than a computable metric."
+      },
+      {
+        "handle": "4fc91b549c7cf6671e60e3d5053e6fa0118bdc941a29b70585c021869b5c1edf",
+        "kind": "rebutted",
+        "note": "The criticism states the 'non-rational' claim fails to address Popper's own behavior. The candidate argues Popper's behavior was consistent with 'critical rationality': he preferred better-corroborated theories *because* they offered more opportunities for criticism and growth, not because he believed they were psychologically inevitable or probable. His preference was a rational adherence to his own methodology."
+      },
+      {
+        "handle": "511d2ecaffe3b9a762e5a5863e7ad2628d3a097ab35ff3fec64cad0d00a99a22",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate departs from the strict requirement that a defense must solve the Tichý/Miller formal problem. Instead, it asserts that Popper's system survives if verisimilitude is treated as a qualitative, non-formalizable aim of science, rendering the formal collapse irrelevant to the *practical* preference for well-tested theories."
+      },
+      {
+        "handle": "5d43a9c25315be3dc0114665380b1138afc9247dda9fc511e0bb8b1504a0ba48",
+        "kind": "rebutted",
+        "note": "The criticism claims the 'biological/psychological' defense ignores Popper's rational engagement. The candidate rebuts this by asserting the preference is neither purely biological nor purely psychological, but 'methodologically rational'. Popper engaged rationally by applying a rule ('choose the best-tested') that serves the goal of truth-seeking without violating the prohibition on induction."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["naval_strategy_severe_weather"],
+      "shared_structure": [
+        "Selection of a route based on past survival of storms does not guarantee future safety.",
+        "Preference for the route that survived the worst storms maximizes the chance of detecting hidden flaws in the ship.",
+        "Acting on the 'best' route is a strategic necessity, not an inductive proof of safety."
+      ],
+      "disanalogies": [
+        "Naval strategy often accepts probabilistic risk calculations, whereas Popper explicitly rejects probability as a measure of theory validity.",
+        "A ship sinking is a final physical event, whereas a falsified theory can lead to theoretical progress."
+      ],
+      "transfer_claims": [
+        "Just as a captain chooses the storm-hardened ship to learn its limits, a scientist chooses the corroborated theory to expose its limits.",
+        "The preference is justified by the quality of information gained from potential failure, not by the expectation of success."
+      ],
+      "overturn_conditions": [
+        "If the naval analogy implies that past survival increases the *probability* of future survival, it fails Popper's criteria.",
+        "If the goal of the voyage is purely safe arrival (truth) rather than learning (verisimilitude), the analogy breaks down."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

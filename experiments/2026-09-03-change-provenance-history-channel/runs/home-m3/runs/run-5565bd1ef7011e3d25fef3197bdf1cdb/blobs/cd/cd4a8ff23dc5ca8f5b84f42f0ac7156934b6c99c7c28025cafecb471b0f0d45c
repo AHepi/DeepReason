@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference of future truth, but as a critical selection mechanism for 'verisimilitude' (truth-likeness) within a non-justificationist framework; however, accepting this costs the scientist any guarantee that the selected theory is actually closer to the truth, reducing rational action to a gamble on the severity of past tests rather than a probability of success.",
+    "mechanism": "The argument distinguishes between 'corroboration' (a logical report of past test severity) and 'probability' (an inductive prediction). It posits that preferring high corroboration is a methodological rule to maximize verisimilitude without claiming knowledge of it. The mechanism relies on the asymmetry of falsification: while we cannot know a theory is true, we can know it has survived tests that would have killed a false one, making it the 'best bet' available without invoking induction.",
+    "counterconditions": [
+      "If the Tichý/Miller proof holds that verisimilitude cannot be consistently defined for false theories, then the preference lacks a coherent target.",
+      "If Popper's own practical choices relied on an implicit belief in the uniformity of nature (induction), then the distinction is merely semantic.",
+      "If 'preference' implies an expectation of future performance, it functionally reintroduces probability regardless of the label."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'expectation of success' with 'logical probability.' The rebuttal clarifies that Popperian preference is a decision to act on the theory that has withstood the most severe attempts at falsification, not a prediction that it will work. The 'action' (building bridges) is based on the critical choice of the least refuted option, not an inductive guarantee."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates propensity (an interpretation of probability statements within physics) from corroboration (a meta-scientific assessment of test severity). The mechanism does not use propensity to justify theory choice; it uses the logical history of falsification attempts."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0782cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address the 'smuggling induction' charge. Instead of relying on 'adaptive fitness,' the argument now frames the preference as a 'critical selection rule' that accepts the risk of error (cost) to avoid the logical impossibility of justification."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Expanded the 'claim' section to explicitly state the cost: 'accepting this costs the scientist any guarantee that the selected theory is actually closer to the truth.' This directly answers the prompt's requirement to analyze what accepting the defense costs."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "While acknowledging the Tichý/Miller proof as a serious challenge, the rebuttal argues that Popper's later qualitative notion of verisimilitude survives as a regulative ideal even if the quantitative definition fails. The preference is for the theory that *appears* to have more verisimilitude based on critical discussion, not one that is proven to have it."
+      },
+      {
+        "handle": "4fc91b549c7cf6671e60e3d5053e6fa0118bdc941a29b70585c021869b5c1edf",
+        "kind": "rebutted",
+        "note": "The candidate addresses Popper's personal behavior by distinguishing between his psychological habits (which may be inductive) and his reconstructed rational methodology. The defense claims Popper's *rational* justification for his preference was non-inductive, even if his *psychology* was not."
+      },
+      {
+        "handle": "511d2ecaffe3b9a762e5a5863e7ad2628d3a097ab35ff3fec64cad0d00a99a22",
+        "kind": "rebutted",
+        "note": "Similar to the rebuttal for handle 1988..., this argues that the collapse of the formal definition does not invalidate the intuitive concept of 'truth-likeness' as a goal. The preference is for the theory that best satisfies our current critical standards for approximating truth, without claiming to measure that approximation."
+      },
+      {
+        "handle": "5d43a9c25315be3dc0114665380b1138afc924713ce907890005aaaa1687ac23",
+        "kind": "revised",
+        "note": "Clarified that the preference is not merely 'biological/psychological inevitability' but a 'methodological commitment.' The revision emphasizes that Popper viewed this commitment as rational because it is the only way to proceed without falling into the trap of dogmatic justificationism."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

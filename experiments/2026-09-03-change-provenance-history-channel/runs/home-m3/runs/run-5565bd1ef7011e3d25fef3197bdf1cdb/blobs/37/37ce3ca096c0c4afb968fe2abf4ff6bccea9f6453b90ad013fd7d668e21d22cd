@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the central tension in Popper's philosophy regarding action, but fails to engage with the specific directive to 'make the strongest case for each answer' and determine which survives. It presents only the argument that induction is smuggled in, omitting the counter-argument (e.g., that preferring the better-corroborated theory is a rational wager or methodological rule consistent with critical rationalism, not an inductive inference). Consequently, it does not fulfill the problem's requirement to weigh both sides and declare a survivor.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

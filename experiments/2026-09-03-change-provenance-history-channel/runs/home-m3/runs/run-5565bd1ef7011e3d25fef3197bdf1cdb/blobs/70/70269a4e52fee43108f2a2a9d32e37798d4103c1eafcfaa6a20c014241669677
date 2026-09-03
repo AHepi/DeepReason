@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the preference is defensible because severe tests eliminate false theories, leaving those with higher potential truth-content (verisimilitude).",
+      "premise_evidence": [
+        {
+          "block": "reasoning-envelope-wf",
+          "quote": "Acting on the best-tested theory is the only rational strategy to approximate truth, even without a guarantee of success or an inductive inference that the future will resemble the past."
+        }
+      ],
+      "case": "The argument commits a performative contradiction by relying on the very inductive assumption it claims to avoid. While explicitly denying an 'inductive inference that the future will resemble the past,' the target asserts that acting on the best-tested theory is the 'only rational strategy to approximate truth.' This assertion is only rational if one assumes that a theory's past performance (surviving severe tests) is a reliable indicator of its future performance or its proximity to truth in untested domains. Without this assumption of the uniformity of nature or the projectibility of 'severe testing' as a marker for verisimilitude, there is no logical bridge between 'has survived tests so far' and 'is the best bet for future action.' By asserting the rationality of the preference based on past elimination, the target smuggles in the principle of induction under the guise of 'methodological rule,' failing to answer how the preference is defensible *without* that inductive leap.",
+      "counterexample": [
+        "Consider a 'grue'-like predicate applied to theories: a theory is 'test-surviving*' if it has survived all tests before time T, but fails immediately after. If we have no inductive basis to prefer 'surviving' over 'test-surviving*', the claim that the former is the 'only rational strategy' collapses into an arbitrary choice, indistinguishable from the inductive habit Popper rejects."
+      ],
+      "successor_question": "If the link between past corroboration and future reliability is not inductive, what specific non-inductive logical principle validates the move from 'Theory A survived test X' to 'Theory A is more likely to succeed in test Y'?"
+    }
+  ]
+}

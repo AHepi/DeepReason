@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the preference for better-corroborated theories is a wager on 'verisimilitude' (truth-likeness) without probabilistic assumptions.",
+      "case": "The defense collapses because Popper's own concept of 'verisimilitude' was proven by Tichý and Miller (1974) to be logically incoherent within a deterministic framework: without probabilistic measures, one cannot formally compare the 'truth-content' vs 'falsity-content' of two false theories to establish that one is 'closer' to the truth. By grounding the pragmatic wager in verisimilitude while explicitly rejecting probability, the target relies on a broken metric. If verisimilitude cannot be defined or compared without smuggling in probabilistic assumptions (which Popper rejected), then the 'non-inductive selection rule' described has no operative mechanism, rendering the preference indefensible on Popper's own strict terms.",
+      "counterexample": [
+        "Consider two false theories, A and B, where A entails all the successful predictions of B plus some additional false ones. Under Popper's logical definitions without probability, A has more truth-content but also more falsity-content than B. There is no non-probabilistic logical rule in Popper's system to determine if A is 'closer' to the truth than B, making the 'wager on verisimilitude' an empty gesture unless one implicitly assumes a probability distribution over possible states of affairs."
+      ],
+      "successor_question": "Can a coherent definition of verisimilitude be constructed that allows for the comparison of false theories without reintroducing the probabilistic concepts Popper explicitly sought to eliminate?"
+    }
+  ]
+}

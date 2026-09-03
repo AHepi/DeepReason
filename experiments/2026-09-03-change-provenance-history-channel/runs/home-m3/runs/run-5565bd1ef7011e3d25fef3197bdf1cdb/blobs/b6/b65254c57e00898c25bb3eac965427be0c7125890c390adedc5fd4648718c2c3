@@ -1,0 +1,77 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, methodological rule of 'critical rationality' that maximizes the potential for future falsification, not the probability of truth.",
+      "mechanism": "Popper distinguishes between the logical status of a theory (which cannot be made probable by past success) and the pragmatic decision of which theory to test next. The mechanism is 'severe testing selection': we prefer the theory that has survived the most severe tests because it is the most informative and thus the most vulnerable to future refutation. Acting on it is not an induction that it will hold forever, but a bet that it offers the best leverage for finding error. The 'preference' is a commitment to the growth of knowledge via error elimination, not a prediction of survival.",
+      "counterconditions": [
+        "If 'preference' implies an expectation of future success based on past performance, it smuggles in induction.",
+        "If the agent acts as if the theory is 'true' rather than 'not yet false', the distinction collapses.",
+        "If the cost of acting on a falsified theory is catastrophic, the non-probabilistic justification may be insufficient for practical action."
+      ],
+      "typicality": 0.92,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_001", "kind": "rebutted", "note": "The mechanism addresses action by framing it as a methodological choice to maximize error detection, not as a redefinition of preference to mere attention. We build bridges on the best-tested theory because it is the most rigorous target for nature, not because we are psychologically focused on it."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "This claim strictly separates corroboration (historical report of test severity) from propensity (physical chance). It does not conflate them; it uses corroboration solely to rank theories by their informational content and testability."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The defense does not redefine rationality as biological fitness. It defines rationality as adherence to the logic of scientific discovery (falsificationism). The preference is rational because it aligns with the goal of truth-seeking via error elimination, not mere survival."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "revised", "note": "Added explicit analysis of costs: Accepting this view costs us the comfort of probabilistic certainty. We must act without knowing the odds, accepting that our best theory may fail tomorrow, and that our 'rational' choice was logically distinct from a prediction of success."},
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "This argument does not rely on verisimilitude (truth-likeness) as a measurable quantity. It relies on 'corroboration' as a report of test severity. We prefer the better-corroborated theory not because it is 'closer to truth' in a defined metric, but because it has withstood more attempts to show it is false."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Popper's personal preference is explained as his own adherence to his methodological rules. He acted rationally according to his system by choosing the theory that offered the highest degree of testability and had survived it, not because of a psychological compulsion."},
+        {"handle": "[SRC_016] against SRC_004", "kind": "rebutted", "note": "Avoids the Tichý/Miller collapse by not invoking a formal definition of verisimilitude. The preference is based on the history of severe testing (corroboration), which remains valid even if verisimilitude cannot be formally calculated."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The preference is not a biological inevitability but a conscious, rational adoption of a critical method. Popper engaged in it as a rational agent committing to the rules of critical discussion and empirical testing."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_001", "SRC_005"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles back induction, rendering Popper's system internally inconsistent when applied to real-world action.",
+      "mechanism": "The mechanism is 'pragmatic induction': any decision to act on a theory T over theory U because T has survived tests while U has not (or T has survived more severe tests) logically entails the premise that 'past performance is a reliable guide to future performance.' Even if labeled 'corroboration,' the functional role of this preference in decision-making is identical to inductive probability. To say 'I will cross this bridge because it has been tested' is to assume 'tested bridges are more likely to hold.' This assumption is inductive. Popper's attempt to strip the probabilistic content while retaining the practical utility fails because the utility *depends* on the probabilistic expectation he denies.",
+      "counterconditions": [
+        "If one can demonstrate a purely deductive link between 'survived tests' and 'preferable for action' without assuming future resemblance, this claim fails.",
+        "If 'preference' can be shown to be purely aesthetic or psychological without normative force for action, the smuggling charge weakens.",
+        "If the cost of error is symmetric across theories, the need for a preference rule might vanish, avoiding the induction trap."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_001", "kind": "rebutted", "note": "The claim argues that the core concern about action *is* addressed by showing that action necessarily implies an inductive premise. Redefining 'preference' doesn't change the logical structure of the decision to act."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "The argument posits that regardless of Popper's specific rejection of propensity in this context, the *act* of preferring reintroduces a probabilistic mindset functionally equivalent to induction, effectively bypassing his semantic prohibitions."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The dilemma is answered directly: the preference *does* smuggle back induction. Attempting to sidestep it by calling it 'evolutionary' or 'adaptive' merely renames the inductive leap without justifying it deductively."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "revised", "note": "Explicit cost analysis: Accepting this view costs us Popper's solution to the problem of induction. We are left with Hume's skepticism, acknowledging that science rests on an unjustifiable inductive habit, and Popper's 'falsificationism' is revealed as a descriptive mask for inductive practice."},
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "This claim agrees that verisimilitude fails but argues the deeper issue is the inductive nature of 'corroboration' itself when used for choice. The Tichý/Miller proof supports the idea that formal measures fail, reinforcing the view that the preference is extra-logical (inductive)."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Popper's behavior is cited as evidence of the inconsistency: he *could not* help but act inductively, proving that his philosophical prohibition was impossible to maintain in practice, thus validating the charge of smuggling."},
+        {"handle": "[SRC_016] against SRC_004", "kind": "rebutted", "note": "Agrees that verisimilitude collapses, using this failure to bolster the argument that no non-inductive metric exists to justify preference, leaving induction as the only remaining explanation for scientific choice."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "Argues that Popper's rational engagement in preference is precisely the problem: he applied reason to justify an inductive step while claiming to reject induction, demonstrating a rationalization of bias rather than a pure critical method."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_002", "SRC_006"]
+    },
+    {
+      "claim": "The preference is defensible only if reconceived as a 'voluntary commitment' to a specific form of life (Critical Rationalism), where the cost is the abandonment of 'justification' entirely in favor of 'responsibility'.",
+      "mechanism": "This approach dissolves the dichotomy between induction and deduction by shifting the ground to ethics/volition. The mechanism is 'existential choice of methodology.' Scientists prefer corroborated theories not because they are 'probable' (induction) or 'proven' (deduction), but because they have voluntarily committed to the game of science which values bold conjectures and severe tests. The 'preference' is a rule of the game one has chosen to play. It is defensible on Popper's terms if those terms include the meta-decision to play the critical game. The 'smuggling' charge fails because no epistemic justification is claimed; only a consistent adherence to a chosen normative framework.",
+      "counterconditions": [
+        "If the choice of the 'game' itself requires an inductive bet (that this game yields truth), the regress continues.",
+        "If 'responsibility' cannot be distinguished from 'expectation of success' in practical outcomes, the distinction is verbal.",
+        "If the framework cannot explain why we don't play other games (e.g., astrology) with equal validity, it fails to account for scientific progress."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_001", "kind": "rebutted", "note": "Addresses action by framing it as 'playing the move' in a chosen game. Building the bridge is the move consistent with the rules of Critical Rationalism, not a prediction of the bridge's stability derived from induction."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Explicitly rejects propensity and probability. The commitment is normative (how we ought to act given our goals), not ontological (how the world works)."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "Does not redefine rationality as fitness. It defines it as consistency with a voluntarily adopted set of norms. The dilemma is resolved by denying that 'rationality' requires 'justification' in the traditional sense."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "revised", "note": "Cost analysis: Accepting this costs the idea that science is 'forced' by nature or logic. Science becomes a voluntary, human activity. We are responsible for our choices, but not 'justified' by the universe. This is a heavy existential cost."},
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "Bypasses the verisimilitude debate entirely. The preference is not about getting closer to truth in a measurable way, but about maintaining the integrity of the critical process."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Popper's behavior is interpreted as his own voluntary commitment to the critical tradition. It was a rational choice of values, not a psychological slip or a hidden induction."},
+        {"handle": "[SRC_016] against SRC_004", "kind": "rebutted", "note": "Since no claim to 'truth-likeness' measurement is made, the Tichý/Miller proof is irrelevant. The preference is procedural, not substantive."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "Denies that the preference is a biological inevitability. It is a cultural and intellectual achievement—a chosen stance against dogmatism and irrationalism."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_007", "SRC_011"]
+    },
+    {
+      "claim": "The preference is a 'meta-inductive' heuristic that Popper implicitly accepted as unavoidable for survival, creating a dual-system epistemology where strict logic governs theory status, but induction governs theory choice.",
+      "mechanism": "The mechanism is 'epistemic compartmentalization.' Popper maintained a strict anti-inductive stance for the *logic of justification* (theories are never confirmed) but tacitly allowed a pragmatic, quasi-inductive stance for the *context of discovery/action*. The 'preference' is a heuristic rule of thumb: 'assume the future resembles the past unless proven otherwise.' This is technically induction, but Popper treated it as a biological/psychological necessity separate from the formal logic of science. Thus, the preference is not defensible on his *strict* logical terms, but is defensible on his *pragmatic* terms as a necessary concession to human limitation.",
+      "counterconditions": [
+        "If Popper explicitly denied any role for heuristics or pragmatism in theory choice, this dual-system interpretation fails.",
+        "If the 'heuristic' can be fully reconstructed as a deductive consequence of aiming for truth, the induction charge is moot.",
+        "If the separation between 'logic' and 'action' is shown to be porous (i.e., action influences what counts as logic), the compartmentalization collapses."
+      ],
+      "typ

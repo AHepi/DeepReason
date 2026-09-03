@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a distinction between 'methodological utility' and 'inductive expectation' that fails to address the problem's core challenge regarding action. While the target correctly identifies Popper's rejection of logical probability, it asserts that choosing a theory for action is merely a 'decision to subject our conjectures to the severest possible tests.' This contradicts the problem context which specifies scientists choose theories 'to act on' (e.g., building a bridge or administering medicine). Action implies an expectation of success in the future; if one acts on Theory A over Theory B because A is better corroborated, one is necessarily expecting A to yield better results in the future than B. The target claims this is not an 'inductive inference about the future,' but offers no non-inductive mechanism to justify why past survival of tests should guide future action without assuming the future will resemble the past. By failing to explain how 'acting on' a theory avoids the smuggled induction of expecting future reliability based on past performance, the target does not successfully defend the preference on Popper's own terms against the charge of inconsistency.",
+      "counterexample": null,
+      "premise": "Acting on a theory entails an expectation that the theory will continue to hold or perform reliably in the future.",
+      "premise_evidence": null,
+      "successor_question": "If acting on a better-corroborated theory does not imply an expectation of its future reliability, what rational basis distinguishes this choice from random selection when lives or resources are at stake?"
+    }
+  ]
+}

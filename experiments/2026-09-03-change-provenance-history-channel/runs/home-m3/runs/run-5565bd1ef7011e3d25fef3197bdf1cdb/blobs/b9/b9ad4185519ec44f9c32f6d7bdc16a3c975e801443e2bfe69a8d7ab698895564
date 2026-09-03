@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to address the 'smuggling induction' charge because the justification for preferring the 'sharper sword' (higher informational content) implicitly relies on an inductive assumption: that past severe testing is a reliable indicator of a theory's utility for future action. Popper explicitly rejects the principle that the future will resemble the past; therefore, without assuming some form of induction (that a theory which survived tests A, B, C is *more likely* to survive test D or function in practice), the preference for the better-corroborated theory becomes arbitrary rather than 'rational' as claimed. The target asserts the preference is defensible but does not explain how one bridges the gap between 'it survived past tests' and 'we should act on it now' without invoking the very probabilistic reasoning Popper banned.",
+      "counterexample": null,
+      "premise": "Popper rejected the idea that surviving tests makes a theory more probable or that the future must resemble the past.",
+      "premise_evidence": null,
+      "successor_question": "If no inductive link is allowed between past survival and future utility, on what non-arbitrary basis does Popper recommend acting on the better-corroborated theory over the worse-corroborated one?"
+    }
+  ]
+}

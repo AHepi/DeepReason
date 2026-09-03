@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's distinction between 'informational content' and 'predictive power' collapses under the requirement to 'act on' a theory. Popper explicitly links high empirical content to low logical probability (high improbability). If a decision-maker prefers Theory A over Theory B because A has survived severe tests (high corroboration/content), they are necessarily betting that A will continue to yield successful predictions in future applications. This expectation of future success based on past performance is the definition of induction. By framing this as a 'wager' on 'information density' rather than 'probability of being true,' the target attempts to semantically bypass the inductive leap required for action, but it cannot escape the fact that acting on a corroborated theory assumes the future will resemble the past regarding that theory's validity.",
+      "counterexample": null,
+      "premise": "Acting on a theory requires an expectation of its future predictive success.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for the better-corroborated theory is not based on an expectation of future success (induction), what rational basis remains for choosing it over a falsified or untested theory when lives or resources are at stake?"
+    }
+  ]
+}

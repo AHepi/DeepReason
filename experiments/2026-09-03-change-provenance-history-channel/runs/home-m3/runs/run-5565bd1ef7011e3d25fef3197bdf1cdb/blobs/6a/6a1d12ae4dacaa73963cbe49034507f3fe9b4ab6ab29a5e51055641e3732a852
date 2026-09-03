@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a 'critical rational choice' rather than an inductive inference; it survives by redefining rationality as the procedural obligation to test the most vulnerable (and thus most informative) surviving theory, but this acceptance costs science any claim to probable truth or guaranteed predictive success, reducing scientific progress to a non-justified evolutionary gamble.",
+    "mechanism": "The mechanism distinguishes between 'logical probability' (which Popper rejects as increasing with corroboration) and 'methodological utility.' Preference is not a belief that the theory is true (induction), but a strategic decision to subject the currently best-tested theory to further severe tests because it has the highest empirical content. The 'preference' is a commitment to continue the critical process with the most promising candidate, not a prediction of its future success based on past performance.",
+    "counterconditions": [
+      "If the preference implies assigning a higher subjective probability of future success to the corroborated theory, it smuggles in induction.",
+      "If the Tichý/Miller critique of verisimilitude holds, the 'best-tested' theory cannot be logically identified as closer to truth, undermining the basis for preference.",
+      "If Popper's own actions in daily life (e.g., crossing a bridge) rely on an implicit inductive belief rather than a critical stance, the distinction collapses in practice."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'preference for action' with 'belief in success.' The rebuttal is that Popper's preference is a methodological rule to test the strongest survivor, not a guarantee it will hold. Building a bridge uses the best-tested theory not because we are induced to believe it won't fail, but because it is the only one that hasn't failed yet; we remain critically aware it might."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The proposal explicitly avoids propensity theory for theory choice. It relies solely on 'severity of tests' and 'empirical content,' which are distinct from propensities. The preference is based on the logical structure of the tests passed, not a probabilistic disposition of the world."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0782cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "revised",
+        "note": "Revised to explicitly state that the 'evolutionary' aspect is a metaphor for the selection of theories via falsification, not a biological imperative that sidesteps rationality. The rationality lies in the adherence to the critical method, not the survival outcome."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Explicitly added the cost analysis: accepting this view costs science the ability to claim 'probable truth' or 'reliable prediction.' We act on the best theory knowing it may be false tomorrow, which is a high epistemic cost compared to inductivist confidence."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "The defense does not rely on a formal definition of verisimilitude to justify preference. It relies on the 'corroboration' report (how well it survived). Even if verisimilitude is uncomputable, the report of survival is a factual historical record that guides the next test without implying truth-likeness."
+      },
+      {
+        "handle": "4fc91b549c7cf6671e60e3d5053e6fa0118bdc941a29b70585c021869b5c1edf",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is interpreted as consistent with his philosophy if viewed as a 'rational bet' without expectation of payoff certainty. He preferred them because they were the most informative targets for criticism, not because he believed them true. The criticism assumes a psychological need for certainty that Popper denied."
+      },
+      {
+        "handle": "511d2ecaffe3b9a762e5a5863e7ad2628d3a097ab35ff3fec64cad0d00a99a22",
+        "kind": "rebutted",
+        "note": "Agrees that verisimilitude is problematic but argues the candidate's mechanism does not depend on it. The preference is for the theory with the highest 'degree of corroboration' (a report of past performance), which is distinct from claiming it has higher verisimilitude."
+      },
+      {
+        "handle": "5d43a9c25315be3dc0114665380b1138afc9247dda9fc511e0bb8b1504a0ba48",
+        "kind": "revised",
+        "note": "Clarified that Popper's engagement was rational in the sense of 'procedural rationality' (following the critical method) rather than 'substantive rationality' (having good reasons to believe the conclusion). The cost is admitting that substantive rationality in science is impossible."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

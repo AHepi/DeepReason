@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The 'negative utilitarianism' analogy fails because Popper's criterion for acting on a theory is its success in surviving severe tests of specific content, not a generic minimization of 'known error.' A theory with no known errors (e.g., a tautology or a vague claim) has minimized error but offers no basis for preference over a bold, highly corroborated theory. Popper's preference relies on the informational content of the tests passed, which the target's 'deficit of truth' model ignores, thereby misrepresenting why scientists prefer better-corroborated theories and failing to defend the preference on Popper's actual terms.",
+      "premise": "Popper prefers theories that have survived severe tests due to their high informational content and risk of falsification, not merely because they lack known errors.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "How does the target distinguish between a trivially unfalsifiable theory (zero known errors) and a boldly corroborated theory if the only metric is 'minimized known error'?"
+    }
+  ]
+}

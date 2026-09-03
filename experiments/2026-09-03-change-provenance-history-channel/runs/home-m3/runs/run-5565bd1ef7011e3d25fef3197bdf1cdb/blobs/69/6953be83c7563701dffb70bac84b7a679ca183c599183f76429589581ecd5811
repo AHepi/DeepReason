@@ -1,0 +1,152 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive methodological rule grounded in verisimilitude and the logic of severe testing, not probability.",
+      "mechanism": "Popper distinguishes between logical probability (which remains zero or undefined for universal laws) and corroboration (a report of past performance). The preference is rational because severe tests eliminate false theories, leaving those with higher potential truth-content (verisimilitude). Acting on the best-tested theory is the only rational strategy to approximate truth, even without a guarantee of success or an inductive inference that the future will resemble the past.",
+      "counterconditions": [
+        "If verisimilitude cannot be formally defined without probabilistic measures (as per Tichý/Miller), this defense collapses.",
+        "If the preference implicitly assumes the uniformity of nature to justify acting on past success, it smuggles in induction."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "The criticism claims the 'biological/psychological' defense fails to address Popper's rational engagement. This candidate rebuts by asserting Popper's preference is explicitly methodological and rational (based on verisimilitude), not merely psychological. The distinction holds: Popper acts on the best-tested theory *because* it has survived severe attempts at falsification, which is a rational criterion within his system, distinct from biological inevitability."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The criticism argues the interpretation fails to address 'acting on'. This candidate directly addresses 'acting on' by framing it as a decision-theoretic choice under uncertainty: since we cannot know the truth, the only rational action is to choose the theory that has withstood the most stringent attempts to refute it, maximizing the chance of selecting a theory with high verisimilitude, without claiming it is probable."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "While Tichý and Miller showed issues with Popper's original quantitative definition of verisimilitude, qualitative comparisons remain viable in Popper's framework. The defense does not rely on a perfect quantitative measure but on the logical asymmetry: falsification is decisive, verification is not. Surviving severe tests increases our rational confidence in the theory's closeness to truth (qualitative verisimilitude) without requiring a probabilistic calculus."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "The criticism alleges a straw man regarding inductive generalization. This candidate clarifies that the preference is NOT based on an inductive generalization ('it worked before, so it will work again') but on the deductive consequence of severe testing: if a theory survives a test designed to kill it, it is a better candidate for truth than one that has not been tested or has failed. This is a comparative assessment of current status, not a prediction based on past frequency."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The criticism conflates 'logical guarantee' with 'progressive convergence'. This candidate accepts the cost: there is no logical guarantee of convergence to truth. However, Popper's wager is that critical selection is the *only* method that allows for progress (error elimination). Accepting this means admitting we have no assurance of success, only the hope that by eliminating errors we move closer to truth. This is the cost: radical fallibilism without teleological guarantee."
+        }
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_008", "SRC_006", "SRC_004", "SRC_007", "SRC_005"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction, rendering Popper's position internally inconsistent when moving from logic to action.",
+      "mechanism": "To prefer theory A over B because A has survived tests while B has not (or fewer) implies an expectation that A will continue to succeed where B might fail. This expectation relies on the assumption that the future will resemble the past (uniformity of nature), which is the principle of induction Hume identified and Popper sought to reject. Without this inductive leap, the fact that A survived yesterday offers no rational basis for betting on A today.",
+      "counterconditions": [
+        "If Popper can ground the preference in a non-inductive principle like 'minimize known error' without assuming future success.",
+        "If the concept of 'rational action' can be decoupled from expectations of future performance."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "revised",
+          "note": "Revised to acknowledge that while Popper may claim his preference is rational/methodological, the *content* of that rationality necessarily invokes an inductive premise when applied to action. The criticism that the 'psychological' label fails is accepted; the failure is deeper—it is a logical smuggling of induction disguised as methodology."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "This candidate strengthens the criticism regarding 'acting on'. To act on a theory is to predict its utility or truth in the immediate future. Choosing the 'better-corroborated' theory for action asserts that past corroboration is a reliable guide to future reliability. This assertion is the definition of inductive inference, regardless of Popper's labeling."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The collapse of verisimilitude (Tichý/Miller) supports this candidate. If we cannot formally compare truth-likeness without probability, and probability is banned, then the 'rational' preference lacks a formal backbone. It defaults to an intuitive (inductive) feeling that 'what worked before will work again', confirming the smuggling charge."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "The criticism claims it's not a straw man because Popper calls it methodological. This candidate argues that calling it 'methodological' does not exempt it from logical scrutiny. If the method prescribes action based on past results, it functions inductively. The label 'methodological rule' is a euphemism for 'inductive habit sanctioned by convention'."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The cost of the Popperian wager is higher than admitted. If the preference is inductive, then Popper hasn't solved the problem of induction; he has merely relabeled it. Accepting this means Popper's entire project of replacing induction with falsification fails at the crucial point of practical application (science as an active enterprise)."
+        }
+      ],
+      "typicality": 0.75,
+      "optional_refs": ["SRC_008", "SRC_006", "SRC_004", "SRC_007", "SRC_005"]
+    },
+    {
+      "claim": "The preference is defensible not as induction nor as verisimilitude, but as a pragmatic evolutionary imperative: science selects for survival of theories, analogous to natural selection, where 'rationality' is redefined as adaptive fitness rather than logical justification.",
+      "mechanism": "Popper's epistemology is evolutionary. Theories compete; severe tests are the environment. Preferencing the survivor is not an inductive inference about the future, nor a claim about absolute truth, but a recognition of the only available heuristic for survival in an uncertain world. It is a 'biological/psychological inevitability' elevated to a methodological principle because it is the only strategy that doesn't lead to immediate extinction (error).",
+      "counterconditions": [
+        "If this reduces science to mere survival without truth-seeking, abandoning Popper's realism.",
+        "If 'adaptive fitness' is indistinguishable from inductive success in practice."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "revised",
+          "note": "Revised to embrace the 'biological/psychological' angle criticized in SRC_013. The rebuttal is that Popper's rationality *is* rooted in this evolutionary context. The criticism that it fails to address Popper's rational engagement is met by redefining rationality itself as evolutionary adaptiveness. Popper acts rationally *because* he acts as an evolved organism seeking survival of his conjectures."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Regarding 'acting on': We act on the fittest theory not because we induce it will work, but because it is the only tool we have that hasn't broken yet. This is pragmatic necessity, not inductive logic. The preference is a survival instinct codified into method."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "departure_declared",
+          "note": "Departure declared: This candidate abandons the need for a formal logical definition of verisimilitude (the target of Tichý/Miller). Instead, it posits that 'truth-likeness' is an emergent property of the evolutionary process of conjecture and refutation, not a static metric to be calculated. The incoherence of the formal definition does not invalidate the evolutionary mechanism."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "It is not a straw man to say this looks like induction, but it is a category error to call it induction. Induction seeks justification; evolution seeks survival. The preference is justified by its necessity for the continuation of the inquiry process, not by a logical bridge from past to future."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The cost is the abandonment of strong realism. We accept that we may never know if we are closer to 'Truth', only that we are better adapted to our current problems. This is a skeptical realism: we aim at truth, but our only gauge is survival."
+        }
+      ],
+      "typicality": 0.45,
+      "optional_refs": ["SRC_008", "SRC_006", "SRC_004", "SRC_007", "SRC_005"]
+    },
+    {
+      "claim": "The dilemma is a false dichotomy; the preference is a 'critical rationalist wager' that transcends the induction/probability binary by treating corroboration as a report of informational content rather than predictive power.",
+      "mechanism": "Corroboration reports that a theory has high empirical content (it risked much and survived). Preferring it is preferring boldness and precision. This is not induction (expecting repetition) but a commitment to learning: the theory that says more and survives is more informative. Acting on it is a bet on information density, not statistical frequency.",
+      "counterconditions": [
+        "If acting on high-content theories still requires assuming they will hold in new contexts (induction).",
+        "If 'informational content' cannot be separated from 'probability of being true' in decision making."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "The criticism regarding 'biological inevitability' is rebutted by framing the preference as a conscious epistemic value choice (valuing content over safety), not a subconscious drive. Popper engages rationally by choosing to value informative theories, a normative stance distinct from psychological compulsion."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "When 'acting on', we choose the high-content theory because if it is true, it yields more understanding; if false, it teaches us more upon falsification. The action is optimized for learning potential, not for successful prediction per se. This avoids induction by shifting the goal from 'being right' to 'learning fast'."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Verisimilitude issues are sidestepped. We don't need to measure 'closeness to truth'; we only need to measure 'amount of content tested'. The comparison is structural (how much was risked?), not ontological (how close to reality?). Thus, Tichý/Miller's critique of truth-measures doesn't apply to content-measures."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "This is not an inductive generalization. It is a deductive preference rule: 'Always prefer the theory that entails more empirical consequences and has not been falsified.' This is a maxim of critical rationalism, derived from the goal of growth of knowledge, not from observation of past successes."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The cost is accepting that we might consistently choose high-content theories that turn out to be false, potentially slowing practical application. The wager is that in the long run, this strategy yields deeper understanding, even if short-term predictive success is less stable than with ad-hoc, low-content theories."
+        }
+      ],
+      "typicality": 0.60,
+      "optional_refs": ["SRC_008", "SRC_006", "SRC_004", "SRC_007", "SRC_005"]
+    }
+  ]
+}
