@@ -180,3 +180,51 @@ model that genuinely cannot do the work: both produce `tier: shallow`. Only the
 per-case `failure_code` separates them. Any future run that lands on an
 unexpected shallow tier should read the doctor record's failure codes before
 concluding anything about the model.
+
+
+---
+
+## P4 — NOT a defect either: M1-H0's operational_failure was the same 429 storm
+
+Second casualty of the same cause as P3, recorded separately because the
+SYMPTOM is completely different and a later reader chasing "atomic child is
+terminally failed" would not think to look at P3.
+
+**What happened.** M1-H0 ran cycles 0-2 successfully (73 accepted, 4 refuted at
+cycle 3) and then died: `state failed`, `stop_reason operational_failure`,
+message "atomic child is terminally failed", at 236,524 tokens of a 600,000
+budget. `deepreason reason` exited 4. The terminal carries
+`lifecycle_refusal: TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL` and
+`stop_reason_resumable: false` — correctly, this time; the run really is not
+resumable.
+
+**Why, from the record.** In that root's own
+`workflow-provider-attempt-v1` objects: **7 of 71 attempts have
+`outcome: transport_failure`** with `usage_status: unknown`, and the string
+`429` appears in 52 files of the root including `run-result.json`. The run was
+in flight during exactly the window in which five provider workloads were
+hitting one endpoint. Same cause as P3, different symptom: P3's victim was
+mid-qualification so it degraded a tier; this one was mid-reasoning so it
+exhausted a work item's repair ladder and terminated.
+
+**Why it is not a defect.** `verify_root` on the failed root reports
+`integrity_valid: true`, `security_valid: true`, `valid: true` — the record of
+the failure is itself intact. The harness took transport failures, tried,
+exhausted the ladder, and terminated with a typed operational failure rather
+than pretending to have an answer. The one thing worth noting for a future
+tranche is that `operational_checks_passed: false` with 18 operational findings
+sits alongside `valid: true`, which is correct but easy to misread at a glance.
+
+**Disposition.** Root retired by rename to
+`home-default/runs/failed-429-run-fe00609058e10605590206d51ab2b7a0`, contents
+never edited, and H0 re-run serially. The failed root is kept because it is the
+evidence for this entry and for P1's open question about whether four-cycle runs
+terminate the way one-cycle runs do.
+
+**The judgement call, stated so it can be overruled.** The 3-cycle partial
+record could have been used as M1's control rather than paying for a re-run.
+It was not, because H0 is the CONTROL: comparing a control that died at cycle 3
+against a treatment that completes 4 cycles measures the crash, not the
+history. Under the operator's "prefer a run complete", a re-run that yields one
+valid measurement beats two arms that cannot be compared. The cost is one extra
+full run.
