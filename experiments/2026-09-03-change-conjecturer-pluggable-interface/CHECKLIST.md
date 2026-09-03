@@ -1,6 +1,6 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=26 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
+State: next=28 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
 verbatim: "Given what read from the other windows, the plugin one. Since all
 three other windows have completed." Build window open; branch
 `claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
@@ -716,17 +716,42 @@ print('ok')"` -> `ok`
 
 ## Phase 6 — the template layer
 
-- [ ] 26. (S4.1) Add the template kind: `{{ name }}` and
+- [x] 26. (S4.1) Add the template kind: `{{ name }}` and
       `{% for %}…{% endfor %}` ONLY. Write the refusal tests FIRST — an
       expression, an import, a two-dot traversal and a code-calling filter
       must each be a typed refusal.
       done-when: `python -m pytest tests/test_seat_section_template.py -k refus -q`
       -> `0 failed`, with each refusal case listed
+      ```
+      $ python -m pytest tests/test_seat_section_template.py -k refus -q
+      ...................                                              [100%]
+      19 passed, 6 deselected in 0.04s
+      ```
+      The grammar is a WHITELIST, which is why the refusal list can be short
+      and still closed: a delimiter whose body is not `name`, `name.attr`,
+      `for x in name[.attr]` or `endfor` is refused. Cases: arithmetic, a
+      call, a filter, `__import__`, `__class__.__mro__`, two-dot traversal,
+      indexing, comparison, a conditional expression, `{% if %}`,
+      `{% import %}`, a call inside a loop, a dunder attribute, a private
+      attribute. Plus: a callable attribute is REFUSED rather than rendered
+      (printing `<bound method ...>` into a prompt would leak interpreter
+      internals); an unclosed delimiter is refused rather than shipped as
+      literal text; iterating a string is refused, since it would silently
+      produce one line per character.
 
-- [ ] 27. (S4.3) [COMMIT] Add the `max_render_bytes` ceiling: overrun is a
+- [x] 27. (S4.3) [COMMIT] Add the `max_render_bytes` ceiling: overrun is a
       typed error naming the template, never a silent clip (NO SILENT CAPS).
       done-when: `python -m pytest tests/test_seat_section_template.py -q`
       -> `0 failed`, including the overrun case
+      ```
+      $ python -m pytest tests/test_seat_section_template.py -q
+      ...........................                                      [100%]
+      27 passed in 0.10s
+      ```
+      The overrun raises `SEAT_SECTION_RENDER_OVERRUN` naming the plugin and
+      both numbers, and a positive anchor proves a render INSIDE its ceiling
+      is untouched — without it the refusal could be satisfied by a ceiling
+      that mangled everything.
 
 ## Phase 7 — operator-authored plugins from the home directory
 
