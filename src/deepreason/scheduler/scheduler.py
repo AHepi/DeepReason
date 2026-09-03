@@ -3073,14 +3073,22 @@ class Scheduler:
         threshold = int(getattr(self.config, "TRANSPORT_DEAD_SEAT_STREAK", 0) or 0)
         for instance in dead_seats(health, threshold):
             row = health[instance]
-            inputs = [
-                DEAD_SEAT_STREAK_SIGNAL,
+            tail = [
                 instance,
                 str(row["max_zero_byte_streak"]),
                 str(row["last_fault_kind"]),
             ]
-            if not self._measure_recorded(inputs):
-                self.harness.record_measure(inputs=inputs)
+            if self._measure_recorded([DEAD_SEAT_STREAK_SIGNAL, *tail]):
+                continue
+            # The signal census (DR-SUB-scheduler) reads the LITERAL at this
+            # call site, so the name is spelled here rather than passed in a
+            # variable; a variable makes the emission invisible to the check
+            # that exists to catch an undeclared signal. The two spellings
+            # cannot drift: a wrong literal fails the census, and a wrong
+            # constant stops the dedupe above from ever matching.
+            self.harness.record_measure(
+                inputs=["provider.dead-seat-streak.v1", *tail]
+            )
         return health
 
     def _measure_recorded(self, inputs) -> bool:

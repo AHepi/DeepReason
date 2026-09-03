@@ -177,3 +177,49 @@ CONTEXT: `experiments/2026-09-02-defect-provider-transport-faults/` deliberately
 did not add a second consumer to this signal; its retry policy is per-call and
 reads no signal. Read its FIX.md §"signal layer" before designing.
 ```
+
+---
+
+## P7 — `CON-run-identity.md:298`'s check cannot pass: it costs 357 s against a 300 s ceiling
+
+WHAT: found while dispositioning this tranche's `docs_verify` run. The check
+runs `python -m pytest tests/test_jailbreak_gate.py -q` in full. Under
+docs_verify's four workers it reports `TIMEOUT after 300s - this check is too
+expensive; narrow it to the claim it actually tests`. Re-run ALONE on an
+otherwise idle container, per `docs/AUDIT_BASELINES.md`'s disposition
+procedure, it PASSES — `9 passed in 357.19s` — which is still over the 300 s
+ceiling. So it times out whether or not the box is loaded, and it is not in
+the recorded expected-failure list. Untouched by this tranche
+(`test_jailbreak_gate.py` and `runtime/continuation.py` are not its files, and
+`continuation.py` belongs to another window).
+
+```
+FIX TRANCHE: CON-run-identity.md:298 is a docs check that can never pass —
+357 s against docs_verify's 300 s ceiling
+
+Read CLAUDE.md fully, then load deepreason-orchestrator, dr-drive-harness and
+dr-explain-to-operator. Start at dr-set-goal.
+
+THE DEFECT: `docs/map/CON-run-identity.md:298`'s check runs
+`python -m pytest tests/test_jailbreak_gate.py -q` entire. Measured
+2026-09-03 on an idle container: 9 passed in 357.19 s, against
+tools/docs_verify.py's 300 s per-check ceiling — so the check reports TIMEOUT
+under every condition, loaded or not, and the claim it defends (the 2026-08-29
+continuation-integrity gate) is therefore unverified by the instrument that is
+supposed to verify it. docs_verify's own message names the remedy: "narrow it
+to the claim it actually tests".
+
+GOAL (for dr-set-goal to bound): the check verifies the continuation-integrity
+claim inside the ceiling. Success criterion: the narrowed check exits 0 in well
+under 300 s AND goes red when the gate is removed from either verb — proven by
+running it against a tree with `CONTINUE_RECORD_NOT_VERIFIED` deleted.
+The precedent to copy is `docs/map/SUB-application.md`'s own 2026-08-31
+narrowing, which took a check from two whole pytest files to four node ids and
+from 160-213 s to 1 s.
+
+CAUTION: narrowing must not become weakening. Pick the node ids that actually
+exercise the claim; a check that passes because it tests less is worse than one
+that times out, because it looks green.
+
+OUT OF SCOPE: the gate itself; runtime/continuation.py (owned elsewhere).
+```
