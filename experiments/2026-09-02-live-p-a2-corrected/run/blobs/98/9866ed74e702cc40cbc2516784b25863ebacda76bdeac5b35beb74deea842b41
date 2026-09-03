@@ -1,0 +1,1 @@
+{"decisive_point":"The mechanism states the trapping events form a thinned Poisson process with intensity λw and X ~ Poisson(λw), which would give annealed consensus probability E[e^{-X}] = exp(λw(e^{-1}-1)). But the claim states P(annealed consensus) = exp(λ(e^{-w}-1)/w), which is E[e^{-wY}] for Y ~ Poisson(λ/w), not E[e^{-Poisson(λw)}].","verdict":"fail"}
