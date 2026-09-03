@@ -1,0 +1,59 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule grounded in 'verisimilitude' (truth-likeness) and the logical asymmetry of testing: while corroboration reports past performance without predicting the future, choosing the theory with higher verisimilitude is the only rational strategy for problem-solving that accepts the risk of error without violating the prohibition on induction.",
+    "mechanism": "The mechanism distinguishes between 'corroboration' (a historical report of severe testing survival) and 'verisimilitude' (a logical estimate of closeness to truth). The preference is justified pragmatically: if we must act, we choose the theory that has withstood more severe tests because it logically contains more empirical content and has survived attempts to falsify it, making it the best available approximation of truth, even though this offers no guarantee (induction) that it will survive the next test. This avoids smuggling in induction by treating the choice as a critical decision rather than a probabilistic prediction.",
+    "counterconditions": [
+      "If verisimilitude cannot be estimated without inductive assumptions about the uniformity of nature.",
+      "If Popper's rejection of evolutionary epistemology undermines the pragmatic argument for preferring survived theories.",
+      "If the distinction between psychological habit and rational justification collapses when the agent must 'act' on the theory.",
+      "If the preference for high-content theories implicitly assumes that nature is simple or regular."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "099c405588adc1304c86c7d0a38092832dd923536c178157149681682e1688d5",
+        "kind": "rebutted",
+        "note": "The candidate explicitly relies on 'verisimilitude' but clarifies that Popper used it as a regulative ideal for critical discussion, not as a proven metric requiring induction. The rebuttal argues that acknowledging the *possibility* of higher verisimilitude based on test severity is a logical comparison of content, not an inductive leap, addressing the criticism that this contradicts Popper's later skepticism by showing the consistency of the *methodological* use versus the *logical* proof."
+      },
+      {
+        "handle": "2488649749af91445f8ee782599ecefde951f2f49277094120910555c5593b00",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly separate 'psychological necessity' from 'rational defensibility.' The claim now frames the preference as a 'critical decision' mandated by the goal of truth-seeking (verisimilitude), which is a normative epistemological stance, not merely a description of scientist behavior."
+      },
+      {
+        "handle": "2a07650f8674efcd19c9508e058ffa8af3554aa41d985882aa778086a7830438",
+        "kind": "rebutted",
+        "note": "Rebutted by clarifying that the argument does not rely on 'evolutionary epistemology' (biological imperative) but on 'methodological rationality.' The preference is derived from the definition of scientific goals (finding truth-like theories), which is a philosophical commitment, not a biological fact."
+      },
+      {
+        "handle": "423e8c74789b19633a871665df41aed920eafff1113d4b3b67bdc77b391e6ccc",
+        "kind": "revised",
+        "note": "Revised the claim to acknowledge the criticism: admitted that without induction, there is no *basis to believe* the theory is true, but argued that Popper's defense is not about 'belief' in success, but about the 'rationality of the attempt.' The mechanism now emphasizes that the choice is a gamble accepted by the critical rationalist, not a calculated probability."
+      },
+      {
+        "handle": "4ab60069bb1ad9eb660608036b57a518a78ac5e51545d7ff22b582fe09b2e63c",
+        "kind": "rebutted",
+        "note": "Rebutted by asserting that 'procedural necessity' *is* the epistemic justification in Popper's framework. To act otherwise (choosing a refuted or less-tested theory) would be irrational relative to the goal of error elimination. The collapse alleged by the critic is actually the core of Popper's solution: action follows the best critical status."
+      },
+      {
+        "handle": "50de1c844d8434f3099d39d96a6a31980c766635daccf1aa1e22950749e1f5e5",
+        "kind": "revised",
+        "note": "Revised to address the 'binary filter' critique. The claim now explicitly states that corroboration is a matter of degree based on the severity and number of tests, allowing for a ranking of surviving theories (better-corroborated) without invoking probability, thus answering why Popper preferred one survivor over another."
+      },
+      {
+        "handle": "55d4c6510b534518a729e1cf80c4573846b6e11dc2d9351e2e60f61a303a6970",
+        "kind": "rebutted",
+        "note": "Rebutted by distinguishing the 'biological imperative' (which Popper rejected as justification) from the 'methodological rule' (which he endorsed). The candidate argues the preference is a rule of critical reason, not an evolutionary drive."
+      },
+      {
+        "handle": "74a93fdc69078b6c98ec0326bbbe235fd572654706e2a48f9b1561d386adda9b",
+        "kind": "revised",
+        "note": "Revised the counterconditions and mechanism to directly address the 'Theory A vs Theory B' dilemma. The explanation now specifies that Theory A is preferred not because it is 'safer' (inductive), but because it has higher informational content and has survived stricter scrutiny, making it a richer target for further falsification, which aligns with the goal of rapid error elimination."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

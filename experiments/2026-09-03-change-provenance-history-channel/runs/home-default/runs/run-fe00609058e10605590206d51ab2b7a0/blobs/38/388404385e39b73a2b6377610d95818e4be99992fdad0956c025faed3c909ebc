@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference of future success, but as a methodological commitment to 'verisimilitude' (truth-likeness) and the pragmatic necessity of acting on the most severely tested available option, while explicitly accepting that this preference carries no guarantee of truth or probability.",
+    "mechanism": "The argument distinguishes between 'epistemic probability' (which Popper rejects as unattainable via induction) and 'methodological rationality' (which demands choosing the theory that has withstood the most severe attempts at falsification). The mechanism relies on the concept of verisimilitude: while we cannot know a theory is true, a highly corroborated theory is logically closer to the truth than a falsified one or an untested one, provided it has higher empirical content. The preference is a rule of action ('act on the best-tested') rather than a belief state ('expect this to work').",
+    "counterconditions": [
+      "If verisimilitude itself requires inductive assumptions to link past testing to future truth-likeness, the defense collapses into the induction it seeks to avoid.",
+      "If Popper's rejection of evolutionary epistemology removes the biological/pragmatic basis for preferring tested theories, the 'necessity' of choice becomes arbitrary.",
+      "If the distinction between 'acting on' and 'believing in' a theory is merely semantic when the outcome of action depends on the theory's truth, the smuggling of induction is confirmed."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "099c405588adc1304c86c7d0a38092832dd923536c178157149681682e1688d5",
+        "kind": "rebutted",
+        "note": "The candidate does not claim verisimilitude solves the problem by proving future success; rather, it frames verisimilitude as a regulative ideal that justifies the *direction* of inquiry without asserting probabilistic increase. The rebuttal clarifies that Popper's later doubts concerned the *definability* of verisimilitude, not the methodological rule of preferring the less-refuted theory."
+      },
+      {
+        "handle": "2488649749af91445f8ee782599ecefde951f2f49277094120910555c5593b00",
+        "kind": "revised",
+        "note": "Revised to explicitly separate psychological habit from rational defensibility. The candidate now argues that the defensibility lies in the consistency with the goal of truth-seeking (critical rationalism), not in a psychological urge."
+      },
+      {
+        "handle": "2a07650f8674efcd19c9508e058ffa8af3554aa41d985882aa778086a7830438",
+        "kind": "rebutted",
+        "note": "The candidate avoids evolutionary epistemology entirely, grounding the preference strictly in the logical asymmetry of falsification and the methodological decision to retain the most informative surviving conjecture."
+      },
+      {
+        "handle": "423e8c74789b19633a871665df41aed920eafff1113d4b3b67bdc77b391e6ccc",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate accepts that without *some* metaphysical faith in the uniformity of nature (which Popper admitted as a psychological fact), the bridge from corroboration to verisimilitude is weak. However, it departs from the critic by arguing this faith is a precondition for *any* action, not a specific flaw in Popper's logic of science."
+      },
+      {
+        "handle": "4ab60069bb1ad9eb660608036b57a518a78ac5e51545d7ff22b582fe09b2e63c",
+        "kind": "rebutted",
+        "note": "The distinction holds because 'acting on' implies a decision under uncertainty based on available critical data, whereas 'epistemic inference' implies deriving a probability. Popper allows the former as a rational gamble consistent with fallibilism."
+      },
+      {
+        "handle": "50de1c844d8434f3099d39d96a6a31980c766635daccf1aa1e22950749e1f5e5",
+        "kind": "revised",
+        "note": "Clarified that corroboration is not binary but comparative based on the severity and number of tests passed. The preference is for the theory with the highest degree of corroboration relative to its rivals, addressing the 'better-corroborated' nuance."
+      },
+      {
+        "handle": "55d4c6510b534518a729e1cf80c4573846b6e11dc2d9351e2e60f61a303a6970",
+        "kind": "rebutted",
+        "note": "Agrees that biological imperatives do not justify rationality, but argues the candidate's mechanism relies on the *logical* requirement of consistency with the aim of science (truth), not biological drives."
+      },
+      {
+        "handle": "74a93fdc69078b6c98ec0326bbbe235fd572654706e2a48f9b1561d386adda9b",
+        "kind": "rebutted",
+        "note": "The preference for Theory A over B is justified because Theory A has survived attempts to kill it, while B has not been tried. Choosing B would be irrational not because A is likely true, but because A has demonstrated robustness where B has demonstrated nothing."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

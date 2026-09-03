@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a methodological rule grounded in the asymmetry of falsification and the goal of verisimilitude; however, accepting this defense costs the agent any guarantee that the preferred theory is actually closer to the truth or will survive the next test, reducing the preference to a non-justified but rationally mandatory 'leap' consistent with critical rationalism.",
+    "mechanism": "The mechanism distinguishes between 'inductive justification' (predicting future truth based on past success) and 'methodological selection' (choosing the theory that has withstood the most severe attempts at falsification as the best current candidate for criticism). It argues that corroboration reports the history of tests, not the probability of the theory. The preference is defended by the logical asymmetry: while verification is impossible, falsification is decisive. Therefore, a theory that survives severe tests has demonstrated a higher capacity to withstand error than an untested one, making it the superior object for further critical scrutiny and tentative application, without implying it is 'more probable'.",
+    "counterconditions": [
+      "If corroboration is shown to implicitly rely on the uniformity of nature (an inductive principle) to justify acting on past test results.",
+      "If Popper's concept of verisimilitude is proven logically incoherent or unable to compare false theories without inductive assumptions.",
+      "If the distinction between 'acting on' a theory and 'believing' it to be probable collapses under pragmatic analysis of decision theory."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "099c405588adc1304c86c7d0a38092832dd923536c178157149681682e1688d5",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on verisimilitude as a proven metric of truth content to justify the preference, but rather uses the *goal* of verisimilitude to frame the methodological rule. The rebuttal clarifies that Popper's later doubts about defining verisimilitude formally do not invalidate the methodological imperative to prefer theories that have survived severe tests, as this preference is based on the logic of falsification (survival) rather than a calculated distance to truth."
+      },
+      {
+        "handle": "2488649749af91445f8ee782599ecefde951f2f49277094120910555c5593b00",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates psychological necessity from rational defensibility. The argument is that the preference is rationally defensible within the internal logic of Critical Rationalism (maximizing exposure to error) even if it lacks external inductive guarantees. It is a normative rule of the game of science, not a description of human psychology."
+      },
+      {
+        "handle": "2a07650f8674efcd19c9508e058ffa8af3554aa41d985882aa778086a7830438",
+        "kind": "rebutted",
+        "note": "The candidate avoids evolutionary epistemology entirely. It grounds the preference strictly in the logical asymmetry of falsification and the definition of corroboration as a report of past critical performance, not as an biological imperative or evolutionary adaptation."
+      },
+      {
+        "handle": "423e8c74789b19633a871665df41aed920eafff1113d4b3b67bdc77b391e6ccc",
+        "kind": "revised",
+        "note": "Revised to clarify that the defense does not claim verisimilitude solves the problem of induction. Instead, the preference is justified as the only consistent action for an agent whose goal is error elimination. The 'cost' section now explicitly admits that without induction, we cannot believe the higher verisimilitude claim is true, only that it is the best target for criticism."
+      },
+      {
+        "handle": "4ab60069bb1ad9eb660608036b57a518a78ac5e51545d7ff22b582fe09b2e63c",
+        "kind": "rebutted",
+        "note": "The candidate addresses 'acting on' by defining it as 'tentative adoption for the purpose of further testing and practical application until falsified.' This distinguishes it from inductive belief. Popper allows acting on the best-corroborated theory precisely because it is the most informative and riskiest, not because it is the safest bet in a probabilistic sense."
+      },
+      {
+        "handle": "50de1c844d8434f3099d39d96a6a31980c766635daccf1aa1e22950749e1f5e5",
+        "kind": "rebutted",
+        "note": "The candidate acknowledges Popper's preference for *better*-corroborated theories among survivors. It explains this via the severity of tests: a theory surviving a more severe test is more highly corroborated than one surviving a less severe test, providing a gradient for choice without invoking probability. The binary filter is only for elimination; corroboration provides the ranking among survivors."
+      },
+      {
+        "handle": "55d4c6510b534518a729e1cf80c4573846b6e11dc2d9351e2e60f61a303a6970",
+        "kind": "rebutted",
+        "note": "Reiterated that the defense relies on methodological rules derived from the logic of science, not biological imperatives. The rejection of evolutionary epistemology as a justification is respected; the justification offered is purely logical and procedural within the Critical Rationalist framework."
+      },
+      {
+        "handle": "74a93fdc69078b6c98ec0326bbbe235fd572654706e2a48f9b1561d386adda9b",
+        "kind": "rebutted",
+        "note": "The candidate answers the pragmatic dilemma by stating that preferring Theory A (highly corroborated) over Theory B (untested) is rational because Theory A has demonstrated its ability to withstand specific criticisms, whereas Theory B has not. Choosing B would be ignoring available critical information. The preference is for the theory that has been most thoroughly vetted, not the one deemed 'true'."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

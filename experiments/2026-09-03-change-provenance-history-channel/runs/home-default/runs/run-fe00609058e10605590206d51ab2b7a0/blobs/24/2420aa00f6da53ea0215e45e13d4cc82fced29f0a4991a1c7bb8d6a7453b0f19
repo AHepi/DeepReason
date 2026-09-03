@@ -1,0 +1,30 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@df3a82ec69b7e90c5d2ed266: program:reasoning_observation_pending
+- reason-counter@0e8c5a9c762b10a3e2a8d989: program:reasoning_observation_pending
+- reason-counter@ac6d7af0d4506c0c96a17fa8: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule grounded in 'verisimilitude' (truth-likeness) and the logic of severe testing: choosing the theory that has withstood the most stringent attempts at falsification maximizes our proximity to truth without assigning it higher probability. This preference survives the charge of smuggling in induction only if we accept the cost of abandoning any guarantee that the future will resemble the past, treating the choice as a rational gamble based on current explanatory power rather than a prediction of reliability.","counterconditions":[{"case":"If verisimilitude cannot be formally defined or measured without relying on inductive assumptions about the structure of the world, the defense collapses into cryptic induction.","checker_spec":null,"eval":"observation"},{"case":"If the pragmatic necessity of acting (e.g., building a bridge) logically entails an assumption that nature is uniform, then Popper's separation of action from induction is illusory.","checker_spec":null,"eval":"observation"},{"case":"If 'severe testing' itself presupposes that past falsifications are relevant to future performance, the criterion of severity is circular.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The mechanism distinguishes between 'corroboration' (a report of past performance under severe tests) and 'probability' (a logical relation predicting future frequency). It argues that preferring the better-corroborated theory is a procedural commitment to the theory with the highest content that has not yet been falsified, which Popper equates with having the highest potential verisimilitude. The preference is justified by the goal of science (finding true theories) and the fact that a severely tested theory offers more opportunities for error detection than an untested one; thus, acting on it is the most rational way to pursue truth, even if it offers no inductive assurance of practical success.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@df3a82ec69b7e90c5d2ed266, reason-counter@0e8c5a9c762b10a3e2a8d989, reason-counter@ac6d7af0d4506c0c96a17fa8
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

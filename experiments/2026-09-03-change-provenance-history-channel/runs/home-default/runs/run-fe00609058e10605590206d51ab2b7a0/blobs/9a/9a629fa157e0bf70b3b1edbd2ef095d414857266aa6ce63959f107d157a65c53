@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference that the theory is true or probable, but as a methodological rule of 'rational action' grounded in the asymmetry of falsification: acting on the best-tested theory minimizes the risk of known error without assuming future regularity, whereas rejecting it offers no corresponding epistemic gain.",
+    "mechanism": "Asymmetric Risk Minimization via Critical Preference: The mechanism treats corroboration reports not as evidence of truth (which would be induction) but as a map of where errors have *not* yet been found. Choosing the best-corroborated theory is rational because it is the only choice compatible with the goal of avoiding known falsity; any other choice would either ignore available critical data (irrational) or implicitly assume untested theories are equally reliable (an unjustified symmetry assumption).",
+    "counterconditions": [
+      "If the agent's goal shifts from 'avoiding known error' to 'maximizing probability of success,' the Popperian defense collapses into induction.",
+      "If two theories have identical severity of tests passed but different content, the preference rule requires a secondary metric (like simplicity) not derived solely from corroboration.",
+      "If the 'better-corroborated' theory has been falsified in a domain relevant to the current action, the preference rule immediately inverts."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "099c405588adc1304c86c7d0a38092832dd923536c178157149681682e1688d5",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on 'verisimilitude' (truth-likeness) as a positive metric. Instead, it grounds the preference in the negative logic of falsification (avoiding known error), which remains consistent with Popper's later rejection of verisimilitude as a measurable quantity."
+      },
+      {
+        "handle": "2488649749af91445f8ee782599ecefde951f2f49277094120910555c5593b00",
+        "kind": "rebutted",
+        "note": "The distinction is maintained by framing the preference as a 'methodological rule' rather than a 'psychological necessity.' The defense argues that ignoring severe test results is procedurally irrational within the critical framework, regardless of psychological impulses."
+      },
+      {
+        "handle": "2a07650f8674efcd19c9508e058ffa8af3554aa41d985882aa778086a7830438",
+        "kind": "rebutted",
+        "note": "The mechanism does not invoke evolutionary epistemology or biological imperatives. It derives the preference strictly from the logical asymmetry between verification (impossible) and falsification (possible), and the rational imperative to use available negative knowledge."
+      },
+      {
+        "handle": "423e8c74789b19633a871665df41aed920eafff1113d4b3b67bdc77b391e6ccc",
+        "kind": "revised",
+        "note": "Revised to clarify that 'verisimilitude' is not the basis. The basis is now defined as 'Asymmetric Risk Minimization,' which requires no belief that the corroborated theory is closer to the truth, only that it is the safest bet against known falsity."
+      },
+      {
+        "handle": "4ab60069bb1ad9eb660608036b57a518a78ac5e51545d7ff22b582fe09b2e63c",
+        "kind": "rebutted",
+        "note": "The candidate addresses 'acting on' by defining the act as a commitment to the theory that has survived the most severe attempts at destruction. This is a procedural decision, not an epistemic inference about the future, thus preserving the distinction."
+      },
+      {
+        "handle": "50de1c844d8434f3099d39d96a6a31980c766635daccf1aa1e22950749e1f5e5",
+        "kind": "rebutted",
+        "note": "The defense acknowledges Popper's preference for *better*-corroborated theories among survivors. It explains this via the 'severity' of tests: a theory surviving a more severe test provides more information (more potential error avoided) than one surviving a less severe test, justifying the gradient preference without induction."
+      },
+      {
+        "handle": "55d4c6510b534518a729e1cf80c4573846b6e11dc2d9351e2e60f61a303a6970",
+        "kind": "rebutted",
+        "note": "No biological imperative is used. The justification is purely methodological: within the game of science, ignoring the results of severe tests is a violation of the rules of critical rationality, not a biological drive."
+      },
+      {
+        "handle": "74a93fdc69078b6c98ec0326bbbe235fd572654706e2a48f9b1561d386adda9b",
+        "kind": "rebutted",
+        "note": "The pragmatic dilemma is resolved by noting that Theory B (untested) carries unknown risks, while Theory A (highly corroborated) has had specific risks eliminated. Rational action dictates choosing the option with the mapped-out danger zone over the unmapped one, without assuming the unmapped one is false."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "bridge_engineering_safety_protocols",
+        "medical_triage_negative_screening"
+      ],
+      "shared_structure": [
+        "Decision based on elimination of known failure modes rather than confirmation of success.",
+        "Preference for the option with the most rigorous stress-testing history.",
+        "Action taken without certainty of future performance, only certainty of past non-failure under specific conditions."
+      ],
+      "disanalogies": [
+        "Scientific theories aim at universal truth, whereas bridges only need to stand in specific locations.",
+        "Popperian corroboration is logically non-probabilistic, whereas engineering safety often relies on probabilistic risk assessment.",
+        "Nature does not actively try to falsify bridges in the same deliberate way scientists design experiments to falsify theories."
+      ],
+      "transfer_claims": [
+        "Just as engineers prefer designs that have survived extreme stress tests (not because they are 'proven' forever, but because known weaknesses were exposed and fixed), scientists should prefer theories that have survived severe tests.",
+        "Choosing an untested bridge design over a tested one when both are theoretically sound is irrational risk-taking, parallel to preferring an untested theory over a corroborated one."
+      ],
+      "overturn_conditions": [
+        "If the 'stress tests' in the source domain are shown to be irrelevant to the actual operating conditions, the analogy fails.",
+        "If engineering practice is shown to rely fundamentally on inductive probability rather than error elimination, the structural match dissolves."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -121,3 +121,62 @@ this is a non-existent knob rather than a disabled gate.
 **Disposition.** Not a defect in shipped behaviour; a documentation and
 ergonomics finding. Folded into the next audit rather than given its own
 tranche.
+
+
+---
+
+## P3 — NOT a defect: the 429 that cost M3-C0 its qualification was self-inflicted
+
+Recorded here so a later reader does not mistake it for a harness fault, and so
+the cost is not written off.
+
+**What happened.** M3-C0's first attempt qualified at tier `shallow`, and
+`deepreason reason` then correctly refused with `QUALIFICATION_TIER_SHALLOW`,
+rc=1, producing no run root at all. The arm's log says "finished" while having
+produced nothing.
+
+**Why, from the record rather than from theory.** The retired doctor record
+(`evidence-429/c0-unqualified-doctor.json`, kept by copy; the tier cache retired
+by rename to `evidence-429/RETIRED-c0.tier.json`) gives the summary directly:
+
+```
+case_count 300, eventual_valid_count 283, pair_count 15,
+qualified false, qualified_pair_count 11
+```
+
+and every one of the 17 failures across the 4 short pairs carries the same
+failure code: **`ENDPOINT_HTTP_429`**. Not a capability failure, not a schema
+failure, not a repair failure — `repair_count` is 0 and `alias_failures` is 0.
+The shallow-fitness battery that ran afterwards passed 6 of 6 first-pass, which
+is why the tier landed at `shallow` rather than `unqualified`.
+
+**Cause, owned rather than attributed.** Five provider workloads were running
+against one endpoint at that moment: two intended arms plus three
+`deepreason qualify` processes orphaned from the first arm design, one of which
+was qualifying `home-c0` — the very home whose qualification failed — at the
+same time as the legitimate one. That is the monitor's error in launching eight
+arms concurrently and then not reaping the children when the drivers were
+killed.
+
+**Disposition: no fix, no tranche.** The harness behaved correctly at every
+step. It rate-limited, recorded the typed failure code per case, degraded to a
+tier the evidence supported, and REFUSED to run full reasoning on a shallow
+qualification instead of quietly running something weaker. That last part is the
+system working exactly as designed.
+
+**What it cost, stated as a cost.** One full qualification battery on `home-c0`,
+plus the four partial M2 batteries stopped at 268/271/270/262 of 360. All of it
+attributable to over-concurrency, none of it to the code under study.
+
+**What changed as a result.** `chain.sh` runs the remaining arms FULLY SERIAL —
+one `deepreason` process at a time, verified by a wait-for-idle gate between
+every step — which removes the cause rather than hoping a lower concurrency
+number is low enough. The operator's cap of 3 is an upper bound; the chain uses
+1.
+
+**The transferable lesson, which is not about this tranche.** A qualification
+degraded by transport pressure is INDISTINGUISHABLE, at the tier level, from a
+model that genuinely cannot do the work: both produce `tier: shallow`. Only the
+per-case `failure_code` separates them. Any future run that lands on an
+unexpected shallow tier should read the doctor record's failure codes before
+concluding anything about the model.

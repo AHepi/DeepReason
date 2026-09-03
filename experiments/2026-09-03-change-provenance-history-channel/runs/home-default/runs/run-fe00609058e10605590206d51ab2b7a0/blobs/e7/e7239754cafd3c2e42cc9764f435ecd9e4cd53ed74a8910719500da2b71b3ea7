@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future truth, but as a methodological rule for maximizing the severity of future tests; accepting this costs us the ability to claim the preferred theory is 'more likely true,' restricting the justification solely to its superior utility as a target for falsification.",
+    "mechanism": "The mechanism distinguishes between 'acting on' a theory (selecting it as the current best basis for application and further testing because it has withstood the most severe attempts at refutation) and 'believing in' a theory (assigning it higher logical probability). The preference is a pragmatic commitment to the theory that offers the most information content and has survived the hardest trials, thereby providing the highest potential for learning if it is eventually falsified. This avoids induction by treating corroboration as a historical report of test severity, not a predictor of future performance.",
+    "counterconditions": [
+      "If one assumes that 'acting on' a theory logically entails believing it will succeed in the future, the distinction collapses into induction.",
+      "If Popper's own personal admissions of preferring theories for practical safety imply a hidden inductive belief, the methodological defense is merely rhetorical.",
+      "If the concept of 'verisimilitude' (truth-likeness) is required to justify the preference, and verisimilitude itself relies on inductive assumptions about the structure of the world, the argument fails."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "099c405588adc1304c86c7d0a38092832dd923536c178157149681682e1688d5",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on 'verisimilitude' as the primary justification. Instead, it relies on the methodological rule of selecting the theory with the highest informational content and test severity. While Popper later struggled with verisimilitude, the core defense of corroboration as a guide for action rests on the logic of testing, not on a metric of truth-likeness."
+      },
+      {
+        "handle": "2488649749af91445f8ee782599ecefde951f2f49277094120910555c5593b00",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates psychological necessity from rational defensibility. The defense argues that the preference is rationally defensible as a strategic choice to maximize error detection (severity), which is a normative methodological rule, not merely a description of human psychology."
+      },
+      {
+        "handle": "2a07650f8674efcd19c9508e058ffa8af3554aa41d985882aa778086a7830438",
+        "kind": "rebutted",
+        "note": "The argument does not invoke evolutionary epistemology. It invokes the internal logic of critical rationalism: if the goal is to eliminate error, one must test the boldest claims that have survived the hardest tests. This is a procedural imperative derived from the definition of science, not a biological analogy."
+      },
+      {
+        "handle": "423e8c74789b19633a871665df41aed920eafff1113d4b3b67bdc77b391e6ccc",
+        "kind": "rebutted",
+        "note": "The candidate clarifies that the basis for preference is not a belief that the theory is 'higher' in truth probability, but that it is 'better' for the specific purpose of scientific progress (falsification). No inductive assumption about the uniformity of nature is needed to prefer a theory that has already proven robust against specific, severe attacks over one that has not."
+      },
+      {
+        "handle": "4ab60069bb1ad9eb660608036b57a518a78ac5e51545d7ff22b582fe09b2e63c",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma. The revision clarifies that 'acting on' in Popper's sense means adopting the theory as the standard for further criticism and practical application precisely because it is the most vulnerable yet surviving target, not because it is safe. The cost is acknowledging that this action carries no guarantee of practical success, only the guarantee of maximal learning potential."
+      },
+      {
+        "handle": "50de1c844d8434f3099d39d96a6a31980c766635daccf1aa1e22950749e1f5e5",
+        "kind": "rebutted",
+        "note": "The candidate addresses the tension by reframing 'better-corroborated' not as a binary filter but as a comparative measure of test severity and informational content. Popper prefers Theory A over Theory B not because A is 'true,' but because A has survived more stringent tests, making it a more valuable tool for probing the limits of our knowledge."
+      },
+      {
+        "handle": "55d4c6510b534518a729e1cf80c4573846b6e11dc2d9351e2e60f61a303a6970",
+        "kind": "rebutted",
+        "note": "The defense is strictly methodological, not biological. It argues that the preference is a rule of procedure for scientists committed to critical scrutiny, independent of any evolutionary justification. The 'imperative' comes from the logical requirements of the critical method, not from biological survival instincts."
+      },
+      {
+        "handle": "74a93fdc69078b6c98ec0326bbbe235fd572654706e2a48f9b1561d386adda9b",
+        "kind": "rebutted",
+        "note": "The candidate answers the pragmatic dilemma: we prefer Theory A because it has demonstrated resilience against severe tests, whereas Theory B is unknown. Choosing A is the only rational way to continue the process of critical scrutiny effectively. Choosing B would be to ignore available evidence of test severity, which violates the commitment to critical rationality."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
