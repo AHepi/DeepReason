@@ -178,6 +178,45 @@ Recorded as an amendment rather than applied silently, per `dr-implement-fix`
 step 1: a change site discovered during implementation stops and amends this
 document before the edit lands.
 
+**C-amendment 2 (added during dr-implement-fix, 2026-09-03, after the first
+ring turned two tests red).** Neither was predicted by the "Existing tests at
+risk" list above; both are recorded here before either is touched, and both
+are fixtures that pinned the defective behaviour rather than evidence the fix
+is wrong. The design is unchanged; the omission was mine, in the grep that
+built that list — it searched `src/` for the refusal code and not `tests/`.
+
+- `tests/test_checkpoint_hardening.py::test_a_failure_terminal_records_why_it_cannot_be_continued`
+  — asserts a failure terminal records
+  `TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL` and that "the record's claim
+  is TRUE: this terminal really cannot be continued". That claim is precisely
+  what the operator's 2026-08-29 law calls a defect, and what this tranche
+  repairs. The test is REWRITTEN, keeping its name and its regression
+  citation, to assert the guarantee that replaces it: the failure terminal
+  takes the receipt, records NO refusal, and IS continuable. Its sibling
+  `test_a_terminal_that_wrote_no_checkpoint_records_that_fact` is untouched —
+  a terminal that could not write a checkpoint at all still has nothing to
+  offer a continuation, and still says so. **This is the committed claim the
+  window instruction directs to `docs/ERRATA.md`**, and the entry is written
+  in this commit.
+
+- `tests/test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation`
+  — its witness selector `_non_resumable_committed_roots` filters committed
+  roots by STOP REASON as an explicitly declared PROXY for "carries no typed
+  receipt" (its own docstring: "Reading the reason is deliberately cheaper
+  than reading the condition the code under test branches on"). Widening
+  `RESUMABLE_STOP_REASONS` breaks the proxy, not the property: those roots
+  still carry no receipt and still refuse. The selector is replaced by the
+  DIRECT condition, which is both cheaper than a replay and stronger than the
+  proxy — a root whose `run-result.json` records a non-null
+  `terminal_lifecycle_refusal` took no receipt, as a recorded fact rather than
+  an inference. Measured before adopting it: the new selector yields **10**
+  witnesses (7 `budget_exhausted` roots refused
+  STOPPED_REFUSES_UNFINISHED_WORKFLOW_AUTHORITY, 3 `operational_failure` roots
+  refused TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL) and **all 10 refuse
+  exactly `CONTINUE_TYPED_STOP_REQUIRED`** — up from the 5 the docstring
+  claims for the old selector. The test gains witnesses; it does not lose
+  them, and no assertion is loosened.
+
 - `finalize_stopped_root` (`:583`) emits one progress line after
   `terminalize_text_run` returns. Without it a finalized root keeps
   `state: running` in `run-status.json` — reproduced on the stub and matching
