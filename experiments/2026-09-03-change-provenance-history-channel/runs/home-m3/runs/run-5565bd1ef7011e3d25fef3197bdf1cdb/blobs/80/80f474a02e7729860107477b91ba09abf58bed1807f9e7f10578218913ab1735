@@ -1,0 +1,77 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive 'critical preference' based on verisimilitude (truth-likeness), but accepting this costs the ability to ever claim rational certainty that the preferred theory is true or even probably true; it requires embracing a fallibilist stance where action is guided by the best-uncorroborated-falsity rather than probable truth.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which implies induction/probability) and 'criticism' (which implies selection via elimination). Scientists prefer Theory A over Theory B not because A is more likely to be true, but because B has been falsified or A has withstood tests that B has not, making A the 'better candidate for truth' (higher verisimilitude) despite both remaining logically improbable. This preference is a rule of method for growth of knowledge, not a probabilistic inference.",
+    "counterconditions": [
+      "If the Tichý/Miller proof successfully demonstrates that verisimilitude cannot be coherently defined without invoking probability, then the non-inductive defense collapses.",
+      "If acting on a theory necessarily entails assuming its future success (induction), then the distinction between 'acting on' and 'believing probable' is merely semantic.",
+      "If Popper's own advice to engineers relies on hidden inductive assumptions about the uniformity of nature, then his system is pragmatically inconsistent."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "017f060a2b21e42b81d92b963a3f75c80b27f8ea05726d7b82ba5200702940d8",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'acting on' with 'assigning high probability.' Popper's link between content and improbability stands; acting on a high-content theory is a bet on its verisimilitude, not its logical probability. The distinction holds because the 'act' is a decision to test further or use tentatively, not a declaration of likelihood."
+      },
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address 'building bridges.' The preference is not just 'focus of attention' but a procedural rule: use the theory that has survived the most severe attempts at falsification relevant to the bridge's stress factors, acknowledging it may still fail tomorrow. This addresses action without induction."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate propensity with corroboration. Propensity interprets single-case probabilities within physical theories; corroboration is a meta-logical report on past testing. The defense relies solely on the latter for theory choice."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0782cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "departure_declared",
+        "note": "Departing from the strict 'evolutionary imperative' framing. While evolution explains why we have such instincts, the rational defensibility rests on the logic of verisimilitude, not biological fitness. The cost is admitting rationality might not align with survival if the environment changes radically."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Explicitly added the cost analysis to the claim: accepting this view costs the comfort of 'rational certainty' and forces scientists to act while admitting they have no reason to believe the theory will work next time, other than it hasn't failed yet."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "While the Tichý/Miller proof challenges quantitative measures of verisimilitude, Popperians argue it does not destroy the qualitative intuition that a falsified theory is further from truth than an unfalsified one. The defense relies on this qualitative ordering, which remains intact."
+      },
+      {
+        "handle": "31e3d2feedffd07a4ba14b8f3ba6f6c2d293d3fe744ce9f002e0deb622684e37",
+        "kind": "revised",
+        "note": "Clarified the cost in the claim: the cost is the abandonment of the idea that science converges on 'probable truth.' We converge on 'less falsified' theories, which is a weaker, more expensive epistemic position."
+      },
+      {
+        "handle": "44f2f6a3d056ae44a83e935fa0d843074fa3a61b24686d802be88631b1dc72a0",
+        "kind": "rebutted",
+        "note": "Same as handle ...72df. The candidate acknowledges the proof but argues it targets formalization, not the core philosophical move of preferring the unfalsified over the falsified as a non-inductive rule."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["courtroom_verdict_selection"],
+      "shared_structure": [
+        "Selection between alternatives without proof of absolute truth",
+        "Preference based on survival of scrutiny rather than positive confirmation",
+        "Action taken despite lingering doubt"
+      ],
+      "disanalogies": [
+        "Legal verdicts often aim for 'beyond reasonable doubt' (high probability), whereas Popper rejects any probability threshold",
+        "Legal systems operate on binary guilt/innocence, while scientific theories are continuous in content"
+      ],
+      "transfer_claims": [
+        "Just as a jury prefers the defendant who survives cross-examination without assuming innocence, scientists prefer theories surviving tests without assuming truth",
+        "The 'cost' in law is potential wrongful acquittal; in science, it is acting on a theory that may fail tomorrow"
+      ],
+      "overturn_conditions": [
+        "If legal preference inherently relies on statistical base rates (induction), the analogy fails to support non-inductive preference"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

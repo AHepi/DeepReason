@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's terms not as an inductive inference of future success, but as a non-inductive 'methodological rule' to maximize the severity of future tests; the cost of accepting this is the abandonment of the hope that science converges toward probable truth, leaving us with only a track record of error-elimination without assurance of predictive reliability.",
+    "mechanism": "The preference functions as a strategic heuristic: since high corroboration indicates a theory has survived severe tests (high empirical content/improbability), choosing it maximizes the potential information gain from the next test. If the theory fails, we learn more; if it survives, our confidence in its high content grows without assigning it higher probability. This avoids induction by treating the preference as a rule for generating knowledge (error elimination) rather than a prediction of utility.",
+    "counterconditions": [
+      "If the Tichý/Miller proof renders verisimilitude formally undefinable, the link between corroboration and 'closeness to truth' collapses, making the preference arbitrary.",
+      "If acting on a theory (e.g., building a bridge) inherently requires an inductive leap regarding future performance, then any justification for preference smuggles induction back in.",
+      "If Popper's distinction between 'logical probability' and 'degree of corroboration' cannot sustain a practical decision procedure without implicitly relying on the uniformity of nature."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "017f060a2b21e42b81d92b963a3f75c80b27f8ea05726d7b82ba5200702940d8",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'acting on' with 'believing true.' Popper's distinction holds because one can choose the high-content theory for testing (action) precisely because it is improbable, not because it is predicted to work. The collapse only occurs if action implies belief in future success, which the mechanism denies."
+      },
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly address 'building bridges' by framing the preference as a methodological rule for error elimination rather than a guarantee of safety. The mechanism now clarifies that acting on a theory does not require expecting it to work, but rather subjecting the most informative candidate to the fire of reality."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The mechanism strictly separates propensity (an interpretation of probability statements within physics) from corroboration (a logical relation between theory and evidence). No conflation occurs; the argument relies solely on the logical asymmetry of falsification."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0780cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "rebutted",
+        "note": "The 'pragmatic evolutionary imperative' is not the core mechanism here. The defense rests on the logical structure of severe testing: preferring the best-tested theory is the only way to accelerate error elimination, which answers the dilemma without redefining rationality as mere fitness."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' to the claim: the abandonment of convergence to probable truth and the acceptance that preference offers no assurance of predictive reliability, only a strategy for learning faster."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "departure_declared",
+        "note": "Departing from the reliance on verisimilitude as a solved metric. The candidate accepts the Tichý/Miller critique as fatal to formal verisimilitude but argues the preference remains defensible as a procedural rule for maximizing test severity, independent of a defined 'truth-likeness' measure."
+      },
+      {
+        "handle": "31e3d2feedffd07a4ba14b8f3ba6f6c2d293d3fe744ce9f002e0deb622684e37",
+        "kind": "revised",
+        "note": "Clarified the cost in the claim: accepting this view costs the scientist the comfort of believing their preferred theory is likely to succeed in application (e.g., bridge building), reducing the preference to a gamble on informational yield rather than safety."
+      },
+      {
+        "handle": "44f2f6a3d056ae44a83e935fa0d843074fa3a61b24686d802be88631b1dc72a0",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on verisimilitude to justify the preference. It relies on the logical requirement that to learn effectively, one must test the most improbable (highest content) theories that have so far survived. The Tichý/Miller proof is acknowledged but deemed irrelevant to this specific procedural justification."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

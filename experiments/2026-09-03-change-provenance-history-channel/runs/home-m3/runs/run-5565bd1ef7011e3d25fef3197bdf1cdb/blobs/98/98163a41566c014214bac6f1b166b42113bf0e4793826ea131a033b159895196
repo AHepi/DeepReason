@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction if reinterpreted as a non-epistemic, methodological rule of 'critical selection' rather than an expectation of future success; however, accepting this defense costs the scientist any rational assurance that the chosen theory will work in practice, reducing scientific action to a blind evolutionary gamble.",
+    "mechanism": "The mechanism distinguishes between 'corroboration' (a logical report of past performance) and 'prediction' (an inductive leap). Popper's preference is framed not as believing Theory A is more likely true than Theory B, but as a procedural commitment to test the most vulnerable (high content) theory that has so far survived. The preference is a rule of the game of science, akin to a chess player preferring a gambit that has worked before, not because it guarantees a win, but because it offers the fastest route to checkmate or refutation. This avoids induction by refusing to assign higher probability to the future success of the gambit.",
+    "counterconditions": [
+      "If the Tichý/Miller proof holds that verisimilitude cannot be estimated, then the 'better' in 'better-corroborated' loses its normative force for truth-likeness.",
+      "If acting on a theory (e.g., building a bridge) inherently requires an assumption of its reliability, then merely labeling the preference 'methodological' is a semantic evasion of the pragmatic need for induction.",
+      "If Popper's own advice to 'act on the best tested theory' implies an expectation of success, then his practice contradicts his strict prohibition against inductive inference."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "017f060a2b21e42b81d92b963a3f75c80b27f8ea05726d7b82ba5200702940d8",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'acting on' with 'believing probable.' The candidate clarifies that acting on a theory in Popper's sense means subjecting it to further risk, not betting on its safety. The distinction between informational content (high risk) and predictive power (expected success) remains intact because the agent does not expect success, only clarity of failure."
+      },
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address the 'building bridges' scenario. The candidate now admits that for practical engineering, Popper's strictures may require a supplementary pragmatic postulate (the 'principle of limited ad hocness' or a conventionalist decision) which Popper himself struggled to formalize without slipping into instrumentalism."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on propensity theory to justify theory choice. It relies solely on the logical asymmetry between verification and falsification. Propensity is irrelevant to the structural argument that preference is a rule of procedure, not a statement of physical chance."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0780cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate accepts that if 'rationality' is defined strictly as 'adaptive fitness,' the problem dissolves. However, this candidate departs from that naturalistic reduction to maintain the philosophical tension Popper intended: rationality as critical rigor, even if it leads to practical uncertainty."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' analysis to the claim: the cost is the loss of rational assurance. Accepting Popper's view means admitting we have no good reason to think the sun will rise tomorrow, only that the theory 'the sun will rise' is currently the best-tested one. This is a steep epistemic cost."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on verisimilitude as a measurable quantity to justify preference. It relies on 'survival of severe tests' as a purely negative filter. We prefer the theory that has not yet failed, not because it is closer to truth (which Tichý/Miller show we can't measure), but because it is the only one left standing. This is a defensive, not an affirmative, justification."
+      },
+      {
+        "handle": "31e3d2feedffd07a4ba14b8f3ba6f6c2d293d3fe744ce9f002e0deb622684e37",
+        "kind": "revised",
+        "note": "Clarified the cost-benefit analysis. The benefit is intellectual honesty (avoiding the fallacy of induction); the cost is practical anxiety (no guarantee of success). The candidate now explicitly states that Popper's solution shifts the burden from 'knowing' to 'hoping' while maintaining critical vigilance."
+      },
+      {
+        "handle": "44f2f6a3d056ae44a83e935fa0d843074fa3a61b24686d802be88631b1dc72a0",
+        "kind": "rebutted",
+        "note": "Reiterated that the argument does not depend on defining verisimilitude positively. The preference is based on the logical status of 'unrefuted' vs 'refuted,' which is binary and immune to the Tichý/Miller critique of degree-based truth-likeness."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

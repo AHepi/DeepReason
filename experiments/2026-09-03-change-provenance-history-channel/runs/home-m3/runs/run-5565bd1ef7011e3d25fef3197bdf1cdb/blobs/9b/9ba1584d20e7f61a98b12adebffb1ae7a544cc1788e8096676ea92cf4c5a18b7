@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's terms as a non-inductive 'critical preference' grounded in verisimilitude (truth-likeness) and empirical content, not probability; this avoids smuggling in induction by treating preference as a rational guess toward truth rather than an expectation of future success, but accepting this costs the agent any guarantee of predictive reliability or practical safety, forcing action to remain a risky leap without probabilistic insurance.",
+    "mechanism": "The mechanism distinguishes between 'justification for belief' (which Popper rejects) and 'preference for criticism' (which he accepts). A theory with higher empirical content has survived more severe tests, making it a better candidate for being close to the truth (verisimilitude), even if its logical probability remains low or undefined. Scientists prefer it not because they expect it to work (induction), but because it is the most informative and least refuted map available. The 'cost' is the explicit admission that this preference offers no pragmatic shield against failure; acting on the best-corroborated theory is still acting on a falsifiable conjecture, meaning bridges built on it may still collapse, and the scientist bears full responsibility for the risk without the comfort of inductive certainty.",
+    "counterconditions": [
+      "If the Tichý/Miller proof holds that verisimilitude cannot be consistently defined in rich languages, then the appeal to truth-likeness collapses into an empty metaphor.",
+      "If 'acting on' a theory inherently requires assigning it a higher subjective probability of success, then the distinction between corroboration and probability is merely semantic, and induction is smuggled back in via the backdoor of praxis.",
+      "If Popper's own advice to prefer corroborated theories implies an expectation of future performance, then his system is performatively self-contradictory."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "017f060a2b21e42b81d92b963a3f75c80b27f8ea05726d7b82ba5200702940d8",
+        "kind": "rebutted",
+        "note": "The criticism claims a collapse between informational content and predictive power. The candidate rebuts this by strictly separating 'content' (what is tested) from 'predictive power' (future success). Preferring high content is a choice to test the boldest conjectures, not a claim that they are more likely to predict correctly. The 'act' is choosing which horse to bet on based on past form (corroboration) without believing the odds have changed (probability)."
+      },
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address 'building bridges.' The candidate now clarifies that preferring a theory for bridge-building is not an expectation of safety (induction) but a responsible selection of the best available critical target; if it fails, the failure is more informative. The revision adds that the 'cost' is the lack of guaranteed safety."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate propensity with corroboration. It relies solely on corroboration as a historical record of test severity and verisimilitude as a regulative ideal. Propensity is irrelevant to the choice mechanism proposed here."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0782cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "departure_declared",
+        "note": "Departing from the 'pragmatic evolutionary imperative' framing. This candidate argues from a deontological epistemic duty to seek truth (verisimilitude) rather than an adaptive fitness argument, which indeed sidesteps the induction problem."
+      },
+      {
+        "handle": "0e0b6bedbaa57c8c884b19763dfc96a486bc51b45cf45a7b3e42fb57f46f62a3",
+        "kind": "rebutted",
+        "note": "While acknowledging the Tichý/Miller proof as a serious threat (listed in counterconditions), the rebuttal asserts that Popper's 'verisimilitude' can be defended as a qualitative, non-metric intuition guiding theory choice, even if a formal quantitative definition fails. The preference rests on this qualitative grasp, not a computed score."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Explicitly expanded the 'cost' analysis in the claim and mechanism. The cost is now defined as the total absence of probabilistic insurance and the acceptance of radical uncertainty in practical application."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "Similar to handle ...62a3, the candidate admits the formal difficulty but argues that the *concept* of verisimilitude remains the only non-inductive bridge Popper offers. The failure of the formal proof does not invalidate the intuitive preference for theories that seem closer to the truth, provided one abandons the demand for certainty."
+      },
+      {
+        "handle": "31e3d2feedffd07a4ba14b8f3ba6f6c2d293d3fe744ce9f002e0deb622684e37",
+        "kind": "revised",
+        "note": "Revised to directly answer the 'cost-benefit' question. The benefit is maximal exposure to truth potential; the cost is the forfeiture of any claim to pragmatic reliability or reduced risk."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

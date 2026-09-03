@@ -1,0 +1,190 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'rational guess' based on verisimilitude (truth-likeness), where severe testing acts as a filter for closeness to truth rather than a calculator of probability.",
+      "mechanism": "Severe tests eliminate false theories; the surviving theory is preferred not because it is likely true (probability), but because it has withstood attempts to falsify it, making it the best available approximation of truth (verisimilitude) for practical action.",
+      "counterconditions": [
+        "The Tichý/Miller proof demonstrates that verisimilitude cannot be formally defined or compared between false theories, undermining the metric for preference.",
+        "If the preference relies on the expectation that the future will resemble the past (the tested theory will continue to work), it smuggles in induction."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_003",
+          "kind": "rebutted",
+          "note": "The distinction holds because 'acting on' a theory requires a decision rule, not a probability calculation. Popper links high content to low probability to show that bold theories are risky, yet preferring them after testing is a choice of the most informative survivor, not a probabilistic bet."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The mechanism addresses action by framing preference as the only rational course when one must act: choosing the theory that has survived the most severe attempts to destroy it is a pragmatic imperative distinct from believing it will probably succeed."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "This candidate explicitly separates corroboration (historical record of testing) from propensity (physical chance). The preference is based on the historical record of severity, not an inferred physical propensity of the theory to be true."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "The argument does not redefine rationality as adaptive fitness but as critical selection. It answers the induction dilemma by asserting that selecting the best-tested theory is a deductive consequence of the goal to find truth, not an inductive inference."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to explicitly state the cost: accepting this view costs us the assurance of success. We act on the best guess knowing it may still be false, abandoning the inductive comfort that past success guarantees future performance."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "While the Tichý/Miller proof challenges the formal definition of verisimilitude, Popper's defense rests on the intuitive and methodological necessity of acting as if some theories are closer to truth than others, even if a perfect logical metric is unavailable."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "The cost is not merely biological but epistemological: we accept that science provides no certainty and no probability, only the temporary status of 'best tested.' The preference is a voluntary commitment to critical rationalism."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate acknowledges the Tichý/Miller proof but argues that Popper's methodology survives by treating verisimilitude as a regulative ideal guiding test selection, rather than a computable value required for every decision."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008",
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction, as any justification for expecting a well-tested theory to perform better in the future than an untested one relies on the uniformity of nature, which Popper rejected.",
+      "mechanism": "Action implies prediction. To prefer Theory A over Theory B for building a bridge is to predict A will hold. This prediction assumes the future conditions will match past test conditions, an assumption that is purely inductive and undefendable without circularity.",
+      "counterconditions": [
+        "Popper might argue that we prefer the theory with higher informational content regardless of expected success.",
+        "The preference could be framed as a psychological inevitability rather than a logical justification."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_003",
+          "kind": "rebutted",
+          "note": "The collapse is real: if 'acting on' a theory means expecting it to work, then distinguishing 'informational content' from 'predictive power' is semantic hair-splitting. Action requires predictive confidence, which implies probability."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Redefining preference as 'focus of attention' fails because engineers do not just 'attend' to the better-corroborated theory; they bet lives on it. This betting behavior is indistinguishable from assigning higher probability."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "Even if propensity is rejected, the act of choosing based on past tests inherently treats the past as a guide to the future, which is the definition of induction Popper sought to avoid."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Evolutionary imperatives explain why we have the impulse, but they do not justify the rationality of the preference. The problem asks if the preference is defensible, not just explicable biologically."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "revised",
+          "note": "Explicitly analyzed cost: Accepting this view costs Popperianism its claim to be a unique logic of science. It reduces to Humean skepticism where action is irrational but psychologically compelled, offering no 'rational' alternative to induction."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The failure of verisimilitude supports this claim: without a valid measure of truth-likeness, there is no non-inductive ground for preference. The Tichý/Miller proof leaves Popper with no bridge from 'survived tests' to 'prefer for action'."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "The cost is the admission that science cannot rationally guide action better than crystal balls, provided the crystal ball user feels confident. The 'biological' excuse admits the logical failure."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "Since verisimilitude is logically flawed per Tichý/Miller, relying on it to escape induction is futile. The preference remains unjustified on strict Popperian logical terms."
+        }
+      ],
+      "optional_refs": [
+        "SRC_010",
+        "SRC_013"
+      ]
+    },
+    {
+      "claim": "The preference is defensible not as an inference about truth, but as a methodological rule of 'critical selection': we choose the theory that offers the most opportunities for further falsification, thereby accelerating the growth of knowledge.",
+      "mechanism": "Scientists prefer well-corroborated theories not because they think they are true or probable, but because these theories have survived severe tests and thus provide a stable platform from which to launch new, riskier predictions. It is a strategic choice for progress, not a belief state.",
+      "counterconditions": [
+        "This shifts the goal from 'acting successfully' (building bridges) to 'learning fast,' which may not satisfy the prompt's requirement about practical action.",
+        "If the theory is false, the 'stable platform' collapses, rendering the strategy useless for immediate action."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_003",
+          "kind": "rebutted",
+          "note": "The distinction stands: 'predictive power' in the sense of successful application is not the goal; 'predictive content' in the sense of testability is. We act on the theory to test it further, not because we expect it to hold forever."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Addressing action: When building a bridge, we use the best-tested theory because it is the current bottleneck for knowledge growth. If it fails, we learn more than if we used an untested one. The 'expectation' is about learning potential, not structural integrity."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "This avoids propensity entirely. Corroboration is a report card of past tests, used solely to decide which theory is ripe for the next round of attacks. No probability is assigned."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "This is not an evolutionary imperative but a conscious methodological decision to maximize error elimination. It directly answers the induction charge by refusing to infer future success, focusing instead on future testability."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "revised",
+          "note": "Cost analysis: Accepting this costs the scientist the peace of mind that their bridge will stand. They must accept that they are using the bridge as a testing apparatus, potentially risking failure for the sake of scientific progress."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Verisimilitude is not required here. The preference is based on the degree of corroboration (severity of tests passed), which is a well-defined concept in Popper, independent of truth-likeness metrics."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "The cost is explicitly the risk of catastrophic failure in exchange for knowledge. The 'biological' aspect is irrelevant; this is a cold, calculated methodological gamble."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "This approach sidesteps the Tichý/Miller proof by not claiming the preferred theory is 'closer to truth,' only that it is 'better tested' and thus more useful for the next step of criticism."
+        }
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "The dilemma is a false dichotomy; Popper's preference is a 'non-justificational' commitment akin to a moral or aesthetic choice, where 'rationality' is redefined as faithfulness to the critical method rather than correct prediction.",
+      "mechanism": "Choosing the better-corroborated theory is an expression of loyalty to the scientific ethos. It is not justified by outcomes (induction) or logic (probability), but by its consistency with the normative ideal of critical rationalism. It is a performative act of being a scientist.",
+      "counterconditions": [
+        "This reduces science to a cult or religion, stripping it of its claim to objective superiority over other belief systems.",
+        "It fails to explain why scientists feel justified in demanding others (e.g., regulators) accept their preferred theories."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_003",
+          "kind": "rebutted",
+          "note": "The distinction collapses only if one demands instrumental justification. If the preference is normative/aesthetic, 'informational content' is valued for its own sake, and 'acting on' it is a ritual of adherence to the norm."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The core concern about action is met by redefining 'rational action' as 'action consistent with critical norms.' Building a bridge with the tested theory is the right thing to do for a critical rationalist, regardless of the outcome."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "Propensity and corroboration are conflated only by those seeking justification. Here, corrob

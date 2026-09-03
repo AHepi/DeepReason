@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction if reinterpreted as a methodological rule for selecting the most informative surviving conjecture for further testing, rather than as an inductive inference of future reliability; however, accepting this defense costs the scientist any rational guarantee that the chosen theory will succeed in practical application, forcing a leap of faith distinct from scientific rationality.",
+    "mechanism": "The mechanism distinguishes between 'scientific rationality' (choosing the theory with highest empirical content that has not yet been falsified, to maximize learning potential) and 'pragmatic action' (where no scientific rationality applies). The preference is not based on the probability of truth (which Popper rejects) but on the severity of tests passed, which indicates high informational content. When acting (e.g., building a bridge), the scientist steps outside the logical bounds of science proper and makes a non-rational, volitional commitment to the best-tested theory, acknowledging that this action cannot be justified by past performance alone.",
+    "counterconditions": [
+      "If one insists that 'preference for action' logically entails an expectation of future success derived from past success, then induction is smuggled in.",
+      "If the Tichý/Miller proof against verisimilitude holds, then 'best-tested' cannot even be coherently defined as 'closest to truth,' undermining the selection criterion.",
+      "If Popper's own advice to act on the best-tested theory implies he believed it was more reliable, then his philosophical distinction collapses in practice."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "017f060a2b21e42b81d92b963a3f75c80b27f8ea05726d7b82ba5200702940d8",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'acting on' with 'believing probable.' The candidate argues that acting on a theory is a voluntary commitment to its high informational content, not an assertion of its predictive probability. The distinction remains valid because the motive for action is the lack of falsification despite severe tests, not an inductive projection."
+      },
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly separate 'methodological selection' from 'pragmatic expectation.' The candidate now admits that Popper's framework offers no rational basis for expecting the bridge to hold, only a basis for choosing which theory to test next. The 'preference' in action is acknowledged as a non-rational leap, addressing the core concern about building bridges."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on propensity theory to justify theory choice. It relies strictly on the logical relation of corroboration (survival of severe tests) as a marker of informational content, explicitly rejecting any probabilistic interpretation of that survival."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0782cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "departure_declared",
+        "note": "Departing from the requirement to provide an 'evolutionary imperative.' The candidate argues that introducing evolutionary biology sidesteps the logical problem of induction rather than solving it. The defense rests solely on the logical distinction between testing and acting."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' analysis: accepting this view costs the agent any rational assurance of success. The scientist must accept that their preference for the best-tested theory provides no logical safety net for practical applications, rendering practical action a form of irrational faith relative to strict Popperian logic."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on verisimilitude (truth-likeness) to justify the preference. It relies on 'corroboration' as a historical record of surviving severe tests. Even if verisimilitude is undefinable, the fact of surviving a specific severe test remains a logical datum that can guide methodological choice without claiming proximity to truth."
+      },
+      {
+        "handle": "31e3d2feedffd07a4ba14b8f3ba6f6c2d293d3fe744ce9f002e0deb622684e37",
+        "kind": "revised",
+        "note": "Clarified the cost: the 'biological/psychological' explanation is rejected as insufficient. The true cost identified is the severance of the link between scientific rationality and practical success. Accepting the defense means admitting science cannot rationally guide action, only critique."
+      },
+      {
+        "handle": "44f2f6a3d056ae44a83e935fa0d843074fa3a61b24686d802be88631b1dc72a0",
+        "kind": "rebutted",
+        "note": "As with handle 1988..., the candidate avoids the Tichý/Miller trap by not claiming the best-tested theory is 'truer' or has higher verisimilitude. It claims only that it is the most worthy of further attempted falsification due to its survived severity, and that acting on it is a separate, non-scientific volition."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

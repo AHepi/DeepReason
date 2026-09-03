@@ -1,0 +1,24 @@
+=== PRIOR HISTORY ON THIS PROBLEM (advisory, non-grounding) ===
+scope: the whole run (every problem it has opened)
+This is a record of what has already been tried. It is advisory material, not evidence, and it decides nothing.
+
+OBJECTIONS ALREADY RAISED AGAINST THESE TARGETS
+For each target, the objections already made and how each turned out. An objection marked SUSTAINED changed the target's status; one marked NOT SUSTAINED did not, and the target answered it.
+  TARGET: Kind: Abstraction. The isolated node represents an abstract instance of the 'Error Elimination Principle' which SRC_003 instantiates concretely in the domain of epistemology. The biological analogy in SRC_003 is merely one concrete manif...
+    current status: REFUTED
+    - [SUSTAINED] critic: relation-form@578e42df713e failed on 364e5e24a2b2
+  TARGET: Relation Kind: Integration (Hybrid Selection System). The problem proposes an integration relation where modern science is a hybrid system combining biological-style blind variation (creative conjecture) with a uniquely human normative f...
+    current status: REFUTED
+    - [SUSTAINED] critic: relation-form@578e42df713e failed on 440d6a13daa6
+  TARGET: Relation Kind: Abstraction. The isolated node (scientific preference) is an abstraction of the neighbourhood's evolutionary mechanism (natural selection), where 'corroboration' functions as the fitness landscape. Refuted If: The specific...
+    current status: REFUTED
+    - [SUSTAINED] critic: relation-form@578e42df713e failed on 44a6040bb729
+  TARGET: Relation Kind: Dependence. The validity of the isolated node's 'preference' concept is strictly dependent on the neighbourhood's 'evolutionary' reality; without a real evolutionary process generating robust theories, the methodological p...
+    current status: REFUTED
+    - [SUSTAINED] critic: relation-form@578e42df713e failed on 7544d4e8c191
+  TARGET: Relation Kind: Contradiction (Prospective Normativity vs. Retrospective Fitness). The problem stands in contradiction to the neighbourhood's evolutionary analogies by asserting that scientific preference inherently requires a prospective...
+    current status: REFUTED
+    - [SUSTAINED] critic: relation-form@578e42df713e failed on 92b5b0390fe2
+  TARGET: Kind: Dependence. The validity of the isolated node's connection to the neighbourhood is strictly dependent on the falsifiability of the 'counterconditions' listed in SRC_002. If those counterconditions (e.g., 'biological fitness is retr...
+    current status: REFUTED
+    - [SUSTAINED] critic: relation-form@578e42df713e failed on ec75c0bf1b46

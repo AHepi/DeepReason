@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, critical selection mechanism based on verisimilitude (truth-likeness), but accepting this defense costs the scientist the ability to claim rational certainty that the chosen theory will succeed in future applications, reducing scientific action to a bold guess rather than a calculated risk.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which implies induction and is rejected) and 'critical preference.' Scientists prefer Theory A over Theory B not because A is more likely to be true (probability), but because A has withstood tests that would have falsified it if it were false, while B has not. This increases A's standing as a candidate for containing more truth-content (verisimilitude) relative to B. The preference is a methodological rule for maximizing the growth of knowledge, not an epistemic guarantee of future success. The 'cost' is the abandonment of the hope that science provides probable safety; we act on the best-tested theory knowing it may still fail, accepting that rationality consists in learning from errors, not avoiding them via probability.",
+    "counterconditions": [
+      "If the Tichý/Miller proof demonstrates that verisimilitude cannot be consistently defined or compared between false theories, then the appeal to verisimilitude collapses, forcing a retreat to pure convention or hidden induction.",
+      "If 'acting on' a theory (e.g., building a bridge) inherently requires an assumption of future regularity (induction) that corroboration does not supply, then the preference smuggles induction back in despite Popper's denials.",
+      "If the distinction between 'logical probability' and 'degree of corroboration' fails to translate into a practical decision rule for high-stakes actions where failure is catastrophic."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "017f060a2b21e42b81d92b963a3f75c80b27f8ea05726d7b82ba5200702940d8",
+        "kind": "rebutted",
+        "note": "The criticism claims the distinction collapses under the requirement to act. The rebuttal is that acting does not require equating informational content with predictive power in a probabilistic sense; it only requires selecting the theory with the highest surviving empirical content as the best current approximation of truth (verisimilitude). Action is a commitment to test the theory in a new domain, not a bet on its probability."
+      },
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address 'building bridges.' The preference is not merely 'focus of attention' but a critical choice: we use the better-corroborated theory because it has survived attempts to show it is inadequate for such tasks. However, we do so without the expectation (induction) that it *will* hold, only that it is the most rational candidate to *try* next."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate propensity with corroboration. Propensity interprets single-case probabilities within a theory; corroboration is a historical report of test performance. The preference relies on the latter to estimate verisimilitude, explicitly rejecting the former as a basis for theory choice."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0780cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "rebutted",
+        "note": "The 'pragmatic' element is not an evolutionary imperative sidestepping induction, but a methodological necessity: without preferring the better-tested theory, critical discussion stops. The dilemma is answered by showing that 'smuggling induction' assumes preference requires a belief in future uniformity, whereas Popperian preference requires only a commitment to critical progress."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' analysis to the claim and mechanism: accepting this view costs the scientist the comfort of probabilistic assurance. We must accept that our best theories are still guesses, and acting on them involves risk that cannot be quantified or eliminated by past success."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "departure_declared",
+        "note": "Departure declared: While acknowledging the Tichý/Miller proof as a serious challenge to formalizing verisimilitude, this candidate proceeds on the working hypothesis that a qualitative notion of 'more truth-content' remains viable for methodological guidance, as Popper himself maintained in later works despite formal difficulties."
+      },
+      {
+        "handle": "31e3d2feedffd07a4ba14b8f3ba6f6c2d293d3fe744ce9f002e0deb622684e37",
+        "kind": "revised",
+        "note": "Clarified the cost: it is not just 'biological/psychological' but epistemic. The cost is the loss of the claim that science yields probable knowledge. We gain a dynamic method but lose static security."
+      },
+      {
+        "handle": "44f2f6a3d056ae44a83e935fa0d843074fa3a61b24686d802be88631b1dc72a0",
+        "kind": "rebutted",
+        "note": "The candidate addresses the Tichý/Miller proof by limiting the scope of verisimilitude to a regulative ideal rather than a computable metric. The defense does not rely on calculating degrees of truth-likeness but on the logical asymmetry that severe testing eliminates error, leaving the survivor as the preferred (though not proven) candidate."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

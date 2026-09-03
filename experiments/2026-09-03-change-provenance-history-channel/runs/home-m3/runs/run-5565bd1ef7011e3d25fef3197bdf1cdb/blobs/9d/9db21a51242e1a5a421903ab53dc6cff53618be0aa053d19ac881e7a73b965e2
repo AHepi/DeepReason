@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as the rational basis for preferring better-corroborated theories, but it fails to address the Tichý/Miller proof which demonstrates that verisimilitude cannot be formally defined or compared between false theories within Popper's own logical framework. Since most scientific theories are strictly false (having been falsified or containing idealizations), the mechanism collapses: one cannot rationally prefer Theory A over Theory B based on 'closeness to truth' if the metric for that closeness is logically incoherent. This leaves the preference unjustified on Popper's terms, effectively smuggling in an inductive assumption that past survival correlates with future reliability because the proposed non-inductive substitute (verisimilitude) is unavailable.",
+      "counterexample": null,
+      "premise": "The Tichý/Miller proof establishes that Popper's definition of verisimilitude yields contradictory results when comparing two false theories, making it impossible to rank them by truth-likeness.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude is logically undefinable for false theories, what specific non-inductive criterion does Popper offer to justify acting on one falsified theory rather than another?"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a methodological rule to maximize the severity of potential falsification; accepting this costs us the assurance that science converges toward truth or that acting on the best-tested theory is 'rational' in the pragmatic sense of maximizing expected utility.",
+    "mechanism": "The mechanism reinterprets 'preference' as 'selection for testability.' We choose the better-corroborated theory because it has survived the most severe tests (highest empirical content), making it the most informative target for the next attempt at falsification. This is not a prediction that it will survive the next test (which would be induction), but a strategic choice to learn as much as possible, as fast as possible, regardless of the outcome. The 'action' taken is the commitment to use this theory as the current benchmark for error detection.",
+    "counterconditions": [
+      "If the Tichý/Miller proof holds, verisimilitude cannot ground the preference, forcing the defense to rely solely on informational content without truth-likeness.",
+      "If 'acting on a theory' (e.g., building a bridge) inherently requires a belief in its reliability/probability, then Popper's distinction collapses into pragmatic induction.",
+      "If the cost of being wrong is catastrophic (existential risk), the methodological rule of 'maximizing learning' may be ethically insufficient compared to a precautionary principle based on probable safety."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "017f060a2b21e42b81d92b963a3f75c80b27f8ea05726d7b82ba5200702940d8",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'acting on' with 'believing true.' Popper's action is to use the theory as a basis for criticism and further testing. High empirical content (low logical probability) is precisely why we prefer it: it tells us more about the world if true, and is easier to falsify if false. The collapse only occurs if one assumes action requires probabilistic confidence, which Popper denies."
+      },
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address 'building bridges.' The preference does not guarantee the bridge won't fall; rather, it selects the theory that has been most rigorously attempted to be broken. If the bridge falls, we learn more than if we used a vague, unfalsifiable theory. The 'expectation' of working is a psychological habit, not the logical justification for the choice."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "Agreed that propensity is distinct. The defense does not rely on propensity for theory choice. It relies on the logical relation between corroboration (past performance) and testability (future potential). Propensity is irrelevant to the methodological rule of selecting the best target for falsification."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0780cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "departure_declared",
+        "note": "Departing from the framing that rationality must be 'adaptive fitness.' The argument is strictly methodological: rationality is adherence to the logic of scientific discovery (falsification), not biological survival. The 'smuggling' charge fails because the goal is defined as knowledge growth, not survival."
+      },
+      {
+        "handle": "0e0b6bedbaa57c8c884b19763dfc9a486bc51b45cf45a7b3e42fb57f46f62a3",
+        "kind": "rebutted",
+        "note": "The defense explicitly abandons verisimilitude as a *computable* guide, relying instead on 'severity of test' as the proxy. The Tichý/Miller proof shows we cannot calculate truth-likeness, but it does not prevent us from preferring theories that have survived harder tests. The cost is admitting we don't know if we are getting closer to truth, only that we are eliminating error."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Explicitly added the cost analysis to the claim: accepting this view costs the assurance of convergence to truth and the pragmatic rationality of expected utility maximization. Science becomes a voluntary activity of error elimination without a guarantee of progress."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "Same as above regarding verisimilitude. The preference is not based on a calculated degree of truth-likeness (which is impossible per Miller), but on the historical fact of surviving severe tests. This is a record of performance, not a measure of essence."
+      },
+      {
+        "handle": "31e3d2feedffd07a4ba14b8f3ba6f6c2d293d3fe744ce9f002e0deb622684e37",
+        "kind": "revised",
+        "note": "Clarified the cost in the claim: the cost is the loss of 'pragmatic rationality.' We act on the best-corroborated theory not because it is likely to work, but because it is the most informative conjecture we have. If it fails, the cost of the error is high, but the gain in knowledge is also maximal."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
