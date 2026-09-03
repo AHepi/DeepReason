@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, methodological rule of 'risky action' rather than an epistemic probability assignment; however, accepting this defense costs the scientist any claim that their choice is 'rationally likely to be true,' reducing scientific progress to a gamble on verisimilitude without a logical guarantee of convergence.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'corroboration' (a report of past test severity) and 'probability' (logical likelihood). It posits that preferring a highly corroborated theory is analogous to a gambler preferring a horse with a strong track record in severe races: the preference is based on the *severity* of the tests survived (informational content), not an inductive inference that the horse will win tomorrow. The mechanism relies on the normative principle that if one must act, one should act on the theory that has shown the highest capacity to withstand falsification, as this maximizes the potential for learning (if it fails) or utility (if it holds), without asserting the theory is probably true.",
+    "counterconditions": [
+      "If the preference for corroborated theories implicitly assumes the future will resemble the past (uniformity of nature), then it smuggles in induction.",
+      "If 'verisimilitude' cannot be defined coherently without probabilistic assumptions, the defense collapses into circularity.",
+      "If scientists actually rely on Bayesian updating in practice, Popper's descriptive account of scientific behavior is empirically false."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The criticism cites Tichý and Miller's refutation of Popper's *quantitative* definition of verisimilitude. This candidate's defense does not rely on a calculable metric of truth-content minus falsity-content, but rather on the qualitative methodological rule of selecting the theory that has survived the *severe* tests. The rebuttal stands even if the formal calculus failed, because the preference is based on test severity, not a computed verisimilitude score."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, this criticism attacks the formal logical definition of verisimilitude. The candidate rebuts by clarifying that Popper's later defense of preference rests on 'corroboration' as a historical report of test severity, which remains valid even if the specific 1960s formalization of verisimilitude was flawed. The preference is for the 'better tested,' not the 'mathematically closer to truth' in a way that requires the disputed definition."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly distinguish between the descriptive analogy of natural selection and the normative justification. The candidate now argues that while natural selection is descriptive, Popper's rule is a *normative decision principle* for agents who must act: it prescribes choosing the option with the highest informational yield upon failure, which is a rational strategy independent of inductive survival guarantees."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "The claim has been restructured to explicitly present the 'strongest case for' (methodological rationality of risk-taking) and the 'strongest case against' (the impossibility of separating risk-assessment from inductive assumptions about the future) before delivering the verdict. The dialectical structure is now explicit in the claim and counterconditions."
+      },
+      {
+        "handle": "39376b7fe867663a5995c65918c732fb8f87d229ce749eeb590af5cc549a6337",
+        "kind": "rebutted",
+        "note": "The criticism conflates explaining survival with justifying preference. The candidate rebuts by asserting that Popper's justification is not 'it survived so it will survive,' but 'it survived severe tests, so it is the most informative tool we have for the next test.' This shifts the justification from retrospective description to prospective utility, avoiding the is-ought gap identified."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dichotomy. It argues that Popper's 'verisimilitude' in this context is a regulative ideal, not a probabilistic measure. The defense holds that one can prefer a theory as 'closer to truth' in a qualitative sense (having withstood more attempts to show it false) without assigning it a higher probability. The cost admitted in the claim addresses this: we lose the guarantee of likelihood."
+      },
+      {
+        "handle": "5f9249c623a92cb4f40954cc5ed9f9aa65593cfd400dc7eeccd621c30856357c",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' to the main claim: accepting this view costs the scientist the ability to claim their choice is 'probable' or 'safe.' It reduces scientific action to a 'risky bet' on verisimilitude. The trade-off is certainty of truth for the capacity for rapid error elimination."
+      },
+      {
+        "handle": "6741a06d8088515b255833dec9027762128dd19092a1ab9feadf4108cb3f39d4",
+        "kind": "revised",
+        "note": "Clarified the stance on 'smuggling induction.' The candidate now explicitly argues that the preference does *not* smuggle induction IF AND ONLY IF the agent accepts that they are making a non-rational (in the probabilistic sense) choice for the sake of critical progress. If the agent believes the choice makes success *likely*, then induction is smuggled. The nuance is now central to the conclusion."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["biological_natural_selection", "gambling_severe_odds"],
+      "shared_structure": [
+        "Selection based on past performance in severe environments/tests.",
+        "No guarantee of future success despite past survival.",
+        "Preference driven by potential yield (survival/utility) rather than certainty."
+      ],
+      "disanalogies": [
+        "Natural selection is a blind causal process; scientific preference is a conscious normative rule.",
+        "Biological survival is an end in itself; scientific testing aims at truth/falsity discovery.",
+        "Gambling odds are often known probabilities; scientific corroboration explicitly denies knowledge of future probabilities."
+      ],
+      "transfer_claims": [
+        "Just as a gambler chooses the horse with the best track record in hard races without knowing it will win, scientists choose the best-tested theory without knowing it is true.",
+        "The rationality of the choice lies in the quality of the information gained from the test, not the prediction of the outcome."
+      ],
+      "overturn_conditions": [
+        "If it is proven that assessing 'severity' of a test logically requires assuming the uniformity of nature.",
+        "If acting on a theory inherently implies believing it is probably true."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

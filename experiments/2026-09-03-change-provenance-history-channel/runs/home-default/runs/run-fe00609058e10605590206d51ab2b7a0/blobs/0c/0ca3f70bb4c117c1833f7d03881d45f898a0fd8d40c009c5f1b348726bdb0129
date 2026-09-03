@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes 'Abstraction' via a universal operator 'E' (Error Elimination) but fails to substantiate the 'Refuted If' condition with a specific demonstration. The 'Refuted If' clause describes a hypothetical scenario ('It is demonstrated that...') where biological and scientific costs are ontologically distinct, but the target does not actually perform this demonstration or provide evidence that such a distinction exists. Instead, it merely states what would refute the abstraction if proven. By defining the relation's validity solely on the absence of a counter-proof it hasn't attempted to construct, the target offers a defensive definition rather than a substantive positive claim of abstraction. It asserts the endpoints are instances of 'E' without showing the mechanism of 'E' applies to both, effectively begging the question that the abstraction holds.",
+      "premise": null,
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Can you explicitly demonstrate the single operator 'E' acting on both genotype mutation and proposition falsification, rather than just asserting they are both instances of it?"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction if rationality is redefined as adherence to a critical method aimed at truth-likeness (verisimilitude) rather than probabilistic certainty; however, this defense costs the scientist any claim to predictive confidence or assurance that the preferred theory is actually true or even approximately true in its untested domains.",
+    "mechanism": "Reframe the choice of theory not as an inductive inference about future success (which would violate Popper's ban on induction) but as a strategic wager based on past error-elimination. The mechanism relies on the distinction between 'probability' (logical likelihood given evidence) and 'corroboration' (a report of how well a theory has withstood severe tests). By accepting that we prefer theories with higher verisimilitude content solely because they have survived attempts to falsify them, we avoid induction. The preference is a rule of procedure: 'Always act on the theory that has best resisted refutation,' which is a normative commitment to the critical method, not a descriptive claim about the world's uniformity.",
+    "counterconditions": [
+      "If one insists that acting on a theory implies believing it will likely succeed in the future, then induction is smuggled back in.",
+      "If Tichý and Miller's proof that verisimilitude cannot be logically defined for false theories holds absolute, then the comparison of 'better' vs 'worse' corroborated theories lacks a formal basis.",
+      "If the practical necessity of science requires assigning degrees of belief (probabilities) to guide action under uncertainty, Popper's binary corroboration is insufficient."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The criticism cites Tichý and Miller to invalidate verisimilitude. While their proof shows Popper's *original quantitative definition* was flawed, it does not prove the *concept* of truth-likeness is incoherent or that scientists cannot qualitatively prefer theories that explain more and contradict less. Popper later acknowledged the difficulty but maintained the intuitive validity of preferring theories that survive severe tests as a proxy for closeness to truth, even without a perfect formal metric."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, the failure of the specific 1963 formalization does not collapse the entire defense. The defense rests on the *methodological rule* of preferring the most severely tested theory, which remains coherent even if the logical definition of 'truth-content minus falsity-content' is problematic for false theories. The preference is procedural, not strictly dependent on that specific failed formula."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "Revised to explicitly distinguish between the descriptive fact of survival (natural selection analogy) and the normative justification. The candidate now argues that the normativity comes from the *decision* to adopt the critical method as the definition of rational scientific behavior, rather than deriving an 'ought' directly from the 'is' of survival."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "The claim now explicitly structures the argument by first presenting the defense (preference as methodological rule) and then the counter-case (induction smuggled via predictive confidence), before concluding with the cost analysis, satisfying the dialectical requirement."
+      },
+      {
+        "handle": "39376b7fe8617864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "The analogy to natural selection is not meant to provide the normative justification itself but to illustrate the mechanism of error elimination. The normative force is derived separately from the rational commitment to seek truth via falsification, not merely from the fact of survival."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de12e1470c5730a79d7431c6",
+        "kind": "rebutted",
+        "note": "The candidate does not ignore verisimilitude but uses it as the goal. The 'false dichotomy' charge fails because the argument posits that defining rationality by rule-adherence *is* the only way to preserve Popper's anti-induction stance while still allowing for a preference. If one demands probable truth, one has already left Popper's framework."
+      },
+      {
+        "handle": "5f9249c623a92cb4f40954cc5ed9f9aa65593cfd400dc7eeccd621c30856357c",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' section: accepting this view costs the scientist any guarantee of predictive success or justification for believing the theory is true. One acts on the best-tested theory knowing it may fail tomorrow, sacrificing psychological comfort and probabilistic insurance for methodological purity."
+      },
+      {
+        "handle": "6741a06d8088515b255833dec9027762128dd19092a1ab9feadf4108cb3f39d4",
+        "kind": "revised",
+        "note": "Clarified that the preference does not sidestep the induction question but answers it negatively: it is only defensible if we *reject* the idea that past success implies future probability. If scientists act expecting future success based on past tests, they are indeed smuggling in induction; Popper's defense requires them to act *despite* having no such expectation, purely out of fidelity to the critical method."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["biological_evolution_by_natural_selection"],
+      "shared_structure": [
+        "Selection occurs based on survival of past challenges.",
+        "No guarantee of future survival is implied by past survival.",
+        "Preference for the 'fittest' is a heuristic, not a law of nature."
+      ],
+      "disanalogies": [
+        "Biological survival is descriptive/causal; scientific preference is normative/volitional.",
+        "Organisms do not 'choose' to be fit; scientists actively choose which theory to test/act on.",
+        "Evolution has no goal of 'truth'; science explicitly aims at truth (verisimilitude)."
+      ],
+      "transfer_claims": [
+        "Just as we expect the fittest organism to survive the next challenge only tentatively, we should expect the best-corroborated theory to hold only tentatively.",
+        "Preferring the fittest does not require believing evolution is progressive; preferring the best-corroborated theory does not require believing science converges probabilistically."
+      ],
+      "overturn_conditions": [
+        "If biological fitness were proven to guarantee future survival, the analogy would break (but it doesn't).",
+        "If scientific rationality required probabilistic assurance rather than methodological consistency, the analogy would fail to justify the preference."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

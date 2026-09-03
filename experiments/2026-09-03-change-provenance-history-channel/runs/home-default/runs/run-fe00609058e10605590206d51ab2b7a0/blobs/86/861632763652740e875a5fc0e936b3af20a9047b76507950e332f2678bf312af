@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a methodological rule for maximizing truth-likeness (verisimilitude) without invoking inductive probability, but accepting this costs the scientist any claim to rational certainty or predictive reliability regarding future success.",
+    "mechanism": "The argument distinguishes between 'inductive inference' (assigning higher probability of truth based on past success) and 'methodological selection' (choosing the theory that has withstood the most severe tests as the best current guess at high verisimilitude). It posits that while corroboration reports past performance, the preference rule is a non-inductive convention aimed at finding truth, not predicting it. The defense relies on the asymmetry of falsification: we cannot prove a theory true, but we can tentatively accept the one least likely to be false given current errors.",
+    "counterconditions": [
+      "If the definition of 'preference' inherently implies an expectation of future success (induction), then the distinction collapses.",
+      "If Tichý and Miller's critique of verisimilitude holds that false theories cannot be logically compared, then the basis for preferring one unfalsified theory over another vanishes.",
+      "If scientists act on corroborated theories because they believe them *more likely* to be true (psychological induction), then Popper's normative account fails to describe actual scientific rationality."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The criticism cites Tichý and Miller's refutation of Popper's *quantitative* definition of verisimilitude. This candidate rebuts by shifting to a *qualitative* notion of verisimilitude based on content and severity of tests passed, which Popper later advocated as a workaround. The preference does not require a precise calculus of truth-content minus falsity-content, only a comparative judgment of which theory has survived more severe attempts at falsification."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, this rebuttal clarifies that the defense does not rely on the failed formal logic of quantifying verisimilitude but on the methodological imperative to seek high content and survive testing. The 'failure' of the formal definition does not invalidate the intuitive or qualitative drive to prefer theories that explain more and have been tested harder."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address the normative/descriptive gap. The analogy to natural selection is dropped in favor of a direct methodological argument: the norm is 'choose the best tested guess,' which is a rule of conduct, not a description of nature's tendency. The normative force comes from the goal of truth, not the mechanism of survival."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "The claim now explicitly structures the response to first present the strongest case for defensibility (methodological rule vs. inductive inference) and then the strongest case against it (the inevitability of inductive assumptions in action), before concluding. The previous draft merged these; the revision separates them to satisfy the dialectical requirement."
+      },
+      {
+        "handle": "39376b7fe8717864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "The criticism claims a conflation of descriptive and normative. This candidate rebuts by asserting that Popper's system is purely normative: it prescribes how scientists *ought* to choose to further the growth of knowledge, regardless of whether biological analogies hold. The justification is logical (maximizing chance of truth via error elimination), not biological."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6",
+        "kind": "rebutted",
+        "note": "The criticism alleges a false dichotomy ignoring verisimilitude. This candidate rebuts by centering the entire argument *on* verisimilitude as the third way between probability and arbitrary choice. The preference is defensible *because* it targets verisimilitude, not despite it. The dichotomy presented in the criticism is rejected; the candidate offers a trichotomy: Probability (Induction), Arbitrary Choice, and Verisimilitude-Seeking (Popper)."
+      },
+      {
+        "handle": "5f9249c623a92cb4f40954cc5ed9f9aa65593cfd400dc7eeccd621c30856357c",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' to the claim and mechanism. The cost identified is the abandonment of 'predictive reliability' and 'rational certainty.' Accepting Popper's view means admitting we have no reason to believe the future will resemble the past, only that we are following the best available procedure for finding truth. We lose the comfort of induction."
+      },
+      {
+        "handle": "6741a06d8088515b255833dec9027762128dd19092a1ab9feadf4108cb3f39d4",
+        "kind": "revised",
+        "note": "Refined the conclusion to directly answer whether induction is smuggled in. The revised stance is: Induction is smuggled in *practically* by scientists who expect success, but *logically* within Popper's system, it is not required if one accepts the 'cost' of having no expectation of success, only a commitment to the method. The tension remains unresolved for the acting scientist but is resolved for the methodologist."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_003"],
+      "shared_structure": [
+        "Selection based on past survival without guarantee of future success",
+        "Distinction between the mechanism of selection and the justification of the trait",
+        "Goal-oriented behavior (finding truth / reproductive fitness) without teleological certainty"
+      ],
+      "disanalogies": [
+        "Biological survival is descriptive/causal; scientific preference is normative/methodological",
+        "Organisms do not 'choose' to survive; scientists actively select theories",
+        "Evolution has no 'truth' goal; science explicitly aims at truth"
+      ],
+      "transfer_claims": [
+        "Just as we can prefer a fit organism as a good specimen without believing it guarantees future offspring, we can prefer a corroborated theory without believing it guarantees future predictions.",
+        "The value lies in the filtering process (severe tests/natural selection), not the outcome's certainty."
+      ],
+      "overturn_conditions": [
+        "If the aim of science is proven to be practical prediction rather than truth, the analogy breaks as the goals diverge.",
+        "If 'preference' is defined strictly as 'expectation of future success', the analogy fails because biological fitness does not imply individual future success."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

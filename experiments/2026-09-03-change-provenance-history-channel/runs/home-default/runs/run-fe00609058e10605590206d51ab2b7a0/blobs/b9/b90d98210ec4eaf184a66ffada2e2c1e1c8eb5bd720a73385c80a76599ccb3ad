@@ -1,0 +1,91 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, methodological rule for maximizing 'risk' and 'leverage' in the search for truth, but accepting this defense costs the scientist any claim to rational expectation that the preferred theory is more likely to be true or practically reliable in the future.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'probability' (logical content) and 'corroboration' (historical performance). It posits that preferring a highly corroborated theory is not an inductive inference that it will hold tomorrow, but a strategic choice to bet on the theory that has survived the most severe tests because it offers the highest 'informational content' and thus the greatest potential for falsification if wrong. This transforms the preference from an epistemic justification (it is probably true) to a pragmatic/methodological one (it is the best instrument for further testing).",
+    "counterconditions": [
+      "If 'preference' inherently implies an expectation of future success, then Popper's view collapses into hidden induction.",
+      "If scientists act on corroboration because they believe it signals truth-likeness (verisimilitude), and verisimilitude cannot be logically defined without induction, the defense fails.",
+      "If the 'cost' of abandoning probable truth renders scientific action irrational for practical purposes (e.g., engineering bridges), the Popperian stance is untenable for working science."
+    ],
+    "typicality": 0.85,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "shared_structure": [
+        "Selection based on past survival without guarantee of future fitness.",
+        "Distinction between descriptive history and normative prediction.",
+        "Value derived from severity of test rather than frequency of success."
+      ],
+      "disanalogies": [
+        "Biological survival is causal and automatic; scientific preference is voluntary and normative.",
+        "Organisms do not 'choose' traits based on information content; scientists explicitly select high-content theories.",
+        "Evolution has no goal of 'truth'; science explicitly aims at truth, making the lack of probabilistic support more costly."
+      ],
+      "transfer_claims": [
+        "Just as we prefer a species that survived an ice age not because it *will* survive the next, but because it possesses traits tested by extreme conditions, we prefer corroborated theories for their tested resilience, not their probability.",
+        "The 'cost' in evolution is extinction; the 'cost' in Popperian science is the abandonment of practical certainty."
+      ],
+      "overturn_conditions": [
+        "If biological survival can be shown to logically entail future survival probability in a way that maps to theory confirmation.",
+        "If the normative gap between 'survived' and 'should be chosen' cannot be bridged without invoking inductive principles."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The criticism correctly notes Tichý and Miller's refutation of Popper's *formal* definition of verisimilitude. However, this candidate's defense does not rely on a formal calculus of truth-content minus falsity-content. Instead, it relies on the *methodological* rule of preferring high-risk, high-survival theories as instruments for further testing. The failure of the formal definition undermines the claim that corroboration measures closeness to truth, but it does not undermine the pragmatic rule of using corroboration to select the most informative conjecture for the next test."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, this candidate sidesteps the need for a logical definition of verisimilitude. The defense argues that Popper's preference is defensible *without* claiming the theory is 'truer' in a measurable sense. The preference is for the theory that offers the best 'leverage' for falsification. The failure of the formal verisimilitude project confirms the 'cost' identified in the claim (no claim to probable truth) but does not invalidate the methodological strategy itself."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "REVISED: The analogy section now explicitly addresses the normative core. The revision clarifies that while natural selection is descriptive, the *scientific adoption* of the analogy is a normative move: we *ought* to treat theories like species in a severe environment, selecting those with proven resilience not because they are destined to survive, but because they represent the most robust current guess. The 'normativity' comes from the goal of error elimination, not from the mechanism of survival itself."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the 'strongest case for each answer' within its structure. The 'Claim' and 'Mechanism' present the defense (defensible as methodological risk-taking). The 'Counterconditions' and the 'Cost' articulated in the Claim present the strongest case against it (it smuggles induction if preference implies expectation, and it fails practical rationality). The conclusion is embedded in the trade-off: it survives only if one accepts the cost of abandoning probable truth."
+      },
+      {
+        "handle": "39376b7fe8717864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "The disanalogy field explicitly separates the descriptive mechanism (biological survival) from the normative justification (scientific choice). The argument does not conflate them; it uses the descriptive fact of survival to justify a normative rule of selection based on 'informational content' and 'severity of test,' which is a distinctively scientific norm not present in biology."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de12e1470c5730a79d7431c6",
+        "kind": "rebutted",
+        "note": "The candidate does not ignore verisimilitude; it acknowledges its formal failure (see discharge of 0a9f...) and argues that the defense holds *despite* this failure by shifting ground to methodological pragmatism. The dichotomy presented is not false but necessary: either one claims probable truth (which requires induction or a working verisimilitude measure) or one claims methodological utility (which Popper offers). The candidate chooses the latter and admits the cost."
+      },
+      {
+        "handle": "5f9249c623a92cb4f40954cc5ed9f9aa65593cfd400dc7eeccd621c30856357c",
+        "kind": "rebutted",
+        "note": "The 'cost' is explicitly defined in the Claim: 'accepting this defense costs the scientist any claim to rational expectation that the preferred theory is more likely to be true or practically reliable in the future.' This directly answers the prompt's requirement to identify negative trade-offs. The trade-off is the loss of inductive confidence required for practical application."
+      },
+      {
+        "handle": "6741a06d8088515b255833dec9027762128dd19092a1ab9feadf4108cb3f39d4",
+        "kind": "rebutted",
+        "note": "The candidate confronts the 'smuggling' charge directly. It argues that preference *only* smuggles induction if 'preference' is defined as 'expectation of future success.' By redefining preference as 'selection for maximum testability,' the candidate attempts to purge induction. The rebuttal admits that if the user/scientist cannot maintain this strict definition and naturally feels 'expectation,' then induction has indeed been smuggled back in via psychology, even if not logic."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_003",
+      "SRC_007"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

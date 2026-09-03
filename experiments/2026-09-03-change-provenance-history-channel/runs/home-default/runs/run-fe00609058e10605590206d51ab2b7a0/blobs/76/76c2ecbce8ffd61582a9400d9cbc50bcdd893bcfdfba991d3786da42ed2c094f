@@ -1,0 +1,83 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms without smuggling in induction, provided the preference is framed as a methodological rule for maximizing 'verisimilitude' (truth-likeness) through severe testing rather than an inductive inference of future probability. The cost of accepting this defense is the abandonment of any claim that science converges toward probable truth or offers practical certainty; instead, science becomes a high-risk gamble where the 'best' theory is merely the one currently most worthy of attempted falsification, offering no guarantee of success in application.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'probability' (logical likelihood based on content) and 'corroboration' (historical report of test performance). It posits that preferring a highly corroborated theory is not an inductive leap that it will hold tomorrow, but a rational selection of the theory with the highest surviving 'verisimilitude' content relative to competitors, akin to natural selection where survival indicates fitness against specific pressures but guarantees nothing about future environments. This mechanism treats the preference as a strategic choice to test the strongest available candidate, thereby accelerating error elimination.",
+    "counterconditions": [
+      "If the Tichý-Miller proof demonstrates that 'verisimilitude' cannot be logically defined for false theories, then the comparison of 'better' vs 'worse' corroborated theories collapses into incoherence.",
+      "If the preference for the survived theory implicitly assumes the uniformity of nature (that what survived yesterday will survive tomorrow), then the definition of 'induction' used is too narrow and the smuggled premise remains.",
+      "If scientists act on theories expecting them to work (practical probability) rather than just to be tested, then Popper's methodological rule fails to describe actual scientific rationality."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "popper_conjectures_refutations_ch10",
+        "tichy_miller_verisimilitude_1974",
+        "darwin_origin_species_ch4"
+      ],
+      "shared_structure": [
+        "Selection via elimination of failed candidates",
+        "Survival indicates past fitness/test-resistance, not future guarantee",
+        "Preference is strategic (choose the strongest to attack/use) not probabilistic"
+      ],
+      "disanalogies": [
+        "Biological survival is descriptive/causal; scientific preference is normative/methodological",
+        "Organisms do not choose their tests; scientists actively design severe tests",
+        "Evolution has no goal of 'truth'; science explicitly aims at verisimilitude"
+      ],
+      "transfer_claims": [
+        "Just as we bet on the fittest organism to survive the next season without knowing the future, we bet on the best-corroborated theory to solve problems without inductive certainty",
+        "The 'cost' in biology is extinction; the 'cost' in Popperian science is the acceptance of radical fallibilism and lack of practical assurance"
+      ],
+      "overturn_conditions": [
+        "If biological fitness could be proven to guarantee future survival, the analogy would support induction, contradicting Popper",
+        "If verisimilitude is shown to be unmeasurable even comparatively, the strategic basis for preference vanishes"
+      ]
+    },
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The candidate acknowledges the Tichý-Miller failure of Popper's *quantitative* definition of verisimilitude but argues that a *qualitative* or comparative notion of 'surviving severe tests' remains coherent as a methodological rule. The defense does not rely on calculating truth-content minus falsity-content, but on the logical asymmetry that a theory passing a severe test where a competitor failed is provisionally preferred for further testing, regardless of whether both are technically false."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, the rebuttal clarifies that the 'verisimilitude' invoked here is not the failed formal logical definition but the intuitive concept of 'closeness to truth' operationalized strictly through severity of testing. The preference is justified by the *process* of elimination, not by a static logical measure that Tichý disproved."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly distinguish between the descriptive fact of survival (natural selection) and the normative rule of preferring the survivor for *further testing*. The candidate now argues that the normativity comes from the goal of error elimination, not from the survival itself implying future success."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "The claim section has been expanded to explicitly articulate the 'strongest case for each answer': first, the defense via methodological rules and verisimilitude; second, the counter-case that this smuggles induction if 'preference' implies expectation of success. The conclusion now weighs these directly."
+      },
+      {
+        "handle": "39376b7fe817864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "The candidate maintains that the analogy holds because the normative force is derived from the *aim* of science (truth/error elimination). Just as a breeder normatively selects the fittest animal to breed *in order to* improve the stock (without guarantee), the scientist selects the best-corroborated theory to test *in order to* eliminate error. The conflation charge ignores the teleological context of the selection."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dichotomy by arguing that Popper's 'verisimilitude' is not an alternative definition of probability but a distinct category entirely. The preference is not for 'probable truth' nor strictly for 'rule adherence' in a vacuum, but for 'maximal exposure to falsification' which correlates with higher potential verisimilitude. The cost is accepting that this correlation offers no inductive security."
+      },
+      {
+        "handle": "5f9249c623a92cb4f40954cc5ed9f9aa65593cfd400dc7eeccd621c30856357c",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' analysis: accepting this view costs the scientist any claim to practical certainty, requires acting on theories known to be false (potentially), and demands a psychological shift from seeking confirmation to seeking refutation even in applied contexts."
+      },
+      {
+        "handle": "6741a06d8088515b255833dec9027762128dd19092a1ab9feadf4108cb3f39d4",
+        "kind": "rebutted",
+        "note": "The candidate argues that redefining preference as a choice for 'risk' and 'leverage' (testing power) directly answers whether induction is smuggled in: it is not, because the agent does not believe the theory is *true* or *likely true*, only that it is the *most useful tool for finding error*. If scientists act expecting success, they are acting irrationally by Popper's standards, not proving induction is necessary."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

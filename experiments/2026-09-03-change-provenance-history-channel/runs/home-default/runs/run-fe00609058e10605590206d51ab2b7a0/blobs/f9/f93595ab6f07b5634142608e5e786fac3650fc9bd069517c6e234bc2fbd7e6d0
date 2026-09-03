@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to establish a 'Shared Mechanism' because it conflates structural similarity with mechanistic identity. While both domains involve filtering, the mechanism in biological evolution is purely causal and blind (differential reproduction based on past survival), whereas the mechanism in scientific theory selection is normative and agent-driven (critical preference based on explanatory power and logical content). The target's 'Refuted If' condition admits this distinction breaks the symmetry, yet the target asserts the relation holds regardless. By defining the shared mechanism as 'retrospective filtering' while ignoring the fundamental difference between causal necessity (biology) and critical rationality (science), the target offers a superficial analogy rather than the required substantive relation of shared mechanism. The endpoints do not share the same operative logic; one is a physical process, the other an epistemological method.",
+      "premise": null,
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Does the presence of normative agency in scientific selection fundamentally alter the 'mechanism' such that it can no longer be classified as the same type of operation as blind biological variation and retention?"
+    }
+  ]
+}

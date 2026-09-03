@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as the non-inductive goal of preferring corroborated theories, but it fails to address the logical collapse of this concept when comparing false theories. As demonstrated by Tichý and Miller, Popper's original formal definition of verisimilitude yields counter-intuitive results where a theory with more false consequences can be ranked as 'closer to truth' than a better-performing one, or where no comparison is possible between two false theories regardless of test survival. Since the vast majority of scientific theories in Popper's framework are strictly false (having been falsified or being falsifiable), the mechanism of 'maximizing verisimilitude' lacks a coherent logical basis for guiding preference among the actual candidates scientists face. Without a repaired definition of verisimilitude that the target does not provide, the claim that corroboration tracks truth-likeness is unsupported, rendering the preference arbitrary rather than defensible on Popper's own terms.",
+      "premise": "Popper's formal definition of verisimilitude is logically incoherent for comparing false theories.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Can a coherent definition of verisimilitude be constructed that preserves Popper's anti-inductivist stance while allowing rational preference between two known-false theories?"
+    }
+  ]
+}

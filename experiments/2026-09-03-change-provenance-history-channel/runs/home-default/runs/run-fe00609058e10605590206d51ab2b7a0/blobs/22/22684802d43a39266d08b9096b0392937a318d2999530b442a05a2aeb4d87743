@@ -1,0 +1,30 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@f2ea5069a664e29f4add10f8: program:reasoning_observation_pending
+- reason-counter@729c31834506436003f0f217: program:reasoning_observation_pending
+- reason-counter@080bf7b6824946c2400ebc98: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule to maximize the 'risk' of falsification, thereby accelerating the elimination of error; however, accepting this defense costs the scientist any rational assurance that the preferred theory is likely true or practically reliable for action, reducing scientific choice to a gamble on severity rather than a bet on probability.","counterconditions":[{"case":"If the preference for corroborated theories implicitly assumes that nature is uniform (i.e., that what worked before will work again), then it smuggles in induction despite Popper's protests.","checker_spec":null,"eval":"observation"},{"case":"If 'acting on' a theory requires an expectation of practical success (e.g., building a bridge that won't collapse), then a purely negative definition of corroboration fails to justify the action without covert probabilistic assumptions.","checker_spec":null,"eval":"observation"},{"case":"If the Tich\u00fd-Miller critique of verisimilitude holds, then comparing theories by 'truth-likeness' based on corroboration is logically incoherent, undermining the claim that we are getting closer to truth.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The argument reconstructs Popper's 'methodological falsificationism' by distinguishing between the logical status of corroboration (a report of past performance) and the pragmatic rule of preference (a decision to subject the boldest conjecture to the severest test). It posits that preferring the best-corroborated theory is equivalent to preferring the theory that has survived the most dangerous attempts at refutation, which keeps the 'game of science' moving toward truth-content without asserting that survival increases the probability of the theory being true. The mechanism relies on the asymmetry between verification and falsification: while we cannot infer truth from survival, we can rationally choose the theory that offers the most informative potential for future falsification.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@f2ea5069a664e29f4add10f8, reason-counter@729c31834506436003f0f217, reason-counter@080bf7b6824946c2400ebc98
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

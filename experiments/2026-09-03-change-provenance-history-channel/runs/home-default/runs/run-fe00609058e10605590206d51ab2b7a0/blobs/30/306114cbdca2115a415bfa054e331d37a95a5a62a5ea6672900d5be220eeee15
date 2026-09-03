@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, methodological rule for maximizing 'verisimilitude' (truth-likeness) and informational content, but accepting this defense costs the scientist any claim to probable truth or inductive security, forcing a reliance on bold conjecture where the 'best' theory is merely the one most worthy of attempted refutation.",
+    "mechanism": "The argument proceeds by distinguishing between 'probability' (which decreases with content) and 'corroboration' (which reports past test performance). It posits that preferring high corroboration is not an inductive inference that the theory will hold tomorrow, but a rational choice to select the theory with the highest potential truth-content (verisimilitude) for further testing. This resolves the tension by redefining 'preference' not as a belief in future success, but as a strategic commitment to the most informative error-detector available.",
+    "counterconditions": [
+      "If Tichý and Miller's proof that Popper's formal definition of verisimilitude is logically incoherent for false theories holds, then the justification collapses because we cannot coherently claim one false theory is 'closer to truth' than another using Popper's own metrics.",
+      "If the preference for corroborated theories implicitly assumes that the future will resemble the past (uniformity of nature), then the defense fails as it smuggles in the very induction Popper rejected.",
+      "If scientists actually act on the belief that corroborated theories are 'probable' rather than just 'well-tested,' then Popper's descriptive account of scientific practice contradicts his normative philosophy."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The criticism cites Tichý and Miller's invalidation of Popper's *formal* quantitative definition of verisimilitude. However, the candidate's mechanism relies on the *qualitative* concept of verisimilitude as a regulative ideal (choosing theories with higher empirical content that have survived severe tests), which Popper maintained remains viable even if the precise logical calculus failed. The defense does not require the broken formalism, only the intuitive notion that a theory surviving more diverse tests is a better candidate for truth-likeness."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, this criticism targets the failed formal definition. The rebuttal is that the preference is justified by the *methodological rule* to seek high content and severe testing, not by a calculated metric of truth-likeness. The collapse of the formal definition undermines a specific proof, not the entire strategy of preferring bold, well-tested conjectures over safe, tautological ones."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly clarify that the 'natural selection' analogy (often used in Popperian defenses) is descriptive of how theories survive, but the *normative* justification comes from the goal of maximizing truth-content. The preference is not 'because it survived' (descriptive) but 'we choose the survivor because it offers the best chance to find errors and approach truth' (normative methodological rule)."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "The claim has been strengthened to explicitly present the dialectic: Case A (Defensible via verisimilitude/methodology) vs Case B (Inductive smuggling via assumption of uniformity). The conclusion now clearly weighs these before stating the cost."
+      },
+      {
+        "handle": "39376b7fe817864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "The criticism argues the analogy conflates descriptive survival with normative justification. The candidate rebuts this by asserting that Popper's normativity is derived from the *aim* of science (truth), not the *fact* of survival. We prefer the survivor not because it survived, but because its survival indicates it has withstood attempts to falsify its high content, making it the most useful tool for further progress. The norm is 'seek truth,' the method is 'prefer the best-tested high-content theory.'"
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dichotomy ignoring verisimilitude. The candidate explicitly centers verisimilitude as the core of the defense, arguing that the choice is precisely between 'probable truth' (induction, which Popper rejects) and 'verisimilitude via severe testing' (critical rationalism). There is no ignored middle ground; the candidate asserts this is the exact tension Popper sought to resolve."
+      },
+      {
+        "handle": "5f9249c623a92cb4f40954cc5ed9f9aa65593cfd400dc7eeccd621c30856357c",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' clause to the main claim: accepting this view costs the scientist 'any claim to probable truth or inductive security.' It forces an acceptance of fallibilism where the 'best' theory is still likely false, merely the least bad option for current inquiry."
+      },
+      {
+        "handle": "6741a06d8088515b255833dec9027762128dd19092a1ab9feadf4108cb3f39d4",
+        "kind": "rebutted",
+        "note": "The criticism suggests the target sidesteps whether induction is smuggled in. The candidate directly addresses this: if the preference relies on the assumption that 'what worked before will work again,' then yes, induction is smuggled in and the defense fails. However, if the preference is purely methodological ('this theory allows for the most rigorous future testing'), then induction is avoided. The candidate takes the stance that the latter is the only defensible Popperian position, acknowledging the high cost of abandoning predictive confidence."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

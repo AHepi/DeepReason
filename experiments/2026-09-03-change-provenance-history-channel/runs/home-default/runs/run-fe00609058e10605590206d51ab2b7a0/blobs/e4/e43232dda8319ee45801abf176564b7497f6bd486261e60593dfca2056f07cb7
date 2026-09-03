@@ -1,0 +1,178 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms strictly as a 'critical selection' mechanism that maximizes informational content and test severity, not probability. The cost of accepting this view is the abandonment of the intuitive link between rational action and the expectation of future success; scientists act on the best-tested theory not because they believe it will work, but because it is the only one that has not yet failed, making rationality a procedural commitment to error-elimination rather than a predictive guarantee.",
+      "mechanism": "Procedural Risk-Taking: Rationality is redefined as the adherence to the method of bold conjecture and severe refutation. Preference is assigned to the theory with the highest empirical content (most falsifiable) that has survived, ensuring maximum learning potential regardless of truth probability.",
+      "counterconditions": [
+        "If the agent requires a positive expectation of success to act rationally.",
+        "If the stability of natural laws cannot be assumed even provisionally for action."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "This candidate avoids the formal definition of verisimilitude (truth-content minus falsity-content) criticized by Tichý and Miller. Instead, it relies on 'test severity' and 'informational content' as the basis for preference, which remains logically coherent even if comparative verisimilitude for false theories fails."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "Similar to the rebuttal for SRC_008, this argument does not depend on Popper's failed logical formalization of verisimilitude. It grounds preference in the pragmatic necessity of choosing the most informative surviving hypothesis, bypassing the need for a truth-likeness metric."
+        },
+        {
+          "handle": "[SRC_015] against SRC_004",
+          "kind": "revised",
+          "note": "The mechanism is revised from a purely descriptive 'natural selection' analogy to a normative 'procedural rule.' The preference is not just what scientists *do* survive doing, but what they *ought* to do to maximize critical feedback, thus addressing the normative core without invoking induction."
+        },
+        {
+          "handle": "[SRC_018] against SRC_012",
+          "kind": "rebutted",
+          "note": "The claim explicitly constructs the strongest case for defensibility (procedural rationality) and implies the counter-case (lack of predictive expectation). The conclusion identifies the specific cost: the severance of rationality from the expectation of success."
+        },
+        {
+          "handle": "[SRC_017] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate distinguishes between the descriptive history of survival and the normative rule of selecting high-content theories. The justification is forward-looking (maximizing future testability), not merely retrospective survival."
+        },
+        {
+          "handle": "[SRC_010] against SRC_007",
+          "kind": "rebutted",
+          "note": "This candidate accepts the dichotomy presented in SRC_007 but clarifies that 'verisimilitude' in the colloquial sense of 'closer to truth' is replaced by 'higher informational content.' It argues that Popper's system holds without the formal verisimilitude concept."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The cost is explicitly stated: the loss of the comforting belief that rational action implies a probable successful outcome. Scientists must accept acting on theories they have no reason to believe are true, only that they are the least erroneous so far."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate directly addresses the 'smuggling induction' charge by arguing that preferring the unrefuted over the refuted is a logical necessity of the falsificationist framework, not an inductive leap assuming the future will resemble the past."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system, rendering his position pragmatically inconsistent. While Popper formally rejects induction, the act of preferring a corroborated theory for future action implicitly assumes the 'principle of the uniformity of nature'—that the conditions which allowed the theory to survive past tests will persist. The strongest defense (pragmatic success) collapses because it relies on the very inductive inference (past success predicts future reliability) that Popper sought to eliminate.",
+      "mechanism": "Implicit Inductive Leap: The psychological and practical necessity of acting 'as if' the future resembles the past forces the scientist to treat corroboration as a proxy for probability, despite formal denials.",
+      "counterconditions": [
+        "If one can demonstrate a non-inductive basis for expecting future performance from past survival.",
+        "If 'action' can be decoupled entirely from any expectation of outcome."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "departure_declared",
+          "note": "This candidate departs from the need to defend Popper's formal verisimilitude. It argues that regardless of the formal definition's coherence, the *practice* of preference relies on an inductive mindset that makes the formal logic irrelevant to actual scientific behavior."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "The failure of formal verisimilitude strengthens this candidate's claim: since no logical bridge exists between corroboration and truth-likeness, the only remaining bridge scientists use is informal induction, confirming the 'smuggling' charge."
+        },
+        {
+          "handle": "[SRC_015] against SRC_004",
+          "kind": "rebutted",
+          "note": "This candidate agrees that the natural selection analogy is purely descriptive. It argues that because it lacks normative force without induction, Popper's attempt to use it as a justification fails, leaving induction as the only viable normative engine."
+        },
+        {
+          "handle": "[SRC_018] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate presents the strongest case for the 'induction' side (the inevitability of assuming uniformity) and contrasts it with the 'defensible' side (which it deems insufficient). The cost identified is the collapse of Popper's claim to have solved the problem of induction."
+        },
+        {
+          "handle": "[SRC_017] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate asserts that the conflation of descriptive survival and normative preference is exactly where induction enters. One cannot move from 'it survived' to 'prefer it for the future' without an inductive assumption."
+        },
+        {
+          "handle": "[SRC_010] against SRC_007",
+          "kind": "rebutted",
+          "note": "It challenges the false dichotomy by suggesting that 'rule-adherence' itself is only rational if one inductively assumes the rules lead to progress. Thus, verisimilitude or rule-following both secretly rely on induction."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The cost of accepting this view is high: it admits that Popper's philosophy fails to provide a unique, non-inductive account of scientific rationality, reducing it to a disguised form of Humean skepticism or conventionalism."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate argues that viewing corroboration as 'informational content' does not solve the problem. Choosing high-content theories for *action* still requires the inductive step that high content correlates with practical utility or truth."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves if we reinterpret 'preference' not as a judgment of truth or probability, but as a strategic bet in a game against nature where the payoff structure favors boldness. On Popper's terms, the preference is defensible as a 'non-cognitive' policy: we choose the better-corroborated theory because it offers the greatest opportunity for falsification (and thus growth), not because we expect it to be true. The cost is the acceptance that science is a game of eliminating errors rather than accumulating truths, and that 'rational preference' is devoid of epistemic confidence.",
+      "mechanism": "Game-Theoretic Strategy: Science is modeled as an optimization problem where the utility function is 'rate of error detection.' Corroborated theories are preferred instruments for this utility, independent of their truth value.",
+      "counterconditions": [
+        "If the goal of science is defined as finding true theories rather than eliminating false ones.",
+        "If agents are incapable of acting without epistemic confidence."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "By shifting the ground from 'verisimilitude' (truth-likeness) to 'strategic utility' (falsifiability potential), this candidate sidesteps the Tichý/Miller proof entirely. The comparison is based on potential for refutation, not logical content differences of false theories."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "Same as above; the failure of verisimilitude definitions is irrelevant to a strategy based purely on maximizing test severity."
+        },
+        {
+          "handle": "[SRC_015] against SRC_004",
+          "kind": "revised",
+          "note": "The analogy to natural selection is refined: it is not just survival, but 'niche construction' for testing. The normative element is the explicit goal of the scientific community (error elimination), which justifies the strategy without induction."
+        },
+        {
+          "handle": "[SRC_018] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate fully articulates the 'defensible' case (strategic betting) and the 'induction' counter-case (need for confidence), concluding that the strategic view survives if one accepts the shifted goal of science. The cost is the loss of 'truth' as the immediate aim."
+        },
+        {
+          "handle": "[SRC_017] against SRC_011",
+          "kind": "rebutted",
+          "note": "The distinction is maintained: biological survival is descriptive, but the 'game strategy' is a normative choice of goals (maximize falsification). The justification lies in the chosen goal, not in the mechanism of survival itself."
+        },
+        {
+          "handle": "[SRC_010] against SRC_007",
+          "kind": "rebutted",
+          "note": "This avoids the verisimilitude trap by defining rationality purely in terms of goal-efficiency (achieving falsifications) rather than truth-proximity. It accepts the rule-adherence model but grounds it in game theory."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The cost is clearly defined: scientists must abandon the hope that their preferred theories are likely true, accepting them instead as the best tools for finding out what is false."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate embraces the 'risk/leverage' interpretation but clarifies that it does not smuggle induction because the 'bet' is not on the theory being true, but on it being useful for testing."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_016"
+      ]
+    },
+    {
+      "claim": "Popper's preference is defensible only through a 'fictionalist' interpretation: scientists must consciously adopt the 'fiction' that corroborated theories are reliable to enable action, while intellectually maintaining that they are likely false. This dual-state allows the preference to function pragmatically without violating the logical ban on induction. The cost is a profound psychological schism in the scientist, who must act with conviction while believing that conviction is logically unjustified.",
+      "mechanism": "Conscious Fictionalism: A cognitive split where the 'acting self' operates on a useful fiction (reliability) while the 'knowing self' adheres to strict falsificationism (uncertainty).",
+      "counterconditions": [
+        "If such a cognitive split is psychologically unsustainable for sustained research programs.",
+        "If the 'fiction' inevitably degrades into believed dogma over time."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "
