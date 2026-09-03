@@ -4,7 +4,13 @@ Traces: every item cites R/C numbers from REQUEST.md. Untraceable items
 are bugs. REQUEST.md re-read in full before writing this (no amendments
 exist yet).
 
-**Status: STOPPED FOR OPERATOR WORDS.** "Questions for operator" is
+**Status: ANSWERED AND UNBLOCKED (REQUEST.md Amendment 1, 2026-09-03).** All
+three questions below were put to the operator with priced options and a
+recommendation each; the operator selected the recommended option in all
+three, ledgered as R26 (new subcommand), R27 (rootless mode in scope) and
+R28 (one tranche, two commit groups). The "Questions for operator"
+section is retained verbatim as the record of what was asked and what it
+cost; every fork in it is CLOSED.
 non-empty (Q1, plus a scope fork the record forced). Per
 `dr-change-orchestrator` and `dr-spec-change` step 2, no implementation
 begins until those are answered.

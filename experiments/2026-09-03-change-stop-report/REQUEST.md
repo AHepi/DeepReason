@@ -288,4 +288,47 @@ writable open repairs, i.e. destroys, the evidence".)
 (append-only; later operator messages land here as R26... or "R7a
 supersedes R7", each with its verbatim quote)
 
-*none yet*
+### Amendment 1 — 2026-09-03, the three STOP questions answered
+
+The operator was presented with SPEC.md's batched question set (Q1, Q1b,
+Q1c), each option priced, each carrying a recommendation. They selected
+the recommended option in all three. Their selections, verbatim as the
+option labels they chose:
+
+Q1 — "Should the stop report be its own command, or a flag on the
+existing `deepreason results`?"
+
+> "New subcommand (Recommended)"
+
+Q1b — "Should the report also cover failures that never produced a run
+root (config errors that fail qualification)?"
+
+> "Include it (Recommended)"
+
+Q1c — "The itemized budget is ~1,300 lines, well over the ~300-line
+guideline. How should it ship?"
+
+> "One tranche, two commit groups (Recommended)"
+
+**R26 (behavior, answers Q1):** the stop report is a NEW public CLI
+subcommand — `deepreason stop-report <root-or-home> [--json]
+[--config FILE] [--verify]` — not a flag on `deepreason results`.
+`deepreason results` is not edited. Binds S1, S12, and the Q1 fork in
+SPEC.md, which is hereby CLOSED.
+
+**R27 (behavior, answers Q1b):** ROOTLESS MODE IS IN SCOPE. The report
+accepts a home that holds no run root and reports from the qualification
+record alone, so the failure class the operator described — a
+configuration error that fails qualification and never mints a root —
+is covered. Binds S12 and the three rootless regression rows of S18.
+The Q1b fork is CLOSED.
+
+**R28 (process, answers Q1c):** ONE TRANCHE, TWO ORDERED COMMIT GROUPS.
+Group A: the report (S1-S12), the regression proof (S18, S20), the unit
+fixtures (S19), the wheel smokes (S21). Group B: the diagnosis-skill
+refusal (S13, S14) and the configuration-stages page (S15-S17). ONE
+DELIVERY.md reconciles R1-R28. The Q1c fork is CLOSED.
+
+Recorded per `dr-ask-the-right-question` §2, the "do it" row: the
+operator approved EXACTLY the recommended options as stated, which is
+approval of those plans and not a licence to widen any of them.
