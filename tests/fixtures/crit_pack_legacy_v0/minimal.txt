@@ -1,0 +1,16 @@
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET e90e769286fa4d43f522d2566e6d5fbe616bf5120a6090a145749180b9b72617
+BARE TARGET: cities are warmer at night because there are more people in them.
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+DIRECTIVE: mount the strongest NEW specific case against TARGET e90e769286fa4d43f522d2566e6d5fbe616bf5120a6090a145749180b9b72617, or attack=false if you find no genuine fault.

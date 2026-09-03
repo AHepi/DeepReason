@@ -1,6 +1,6 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=5 blockers=none — step 5 awaits its docs_verify FULL run; step 6 (the amendment pass) is DONE out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
+State: next=9 blockers=none — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
 verbatim: "Given what read from the other windows, the plugin one. Since all
 three other windows have completed." Build window open; branch
 `claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
@@ -155,10 +155,70 @@ against 0; a NEW failure is a failed step, a baseline row is not.
       Zero findings against the new document, which is what `--audit` proves
       here: each of its five checks can fail.
 
-- [ ] 5. (S13) [COMMIT] Add the row for the new seam to
+- [x] 5. (S13) [COMMIT] Add the row for the new seam to
       `docs/map/INDEX.md`'s seam matrix and remove it from
       `CON-packs-and-token-economy.md`'s `Seams-undocumented:` header.
       done-when: `python tools/docs_verify.py` (FULL mode) -> `0 failed`
+
+      DONE 2026-09-03. Row added to `INDEX.md`'s seam matrix (coupling `—`,
+      because one side is a concept — `INDEX.md`'s own stated rule; its
+      "last ten" sentence became "last eleven"); removed from
+      `CON-packs-and-token-economy.md`'s `Seams-undocumented:` and added to
+      its `Seams:`; added to `SUB-rules.md`'s `Seams:` so BOTH sides name it.
+
+      **The done-criterion as written (`0 failed`) is not this container's
+      baseline, and the result is compared against the baseline instead.**
+      `docs/AUDIT_BASELINES.md:40-46` records **5 or 6 failed on a SHALLOW
+      clone**; `git rev-parse --is-shallow-repository` -> `true` here.
+      ```
+      $ python tools/docs_verify.py
+      docs_verify [full]: 76 documents, 1341 checks, 4 workers
+        FAIL SEAM-llm-x-rules.md:54: unparseable check ...
+        FAIL CON-run-identity.md:211  (git log over renamed roots)
+        FAIL CON-run-identity.md:213  (ambiguous argument '1637e808')
+        FAIL CON-run-identity.md:215  (ambiguous argument 'f304fec1')
+        FAIL INV-frozen-surfaces.md:181 (transport_failure census)
+        FAIL INV-frozen-surfaces.md:736 (git show of an absent branch)
+        FAIL CON-run-identity.md:313  TIMEOUT after 300s
+      docs_verify: 7 failed
+      ```
+      SIX are named baselines: `SEAM-llm-x-rules.md:54` and
+      `INV-frozen-surfaces.md:181` (`AUDIT_BASELINES.md:67-68`);
+      `CON-run-identity.md:211/213/215` (shallow-clone rows); and
+      `CON-run-identity.md:313`, which is the "passes alone, exceeds the
+      300 s ceiling" row the window instruction gives as `:298` — the line
+      moved, the check did not, and `docs/ERRATA.md` E67's own rule is to
+      anchor such a row by WHAT IT RUNS (`tests/test_jailbreak_gate.py`),
+      never by line number.
+
+      **The SEVENTH is NOT on the instruction's list, and it is not this
+      tranche's either.** `INV-frozen-surfaces.md:736` fails because its
+      check runs `git show
+      origin/claude/deepreason-p-s1-commitments-wowcib:...` and that branch
+      is absent from this shallow clone:
+      ```
+      $ git rev-parse --verify origin/claude/deepreason-p-s1-commitments-wowcib
+      fatal: Needed a single revision
+      $ python experiments/2026-09-01-defect-judge-canary-compile-gap/price_compile_gap.py --expect fixed
+      subprocess.CalledProcessError: Command '['git', 'show',
+        'origin/claude/deepreason-p-s1-commitments-wowcib:...']'
+        returned non-zero exit status 128
+      ```
+      Reproduced as environment rather than assumed: `git diff --stat
+      e91f4fcc3..HEAD -- docs/map/INV-frozen-surfaces.md
+      docs/map/CON-run-identity.md docs/map/SEAM-llm-x-rules.md` is EMPTY —
+      all three failing documents are byte-identical to the base commit, and
+      the `:736` check text is byte-identical too. Carried to VALIDATION.md
+      as a proposed new shallow-clone baseline row, not fixed here (the
+      audit family owns baselines).
+
+      **`INV-frozen-surfaces.md:364` — the branch tripwire that fires when a
+      branch touches a frozen path — is ABSENT from the failure list, i.e.
+      GREEN.** That is the instruction's own required condition, and it is
+      the independent confirmation that decisions (1)-(4) held so far.
+
+      `--links`: 0 dangling, 76 documents. `--audit`: the one baseline
+      finding, none naming the new seam document.
 
 ## Phase 1b — the amendment pass (paperwork, no code)
 
@@ -205,7 +265,7 @@ print('ok')"` -> `ok`
 
 ## Phase 1c — the CRITIC golden, captured before any refactor exists
 
-- [ ] 7. (S10.4, §17.3) Capture the critic golden from the BASE COMMIT.
+- [x] 7. (S10.4, §17.3) Capture the critic golden from the BASE COMMIT.
       `tests/fixtures/crit_pack_legacy_v0/` holding, for fixed committed
       inputs, the exact bytes this window's base produces from
       `render_crit_pack` — at minimum one MINIMAL case (a target and its
@@ -217,12 +277,46 @@ print('ok')"` -> `ok`
       -> `2` or more, AND the thirteen critic section ids appear across the
       fixtures
 
-- [ ] 8. (S10.4, §17.3) [COMMIT] Write
+      DONE 2026-09-03, before any refactor exists. Inputs are literals in
+      `tests/crit_pack_golden_cases.py`; four cases: `minimal` (a target with
+      no support chain, no attackers, no optional context), `maximal`,
+      `withheld`, `legacy_layout`.
+      ```
+      $ python -c "... (the done-criterion) ..."
+      4
+      thirteen critic sections: all present
+      plus: ['context-withheld', 'question',
+             'reference-menu-candidates-evidence-refs-block']
+      ```
+
+- [x] 8. (S10.4, §17.3) [COMMIT] Write
       `tests/test_crit_pack_legacy_golden.py` asserting `render_crit_pack`
       reproduces each fixture byte-for-byte, and prove it can FAIL against a
       one-character mutation of a fixture.
       done-when: `python -m pytest tests/test_crit_pack_legacy_golden.py -q`
       -> `0 failed`, AND the pasted RED run of the mutated fixture
+
+      DONE 2026-09-03. GREEN on the tree, both seats together:
+      ```
+      $ python -m pytest tests/test_crit_pack_legacy_golden.py -q
+      .......                                                        [100%]
+      7 passed in 0.18s
+      $ python -m pytest tests/test_crit_pack_legacy_golden.py \
+            tests/test_conj_pack_legacy_golden.py -q
+      ...............                                                [100%]
+      15 passed in 0.49s
+      ```
+      RED against a ONE-CHARACTER mutation of the critic's `maximal.txt`
+      (`TARGET COMMITMENTS` -> `TARGET COMMITMENTT`), then restored:
+      ```
+      FAILED tests/test_crit_pack_legacy_golden.py::
+        test_the_default_render_is_byte_identical_to_the_committed_golden[maximal]
+      1 failed, 6 passed in 0.19s
+      ```
+      The companion mutation test inside the file uses a DIFFERENT marker
+      (`MACHINE` -> `MACHIME`) so the two mutations cannot collide: the first
+      version shared a marker with the manual proof and reported two failures
+      where one was the proof invalidating the other's precondition.
 
 ## Phase 2 — the seat-section interface (seat-agnostic, §17.1)
 
