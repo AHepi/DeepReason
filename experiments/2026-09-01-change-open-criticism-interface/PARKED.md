@@ -85,8 +85,54 @@ Ready-to-send prompt:
 > confirmed map defects; do not change behavior code or weaken, skip, or xfail
 > a check to make the totals green.
 
-Immediate validation prerequisite: P5, because this tranche cannot deliver
-while either authoritative gate remains RED. After that environment rerun,
-recommended next substantive tranche: P1. It is the remaining pre-existing
+DISCHARGED IN PART, 2026-09-03. The environment rerun this park asked for was
+performed on the rebased tree in a capable container: the unfiltered gate came
+back `4725 passed, 6 skipped, 0 failed`, and every environment row this park
+names (`bc`, `python -I` package visibility, AF_UNIX, network namespaces, the
+shallow-clone git-history rows, the missing judge-canary branch ref) is either
+absent there or was satisfied rather than disposed. `proof/
+revalidation-2026-09-03.txt` is that transcript. What REMAINS parked under P5
+is the map debt alone: the malformed check at `SEAM-llm-x-rules.md:54`, the
+rotted `transport_failure` census at `INV-frozen-surfaces.md:181`, the two
+coverage findings on unchanged seams, the twenty missing `Sweep:` headers, and
+the advisory stale entries. The new instrument-cost row is P6.
+
+Immediate validation prerequisite: NONE — discharged as above, and operator
+amendment R13 (REQUEST.md) disposes the three surviving base-reproducing
+`docs_verify` rows. Recommended next substantive tranche: P1. It is the remaining pre-existing
 behavior most directly at odds with the operator's stated epistemology; source
 integration should not cement that refusal into a new extension path.
+
+## P6 — `CON-run-identity.md:298` costs more than the verifier's own ceiling
+
+Why parked: found during the 2026-09-03 revalidation on a CAPABLE container,
+so it is not an artefact of a restricted host. The map check at
+`docs/map/CON-run-identity.md:298` pairs three greps with a whole pytest file
+(`tests/test_jailbreak_gate.py`). Run alone and serially it PASSES — `9 passed
+in 345.31s (0:05:45)` — but 345 s exceeds `tools/docs_verify.py`'s own 300 s
+per-check ceiling, so inside `docs_verify` it can only ever report `TIMEOUT`.
+The CLAIM is true; the CHECK cannot pass. This is the same pathology
+`experiments/2026-08-31-defect-jailbreak-gate-closure` already fixed once for
+`SUB-application.md` by narrowing the check to the four node ids that exercise
+the claim (`docs/AUDIT_BASELINES.md`, and `docs/ERRATA.md` E67); this row was
+not narrowed with it. Not repaired here: this is a behaviour tranche, and
+`docs/AUDIT_BASELINES.md` may only move in the tranche that moves the value.
+
+Ready-to-send prompt:
+
+> Route to `deepreason-orchestrator`. Goal: `docs/map/CON-run-identity.md:298`
+> reports a real verdict instead of `TIMEOUT`, without weakening what it
+> claims. Evidence: on a 4-CPU container the check passes serially in 345.31 s
+> against `tools/docs_verify.py`'s 300 s per-check ceiling, so it times out
+> under `python tools/docs_verify.py` every time
+> (`experiments/2026-09-01-change-open-criticism-interface/proof/
+> revalidation-2026-09-03.txt` §A). Precedent: the identical fix for
+> `SUB-application.md` in `experiments/2026-08-31-defect-jailbreak-gate-closure`
+> narrowed the check from two whole pytest files to four node ids and took it
+> from ~190 s to ~1 s; `docs/ERRATA.md` E67 records that the row is anchored by
+> what the check RUNS, not by its line number. End state: the check names only
+> the node ids that exercise the continuation/amend integrity clause
+> (`CONTINUE_RECORD_NOT_VERIFIED`, `record_verification_refusal`,
+> `AMEND_RECORD_NOT_VERIFIED`), runs inside the ceiling, is mutation-proven to
+> go RED if the clause is removed from either verb, and
+> `docs/AUDIT_BASELINES.md` is updated in the SAME commit to drop this row.

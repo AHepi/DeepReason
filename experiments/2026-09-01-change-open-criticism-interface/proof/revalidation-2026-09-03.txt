@@ -1,0 +1,226 @@
+REVALIDATION ON THE REBASED TREE — 2026-09-03
+
+Why this transcript exists
+--------------------------
+The 2026-09-01 VALIDATION.md returned FAIL solely because the full gate and
+docs_verify were not zero-failure in the codex container, with every RED row
+reproducing on the untouched tranche base there. Operator amendment R13
+(REQUEST.md, 2026-09-03) disposes base-reproducing rows as environment-only
+baselines and authorizes delivery past them. This transcript re-measures every
+gate on the REBASED tree in a DIFFERENT container, and R13 turns out to be
+needed for three docs_verify rows only: the full gate is zero-failure here.
+
+Rebase
+------
+tranche base (new): 762178b63  ("Merge claude/executor-stop-report-paiagc")
+merge commit:       ee61ba4147 (--no-ff, no conflicts in any file)
+branch:             claude/open-criticism-contracts-delivery-rt5nde
+The codex branch was cut from 3cb51b14e / merge-base be4996329; the merge
+produced NO conflict in src/deepreason/criticism_source.py, in
+tests/test_criticism_source_contract.py, in any of the three owner maps, or in
+scripts/wheel_smoke.py. The socket's contract is byte-identical to the codex
+branch's; nothing was resolved by changing behaviour.
+
+Container
+---------
+python  /usr/local/bin/python, 3.11.15   4 CPUs, 15 GiB RAM
+install python -m pip install -e . pytest pytest-xdist jsonschema
+        --break-system-packages   (deepreason, pytest, xdist, jsonschema all
+        import under `python`, per AUDIT_BASELINES.md's interpreter/pip rule)
+clone   made FULL (`git fetch --unshallow`) and
+        `git fetch origin claude/deepreason-p-s1-commitments-wowcib` before any
+        admitted docs_verify total, because AUDIT_BASELINES.md names both as
+        ENVIRONMENT preconditions, not findings. bc 1.07.1 is present here, so
+        the codex container's SEAM-rules-x-workflow.md:57 row does not arise.
+
+A. BASE CONTROL — untouched 762178b63, this container
+-----------------------------------------------------
+command: python -m pytest tests/ -q -n 4
+result:  4712 passed, 6 skipped in 1720.60s (0:28:40)   exit 0
+
+command: python tools/docs_verify.py           (before unshallow, shallow clone)
+result:  75 documents, 1328 checks — 7 failed
+         SEAM-llm-x-rules.md:54          unparseable check
+         CON-run-identity.md:211/213/215 git-history rows, shallow clone
+         INV-frozen-surfaces.md:181      rotted transport_failure census
+         INV-frozen-surfaces.md:669      judge-canary row, missing branch ref
+         CON-run-identity.md:298         TIMEOUT after 300s
+
+command: python tools/docs_verify.py           (after unshallow + branch fetch)
+result:  75 documents, 1328 checks — 3 failed
+         SEAM-llm-x-rules.md:54
+         INV-frozen-surfaces.md:181
+         CON-run-identity.md:298
+
+The four rows that disappeared were environment preconditions named by
+AUDIT_BASELINES.md, cleared by satisfying them rather than by disposing them.
+
+CON-run-identity.md:298, disposed by its own check run ALONE, per
+AUDIT_BASELINES.md's stated one-command rule:
+  python -c "...CONTINUE_RECORD_NOT_VERIFIED / record_verification_refusal /
+  AMEND_RECORD_NOT_VERIFIED assertions..." && python -m pytest
+  tests/test_jailbreak_gate.py -q
+  -> 9 passed in 345.31s (0:05:45), exit 0
+The CLAIM holds. The check costs 345 s against the verifier's own 300 s
+per-check ceiling (tools/docs_verify.py), so it cannot pass inside
+docs_verify on this box even serially. This is an instrument-cost row, not a
+code defect, and it is PARKED (PARKED.md P6) rather than repaired here.
+
+B. HEAD — the rebased tree
+--------------------------
+command: python -m pytest tests/ -q -n 4
+result:  4725 passed, 6 skipped in 1974.36s (0:32:54)   exit 0
+
+  DELTA vs base: +13 passed, +0 failed, +0 skipped.
+  The 13 are exactly tests/test_criticism_source_contract.py's 13 tests.
+  ZERO full-gate rows require R13 in this container.
+
+command: python tools/docs_verify.py
+result:  75 documents, 1331 checks — 3 failed
+         SEAM-llm-x-rules.md:54
+         INV-frozen-surfaces.md:181
+         CON-run-identity.md:298
+
+  DELTA vs base: +3 checks (the tranche's three new owner-map checks), and the
+  failure LIST is IDENTICAL row for row. No changed owner map appears in it.
+  All three rows reproduce on the untouched base in this same container and
+  are therefore disposed as environment-only baselines under R13; two of them
+  (SEAM-llm-x-rules.md:54, INV-frozen-surfaces.md:181) are additionally
+  recorded baselines in docs/AUDIT_BASELINES.md.
+
+C. TARGETED ACCEPTANCE CHECKS
+-----------------------------
+S1  pytest tests/test_criticism_source_contract.py -q -k 'closed_contract or
+    arbitrary_content or host_bound or operational_result'
+    -> 8 passed, 5 deselected in 0.06s
+S2  pytest ... -k 'registry or invocation or decline or unavailable or failure
+    or independent'
+    -> 4 passed, 9 deselected in 2.95s
+S3  pytest ... -k human_description
+    -> 1 passed, 12 deselected in 0.06s
+S4  pytest tests/test_criticism_source_contract.py tests/test_judge_canary_dispatch.py
+    tests/test_v6_manifest_defended_trial.py -q
+    -> 16 passed in 6.49s
+    (the defended-trial ring is unchanged and green: the socket has not made
+    source success, decline, absence or failure a prerequisite for defended
+    trial)
+
+D. OWNER-MAP EXACT CHECKS (the three checks this tranche added)
+---------------------------------------------------------------
+CON-criticism-source.md  -> 6 passed, 7 deselected in 2.93s
+CON-conjecture-kinds.md  -> 4 passed in 0.07s
+CON-authority.md         -> 3 passed in 0.07s
+
+E. MUTATION PROOFS, all five re-run on the rebased tree
+-------------------------------------------------------
+Each pair is a deliberate mutant proven RED, then the restored tree proven
+GREEN. Backups were taken outside the repo and restored byte-for-byte;
+`git status --porcelain` was EMPTY afterwards.
+
+ 1. score mutant        (add `score: float | None = None` to
+                         CriticismContributionV1)
+    RED  test_contract_fields_are_closed_contract   1 failed in 0.09s  exit 1
+    GREEN after restore                             1 passed in 0.06s  exit 0
+ 2. priority mutant     (add `priority: int | None = None` to
+                         CriticismSourceManifestV1)
+    RED  test_contract_fields_are_closed_contract   1 failed in 0.09s  exit 1
+    GREEN after restore                             1 passed in 0.06s  exit 0
+ 3. absolute reverse-import mutant
+                        (`from deepreason import criticism_source` in
+                         src/deepreason/__init__.py)
+    RED  test_registry_is_deliberately_unwired_from_shipped_graph
+                                                    1 failed in 3.02s  exit 1
+    GREEN after restore                             1 passed in 2.85s  exit 0
+ 4. relative reverse-import mutant
+                        (`from . import criticism_source` in
+                         src/deepreason/__init__.py)
+    RED  test_registry_is_deliberately_unwired_from_shipped_graph
+                                                    1 failed in 2.99s  exit 1
+    GREEN after restore (both directions)           2 passed in 2.96s  exit 0
+ 5. outbound relative dependency mutant
+                        (`from . import config` in criticism_source.py)
+    RED  test_module_has_no_deepreason_dependency   1 failed in 0.12s  exit 1
+    GREEN after restore                             1 passed in 0.06s  exit 0
+
+This demonstrates the enumerated boundary on this tree. It is not suite-wide
+certification, and no aggregate kill score is claimed — per SPEC S4's own
+disposition of `asymmetry-in-test-suite-certification(1).md` and
+`self-confirming-checks.md`.
+
+F. BLAST RADIUS, FROZEN SURFACES, BUDGET, PACKAGING
+----------------------------------------------------
+git diff --name-only 762178b63 -- src/deepreason/capabilities/state.py
+  src/deepreason/harness.py src/deepreason/invariants.py
+  src/deepreason/verification src/deepreason/run_manifest.py
+  src/deepreason/qualification.py src/deepreason/llm/firewall.py
+  -> (empty output)
+
+python tools/blast_radius.py --files src/deepreason/criticism_source.py
+  tests/test_criticism_source_contract.py docs/map/CON-criticism-source.md
+  docs/map/CON-conjecture-kinds.md docs/map/CON-authority.md
+  scripts/wheel_smoke.py --symbols describe_criticism_sources
+  invoke_criticism_source
+  -> "frozen_surface_contacts": []
+     "frozen_adjacent_contacts": []
+     "frozen_surface_verdict": "CLEAR"
+     reachability: describe_criticism_sources UNREACHABLE,
+                   invoke_criticism_source   UNREACHABLE
+  UNREACHABLE is the DECLARED phase-one boundary (SPEC "Out of scope"), not
+  hidden dead wiring: the functions are a library interface exercised directly
+  by their contract tests, and tests/test_criticism_source_contract.py::
+  test_registry_is_deliberately_unwired_from_shipped_graph PINS it.
+
+complete branch name-status vs 762178b63: 3 modified owner maps, modified
+  scripts/wheel_smoke.py, added src/deepreason/criticism_source.py, added
+  tests/test_criticism_source_contract.py, plus tranche artifacts. Nothing
+  else. No committed run root was opened, edited, or replayed.
+
+python tools/diff_budget.py 762178b63 --ceiling 280 --paths <declared areas>
+  -> {"areas": {"src/deepreason/criticism_source.py": 140,
+                "tests/test_criticism_source_contract.py": 114,
+                "docs/map/CON-criticism-source.md": 10,
+                "docs/map/CON-conjecture-kinds.md": 6,
+                "docs/map/CON-authority.md": 8,
+                "scripts/wheel_smoke.py": 2},
+      "total_insertions": 280, "ceiling": 280, "verdict": "WITHIN"}
+
+python scripts/wheel_smoke.py
+  -> wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+     points, module parity, MCP registration, and exact MCP schemas   exit 0
+  The provider-facing operational surface did not move, so
+  scripts/wheel_operational_smoke.py is not owed.
+
+G. AUXILIARY MAP MODES
+----------------------
+python tools/docs_verify.py --audit    -> 1 finding: SEAM-llm-x-rules.md:54
+                                          (the recorded baseline, unchanged)
+python tools/docs_verify.py --links    -> 0 dangling reference(s), 75 documents
+python tools/docs_verify.py --coverage -> 7 seams swept, 20 without a Sweep:
+                                          header, 2 findings — both on
+                                          UNCHANGED seams
+                                          (SEAM-periphery-x-verification.md,
+                                          SEAM-schools-x-scratch.md); parked as
+                                          map maintenance, not repaired in a
+                                          behaviour tranche.
+
+H. STEP 11, closed on its own done-criterion
+---------------------------------------------
+python -m pytest tests/test_v6_engaged_public_defaults.py::
+  test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal -q
+  -> 1 passed in 3.15s, exit 0
+The codex container's `DENIED / runner_unavailable` was a containment
+restriction there. It does not exist here, so the row is CLOSED GREEN rather
+than disposed.
+
+RESIDUE — what this transcript does NOT establish
+--------------------------------------------------
+- It does not prove the socket works in a live run: the socket is deliberately
+  unwired and has no graph consumer (SPEC "Out of scope"). Nothing in this
+  tranche was exercised against a provider or a committed run root.
+- It does not certify the suite; it establishes the five enumerated
+  constraints on this tree.
+- It does not close C1 globally: the shipped `formally_backed` prose refusal
+  remains parked (PARKED.md P1).
+- The three surviving docs_verify rows remain RED. They are disposed under R13
+  as base-reproducing environment/baseline rows, which is a statement about
+  ATTRIBUTION, not a claim that the checks passed.

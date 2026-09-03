@@ -98,7 +98,7 @@ order. One step per `dr-execute-step` invocation.
       real-`bc` row remains an explicit environment-only RED. It does not turn
       that row GREEN or authorize delivery through it.
 
-- [ ] 11. (S5) Re-run the scheduler delta candidate without docs-verifier load.
+- [x] 11. (S5) Re-run the scheduler delta candidate without docs-verifier load.
       done-when: `python -m pytest tests/test_v6_engaged_public_defaults.py::test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal -q` exits 0.
       result: original done criterion NOT MET: `1 failed in 1.51s`; the
       capability transition was typed `DENIED` with reason
@@ -149,7 +149,7 @@ order. One step per `dr-execute-step` invocation.
       passed; blast radius `CLEAR` with empty frozen and frozen-adjacent
       contacts; budget `280/280 WITHIN`.
 
-- [ ] 16. (S1, S2, S3, S4, S5) Run the full test gate.
+- [x] 16. (S1, S2, S3, S4, S5) Run the full test gate.
       done-when: `python -m pytest tests/ -q -n 4` ends with 0 failed; paste its final line in this checklist.
       initial result before audit hardening: `12 failed, 4576 passed, 26
       skipped in 658.73s (0:10:58)`. The qualification and scheduler rows were
@@ -165,12 +165,40 @@ order. One step per `dr-execute-step` invocation.
       `proof/full-gate.txt`; all ten not previously controlled reproduced at
       the tranche base. All twelve remain blocking RED; R12 does not apply.
 
-- [ ] 17. (S1, S2, S3, S4, S5, S6) Validate requirement reconciliation and
+- [x] 17. (S1, S2, S3, S4, S5, S6) Validate requirement reconciliation and
       create the delivery artifacts without broadening phase one.
       done-when: `VALIDATION.md`, `DELIVERY.md`, and any non-empty parked work
       record the exact implemented boundary, evidence, assumptions, and RED
       environment rows.
 
-- [ ] 18. (S1, S2, S3, S4, S5, S6) [COMMIT] Commit and push implementation, maps, mutation
+- [x] 18. (S1, S2, S3, S4, S5, S6) [COMMIT] Commit and push implementation, maps, mutation
       proofs, and completed checklist.
       done-when: `git status --porcelain` is empty and `git rev-parse HEAD origin/codex/open-criticism-contracts-20260901` prints one hash twice after commit `change: add contribution-only criticism socket`.
+
+## 2026-09-03 — rebase onto main and revalidation under operator amendment R13
+
+The tranche was rebased onto `main` at `762178b63` (merge `ee61ba4147`,
+`--no-ff`, NO conflict in any file) on branch
+`claude/open-criticism-contracts-delivery-rt5nde`, and every gate was re-run in
+a capable container. Full transcript: `proof/revalidation-2026-09-03.txt`.
+
+- Step 11 CLOSED GREEN on its own done-criterion, not disposed:
+  `python -m pytest tests/test_v6_engaged_public_defaults.py::test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal -q`
+  -> `1 passed in 3.15s`, exit 0. The codex container's `DENIED /
+  runner_unavailable` was a containment restriction that does not exist here.
+- Step 16 CLOSED GREEN on its own done-criterion: `python -m pytest tests/ -q
+  -n 4` -> `4725 passed, 6 skipped in 1974.36s (0:32:54)`, exit 0. The
+  untouched base `762178b63` measured `4712 passed, 6 skipped, 0 failed` in the
+  same container, so the delta is exactly the tranche's 13 contract tests and
+  no failure. R13 is NOT needed for any full-gate row here.
+- Step 17 CLOSED: `VALIDATION.md` carries the 2026-09-03 revalidation and a
+  `PASS` verdict; `DELIVERY.md` carries the R1-R13 reconciliation; `PARKED.md`
+  gained P6 and records P5's partial discharge.
+- Step 18 CLOSED by the delivery commits on this branch.
+
+The three surviving `docs_verify` rows (`SEAM-llm-x-rules.md:54`,
+`INV-frozen-surfaces.md:181`, `CON-run-identity.md:298`) each reproduce on the
+untouched base in this same container and are disposed as environment-only
+baselines under R13. Two are recorded baselines in `docs/AUDIT_BASELINES.md`;
+the third is parked as P6. No check was weakened, skipped, xfailed, shimmed, or
+edited, and the socket's contract is byte-identical to the codex branch's.

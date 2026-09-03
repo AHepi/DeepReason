@@ -269,14 +269,158 @@ machine-interpreted epistemic or representation-control field. Content and
 codec are transport data; the boundary neither derives a category nor decides
 validity.
 
-## Verdict: FAIL
+## Verdict (2026-09-01, SUPERSEDED): FAIL
 
-The targeted contract, mutation, defended-ring, wheel, owner-map, budget, and
-blast checks pass. Delivery is nevertheless blocked because the unfiltered
-test gate and authoritative documentation gate are not zero-failure. Base
-attribution explains those rows but cannot convert them into PASS, and R12 is
-limited to continuing past unavailable real `bc` during validation.
+Retained verbatim as history; superseded by the 2026-09-03 revalidation below.
 
-Unblocking requires a capable environment in which both authoritative gates
-reach zero, or a new operator amendment that explicitly disposes these exact
-remaining rows. No such amendment is inferred from “Keep going.”
+> The targeted contract, mutation, defended-ring, wheel, owner-map, budget, and
+> blast checks pass. Delivery is nevertheless blocked because the unfiltered
+> test gate and authoritative documentation gate are not zero-failure. Base
+> attribution explains those rows but cannot convert them into PASS, and R12 is
+> limited to continuing past unavailable real `bc` during validation.
+>
+> Unblocking requires a capable environment in which both authoritative gates
+> reach zero, or a new operator amendment that explicitly disposes these exact
+> remaining rows. No such amendment is inferred from "Keep going."
+
+Both of the stated unblocking conditions have since been met, independently of
+each other: the operator issued amendment R13, AND the tranche was re-measured
+in a capable environment where the full gate does reach zero.
+
+# Revalidation, 2026-09-03 — rebased tree, capable container, amendment R13
+
+Branch: `claude/open-criticism-contracts-delivery-rt5nde`
+Tranche base (new): `762178b63`
+Merge: `ee61ba4147`, `--no-ff`, from `codex/open-criticism-contracts-20260901`
+Full transcript: `proof/revalidation-2026-09-03.txt`
+
+## Rebase — no conflict, no behaviour change
+
+The merge onto `main` at `762178b63` produced NO conflict in
+`src/deepreason/criticism_source.py`, in
+`tests/test_criticism_source_contract.py`, in `docs/map/CON-criticism-source.md`,
+`docs/map/CON-conjecture-kinds.md`, `docs/map/CON-authority.md`, or in
+`scripts/wheel_smoke.py`. The socket's contract is byte-identical to the codex
+branch's. Nothing was resolved by changing the socket's contract, because
+nothing had to be resolved at all.
+
+## Authority for this revalidation
+
+`REQUEST.md` R13 (operator, 2026-09-03), recorded verbatim before it was acted
+on:
+
+> Operator amendment R13: every full-gate and docs_verify RED row that
+> reproduces on the untouched tranche base under the same container is
+> an environment-only known-not-yours baseline. Record each such row
+> with its base-reproduction evidence, dispose them as baseline, and
+> proceed to delivery. This authorizes no row that does not reproduce on
+> the base.
+
+R13 is applied here to THREE `docs_verify` rows and to NO full-gate row.
+
+## Full gate — the S5-class blocker is gone, not disposed
+
+| tree | command | result |
+|---|---|---|
+| base `762178b63`, untouched | `python -m pytest tests/ -q -n 4` | **4712 passed, 6 skipped, 0 failed** (1720.60s) |
+| head, rebased | `python -m pytest tests/ -q -n 4` | **4725 passed, 6 skipped, 0 failed** (1974.36s) |
+
+PASS. The delta is `+13 passed, +0 failed` — exactly the thirteen tests in
+`tests/test_criticism_source_contract.py`. The twelve failing nodeids recorded
+in `proof/full-gate.txt` were properties of the codex container (no `python -I`
+package visibility, no AF_UNIX permission, no unshared network namespace, a
+different absolute Python toolchain path in the qualification subject digest,
+nested containment restrictions). None of them exists here. This row is closed
+GREEN on its own done-criterion; R13 is not invoked for it.
+
+## docs_verify — three rows, all base-reproducing, all disposed under R13
+
+| tree | checks | failed |
+|---|---|---|
+| base `762178b63`, shallow clone | 1328 | 7 |
+| base `762178b63`, after `git fetch --unshallow` + judge-canary branch ref | 1328 | 3 |
+| head, rebased | **1331** | **3** |
+
+The four rows that disappeared between the first and second base runs
+(`CON-run-identity.md:211/213/215`, `INV-frozen-surfaces.md:669`) are named by
+`docs/AUDIT_BASELINES.md` as ENVIRONMENT PRECONDITIONS rather than findings.
+They were SATISFIED, not disposed.
+
+`+3` checks is exactly this tranche's three new owner-map checks, and the
+failure LIST is IDENTICAL row for row between base and head. No changed owner
+map appears in it.
+
+| row | reproduces on untouched base, same container | disposition |
+|---|---|---|
+| `SEAM-llm-x-rules.md:54` — unparseable check, lost closing backtick | yes | R13 baseline; also a recorded baseline in `docs/AUDIT_BASELINES.md`, parked P3 of `experiments/2026-08-29-fix-docs-verify-multiline-checks/` |
+| `INV-frozen-surfaces.md:181` — rotted `transport_failure` census | yes | R13 baseline; also a recorded baseline in `docs/AUDIT_BASELINES.md`, parked P-D3 of `experiments/2026-08-30-fix-rotted-map-checks/` |
+| `CON-run-identity.md:298` — `TIMEOUT after 300s` | yes | R13 baseline. Disposed by its own one-command rule: run ALONE and serially it PASSES, `9 passed in 345.31s`. The claim holds; the check costs more than `docs_verify`'s own 300 s per-check ceiling, so it can never pass inside the verifier on this box. Instrument cost, not a code defect. Newly parked as **P6**. |
+
+PASS under R13. This is a statement about ATTRIBUTION: the three checks did not
+pass, and nothing was weakened, skipped, xfailed, shimmed, or edited to make
+them appear to.
+
+## Every other acceptance check, re-run on the rebased tree
+
+| item | command | result |
+|---|---|---|
+| S1 | contract ring `-k 'closed_contract or arbitrary_content or host_bound or operational_result'` | 8 passed, 5 deselected — PASS |
+| S2 | `-k 'registry or invocation or decline or unavailable or failure or independent'` | 4 passed, 9 deselected — PASS |
+| S3 | `-k human_description` | 1 passed, 12 deselected — PASS |
+| S4 | contract + `test_judge_canary_dispatch` + `test_v6_manifest_defended_trial` | 16 passed — PASS |
+| S4 | five mutation pairs, all RED then GREEN, tree restored, `git status --porcelain` empty | PASS |
+| S5 | `CON-criticism-source` exact check | 6 passed, 7 deselected — PASS |
+| S5 | `CON-conjecture-kinds` exact check | 4 passed — PASS |
+| S5 | `CON-authority` exact check | 3 passed — PASS |
+| S5 | `python tools/docs_verify.py` | 3 failed, all R13 baseline — PASS under R13 |
+| S6 | four alphaXiv sources disposed in `SPEC.md`, none adopted as authority | PASS (unchanged) |
+| — | `python scripts/wheel_smoke.py` | passed, exit 0 — PASS |
+| — | frozen-surface `git diff --name-only` over all seven declared paths | empty — PASS |
+| — | `python tools/blast_radius.py` | `CLEAR`, frozen contacts `[]`, frozen-adjacent contacts `[]` — PASS |
+| — | `python tools/diff_budget.py 762178b63 --ceiling 280` | `280/280 WITHIN` — PASS |
+| — | `docs_verify --links` | 0 dangling, 75 documents — PASS |
+| — | `docs_verify --audit` | 1 finding, the recorded baseline — baseline |
+| — | `docs_verify --coverage` | 2 findings, both on UNCHANGED seams — parked |
+
+The five mutation pairs are: forbidden `score` on `CriticismContributionV1`;
+forbidden `priority` on `CriticismSourceManifestV1`; absolute reverse import
+`from deepreason import criticism_source`; relative reverse import `from .
+import criticism_source`; outbound relative dependency `from . import config`.
+Each mutant exited 1 and each restore exited 0.
+
+## Scope — nothing was widened
+
+The socket remains deliberately unwired (P2), formalism does not outrank prose
+(R4), and nothing added a score, rank, or heuristic (R6, R8). Blast radius
+reports `describe_criticism_sources` and `invoke_criticism_source` as
+`UNREACHABLE`, which is the DECLARED phase-one boundary pinned by
+`test_registry_is_deliberately_unwired_from_shipped_graph`, not hidden dead
+wiring. The complete branch `name-status` against `762178b63` is three modified
+owner maps, one modified `scripts/wheel_smoke.py`, two added files, and tranche
+artifacts. Nothing else. No committed run root was opened, edited, or replayed.
+
+## What changed in the tranche's own artifacts
+
+`REQUEST.md` gained R13 verbatim. `CHECKLIST.md` closed steps 11, 16, 17, 18 on
+their own done-criteria. `PARKED.md` gained P6 and records P5's partial
+discharge — the capable-environment rerun P5 asked for was performed, so what
+remains under P5 is map debt alone. `proof/revalidation-2026-09-03.txt` is new.
+No earlier artifact text was rewritten; the 2026-09-01 FAIL verdict stands
+above as history.
+
+## Residue — what this does NOT establish
+
+The socket has no graph consumer and was not exercised against a provider or a
+committed run root; "it works" is not claimed, only that the boundary holds.
+The mutation evidence establishes five enumerated constraints on this tree, not
+suite-wide certification, and no aggregate kill score is claimed. C1 is not
+closed globally: the shipped `formally_backed` prose refusal remains parked as
+P1. The three `docs_verify` rows remain RED and disposed, not passing.
+
+## Verdict: PASS
+
+Every acceptance check in `SPEC.md` is green on the rebased tree. The full gate
+is zero-failure and no full-gate row needed R13. The only remaining RED rows
+are three `docs_verify` rows that reproduce identically on the untouched base
+in this same container and are therefore disposed as environment-only baselines
+under R13. No red row appeared that did not exist on the base.
