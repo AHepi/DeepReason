@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a conflation of 'falsifiability' (logical content) with 'corroboration' (historical survival), creating a pragmatic contradiction. The target argues we prefer better-corroborated theories because they are 'more falsifiable.' However, in Popper's framework, a theory that has survived severe tests (high corroboration) has often had its most accessible falsifiers removed or its domain restricted by auxiliary hypotheses, potentially reducing its immediate testability compared to a fresh, bold conjecture. More critically, if the goal is strictly 'learning velocity' via rapid failure, the rational Popperian strategy would be to act on the *boldest, least corroborated* theory to maximize the chance of quick refutation. By preferring the *survivor* (the well-corroborated one) for action, the scientist is implicitly treating past survival as a marker of future reliability or 'safety' for practical purposes. This smuggles induction back in under the guise of 'critical convention,' as it uses past performance (corroboration) to predict future utility, which is precisely the inductive move Popper sought to reject. The target fails to explain why the 'survivor' is the preferred vehicle for risk if the aim is purely to expose error, rather than the 'fresh conjecture'.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between logical falsifiability (content) and historical corroboration (report of test outcomes).",
+      "premise_evidence": null,
+      "successor_question": "If the goal is maximizing learning velocity through refutation, why does the Popperian framework not recommend acting on the least corroborated (boldest) theory rather than the best corroborated one?"
+    }
+  ]
+}

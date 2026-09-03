@@ -1,0 +1,83 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a methodological rule for selecting the most 'testable' and 'informative' target for falsification, thereby maximizing verisimilitude (truth-likeness) without assigning probability. This stance survives the charge of smuggling induction only if one accepts the cost of abandoning any guarantee of practical reliability for action, reducing scientific preference to a bet on where error is most likely to be found rather than where truth is most likely to reside.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'probability' (logical likelihood based on content) and 'corroboration' (historical record of surviving severe tests). It posits that preferring a highly corroborated theory is rational because high corroboration indicates high empirical content and thus high testability. By choosing the theory with the highest content that has not yet been falsified, scientists maximize the potential growth of knowledge (verisimilitude) even if the theory is false. The mechanism relies on the normative rule: 'Always test the boldiest conjecture,' which justifies preference without implying the conjecture is probable to be true or to remain unfalsified.",
+    "counterconditions": [
+      "If the Tichý-Miller proof demonstrates that verisimilitude cannot be coherently defined for false theories, then the goal of maximizing verisimilitude becomes unintelligible, collapsing the defense.",
+      "If 'acting on' a theory (e.g., engineering) inherently requires an assumption of reliability that corroboration cannot provide without induction, then the preference is pragmatically indefensible on Popperian terms.",
+      "If the analogy to natural selection is interpreted as providing a normative justification rather than a descriptive explanation of survival, it commits the naturalistic fallacy Popper sought to avoid."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The candidate acknowledges the Tichý-Miller critique of Popper's *formal* definition of verisimilitude but rebuts the claim that this destroys the *defense*. The defense here shifts reliance from the failed quantitative calculus of truth-content minus falsity-content to the qualitative methodological rule of preferring higher content/higher testability. The coherence of the *goal* (verisimilitude) remains intact as a regulative ideal even if the specific 1974 formalization was flawed; later refinements (e.g., by Kuipers or Niiniluoto) address the logical gaps without reintroducing induction."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, the candidate argues that the failure of the specific logical definition does not invalidate the intuitive concept of truth-likeness as a non-probabilistic aim. The defense does not rely on the broken formalism but on the structural advantage of high-content theories in the search for truth, which remains valid regardless of the measurement problem of false theories."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "Revised to explicitly separate the descriptive force of the evolutionary analogy from the normative justification. The candidate now clarifies that natural selection explains *why* science progresses (descriptive), but the normative core is derived strictly from the logic of falsification and the definition of rationality as adherence to critical methods, not from the biological outcome itself."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "The claim and mechanism have been restructured to explicitly present the 'strongest case' for the defense (methodological rule/testability) and the 'strongest case' for the indictment (pragmatic failure/induction smuggling) before rendering the verdict. The dialectical structure is now embedded in the flow of the mechanism and counterconditions."
+      },
+      {
+        "handle": "343e10b5bcf5a8a8cda3a18e5ff5334fcad05a2527c61f22d4b83ec4299bec0b",
+        "kind": "rebutted",
+        "note": "The candidate rebuts the conflation charge by distinguishing between 'methodological preference' (which Popper defends) and 'pragmatic reliance' (which Popper admits requires a decision outside logic). The defense holds that Popper's terms justify the *choice* of theory for testing and tentative acceptance, but explicitly deny that this choice guarantees the reliability needed for bridge-building; thus, the tension is resolved by admitting that acting on theories involves a non-rational (or extra-logical) decision element, which is consistent with Popper's rejection of foundationalism."
+      },
+      {
+        "handle": "39376b7fe8717864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "Reiterated that the analogy is illustrative of the *process* of elimination, not the *justification* of the norm. The normative justification comes solely from the imperative to learn from errors, which favors theories that have survived severe tests because they have withstood attempts to show them wrong, not because they are biologically 'fit' in a moral sense."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6",
+        "kind": "revised",
+        "note": "Clarified that the defense does not ignore verisimilitude but reinterprets it as a qualitative directionality rather than a quantifiable state. The false dichotomy is dissolved by arguing that rule-adherence *is* the path to verisimilitude in Popper's system, making them co-extensive rather than mutually exclusive options."
+      },
+      {
+        "handle": "42eaa01a96703402341867220e2fe7e8047d04b0761bc0aafe6c66cb5a39057c",
+        "kind": "rebutted",
+        "note": "Addressed by noting that while the *measurement* of verisimilitude between false theories is problematic, the *preference* for theories with greater empirical content (which correlates with potential verisimilitude) remains logically sound. The collapse of the metric does not entail the collapse of the directional heuristic."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_process",
+        "critical_rationality_framework"
+      ],
+      "shared_structure": [
+        "Elimination of unfit variants leads to survival of the remaining.",
+        "Survival is retrospective, not predictive of future environment changes.",
+        "Preference is based on past performance under stress, not inherent probability of correctness."
+      ],
+      "disanalogies": [
+        "Biological survival is descriptive/causal; scientific preference is normative/methodological.",
+        "Organisms do not choose to be tested; scientists actively seek severe tests.",
+        "Evolution has no goal of 'truth'; science has the regulative ideal of verisimilitude."
+      ],
+      "transfer_claims": [
+        "Just as we prefer the organism that survived a plague for breeding without assuming it is immune to all future diseases, we prefer the corroborated theory without assuming it is probable.",
+        "The 'fitness' of a theory is its capacity to withstand falsification, analogous to an organism's resistance to environmental stressors."
+      ],
+      "overturn_conditions": [
+        "If biological survival were shown to be purely random with no correlation to fitness, the analogy would fail.",
+        "If scientific progress were shown to rely on inductive accumulation rather than conjecture and refutation."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

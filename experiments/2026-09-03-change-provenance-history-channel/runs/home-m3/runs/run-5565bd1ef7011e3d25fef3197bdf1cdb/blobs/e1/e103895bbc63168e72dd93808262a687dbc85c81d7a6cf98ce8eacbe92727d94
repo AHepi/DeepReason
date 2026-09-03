@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that preference is a 'non-rational, psychological commitment' fails to address the problem's specific challenge regarding Popper's own behavior. The prompt notes that Popper himself preferred better-corroborated theories when choosing which theory to *act on*. If this preference were merely a non-rational psychological leap indistinguishable in practice from acting on higher probability, it would functionally reintroduce the inductive principle Popper rejected: that past success (corroboration) is a reliable guide for future action. By labeling it 'non-rational,' the target avoids explaining why Popper specifically chose the *better-corroborated* theory rather than any other theory for action. If the choice is guided by corroboration status, it implies a rational link between past test survival and future reliability, which smuggles induction back in under the guise of 'psychological necessity.' The target does not successfully distinguish this from implicit probabilistic belief, as the systematic preference for corroborated theories in action contexts mirrors the very inductive inference Popper sought to eliminate.",
+      "counterexample": null,
+      "premise": "Popper preferred better-corroborated theories when choosing which theory to act on, implying a systematic link between past test survival and future action choices.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories in action is non-rational, what prevents it from being an arbitrary leap rather than a systematic reliance on past performance, and how does this systematic reliance differ functionally from induction?"
+    }
+  ]
+}

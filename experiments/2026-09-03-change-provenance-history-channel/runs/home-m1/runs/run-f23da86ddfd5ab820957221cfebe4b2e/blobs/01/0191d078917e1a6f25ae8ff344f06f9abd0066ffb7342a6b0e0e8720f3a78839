@@ -1,0 +1,189 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, methodological rule of 'conjecture and refutation' that maximizes error elimination without assigning probability.",
+      "mechanism": "Error Elimination Principle: Preference is based on the logical content and severity of tests passed, not on an expectation of future success derived from past frequency. We prefer the theory that has survived the most severe attempts at falsification because it contains more empirical content and has eliminated more potential errors, not because it is 'more likely' to be true.",
+      "counterconditions": [
+        "If the act of preferring a theory for future action implicitly assumes the future will resemble the past (uniformity of nature), then the preference is inductive.",
+        "If 'verisimilitude' (truth-likeness) cannot be formally defined without relying on probabilistic assumptions, then the objective ground for preference collapses."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate does not rely on 'metaphysical faith' but on the logical asymmetry between verification and falsification. The preference is a decision to test the boldst conjecture, not a belief in its probable truth."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "While verisimilitude is relevant, this argument grounds preference in 'severity of tests' and 'empirical content' which are definable without the failed formal definition of verisimilitude. The false dilemma charge is rejected because a third option exists: pragmatic selection based on informational yield."
+        },
+        {
+          "handle": "[SRC_010] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate distinguishes between 'objectivity of method' (the rule of preferring the best-tested) and 'objectivity of result' (the theory being true). Popper defends the former as rational without claiming the latter is guaranteed."
+        },
+        {
+          "handle": "[SRC_013] against SRC_003",
+          "kind": "rebutted",
+          "note": "Projecting past survival into future preference is not an inductive leap if the justification is 'we have learned where the errors are not,' rather than 'nature is uniform.' It is a negative knowledge claim, not a positive prediction."
+        },
+        {
+          "handle": "[SRC_002] against SRC_001",
+          "kind": "rebutted",
+          "note": "The dichotomy is false. The alternative foundation is 'corroboration as a report of past performance' which informs the choice of which theory to subject to new tests, not a guarantee of its future validity."
+        },
+        {
+          "handle": "[SRC_015] against SRC_014",
+          "kind": "departure_declared",
+          "note": "This candidate explicitly departs from relying on the formal concept of 'verisimilitude' as the sole ground, instead anchoring in 'severity of tests' and 'informational content' to avoid the logical incoherence cited."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "Functional identity is not logical identity. While the *behavior* looks like induction, the *justification* differs fundamentally: one relies on the principle of uniformity, the other on the logic of falsification and the growth of knowledge."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "Same as [SRC_015]; the candidate avoids the specific formal definition of verisimilitude that failed, using 'degree of corroboration' as a historical report card rather than a truth-proxy."
+        }
+      ],
+      "optional_refs": ["SRC_003", "SRC_007"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction, rendering Popper's system internally inconsistent when applied to practical scientific action.",
+      "mechanism": "The Pragmatic Contradiction: Any decision to act on a theory (e.g., build a bridge using Newtonian physics) entails an expectation that the theory will hold in the untested future. This expectation cannot be derived from past falsifications alone without assuming the uniformity of nature, which is the very principle of induction Popper rejected.",
+      "counterconditions": [
+        "If scientists can act on theories purely as 'unfalsified conjectures' without any expectation of their reliability, then no induction is involved.",
+        "If 'rational action' can be defined solely by the avoidance of known errors rather than the pursuit of likely truths, the inductive leap is bypassed."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_011",
+          "kind": "revised",
+          "note": "Revised to clarify that the 'smuggling' occurs specifically in the transition from 'logical assessment' to 'pragmatic action,' where the agent must assume the future resembles the past to justify the risk taken."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Invoking verisimilitude does not solve the problem because acting on a theory with higher verisimilitude still requires the inductive assumption that higher verisimilitude correlates with future success/safety."
+        },
+        {
+          "handle": "[SRC_010] against SRC_001",
+          "kind": "rebutted",
+          "note": "The distinction between method and result collapses in action. To choose Method A over Method B for a result implies a belief that Method A is more effective, which is an inductive claim about efficacy."
+        },
+        {
+          "handle": "[SRC_013] against SRC_003",
+          "kind": "rebutted",
+          "note": "Agrees that projecting past survival is an inductive leap. The rebuttal is that Popper's denial of this being induction is merely semantic; functionally, it is induction."
+        },
+        {
+          "handle": "[SRC_002] against SRC_001",
+          "kind": "rebutted",
+          "note": "Argues that the 'alternative foundation' Popper proposes is empty when it comes to guiding action. Without induction, there is no rational basis to prefer one unfalsified theory over another for practical purposes."
+        },
+        {
+          "handle": "[SRC_015] against SRC_014",
+          "kind": "rebutted",
+          "note": "Even if verisimilitude is incoherent, the core argument stands: any preference for action implies an inductive expectation. The failure of verisimilitude only strengthens the claim that Popper lacks a non-inductive ground for action."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "Reaffirms that functional identity to induction is sufficient to count as induction in the context of justifying action, regardless of the internal logical labeling."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "The failure of verisimilitude removes Popper's primary defense, leaving the inductive smuggling exposed and undefended."
+        }
+      ],
+      "optional_refs": ["SRC_004", "SRC_013"]
+    },
+    {
+      "claim": "The preference is defensible only if accepted as a 'conventionalist decision' or a 'psychological fact' about scientists, rather than a logically compelled rational necessity, costing Popper the claim that his methodology is uniquely rational compared to induction.",
+      "mechanism": "Conventionalist Rescue: Popper can admit that the preference for corroborated theories is a convention adopted by the scientific community to facilitate progress, similar to choosing axioms. It is not 'true' that we should prefer them, but we *do*, and this convention works. This shifts the ground from epistemology to sociology/psychology.",
+      "counterconditions": [
+        "If the convention itself can be shown to lead to faster error elimination than random choice or preferring less-corroborated theories, then it has a rational (though not logical) grounding.",
+        "If Popper insists the preference is logically necessary, this conventionalist escape route is closed."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_011",
+          "kind": "revised",
+          "note": "Revised to explicitly frame the 'faith' as a sociological convention rather than a metaphysical commitment, thereby sidestepping the charge of unjustified metaphysical assumption."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "This approach accepts the 'false dilemma' charge partially but argues that the third option is 'convention,' not 'verisimilitude.' It ignores verisimilitude entirely."
+        },
+        {
+          "handle": "[SRC_010] against SRC_001",
+          "kind": "rebutted",
+          "note": "Concedes that 'objectivity of result' is lost, but maintains 'objectivity of method' as a shared social norm, not a logical imperative."
+        },
+        {
+          "handle": "[SRC_013] against SRC_003",
+          "kind": "rebutted",
+          "note": "Admits the 'leap' but reclassifies it as a voluntary convention, which by definition does not require logical proof, thus neutralizing the criticism that it violates Popper's anti-induction stance (since conventions aren't inductive proofs)."
+        },
+        {
+          "handle": "[SRC_002] against SRC_001",
+          "kind": "rebutted",
+          "note": "Accepts the false dichotomy critique by introducing 'convention' as the alternative foundation, distinct from both probability and pure logic."
+        },
+        {
+          "handle": "[SRC_015] against SRC_014",
+          "kind": "rebutted",
+          "note": "Irrelevant to this candidate, as it does not rely on verisimilitude."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "Acknowledges functional similarity to induction but argues that since it is a conscious convention, it lacks the hidden, unjustified status of naive induction."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "Irrelevant; no appeal to verisimilitude is made."
+        }
+      ],
+      "optional_refs": ["SRC_001", "SRC_010"]
+    },
+    {
+      "claim": "The preference is defensible via an evolutionary analogy: theories compete in an ecosystem of ideas, and 'corroboration' is merely the signal of survival fitness, requiring no inductive inference about the future, only a recognition of current fitness.",
+      "mechanism": "Evolutionary Epistemology Extension: Just as we prefer the gazelle that has outrun lions in the past not because we induce it will do so again, but because it currently possesses the traits (speed) that caused survival, we prefer theories with high corroboration because they possess the trait of 'high empirical content/severity resistance.' The preference is for the *trait*, not the *future outcome*.",
+      "counterconditions": [
+        "If the identification of 'traits' in theories relies on inductive generalization from past tests, the analogy fails.",
+        "If biological fitness itself is an inductive concept (predicting future reproduction), the analogy transfers the problem rather than solving it."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_011",
+          "kind": "rebutted",
+          "note": "Rejects 'metaphysical faith' in favor of 'structural analysis.' We identify the structural trait (severity passed) directly, without needing faith in uniformity."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Offers 'fitness traits' as an alternative to 'verisimilitude.' It avoids the logical issues of truth-likeness by focusing on relational properties (test severity)."
+        },
+        {
+          "handle": "[SRC_010] against SRC_001",
+          "kind": "rebutted",
+          "note": "Grounds preference in the observable history of interaction (survival), which is objective, even if the future implication is uncertain."
+        },
+        {
+          "handle": "[SRC_013] against SRC_003",
+          "kind": "rebutted",
+          "note": "Denies the leap. Recognizing a trait is not predicting the future; it is describing the present state of the theory relative to its tests."
+        },
+        {
+          "handle": "[SRC_002] against SRC_001",

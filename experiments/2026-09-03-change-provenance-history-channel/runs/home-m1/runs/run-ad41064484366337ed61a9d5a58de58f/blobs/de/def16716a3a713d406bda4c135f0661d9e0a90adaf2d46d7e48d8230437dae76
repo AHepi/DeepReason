@@ -1,0 +1,209 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Dependence. The isolated node 1c110c6075f4 depends on the methodological rule of 'critical preference' (SRC_005) to function as a non-inductive guide for action. REFUTED IF: The agent using 1c110c6075f4 assigns a higher subjective probability of truth to the preferred theory based solely on its past survival, thereby collapsing the distinction between verisimilitude and probabilistic induction.",
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate explicitly includes the phrase 'refuted if' and names the relation kind 'Dependence', satisfying the form criteria that allegedly failed in the cited target."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "revised",
+          "note": "Revised to define the specific mechanism of dependence: the functional reliance of the isolated node on the 'critical preference' rule to avoid inductive assumptions, rather than just stating a conditional failure."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The refutation condition targets an ontological shift in the agent's stance (assigning probability) rather than a mere measurement failure, thus defining a substantive logical dependency."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "revised",
+          "note": "The 'REFUTED IF' clause now defines the boundary of the dependence relation itself (the point where dependence turns into forbidden induction), not an internal vulnerability of the concept."
+        },
+        {
+          "handle": "[SRC_015] against SRC_010",
+          "kind": "revised",
+          "note": "Explicitly connects the isolated node 1c110c6075f4 to the neighbourhood artifact SRC_005, establishing the required shared context between endpoints."
+        }
+      ],
+      "neighbours": [
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "Relation Kind: Contradiction. The isolated node 1c110c6075f4 stands in contradiction to any interpretation of corroboration as 'eliminative default' (SRC_004) if it implies positive support. REFUTED IF: There exists only one unrefuted theory available for action, rendering the 'preference' mechanism vacuous and forcing a choice that cannot be justified by elimination alone.",
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate strictly adheres to the required syntax with 'Relation Kind' and 'REFUTED IF' containing the keyword 'contradiction'."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "revised",
+          "note": "Clarified the mechanism of contradiction: the clash between needing a positive selection rule versus relying solely on the absence of alternatives."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The refutation condition describes a structural failure of the 'eliminative default' logic itself (vacuity in singleton sets), which is an ontological limit of the framework, not just a measurement issue."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "revised",
+          "note": "The 'REFUTED IF' clause defines the exact condition under which the contradiction relation holds (the collapse of choice), directly addressing the integration of the concepts."
+        },
+        {
+          "handle": "[SRC_015] against SRC_010",
+          "kind": "revised",
+          "note": "The relation is explicitly drawn between the isolated node and SRC_004, ensuring the endpoints are correctly identified within the neighbourhood."
+        }
+      ],
+      "neighbours": [
+        "SRC_004"
+      ]
+    },
+    {
+      "content": "Relation Kind: Shared Mechanism. Both the isolated node 1c110c6075f4 and the evolutionary epistemology view (SRC_002) share the mechanism of 'systemic selection pressure' where severe tests act as environmental filters. REFUTED IF: The stability of the problem environment (the nature of the tests) changes fundamentally over time such that past 'fitness' (survival of tests) becomes inversely correlated with future adaptability.",
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Contains 'Shared Mechanism' and 'REFUTED IF' as required by the predicate check."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "revised",
+          "note": "Defined the mechanism explicitly as 'systemic selection pressure' and specified the exact environmental change that would refute the shared nature of this mechanism."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The refutation condition posits a change in the world's structure (environmental stability), which is an ontological claim about the validity of the evolutionary analogy, not an epistemic measurement failure."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "revised",
+          "note": "The 'REFUTED IF' clause specifies the breakdown of the shared mechanism itself, thereby defining the limits of the 'Shared Mechanism' relation."
+        },
+        {
+          "handle": "[SRC_015] against SRC_010",
+          "kind": "revised",
+          "note": "Correctly identifies the endpoints as the isolated node and SRC_002, asserting a mechanism shared between these specific entities."
+        }
+      ],
+      "neighbours": [
+        "SRC_002"
+      ]
+    },
+    {
+      "content": "Relation Kind: Abstraction. The isolated node 1c110c6075f4 is an abstraction of the pragmatic decision rule found in SRC_001, stripping away the specific context of 'verisimilitude' to focus purely on the act of choosing without belief. REFUTED IF: The act of choosing a theory for practical action logically entails holding a belief in its likelihood of success, making the separation between 'pragmatic choice' and 'belief' impossible to maintain.",
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Uses the keyword 'Abstraction' and includes the mandatory 'REFUTED IF' summary."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "revised",
+          "note": "Specified the mechanism of abstraction (stripping context) and defined the refutation condition as the logical impossibility of separating choice from belief."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The refutation condition addresses the logical entailment between action and belief (an ontological/semantic link), avoiding mere methodological dependency."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "revised",
+          "note": "The 'REFUTED IF' clause defines the precise point where the abstraction fails to map onto the concrete reality of human psychology/logic, defining the abstraction relation's limit."
+        },
+        {
+          "handle": "[SRC_015] against SRC_010",
+          "kind": "revised",
+          "note": "Establishes the relation specifically between the isolated node and SRC_001."
+        }
+      ],
+      "neighbours": [
+        "SRC_001"
+      ]
+    },
+    {
+      "content": "Relation Kind: Integration. The isolated node 1c110c6075f4 integrates the historical record aspect of SRC_004 with the active selection of SRC_005 to form a hybrid 'Critical-Historical' stance. REFUTED IF: The historical record of criticism (corroboration) can be shown to have zero causal or logical influence on the rationality of the current selection, rendering the integration merely nominal rather than functional.",
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Includes 'Integration' and 'REFUTED IF' in the content."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "revised",
+          "note": "Defined the integration mechanism as combining historical record with active selection, and specified the refutation as the severing of causal/logical influence."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The refutation condition claims a lack of causal power in the historical record, which is a substantive claim about the nature of the integrated components, not a measurement error."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "revised",
+          "note": "The 'REFUTED IF' clause defines the failure mode of the integration itself (nominal vs functional), satisfying the requirement to define the relation."
+        },
+        {
+          "handle": "[SRC_015] against SRC_010",
+          "kind": "revised",
+          "note": "Explicitly links the isolated node to both SRC_004 and SRC_005 as the endpoints of the integration."
+        }
+      ],
+      "neighbours": [
+        "SRC_004",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "Relation Kind: Reduction. The isolated node 1c110c6075f4 reduces to the biological metaphor of 'survival of the fittest' described in SRC_002, implying that scientific rationality is fully explainable by blind variation and selective retention. REFUTED IF: Scientists demonstrate the capacity to intentionally design experiments that violate the 'blind' variation assumption, thereby introducing a teleological element that cannot be reduced to blind evolutionary mechanisms.",
+      "typicality": 0.20,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Contains 'Reduction' and 'REFUTED IF'."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "revised",
+          "note": "Defined the reduction mechanism (rationality explained by blind variation) and the refutation condition (intentional design violating blindness)."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The refutation condition asserts the existence of teleology (intentionality) which contradicts the ontological basis of the reduction, going beyond methodological issues."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "revised",
+          "note": "The 'REFUTED IF' clause identifies the specific feature (teleology) that breaks the reduction, defining the boundary of the reductive relation."
+        },
+        {
+          "handle": "[SRC_015] against SRC_010",
+          "kind": "revised",
+          "note": "Connects the isolated node directly to SRC_002 for the reduction claim."
+        }
+      ],
+      "neighbours": [
+        "SRC_002"
+      ]
+    }
+  ]
+}

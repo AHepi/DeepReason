@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to address the 'smuggling induction' charge because its reliance on 'survival' as a marker for being the 'most informative error-eliminated option' implicitly assumes that past survival is a reliable indicator of future robustness or utility. Popper explicitly rejected the idea that surviving tests makes a theory more probable or reliable for the future; by arguing we should prefer the survivor *because* it has survived, the target reinstates an inductive principle (that the future will resemble the past regarding test outcomes) which Popper deemed irrational. The target claims this is merely a 'strategic move,' but without an inductive bridge, there is no Popperian justification for why the 'error-eliminated' status of the past theory should guide action in the present any more than a random guess would, rendering the preference indefensible on strictly non-inductive terms.",
+      "counterexample": null,
+      "premise": "Popper rejected the notion that surviving tests increases a theory's probability or reliability for future applications.",
+      "premise_evidence": null,
+      "successor_question": "If past survival provides no inductive reason to expect future success, what non-circular Popperian argument justifies preferring the survivor over a falsified or untested theory for practical action?"
+    }
+  ]
+}

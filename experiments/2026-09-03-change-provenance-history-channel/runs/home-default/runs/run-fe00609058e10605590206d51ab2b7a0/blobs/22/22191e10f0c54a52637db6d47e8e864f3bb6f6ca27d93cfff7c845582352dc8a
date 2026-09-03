@@ -1,0 +1,128 @@
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 2 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## open-criticisms
+OPEN CRITICISMS ON THIS PROBLEM (8 of 35 shown, by handle) -- these are part of what your candidate must answer, not advice.
+Every candidate you submit must DISCHARGE each handle below, one of:
+  - revised -- say WHAT changed and WHERE in the candidate
+  - rebutted -- say why the criticism fails. Your rebuttal enters the record as an ordinary claim and can be attacked like any other
+  - departure_declared -- say what you are breaking with. Declaring costs you nothing; nothing scores a departure
+  [0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7] against dfcf7c92365776fc82abb1ee43092fa0080a01d6c56795f700f26eac2fe93626
+      CLAIM: The argument fails because Popper's own formal definition of verisimilitude (truth-content minus falsity-content) was proven by Tichý and Miller in 1974 to be logically incoherent for comparing false theories. Since all scientific theories
+      CITED SPAN: (none quoted)
+  [0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593] against dfcf7c92365776fc82abb1ee43092fa0080a01d6c56795f700f26eac2fe93626
+      CLAIM: The target's defense relies on 'verisimilitude' (truth-likeness) to justify preferring better-corroborated theories without induction. However, Popper's own formal attempt to define verisimilitude logically failed because it was shown (by T
+      CITED SPAN: (none quoted)
+  [1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe] against b3c0511b432396d0e2d2bf8490349317b336851e22777534cc85e5e6886fa5de
+      CLAIM: The target's analogy between natural selection and scientific preference fails to address the normative core of the problem: Popper's rejection of induction. While natural selection explains why organisms *do* survive (descriptive), it does
+      CITED SPAN: (none quoted)
+  [2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f] against 461dc629214617dbaa5eef2d9a41102e3759a1e582b7aef13f1829d19fb0b561
+      CLAIM: The target fails to answer the specific prompt requirement to 'Make the strongest case for each answer' before concluding. The prompt explicitly demands a dialectical structure presenting both the defense (preference is defensible) and the
+      CITED SPAN: (none quoted)
+  [343e10b5bcf5a8a8cda3a18e5ff5334fcad05a2527c61f22d4b83ec4299bec0b] against d78f3bb377b4cbc7dc6f190f018c5f3a49032f8ea9da96337e03277b2bc0b68a
+      CLAIM: The target's defense fails to resolve the specific tension regarding 'acting on' a theory (e.g., building a bridge) because it conflates the methodological goal of falsification with the pragmatic necessity of reliability. While the target
+      CITED SPAN: (none quoted)
+  [39376b7fe8717864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f] against 8b7cece3d967663a5995c65918c732fb8f87d229ce749eeb590af5cc549a6337
+      CLAIM: The target's analogy fails because it conflates the descriptive mechanism of biological survival with the normative justification required for scientific preference. While natural selection explains why organisms survive retrospectively wit
+      CITED SPAN: (none quoted)
+  [3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6] against d32d72987f32122368583d8ec4e5d9c332a7160bcf21e0195c546bc71898d70a
+      CLAIM: The target's claim that the preference is defensible 'only if' rationality is defined by rule-adherence rather than probable truth presents a false dichotomy that ignores Popper's concept of 'verisimilitude' (truth-likeness). Popper explici
+      CITED SPAN: (none quoted)
+  [42eaa01a96703402341867220e2fe7e8047d04b0761bc0aafe6c66cb5a39057c] against b01d776a75ff26c4c9671f863b2d5dc12d5faa98f49a3adf62c7fe2806d40434
+      CLAIM: The target's defense relies on 'verisimilitude' (truth-likeness) as the non-inductive goal of preferring corroborated theories, but it fails to address the logical collapse of this concept when comparing false theories. As demonstrated by T
+      CITED SPAN: (none quoted)
+
+## school-stance
+SCHOOL STANCE (weight 0.45): seek the covering principle
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural) — each entry is its CLAIM, distilled; request an alias through context_request to read that artifact whole:
+- 30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81: {"school_policy": {"school": "school-2", "stance": "unifier"}}
+- a3dc58a65aecf1c6f09f894de15c54c12c8189af38faab41be98b872085209b2: The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic, non-inductive rule of action based on verisimilitude (truth-like …[clipped; request this alias for the whole text]
+- 7e0fa2a5afcc1ccc3e95da85b0175936d67650c2e1a79d7361f3f919efef6796: The preference smuggles induction back in because acting on corroboration necessarily assumes the uniformity of nature or the stability of laws, which Popper ex …[clipped; request this alias for the whole text]
+- 2b2849a64e01534a46cff6511f2c52e4711e7522bae536162e1f4e407ade0278: Corroboration functions as a 'causal mechanism' of selection analogous to natural selection, where preference is a survival trait of the scientific community ra …[clipped; request this alias for the whole text]
+- 87adca84db6c03259c19c7881f16ddbd6f5dbeac386dc74e10ebeb395a3ab5af: The preference is a 'methodological fiction' necessary for the practice of science, defensible only as a constitutive rule of the scientific game, similar to ac …[clipped; request this alias for the whole text]
+- d09640a7ff682ac50b9e9da0631c53348c32b06456c3d94dd07a7e622b0f8728: The preference is defensible only if we accept a 'critical rationalist' ethic where acting on the best-tested theory is a moral duty to minimize harm from error …[clipped; request this alias for the whole text]
+
+## complement-directive
+COMPLEMENT DIRECTIVE: produce the attempt these summaries make least likely — avoid the modal continuation of the neighbourhood.
+
+## live-neighbourhood
+LIVE NEIGHBOURHOOD (accepted and still standing — shown whole because these are the ones to build on or beat):
+- a5d32c609abf40c712e4f69f5c2c5a5cda506da803e3528f24b8e5a624ac3ecc: Kind: Reduction. The normative preference described in the isolated node reduces to the descriptive fact of 'community survival' outlined in SRC_001. What scientists call 'rational preference' is nothing more than the sociological phenomenon of research groups adopting methods that prevent their extinction. Refuted If: A rational agent is identified who consistently prefers corroborated theories despite belonging to a community that would survive equally well by preferring non-corroborated ones, proving the preference is not reducible to community survival mechanics.
+- 04a0db2dde118a0b8f7733a1772de313a0b40ef9f0c0393009cb4f9bf518aafc: Kind: Contradiction. The isolated node's requirement for a 'substantive relation' contradicts the foundational premise in SRC_004 that the link between science and evolution is purely metaphorical and dissolves under logical scrutiny. If the relation is substantive (causal or structural), then the 'category mistake' defense in SRC_004 fails. Refuted If: It is demonstrated that one can maintain the 'category mistake' defense while simultaneously asserting a substantive structural isomorphism between the two domains, proving they are not contradictory but complementary descriptions of different levels.
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates. EVERY candidate must carry a `discharges` entry for EVERY handle listed under OPEN CRITICISMS above. A submission missing any of them is returned to you once with the open list, and then accepted with the gap recorded.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.
+
+REFERENCE MENU -- /candidates/*/optional_refs/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (23 legal values)
+  [0] OMIT -- leave "optional_refs" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+  [18] SRC_018
+  [19] SRC_019
+  [20] SRC_020
+  [21] SRC_021
+  [22] SRC_022
+  [23] SRC_023
+You may answer with the handle itself or with its [index].
+
+REFERENCE MENU -- /candidates/*/neighbours/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (23 legal values)
+  [0] OMIT -- leave "neighbours" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+  [18] SRC_018
+  [19] SRC_019
+  [20] SRC_020
+  [21] SRC_021
+  [22] SRC_022
+  [23] SRC_023
+You may answer with the handle itself or with its [index].

@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the preference for better-corroborated theories is defensible because scientists prefer 'bold conjectures' with high informational content that have survived, rather than the survival record itself.",
+      "case": "The target fails to resolve the dilemma because it conflates the initial choice of a bold theory with the subsequent preference for that specific theory *after* it has survived tests. Popper's problem is why we prefer Theory A (bold, survived) over Theory B (bold, falsified) or Theory C (cautious, survived). If the preference is solely for 'high content,' we should prefer a bold, falsified theory over a cautious, surviving one, yet scientists do not; they prefer the survivor. Conversely, if the preference tracks survival among equal-content theories, the target admits this relies on the very 'past success' report it claims to discard. By asserting the value lies in 'riskiness maintained despite attacks,' the target implicitly treats the maintenance of riskiness through time as a positive indicator of future reliability, which smuggles in the inductive principle that past resistance to falsification predicts future resistance—the exact induction Popper rejected.",
+      "counterexample": [
+        "Consider two theories: T1 (High Content, Survived 10 severe tests) and T2 (High Content, Falsified on test 1). If the preference is truly for 'informational content and testability' regardless of survival, T2 should be equally or more attractive as a 'bold conjecture.' However, working scientists and Popper himself prefer T1. The target explains this by citing 'survival rate' implicitly ('maintained despite attacks'), thereby admitting the preference tracks the temporal sequence of survival, which constitutes an inductive inference that the future will resemble the past."
+      ],
+      "successor_question": "If the preference is not based on the probability of future success derived from past survival, what non-inductive reason does Popper provide for rejecting a bold theory that failed yesterday in favor of one that succeeded, given both had equal initial content?"
+    }
+  ]
+}

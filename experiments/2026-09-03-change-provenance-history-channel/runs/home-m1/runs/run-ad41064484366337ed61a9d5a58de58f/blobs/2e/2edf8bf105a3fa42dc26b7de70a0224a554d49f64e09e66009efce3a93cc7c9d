@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims that preferring a better-corroborated theory 'necessarily smuggles in induction' because it entails the hidden premise that 'the future will resemble the past'.",
+      "case": "The target constructs a false dilemma by asserting that the only alternative to 'radical skepticism' (where no theory is preferred) is to accept induction. It ignores Popper's own explicit solution: the preference for better-corroborated theories is a critical rational choice based on the logic of testing, not an inductive inference about truth or future success. Popper argues we prefer the theory that has withstood the severest tests because it is the most informative and has survived our best attempts to refute it; this is a methodological rule for criticism, not an inductive leap assuming nature's uniformity. By failing to engage with this specific non-inductive justification which Popper details in 'The Logic of Scientific Discovery' (specifically regarding the 'problem of adoption'), the target attacks a straw man of Popperianism rather than the actual philosophy, incorrectly concluding the preference is indefensible on Popper's own terms.",
+      "counterexample": [
+        "Popper explicitly states in Section 83 of 'The Logic of Scientific Discovery' that choosing the better-tested theory does not imply we believe it is more likely to be true (induction), but that it is the one most open to further testing and thus best serves the goal of science (critical rationalism)."
+      ],
+      "successor_question": "If the preference is not based on the probability of truth or the uniformity of nature, what specific logical principle allows a scientist to rationally choose Theory A over Theory B without violating the ban on induction?"
+    }
+  ]
+}

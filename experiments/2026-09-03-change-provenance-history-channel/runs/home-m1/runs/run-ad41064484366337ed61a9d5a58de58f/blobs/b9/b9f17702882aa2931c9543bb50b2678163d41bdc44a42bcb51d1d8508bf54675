@@ -1,0 +1,76 @@
+{
+  "candidates": [
+    {
+      "content": "Kind: Integration. The isolated node 1c110c6075f4 integrates with the neighbourhood's evolutionary epistemology (SRC_002, SRC_003) by serving as the specific 'severe test' mechanism that generates the environmental pressure required for theory selection. REFUTED IF: the isolated node can be removed from the system without reducing the rate of falsification or the discriminatory power of the selection environment, proving it is merely decorative rather than constitutive of the testing pressure.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_002", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "The candidate explicitly names 'Integration' and defines a substantive causal role (generating pressure), satisfying relation-form@578e42df713e."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "The mechanism is defined as 'generating environmental pressure for selection,' which is distinct from the refutation condition."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "The relation is ontological (constitutive part of the selection engine), not merely epistemic; the refutation tests the necessity of the part, not the measurability."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "The 'REFUTED IF' clause targets the integration claim itself (by testing removability), not an internal vulnerability of the concept."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "The mechanism explicitly links the isolated node to the neighbourhood's selection process, not an external entity."}
+      ]
+    },
+    {
+      "content": "Kind: Contradiction. The isolated node 1c110c6075f4 contradicts the 'Eliminative Default' stance of SRC_004 by asserting a positive methodological rule that requires active preference rather than passive survival. REFUTED IF: the isolated node can be reinterpreted as merely describing the absence of elimination (a negative state) rather than prescribing an active choice, thereby collapsing into the eliminative framework it purportedly opposes.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "revised", "note": "Clarified that the relation is 'Contradiction' based on active vs. passive methodology."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism is 'active prescription vs. passive description'; refutation tests interpretive collapse."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "This is a logical contradiction in operational mode, not a measurement dependency."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Refutation condition directly tests the existence of the contradiction."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Endpoints are clearly the isolated node and SRC_004."}
+      ]
+    },
+    {
+      "content": "Kind: Abstraction. The isolated node 1c110c6075f4 is an abstract formalization of the 'critical rationalism' described concretely in SRC_001 and SRC_005, stripping away the historical context of 'scientists' to leave only the logical structure of verisimilitude maximization. REFUTED IF: the isolated node retains any reference to human agency, temporal sequence, or historical decision-making, proving it is a narrative summary rather than a pure abstraction of the mechanism.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_001", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Relation 'Abstraction' is named; mechanism is 'stripping context to leave logical structure'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism defined as de-contextualization; refutation checks for residual context."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Relation is structural (instance-to-abstract), not dependent on measurement independence."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Refutation condition validates the purity of the abstraction."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Connects isolated node directly to SRC_001/SRC_005 mechanisms."}
+      ]
+    },
+    {
+      "content": "Kind: Shared Mechanism. Both the isolated node 1c110c6075f4 and the neighbourhood artifacts (SRC_002, SRC_003) share the mechanism of 'fitness-proportional retention,' where entities persist not because they are verified true, but because they have not yet been eliminated by a selector. REFUTED IF: the isolated node relies on any form of verification, confirmation, or probabilistic support for retention, demonstrating that its persistence logic differs fundamentally from the evolutionary elimination of the neighbourhood.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_002", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "'Shared Mechanism' explicitly named; mechanism is 'fitness-proportional retention'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism is defined as retention via non-elimination; refutation tests for verification reliance."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Ontological claim about retention logic, not epistemic measurement."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Refutation condition targets the core definition of the shared mechanism."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Explicitly links isolated node to neighbourhood artifacts."}
+      ]
+    },
+    {
+      "content": "Kind: Dependence. The coherence of the isolated node 1c110c6075f4 depends entirely on the 'non-inductive' constraint established in SRC_001; without the explicit rejection of probabilistic truth, the isolated node collapses into standard Bayesian updating. REFUTED IF: the isolated node remains logically consistent and functional when the 'non-inductive' constraint is removed, implying it possesses an intrinsic logic independent of Popperian anti-inductivism.",
+      "typicality": 0.90,
+      "neighbours": ["SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "'Dependence' named; mechanism is 'logical collapse without constraint'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism is logical dependency; refutation tests independence."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Logical dependence, not methodological measurement dependency."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Refutation condition tests the dependency claim directly."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Links isolated node to SRC_001."}
+      ]
+    },
+    {
+      "content": "Kind: Inheritance. The isolated node 1c110c6075f4 inherits the 'methodological rule' status from SRC_005 but modifies the inheritance vector to apply to 'conceptual structures' rather than 'empirical theories.' REFUTED IF: the isolated node applies its rules to empirical predictions or observable data points rather than exclusively to the structural integrity of conceptual frameworks, showing it failed to inherit the specific scope limitation.",
+      "typicality": 0.30,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "'Inheritance' named; mechanism is 'scope modification'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism is scope-restricted inheritance; refutation tests scope violation."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Structural inheritance claim, not measurement issue."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Refutation condition validates the inheritance boundary."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Links isolated node to SRC_005."}
+      ]
+    }
+  ]
+}

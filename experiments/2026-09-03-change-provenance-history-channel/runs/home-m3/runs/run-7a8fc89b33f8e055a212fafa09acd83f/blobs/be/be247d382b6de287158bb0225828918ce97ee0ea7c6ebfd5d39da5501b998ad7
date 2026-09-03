@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference that the theory is more probable, but as a rational methodological rule grounded in the concept of 'verisimilitude' (truth-likeness) and the pragmatic necessity of acting on the best-tested available option, provided one accepts the cost of abandoning the guarantee of future success and acknowledging that verisimilitude remains a regulative ideal rather than a calculable metric.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'probability' (logical likelihood based on evidence) and 'corroboration' (a report of past performance). It posits that preferring the better-corroborated theory is a non-inductive bet on higher verisimilitude: since we cannot know the truth, we rationally select the theory that has withstood the most severe attempts at falsification, as this offers the strongest (though fallible) indication that it corresponds closer to reality than its rivals. This avoids induction by refusing to claim the future will resemble the past, instead claiming only that the current theory is the best critical target we have.",
+    "counterconditions": [
+      "If the Miller-Tichý refutation of verisimilitude is accepted as fatal, rendering the concept logically incoherent within Popper's formal framework.",
+      "If the preference for corroborated theories is shown to implicitly rely on the uniformity of nature (the principle that what worked before will work again), which constitutes the very induction Popper rejected.",
+      "If the distinction between 'pragmatic action' and 'rational justification' collapses, implying that acting without epistemic justification is irrational."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'justification for truth' with 'justification for preference.' The candidate explicitly separates these: the preference is justified methodologically (as the best critical choice) without claiming logical probability. The defense does not rely on pragmatic necessity alone but on the rationality of selecting the hypothesis with the highest surviving content."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "rebutted",
+        "note": "The candidate does not present a false dilemma nor redefine probability. It adheres to Popper's definition of corroboration as distinct from probability. The defense argues that the preference is defensible *without* redefining probability, by shifting the ground of preference to verisimilitude and methodological rationality."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4476ce9476f4be73990a91bfccedd76a3db90a87926c01",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge the Miller-Tichý refutation as a major cost. The candidate now frames verisimilitude not as a formally solved logical metric, but as a necessary 'regulative ideal' or metaphysical assumption that Popperians must accept despite its formal difficulties, rather than claiming it is a coherent substitute fully vindicated within the original framework."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The analogy to evolution is not the core of this candidate's argument. The defense rests on the logical structure of falsification and the definition of corroboration as a history of severe tests, which provides a non-inductive reason (survival of the fittest explanation) to prefer one theory over another without assuming nature's uniformity."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "Revised to concede that Popper struggled with verisimilitude post-refutation. The candidate argues that the preference survives only if one accepts a modified Popperianism where verisimilitude is retained as a qualitative guide despite the lack of a quantitative formalism, treating the refutation as a technical hurdle rather than a total abandonment of the concept."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for BOTH answers. It defends the preference (Answer A) via verisimilitude/methodology, while the counterconditions and the final 'cost' analysis articulate the strongest case for the view that it smuggles in induction (Answer B) if those conditions are met. The structure satisfies the directive by weighing both sides within the single proposal."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The candidate does not claim accepting the preference costs 'normativity.' Rather, it specifies the cost is the loss of certainty and the acceptance of a fallibilist normativity where 'rational' means 'most critically tested' rather than 'most likely true.' This preserves normativity within a non-justificationist framework."
+      },
+      {
+        "handle": "a3a496115ceba9824b3999689584a02fdb9c6dc5e7fda0e921e397f592ae3eb7",
+        "kind": "rebutted",
+        "note": "The candidate directly addresses whether induction is smuggled in. It argues induction is avoided IF the preference is viewed as a methodological rule based on past error-elimination rather than a prediction of future success. If the critic insists that any reliance on past testing implies induction, the candidate concedes this in the 'cost' section, thereby answering the challenge directly rather than sidestepping it."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

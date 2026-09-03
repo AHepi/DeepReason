@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims the relation is a 'Reduction' where preference reduces to procedural rules, yet the 'REFUTED IF' condition explicitly posits a scenario driven by 'epistemic probability.' By admitting that 'epistemic probability' (a distinct epistemic mechanism) can override or exist alongside procedural rules in the refutation condition, the target contradicts its own assertion that preference is fully reduced to game-state management. If epistemic probability is a valid driver of preference independent of procedure, the reduction fails, and the stated relation is internally inconsistent.",
+      "premise": null,
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": null
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is fully defensible on Popper's terms as a non-inductive, pragmatic decision rule based on verisimilitude (truth-likeness) rather than probability.",
+      "mechanism": "Popper distinguishes between the logical probability of a theory (which remains zero or undefined for universal laws) and its empirical content. A theory that survives severe tests has demonstrated high empirical content and resilience. Choosing it is not an inference that it is 'true' or 'probable,' but a rational wager that the theory with higher verisimilitude is closer to the truth. The mechanism is 'critical preference': we prefer the theory that has withstood our best attempts to falsify it, not because the future will resemble the past (induction), but because it is the only one currently standing as a viable candidate for truth.",
+      "counterconditions": [
+        "If 'verisimilitude' cannot be defined without relying on inductive assumptions about the structure of reality.",
+        "If the act of preferring one theory over another implicitly assumes that past success predicts future success.",
+        "If no non-probabilistic metric can distinguish between two unfalsified theories other than arbitrary choice."
+      ],
+      "typicality": 0.92,
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories smuggles induction back into Popper's system, rendering his rejection of induction inconsistent with his methodology of science.",
+      "mechanism": "The 'Pragmatic Vindication' critique: To prefer Theory A over Theory B because A has survived tests while B has not (or A has survived more severe tests) is to assume that the property of 'having survived tests' is a reliable indicator of future performance or truth. This assumption is itself an inductive principle (the uniformity of nature regarding testability). Without this inductive bridge, the fact that a theory worked yesterday provides zero logical force for expecting it to work tomorrow. Thus, Popper's 'critical preference' is induction by another name.",
+      "counterconditions": [
+        "If Popper explicitly accepts that his method relies on a non-justified, biological faith in regularity.",
+        "If the definition of 'severe test' inherently contains an inductive premise about background knowledge.",
+        "If the distinction between 'acting on' a theory and 'believing' a theory collapses under scrutiny."
+      ],
+      "typicality": 0.88,
+      "optional_refs": [
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves if we view corroboration not as a measure of truth or probability, but as a report of the current state of critical discussion, making preference a procedural necessity rather than an epistemic inference.",
+      "mechanism": "Corroboration is purely historical: it reports 'Theory T has been tested and not yet refuted.' It makes no claim about T's future. The preference for T is not an epistemic judgment that T is better, but a procedural rule of the game of science: 'Do not discard a theory that has not been falsified in favor of one that has, or in favor of nothing.' This avoids induction because it makes no prediction; it simply dictates the current move in the dialectic. The cost is accepting that science offers no guidance on what to believe, only on what to test next.",
+      "counterconditions": [
+        "If scientists clearly act on the belief that corroborated theories are more likely to be true, not just procedurally convenient.",
+        "If the 'game' of science aims at truth, rendering purely procedural rules insufficient for goal attainment.",
+        "If the severity of a test cannot be assessed without inductive background knowledge."
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "Popper's defense holds only if we accept a dual-aspect theory of rationality: theoretical reason (logic) forbids induction, but practical reason (evolutionary epistemology) mandates preference for the fittest surviving hypothesis.",
+      "mechanism": "This candidate posits that Popper implicitly shifts domains. In the domain of logic/proof, induction is dead. In the domain of action/biology, organisms (including scientists) must conjecture and select based on survival value. Corroboration is the scientific analog of evolutionary fitness. We prefer the corroborated theory not because logic demands it, but because our cognitive apparatus is evolved to seek patterns that survive. The 'smuggling' is not a logical error but a category shift from justification to explanation.",
+      "counterconditions": [
+        "If Popper explicitly denied any evolutionary basis for scientific rationality.",
+        "If the gap between 'survival value' and 'truth approximation' cannot be bridged without induction.",
+        "If this dual-aspect view renders the concept of 'objective knowledge' incoherent."
+      ],
+      "typicality": 0.65,
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is indefensible on strict Popperian terms; the only consistent stance is total agnosticism regarding theory choice, reducing science to a generator of falsified statements with no guide for action.",
+      "mechanism": "A radical skeptical reading: If corroboration adds no probability and implies no future success, then logically, a newly minted, untested crazy theory is on equal footing with Einstein's relativity regarding future predictions. Any preference is irrational. Popper's own admission of preference reveals that his system cannot function without an unstated, tacit inductive axiom. Therefore, the system fails its own criterion of consistency.",
+      "counterconditions": [
+        "If 'action' requires no rational basis other than arbitrary choice.",
+        "If the concept of 'severity' in testing introduces a non-inductive differentiator.",
+        "If Popper's later works explicitly address and resolve this specific inconsistency."
+      ],
+      "typicality": 0.45,
+      "optional_refs": [
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "Corroboration functions as a 'negative probability' filter: it doesn't make a theory probable, but it eliminates competitors, making the survivor the 'best available' by default without positive inductive support.",
+      "mechanism": "Instead of viewing corroboration as adding weight (induction), view it as subtracting alternatives (deduction via modus tollens). We prefer Theory A not because A is likely true, but because B, C, and D have been proven false. The preference is relative, not absolute. This survives Popper's ban on induction because it relies entirely on the deductive logic of falsification. The cost is that if all theories remain unfalsified, we have no basis for preference, leading to potential paralysis in fields where falsification is difficult.",
+      "counterconditions": [
+        "If there are always multiple unfalsified theories compatible with data (underdetermination).",
+        "If the 'survivor' status implicitly attributes a positive quality to the theory.",
+        "If the choice of which tests to run (to eliminate competitors) relies on inductive hunches."
+      ],
+      "typicality": 0.70,
+      "optional_refs": [
+        "SRC_001"
+      ]
+    }
+  ]
+}

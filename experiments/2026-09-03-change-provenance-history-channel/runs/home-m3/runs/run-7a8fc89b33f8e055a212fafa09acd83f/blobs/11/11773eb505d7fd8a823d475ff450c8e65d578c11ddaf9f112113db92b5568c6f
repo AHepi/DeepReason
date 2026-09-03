@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a distinction between 'pragmatic rationality' and 'inductive inference' that Popper explicitly rejected as insufficient to justify preference. Popper argued that without an inductive principle (which he deemed invalid), preferring the better-corroborated theory is merely an irrational habit or 'animal faith,' not a defensible rule of rational action. By asserting the preference is 'defensible' and 'non-irrational' solely because it avoids claiming increased probability, the target smuggles in a normative claim about rationality that requires the very inductive bridge Popper severed. If corroboration reports only past performance and implies nothing about the future, then choosing Theory A over Theory B for future action is logically arbitrary, making the target's claim that it is the 'only non-irrational choice' a contradiction of Popper's own strict separation of logic from psychology.",
+      "counterexample": null,
+      "premise": "Popper stated that if we reject induction, we cannot rationally prefer one unfalsified theory over another for future prediction based solely on past corroboration.",
+      "premise_evidence": null,
+      "successor_question": "Does Popper's rejection of induction leave any logical ground for calling the preference for corroborated theories 'rational' rather than just a psychological necessity?"
+    }
+  ]
+}

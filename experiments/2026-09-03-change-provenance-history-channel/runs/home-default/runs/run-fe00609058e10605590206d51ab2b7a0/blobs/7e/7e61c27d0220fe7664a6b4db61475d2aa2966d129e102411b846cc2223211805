@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' to avoid induction, but this fails Popper's own terms because Tichý and Miller proved that within Popper's logical framework, one cannot compare the verisimilitude of two false theories. Since all universal scientific theories are strictly false (having been falsified or being falsifiable), the metric collapses, leaving the preference for the 'better-corroborated' theory without a non-inductive rational basis. Consequently, the scientist's preference reverts to an inductive assumption that past survival predicts future utility, which is exactly what the target claims to avoid.",
+      "premise": "Tichý (1974) and Miller (1974) demonstrated that Popper's definition of verisimilitude entails that no false theory can be closer to the truth than another false theory.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "If verisimilitude comparisons between false theories are logically impossible in Popper's system, what specific non-inductive principle does Popper offer to justify acting on one falsified theory over another?"
+    }
+  ]
+}

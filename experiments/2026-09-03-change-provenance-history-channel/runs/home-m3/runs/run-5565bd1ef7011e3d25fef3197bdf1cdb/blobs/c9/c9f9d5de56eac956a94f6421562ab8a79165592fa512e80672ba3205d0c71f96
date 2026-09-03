@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses because it relies on 'verisimilitude' (truth-likeness) as the rational basis for preference, yet explicitly admits this offers no guarantee of being closer to the truth. As the target itself notes in its counterconditions, the Tichý/Miller proof demonstrates that verisimilitude cannot be consistently defined for false theories. Since Popper holds that all scientific theories are likely false (conjectures), the scientist has no coherent metric to determine which false theory is 'better.' Consequently, preferring the 'better-corroborated' theory becomes an arbitrary choice disguised as a methodological rule, functionally indistinguishable from the inductive habit Popper sought to reject, because it assumes without justification that surviving severe tests correlates with proximity to truth.",
+      "counterexample": null,
+      "premise": "The Tichý/Miller proof shows verisimilitude is undefined for false theories, and Popper considers all current theories to be potentially false.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be measured or defined for the very theories scientists must choose between, what non-inductive logical principle actually guides the selection of one conjecture over another?"
+    }
+  ]
+}

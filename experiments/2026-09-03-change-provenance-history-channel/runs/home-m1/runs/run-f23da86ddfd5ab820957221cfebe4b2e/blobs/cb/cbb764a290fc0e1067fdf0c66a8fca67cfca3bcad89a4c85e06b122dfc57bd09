@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target conflates Popper's rejection of induction as a logical justification for truth with his acceptance of it as a pragmatic basis for action, misrepresenting the 'cost' Popper explicitly accepted.",
+      "case": "The argument fails because it assumes that acting on a corroborated theory requires believing the future *will* resemble the past (a logical claim), whereas Popper explicitly argues that we must act on the best-tested theory precisely *because* we cannot know the future, making the choice a rational guess rather than an inductive inference. The target claims this 'smuggles induction back in,' but Popper admits the pragmatic necessity of assuming uniformity for action while denying its logical validity; the target treats this pragmatic admission as a logical contradiction, ignoring Popper's distinction between the context of justification (no induction) and the context of action (pragmatic preference). By framing the preference as arbitrary without the hidden premise of uniformity, the target overlooks Popper's core argument: the preference is not arbitrary because it selects the theory that has withstood the most severe attempts at falsification, which is the only rational criterion available in the absence of positive proof.",
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "If the preference is merely a 'rational guess' based on severity of testing rather than an expectation of nature's uniformity, how does Popper justify the specific content of the guess (i.e., why prefer A over B) without implicitly relying on the very regularity he denies?"
+    }
+  ]
+}

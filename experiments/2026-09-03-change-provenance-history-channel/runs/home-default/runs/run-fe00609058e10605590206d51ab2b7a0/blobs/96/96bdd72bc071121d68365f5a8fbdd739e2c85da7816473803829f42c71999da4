@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation as required. The problem explicitly mandates naming a relation kind (e.g., dependence, reduction) and stating what it is refuted if. The target provides the 'Relation Kind' (Contradiction) but completely omits the mandatory 'Refuted If' condition in its structural output. Instead, the text following 'Refuted If:' describes a scenario that would collapse the contradiction, rather than stating the specific condition under which the proposed relation itself is refuted. Furthermore, the content argues for a 'contradiction' between 'prospective preference' and 'retrospective fitness', but fails to establish how these two distinct mechanisms interact substantively (e.g., via shared mechanism or integration) before claiming they contradict; it merely asserts opposition without defining the connective tissue required for a substantive relation.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

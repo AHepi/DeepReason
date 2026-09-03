@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Kind: Shared Mechanism. The isolated node and the evolutionary analogy in SRC_005 share the mechanism of 'retrospective filtering for prospective utility.' Both systems select survivors based on past performance (fitness/corroboration) not to guarantee future truth, but to identify the most robust platform for generating new errors. Refuted If: The scientific preference for corroborated theories is shown to rely on a prospective probability calculation (induction) rather than a strategic choice based on past survival, thereby breaking the shared mechanism with biological evolution which lacks such prospective normative calculus.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_005", "SRC_001"],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "The candidate does not claim evolution lacks a normative element entirely; it claims the specific mechanism of 'retrospective filtering' is shared. The normativity in science is the strategic decision to use this filter, not an inherent property of the filter itself."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Explicitly named the relation kind 'Shared Mechanism' and included the mandatory 'Refuted If' clause detailing the breakdown condition."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "The 'Refuted If' condition posits a specific alternative causal story (prospective probability) that, if true, would falsify the proposed shared mechanism. It does not need to be proven true now, only that its truth would refute the claim."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Similar to SRC_012, the claim is about the structural similarity of the filtering process, not the presence/absence of normativity in the endpoints themselves."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Moved beyond abstract analogy by specifying the exact causal step ('retrospective filtering') shared by both domains and defined a concrete failure mode."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "The candidate explicitly addresses the normative gap by framing the scientific preference as a 'strategic choice' (a normative act) applied to a descriptive mechanism, distinguishing it from mere biological fitness."},
+        {"handle": "SRC_010", "kind": "revised", "note": "Defined the relation as a shared functional mechanism ('retrospective filtering') rather than a loose analogy, linking the isolated node directly to the operational logic of SRC_005."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Included a specific 'Refuted If' statement: 'If the scientific preference... relies on prospective probability calculation...'"}
+      ]
+    },
+    {
+      "content": "Kind: Contradiction. The isolated node's requirement for a 'substantive relation' contradicts the foundational premise in SRC_004 that the link between science and evolution is purely metaphorical and dissolves under logical scrutiny. If the relation is substantive (causal or structural), then the 'category mistake' defense in SRC_004 fails. Refuted If: It is demonstrated that one can maintain the 'category mistake' defense while simultaneously asserting a substantive structural isomorphism between the two domains, proving they are not contradictory but complementary descriptions of different levels.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_004", "SRC_002"],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "departure_declared", "note": "This candidate departs from the assumption that the endpoints must be harmonized; instead, it proposes their fundamental incompatibility as the relation."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Clearly stated 'Kind: Contradiction' and provided the required 'Refuted If' scenario."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "The refutation condition describes a theoretical resolution (compatibility of contradiction and isomorphism) which, if possible, would invalidate this candidate's core claim."},
+        {"handle": "SRC_013", "kind": "departure_declared", "note": "Departing from the goal of finding a compatible relation; proposing that the tension itself is the substantive link."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Specified the exact point of contradiction: the coexistence of 'substantive relation' and 'category mistake'."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "The normative gap is the source of the contradiction, not an ignored feature. The candidate leverages this gap to assert incompatibility."},
+        {"handle": "SRC_010", "kind": "revised", "note": "Established a structural link by defining the relation as the logical conflict between the problem's demand and the foundation's denial."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Stated 'Refuted If: It is demonstrated that one can maintain...' as the specific condition for falsification."}
+      ]
+    },
+    {
+      "content": "Kind: Abstraction. The isolated node represents an abstract instance of the 'Error Elimination Principle' which SRC_003 instantiates concretely in the domain of epistemology. The biological analogy in SRC_003 is merely one concrete manifestation of this higher-order abstraction. Refuted If: A case is found where the 'Error Elimination Principle' operates successfully in a system that neither involves biological evolution nor scientific corroboration, yet the specific constraints of SRC_003 (risk, empirical content) do not apply, showing SRC_003 is not a mere instantiation but a unique mechanism unrelated to the abstract principle.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "The candidate does not mischaracterize evolution; it elevates the principle above both domains, treating them as parallel instances."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Defined the relation as 'Abstraction' and included the 'Refuted If' clause."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "The 'Refuted If' provides a concrete counter-example scenario (a third domain) that would break the abstraction hierarchy."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "The argument avoids the normative gap by positioning the abstraction as neutral, applying to both descriptive (biology) and normative (science) domains equally."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Moved from analogy to hierarchical abstraction, specifying the 'Error Elimination Principle' as the connecting structure."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "Addresses the gap by suggesting the abstraction encompasses both retrospective (biology) and prospective (science) orientations as variants."},
+        {"handle": "SRC_010", "kind": "revised", "note": "Links the isolated node to SRC_003 via a formal hierarchical relationship (instance-of) rather than analogy."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Provided the specific 'Refuted If' condition involving a third domain where the principle holds but SRC_003's specifics fail."}
+      ]
+    },
+    {
+      "content": "Kind: Dependence. The validity of the isolated node's connection to the neighbourhood is strictly dependent on the falsifiability of the 'counterconditions' listed in SRC_002. If those counterconditions (e.g., 'biological fitness is retrospective while scientific preference is prospective') are proven to be insurmountable differences, the relation collapses. Thus, the relation is 'Dependence on the Negation of Counterconditions.' Refuted If: The counterconditions in SRC_002 are shown to be irrelevant to the core mechanism of selection, meaning the relation holds even if the counterconditions are true, thereby severing the claimed dependence.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_002", "SRC_001"],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "The candidate accepts the critique of the endpoints and makes the relation contingent on resolving that very critique."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Explicitly named 'Dependence' and formulated the 'Refuted If' around the irrelevance of the counterconditions."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "The 'Refuted If' scenario (irrelevance of counterconditions) is a clear, testable claim that would nullify the dependence."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Directly engages with the normative gap by making the relation's existence dependent on bridging or dismissing that gap."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Defines the relation structurally as a logical dependency on the status of specific premises in SRC_002."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "The normative gap is the central pivot; the relation exists only if the gap can be logically navigated."},
+        {"handle": "SRC_010", "kind": "revised", "note": "Establishes a functional link where the isolated node acts as a conditional operator on the foundation artifact."},
+        {"handle": "SRC_021", "kind": "revised", "note": "States 'Refuted If: The counterconditions... are shown to be irrelevant...'"}
+      ]
+    },
+    {
+      "content": "Kind: Integration. The isolated node integrates the 'retrospective' nature of biological evolution (SRC_005) with the 'prospective' aim of scientific inquiry to form a hybrid 'Cyclical Validation Loop.' In this integrated system, retrospective corroboration fuels prospective risk-taking, which in turn generates new data for retrospective filtering. Refuted If: It is shown that retrospective corroboration and prospective risk-taking operate in strictly separate, non-interacting phases of scientific practice, such that no feedback loop exists and the 'integration' is merely a sequential juxtaposition without causal interaction.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_005", "SRC_003"],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "revised", "note": "The candidate acknowledges the difference (retrospective vs prospective) and proposes an integration that specifically bridges them, rather than denying the difference."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Named the relation 'Integration' and provided the 'Refuted If' condition."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "The 'Refuted If' describes a scenario of strict separation which would disprove the proposed integration."},
+        {"handle": "SRC_013", "kind": "revised", "note": "Addresses the normative gap by integrating the descriptive (biology) and normative (science) elements into a single cyclical process."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Specifies the causal mechanism of the integration: 'retrospective corroboration fuels prospective risk-taking'."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "The candidate explicitly models the interaction between the retrospective and prospective elements, addressing the gap directly."},
+        {"handle": "SRC_010", "kind": "revised", "note": "Defines a functional link (the loop) that structurally connects the endpoints."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Included the specific 'Refuted If' condition regarding the lack of causal interaction."}
+      ]
+    },
+    {
+      "content": "Kind: Reduction. The normative preference described in the isolated node reduces to the descriptive fact of 'community survival' outlined in SRC_001. What scientists call 'rational preference' is nothing more than the sociological phenomenon of research groups adopting methods that prevent their extinction. Refuted If: A rational agent is identified who consistently prefers corroborated theories despite belonging to a community that would survive equally well by preferring non-corroborated ones, proving the preference is not reducible to community survival mechanics.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_001", "SRC_004"],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "The candidate argues that the 'normative element' is an illusion created by the descriptive mechanism, directly challenging the critic's premise that the normativity is real and missing in evolution."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Clearly stated 'Kind: Reduction' and the 'Refuted If' condition."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "The 'Refuted If' posits a specific counter-example (the rational agent in a safe community) that would break the reduction."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Attempts to dissolve the normative gap by reducing the normative to the descriptive."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Proposes a specific causal reduction (preference = survival trait) rather than a vague analogy."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "Directly addresses the gap by claiming the 'normative' side of the gap is reducible to the 'descriptive' side."},
+        {"handle": "SRC_010", "kind": "revised", "note": "Establishes a reductive link between the isolated node's concept and the foundation's mechanism."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Stated 'Refuted If: A rational agent is identified...'"}
+      ]
+    }
+  ]
+}

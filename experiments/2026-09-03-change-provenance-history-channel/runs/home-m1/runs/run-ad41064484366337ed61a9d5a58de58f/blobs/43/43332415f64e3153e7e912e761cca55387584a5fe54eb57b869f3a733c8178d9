@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference that the theory is more probable or true, but as a critical rational choice to act on the theory that has withstood the most severe tests so far, accepting the cost that this preference offers no guarantee of future success and remains perpetually open to falsification.",
+    "mechanism": "Critical Rational Choice via Severe Testing: The mechanism distinguishes between the logical status of a theory (which never gains probability) and the methodological rule for action (prefer the theory that has survived the most rigorous attempts at refutation). This avoids induction by treating corroboration as a report on past performance under stress, not a predictor of future frequency. The 'preference' is a decision to bet on the currently least-refuted option, acknowledging that the next test could overturn it.",
+    "counterconditions": [
+      "If the agent requires a probabilistic guarantee of future success to act, Popper's framework cannot provide it without smuggling in induction.",
+      "If 'verisimilitude' (truth-likeness) is invoked as the metric for preference, the Tichý-Miller theorem undermines its formal coherence within Popper's system.",
+      "If the preference is interpreted as a causal explanation for why the theory will continue to work (evolutionary analogy), it conflates descriptive survival with normative justification."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dichotomy between 'non-rational convention' and 'critical rational choice.' This candidate explicitly adopts the latter: the preference is a rational, critical decision based on the history of severe testing, not a blind convention nor an inductive probability calculation. It addresses Popper's actual solution by framing the choice as methodological rather than logical."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "rebutted",
+        "note": "The criticism argues the mechanism fails when multiple unrefuted theories coexist. However, Popper's criterion of 'severity' differentiates them: a theory that has survived more severe or numerous tests is 'better corroborated' even if neither is yet falsified. The choice is not arbitrary; it favors the theory that has risked more and survived."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "rebutted",
+        "note": "The criticism states evolutionary epistemology fails to answer the cost of lacking an inductive bridge. This candidate accepts that cost explicitly: the 'cost' is the absence of a guarantee. The defense does not claim the 'fittest' will survive tomorrow, only that it is the most rational bet today given current knowledge. The lack of an inductive bridge is the feature, not the bug."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The criticism alleges the evolutionary analogy smuggles in induction. This candidate clarifies that the analogy is limited to the *selection* process (we choose the survivor), not a prediction of *future* survival. We do not infer 'it survived, so it will survive'; we infer 'it survived, so it is the best current candidate to test next.' No inductive leap regarding nature's uniformity is made."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "rebutted",
+        "note": "The criticism conflates causal explanation with normative justification. This candidate strictly maintains the normative stance: scientists *should* prefer the better-corroborated theory because it has withstood more criticism, not because evolutionary forces caused it to survive. The justification is methodological rigor, not biological causality."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "Similar to above, the candidate rejects the idea that preferring the 'currently fittest' implies it will remain fit. The 'bet' is acknowledged as risky and non-guaranteed. The defense holds on Popper's terms precisely because it refuses to convert past survival into a probabilistic asset."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "rebutted",
+        "note": "The criticism claims methodological acceptance smuggles in probabilistic weighting. This candidate denies this: accepting a theory for action is a binary decision (act on A, not B) based on comparative corroboration, not a weighted average of probabilities. The 'regulative ideal' is simply to seek truth by eliminating error, not to maximize expected utility via induction."
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "departure_declared",
+        "note": "This candidate departs from any defense relying on 'verisimilitude' as a formal metric due to the Tichý-Miller theorem objections. Instead, it relies solely on the comparative history of severe testing and the methodological rule to prefer the theory that has risked more."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

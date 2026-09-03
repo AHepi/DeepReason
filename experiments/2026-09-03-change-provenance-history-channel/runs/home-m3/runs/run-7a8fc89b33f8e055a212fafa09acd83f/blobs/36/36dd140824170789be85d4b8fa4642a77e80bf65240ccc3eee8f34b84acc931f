@@ -1,0 +1,86 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference that the theory is more likely true, but as a procedural rule of critical rationalism: we prefer the theory that has withstood the most severe tests because it offers the best available target for future falsification, thereby maximizing the growth of knowledge. This preference does not smuggle in induction because it makes no probabilistic claim about the future; it simply acknowledges that a theory surviving severe tests has higher 'verisimilitude' (truth-likeness) relative to a refuted one, even if verisimilitude cannot be quantitatively measured. The cost of accepting this view is the abandonment of the hope for a formal, algorithmic method to determine which theory is 'best' in a final sense, leaving scientists with a fallible, metaphysical faith in the regularity of nature to justify acting on the best-tested theory.",
+    "mechanism": "Critical Rationalism Procedural Rule",
+    "counterconditions": [
+      "If verisimilitude is proven formally incoherent within Popper's framework (as argued by Miller and Tichý), then the defense collapses unless a non-quantitative notion of 'closeness to truth' can be salvaged.",
+      "If the preference for corroborated theories implicitly assumes that the future will resemble the past (uniformity of nature) without explicitly stating it as a metaphysical postulate, then induction has been smuggled back in.",
+      "If Popper's distinction between the 'logic of discovery' and the 'context of action' fails to provide a normative reason for preferring one theory over another, then the preference is merely psychological, not rational."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "shared_structure": [
+        "Selection based on survival of severe trials rather than probability accumulation.",
+        "Distinction between pragmatic utility for action and logical justification of truth.",
+        "Reliance on a metaphysical axiom (regularity of nature) to bridge the gap between test results and future action."
+      ],
+      "disanalogies": [
+        "Biological evolution lacks the intentional choice element present in scientific theory selection.",
+        "Natural selection operates on reproductive fitness, whereas corroboration operates on informational content and test severity.",
+        "Evolutionary success is retrospective, while scientific preference is prospective (aimed at future tests)."
+      ],
+      "transfer_claims": [
+        "Just as organisms surviving harsh environments are not 'more probable' to survive future changes but are the only viable candidates for further adaptation, corroborated theories are the only viable candidates for further scientific progress.",
+        "The 'fitness' of a theory is its ability to withstand falsification, not its statistical likelihood of being true."
+      ],
+      "overturn_conditions": [
+        "If a less corroborated theory consistently outperforms a highly corroborated one in new domains without being falsified, the procedural rule loses its normative force.",
+        "If the concept of 'severity' of a test cannot be defined independently of the theory being tested, the entire mechanism becomes circular."
+      ]
+    },
+    "evidence_refs": [],
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The candidate explicitly distinguishes between logical justification (which denies increased probability) and pragmatic necessity (procedural rule for action), arguing that Popper's defense rests precisely on this separation, not their conflation."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "rebutted",
+        "note": "The candidate does not present a false dilemma; it argues that the preference is defensible *only* if understood as a procedural rule grounded in verisimilitude and metaphysical faith, rejecting the idea that redefining probability is the solution."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be73990a91bfccedd76a3db90a87926c01",
+        "kind": "revised",
+        "note": "Acknowledges the Miller-Tichý refutation of formal verisimilitude but revises the claim to rely on a qualitative, non-quantitative notion of 'closeness to truth' as a regulative ideal rather than a calculable metric."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The analogy to evolution is used to illustrate the selection mechanism, not to equate procedural necessity with rational defensibility. The rational defensibility comes from the goal of maximizing knowledge growth through severe testing."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "Revises the reliance on verisimilitude to clarify that it is used as a qualitative guide for theory choice despite formal incoherence, aligning with Popper's later concessions that it remains a useful regulative idea."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for both sides: the defense via procedural rules/verisimilitude and the critique regarding hidden induction/metaphysical assumptions, fulfilling the problem directive."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The candidate accepts the cost of losing strict normativity in the 'logic of discovery' but argues that normativity is preserved in the 'context of action' through the rational commitment to critical testing, avoiding the false dilemma."
+      },
+      {
+        "handle": "a3a496115ceba9824b3999689584a02fdb9c6dc5e7fda0e921e397f592ae3eb7",
+        "kind": "rebutted",
+        "note": "The candidate directly addresses whether induction is smuggled in by concluding that it is avoided only if the preference is framed as a metaphysical bet on nature's uniformity, explicitly acknowledging this as a non-inductive, conjectural stance."
+      }
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

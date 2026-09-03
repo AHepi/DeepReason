@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is 'defensible only if reinterpreted' as a non-rational convention creates a false dichotomy that fails to address Popper's actual solution: the preference is defensible as a critical rational choice based on verisimilitude (truth-likeness), not merely as an arbitrary tie-breaker. By framing the option strictly as 'non-rational guesses,' the target ignores Popper's argument that choosing the better-corroborated theory is the most rational action available because it has withstood attempts to falsify it, thereby offering the best chance of approximating truth without invoking probabilistic induction. The target's mechanism reduces Popper's nuanced epistemological stance on rational decision-making under uncertainty to mere conventionalism, failing to make the 'strongest case' for defensibility as required by the problem context.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between the logical status of corroboration (not probability) and the pragmatic rationality of preferring better-corroborated theories as those closest to the truth (verisimilitude).",
+      "premise_evidence": null,
+      "successor_question": "How does the target's characterization of scientific progress as 'non-rational guesses' account for Popper's explicit appeals to verisimilitude and the rationality of critical preference in 'Conjectures and Refutations'?"
+    }
+  ]
+}

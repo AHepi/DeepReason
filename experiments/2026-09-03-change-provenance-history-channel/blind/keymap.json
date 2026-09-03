@@ -1,0 +1,837 @@
+{
+ "cf10d39a-31e9-4764-bee7-df2448d4ca65": {
+  "arm": "M1-H0P-control",
+  "artifact": "60216eb27b9ade7a7a9e317eec80ad9566fb86c117ebc771d79c9b09d0ca582a",
+  "school": "school-2"
+ },
+ "dbd56f06-dab1-4bbe-9d7c-691eeca9806c": {
+  "arm": "M1-H0P-control",
+  "artifact": "fdac0b227abad496482e41e6152851ea225b4e74266a0d711f8164b17ef355f1",
+  "school": "school-0"
+ },
+ "a31aa5fb-124c-4b07-b35e-c3d3791ce253": {
+  "arm": "M1-H0P-control",
+  "artifact": "6f2daa00ce631dd4bdf06e788beeae9eecbc9b4fd25d75329137836e439bf5a9",
+  "school": "school-3"
+ },
+ "652a4af9-306e-4c2b-9a08-f83da96a05ae": {
+  "arm": "M1-H0P-control",
+  "artifact": "cb2b7d7d12490fe49b6a0bd74067b7c3480a702d604b3df1b45e7b1e8a267da1",
+  "school": "school-0"
+ },
+ "09999f36-9da8-48ea-bdb1-7a64e91a4563": {
+  "arm": "M1-H0P-control",
+  "artifact": "0968e1bf8a8bc4c460aaba1a6a6c4b02361b6c13cd866dfc8a87cd4275b0713d",
+  "school": "school-3"
+ },
+ "d368f1a9-26cb-4e32-b22a-ec3df94d805b": {
+  "arm": "M1-H0P-control",
+  "artifact": "9ac66ae31230aa9f670ee02a8177a3ff0d6eb700971940bef7381bf2f49097e2",
+  "school": "school-2"
+ },
+ "3ae944af-7f97-403e-9f36-e8f81ce8eb09": {
+  "arm": "M1-H0P-control",
+  "artifact": "f9ddd6d75bece4eed67acd20100a3dba4157f58af212889cd15d2a35b29865c9",
+  "school": "school-2"
+ },
+ "5fd6f3cf-da97-4934-a5e6-d66362919626": {
+  "arm": "M1-H0P-control",
+  "artifact": "e7ebd0c8f97190bb32b8c484dd1ea82104ca3e6539f3d6f0111dd57474d1d0f2",
+  "school": "school-3"
+ },
+ "a8d471a7-5207-4e35-b2e9-71e12700f4ca": {
+  "arm": "M1-H0P-control",
+  "artifact": "a226501dfdb65f0b639ee05417e7320dd071cadd6b52e3dc48e1a3357e3ab3c0",
+  "school": "school-0"
+ },
+ "b3dec60e-83c5-4a2c-940a-d44caa236c13": {
+  "arm": "M1-H0P-control",
+  "artifact": "1c542314043e1b2f47e4590300a194d492c0616c4534035c25fccec957ad8650",
+  "school": "school-3"
+ },
+ "84cd42ca-ad87-49bb-b128-92ec34a5cdb9": {
+  "arm": "M1-H0P-control",
+  "artifact": "63a7e5c46ebdfec503417d52959e61ee7b1c13e30769cdfb7559b0f58f48561d",
+  "school": "school-1"
+ },
+ "6128aa60-eea3-45f1-b6e5-db00c202cb3d": {
+  "arm": "M1-H0P-control",
+  "artifact": "fdac0d10f50362231db6d57cd2101545e65106bb0a91ba402c5b9a6d588f70ee",
+  "school": "school-3"
+ },
+ "150db6a5-e6b4-4b48-a386-f16358ba385c": {
+  "arm": "M1-H0P-control",
+  "artifact": "515ee590ffe77024a0e181995aaeaae47d64144aad4714b8d18e1ec5cd6d85ac",
+  "school": "school-3"
+ },
+ "14f1170c-66fb-4956-9d3c-47b069792a22": {
+  "arm": "M1-H0P-control",
+  "artifact": "170dcf822801a53f6d94ffdc4bda4d22572ff209de7550eb8a50aeb1b52720ea",
+  "school": "school-3"
+ },
+ "56acd5a2-7311-4327-b172-6b9b5e144173": {
+  "arm": "M1-H0P-control",
+  "artifact": "a6ea9327509e38ef25510894d8803071a36d8ab71715643407c4a567c59668b0",
+  "school": "school-0"
+ },
+ "0a6407f6-c861-4f86-8f65-7e61d957efe8": {
+  "arm": "M1-H0P-control",
+  "artifact": "9612ffdcec932d382d1fe3c48cd4face78ab82aeef1347a2d0fa27b3a060d175",
+  "school": "school-3"
+ },
+ "a90a687b-5e2e-4fd7-b9ca-1ba4319aa1ac": {
+  "arm": "M1-H0P-control",
+  "artifact": "a230075e1466746643baf9bff1920c63c3354e25fe5f3f21166289703bf6d136",
+  "school": "school-1"
+ },
+ "69cbb80d-2d98-4363-ad8e-04245ffde738": {
+  "arm": "M1-H0P-control",
+  "artifact": "9beab8aa82bef21bef62b4ceb1fca6a1ad60cfc07b9265a907e9b7dbd3d0f767",
+  "school": "school-2"
+ },
+ "c7c21a3c-17d8-4155-bca5-9e9511cd58ca": {
+  "arm": "M1-H0P-control",
+  "artifact": "3226b6c177b8dee560353eddd3ae2c3e90f7941be986a8b1557e8b52e3f6ed09",
+  "school": "school-1"
+ },
+ "7b6234de-e825-4055-abd8-1a16b62a50d9": {
+  "arm": "M1-H0P-control",
+  "artifact": "a5c8ff9f16ff7e5808e0172432e38cff0877081f098fa32044ccce506d9c3d6b",
+  "school": "school-0"
+ },
+ "2435f5f2-09ac-451b-8e71-c6ef3768bf38": {
+  "arm": "M1-H0P-control",
+  "artifact": "d1d271871de8727a8c719b97c013eb59b199b2a89a26744cfa08afc905a7865c",
+  "school": "school-1"
+ },
+ "43642053-6327-4b89-b690-1b75019f4574": {
+  "arm": "M1-H0P-control",
+  "artifact": "d1554cc20bead05c526a0581483cc4e0b41529fcef575783ea276c574d5bd48f",
+  "school": "school-1"
+ },
+ "332ff8b8-7cb9-4d3e-94f7-0c0400e5c674": {
+  "arm": "M1-H0P-control",
+  "artifact": "3baa44732dc8dd0221347df6f6d729a4ee2d9a2ace55e2f8202f296565a7a571",
+  "school": "school-1"
+ },
+ "2b1b4087-8260-4dd0-9410-ca7787dd5597": {
+  "arm": "M1-H0P-control",
+  "artifact": "3b7659cfef9fc1f41f273213c8d0a1b96d400792448fd565afe46b66e8cd9276",
+  "school": "school-0"
+ },
+ "3aa52170-d599-4c59-bf4f-14ccd251e961": {
+  "arm": "M1-H0P-control",
+  "artifact": "674033b652ec81d91033cb694309478c575ba7831ee557afa9e850584e1c3fde",
+  "school": "school-2"
+ },
+ "de39a4ba-a7c7-4ac4-af1d-da55627da05a": {
+  "arm": "M1-H0P-control",
+  "artifact": "6ba453712e51ea206dfb921055146c7e61f8ba07077ced01650c961f8aa6701f",
+  "school": "school-2"
+ },
+ "fe9b3b8b-e195-4a69-9274-e9b61ad501c3": {
+  "arm": "M1-H0P-control",
+  "artifact": "42d3d5be8c91fada9027ca691d3cd91048305a27cb99b614b7e58c96c8a3e192",
+  "school": "school-3"
+ },
+ "020c7bed-a67b-40d5-911b-8bd56e16c6ee": {
+  "arm": "M1-H0P-control",
+  "artifact": "0c317ca50e172b2fb222da8721276e0548e2a5fbe2c0338fb3f02963a48aee5a",
+  "school": "school-0"
+ },
+ "8be8edc8-4e61-4ec9-a0c4-2a288cec0bb7": {
+  "arm": "M1-H0P-control",
+  "artifact": "9e424a4dac4841a0b0e18e230ee0f88f2082eccb0f22e1ed51b0647ce8325542",
+  "school": "school-2"
+ },
+ "376b030b-fb9b-4cde-99eb-d5f713f730b8": {
+  "arm": "M1-H0P-control",
+  "artifact": "fddcb6fad5d0f6fddceb19af1d47de3f4b962685a02dc14201c26baca46de88a",
+  "school": "school-0"
+ },
+ "c229f4ca-35bc-4370-b172-10b31e6ceefd": {
+  "arm": "M1-H0P-control",
+  "artifact": "450b5e783863221830188e27be07ddd9d6952e0ad5dd969ac6425b25dddadf20",
+  "school": "school-1"
+ },
+ "0f603de8-c4d8-424c-8258-9c40f3aa7715": {
+  "arm": "M1-H0P-control",
+  "artifact": "eaf913dfb8c3013cd24ea444595c73aeed07caecd149888aef19ac04739b108a",
+  "school": "school-0"
+ },
+ "131cf2d6-a8d6-4c34-95fb-09d053b255c8": {
+  "arm": "M1-H0P-control",
+  "artifact": "beabdaebcfb2e0a9329c87340d71cd6dc6b6de31a1a7f5c64a3b9fe85cb38311",
+  "school": "school-1"
+ },
+ "0e88fe17-6832-4496-b13f-b79a631554da": {
+  "arm": "M1-H0P-control",
+  "artifact": "1c110c6075f45f457e416f07a9bce61eb2649c07f0d6b6deb811778e9f9c0568",
+  "school": "school-3"
+ },
+ "c3cd492b-ba00-450f-9c1e-38abd4276a67": {
+  "arm": "M1-H0P-control",
+  "artifact": "39c4ab49f7f47e721e7bbffc2cce176b20664dbeb0547b6100dc132b32a79e45",
+  "school": "school-3"
+ },
+ "eede37fd-589a-45d5-bb9b-ae6a35d502f5": {
+  "arm": "M1-H0P-control",
+  "artifact": "f684fe848a6a54be40921e45498e7b5eb5523708ffac635e2b5eb91ebba1c711",
+  "school": "school-3"
+ },
+ "6b1709c0-c8bc-492d-8278-75bba337c720": {
+  "arm": "M1-H0P-control",
+  "artifact": "83a2cc5e9d1d76bda6053cda0c458179b82b7cc874281f3452b654564e26ded0",
+  "school": "school-2"
+ },
+ "883536bd-44d3-435a-8240-662aa4310ac4": {
+  "arm": "M1-H0P-control",
+  "artifact": "6f998f892c07386c4db3e96e89c415ed0c80331d8aa11335f66ef6f5e0a29ae3",
+  "school": "school-1"
+ },
+ "96707224-40f5-4d22-be5e-f2a486114deb": {
+  "arm": "M1-H0P-control",
+  "artifact": "c8303bbbb32fd9f501dc34882415d17e2da698f9077ac934487d2ba5b684f79e",
+  "school": "school-2"
+ },
+ "c99196a3-9b21-4ee6-b443-31a0a1e9a1cf": {
+  "arm": "M1-H0P-control",
+  "artifact": "bbaf2fa684bef168b4734006231acb4128dbc7f5b5e383685e7f68c621272986",
+  "school": "school-2"
+ },
+ "b59506c4-50d2-4d98-8fba-021c577d888c": {
+  "arm": "M1-H0P-control",
+  "artifact": "cd818d9f153be8ceb5b70209297465bc92341d91ae6f3530aec21d6236a8209a",
+  "school": "school-0"
+ },
+ "4e64f7c0-2f99-4665-9f15-60ad788093bd": {
+  "arm": "M1-H0P-control",
+  "artifact": "87c428e8419a547d09c2a8e2b7320743ba15499b73c4876d72abd5ff56e316d4",
+  "school": "school-1"
+ },
+ "ea909c41-5a6c-4bd0-ac43-3a428ca275f6": {
+  "arm": "M1-H0P-control",
+  "artifact": "9f667af5b4cfb931e7a50f5fcb4c95b6e57327052235ce24fe4cc76b8620c74f",
+  "school": "school-0"
+ },
+ "14edc955-b498-4fe8-adbb-058d5245201c": {
+  "arm": "M1-H1R-history",
+  "artifact": "4290750e9d9100eee3b7bde1f222f9a5e28ffecb86466c7aeb7d0d040d42f370",
+  "school": "school-0"
+ },
+ "806fa17f-e507-41ea-8eac-5ae594de44c9": {
+  "arm": "M1-H1R-history",
+  "artifact": "1b2b14e6eb3134630a00ad02ba96eb22a7769e2b33ced8083f0f15f7014dfd8d",
+  "school": "school-3"
+ },
+ "2c5e5c70-d3c4-4468-9274-3ffbc67f5ec2": {
+  "arm": "M1-H1R-history",
+  "artifact": "7d957540b0e8696d6333183b79f20032d8b1c54549cf0fe454d78a6bab437be7",
+  "school": "school-1"
+ },
+ "7975986b-9dad-4bb6-86c8-0ca6436111cd": {
+  "arm": "M1-H1R-history",
+  "artifact": "6007d28e1c71fbdf673d5a80e2f31f51df1c3f0eac17cc12d3dd000e6cd78d5c",
+  "school": "school-0"
+ },
+ "f5f1a351-86fb-4ed5-b0f4-9bb0a53fb7a6": {
+  "arm": "M1-H1R-history",
+  "artifact": "34f6f6b4e99ddc63e91caa15579af92c887ee9bc30eeb481e1d65e6faf213c54",
+  "school": "school-2"
+ },
+ "f4ab9c68-66f9-4c48-987e-8416ef2f054d": {
+  "arm": "M1-H1R-history",
+  "artifact": "ee08132686c6d547bddc2859d916a3900447179b39efe62ff26d7551c4c098f1",
+  "school": "school-0"
+ },
+ "95c43682-6d8f-4cbf-bbdc-5cff1d2f248d": {
+  "arm": "M1-H1R-history",
+  "artifact": "5ef493f2384fa5d512512bd3a92bd5fb87af4d88d07cebcea1440e1fca07971d",
+  "school": "school-0"
+ },
+ "f76daa3c-8f0d-4184-acd4-f9db43b004eb": {
+  "arm": "M1-H1R-history",
+  "artifact": "51ef8f97a9c0ad0ac451cd6c221e1e92ab89fa2614971e29531d63b83d1904ca",
+  "school": "school-0"
+ },
+ "aaae81c5-3dbc-4e11-a133-66883d7aa7c4": {
+  "arm": "M1-H1R-history",
+  "artifact": "814125e64707f42706ada042479d478ecf46caeb2e92ef602c2ddbb950fc5643",
+  "school": "school-2"
+ },
+ "3b6a0c22-bb42-4cc6-b399-3fab70224729": {
+  "arm": "M1-H1R-history",
+  "artifact": "d9f0f1b8e4951f0da168dff3c23e2d7ebd2ea36c308c2936240886a9c622342e",
+  "school": "school-1"
+ },
+ "19fd2e60-3f20-426b-8740-b0b64bc2e88b": {
+  "arm": "M1-H1R-history",
+  "artifact": "027c9b5f9c1f64e697f68ae3c2fba9d2577e211a2eb384fac7c41eaa78ec32bc",
+  "school": "school-1"
+ },
+ "0e703a1d-f8b8-49c2-9216-07863372535a": {
+  "arm": "M1-H1R-history",
+  "artifact": "3e9ee5671a260767608184db43f7accb9bc08640183418b2873b172ce883d9fa",
+  "school": "school-2"
+ },
+ "7ff4799c-1018-4147-a58d-8c80e8db86e2": {
+  "arm": "M1-H1R-history",
+  "artifact": "6a9845889c335ed845096027c1343dac9b0d310485c6da6050cc40d06d998beb",
+  "school": "school-2"
+ },
+ "80f7e215-e37b-4788-a0ff-9b64ac6a2c72": {
+  "arm": "M1-H1R-history",
+  "artifact": "7d2987a865b5cb0a8fa3f857b95977dad8368cf3639e0965ab2ac4a789f818e4",
+  "school": "school-0"
+ },
+ "57c7c61c-76c2-41b7-bd90-b08802ea852c": {
+  "arm": "M1-H1R-history",
+  "artifact": "efee3c365ef6506361b3642beded204b174e4e4aa784d1f51bbccae2cc4461a9",
+  "school": "school-2"
+ },
+ "bc4f86e8-3370-4d38-bbf1-d8dfd97cb8b0": {
+  "arm": "M1-H1R-history",
+  "artifact": "f759e1797c3c7358c9f05eca44bdc692d699cccb94f075e8e216f35bb555d77f",
+  "school": "school-1"
+ },
+ "a7dfb89c-7c3b-4f90-9b4b-059c7585fc7e": {
+  "arm": "M1-H1R-history",
+  "artifact": "7fc855bbf361cd0f4987e5422f32a0439620ac0d698bf3a16508a2a498aa7f5f",
+  "school": "school-1"
+ },
+ "66867b32-6b3d-481e-aeb1-7945415c39a8": {
+  "arm": "M1-H1R-history",
+  "artifact": "40c5ea46a208a03c83b535c2ce38073db85fb5535f73f8f8f8478606b6c04914",
+  "school": "school-3"
+ },
+ "799e0a0b-d8bb-4082-a93e-7eaee2368e88": {
+  "arm": "M1-H1R-history",
+  "artifact": "3a77ace07dfcdc3734ab2c28b9478eec8947b92d93c0dba7ce9b871683636122",
+  "school": "school-1"
+ },
+ "050563b5-3f6c-4d16-9374-186cd154cd7e": {
+  "arm": "M1-H1R-history",
+  "artifact": "3fa7354331a64651335a4a55b1ca743953781ab5bb0b063c9b6d6267b586a38f",
+  "school": "school-2"
+ },
+ "c3612b5b-394e-4f7e-8401-304a3635bcdf": {
+  "arm": "M1-H1R-history",
+  "artifact": "f5aed36a6a7041449961327347d822ddfde301bb0c42b8fd34e8a3b466041e10",
+  "school": "school-1"
+ },
+ "c28fa6a6-852f-4aca-9618-b6cadcd25169": {
+  "arm": "M1-H1R-history",
+  "artifact": "63f5bb00b0ca2ce2344a7c4e9b88050c50aabcefd2efbd8920f57addbb3204f2",
+  "school": "school-3"
+ },
+ "ca13edda-461c-4de8-8cb4-92afdf80b795": {
+  "arm": "M1-H1R-history",
+  "artifact": "af02ceb09c7236ce3d421fda3f9c901c061b80965c654f87b17f26948856bbc7",
+  "school": "school-3"
+ },
+ "a54f49ba-1de6-4143-8df7-80c118d24af9": {
+  "arm": "M1-H1R-history",
+  "artifact": "f27c7cc2aeb1e46a3ffb82cc2dc47757027cf4ea92168508d34472a5bd0fedd6",
+  "school": "school-0"
+ },
+ "3e215d39-6142-494a-973c-2688f1124968": {
+  "arm": "M1-H1R-history",
+  "artifact": "af00a557d9cfb86db6668e7e9782bc3c03c9d48dfbd42bc8bf72bf339f03defb",
+  "school": "school-3"
+ },
+ "65685247-f3ff-4383-ab8e-f501e25926ae": {
+  "arm": "M1-H1R-history",
+  "artifact": "ad9a3ba15fcc8a438c1744513b4ae5b1b93d3157d2e4514c126fb34d06849d38",
+  "school": "school-2"
+ },
+ "8bcc9e3b-2862-4c0b-9ef1-20407f142232": {
+  "arm": "M1-H1R-history",
+  "artifact": "1b08d4f8e0e42d6b477203b47669cc8576e095846ed7e2195b1f2331562340ff",
+  "school": "school-0"
+ },
+ "28f8b0ae-94a6-4f24-9999-17b994db631c": {
+  "arm": "M1-H1R-history",
+  "artifact": "7e84b0473ef70e95260cbe3a5fdc4303fa56ab93c744885d4119ed531a76c302",
+  "school": "school-3"
+ },
+ "1f3abfc4-dcfa-4d3d-aba1-b8d8f40bc849": {
+  "arm": "M1-H1R-history",
+  "artifact": "0eb89cbfbccaadff57f25b9a9bb07839f78ebb406a59ab900e75dd3a734364e3",
+  "school": "school-2"
+ },
+ "201034b1-6fb6-40c0-ab60-60089492e466": {
+  "arm": "M1-H1R-history",
+  "artifact": "7408bf353315773aabc7c576fe2afefde63fe151bdaafb2d950e6b6cd8b1edea",
+  "school": "school-0"
+ },
+ "20c1b589-0a3b-487b-9657-8de26233b85d": {
+  "arm": "M1-H1R-history",
+  "artifact": "d17b1621d338e4243a8aea2897eb8fc7a91873f1b78c220abd92f049f8ed6d67",
+  "school": "school-1"
+ },
+ "6fb83a0d-ae54-4c08-ba86-9c7a01013184": {
+  "arm": "M1-H1R-history",
+  "artifact": "451a5650d57c7f895e07e5e05d19b21af0b6769d294ac4cdf267690944f4d7c1",
+  "school": "school-2"
+ },
+ "bbb4b065-ba2c-45a3-9353-0740d235be31": {
+  "arm": "M1-H1R-history",
+  "artifact": "2805c437547199bf8c2174f685894cc7b69c2841aaf475e4ef6c63270b6e3f3d",
+  "school": "school-3"
+ },
+ "ba7b895d-8d3b-478a-bda0-302b168cadd0": {
+  "arm": "M1-H1R-history",
+  "artifact": "7d93a3c1aed3cdc6dae8479f3d71e4329be1d2f64be3c781e87ff1ca7f2724b9",
+  "school": "school-3"
+ },
+ "a83e8391-1cd9-4490-987a-f1cadf994bf5": {
+  "arm": "M1-H1R-history",
+  "artifact": "0e7c744798ee87399a050abd6cd2e04b6bc10eca0bf07854be5e563dd7989460",
+  "school": "school-1"
+ },
+ "c362eac5-a36e-4f15-b546-3feb89d06db7": {
+  "arm": "M1-H1R-history",
+  "artifact": "3108eb6d12adcba1e6e52007bf51a7b0ffe2815aac6ce29da8c5984e56a1bac2",
+  "school": "school-1"
+ },
+ "78c40120-7167-405b-91a8-6275fa3c23d9": {
+  "arm": "M1-H1R-history",
+  "artifact": "2ce96850cf3b98254f35978fc170840648cb0478603829b00edb9692d05ab1a5",
+  "school": "school-0"
+ },
+ "55bf49b7-a77a-437b-9e13-975a22fdb007": {
+  "arm": "M1-H1R-history",
+  "artifact": "7704f0ad5f35282621ac3843d1424e60b8a8912edf24daa1c2a2bb3abdef8609",
+  "school": "school-0"
+ },
+ "2382ee59-af3b-4911-a238-ce4491a49fd8": {
+  "arm": "M1-H1R-history",
+  "artifact": "d97262e6e412113d7242244ec05ba4dc6e8b369103ceb432746f37f06f4dd51f",
+  "school": "school-0"
+ },
+ "ca3d2ac6-8e41-4a2e-815e-04c5ae2c6028": {
+  "arm": "M1-H1R-history",
+  "artifact": "2b2dc8431b18b8aa0541623ac92ad4c34ba8c1437a0d46079e56d4f73cfd40a0",
+  "school": "school-3"
+ },
+ "1a62aa3e-fe85-479d-afd1-e237359e124c": {
+  "arm": "M1-H1R-history",
+  "artifact": "2eee036f24d38198ea15718848f760cdb407a54d0b2e5fe4206e2fe8ffbc2d8f",
+  "school": "school-3"
+ },
+ "c22d90ad-764c-4937-a228-462712fb0ac6": {
+  "arm": "M1-H1R-history",
+  "artifact": "7c9b7161aa421cd20e2ab79e48be56e2bd4cd4b496a24a6dc54b82e069ddc75b",
+  "school": "school-2"
+ },
+ "e9165d2d-658a-4f3b-9980-83df4e1d7d7c": {
+  "arm": "M3-C0P-blind",
+  "artifact": "66225d91beb60a53b7f8f9c10281638da03df4b726808e77b4bfb8db6cd0919e",
+  "school": "school-0"
+ },
+ "6660f84d-0f16-48dd-aa00-0cef219a26b5": {
+  "arm": "M3-C0P-blind",
+  "artifact": "14d763cde4c3302094f6099cd94af2edcfbd0aae6b52a896b21bd2f219da9153",
+  "school": "school-3"
+ },
+ "93bdf0c0-7691-4ba2-8f55-3b92813c1b40": {
+  "arm": "M3-C0P-blind",
+  "artifact": "114f1d162577f71dfb75059979184cc9a2a908baba628825fd98ef7acf772638",
+  "school": "school-3"
+ },
+ "f49438d0-a371-4eed-a4df-63e35382b651": {
+  "arm": "M3-C0P-blind",
+  "artifact": "80cf71e6af3416b2ba827c942c55e69c964428e573308e82948398e1a00eba59",
+  "school": "school-2"
+ },
+ "7dfa1c81-aa57-41fc-9b8b-9683d27aa7c2": {
+  "arm": "M3-C0P-blind",
+  "artifact": "15d4cac06e4732ee4307816de543cf791f5f2d81c5fb5283762e4707b63d47bd",
+  "school": "school-0"
+ },
+ "ca3c3ea5-dd6d-4b85-93fe-41f04821793c": {
+  "arm": "M3-C0P-blind",
+  "artifact": "acba75eb524a633882c68027dcd262651b8712ea133ce898d6449b4407232173",
+  "school": "school-3"
+ },
+ "c9a873d2-fc1e-46d0-b0bc-8c73e2ec63b4": {
+  "arm": "M3-C0P-blind",
+  "artifact": "a9f9ff400459ab6e301346b3d488c3b28dbc247dda9fc511e0bb8b1504a0ba48",
+  "school": "school-0"
+ },
+ "7dd59946-0351-4617-a024-b5d1948e1976": {
+  "arm": "M3-C0P-blind",
+  "artifact": "8f6bac156b898bd15f5d9eac77911c2b233be19cca25ae962704ae206f9dc666",
+  "school": "school-3"
+ },
+ "1a12af85-89d6-4408-a0b8-3687a76f72bb": {
+  "arm": "M3-C0P-blind",
+  "artifact": "d51779d908becef983c5153766937e4b0bf74f9e63099ab47877563cc0f6b96d",
+  "school": "school-3"
+ },
+ "0bf6742a-142a-4de1-ac53-9bc5adae2333": {
+  "arm": "M3-C0P-blind",
+  "artifact": "379ab00a72459db22fc153c0df81847d15426027e421985fccee2be078ea5ead",
+  "school": "school-0"
+ },
+ "db4ebb68-9118-44af-a554-80ce02674d95": {
+  "arm": "M3-C0P-blind",
+  "artifact": "142811aee2e8033d5ad4b34fb90048966e917d73c515c94f1b5cfe609d587140",
+  "school": "school-3"
+ },
+ "faee0983-e1f5-42ec-bd6f-68ceb26d9411": {
+  "arm": "M3-C0P-blind",
+  "artifact": "e65e569a64341cce7dff7d7d8a322c802bbd81f5f81dc62972df9657d1ed71ad",
+  "school": "school-0"
+ },
+ "30015ef6-1a9c-41da-8b90-2f936e683994": {
+  "arm": "M3-C0P-blind",
+  "artifact": "5bcef9fd7b590859587c7a90d1eb7e0d84c626f0dce1a881500922f80e403db7",
+  "school": "school-0"
+ },
+ "b5de35de-035c-4d23-a870-57dc58504d0d": {
+  "arm": "M3-C0P-blind",
+  "artifact": "5204742d5573d16028fffaf66b6e40ec725c15dfc8462944f2259b21c1efaaa6",
+  "school": "school-1"
+ },
+ "2c05dbe2-f636-4746-98b2-5d465ca62381": {
+  "arm": "M3-C0P-blind",
+  "artifact": "a34366fbb01af803e0fd72cfaef5dc94120838e1e6e3ac54c268b0b28053f52f",
+  "school": "school-2"
+ },
+ "700879b2-a318-421d-8f1b-aace26e622b7": {
+  "arm": "M3-C0P-blind",
+  "artifact": "e28e1e645a8e8645a0d0cfba32f0ad1e7f00d2fb5dd8fb2cf94cc4d1679958be",
+  "school": "school-2"
+ },
+ "0f86ec6e-4a2d-4ee4-814a-e50f833b6306": {
+  "arm": "M3-C0P-blind",
+  "artifact": "8bfd6c4257923486bcc15ce15a87eb5f7c5c68bcd5fa5959c00ce6abf98c7fb6",
+  "school": "school-1"
+ },
+ "eed1db21-9454-487c-a928-f2e2c61e95f7": {
+  "arm": "M3-C0P-blind",
+  "artifact": "122b5d29b9a41ab28abea2575f3e0536fc777955bd02ec77e9b1974ade433c08",
+  "school": "school-2"
+ },
+ "f5faa11f-57f7-457b-a4bc-c10279e5402a": {
+  "arm": "M3-C0P-blind",
+  "artifact": "8313412ab8109c783bb0f0e488c2bb7ddfafb95d04ca749562b47e510bde5784",
+  "school": "school-3"
+ },
+ "f84c5080-d7a6-43ee-a4b0-472466dfe2c3": {
+  "arm": "M3-C0P-blind",
+  "artifact": "4312d3857847f3e8fe3a029103cb624362c6a34cf8ebd3b889fed3430679aa0d",
+  "school": "school-1"
+ },
+ "c58d8626-3958-4f2f-9488-b4713fc36859": {
+  "arm": "M3-C0P-blind",
+  "artifact": "6ed489ba476e2c28a3c05d0de6716d2e6fca2ed326521b77351834a6ae575001",
+  "school": "school-2"
+ },
+ "0277202d-30bd-4c5f-a228-a6c626f7cce8": {
+  "arm": "M3-C0P-blind",
+  "artifact": "1ce6599018ecc02eaf88331566087fb0edaab3c7093e2f0490164cd1a8aa752a",
+  "school": "school-3"
+ },
+ "50d667a0-797a-40c2-adcd-af9665dbcf43": {
+  "arm": "M3-C0P-blind",
+  "artifact": "0212cc85396d009f0653a57a74d73ecc0d2ef78aa6c12d516b551f6ade69fd0e",
+  "school": "school-0"
+ },
+ "8e69f6ef-4b29-4f0e-a73e-857ca1797d16": {
+  "arm": "M3-C0P-blind",
+  "artifact": "27e29ea5ef4c343f9ad3442bbc9f4487b47dea3db92a9fc6abac8596b8caebdf",
+  "school": "school-3"
+ },
+ "e0b53d21-fedc-4f7c-9339-b379e82ca1fc": {
+  "arm": "M3-C0P-blind",
+  "artifact": "248d85fca43196d186b61e7b6a633754a46407e0d4ad3b0e0afda365f3c56c51",
+  "school": "school-1"
+ },
+ "dabb5895-05ac-4bc7-84e2-aa83dca4a6e5": {
+  "arm": "M3-C0P-blind",
+  "artifact": "344a17c05c1aa562da5a3ad77eb3c8691cdace8a49176cb630f4360041e058eb",
+  "school": "school-2"
+ },
+ "108f4a99-af1c-4038-9d07-80f9099fff07": {
+  "arm": "M3-C0P-blind",
+  "artifact": "7838f5614e76af60349dc4459aec900a6425fdc30d09af0b86d05d2da5eeaa22",
+  "school": "school-1"
+ },
+ "13d952db-8f7d-4aa9-8d63-3f7852b482b1": {
+  "arm": "M3-C0P-blind",
+  "artifact": "7b68659b1cd221ea4330f665c941c0ce646a85698284f8417ca2538cd6224ed7",
+  "school": "school-0"
+ },
+ "f93411cb-46a3-40ea-9f56-dfdecb30c812": {
+  "arm": "M3-C0P-blind",
+  "artifact": "56f39baa88d0f77353778f0a36ff5274fde87fe68c29a24fd32f24114235a378",
+  "school": "school-0"
+ },
+ "797a689a-cf79-4fa7-833d-22f919aa44bd": {
+  "arm": "M3-C0P-blind",
+  "artifact": "e24a6fb5cae299a841b2840d2e27341001308fa3fa7072320632ad57bec6159a",
+  "school": "school-2"
+ },
+ "3a31d241-975a-456d-a66b-2443ef4bbe8e": {
+  "arm": "M3-C0P-blind",
+  "artifact": "629d857c754424040e1abb982b3d6305076d3e4380956ca9bc157a986a6f3245",
+  "school": "school-2"
+ },
+ "f448b599-7950-4c35-85e9-d61b3e9b5f1c": {
+  "arm": "M3-C0P-blind",
+  "artifact": "4c1f39b88c2aff008393b049ab69e2d3916b241903dc9cf1cba92d89c4bd3a0a",
+  "school": "school-0"
+ },
+ "7b6a5194-ba3b-4df5-b719-1953ed977069": {
+  "arm": "M3-C0P-blind",
+  "artifact": "957704bb4c4e6f7236320c6f6cc93553937337ebec1d55bed67326031e01a9c0",
+  "school": "school-2"
+ },
+ "68b87584-0ea3-4c81-a793-a7b00c177df9": {
+  "arm": "M3-C0P-blind",
+  "artifact": "63d4387b52c8ef810fc8a767fef3b09a30310882ef889d37d3444367e63a8d9f",
+  "school": "school-3"
+ },
+ "29d14094-1062-48e8-9771-81125b0f005a": {
+  "arm": "M3-C0P-blind",
+  "artifact": "ef02b433c91f8a8bda60557c8e46a8ffdb6232c39ad4bb4ad1a591248c3824cf",
+  "school": "school-3"
+ },
+ "4f98a88b-3c38-4bd7-91e4-6e5e714ca8e7": {
+  "arm": "M3-C0P-blind",
+  "artifact": "a83d728459bb6d60350912c3c90a91f82e19193af0c6742cb156126326d2b2ee",
+  "school": "school-2"
+ },
+ "0520e806-5dca-44b2-8363-1b01a03fb033": {
+  "arm": "M3-C0P-blind",
+  "artifact": "6d2476f30f531f1d40759d5aa09b806c4d842b74521e7a52a007df516beed4f2",
+  "school": "school-1"
+ },
+ "19811bb7-851b-422d-86ab-9512c13d9557": {
+  "arm": "M3-C0P-blind",
+  "artifact": "76cf918960284a1cad58c407e26c2ac89253cefdaf9fa848c56f60e4fab131c8",
+  "school": "school-0"
+ },
+ "ced764be-0b91-463b-a759-22331b96869c": {
+  "arm": "M3-C0P-blind",
+  "artifact": "53ad22d9d2458ed095cf4736161958bc17c6ae0a23fe2c65d2aa827ef27e0d1d",
+  "school": "school-0"
+ },
+ "3feef29a-596e-49b3-a158-c42425af291d": {
+  "arm": "M3-C0P-blind",
+  "artifact": "382c277a8e31c7eec03820036a75b56a1cf77133929e09376b9220cf05202337",
+  "school": "school-2"
+ },
+ "0db607d5-ad9b-4aa9-973b-3644f00e0b2e": {
+  "arm": "M3-C0P-blind",
+  "artifact": "354fa70c0e0698475f3990a6611ddf1b45577f6071bdf6fcf8f9490f23ab5688",
+  "school": "school-1"
+ },
+ "36e8860d-a977-40eb-8cdf-710b10214497": {
+  "arm": "M3-C0P-blind",
+  "artifact": "33ee028f5b344ac0c2b69a8cb69bc213ab4c50b87834194672e7229ede25663e",
+  "school": "school-2"
+ },
+ "25e0600e-ca56-4f64-a4d6-eaafe1079e50": {
+  "arm": "M3-C0P-blind",
+  "artifact": "d3c2ddb14a447cc678d6286c68423f4e22a0c96c60ad1ecfe8f4cc4732acecca",
+  "school": "school-1"
+ },
+ "ec8964a8-7213-4c82-9fef-c51ca44817d3": {
+  "arm": "M3-C1I-informed",
+  "artifact": "7021dbe4e8cc3f444b21b2ea28b224fb84c9a5d240e587196da3fbdf841c2d00",
+  "school": "school-2"
+ },
+ "1f81f1b6-725a-4a02-a0f3-d5de9de05d02": {
+  "arm": "M3-C1I-informed",
+  "artifact": "2ade2c918534d240e9d4ae1b4b7abda6eb771ebec04731c30507d4a0cf5d2a3f",
+  "school": "school-1"
+ },
+ "5cfb2261-7652-4bbf-9191-d650fd9b05a3": {
+  "arm": "M3-C1I-informed",
+  "artifact": "09292130faa932cf0804d2bc6f0ea0385aa2f8e73b576128b38110b22e56297b",
+  "school": "school-0"
+ },
+ "42f0fc48-f27c-4462-b979-5ca6ee924d5d": {
+  "arm": "M3-C1I-informed",
+  "artifact": "9ec97bda15bc76d6bb7d3eb49f88ee669a9e8b16f7401726e74c2ddf27fa2be4",
+  "school": "school-0"
+ },
+ "1e07d0fa-d9aa-49cd-b589-e4bf586439b7": {
+  "arm": "M3-C1I-informed",
+  "artifact": "013ff21c48935ba2325b560ec32b5aed85de59fe64cd39eb23b70020f165ef21",
+  "school": "school-2"
+ },
+ "67801f54-e3d4-4747-8e36-7737d89851a7": {
+  "arm": "M3-C1I-informed",
+  "artifact": "79592f4129f5bd0bd89bdd44f4d2ce00e2e61c025a664324733791b7f767c477",
+  "school": "school-0"
+ },
+ "cf091ee9-b706-4f3f-ac61-d88cb06efbb0": {
+  "arm": "M3-C1I-informed",
+  "artifact": "fcb8773c112f25d19710209c07ef5f1d63df54ca2671420ac58f9269173affba",
+  "school": "school-3"
+ },
+ "5aa2aaa0-ea52-4bce-96ff-06e710d11645": {
+  "arm": "M3-C1I-informed",
+  "artifact": "29b2e871586083741e071565e0ef2d58a4831a839f59d5019344b9752e2305c7",
+  "school": "school-3"
+ },
+ "28462a91-31c6-495a-a70c-07f221f1391d": {
+  "arm": "M3-C1I-informed",
+  "artifact": "8f9984ad28195fd566132a854d7573747df585d33ffe36fb3b99f129f9c36395",
+  "school": "school-0"
+ },
+ "12ce52fc-afab-4f0d-ab1d-2adb63ffa5f2": {
+  "arm": "M3-C1I-informed",
+  "artifact": "2381944fc1b3f966dcf0cb5b1119e87501aa667daa710a6bd4fac5750615faee",
+  "school": "school-1"
+ },
+ "cd3a068d-f401-4fc7-bdfd-19a6cc8082f4": {
+  "arm": "M3-C1I-informed",
+  "artifact": "f894be130c0ad90e4044d63fa13ad002bfd1a00aa33bfb4319c6d7cc43f64271",
+  "school": "school-0"
+ },
+ "0b2fd1a3-5715-4f1e-90a4-be47f7692708": {
+  "arm": "M3-C1I-informed",
+  "artifact": "e115df514452479b218125730c948decdfe7df6ad72be60a0be5a6d4efa33f55",
+  "school": "school-2"
+ },
+ "aab0e9c8-65a1-4c9e-acc8-3bc0f4a02c43": {
+  "arm": "M3-C1I-informed",
+  "artifact": "d1fbd7aac20fc900815903587c49a4198da27ef02a6558bf0ee33c270240f8bd",
+  "school": "school-3"
+ },
+ "5aa22752-1ad9-4721-adfb-1f929edfb3d8": {
+  "arm": "M3-C1I-informed",
+  "artifact": "7dd4a9938315324766096409660822375ea75e5895aedad6a6486d7f90d9a2aa",
+  "school": "school-2"
+ },
+ "c68dff05-2d07-4db4-9980-a20d54dbe460": {
+  "arm": "M3-C1I-informed",
+  "artifact": "0185943a06774d7490456b933fc783b352b1ce4da8a79b846746eb5412e3b9d2",
+  "school": "school-3"
+ },
+ "1e5834b0-31e7-4129-b27f-e465e6ed73a2": {
+  "arm": "M3-C1I-informed",
+  "artifact": "1306015a4f069caf706fb20b315df2862b0bdf8a03803233f7afa55ec811cdd3",
+  "school": "school-0"
+ },
+ "4f8dc0c8-cdb1-4307-b318-68e3070f6a77": {
+  "arm": "M3-C1I-informed",
+  "artifact": "600baad49249b22ed320eb4014664d62d64aa1283a6ab6e50e236dc80d94370b",
+  "school": "school-2"
+ },
+ "342e0403-b315-4280-895e-6154daee344f": {
+  "arm": "M3-C1I-informed",
+  "artifact": "474a6a55b3fc0299fc4e96a42607f97b005afe6945677c5494cddc61e61ce1e6",
+  "school": "school-2"
+ },
+ "82b83e52-78d6-4e4c-abea-951b2e081d28": {
+  "arm": "M3-C1I-informed",
+  "artifact": "66a237835eb9270aa156e1dfb9cabb96ecb66ef3059856bef740438fe8d973cc",
+  "school": "school-3"
+ },
+ "3e74a67a-b7f9-441d-88e0-c0cd1e52ba4d": {
+  "arm": "M3-C1I-informed",
+  "artifact": "c08bbd96569a9f3da303fc1e24002804aa4760ed09512aba83be3bc7407fead8",
+  "school": "school-1"
+ },
+ "876c1549-c8f9-443e-b21a-56dcb799bc4a": {
+  "arm": "M3-C1I-informed",
+  "artifact": "5fe77aa4aa58f05b8b08ed9f42860b3cea412371f491c5a42f1492346704bc8a",
+  "school": "school-0"
+ },
+ "5dff5aad-438d-4352-8a95-04cccfa841e8": {
+  "arm": "M3-C1I-informed",
+  "artifact": "5826034a3ab0f466818d0f7eeaf01ea07d8a633606fd0210d99ad92c0243d232",
+  "school": "school-1"
+ },
+ "51f2afe7-a06b-45ae-ab56-f53e829d7b27": {
+  "arm": "M3-C1I-informed",
+  "artifact": "be570f5bbbba9f29c76db4d66ee6be1bd4e846a10ad2a6cd279b927f76f77bc5",
+  "school": "school-2"
+ },
+ "fb1b57cf-a1e1-46a8-b08e-5af478a2634b": {
+  "arm": "M3-C1I-informed",
+  "artifact": "c839dd06f8ef5476da943f222b4cd85490a0660c8db5248cd25e2f0d510429c8",
+  "school": "school-3"
+ },
+ "e2c380ba-6229-4c04-b797-2ae856170019": {
+  "arm": "M3-C1I-informed",
+  "artifact": "6940929002ab60f7d9c7dd361c7c9d91ad9a0f25db9f241c0dce29235bbb1c12",
+  "school": "school-0"
+ },
+ "d3c6f73b-c254-4735-962a-a68e24a88f12": {
+  "arm": "M3-C1I-informed",
+  "artifact": "4f3b337687f3edf0d7fa25412b1f51806c1e27c7126fcbdb304034af02fb57cf",
+  "school": "school-3"
+ },
+ "dfe75197-09b9-4c1c-81a4-53612c21c7f4": {
+  "arm": "M3-C1I-informed",
+  "artifact": "6ebb18e4ce6be41296b73490fb888efe47d29626728f8770daed357c8f0c9fcf",
+  "school": "school-1"
+ },
+ "0c608921-64ad-40ff-9ebb-02a31f715ea9": {
+  "arm": "M3-C1I-informed",
+  "artifact": "4d98a04d2b28f0613ae451a1da079c14a567d39f11582630ea940d02905d6dc4",
+  "school": "school-2"
+ },
+ "59242fca-77a1-4efd-9f53-03dfbd5d6623": {
+  "arm": "M3-C1I-informed",
+  "artifact": "aac299819be57013d012f722e49c41f34742bfc3733db55a6e2d2debc6c8a4b5",
+  "school": "school-0"
+ },
+ "bf796d41-ea0e-401f-bf2a-00e117a78a74": {
+  "arm": "M3-C1I-informed",
+  "artifact": "f6a1a5120048ca273fd149ac0a0e4672786b924209071bcdf0167a8f5ebe1ed6",
+  "school": "school-3"
+ },
+ "f12864a1-8864-49c6-bc7f-c48968ac095f": {
+  "arm": "M3-C1I-informed",
+  "artifact": "7d666137b65cb5b44c9f09a1eaa4d6d11ce9165ac121176ea492c66bac47e690",
+  "school": "school-2"
+ },
+ "c7b3ca01-87b8-4a91-8bba-df18f23b4cda": {
+  "arm": "M3-C1I-informed",
+  "artifact": "f426dfdc1087dbf268d19c0c19f9d6f47e3f0b4cb083c0ac915f5d1afb2394a2",
+  "school": "school-3"
+ },
+ "d517606d-de0d-4bfe-b895-c35f14ef0efd": {
+  "arm": "M3-C1I-informed",
+  "artifact": "1e33c17562e8afdc834cc0dadfaa97248b3d65e4b9c5c26f9a86e5f3eb31d9ad",
+  "school": "school-0"
+ },
+ "26616159-b44b-48e6-b984-bc7162242f86": {
+  "arm": "M3-C1I-informed",
+  "artifact": "64e71c9648e3cc1bb3874cafa0c349cd68f23f33ac70355b54ec87f7efe31ce7",
+  "school": "school-1"
+ },
+ "02323e4f-b1e4-4cfd-a7f3-d5664816e8e6": {
+  "arm": "M3-C1I-informed",
+  "artifact": "8d16d54a563d15e1ddd8ecb6e636672475a7c809d072ff93734e2bee086a045d",
+  "school": "school-1"
+ },
+ "873eb9b7-282e-44d7-89d3-d16b12a9106c": {
+  "arm": "M3-C1I-informed",
+  "artifact": "83777a6c2b2f628ae395a1c8a60be0b7e94b3c155095672452adb02fdd3d14c4",
+  "school": "school-3"
+ },
+ "7f69c3b5-21f0-4fdc-b6ca-e72b91c69421": {
+  "arm": "M3-C1I-informed",
+  "artifact": "f3d844769f6a642144498ae246a7113529c8b3452ba77763a83abac7ae2ed13f",
+  "school": "school-0"
+ },
+ "7fe8fa89-3e15-4766-854f-cb8cd798425b": {
+  "arm": "M3-C1I-informed",
+  "artifact": "d5bf2ac494287d9203ba26b090358e6ec521b560b19f3a789b8d698715b405a9",
+  "school": "school-1"
+ },
+ "012fd405-c1f0-4448-97ca-a60fd8670f1b": {
+  "arm": "M3-C1I-informed",
+  "artifact": "3929e4b37e4a328b4377f432518075203e61fc9ae5cb9bb4994f2d320869639e",
+  "school": "school-0"
+ }
+}

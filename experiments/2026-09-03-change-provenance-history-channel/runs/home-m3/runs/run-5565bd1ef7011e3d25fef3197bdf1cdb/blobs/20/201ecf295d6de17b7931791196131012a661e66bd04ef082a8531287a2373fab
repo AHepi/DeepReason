@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the preference for corroborated theories is merely a preference for discussing thoroughly vetted theories (resource allocation), not a belief in their reliability or safety for action.",
+      "case": "This interpretation fails to address the core of Popper's problem regarding 'acting on' a theory. The prompt explicitly notes that scientists and Popper himself prefer better-corroborated theories when choosing which theory to *act on* (e.g., building a bridge). The target's redefinition reduces this practical, high-stakes preference to a mere heuristic for 'discussion' or 'attention.' If an engineer chooses Theory A over Theory B because A is better corroborated, they are acting on the expectation that A will not fail in the future. The target's claim that this is just about 'community diligence' or 'focusing resources on inquiry' evaporates the justification for the action itself. It answers why we *talk* about the theory, but not why we *bet our lives* on it, thereby failing to resolve the tension between rejecting induction and making practical choices.",
+      "counterexample": [
+        "An engineer refusing to use a well-tested steel alloy in favor of an untested one, despite the target's logic that the choice should only reflect 'where to focus discussion,' would be considered irrational in practice because the goal is structural integrity (future performance), not epistemic housekeeping."
+      ],
+      "successor_question": "If corroboration is only a report on past test severity and not a guide for future reliability, what non-inductive principle allows Popper to advise acting on the corroborated theory rather than flipping a coin?"
+    }
+  ]
+}

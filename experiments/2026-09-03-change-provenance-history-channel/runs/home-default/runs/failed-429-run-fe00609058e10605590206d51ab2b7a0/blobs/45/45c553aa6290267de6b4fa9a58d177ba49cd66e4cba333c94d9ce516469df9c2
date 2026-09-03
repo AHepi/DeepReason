@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Reduction. The isolated problem (preference without induction) reduces to the procedural rule defined in SRC_005: preference is not an epistemic inference but a dialectical move dictated by the current state of falsification. REFUTED IF: An agent can demonstrate a rational basis for preferring one unfalsified theory over another that relies on positive probabilistic weight rather than the mere absence of falsification, thereby proving the procedural rule insufficient for rational action.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "The candidate does not claim a contradiction between inductive bridges and elimination; it claims reduction to a procedural rule, avoiding the need for an inductive bridge entirely."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Explicitly names 'Reduction' as the relation kind and defines the endpoints (isolated problem -> SRC_005 procedural rule)."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "The refutation condition tests for 'positive probabilistic weight,' distinguishing the reduction from epistemic probability scenarios."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Content now explicitly contains 'refuted if' and 'reduces to' to satisfy relation-form@578e42df713e."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "revised", "note": "Links specific isolated problem to SRC_005 via a named mechanism (procedural necessity)."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "revised", "note": "Corrected formatting to include required keywords for relation-form check."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "rebutted", "note": "The relation is not asserted as redundant but as a foundational reduction of the problem space."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Does not claim integration of descriptions but reduction of the preference mechanism to a single procedural rule."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Shared Mechanism. Both the isolated problem and SRC_003 operate on the mechanism of 'negative filtering' where validity is conferred solely by the elimination of competitors rather than positive confirmation. REFUTED IF: There exists a viable scientific methodology that generates preference among theories without eliminating any competitors, relying instead on additive confirmation or Bayesian updating of priors.",
+      "typicality": 0.78,
+      "neighbours": ["SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "Focuses on shared mechanism of elimination, bypassing the inductive bridge vs. elimination contradiction."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Defines relation as 'Shared Mechanism' with clear endpoints."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Refutation condition targets additive confirmation, distinct from the negative filtering mechanism."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Includes 'refuted if' and 'shares mechanism'."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "revised", "note": "Explicitly links isolated problem to SRC_003."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "revised", "note": "Keywords present."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "rebutted", "note": "Mechanism is substantive (negative filtering), not a redundant assertion."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Identifies a specific shared mechanism rather than integrating two descriptions."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Contradiction. The isolated problem's demand for non-inductive preference contradicts SRC_001's reliance on 'verisimilitude' as a metric, because verisimilitude implicitly assumes a structural similarity to truth that functions as a disguised inductive proxy. REFUTED IF: Verisimilitude can be formally defined and measured using only deductive logic and empirical content without any assumption that past resilience predicts future truth-likeness.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "revised", "note": "Explicitly frames the tension as a contradiction between non-inductive demands and verisimilitude."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Names 'Contradiction' and specifies the conflicting endpoints."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Refutation condition addresses the definability of verisimilitude without induction."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Contains 'refuted if' and 'contradicts'."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "revised", "note": "Links isolated problem to SRC_001."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "revised", "note": "Keywords present."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "rebutted", "note": "Proposes a genuine logical conflict, not redundancy."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Claims contradiction, not integration."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Abstraction. The isolated problem represents an abstract formalization of the historical reporting mechanism found in SRC_002, stripping away the contextual 'game of science' narrative to isolate the pure logical structure of procedural necessity. REFUTED IF: The isolated problem introduces new variables or constraints regarding preference that are not present in or derivable from the historical reporting model of SRC_002.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_002"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "Abstraction avoids the specific contradiction by elevating the discussion to structural form."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Defines relation as 'Abstraction'."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Refutation condition checks for extraneous variables not in the base model."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Includes 'refuted if' and 'abstracts'."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "revised", "note": "Connects isolated problem to SRC_002."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "revised", "note": "Keywords present."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "rebutted", "note": "Abstraction is a distinct logical operation, not redundancy."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Does not claim integration of descriptions."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Dependence. The viability of the isolated problem's solution depends entirely on the truth of SRC_004's claim that 'severe testing' can be defined without inductive background knowledge; if severe testing requires induction, the isolated problem collapses. REFUTED IF: A definition of 'severe test' is provided that relies zero percent on inductive assumptions about nature's uniformity or riskiness of predictions.",
+      "typicality": 0.72,
+      "neighbours": ["SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "Frames the issue as dependence on the definition of severity, sidestepping the elimination/bridge conflict."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Names 'Dependence' and identifies the critical dependency."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Refutation condition targets the possibility of non-inductive severity definitions."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Includes 'refuted if' and 'depends on'."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "revised", "note": "Links isolated problem to SRC_004."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "revised", "note": "Keywords present."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "rebutted", "note": "Establishes a critical dependency, not redundancy."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Claims dependence, not integration."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Compatibility. The isolated problem is compatible with SRC_005 only under the strict condition that 'procedural necessity' is interpreted as a local rule for the current dialectical moment, not a global heuristic for theory choice; if interpreted globally, they become incompatible. REFUTED IF: The procedural rule in SRC_005 is shown to function effectively as a global heuristic for theory choice across multiple dialectical moments without collapsing into inductive reasoning.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "Compatibility claim allows for nuanced interpretation, avoiding binary contradiction."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Names 'Compatibility' and specifies the condition."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Refutation condition tests the global applicability of the procedural rule."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Includes 'refuted if' and 'compatible with'."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "revised", "note": "Links isolated problem to SRC_005."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "revised", "note": "Keywords present."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "rebutted", "note": "Conditional compatibility is a substantive relation."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Defines compatibility conditions, not just integrating descriptions."}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target commits a category error by conflating the causal history of theory selection with the normative justification for acting on a specific theory. While Popper accepts that corroboration reports a historical fact (survival of tests), the problem asks if *preference* for the better-corroborated theory is defensible without induction. The target's analogy to natural selection explains why uncorroborated theories disappear (causal mechanism) but fails to justify why a scientist should bet on the 'fittest' theory surviving future tests (prospective action). In biology, 'fitness' is defined retrospectively by actual survival; in science, preference implies an expectation of future reliability. By reducing preference to a mere 'survival trait' of the community, the target sidesteps the core philosophical challenge: providing a non-inductive reason to believe the selected theory will work tomorrow. This renders the defense circular or irrelevant to the agent's decision-making context.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between the logical status of a theory (which cannot be made probable) and the rational basis for preferring one theory over another for practical application.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration is purely retrospective, what non-inductive bridge allows a Popperian scientist to rationally prefer Theory A over Theory B for a critical engineering task today?"
+    }
+  ]
+}

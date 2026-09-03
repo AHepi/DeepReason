@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of truth, but as a non-inductive methodological rule grounded in the aim of science (verisimilitude) and the pragmatic necessity of action, without smuggling in probability; however, accepting this defense costs the ability to claim that corroboration provides any rational degree of belief in the theory's future success, reducing the preference to a bold guess with no epistemic weight beyond its survival of past tests.",
+    "mechanism": "The argument distinguishes between 'logical probability' (which Popper rejects as increasing with corroboration) and 'methodological choice' (which is governed by the goal of approaching truth). It posits that preferring the best-tested theory is analogous to choosing the strongest shield in battle: one does not believe the shield is magically impenetrable (induction), but one chooses it because it has withstood the hardest blows (corroboration) while acknowledging it might fail next time. This separates the justification for action from the justification for belief.",
+    "counterconditions": [
+      "If verisimilitude is formally incoherent (as Miller and Tichý argued), then the aim of science cannot rationally guide theory choice, collapsing the defense into mere convention.",
+      "If the preference for corroborated theories implies any expectation of future success based on past performance, it constitutes induction by another name, violating Popper's core prohibition.",
+      "If the 'pragmatic necessity' argument fails to distinguish between acting on a hunch and acting on a rational rule, the preference becomes arbitrary."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates logical justification (belief/probability) from pragmatic necessity (action), arguing that Popper's defense rests precisely on this distinction: we act on the best-corroborated theory not because it is probable, but because it is the most rational guess given our aim for truth, thereby avoiding the conflation alleged."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "rebutted",
+        "note": "The candidate does not present a false dilemma requiring redefined probability; instead, it accepts Popper's solution that preference is a methodological rule detached from probability, directly addressing the criticism by affirming this specific Popperian move."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be73990a91bfccedd76a3db90a87926c01",
+        "kind": "revised",
+        "note": "Revised to acknowledge the Miller-Tichý refutation of verisimilitude as a fatal weakness in the 'strongest case' for defensibility. The candidate now frames the reliance on verisimilitude as the primary cost: if verisimilitude is incoherent, the defense collapses, making the 'surviving' answer contingent on finding a non-verisimilitude basis for the aim of science."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The biological analogy is rejected in favor of a 'shield' analogy to avoid conflating procedural necessity with rational defensibility. The argument maintains that the rationality comes from the alignment with the critical method's goal, not from an evolutionary imperative."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "Explicitly incorporated the abandonment of verisimilitude as a central countercondition. The candidate now argues that without a coherent concept of verisimilitude, the 'defensibility' is severely weakened, forcing a retreat to pure conventionalism or pragmatism."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "revised",
+        "note": "Expanded the 'strongest case for each answer' section to fully articulate the induction-smuggling argument before refuting it, ensuring both sides are presented with maximal strength as required by the problem statement."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "Clarified that the cost identified is not the loss of normativity entirely, but the loss of *epistemic* normativity regarding future success. The normativity remains methodological (follow the critical process), even if it doesn't guarantee or predict truth."
+      },
+      {
+        "handle": "900d96a45b619700ca7b8bd3c22cf6543d0c74e7f033d5be40ecec34562a7dbb",
+        "kind": "rebutted",
+        "note": "Defended the equation of methodological preference with rational defensibility within Popper's framework, arguing that for Popper, 'rationality' in science just IS adherence to the critical method, so the two are not distinct in the way the critic suggests."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["shield_battle_test", "medical_triage_protocol"],
+      "shared_structure": [
+        "Selection based on past performance under stress",
+        "No guarantee of future success",
+        "Rationality defined by adherence to protocol rather than prediction accuracy",
+        "Goal-oriented behavior despite uncertainty"
+      ],
+      "disanalogies": [
+        "Scientific theories aim at universal truth, shields only at immediate survival",
+        "Corroboration involves logical falsification attempts, not just physical impact",
+        "Theory choice affects the definition of reality, unlike shield choice"
+      ],
+      "transfer_claims": [
+        "Just as a commander rationally chooses the battle-tested shield without believing it is invincible, a scientist rationally chooses the well-corroborated theory without believing it is probable.",
+        "The rationality of the choice lies in the procedure (testing/critical scrutiny), not in the outcome prediction."
+      ],
+      "overturn_conditions": [
+        "If the goal of science is shown to be something other than verisimilitude (e.g., empirical adequacy only)",
+        "If past performance is demonstrated to be logically irrelevant to any form of rational choice"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

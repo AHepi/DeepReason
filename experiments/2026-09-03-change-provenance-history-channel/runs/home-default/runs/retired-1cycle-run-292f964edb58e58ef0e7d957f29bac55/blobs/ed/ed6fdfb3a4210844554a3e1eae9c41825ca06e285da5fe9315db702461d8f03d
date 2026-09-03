@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target's claim that preferring better-corroborated theories 'smuggles induction back in' relies on a misinterpretation of Popper's distinction between the logical status of corroboration and the pragmatic rationale for action.",
+      "case": "The target asserts that any preference for a theory based on past survival presupposes the 'principle of uniformity of nature,' which Popper rejected. However, this ignores Popper's explicit solution: the preference is not an inductive inference that the theory is *true* or *probable*, but a rational decision rule based on the goal of finding truth. Popper argues that since we cannot know which theory is true, we should test the most falsifiable ones; if they survive, they are the best candidates we have. The 'bridge' the target claims is missing is not the inductive principle of uniformity, but the methodological rule that one should act on the theory that has withstood the severest criticism so far, precisely because it offers the best chance of detecting error. The target fails to engage with Popper's argument that this preference is deductive in structure (if we want to find truth, we must test bold conjectures) rather than inductive (past success guarantees future success). By conflating the *reason for acting* with an *inductive prediction of future success*, the target attacks a straw man of Popper's position, missing his core distinction between corroboration (a report of past performance) and probability (a prediction of future reliability).",
+      "counterexample": [
+        "Popper explicitly states in 'Conjectures and Refutations' that we prefer the better-corroborated theory not because we believe it will continue to be successful (which would be induction), but because it is the one that has survived the most severe attempts at falsification, making it the most worthy of further testing and tentative acceptance as a guide to action."
+      ],
+      "successor_question": "If the preference for better-corroborated theories is a methodological rule rather than an inductive inference, how does Popper justify the normative force of this rule without appealing to any expectation of future success?"
+    }
+  ]
+}

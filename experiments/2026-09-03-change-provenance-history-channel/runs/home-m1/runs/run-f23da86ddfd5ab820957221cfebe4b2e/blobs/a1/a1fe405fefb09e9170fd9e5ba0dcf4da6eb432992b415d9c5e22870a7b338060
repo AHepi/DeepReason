@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is defensible 'only if' accepted as a conventionalist decision creating a false dilemma. It ignores Popper's concept of 'verisimilitude' (truth-likeness), where preferring a better-corroborated theory is a rational conjecture that it is closer to the truth than its falsified rivals, even without inductive probability. By reducing the justification solely to 'speed of error detection' and explicitly 'abandoning the claim that this methodology tracks truth,' the target misrepresents Popper's later work and fails to make the 'strongest case' for defensibility as required by the problem context.",
+      "premise": "Popper introduced verisimilitude to explain scientific progress and theory preference without relying on induction or probability, arguing that we prefer theories that have withstood severe tests because they are potentially closer to the truth, not merely because they facilitate faster falsification.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "How does the target reconcile its assertion that scientists must abandon claims of tracking truth with Popper's explicit use of verisimilitude to define scientific progress?"
+    }
+  ]
+}

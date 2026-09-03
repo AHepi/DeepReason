@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of truth, but as a non-inductive methodological rule grounded in the 'logic of situation': acting on the best-tested theory is the only rational way to expose error, whereas acting on a less-tested or falsified theory deliberately obstructs the growth of knowledge. This avoids smuggling in induction by reframing 'preference' from 'belief in probable truth' to 'strategic selection for severe testing,' though accepting this costs the scientist any claim to positive justification that their actions are likely to succeed.",
+    "mechanism": "Reframe the concept of 'preference' from an epistemic probability assignment (which Popper rejects) to a procedural imperative within the logic of scientific discovery. The argument proceeds by distinguishing between the context of justification (where induction is banned) and the context of action (where a decision rule is required). The mechanism utilizes a 'critical rationality' bridge: since all theories are conjectures, the only differentiating factor is their exposure to refutation. Choosing the most corroborated theory maximizes the potential for future falsification if the theory is false, thereby accelerating error elimination. This aligns with Popper's evolutionary epistemology where 'fitness' is defined by survival of tests, not probability of truth.",
+    "counterconditions": [
+      "If the Miller-Tichý refutation of verisimilitude holds strictly, then 'better-corroborated' cannot even imply 'closer to truth,' potentially leaving the preference rule without even a verisimilitude-based heuristic anchor.",
+      "If the distinction between 'acting on' and 'believing in' is psychologically impossible for agents, the rule becomes pragmatically inert.",
+      "If the goal of science is predictive success rather than error elimination, this rule offers no guarantee of better predictions than a random guess among unfalsified theories."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The criticism claims a conflation of logical justification and pragmatic necessity. This candidate rebuts by asserting that Popper's system explicitly merges these via the 'logic of situation.' The justification FOR the preference IS its pragmatic necessity for error elimination; they are not distinct domains in Popper's methodology but integrated through the imperative to test severely."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "rebutted",
+        "note": "The criticism alleges a false dilemma regarding probability redefinition. This candidate does not redefine probability but redefines the semantic content of 'preference.' It argues Popper's solution is not about probability at all, but about the asymmetry of falsification making the best-tested theory the unique rational choice for the specific goal of learning, avoiding the need to redefine probability."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be73990a91bfccedd76a3db90a87926c01",
+        "kind": "revised",
+        "note": "Acknowledging the Miller-Tichý refutation of formal verisimilitude, the candidate has been revised to remove any reliance on 'truth-likeness' as a measurable quantity. Instead, it relies solely on the 'potential for falsification' as the operational metric for preference, which remains valid even if verisimilitude is formally undefined."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The criticism argues the analogy to evolution conflates procedural necessity with rational defensibility. This candidate rebuts by stating that in Critical Rationalism, 'rationality' IS defined as adherence to procedures that maximize error detection. Therefore, procedural necessity constitutes the entirety of rational defensibility in this framework; there is no separate 'rational' standard outside of the method."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "In response to the claim that Popper abandoned verisimilitude, the candidate explicitly drops verisimilitude as a bridge. The argument now rests entirely on the 'logic of the situation' and the strategic aim of maximizing testability, which Popper never abandoned."
+      },
+      {
+        "handle": "60ef0d6b71db19114ca85499b1bdf00dea34b3d51f9c0ada0d35365043649fc0",
+        "kind": "rebutted",
+        "note": "The criticism states the evolutionary dissolution fails to address the normative question. This candidate addresses it directly by providing a normative rule: 'One ought to choose the theory that allows for the most severe test.' This is a normative claim derived from the definition of scientific rationality as error elimination, satisfying the requirement for a defense of Popper's own behavior."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "rebutted",
+        "note": "The criticism claims the target omitted the case for defensibility. This candidate explicitly constructs the strongest case for defensibility (the 'logic of situation' argument) before acknowledging its costs, thereby fulfilling the directive to present both sides."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The criticism argues that reducing the preference to a psychological fact creates a false dilemma regarding normativity. This candidate agrees that it is not merely a psychological fact but a methodological norm. However, it clarifies that the 'cost' is the loss of *inductive* normativity (certainty of success), not normativity per se. The normativity shifts from 'likely true' to 'best bet for learning'."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["biological_natural_selection_process"],
+      "shared_structure": [
+        "Selection is based on survival of trials (tests/f predators), not probability of perfection.",
+        "Preference for the survivor is a strategy for future adaptation, not a proof of optimality.",
+        "The system evolves by eliminating the unfit rather than confirming the fit."
+      ],
+      "disanalogies": [
+        "Biological selection is blind and non-rational, whereas Popper's preference is a conscious, rational methodological rule.",
+        "Organisms do not 'choose' to act on their traits; scientists actively choose which theory to deploy.",
+        "Evolution has no telos of 'truth,' while science explicitly aims at truth (even if asymptotically)."
+      ],
+      "transfer_claims": [
+        "Just as an organism's survival suggests it is well-adapted to current conditions without guaranteeing future survival, corroboration suggests a theory is well-tested without guaranteeing future truth.",
+        "Preferring the surviving organism is the only rational strategy for propagation, just as preferring the corroborated theory is the only rational strategy for knowledge growth."
+      ],
+      "overturn_conditions": [
+        "If biological survival were shown to be purely random with no correlation to fitness, the analogy would collapse.",
+        "If scientific progress were shown to rely on retaining falsified theories for heuristic value, the 'elimination' model would fail."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

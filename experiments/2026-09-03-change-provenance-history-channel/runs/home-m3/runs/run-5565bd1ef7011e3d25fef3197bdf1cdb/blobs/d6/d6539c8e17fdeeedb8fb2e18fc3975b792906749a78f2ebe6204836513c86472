@@ -1,0 +1,42 @@
+## problem-context
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@fc3a372cb72bb72f5800c6a5: program:reasoning_observation_pending
+- reason-counter@4293a886fcd858108a7d1608: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 248d85fca43196d186b61e7b6a633754a46407e0d4ad3b0e0afda365f3c56c51
+{"analogy":null,"claim":"The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive methodological rule grounded in verisimilitude and the logic of severe testing, not probability.","counterconditions":[{"case":"If verisimilitude cannot be formally defined without probabilistic measures (as per Tich\u00fd/Miller), this defense collapses.","checker_spec":null,"eval":"observation"},{"case":"If the preference implicitly assumes the uniformity of nature to justify acting on past success, it smuggles in induction.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Popper distinguishes between logical probability (which remains zero or undefined for universal laws) and corroboration (a report of past performance). The preference is rational because severe tests eliminate false theories, leaving those with higher potential truth-content (verisimilitude). Acting on the best-tested theory is the only rational strategy to approximate truth, even without a guarantee of success or an inductive inference that the future will resemble the past.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- a9f9ff400459ab6e301346b3d488c3b28dbc247dda9fc511e0bb8b1504a0ba48 [mention]
+- 66225d91beb60a53b7f8f9c10281638da03df4b726808e77b4bfb8db6cd0919e [mention]
+- 4c1f39b88c2aff008393b049ab69e2d3916b241903dc9cf1cba92d89c4bd3a0a [mention]
+- 5bcef9fd7b590859587c7a90d1eb7e0d84c626f0dce1a881500922f80e403db7 [mention]
+- 76cf918960284a1cad58c407e26c2ac89253cefdaf9fa848c56f60e4fab131c8 [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- a9f9ff400459ab6e301346b3d488c3b28dbc247dda9fc511e0bb8b1504a0ba48: {"analogy":null,"claim":"The preference is defensible only if we accept a dual-aspect theory of rationality: theoretical reason rejects induction, while practic
+- 66225d91beb60a53b7f8f9c10281638da03df4b726808e77b4bfb8db6cd0919e: {"analogy":null,"claim":"The tension dissolves if corroboration is viewed not as a property of the theory but as a report on the severity of the tests attempted
+- 4c1f39b88c2aff008393b049ab69e2d3916b241903dc9cf1cba92d89c4bd3a0a: {"analogy":null,"claim":"The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule of 'critical rationalism' rath
+- 5bcef9fd7b590859587c7a90d1eb7e0d84c626f0dce1a881500922f80e403db7: {"analogy":null,"claim":"Popper's system contains a performative contradiction: the rule 'prefer the better-corroborated theory' is itself a universal norm deri
+- 76cf918960284a1cad58c407e26c2ac89253cefdaf9fa848c56f60e4fab131c8: {"analogy":null,"claim":"The survivor is the 'methodological wager' view, but accepting it costs science its claim to progressive convergence toward truth, redu
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+DIRECTIVE: mount the strongest NEW specific case against TARGET 248d85fca43196d186b61e7b6a633754a46407e0d4ad3b0e0afda365f3c56c51, or attack=false if you find no genuine fault.

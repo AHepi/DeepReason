@@ -1,0 +1,84 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms without smuggling in induction, provided the preference is interpreted strictly as a methodological rule for selecting the most informative target for falsification (the 'best test object'), rather than as an epistemic bet on future predictive success. The cost of this defense is the abandonment of any guarantee that acting on the preferred theory will yield practical success; it accepts that the 'fittest' theory may be falsified tomorrow, rendering the action based on it retroactively irrational in outcome, though methodologically sound at the moment of choice.",
+    "mechanism": "Methodological Selection for Severity: The mechanism treats corroboration not as a measure of truth probability, but as a historical record of a theory's capacity to survive severe tests. The scientist prefers the better-corroborated theory because it has proven itself a harder nut to crack, offering the highest potential informational yield if it fails. This is a strategic choice for efficiency in error elimination, not an inductive inference that past survival predicts future survival.",
+    "counterconditions": [
+      "If the agent implicitly assumes the uniformity of nature to expect the preferred theory to work in the future.",
+      "If the preference is justified by an appeal to 'verisimilitude' (truth-likeness) given the Tichý-Miller theorem undermines its calculability.",
+      "If the distinction between 'acting on' a theory and 'believing' it to be probable collapses in practice."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "shared_structure": [
+        "Selection of a candidate based on past performance metrics.",
+        "Distinction between explanatory power and predictive certainty.",
+        "Rejection of probabilistic weighting in favor of binary survival status."
+      ],
+      "disanalogies": [
+        "Biological evolution selects for reproduction (future existence), whereas Popperian selection chooses a theory to potentially destroy it (future falsification).",
+        "A gambler betting on a streak assumes the streak continues (induction); a Popperian choosing a theory assumes it might fail soon (deductive openness)."
+      ],
+      "transfer_claims": [
+        "Just as a biologist studies the most robust organism to understand limits of life, a scientist tests the most corroborated theory to understand limits of truth.",
+        "Preference does not imply expectation of continued success, only recognition of current resilience."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that no rational agent would act on a theory without some expectation of its future reliability.",
+        "If the 'methodological rule' inevitably generates psychological belief in probability despite logical prohibitions."
+      ]
+    },
+    "discharges": [
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "rebutted",
+        "note": "The criticism claims the mechanism fails when multiple unrefuted theories coexist. The rebuttal is that the mechanism specifically addresses this by ranking them via severity of tests passed. Coexistence is the default state; the 'preference' is the tie-breaker based on informational content and test severity, not a claim that others are false."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "rebutted",
+        "note": "The criticism argues evolutionary epistemology fails to answer the cost of lacking an inductive bridge. The rebuttal clarifies that the 'cost' is explicitly accepted: there is no bridge to future success. The preference is for the 'best current target,' not the 'most likely winner.' The defense holds precisely because it admits the risk of failure."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The criticism alleges the evolutionary analogy smuggles in induction. This is rebutted by distinguishing the *goal* of the selection: biological selection aims at persistence (inductive), while Popperian selection aims at exposing error (deductive). Choosing the 'fittest' to test it hardest is the opposite of betting on its survival."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "revised",
+        "note": "Revised to explicitly separate causal explanation from normative justification. The candidate now clarifies that the 'normative' force comes solely from the imperative to learn fast, not from any causal guarantee of the theory's utility. The revision adds the constraint that acting on the theory is a 'calculated risk' devoid of inductive warrant."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "The criticism states the pragmatic bet fails on Popper's terms. The rebuttal asserts it is not a 'bet' in the gambling sense (expecting win), but a 'wager' in the Pascal sense (maximizing potential gain of knowledge). One chooses the corroborated theory because losing it teaches more than losing a weak one."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate rejects the premise that 'acting on' a theory requires assuming it will continue to succeed. It posits that rational action can consist of deploying a known-fallible tool while fully anticipating its breakage, provided the deployment yields critical data."
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "rebutted",
+        "note": "The criticism invokes the Tichý-Miller theorem against verisimilitude. The rebuttal confirms the candidate does NOT rely on verisimilitude. It relies solely on 'corroboration' as a historical report card, avoiding any claim about proximity to truth, thus sidestepping the theorem entirely."
+      },
+      {
+        "handle": "5e2df92cb9e1b33a910e9a6b9b29a1f0c4895a11d9c8ac63dac5bc9e45a7a571",
+        "kind": "rebutted",
+        "note": "The criticism claims the target sidesteps the induction question by focusing on informational content. The rebuttal argues this IS the answer: the preference is defensible IF AND ONLY IF it is redefined as a search for information, not truth. The dilemma dissolves when the goal shifts from 'being right' to 'learning fast'."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_007"
+      ]
+    }
+  }
+}

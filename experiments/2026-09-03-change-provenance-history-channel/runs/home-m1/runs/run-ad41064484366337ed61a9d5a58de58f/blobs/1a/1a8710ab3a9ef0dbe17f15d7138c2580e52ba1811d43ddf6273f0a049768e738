@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, critical rational choice based on the logical asymmetry of falsification, where 'corroboration' reports past severity of tests without implying future probability.",
+      "mechanism": "Critical Rational Choice via Logical Asymmetry",
+      "counterconditions": [
+        "If the agent assumes the future will resemble the past in any relevant way regarding the theory's success.",
+        "If the preference relies on a hidden premise that surviving tests increases likelihood of truth.",
+        "If the decision procedure cannot distinguish between a lucky survivor and a robust theory without invoking probabilistic expectations."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "The candidate explicitly rejects the 'false dichotomy' by framing the choice as a critical act of selecting the most severely tested (and thus most informative) theory, not a probabilistic bet or a mere convention."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Addresses coexisting unrefuted theories by prioritizing the one with higher test severity (content), not just survival count."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "Clarifies that the 'cost' is the inability to claim predictive certainty, only the rationality of choosing the best-tested error-eliminator."},
+        {"handle": "[SRC_013] against SRC_004", "kind": "rebutted", "note": "Distinguishes evolutionary analogy (which may smuggle induction) from the logical report of test severity used here."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "Separates the causal history of survival from the normative justification of choosing the theory with the highest informational content relative to tests."},
+        {"handle": "[SRC_005] against SRC_004", "kind": "rebutted", "note": "Rejects the 'pragmatic bet' interpretation in favor of a 'critical selection' interpretation."},
+        {"handle": "[SRC_010] against SRC_002", "kind": "rebutted", "note": "Denies that methodological acceptance requires assuming future success; it only requires accepting the current lack of refutation."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Avoids verisimilitude metrics entirely, relying solely on the reporting function of corroboration."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_012"]
+    },
+    {
+      "claim": "The preference inevitably smuggles induction back in because acting on a corroborated theory logically entails an expectation of its continued success, which is an inductive leap Popper's framework cannot justify without contradiction.",
+      "mechanism": "The Inevitability of Implicit Induction in Action",
+      "counterconditions": [
+        "If the agent can act on a theory while genuinely holding zero expectation of its future reliability.",
+        "If 'preference' is redefined as a purely arbitrary gesture devoid of predictive intent.",
+        "If the cost of action is accepted as purely random regardless of test history."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_012", "kind": "revised", "note": "Revised to argue that even 'critical rational choice' implicitly relies on an inductive norm that severe tests are good indicators, which Popper forbids."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Argues that choosing between coexisting theories forces an inductive guess about which will fail next."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "Accepts the cost: the preference is indefensible on strict Popperian terms, revealing a gap between his epistemology and his methodology."},
+        {"handle": "[SRC_013] against SRC_004", "kind": "rebutted", "note": "Confirms that evolutionary analogies fail precisely because they rely on the inductive success of natural selection."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "Insists that normative justification for action *requires* a bridge to the future, which is inductive."},
+        {"handle": "[SRC_005] against SRC_004", "kind": "rebutted", "note": "Agrees that the 'pragmatic bet' is indeed an inductive wager."},
+        {"handle": "[SRC_010] against SRC_002", "kind": "rebutted", "note": "Concludes that methodological acceptance *is* probabilistic weighting in disguise."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Notes that without verisimilitude or induction, there is no metric for preference, leaving the choice arbitrary."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_010"]
+    },
+    {
+      "claim": "The preference is defensible only if reinterpreted as a non-rational, psychological convention or 'faith' in reason, admitting that Popper's system provides no logical bridge from corroboration to action, thus costing the claim of pure rationality.",
+      "mechanism": "Non-Rational Conventionalism",
+      "counterconditions": [
+        "If Popper successfully provides a logical derivation of action from corroboration.",
+        "If the 'convention' can be shown to be rationally compelled rather than adopted.",
+        "If the cost of abandoning rational justification is deemed too high for the system to survive."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Explicitly accepts the 'non-rational convention' label, rejecting the idea that it must be a 'critical rational choice' to be valid."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Suggests scientists choose based on community convention when logic fails."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "Identifies the cost as the loss of the 'rational' defense of science."},
+        {"handle": "[SRC_013] against SRC_004", "kind": "departure_declared", "note": "Departing from the attempt to save the analogy; instead embracing the irrationality."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "Agrees that causal explanation is all we have, and normative justification is absent."},
+        {"handle": "[SRC_005] against SRC_004", "kind": "rebutted", "note": "Reframes the 'bet' as a blind leap."},
+        {"handle": "[SRC_010] against SRC_002", "kind": "rebutted", "note": "Admits the smuggling of induction is actually a surrender to non-rational habit."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Accepts that without a working metric, we are left with convention."}
+      ],
+      "optional_refs": ["SRC_012", "SRC_015"]
+    },
+    {
+      "claim": "The preference is defensible through a 'Decision-Theoretic Falsificationism' where acting on the best-corroborated theory minimizes the expected rate of error elimination failure, treating 'probability' not as truth-likeness but as a heuristic for error avoidance efficiency.",
+      "mechanism": "Error-Avoidance Efficiency Heuristic",
+      "counterconditions": [
+        "If minimizing error rate logically requires assuming stable error distributions (induction).",
+        "If the heuristic collapses into standard Bayesian updating under scrutiny.",
+        "If Popper explicitly rejected any form of efficiency-based justification."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_012", "kind": "revised", "note": "Refines the defense to be about 'efficiency of error detection' rather than 'rational choice' broadly."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Proposes that among coexisting theories, the one with more severe tests offers a tighter constraint on potential errors."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "Defines the cost as the abandonment of 'truth' goals in favor of 'error management' goals."},
+        {"handle": "[SRC_013] against SRC_004", "kind": "rebutted", "note": "Distances the heuristic from biological evolution, grounding it in information theory."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "Links the causal history of tests directly to the normative goal of rapid error elimination."},
+        {"handle": "[SRC_005] against SRC_004", "kind": "rebutted", "note": "Reinterprets the 'bet' as a calculated risk management strategy."},
+        {"handle": "[SRC_010] against SRC_002", "kind": "rebutted", "note": "Argues this is not probabilistic weighting of truth, but weighting of test coverage."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Bypasses verisimilitude by focusing on the process of testing rather than the state of the theory."}
+      ],
+      "optional_refs": ["SRC_004", "SRC_006"]
+    }
+  ]
+}

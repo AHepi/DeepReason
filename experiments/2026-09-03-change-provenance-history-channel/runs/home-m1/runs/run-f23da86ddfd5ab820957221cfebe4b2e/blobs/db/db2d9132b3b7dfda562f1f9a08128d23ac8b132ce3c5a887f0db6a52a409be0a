@@ -1,0 +1,215 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, methodological rule of 'conjecture and refutation' that maximizes error elimination without asserting future probability.",
+      "mechanism": "Error Elimination Principle: Preference is based on the logical asymmetry between verification and falsification. A theory that has survived severe tests has had more opportunities to be falsified; preferring it is simply choosing the hypothesis that has withstood the most rigorous attempts at destruction, not predicting it will survive the next one.",
+      "counterconditions": [
+        "If the agent implicitly assumes that past survival increases the likelihood of future survival.",
+        "If the preference relies on a hidden premise of the uniformity of nature.",
+        "If the choice is made for practical success rather than proximity to truth (verisimilitude)."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The defense does not concede a 'metaphysical faith'; it explicitly rejects faith in favor of a procedural rule. The preference is a decision to test the strongest survivor further, not an assumption of its future success."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Verisimilitude is the goal, but the mechanism described here is purely negative (error elimination). We prefer the theory not because we know it is truer, but because it is the least refuted available option."
+        },
+        {
+          "handle": "[SRC_011] against SRC_001",
+          "kind": "rebutted",
+          "note": "Objectivity of method is maintained because the rule (prefer the most severely tested) is intersubjective and independent of personal belief. It does not claim objectivity of the result (truth), only of the selection process."
+        },
+        {
+          "handle": "[SRC_014] against SRC_003",
+          "kind": "rebutted",
+          "note": "Projecting past survival into a reason for preference is not an inductive leap if the reason is 'it has not yet failed' rather than 'it will not fail.' The temporal projection is absent; the focus is on the current state of critical discussion."
+        },
+        {
+          "handle": "[SRC_002] against SRC_001",
+          "kind": "rebutted",
+          "note": "This is not a false dichotomy. Popper offers a third way: preference based on critical scrutiny rather than probability or arbitrary convention. It is grounded in the logic of falsifiability."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "Functionally similar does not mean logically identical. While both induction and this method lead to preferring Theory A, the justification differs fundamentally: one cites probable truth, the cites lack of falsification."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "This argument avoids formal verisimilitude calculations. It relies solely on the history of attempted falsifications, which remains logically robust even if formal verisimilitude definitions fail."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The cost is accepting that we have no rational guarantee of future success. The benefit is maintaining logical consistency. We prefer Theory A because it is our best current guess, fully aware it may fail tomorrow."
+        }
+      ],
+      "optional_refs": ["SRC_003", "SRC_004"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system, rendering his rejection of induction self-defeating in practice.",
+      "mechanism": "Pragmatic Induction: Any action taken on the basis of past performance implies a belief in the relevance of the past to the future. To 'prefer' X over Y for action is to bet on X's future reliability, which is an inductive inference regardless of verbal disclaimers.",
+      "counterconditions": [
+        "If 'preference' can be decoupled from 'expectation of success'.",
+        "If the agent acts randomly or contrary to corroboration.",
+        "If the preference is purely aesthetic and has no bearing on practical application."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "revised",
+          "note": "Revised to emphasize that even a 'methodological rule' guiding action constitutes a pragmatic induction. The 'faith' is not metaphysical but operational."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Invoking verisimilitude does not solve the problem because accessing verisimilitude requires assuming that past tests are indicative of truth-content, which is itself an inductive step."
+        },
+        {
+          "handle": "[SRC_011] against SRC_001",
+          "kind": "rebutted",
+          "note": "The distinction between method and result collapses when the method is used to guide life-and-death decisions (e.g., engineering bridges). The 'objectivity' claimed is illusory if the underlying move is inductive."
+        },
+        {
+          "handle": "[SRC_014] against SRC_003",
+          "kind": "rebutted",
+          "note": "Popper's explicit rejection of using past survival as a reason for future expectation is contradicted by the very act of using it as a reason for preference. This is a performative contradiction."
+        },
+        {
+          "handle": "[SRC_002] against SRC_001",
+          "kind": "rebutted",
+          "note": "The 'third way' is a semantic sleight of hand. If the output of the method is 'Act as if A is true,' the input must effectively be 'A is likely true,' which is induction."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "Functional identity implies logical equivalence in a pragmatic framework. If the behavior is indistinguishable from induction, the philosophical denial is merely dogmatic."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Even without formal verisimilitude, the intuitive notion that 'more tests passed = closer to truth' drives the preference, and this intuition is inductive."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The cost of admitting this is high: it means Popper's entire epistemology rests on a hidden inductive foundation. However, this is the honest assessment of scientific practice."
+        }
+      ],
+      "optional_refs": ["SRC_006", "SRC_014"]
+    },
+    {
+      "claim": "The preference is defensible only as a 'conventionalist decision' or a 'rational bet' that accepts the cost of having no logical guarantee, thereby preserving Popper's anti-induction stance by sacrificing rational certainty.",
+      "mechanism": "Rational Decision Theory under Ignorance: Scientists make a conscious, non-cognitive choice to treat the best-tested theory as if it were true, acknowledging this is a convention necessary for action, not a derivation from evidence.",
+      "counterconditions": [
+        "If the decision is presented as logically compelled rather than voluntarily adopted.",
+        "If the convention is claimed to increase probability.",
+        "If the agent denies the arbitrariness of the starting point."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "revised",
+          "note": "Clarified that the 'faith' is acknowledged as a necessary convention for action, not a disguised metaphysical truth. This aligns with Popper's later concessions on decision."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Verisimilitude provides a direction for the convention (aim for truth), but the act of preferring remains a decision, not a logical consequence."
+        },
+        {
+          "handle": "[SRC_011] against SRC_001",
+          "kind": "rebutted",
+          "note": "Conflating 'convention' with 'lack of objective grounding' is the error. The grounding is in the shared agreement of the scientific community to play by these rules."
+        },
+        {
+          "handle": "[SRC_014] against SRC_003",
+          "kind": "rebutted",
+          "note": "By framing it as a decision, we avoid the inductive leap. We do not infer the future; we decide to act as though the pattern holds."
+        },
+        {
+          "handle": "[SRC_002] against SRC_001",
+          "kind": "rebutted",
+          "note": "This embraces the 'convention' horn of the dilemma but argues it is a *rational* convention, distinct from arbitrary whim, thus escaping the charge of irrationality."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "It is functionally similar to induction, but the *justification* is different: one is inference, the other is volition. This distinction saves the logic."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Verisimilitude serves as the regulatory ideal for the convention, not the proof of its validity."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The cost is explicitly accepted: we lose the claim that science is purely logical inference. Science becomes a rational enterprise involving both logic and decision."
+        }
+      ],
+      "optional_refs": ["SRC_001", "SRC_002"]
+    },
+    {
+      "claim": "Popper's preference is an evolutionary analogy where theories compete for survival, and 'preference' is merely the description of the surviving theory, devoid of any normative force or inductive prediction.",
+      "mechanism": "Evolutionary Epistemology: Just as nature 'prefers' fit organisms without predicting their future survival, scientists 'prefer' corroborated theories as a description of the current state of the ecosystem of ideas. No induction is involved, only retrospective sorting.",
+      "counterconditions": [
+        "If the scientist actively chooses based on expected future utility.",
+        "If the analogy breaks down because human agency involves foresight unlike natural selection.",
+        "If 'preference' implies a forward-looking recommendation."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the idea that 'preference' implies a cognitive stance. Here, preference is redefined as a systemic outcome, not an agent's belief."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Verisimilitude is irrelevant in a purely descriptive evolutionary model. Survival is the only metric."
+        },
+        {
+          "handle": "[SRC_011] against SRC_001",
+          "kind": "rebutted",
+          "note": "Objectivity is achieved by removing the agent's bias entirely. The 'preference' is in the data, not the mind."
+        },
+        {
+          "handle": "[SRC_014] against SRC_003",
+          "kind": "rebutted",
+          "note": "No projection occurs. We observe who survived. Using that observation to guide future action is a separate step not covered by the definition of 'preference' in this context."
+        },
+        {
+          "handle": "[SRC_002] against SRC_001",
+          "kind": "rebutted",
+          "note": "This avoids the dichotomy by changing the category of 'preference' from epistemic judgment to biological/sociological fact."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "Natural selection is not induction; it is a filter. Describing the filter's output is not an inductive leap."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Truth-likeness is replaced by fitness-for-environment. The failure of formal verisimilitude does not impact evolutionary fitness."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

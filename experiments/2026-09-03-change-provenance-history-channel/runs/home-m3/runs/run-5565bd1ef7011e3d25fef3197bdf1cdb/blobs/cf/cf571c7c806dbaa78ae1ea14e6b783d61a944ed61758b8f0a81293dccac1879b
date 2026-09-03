@@ -1,0 +1,202 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'critical preference' based on verisimilitude (truth-likeness), where acting on the best-tested theory is a rational guess at closeness to truth, not a probabilistic expectation of success.",
+      "mechanism": "Critical Rationalism via Verisimilitude: Preference is justified by the logical content of surviving severe tests which increases the theory's potential truth-likeness, distinct from inductive probability.",
+      "counterconditions": [
+        "If the Tichý/Miller proof demonstrates that verisimilitude cannot be consistently defined in rich languages, this mechanism collapses.",
+        "If 'acting on' a theory logically entails assigning it higher predictive probability, the distinction between corroboration and probability fails."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_003",
+          "kind": "rebutted",
+          "note": "The distinction holds because 'acting on' refers to selecting the best critical target for further testing or practical application based on current error elimination, not assigning a degree of belief. High empirical content (low logical probability) is compatible with high verisimilitude."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Preference does not require an expectation of future success (induction); it is a commitment to the theory that has withstood the most stringent attempts at falsification, making it the most 'worthy' of reliance until refuted."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "This proposal explicitly separates propensity (a physical interpretation of probability within a theory) from corroboration (a meta-scientific assessment of test severity), avoiding the conflation criticized."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "The argument relies on logical relations of test severity and content, not a redefinition of rationality as adaptive fitness. It addresses the smuggling charge by denying the necessity of induction for action."
+        },
+        {
+          "handle": "[SRC_015] against SRC_014",
+          "kind": "revised",
+          "note": "Acknowledges the Tichý/Miller proof as a serious challenge to the formal definition of verisimilitude but argues that a qualitative or restricted quantitative notion survives for practical theory choice, revising the claim to rely on 'qualitative verisimilitude'."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "rebutted",
+          "note": "The cost is explicitly the abandonment of certainty and probabilistic assurance; we accept that our best theory may still be false, and our preference is merely a methodological rule, not a guarantee."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "revised",
+          "note": "Revises the reliance on formal verisimilitude to a 'conjectural closeness to truth' that accepts the Tichý/Miller limitations while maintaining that severe testing remains the only non-inductive guide we have."
+        },
+        {
+          "handle": "[SRC_012] against SRC_002",
+          "kind": "rebutted",
+          "note": "The cost is not biological but epistemological: the acceptance that science provides no positive justification for belief, only a negative one (survival of criticism), which is the price of avoiding induction."
+        }
+      ],
+      "optional_refs": ["SRC_014", "SRC_015"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories unavoidably smuggles in induction because any decision to act on a past success implies an assumption that the future will resemble the past, which is the very principle Popper sought to reject.",
+      "mechanism": "Hidden Inductive Premise: Action based on corroboration implicitly assumes the uniformity of nature or the reliability of past tests as predictors of future performance, reintroducing the inductive step Popper tried to eliminate.",
+      "counterconditions": [
+        "If a purely deductive or evolutionary account of 'preference' can be constructed that requires no assumption of future regularity.",
+        "If 'action' can be decoupled from 'expectation of success' entirely."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_003",
+          "kind": "rebutted",
+          "note": "The collapse occurs because the act of preferring X over Y for future action logically entails believing X is more likely to succeed, which is a probabilistic/inductive judgment regardless of Popper's terminology."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Scientists prefer corroborated theories precisely because they expect them to work (e.g., bridges not collapsing). Denying this expectation renders the preference irrational or magical, thus confirming the inductive smuggle."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "Even if propensity is distinct, the *choice* to act on a theory with high corroboration treats that corroboration as a proxy for reliability, effectively functioning as an inductive probability assignment."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Evolutionary imperatives themselves rely on the inductive assumption that what worked for survival in the past will continue to do so; thus, this defense merely pushes the induction back a step rather than eliminating it."
+        },
+        {
+          "handle": "[SRC_015] against SRC_014",
+          "kind": "rebutted",
+          "note": "Verisimilitude fails as a non-inductive basis because assessing 'closeness to truth' from finite tests requires an inductive leap that the unobserved aspects of the theory align with the observed ones."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "rebutted",
+          "note": "The cost of accepting this view is admitting that Popper's system is incomplete or inconsistent regarding action, forcing a return to some form of mitigated induction or pragmatism he officially rejected."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The Tichý/Miller proof reinforces the impossibility of a non-inductive measure of truth-likeness, strengthening the claim that any preference must rest on hidden inductive assumptions."
+        },
+        {
+          "handle": "[SRC_012] against SRC_002",
+          "kind": "rebutted",
+          "note": "The cost is the philosophical integrity of Critical Rationalism; accepting this means conceding that pure deduction cannot guide action, requiring a hybrid epistemology."
+        }
+      ],
+      "optional_refs": ["SRC_001", "SRC_007"]
+    },
+    {
+      "claim": "The preference is defensible not as an epistemic justification but as a pragmatic, evolutionary imperative where 'rationality' is redefined as adherence to methods that have historically eliminated error, without claiming these methods guarantee future truth.",
+      "mechanism": "Evolutionary Epistemology: Science is a selection process analogous to natural selection; preferring corroborated theories is a behavioral disposition selected for its error-eliminating track record, not a logical inference about probability.",
+      "counterconditions": [
+        "If the problem strictly demands an epistemic (truth-related) justification rather than a pragmatic one.",
+        "If the 'evolutionary' analogy itself relies on an inductive assumption about the continuity of selective pressures."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_003",
+          "kind": "departure_declared",
+          "note": "Departing from the requirement that 'acting on' must involve a truth claim; here, acting is a survival strategy independent of truth probability."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Scientists may 'expect' success psychologically, but the *rational defense* of their preference need only cite the methodological robustness of error elimination, not a metaphysical guarantee."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "Propensity is irrelevant here; the mechanism is purely about the historical fact of survival under testing, treated as a selection criterion rather than a probability indicator."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "This directly answers the dilemma by reframing 'smuggling induction' as a category error; the preference is non-inductive because it makes no prediction, only a retrospective assessment of fitness."
+        },
+        {
+          "handle": "[SRC_015] against SRC_014",
+          "kind": "rebutted",
+          "note": "Verisimilitude is not required; the 'fitness' of a theory is defined solely by its survival of tests, bypassing the need for a formal truth-likeness metric vulnerable to Tichý/Miller."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "rebutted",
+          "note": "The cost is the loss of science as a pursuit of 'truth' in a strong sense, reducing it to a tool for survival and adaptation, which Popper might find acceptable but realists would reject."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Since this approach abandons verisimilitude as the justificatory basis, the Tichý/Miller proof is irrelevant to the core mechanism of evolutionary selection."
+        },
+        {
+          "handle": "[SRC_012] against SRC_002",
+          "kind": "rebutted",
+          "note": "The cost is explicitly acknowledged: we sacrifice the claim that science converges on truth for the claim that it converges on survivability, a trade-off inherent in the evolutionary model."
+        }
+      ],
+      "optional_refs": ["SRC_002", "SRC_012"]
+    },
+    {
+      "claim": "The dilemma is dissolved by recognizing that 'corroboration' reports a historical fact of test severity, and 'preference' is simply the logical consistency of continuing to use a hypothesis that has not yet been falsified, devoid of any forward-looking inductive force.",
+      "mechanism": "Status Quo Bias of Falsification: Preference is merely the absence of a reason to switch; since the better-corroborated theory is the only one not yet rejected, sticking with it is the default state, requiring no positive inductive justification.",
+      "counterconditions": [
+        "If 'acting on' a theory involves risk-taking that logically demands a positive reason beyond mere lack of refutation.",
+        "If there are multiple unfalsified theories, requiring a criterion for preference among them."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_003",
+          "kind": "rebutted",
+          "note": "No collapse occurs because the 'informational content' is a static property, and 'acting' is just the continuation of the current experimental program until a falsification occurs."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The 'expectation' of scientists is a psychological add-on, not a logical requirement of the preference. Logically, one simply hasn't found a reason to stop using the theory yet."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "Conflation is avoided by strictly limiting corroboration to a report of past test outcomes, refusing to let it mutate into a propensity or probability measure."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "This avoids the 'pragmatic' redefinition by staying strictly within the logic of falsification: preference = non-rejection. It sidesteps the induction charge by offering no positive ground for action."
+        },
+        {
+          "handle": "[SRC_015] against SRC_014",
+          "kind": "rebutted",
+          "note": "Verisimilitude is unnecessary; the preference is procedural (stick with what isn't broken) rather than ontological (stick with what is truer)."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "rebutted",
+          "note": "The cost is
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

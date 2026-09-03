@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to address the core dilemma of whether Popper's preference 'smuggles back in induction,' instead substituting an external sociological explanation that Popper explicitly rejected. By framing the preference as a 'sociological convention' rather than addressing its rational defensibility on Popper's own epistemological terms (e.g., via verisimilitude or critical preference), the target ignores the problem's constraint to evaluate the preference 'on Popper's own terms.' This constitutes a scope failure where the answer denies the premise of the question (that there is a logical/epistemological defense to be made) without arguing why such a defense is impossible within Popper's system, thereby failing to 'make the strongest case for each answer' as required.",
+      "counterexample": null,
+      "premise": "The problem asks if the preference for better-corroborated theories is defensible on Popper's own terms or if it smuggles in induction, requiring an analysis of Popper's internal logic.",
+      "premise_evidence": null,
+      "successor_question": "How can the target reconcile its claim that the preference is purely sociological with Popper's explicit insistence that theory choice is a rational, critical activity distinct from social consensus?"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule of 'critical preference' rather than an inductive inference; it costs the scientist the comfort of believing the preferred theory is likely true, accepting instead that it is merely the best target for future refutation.",
+      "mechanism": "Critical Preference as Non-Inductive Heuristic: The scientist chooses the theory with higher content and severity of tests not because it is probable, but because it offers the most informative potential for falsification. Acting on it is a bet on its explanatory power, not its truth probability.",
+      "counterconditions": [
+        "If the choice implies an expectation of future success based on past performance, it collapses into induction.",
+        "If the 'bet' cannot be distinguished from a probabilistic wager in practice, the distinction is merely verbal.",
+        "If the scientist cannot articulate why they would abandon the theory upon a single failed test without invoking probability, the defense fails."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_009", "kind": "rebutted", "note": "The mechanism addresses coexistence by framing preference as a temporary selection of the 'best target' for criticism, not a final elimination of others. Multiple unrefuted theories can coexist, but the one with highest corroboration is the rational choice for action solely due to its informational yield."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "rebutted", "note": "Evolutionary epistemology describes the process, but the normative justification is the logical requirement to test the boldest conjectures. The cost is acknowledged: we act without knowing the future, accepting the risk of error as the price of progress."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "The distinction is maintained by explicitly rejecting any causal link between survival and future truth. The justification is purely methodological: to learn fastest, we must test the most vulnerable (highly corroborated) theories first."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "rebutted", "note": "The 'pragmatic bet' is not on survival, but on the utility of the theory as a tool for discovery. It differs from biological selection by being a conscious, critical decision to expose the theory to danger, not a passive survival report."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "Methodological acceptance is a rule of procedure ('test this first'), not a regulative ideal assuming future success. The induction charge fails because no assumption about the uniformity of nature is made; only the current state of criticism is considered."},
+        {"handle": "[SRC_007] against SRC_005", "kind": "rebutted", "note": "The dilemma is not false; the alternative to radical skepticism is indeed a non-inductive rule of preference. Popper's solution is precisely this third way: acting on the best-tested theory without believing it is true or probable."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "The conflation charge is rejected. The descriptive mechanism (survival) is distinct from the normative rule (prefer the survivor for testing). The justification lies in the logic of scientific discovery, not in the history of survival."},
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "Engineering stability is achieved by constantly monitoring the most corroborated theory for failure, not by assuming its permanence. The cost is perpetual vigilance, which is consistent with Popper's fallibilism."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_001", "SRC_007"]
+    },
+    {
+      "claim": "The preference inevitably smuggles induction back in because any rational basis for acting on a corroborated theory over an uncorroborated one requires an implicit premise that the future will resemble the past (the Principle of Uniformity), which Popper explicitly rejected.",
+      "mechanism": "The Inductive Leak: Rational action requires a bridge from 'has worked' to 'will work'. Without this bridge, preferring Theory A over Theory B is arbitrary. Since Popper denies the bridge (probability/induction), his system cannot justify the preference without self-contradiction.",
+      "counterconditions": [
+        "If a non-inductive rationale for action can be formulated that does not rely on future resemblance, this claim fails.",
+        "If 'arbitrariness' is accepted as a valid scientific stance, the need for induction dissolves.",
+        "If the definition of 'rational action' is narrowed to exclude predictive confidence, the leak is plugged."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_009", "kind": "revised", "note": "Revised to acknowledge that while Popper attempts to handle coexistence via 'degree of corroboration', the *reason* for choosing the higher degree is inherently inductive. The revision clarifies that the problem isn't just multiple theories, but the *basis* for ranking them for action."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "rebutted", "note": "The cost is indeed the collapse of the system into crypto-inductivism. The 'evolutionary' frame is just a metaphor for inductive selection; without the inductive premise, the 'fittest' label has no normative force for action."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "The criticism stands: describing *why* a theory survived (causal) does not justify *why* we should trust it (normative) unless we assume survival indicates reliability, which is an inductive step."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "rebutted", "note": "The 'pragmatic bet' analogy fails because a bet implies odds. If corroboration is not probability, the odds are undefined. Betting on the 'fittest' without odds is irrational unless one assumes fitness predicts future performance (induction)."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "This claim confirms the 'smuggled induction' charge. Methodological acceptance *is* the smuggling operation; it functions exactly like probabilistic weighting despite Popper's denials."},
+        {"handle": "[SRC_007] against SRC_005", "kind": "rebutted", "note": "The dilemma is real. If the only alternative to skepticism is induction, and Popper rejects induction, then his 'preference' is either skeptical (arbitrary) or inductive (contradictory). He cannot have it both ways."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "The conflation is unavoidable. To prefer a survivor for *action* is to treat its survival as evidence of its value, which conflates the descriptive history with normative weight, effectively reintroducing induction."},
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "The distinction between logical status and practical action is the very site of the smuggling. Practical action *requires* a logical bridge to the future; denying the bridge while acting renders the action epistemologically groundless."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_002", "SRC_015"]
+    },
+    {
+      "claim": "The preference is defensible if reinterpreted as a 'decision under ignorance' using a maximin strategy: since all theories are possibly false, we choose the one that has survived the most severe tests to minimize the risk of immediate, catastrophic error, without assuming it will succeed tomorrow.",
+      "mechanism": "Minimax Regret in Falsificationism: We do not expect the theory to be true or to continue working. We choose it because it has *not yet* failed where others might have. It is the 'least bad' option known so far, minimizing the regret of choosing a theory already known to be problematic.",
+      "counterconditions": [
+        "If 'severity of tests' implies a prediction of future robustness, the inductive smuggling returns.",
+        "If the 'risk of error' is calculated based on past failure rates, the calculation is inductive.",
+        "If the scientist acts with *any* expectation of success, the minimax framing is a post-hoc rationalization."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_009", "kind": "rebutted", "note": "This mechanism handles coexistence by evaluating the 'known unknowns'. Theories with less severe testing carry higher potential for hidden errors. The choice is based on current knowledge of flaws, not future promise."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "rebutted", "note": "The cost is accepting that we are not choosing the 'best' theory, but the 'least refuted' one. This avoids the evolutionary/inductive trap by focusing on the absence of known falsifiers rather than the presence of positive support."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "The normative justification is risk aversion, not truth-tracking. We prefer the corroborated theory because ignoring known survival data would be irrational risk-taking, not because survival implies truth."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "revised", "note": "Revised to clarify that the 'bet' is not on survival, but on the *absence of known defeat*. The analogy shifts from biological fitness to military intelligence: using the map that hasn't led to a cliff yet, without assuming the terrain won't change."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "This is not probabilistic weighting. It is a binary check: 'Has this failed severely?' If no, it remains in the pool. Preference is given to those with the most rigorous 'no' answers, not to those with high probability scores."},
+        {"handle": "[SRC_007] against SRC_005", "kind": "rebutted", "note": "This offers a third way distinct from both skepticism and induction. It is a procedural rule of caution: do not ignore negative evidence (falsifications) when choosing actions."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "The descriptive mechanism (survival) informs the normative rule (caution) without conflating them. Survival indicates 'not yet killed', which is a valid reason for caution, not a proof of life."},
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "Engineering projects proceed by constantly checking for the 'cliff'. The instability is a feature, not a bug; it forces continuous testing, which is the essence of Popperian science."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_004", "SRC_006"]
+    }
+  ]
+}

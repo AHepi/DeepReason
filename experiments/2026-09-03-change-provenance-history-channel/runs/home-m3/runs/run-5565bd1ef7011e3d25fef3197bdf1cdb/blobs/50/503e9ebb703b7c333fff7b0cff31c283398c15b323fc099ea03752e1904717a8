@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the core tension in Popper's philosophy regarding action versus theory, but fails to engage with Popper's specific non-inductive defense (verisimilitude or critical preference) which directly addresses the 'acting on' scenario, rendering the conclusion that induction is 'smuggled back in' premature without refuting those specific counter-arguments.",
+      "counterexample": null,
+      "premise": "Popper explicitly distinguished between theoretical corroboration and practical decision-making, arguing that choosing the best-tested theory is a rational critical preference based on current status, not an inductive prediction of future success.",
+      "premise_evidence": null,
+      "successor_question": "How does Popper's concept of 'verisimilitude' specifically resolve the dilemma of acting on a theory without assuming the future will resemble the past?"
+    }
+  ]
+}

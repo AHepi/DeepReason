@@ -1,0 +1,23 @@
+=== arm M1-H0 (mode=none) started 2026-09-03T02:27:59Z ===
+--- setup ---
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/2026-09-03-change-provenance-history-channel/runs/home-default/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+rc=0
+--- qualify ---
+MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so nothing here can say whether reasoning='none' leaves hidden reasoning on. The run proceeds and sends exactly what you configured. To have this answered, write $DEEPREASON_HOME/model-profiles/<model-id>/agent.md.
+Qualified: ollama/qwen3.5:397b
+Qualification tier: full
+Qualification state: ready
+Next action: deepreason reason "YOUR QUESTION"
+rc=0
+--- reason, 4 cycles 2026-09-03T02:28:01Z ---
+MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so nothing here can say whether reasoning='none' leaves hidden reasoning on. The run proceeds and sends exactly what you configured. To have this answered, write $DEEPREASON_HOME/model-profiles/<model-id>/agent.md.
+RUN_ALREADY_STARTED: choose a fresh root or continue_run
+rc=1
+=== results 2026-09-03T02:28:06Z ===

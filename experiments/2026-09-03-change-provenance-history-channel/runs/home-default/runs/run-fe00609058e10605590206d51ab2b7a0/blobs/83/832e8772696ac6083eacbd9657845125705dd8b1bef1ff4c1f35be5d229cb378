@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a methodological rule of 'critical rationality' rather than an inductive inference of probability, but this defense costs the scientist any claim to predictive reliability or truth-likeness (verisimilitude) in the strong sense, reducing the preference to a pragmatic gamble without epistemic justification.",
+    "mechanism": "The argument distinguishes between the context of discovery (where induction is rejected) and the context of action (where methodological rules apply). It posits that preferring the best-tested theory is not a prediction that it will succeed (which would be inductive), but a commitment to the rule that has so far survived the most severe criticism. The mechanism relies on the asymmetry of falsification: while we cannot know a theory is true, we know which theories have failed. Choosing the one that hasn't failed yet is the only rational move available, even if it offers no guarantee of future success.",
+    "counterconditions": [
+      "If the preference implies a higher probability of future success, it smuggles in induction.",
+      "If Popper's concept of verisimilitude is logically incoherent (per Tichý/Miller), the appeal to 'truth-likeness' as a justification collapses.",
+      "If the distinction between descriptive survival (biology) and normative choice (science) cannot be bridged without inductive assumptions."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The candidate explicitly accepts the collapse of formal verisimilitude (Tichý/Miller) as a cost. It does not rely on verisimilitude to justify the preference, but rather on 'critical rationality' and the absence of falsification, thereby sidestepping the incoherence objection by lowering the epistemic stakes."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, the rebuttal concedes the failure of logical verisimilitude but argues the preference stands on methodological grounds alone: we choose the unrefuted over the refuted not because it is 'truer', but because it is the only one left standing. The criticism assumes verisimilitude is necessary for the preference, which the candidate denies."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "Revised to explicitly address the normative/descriptive gap. The candidate now clarifies that the 'natural selection' analogy is limited; scientific preference is normative because it adopts a rule ('choose the unrefuted') as a definition of rational action, whereas biological survival is merely descriptive. The revision strengthens the claim that this normativity is self-imposed, not derived from nature."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "rebutted",
+        "note": "The candidate structure inherently presents the strongest case for the defense (methodological rule) and immediately identifies its fatal weakness (the cost of no reliability guarantee), satisfying the dialectical requirement. The 'strongest case against' is embedded in the 'cost' analysis: that without induction, the preference is empty of predictive power."
+      },
+      {
+        "handle": "343e10b5bcf5a8a8cda3a18e5ff5334fcad05a2527c61f22d4b83ec4299bec0b",
+        "kind": "rebutted",
+        "note": "The candidate addresses the 'acting on' tension by admitting the conflation is real but arguing Popper resolves it by redefining 'rational action' as 'adherence to critical method' rather than 'maximization of expected utility'. The rebuttal states that if one demands reliability for action, one must abandon Popper; if one stays with Popper, one acts on a gamble."
+      },
+      {
+        "handle": "39376b7fe8717864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "Reiterated that the analogy is not meant to provide the justification itself but to illustrate the selection process. The normative force comes from the conscious adoption of the critical method as a constitutive rule of science, distinguishing it from blind biological survival."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6",
+        "kind": "revised",
+        "note": "Revised to clarify that the dichotomy (rule-adherence vs. probable truth) is indeed exhaustive on Popper's terms. The candidate now explicitly rejects verisimilitude as a viable third option due to the Tichý/Miller critique, forcing the choice: either accept induction (probability) or accept the hollow victory of rule-adherence. This strengthens the 'cost' argument."
+      },
+      {
+        "handle": "42eaa01a96703402341867220e2fe7e8047d04b0761bc0aafe6c66cb5a39057c",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on verisimilitude for the defense. It acknowledges the logical collapse of verisimilitude and uses that very collapse to demonstrate the high cost of Popper's position: without verisimilitude and without induction, the preference is purely procedural and lacks epistemic weight."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "biological_natural_selection_survival_of_fittest",
+        "legal_procedural_rationality_due_process"
+      ],
+      "shared_structure": [
+        "Selection based on elimination of failures rather than confirmation of success.",
+        "Preference for the current survivor does not guarantee future survival.",
+        "Normative rule (choose the survivor) is distinct from descriptive outcome (the survivor exists)."
+      ],
+      "disanalogies": [
+        "Biological survival is non-normative and retrospective; scientific preference is prospective and normative.",
+        "Legal due process aims for justice (a value); Popper's method aims only for error-elimination (a negative criterion)."
+      ],
+      "transfer_claims": [
+        "Just as betting on the undefeated boxer is rational not because they will win, but because they haven't lost yet, preferring the best-corroborated theory is rational only as a adherence to the rule of testing.",
+        "The lack of guarantee in natural selection mirrors the lack of predictive certainty in Popperian science."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that 'survival of tests' correlates with 'truth' independent of induction.",
+        "If a coherent definition of verisimilitude is restored that avoids the Tichý/Miller paradox."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

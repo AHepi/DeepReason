@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's conclusion that accepting the 'methodological wager' costs science its claim to 'progressive convergence toward truth' is a mischaracterization of Popper's mature philosophy. Popper explicitly developed the concept of 'verisimilitude' (truth-likeness) to account for scientific progress without induction, arguing that we can rationally prefer theories with higher verisimilitude content even if probability remains zero. By asserting the cost is the loss of convergence to truth, the target ignores Popper's specific solution to this exact problem, thereby failing to answer the prompt's requirement to assess defensibility 'on Popper's own terms'.",
+      "premise": "Popper introduced verisimilitude to explain scientific progress as approaching truth without relying on inductive probability.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Does the target's dismissal of verisimilitude as a viable defense stem from a misunderstanding of Popper's distinction between logical probability and qualitative closeness to truth?"
+    }
+  ]
+}

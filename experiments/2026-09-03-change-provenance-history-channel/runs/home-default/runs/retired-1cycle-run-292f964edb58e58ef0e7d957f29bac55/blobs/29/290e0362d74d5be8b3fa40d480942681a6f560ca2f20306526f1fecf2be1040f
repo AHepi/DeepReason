@@ -1,0 +1,328 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'methodological rule' driven by the goal of error elimination, not truth approximation; accepting this costs the ability to claim science progressively approaches reality (verisimilitude), reducing rationality to a survival game.",
+      "mechanism": "Pragmatic Deflation: The preference is justified solely by the logical asymmetry that falsification eliminates error, while corroboration merely indicates a theory has survived so far. We prefer the survivor not because it is likely true, but because it is the only one not yet known to be false, maximizing our current stock of non-refuted knowledge.",
+      "counterconditions": [
+        "If scientists explicitly act on the belief that corroborated theories are more likely to predict future events correctly.",
+        "If Popper's concept of verisimilitude cannot be sustained without probabilistic assumptions.",
+        "If the 'goal of science' is redefined to include truth-likeness rather than just error elimination."
+      ],
+      "typicality": 0.92,
+      "discharges": [
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The mechanism addresses preference by defining it as a choice for the 'currently non-refuted' high-content theory, not a prediction of future success based on past frequency. The preference is for the object with the highest informational content that remains standing, not for the record of survival itself."
+        },
+        {
+          "handle": "[SRC_010] against SRC_007",
+          "kind": "revised",
+          "note": "Revised to clarify that the 'false dilemma' charge is partially correct: the pragmatic defense does not sever the grip on verisimilitude entirely if verisimilitude is defined logically (content + truth), but it does sever the *epistemic access* to it. The cost is admitting we cannot know if we are progressing toward truth, only that we are eliminating specific errors."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "The phrase 'minimizing expected error' is rejected in favor of 'eliminating known error.' No expectation of future frequency is calculated; the rule is simply: do not use a falsified theory when a non-falsified one is available. This is a logical constraint, not an inductive inference."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "The distinction between initial boldness and subsequent preference is resolved by noting that survival preserves the high content. We prefer Theory A (bold, survived) over Theory B (bold, falsified) because A retains its high informational potential while B has been nullified. The preference tracks the *current status* of the content, not the history."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "Agrees that Popper distinguishes logical status from pragmatic decision, but argues this candidate makes that distinction the core mechanism. The preference is purely pragmatic (action-guiding) and makes no claim about the logical probability of the theory."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "Rejects the link between corroboration and verisimilitude. This candidate argues that accepting the pragmatic defense *requires* abandoning the claim that corroboration indicates progress toward truth. The 'cost' identified in the claim is precisely the loss of this link."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "No Kantian regulative ideal is imported. The rule is derived strictly from the definition of falsifiability and the logical asymmetry of verification/falsification. It is a methodological convention, not a metaphysical postulate."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Explicitly avoids 'expectation.' The rule is: 'Prefer the theory that has not failed.' This is a static comparison of current states (failed vs. not failed), not a dynamic projection of past success into future probability."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference smuggles induction back in because any rationale for preferring a theory based on its survival of past tests necessarily assumes the uniformity of nature (that the future will resemble the past), which Popper explicitly rejected; the only surviving option is to admit that scientific rationality relies on an unjustifiable inductive habit.",
+      "mechanism": "Inductive Smuggling Detection: Analyzes the semantic gap between 'has survived' (past) and 'prefer for action' (future). Any bridge across this gap implies a premise that past performance predicts future reliability, which is the definition of induction. Popper's attempt to label this 'pragmatic' is a verbal disguise for the inductive leap he forbade logically.",
+      "counterconditions": [
+        "If a non-inductive bridge between past survival and future preference can be formally demonstrated.",
+        "If 'preference' is shown to be purely aesthetic or arbitrary rather than rational.",
+        "If Popper's system allows for 'rational faith' without logical justification."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "This candidate argues that the 'mechanism of preference' *is* the inductive leap. Any attempt to describe it as non-inductive fails to explain why we act on the survivor. The criticism that the target failed to address the mechanism is met by identifying the mechanism as hidden induction."
+        },
+        {
+          "handle": "[SRC_010] against SRC_007",
+          "kind": "rebutted",
+          "note": "Supports the view that the pragmatic defense reduces science to a survival game. It agrees that this is a misrepresentation only if one insists on 'progress,' but if the alternative is irrationality, then the 'game' is the only honest description left."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "revised",
+          "note": "Strengthened: The phrase 'minimizing expected error' is not just smuggling induction; it *is* induction. The revision clarifies that 'expected' implies a probability distribution over future outcomes derived from past frequencies, which is exactly what Popper banned."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Addresses the conflation by arguing that the preference for the *specific* survivor (after tests) versus the initial bold theory is the smoking gun. If we only valued boldness, we wouldn't care about survival. Caring about survival implies we value the *result* of the test as a predictor, which is inductive."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "Argues that the distinction between 'logical status' and 'pragmatic decision' is insufficient. A rational pragmatic decision requires reasons; if the reason is 'it survived,' and that implies 'it will work,' the induction is present in the pragmatism."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "Contends that verisimilitude cannot save the day because assessing verisimilitude also requires inductive assumptions about which tests are relevant and representative. Without induction, we cannot claim the survivor is closer to truth."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "Agrees that importing Kantian ideals contradicts Popper, but argues that *avoiding* them leaves Popper with no defense against induction. The contradiction is inherent in Popper's system, not introduced by this candidate."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Reaffirms that 'expectation' is the key. To prefer X over Y for future action based on past data is to have an expectation. Denying the word 'expectation' does not remove the cognitive state it describes."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves if corroboration is viewed not as a report on past success nor a predictor of future truth, but as a measure of 'informational utility': we prefer better-corroborated theories because they represent the highest density of unresolved problems and potential learning, regardless of their truth value.",
+      "mechanism": "Informational Utility Shift: Re-frames 'preference' from 'belief in truth' to 'selection for research efficiency.' A corroborated bold theory is preferred because it offers the most fertile ground for further testing (high content), whereas a falsified theory is a dead end. This avoids induction by making the goal 'learning speed' rather than 'truth acquisition.'",
+      "counterconditions": [
+        "If scientists prefer corroborated theories for practical application (building bridges) rather than further research.",
+        "If 'informational content' cannot be distinguished from 'probability of truth' in practice.",
+        "If Popper explicitly tied preference to practical action, not just research selection."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "revised",
+          "note": "Revises the mechanism to explicitly separate 'preference for action' (which may be inductive) from 'preference for research' (which is not). The candidate claims Popper's defense holds only for the latter, conceding the former might be indefensible on his strict terms."
+        },
+        {
+          "handle": "[SRC_010] against SRC_007",
+          "kind": "rebutted",
+          "note": "Argues this is not a false dilemma but a third way. Science has teleological direction (error elimination/learning) without needing to claim progress toward absolute truth. The 'cost' is accepting that science is an endless process of questioning, not a march to certainty."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "Denies that 'maximizing learning potential' requires induction. It is a structural property of high-content theories that they yield more information when tested. This is a logical fact, not an empirical generalization."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Clarifies that the preference for the survivor is because the survivor *retains* its high content. The falsified theory loses its utility as a research tool. Thus, the preference tracks the *current utility* of the content, not the past event of survival."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "Aligns with the distinction between logical status and pragmatic decision, interpreting the 'pragmatic' here as 'methodologically efficient' rather than 'practically safe.'"
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "departure_declared",
+          "note": "Departure: This candidate abandons the attempt to link corroboration to verisimilitude entirely. It posits that 'truth-likeness' is a red herring; the only defensible metric is 'testability remaining.'"
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "No Kantian ideal needed. The principle of 'maximize testability' is internal to the logic of falsificationism itself."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Rejects 'expected error' in favor of 'potential information gain.' No expectation of future stability is assumed; only the potential for future refutation."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Popper's preference is defensible only if we accept a 'Darwinian Epistemology' where theories compete for survival, and 'preference' is merely the observer's recognition of the current fittest specimen, devoid of any implication about its future fitness or truth; the cost is accepting that scientific rationality is retrospective, not prospective.",
+      "mechanism": "Evolutionary Analogy: Treats theories as biological organisms. Corroboration is analogous to survival to reproductive age. We 'prefer' the survivor because it exists, not because we predict it will survive tomorrow. Induction is avoided because evolution makes no promises about the future environment. The cost is that science offers no guarantee of practical success, only a record of past resilience.",
+      "counterconditions": [
+        "If the analogy breaks down because theories do not replicate or mutate like genes.",
+        "If scientists require prospective guarantees for engineering and medicine.",
+        "If 'fitness' in science implicitly relies on a stable environment (induction)."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The mechanism of preference is 'recognition of existence.' We prefer the survivor because it is the only one left. This addresses the 'how' by removing the 'why' of future prediction."
+        },
+        {
+          "handle": "[SRC_010] against SRC_007",
+          "kind": "revised",
+          "note": "Accepts the 'game of survival' description but reframes it as a feature. The lack of teleological direction (toward truth) is the point; the direction is simply 'away from death (falsification).'"
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "Evolutionary selection does not calculate 'expected error'; it simply eliminates the erroneous. The observer's preference mimics this elimination process without adding inductive superstructure."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Distinguishes initial boldness (mutation) from survival (selection). We prefer the survivor because the selection process has occurred. The preference is for the *outcome* of the selection, not the *process* of mutation."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "Fully embraces the split: Logical status = 'currently alive.' Pragmatic decision = 'bet on the living.' No inference connects the two other than the tautology that the dead cannot act."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "Denies that verisimilitude is relevant to the evolutionary model. Fitness is not truth; it is just fit-to-current-conditions. This candidate accepts the cost that science may not track truth."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "Darwinism is naturalistic, not Kantian. No regulative ideal is required, only the observation of differential survival."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Explicitly rejects 'expectation.' In evolution, past survival does not guarantee future survival (environment changes). Preferring the survivor is a gamble, not a calculation."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict terms and represents a performative contradiction: Popper the philosopher bans induction, but Popper the scientist practices it. The only honest resolution is to admit that critical rationalism secretly relies on a 'principle of uniformity' as a regulative fiction, costing the system its claim to be purely logical.",
+      "mechanism": "Performative Contradiction Analysis: Identifies the gap between Popper's normative rules (no induction) and his descriptive advice (prefer the corroborated). Argues that the 'preference' functions psychologically and practically as induction, even if labeled otherwise. The 'defense' is therefore a rhetorical mask.",
+      "counterconditions": [
+        "If a coherent non-inductive interpretation of 'preference' can be constructed.",
+        "If Popper's later works successfully patch this hole.",
+        "If 'rationality' can be defined without reference to future expectations."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "Claims the target failed because it tried to find a mechanism *within* Popper's rules. This candidate asserts the mechanism is *outside* the rules (psychological habit), thus addressing the failure by changing the frame."
+        },
+        {
+          "handle": "[SRC_010] against SRC_007",
+          "kind": "rebutted",
+          "note": "Agrees it is a false dilemma to think Popper has a clean solution. The 'pragmatic defense' is indeed a reduction to a survival game, and this candidate argues that is the *only* thing left once the pretense of rational preference is stripped."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "revised",
+          "note": "Revises the accusation: It's not just 'smuggling'; it's a foundational dependency. 'Minimizing expected error' is the *actual* engine, and 'corroboration' is just the dashboard light. The candidate admits the induction openly."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Resolves the conflation by stating that the preference for the survivor *is* the inductive step. There is no distinction to be made; the act of preferring based on survival *is* the induction Popper denied."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "Argues that the distinction between logical status and pragmatic decision is a smokescreen. If the pragmatic decision is rational, it needs logic. If it uses past data to guide future action, that logic is inductive."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "Asserts that verisimilitude fails precisely because it tries to hide the inductive assumption that surviving tests makes a theory 'closer' to truth. Without induction, 'closer' is meaningless."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "revised",
+          "note": "Revises to say: Yes, we *must* import a Kantian-like fiction (Uniformity of Nature) to make science work. Popper was wrong to think he could dispense with it. The cost is admitting Critical Rationalism is incomplete without this postulate."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Confirms that 'expectation' is unavoidable. The candidate embraces the term: Science *is* about managing expectations, and that *is* inductive. Popper's denial was the error."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is defensible if we reinterpret 'corroboration' as a 'degree of responsibility': we prefer the better-corroborated theory because we are more responsible for acting on it, having subjected it to severe tests, whereas acting on an untested theory is negligent; the cost is shifting the basis of science from 'truth-seeking' to 'liability-management'.",
+      "mechanism": "Ethical/Responsibility Reframe: Shifts the domain from epistemology to ethics. The 'preference' is a moral obligation to minimize negligence. We test theories to discharge our duty of care. A corroborated theory is one where we have done our due diligence. Induction is irrelevant because the justification is deontological (duty-based), not consequentialist (outcome-based).",
+      "counterconditions": [
+        "If Popper explicitly framed his methodology in ethical rather than epistemic terms.",
+        "If 'responsibility' can be defined without reference to probable outcomes.",
+        "If scientists view themselves as morally liable for theoretical failures."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The mechanism of preference is 'moral duty.' We prefer the tested theory because we owe it to the community to use the most scrutinized tool available. This bypasses the need for a predictive mechanism."
+        },
+        {
+          "handle": "[SRC_010] against SRC_007",
+          "kind": "rebutted",
+          "note": "Rejects the 'false dilemma.' Science has a teleological direction: the reduction of intellectual negligence. This is a valid goal distinct from 'truth' or 'survival'."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "'Minimizing expected error' is replaced by 'fulfilling epistemic duty.' One can fulfill a duty even if the outcome is bad (the theory fails later). The justification lies in the process, not the expectation."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "The preference for the survivor is because the survivor is the only one where the duty of testing has been fully discharged. The untested bold theory is a liability."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "Uses the distinction: Logical status (unproven) remains, but Pragmatic decision is now an Ethical imperative. This strengthens the divide rather than conflating it."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "departure_declared",
+          "note": "Departure: Abandons 'verisimilitude' entirely. Truth is not the metric; 'due diligence' is. This is a radical shift from Popper's stated goals but saves his logic."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "Not Kantian, but Deontological. It relies on rules of conduct (test thoroughly), not metaphysical postulates about the world."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "No 'expectation' of success is needed. One acts on the tested theory because it is the *responsible* thing to do, even if one expects it to fail tomorrow. The act is justified by the history of testing, not the prediction of utility."
+        }
+      ],
+      "optional_refs": []
+    }
+  ]
+}

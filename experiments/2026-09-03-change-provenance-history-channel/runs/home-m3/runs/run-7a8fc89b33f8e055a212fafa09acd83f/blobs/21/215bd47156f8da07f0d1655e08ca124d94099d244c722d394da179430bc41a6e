@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of truth, but as a non-inductive methodological rule grounded in the goal of maximizing verisimilitude (truth-likeness) through severe testing, though accepting this costs the framework its formal coherence due to the Miller-Tichý refutation of verisimilitude definitions.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'probability' (logical likelihood) and 'corroboration' (report on past performance). It posits that preferring the best-corroborated theory is a rational betting strategy based on the assumption that theories with higher content and survival of severe tests have greater verisimilitude, even if their probability is lower. This avoids induction by treating the preference as a procedural imperative for growth of knowledge rather than a prediction of future success. However, it explicitly acknowledges that the concept of verisimilitude, which bridges corroboration and truth-likeness, was formally shown to be incoherent within Popper's own logical constraints by Miller and Tichý, rendering the defense internally unstable.",
+    "counterconditions": [
+      "If verisimilitude can be rigorously defined without collapsing into probability or logical content alone, the defense holds.",
+      "If the preference is interpreted purely as a psychological habit with no rational normative force, the charge of smuggling induction dissolves but so does the defensibility.",
+      "If Popper's later concessions on verisimilitude are treated as fatal to the entire project of rational theory choice, the preference becomes indefensible on his terms."
+    ],
+    "typicality": 0.75,
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_pressure",
+        "survivorship_bias_in_data"
+      ],
+      "shared_structure": [
+        "Selection of survivors based on past performance without guarantee of future success",
+        "Distinction between fitness (corroboration) and absolute truth (optimal adaptation)",
+        "Procedural rule vs. predictive certainty"
+      ],
+      "disanalogies": [
+        "Biological evolution has no teleological goal of 'truth', whereas Popperian science aims at verisimilitude",
+        "Survival in nature does not imply increased complexity or content, while Popper prefers high-content theories",
+        "Evolutionary fitness is relative to environment, while corroboration is relative to severe tests designed to falsify"
+      ],
+      "transfer_claims": [
+        "Just as we bet on the fittest organism without knowing the future environment, we act on the best-corroborated theory without inductive certainty",
+        "The 'smuggling' charge fails if the mechanism is seen as blind variation and selective retention rather than inductive projection"
+      ],
+      "overturn_conditions": [
+        "Demonstration that biological fitness implies inductive reasoning about the future",
+        "Proof that Popper explicitly rejected the evolutionary analogy for theory choice"
+      ]
+    },
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The candidate explicitly distinguishes between logical justification (which denies probability increase) and pragmatic/methodological necessity (the rule to act), arguing the preference is a procedural rule for maximizing verisimilitude, not a conflation of the two."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "rebutted",
+        "note": "The candidate does not redefine probability but relies on the specific Popperian concept of verisimilitude as the bridge, acknowledging this is Popper's actual solution while highlighting its subsequent formal failure."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be73990a91bfccedd76a3db90a87926c01",
+        "kind": "revised",
+        "note": "Revised to explicitly state that the defense costs the framework its formal coherence because the Miller-Tichý refutation is accepted as a decisive blow to the verisimilitude concept within the candidate's conclusion."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The analogy to evolution is used only to illustrate the structure of 'selection without induction,' not to equate procedural necessity with rational defensibility; the rational defensibility is argued to rest on the goal of verisimilitude."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "Revised to incorporate the abandonment of verisimilitude as a central cost of the position, agreeing that relying on it makes the defense vulnerable, thus satisfying the criticism that the argument fails if verisimilitude is incoherent."
+      },
+      {
+        "handle": "60ef0d6b71db19114ca85499b1bdf00dea34b3d51f9c0ada0d35365043649fc0",
+        "kind": "rebutted",
+        "note": "The candidate addresses the normative question by framing the preference as a methodological norm derived from the aim of science (verisimilitude), directly answering why Popper himself would prefer it despite lacking inductive proof."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "rebutted",
+        "note": "The candidate presents the strongest case FOR defensibility (via verisimilitude and methodological rules) and the strongest case AGAINST (via Miller-Tichý refutation), fulfilling the directive to make both cases before concluding."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The candidate argues that accepting the preference as merely psychological DOES cost the normativity of science, maintaining the dilemma: either it is a rational norm (requiring verisimilitude) or it is non-rational (losing normativity)."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

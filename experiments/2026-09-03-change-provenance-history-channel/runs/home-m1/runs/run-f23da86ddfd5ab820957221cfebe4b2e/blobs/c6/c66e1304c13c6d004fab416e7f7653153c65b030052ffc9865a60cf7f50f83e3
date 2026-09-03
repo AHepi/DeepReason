@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a false dichotomy between 'logical derivation' and 'biological imperative,' ignoring Popper's explicit concept of 'rational preference.' Popper argues that preferring the better-corroborated theory is rational not because it is more probable (induction), but because it has withstood more severe tests, making it the most informative and critically vetted option available. By reducing the choice to a non-rational biological necessity, the target misrepresents Popper's epistemology, which explicitly provides a logical basis for action (choosing the theory that has survived the most rigorous attempts at falsification) without invoking induction or abandoning reason to biology.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between 'probability' (which he rejects for corroboration) and 'rational preference' based on severity of tests.",
+      "premise_evidence": null,
+      "successor_question": "Does the target's reliance on 'biological imperative' inadvertently concede that Popper's epistemology cannot guide rational action, contradicting Popper's own claims about the rationality of science?"
+    }
+  ]
+}

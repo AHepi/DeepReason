@@ -1,0 +1,202 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'critical preference' grounded in verisimilitude (truth-likeness), where corroboration serves as the best available indicator of a theory's proximity to truth without assigning it probability.",
+      "mechanism": "Popper distinguishes between logical probability (which remains zero or undefined for universal laws) and verisimilitude (the degree to which a theory corresponds to reality). Corroboration reports the severity of tests survived. While it does not increase the probability of truth, it increases the rational warrant to believe the theory is closer to the truth than its refuted rivals. This is a comparative judgment of content, not a probabilistic inference.",
+      "counterconditions": [
+        "If Popper explicitly rejected verisimilitude as a viable concept for guiding scientific preference.",
+        "If the measure of verisimilitude itself requires inductive assumptions about the structure of the world.",
+        "If 'critical preference' is shown to be functionally identical to inductive probability in decision-making contexts."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Popper did express doubts about defining verisimilitude formally in later works, but he never abandoned the intuitive notion that some false theories are closer to the truth than others. The candidate relies on the intuitive utility of verisimilitude as a regulative ideal, not a formal metric, which remains consistent with his later caution rather than contradicting it."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate addresses the tension by clarifying that 'better-corroborated' does not mean 'more probable' but 'more severely tested and thus more informative.' Popper's preference is for the theory with higher empirical content that has survived, not merely one that hasn't been eliminated. This distinguishes it from a binary filter."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "This candidate explicitly leverages the distinction cited: it argues that 'critical preference' is the specific non-inductive mechanism Popper proposed. It accepts the rejection of induction for justification but affirms preference for action based on critical discussion outcomes."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The defense is normative, not psychological. It argues that rational agents *ought* to prefer the theory with higher verisimilitude because it offers more potential for truth, regardless of psychological impulses. The justification lies in the logic of the situation (verisimilitude), not the psychology of the scientist."
+        }
+      ],
+      "optional_refs": ["SRC_005", "SRC_011"]
+    },
+    {
+      "claim": "The preference smuggles induction back into Popper's system because any claim that past survival predicts future reliability or indicates 'truth-likeness' implicitly assumes the uniformity of nature, which is the core of the problem of induction.",
+      "mechanism": "To prefer Theory A over Theory B because A survived tests while B did not (or A survived more severe tests) is to assume that the conditions which allowed A to survive will persist or that the properties tested are representative of the whole. This is an inductive leap. Without this leap, a refuted theory could conceivably be 'truer' than an unrefuted one in untested domains, making the preference irrational on purely deductive grounds.",
+      "counterconditions": [
+        "If Popper can demonstrate a purely deductive link between test survival and truth-content.",
+        "If the preference is shown to be purely pragmatic with no epistemic implications whatsoever.",
+        "If the assumption of nature's uniformity is replaced by a metaphysical principle that is not inductive."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate argues that the reliance on verisimilitude *is* the contradiction. Even if Popper tried to salvage it, the act of using past performance to gauge truth-likeness is inherently inductive, validating the criticism that the mechanism fails on Popper's own anti-inductive terms."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate agrees that reducing corroboration to a binary filter is insufficient, but argues that adding 'severity' or 'degree' of corroboration only deepens the inductive smuggling. The tension remains unresolved because any gradient of preference implies a gradient of expected future success."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "While Popper named it 'critical preference,' this candidate argues the name is a label, not a solution. If the preference guides action towards expected success, it functions as induction. The distinction is semantic, not structural."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate asserts that even a normative justification for preference requires a bridge between 'has survived' and 'will likely succeed/is closer to truth.' Building this bridge without induction is impossible; thus, the normative claim itself collapses into inductive reasoning."
+        }
+      ],
+      "optional_refs": ["SRC_006", "SRC_012"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view corroboration not as a measure of truth or probability, but as a report of the current state of critical discussion, making preference a procedural necessity within the 'game of science' rather than an epistemic inference about the world.",
+      "mechanism": "Science is a social and logical game with rules. One rule is: 'Do not accept a falsified theory if an unfalsified alternative exists.' Corroboration is simply the scorecard of this game. Preferring the high-score theory is not a belief that it is true (epistemic), but a move to keep the game going (procedural). It avoids induction because it makes no claim about the future behavior of nature, only about the current status of proposals in the dialectic.",
+      "counterconditions": [
+        "If scientists clearly act on the belief that corroborated theories are more likely to be true, not just procedurally convenient.",
+        "If the 'game' of science aims at truth, rendering purely procedural rules insufficient for goal attainment.",
+        "If the severity of a test cannot be assessed without inductive background knowledge."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "This candidate departs from the need for 'verisimilitude' entirely. It argues that invoking truth-likeness is what creates the contradiction. By stripping corroboration of all ontological weight and treating it as purely dialectical status, the need for verisimilitude vanishes, sidestepping Popper's later doubts."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate addresses the 'better' vs 'binary' issue by defining 'better' as 'more useful for continuing the critical discussion.' A theory that survives severe tests provides more opportunities for further refutation than one that is easily falsified or untested. Thus, the preference is for maximal testability, not maximal truth-probability."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "This aligns perfectly with the 'critical preference' distinction. It defines critical preference as a rule of procedure (keep the best target alive) rather than a guide to belief (this target is probably right)."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate explicitly rejects psychological explanations. The justification is internal to the logic of the scientific method defined as critical rationalism. It is a normative rule of the system, not a description of human behavior."
+        }
+      ],
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "Popper's defense holds only if we accept a dual-aspect theory of rationality: theoretical reason (logic) forbids induction, but practical reason (evolutionary epistemology) mandates preference for the fittest surviving hypothesis as an adaptive strategy.",
+      "mechanism": "In the domain of pure logic, induction is invalid. However, humans are evolved organisms. Our cognitive apparatus selects hypotheses that have survival value. Corroboration is the scientific analog of evolutionary fitness. We prefer the corroborated theory not because logic proves it true, but because our biological and cultural evolution has tuned us to trust patterns that survive severe selection pressures. The 'smuggling' is actually a legitimate shift from the context of justification to the context of discovery/action.",
+      "counterconditions": [
+        "If Popper explicitly denied any evolutionary basis for scientific rationality.",
+        "If the gap between 'survival value' and 'truth approximation' cannot be bridged without induction.",
+        "If this dual-aspect view renders the concept of 'objective knowledge' incoherent."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to clarify that this does not rely on 'verisimilitude' as a logical metric, but as an evolutionary heuristic. This avoids the formal contradictions Popper found with verisimilitude by grounding the preference in biology/pragmatics rather than formal semantics."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The preference for 'better' corroborated theories is explained by the degree of fitness. A theory surviving severe tests is 'fitter' than one surviving weak tests. This gradient is natural in an evolutionary framework, resolving the binary filter critique."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "This candidate fully embraces the distinction. It argues that the 'smuggling' charge fails because it assumes a single domain of rationality. By splitting logic (no induction) and action (evolutionary preference), the inconsistency disappears."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate concedes the psychological element but argues it is foundational to Popper's later evolutionary epistemology. The normative force comes from the objective fact of survival in the environment of theories, not subjective feeling."
+        }
+      ],
+      "optional_refs": ["SRC_008"]
+    },
+    {
+      "claim": "The preference is defensible solely as a methodological rule to maximize falsifiability: we prefer the theory that has survived the most severe tests because it is the most risky and thus the most informative, keeping the engine of science running.",
+      "mechanism": "The goal of science is not truth possession but error elimination. Theories that survive severe tests are those with high empirical content (they said a lot and weren't wrong yet). Preferring them maximizes the potential for future errors to be found. If we preferred easy-to-satisfy theories, science would stall. Therefore, the preference is a strategic choice to optimize the rate of learning, completely independent of truth probability.",
+      "counterconditions": [
+        "If maximizing falsifiability leads to preferring known falsehoods over approximations of truth.",
+        "If scientists actually aim for stable, usable models rather than maximal risk.",
+        "If 'severity' of a test cannot be defined without assuming some regularities (induction)."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departure from verisimilitude. This candidate argues that 'truth-likeness' is a red herring. The only metric that matters is informational content and risk. This sidesteps the formal issues with verisimilitude."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The 'better' theory is the one with higher content/severity. This is a quantitative measure of information, not a binary state. It directly addresses the need to distinguish between survivors based on the quality of their survival."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "This is the purest form of 'critical preference.' It is a methodological rule for efficiency in error elimination, strictly avoiding any claim about the likelihood of truth."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The justification is strictly normative and methodological: 'If you want to learn fast, do X.' It does not rely on how scientists psychologically feel, but on the logical requirements of the growth of knowledge."
+        }
+      ],
+      "optional_refs": ["SRC_004"]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict terms; it is a necessary 'fiction' or 'regulative ideal' that scientists must adopt to function, acknowledging that while logically unjustifiable, it is pragmatically unavoidable.",
+      "mechanism": "Popper's system creates a paradox: logically, no preference is warranted; practically, action is required. The resolution is to admit that the preference is a 'rational faith' or a 'metaphysical principle' (like the belief in a real world) that sits outside the logical system. It is not derived from Popper's logic but is a precondition for applying it. We act *as if* corroboration matters, knowing it doesn't logically guarantee anything.",
+      "counterconditions": [
+        "If Popper claimed his system was self-contained and required no external metaphysical principles.",
+        "If admitting a 'faith' component undermines the entire project of Critical Rationalism.",
+        "If this turns Popperism into a form of conventionalism he sought to destroy."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate agrees with the critic that verisimilitude fails as a logical savior. It argues that recognizing this failure forces us to admit the preference is extra-logical, thus validating the criticism of SRC_005's reliance on it."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The tension is acknowledged as real and unresolvable within pure logic. The 'preference' is a pragmatic patch, not a logical derivation. The candidate accepts that Popper's own behavior showed this tension."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "It argues that 'critical preference' is essentially a label for this pragmatic leap. Calling it 'non-inductive' is a way to mask the fact that it is a voluntary assumption of regularity, effectively conceding the core of the induction critique."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate blurs the line between psychological and normative. It suggests the normative rule exists *because* of the psychological necessity. The justification is circular or pragmatic, not purely logical."
+        }
+      ],
+      "optional_refs": ["SRC_002"]
+    }
+  ]
+}

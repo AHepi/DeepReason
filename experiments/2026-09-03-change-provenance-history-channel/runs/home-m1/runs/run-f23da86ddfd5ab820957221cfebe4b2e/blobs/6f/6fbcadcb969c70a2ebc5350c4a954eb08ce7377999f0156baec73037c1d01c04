@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference that the future will resemble the past, but as a non-inductive methodological rule aimed at maximizing verisimilitude (truth-likeness) while acknowledging that this aim rests on a critical rationalist 'faith' rather than logical justification.",
+    "mechanism": "Distinguish between the logical status of corroboration (a report of past performance, carrying no probability for the future) and the pragmatic decision to prefer high-corroboration theories as the best available guess at truth. This avoids induction by treating the preference as a convention of the game of science designed to eliminate error, where the 'cost' is accepting that the ultimate goal of science (truth) cannot be logically secured, only pursued critically.",
+    "counterconditions": [
+      "If the preference implies a belief that past success guarantees future success, it collapses into induction.",
+      "If the concept of verisimilitude is logically incoherent as critics argue, the objective grounding for preference vanishes.",
+      "If the 'metaphysical faith' required is indistinguishable from the principle of uniformity of nature, the distinction from induction is merely verbal."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "059c75cb550e1b3f17f7e4cf17ed53b0cb31a7935eefc2fc97ccf46fb5dae5c0",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'justification' with 'motivation'. Popper admits a 'faith' in regularities, but explicitly distinguishes this psychological/metaphysical stance from the logical principle of induction. The defense holds because the preference is a decision to act *as if* nature is uniform to test theories severely, not a claim that logic proves nature is uniform."
+      },
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "revised",
+        "note": "Revised to explicitly integrate 'verisimilitude' as the bridge. The previous framing created a false dilemma between 'probability' and 'convention'; the updated mechanism posits 'critical preference for higher verisimilitude' as the third way Popper intended."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The criticism correctly identifies the tension but mischaracterizes the solution. Popper does not conflate objectivity of method and result; he argues the method (severe testing) is objective, while the result (preference) is a rational decision based on that method, not an objective guarantee of truth."
+      },
+      {
+        "handle": "3dd7e6e5900af409fe538c843fc9a16df138e02b954e617cb086b0f92122ce4f",
+        "kind": "rebutted",
+        "note": "Projecting past survival into future preference is only inductive if one claims the projection is *justified* by the past. Popper's move is to admit the projection is unjustifiable logically but necessary methodologically. It is a 'jump' without a logical net, which is the definition of his non-inductive stance."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "revised",
+        "note": "Clarified that the alternative foundation is 'verisimilitude' guided by critical preference, rejecting the dichotomy that it must be either probabilistic or purely arbitrary convention."
+      },
+      {
+        "handle": "552493f430823f47c25c532667b8fd3a2ec2fe75df8bb51ca62e9cd35fb45563",
+        "kind": "departure_declared",
+        "note": "Departing from the assumption that Popper's formal definition of verisimilitude must be logically perfect for the strategy to work. The candidate relies on the *intuitive* and *methodological* utility of verisimilitude as a regulative ideal, even if the formalization faced technical issues later."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "rebutted",
+        "note": "Functional identity does not imply logical identity. While the *action* looks like induction, the *warrant* for the action differs: induction claims logical support from premises; Popper's preference claims only that it is the most rational bet available after eliminating errors, without claiming the bet is safe."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "rebutted",
+        "note": "Similar to handle ...5563, this criticism attacks the formalization of verisimilitude. The candidate survives by retreating to verisimilitude as a meta-scientific goal rather than a formally defined logical operator within the system."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_003"],
+      "shared_structure": [
+        "Selection pressure acts on variants without guaranteeing future fitness.",
+        "Past survival indicates robustness but predicts nothing about new environments.",
+        "Preference for the 'fittest' is a heuristic strategy, not a law of nature."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of truth; science explicitly aims at truth (verisimilitude).",
+        "Natural selection is blind; scientific preference is a critical, rational decision.",
+        "Evolutionary fitness is relative to current environment; scientific corroboration seeks universal laws."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the fittest organism surviving tomorrow without knowing the future environment, we bet on the best-corroborated theory.",
+        "The 'cost' in both cases is the acceptance of contingency: the fittest may die, and the best theory may be falsified."
+      ],
+      "overturn_conditions": [
+        "If biological fitness were proven to guarantee future survival, the analogy would collapse into determinism.",
+        "If scientific corroboration could assign positive probability, the need for the evolutionary analogy would vanish."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": ["SRC_003"]
+    }
+  }
+}

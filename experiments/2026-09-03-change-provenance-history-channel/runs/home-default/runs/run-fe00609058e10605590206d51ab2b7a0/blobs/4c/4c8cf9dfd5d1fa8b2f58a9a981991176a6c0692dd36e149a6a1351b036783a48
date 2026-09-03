@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target incorrectly conflates 'preference for action' with 'expectation of future success.' Popper's specific solution to this problem is that preferring the better-corroborated theory is a rational convention based on the logic of testing (it is the theory that has withstood the most severe attempts at falsification), not an inductive prediction that it will remain true. The target asserts that acting implies betting on the continuity of natural laws, but fails to address Popper's argument that one can choose the best-tested theory as a critical rationalist stance without assuming the uniformity of nature or assigning it higher probability.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

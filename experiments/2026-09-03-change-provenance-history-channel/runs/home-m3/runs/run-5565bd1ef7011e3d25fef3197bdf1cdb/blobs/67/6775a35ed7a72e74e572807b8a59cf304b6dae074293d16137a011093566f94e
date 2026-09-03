@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, methodological rule of 'acting as if' the best-tested theory is true for practical purposes, without assigning it higher logical probability.",
+      "mechanism": "Methodological Fictionalism: Scientists adopt the best-corroborated theory as a working hypothesis for action (building bridges) while maintaining the epistemic stance that its truth probability remains unknown. The 'preference' is a decision-theoretic move, not an inductive inference about nature's uniformity.",
+      "counterconditions": [
+        "If acting on a theory necessarily implies believing it is more likely true, then this distinction collapses.",
+        "If Popper cannot explain why we don't act on falsified theories if probability is irrelevant, the pragmatic defense fails."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_003", "kind": "rebutted", "note": "The distinction holds because 'acting on' is a volitional commitment to a specific course of action based on current critical status, not a cognitive update of logical probability. High content implies low probability, but high corroboration implies high reliability for *decision making* under uncertainty, not high truth likelihood."},
+        {"handle": "[SRC_007] against SRC_001", "kind": "revised", "note": "Revised to explicitly separate 'focus of attention' from 'action'. The mechanism now argues that action requires a singular choice, and corroboration provides the only rational basis for that choice without invoking induction."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "This candidate does not rely on propensity theory for theory choice. It relies on methodological rules. Propensity is internal to probabilistic theories; corroboration is external, assessing the theory itself."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "The dilemma is answered by denying the premise that 'preference' equals 'inductive belief'. One can prefer X for action without believing X is induced to be true."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "revised", "note": "Explicitly added cost analysis: The cost is the acceptance of radical fallibilism where even our best actions are based on guesses that might be false, creating psychological tension between practical confidence and theoretical doubt."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "This argument does not rely on verisimilitude (truth-likeness) which is indeed problematic post-Tichý/Miller. It relies solely on the pragmatic necessity of choosing *something* to act upon, regardless of its proximity to truth."},
+        {"handle": "[SRC_014] against SRC_002", "kind": "rebutted", "note": "The cost is not biological but epistemological: the loss of the guarantee that our successful actions track truth. We survive, but we do not necessarily know why."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "Verisimilitude is bypassed entirely. The justification is purely procedural: we choose the theory that has survived the hardest tests because it is the only one remaining that hasn't failed, not because it is 'closer' to truth."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_007"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories unavoidably smuggles induction back into Popper's system, rendering his rejection of induction inconsistent with scientific practice and his own advice on theory choice.",
+      "mechanism": "CryptInduction: The act of preferring a theory for future action implicitly assumes that the future will resemble the past (nature is uniform). If corroboration (past survival) has no bearing on future performance (probability), then preferring the corroborated theory is irrational unless one assumes inductive regularity.",
+      "counterconditions": [
+        "If Popper can define a form of 'rationality' that is distinct from both logic and induction, this charge fails.",
+        "If the preference is merely psychological and not rational, Popper's normativity collapses."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_003", "kind": "rebutted", "note": "The collapse is real. To 'act on' a theory is to bet on its future success. A bet requires odds. If Popper denies objective odds (probability), he must be relying on subjective inductive hunches, which contradicts his objective stance."},
+        {"handle": "[SRC_007] against SRC_001", "kind": "rebutted", "note": "Exactly. Scientists prefer corroborated theories *because* they expect them to work. This expectation is the definition of induction. Redefining it as 'focus' is semantic evasion."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "departure_declared", "note": "Departing from the need to use propensity here. The argument is that the *practice* of selection is inductive, regardless of the specific probabilistic interpretation used."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "Redefining rationality as 'adaptive' doesn't solve the philosophical problem. If adaptation works, it's because nature is uniform. Acknowledging that is admitting induction."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "revised", "note": "Cost analysis added: Accepting this means admitting Popper failed to solve Hume's problem. Science becomes a biologically successful but philosophically unjustified habit."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Verisimilitude was Popper's attempted escape hatch. Since it failed (Tichý/Miller), the induction charge stands unblocked. There is no other non-inductive bridge from past success to future utility."},
+        {"handle": "[SRC_014] against SRC_002", "kind": "rebutted", "note": "The cost is the demolition of Popper's claim to have solved the problem of induction. He merely hid it behind the term 'corroboration'."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "With verisimilitude broken, the only reason to prefer the surviving theory is the inductive hope that it continues to survive."}
+      ],
+      "optional_refs": ["SRC_008", "SRC_010"]
+    },
+    {
+      "claim": "The preference is defensible not through induction or fiction, but through an evolutionary epistemology where 'corroboration' signals a theory's fitness in a competitive environment of ideas, analogous to natural selection.",
+      "mechanism": "Evolutionary Selectionism: Theories are conjectures; tests are environmental pressures. Corroboration indicates survival fitness, not truth probability. We prefer the 'fittest' theory because it has demonstrated robustness against elimination, similar to preferring a sturdy bridge design because it survived stress tests, not because we calculated its probability of being 'true'.",
+      "counterconditions": [
+        "If evolutionary success does not correlate with truth or utility in a stable way, this analogy fails.",
+        "If 'fitness' in science implicitly relies on an inductive assumption about the stability of the 'environment' (nature)."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_003", "kind": "rebutted", "note": "Informational content and predictive power are distinct in evolution. A highly specific mutation (high content) might be unlikely (low probability) but highly fit in a specific niche. Corroboration measures fit, not probability."},
+        {"handle": "[SRC_007] against SRC_001", "kind": "revised", "note": "Clarified that 'action' is selecting the organism (theory) most likely to survive the next round of tests, not asserting it represents ultimate reality."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Propensity is irrelevant here. Fitness is a historical record of survival, not a propensitic probability of future events, though it informs expectations."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "This directly answers the dilemma: it replaces induction with selection. We don't assume the future resembles the past; we assume the mechanism of selection (testing) continues to operate."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "revised", "note": "Cost: We must accept that science tracks 'survivability' rather than 'truth'. A theory could be false but highly fit for our current observational limits."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Avoids verisimilitude. Fitness is observable (survival); truth-likeness is not. We select for the observable trait."},
+        {"handle": "[SRC_014] against SRC_002", "kind": "rebutted", "note": "The cost is abandoning the goal of truth for the goal of empirical adequacy and survival."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "Selectionism does not require verisimilitude, only differential survival rates."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_014"]
+    },
+    {
+      "claim": "The debate rests on a category error: 'corroboration' is a report of past performance, while 'preference' is a normative decision. Popper's system allows the leap from 'is' (corroborated) to 'ought' (prefer) via the constitutive aim of science: finding truth, even if probability cannot guide us.",
+      "mechanism": "Constitutive Normativity: The preference is justified by the regulative idea of truth. Since we seek truth, and falsified theories are known to be false while corroborated ones are merely unknown, the only rational path toward the goal is to pursue the unknown-but-not-false. This is a teleological justification, not an inductive one.",
+      "counterconditions": [
+        "If the link between 'not falsified' and 'closer to truth' relies on hidden inductive assumptions.",
+        "If the 'aim of science' is itself an unjustified presupposition."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_003", "kind": "rebutted", "note": "The distinction remains vital. We act on the theory that keeps the path to truth open, whereas falsified theories close it. This is a strategic move, not a probabilistic calculation."},
+        {"handle": "[SRC_007] against SRC_001", "kind": "rebutted", "note": "Action is guided by the goal. If the goal is truth, and only corroborated theories are candidates for truth, preference is mandatory by definition of the goal."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "No conflation occurs. Propensity describes physical chances; this mechanism describes rational pursuit of a defined goal."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "It answers the dilemma by shifting the ground from epistemology (justification of belief) to axiology (pursuit of values/goals)."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "revised", "note": "Cost: Science becomes a faith-based enterprise in the value of truth, without any guarantee that our methods actually approach it."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Does not require verisimilitude metrics. It only requires the binary distinction: falsified (dead end) vs. not falsified (potential path)."},
+        {"handle": "[SRC_014] against SRC_002", "kind": "rebutted", "note": "The cost is the acknowledgment that the 'rationality' of science depends on an unprovable commitment to truth-seeking."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "Bypasses the need to measure degrees of truth-likeness."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_012"]
+    }
+  ]
+}

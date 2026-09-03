@@ -1,0 +1,211 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms strictly as a methodological rule for maximizing 'content' and 'testability,' not truth-probability. The cost of accepting this is the abandonment of any expectation that science converges on truth in the long run; we act only to learn faster where we are wrong.",
+      "mechanism": "Corroboration reports the severity of tests passed. Preferring high corroboration is preferring theories that have risked more falsification and survived. This maximizes the rate of error elimination (verisimilitude progress) without assuming the future resembles the past (induction).",
+      "counterconditions": [
+        "If the choice to act on a theory implies a belief in its future success, then induction has been smuggled back in via the action itself.",
+        "If 'severity' cannot be defined without referencing the probability of the evidence given the background knowledge, the definition collapses into Bayesianism."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "This candidate avoids the formal definition of verisimilitude (truth-content minus falsity-content) entirely, relying instead on the pre-formal notion of 'severity of test' and 'informational content,' which remains coherent even if the 1974 proofs hold."
+        },
+        {
+          "handle": "[SRC_016] against SRC_002",
+          "kind": "rebutted",
+          "note": "Same as above: the argument does not depend on the failed logical formalization of verisimilitude but on the procedural rule of seeking high-risk tests."
+        },
+        {
+          "handle": "[SRC_017] against SRC_003",
+          "kind": "rebutted",
+          "note": "This is a methodological argument, not an evolutionary analogy. It justifies preference normatively via the goal of rapid error elimination, not descriptively via survival mechanisms."
+        },
+        {
+          "handle": "[SRC_020] against SRC_012",
+          "kind": "revised",
+          "note": "The claim now explicitly structures the response: Case A (Defensible via Content/Severity) vs Case B (Induction Smuggled). The verdict favors Case A but acknowledges the severe cost (no convergence guarantee)."
+        },
+        {
+          "handle": "[SRC_019] against SRC_011",
+          "kind": "rebutted",
+          "note": "No biological analogy is used. The justification is purely epistemic/methodological regarding test severity."
+        },
+        {
+          "handle": "[SRC_008] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate explicitly rejects 'truth-likeness' as a probabilistic measure and distinguishes 'content' from 'verisimilitude' in the formal sense criticized by Miller/Tichý."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "revised",
+          "note": "The cost is now explicitly stated: the loss of the guarantee of convergence to truth. We gain speed of learning errors, but lose the comfort of probable truth."
+        },
+        {
+          "handle": "[SRC_007] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate addresses the 'smuggling' charge directly by arguing that acting on a theory to test it further is consistent with fallibilism and does not require believing the theory is probably true."
+        }
+      ],
+      "optional_refs": [
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict logical terms and necessarily smuggles in induction. The strongest case for defense relies on a pragmatic 'leap of faith' that the future will resemble the past, which Popper explicitly rejected as irrational. The surviving view is that scientists are inconsistent Popperians who must act inductively to function.",
+      "mechanism": "Action implies prediction. To prefer Theory A over Theory B for action is to predict A will perform better in the future. This prediction rests on the assumption that past performance (corroboration) indicates future success, which is the principle of uniformity of nature (induction).",
+      "counterconditions": [
+        "If one can demonstrate a form of rational action that requires no prediction of future success.",
+        "If 'preference' can be redefined as a random selection mechanism that coincidentally favors corroborated theories without causal link to future performance."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "This argument sidesteps the verisimilitude formalism failure by attacking the deeper pragmatic contradiction of action itself, regardless of how verisimilitude is defined."
+        },
+        {
+          "handle": "[SRC_016] against SRC_002",
+          "kind": "rebutted",
+          "note": "Irrelevant to this specific line of attack, which focuses on the logic of action rather than the definition of truth-likeness."
+        },
+        {
+          "handle": "[SRC_017] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate agrees that descriptive analogies fail; it argues the normative justification itself is impossible without induction."
+        },
+        {
+          "handle": "[SRC_020] against SRC_012",
+          "kind": "revised",
+          "note": "Structure clarified: Strongest Case for Defense (Pragmatic Leap) vs Strongest Case for Induction (Action requires Prediction). Verdict: Induction wins logically, costing us Popper's pure rationality."
+        },
+        {
+          "handle": "[SRC_019] against SRC_011",
+          "kind": "rebutted",
+          "note": "No reliance on biological analogy; the argument is based on the logic of decision theory."
+        },
+        {
+          "handle": "[SRC_008] against SRC_005",
+          "kind": "rebutted",
+          "note": "Explicitly argues that 'verisimilitude' cannot save the position because the act of preferring it for future use is already inductive."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "revised",
+          "note": "Cost identified: We must accept that scientific rationality is partially irrational (inductive) or that scientists are systematically self-deceived about their own methodology."
+        },
+        {
+          "handle": "[SRC_007] against SRC_004",
+          "kind": "revised",
+          "note": "Directly answers the 'smuggling' charge: Yes, it is smuggled in via the necessity of prediction for action. The cost is the collapse of Popper's demarcation between rational science and irrational habit."
+        }
+      ],
+      "optional_refs": [
+        "SRC_010",
+        "SRC_013"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves if we treat the preference not as an epistemic judgment about the world, but as a constitutive rule of the 'game' of science, similar to rules in chess. It is defensible as a social norm for stabilizing discourse, but the cost is that it offers no guarantee of individual cognitive rationality or contact with reality.",
+      "mechanism": "Institutional Normativity. Just as a chess player moves the bishop diagonally not because it's 'probable' to win, but because it's the rule, scientists prefer corroborated theories because it is the rule of the institution. This separates the 'logic of discovery' (institutional rules) from the 'psychology of belief' (individual induction).",
+      "counterconditions": [
+        "If the institutional rule itself was adopted historically because of its inductive success, then the foundation is still inductive.",
+        "If individual scientists cannot psychologically separate their professional actions from their personal expectations of success."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "Avoids technical verisimilitude definitions by shifting the domain to social epistemology and institutional rules."
+        },
+        {
+          "handle": "[SRC_016] against SRC_002",
+          "kind": "rebutted",
+          "note": "Same as above; the failure of logical verisimilitude does not impact the validity of social norms."
+        },
+        {
+          "handle": "[SRC_017] against SRC_003",
+          "kind": "rebutted",
+          "note": "This is a normative institutional argument, not a descriptive evolutionary one. It prescribes how scientists *ought* to behave within the institution."
+        },
+        {
+          "handle": "[SRC_020] against SRC_012",
+          "kind": "revised",
+          "note": "Candidate now explicitly presents the 'Institutional Rule' case vs the 'Inductive Smuggling' case, concluding that the Institutional view survives but at the cost of disconnecting science from individual rationality."
+        },
+        {
+          "handle": "[SRC_019] against SRC_011",
+          "kind": "rebutted",
+          "note": "Distinguishes clearly between descriptive survival (biology) and normative rule-following (institutions)."
+        },
+        {
+          "handle": "[SRC_008] against SRC_005",
+          "kind": "rebutted",
+          "note": "Rejects the false dichotomy by introducing a third category: Constitutive Norms, which are neither probabilistic nor inductive."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "revised",
+          "note": "Cost specified: The alienation of the scientist. The scientist must follow rules they may not personally believe in, creating a split between public method and private belief."
+        },
+        {
+          "handle": "[SRC_007] against SRC_004",
+          "kind": "rebutted",
+          "note": "Argues that following a rule is not 'smuggling' induction; it is simply playing the game. The 'smuggling' only occurs if one claims the rule guarantees truth."
+        }
+      ],
+      "optional_refs": [
+        "SRC_014"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only through a radical reinterpretation of 'rationality' as 'risk management.' We prefer corroborated theories not because they are likely true, but because they allow us to make the most precise, risky predictions. The cost is accepting that science is a high-stakes gamble with no safety net of probability.",
+      "mechanism": "Risk-Based Utility. A highly corroborated theory has high informational content. Acting on it yields higher potential utility (if true) or faster falsification (if false) than acting on a vague, untested theory. Rationality is maximizing the rate of learning, not maximizing confidence.",
+      "counterconditions": [
+        "If the goal of science is actually stability or technological reliability rather than rapid error elimination.",
+        "If 'risk' cannot be quantified or compared across different theoretical frameworks without invoking probability."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "Does not rely on the specific logical formulation of verisimilitude, but on the pragmatic concept of informational content and risk."
+        },
+        {
+          "handle": "[SRC_016] against SRC_002",
+          "kind": "rebutted",
+          "note": "Focuses on the utility of risk rather than the logical definition of truth-likeness."
+        },
+        {
+          "handle": "[SRC_017] against SRC_003",
+          "kind": "rebutted",
+          "note": "Provides a normative justification (maximize learning rate) rather than a descriptive biological analogy."
+        },
+        {
+          "handle": "[SRC_020] against SRC_012",
+          "kind": "revised",
+          "note": "Structured to contrast 'Risk Management' defense against 'Inductive Smuggling' critique. Concludes Risk Management survives but costs us the illusion of safety."
+        },
+        {
+          "handle": "[SRC_019] against SRC_011",
+          "kind": "rebutted",
+          "note": "Argument is based on decision theory under uncertainty, not biological survival mechanisms."
+        },
+        {
+          "handle": "[SRC_008] against SRC_005",
+          "kind": "rebutted",
+          "note": "Reframes the discussion away from 'truth-likeness' to 'informational yield,' bypassing the Tichý/Miller objection."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "revised",
+          "note": "Cost explicitly defined: The psychological burden of operating without probabilistic assurance. Science becomes a series of bold bets rather than a accumulation of certainties."
+        },
+        {
+          "handle": "[SRC_007] against

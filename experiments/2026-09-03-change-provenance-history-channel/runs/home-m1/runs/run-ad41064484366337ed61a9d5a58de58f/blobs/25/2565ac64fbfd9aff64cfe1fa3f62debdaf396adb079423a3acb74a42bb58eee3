@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is 'defensible only as an ethical stance' creates a false dichotomy by ignoring Popper's explicit pragmatic justification. Popper argues that preferring better-corroborated theories is rational not because it increases probability (induction) nor solely as an ethical duty, but as a critical methodological rule: if we seek truth, we must test the boldest conjectures most severely. The target fails to address this pragmatic bridge between 'no probability increase' and 'rational preference,' incorrectly reducing the entire defense to ethics and thereby misrepresenting Popper's actual solution to the problem.",
+      "premise": "Popper distinguishes between logical probability (which does not increase) and pragmatic rationality (which favors severe testing outcomes as a methodological rule for truth-seeking).",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Does framing the preference purely as an 'ethical stance' overlook Popper's argument that it is a necessary component of the critical method itself, distinct from both induction and moral obligation?"
+    }
+  ]
+}

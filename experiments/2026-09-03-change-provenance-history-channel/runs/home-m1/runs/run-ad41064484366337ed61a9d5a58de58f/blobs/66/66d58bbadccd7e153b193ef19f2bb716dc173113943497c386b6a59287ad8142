@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, critical rational choice to act on the theory with the highest informational content and severest test history, accepting that this yields no probability of truth but only the best available target for further falsification.",
+      "mechanism": "Critical Rational Preference: Scientists choose the theory that has survived the most severe tests not because it is likely true, but because it is the most informative and thus the most vulnerable to future refutation. Acting on it maximizes the potential for learning through error elimination.",
+      "counterconditions": [
+        "If the agent requires a probabilistic guarantee of success for action, this defense fails.",
+        "If 'preference' implies an expectation of future performance based on past survival, the defense collapses into induction.",
+        "If the cost of acting on a false theory is catastrophic and irreversible, the lack of probability assessment may be deemed irrational."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_009", "kind": "rebutted", "note": "The defense does not create a false dichotomy; it explicitly rejects the need for rational convention or probability, positing instead a third category: critical preferability based on test severity."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "When multiple unrefuted theories coexist, the one with the higher degree of corroboration (more severe tests passed) is preferred because it has higher informational content, not because it is 'safer'."},
+        {"handle": "[SRC_007] against SRC_005", "kind": "rebutted", "note": "Evolutionary epistemology describes the process, but the justification here is logical: we prefer the theory that tells us more about the world, even if we don't believe it's true."},
+        {"handle": "[SRC_011] against SRC_003", "kind": "rebutted", "note": "The analogy to biological fitness is descriptive of survival, not prescriptive of truth. The preference is for the 'fittest' in terms of test severity, not future survival probability."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Popper distinguishes between the causal history of selection and the normative rule: 'Choose the best-tested theory.' The norm is derived from the goal of maximizing error elimination, not from the history itself."},
+        {"handle": "[SRC_004] against SRC_003", "kind": "rebutted", "note": "The 'pragmatic bet' is not on truth, but on the efficiency of the learning process. We bet on the theory that will teach us the fastest, whether by confirming its utility or revealing its flaw."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Maximizing potential for falsification IS the rational basis for preference in Popper's system. It is not an inductive bridge to truth, but a strategic move to accelerate knowledge growth."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Acting on a theory does not require an expectation of future success (probability); it only requires the acceptance that this theory is currently the most rigorous hypothesis available to guide action and testing."}
+      ],
+      "optional_refs": ["SRC_009", "SRC_013"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories smuggles induction back into Popper's system because any decision to act on a theory necessarily entails an implicit assumption that the future will resemble the past regarding the theory's reliability.",
+      "mechanism": "The Inductive Smuggle: Action implies expectation. To prefer Theory A over Theory B for practical application is to expect Theory A to perform better in the future. This expectation relies on the uniformity of nature (that past test survival predicts future success), which is the definition of induction Popper sought to eliminate.",
+      "counterconditions": [
+        "If one can act purely on the basis of current status without any regard for future outcomes, the charge holds less weight.",
+        "If 'preference' is redefined as mere arbitrary selection without expectation, the pragmatic force of science is lost.",
+        "If Popper admits a 'principle of induction' for practical life while rejecting it for science, his system becomes dualistic and inconsistent."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_009", "kind": "revised", "note": "Revised to clarify that the 'false dichotomy' charge is valid if Popper claims a purely logical basis for action; the revision argues that action inherently bridges the gap via implicit induction."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "In scenarios with multiple unrefuted theories, choosing the 'better-corroborated' one explicitly uses past performance as a proxy for future reliability, which is inductive."},
+        {"handle": "[SRC_007] against SRC_005", "kind": "rebutted", "note": "Evolutionary epistemology fails to answer the cost because evolution itself is an inductive process (traits that worked before are selected for the future)."},
+        {"handle": "[SRC_011] against SRC_003", "kind": "rebutted", "note": "The analogy to biological selection confirms the smuggling: nature selects based on past survival to ensure future survival, which is an inductive mechanism."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The conflation is unavoidable. One cannot justify a normative preference for action based on causal history without assuming that history is relevant to the future outcome."},
+        {"handle": "[SRC_004] against SRC_003", "kind": "rebutted", "note": "Calling it a 'pragmatic bet' does not remove the inductive underpinning; a bet on a horse is based on its past performance implying future speed."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Maximizing falsification potential is a scientific goal, but acting on the theory (e.g., building a bridge) assumes it won't fail, which is an inductive leap from 'hasn't failed yet'."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "This is the core rebuttal: acting inherently requires an expectation of future success. Denying this makes action irrational or random."}
+      ],
+      "optional_refs": ["SRC_010", "SRC_001"]
+    },
+    {
+      "claim": "The preference is defensible only if reinterpreted as a methodological convention or 'critical attitude' that deliberately suspends the demand for justification, accepting the cost of acting without certainty rather than smuggling in induction.",
+      "mechanism": "Methodological Conventionalism: Popper's solution is not a logical proof that the better-corroborated theory is better, but a proposal for a rule of conduct. We agree to act as if the best-tested theory is the best guide, knowing full well it might be false, to maintain the critical framework.",
+      "counterconditions": [
+        "If scientists cannot psychologically sustain action without belief in probable truth, this convention fails.",
+        "If the 'cost' of being wrong is too high for mere convention to bear (e.g., nuclear safety), the convention breaks down.",
+        "If the convention is arbitrary, why prefer corroboration over randomness? This risks circularity."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_009", "kind": "revised", "note": "Adopts the critic's view that it is a 'non-rational convention' but reframes it as a necessary methodological postulate rather than a failure."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "The convention applies precisely when multiple theories survive: the rule 'pick the most tested' is the agreed-upon tie-breaker, not a claim of superiority."},
+        {"handle": "[SRC_007] against SRC_005", "kind": "departure_declared", "note": "Departure from evolutionary epistemology; this candidate relies on social/methodological agreement, not biological analogy."},
+        {"handle": "[SRC_011] against SRC_003", "kind": "rebutted", "note": "It is not an analogy to biology; it is a conscious human decision to adopt a specific rule of thumb to avoid dogmatism."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The normative justification IS the convention itself. We ought to follow it because we have agreed that it serves the goal of critical inquiry."},
+        {"handle": "[SRC_004] against SRC_003", "kind": "rebutted", "note": "The 'bet' is not on the theory's truth, but on the utility of the convention for maintaining a critical society."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "The rational basis is the preservation of the critical method, not the maximization of falsification per se."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Acting requires expectation, but the expectation is generated by the convention, not by inductive inference from data."}
+      ],
+      "optional_refs": ["SRC_012", "SRC_005"]
+    },
+    {
+      "claim": "The dilemma is dissolved by recognizing that 'corroboration' reports only the past logical relation between theory and evidence, and 'preference' is a separate, non-cognitive volitional act that needs no epistemic defense.",
+      "mechanism": "Volitional Separation: Corroboration is a historical fact (Theory T survived Test E). Preference is an act of will (I choose to use T). No bridge is needed between 'is' (past survival) and 'ought' (future action) because the agent simply wills the action without claiming epistemic support.",
+      "counterconditions": [
+        "If scientific action must be rational (guided by reasons), pure volition appears arbitrary and irrational.",
+        "If the choice is truly reason-free, why do scientists consistently choose the corroborated theory?",
+        "This separation may render science indistinguishable from gambling or faith."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_009", "kind": "rebutted", "note": "There is no false dichotomy; there is a category error in asking for an epistemic defense of a volitional act."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "Scientists choose the corroborated theory not because of a rule, but because the will naturally aligns with the most robust historical record, even if logically unconnected."},
+        {"handle": "[SRC_007] against SRC_005", "kind": "rebutted", "note": "Evolutionary epistemology is irrelevant; this is about individual agency separating fact from value."},
+        {"handle": "[SRC_011] against SRC_003", "kind": "rebutted", "note": "No induction is smuggled because no prediction is claimed. The agent acts without expecting success, merely acting."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Popper's maintenance of the distinction supports this: the causal explanation is psychological, the normative is nonexistent (it's just choice)."},
+        {"handle": "[SRC_004] against SRC_003", "kind": "rebutted", "note": "It is not a 'bet'; it is a commitment without expectation of return."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Rational basis is rejected; the basis is existential commitment."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Acting does NOT require expectation of success; one can act while acknowledging total ignorance of the outcome."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_014"]
+    }
+  ]
+}

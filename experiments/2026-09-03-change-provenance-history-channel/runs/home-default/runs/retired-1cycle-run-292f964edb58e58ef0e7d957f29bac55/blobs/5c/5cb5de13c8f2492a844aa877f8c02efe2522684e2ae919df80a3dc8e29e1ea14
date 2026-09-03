@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the preference is grounded in 'minimizing expected error', but this metric implicitly relies on an inductive assumption that past error rates predict future reliability.",
+      "case": "The argument collapses because the phrase 'minimizing expected error' smuggles induction back in. To calculate or even qualitatively assess 'expected error' for a future action based on past tests, one must assume that the frequency of past falsifications (or survival) is a reliable guide to future performance. Popper explicitly rejected the idea that past success makes future success more probable. If the agent chooses Theory A over Theory B because A has survived more severe tests, and justifies this by saying it 'minimizes expected error', they are asserting that the property of having survived tests so far is a valid predictor of future utility. This is precisely the inductive inference Popper forbade: moving from 'has survived' to 'will likely survive/is reliable'. Without the inductive leap that nature's behavior regarding these theories will remain uniform enough for past survival to indicate future low error, the concept of 'expected error' is empty. Therefore, the pragmatic defense fails on Popper's own terms because it cannot define 'rational policy' without covertly using the probability of future truth/reliability that it claims to reject.",
+      "counterexample": [
+        "A theory that survived 1000 tests due to luck vs one that survived 1 due to truth; without induction, past count implies nothing about future 'expected error'."
+      ],
+      "successor_question": "If 'expected error' cannot be calculated without assuming the uniformity of nature, what non-inductive metric does Popper actually provide to distinguish a rational choice from a random guess between two unfalsified theories?"
+    }
+  ]
+}

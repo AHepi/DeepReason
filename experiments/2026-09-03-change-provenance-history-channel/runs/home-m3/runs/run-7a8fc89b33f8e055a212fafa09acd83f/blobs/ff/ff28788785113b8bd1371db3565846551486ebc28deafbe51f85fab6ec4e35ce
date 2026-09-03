@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of truth, but as a pragmatic methodological rule grounded in the goal of error elimination; however, accepting this defense costs the ability to claim that such preferences track 'verisimilitude' (truth-likeness) in any formally rigorous sense, forcing a retreat to a purely procedural conventionalism that cannot guarantee progress toward truth, only the avoidance of known falsities.",
+    "mechanism": "The argument reconstructs Popper's distinction between the logical status of a theory (which remains unproven) and the methodological decision to prefer the theory that has withstood the most severe tests. It posits that this preference is rational because it maximizes the opportunity for future falsification (severe testing), thereby accelerating error elimination. The mechanism explicitly rejects 'verisimilitude' as a quantitative guide due to the Miller-Tichý refutation, instead framing the preference as a non-cognitive, evolutionary-style selection pressure where 'survival' implies nothing about future success, only past resistance to specific errors. This avoids induction by refusing to project past success into future probability, treating the preference as a bet on higher testability rather than higher truth-content.",
+    "counterconditions": [
+      "If one insists that scientific preference must imply a rational belief in higher truth-content (verisimilitude), then Popper's framework collapses because the formal definition of verisimilitude is incoherent.",
+      "If the preference is interpreted as an inductive inference that the future will resemble the past, it directly contradicts Popper's core rejection of induction.",
+      "If the defense relies solely on 'psychological necessity' without a normative methodological basis, it fails to answer why scientists *ought* to prefer corroborated theories rather than just noting that they *do*."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate logical justification with pragmatic necessity; rather, it argues that the 'justification' IS the pragmatic methodological rule itself. The preference is defended as a rule of conduct (methodology) which is logically distinct from a claim about probability, thus satisfying Popper's requirement for a non-inductive reason to act."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "revised",
+        "note": "Revised to clarify that the dilemma is not about redefining probability, but about rejecting the need for probability entirely in favor of 'severity of test' as the sole criterion for preference. The candidate now explicitly states that the preference is defensible ONLY IF we accept that rational action does not require probabilistic confidence."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be73990a91bfccedd76a3db90a87926c01",
+        "kind": "departure_declared",
+        "note": "Departing from any reliance on 'verisimilitude' as a coherent metric. The candidate explicitly accepts the Miller-Tichý refutation and argues that the cost of Popper's defense is the abandonment of verisimilitude as a guide, leaving only a procedural commitment to error elimination."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The analogy to biological evolution is used strictly to illustrate 'procedural necessity' (survival of the fittest test) without implying 'rational defensibility' in the sense of tracking truth. The rebuttal clarifies that the non-inductive reason is the maximization of testability, not an evolutionary guarantee of progress."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "Revised to explicitly state that Popper's framework, when stripped of the incoherent concept of verisimilitude, relies solely on the methodological rule of preferring the most testable (and thus best-tested) theory. The argument no longer attempts to bridge the gap with verisimilitude but acknowledges the gap as the 'cost' of the defense."
+      },
+      {
+        "handle": "60ef0d6b71db19114ca85499b1bdf00dea34b3d51f9c0ada0d35365043649fc0",
+        "kind": "rebutted",
+        "note": "The candidate addresses the normative question by defining the norm as 'methodological consistency': if one accepts the goal of error elimination, one is normatively bound to prefer the theory that offers the best chance of being falsified (the corroborated one). This answers why Popper himself acted this way without invoking induction."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "revised",
+        "note": "Revised to ensure both sides of the dilemma are presented: (1) The case FOR defensibility (pragmatic methodological rule) and (2) The case AGAINST (smuggling induction or relying on incoherent verisimilitude). The conclusion now explicitly weighs these before declaring the pragmatic defense as the survivor, albeit with high costs."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dilemma that accepting the preference as a fact loses normativity. Instead, it argues the normativity derives from the internal logic of the critical method itself: to be a Popperian scientist IS to prefer the most severely tested theory. This is a normative commitment to a method, not a psychological observation."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

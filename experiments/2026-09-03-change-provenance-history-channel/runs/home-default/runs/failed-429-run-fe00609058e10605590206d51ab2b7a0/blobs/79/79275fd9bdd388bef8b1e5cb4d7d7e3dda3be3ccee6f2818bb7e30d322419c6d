@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation as required. Instead of defining a structural or logical connection (dependence, reduction, shared mechanism, etc.) between the isolated problem and its neighborhood, it defines the 'connection' merely as a historical record of survival ('recording of the fact that the isolated node has survived testing'). A record of past status is metadata, not a substantive relational mechanism like 'reduction' which implies a derivational link. Furthermore, the 'REFUTED IF' condition incorrectly shifts the burden to predictive power ('likelihood of future success'), whereas the prompt requires a relation explaining the current connection, not a guarantee of future stability. The target conflates the existence of a historical trace with a functional reduction.",
+      "premise": null,
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Does describing a node's survival history constitute a 'reduction' in the logical sense, or is it merely an observation that lacks the derivational structure required for a substantive relation?"
+    }
+  ]
+}

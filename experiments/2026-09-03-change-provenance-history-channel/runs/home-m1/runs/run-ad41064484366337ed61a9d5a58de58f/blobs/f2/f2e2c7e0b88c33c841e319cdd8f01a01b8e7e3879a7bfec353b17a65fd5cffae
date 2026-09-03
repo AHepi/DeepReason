@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference that the theory is more likely true, but as a critical rational choice to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing verisimilitude (truth-likeness) without assigning probability. This survives the charge of smuggling induction only if one accepts the cost of abandoning the guarantee that acting on the best-tested theory will yield successful predictions, accepting instead that it is merely the most rationally criticizable option available.",
+    "mechanism": "Critical Rational Choice via Verisimilitude: The mechanism distinguishes between the logical status of a theory (unproven, improbable) and the methodological rule for action (choose the one that has survived the severest tests). Preference is justified because corroboration reports on the theory's past performance in critical tests, which serves as a non-inductive indicator of its potential closeness to the truth (verisimilitude), rather than a predictor of future success based on uniformity of nature.",
+    "counterconditions": [
+      "If the Tichý-Miller theorem holds that verisimilitude cannot be formally defined or compared within Popper's framework, then the justification collapses into arbitrary preference.",
+      "If 'acting on a theory' logically entails assuming its future reliability (an inductive step), then the distinction between methodological rule and inductive inference is merely verbal.",
+      "If multiple unrefuted theories exist with equal severity of testing, the mechanism fails to provide a selection criterion without introducing an extra-logical tie-breaker."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dichotomy; this candidate rebuts by explicitly framing the preference as a 'critical rational choice' distinct from both probabilistic induction and non-rational convention, aligning with Popper's specific solution of rational action without belief in probability."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address the coexistence of multiple unrefuted theories by adding a countercondition regarding equal severity testing, acknowledging that the mechanism requires a tie-breaker in such edge cases which Popper leaves to further critical discussion."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "rebutted",
+        "note": "Rebutted by clarifying that the 'cost' accepted is precisely the lack of an inductive bridge; the defense does not claim the fittest survivor *will* succeed, only that it is the most rational bet given current knowledge, thus answering the specific cost question."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The analogy to biological selection is rejected as the primary justification; instead, the candidate relies on the logical asymmetry of falsification and the definition of verisimilitude, avoiding the inductive smuggle inherent in evolutionary analogies."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "revised",
+        "note": "Revised the claim to sharply distinguish between the causal explanation of survival and the normative justification for preference, explicitly stating that the latter rests on the methodological rule of critical rationality, not causal history."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "Rebutted by asserting that the 'pragmatic bet' is not an inductive inference but a decision-theoretic move based on the available critical data, which Popper allows as rational action without committing to the truth of the theory."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate rejects the premise that 'methodological acceptance' must assume future success to be valid; it posits that methodological acceptance is simply the act of submitting the theory to further tests, not a regulative ideal of success."
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "revised",
+        "note": "Revised the mechanism to acknowledge the Tichý-Miller critique as a serious countercondition, limiting the strength of the verisimilitude argument to a qualitative rather than formal quantitative comparison."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["biological_natural_selection", "courtroom_cross_examination"],
+      "shared_structure": [
+        "Survival of the fittest theory parallels survival of the fittest organism under environmental pressure.",
+        "Severe testing parallels rigorous cross-examination in a legal trial.",
+        "Corroboration parallels a verdict of 'not guilty' which does not prove innocence but indicates survival of scrutiny."
+      ],
+      "disanalogies": [
+        "Biological survival is causal and blind, whereas scientific preference is a conscious, normative choice.",
+        "Legal 'not guilty' is a binary status, whereas corroboration is a matter of degree based on test severity.",
+        "Organisms do not learn from falsification, whereas scientists modify or reject theories based on it."
+      ],
+      "transfer_claims": [
+        "Just as we rely on the surviving organism to continue functioning until proven otherwise, we rely on the corroborated theory for action.",
+        "The severity of the test adds weight to the survival, similar to the rigor of cross-examination validating a witness's credibility temporarily."
+      ],
+      "overturn_conditions": [
+        "If the environment changes radically such that past fitness predicts future failure, the biological analogy breaks down for science.",
+        "If the legal system assumes 'not guilty' implies 'innocent' for future behavior, the analogy smuggles in the induction Popper rejects."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

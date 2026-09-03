@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'critical preference' based on verisimilitude (truth-likeness), but accepting this defense costs the admission that we can never know if our preference is actually tracking truth, only that it is the most rational guess available in the absence of induction.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which requires induction and is impossible) and 'preferability' (which relies on the logical content of tests survived). A theory that survives severe tests has higher verisimilitude potential because it has ruled out more false possibilities without being falsified itself. The preference is not a prediction of future success (induction) but a recognition of current explanatory power and informational content. We act on the best-tested theory not because it is probable, but because it is the most informative error-elimination candidate we possess.",
+    "counterconditions": [
+      "The Tichý/Miller proof demonstrates that verisimilitude cannot be formally defined or compared in rich languages, potentially collapsing the distinction between 'better-corroborated' and 'more probable'.",
+      "If acting on a theory implies expecting it to work in the future, this smuggles in an inductive assumption about the uniformity of nature.",
+      "Popper's rejection of probability as a measure of corroboration must remain consistent even when practical action demands a probabilistic-looking choice."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "017f060a2b21e42b81d92b963a3f75c80b27f8ea05726d7b82ba5200702940d8",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'predictive power' with 'probabilistic expectation.' Popper links high content to low logical probability, but the preference is based on the *severity* of the test passed, not a calculation of future frequency. Acting on high-content theories is choosing the riskiest, most informative option, not the safest probabilistic bet."
+      },
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address 'action' (building bridges). The preference is not merely 'focus of attention' but a critical decision rule: when forced to act, one must choose the hypothesis that has withstood the most stringent attempts at refutation, as this minimizes the risk of known error, even if it guarantees no future success."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The defense does not conflate propensity with corroboration. Propensity interprets single-case probabilities within a theory; corroboration is a report on the past performance of a theory against tests. The preference uses the latter to select the former only as a tentative guide, not as a derived probability value."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0780cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "departure_declared",
+        "note": "Departing from the strict requirement to solve the dilemma solely via 'adaptive fitness.' While evolutionary epistemology supports the view, the primary defense here rests on the logical asymmetry between verification and falsification, not biological imperative."
+      },
+      {
+        "handle": "0e0b6bedbaa57c8c884b19763dfc9a486bc51b45cf45a7b3e42fb57f46f62a3",
+        "kind": "rebutted",
+        "note": "The Tichý/Miller proof applies to formal definitions of verisimilitude in specific logical frameworks. Popper's later work accepts that while a perfect formal measure may be elusive, the intuitive comparative judgment of 'closer to truth' based on error elimination remains a valid regulative ideal for scientific practice, distinct from inductive probability."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Explicitly added the cost analysis to the claim: accepting this view costs the certainty of success. We admit we do not know if the better-corroborated theory is true or will work; we only know it is the best critical guess. This sacrifices the comfort of inductive assurance."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "Similar to the rebuttal for 0e0b..., the Tichý/Miller result limits formalization but does not invalidate the methodological rule. Popper argues that despite the lack of a perfect metric, the process of conjecture and refutation objectively increases our grasp of reality, making the preference rational without being inductive."
+      },
+      {
+        "handle": "31e3d2feedffd07a4ba14b8f3ba6f6c2d293d3fe744ce9f002e0deb622684e37",
+        "kind": "revised",
+        "note": "Clarified the cost in the claim. The cost is not just 'voluntary activity' but the acceptance of fundamental ignorance regarding the future. We pay the price of anxiety and uncertainty by rejecting induction, gaining only the integrity of logical consistency."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

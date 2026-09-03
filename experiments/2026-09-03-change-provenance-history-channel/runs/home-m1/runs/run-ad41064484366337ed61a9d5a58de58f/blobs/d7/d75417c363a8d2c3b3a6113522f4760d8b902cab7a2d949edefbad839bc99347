@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, pragmatic decision to act on the theory that has withstood the most severe tests, acknowledging it may still be false but is currently the 'fittest' survivor.",
+      "mechanism": "Evolutionary Epistemology: Theories compete in a selection process where severe tests act as the environmental pressure. Preference is not a prediction of future success (induction) but a report on current survival status.",
+      "counterconditions": [
+        "If the scientist claims the preferred theory is *more likely* to be true in the future based on past performance.",
+        "If the 'severity' of the test is defined probabilistically rather than logically.",
+        "If the preference is used to justify ignoring falsified theories without independent criticism."
+      ],
+      "typicality": 0.92,
+      "discharges": [
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "The rebuttal distinguishes between normative justification (which Popper rejects for induction) and critical preference (which he accepts). The choice is justified by the logical fact of survival, not a causal explanation of why it survived."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "The analogy to biological selection is descriptive of the process, but the *reason* for preference is the logical asymmetry: we know the others failed, while this one has not yet failed. It is a bet on the unknown, not an expectation of the known."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "This candidate explicitly avoids the false dilemma by adopting Popper's third way: critical preference without inductive validation. It does not ignore his solution; it embodies it."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "No appeal to verisimilitude is made here. The preference is based solely on the binary state of 'not yet falsified' after severe testing, avoiding the collapsed metric of truth-likeness."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "For practical action (bridge building), we do not need 'likelihood of truth.' We need the theory that has survived the most relevant stress tests. Acting on the best-tested theory is the only rational move when all are known to be potentially false."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "This is not a methodological assumption of induction. It is a rejection of induction in favor of a decision rule based on critical discussion and test severity."},
+        {"handle": "[SRC_016] against SRC_012", "kind": "rebutted", "note": "Popper's rejection of induction is a logical critique of its validity, not an inductive generalization itself. This candidate relies on that logical critique."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "The candidate utilizes the 'severity of test' metric exactly as Popper defined it: the logical improbability of the evidence given the theory, not a probabilistic confirmation of the theory."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_009"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories smuggles induction back in because any assertion that past survival is a relevant guide for future action implicitly assumes the uniformity of nature or the stability of laws, which is an inductive premise.",
+      "mechanism": "Hidden Premise Extraction: The move from 'Theory T survived test X' to 'We should act on T for future event Y' contains a suppressed major premise: 'What worked/survived in the past will work/survive in the future.'",
+      "counterconditions": [
+        "If Popper can define 'rational action' without any reference to future expectations.",
+        "If the 'decision' to act is purely arbitrary and unrelated to the test results.",
+        "If the concept of 'severity' can be established without assuming stable background knowledge."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_006] against SRC_002", "kind": "revised", "note": "Revised to clarify that the conflation is not just causal/normative but logical: the normative force of the preference *depends* on an implicit inductive hope, making the distinction moot."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "Even if framed as a 'bet,' a rational bet requires odds. Assigning better odds to the corroborated theory is an inductive act. A random bet would not prefer the corroborated one."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "Popper's 'solution' is merely verbal sleight of hand. He renames induction 'critical preference' but the functional role in scientific practice remains inductive."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "departure_declared", "note": "Departing from the specific 'verisimilitude' attack to focus on the more fundamental 'hidden premise' of temporal projection."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "In bridge building, if we know the theory is possibly false, acting on it anyway implies we think it's 'probably' true enough. That 'enough' is an inductive threshold."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "Popper's refutation of induction fails because his own system cannot function without it. The 'regulative ideal' is just induction in disguise."},
+        {"handle": "[SRC_016] against SRC_012", "kind": "rebutted", "note": "While Popper's rejection is logical, the *application* of his system (preferring T) reintroduces induction pragmatically, creating a performative contradiction."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Severity measures how hard we tried to break it. Using that measure to predict it won't break next time is the inductive leap."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_011"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view corroboration reports not as guides to action, but as historical records of criticism; the 'preference' is simply the refusal to act on already-refuted theories, leaving only the unrefuted ones by default.",
+      "mechanism": "Eliminative Default: Action is not taken *because* a theory is corroborated, but because all alternatives have been eliminated. Corroboration is merely the label for 'not yet eliminated'.",
+      "counterconditions": [
+        "If there are multiple unrefuted theories, requiring a choice between them.",
+        "If the cost of acting on a false unrefuted theory varies, requiring a probability estimate.",
+        "If 'survival' implies positive support rather than mere lack of negation."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "There is no conflation because there is no positive justification. The 'preference' is a negative space left by falsification."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "This removes the need for the biological analogy. It is purely logical elimination: A is false, B is false, C remains. We use C not because it is fit, but because A and B are dead."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "This avoids the false dilemma by showing the 'preference' is a null operation—a default state, not an active inductive inference."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "No metric of truth-likeness is needed. Only the binary metric of 'falsified' vs 'not falsified'."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "In bridge building, we don't assume the surviving theory is true. We just acknowledge we have no proven reason to reject it yet, unlike the others."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "This is not a methodological assumption but a logical consequence of modus tollens applied to the set of available theories."},
+        {"handle": "[SRC_016] against SRC_012", "kind": "rebutted", "note": "The argument does not generalize; it applies specifically to the set of currently proposed theories."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Severity is relevant only insofar as it ensures the theory was genuinely at risk of falsification, making its survival meaningful as a lack of refutation."}
+      ],
+      "optional_refs": ["SRC_010", "SRC_014"]
+    },
+    {
+      "claim": "Popper's system incurs a cost of 'permanent tentativeness' where no theory is ever truly preferred for action, only provisionally tolerated until the next test, rendering long-term engineering projects epistemologically unstable.",
+      "mechanism": "Radical Fallibilism Extension: Pushing Popper's logic to its limit reveals that if corroboration adds no weight, then a theory tested 1000 times is epistemically identical to one tested once, provided neither is falsified.",
+      "counterconditions": [
+        "If Popper allows 'degrees of corroboration' to influence the urgency of further testing.",
+        "If practical action operates in a different domain than epistemic justification.",
+        "If the 'cost' is accepted as the necessary price for avoiding dogmatism."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_006] against SRC_002", "kind": "departure_declared", "note": "Departing from the defense of Popper to highlight the internal instability this creates for the 'preference' concept."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "The biological analogy breaks down here because evolution selects for reproduction over time, whereas Popperian science offers no mechanism for 'temporal fitness' without induction."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "This shows that Popper's 'solution' leads to a paralysis of action unless one secretly reintroduces induction, confirming the dilemma is real."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "Verisimilitude was Popper's attempt to fix this, but without it, the system collapses into equiprobability of all unfalsified theories."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "This is the core cost: building a bridge on a theory that might be as weak as a fresh guess is practically indefensible, suggesting Popper's terms are insufficient for application."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "The refusal to accept induction as a regulative ideal leaves a vacuum where practical confidence should be."},
+        {"handle": "[SRC_016] against SRC_012", "kind": "rebutted", "note": "The straw man charge is irrelevant to the practical consequence that Popper's logic denies accumulation of safety."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Severity distinguishes theories, but if it doesn't translate to 'preference weight,' the distinction is academically interesting but practically useless."}
+      ],
+      "optional_refs": ["SRC_015", "SRC_005"]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference that the future will resemble the past, but as a non-inductive, methodological rule of 'critical selection' aimed at maximizing truth-content (verisimilitude) while acknowledging that this strategy rests on a non-rational, metaphysical faith in the uniformity of nature which Popper explicitly admitted was necessary for action.",
+    "mechanism": "The mechanism distinguishes between 'logical probability' (which corroboration does not increase) and 'verisimilitude' (truth-likeness). While we cannot know a theory is true, severe testing eliminates error. Preferring the theory that has survived the most severe tests is a rational strategy to get closer to the truth, provided one accepts the metaphysical postulate that nature is uniform enough for past survival to be a relevant filter for future performance. This avoids induction by treating the preference as a conventional decision to act on the best-tested hypothesis rather than a logical proof of its future success.",
+    "counterconditions": [
+      "If the critic demonstrates that projecting past test survival to future reliability is logically identical to the principle of induction regardless of labeling.",
+      "If the critic proves that Popper's concept of verisimilitude is formally incoherent and thus cannot serve as an objective ground for preference.",
+      "If the admission of 'metaphysical faith' is shown to violate Popper's own criterion of demarcation or his rejection of unjustified assumptions."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "059c75cb550e1b3f17f7e4cf17ed53b0cb31a7935eefc2fc97ccf46fb5dae5c0",
+        "kind": "rebutted",
+        "note": "The criticism claims conceding 'metaphysical faith' defeats the defense. However, Popper himself argued in 'Conjectures and Refutations' that while science rejects induction logically, action requires a metaphysical faith in regularities. The defense survives because it locates the faith in the *decision to act*, not in the *logical justification* of the theory, maintaining the separation Popper demanded."
+      },
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "revised",
+        "note": "Revised to explicitly integrate 'verisimilitude' as the objective anchor. The previous draft implied a false dilemma between induction and convention; the revision clarifies that verisimilitude provides the objective direction (toward truth), while the *preference* itself is a methodological rule, not a probabilistic calculation."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The claim does not conflate objectivity of method with result. It argues the *method* (severe testing) objectively increases verisimilitude potential, even if the *result* (truth) remains unknown. The preference is objective in its aim (truth) though the choice to act on it involves a conventional element."
+      },
+      {
+        "handle": "3dd7e6e5900af409fe538c843fc9a16df138e02b954e617cb086b0f92122ce4f",
+        "kind": "rebutted",
+        "note": "Projecting past survival is only an inductive leap if one claims it guarantees future success or increases logical probability. Popper's view is that we *choose* to act as if it matters because it is the best critical filter available; this is a pragmatic policy, not an inductive inference about the universe's structure derived from data."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "revised",
+        "note": "Clarified that the dichotomy is not between probability and mere convention, but between inductive logic and critical methodology grounded in verisimilitude. The revision explicitly names verisimilitude as the third option ignored by the critic."
+      },
+      {
+        "handle": "552493f430823f47c25c532667b8fd3a2ec2fe75df8bb51ca62e9cd35fb45563",
+        "kind": "departure_declared",
+        "note": "Departing from the strict requirement that Popper's *formal* definition of verisimilitude must be flawless to save the argument. Even if the formal definition failed (as Tichý and Miller showed), the *intuitive* concept of preferring theories that explain more and have survived more tests remains a valid methodological heuristic within Popper's spirit, if not his precise letter."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "rebutted",
+        "note": "Functional identity does not imply logical identity. While the *behavior* of preferring tested theories looks like induction, the *justification* differs fundamentally: induction asserts 'it worked before, so it is probable it will work again,' whereas Popper asserts 'it survived severe attempts to falsify it, so it is the best candidate for truth we have, despite no guarantee.'"
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "rebutted",
+        "note": "Similar to handle ...5563, this relies on the failure of the formal definition. The rebuttal holds that the *strategy* of seeking high verisimilitude through corroboration survives the failure of the specific formalization, as the core insight (bold conjectures + severe tests = progress) remains intact."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["evolutionary_natural_selection"],
+      "shared_structure": [
+        "Selection based on past survival against harsh conditions",
+        "No guarantee of future survival despite past success",
+        "Preference for the 'fittest' is a strategy, not a prophecy"
+      ],
+      "disanalogies": [
+        "Biological fitness is reproductive success; scientific fitness is truth-likeness",
+        "Evolution has no goal; science explicitly aims at truth",
+        "Organisms do not choose; scientists consciously adopt methodological rules"
+      ],
+      "transfer_claims": [
+        "Just as we expect the fittest organism to survive tomorrow without claiming it is 'probable' in a statistical sense, we prefer the best-corroborated theory without claiming it is probably true.",
+        "The 'faith' in nature's uniformity parallels the biological assumption that environmental pressures will remain relevant selectors."
+      ],
+      "overturn_conditions": [
+        "If biological evolution is shown to rely on inductive learning mechanisms rather than blind variation and selection.",
+        "If the concept of 'fitness' in biology is proven to be purely retrospective with no predictive utility whatsoever."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

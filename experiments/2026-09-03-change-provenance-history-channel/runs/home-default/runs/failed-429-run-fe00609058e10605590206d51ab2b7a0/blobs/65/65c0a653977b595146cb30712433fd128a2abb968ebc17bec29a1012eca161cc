@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to establish a 'Shared Mechanism' because it conflates a specific logical operation (modus tollens/elimination) with the general outcome of preference. The problem context requires naming a substantive relation (e.g., dependence, shared mechanism) between the isolated problem and its neighborhood. The target asserts the shared mechanism is 'preference emerges solely from the elimination of competitors.' However, the 'Refuted If' condition describes a scenario where preference exists without elimination (a single untested theory). This counterexample does not disprove a *shared* mechanism; it merely shows the mechanism is not *universal* or *necessary* for all preference. A shared mechanism can exist between two specific instances (the problem and SRC_003) even if that mechanism is not the only way preference can arise in the universe. The target's logic incorrectly treats the existence of an alternative path to preference as a refutation of the specific structural similarity between the two named endpoints. Furthermore, the target defines the mechanism as 'negative probability filter,' which is a metaphorical description rather than a rigorous formal mechanism like 'reduction' or 'inheritance,' failing the requirement for a substantive relation kind.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

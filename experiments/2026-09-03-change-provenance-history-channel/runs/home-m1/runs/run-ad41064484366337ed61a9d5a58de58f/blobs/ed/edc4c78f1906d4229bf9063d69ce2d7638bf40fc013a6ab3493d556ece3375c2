@@ -1,0 +1,83 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference that the theory is true or probable, but as a critical-rational choice to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing the potential for learning from error should the theory fail in the future.",
+    "mechanism": "Critical Preference via Risk-Optimized Falsifiability: The mechanism selects the theory with the highest empirical content (most falsifiable) that has survived testing. Acting on this theory does not assume it will continue to succeed (induction); rather, it assumes that if it is false, it will reveal its falsehood sooner than a less testable rival, thus serving the epistemic goal of truth-seeking even in practical action.",
+    "counterconditions": [
+      "If the agent's primary goal is immediate practical success rather than long-term error elimination, this mechanism offers no guarantee of better outcomes than random selection among unfalsified theories.",
+      "If two theories have equal degrees of falsifiability and both survive identical tests, this mechanism provides no tie-breaking criterion without smuggling in an inductive assumption about uniformity.",
+      "If the 'severe test' itself relies on background knowledge that is merely conjectural, the corroboration report may be illusory, rendering the preference arbitrary."
+    ],
+    "typicality": 0.85,
+    "analogy": {
+      "source_memory_refs": ["biological_selection_survival", "court_cross_examination"],
+      "shared_structure": [
+        "Selection based on survival of severe stressors rather than positive verification.",
+        "Survival indicates robustness to current challenges, not immunity to future ones.",
+        "Preference for the 'survivor' is a heuristic for resilience, not a prediction of eternal life."
+      ],
+      "disanalogies": [
+        "Biological survival is causal and non-cognitive; scientific preference is a normative, conscious decision.",
+        "In court, a witness surviving cross-examination is often taken as more credible (probabilistic), whereas Popper explicitly forbids increasing subjective probability.",
+        "Evolution has no goal of 'truth,' whereas Popperian science explicitly aims at verisimilitude."
+      ],
+      "transfer_claims": [
+        "Just as we rely on the organism that survived the plague without assuming it is immune to the next strain, we rely on the corroborated theory without assuming it is true.",
+        "The 'fittest' theory is the one most likely to yield a decisive refutation if it is wrong, making it the safest bet for critical progress."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that acting on a less-corroborated but simpler theory yields faster error detection in specific domains.",
+        "If the definition of 'severity' cannot be made independent of inductive assumptions about background knowledge."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dichotomy between 'non-rational convention' and 'critical rational choice.' This candidate explicitly adopts the latter: the preference is rational because it aligns with the meta-goal of error elimination, not because it predicts success. It is not a mere convention but a strategic application of falsificationism to action."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "rebutted",
+        "note": "The 'Eliminative Default' fails only if viewed as a passive rule. This candidate proposes an active 'Risk-Optimized' mechanism: when multiple theories survive, we choose the one with the highest informational content (most risky). This breaks ties by selecting the theory that offers the greatest opportunity for future falsification, addressing the coexistence scenario without induction."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "rebutted",
+        "note": "The cost of accepting this view is precisely that we abandon the expectation of practical success guaranteed by induction. The 'cost' is the acceptance that we might act on a theory that fails tomorrow. The defense answers this by reframing the goal: the cost is acceptable because the alternative (induction) is logically invalid, and the benefit is maximizing the speed of learning from failure."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The analogy to biological selection smuggles in induction only if one assumes past survival predicts future survival. This candidate's mechanism explicitly rejects that prediction. The analogy holds only on the structural point of 'survival of the stressed,' while the disanalogy (normative vs causal) prevents the inductive slide. We prefer the survivor not because it will survive again, but because it has proven its capacity to withstand specific attacks."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "revised",
+        "note": "Revised to clarify the distinction between causal explanation and normative justification. The claim now explicitly states that the justification is 'critical-rational' based on the goal of error elimination, separating the 'why we do it' (goal alignment) from the 'why it works causally' (which Popper leaves open)."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "The criticism argues that betting on the 'fittest' implies an expectation of future fitness. This candidate rebuts by defining the 'bet' not on the theory's truth, but on the methodology's efficiency. We bet that *if* the theory is false, this choice will reveal it fastest. The wager is on the process of inquiry, not the outcome of the world."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "rebutted",
+        "note": "Methodological acceptance here is strictly provisional and does not assign weight or probability. It is a decision to use theory X as the basis for further tests because X is the most informative. This avoids the 'regulative ideal' trap by remaining grounded in the logical asymmetry of falsification: one counter-instance kills the theory, so we pick the one most vulnerable to such instances."
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "departure_declared",
+        "note": "Departing from reliance on 'verisimilitude' as a quantitative metric due to the Tichý-Miller theorem. This candidate relies solely on 'degree of corroboration' (report of past performance) and 'empirical content' (logical structure), avoiding the problematic comparison of truth-likeness values that the criticism correctly identifies as flawed."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "checker_specs": []
+  }
+}

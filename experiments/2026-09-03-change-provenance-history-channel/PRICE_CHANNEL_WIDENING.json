@@ -1,0 +1,56 @@
+{
+  "P1_digests_moved": 2,
+  "P1_moved_list": [
+    "default",
+    "question-B"
+  ],
+  "P1_run_configs_priced": 10,
+  "P2_broken_by_widening": 69,
+  "P2_broken_list": [
+    "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752/run-manifest.json",
+    "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc/run-manifest.json",
+    "experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829/run-manifest.json",
+    "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c/run-manifest.json",
+    "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c/run-manifest.json",
+    "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea/run-manifest.json",
+    "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1/run-manifest.json",
+    "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7/run-manifest.json",
+    "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70/run-manifest.json",
+    "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b/run-manifest.json",
+    "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913/run-manifest.json",
+    "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008/run-manifest.json",
+    "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7/run-manifest.json",
+    "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726/run-manifest.json",
+    "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06/run-manifest.json",
+    "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949/run-manifest.json",
+    "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd/run-manifest.json",
+    "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484/run-manifest.json",
+    "experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-wiring/live_run_v7/run-manifest.json",
+    "experiments/2026-08-12-live-grounded-extension-expansion/run/run-epochs/001/run-manifest.json"
+  ],
+  "P2_committed_manifests_checked": 70,
+  "P2_valid_before": 69,
+  "P3_road_b_gate": {
+    "any_refusal_keyed_to_attention_list": false,
+    "conjecture_turn_refuses_by_member": true,
+    "workflow_refuses_by_member": true
+  },
+  "P4_road_b_grantable": {
+    "consequence": "permanently denied channel_not_permitted; Road B needs its OWN request field and permitted list, not RetrievalChannel",
+    "road_b_channel_admitted_to_permitted_list": false,
+    "validator_says": "permitted_retrieval_channels"
+  },
+  "after_digests": {
+    "default": "059b3e0d92057ee7fafe7d31c1af4c473cc5b6151de22eaf153c8ad465b0ebf3",
+    "question-B": "059b3e0d92057ee7fafe7d31c1af4c473cc5b6151de22eaf153c8ad465b0ebf3"
+  },
+  "before_digests": {
+    "default": "02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713",
+    "question-B": "02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713"
+  },
+  "probe": "PROVENANCE_CHANNEL_PRICE_V1",
+  "proposed_channels": [
+    "provenance",
+    "episode_pool"
+  ]
+}

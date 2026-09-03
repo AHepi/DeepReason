@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference of future truth, but as a methodological rule for selecting the most 'testable' (highest empirical content) survivor, accepting the cost that this preference guarantees no increase in subjective probability of success and may lead to acting on false theories more frequently than safer, less informative alternatives.",
+    "mechanism": "Popper distinguishes between the logical status of a theory (which remains conjectural) and the rational basis for action. The mechanism is 'selection by severe testing': we prefer Theory A over Theory B because A has survived tests that would have falsified B, meaning A has higher empirical content (is more improbable). This preference is a decision to bet on the theory that tells us more about the world, not a calculation that A is more likely to be true. The 'smuggling' of induction is avoided because the agent explicitly denies that past survival increases the probability of future survival; instead, they accept that the chosen theory is still possibly false, but it is the best available target for further error elimination.",
+    "counterconditions": [
+      "If the Tichý/Miller proof holds that verisimilitude cannot be rationally estimated, then the claim that high content equals 'better' collapses into arbitrary risk-taking.",
+      "If 'acting on a theory' logically entails assuming it will work (inductive expectation), then the distinction between 'preference' and 'belief in probability' is merely semantic.",
+      "If the cost of acting on a highly corroborated but false theory (e.g., bridge collapse) is unacceptable, the methodological rule fails pragmatic rationality."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "017f060a2b21e42b81d92b963a3f75c80b27f8ea05726d7b82ba5200702940d8",
+        "kind": "rebutted",
+        "note": "The criticism claims informational content collapses under action requirements. Rebuttal: Popper's framework explicitly separates the logic of justification (no induction) from the context of discovery/action. We act on high-content theories precisely because they are risky; if they survive, they offer more information. The collapse only occurs if one assumes action requires probabilistic certainty, which Popper denies is necessary for rational action."
+      },
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address 'building bridges.' The preference is not that the bridge 'will stand' (inductive expectation), but that the theory used to build it has withstood more severe structural tests than alternatives. The revision clarifies that the 'expectation' is a psychological byproduct, not the logical warrant for the choice."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate propensity with corroboration. Propensity interprets single-case probabilities within physical theories; corroboration is a logical relation between theory and evidence. The defense relies solely on the logical asymmetry of falsification, not on any propensity interpretation of the theory's truth."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0782cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "rebutted",
+        "note": "The 'pragmatic evolutionary imperative' was not the core argument. The core argument is methodological: we prefer the theory that allows for faster error detection. This directly answers whether induction is smuggled in: it is not, because the goal is not 'truth acquisition' via accumulation, but 'error elimination' via selection."
+      },
+      {
+        "handle": "0e0b6bedbaa57c8c884b19763dfc96a486bc51b45cf45a7b3e42fb57f46f62a3",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate accepts the Tichý/Miller critique that verisimilitude cannot be formally defined, and thus abandons 'truth-likeness' as the justification. Instead, it grounds the preference strictly in 'empirical content' and 'severity of tests,' accepting the cost that we cannot know if we are getting closer to the truth, only that we are eliminating specific errors."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' analysis to the claim and mechanism. The cost is the abandonment of the assurance that science converges on truth or that our actions are probabilistically safe. We accept that we might act on a false theory, provided it is the most informative false theory available."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "departure_declared",
+        "note": "Departure declared: Agreeing with the criticism that verisimilitude fails under Tichý/Miller. The candidate now argues that Popper's own terms force us to rely on 'corroboration reports' as historical records of survival, without inferring any future reliability or truth approximation beyond the fact that the theory has not yet been killed."
+      },
+      {
+        "handle": "31e3d2feedffd07a4ba14b8f3ba6f6c2d293d3fe744ce9f002e0deb622684e37",
+        "kind": "revised",
+        "note": "Revised the cost section to specifically address the 'biological/psychological' vs 'rational' distinction. The cost is that rationality becomes purely negative (avoiding known errors) rather than positive (maximizing expected utility), forcing scientists to act without the comfort of inductive confidence."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["survival_of_the_fittest_in_evolution"],
+      "shared_structure": [
+        "Selection occurs based on survival of severe conditions (tests/environment).",
+        "Survival does not guarantee future survival or perfection.",
+        "Preference for the survivor is based on its proven resilience, not a prediction of immortality."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious agent choosing to act; scientific methodology involves deliberate choice.",
+        "Biological fitness is relative to a specific environment which changes; scientific tests aim for universal validity.",
+        "Evolution has no goal of 'truth'; science explicitly aims at truth even if it can only approach it negatively."
+      ],
+      "transfer_claims": [
+        "Just as we expect a species that survived an ice age to handle cold better than one that didn't (without guaranteeing it won't freeze tomorrow), we expect a corroborated theory to handle known tests better.",
+        "The 'cost' in evolution is extinction; the 'cost' in science is acting on a theory that is eventually falsified."
+      ],
+      "overturn_conditions": [
+        "If biological survival is shown to be purely random with no link to traits, the analogy fails.",
+        "If scientific testing is shown to be incapable of distinguishing between competing theories (underdetermination), the selection mechanism fails."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

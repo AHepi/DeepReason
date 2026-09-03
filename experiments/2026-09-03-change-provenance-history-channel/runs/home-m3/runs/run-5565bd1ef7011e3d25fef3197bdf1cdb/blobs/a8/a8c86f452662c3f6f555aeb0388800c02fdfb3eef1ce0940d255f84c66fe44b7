@@ -1,0 +1,216 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive methodological rule grounded in verisimilitude (truth-likeness), not probability. Accepting this costs the ability to formally quantify 'closeness to truth' without falling into the Tichý-Miller paradox, requiring a qualitative rather than quantitative acceptance of progress.",
+      "mechanism": "Popper distinguishes between logical probability (which decreases with content) and corroboration (a report of past performance). The rational preference for action is based on the conjecture that the theory with higher informational content and severe test survival is closer to the truth (verisimilitude), even if we cannot prove it or assign it a probability > 0. This is a critical preference, not an inductive inference.",
+      "counterconditions": [
+        "If the Tichý-Miller proof renders the concept of verisimilitude logically incoherent in all deterministic frameworks, the defense collapses.",
+        "If 'acting on' a theory necessarily implies believing it is probable, the distinction fails."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "The defense does not redefine rationality as adaptive fitness; it retains Popper's specific definition of rational action as choosing the theory with the highest verisimilitude based on critical discussion, distinct from biological survival."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "rebutted",
+          "note": "Popper's engagement is explicitly framed as a rational methodological choice within the critical tradition, not a psychological inevitability. The criticism conflates the origin of the impulse with its justification."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "The proposal addresses 'acting on' by defining action-selection as the application of the methodological rule to prefer the best-tested theory for practical purposes, without asserting its truth or probability."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "The distinction resolves the dilemma by showing that high informational content (and thus low probability) is precisely why we prefer it for action: it offers more potential for falsification and thus faster error elimination, which is the goal of science."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "revised",
+          "note": "Acknowledges the Tichý-Miller incoherence of formal verisimilitude but argues Popper's later work accepts a naive, qualitative notion of truth-content sufficient for methodological preference, revising the claim to rely on this qualitative stance."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "The argument does not use inductive generalization; it uses a deductive preference rule: 'If theory A has survived severer tests than B, and both are unfalsified, prefer A for action.' This is a rule of procedure, not an inference from past to future."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "revised",
+          "note": "Revises the reliance on formal verisimilitude to a 'critical preference' based on the intuitive idea that surviving severe tests makes a theory a better candidate for truth, admitting the formal gap but denying it invalidates the pragmatic rule."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "The defense explicitly separates methodological preference (which is valid) from epistemic justification of truth/probability (which is rejected). The cost is accepting that our best theories are still likely false, just less obviously so."
+        }
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_001", "SRC_009"]
+    },
+    {
+      "claim": "The preference smuggles induction back in because any decision to act on a theory assumes the future will resemble the past (that unobserved consequences will match observed test results). Popper's 'methodological rule' is merely a linguistic disguise for inductive faith, and his system cannot consistently explain why we should bet on the better-corroborated theory without invoking probability.",
+      "mechanism": "Action entails prediction. Predicting that a bridge built on Theory A (well-tested) will hold while one on Theory B (poorly tested) might fail requires the assumption that the structural laws holding in the past will hold in the future. This is the Principle of Uniformity of Nature, which is the core of induction. Popper's rejection of induction leaves him with no bridge from 'tested' to 'will work'.",
+      "counterconditions": [
+        "If Popper can demonstrate a purely deductive link between 'severe testing' and 'practical reliability' without assuming uniformity.",
+        "If 'action' can be redefined as something other than betting on future outcomes."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "This candidate argues the opposite: that the 'evolutionary' or 'pragmatic' defenses fail precisely because they tacitly rely on the inductive assumption that what worked before will work again."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "rebutted",
+          "note": "The criticism claims the target failed to address Popper's rational engagement; this candidate asserts that Popper's rational engagement *is* the problem, as it reveals his implicit reliance on induction despite his denials."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "Addresses 'acting on' directly by arguing that action *is* the point where induction becomes unavoidable; one cannot act without assuming the future resembles the past."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "Argues that distinguishing information content from predictive power is insufficient because acting requires predictive power, which inevitably drags in inductive assumptions about the stability of laws."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "Agrees that verisimilitude is problematic, but argues the deeper issue is that even without verisimilitude, the act of preference itself is inductive."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "Counters that calling it a 'methodological rule' does not exempt it from the charge of smuggling induction; a rule that says 'prefer the past-successful' is an inductive rule by definition."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Supports the view that without a coherent non-probabilistic measure like verisimilitude, the preference defaults to a crude inductive habit."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "Argues that the conflation is real: Popper tries to separate them, but the necessity of action forces the methodological preference to function as an epistemic warrant, thereby reintroducing induction."
+        }
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_003", "SRC_007"]
+    },
+    {
+      "claim": "The preference is defensible not as induction nor as truth-tracking, but as a Darwinian evolutionary imperative: organisms (and scientists) who prefer well-tested theories survive longer. This bypasses the need for logical justification entirely, replacing epistemology with biology. The cost is abandoning the claim that science is a uniquely rational enterprise distinct from animal learning.",
+      "mechanism": "Evolutionary Epistemology. Just as a gazelle learns to fear lions after close escapes, scientists develop heuristics to prefer theories that have survived 'predation' (falsification attempts). This preference is hardwired by natural selection, not derived by logic. It is 'rational' only in the sense of being adaptive.",
+      "counterconditions": [
+        "If Popper explicitly rejects biological reductionism of scientific rationality.",
+        "If the 'survival' of a theory does not correlate with the survival of the scientist holding it."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "departure_declared",
+          "note": "Departing from strict Popperian text to embrace the evolutionary interpretation he occasionally hinted at but often disavowed to protect the autonomy of logic."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "rebutted",
+          "note": "Addresses the 'rational' aspect by redefining rationality as successful adaptation, arguing Popper's own behavior is evidence of this deep-seated biological drive."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "Explains 'acting on' as the manifestation of an evolved instinct to trust patterns that haven't killed us yet."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "Sidesteps the information/prediction dilemma by focusing solely on the survival value of the heuristic."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "Irrelevant to the evolutionary argument; verisimilitude need not be formally defined for the heuristic to evolve."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "Denies it is a straw man; argues that the 'methodological rule' is simply the conscious articulation of an unconscious evolutionary strategy."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Bypasses the need for verisimilitude entirely."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "Accepts the conflation but argues it is necessary: methodology is rooted in biology."
+        }
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_010", "SRC_013"]
+    },
+    {
+      "claim": "The dilemma is dissolved by recognizing that 'corroboration' is a historical report, not a predictor. We prefer the better-corroborated theory for action simply because it is the only one we have critically examined thoroughly; the alternative is acting on ignorance. This is a 'negative' justification: we don't know it will work, but we know the other hasn't been tested as hard. The cost is a profound skepticism: we act with no positive expectation of success.",
+      "mechanism": "Critical Rationalism as Negative Heuristic. Action is inevitable. When forced to choose, the critical rationalist chooses the theory that has withstood the most attempts to destroy it, not because they believe it is true or probable, but because the rival has *less* resistance to error. It is a choice of the 'least refuted' option.",
+      "counterconditions": [
+        "If 'least refuted' is logically equivalent to 'most probable' in practice.",
+        "If agents cannot psychologically sustain action without positive belief."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Clarifies that this is not an evolutionary imperative but a logical consequence of the situation of forced choice under uncertainty."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "rebutted",
+          "note": "Popper's preference is rational because it maximizes the use of available critical knowledge, not because of psychological inevitability."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "Directly addresses 'acting on' by framing action as a forced move where the only rational criterion is the degree of critical scrutiny applied."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "The informational content matters because higher content means more opportunities for falsification; surviving them is a stronger negative signal."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "Does not rely on verisimilitude comparisons, only on the binary fact of whether a test was performed and survived."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "Explicitly denies using inductive generalization; uses only the current state of critical debate."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Avoids the verisimilitude trap by sticking to the history of tests."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "Maintains the separation: the methodological preference is purely negative (avoiding the known-bad), not a positive claim about the future."
+        }
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_002", "SRC_006"]
+    }
+  ]
+}

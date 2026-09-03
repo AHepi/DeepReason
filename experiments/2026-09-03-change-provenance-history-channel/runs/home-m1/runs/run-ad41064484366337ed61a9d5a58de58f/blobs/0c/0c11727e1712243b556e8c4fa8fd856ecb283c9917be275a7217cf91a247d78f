@@ -1,0 +1,132 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic, non-inductive rule of action: we prefer the theory that has withstood the most severe tests not because it is more likely true, but because it has proven itself the most robust instrument for survival and problem-solving so far.",
+      "mechanism": "Evolutionary Epistemology applied to theory choice: Just as organisms are selected for fitness without implying they will remain fit, theories are selected for corroboration without implying future truth. The 'preference' is a bet on the currently fittest survivor, acknowledging the risk of future refutation.",
+      "counterconditions": [
+        "If the preference implies any increase in subjective probability or rational expectation of future success, it collapses into induction.",
+        "If Popper cannot distinguish between 'acting on' and 'believing in' without invoking probability, the defense fails."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "The rebuttal distinguishes causal explanation (evolutionary selection) from normative justification by framing the justification as purely pragmatic/instrumental ('bet on the fittest') rather than epistemic ('likely to be true'). The norm is 'act on what works best now,' not 'expect it to work forever.'"
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "This candidate explicitly rejects verisimilitude as the metric. It relies solely on 'survival of severe tests' (corroboration) as a historical fact of resistance, avoiding any claim about closeness to truth or content comparison that might smuggle in induction."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The defense does not use induction as a 'methodological assumption' or 'regulative ideal.' It treats the preference as a contingent, fallible decision rule akin to choosing the strongest horse in a race based on past performance, without assuming the horse will win."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Agrees that 'severity of test' is the metric, but clarifies that this metric measures past resistance, not future probability. The preference is justified by the magnitude of the risk survived, not by an inductive projection of that survival."
+        }
+      ],
+      "optional_refs": ["SRC_004"]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict terms and necessarily smuggles in induction; the only consistent Popperian stance is radical skepticism where no theory is preferred for action over another unless one has been falsified and the other has not.",
+      "mechanism": "Logical Strictness: Any move from 'has survived' to 'should be used' entails a premise that 'the future will resemble the past' or 'nature is uniform,' which is the definition of induction. Without this hidden premise, the preference is arbitrary.",
+      "counterconditions": [
+        "If Popper admits any non-falsified theory can be acted upon equally, his system becomes practically useless for science.",
+        "If the 'smuggled induction' is unconscious, the system is psychologically impossible for humans to follow."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "revised",
+          "note": "Revised to accept that the distinction between causal and normative collapses if the normative force requires *any* reason beyond logical necessity. If the reason is 'it worked before,' that is induction. The revision concedes the criticism: the preference *is* indutive."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Argues that even without verisimilitude, the act of preferring X over Y based on past tests assumes X is a better guide than Y, which is an inductive inference about the stability of the world."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Supports the critic: attempting to call induction a 'methodological assumption' is indeed a contradiction of Popper's core refutation. The only honest position is to admit the smuggling."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Concedes severity is the metric of *past* performance, but argues that using this metric to guide *future* action transforms a descriptive statistic into a predictive principle, which is the very definition of induction."
+        }
+      ],
+      "optional_refs": ["SRC_003"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view corroboration not as a measure of truth or probability, but as a measure of 'informational content' and 'testability'; we prefer the highly corroborated theory because it is the most informative and precise tool available, despite knowing it is likely false.",
+      "mechanism": "Content-Based Preference: High corroboration implies high empirical content (boldness). We prefer bold theories because they tell us more about the world, even if we expect them to be eventually refuted. The preference is for 'depth of insight' rather than 'likelihood of truth'.",
+      "counterconditions": [
+        "If the preferred theory is known to be false, acting on it for critical applications (e.g., bridge building) seems irrational unless some probability is assigned.",
+        "If 'informational content' is valued because it leads to truth, this valuing process may implicitly rely on inductive hopes."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "The justification is normative but not inductive: the norm is 'seek maximum information,' not 'seek maximum truth-probability.' The preference is for the theory that risks the most, not the one safest to believe."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Avoids verisimilitude entirely. The metric is 'degree of testability survived,' which correlates with content, not truth-likeness. We prefer the theory that says the most, knowing it might be wrong."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Does not assume induction. It accepts that the high-content theory will likely be refuted tomorrow, but chooses it today for its explanatory power, not its durability."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Aligns with the severity metric: severe tests target high-content claims. Surviving them proves the theory's robustness as an informational structure, justifying its temporary adoption."
+        }
+      ],
+      "optional_refs": ["SRC_005"]
+    },
+    {
+      "claim": "Popper's system contains a performative contradiction: the rejection of induction is itself a universal claim that cannot be corroborated without using the very inductive practices it forbids, rendering the 'defense' of non-inductive preference circular.",
+      "mechanism": "Self-Referential Incoherence: To claim 'induction is invalid' universally requires an inductive leap from past failures of induction to its future impossibility. Thus, any preference derived from this system inherits this foundational circularity.",
+      "counterconditions": [
+        "If Popper treats his own anti-induction stance as a conjecture open to refutation, the circle might be broken.",
+        "If the critique applies to all philosophy, it loses specific force against Popper."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "departure_declared",
+          "note": "Departing from the internal debate to attack the framework itself. The criticism regarding causal vs normative is moot if the entire framework is performatively contradictory."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "departure_declared",
+          "note": "Departing from the specific mechanism of verisimilitude to argue the whole edifice of non-inductive preference is unstable due to self-reference."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that Popper's refusal to treat anti-induction as a mere methodological assumption is what creates the contradiction; he presents it as a logical truth, which is the error."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Even if severity is the metric, the validation of 'severity' as a useful concept relies on an inductive history of science, which Popper denies using."
+        }
+      ],
+      "optional_refs": ["SRC_001"]
+    }
+  ]
+}

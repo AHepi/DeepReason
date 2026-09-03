@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Kind: Shared Mechanism. The relation between biological evolution and scientific theory selection is a shared mechanism of 'blind variation and selective retention' where the 'Refuted If' condition is: if it can be demonstrated that scientific preference requires a prospective normative judgment (a value-based choice about what *should* be tested next) that is structurally impossible for the retrospective, non-teleological process of natural selection to instantiate.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_001", "SRC_002", "SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "The contradiction is resolved by distinguishing between the mechanism (retrospective filtering) and the agent's use of the output. The mechanism itself remains blind; the 'refuted if' condition explicitly tests for the intrusion of prospective normativity into the mechanism's operation, not its application."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "The claim does not assert evolution lacks *any* normative element in a broad sense, but specifically lacks the *prospective* normative element required for inductive justification. The 'refuted if' condition targets this specific gap."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "revised", "note": "Revised content to explicitly include the phrase 'refuted if' and name the relation kind 'Shared Mechanism' in the opening sentence to satisfy relation-form@578e42df713e."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "Revised to ensure the 'refuted if' clause describes a substantive failure mode of the analogy rather than a tautology."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "The 'refuted if' condition posits a specific structural incompatibility (prospective normativity vs retrospective filtering), which is a substantive scenario, not merely a nullification of mutation."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The endpoint characterization is precise: the criticism claims science needs a normative element evolution lacks. The candidate accepts this premise as the very condition under which the relation is refuted, turning the criticism into the definition of the failure state."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "revised", "note": "Removed meta-commentary. The candidate now directly names the relation kind and states the 'refuted if' condition as a single substantive proposition."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The 'shared mechanism' is defined structurally as 'blind variation and selective retention'. The 'refuted if' condition establishes the causal limit: if prospective normativity is required, the structural integration fails."}
+      ]
+    },
+    {
+      "content": "Kind: Contradiction. The relation is a fundamental contradiction between the 'logic of discovery' implied by evolutionary analogy and the 'logic of justification' required for scientific preference. It is Refuted If: one can demonstrate that the 'causal mechanism' of science operates entirely without any appeal to future-oriented rational norms, functioning purely as a historical record of survival similar to a fossil layer.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_018", "kind": "departure_declared", "note": "Departing from the assumption that a 'shared mechanism' must exist. This candidate proposes a contradiction instead, rendering the critique of the shared mechanism's internal logic moot."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "The candidate argues that the 'normative element' is exactly what creates the contradiction, not a missing feature of evolution. The 'refuted if' condition tests whether science can actually dispense with this norm."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "revised", "note": "Explicitly added 'Refuted If' and named the kind 'Contradiction' to satisfy the predicate check."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "Clarified the 'refuted if' condition to describe a specific empirical state (science operating purely historically) rather than a logical triviality."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "The scenario described (science as pure history) is a substantive, albeit radical, hypothesis about the nature of scientific practice, not a nullification."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The candidate agrees that evolution lacks the normative element and posits this lack as the source of contradiction with science, which presumably possesses it. The 'refuted if' challenges whether science truly possesses it."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "revised", "note": "Stripped all meta-discussion. The text is now a direct proposal of relation kind and refutation condition."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The relation is not an abstract analogy but a proposed logical conflict. The 'refuted if' condition specifies the exact empirical evidence needed to dissolve the conflict."}
+      ]
+    },
+    {
+      "content": "Kind: Abstraction. Scientific preference is an abstraction of the biological selection mechanism, stripping away the temporal constraint of retrospection. It is Refuted If: the cognitive architecture of scientists proves incapable of simulating prospective fitness landscapes without relying on actual retrospective data, thereby collapsing the abstraction back into the biological original.",
+      "typicality": 0.30,
+      "neighbours": ["SRC_004", "SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_018", "kind": "revised", "note": "Reframed the relation as 'Abstraction' rather than 'Shared Mechanism' to avoid the specific contradiction regarding retrospective filtering noted in the criticism. The 'refuted if' now addresses the limits of this abstraction."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "The claim acknowledges evolution lacks the normative element; the abstraction attempts to add it mentally. The 'refuted if' tests the viability of this mental addition."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "revised", "note": "Ensured the string 'refuted if' appears and the relation kind 'Abstraction' is named."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "Modified the 'refuted if' clause to specify a psychological/cognitive failure mode, ensuring it is a non-trivial condition."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "The condition describes a specific cognitive limitation (inability to simulate prospective landscapes), which is a substantive claim about human psychology."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The candidate posits that science *attempts* to supply the missing normative element via abstraction. The 'refuted if' condition challenges the success of this attempt."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "revised", "note": "Direct statement of relation and condition removed all meta-analysis."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The 'abstraction' is defined by its specific deviation from the biological original (removing temporal constraints). The 'refuted if' defines the boundary where this deviation becomes impossible."}
+      ]
+    },
+    {
+      "content": "Kind: Dependence. The validity of the evolutionary analogy for science depends entirely on the absence of teleological intent in the scientist's choice of problems. It is Refuted If: historical analysis reveals that problem selection in science is consistently driven by explicit goals of 'truth approximation' or 'utility' that have no parallel in the blind drift of genetic mutation.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_002", "SRC_005", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "This candidate does not claim a shared mechanism of filtering, but a dependence of the analogy's validity on a specific negative condition (absence of teleology). The criticism of the filtering mechanism is therefore irrelevant."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "The candidate accepts that evolution lacks normative elements. The 'refuted if' condition asserts that if science *has* them (teleological intent), the dependence relation breaks."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "revised", "note": "Added explicit 'Refuted If' phrasing and named the relation 'Dependence'."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "Clarified the 'refuted if' condition to refer to concrete historical evidence of teleological intent."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "The condition posits a specific historical finding (consistent teleological drive), which is a substantive empirical claim."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The argument hinges on the difference: if science has the normative element (teleology) and evolution doesn't, the dependence fails. This aligns with the critic's observation but uses it as the refutation condition."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "revised", "note": "Formulated as a direct conditional statement without meta-commentary."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The relation is 'Dependence', not just an analogy. The 'refuted if' specifies the exact causal factor (teleological intent) that would sever the dependence."}
+      ]
+    },
+    {
+      "content": "Kind: Integration. The evolutionary model and the normative model of science are integrated via a dual-process theory where 'blind variation' generates candidates and 'normative selection' chooses them. It is Refuted If: neurocognitive evidence shows that the generation of scientific conjectures is itself guided by implicit normative heuristics, preventing the separation of the two processes required for this integration.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_004", "SRC_001", "SRC_002"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_018", "kind": "departure_declared", "note": "Departing from the view that the mechanisms must be identical or strictly analogous. This candidate proposes an integrated hybrid model, bypassing the contradiction in treating them as a single shared mechanism."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "The candidate grants evolution lacks normativity. It proposes science integrates a non-normative generator with a normative selector. The 'refuted if' tests whether the generator is truly non-normative."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "revised", "note": "Included 'Refuted If' and named the relation 'Integration'."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "Specified the 'refuted if' condition as a finding in neurocognitive science regarding implicit heuristics."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "The condition describes a specific cognitive architecture failure (lack of separable processes), which is substantive."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The model explicitly accounts for the normative element missing in evolution by adding it as a second process. The 'refuted if' challenges the architectural separation."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "revised", "note": "Direct proposal of relation and condition, removing meta-discourse."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The 'integration' is defined by the specific coupling of two distinct processes. The 'refuted if' identifies the precise point of coupling failure."}
+      ]
+    },
+    {
+      "content": "Kind: Reduction. The apparent normative force of scientific preference reduces to a complex evolutionary pressure on the social group of scientists, where 'rationality' is merely a label for behaviors that enhance group survival. It is Refuted If: individual scientists can and do persist in pursuing theories that are demonstrably detrimental to their career survival and group status solely due to a commitment to logical consistency, proving the motive is irreducible to evolutionary fitness.",
+      "typicality": 0.15,
+      "neighbours": ["SRC_005", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "The candidate does not claim a 'shared mechanism' of filtering but a 'reduction' of normativity to fitness. The criticism of the filtering mechanism's internal logic is sidestepped by changing the relation type."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "The claim argues that the 'normative element' is an illusion created by evolutionary pressure. The 'refuted if' condition provides the test case (altruistic logical consistency) that would shatter this reduction."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "revised", "note": "Ensured 'Refuted If' is present and the relation is named 'Reduction'."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "Defined the 'refuted if' condition as a specific behavioral observation of scientists acting against self-interest."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "The scenario (scientists sacrificing career for logic) is a strong, substantive counter-example to the reductionist claim."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The candidate asserts evolution lacks normativity and claims science's normativity reduces to evolutionary drives. The 'refuted if' tests if there is a residue of normativity that cannot be reduced."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "revised", "note": "Purely declarative statement of relation and refutation condition."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The 'reduction' is specific (normativity to fitness). The 'refuted if' specifies the exact phenomenon (non-adaptive logical commitment) that would prevent this reduction."}
+      ]
+    }
+  ]
+}

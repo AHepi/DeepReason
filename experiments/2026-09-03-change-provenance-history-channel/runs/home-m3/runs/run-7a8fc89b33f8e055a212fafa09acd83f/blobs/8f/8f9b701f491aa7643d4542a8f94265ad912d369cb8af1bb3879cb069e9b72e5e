@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to answer the specific question of whether the preference 'smuggles back in induction.' By redefining the preference as a 'conjectural bet' on a metaphysical axiom, the target sidesteps the core epistemological challenge: acting on corroboration functionally treats past success as a guide to future reliability, which is the definition of induction Popper rejected. The target asserts this move is 'defensible' but provides no argument for why relying on an unprovable metaphysical assumption to guide action differs substantively from the inductive principle it seeks to replace, thus failing to make the 'strongest case' required by the problem context.",
+      "counterexample": null,
+      "premise": "Acting on the belief that a theory will succeed in the future because it succeeded in the past constitutes inductive reasoning, regardless of whether it is labeled a 'bet' or grounded in a 'meta-conjecture'.",
+      "premise_evidence": null,
+      "successor_question": "If the 'World Principle' is itself a conjecture that cannot be corroborated without using the very inductive logic it is meant to justify, does this not create a vicious circle rather than escaping induction?"
+    }
+  ]
+}

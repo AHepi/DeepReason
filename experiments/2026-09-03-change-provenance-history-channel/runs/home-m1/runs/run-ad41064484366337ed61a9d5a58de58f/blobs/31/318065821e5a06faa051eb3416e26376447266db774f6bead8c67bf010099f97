@@ -1,0 +1,107 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'critical choice' based on informational content, not probability of truth.",
+      "mechanism": "Reinterpret the act of preference not as a prediction of future success (which requires induction) but as a selection of the theory with the highest empirical content and severity of tests passed. The 'cost' is accepting that this preference offers no guarantee of practical success, only that it is the most rational bet given current knowledge states.",
+      "counterconditions": [
+        "If the scientist acts expecting the theory to work because it worked before, they have smuggled in induction.",
+        "If the preference cannot distinguish between two equally corroborated theories without appealing to past frequency.",
+        "If 'rational choice' implicitly relies on the uniformity of nature."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_009", "kind": "rebutted", "note": "The candidate explicitly adopts the 'critical rational choice' framing mentioned in the criticism, arguing it resolves the false dichotomy by rejecting probability entirely."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Clarified that when multiple unrefuted theories exist, the choice defaults to the one with higher informational content (more precise predictions), not just survival count."},
+        {"handle": "[SRC_007] against SRC_005", "kind": "rebutted", "note": "Argues that the 'cost' of no guarantee is the specific answer to the prompt's demand, avoiding the evolutionary analogy's trap."},
+        {"handle": "[SRC_011] against SRC_003", "kind": "departure_declared", "note": "Departing from evolutionary epistemology analogies which inherently rely on past success predicting future fitness."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Distinguishes normative justification (choose high content) from causal explanation (why we feel confident), maintaining Popper's separation."},
+        {"handle": "[SRC_004] against SRC_003", "kind": "revised", "note": "Removed language implying a 'bet' on success; reframed as a 'commitment' to the most falsifiable survivor."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Maintains that maximizing falsification potential is a logical criterion, not an inductive hope for truth."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Accepts the cost: acting requires expectation, but Popperian expectation is a conjecture, not an inductive inference."}
+      ],
+      "optional_refs": ["SRC_012", "SRC_002"]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict terms and necessarily smuggles in induction; the only consistent Popperian stance is radical skepticism where no theory is preferred for action.",
+      "mechanism": "Demonstrate that any decision to act on Theory A over Theory B implies a belief that A is more likely to succeed in the future than B. Since corroboration reports only on the past, bridging this gap requires the Principle of Uniformity of Nature, which is inductive. The 'surviving' answer is that Popper's system fails to provide a logic of discovery or action, only a logic of refutation.",
+      "counterconditions": [
+        "If a non-inductive bridge can be constructed between past survival and future utility.",
+        "If 'preference' can be defined purely as arbitrary convention without rational grounding.",
+        "If the cost of skepticism is deemed too high to be a viable philosophical position."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_009", "kind": "rebutted", "note": "Rejects the 'critical rational choice' as a disguised form of induction, arguing the dichotomy was not false."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Explicitly addresses the coexistence scenario by concluding that without induction, choice is arbitrary, thus supporting the 'indefensible' claim."},
+        {"handle": "[SRC_007] against SRC_005", "kind": "rebutted", "note": "Agrees that evolutionary analogies fail, using this failure to bolster the claim that NO non-inductive justification exists."},
+        {"handle": "[SRC_011] against SRC_003", "kind": "rebutted", "note": "Confirms that evolutionary epistemology smuggles induction, and extends this critique to all attempted justifications."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Argues that conflating causal and normative is inevitable when acting, proving the impossibility of a pure Popperian action."},
+        {"handle": "[SRC_004] against SRC_003", "kind": "rebutted", "note": "Shows that the 'pragmatic bet' is mathematically equivalent to assigning higher probability, violating Popper's core tenet."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Asserts that maximizing falsification potential does not solve the problem of future action."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Concedes that acting requires expectation of success, and since this cannot be derived from corroboration alone, induction is smuggled in."}
+      ],
+      "optional_refs": ["SRC_015", "SRC_004"]
+    },
+    {
+      "claim": "The preference is defensible as a methodological rule of 'conjectural risk-taking,' where choosing the better-corroborated theory is simply choosing the one that has survived the greatest risk, making it the best target for further error elimination.",
+      "mechanism": "Shift the goal of science from 'finding true theories for action' to 'eliminating error.' We prefer the well-corroborated theory not because we think it will work, but because it has proven robust enough to serve as a stable platform for the next severe test. The cost is abandoning the idea that science aims at practical utility or truth approximation in the short term.",
+      "counterconditions": [
+        "If the scientist's actual goal is practical success rather than error elimination.",
+        "If a less corroborated theory offers a more severe test opportunity.",
+        "If 'stability' is itself an inductive concept reliant on past performance."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_009", "kind": "revised", "note": "Refines 'critical choice' to specifically mean 'choice of best error-elimination platform'."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "Argues that among coexisting theories, the one with higher corroboration offers the sharper knife for cutting out errors."},
+        {"handle": "[SRC_007] against SRC_005", "kind": "departure_declared", "note": "Departs from the frame of 'preferring for action' entirely, replacing it with 'preferring for testing'."},
+        {"handle": "[SRC_011] against SRC_003", "kind": "rebutted", "note": "Denies that selecting a testing platform requires induction about the future, only a logical assessment of current test severity."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "revised", "note": "Clarifies that the normative justification is internal to the methodology of criticism, not external action."},
+        {"handle": "[SRC_004] against SRC_003", "kind": "rebutted", "note": "Rejects the 'pragmatic bet' interpretation; it is a 'methodological commitment'."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Aligns 'maximizing falsification' directly with the definition of preference."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Argues that the 'expectation of future success' is irrelevant to the goal of error elimination."}
+      ],
+      "optional_refs": ["SRC_014", "SRC_007"]
+    },
+    {
+      "claim": "Popper's distinction collapses under the pressure of 'verisimilitude' (truth-likeness); preference is defensible if we assume corroboration tracks verisimilitude, but this assumption is itself an inductive leap Popper tried to avoid.",
+      "mechanism": "Analyze the concept of verisimilitude. If corroboration indicates a theory is closer to the truth (higher verisimilitude), then preferring it is rational. However, showing that a theory is closer to the truth based on past tests requires assuming that the structure of reality remains constant (induction). Thus, the defense succeeds only by quietly reinstating the very principle Popper rejected.",
+      "counterconditions": [
+        "If verisimilitude can be defined without reference to future performance.",
+        "If corroboration can be shown to track verisimilitude logically rather than empirically.",
+        "If the 'leap' is categorized as a metaphysical necessity rather than an inductive inference."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_009", "kind": "rebutted", "note": "Argues that the 'critical rational choice' relies on verisimilitude, which reintroduces the problem."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Uses the verisimilitude metric to distinguish between coexisting theories where simple survival is equal."},
+        {"handle": "[SRC_007] against SRC_005", "kind": "rebutted", "note": "Identifies the 'cost' as the unavoidable reliance on the verisimilitude assumption."},
+        {"handle": "[SRC_011] against SRC_003", "kind": "rebutted", "note": "Confirms that linking past survival to verisimilitude is the inductive step."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "revised", "note": "Nuances the causal/normative split by showing verisimilitude attempts to bridge them."},
+        {"handle": "[SRC_004] against SRC_003", "kind": "rebutted", "note": "Shows that the 'bet' is on verisimilitude, which is the hidden inductive variable."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Argues that maximizing falsification is the method to increase verisimilitude, but the link is inductive."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "States that expectation of success is exactly what verisimilitude promises, confirming the inductive smuggling."}
+      ],
+      "optional_refs": ["SRC_011", "SRC_003"]
+    },
+    {
+      "claim": "The preference is a 'non-rational convention' akin to choosing the rules of a game; it is defensible only as a voluntary commitment to the Popperian framework, not as a logical derivation.",
+      "mechanism": "Frame the preference as a constitutive rule of the 'game of science.' Just as a chess player prefers moves that control the center not because they guarantee a win but because they define good chess, a Popperian prefers corroborated theories because that is what it means to play the game of critical rationalism. The cost is admitting that the foundation of scientific preference is ultimately arbitrary or aesthetic, not logical.",
+      "counterconditions": [
+        "If the rules of the game can be justified by their outcomes (which invites induction).",
+        "If scientists view their preference as compelled by evidence rather than chosen by convention.",
+        "If 'convention' fails to explain the urgency of preferring one life-saving theory over another."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_009", "kind": "revised", "note": "Adopts the 'non-rational convention' label but frames it positively as a necessary constitutive rule."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "Argues that in cases of coexistence, the convention dictates choosing the one with higher test severity, regardless of outcome certainty."},
+        {"handle": "[SRC_007] against SRC_005", "kind": "rebutted", "note": "Accepts the cost: the 'convention' offers no promise of survival, only coherence within the system."},
+        {"handle": "[SRC_011] against SRC_003", "kind": "rebutted", "note": "Denies that conventions are inductive; they are definitional."},
+        {"handle": "[SRC_002
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

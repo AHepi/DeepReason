@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target asserts a 'Dependence' relation but fails to define the specific mechanism of that dependence, instead describing a conditional failure state ('REFUTED IF'). The prompt explicitly requires naming the kind of relation AND stating what it is, whereas the target only states under what conditions the preference rule loses its non-inductive basis. It describes a vulnerability of the mechanism rather than the substantive link (e.g., how SRC_005 specifically utilizes or derives from SRC_004's mechanism) required by the problem context.",
+      "counterexample": null,
+      "premise": "The problem context demands a substantive relation naming its kind and stating what it is, distinguishing this from a mere summary of endpoints or a conditional refutation scenario.",
+      "premise_evidence": null,
+      "successor_question": "What is the specific operational mechanism by which the preference rule in SRC_005 utilizes the 'Eliminative Default' of SRC_004, beyond the statement that it fails without it?"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, methodological rule of 'error elimination' rather than a truth-conducive probability assessment; the cost is accepting that science offers no rational guarantee of future success, only a history of surviving past errors.",
+      "mechanism": "Methodological Conventionalism: The choice is a decision to adopt the theory that has withstood the most severe tests because it is the most informative and risky, not because it is likely true. This aligns with Popper's view that we learn from mistakes; preferring the unrefuted over the refuted is simply continuing the process of conjecture and refutation without asserting inductive validity.",
+      "counterconditions": [
+        "If the agent believes the preferred theory is more likely to be true in the future based on past performance.",
+        "If the preference relies on an assumption of the uniformity of nature.",
+        "If the 'decision' is arbitrary rather than grounded in the logical content of the theories."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The defense does not rely on 'metaphysical faith' but on a critical decision to test the most vulnerable theory. The uniformity of nature is not assumed; rather, the method remains valid even if nature changes, as the new theory will be tested and potentially refuted."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Verisimilitude is a separate metric for comparing truth-content, but the *preference* mechanism here is methodological (survival of tests), not ontological. The false dilemma charge fails because the third option is 'methodological rule,' not 'inductive probability.'"},
+        {"handle": "[SRC_011] against SRC_001", "kind": "rebutted", "note": "The argument distinguishes between objectivity of method (intersubjective testability) and objectivity of result (truth). The preference is objective in method because any scientist can verify the test history, regardless of the ultimate truth status."},
+        {"handle": "[SRC_014] against SRC_003", "kind": "rebutted", "note": "Projecting past survival into future preference is not an inductive leap if framed as 'we prefer the theory that has not yet failed' rather than 'the theory that has not failed will not fail.' It is a stance of critical openness, not predictive certainty."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The dichotomy is not false; the alternative to induction is not randomness but critical selection. The foundation is the logical asymmetry between verification and falsification, not a hidden inductive premise."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "rebutted", "note": "Functional identity does not imply logical identity. While the behavior looks like induction, the justification differs fundamentally: one relies on positive instance accumulation (induction), the other on the absence of negative instances (falsificationism)."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "This candidate does not rely on formal verisimilitude definitions which failed. It relies on the pragmatic methodological rule of preferring the unrefuted, which remains intact despite the technical failures of quantifying truth-likeness."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "The cost is explicitly acknowledged: we act on the best-tested theory while admitting it may fail tomorrow. This is not a contradiction but the core of fallibilism. The 'cost' is the loss of inductive comfort, which Popper argues we never had anyway."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_008"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because acting on past success as a guide for future action constitutes a practical inductive inference, regardless of the verbal denial of probabilistic support.",
+      "mechanism": "Pragmatic Induction: Even if corroboration is defined logically as non-probabilistic, the *act* of preferring Theory A over Theory B for future application implies a belief that A is more reliable. This reliability judgment is functionally equivalent to assigning higher subjective probability, violating the strict ban on inductive logic.",
+      "counterconditions": [
+        "If the preference can be shown to be purely aesthetic or arbitrary.",
+        "If Popper provides a non-inductive bridge principle connecting test history to future utility.",
+        "If the agent acts on the less corroborated theory without specific new reasons."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "Revised to emphasize that the 'smuggling' occurs in the pragmatic domain of action, not necessarily in the formal definition of corroboration. The 'faith' is implicit in the action of relying on past survival."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Invoking verisimilitude does not solve the problem of *action*. Even if we know A is closer to the truth, choosing it for future prediction assumes that being closer to the truth now makes it more likely to yield correct predictions later—an inductive step."},
+        {"handle": "[SRC_011] against SRC_001", "kind": "rebutted", "note": "The distinction between method and result collapses when the method dictates action. If the method systematically selects theories that work, it is functioning as an inductive engine, regardless of the philosopher's intent."},
+        {"handle": "[SRC_014] against SRC_003", "kind": "rebutted", "note": "This claim agrees with the criticism: projecting past survival into future preference IS the inductive leap. Popper's rejection of this projection is inconsistent with his advice to prefer well-tested theories."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The 'false dichotomy' charge misses the point. The alternative to explicit probability is not just convention; it is implicit probability. The 'foundation' Popper seeks is unavailable for guiding action without inductive assumptions."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "rebutted", "note": "Agrees fully: functional identity implies logical equivalence in the context of decision theory. If the output of the reasoning is 'expect A to work,' the input must have been 'A worked before, so it will work again,' which is induction."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The failure of verisimilitude strengthens this claim. Without a robust measure of truth-likeness to justify preference, the only remaining basis for preference is past performance, which is purely inductive."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "The cost identified here is the collapse of Popper's distinctiveness. If his system requires induction to function practically, then his rejection of induction was merely semantic, costing the system its claimed logical purity."}
+      ],
+      "optional_refs": ["SRC_004", "SRC_006"]
+    },
+    {
+      "claim": "The dilemma is dissolved by recognizing that scientific preference is an evolutionary selection mechanism where 'fitness' (corroboration) is retrospective, and the 'preference' is merely the current state of the population of ideas, carrying no predictive warrant whatsoever.",
+      "mechanism": "Evolutionary Epistemology Analogy: Just as a surviving species is not 'more probable' to survive tomorrow but is simply the one currently alive, a corroborated theory is just the one currently unrefuted. Scientists 'prefer' it only in the sense that it is the only viable tool left, not because they predict its future success. The 'cost' is the acceptance of total agnosticism regarding future performance.",
+      "counterconditions": [
+        "If scientists claim the theory will definitely work.",
+        "If the selection mechanism implies a trend toward truth.",
+        "If the 'preference' involves active betting beyond mere usage."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_012", "kind": "departure_declared", "note": "Departing from the framing of 'defense.' This is not a defense of rational preference but a re-description of preference as a brute fact of survival, removing the need for justification entirely."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Verisimilitude is irrelevant in a purely descriptive evolutionary model. We don't prefer the fittest because it's 'truer,' but because the others are dead (refuted)."},
+        {"handle": "[SRC_011] against SRC_001", "kind": "rebutted", "note": "Objectivity is maintained as a description of the historical record of refutations. No normative claim about 'should' is made, only a descriptive 'is.'"},
+        {"handle": "[SRC_014] against SRC_003", "kind": "rebutted", "note": "There is no 'leap' because there is no projection. The scientist uses the theory until it dies. Expecting it to work is a psychological habit, not a logical component of the method."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The dichotomy is bypassed. It is neither convention nor induction; it is natural selection of ideas. The 'grounding' is the fact of refutation of alternatives."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "rebutted", "note": "While functionally similar to induction, the *logic* is different. Induction infers future from past; evolution simply notes present survival. The similarity is superficial."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "This approach avoids the need for a formal definition of verisimilitude by relying solely on the binary status of refuted/unrefuted."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "The cost is radical skepticism. We use the theory knowing it might fail instantly, with no reason to expect otherwise. This answers the cost question by maximizing it."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_007"]
+    }
+  ]
+}

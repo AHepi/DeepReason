@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'rational preference' grounded in verisimilitude (truth-likeness) rather than probability, avoiding induction by treating past survival as a marker of content richness and test severity, not future likelihood.",
+      "mechanism": "Popper distinguishes between logical probability (which remains zero or undefined for universal laws) and verisimilitude (closeness to truth). We prefer Theory A over B not because A is more likely to be true, but because A has withstood more severe tests, suggesting it has higher content and potentially higher verisimilitude. This is a non-inductive, critical choice: we act on the theory that has best resisted our attempts to falsify it, acknowledging it may still be false.",
+      "counterconditions": [
+        "If verisimilitude cannot be estimated without assuming uniformity of nature.",
+        "If the preference functionally relies on the expectation that past success predicts future success.",
+        "If 'rational preference' is merely a semantic disguise for inductive habit."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "The mechanism does not rely on a false dichotomy; it explicitly invokes Popper's third option: rational preference based on verisimilitude and severity of tests, distinct from both probability and mere convention."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "rebutted", "note": "Minimizing error risk via severe testing is not inductive; it is the application of the error-elimination principle. We do not assume the future will resemble the past; we assume that if a theory is false, severe tests are the best way to find out now."},
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The cost is accepting that we act on theories we know might be false, but which are currently the best approximations of truth we have. The preference is for the theory with the highest known informative content that has not yet been refuted."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Verisimilitude being unknowable in absolute terms does not render the mechanism empty; comparative verisimilitude can be argued via logical content and test severity. The dilemma is resolved by shifting from 'justification' to 'critical preference'."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "The defense explicitly uses Popper's concept of 'rational preference,' which is neither purely logical derivation nor biological imperative, but a normative epistemic stance adopted by critical rationalists."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The distinction between psychological choice and logical status is maintained; the claim is that the *reason* for the preference is logical (severity/content), even if the act is psychological."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The reason for preferring survival is not inductive uniformity, but the logical asymmetry of falsification: surviving a severe test eliminates a specific potential error, increasing our critical standing without asserting positive probability."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "While quantitative verisimilitude was problematic, the qualitative concept remains central to Popper's later work. The mechanism relies on the evolutionary selection of theories via error elimination, which is an epistemic process grounded in this qualitative notion."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_005", "SRC_015"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because any pragmatic justification for acting on past success implicitly assumes the uniformity of nature or the reliability of memory, which are inductive principles.",
+      "mechanism": "Even if labeled 'rational preference' or 'verisimilitude,' the act of choosing Theory A because it survived tests T1...Tn to avoid future error E presupposes that the conditions under which T1...Tn were valid will hold in the future context of E. Without this assumption, past survival is irrelevant to future action. Thus, the 'pragmatic' defense collapses into a hidden inductive premise.",
+      "counterconditions": [
+        "If Popper can define 'rationality' without any reference to future expectations.",
+        "If the 'uniformity of nature' is not required for the relevance of past tests to future actions.",
+        "If the preference can be justified solely by the logical structure of the tests themselves, independent of temporal extension."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "The argument claims that Popper's 'alternative foundation' (verisimilitude/rational preference) secretly rests on an inductive bridge between past test results and future utility, making the dichotomy false only superficially."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "revised", "note": "Clarified that the functional identity to induction lies in the *application* of the theory to future cases, which requires an assumption of stability that Popper explicitly rejects logically but implicitly accepts pragmatically."},
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The cost is admitting that Popper's system is inconsistent: it forbids induction logically but requires it practically. The preference is indefensible on *strict* Popperian terms, revealing a gap between his logic and his pragmatism."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "The dilemma stands: if verisimilitude is unknowable and the mechanism relies on past performance for future gain, the only remaining ground is inductive hope, however disguised."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "'Rational preference' is analyzed here as a term that masks the underlying inductive leap required to make past corroboration relevant to future decision-making."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "Even if the logical status is distinct, the *justification* for the psychological act of preference relies on an inductive inference about the world's stability."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "Preferring survival over non-survival for future action *does* assume uniformity; otherwise, a theory that failed yesterday might be safer today, rendering past tests useless guides."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "The collapse of quantitative verisimilitude strengthens the charge that the remaining qualitative appeal is just a placeholder for inductive confidence."}
+      ],
+      "optional_refs": ["SRC_008", "SRC_011", "SRC_006"]
+    },
+    {
+      "claim": "The preference is defensible not as induction nor as a claim to truth, but as an evolutionary strategy of 'error elimination' where the scientist acts as a selector of variants, and 'corroboration' is simply the record of survival in a competitive environment of ideas.",
+      "mechanism": "Adopting a strict evolutionary epistemology analogy: theories are mutations, tests are environmental pressures. Preferring the survivor is not an inductive prediction that it will survive forever, but a heuristic recognition that it possesses traits (content, precision) that allowed it to survive *so far*. It is a 'bet' on the current fittest, fully aware it may be superseded. This avoids induction by reframing science as a dynamic process of selection rather than a static accumulation of probable truths.",
+      "counterconditions": [
+        "If evolutionary analogies fail to account for the normative force of scientific preference.",
+        "If the 'heuristic bet' implicitly assumes the environment (nature) remains constant.",
+        "If the analogy reduces rationality to mere biological survival instinct."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "This approach embraces the biological analogy (SRC_003) but grounds it in Popper's own evolutionary epistemology, offering a robust third way beyond probability and convention."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "rebutted", "note": "Error elimination is not inductive; it is the removal of unfit variants. Preferring the survivor is a description of the selection process, not a prediction of its eternal validity."},
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The cost is accepting that science offers no guarantees, only the best current candidates from a process of elimination. The preference is for the 'least refuted' option."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Verisimilitude is reinterpreted here as 'fitness' in the problem-space. The mechanism is robust because it doesn't require knowing the absolute truth, only relative fitness."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "Rational preference is defined as the alignment with the evolutionary goal of truth-seeking through error elimination, bridging the logical and biological."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The propagation of theories is the mechanism; the preference is the conscious participation in this propagation of the fittest ideas."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "Preferring survival is not an assumption of uniformity, but a recognition of the causal power of the tests that eliminated the competitors."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "Evolutionary selection is the epistemic process; verisimilitude is the telos. They are distinct but complementary in this framework."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_003", "SRC_012"]
+    },
+    {
+      "claim": "The debate dissolves if we recognize that 'preference' in Popper is a performative speech act of commitment to criticism, not a cognitive state of belief or prediction. To prefer Theory A is to commit to using it as the basis for further attempts at falsification.",
+      "mechanism": "Reinterpreting 'preference' as a methodological rule: 'Act on Theory A' means 'Use Theory A to generate new, risky predictions.' This shifts the focus from 'why A is better' to 'what we do with A.' The defensibility lies in the fact that acting on the most severely tested theory maximizes the potential for discovering new errors. It is a rule for maximizing learning, not for minimizing error risk via induction.",
+      "counterconditions": [
+        "If scientists actually hold beliefs about the truth/falsity of theories when acting.",
+        "If the 'commitment to criticism' cannot explain why we don't act on refuted theories.",
+        "If this view renders the concept of 'corroboration' redundant."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_003", "kind": "departure_declared", "note": "Departing from the idea that preference must be grounded in a property of the theory (like verisimilitude); instead, it is grounded in the agent's commitment to a specific mode of inquiry."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "rebutted", "note": "No inductive principle is smuggled in because the goal is not 'future success' but 'future testability.' Acting on A is about exposing A to new dangers, not banking on its safety."},
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The cost is abandoning the intuition that we prefer A because it's 'safer.' We prefer A because it's more 'informative' and thus more useful for growth."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "The dilemma is bypassed: we don't need to know if we are closer to truth; we only need to know which theory offers the best platform for the next critical step."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "Rational preference is recast as procedural rationality: following the rules of the game of science."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The psychological act is one of commitment to a procedure, not a judgment of probability."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "Preferring survival is preferring the theory that has proven itself a worthy opponent, worthy of further engagement."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "Verisimilitude becomes a regulatory ideal, while the mechanism is purely procedural."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_010"]
+    }
+  ]
+}

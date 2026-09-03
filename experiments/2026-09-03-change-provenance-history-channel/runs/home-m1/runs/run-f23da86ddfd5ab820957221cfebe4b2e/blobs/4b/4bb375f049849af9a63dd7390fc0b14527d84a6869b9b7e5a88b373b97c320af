@@ -1,0 +1,84 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference about future truth, but as a non-inductive 'conventionalist decision' to act on the theory that has withstood the most severe tests, thereby maximizing the opportunity for future falsification and minimizing the risk of acting on a theory already known to be false. This preference survives only if one accepts the cost that science offers no rational guarantee of predictive success or proximity to truth (verisimilitude) beyond the negative knowledge that the rejected theory has failed; it reduces the choice to a methodological rule for error-avoidance rather than a probabilistic bet on nature's uniformity.",
+    "mechanism": "The mechanism distinguishes between 'logical probability' (which Popper rejects as increasing with corroboration) and 'methodological utility' (which increases with severity of tests passed). By framing the preference as a decision to maximize testability (content) and minimize known error, the agent avoids the inductive leap of assuming the future will resemble the past. Instead, the agent adopts the rule: 'Act on the theory that has survived the hardest attempts to kill it, because if it is false, we will find out sooner.' This shifts the justification from 'it will work' to 'it is the best available target for refutation,' which is consistent with falsificationism.",
+    "counterconditions": [
+      "If the preference implicitly assumes that surviving past tests makes future survival more likely, it smuggles in induction.",
+      "If the 'conventionalist decision' cannot explain why scientists feel rationally compelled (not just arbitrarily willing) to choose the corroborated theory, the defense fails.",
+      "If Popper's own reliance on 'verisimilitude' to ground this preference is admitted, the defense collapses because his formal account of verisimilitude failed.",
+      "If the distinction between 'objectivity of method' and 'objectivity of result' cannot sustain the claim that the choice is rational rather than arbitrary."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "059c75cb550e1b3f17f7e4cf17ed53b0cb31a7935eefc2fc97ccf46fb5dae5c0",
+        "kind": "rebutted",
+        "note": "The criticism claims the defense concedes a 'metaphysical faith.' This rebuttal clarifies that the proposal explicitly rejects metaphysical faith in uniformity. The preference is grounded in the logical asymmetry of falsification (we know what is false, not what is true) and a methodological rule to maximize learning speed, not a belief in nature's consistency."
+      },
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "rebutted",
+        "note": "The criticism invokes 'verisimilitude' as an ignored alternative. This proposal addresses that by arguing that relying on verisimilitude would indeed fail (as per Popper's own later admissions), so the defense *must* rest on the conventionalist decision to avoid known error, not on truth-likeness. The dilemma is not false; verisimilitude is the trap this argument avoids."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The criticism conflates objectivity of method with result. The rebuttal is that Popper's framework grounds the preference precisely in the 'objectivity of method' (the public record of failed falsification attempts), not in an objective result (truth). The choice is rational because it follows the method's goal (error elimination), not because it guarantees a true outcome."
+      },
+      {
+        "handle": "3dd7e6e5900af409fe538c843fc9a16df138e02b954e617cb086b0f92122ce4f",
+        "kind": "revised",
+        "note": "Revised to explicitly state that projecting past survival into a reason for *future preference* is NOT an inductive leap if the reason is 'maximize chance of future falsification' rather than 'maximize chance of future success.' The mechanism now clarifies that the projection is about where to look for errors, not where to expect truth."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "rebutted",
+        "note": "The criticism alleges a false dichotomy between probability and convention. The rebuttal asserts that 'convention' here is not arbitrary but 'rationally constrained by the goal of error elimination.' It is a third way: a normative methodological rule derived from the logic of falsification, distinct from both probabilistic induction and arbitrary whim."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "rebutted",
+        "note": "The criticism argues the preference is functionally identical to induction. The rebuttal distinguishes the *function*: induction predicts success; this proposal selects the best candidate for *failure*. Acting on the best-corroborated theory is acting on the one most likely to reveal its own falsehood soonest if it is indeed false, which is the opposite functional goal of induction."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "rebutted",
+        "note": "The criticism correctly notes Popper's failure on verisimilitude. This proposal leverages that failure to argue that the *only* defensible route is the conventionalist one proposed here, explicitly abandoning verisimilitude as a justification. The defense survives precisely by accepting this limitation."
+      },
+      {
+        "handle": "720e994a62093f4921479eee06c7b2643add166f9ff3ec18dfac4aefd5df7507",
+        "kind": "rebutted",
+        "note": "The criticism asks for the cost of denying future likelihood. The claim explicitly states this cost: 'science offers no rational guarantee of predictive success.' The defense survives by accepting this cost—that we act without hope of certainty, only with the strategy of fastest error detection."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_003"
+      ],
+      "shared_structure": [
+        "Selection based on survival of stress tests rather than prediction of future performance.",
+        "Distinction between 'best available option' and 'guaranteed successful option'.",
+        "Reliance on negative knowledge (what has failed) rather than positive knowledge (what will work)."
+      ],
+      "disanalogies": [
+        "Evolutionary natural selection has no conscious goal of error elimination, whereas Popperian science does.",
+        "Biological fitness implies reproductive success (positive outcome), whereas corroboration implies only non-falsification (negative outcome)."
+      ],
+      "transfer_claims": [
+        "Just as we trust a bridge design that survived wind tunnel tests not because it guarantees no collapse, but because it survived the best attempt to break it, we prefer corroborated theories as the safest bet for finding errors.",
+        "The rationality of the choice lies in the rigor of the test, not the probability of the outcome."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that acting on the best-corroborated theory inevitably requires assuming it will behave in the future as it did in the past.",
+        "If the 'conventionalist decision' is proven to be indistinguishable in practice from an inductive habit."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_003"
+      ]
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories in action is defensible without smuggling induction by reframing 'preference' as a methodological rule to maximize the severity of future tests, not as an inductive inference of truth or reliability; the cost of this defense is the admission that Popperian science offers no rational guarantee for practical success (e.g., bridge safety), only a commitment to the fastest possible error elimination.",
+    "mechanism": "The mechanism distinguishes between 'context of discovery/action' (where agents must act) and 'context of justification' (where logic applies). It argues that choosing the best-corroborated theory is a non-inductive strategic rule: since the goal is truth via falsification, one must test the theory that has survived the hardest attempts, as it contains the most potential falsifiers. Acting on it is not betting on its truth (induction) but betting on its capacity to reveal error quickly if false. This resolves the tension by denying that 'acting on' implies 'believing probable'.",
+    "counterconditions": [
+      "If the agent acts on the theory expecting it to succeed (e.g., the bridge will hold) rather than expecting it to potentially fail safely, they have smuggled in induction.",
+      "If the formal definition of verisimilitude remains incoherent (per Tichý/Miller), the comparison of 'better' corroborated theories lacks logical footing.",
+      "If the distinction between 'preferring for criticism' and 'preferring for action' cannot be maintained in high-stakes scenarios where failure is catastrophic."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The criticism cites Tichý/Miller against verisimilitude. This candidate bypasses the need for a formal quantitative measure of truth-content by relying solely on the qualitative ordering of severity of tests passed. The preference is based on the history of attempted falsification, not a calculated difference in truth/falsity content."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, the defense does not rely on the failed formal definition of verisimilitude but on the procedural rule: 'Test the theory that has survived the most severe tests.' This is a rule of method, not a claim about logical truth-likeness metrics."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "rebutted",
+        "note": "The natural selection analogy was illustrative, not the core argument. The core argument is normative: Popper prescribes preferring bold, well-tested theories *because* this prescription best serves the normative goal of eliminating error, not because nature dictates it."
+      },
+      {
+        "handle": "17f09fa02242185436263f3c9b86d093542003762a8b858119658fbe11d26d6",
+        "kind": "revised",
+        "note": "Revised to explicitly separate 'preferring for action' from 'expecting success'. The revision clarifies that acting on a theory in Popper's view means using it as the current best target for falsification in practice, acknowledging it may fail at any moment, rather than assuming it will work."
+      },
+      {
+        "handle": "205c867384d2a55777e20f3ebdbf380a88e3596428976e9fb159a5d5fe0e8fbb",
+        "kind": "rebutted",
+        "note": "The candidate accepts the conflation charge only if one assumes 'action' requires 'reliability'. It rebuts by asserting Popperian action requires only 'testability'. We build the bridge with the best theory to see if it falls; if it does, we learn more than if we used a vague theory."
+      },
+      {
+        "handle": "269bca3c11013395f75db136f55665c38801f5759a38bfef887ba32a9a7294d4",
+        "kind": "rebutted",
+        "note": "The mechanism 'acceleration of falsification' does not assume past success predicts future utility. It assumes only that a theory that has withstood severe tests is logically more informative and thus a better candidate for the next attempt at falsification, regardless of future outcomes."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "rebutted",
+        "note": "The claim implicitly presents the strongest case for the defense (non-inductive methodological rule) and identifies the strongest counter-case (the impossibility of separating action from expectation of reliability in practice), concluding that the defense survives only by accepting the cost of no practical guarantee."
+      },
+      {
+        "handle": "343e10b5bcf5a8a8cda3a18e5ff5334fcad05a2527c61f22d4b83ec4299bec0b",
+        "kind": "departure_declared",
+        "note": "Departing from the intuition that 'acting on' a theory necessitates a belief in its reliability. The candidate declares that within strict Popperian terms, 'acting on' is synonymous with 'subjecting to practical test', rejecting the premise that practical action requires an inductive leap."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

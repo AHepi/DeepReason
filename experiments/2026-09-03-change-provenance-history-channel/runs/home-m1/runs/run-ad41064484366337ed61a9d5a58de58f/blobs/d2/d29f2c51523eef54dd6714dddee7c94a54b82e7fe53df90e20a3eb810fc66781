@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "Popper explicitly rejected the proposal to treat induction as a 'methodological' rule or pragmatic convention, arguing that such a move surrenders the logical core of his solution to the problem of induction.",
+      "premise_evidence": null,
+      "case": "The target's central claim—that the dilemma dissolves by accepting induction as a 'methodological assumption' or 'regulative ideal'—directly contradicts Popper's own explicit refutation of this exact strategy. In 'The Logic of Scientific Discovery' and later works, Popper argued that shifting induction from a logical principle to a methodological rule (a 'convention') does not solve the problem; it merely disguises the irrationality of the inference. He maintained that if an inference is logically invalid, no amount of methodological labeling can justify acting upon it without smuggling in the very inductive belief he sought to eliminate. By proposing 'methodological fictionalism' as the solution, the target attributes to Popper a concession he rigorously denied, thereby failing to answer whether the preference is defensible *on Popper's own terms*. On Popper's own terms, this 'solution' is precisely the surrender of falsificationism to conventionalism that he warned against.",
+      "counterexample": null,
+      "successor_question": "If Popper rejected methodological conventions as a disguise for induction, what non-inductive justification did he ultimately offer for preferring better-corroborated theories in practice, if not the one proposed here?"
+    }
+  ]
+}

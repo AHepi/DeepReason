@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes a 'Reduction' to SRC_005 but fails to define the substantive relation as required. The statement describes what corroboration *is* in SRC_005 ('a historical report') and asserts a reduction, but it does not explicitly name the specific kind of reduction (e.g., ontological, methodological) nor clearly articulate the mechanism linking 'preference without induction' to 'procedural mechanism' beyond the label. Furthermore, the 'REFUTED IF' condition describes a scenario where scientists reject a theory, which challenges the *validity* of the reduction's claim about scientific behavior, but the target itself fails the primary constraint to 'name its kind and state what it is' with sufficient substantive detail rather than just asserting the reduction exists.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

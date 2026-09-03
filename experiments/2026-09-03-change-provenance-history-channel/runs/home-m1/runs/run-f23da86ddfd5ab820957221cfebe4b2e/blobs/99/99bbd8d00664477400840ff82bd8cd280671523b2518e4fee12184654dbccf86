@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's terms not as an inductive inference that the future will resemble the past, but as a non-inductive methodological rule to maximize the severity of future tests (truth-likeness potential), provided one accepts the 'departure' that this preference relies on a pragmatic, non-justificatory faith in the uniformity of nature which Popper explicitly acknowledged as necessary for action but excluded from the logic of science.",
+    "mechanism": "The mechanism distinguishes between 'logical corroboration' (a report of past test severity) and 'pragmatic preference' (a decision rule for action). It argues that choosing the theory with higher content and better corroboration maximizes the chance of detecting error (falsification) in the next step, rather than maximizing the probability of truth. This avoids induction because it does not claim the preferred theory is *more likely true*; it claims it is *better suited for critical testing*. The apparent circularity of projecting past success into future utility is resolved by framing it as a conventionalist decision to play the game of science optimally, while admitting that acting on any theory outside the laboratory requires a metaphysical faith that Popper conceded was unavoidable for living beings but irrelevant to the objective validity of the scientific method itself.",
+    "counterconditions": [
+      "If preferring a theory based on past survival necessarily implies believing it will survive future tests, then the distinction between corroboration and probability collapses into induction.",
+      "If Popper's concept of verisimilitude (truth-likeness) is logically incoherent as critics argue, then it cannot serve as the objective ground for preference without smuggling in probabilistic assumptions.",
+      "If the 'pragmatic faith' in uniformity is required to act, then Popper's rejection of induction is merely semantic, as the practical outcome is identical to inductivism."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "059c75cb550e1b3f17f7e4cf17ed53b0cb31a7935eefc2fc97ccf46fb5dae5c0",
+        "kind": "departure_declared",
+        "note": "The candidate explicitly declares a departure from the strict separation of action and logic by accepting Popper's own concession: that acting on a theory requires a 'metaphysical faith' in uniformity. The defense holds that this faith is a precondition for *action*, not a component of the *logical justification* of the theory, thus preserving Popper's core anti-inductivist stance within the domain of scientific logic while answering the criticism about practical preference."
+      },
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dilemma between convention and verisimilitude. The candidate rebuts this by integrating both: the preference is a conventionalist *decision* to pursue theories with higher *potential* verisimilitude. It does not claim the theory *has* higher verisimilitude (which would require induction), but that it is the rational choice for *seeking* it through severe testing. Thus, no dilemma exists; the convention is the vehicle for pursuing the ideal of verisimilitude."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465e76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The candidate rejects the conflation of 'objectivity of method' with 'objectivity of result.' The preference is grounded in the objectivity of the *method* (maximizing test severity), not an objective guarantee of the *result* (truth). Popper's framework supports this: we objectively know which theory is more testable, even if we cannot objectively know which is truer. The criticism fails by demanding a result-oriented justification that Popper's system explicitly forbids."
+      },
+      {
+        "handle": "3dd7e6e5900af409fe538c843fc9a16df138e02b954e617cb086b0f92122ce4f",
+        "kind": "rebutted",
+        "note": "The claim that projecting past survival is an inductive leap is rebutted by clarifying the nature of the projection. We do not project 'survival' (truth); we project 'testability.' A theory that has survived severe tests has demonstrated its capacity to withstand attack, making it a more robust tool for *future* attacks. This is a deductive assessment of the theory's current logical structure and empirical track record as a testing instrument, not an inductive inference about its future truth value."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "revised",
+        "note": "Revised to clarify that the dichotomy is not between 'probability' and 'mere convention,' but between 'probabilistic justification' and 'methodological optimization.' The candidate now explicitly frames the preference as a strategic move in a critical game, grounded in the goal of error elimination, which provides an objective basis distinct from both induction and arbitrary convention."
+      },
+      {
+        "handle": "552493f430823f47c25c532667b8fd3a2ec2fe75df8bb51ca62e9cd35fb45563",
+        "kind": "rebutted",
+        "note": "While acknowledging the formal difficulties with defining verisimilitude, the candidate argues that the *intuition* of truth-likeness drives the methodological rule without requiring a completed formal definition. The preference is for the theory that *appears* closer to the truth based on surviving severe tests, serving as a regulative ideal. The criticism assumes a static, fully-defined metric is needed for action, whereas Popperian science is dynamic and fallibilist; we act on the best available estimate of verisimilitude knowing it may be wrong."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "rebutted",
+        "note": "The functional identity between preferring the 'fittest' and induction is superficial. Induction justifies belief in the *continuity* of patterns. Popperian preference justifies the *selection of targets* for falsification. The former seeks confirmation; the latter seeks refutation. Even if the behavioral output (choosing Theory A) is identical, the internal logic and intent (expecting A to work vs. expecting A to fail soonest if false) are diametrically opposed, preserving the philosophical distinction."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "rebutted",
+        "note": "Similar to the rebuttal for handle ...5563, this candidate maintains that the failure of the *formal* definition of verisimilitude does not invalidate its *heuristic* use. Scientists prefer better-corroborated theories because they offer more opportunities for learning (higher content), regardless of whether a perfect logical measure of 'distance to truth' exists. The criticism mistakes the lack of a final metric for the absence of a rational criterion for choice."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

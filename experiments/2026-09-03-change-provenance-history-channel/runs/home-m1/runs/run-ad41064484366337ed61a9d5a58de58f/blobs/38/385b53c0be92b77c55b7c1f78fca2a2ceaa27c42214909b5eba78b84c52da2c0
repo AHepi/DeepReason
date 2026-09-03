@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Integration. The isolated node 1c110c6075f4 integrates with the neighbourhood (specifically SRC_005 and SRC_003) by serving as the operational bridge between the abstract methodological rule of 'critical rationalism' and the concrete evolutionary selection mechanism. It is REFUTED IF the node can be removed without breaking the causal link that allows a theory's survival in severe tests (SRC_003) to justify its selection as the best current conjecture (SRC_005), thereby reducing the system to either pure luck or unjustified induction.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "This candidate explicitly names 'Integration' as the relation kind and defines a specific refutation condition regarding the causal link, satisfying relation-form@578e42df713e."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "The refutation condition targets the structural integrity of the integration, not merely an internal vulnerability."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "The relation kind is clearly stated as 'Integration'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "The mechanism of dependence is defined as the 'operational bridge' allowing survival to justify selection; the refutation condition specifies the failure of this bridge."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "The candidate establishes the integration by defining the node's role as the necessary connector between methodological rule and evolutionary mechanism."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "The relation is ontological/causal (the bridge enabling justification), not merely epistemic or methodological dependency."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "The 'REFUTED IF' clause defines the failure of the integration relation itself (the breakage of the link), not an internal flaw of the concepts."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "The mechanism is explicitly shared between the isolated node and the specified neighbourhood endpoints (SRC_003, SRC_005)."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Dependence. The isolated node 1c110c6075f4 is dependent on the neighbourhood's 'Eliminative Default' mechanism (SRC_004) for its semantic coherence. It is REFUTED IF the node retains meaningful content when all alternative theories are eliminated, implying it possesses intrinsic positive support rather than deriving its status solely from the absence of competitors as defined in SRC_004.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_018", "kind": "revised", "note": "Clarified relation kind as 'Dependence' and specified the mechanism as semantic coherence derived from eliminative default."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Refutation condition targets the source of the node's status (intrinsic vs. derived), defining the dependence relation."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Relation kind 'Dependence' is explicitly named."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism defined as 'semantic coherence derived from eliminative default'; refutation specifies the failure of this derivation."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Establishes dependence by showing the node collapses without the neighbourhood's eliminative mechanism."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Defines an ontological dependence of meaning on the state of alternatives, not just a measurement issue."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Refutation condition describes the breakdown of the dependence relation (node retaining meaning independently)."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Mechanism links the isolated node directly to SRC_004 in the neighbourhood."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Contradiction. The isolated node 1c110c6075f4 stands in contradiction to the neighbourhood's 'Evolutionary Epistemology' claim (SRC_002) if interpreted as requiring a rational agent's logical inference. It is REFUTED IF the node can be reconciled with SRC_002's assertion that 'rationality' is replaced by 'survival of the fittest ideas' without residual need for individual logical choice, thereby proving the node redundant or misaligned with the systemic process.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_002"],
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Relation kind 'Contradiction' is named; refutation condition tests the possibility of reconciliation."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Refutation condition defines the boundary where the contradiction dissolves into redundancy."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Relation kind 'Contradiction' is explicit."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism is the clash between 'rational agent' and 'systemic process'; refutation specifies the condition for resolving this clash."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Establishes the relation by positing the node as a counter-claim to SRC_002's core mechanism."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Addresses the ontological status of the agent vs. system, not just measurement."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Refutation condition defines the failure of the contradiction (i.e., if they are actually compatible)."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Directly engages SRC_002 from the neighbourhood."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Shared Mechanism. The isolated node 1c110c6075f4 and the neighbourhood artifact SRC_001 share the mechanism of 'Verisimilitude-based Selection'. It is REFUTED IF the node operates on a principle of probabilistic truth assignment rather than selecting the theory with the highest informational content and severest test survival as described in SRC_001, demonstrating a divergence in the underlying selection logic.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Relation kind 'Shared Mechanism' is named; refutation tests the identity of the mechanism."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Refutation condition specifies the exact point of divergence (probabilistic vs. verisimilitude)."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Relation kind is clearly stated."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism defined as 'Verisimilitude-based Selection'; refutation specifies the alternative logic that would break the sharing."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Establishes the shared mechanism by aligning the node's operation with SRC_001's definition."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Focuses on the logic of selection (ontological/methodological hybrid), not just measurement independence."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Refutation condition defines the failure of the 'sharing' relation."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Explicitly links the node to SRC_001."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Abstraction. The isolated node 1c110c6075f4 acts as an abstraction of the neighbourhood's specific 'Counterconditions' found in SRC_003 and SRC_005, generalizing them into a single meta-rule about non-inductive preference. It is REFUTED IF the node fails to encompass the specific cases of 'future resembling past' or 'subjective probability' mentioned in those counterconditions, proving it is merely a summary rather than a functional abstraction that governs them.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Relation kind 'Abstraction' is named; refutation tests the coverage of the abstraction."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Refutation condition defines the failure mode of the abstraction (lack of coverage)."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Relation kind is explicit."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism is 'generalization of counterconditions'; refutation specifies the missing elements."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Establishes the relation by positioning the node as the governing meta-rule."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Deals with the logical scope of the rule, not measurement."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Refutation condition defines the failure of the abstraction relation (becoming a mere summary)."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Links node to specific neighbourhood artifacts SRC_003 and SRC_005."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Inheritance. The isolated node 1c110c6075f4 inherits the property of 'Non-Inductive Defensibility' from the neighbourhood's foundational claim in SRC_001. It is REFUTED IF the node requires any form of probabilistic induction to sustain its own validity, thereby breaking the lineage of non-inductive reasoning established in the parent artifact SRC_001.",
+      "typicality": 0.70,
+      "neighbours": ["SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Relation kind 'Inheritance' is named; refutation tests the continuity of the inherited property."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Refutation condition specifies the exact break in the inheritance chain (introduction of induction)."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Relation kind is explicit."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism is 'property inheritance'; refutation defines the condition where the property is lost."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Establishes the relation by tracing the property from SRC_001 to the node."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Addresses the logical foundation (induction vs. non-induction), not measurement."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Refutation condition defines the failure of the inheritance relation."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Directly links node to SRC_001."}
+      ]
+    }
+  ]
+}

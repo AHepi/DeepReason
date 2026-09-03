@@ -1,0 +1,234 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, critical rational choice based on the logical asymmetry of falsification: we prefer the theory that has withstood more severe tests not because it is likely true, but because it has survived attempts to show it false, making it the best available target for further criticism.",
+      "mechanism": "Critical Rational Choice via Logical Asymmetry",
+      "counterconditions": [
+        "If the preference implies any expectation of future success beyond the current state of non-falsification.",
+        "If 'severity' of tests cannot be defined without reference to background knowledge which itself relies on induction.",
+        "If acting on a theory inherently requires assuming its reliability for practical purposes."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate explicitly frames the preference as a 'critical rational choice' based on logical asymmetry, directly addressing the criticism that a false dichotomy was created. It avoids reinterpreting the preference as a non-rational convention."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "The mechanism addresses coexisting unrefuted theories by selecting the one that has survived *more severe* tests, providing a criterion for choice even when multiple theories are logically possible."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "The cost accepted is that this preference offers no guarantee of future success or truth-likeness, only a status report on current survivability, which answers the specific cost question."
+        },
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "The argument relies on logical asymmetry (falsification vs verification) rather than an evolutionary analogy of past survival predicting future fitness, thus avoiding the smuggled induction."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The distinction is maintained between the causal history of survival and the normative justification for choice, which is grounded in the methodological rule to test the boldest conjectures."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'bet' is characterized as a methodological commitment to error elimination, not a pragmatic wager on biological-style fitness continuity."
+        },
+        {
+          "handle": "[SRC_010] against SRC_002",
+          "kind": "rebutted",
+          "note": "Methodological acceptance is strictly separated from probabilistic weighting; the regulative ideal is 'error elimination,' not 'continued success.'"
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "The argument does not rely on verisimilitude as a measurable metric but on the comparative logical status of having survived more severe tests."
+        }
+      ],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's framework because any decision to act on a theory presupposes that the future will resemble the past (that the conditions allowing the theory to survive will persist), which is the very principle of uniformity Popper sought to reject.",
+      "mechanism": "Inevitable Inductive Presupposition in Action",
+      "counterconditions": [
+        "If a scientist can act on a theory while explicitly denying any expectation of its future validity.",
+        "If 'preference' can be meaningfully defined as purely retrospective with no forward-looking component.",
+        "If the 'cost' of accepting this view is merely intellectual consistency without practical paralysis."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "revised",
+          "note": "Revised to clarify that the 'smuggling' occurs specifically in the transition from theoretical assessment to practical action, rather than in the assessment itself."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Even with multiple unrefuted theories, the act of choosing one for action imposes an inductive burden regarding its future performance relative to the others."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "The cost identified is the collapse of Popper's distinction between scientific rationality and pragmatic decision-making; the 'evolutionary' defense fails because evolution itself is an inductive narrative."
+        },
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "This candidate agrees that evolutionary epistemology smuggles in induction, using this as proof that the preference is indefensible on strict Popperian terms."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "It argues that Popper's maintenance of the distinction is untenable when faced with the reality of action, where causal explanation and normative justification converge on inductive assumptions."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'pragmatic bet' is shown to be indistinguishable from an inductive inference about the stability of the environment."
+        },
+        {
+          "handle": "[SRC_010] against SRC_002",
+          "kind": "rebutted",
+          "note": "Confirms that methodological acceptance effectively functions as probabilistic weighting in practice, regardless of formal denial."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "departure_declared",
+          "note": "Departing from the need to salvage verisimilitude; the argument rests solely on the necessity of induction for action, rendering truth-likeness metrics secondary."
+        }
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_010"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if reinterpreted as a conventionalist rule of the game of science, akin to choosing to play chess rather than checkers; it is not a rational inference about the world but a voluntary adoption of a methodology that values severity, carrying the cost that this preference has no objective binding force outside the community of critical rationalists.",
+      "mechanism": "Conventionalist Methodological Rule",
+      "counterconditions": [
+        "If the rule can be shown to have objective consequences independent of human agreement.",
+        "If scientists feel compelled by evidence rather than convention.",
+        "If the 'game' of science produces results that would be impossible without an underlying inductive reality."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "Explicitly adopts the 'non-rational convention' framing criticized in SRC_015, arguing that this is the only consistent interpretation, thereby rebutting the claim that it creates a false dichotomy by embracing one side of it."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "In cases of coexisting theories, the convention dictates choosing the one that best exemplifies the value of 'severity,' providing a procedural rather than epistemic resolution."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "The cost is explicitly the loss of objective justification; the preference is a social contract, not a report on fitness."
+        },
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "By framing it as a convention, the charge of smuggling induction is neutralized because conventions do not make truth claims about the future."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "Accepts the conflation of causal and normative in the social practice of science, rejecting the idea that they must be separate for the preference to work."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'bet' is on the utility of the convention itself, not on the theory's survival."
+        },
+        {
+          "handle": "[SRC_010] against SRC_002",
+          "kind": "rebutted",
+          "note": "Argues that 'methodological acceptance' is precisely a conventional agreement, distinct from probabilistic belief."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "Verisimilitude is irrelevant; the choice is based on adherence to the rule of severity."
+        }
+      ],
+      "optional_refs": [
+        "SRC_012",
+        "SRC_015"
+      ]
+    },
+    {
+      "claim": "The preference is defensible through a 'propensity' interpretation of probability where corroboration reports the objective propensity of a theory to withstand tests, not its subjective likelihood of being true; this allows Popper to retain a form of probabilistic reasoning without committing to Bayesian induction, though it costs him the ability to quantify these propensities numerically.",
+      "mechanism": "Objective Propensity Reporting",
+      "counterconditions": [
+        "If propensities cannot be distinguished from long-run frequencies (which require induction).",
+        "If the 'propensity' is merely a metaphor for logical content.",
+        "If scientists require numerical probabilities for decision making."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "revised",
+          "note": "Refined to specify that the 'reinterpretation' is towards objective propensities rather than non-rational convention."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Propensities allow for comparison between coexisting theories based on their testable structural strength."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "The cost is the lack of quantification; the preference is qualitative based on the magnitude of the propensity."
+        },
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "Propensities are inherent properties of the experimental setup and theory, not inductive generalizations from past instances."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "Provides a normative basis (maximizing propensity satisfaction) distinct from the causal history."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'bet' is on the existence of the propensity, not on biological survival."
+        },
+        {
+          "handle": "[SRC_010] against SRC_002",
+          "kind": "rebutted",
+          "note": "Distinguishes propensity (objective) from subjective probabilistic weighting."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "Propensity serves as the metric replacing verisimilitude."
+        }
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The dilemma is a category error: Popper's 'preference' is not an epistemic judgment about truth or probability, nor a pragmatic gamble, but an aesthetic commitment to boldness; we prefer the better-corroborated theory because it is more informative and risky, and the 'cost' is that this preference may lead us to falsehood more often than a conservative strategy, which Popper accepts as the price of learning.",
+      "mechanism": "Aesthetic Commitment to Boldness and Information Content",
+      "counterconditions": [
+        "If 'boldness' can be defined independently of test outcomes.",
+        "If scientists are motivated by truth rather than information content.",
+        "If the rate of falsehood acquisition undermines the scientific enterprise."
+      ],

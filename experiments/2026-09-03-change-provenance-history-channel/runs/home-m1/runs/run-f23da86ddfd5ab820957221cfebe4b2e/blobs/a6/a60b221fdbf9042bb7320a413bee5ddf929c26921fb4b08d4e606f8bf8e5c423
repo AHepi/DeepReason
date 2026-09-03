@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses because it conflates 'verisimilitude' (a semantic concept of truth-likeness) with the 'evolutionary selection' mechanism (an epistemic process). Popper explicitly abandoned the quantitative definition of verisimilitude after Tichý and Miller proved it incoherent for false theories; therefore, one cannot use the *failure* of verisimilitude to be formally defined as a mere 'cost' while simultaneously relying on an 'evolutionary search' that implicitly assumes the very stability of the truth landscape (induction) the problem asks about. The target claims the preference is defensible as a 'verisimilitude heuristic' via evolution, but if verisimilitude is undefined, the 'heuristic' has no object, and if the evolutionary analogy requires assuming the future resembles the past (stable fitness landscape), it smuggles in induction, contradicting the claim that the view is defensible on Popper's non-inductive terms.",
+      "counterexample": null,
+      "premise": "Popper's formal account of verisimilitude was refuted by Tichý (1974) and Miller (1974), showing that among false theories, one cannot generally say one is closer to the truth than another without invoking probability or inductive assumptions about the structure of truth.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot serve as the formal ground for the preference, does the 'evolutionary' analogy merely disguise an inductive bet on the stability of nature, thereby confirming the charge that Popper smuggles induction back in?"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims that accepting the pragmatic defense forces Popper to concede that corroboration offers no grip on verisimilitude, thereby reducing science to a game of survival without teleological direction.",
+      "case": "The target presents a false dichotomy by assuming that if corroboration is not probabilistic, it cannot relate to verisimilitude (truth-likeness). Popper explicitly developed the concept of verisimilitude to allow for a non-inductive notion of progress: a theory can be closer to the truth than another even if we cannot assign it a higher probability. The target's claim that the pragmatic view 'reduces scientific rationality to a game of survival without teleological direction' ignores Popper's specific argument that severe testing is the method by which we eliminate error and thus potentially approach truth, even if we can never confirm we have done so. The 'cost' identified by the target is not a necessary consequence of the pragmatic defense but rather a misinterpretation of how Popper separates the logic of justification (no induction) from the heuristic of discovery (preferring bold, well-tested conjectures as potentially closer to the truth).",
+      "counterexample": [
+        "Popper's distinction between 'corroboration' (a report on past performance) and 'verisimilitude' (a logical relation to truth) allows him to maintain that preferring better-corroborated theories is rational precisely because they have withstood attempts to falsify them, which is the only way to screen out falsehoods and retain those possibly closer to the truth, without invoking induction."
+      ],
+      "successor_question": "If verisimilitude is defined logically rather than probabilistically, does the preference for better-corroborated theories actually require abandoning the goal of truth approximation, or does it simply change the mechanism by which we pursue it?"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that accepting Popper's defense costs the ability to claim preferences track 'verisimilitude' in any formally rigorous sense is factually incorrect regarding Popper's own terms. Popper explicitly developed a qualitative (non-quantitative) definition of verisimilitude in 'Conjectures and Refutations' and later works specifically to maintain that better-corroborated theories can be rationally preferred as closer to the truth, even after the Miller-Tichý refutation of his earlier quantitative attempts. By asserting that the framework forces a retreat to 'purely procedural conventionalism' that cannot guarantee progress toward truth, the target constructs a straw man of Popper's mature position, which retains a realist commitment to truth-likeness as the regulative ideal guiding the preference, distinct from probability but not devoid of truth-content implications.",
+      "counterexample": null,
+      "premise": "Popper maintained a qualitative concept of verisimilitude to justify preferring better-corroborated theories as closer to the truth, despite rejecting quantitative measures.",
+      "premise_evidence": null,
+      "successor_question": "Does the target's characterization of Popper's 'cost' ignore his explicit distinction between quantitative and qualitative verisimilitude in his later writings?"
+    }
+  ]
+}

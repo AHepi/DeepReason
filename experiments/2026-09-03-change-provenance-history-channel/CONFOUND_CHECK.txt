@@ -1,0 +1,111 @@
+CONFOUND_CHECK -- C11's cross-problem premise, measured on committed roots
+=========================================================================
+Instrument : measure_diversity_per_problem.py --confound
+Roots      : 5 committed roots, 788 claim-bearing conjectures in total
+Result     : pooled and per-problem D4 and near-duplicate rate are IDENTICAL
+             on 5 of 5 roots (inflation +0.000000 everywhere).
+Reason     : sub-problems DO receive Conj output (audit:ritual 96 artifacts;
+             four conn: problems 42 between them) but every such artifact has
+             an inline body that is not JSON, so it carries no claim and no
+             pairwise measure can include it. 100% of claim-bearing
+             conjectures sit on the seed problem.
+Limit      : the run whose pooled D5 C11 refers to (2026-09-02
+             full-harness-diversity, D5 = 0.702) never committed its run root
+             on branch claude/model-profile-registry-opkgal -- only
+             RESULTS.md, measure_diversity.py and DIVERSITY_PREREG.md are
+             there -- so that number cannot be re-derived by anyone, under
+             either unit. The premise is unverifiable rather than merely
+             unconfirmed.
+Disposition: C11 is FOLLOWED regardless. Seed-only is the more conservative
+             unit, costs nothing, and is correct in advance of any run that
+             does put claims on a sub-problem. No committed root does; the
+             arms this tranche launches are not committed roots.
+
+=== CROSS-PROBLEM CONFOUND on ../../experiments/2026-08-25-change-constructive-frontier/run ===
+  seed problem                   : question-64b724c4118320989925d111501a8e41
+  problems RECEIVING Conj output : 2
+  problems with COMPARABLE claims: 1
+  per-problem artifact disposition (why each was kept or dropped):
+      [sub ] audit:ritual: inline-not-json=96
+      [SEED] question-64b724c4118320989925d111501a8e41: claim=163
+  claim-bearing conjectures pooled: 163
+  claim-bearing on the seed problem: 163
+  D4 pooled (parent script unit) : 0.7728708322800779
+  D4 seed problem only (C11 unit): 0.7728708322800779
+  D4 inflation from pooling      : +0.000000
+  near-dup pooled                : 0.04960993713549951
+  near-dup seed only             : 0.04960993713549951
+
+  VERDICT: pooled and per-problem are IDENTICAL -- the confound cannot arise on this root, because no sub-problem produced a claim-bearing conjecture
+
+=== CROSS-PROBLEM CONFOUND on ../../experiments/2026-08-25-poietics-program/run ===
+  seed problem                   : question-aa835741bebc4b4cb189f4b08bef649a
+  problems RECEIVING Conj output : 5
+  problems with COMPARABLE claims: 1
+  per-problem artifact disposition (why each was kept or dropped):
+      [sub ] conn:007dca563e8d: inline-not-json=6
+      [sub ] conn:0094852dcac7: inline-not-json=24
+      [sub ] conn:0b35ed752e77: inline-not-json=6
+      [sub ] conn:0c9d02e6f822: inline-not-json=6
+      [SEED] question-aa835741bebc4b4cb189f4b08bef649a: claim=120
+  claim-bearing conjectures pooled: 120
+  claim-bearing on the seed problem: 120
+  D4 pooled (parent script unit) : 0.8384111330457943
+  D4 seed problem only (C11 unit): 0.8384111330457943
+  D4 inflation from pooling      : +0.000000
+  near-dup pooled                : 0.0
+  near-dup seed only             : 0.0
+
+  VERDICT: pooled and per-problem are IDENTICAL -- the confound cannot arise on this root, because no sub-problem produced a claim-bearing conjecture
+
+=== CROSS-PROBLEM CONFOUND on ../../experiments/2026-08-26-pc2-rematch/run ===
+  seed problem                   : question-64b724c4118320989925d111501a8e41
+  problems RECEIVING Conj output : 1
+  problems with COMPARABLE claims: 1
+  per-problem artifact disposition (why each was kept or dropped):
+      [SEED] question-64b724c4118320989925d111501a8e41: claim=220
+  claim-bearing conjectures pooled: 220
+  claim-bearing on the seed problem: 220
+  D4 pooled (parent script unit) : 0.7054175878299338
+  D4 seed problem only (C11 unit): 0.7054175878299338
+  D4 inflation from pooling      : +0.000000
+  near-dup pooled                : 0.06434205064342051
+  near-dup seed only             : 0.06434205064342051
+
+  VERDICT: pooled and per-problem are IDENTICAL -- the confound cannot arise on this root, because no sub-problem produced a claim-bearing conjecture
+
+=== CROSS-PROBLEM CONFOUND on ../../experiments/2026-08-22-change-epoch3-second-lineage/run ===
+  seed problem                   : question-4dd62735b90864a75220e09b302500bc
+  problems RECEIVING Conj output : 4
+  problems with COMPARABLE claims: 1
+  per-problem artifact disposition (why each was kept or dropped):
+      [sub ] conn:0793267d0d4d: inline-not-json=6
+      [sub ] conn:07c58a1d6b34: inline-not-json=6
+      [sub ] conn:13f027942733: inline-not-json=5
+      [SEED] question-4dd62735b90864a75220e09b302500bc: claim=71
+  claim-bearing conjectures pooled: 71
+  claim-bearing on the seed problem: 71
+  D4 pooled (parent script unit) : 0.8898994580489265
+  D4 seed problem only (C11 unit): 0.8898994580489265
+  D4 inflation from pooling      : +0.000000
+  near-dup pooled                : 0.0
+  near-dup seed only             : 0.0
+
+  VERDICT: pooled and per-problem are IDENTICAL -- the confound cannot arise on this root, because no sub-problem produced a claim-bearing conjecture
+
+=== CROSS-PROBLEM CONFOUND on ../../experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6 ===
+  seed problem                   : question-64b724c4118320989925d111501a8e41
+  problems RECEIVING Conj output : 1
+  problems with COMPARABLE claims: 1
+  per-problem artifact disposition (why each was kept or dropped):
+      [SEED] question-64b724c4118320989925d111501a8e41: claim=214
+  claim-bearing conjectures pooled: 214
+  claim-bearing on the seed problem: 214
+  D4 pooled (parent script unit) : 0.8329445786412617
+  D4 seed problem only (C11 unit): 0.8329445786412617
+  D4 inflation from pooling      : +0.000000
+  near-dup pooled                : 0.017287525777719276
+  near-dup seed only             : 0.017287525777719276
+
+  VERDICT: pooled and per-problem are IDENTICAL -- the confound cannot arise on this root, because no sub-problem produced a claim-bearing conjecture
+

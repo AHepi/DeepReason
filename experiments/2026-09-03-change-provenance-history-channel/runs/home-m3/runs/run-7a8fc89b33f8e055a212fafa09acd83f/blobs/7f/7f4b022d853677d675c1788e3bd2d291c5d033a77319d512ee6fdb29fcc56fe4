@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim that preference 'inevitably smuggles induction' is too strong because it ignores Popper's specific distinction between theoretical probability and pragmatic verisimilitude (truth-likeness). Popper argues that while corroboration does not increase the logical probability of a theory being true, the better-corroborated theory is rationally preferred as the one closest to the truth based on critical discussion, not on an inductive assumption that the future will resemble the past. The target fails to address this non-inductive rationale for preference, conflating 'acting on the best available theory' with 'expecting future success based on past frequency,' which Popper explicitly rejects in favor of acting on the theory that has withstood the severest attempts at falsification.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates the descriptive fact of survival with the normative justification for preference. Popper's problem asks if preferring the better-corroborated theory is defensible *on his own terms* (which reject induction). The target argues preference is rational simply because the theory is 'the only one left standing.' However, if all surviving theories are equally false (as Popper holds), and corroboration offers no probabilistic guidance for the future, then selecting the 'survivor' for practical action is functionally identical to an inductive bet that past survival predicts future utility. By admitting the preference is not based on truth or probability, yet still advocating for the selection of the survivor for *action*, the target smuggles in a pragmatic form of induction (assuming the environment of tests remains stable enough for past survival to matter) without acknowledging this cost, thereby failing to resolve the tension Popper identified.",
+      "counterexample": null,
+      "premise": "Popper explicitly rejected the idea that past success (corroboration) provides any logical basis for expecting future success, labeling such expectations as inductive.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration is strictly retrospective and offers no predictive power, what non-inductive principle allows a scientist to prefer Theory A over Theory B for a high-stakes future application?"
+    }
+  ]
+}

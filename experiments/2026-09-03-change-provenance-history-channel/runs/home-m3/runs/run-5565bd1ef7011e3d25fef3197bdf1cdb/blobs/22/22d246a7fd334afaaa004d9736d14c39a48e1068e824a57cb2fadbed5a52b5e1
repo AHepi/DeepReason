@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, critical rationality of 'verisimilitude-tracking,' but accepting this costs the certainty of progress and admits that science operates on a metaphysical faith in the uniformity of nature which cannot itself be tested.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which requires induction and is impossible) and 'critical preference' (which selects the theory with the highest surviving content and least falsity). Preference is not a probability assignment but a bet on truth-likeness (verisimilitude) based on severe testing. The cost is acknowledging that while we can rationally prefer Theory A over B, we cannot know if A is actually closer to the truth than B, rendering scientific progress a hopeful conjecture rather than a guaranteed accumulation.",
+    "counterconditions": [
+      "If the Tichý/Miller proof holds that verisimilitude comparisons are logically impossible for false theories, then the mechanism collapses into irrationalism.",
+      "If Popper's own actions imply an inductive belief in future success rather than a logical comparison of content, the preference smuggles induction back in.",
+      "If the 'metaphysical faith' required is indistinguishable from the inductive principle Popper rejected, the distinction is merely verbal."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "rebutted",
+        "note": "The criticism claims the mechanism redefines preference as 'focus of attention.' This is incorrect; the proposal defines preference as a 'critical bet on verisimilitude' grounded in logical content comparison, not psychological attention. This directly addresses action (building bridges) by framing it as acting on the best available critical map, not the most probable one."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The proposal explicitly separates 'propensity' (an objective physical chance within a theory) from 'corroboration' (a report on past tests). The mechanism relies solely on corroboration reports to estimate verisimilitude, avoiding the conflation the criticism alleges."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0782cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "revised",
+        "note": "Revised to explicitly state that the 'pragmatic' element is not an evolutionary imperative but a logical requirement of critical rationality: one must act on the best-tested theory to maximize the chance of finding errors, thereby directly answering whether it smuggles in induction (it does not, if viewed as error-elimination)."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Expanded the 'cost' section in the claim and mechanism to explicitly analyze the loss of certainty: accepting this view costs the ability to claim science converges on truth, reducing it to a process of eliminating error without a guarantee of getting closer."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "While the Tichý/Miller proof challenges the *quantitative* definition of verisimilitude, the proposal relies on a *qualitative* intuition of content and survival which Popper maintained was sufficient for practical preference, even if formalization failed. The criticism assumes formalizability is a precondition for rational preference, which Popper denied."
+      },
+      {
+        "handle": "4fc91b549c7cf6671e60e3d5053e6fa0118bdc941a29b70585c021869b5c1edf",
+        "kind": "rebutted",
+        "note": "The proposal argues Popper's personal preference was consistent with his philosophy: he preferred better-corroborated theories not because he believed they were more likely true (induction), but because they offered more opportunities for refutation (critical rationality). His behavior reflects consistency with critical method, not hidden induction."
+      },
+      {
+        "handle": "511d2ecaffe3b9a762e5a5863e7ad2628d3a097ab35ff3fec64cad0d00a99a22",
+        "kind": "departure_declared",
+        "note": "Departing from the strict requirement that verisimilitude must be formally provable to be useful. The candidate asserts that a regulative ideal of truth-likeness, even if unprovable in specific cases, is sufficient to ground rational preference without induction."
+      },
+      {
+        "handle": "5d43a9c25315be3dc0114665380b1138afc924713ce907890005aaaa1687ac23",
+        "kind": "rebutted",
+        "note": "The criticism assumes rationality requires predictive certainty. The candidate rebuts this by defining Popperian rationality as the rigorous attempt to eliminate error. Popper's engagement was rational precisely because it was critical, not because it was inductively secure."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

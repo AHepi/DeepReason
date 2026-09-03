@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes a 'Reduction' relation but fails to define the specific mechanism of reduction, instead offering a conditional refutation scenario. The problem requires naming the kind of relation AND stating what it is refuted if; however, the statement 'it is REFUTED IF the fitness of a theory cannot be measured independently...' describes a condition under which the reduction fails, rather than defining the reduction itself (i.e., how 'Critical Preference' logically or causally becomes 'Survival of the Fittest'). Furthermore, the reference to 'SRC_002' introduces an external endpoint not established in the immediate context, making the relation unverifiable and abstract rather than substantive. A valid reduction must demonstrate that the properties of the reduced concept are fully explainable by the reducing concept, which is not attempted here.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

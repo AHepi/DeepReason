@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, methodological rule of 'risk-taking' rather than a probabilistic inference, but accepting this defense costs the scientist any claim that their choice is 'likely true' or rationally superior in terms of expected utility, reducing scientific progress to a gamble on boldness without epistemic security.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'logical probability' (which remains low for highly testable theories) and 'methodological preference' (which favors severity). It posits that choosing the best-corroborated theory is akin to a gambler choosing the horse with the most rigorous past performance not because it will win (induction), but because it offers the highest potential payoff (truth-content) if it survives the next test. The mechanism relies on redefining 'rational action' as adherence to the rule of seeking falsification, not maximizing truth-probability.",
+    "counterconditions": [
+      "If the preference for corroborated theories implicitly assumes the future will resemble the past (uniformity of nature), then it smuggles in induction.",
+      "If 'verisimilitude' (truth-likeness) is required to justify the preference, and verisimilitude is logically incoherent for false theories (per Tichý/Miller), then the defense collapses.",
+      "If scientists act on corroboration because they believe the theory is 'more likely true,' then they are violating Popper's prohibition on probabilistic confirmation."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on Popper's formal definition of verisimilitude to justify the preference. Instead, it grounds the preference in the methodological rule of 'boldness' and 'severity,' rendering the Tichý/Miller critique of logical verisimilitude irrelevant to this specific defense strategy."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, the argument does not use 'truth-likeness' as a measurable quantity to prove superiority. It frames the preference as a strategic choice for high information content, bypassing the need for a coherent logical measure of verisimilitude."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "Revised to explicitly distinguish between the descriptive fact of survival (natural selection analogy) and the normative rule of 'seeking severe tests.' The candidate now clarifies that the normativity comes from the scientist's voluntary adoption of the goal 'find the truth via error elimination,' not from the survival itself."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "The claim and counterconditions have been structured to first present the strongest case for defensibility (methodological rule) and then the strongest case against it (smuggled induction/cost of uncertainty), directly addressing the dialectical requirement before stating the survivor."
+      },
+      {
+        "handle": "39376b7fe8617864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "The candidate argues that the normative justification is not derived from the biological mechanism itself, but from the parallel: just as evolution selects for fitness without foresight, science selects for severity without induction. The norm is self-imposed by the scientist aiming at truth, not inherent in the history of the theory."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de12e1470c5730a79d7431c6",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dichotomy by asserting that Popper's system allows for a third option: preference based on 'potential falsifiability' and 'severity' rather than 'probability' OR 'verisimilitude.' It argues that one can prefer a theory for its boldness without needing a coherent metric of truth-likeness."
+      },
+      {
+        "handle": "5f9249c623a92cb4f40954cc5ed9f9aa65593cfd400dc7eeccd621c30856357c",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' clause to the main claim: the cost is the abandonment of 'epistemic security' and the inability to claim the chosen theory is 'probably true,' reducing action to a high-stakes gamble."
+      },
+      {
+        "handle": "6741a06d8088515b255833dec9027762128dd19092a1ab9feadf4108cb3f39d4",
+        "kind": "revised",
+        "note": "Clarified that the defense does not sidestep the induction charge but meets it head-on by redefining the basis of preference. It admits that if 'rationality' requires probabilistic assurance, Popper fails; but if 'rationality' means 'best strategy to eliminate error,' he succeeds. The tension is resolved by changing the definition of rational action."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["biological_evolution_by_natural_selection"],
+      "shared_structure": [
+        "Selection occurs based on past performance (survival/tests) without guarantee of future success.",
+        "The mechanism is retrospective (filtering failures) rather than prospective (predicting winners).",
+        "Preference for the 'fittest' or 'best-tested' is a heuristic for potential, not a proof of outcome."
+      ],
+      "disanalogies": [
+        "Biological survival is descriptive and blind; scientific preference is normative and intentional.",
+        "Organisms do not choose to be tested; scientists actively design severe tests.",
+        "Evolution has no goal of 'truth'; science explicitly aims at truth (even if asymptotically)."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the fittest organism without knowing the future environment, we bet on the best-corroborated theory without knowing the next test.",
+        "The rationality of the bet lies in the rigor of the filtering process, not in the probability of the winner."
+      ],
+      "overturn_conditions": [
+        "If the universe is shown to be non-uniform such that past severity guarantees nothing about future structure.",
+        "If it is proven that acting on corroboration inevitably requires an unconscious inductive leap."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

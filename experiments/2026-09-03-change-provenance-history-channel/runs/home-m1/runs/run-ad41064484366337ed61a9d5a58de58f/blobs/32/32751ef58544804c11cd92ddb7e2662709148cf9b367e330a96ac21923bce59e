@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'corroboration' as a non-probabilistic indicator of resilience to guide action, but it fails to solve the problem's specific challenge regarding the Tichý-Miller theorem. The prompt explicitly asks what accepting the defense 'costs,' and the target omits the critical cost: within Popper's own formal framework, the concept of 'verisimilitude' (truth-likeness) required to justify preferring one unrefuted theory over another was proven logically incoherent by Tichý and Miller. By asserting the preference is defensible without addressing how to navigate this formal collapse of verisimilitude, the target smuggles in an intuitive notion of 'fitness' that lacks the logical grounding Popper's strict anti-inductivism demands, thereby failing to make the strongest case for the defense as requested.",
+      "counterexample": null,
+      "premise": "The Tichý-Miller theorem demonstrates that within Popper's formal definitions, one cannot consistently define 'verisimilitude' to compare false theories, undermining the logical basis for preferring a 'better-corroborated' theory if corroboration is meant to indicate proximity to truth.",
+      "premise_evidence": null,
+      "successor_question": "How can a Popperian agent rationally prefer Theory A over Theory B based on past tests if the formal concept of 'truth-likeness' needed to interpret those tests as signs of superiority is logically undefined?"
+    }
+  ]
+}

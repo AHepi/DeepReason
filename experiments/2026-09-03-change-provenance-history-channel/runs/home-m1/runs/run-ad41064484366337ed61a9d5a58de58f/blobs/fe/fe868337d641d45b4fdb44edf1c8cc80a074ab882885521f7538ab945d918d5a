@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-justificational 'critical choice' grounded in the methodological rule to test the most vulnerable (and thus most informative) surviving theory; however, accepting this costs the scientist any rational assurance that the preferred theory will actually work in practice, reducing the preference to a gamble on verisimilitude without a metric to verify it.",
+    "mechanism": "Reinterpret the scientist's preference as a commitment to the 'principle of transference' where choosing the best-tested theory is simply continuing the process of severe testing rather than halting at a probable truth. The mechanism distinguishes between 'acceptance for action' (which implies induction) and 'acceptance for further criticism' (which is purely Popperian). The defense argues that when Popper acts, he is not predicting success but selecting the target richest in potential falsifiers. The cost is the admission that this offers no pragmatic guarantee against failure, creating a gap between rational choice and practical reliability.",
+    "counterconditions": [
+      "If the agent requires a probabilistic guarantee of success before acting, the Popperian framework collapses into the induction it rejects.",
+      "If the Tichý-Miller theorem holds that verisimilitude cannot be compared between false theories, the 'richest target' heuristic loses its comparative ranking power.",
+      "If 'acting on a theory' inherently entails an expectation of future performance based on past results, the distinction between critical choice and inductive bet is merely semantic."
+    ],
+    "typicality": 0.75,
+    "analogy": {
+      "source_memory_refs": [
+        "Biological natural selection favors the 'fittest' survivor not because it guarantees future survival, but because it represents the current peak of adaptation to known pressures."
+      ],
+      "shared_structure": [
+        "Both systems select based on past survival against severe challenges (predators/tests).",
+        "Both explicitly reject the guarantee that past survival ensures future survival (the environment/test conditions may change).",
+        "Selection is a report on current status, not a prophecy of future endurance."
+      ],
+      "disanalogies": [
+        "Biological selection is a causal, blind process without agency, whereas scientific preference is a conscious, normative methodological decision.",
+        "In biology, 'fitness' is defined strictly by reproductive success (a form of verification), whereas in Popper's science, 'corroboration' explicitly denies verifying truth or probability.",
+        "A biological organism cannot choose to test itself further; a scientist chooses the best-corroborated theory specifically to try to destroy it next."
+      ],
+      "transfer_claims": [
+        "Just as an evolutionary biologist prefers the fittest species as the best subject for studying adaptation without claiming it will never go extinct, a Popperian scientist prefers the best-corroborated theory as the best subject for criticism without claiming it will not fail.",
+        "The 'cost' in both domains is the same: acting on the 'fittest' or 'best-tested' entity carries the risk of immediate failure if conditions shift, yet it remains the only rational starting point."
+      ],
+      "overturn_conditions": [
+        "If biological fitness could be shown to logically entail future survival probabilities, the analogy would support induction rather than critical rationalism.",
+        "If the scientist's goal is defined as 'successful prediction' rather than 'error elimination', the biological analogy fails to justify the preference."
+      ]
+    },
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The candidate explicitly adopts the 'critical rational choice' framing mentioned in the criticism but clarifies that this choice is methodological (for further testing) rather than a disguised justification for action, thereby addressing the false dichotomy by refining the definition of 'preference'."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address the coexistence of multiple unrefuted theories by introducing the criterion of 'severity of tests passed' as the tie-breaker, ensuring the choice is not arbitrary among survivors."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "departure_declared",
+        "note": "Departing from the requirement to provide a 'pragmatic bridge' to success; the candidate asserts that Popper's terms strictly forbid such a bridge, and the cost of the solution is exactly the absence of this inductive comfort."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The analogy to evolution is used descriptively to illustrate the lack of guarantee, not normatively to justify future success. The rebuttal clarifies that pointing out the lack of induction in the analogy supports, rather than smuggles in, Popper's rejection of induction."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "revised",
+        "note": "Clarified the distinction between causal explanation and normative justification by framing the preference as a 'methodological rule' (normative) that mimics the structure of survival (causal) without deriving 'ought' from 'is'."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "The claim that this 'smuggles in induction' is rebutted by emphasizing that the 'bet' is acknowledged as irrational in the probabilistic sense; the rationality lies solely in the efficiency of error detection, not in expected utility."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "revised",
+        "note": "Refined the argument to separate 'methodological acceptance' (tentative use for testing) from 'probabilistic weighting,' explicitly stating that the former does not assume the latter, thus avoiding the conflation charged."
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "rebutted",
+        "note": "Acknowledges the Tichý-Miller problem but argues that Popperians can still rank theories by 'test severity' and 'survival' even if formal verisimilitude is undefined, shifting the metric from truth-likeness to informational content."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

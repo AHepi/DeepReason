@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'Evolutionary Epistemology' to justify preferring better-corroborated theories as the 'fittest survivors,' but this analogy smuggles in the very induction Popper rejected. By arguing that past survival (corroboration) makes a theory a robust instrument for *future* problem-solving, the target implicitly assumes the uniformity of nature—that the conditions which allowed a theory to survive past tests will persist or recur. Popper explicitly rejected any inference from past success to future reliability as inductive; therefore, framing the preference as a bet on the 'currently fittest' for *future* utility fails to remain within Popper's non-inductive terms and collapses into the pragmatic induction the prompt asks to avoid.",
+      "counterexample": null,
+      "premise": "Popper rejects any inference from past test survival to future reliability as a form of induction.",
+      "premise_evidence": null,
+      "successor_question": "Can a preference for action be formulated that relies solely on the logical content of surviving tests without assuming any continuity between past and future environmental conditions?"
+    }
+  ]
+}

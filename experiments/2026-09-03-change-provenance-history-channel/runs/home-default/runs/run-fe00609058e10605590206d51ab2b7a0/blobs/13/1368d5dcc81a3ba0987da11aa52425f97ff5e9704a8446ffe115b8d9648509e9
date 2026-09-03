@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, methodological rule for maximizing truth-content exposure (verisimilitude), but accepting this defense costs the scientist any claim to probabilistic safety or predictive certainty, forcing a reliance on critical rationality rather than justified belief.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'probability' (logical likelihood) and 'corroboration' (historical test performance). It posits that preferring the better-corroborated theory is not an inductive inference that the theory is *true* or *probable*, but a strategic choice to select the theory that has survived the most severe attempts at falsification, thereby offering the highest potential truth-content (verisimilitude) without asserting its likelihood. This resolves the tension by redefining 'preference' as a rule of action (methodology) rather than a statement of belief (epistemology).",
+    "counterconditions": [
+      "If Tichý and Miller's proof of the incoherence of Popper's formal verisimilitude definition holds universally, then the metric for 'better' corroboration collapses.",
+      "If the act of preferring a theory for future action implicitly assumes the future will resemble the past (uniformity of nature), then induction is smuggled in regardless of methodological labeling.",
+      "If scientists actually rely on probabilistic heuristics in practice despite Popper's prescriptions, the normative defense fails to describe actual rational agency."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The candidate acknowledges Tichý and Miller's critique of Popper's *formal quantitative* definition of verisimilitude but argues that Popper's *qualitative* intuition—that a theory surviving severe tests is a better candidate for truth-likeness—remains a valid methodological heuristic even without a perfect logical calculus. The defense rests on the procedural value of severe testing, not the failed arithmetic of truth-content minus falsity-content."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, the candidate distinguishes between the failed formalization and the core philosophical move: corroboration reports past performance, not future probability. The preference is justified by the goal of finding high-content theories, not by a logical guarantee of their truth, thus sidestepping the specific failure of the formal verisimilitude definition."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "The mechanism now explicitly frames the preference as a 'normative methodological rule' rather than a descriptive analogy to natural selection. It clarifies that the justification is not 'survival explains preference' but 'critical rationality mandates selecting the most severely tested option to maximize error elimination,' directly addressing the normative core."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "The claim and mechanism have been structured to first present the strongest case for defensibility (methodological rule for truth-content) and then immediately articulate the strongest counter-case (smuggled induction via uniformity assumption) before delivering the verdict, satisfying the dialectical requirement."
+      },
+      {
+        "handle": "39376b7fe8717864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate description with normativity; it explicitly argues that the normative justification stems from the imperative to eliminate error (critical rationalism), using the descriptive fact of survival only as an indicator of where error has *not yet* been found, not as the source of the norm itself."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6",
+        "kind": "rebutted",
+        "note": "The candidate addresses verisimilitude not as a probabilistic measure but as a comparative estimate of truth-content based on severity of tests. It rejects the false dichotomy by arguing that one can prefer a theory for its high content and survival without assigning it higher probability, maintaining Popper's strict separation."
+      },
+      {
+        "handle": "5f9249c623a92cb4f40954cc5ed9f9aa65593cfd400dc7eeccd621c30856357c",
+        "kind": "revised",
+        "note": "The claim now explicitly states the cost: 'accepting this defense costs the scientist any claim to probabilistic safety or predictive certainty.' It details that the trade-off is exchanging the comfort of induction for the riskier, yet logically cleaner, stance of critical fallibilism."
+      },
+      {
+        "handle": "6741a06d8088515b255833dec9027762128dd19092a1ab9feadf4108cb3f39d4",
+        "kind": "rebutted",
+        "note": "The candidate directly confronts the 'smuggling' charge by arguing that if 'preference' is strictly limited to 'choice of action for testing' and not 'belief in truth,' induction is not required. It admits that if scientists feel *confidence*, they are indeed smuggling induction, but argues Popper's system only defends the *choice*, not the feeling."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_pressure",
+        "legal_adversarial_system"
+      ],
+      "shared_structure": [
+        "Survival of the fittest hypothesis mirrors survival of the fittest organism under predation.",
+        "Corroboration functions like a legal verdict of 'not guilty' (failed to disprove) rather than 'innocent' (proven true).",
+        "Preference is based on track record of resisting attacks, not intrinsic probability of correctness."
+      ],
+      "disanalogies": [
+        "Biological survival is descriptive and causal; scientific preference is normative and methodological.",
+        "Organisms do not choose their strategies; scientists consciously adopt methodological rules.",
+        "Legal systems aim for finality; Popperian science aims for perpetual openness to revision."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the organism that survived the harshest winter without assuming it is immortal, we bet on the corroborated theory without assuming it is probable.",
+        "The 'not guilty' verdict justifies release (action) without justifying belief in absolute innocence."
+      ],
+      "overturn_conditions": [
+        "If the environment changes such that past survival traits become fatal flaws (radical paradigm shift), the analogy breaks.",
+        "If the legal system is shown to systematically convict the innocent despite adversarial testing, the 'not guilty' analogy fails."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

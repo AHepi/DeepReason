@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) to justify preferring better-corroborated theories without induction, but this concept was rigorously refuted by Tichý and Miller in 1974, who proved that under Popper's own definitions, no false theory can be closer to the truth than another. By building its central mechanism on a logically incoherent concept that Popper himself eventually admitted was untenable, the target fails to provide a defensible case on Popper's terms and inadvertently smuggles in the very inductive assumption it claims to avoid: that past severity correlates with future truth-likeness.",
+      "premise": "Popper's formal definition of verisimilitude was proven logically inconsistent by Tichý and Miller (1974), rendering it unable to support non-inductive preference rules.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "If verisimilitude is logically incoherent as a static measure, can Popper's preference rule be saved solely by evolutionary epistemology without reintroducing probabilistic assumptions about survival?"
+    }
+  ]
+}

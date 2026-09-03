@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-probabilistic metric to justify preferring better-corroborated theories. However, this collapses under Popper's own strictures because without a probabilistic assumption that nature is uniform (i.e., that the future will resemble the past), there is no rational basis to assume a theory with high verisimilitude today will remain successful or 'closer to truth' in future applications. By asserting that surviving severe tests makes a theory the 'best approximation' for action, the target implicitly smuggles in the very inductive principle Popper rejected: that past performance is a reliable guide to future utility. If one cannot assign a higher probability of success to the corroborated theory, the preference becomes arbitrary, not rational; if one can, one has reintroduced induction.",
+      "premise": "Acting on a theory logically entails an expectation of its future success, which requires an inductive bridge that verisimilitude alone cannot provide without probabilistic assumptions.",
+      "counterexample": null,
+      "successor_question": "If verisimilitude cannot be measured independently of probabilistic assumptions about the structure of the world, does Popper's distinction between 'corroboration' and 'probability' ultimately fail to support any rational preference for action?",
+      "premise_evidence": null
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference that the future will resemble the past, but as a critical-rational decision rule to maximize the content of our conjectures while minimizing the risk of immediate error; however, accepting this defense costs us any guarantee of practical success, reducing scientific action to a gamble on the 'most informative survivor' without assurance that it will continue to survive.",
+    "mechanism": "The mechanism is 'Critical Pragmatism': since all theories are equally unproven (probability zero), the rational agent chooses the theory with the highest empirical content (best tested so far) because it offers the most opportunities for falsification and thus the fastest route to truth approximation (verisimilitude), whereas choosing a less-tested theory would be an arbitrary retreat from critical scrutiny. This avoids induction by treating corroboration as a historical report of survival, not a predictor of future performance.",
+    "counterconditions": [
+      "If the Tichý-Miller theorem holds that verisimilitude cannot be formally defined within Popper's framework, then the claim that we are approximating truth collapses.",
+      "If the choice between two unfalsified theories relies on the assumption that the one that survived severe tests is *more likely* to solve a new problem, then induction has been smuggled back in under the guise of 'content'.",
+      "If Popper's own admission that we must 'act' implies a belief in the stability of natural laws, then the distinction between corroboration and probability is merely semantic."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dichotomy between 'non-rational convention' and 'critical rational choice.' My candidate explicitly adopts the 'critical rational choice' path, arguing that the preference is rational because it maximizes testability (content), not because it predicts success. This directly addresses the 'actual solution' cited by the critic."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "rebutted",
+        "note": "The critic argues the 'Eliminative Default' fails when multiple theories coexist. My mechanism ('Critical Pragmatism') resolves this by selecting the theory with the *highest empirical content* (most severe tests passed), not just any surviving theory. This provides a discriminating criterion for coexisting unrefuted theories."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "revised",
+        "note": "Revised the 'cost' section to explicitly state that without an inductive bridge, the 'fittest' survivor offers no assurance of solving *new* problems, only that it has solved *old* ones. This clarifies the specific cost of the evolutionary analogy: it explains survival history, not future utility."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf7eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The critic claims the evolutionary analogy smuggles in induction. I rebut this by distinguishing between the *causal* explanation of survival (evolution) and the *normative* reason for choice (maximizing content). We choose the survivor not because it *will* survive, but because it represents the boldest conjecture currently standing, which is the goal of critical rationalism."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "rebutted",
+        "note": "The critic conflates causal explanation with normative justification. My candidate separates these: the causal story is evolution/selection; the normative justification is the logical imperative to test the strongest claims. The scientist prefers the corroborated theory because it is the best target for further criticism, not because it is causally guaranteed to work."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "The 'pragmatic bet' described is not a bet on *success* (which would be inductive) but a bet on *informative failure*. Choosing the well-corroborated theory allows us to learn more if it fails. If it succeeds, we gain nothing new logically, but we maintain the status quo of the best-tested knowledge. This avoids assuming future resemblance."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "departure_declared",
+        "note": "I declare a departure from the idea that 'methodological acceptance' requires any assumption of future success. My candidate posits that methodological acceptance is purely a commitment to use the theory as the basis for *further testing*, not as a reliable guide for action in the sense of predicting outcomes."
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "revised",
+        "note": "Revised the mechanism to acknowledge the Tichý-Miller theorem's impact. Instead of claiming we *know* we are approaching truth via verisimilitude, the candidate now frames verisimilitude as a 'regulative ideal' or hope, rather than a formally definable metric we can calculate. This mitigates the criticism that the concept is undermined."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["biological_natural_selection", "championship_sports_tournaments"],
+      "shared_structure": [
+        "Survival of the fittest does not guarantee future victory, only past resilience.",
+        "Choosing the current champion is rational because they have defeated the strongest opponents, not because they are invincible.",
+        "The goal is to find the strongest competitor, not to predict the outcome of the next match with certainty."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of truth, whereas science explicitly aims at truth-likeness.",
+        "In sports, the rules remain constant; in science, the 'tests' (nature's challenges) can change fundamentally.",
+        "A biological survivor reproduces; a scientific theory only persists until falsified."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the heavyweight champion despite knowing they can lose, we act on the best-corroborated theory despite knowing it might be false.",
+        "The rationality of the choice lies in the quality of the opposition defeated, not in the certainty of the result."
+      ],
+      "overturn_conditions": [
+        "If nature is shown to be maliciously deceptive (e.g., changing laws specifically to fool our best theories), the pragmatic bet fails.",
+        "If it is proven that less-tested theories consistently solve new problems better than well-tested ones, the content-based preference is irrational."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

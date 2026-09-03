@@ -1,0 +1,30 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@d5ed0647325b6ccada2564be: program:reasoning_observation_pending
+- reason-counter@360d8a7c9d4b72caaa1ef511: program:reasoning_observation_pending
+- reason-counter@13347268f7d0b07c51fc2721: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Preferring the better-corroborated theory is defensible on Popper's terms not as an inductive inference that the future will resemble the past, but as a non-inductive methodological rule to maximize the severity of future tests (truth-likeness potential), provided one accepts the 'departure' that this preference relies on a pragmatic, non-justificatory faith in the uniformity of nature which Popper explicitly acknowledged as necessary for action but excluded from the logic of science.","counterconditions":[{"case":"If preferring a theory based on past survival necessarily implies believing it will survive future tests, then the distinction between corroboration and probability collapses into induction.","checker_spec":null,"eval":"observation"},{"case":"If Popper's concept of verisimilitude (truth-likeness) is logically incoherent as critics argue, then it cannot serve as the objective ground for preference without smuggling in probabilistic assumptions.","checker_spec":null,"eval":"observation"},{"case":"If the 'pragmatic faith' in uniformity is required to act, then Popper's rejection of induction is merely semantic, as the practical outcome is identical to inductivism.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The mechanism distinguishes between 'logical corroboration' (a report of past test severity) and 'pragmatic preference' (a decision rule for action). It argues that choosing the theory with higher content and better corroboration maximizes the chance of detecting error (falsification) in the next step, rather than maximizing the probability of truth. This avoids induction because it does not claim the preferred theory is *more likely true*; it claims it is *better suited for critical testing*. The apparent circularity of projecting past success into future utility is resolved by framing it as a conventionalist decision to play the game of science optimally, while admitting that acting on any theory outside the laboratory requires a metaphysical faith that Popper conceded was unavoidable for living beings but irrelevant to the objective validity of the scientific method itself.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@d5ed0647325b6ccada2564be, reason-counter@360d8a7c9d4b72caaa1ef511, reason-counter@13347268f7d0b07c51fc2721
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

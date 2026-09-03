@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories in action is defensible without smuggling induction by re-framing 'preference' as a methodological rule for maximizing falsifiability potential rather than an inductive bet on truth; however, this defense costs the agent any claim to pragmatic reliability or rational assurance that the chosen theory will not fail catastrophically in application.",
+    "mechanism": "The mechanism distinguishes between 'corroboration as probability' (which Popper rejects) and 'corroboration as a track record of surviving severe tests,' arguing that preferring the latter for action is not an inductive inference that the future will resemble the past, but a strategic choice to employ the theory that has currently withstood the most rigorous attempts at refutation, thereby keeping the error-elimination process most active. The preference is normative for the growth of knowledge, not descriptive of nature's uniformity.",
+    "counterconditions": [
+      "If the agent requires a guarantee of safety or reliability for critical actions (e.g., building a bridge), the Popperian stance collapses into irrationalism because it explicitly denies that past success predicts future performance.",
+      "If the definition of 'acting on' implies relying on the theory's truth rather than merely its current unfalsified status, the preference smuggles in induction by assuming the unobserved behaves like the observed.",
+      "If the Tichý-Miller critique of verisimilitude holds, then comparing 'better-corroborated' theories lacks a logical foundation for claiming one is closer to truth, undermining the rationale for preference even as a methodological tool."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The criticism conflates the justification for 'preference in action' with the formal definition of 'verisimilitude.' My candidate does not rely on proving Theory A is closer to truth than Theory B via Tichý-Miller's target; it relies on the procedural rule that the theory which has survived more severe tests is the best available instrument for further testing and tentative action, regardless of whether we can formally quantify its distance from truth."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Rebutted similarly: The defense does not require a successful logical definition of verisimilitude to justify preference. It justifies preference based on the asymmetry of falsification: a well-tested theory is logically less likely to be falsified immediately than an untested one, making it the rational choice for temporary reliance without invoking inductive probability."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "Revised to explicitly address the normative/descriptive gap. The candidate now clarifies that the 'natural selection' analogy is strictly limited to explaining the survival of theories, while the normative justification for *preferring* them rests on the decision-theoretic argument that choosing the best-tested theory maximizes the chance of detecting errors quickly if they exist, which is a normative goal of critical rationalism."
+      },
+      {
+        "handle": "17f09fa02242185436263f3c9b86d093542003762a8b858119658fbe11d26d6",
+        "kind": "rebutted",
+        "note": "The candidate explicitly distinguishes 'preferring for criticism' vs 'preferring for action' by defining 'action' in the Popperian sense as 'tentative adoption for the purpose of further testing in real-world conditions.' It rejects the premise that 'acting on' implies a belief in reliability, thus avoiding the collapse described in the criticism."
+      },
+      {
+        "handle": "205c867384d2a55776e20f3ebdbf380a88e3596428976e9fb159a5d5fe0e8fbb",
+        "kind": "departure_declared",
+        "note": "I declare a departure from the requirement to provide 'pragmatic reliability.' The candidate accepts the cost that Popperian action offers no reliability, only the best available guess that is most open to correction. This is a feature, not a bug, of the system."
+      },
+      {
+        "handle": "269bca3c11013395f75db136f55665c38801f5759a38bfef887ba32a9a7294d4",
+        "kind": "rebutted",
+        "note": "The mechanism of 'acceleration of falsification' does not assume the future resembles the past. It assumes only that if a theory is false, it is more likely to show its falsehood under severe testing than an untested one. This is a logical point about test severity, not an inductive projection of past success rates."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe0b7e32ca704f",
+        "kind": "revised",
+        "note": "Revised to ensure the dialectical structure is explicit. The claim now clearly articulates the strongest case for defensibility (methodological consistency) and the strongest case against it (lack of pragmatic assurance), before concluding that the former survives only at the high cost of the latter."
+      },
+      {
+        "handle": "343e10b5bcf5a8a8cda3a18e5ff5334fcad05a2527c61f22d4b83ec4299bec0b",
+        "kind": "rebutted",
+        "note": "The tension regarding 'building a bridge' is resolved by admitting that Popper cannot rationally guarantee the bridge won't fall. The 'defense' is that using the best-tested physics is the only rational way to *learn* if the bridge will fall before it does so catastrophically, or to minimize the risk of unknown errors. It concedes the lack of reliability charge to save the anti-induction stance."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim that preferring a corroborated theory 'necessarily assumes the uniformity of nature' conflates Popper's specific rejection of inductive logic (justifying truth/probability) with his accepted methodology of critical preference. Popper explicitly defended acting on the best-tested theory not as an inductive inference that the future will resemble the past, but as a rational decision rule based on the current state of criticism; the target fails to address Popper's distinction between logical justification (which he denies) and pragmatic preference (which he affirms), rendering its assertion that such preference 'smuggles in induction' a mischaracterization of Popper's actual position on scientific action."
+    }
+  ]
+}

@@ -1,0 +1,274 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule for maximizing 'learning velocity' rather than an inductive inference of truth probability. The cost is accepting that acting on a theory is a pragmatic gamble with no logical guarantee of success, severing the link between scientific rationality and prospective reliability.",
+      "mechanism": "Reinterpret 'preference' not as a belief in higher truth-likeness (verisimilitude) but as a strategic heuristic to expose errors faster. A highly corroborated theory has survived severe tests, meaning it has high informational content; preferring it for action maximizes the potential severity of future tests if it fails, or solidifies a robust basis for further conjecture if it holds. This avoids induction by treating corroboration as a historical report card, not a predictor.",
+      "counterconditions": [
+        "If the agent requires a logical guarantee that the chosen theory will not fail in the next instance (e.g., building a bridge), this defense collapses.",
+        "If 'acting on' implies believing the theory is probably true, the defense fails."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The defense does not rely on biological analogy conflating procedure with rationality. Instead, it relies on Popper's explicit distinction between the logical status of a theory (unchanged) and the methodological decision to prefer theories that have withstood severe tests to accelerate error elimination. The rationality is instrumental (speed of learning), not evolutionary fitness."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate explicitly abandons verisimilitude as the ground for preference. It substitutes 'learning velocity' and 'severity of potential falsification' as the criteria, aligning with Popper's later retreat from formal verisimilitude while retaining the intuitive drive to prefer bold, tested theories."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "The claim now explicitly frames the 'strongest case' for defensibility as the 'learning velocity' argument, while the counterconditions outline the strongest case for the opposing view (that it smuggles induction when action requires certainty). The synthesis identifies the survival of the methodological defense at the cost of normative certainty."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The cost identified is precisely the loss of strong normativity regarding truth. The defense admits that preferring a theory is a 'pragmatic gamble,' confirming that the logical status remains non-inductive while the psychological/sociological act of preference is acknowledged as distinct from logical justification."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "No redefinition of probability occurs. The argument maintains Popper's strict separation: corroboration is a report of past performance. The preference is based on the *consequences* of choosing that report (faster error detection), not on equating corroboration with probability."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "revised",
+          "note": "The candidate now addresses the 'acting on' constraint directly by defining such action as a 'pragmatic gamble.' It concedes that for high-stakes action requiring certainty, Popper's framework offers no logical comfort, thus answering the specific challenge of engineering/application contexts."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference for corroborated theories inevitably smuggles induction back into Popper's system because 'acting on' a theory logically presupposes an expectation of its future success, which is an inductive leap. The only surviving defense is to admit that science operates on a 'faith' in the uniformity of nature that Popper tried to exclude, costing the system its claim to be purely deductive.",
+      "mechanism": "Analyze the pragmatics of action: to build a bridge using a corroborated theory is to bet that the future will resemble the past. Since Popper denies any logical bridge (probability) between past tests and future performance, the scientist's choice is arational or implicitly inductive. The 'strongest case' for the defense (methodological utility) fails when the stakes involve single-instance catastrophic failure where 'learning velocity' is irrelevant.",
+      "counterconditions": [
+        "If one can demonstrate a non-inductive principle of 'rational betting' that does not rely on future resemblance.",
+        "If 'acting on' can be decoupled from any expectation of success (e.g., acting solely to test)."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "This argument bypasses biological analogies entirely, focusing on the logical structure of practical reasoning (the problem of induction applied to praxis). It argues that procedural necessity *is* rational defensibility only if one accepts induction, which Popper rejects."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The argument does not rely on verisimilitude. It attacks the very possibility of a non-inductive preference for action, regardless of whether the metric is verisimilitude, corroboration, or utility."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "This candidate presents the 'smuggles induction' case as the primary claim, while the counterconditions serve as the steel-manned version of the opposing view (that a non-inductive preference is possible). The conclusion asserts the induction charge survives."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "It challenges the 'false dilemma' by asserting that the distinction between logical status and psychological fact is insufficient to save rationality. If the psychological fact drives action without logical support, the enterprise is arguably irrational by Popper's own strict standards."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "The claim is that *any* preference for the future based on the past is inductive, regardless of whether one calls it 'probability' or 'corroboration.' Renaming the metric does not solve the Humean gap."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "revised",
+          "note": "The candidate specifically targets the 'acting on' constraint, arguing that this is exactly where the smuggling occurs. Unlike testing, acting implies trust in future stability, which is the definition of induction."
+        }
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Popper's preference is defensible only if we redefine 'rationality' as 'commitment to error elimination' rather than 'maximization of expected utility.' The cost is a radical discontinuity between scientific rationality and everyday practical rationality, rendering scientists irrational agents in the context of daily life.",
+      "mechanism": "Propose a dual-aspect theory of rationality: Scientific Rationality (deductive, error-focused) vs. Practical Rationality (inductive, success-focused). Popper's defense works only within the sealed container of Science. When scientists 'act on' theories outside the lab, they switch modes. The contradiction arises from expecting one definition of rationality to cover both domains.",
+      "counterconditions": [
+        "If there is no clear boundary between 'scientific testing' and 'practical application'.",
+        "If Popper claims his logic applies to all rational human action."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departing from the attempt to unify procedural and rational defenses. Instead, this candidate declares a split: the defense holds only by compartmentalizing rationality itself."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Verisimilitude is irrelevant here; the mechanism is a semantic shift in the definition of 'rationality' across contexts."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "The strongest case for defensibility is the compartmentalization of rationality; the strongest case against is the impossibility of maintaining this split in real-world scientists. The survivor is the split, at the cost of coherence."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Accepts the critic's point that normativity is preserved logically but argues the cost is the fragmentation of the agent. It is not a false dilemma but a tragic duality."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Does not redefine probability; redefines the scope of rational agency."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "revised",
+          "note": "Directly addresses the 'acting on' problem by positing that scientists must become 'irrational' (in Popper's sense) to act safely, thus saving Popper's logic by sacrificing the scientist's consistency."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict terms and represents a performative contradiction: Popper the philosopher denies induction, but Popper the scientist (and his followers) practice it. The surviving view is that Popper's system is a normative ideal that describes how science *should* work logically, not how it *does* work psychologically, costing the theory its descriptive power.",
+      "mechanism": "Treat Popper's corpus as containing two distinct voices: the Logician (pure deduction) and the Methodologist (pragmatic advice). The contradiction is real and unresolved. The 'preference' is a necessary fiction for the Methodologist to function, which the Logician cannot justify. Acceptance means viewing Popperianism as a regulative ideal rather than a complete account of scientific reasoning.",
+      "counterconditions": [
+        "If Popper successfully integrated the methodological advice into the logical framework in later works.",
+        "If the 'preference' can be derived strictly from the logic of falsification without pragmatic additions."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Identifies the conflict not as a failed analogy but as an internal inconsistency in Popper's own project between his logical constraints and his methodological prescriptions."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Acknowledges the failure of verisimilitude as evidence of the broader failure to bridge the gap, reinforcing the claim of performative contradiction."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "Presents the 'indefensible' case as the survivor, while acknowledging the 'defensible' case exists only as a pragmatic stopgap. The cost is the descriptive adequacy of the philosophy."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Argues that distinguishing logical status from psychological fact doesn't solve the problem; it merely highlights the gap where the contradiction lives."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Contends that no amount of terminological precision (corroboration vs probability) resolves the functional need for induction in action."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "revised",
+          "note": "Focuses on the 'acting on' moment as the point where the Logician falls silent and the Methodologist takes over illegally, confirming the contradiction."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_011"
+      ]
+    },
+    {
+      "claim": "The preference is defensible via a 'propensity' interpretation of probability that Popper himself developed later, allowing corroboration to reflect an objective tendency of the theory to survive, thus avoiding subjective induction. The cost is adopting a controversial metaphysical stance on propensities that many find as problematic as induction itself.",
+      "mechanism": "Leverage Popper's later work on propensity theory. Corroboration indicates the objective propensity of a theory to withstand tests in a given situation. Preferring high-corroboration theories is preferring those with high objective survival propensities. This is not subjective induction (Hume) but recognition of objective chances.",
+      "counterconditions": [
+        "If the propensity interpretation is deemed circular or untestable.",
+        "If 'propensity' is just 'probability' renamed, violating Popper's initial constraint."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Moves away from biological analogy to metaphysical propensity, offering a distinct ontological ground for preference."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Uses propensity as an alternative to verisimilitude, attempting to solve the formal incoherence critics pointed out."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "Constructs the defense around propensity theory, while the counterconditions represent the standard objections to that theory, forming the 'strongest case' against it."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Asserts that propensity provides the missing normative link, making the preference more than just a psychological habit."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Explicitly engages with the definition of probability, arguing that propensity *is* the correct physicalist definition Popper sought, not a smuggling of classical probability."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "revised",
+          "note": "Addresses 'acting on' by suggesting we act on objective propensities, which is rational even without certainty, distinguishing it from Humean induction."
+        }
+      ],
+      "optional_refs": [
+        "SRC_009",
+        "SRC_013"
+      ]
+    },
+    {
+      "claim": "The dilemma is false because 'corroboration' functions as a second-order logical relation describing the *history* of testing, not a first-order prediction. Preference is simply the logical consequence of choosing the theory that currently imposes the tightest constraints on the world, maximizing the informative content of any future refutation. No induction or probability is involved, only a commitment to high informational yield.",
+      "mechanism": "Strictly logical analysis of 'informational content.' A well-corroborated theory has high empirical content (it says more). Choosing it maximizes the 'bang for the buck' of future testing. If it fails, we learn more. If it succeeds, we retain a powerful tool. This is a decision-theoretic move based on information theory, not inductive logic.",
+      "counterconditions": [
+        "If 'acting on' requires safety rather than informational yield.",
+        "If high content theories are too risky for practical application."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Grounds the defense in information theory and logic, completely bypassing biological or procedural analogies."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Avoids verisimilitude entirely by focusing on 'informational content' and 'constraint,' which remain valid in Popper's framework."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "Frames the 'informational yield' argument as the strongest defense, and the 'safety/risk' countercondition as the strongest attack (smuggling induction for safety). The survivor depends on the goal (learning vs. safety)."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Maintains that this is a purely logical/normative stance, not a psychological description."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Clarifies that no redefinition of probability is needed; the metric is 'information,' which is distinct from probability."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "revised",
+          "note": "Concedes that for 'acting on' in a safety-critical sense, this defense fails (supporting the critic), but holds firm for 'acting on' in a research-context sense."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_014"
+      ]
+    }
+  ]
+}

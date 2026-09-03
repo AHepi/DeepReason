@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes a 'Reduction' relation but defines the refutation condition as a failure of measurement independence ('fitness... cannot be measured independently'). This describes an epistemic or methodological dependency, not an ontological reduction where one entity constitutes another. By conflating the inability to measure fitness without predictive success with the definition of the preference itself, the target fails to establish the substantive 'Reduction' relation it claims, instead offering a circular constraint on verification that does not connect the endpoints as required.",
+      "premise": "A valid Reduction relation requires showing that the reduced entity is constituted by or identical to the base entity, not merely that its verification depends on the base entity's metrics.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Can you reformulate the relation as 'Dependence' if the core argument relies on measurement constraints rather than constitutive identity?"
+    }
+  ]
+}

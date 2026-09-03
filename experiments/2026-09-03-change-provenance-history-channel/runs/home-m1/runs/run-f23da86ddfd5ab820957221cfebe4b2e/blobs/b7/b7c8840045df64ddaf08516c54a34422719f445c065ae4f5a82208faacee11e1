@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, methodological rule of 'conjecture and refutation' that maximizes error elimination without assigning probability.",
+      "mechanism": "Error Elimination Principle: Preferring the theory with higher content and severe test survival is a strategic choice to expose errors faster, not a prediction of future success based on past frequency.",
+      "counterconditions": [
+        "If the preference implies any belief that the future will resemble the past.",
+        "If the choice is based on psychological comfort rather than logical severity.",
+        "If 'corroboration' is treated as a degree of confirmation rather than a report of past performance."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The 'metaphysical faith' charge conflates the pragmatic necessity of acting on the best-tested theory with an inductive justification. Popper allows a rational preference based on critical discussion, not faith."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Verisimilitude supports the goal of truth, but the *preference mechanism* itself relies on corroboration reports, not a calculated probability of truth-likeness which Popper admitted was difficult to formalize."},
+        {"handle": "[SRC_011] against SRC_001", "kind": "rebutted", "note": "Objectivity of method (severe testing) does not guarantee objectivity of result (truth), but it provides the only non-arbitrary basis for preference available to fallibilists."},
+        {"handle": "[SRC_014] against SRC_003", "kind": "rebutted", "note": "Projecting past survival into future preference is not an inductive leap if explicitly framed as a decision to subject the most vulnerable (high content) theory to further tests, regardless of the outcome."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The dichotomy is false; the third option is a critical preference based on informational content and test severity, distinct from both probabilistic induction and arbitrary convention."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "rebutted", "note": "Functional identity does not imply logical identity. While the behavior looks inductive, the justification (error elimination) is deductive in structure (modus tollens)."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "While the formal definition of verisimilitude faced issues, the intuitive drive to prefer theories that have withstood more attempts at falsification remains valid as a methodological heuristic independent of formal verisimilitude metrics."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "The cost is accepting that we have no reason to believe the preferred theory is *true* or *likely*, only that it is the most informative and rigorously tested instrument currently available for problem-solving."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_004"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction because any practical reliance on past test results to guide future action presupposes the uniformity of nature.",
+      "mechanism": "Pragmatic Induction Trap: To act on a theory is to expect it to work; expecting it to work because it worked before is the definition of induction, regardless of Popper's semantic disclaimers.",
+      "counterconditions": [
+        "If one can demonstrate a way to act on a theory without any expectation of its future reliability.",
+        "If 'preference' is strictly limited to choosing which theory to attack next, never which to use.",
+        "If the agent explicitly accepts that the preferred theory is likely to fail immediately."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "Revised to emphasize that even a 'methodological rule' requires a meta-inductive assumption that the rule itself yields better outcomes over time."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Verisimilitude cannot save the preference because we cannot know which theory is closer to truth without assuming our tests are reliable indicators, which is inductive."},
+        {"handle": "[SRC_011] against SRC_001", "kind": "rebutted", "note": "Distinguishing method from result fails here because the *choice* of method is itself driven by the hope (inductive belief) that it produces better results."},
+        {"handle": "[SRC_014] against SRC_003", "kind": "revised", "note": "Strengthened: The very act of selecting a theory for application based on 'past survival' is the inductive leap Popper sought to avoid."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The 'third option' of critical preference collapses into induction when examined pragmatically: why criticize A instead of B unless you suspect B is more robust?"},
+        {"handle": "[SRC_006] against SRC_004", "kind": "revised", "note": "Confirmed: Functional identity reveals logical identity in the context of action. If it walks like induction, it is induction."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The failure of formal verisimilitude underscores the impossibility of justifying preference without falling back on inductive intuitions."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "revised", "note": "The cost is high: admitting that Popper's system cannot account for scientific practice without contradicting its core anti-inductive stance."}
+      ],
+      "optional_refs": ["SRC_006", "SRC_014"]
+    },
+    {
+      "claim": "The preference is defensible only as a 'conventionalist decision' or a 'rational faith' in the progress of knowledge, which technically violates strict anti-inductivism but saves the utility of science.",
+      "mechanism": "Decisionism: Scientists adopt a convention to treat corroboration as a guide, acknowledging this is a non-rational (or extra-rational) commitment necessary for life and research.",
+      "counterconditions": [
+        "If Popper explicitly forbade all forms of conventionalism in theory choice.",
+        "If the decision can be derived purely logically without any volitional component.",
+        "If 'faith' is shown to be unnecessary for simple trial-and-error learning."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "Explicitly accepts the 'metaphysical faith' charge as the price of doing science, reframing it as a necessary postulate rather than a logical derivation."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Verisimilitude is the *goal* of the convention, not the justification for it. The convention is adopted *to pursue* verisimilitude."},
+        {"handle": "[SRC_011] against SRC_001", "kind": "rebutted", "note": "This view concedes that the preference is not objectively grounded in logic alone, but intersubjectively grounded in the scientific community's shared conventions."},
+        {"handle": "[SRC_014] against SRC_003", "kind": "rebutted", "note": "Admits the inductive leap but categorizes it as a voluntary 'decision' rather than a logical error, thus sidestepping the prohibition on *justified* induction."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "revised", "note": "Accepts the false dichotomy resolution: it is a convention, but a rational one given our aims, distinguishing it from arbitrary whim."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "rebutted", "note": "Acknowledges functional similarity to induction but argues the *status* differs because it is openly declared as a decision, not disguised as a logical proof."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Since formal verisimilitude failed, the conventionalist approach is the only remaining way to justify preference without logical contradiction."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "revised", "note": "The cost is abandoning the claim that science is purely rational/logical; it admits an element of non-rational commitment."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_013"]
+    },
+    {
+      "claim": "The debate dissolves if we view corroboration not as a reason for preference, but as a historical record that merely identifies which theories are currently 'unrefuted,' leaving preference as a biological/psychological inevitability unrelated to logic.",
+      "mechanism": "Descriptive Naturalism: Preference is a brute fact of human psychology (we trust what worked), not a logical norm. Popper's logic describes the status of theories, not the drivers of agents.",
+      "counterconditions": [
+        "If Popper intended his philosophy to prescribe how scientists *ought* to choose.",
+        "If 'preference' can be shown to be logically necessitated by the goal of truth.",
+        "If psychological explanations are deemed irrelevant to epistemological validity."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_012", "kind": "departure_declared", "note": "Departing from the assumption that the preference must be logically defensible; proposing it is merely a natural phenomenon."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Verisimilitude is irrelevant if preference is just a psychological reflex to unrefuted status."},
+        {"handle": "[SRC_011] against SRC_001", "kind": "rebutted", "note": "Objectivity of method is preserved in the testing, while the preference itself is subjective/biological."},
+        {"handle": "[SRC_014] against SRC_003", "kind": "rebutted", "note": "No inductive leap is made logically; the 'leap' is just how brains work, which is outside the scope of Popper's logical critique."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Avoids the dichotomy by removing the requirement for logical grounding of the preference entirely."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "rebutted", "note": "Functional identity is accepted, but the label 'induction' is reserved for logical arguments, not behavioral patterns."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Irrelevant to a descriptive account of why scientists prefer certain theories."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "revised", "note": "The cost is rendering Popper's normative project incomplete; he explains testing but not choosing."}
+      ],
+      "optional_refs": ["SRC_005", "SRC_015"]
+    }
+  ]
+}

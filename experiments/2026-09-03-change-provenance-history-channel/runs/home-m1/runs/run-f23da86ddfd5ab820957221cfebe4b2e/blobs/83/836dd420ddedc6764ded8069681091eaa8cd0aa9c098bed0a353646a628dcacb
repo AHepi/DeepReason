@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it explicitly concedes that the preference for better-corroborated theories relies on a 'metaphysical faith in the uniformity of nature.' Since Popper rejected induction precisely to avoid unjustified assumptions about nature's uniformity (the principle that the future will resemble the past), admitting this faith as a prerequisite for the methodological rule means the preference does smuggle back in the very inductive assumption Popper sought to eliminate. The target claims the preference is 'defensible on Popper's own terms,' but Popper's terms demand rationality without such metaphysical crutches; therefore, the argument is self-refuting.",
+      "counterexample": null,
+      "premise": "Popper's rejection of induction is fundamentally a rejection of the need for, or possibility of, justifying the principle of the uniformity of nature.",
+      "premise_evidence": null,
+      "successor_question": "If the methodological rule requires a 'metaphysical faith' in uniformity to function, in what sense does it differ from the inductive inference Popper claimed to have replaced?"
+    }
+  ]
+}

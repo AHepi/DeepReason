@@ -1,0 +1,92 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a procedural rule of 'conjectural risk management' that does not imply increased probability or truth-likeness, but merely selects the theory that has withstood the most severe attempts at falsification so far.",
+      "mechanism": "Procedural Rationality via Severe Testing: The scientist prefers Theory A over Theory B not because A is more likely to be true, but because A has survived tests that would have killed B. This is a decision rule based on current critical status, not an inductive inference about future performance or underlying probability.",
+      "counterconditions": [
+        "If the preference implies any expectation that the corroborated theory will succeed in future applications where uncorroborated ones fail.",
+        "If the preference relies on a hidden assumption that nature is uniform enough for past survival to predict future survival.",
+        "If the scientist acts with confidence rather than tentative acceptance."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_014] against SRC_003", "kind": "rebutted", "note": "The rebuttal clarifies that 'procedural necessity' IS the rational defensibility Popper offers; there is no separate 'logical justification' required beyond the logic of the situation (one theory is refuted, the other is not)."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "The analogy to evolution is illustrative, not foundational. The core argument rests on the asymmetry of falsification: preferring the non-refuted is the only non-inductive move available."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "This candidate explicitly avoids verisimilitude. It relies solely on the binary status of 'refuted' vs 'not yet refuted', which remains coherent even if comparative truth-likeness is not."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "revised", "note": "Added explicit section in mechanism detailing why the preference might be seen as smuggling induction (the counterconditions) to satisfy the 'strongest case for each answer' directive."},
+        {"handle": "[SRC_015] against SRC_004", "kind": "rebutted", "note": "The cost is indeed the loss of traditional normativity (justified true belief), but Popper replaces it with a normative rule of criticism. The dilemma is false because Popper redefines rationality as critical rather than justificatory."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "No appeal to verisimilitude is made. The preference is based on the history of testing, not a measure of closeness to truth."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The scientist's preference is defended as the individual instantiation of the systemic rule of error elimination. The normative justification for the scientist is identical to the system's: do not use what has been shown to be false."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Conjectural risk management resolves the tension by framing action as a gamble on the least-bad option known, not a prediction of success. It admits the possibility of failure without contradicting the basis of the choice."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_003", "SRC_009"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's framework because acting on a theory inherently involves an expectation of its future reliability, which cannot be derived from past falsifications alone without assuming the uniformity of nature.",
+      "mechanism": "The Pragmatic Induction Trap: To act on a theory (e.g., build a bridge using its physics) is to bet on its future validity. This bet is only rational if one assumes that the conditions which allowed the theory to survive past tests will persist. This assumption is inductive.",
+      "counterconditions": [
+        "If Popper can define a form of 'action' that entails no expectation of future success.",
+        "If the preference is purely aesthetic or psychological with no bearing on practical outcomes.",
+        "If the 'severe test' logically guarantees future performance in similar conditions."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_014] against SRC_003", "kind": "rebutted", "note": "The distinction between logical justification and pragmatic necessity collapses when 'pragmatic necessity' drives life-or-death decisions. If the action is rational, it requires justification; if the justification isn't inductive, it must be shown how."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "The biological analogy fails precisely because biological fitness is retrospective, whereas scientific action is prospective. Conflating them hides the inductive leap required to move from 'survived' to 'will work'."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "Even without verisimilitude, the act of preference implies a belief in utility. If utility isn't probability, what is it? If it's not grounded in induction, it's arbitrary."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "revised", "note": "Strengthened the 'strongest case' for the opposing view by emphasizing the inevitability of expectation in any non-trivial action."},
+        {"handle": "[SRC_015] against SRC_004", "kind": "rebutted", "note": "Accepting this view costs the rationality of science itself, reducing it to blind habit. Popper's attempt to save rationality by rejecting induction fails if action requires induction."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The problem persists even without verisimilitude. The issue is the temporal gap between past tests and future application."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The systemic level does not solve the individual's dilemma. The scientist must still decide whether to trust the theory, and that trust is inductive."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Risk management that ignores the probability of future failure (derived from past success) is not management; it's gambling. Calling it 'conjectural' doesn't remove the inductive structure of the gamble."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_001", "SRC_007"]
+    },
+    {
+      "claim": "The surviving solution is a 'Critical Conventionalism': we prefer corroborated theories not because they are probable or truthful, but because we have conventionally agreed to treat 'survival of severe tests' as the demarcation criterion for actionable knowledge, accepting that this convention itself is not rationally justifiable beyond its utility in error elimination.",
+      "mechanism": "Meta-Conventional Decision Rule: Popper's framework survives by admitting that the choice to act on corroborated theories is a non-rational (but critical) convention. It is a 'decision' in the existentialist sense, not a logical derivation. The cost is the abandonment of the hope for a fully rational foundation for scientific action.",
+      "counterconditions": [
+        "If the convention itself can be critically tested and potentially falsified.",
+        "If this leads to total relativism where any convention is as good as another.",
+        "If scientists cannot psychologically sustain action on a purely conventional basis."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_014] against SRC_003", "kind": "revised", "note": "Clarified that the 'procedural rule' is underpinned by a convention, bridging the gap between logical justification (impossible) and pragmatic necessity (contingent on the convention)."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "The analogy to evolution is replaced by a sociological account of scientific conventions. The 'non-inductive reason' is the mutual agreement to play the game of science by these rules."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "Verisimilitude is irrelevant here. The convention is about method, not truth content."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "revised", "note": "Explicitly constructed the 'strongest case' for both sides before synthesizing them into this conventionalist resolution."},
+        {"handle": "[SRC_015] against SRC_004", "kind": "rebutted", "note": "The cost IS the normativity of science in the classical sense, but it gains a new, evolutionary normativity based on the survival of the practice itself."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "By sidestepping truth-likeness entirely, this approach avoids the incoherence of verisimilitude."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The scientist's preference is justified by their participation in the convention. To opt out is to leave the practice of science."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Action is defensible as adherence to a convention that has historically minimized catastrophic errors, even if it doesn't guarantee success."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_012", "SRC_015"]
+    },
+    {
+      "claim": "Popper's preference is defensible only if we reinterpret 'corroboration' not as a property of the theory, but as a report on the state of our criticism: preferring a corroborated theory is simply acknowledging that we currently lack reasons to reject it, while we may have reasons to reject its rivals.",
+      "mechanism": "Epistemic Negation: The preference is negative, not positive. We do not choose Theory A because it is 'good'; we choose it because Theory B has been shown to be 'bad'. This preserves the asymmetry of falsification and avoids induction by refusing to attribute any positive weight to survival.",
+      "counterconditions": [
+        "If all competing theories are equally unrefuted.",
+        "If the absence of refutation is treated as evidence of reliability.",
+        "If the scientist feels 'confidence' rather than 'lack of objection'."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_014] against SRC_003", "kind": "rebutted", "note": "This reframes the 'procedural necessity' as a logical consequence of the current state of criticism, making it internally consistent without needing external justification."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "The evolutionary analogy holds if viewed as 'elimination of the unfit' rather than 'selection of the fit'. The mechanism is purely negative."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "No positive attribute like verisimilitude is assigned. The mechanism relies solely on the presence or absence of falsifying arguments."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "revised", "note": "Ensured the argument presents the strongest case for the 'smuggling induction' view by challenging whether 'lack of objection' is sufficient for high-stakes action."},
+        {"handle": "[SRC_015] against SRC_004", "kind": "rebutted", "note": "The cost is a very thin notion of rationality, one that can only say 'not this one' but never 'this one is safe'. This may be insufficient for engineering but sufficient for science."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Avoids verisimilitude completely by focusing on the logical status of criticism."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The scientist's preference is justified as the rational response to the current map of criticisms: go where there are no mines, not because the path is guaranteed clear, but because mines are known elsewhere."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Risk management here is defined as avoiding known risks (falsified theories). It does not claim to manage unknown risks, thus avoiding the inductive trap."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_002", "SRC_010"]
+    }
+  ]
+}

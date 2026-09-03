@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the debate 'dissolves' via a psychological/logical split fails to address the prompt's core challenge regarding normative defensibility. Popper explicitly rejects psychologism; therefore, grounding the preference for better-corroborated theories in 'psychological inevitability' does not defend the preference on Popper's own terms but rather concedes that the preference is irrational from a logical standpoint. This leaves the 'smuggling of induction' charge unanswered: if the preference lacks logical justification (as the target admits) and relies on psychology (which Popper deems irrelevant to validity), the target has not shown the preference is defensible, only that it is inevitable, which costs the system its normative force entirely.",
+      "counterexample": null,
+      "premise": "Popper distinguishes sharply between the context of discovery (psychology) and the context of justification (logic), rejecting the former as a basis for scientific validity.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for better-corroborated theories is merely a psychological habit without logical backing, how can a Popperian scientist rationally claim one theory is superior to another for practical action without implicitly relying on the inductive principle that past success predicts future reliability?"
+    }
+  ]
+}

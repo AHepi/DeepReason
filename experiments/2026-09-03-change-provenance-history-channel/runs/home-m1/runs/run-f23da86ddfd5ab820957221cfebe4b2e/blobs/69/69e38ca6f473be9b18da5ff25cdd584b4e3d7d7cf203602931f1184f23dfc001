@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference that the future will resemble the past, but as a non-inductive 'conventionalist decision' to act on the theory that has withstood the most severe tests, thereby maximizing the objective chance of learning from error (falsification) rather than maximizing subjective probability of truth.",
+    "mechanism": "Reframes the scientist's preference from a predictive bet (which requires induction) to a methodological rule for selecting the most informative potential falsifier. By choosing the theory with higher content and surviving tests, one selects the hypothesis that offers the greatest opportunity for future refutation. If it survives, we learn nothing new; if it fails, we learn significantly. This aligns with Popper's goal of rapid error elimination without assuming nature's uniformity.",
+    "counterconditions": [
+      "If the agent believes the preferred theory is more likely to be true in the future based solely on past survival, they have smuggled in induction.",
+      "If the preference relies on a hidden assumption that the laws of nature are stable over time (uniformity), the defense collapses into the very metaphysical faith Popper rejected.",
+      "If the concept of 'verisimilitude' (truth-likeness) is required to justify the preference, the defense fails because Popper's formal definition of verisimilitude was logically untenable."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "059c75cb550e1b3f17f7e4cf17ed53b0cb31a7935eefc2fc97ccf46fb5dae5c0",
+        "kind": "rebutted",
+        "note": "The criticism assumes that any reliance on 'faith' implies induction. The candidate rebuts this by clarifying that the 'decision' is methodological (a rule for action), not epistemological (a belief in truth). It is a pragmatic choice to maximize testability, not a metaphysical assertion of uniformity."
+      },
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address 'verisimilitude'. While Popper used verisimilitude informally, the candidate now grounds the preference strictly in 'content' and 'testability' to avoid the logical failures of his formal verisimilitude definitions cited in other criticisms."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The candidate maintains that the preference IS a convention, but argues this does not reduce progress to mere whim. The convention is objectively constrained by the logical structure of the theories (their content and testability). Objectivity lies in the method of selection, not in the guaranteed truth of the result."
+      },
+      {
+        "handle": "3dd7e6e5900af409fe538c843fc9a16df138e02b954e617cb086b0f92122ce4f",
+        "kind": "rebutted",
+        "note": "The projection of past survival into future preference is not an inductive leap regarding truth, but a strategic move regarding information gain. We prefer the tested theory because it is the sharpest knife for cutting nature, not because we believe it will remain sharp forever."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "rebutted",
+        "note": "The dichotomy is not false; it is exhaustive. If corroboration is not probability, the only remaining ground for preference within Popper's system is a methodological convention. The candidate embraces this horn of the dilemma rather than trying to escape it via a third, non-existent foundation."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "revised",
+        "note": "Clarified that the 'risk minimization' mentioned is the risk of failing to learn (missing a falsification), not the risk of the theory being false. This distinguishes the functional role of the preference from the inductive principle of expecting success."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "departure_declared",
+        "note": "The candidate departs from using 'verisimilitude' as a primary justification due to the well-known logical difficulties cited. It substitutes 'potential falsifiability' and 'informational content' as the robust metrics for preference."
+      },
+      {
+        "handle": "720e994a62093f4921479eee06c7b2643add166f9ff3ec18dfac4aefd5df7507",
+        "kind": "rebutted",
+        "note": "The cost accepted is precisely that we have no rational guarantee the preferred theory will work tomorrow. The defense survives by admitting this cost: we prefer it NOT because it will work, but because if it DOESN'T work, we will find out faster than with any other theory."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_of_phenotypes",
+        "chess_opening_preparation"
+      ],
+      "shared_structure": [
+        "Selection based on past survival/performance without assuming future repetition of conditions.",
+        "Preference for the option that exposes the agent to the highest resolution feedback (falsification/checkmate).",
+        "Decision rule is procedural/strategic rather than probabilistic/predictive."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious agent making a 'decision', whereas Popper's scientist actively chooses.",
+        "Chess openings rely on opponent psychology and established patterns (inductive elements), whereas Popperian science explicitly rejects pattern-based prediction."
+      ],
+      "transfer_claims": [
+        "Just as a chess player chooses a sharp opening to force a decisive result quickly (win or lose) rather than a drawish line, a scientist chooses a highly corroborated, high-content theory to force a quick falsification or temporary survival.",
+        "Evolution selects traits that survived past environments not because the future will match the past, but because those traits represent the only existing data points of success; similarly, science selects theories that survived tests as the only available tools for further testing."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that choosing the 'sharpest' theory inherently requires a probabilistic judgment about the stability of the testing environment.",
+        "If the distinction between 'methodological convention' and 'inductive belief' proves to be merely verbal with no practical difference in action."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

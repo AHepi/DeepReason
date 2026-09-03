@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-probabilistic metric to justify preferring better-corroborated theories, but this smuggles induction back in because the concept of verisimilitude itself collapses without probabilistic assumptions. Popper explicitly rejected the idea that surviving tests makes a theory 'more probable,' yet the target claims the surviving theory is the 'best approximation to the truth.' To assert that a theory which has survived severe tests is *closer* to the truth than one that has not (or has failed) logically entails an inductive inference: it assumes that past performance in tests is a reliable indicator of the theory's structural correspondence to reality (truth). If one cannot assume that nature is uniform enough for past survival to predict future success or truth-content, then the 'critical preference' is arbitrary. The target attempts to bypass this by calling it a 'pragmatic decision rule,' but if the rule is not grounded in the expectation that the preferred theory is *more likely* to yield true predictions (a probabilistic claim), then there is no rational basis within Popper's own anti-inductive framework to prefer it over a falsified or untested rival. Thus, the appeal to verisimilitude functions as a proxy for probability, violating the strict separation Popper demanded.",
+      "premise": "Popper held that corroboration is not probability and rejected induction, yet scientists prefer better-corroborated theories.",
+      "counterexample": [
+        "A theory that has survived 100 severe tests could, in a non-uniform universe, be completely false in its next prediction, while a falsified theory might accidentally hit the truth; without assuming uniformity (induction), 'verisimilitude' based on past tests offers no logical guarantee of being 'closer' to truth."
+      ],
+      "successor_question": "If verisimilitude cannot be measured without inductive assumptions about the link between past test survival and future truth-content, does Popper's 'critical preference' reduce to an irrational leap of faith rather than a rational decision rule?"
+    }
+  ]
+}

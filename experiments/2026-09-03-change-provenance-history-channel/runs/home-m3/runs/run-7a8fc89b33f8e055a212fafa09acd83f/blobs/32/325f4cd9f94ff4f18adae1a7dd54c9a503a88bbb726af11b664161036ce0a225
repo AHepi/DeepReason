@@ -1,0 +1,228 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'methodological rule of action' rather than a logical claim about truth probability. It survives by distinguishing between the logic of justification (where induction is banned) and the pragmatics of survival (where acting on the best-tested theory is the only rational move to avoid known error).",
+      "mechanism": "Procedural Rationality via Error Avoidance: The agent adopts the best-corroborated theory not because it is likely true, but because it is the only one that has not yet been proven false despite severe attempts. Preferring a falsified or less-tested theory would be irrational negligence, not induction.",
+      "counterconditions": [
+        "If the agent claims the preferred theory is 'more likely true' based on past success.",
+        "If the agent cannot articulate a non-probabilistic reason for the preference other than 'it worked before'.",
+        "If the preference rule is applied to future predictions as guarantees rather than conjectures."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_014] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate explicitly separates logical justification (probability) from pragmatic necessity (action), arguing the latter does not require the former, thus avoiding the conflation charged."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "The defense relies on 'procedural rationality' (avoiding known errors) which is distinct from biological 'fitness'; it addresses Popper's requirement by offering a logical norm of caution, not an evolutionary analogy."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "This argument does not rely on verisimilitude (truth-likeness) comparisons but on the negative status of 'not yet falsified,' bypassing the incoherence of positive verisimilitude measures."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "revised",
+          "note": "Added explicit section detailing the strongest case FOR the induction-smuggling view in the 'counterconditions' and mechanism analysis to satisfy the directive for balanced argumentation before concluding."
+        },
+        {
+          "handle": "[SRC_015] against SRC_004",
+          "kind": "rebutted",
+          "note": "Accepting this view costs the idea that science provides probable truths, but it preserves the normativity of science as a system of critical vigilance; the dilemma is false because normativity exists in the rigor of testing, not the certainty of results."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "No appeal to verisimilitude is made; the preference is based solely on the binary status of 'falsified' vs 'unfalsified,' which remains coherent in Popper's framework."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The defense addresses the individual scientist's preference by framing it as a duty of care: a scientist who ignores severe test results acts irrationally, regardless of systemic outcomes."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "The tension regarding action is resolved by defining 'rational action' as minimizing known risk (falsification) rather than maximizing expected utility (probability), which smuggles no induction."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_014"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system. Any decision to act on a theory because it survived past tests assumes the uniformity of nature (that the future will resemble the past), which is the very principle Popper sought to eliminate.",
+      "mechanism": "Hidden Inductive Leap: The move from 'Theory T survived tests t1...tn' to 'Act on T for future situation t(n+1)' contains a suppressed premise that past performance predicts future reliability. Without this premise, the preference is arbitrary.",
+      "counterconditions": [
+        "If the proponent can demonstrate a valid deductive link between past survival and future success without assuming uniformity.",
+        "If the preference is shown to be purely random or aesthetic rather than based on test history.",
+        "If 'corroboration' is redefined as a purely logical relation with no temporal extension."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_014] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate argues that even 'pragmatic necessity' relies on an inductive assumption that avoiding past errors leads to better future outcomes, thus the conflation is inherent in the act of preferring."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "The argument posits that 'procedural necessity' in science is indistinguishable from inductive reasoning because both rely on the predictive value of past data."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "While verisimilitude failed, the core charge here is about the temporal projection of test results, which remains a form of induction regardless of truth-likeness metrics."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "revised",
+          "note": "Expanded to include the counter-argument (Case A) regarding procedural rationality to ensure the 'strongest case for each answer' requirement is met before delivering the verdict."
+        },
+        {
+          "handle": "[SRC_015] against SRC_004",
+          "kind": "rebutted",
+          "note": "Accepting this view costs the rationality of scientific progress, reducing it to blind guesswork; however, the candidate argues this cost is necessary to maintain logical consistency against induction."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The criticism focuses on the structure of the inference (past to future) rather than the metric of verisimilitude, rendering the verisimilitude objection orthogonal to this specific inductive charge."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The scientist's preference is the exact locus of the inductive leap; shifting to a systemic level does not erase the individual's reliance on past success to guide future action."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "The core tension is confirmed: acting on corroboration IS smuggling induction, as 'risk management' implicitly assumes past risks predict future ones."
+        }
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_011"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if we accept a 'Darwinian' epistemology where theories compete and survive, but this comes at the cost of abandoning the 'rational agent' model entirely. The survivor is not 'true' or 'probable,' merely 'fit' for the current environment, making the preference a biological fact, not a logical justification.",
+      "mechanism": "Evolutionary Epistemology Shift: Replace 'justification' with 'selection.' Scientists prefer corroborated theories because they are the surviving variants. This avoids induction by treating knowledge growth as a blind variation and selective retention process.",
+      "counterconditions": [
+        "If the selection process is claimed to converge on truth rather than just survival.",
+        "If the scientist is assumed to have access to the 'fitness landscape' prior to selection.",
+        "If the preference is framed as a conscious logical deduction rather than an adaptive behavior."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_014] against SRC_003",
+          "kind": "departure_declared",
+          "note": "Departs from the requirement to find a 'logical justification' by asserting that only a biological/pragmatic explanation exists, rendering the logical/pragmatic distinction moot."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "Embraces the biological analogy fully, arguing that 'procedural necessity' IS 'rational defensibility' in an evolutionary context, rejecting the critic's separation of the two."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "Does not use verisimilitude; uses 'fitness' which is defined relationally to the environment (tests), avoiding the need for an absolute truth measure."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "revised",
+          "note": "Included a robust defense of the 'induction smuggling' view (as a failure of the Darwinian shift to satisfy traditional rationality) to meet the balance criteria."
+        },
+        {
+          "handle": "[SRC_015] against SRC_004",
+          "kind": "rebutted",
+          "note": "Accepts the cost: science loses its special normative status and becomes a subset of general adaptive behavior, but gains consistency with naturalism."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Fitness is comparable via survival time and severity of tests faced, bypassing the need for a formal verisimilitude calculus."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "Reframes the scientist's preference as the mechanism of selection itself, answering the normative question by dissolving it into a descriptive evolutionary account."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "Resolves the action tension by defining action as the expression of the surviving variant, removing the need for a 'reason' beyond the fact of survival."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "The preference is a 'conjectural bet' that is rational only under the meta-conjecture that the universe is comprehensible. This moves the inductive burden from specific theories to a metaphysical assumption about the world, which Popper admitted was necessary but unprovable.",
+      "mechanism": "Metaphysical Insurance: The preference relies on the 'World Principle' (the world has regularities). Acting on corroborated theories is a bet that this principle holds. It is defensible as a consistent application of this higher-order conjecture.",
+      "counterconditions": [
+        "If the meta-conjecture is treated as a proven axiom.",
+        "If the preference is applied in domains where the 'World Principle' is known to fail (e.g., quantum indeterminacy interpretations).",
+        "If the bet is claimed to increase the probability of the meta-conjecture being true."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_014] against SRC_003",
+          "kind": "rebutted",
+          "note": "Distinguishes between the logical justification of the theory (none) and the pragmatic justification of the bet (based on the metaphysical stance), avoiding conflation."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "Argues that the 'non-inductive reason' is the commitment to realism/comprehensibility, which functions differently than standard induction."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "Relies on a metaphysical postulate, not verisimilitude, to bridge the gap."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "revised",
+          "note": "Ensured the 'smuggling induction' argument is presented as the failure mode where the meta-conjecture is treated as empirical evidence."
+        },
+        {
+          "handle": "[SRC_015] against SRC_004",
+          "kind": "rebutted",
+          "note": "Costs the claim that science is purely empirical; it admits a foundational metaphysical layer, but preserves normativity within that framework."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Avoids verisimilitude by grounding the preference in the coherence of the agent's worldview rather than the truth-content of the theory."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "Addresses the scientist's preference as a personal commitment to the metaphysical bet, satisfying the individual normative requirement."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "Action is justified as consistency with one's own metaphysical commitments, resolving the tension without invoking induction."
+        }
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_015"
+      ]
+    }
+  ]
+}

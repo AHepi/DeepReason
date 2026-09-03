@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference that the theory is more likely true, but as a methodological rule to maximize the 'degree of corroboration' which serves as a report of past performance without predicting future success; however, accepting this defense costs the scientist any rational assurance that acting on the preferred theory will yield successful practical outcomes, reducing scientific action to a non-rational 'leap' or pragmatic bet that implicitly relies on the very uniformity of nature Popper explicitly rejected.",
+    "mechanism": "Distinction between logical probability (induction) and methodological preference (corroboration report), coupled with the admission that practical action requires an extra-logical decision.",
+    "counterconditions": [
+      "If corroboration is strictly a report of the past, it cannot logically guide future action without assuming the future resembles the past (induction).",
+      "If Popper advocates choosing the better-corroborated theory for action, he is implicitly assigning it higher subjective probability despite his explicit denial.",
+      "If the choice is merely a 'bet,' then Popper's philosophy offers no rational advantage over irrationalism or conventionalism regarding practical application."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "rebutted",
+        "note": "The candidate addresses the coexistence of unrefuted theories by framing the choice not as eliminating the unchosen, but as selecting the one with the highest degree of corroboration (most severe tests survived) as a methodological convention, acknowledging this does not eliminate the others logically but prioritizes them pragmatically."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "revised",
+        "note": "Revised to explicitly state the cost: the defense fails to provide an inductive bridge, meaning the preference is a report of survival only, and the 'cost' is the lack of rational justification for expecting future success, directly answering the prompt's demand for the specific price of this view."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The candidate argues that while the analogy to biological selection (fittest survivor) is useful descriptively, the normative justification is not that the 'fittest' will survive tomorrow (which would be induction), but that we methodologically choose to test the currently fittest to learn fastest; the smuggling of induction is admitted only in the practical 'leap' to action, not in the logical assessment."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "revised",
+        "note": "Clarified the distinction between causal explanation (why it survived) and normative justification (why choose it). The revision emphasizes that the normative force is purely methodological (maximize learning potential), while admitting that for *practical* action, Popper must indeed rely on a non-rational decision, thus addressing the conflation charge by separating the contexts."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "The rebuttal stands that the 'pragmatic bet' is exactly what Popper admits is necessary. The criticism claims this fails on Popper's terms, but the candidate demonstrates that Popper's terms *require* this bet because logic alone cannot bridge the gap to action; thus, the defense holds by accepting the limitation rather than hiding it."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "departure_declared",
+        "note": "Departing from the attempt to fully save Popper from the charge of smuggling induction in practical contexts; the candidate declares that in the realm of *action*, induction (or a functional equivalent) is indeed smuggled in, and the 'defense' is only valid for theoretical preference, not practical certainty."
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "rebutted",
+        "note": "While verisimilitude has technical issues (Tichý-Miller), the candidate's mechanism relies on 'degree of corroboration' as a historical report, not a measure of truth-likeness per se, thereby sidestepping the specific theorem cited while maintaining the core Popperian distinction between testing and truth."
+      },
+      {
+        "handle": "5e2df92cb9e1b33a910e9a6b9b29a1f0c4895a11d9c8ac63dac5bc9e45163026",
+        "kind": "revised",
+        "note": "Explicitly integrated the answer to whether induction is smuggled back in: Yes, for practical action, but No for theoretical preference. The revision ensures the dilemma is not sidestepped but resolved by bifurcating the domains of theory and practice."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

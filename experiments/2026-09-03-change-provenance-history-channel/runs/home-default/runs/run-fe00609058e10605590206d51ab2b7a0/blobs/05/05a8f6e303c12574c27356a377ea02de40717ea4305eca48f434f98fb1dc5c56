@@ -1,0 +1,9 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim that preferring corroborated theories 'necessarily assumes the uniformity of nature' overlooks Popper's specific distinction between theoretical justification and pragmatic decision-making. Popper explicitly argued that while corroboration reports are purely historical (describing past performance), the preference for a well-corroborated theory in action is a rational, non-inductive decision based on the methodological rule to prefer the theory that has withstood the severest tests so far. This preference does not assert that the theory is more probable or that nature is uniform; it is a critical choice to act on the best-tested available option without making an inductive inference about the future. Therefore, the target fails to engage with Popper's actual solution to the problem of action, which separates the logical status of corroboration from the pragmatic necessity of choice, rendering the accusation of 'smuggling induction' a misinterpretation of Popper's pragmatic stance."
+    }
+  ]
+}

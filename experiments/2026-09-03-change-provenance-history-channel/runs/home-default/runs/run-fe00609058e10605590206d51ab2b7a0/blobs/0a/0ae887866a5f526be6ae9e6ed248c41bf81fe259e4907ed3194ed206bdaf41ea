@@ -1,0 +1,72 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic, non-inductive rule of action based on verisimilitude (truth-likeness), not probability.",
+      "mechanism": "Popper distinguishes between the logical status of a theory (which remains improbable) and its epistemic status regarding truth-content. A theory that survives severe tests has demonstrated a higher capacity to withstand falsification, suggesting it captures more structural reality (verisimilitude). Choosing it is a rational bet on truth-content, not an inductive inference that the future will resemble the past.",
+      "counterconditions": [
+        "If 'verisimilitude' cannot be defined without invoking probabilistic assumptions about the distribution of true/false statements.",
+        "If the act of preferring a theory for future action implicitly assumes its predictive reliability, which is an inductive claim."
+      ],
+      "typicality": 0.92,
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "The preference smuggles induction back in because acting on corroboration necessarily assumes the uniformity of nature or the stability of laws, which Popper explicitly rejected as a basis for science.",
+      "mechanism": "To prefer Theory A over Theory B for future application is to predict that A will continue to succeed where B might fail. This prediction relies on the assumption that the conditions which allowed A to survive tests will persist. Since Popper denies any logical justification for assuming the future resembles the past (the problem of induction), this practical preference is psychologically inevitable but logically indefensible within his strict falsificationist framework.",
+      "counterconditions": [
+        "If Popper can ground the preference solely in the logical asymmetry between verification and falsification without referencing future success.",
+        "If the preference is redefined as a methodological rule for generating new errors rather than a guide to truth."
+      ],
+      "typicality": 0.88,
+      "optional_refs": [
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "Corroboration functions as a 'causal mechanism' of selection analogous to natural selection, where preference is a survival trait of the scientific community rather than a logical proof of truth.",
+      "mechanism": "Just as organisms are selected for fitness without implying they are 'perfect' or 'probable' to survive forever, theories are selected for corroboration. The scientist's preference is an evolutionary adaptation of the research community to maximize error elimination. It is defensible not as logic, but as a causal process of knowledge growth where the 'fittest' (most tested) theories are the only ones available for further mutation and testing.",
+      "counterconditions": [
+        "If the analogy breaks down because biological fitness is retrospective while scientific preference is prospective.",
+        "If the 'causal mechanism' of science requires a normative element that evolution lacks."
+      ],
+      "typicality": 0.65,
+      "optional_refs": [
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves if we view corroboration as a measure of informational content and test severity, making the preference a choice for higher risk and higher potential yield, not safety or probability.",
+      "mechanism": "Popper values bold conjectures. A highly corroborated theory is one that took a great risk (high empirical content) and survived. Scientists prefer it not because it is 'safe' (probable), but because it has proven its robustness against high-risk tests. The preference is for the theory that offers the most leverage for future falsification, aligning with the goal of rapid error elimination rather than inductive security.",
+      "counterconditions": [
+        "If scientists actually prefer corroborated theories because they believe them to be 'true' or 'reliable' in an inductive sense.",
+        "If high corroboration inevitably leads to a psychological sense of certainty that mimics induction."
+      ],
+      "typicality": 0.78,
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "Popper's position is internally inconsistent: he rejects induction logically but reinstates it pragmatically through the concept of 'corroboration' as a guide for action.",
+      "mechanism": "The term 'corroboration' acts as a Trojan horse. While defined negatively (not falsified), its function in scientific practice is positive (guiding expectation). By advising scientists to act on the best-corroborated theory, Popper effectively advises them to trust induction, even if he refuses to call it that. The 'cost' of accepting this is admitting that pure falsificationism is insufficient for guiding scientific practice without a hidden inductive core.",
+      "counterconditions": [
+        "If a coherent distinction can be drawn between 'trusting' a theory and 'using' a theory as a provisional standard.",
+        "If the inconsistency is merely verbal and not substantive in the methodology."
+      ],
+      "typicality": 0.55,
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is defensible only if we accept that 'rationality' in science is defined by adherence to methodological rules (falsifiability) rather than by the achievement of probable truth.",
+      "mechanism": "Under this view, the scientist is rational not because they expect the theory to work (induction), but because they are following the only rule that allows science to progress (testing bold claims). The preference for the corroborated theory is a commitment to the method, not a belief in the outcome. The cost is a radical separation of rationality from expectation, rendering the scientist a rule-follower who acts without expectation of success.",
+      "counterconditions": [
+        "If rational action inherently requires an expectation of success.",
+        "If the methodological rule itself cannot be justified without appealing to its past success (induction)."
+      ],
+      "typicality": 0.42,
+      "optional_refs": []
+    }
+  ]
+}

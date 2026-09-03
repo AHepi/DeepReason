@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the preference is defensible as a 'pragmatic, non-inductive rule' that minimizes 'expected error' without implying the theory is more probable.",
+      "case": "The target's justification smuggles induction back in by relying on the concept of 'minimizing expected error.' The calculation of any 'expectation' regarding future performance based on past test results is inherently inductive. If the agent chooses Theory A over Theory B because A has survived severe tests, and justifies this by saying it reduces the 'expected error,' they are asserting that past survival is a reliable guide to future reliability. This contradicts Popper's strict prohibition against using past success to infer future probability or reliability. The analogy of 'betting on the horse with the best track record' fails because a rational bettor implies an expectation of winning (probability); if one truly held no inductive belief that the track record matters, there would be no rational basis to prefer that horse over any other, rendering the 'pragmatic rule' arbitrary rather than rational.",
+      "counterexample": [
+        "A scientist who strictly adheres to Popper's anti-induction would have to admit that a theory surviving 1,000 tests has exactly the same logical standing regarding future truth as a theory surviving 0 tests, unless they assume the future will resemble the past (induction). Therefore, claiming the choice 'minimizes expected error' presupposes the very inductive principle the target claims to avoid."
+      ],
+      "successor_question": "If 'expected error' cannot be calculated without inductive assumptions about the uniformity of nature, what non-arbitrary criterion remains for the pragmatic choice if not a covert form of induction?"
+    }
+  ]
+}

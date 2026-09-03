@@ -1,0 +1,5 @@
+{
+  "op": "replace",
+  "path": "/candidates/1/evidence_refs/1/block",
+  "value": null
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target asserts Popper's preference is 'purely sociological' and lacks 'underlying logical... guarantee,' but this contradicts Popper's explicit defense of preferring better-corroborated theories as the most rational course of action *given* our goal of finding truth, even without inductive probability. Popper argues that while corroboration does not increase probability, it indicates a theory has withstood severe tests, making it the best available candidate for truth—a logical preference based on critical scrutiny, not merely a social convention.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between the logical status of corroboration (not probability) and the rational decision to prefer theories that have survived severe testing as the best means to achieve the aim of science (truth).",
+      "premise_evidence": null,
+      "successor_question": "How does the target reconcile its claim of 'purely sociological' basis with Popper's own arguments in 'Conjectures and Refutations' that frame theory preference as a rational, albeit non-inductive, decision procedure?"
+    }
+  ]
+}

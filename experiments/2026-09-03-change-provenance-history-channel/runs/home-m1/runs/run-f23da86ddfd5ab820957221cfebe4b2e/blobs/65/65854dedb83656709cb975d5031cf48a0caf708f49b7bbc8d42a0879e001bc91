@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference that the future will resemble the past, but as a non-inductive, methodological rule of 'conjectural risk-management': since we cannot know truth, we act on the theory that has survived the most severe tests because it has exposed itself to the highest risk of falsification and failed to be eliminated, thereby offering the best available (though fallible) guide for action without assigning it higher probability.",
+    "mechanism": "The mechanism distinguishes between 'inductive justification' (claiming past success guarantees or probabilifies future success) and 'critical selection' (choosing the survivor of the most stringent attempts at elimination as the most informative error-corrected guess). Preference is grounded in the logical asymmetry of falsification: a severely tested theory contains more empirical content and has withstood more potential refuters than an untested one; choosing it minimizes the risk of acting on known falsehoods, even if it does not maximize the chance of acting on truth.",
+    "counterconditions": [
+      "If the preference implicitly assumes nature's uniformity to project past survival into future reliability, it collapses into the induction Popper rejected.",
+      "If 'verisimilitude' (truth-likeness) is required to ground the preference objectively, and verisimilitude is logically incoherent as critics argue, the defense fails.",
+      "If the choice of the 'fittest' theory is merely a conventionalist decision with no objective tie to error-minimization, it reduces scientific progress to arbitrary convention."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "059c75cb550e1b3f17f7e4cf17ed53b0cb31a7935eefc2fc97ccf46fb5dae5c0",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on 'metaphysical faith in uniformity.' It relies on the logical fact that a theory surviving severe tests has had more opportunities to be proven false than an untested one. Preferring it is a strategy to avoid known errors, not a belief that nature is uniform."
+      },
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "revised",
+        "note": "Revised to explicitly address 'verisimilitude' by clarifying that the defense rests on 'empirical content' and 'risk of falsification' rather than a formal measure of truth-likeness, thus sidestepping the logical incoherence of Popper's specific verisimilitude definition while retaining the intuition of approaching truth."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The distinction between 'objectivity of method' and 'objectivity of result' is maintained. The preference is objective because the severity of tests and the survival of the theory are intersubjectively checkable facts, not mere conventions, even if the ultimate truth of the theory remains unknown."
+      },
+      {
+        "handle": "3dd7e6e5900af409fe538c843fc9a16df138e02b954e617cb086b0f92122ce4f",
+        "kind": "rebutted",
+        "note": "Projecting past survival into future preference is not an inductive leap if framed as 'acting on the best error-corrected guess.' We do not assume the future will match the past; we assume that a theory that hasn't been caught lying yet is a safer bet than one that has or one that hasn't been checked, which is a pragmatic, not inductive, stance."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "rebutted",
+        "note": "The dichotomy is not false because the alternative foundation proposed is 'severity of testing' and 'informational content,' which are distinct from both probability and pure convention. This third way grounds preference in the logical structure of falsification itself."
+      },
+      {
+        "handle": "552493f430823f47c25c532667b8fd3a2ec2fe75df8bb51ca62e9cd35fb45563",
+        "kind": "departure_declared",
+        "note": "Departing from reliance on Popper's formal 'verisimilitude' definition. The candidate grounds preference in 'survival of severe tests' (corroboration) as a proxy for informational robustness, acknowledging the formal failure of verisimilitude but arguing the intuitive core survives via severity."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "rebutted",
+        "note": "Functional identity does not imply logical identity. While the *action* resembles induction, the *justification* differs: induction claims probability based on repetition; Popperian preference claims safety based on the absence of disproof despite rigorous attempts. The rationale is critical, not enumerative."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "revised",
+        "note": "Revised to remove dependency on the coherent definition of verisimilitude. The argument now stands on the 'principle of severe testing': preferring the theory that has faced and survived the greatest risk of elimination is rational risk management, independent of whether we can formally quantify its 'truth-likeness'."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["evolutionary_survival_of_fittest"],
+      "shared_structure": [
+        "Selection based on survival of severe challenges rather than positive proof of superiority.",
+        "Preference for the survivor is a heuristic for future performance, not a guarantee.",
+        "The process eliminates the weak rather than confirming the strong."
+      ],
+      "disanalogies": [
+        "Biological fitness is relative to a specific environment which changes; scientific corroboration aims at universal laws.",
+        "Evolution has no goal of truth; science explicitly aims at truth (even if asymptotically).",
+        "Natural selection is blind; scientific testing is designed intentionally to be severe."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the organism that survived a plague to be robust, we bet on the theory that survived severe tests to be robust.",
+        "Survival indicates resistance to elimination, not inherent probability of being the final answer."
+      ],
+      "overturn_conditions": [
+        "If survival in evolution is shown to be purely random with no link to robustness, the analogy fails.",
+        "If scientific testing cannot be shown to be genuinely severe (i.e., capable of falsifying true theories), the selection mechanism is void."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

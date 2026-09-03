@@ -1,0 +1,340 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'critical preference' based on verisimilitude (truth-likeness) rather than probability. We prefer the theory that has withstood more severe tests not because it is likely true, but because it has demonstrated greater empirical content and resilience, making it the best available approximation to truth for practical action.",
+      "mechanism": "Critical Preference via Verisimilitude: Action is guided by the theory with the highest surviving informational content. Corroboration reports the history of severe testing, serving as a marker of potential verisimilitude without assigning a probability value. The 'smuggling' charge fails because the move from 'survived tests' to 'prefer for action' is a methodological rule of critical rationalism, not an inductive inference about future success.",
+      "counterconditions": [
+        "If verisimilitude cannot be formally defined without probabilistic assumptions (as per Tichý/Miller objections), this defense collapses.",
+        "If Popper's own actions relied on an implicit belief in future regularity rather than just current critical status.",
+        "If the distinction between 'probability' and 'rational preference' proves semantically empty in practice."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "The mechanism explicitly addresses 'action' by framing preference as a critical choice for the best available approximator of truth (verisimilitude) when building bridges, not merely a shift in attention. It rejects the idea that 'focus' replaces 'action'."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "This does not redefine rationality as 'adaptive fitness' but as 'critical consistency.' The preference is rational because it aligns with the goal of error elimination, not biological survival."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "revised",
+          "note": "Added explicit analysis of costs: Accepting this view costs us the comfort of probabilistic certainty and requires acknowledging that our best theories may still be false, demanding constant vigilance."
+        },
+        {
+          "handle": "[SRC_006] against SRC_003",
+          "kind": "rebutted",
+          "note": "Popper's engagement was rational in the critical sense, not the inductive. He preferred the better-tested theory because it was more open to falsification and had survived, not because he believed it was psychologically inevitable."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "The claim directly addresses 'acting on' by positing that action requires a basis, and the only non-arbitrary basis in critical rationalism is the degree of corroboration (severity of tests passed)."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The distinction resolves the dilemma by showing that high informational content (riskiness) combined with survival is the specific criterion for action, distinct from generic predictive power."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The analogy is not about generic error minimization but about preferring the theory that has specifically survived tests of its bold, risky predictions."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "departure_declared",
+          "note": "Departing from the requirement that verisimilitude must be formally quantifiable like probability; we accept a qualitative or comparative notion of truth-likeness sufficient for practical preference."
+        }
+      ],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "The preference unavoidably smuggles induction back in. Despite Popper's protests, the act of preferring a corroborated theory for future action implicitly assumes that the future will resemble the past (that the mechanisms which allowed survival will continue to operate), which is the very principle of induction he sought to eliminate.",
+      "mechanism": "Hidden Inductive Leap: The transition from 'has survived' to 'will succeed in application' contains a temporal gap. Bridging this gap requires an assumption of nature's uniformity. Without this, preferring Theory A over Theory B (both currently unfalsified) is arbitrary. Thus, Popperian science covertly relies on the inductive habit it verbally rejects.",
+      "counterconditions": [
+        "If a non-inductive principle (e.g., simplicity, explanatory power) can justify the preference without referencing future success.",
+        "If 'preference' is redefined as a purely psychological state with no rational claim.",
+        "If the problem of action is dissolved by claiming we never truly 'act' on theories, only test them."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "This candidate argues the opposite: that the mechanism *does* address action, but concludes that doing so necessarily invokes induction, contrary to the critic's claim that it fails to address action."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "It answers the dilemma by affirming the smuggling charge. It does not sidestep Popper but exposes a contradiction in his system regarding action."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "revised",
+          "note": "Explicit cost added: Accepting this means admitting Popper's system is incomplete or inconsistent regarding practical rationality, forcing a return to Humean skepticism or a new foundation."
+        },
+        {
+          "handle": "[SRC_006] against SRC_003",
+          "kind": "rebutted",
+          "note": "Argues that Popper's rational engagement was itself flawed because it rested on an unacknowledged inductive premise."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "Directly addresses 'acting on' by stating that such action is impossible without the smuggled inductive assumption."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Claims the distinction fails because any use of past performance to guide future action is inherently inductive."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Argues that surviving specific tests only matters for future action if one assumes those tests remain relevant, an inductive step."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "Supports the claim that without a coherent non-probabilistic measure of truth (verisimilitude), the system defaults to hidden induction."
+        }
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The preference is defensible not as induction nor as verisimilitude, but as a 'conventionalist decision' to treat the most severely tested theory as the provisional standard for normal science until it is falsified. This is a pragmatic rule of the game, not a statement about truth or probability.",
+      "mechanism": "Methodological Conventionalism: Scientists agree to act on the best-tested theory as a social/methodological convention to facilitate progress and avoid arbitrariness. It costs nothing in terms of truth claims because it makes none; it is simply the rule 'play the winner until they lose.'",
+      "counterconditions": [
+        "If this reduces science to mere game-playing with no connection to reality.",
+        "If the convention itself requires an inductive justification to be adopted.",
+        "If Popper explicitly rejected conventionalism as a solution to the problem of induction."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Addresses action by defining it as adherence to a methodological rule, which is sufficient for building bridges within the scientific framework."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Does not redefine rationality as fitness, but as rule-following. It answers the dilemma by denying the need for a truth-based justification."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "revised",
+          "note": "Cost identified: Accepting this means science loses its claim to getting closer to truth, becoming merely a self-consistent procedural activity."
+        },
+        {
+          "handle": "[SRC_006] against SRC_003",
+          "kind": "rebutted",
+          "note": "Popper's preference is interpreted as a commitment to the methodological rule, which is a rational choice of procedure."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "Acting on the theory is simply following the agreed-upon convention of the scientific community."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The distinction is irrelevant here; the criterion is simply 'most tested,' regardless of content type."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The convention is to minimize known error by sticking to the theory that hasn't failed yet."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "Bypasses the verisimilitude problem entirely by not claiming the preferred theory is truer, just 'currently accepted.'"
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "The dilemma is a category error: Popper's 'corroboration' is a report of past performance, while 'preference for action' is a bet on the future. The defensibility lies in recognizing that all action involves risk, and choosing the best-tested theory is simply the most rational *bet* given the available information, without asserting it will win.",
+      "mechanism": "Rational Betting Strategy: Action is inherently uncertain. Corroboration provides the best available data for placing a bet. Preferring the corroborated theory is akin to betting on the horse with the best track record—not because it *must* win (induction), but because it is the most reasonable wager in the absence of certainty.",
+      "counterconditions": [
+        "If 'rational bet' implicitly assumes the track record predicts future performance (induction).",
+        "If Popper refused to frame scientific acceptance as 'betting'.",
+        "If the stakes of scientific action (e.g., human life) demand more than a 'bet'."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Addresses action by framing it as risk management. Building a bridge is a bet that the theory holds; we bet on the one with the best history."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Answers the dilemma by accepting the 'smuggling' charge only if one insists on certainty; if action is betting, no smuggling occurs, just risk assessment."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "revised",
+          "note": "Cost: Accepting this means admitting science cannot guarantee safety or truth, only offer the most prudent gamble."
+        },
+        {
+          "handle": "[SRC_006] against SRC_003",
+          "kind": "rebutted",
+          "note": "Popper's rationality is the rationality of the gambler who uses all available stats, not the prophet who knows the future."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "Acting on a theory is placing a bet; the mechanism explains why we bet on the corroborated one."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "High informational content makes the bet riskier but more valuable; survival makes it a smarter bet."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "We bet on the theory that has survived specific severe tests because it has proven robust in those specific domains."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "Avoids the need for formal verisimilitude by relying on the pragmatic utility of the 'best bet' heuristic."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_010"
+      ]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict terms, revealing a fatal flaw: Critical Rationalism cannot account for the rationality of action without collapsing into either induction or irrationalism. The 'surviving' answer is that we must supplement Popper with a limited, fallibilist form of induction (abduction) to bridge the gap.",
+      "mechanism": "Neo-Popperian Synthesis: Acknowledge that pure falsificationism is insufficient for action. Introduce 'abductive confidence'—a non-probabilistic but inductive-leaning warrant that allows acting on theories that explain the most while surviving tests. This saves the practice of science at the cost of Popper's purity.",
+      "counterconditions": [
+        "If this synthesis is just Bayesianism in disguise.",
+        "If Popper's system can be salvaged without adding induction.",
+        "If 'abductive confidence' is just another name for the smuggled induction."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Addresses action by proposing a new mechanism (abduction) that explicitly supports it, fixing the gap in pure Popperism."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Directly answers the dilemma by admitting the smuggling and formalizing it as a necessary supplement."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "revised",
+          "note": "Cost: Abandoning the dream of a purely deductive science; accepting that some inductive leap is unavoidable for agency."
+        },
+        {
+          "handle": "[SRC_006] against SRC_003",
+          "kind": "rebutted",
+          "note": "Explains Popper's behavior as intuitively relying on this missing piece, even if his philosophy denied it."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "Action requires the abductive step; without it, Popper's system leaves us paralyzed."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The distinction is preserved but underpinned by abductive reasoning rather than pure logic."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Minimizing error requires abductive inference about which theories are likely to continue minimizing error."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "Accepts the failure of verisimilitude and proposes abduction as the alternative metric for action."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_011"
+      ]
+    },
+    {
+      "claim": "The preference is defensible because 'corroboration' is not a measure of truth but a measure of 'testability potential retained.' We prefer the better-corroborated theory because it remains the most fertile ground for future criticism and discovery, not because we expect it to work forever.",
+      "mechanism": "Fertility Heuristic: Action is chosen to maximize the rate of learning. Theories that have survived severe tests while retaining high content are the most 'fertile' for generating new problems and tests. We act on them to keep the engine of discovery running, not because we believe they are final truths.",
+      "counterconditions": [
+        "If acting on a theory implies believing it works, not just that it's interesting.",
+        "If fertility does not justify the risks of real-world action (e.g., bridge collapse).",
+        "If Popper viewed action as separate from the goal of maximizing criticism."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Reframes 'action' as part of the experimental process; building the bridge is also a test."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Answers the dilemma by shifting the goal from 'success' to 'learning,' avoiding the need for induction about success."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "revised",
+          "note": "Cost: We might act on theories we suspect are false if they are highly fertile, potentially risking practical failure for theoretical gain."
+        },
+        {
+          "handle": "[SRC_006] against SRC_003",
+          "kind": "rebutted",
+          "note": "Popper's preference was for the theory that offered the most opportunities for further refutation."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "Acting on the theory is a way of subjecting it to new, real-world tests."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "High content theories are preferred precisely because they are more fertile for testing."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Surviving specific tests indicates the theory is robust enough to sustain further critical inquiry."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "Sidesteps the verisimilitude issue by focusing on the dynamic role of the theory in research rather than its static truth value."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008",
+        "SRC_014"
+      ]
+    }
+  ]
+}

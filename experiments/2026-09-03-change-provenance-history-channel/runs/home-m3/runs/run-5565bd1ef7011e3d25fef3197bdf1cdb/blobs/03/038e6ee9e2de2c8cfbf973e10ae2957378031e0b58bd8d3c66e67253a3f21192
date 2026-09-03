@@ -1,0 +1,212 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'methodological rule' akin to choosing the sharper sword: it maximizes testability (informational content) without asserting future success probability.",
+      "mechanism": "Corroboration reports past performance in severe tests; preferring the theory with higher informational content (lower logical probability) is rational because it exposes itself more to falsification. If it survives, we have learned more, even if we cannot predict it will survive the next test.",
+      "counterconditions": [
+        "The agent must accept that this preference offers no guarantee of practical success (the bridge might still fall).",
+        "The distinction between 'acting on' and 'believing true' must be rigorously maintained."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_003",
+          "kind": "rebutted",
+          "note": "The criticism conflates 'predictive power' (expectation of truth) with 'testability' (capacity to be falsified). Popper links high content to low probability precisely to show we prefer the riskier claim, not the more probable one. Acting on it is a gamble on its content, not its probability."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Popper does not expect the theory to work; he expects that IF it is false, this theory is the most likely to reveal it. Building a bridge on the best-tested theory is the most rational way to learn quickly if our physics is wrong, not a bet that it is right."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "This proposal explicitly avoids propensity as a justification for theory choice, relying instead on the logical relation between content and test severity."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "No evolutionary imperative is invoked; the justification is purely methodological and logical within the framework of falsificationism."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "revised",
+          "note": "Added explicit cost analysis: The cost is the acceptance of radical uncertainty regarding future performance and the abandonment of the comfort of probabilistic safety."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Verisimilitude is not required for this argument; the argument rests solely on the degree of corroboration as a report of test severity survived."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "The cost is epistemic humility, not a biological drive. The proposal addresses the cost directly."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The Tichý/Miller proof is irrelevant here as the mechanism does not rely on defining verisimilitude, but on the comparative history of testing."
+        }
+      ],
+      "optional_refs": ["SRC_001", "SRC_003"]
+    },
+    {
+      "claim": "The preference smuggles induction back in because any decision to 'act on' a theory inherently assumes the uniformity of nature (that the future will resemble the past), which Popper's logic cannot escape despite his verbal denials.",
+      "mechanism": "Action implies expectation. To build a bridge using Theory A over Theory B because A survived tests yesterday is to assume that the laws governing the bridge's stability tomorrow will be the same as yesterday. This assumption is the principle of induction.",
+      "counterconditions": [
+        "Popper must admit that 'rational action' requires more than just 'having tested', it requires 'expecting continuity'.",
+        "The distinction between 'psychological habit' and 'logical justification' collapses when the stakes involve physical safety."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_003",
+          "kind": "rebutted",
+          "note": "The criticism tries to save the distinction, but in the context of action (building bridges), 'informational content' is useless unless one assumes the content remains relevant. That assumption is inductive."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Agrees with the critic: scientists prefer corroborated theories because they expect them to work. Popper's denial of this expectation is a semantic game that fails to address the pragmatic reality of action."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "departure_declared",
+          "note": "Departing from strict Popperian textual exegesis to focus on the pragmatic implications of 'action' which inevitably reintroduce induction."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "The 'pragmatic imperative' IS the inductive leap. The criticism claims it sidesteps the issue, but the proposal argues it IS the issue."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "revised",
+          "note": "Explicitly states the cost: Accepting this view means admitting Popper failed to solve the problem of induction and that science rests on an unjustifiable metaphysical faith."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Verisimilitude attempts were indeed flawed, but the failure of verisimilitude strengthens the claim that only induction can justify preference."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "The cost is the collapse of Popper's entire demarcation project if induction is admitted as necessary for action."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The failure of verisimilitude supports the conclusion that no non-inductive metric exists to justify action."
+        }
+      ],
+      "optional_refs": ["SRC_002", "SRC_007"]
+    },
+    {
+      "claim": "The preference is defensible only if reinterpreted through an evolutionary epistemology where 'rationality' is replaced by 'adaptive fitness', effectively conceding that logic alone cannot justify the preference.",
+      "mechanism": "Humans prefer corroborated theories not because it is logically valid, but because organisms that did so survived. This shifts the justification from the realm of logic (Popper's goal) to biology, accepting that the 'smuggling' is a feature of our cognitive architecture, not a flaw in the theory.",
+      "counterconditions": [
+        "One must abandon the idea that scientific rationality is purely logical.",
+        "The definition of 'defensible' must expand to include 'evolutionarily stable'."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_003",
+          "kind": "departure_declared",
+          "note": "Departing from the logical distinction to embrace a biological explanation where the distinction matters less than the survival outcome."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The critic says it fails to address action; this proposal argues it addresses action perfectly by explaining WHY we act, even if logic doesn't compel it."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "Propensity is irrelevant; the mechanism is natural selection of cognitive strategies."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "revised",
+          "note": "Clarifies that the 'pragmatic evolutionary imperative' IS the answer to whether it smuggles induction: yes, but it's a necessary smuggling for survival."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "revised",
+          "note": "The cost is the surrender of the ideal of pure reason; science becomes a sophisticated form of animal adaptation."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Verisimilitude is unnecessary if the goal is survival rather than truth approximation."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "Addresses the cost-benefit: the benefit is survival, the cost is logical purity."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "Logical proofs against verisimilitude do not apply to evolutionary explanations of behavior."
+        }
+      ],
+      "optional_refs": ["SRC_004", "SRC_014"]
+    },
+    {
+      "claim": "The dilemma is a false dichotomy created by a misunderstanding of 'probability'; Popper's preference is defensible if we view corroboration as a measure of 'propensity to withstand tests' rather than 'probability of being true'.",
+      "mechanism": "Utilizing Popper's later propensity interpretation, corroboration indicates a theory's objective propensity to survive specific test conditions. Preferring the higher propensity is not inductive (predicting the future from the past) but recognizing an existing dispositional property of the theory relative to the world.",
+      "counterconditions": [
+        "Must accept propensity as a real, albeit unprovable, feature of the universe.",
+        "Must distinguish clearly between 'propensity to survive tests' and 'propensity to be true'."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_003",
+          "kind": "rebutted",
+          "note": "The criticism assumes 'acting on' requires predictive probability. This proposal argues it requires recognizing a current dispositional state (propensity)."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Scientists expect theories to work because they possess a high propensity to pass tests, not because of inductive enumeration."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "revised",
+          "note": "Explicitly addresses the critic's concern by clarifying that Popper DID use propensity for theory choice in his later work, contrary to the critic's assertion that he rejected it for this purpose."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "This is not an evolutionary sidestep but a metaphysical refinement of probability theory itself."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "revised",
+          "note": "The cost is the adoption of a controversial metaphysical stance (propensities) that many empiricists reject."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Propensity offers a route around the Tichý/Miller proof which targeted truth-content, not test-survival dispositions."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "The cost is metaphysical baggage, not a failure to answer the cost-benefit analysis."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The proof applies to verisimilitude, not to the propensity interpretation of corroboration."
+        }
+      ],
+      "optional_refs": ["SRC_009", "SRC_011"]
+    }
+  ]
+}

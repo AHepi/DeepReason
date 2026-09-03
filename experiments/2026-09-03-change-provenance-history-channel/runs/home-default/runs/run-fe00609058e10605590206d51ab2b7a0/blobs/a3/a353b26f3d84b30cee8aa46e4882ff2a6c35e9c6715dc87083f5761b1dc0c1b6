@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule to maximize the 'risk' of falsification, thereby accelerating the elimination of error; however, accepting this defense costs the scientist any rational assurance that the preferred theory is likely true or practically reliable for action, reducing scientific choice to a gamble on severity rather than a bet on probability.",
+    "mechanism": "The argument reconstructs Popper's 'methodological falsificationism' by distinguishing between the logical status of corroboration (a report of past performance) and the pragmatic rule of preference (a decision to subject the boldest conjecture to the severest test). It posits that preferring the best-corroborated theory is equivalent to preferring the theory that has survived the most dangerous attempts at refutation, which keeps the 'game of science' moving toward truth-content without asserting that survival increases the probability of the theory being true. The mechanism relies on the asymmetry between verification and falsification: while we cannot infer truth from survival, we can rationally choose the theory that offers the most informative potential for future falsification.",
+    "counterconditions": [
+      "If the preference for corroborated theories implicitly assumes that nature is uniform (i.e., that what worked before will work again), then it smuggles in induction despite Popper's protests.",
+      "If 'acting on' a theory requires an expectation of practical success (e.g., building a bridge that won't collapse), then a purely negative definition of corroboration fails to justify the action without covert probabilistic assumptions.",
+      "If the Tichý-Miller critique of verisimilitude holds, then comparing theories by 'truth-likeness' based on corroboration is logically incoherent, undermining the claim that we are getting closer to truth."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The criticism correctly notes the failure of Popper's *quantitative* definition of verisimilitude. However, this candidate's defense does not rely on a calculated measure of truth-content minus falsity-content. Instead, it relies on the *qualitative* methodological rule of choosing the most severely tested theory to maximize error elimination. The collapse of the formal calculus does not invalidate the procedural heuristic of preferring bold, surviving conjectures as the best engine for learning, even if we cannot formally rank their distance from truth."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, this candidate sidesteps the need for a successful formal definition of verisimilitude. The justification offered is pragmatic and procedural: we prefer the better-corroborated theory because it is the one currently offering the greatest leverage for finding errors, not because we have computed its 'truth-likeness.' The failure of the logical definition blocks a specific metaphysical claim but leaves the methodological imperative intact."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "rebutted",
+        "note": "The criticism demands a normative justification beyond descriptive survival. This candidate provides it: the norm is 'maximize the rate of error elimination.' Just as natural selection is descriptive, the *scientist's choice* to emulate it is normative based on the goal of learning. The norm is not 'survival is good,' but 'if our goal is to eliminate error, we must test the survivors hardest.' This preserves the anti-inductive stance while grounding the preference in a rational goal."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "The claim has been explicitly structured to present the strongest case for the defense (methodological risk maximization) and the strongest case for the indictment (the cost of losing practical assurance/probability). The conclusion explicitly weighs these, stating that the defense survives only by accepting the cost of agnosticism regarding practical reliability."
+      },
+      {
+        "handle": "39376b7fe8717864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes between the descriptive fact of survival and the normative rule of preference. The norm is derived from the aim of science (error elimination), not merely from the fact of survival. We do not prefer the theory *because* it survived; we prefer it because its survival indicates it has withstood severe tests, making it the optimal vehicle for further testing. This avoids the is-ought fallacy by anchoring the 'ought' in the declared aim of the scientific enterprise."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6",
+        "kind": "rebutted",
+        "note": "The candidate does not ignore verisimilitude but argues that the *preference* can be sustained even if the *formal ranking* of verisimilitude fails. The defense rests on the severity of tests, not on a computed score of truth-likeness. The dichotomy presented is between 'probable truth' (induction) and 'severity of testing' (falsification); the candidate argues Popper forces this choice, and the cost of choosing the latter is the loss of confidence in practical success."
+      },
+      {
+        "handle": "5f9249c623a92cb4f40954cc5ed9f9aa65593cfd400dc7eeccd621c30856357c",
+        "kind": "revised",
+        "note": "The claim now explicitly articulates the cost: 'accepting this defense costs the scientist any rational assurance that the preferred theory is likely true or practically reliable for action.' It frames the trade-off as sacrificing practical certainty for the sake of methodological purity and the acceleration of error detection."
+      },
+      {
+        "handle": "6741a06d8088515b255833dec9027762128dd19092a1ab9feadf4108cb3f39d4",
+        "kind": "rebutted",
+        "note": "The candidate directly addresses whether induction is smuggled in. It argues that if the preference is viewed as a bet on *future success*, induction is smuggled in. However, if the preference is viewed as a commitment to *future testing*, induction is avoided. The candidate concludes that scientists often do smuggle induction when acting, but strictly speaking, on Popper's terms, the preference is only defensible if stripped of all expectations of practical reliability, thus answering the core tension by admitting the defense requires a counter-intuitive restriction on what 'rational action' means."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

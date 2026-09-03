@@ -1,0 +1,109 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule for error elimination, not an inductive inference about truth probability.",
+      "mechanism": "Corroboration reports the severity of tests survived. Preferring the theory that has withstood more severe tests is equivalent to preferring the theory that has been less likely to be false if it were false. This is a deductive assessment of past performance (the test history), not a probabilistic prediction of future success. The 'preference' is a decision to subject the bold conjecture to further risk, maximizing the chance of finding error, rather than assuming it will hold.",
+      "counterconditions": [
+        "If the scientist acts on the theory expecting it to succeed in future applications based solely on past success, they have slipped into induction.",
+        "If 'preference' implies assigning a higher subjective degree of belief (Bayesian posterior) to the corroborated theory, it contradicts Popper's anti-probabilism.",
+        "If the choice is made because the theory is 'safer' or 'more reliable' in a pragmatic sense derived from past frequency, this is inductive."
+      ],
+      "typicality": 0.92,
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The preference smuggles induction back in because any action-guiding choice necessarily assumes the future will resemble the past, which Popper explicitly forbade as a logical principle.",
+      "mechanism": "To 'prefer' theory A over theory B for action (e.g., building a bridge) implies an expectation that A will not fail where B might. This expectation relies on the assumption that the conditions which allowed A to survive past tests will persist. Since Popper denies that survival increases probability, the only ground for this expectation is the uniformity of nature (induction). Without this hidden premise, the preference is arbitrary; with it, Popper's system collapses into the very inductivism he sought to replace.",
+      "counterconditions": [
+        "If the agent admits they are acting on a blind guess and the preference is merely psychological comfort, the charge of smuggling induction fails.",
+        "If the 'preference' is redefined strictly as 'choosing the best target for attempted falsification' rather than 'choosing the best basis for action', the inductive step is avoided.",
+        "If one accepts that rational action does not require probable truth, only the absence of known falsity, the inductive gap is bridged without induction."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_005"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The surviving view is that the preference is defensible as a non-inductive 'verisimilitude' heuristic, but accepting it costs the certainty that science converges on truth, leaving us with only 'boldness' as a guide.",
+      "mechanism": "Popper later introduced 'verisimilitude' (truth-likeness) to explain why we prefer corroborated theories: they seem closer to the truth. The mechanism is evolutionary: we select theories that have survived severe filters. This is defensible without induction if viewed as a search strategy in a landscape of errors. However, the cost is high: we can never know if we are actually getting closer to the truth or just finding theories that fit current local conditions. We lose the guarantee of progress, retaining only the hope that eliminating error leaves something better behind.",
+      "counterconditions": [
+        "If verisimilitude cannot be formally defined or measured without invoking probability, the defense collapses.",
+        "If the 'cost' includes the inability to justify why we should trust technology built on these theories, the position becomes pragmatically untenable.",
+        "If the evolutionary analogy requires an inductive assumption that the 'fitness landscape' of truth is stable, the smuggling charge stands."
+      ],
+      "typicality": 0.78,
+      "optional_refs": [
+        "SRC_006"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The preference is a category mistake: Popper conflates the logical status of a theory (unproven) with the psychological/biological necessity of acting, creating a false dilemma between induction and arbitrariness.",
+      "mechanism": "The mechanism here is biological pragmatism. Humans must act; waiting for logical certainty is impossible. The 'preference' is not a logical derivation but a biological imperative to use the most robust tool available. It is defensible on Popper's terms only if we admit that his logic applies to the growth of knowledge (theories), while his advice on action belongs to the domain of biology/psychology. The 'smuggling' is only apparent if one demands logic to dictate all action. The cost is the separation of epistemology from praxis.",
+      "counterconditions": [
+        "If Popper claims his methodology dictates rational action, not just theory generation, this separation is invalid.",
+        "If 'biological imperative' is just a naturalized form of induction (expecting survival based on past fitness), the problem remains.",
+        "If the 'preference' influences which experiments are funded or which risks are taken, it functions logically as a probability assignment regardless of the label."
+      ],
+      "typicality": 0.65,
+      "optional_refs": [
+        "SRC_007"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The strongest case for 'smuggling' is that 'severity' of a test is itself defined inductively: a test is severe only if we expect the theory to fail if it is false, which presupposes regularities in nature.",
+      "mechanism": "The definition of a 'severe test' relies on background knowledge. We judge a test as severe because, given our current understanding, a false theory would likely fail it. This judgment of likelihood ('would likely fail') is inherently probabilistic and inductive. Therefore, the core metric of Popperian corroboration (severity) rests on an inductive foundation. The preference for the theory passing such tests thus indirectly relies on the inductive validity of the severity assessment.",
+      "counterconditions": [
+        "If 'severity' is defined purely logically (e.g., logical incompatibility with background knowledge) without reference to empirical likelihoods, the inductive link is broken.",
+        "If the background knowledge is treated as conjectural and fallible rather than probable, the circularity might be avoided.",
+        "If the 'expectation' of failure is a logical deduction from the theory's content rather than an empirical generalization, the mechanism holds."
+      ],
+      "typicality": 0.55,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Accepting the defensibility of preference costs the objectivity of scientific progress, reducing it to a convention of 'critical rationalism' that cannot distinguish itself from dogmatism in the limit.",
+      "mechanism": "If corroboration is not probability, and preference is merely a rule of thumb for error avoidance, then there is no objective sense in which the preferred theory is 'better' than a rival that hasn't been tested yet, except that it has survived so far. This makes the preference a convention. The cost is that we cannot claim science objectively progresses toward truth; we only claim it adheres to a specific set of rules (the critical method). If a dogmatist refuses to test their theory, Popper can only say they are violating the rules, not that they are objectively wrong about the world. The 'survival' of the view depends on accepting conventionalism over realism.",
+      "counterconditions": [
+        "If Popper is a realist who believes truth exists independently of our methods, this conventionalist reading misrepresents him.",
+        "If the 'cost' is acceptable because objectivity lies in the method, not the result, the position remains stable.",
+        "If the preference can be grounded in the logical content (information richness) of the theory rather than its history, the loss of objectivity is mitigated."
+      ],
+      "typicality": 0.42,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ],
+  "abstention": null,
+  "context_request": null,
+  "research_proposals": [],
+  "scratch_proposal": null,
+  "simulation_proposals": []
+}

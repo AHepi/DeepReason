@@ -1,0 +1,244 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'critical choice' based on verisimilitude (truth-likeness), where corroboration reports past severity but the choice targets future truth-content, accepting the cost that this relies on a metaphysical optimism about progress rather than logical guarantee.",
+      "mechanism": "Metaphysical Optimism and Verisimilitude",
+      "counterconditions": [
+        "If the Tichý-Miller theorem successfully proves verisimilitude cannot be defined within Popper's logic, this mechanism collapses.",
+        "If 'critical choice' is shown to implicitly require an inductive assumption that the future will resemble the past regarding test outcomes."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate explicitly adopts the 'critical rational choice' framing mentioned in the criticism, arguing it avoids the false dichotomy by introducing verisimilitude as the third option between probability and convention."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Addresses coexisting unrefuted theories by asserting the choice is for the one with higher potential truth-content (verisimilitude), not merely survival status."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "Clarifies that the 'cost' is the acceptance of metaphysical optimism, which answers the prompt's requirement to state what accepting the defense costs."
+        },
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "Distinguishes 'metaphysical optimism' from 'induction'; optimism is a regulative ideal for action, not a logical claim about nature's uniformity."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "Separates the causal explanation (evolutionary selection) from the normative justification (choice based on estimated truth-content)."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "Rejects the 'pragmatic bet' analogy in favor of a 'critical preference' based on logical content and severity passed."
+        },
+        {
+          "handle": "[SRC_010] against SRC_002",
+          "kind": "rebutted",
+          "note": "Argues that methodological acceptance does not smuggle induction if it is framed as a decision to treat the theory as the best available guess, not as probable."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "revised",
+          "note": "Acknowledges the Tichý-Miller threat but revises the claim to rely on 'naive verisimilitude' as a practical guide despite formal difficulties, explicitly listing this fragility as a cost."
+        }
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_011",
+        "SRC_014"
+      ]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict logical terms and necessarily smuggles in induction; the only consistent Popperian stance is to view the preference as a non-rational 'convention' or 'decision' akin to choosing a game, costing us the ability to claim scientific action is objectively more rational than arbitrary guessing.",
+      "mechanism": "Radical Conventionalism",
+      "counterconditions": [
+        "If Popper can demonstrate a logical bridge between 'severe testing' and 'rational action' without invoking probability.",
+        "If the definition of 'rationality' is expanded to include non-inductive pragmatic success."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "Accepts the 'false dichotomy' charge but argues the 'critical rational choice' is itself an inductive disguise, leaving 'convention' as the only honest category."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Admits that for coexisting theories, the choice is arbitrary under strict logic, confirming the 'smuggling' charge."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "Explicitly states the cost: the loss of objective rationality in preference, reducing it to a psychological or sociological habit."
+        },
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "Agrees that evolutionary epistemology smuggles induction; therefore, it is rejected as a defense, supporting the 'indefensible' conclusion."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "Concedes that causal explanations (survival) cannot ground normative preferences without an inductive leap."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "Rejects the 'fittest survivor' analogy as inherently inductive when applied to future performance."
+        },
+        {
+          "handle": "[SRC_010] against SRC_002",
+          "kind": "rebutted",
+          "note": "Confirms that 'methodological acceptance' functions as probabilistic weighting in practice, validating the criticism."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "Uses the failure of verisimilitude (Tichý-Miller) as primary evidence that no non-inductive metric exists, forcing the conventionalist conclusion."
+        }
+      ],
+      "typicality": 0.65,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_010"
+      ]
+    },
+    {
+      "claim": "The preference is defensible not as a claim about truth or probability, but as a 'methodological rule' analogous to a lawyer preferring a witness who has survived cross-examination; the 'cost' is accepting that science is a procedural game of error-elimination where 'better' means 'more tested' rather than 'more likely true'.",
+      "mechanism": "Procedural Rationality / Cross-Examination Analogy",
+      "counterconditions": [
+        "If the analogy between legal cross-examination and scientific testing fails to capture the predictive necessity of science.",
+        "If 'more tested' is shown to logically imply 'more reliable' only via induction."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "revised",
+          "note": "Refines 'critical rational choice' into 'procedural rationality,' distinguishing it from both convention and induction."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Explains that between coexisting theories, the one with more severe tests passed is procedurally superior, regardless of current refutation status."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "Defines the cost as the abandonment of 'truth-likeness' goals in favor of 'error-elimination' status."
+        },
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "Argues that procedural rules do not rely on past success predicting future success, but on the logical value of having attempted falsification."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "Posits that the normative justification is internal to the methodological game, not external causal selection."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "Replaces 'biological fitness' with 'procedural robustness' to avoid inductive smuggling."
+        },
+        {
+          "handle": "[SRC_010] against SRC_002",
+          "kind": "rebutted",
+          "note": "Clarifies that methodological acceptance is a rule of the game, not a hidden probability assignment."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "Sidesteps the verisimilitude problem entirely by grounding preference in test severity count, not truth-content estimation."
+        }
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_007",
+        "SRC_009"
+      ]
+    },
+    {
+      "claim": "The preference is a 'functional fiction' necessary for the sociology of science to operate; it is indefensible logically but indispensable pragmatically, costing Popperians the consistency of their system in exchange for the utility of scientific practice.",
+      "mechanism": "Sociological Functionalism",
+      "counterconditions": [
+        "If scientists can operate effectively without the fiction of preference (e.g., random theory selection).",
+        "If the 'fiction' is exposed as causing harmful dogmatism rather than progress."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "departure_declared",
+          "note": "Departs from the search for a logical defense, accepting the inconsistency as a feature of human practice."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Argues that the 'choice' mechanism is a social coordination tool, not a logical derivation."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "Identifies the cost as 'logical consistency,' which is sacrificed for 'sociological function'."
+        },
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "Admits the induction is smuggled in but frames it as an unavoidable cognitive bias required for action."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "Merges causal explanation and normative justification into a single sociological phenomenon."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "Accepts the 'pragmatic bet' description but strips it of rationalist pretensions."
+        },
+        {
+          "handle": "[SRC_010] against SRC_002",
+          "kind": "rebutted",
+          "note": "Confirms the smuggling of induction as the price of doing business."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "Treats the failure of verisimilitude as proof that the logical foundation is missing, reinforcing the functionalist view."
+        }
+      ],
+      "typicality": 0.45,
+      "optional_refs": [
+        "SRC_006",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The preference is defensible via 'propensity' interpretation: corroboration measures the objective propensity of a theory to withstand tests, which is distinct from subjective probability or induction, costing the acceptance of a controversial metaphysical doctrine of propensities.",
+      "mechanism": "Propensity Interpretation of Probability",
+      "counterconditions": [
+        "If the propensity interpretation is deemed circular or untestable.",
+        "If 'propensity to withstand tests' is indistinguishable from 'probability of being true'."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "Offers 'propensity' as the specific mechanism for 'critical rational choice' that avoids the false dichotomy."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Selects the theory with the highest objective propensity to survive future tests."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note":

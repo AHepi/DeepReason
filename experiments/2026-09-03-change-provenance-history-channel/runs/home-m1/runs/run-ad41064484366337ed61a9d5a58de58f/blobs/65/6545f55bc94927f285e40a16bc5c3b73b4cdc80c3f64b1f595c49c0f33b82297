@@ -1,0 +1,67 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, methodological rule of 'critical preference,' where corroboration reports past performance without predicting future success, thus avoiding the smuggling of induction.",
+      "mechanism": "Corroboration functions as a historical report card (severity of tests passed) rather than a probability estimate. The scientist prefers the theory with the highest 'critical content' survived, not because it is likely true, but because it is the most rationally criticizable survivor available for action. This is a decision rule based on the logic of the situation (verisimilitude potential), not an inductive inference that the future will resemble the past.",
+      "counterconditions": [
+        "If corroboration is treated as increasing the logical probability of the theory.",
+        "If the preference relies on the assumption that nature is uniform.",
+        "If the scientist claims the preferred theory is 'more likely to be true' in a probabilistic sense."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "The distinction is maintained: the causal explanation (evolutionary selection of theories) is separate from the normative justification (methodological rule to prefer the best-tested). The justification is not 'it survived so it will survive,' but 'it is the most severely tested candidate we have; acting on anything else is irrational given our goal of truth-likeness.'"},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "The pragmatic bet is not on 'future fitness' via induction, but on 'current critical status.' We choose the fittest survivor *now* as the best basis for action, acknowledging it may fail tomorrow. This is a static evaluation of current knowledge state, not a dynamic prediction."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "This does not ignore Popper's solution; it *is* Popper's solution. The false dilemma claim fails because the proposal explicitly rejects the 'induction' horn and avoids 'radical skepticism' by adopting the 'critical preference' horn, which Popper defined as distinct from both."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "Verisimilitude is used here only as a regulative ideal (aiming for truth), not as a calculable metric that collapses into probability. The preference is for the theory that *appears* closer to truth based on severe testing, without claiming to measure the distance probabilistically."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "For bridge building, we do not act on the theory because it is 'likely true,' but because it is the only one that has withstood attempts to show it false. Acting on a falsified or less-tested theory would be knowingly irrational. The 'depth of insight' is the capacity to withstand criticism, which is directly relevant to safety."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "This is not a 'methodological assumption' of induction (which Popper rejected as self-contradictory). It is a methodological *rule* of preference derived from the deductive logic of falsification: if T1 survives tests that falsify T2, T1 is provisionally preferred. No universal premise about the future is added."},
+        {"handle": "[SRC_016] against SRC_012", "kind": "rebutted", "note": "The argument does not claim Popper's rejection of induction is an inductive generalization. It asserts that the *preference rule* is a deductive consequence of the aim of science (truth) and the method of falsification, not an inductive habit."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Agreed that Popper provides 'severity of test' as a metric. This candidate utilizes exactly that metric to define 'better-corroborated' without converting it into a probability score, thereby satisfying the criticism that the metric exists and is non-probabilistic."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_009", "SRC_010"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back in because any practical reliance on past test results to guide future action implicitly assumes the uniformity of nature or the reliability of memory, which are inductive principles.",
+      "mechanism": "Even if labeled 'critical preference,' the act of choosing Theory A over Theory B because A survived tests yesterday implies a belief that the conditions allowing A's survival will persist or that the test results are reliable guides to future performance. This hidden premise ('the future will resemble the past regarding test outcomes') is the definition of induction. Popper's attempt to sever this link is semantic, not substantive, because action requires predictive confidence.",
+      "counterconditions": [
+        "If one can demonstrate a form of rational action that relies zero percent on the expectation of regularity.",
+        "If 'corroboration' can be shown to have zero bearing on future expectations.",
+        "If the agent acts on the less-corroborated theory without being deemed irrational."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_006] against SRC_002", "kind": "revised", "note": "Revised to acknowledge that while Popper distinguishes causal/normative, the *normative* force itself ('you ought to prefer A') relies on an implicit inductive wager that A's past success is relevant to its future utility. The rebuttal fails because the 'ought' presupposes the 'will'."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "The 'pragmatic bet' analogy actually supports the induction charge: a bet is only rational if one believes the odds (based on past data) reflect future reality. Calling it a 'bet on the currently fittest' admits the dependence on past performance as a proxy for future capability."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "Popper's 'solution' is verbal sleight of hand. He claims a middle ground, but any middle ground that allows *action* based on *past* tests necessarily imports induction. The dilemma is real: either radical skepticism (no action) or induction (action based on past)."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "Even without explicit probability, the concept of 'verisimilitude' as a guide for action assumes that theories that looked truer in the past will look truer (or be truer) in the future. This temporal projection is inductive."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "revised", "note": "In bridge building, the engineer prefers the tested theory precisely because they expect the laws of physics to hold tomorrow as they did yesterday. This expectation is the inductive principle Popper claimed to reject. The 'depth of insight' is irrelevant if the underlying regularity is not assumed."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "Treating induction as a 'regulative ideal' or 'methodological assumption' is exactly what Popper criticized, but this candidate argues that *any* preference rule functioning as a guide for action *is* effectively such an assumption, regardless of what Popper called it."},
+        {"handle": "[SRC_016] against SRC_012", "kind": "rebutted", "note": "The criticism of the straw man is noted, but the core point stands: the *practice* of preferring corroborated theories functions inductively, even if the *philosophical justification* denies it. The contradiction lies between Popper's philosophy and his prescribed practice."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "While 'severity of test' is a metric, using it to *prefer* one theory for *future* action transforms a descriptive metric into a predictive tool, which is the domain of induction."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_003", "SRC_011"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view scientific preference not as a truth-tracking mechanism (induction) nor as a blind guess (skepticism), but as an evolutionary selection process where 'corroboration' is simply the record of survival, and preference is the natural outcome of eliminating the unfit.",
+      "mechanism": "Adopt a strict evolutionary epistemology: theories are conjectures; tests are selection pressures. Corroboration is merely the statement 'this theory has not yet been eliminated.' Preferring it is not an inductive leap that it *will* survive, but a recognition that it is the *only* one left standing. The 'cost' is accepting that we have no reason to think the survivor is 'true' or 'probable,' only that it is the current temporary winner in a game of elimination. Action is taken on the survivor by default, not by positive justification.",
+      "counterconditions": [
+        "If the elimination process is biased or incomplete.",
+        "If 'survival' is conflated with 'fitness for future purposes'.",
+        "If the agent attributes positive likelihood to the survivor."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_006] against SRC_002", "kind": "departure_declared", "note": "Departing from the need for a 'normative justification' distinct from the 'causal explanation.' In this view, the causal process (elimination) *generates* the norm: you prefer the survivor because there is nothing else. The 'ought' emerges from the 'is' of the elimination set."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "The 'pragmatic bet' is mischaracterized. It is not a bet on future fitness, but a resignation to the current state of the field. We use the survivor because the others are dead. This is not induction; it is accounting."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "This avoids the false dilemma by rejecting the premise that preference requires a *positive* reason (induction) or *no* reason (skepticism). The reason is negative: the alternatives are falsified."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "Verisimilitude is discarded entirely. We do not prefer the survivor because it is 'closer to truth,' but because it is 'not yet known to be false.' This removes the collapsing metric."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "revised", "note": "For bridge building, this implies we build with the surviving theory knowing it might collapse, but acknowledging that building with a falsified theory is guaranteed madness. The 'insight' is purely negative knowledge of what doesn't work."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "This is not a 'methodological assumption' of induction. It is a description of the logical state of the corpus of knowledge: {T1, T2... Tn} where T2..Tn are falsified. Preference for T1 is logically necessitated by the set, not assumed."},
+        {"handle": "[SRC_016] against SRC_012", "kind": "rebutted", "note": "No straw man here. The argument relies on the deductive fact of falsification of rivals, not an inductive generalization about the survivor."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Severity of test is reinterpreted strictly as 'capacity to eliminate.' High severity means high elimination power. The preferred theory is just the one that hasn't been eliminated yet."}
+      ],
+      "optional_refs": ["SRC_004", "SRC_012"]
+    }
+  ]
+}

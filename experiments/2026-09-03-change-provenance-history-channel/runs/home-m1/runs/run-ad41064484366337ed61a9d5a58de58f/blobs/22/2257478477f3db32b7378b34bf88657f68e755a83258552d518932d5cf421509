@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a critical rational choice to subject the boldiest surviving conjecture to the most severe possible tests, thereby maximizing the rate of error elimination; accepting this costs the scientist any assurance that the chosen theory is true or probably true, reducing scientific action to a non-justified 'faith' in the method of criticism itself.",
+    "mechanism": "Critical Rational Choice via Error Elimination Rate: The mechanism posits that preferring the best-corroborated theory is equivalent to selecting the hypothesis that has survived the most stringent attempts at falsification, which makes it the most informative target for future testing. This preference is normative only in the sense of adhering to the goal of rapid truth approximation through falsification, not in predicting utility or truth.",
+    "counterconditions": [
+      "If the goal of science shifts from truth-seeking to immediate practical reliability, the Popperian preference becomes indefensible without smuggling in induction.",
+      "If two theories have equal corroboration but different prior plausibility (in a Bayesian sense), Popper's framework lacks the resources to distinguish them.",
+      "If the 'best-corroborated' theory is known to be false in limiting cases (e.g., Newtonian physics), acting on it requires an inductive leap regarding its domain of validity."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The candidate explicitly rejects the 'non-rational convention' dichotomy by framing the preference as a 'critical rational choice' grounded in the logic of error elimination, directly addressing the claim that a false dichotomy was created."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "revised",
+        "note": "Revised to clarify that when multiple unrefuted theories coexist, the preference goes to the one with higher content and severity of tests passed (boldness), not merely survival, thus addressing the selection problem among coexisting survivors."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "rebutted",
+        "note": "The cost is explicitly identified as the loss of assurance regarding future success; the defense does not claim the 'fittest' will survive tomorrow, only that it is the best current target for criticism, answering the specific cost question."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The analogy to biological selection is rejected in favor of a logical argument about information content and test severity; the preference is not based on past survival predicting future survival (induction) but on current informational value."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "revised",
+        "note": "Clarified the distinction between causal explanation and normative justification by grounding the normativity in the accepted goal of 'rapid error elimination' rather than evolutionary causality."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "The candidate avoids the 'pragmatic bet' language that implies induction, instead framing the choice as a commitment to the method of criticism, which is consistent with Popper's rejection of pragmatic justification based on past success."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "rebutted",
+        "note": "Explicitly states that the preference does not assume the theory will continue to succeed (no regulative ideal of continuity), but rather treats the theory as the most vulnerable and thus most useful conjecture for the next test."
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "departure_declared",
+        "note": "Departing from reliance on 'verisimilitude' as a quantitative metric due to the Tichý-Miller theorem; the argument rests solely on qualitative corroboration and test severity."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "biological_evolution_selection_pressure",
+        "court_cross_examination_procedures"
+      ],
+      "shared_structure": [
+        "Survival of the fittest corresponds to survival of the most severely tested theory.",
+        "Selection is based on past performance but justifies future attention, not future success guarantees.",
+        "The goal is elimination of the weak (false theories/organisms) rather than certification of the strong."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of truth, whereas science explicitly aims at truth.",
+        "In court, cross-examination aims to establish facts for a verdict, whereas in Popperian science, it aims to overturn the current best guess.",
+        "Organisms do not choose to be tested; scientists actively seek out severe tests for their own theories."
+      ],
+      "transfer_claims": [
+        "Just as we study the hardiest organism to understand survival limits, we act on the best-corroborated theory to understand the limits of nature.",
+        "Preference is a heuristic for where to look next, not a warranty of safety."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that avoiding falsification is possible without approaching truth (e.g., ad-hoc modifications), the link between corroboration and error elimination breaks.",
+        "If practical action requires a probability threshold that corroboration cannot provide, the preference becomes irrational for engineers."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

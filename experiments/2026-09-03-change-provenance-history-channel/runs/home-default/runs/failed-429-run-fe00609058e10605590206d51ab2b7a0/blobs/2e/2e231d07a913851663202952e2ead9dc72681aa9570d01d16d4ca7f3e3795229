@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses because it conflates 'rational mandatory selection' with 'non-justified leap,' failing to explain how a preference can be rationally mandatory without any justificatory link to the goal of truth (verisimilitude). If the preference offers no guarantee or probability of being closer to the truth, and Popper explicitly rejects inductive bridges, the agent has no rational basis within Popper's own terms to prefer Theory A over Theory B for action; the move from 'survived tests' to 'prefer for action' implicitly smuggles in an inductive assumption that past performance is relevant to future utility, which is precisely the induction Popper rejected.",
+      "counterexample": null,
+      "premise": "Popper rejects induction and claims corroboration does not imply probability or future success.",
+      "premise_evidence": null,
+      "successor_question": "Can a methodological rule be considered 'rational' if it admits no logical connection between the rule's criteria (past survival) and its objective (truth/utility), or does this admission prove the rule relies on an unstated inductive faith?"
+    }
+  ]
+}

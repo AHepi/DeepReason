@@ -1,0 +1,104 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic rule of action that does not imply inductive probability, provided we accept the cost of abandoning the hope that science converges toward truth in a probabilistic sense.",
+      "mechanism": "Distinction between logical justification (probability) and pragmatic decision-making (corroboration as a guide for action without predictive certainty).",
+      "counterconditions": [
+        "If corroboration implies any degree of future reliability beyond mere survival of tests.",
+        "If Popper's own actions cannot be explained without assuming some form of induction.",
+        "If the 'pragmatic' defense collapses into a hidden appeal to the uniformity of nature."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_003", "kind": "rebutted", "note": "The candidate explicitly separates logical justification from pragmatic necessity, arguing that Popper's preference is a procedural rule for action, not a claim about increased probability, thus avoiding the conflation cited."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "rebutted", "note": "It rejects the false dilemma by showing Popper's solution is not a redefinition of probability but a complete rejection of probability as the metric for theory choice in favor of severity testing."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "departure_declared", "note": "This candidate departs from relying on verisimilitude entirely, grounding the preference solely in the methodological rule of selecting the most severely tested theory for critical discussion, acknowledging the formal refutation of verisimilitude."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "It clarifies that the biological analogy is illustrative of error elimination, not the source of rational defensibility; the defense rests on the logic of falsification, not evolutionary success."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "revised", "note": "Revised to remove all reliance on verisimilitude as a bridge, focusing instead on the 'best bet' heuristic which requires no claim of truth-likeness, only of test severity."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Addresses the normative question by framing the preference as a rational commitment to critical rationalism itself: to act on the least refuted theory is the only consistent action for a fallibilist."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "The candidate now explicitly constructs the strongest case for the opposing view (that it smuggles induction) in its counterconditions before refuting it, satisfying the directive to present both sides."},
+        {"handle": "[SRC_012] against SRC_004", "kind": "rebutted", "note": "Argues that accepting the preference as a psychological fact does not destroy normativity if the norm is defined as 'consistency with critical rationalism' rather than 'guarantee of truth'."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_005"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because any reason to prefer a surviving theory over a refuted one for future action assumes the future will resemble the past.",
+      "mechanism": "Reductio ad absurdum: demonstrating that 'pragmatic preference' without inductive assumption is empty, as action inherently requires a belief in predictive utility.",
+      "counterconditions": [
+        "If one can act on a theory without expecting it to work better than a random guess.",
+        "If 'corroboration' reports only past performance with zero implication for future utility.",
+        "If Popper's 'critical preference' is merely aesthetic and not actionable."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_003", "kind": "rebutted", "note": "Argues that the distinction between logical and pragmatic is illusory; if a pragmatic rule guides action successfully, it functions as an inductive principle regardless of label."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "rebutted", "note": "Contends that Popper's 'solution' is verbal sleight of hand; refusing to call it probability doesn't remove the inductive leap required to act on it."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Accepts the refutation of verisimilitude and uses it to strengthen the claim that without it, Popper has no non-inductive ground for preference, leaving only arbitrary choice or hidden induction."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "Asserts that the biological analogy actually proves the point: evolution works via induction-like mechanisms (fitness implies survival), so using it supports the idea that science too relies on quasi-inductive patterns."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Uses the collapse of verisimilitude to argue that Popper's system is left with no bridge at all, forcing the conclusion that scientists implicitly use induction despite Popper's protests."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Directly addresses Popper's behavior: argues that when Popper acted on corroborated theories, he was indeed acting inductively, contradicting his own philosophy."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "revised", "note": "Expanded to fully articulate the 'strongest case' for the defense (pragmatic rule) before dismantling it, ensuring both sides are presented robustly."},
+        {"handle": "[SRC_012] against SRC_004", "kind": "rebutted", "note": "Rejects the idea that distinguishing logic of discovery saves the normativity; argues that if the logic of justification fails, the normative force of science collapses into sociology."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_008"]
+    },
+    {
+      "claim": "The tension is resolved by viewing corroboration not as a measure of truth or probability, but as a measure of 'informational content' and 'testability'; we prefer high-corroboration theories because they risk more, not because they are likely true.",
+      "mechanism": "Reframing preference as a commitment to boldness and informational growth rather than safety or truth-proximity.",
+      "counterconditions": [
+        "If scientists prefer corroborated theories because they expect them to be safe/reliable.",
+        "If 'boldness' cannot be distinguished from 'falsity' without retrospective bias.",
+        "If the cost of preferring bold theories is frequent catastrophic failure in application."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_003", "kind": "rebutted", "note": "Clarifies that the preference is for 'content-rich' theories, a logical property, not a pragmatic necessity derived from past success."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "rebutted", "note": "Shows this is not a redefinition of probability but a shift in the axis of evaluation from likelihood to informativeness."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Avoids verisimilitude entirely by anchoring the value in 'potential for falsification' rather than 'closeness to truth'."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "Distinguishes the biological analogy: nature selects for survival, but science selects for 'interestingness' (high content), which is a normative, non-biological criterion."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Since this approach doesn't use verisimilitude, the refutation of verisimilitude is irrelevant to this specific defense."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Explains Popper's preference as a desire to learn fast (via falsification of bold claims), which is a defensible normative goal independent of induction."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Presents the induction-smuggling argument as the primary countercondition, giving it full weight before offering this alternative resolution."},
+        {"handle": "[SRC_012] against SRC_004", "kind": "rebutted", "note": "Argues that the normativity of science is preserved precisely by shifting the goal from 'truth' to 'growth of knowledge,' which remains a valid normative aim."}
+      ],
+      "optional_refs": ["SRC_009", "SRC_014"]
+    },
+    {
+      "claim": "Popper's position is untenable: the preference for corroborated theories is either irrational (random choice) or inductive; since scientists are not irrational, they are implicitly inductivists, rendering Popper's formal rejection of induction a philosophical fiction.",
+      "mechanism": "Disjunctive syllogism forcing a choice between irrationality and induction, concluding that real scientific practice validates induction despite Popper's terminology.",
+      "counterconditions": [
+        "If there exists a third option between randomness and induction.",
+        "If 'rationality' can be defined without reference to successful prediction.",
+        "If Popper's 'critical preference' constitutes a distinct third category of rationality."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_003", "kind": "rebutted", "note": "Argues that the 'pragmatic necessity' is just induction by another name; calling it procedural doesn't change its functional role in guiding expectations."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "rebutted", "note": "Claims Popper's 'actual solution' is a denial of reality; the dilemma is real and inescapable."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Uses the failure of verisimilitude to show that Popper's attempted middle-ground collapsed, leaving only the hard choice between induction and skepticism."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "Suggests the biological analogy confirms induction: organisms 'prefer' traits that worked in the past, which is an inductive strategy encoded in DNA."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Agrees that verisimilitude failed, and argues this failure exposes the emptiness of Popper's non-inductive account of preference."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Directly answers the normative question: the preference is defensible only if we admit induction, which costs Popper his central philosophical innovation."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Explicitly details the 'defensible' case (as a pragmatic rule) only to dismantle it as insufficient, thereby fulfilling the requirement to present the strongest version of the opposing view."},
+        {"handle": "[SRC_012] against SRC_004", "kind": "rebutted", "note": "Accepts the cost: admitting induction means science is not logically distinct from common sense, but argues this is a feature, not a bug, of actual scientific practice."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_006"]
+    },
+    {
+      "claim": "The preference is defensible if we interpret Popper's system as a game-theoretic strategy where 'corroboration' signals a theory's resilience against opponents, making it the optimal move in a competitive epistemic environment without claiming truth.",
+      "mechanism": "Game-theoretic modeling of scientific discourse where corroboration represents a high score in a falsification tournament, justifying selection for further play.",
+      "counterconditions": [
+        "If the 'game' of science aims at truth rather than just winning arguments.",
+        "If resilience against past tests does not correlate with resilience against future, novel tests.",
+        "If the cost of this view is reducing science to sophistry or rhetoric."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_003", "kind": "rebutted", "note": "Reframes 'pragmatic necessity' as 'optimal strategy' within a defined rule-set, avoiding the need for extra-logical justification."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "rebutted", "note": "Offers a concrete mechanism (game theory) that is neither probability nor simple redefinition, but a structural analysis of the scientific
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

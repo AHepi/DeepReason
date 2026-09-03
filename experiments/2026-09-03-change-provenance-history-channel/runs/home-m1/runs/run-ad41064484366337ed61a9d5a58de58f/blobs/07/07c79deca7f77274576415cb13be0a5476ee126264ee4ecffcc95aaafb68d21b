@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference of future success, but as a non-justificationist 'critical choice' grounded in the methodological rule to prefer the theory with greater empirical content and severity of testing; however, accepting this defense costs the scientist any rational guarantee that the preferred theory will work in practice, reducing the preference to a bold conjecture about which error has been most thoroughly eliminated so far.",
+    "mechanism": "Critical Choice via Content Maximization: The mechanism distinguishes between 'justification' (which requires induction) and 'choice' (which relies on comparing logical content and test severity). A scientist prefers Theory B over Theory A not because B is more likely true, but because B has survived tests that would have falsified A, meaning B contains more information about the world. The 'cost' is the admission that this preference offers no security against future falsification; it is a decision to bet on the theory that has told us more, acknowledging that it might still be wrong tomorrow.",
+    "counterconditions": [
+      "If the preference implies any probability assignment >0.5 to the theory's future success, it violates Popper's anti-induction stance.",
+      "If the mechanism cannot explain why a scientist should act on the corroborated theory rather than flipping a coin between unfalsified theories, it fails the pragmatic test.",
+      "If the 'content' argument secretly relies on the uniformity of nature (that what worked before will work again), it smuggles in induction."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dichotomy between 'non-rational convention' and 'critical rational choice.' This candidate explicitly adopts the 'critical rational choice' path, arguing the preference is rational because it maximizes empirical content, not because it is a blind convention or an inductive probability. The rebuttal stands by clarifying that 'rational' here means 'consistent with critical method,' not 'probabilistically justified.'"
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address the scenario of multiple unrefuted theories. The choice is not just about survival, but about which survivor has undergone 'severe tests' (high risk of falsification) that the others have not, or which has higher logical content. The preference goes to the theory that has risked more and survived, distinguishing it from a mere 'survivor' of easy tests."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "rebutted",
+        "note": "The criticism argues evolutionary epistemology fails to answer the 'cost.' This candidate accepts the cost explicitly: the loss of guaranteed future success. The defense is not that the 'fittest' will survive, but that preferring the 'fittest' (most tested) is the only way to learn faster. The cost is the acceptance of fallibilism without safety nets."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The claim that evolutionary analogy smuggles in induction is rebutted by distinguishing descriptive survival from normative choice. We do not prefer the theory *because* it survived (inductive); we prefer it because the *process* of severe testing it survived increased its informational content (logical). The past survival is evidence of content, not a predictor of future truth."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "revised",
+        "note": "Revised to sharply separate causal explanation (why the theory is still here) from normative justification (why we choose it). The justification is the methodological rule: 'Always prefer the theory that allows the most stringent tests.' This is a normative rule of the game of science, not a causal law of history."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "Rebutted the claim that 'betting on the fittest' is inductive. In Popper's view, betting on the most corroborated theory is betting on the one that has been most rigorously attempted to be killed and failed. It is a bet on the current state of criticism, not a bet on the uniformity of nature."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'methodological acceptance' with 'probabilistic weighting.' This candidate asserts that methodological acceptance is purely procedural: we accept the theory as the best basis for further criticism and testing, not as a probable truth. No regulative ideal of future success is assumed, only the imperative to test the strongest available target."
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate avoids relying on 'verisimilitude' (truth-likeness) as the primary metric due to the Tichý-Miller theorem issues cited. Instead, it grounds the preference strictly in 'empirical content' and 'severity of tests,' which remain robust in Popper's later work even if formal verisimilitude definitions struggled."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["biological_selection_process"],
+      "shared_structure": [
+        "Selection based on survival of severe challenges",
+        "Preference for the variant with highest resilience so far",
+        "No guarantee of future survival despite past success"
+      ],
+      "disanalogies": [
+        "Biological selection is causal/blind; scientific choice is normative/conscious",
+        "Biological fitness aims at reproduction; scientific corroboration aims at truth-content elimination",
+        "Organisms do not 'choose' to be fit; scientists actively 'prefer' based on critical rules"
+      ],
+      "transfer_claims": [
+        "Just as we expect the fittest organism to survive the next season without guarantee, we expect the best-corroborated theory to withstand the next test without logical necessity",
+        "The value lies in the rigor of the test survived, not the mere fact of survival"
+      ],
+      "overturn_conditions": [
+        "If biological evolution is shown to be teleological (aimed at truth)",
+        "If scientific theory choice is shown to be entirely random relative to test severity"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

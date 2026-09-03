@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference that the future will resemble the past, but as a non-inductive methodological rule to maximize the severity of future tests; however, accepting this defense costs us the ability to claim that such preferences make the theory more likely to be true or successful in application, reducing the preference to a strategic gamble rather than a rational expectation of utility.",
+    "mechanism": "The mechanism distinguishes between 'inductive justification' (claiming past success increases future probability) and 'methodological selection' (choosing the theory that offers the best chance of being falsified if false). By preferring the most severely tested theory, scientists select the one with the highest empirical content and the greatest exposure to potential refutation. If it survives again, we learn more; if it fails, we eliminate a strong contender. This avoids induction because it does not assume the surviving theory will continue to survive, only that it is currently the most informative target for criticism.",
+    "counterconditions": [
+      "If the preference implies any expectation that the theory will work in practical applications (e.g., engineering bridges), it smuggles in induction.",
+      "If Popper's rejection of verisimilitude (due to logical incoherence) stands, there is no objective metric to rank theories other than falsification status, making the preference arbitrary.",
+      "If the 'metaphysical faith' in the uniformity of nature is required to act on any theory, then the distinction between corroboration and probability collapses in practice."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "059c75cb550e1b3f17f7e4cf17ed53b0cb31a7935eefc2fc97ccf46fb5dae5c0",
+        "kind": "rebutted",
+        "note": "The criticism assumes defending the preference requires a 'metaphysical faith.' The candidate rebuts this by framing the preference as a procedural rule for maximizing test severity, which requires no faith in nature's uniformity, only a commitment to critical rationalism."
+      },
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "revised",
+        "note": "Revised to explicitly address 'verisimilitude.' While Popper desired verisimilitude as an objective ground, the candidate acknowledges its logical failure (per critics like Miller and Tichý) and argues the defense must rest solely on methodological severity, not truth-likeness."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The candidate maintains that without an inductive bridge or a coherent verisimilitude metric, the preference *is* conventional in the specific sense of being a decision of method, not a discovery of objective superiority. This conflates neither method nor result but clarifies their distinct roles."
+      },
+      {
+        "handle": "3dd7e6e5900af409fe538c843fc9a16df138e02b954e617cb086b0f92122ce4f",
+        "kind": "rebutted",
+        "note": "The projection of past survival into future preference is rebutted as non-inductive because the goal is not to predict success but to invite failure. We prefer the well-tested theory because it has proven robust against attempts to kill it, making it the best vehicle for further learning, regardless of its future survival."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "rebutted",
+        "note": "The dichotomy is not false; given the collapse of verisimilitude and the rejection of induction, 'conventional methodological rule' is indeed the only remaining category. The candidate embraces this rather than seeking a third, non-existent foundation."
+      },
+      {
+        "handle": "552493f430823f47c25c532667b8fd3a2ec2fe75df8bb51ca62e9cd35fb45563",
+        "kind": "revised",
+        "note": "Explicitly incorporated the failure of formal verisimilitude into the main claim. The defense now rests entirely on the 'severity of test' argument, conceding that we cannot claim the preferred theory is 'closer to the truth' in a formal sense."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "rebutted",
+        "note": "Functional identity does not imply logical identity. While the action looks like induction, the *justification* differs: induction justifies belief in future success; Popperian methodology justifies the selection of the most vulnerable target for the next experiment."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "revised",
+        "note": "Aligned with the critique on verisimilitude. The candidate no longer relies on verisimilitude as a justification but treats it as a failed attempt by Popper, forcing the defense back to pure methodological convention."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_biology_natural_selection",
+        "legal_adversarial_system"
+      ],
+      "shared_structure": [
+        "Selection of the 'fittest' entity based on survival of past challenges.",
+        "No guarantee of future survival or absolute truth, only relative robustness.",
+        "Process driven by elimination of weak candidates rather than verification of strong ones."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of testing; Popperian science explicitly aims at falsification.",
+        "Legal systems aim for a verdict (truth-equivalent); Popperian science aims for endless conjecture and refutation without final verdicts."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the organism that survived diverse environments without assuming it will survive the next one, we bet on the corroborated theory without assuming it will pass the next test.",
+        "The 'fitness' is retrospective, not predictive."
+      ],
+      "overturn_conditions": [
+        "If biological fitness is shown to be predictive of future survival in a way that transcends mere description, the analogy might support induction.",
+        "If the legal system is shown to rely on probabilistic guilt rather than adversarial stress-testing, the structural parallel fails."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

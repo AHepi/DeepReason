@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's distinction between 'informational content' and 'probability of truth' fails to address the pragmatic core of the problem: acting on a theory inherently requires an expectation of future success. Popper rejects induction because past survival does not logically guarantee future performance. By advising scientists to prefer the 'richer' corroborated theory for action, the target implicitly assumes that 'richness retained after testing' is a reliable indicator of future utility or truth-likeness. Without this inductive bridge—that the property which made the theory survive (content) will continue to make it successful—the preference for the high-content theory over a low-content one for *action* is arbitrary. Thus, the preference smuggles in induction by assuming the future will resemble the past regarding the value of informational content.",
+      "counterexample": null,
+      "premise": "Acting on a theory requires an expectation that it will perform well in the future, which cannot be derived solely from its past survival without an inductive assumption.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration provides no probability of future success, on what non-inductive basis can one claim the 'richer' theory is more likely to work tomorrow than the 'poorer' one?"
+    }
+  ]
+}

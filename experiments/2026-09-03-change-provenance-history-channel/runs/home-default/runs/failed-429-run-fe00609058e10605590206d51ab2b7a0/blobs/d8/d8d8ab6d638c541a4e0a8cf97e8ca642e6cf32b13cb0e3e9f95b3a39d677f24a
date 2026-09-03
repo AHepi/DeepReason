@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims that preferring a corroborated theory is merely a 'procedural rule' that 'makes no prediction' and avoids induction entirely.",
+      "case": "The target's distinction between 'procedural necessity' and 'epistemic inference' collapses when applied to the actual goal of science. If the 'game of science' aims at truth (as Popper insisted), then a procedural rule that systematically prefers Theory A over Theory B must be justified by the belief that following this rule is more likely to lead to truth than ignoring it. To assert 'Do not discard a non-falsified theory' as a rational norm implies that doing so is a better strategy for achieving the goal of truth than random selection or discarding it. This implicit judgment—that the procedure is effective—is itself an inductive leap about the future reliability of past survival. By framing the preference as purely historical and non-predictive, the target fails to explain why a scientist should care about the 'current move in the dialectic' unless they assume (inductively) that this move correlates with future success. Thus, the target does not dissolve the dilemma but merely relabels the inductive assumption as a 'rule of the game,' smuggling induction back in through the justification of the rule itself.",
+      "counterexample": [
+        "If a scientist follows the procedural rule 'prefer the corroborated theory' but explicitly believes that this rule has no connection to the likelihood of the theory being true or surviving future tests, their preference becomes arbitrary and irrational relative to the goal of finding true theories. The moment they claim the rule is 'rational' or 'defensible,' they are making an inductive claim about the rule's efficacy."
+      ],
+      "successor_question": "If the preference for corroborated theories is not based on any expectation that they are more likely to be true or survive future tests, on what grounds can Popper call this preference 'rational' rather than just a blind habit?"
+    }
+  ]
+}

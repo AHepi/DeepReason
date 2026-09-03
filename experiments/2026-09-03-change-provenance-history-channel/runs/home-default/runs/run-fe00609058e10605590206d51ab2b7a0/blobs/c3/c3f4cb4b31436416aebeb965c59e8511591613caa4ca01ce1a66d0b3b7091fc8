@@ -1,0 +1,330 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic rule of action based on verisimilitude, not induction. It survives by redefining rationality as adherence to the method of error elimination rather than the pursuit of probable truth, costing us the comfort of believing our best theories are likely true.",
+      "mechanism": "Popper replaces the inductive goal of 'truth probability' with the non-inductive goal of 'verisimilitude' (truth-likeness). A theory that survives severe tests has demonstrated higher content and resilience, making it a better candidate for approximating truth, even if its probability remains zero or undefined. The scientist prefers it not because it is 'safe' (inductive prediction of future success) but because it is the most informative and rigorously tested tool available for further conjecture and refutation.",
+      "counterconditions": [
+        "If the formal definition of verisimilitude is logically incoherent for comparing false theories, rendering the comparison meaningless.",
+        "If the act of preferring a theory for future action implicitly assumes the uniformity of nature, thereby smuggling induction back in despite verbal denials.",
+        "If scientists psychologically treat corroboration as a measure of safety/probability regardless of the philosophical justification."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "While Tichý and Miller showed Popper's original quantitative definition of verisimilitude was flawed for false theories, Popper and later defenders (like Oddie and Niiniluoto) developed qualitative or revised quantitative accounts that restore coherence. The core intuition—that surviving severe tests indicates greater closeness to truth—remains defensible even if the initial formalization failed."
+        },
+        {
+          "handle": "[SRC_019] against SRC_005",
+          "kind": "rebutted",
+          "note": "Same as above: the failure of the specific 1974 formalization does not invalidate the entire concept of verisimilitude as a guiding principle. Revised definitions address the logical gaps, allowing the preference to remain non-inductive."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "This is not a false dichotomy. Popper explicitly offers verisimilitude as the third way between 'probability' and 'arbitrary choice.' The preference is justified by the logical relation of test severity and content, not by a sociological description alone."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "revised",
+          "note": "The cost is explicitly identified: accepting this view requires abandoning the idea that science converges on 'probable truth' or offers predictive security. We gain a dynamic method of growth but lose the static comfort of justified belief. The trade-off is certainty for progress."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "The preference does not smuggle in induction because it is framed as a choice for 'risk' and 'leverage' (high content), not 'safety.' Scientists acting on corroboration are betting on the theory's ability to withstand future falsification, not predicting its success based on past uniformity. The assumption is methodological, not ontological."
+        },
+        {
+          "handle": "[SRC_016] against SRC_013",
+          "kind": "rebutted",
+          "note": "Acknowledges the historical failure of Popper's specific formula but argues that the concept of verisimilitude has been successfully rehabilitated in post-Popperian philosophy of science, preserving the non-inductive defense."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "The defense is not merely sociological; it is epistemological. It argues that the *rule* of preferring corroborated theories is the only rational rule consistent with the logic of falsification, regardless of what scientists actually feel. It prescribes how they *should* act to maximize knowledge growth."
+        },
+        {
+          "handle": "[SRC_020] against SRC_006",
+          "kind": "rebutted",
+          "note": "Correctly distinguishes between 'predicting future success' (induction) and 'choosing the best current conjecture' (non-inductive preference). Popper's defense rests on the latter: we choose the theory that has done the most work, not the one we expect to work forever."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The preference inevitably smuggles induction back in because any decision to act on a corroborated theory for future outcomes implicitly assumes the uniformity of nature—the very principle Popper rejected. The 'pragmatic' defense is a semantic shield hiding an inductive core.",
+      "mechanism": "Action implies expectation. To prefer Theory A over Theory B for practical application is to expect Theory A to yield better results in the future. This expectation cannot be derived from past survival alone without assuming that the future will resemble the past (uniformity). Since Popper denies this assumption can be logically justified, his own practice of preference contradicts his theoretical prohibition of induction.",
+      "counterconditions": [
+        "If the preference can be strictly limited to 'choice of problem' rather than 'expectation of success'.",
+        "If 'acting on' a theory is redefined as 'using it as a target for further attacks' rather than relying on its predictions.",
+        "If the assumption of uniformity is treated as a metaphysical necessity rather than an inductive inference."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "This candidate bypasses the verisimilitude debate entirely, arguing that even a coherent verisimilitude cannot bridge the gap to action without induction."
+        },
+        {
+          "handle": "[SRC_019] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Irrelevant to this line of argument; the focus is on the pragmatics of action, not the logic of truth-likeness."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Rejects the 'third way.' Argues that the dichotomy between probability and arbitrariness is real; if it's not probability, and it's not arbitrary, it must be hidden induction."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "revised",
+          "note": "The cost of accepting this view is devastating: it implies Popper's system is internally inconsistent when applied to real-world science. We must either accept induction or admit that scientific action is irrational/unjustified."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that 'risk' and 'leverage' are empty concepts if they don't imply a differential expectation of future performance. Choosing the 'riskier' theory only makes sense if you think it has a better chance of being right—which is inductive."
+        },
+        {
+          "handle": "[SRC_016] against SRC_013",
+          "kind": "departure_declared",
+          "note": "Does not rely on verisimilitude failures; argues the problem is deeper, lying in the nature of action itself."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Agrees that sociology isn't justification, but argues that the *logic* of action itself forces the inductive step, making the epistemological justification impossible on Popper's strict terms."
+        },
+        {
+          "handle": "[SRC_020] against SRC_006",
+          "kind": "rebutted",
+          "note": "Challenges the distinction. Claims that 'choosing the best current conjecture' for action IS 'predicting future success' in disguise. You cannot separate the two in practice."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves if we view corroboration as a measure of informational content and test severity, making the preference a choice for higher risk and higher potential yield, not safety or probability. It survives by shifting the goal from 'truth acquisition' to 'error elimination efficiency'.",
+      "mechanism": "Popper values bold conjectures. A highly corroborated theory is one that took a great risk (high empirical content) and survived. Scientists prefer it not because it is 'safe' (probable), but because it has proven its robustness against high-risk tests. The preference is for the theory that offers the most leverage for future falsification, aligning with the goal of rapid error elimination rather than inductive security.",
+      "counterconditions": [
+        "If scientists actually prefer corroborated theories because they believe them to be 'true' or 'reliable' in an inductive sense.",
+        "If high corroboration inevitably leads to a psychological sense of certainty that mimics induction.",
+        "If the 'efficiency' of error elimination itself relies on an inductive assumption that errors are finite or detectable."
+      ],
+      "typicality": 0.90,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "This approach sidesteps verisimilitude entirely, focusing instead on information content and test severity as the justification."
+        },
+        {
+          "handle": "[SRC_019] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Same as above; verisimilitude is not the primary mechanism here."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Denies the false dichotomy by introducing 'informational yield' as the criterion. It's neither probability nor arbitrary; it's strategic selection for maximum learning."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "revised",
+          "note": "The cost is the abandonment of 'truth' as the immediate goal. We accept that we may never know if a theory is true, only that it is the most efficient engine for generating new knowledge and exposing errors."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Clarifies that 'acting on' means 'using as the basis for the next experiment,' not 'betting on its eternal validity.' The preference is procedural, not doxastic."
+        },
+        {
+          "handle": "[SRC_016] against SRC_013",
+          "kind": "departure_declared",
+          "note": "Does not depend on verisimilitude."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Argues this is a normative epistemological rule: 'To maximize knowledge growth, one ought to test the most severely tested theories further.' This is a logical imperative of the falsificationist method, not a sociological observation."
+        },
+        {
+          "handle": "[SRC_020] against SRC_006",
+          "kind": "rebutted",
+          "note": "Reiterates that the preference is for 'severe testability,' not 'future success.' The assumption is that severe tests are good for science, not that the theory will survive them."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Corroboration functions as a 'causal mechanism' of selection analogous to natural selection, where preference is a survival trait of the scientific community rather than a logical proof of truth. It survives by naturalizing epistemology, costing us the claim that science is purely a logical enterprise.",
+      "mechanism": "Just as organisms are selected for fitness without implying they are 'perfect' or 'probable' to survive forever, theories are selected for corroboration. The scientist's preference is an evolutionary adaptation of the research community to maximize error elimination. It is defensible not as logic, but as a causal process of knowledge growth where the 'fittest' (most tested) theories are the only ones available for further mutation and testing.",
+      "counterconditions": [
+        "If the analogy breaks down because biological fitness is retrospective while scientific preference is prospective.",
+        "If the 'causal mechanism' of science requires a normative element that evolution lacks.",
+        "If naturalizing epistemology fails to answer the normative question of why we *ought* to prefer corroborated theories."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Shifts the ground from logical justification (verisimilitude) to evolutionary explanation."
+        },
+        {
+          "handle": "[SRC_019] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Same as above."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Dissolves the dichotomy by suggesting the preference is a biological/sociological fact of the scientific organism, not a logical derivation."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "revised",
+          "note": "The cost is significant: we lose the notion of science as a purely rational, logical endeavor. It becomes a contingent, evolutionary process where 'rationality' is just a successful survival strategy."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Accepts that scientists act inductively in practice but frames this as an evolutionary trait, not a logical error. The 'smuggling' is a feature, not a bug, of the cognitive apparatus."
+        },
+        {
+          "handle": "[SRC_016] against SRC_013",
+          "kind": "departure_declared",
+          "note": "Bypasses the verisimilitude debate."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Embraces the conflation. Argues that the epistemological justification *is* the sociological/biological reality of how knowledge grows. Normativity emerges from descriptive success."
+        },
+        {
+          "handle": "[SRC_020] against SRC_006",
+          "kind": "rebutted",
+          "note": "Argues that the 'assumption of uniformity' is an evolved heuristic, not a logical premise. Popper's rejection of it as a logical principle stands, even if we use it as a biological tool."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict terms and represents a necessary 'leap of faith' or conventionalist decision that Popper tried but failed to fully rationalize. The surviving view is that science rests on unprovable decisions, costing us the dream of a completely self-grounding rational method.",
+      "mechanism": "Popper's system hits a hard limit at the point of action. Logic can tell us what is falsified, but it cannot tell us which unfalsified theory to pick without some extra-logical input. The preference for corroboration is thus a conventionalist decision—a rule we adopt because it works, not because logic demands it. This accepts a form of 'decisionism' where the foundation of science is a voluntary commitment to certain rules.",
+      "counterconditions": [
+        "If a purely logical derivation of preference can be found without extra-logical premises.",
+        "If the 'decision' can be shown to be compelled by the definition of science itself.",
+        "If the 'leap of faith' is indistinguishable from the induction Popper rejected."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Agrees that verisimilitude failed, using this as evidence that no logical bridge exists, forcing the 'decisionist' conclusion."
+        },
+        {
+          "handle": "[SRC_019] against SRC_005",
+          "kind": "rebutted",
+          "note": "Uses the failure of verisimilitude to support the claim that logic runs out, necessitating a decision."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Accepts the dichotomy: if it's not logical probability, and not arbitrary, it must be a non-rational (but perhaps pragmatic) decision."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "revised",
+          "note": "The cost is the highest possible: admitting that the core of scientific practice (theory choice) is not logically justified but conventionally adopted. Rationality has limits."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Concedes that induction is smuggled in, or rather, that the 'decision' to act as if induction works is unavoidable. Popper's attempt to purge it was noble but incomplete."
+        },
+        {
+          "handle": "[SRC_016] against SRC_013",
+          "kind": "rebutted",
+          "note": "Cites the verisimilitude failure as the smoking gun that proves logic cannot sustain the preference."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Distinguishes between the sociological fact of preference and the epistemological lack of justification. The 'decision' is the epistemological stopgap."
+        },
+        {
+          "handle": "[SRC_020] against SRC_006",
+          "kind": "rebutted",
+          "note": "Agrees that the preference assumes uniformity, but classifies this assumption as a 'decision' rather than an 'inductive inference,' saving Popper's logic at the cost of making science foundationaly decisionist."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is defensible only if we reinterpret 'corroboration' not as a property of the theory, but as a property of the *testing process* itself. We prefer the theory associated with the most rigorous process, defensible as a commitment to methodological rigor rather than truth.",
+      "mechanism": "Shift the locus of value from the object (theory) to the activity (testing). A 'better-corroborated' theory is simply one that has emerged from a more severe filtering process. Preferring it is akin to preferring a refined metal over an unrefined ore—not because we know the metal is 'true' in some absolute sense, but because we trust the refining process. This avoids induction by focusing on the quality of the procedure, not the probability of the outcome.",
+      "counterconditions": [
+        "If the 'quality of the process' itself relies on inductive assumptions about the reliability of tests.",
+        "If scientists care about the theory's truth, not just the process history.",
+        "If the 'refining process' metaphor secretly assumes that refinement correlates with truth (an inductive link)."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Avoids the verisimilitude trap by changing the subject from 'truth-content' to 'process-quality'."
+        },
+        {
+          "handle": "[SRC_019] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Same as above."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Offers a third option: preference based on procedural virtue rather than truth-probability or arbitrariness."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "revised",
+          "note": "The cost is a form of instrumentalism. We care less about whether the theory is 'true' and more about whether it was 'well-tested.' Truth becomes secondary to methodological hygiene."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that trusting the process is not induction. It is a commitment to the rules of the game. We play by the rules, and the winner of the current round gets to play the next, without predicting they will win forever."
+        },
+        {
+          "handle": "[SRC_016] against SRC_013",
+          "kind": "departure_declared",
+          "note": "Sidesteps verisimilitude."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Claims this is a robust epistemological stance: 'Methodological Rigorism.' It justifies preference normatively based on the duty to follow the best methods."
+        },
+        {
+          "handle": "[SRC_020] against SRC_006",
+          "kind": "rebutted",
+          "note": "Denies that trusting the process assumes uniformity. It only assumes that the rules were followed. Whether the rules lead to truth is a separate, open question."
+        }
+      ],
+      "optional_refs": []
+    }
+  ]
+}

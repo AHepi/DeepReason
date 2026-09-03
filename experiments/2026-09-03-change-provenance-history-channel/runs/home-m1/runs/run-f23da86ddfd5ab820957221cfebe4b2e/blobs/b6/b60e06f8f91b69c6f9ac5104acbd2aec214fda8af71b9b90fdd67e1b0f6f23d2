@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference that the future will resemble the past, but as a non-inductive 'conventionalist decision' to act as if the best-tested theory is the closest to the truth (verisimilitude), accepting the cost that this preference provides no guarantee of success and renders scientific rationality a matter of critical choice rather than logical compulsion.",
+    "mechanism": "The mechanism distinguishes between the logical status of corroboration (a report of past performance) and the pragmatic rule of action (preferring the theory with the highest verisimilitude). By framing the preference as a methodological rule adopted to maximize the chance of finding truth without asserting that past success probabilistically ensures future success, the argument bypasses the need for the Principle of Induction. The 'cost' is the admission that science cannot logically justify its own practical utility; it must rely on a bold, unjustifiable faith in the uniformity of nature to bridge the gap between 'has survived' and 'will survive,' a faith Popper accepts as necessary for action but rejects as a basis for knowledge.",
+    "counterconditions": [
+      "If the preference for better-corroborated theories implicitly assumes that past test results are a reliable guide to future performance, then it smuggles in induction.",
+      "If Popper's concept of verisimilitude cannot be defined without reintroducing probabilistic assumptions, then the defense collapses into the very induction it seeks to avoid.",
+      "If the 'conventionalist decision' is arbitrary and lacks any objective grounding in the theory's content, then the preference is merely psychological, not rational."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "059c75cb550e1b3f17f7e4cf17ed53b0cb31a7935eefc2fc97ccf46fb5dae5c0",
+        "kind": "rebutted",
+        "note": "The criticism claims the defense concedes a 'metaphysical faith.' This is rebutted by clarifying that Popper explicitly accepts a 'metaphysical faith in the uniformity of nature' as a prerequisite for *action*, distinct from *knowledge*. The defense does not fail by admitting this; it succeeds by isolating induction from the logic of justification while retaining it as a pragmatic necessity for living and acting. The preference is defensible *as a decision*, not as a logical derivation."
+      },
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "revised",
+        "note": "Revised to explicitly integrate 'verisimilitude' not as a proven metric but as the *regulative ideal* guiding the conventionalist decision. The previous phrasing implied verisimilitude was a settled foundation; the revision clarifies it is the *goal* we aim for by choosing the best-tested theory, acknowledging Popper's own later struggles with its formal definition while maintaining its role as the motivating principle for non-inductive preference."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The criticism argues that conflating method and result reduces progress to convention. This is rebutted by asserting that Popper's framework *intentionally* grounds preference in the 'objectivity of method' (severe testing) precisely because 'objectivity of result' (truth) is inaccessible. The preference is not arbitrary convention but a rule derived from the method of error elimination; it is 'conventional' only in the sense that its adoption is a free choice, not logically forced, yet it is objectively linked to the goal of truth-likeness."
+      },
+      {
+        "handle": "3dd7e6e5900af409fe538c843fc9a16df138e02b954e617cb086b0f92122ce4f",
+        "kind": "rebutted",
+        "note": "The claim that projecting past survival into future preference is an inductive leap is rebutted by distinguishing between 'expecting' the future to resemble the past (induction) and 'deciding to act' on the best available option (pragmatism). Popper rejects the logical validity of the projection but endorses the rationality of the decision to prefer the theory that has withstood the most severe attempts at falsification, as it offers the best chance of not being false, without claiming it is likely to be true."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "rebutted",
+        "note": "The false dichotomy charge is rebutted by showing the third option: the preference is neither a probabilistic calculation nor a mere arbitrary whim, but a 'methodological rule' grounded in the logic of falsification. It is a normative stance: 'If you want to find the truth, choose the theory that has survived the hardest tests.' This avoids the dichotomy by changing the category of the justification from epistemic probability to methodological efficacy."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "revised",
+        "note": "Revised to acknowledge the functional similarity to induction while sharply distinguishing the *logical basis*. While the *behavior* looks inductive (preferring the past winner), the *justification* is deductive/pragmatic: we prefer it because it is the only one not yet known to be false, and it has high content. The revision clarifies that the 'cost' is accepting that this functional similarity does not imply logical identity; the inductive principle is rejected as a justification, even if the outcome mimics it."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "rebutted",
+        "note": "The criticism regarding the failure of formal verisimilitude definitions is rebutted by noting that the *concept* of verisimilitude remains valid as a regulative ideal even if its precise logical formulation proved difficult. Popper's defense of preference relies on the intuitive notion that a theory surviving severe tests is 'closer to the truth' than a refuted one, a notion that drives scientific practice regardless of the technical hurdles in formalizing a quantitative measure. The argument stands on the qualitative distinction, not the failed quantification."
+      },
+      {
+        "handle": "720e994a62093f4921479eee06c7b2643add166f9ff3ec18dfac4aefd5df7507",
+        "kind": "rebutted",
+        "note": "The specific cost asked is answered: the cost is the loss of logical certainty and the acceptance of 'rational faith.' If we deny that past survival makes future survival likely, we admit we are gambling. However, Popper argues this is the only honest gamble: preferring the best-tested theory is the most rational bet we can make, even if we cannot prove the odds are in our favor. The defense survives by embracing this cost—the abandonment of the dream of a logically guaranteed scientific method—in exchange for a coherent, non-inductive account of scientific rationality."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["naval_strategy_severe_weather"],
+      "shared_structure": [
+        "Past survival of a ship in severe storms does not logically guarantee it will survive the next storm.",
+        "Yet, a captain prefers the ship that has survived the most severe storms over one that has not.",
+        "This preference is not based on an inductive belief that 'storms will behave as before,' but on the pragmatic assessment that the sturdy ship is the best available option.",
+        "Choosing the sturdy ship involves a 'faith' in the continuity of physical laws, but the decision itself is a methodological rule, not a logical proof."
+      ],
+      "disanalogies": [
+        "Ships are physical objects subject to wear, whereas theories are abstract entities that do not 'wear out' but are refuted.",
+        "A captain's goal is immediate survival, while a scientist's goal is long-term truth approximation (verisimilitude).",
+        "Storms are random natural events, while scientific tests are deliberately designed to be severe and specific."
+      ],
+      "transfer_claims": [
+        "Just as the captain's preference is rational without being inductively certain, the scientist's preference for corroborated theories is rational without implying probability.",
+        "The 'faith' required in both cases is a precondition for action, not a component of the logical justification for the preference."
+      ],
+      "overturn_conditions": [
+        "If it were shown that the ship's past survival actually weakened its structure (negative learning), the analogy would break.",
+        "If scientific tests were shown to be random rather than severe, the basis for preference would vanish."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

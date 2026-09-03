@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-probabilistic metric for selection, but this smuggles in induction because preferring a theory with higher verisimilitude based on past test survival implicitly assumes that the structural features which allowed it to survive past tests will continue to yield success in future, untested applications. Popper explicitly rejected the idea that past performance licenses any expectation of future reliability; therefore, using verisimilitude to justify *acting* on a theory (as the prompt requires regarding scientists' preferences) collapses into the very inductive principle the target claims to avoid, failing to distinguish between 'best current conjecture' and 'most reliable guide to action'.",
+      "counterexample": null,
+      "premise": "Popper rejected the notion that past test survival provides any rational basis for expecting future predictive success.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be probabilistically linked to future success without induction, what non-inductive justification does Popper offer for the practical necessity of choosing one theory over another for action?"
+    }
+  ]
+}

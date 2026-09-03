@@ -1,0 +1,91 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference of future truth, but as a critical rational choice to subject one's actions to the most severe available test; accepting this costs the scientist any expectation that the chosen theory is likely true or will remain unfalsified.",
+    "mechanism": "Critical Preference via Severity Maximization: The agent selects the theory with the highest empirical content and best survival record solely because it offers the greatest opportunity for future error detection (falsification), thereby minimizing the risk of acting on an easily refutable dogma. This treats corroboration as a report of past test severity, not a predictor of future success.",
+    "counterconditions": [
+      "If the agent prefers the theory because they believe it is more likely to succeed in the future, the preference becomes inductive and indefensible on Popperian terms.",
+      "If no unrefuted theories exist to choose between, the mechanism defaults to selecting the theory with the highest remaining verisimilitude potential based on logical content alone.",
+      "If the 'cost' of accepting the theory includes an implicit bet on its continuity, the defense collapses into the pragmatism Popper rejected."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The criticism posits a false dichotomy between 'non-rational convention' and 'critical rational choice.' The candidate explicitly adopts the latter: the choice is rational because it maximizes testability (severity), not because it predicts truth. This addresses the core of Popper's solution without needing reinterpretation as mere convention."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "rebutted",
+        "note": "The 'Eliminative Default' is not required here. When multiple unrefuted theories coexist, Popper's criterion of 'degree of corroboration' functions as a tie-breaker based on which theory has survived the *severe* tests that might have falsified it. The candidate chooses the one that has endured the harshest scrutiny, not merely the one that hasn't been hit yet."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "revised",
+        "note": "Revised to explicitly state the 'cost': the abandonment of any expectation of future success. The previous reliance on 'Evolutionary Epistemology' was ambiguous regarding whether survival implies fitness for the future. The mechanism now strictly frames preference as a methodological commitment to severity, rejecting the evolutionary analogy if it implies predictive power."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The analogy to biological selection is rejected insofar as it suggests 'fitness' equals 'future survival.' The candidate argues that preferring the 'fittest survivor' is only valid if 'fittest' is defined as 'most thoroughly tested and not yet broken,' not 'most adapted to future conditions.' This avoids smuggling in induction."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "rebutted",
+        "note": "The distinction between causal explanation and normative justification is maintained. The candidate does not claim we *do* prefer corroborated theories because of evolution (causal); it claims we *should* prefer them because doing so adheres to the norm of critical rationality (normative). The justification is the alignment with the goal of error elimination."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "revised",
+        "note": "Clarified that the 'pragmatic bet' is not on the theory's truth, but on the efficacy of the *method* of criticism. The revision removes language suggesting a bet on the 'currently fittest' surviving into the future, replacing it with a commitment to the theory that currently offers the best platform for further testing."
+      },
+      {
+        "handle": "406f638f976b926f52618322e0179a9a339b4f66006f5cb9fcdb0f63c060d368",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes 'maximizing potential for falsification' from 'rational basis for preference in action' by defining the action itself as an experiment. To act on the best-corroborated theory is to subject one's actions to the most rigorous test possible. This is not induction; it is the practical application of falsificationism."
+      },
+      {
+        "handle": "413118405fe4cbb409c43cbfa1663926136c533f14184d4050959108",
+        "kind": "rebutted",
+        "note": "The criticism assumes acting requires an expectation of future success. The candidate rejects this premise: acting on a Popperian theory requires only the acceptance that the theory is the best current target for criticism. One acts *tentatively*, fully expecting the theory might fail tomorrow, which is consistent with rejecting induction."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "bridge_engineering_safety_margins",
+        "chess_opening_preparation"
+      ],
+      "shared_structure": [
+        "Selection of a strategy/tool based on past resistance to failure rather than predicted future success.",
+        "Acknowledgment that past performance does not guarantee future results but indicates robustness under stress.",
+        "Preference driven by the desire to maximize the visibility of potential errors."
+      ],
+      "disanalogies": [
+        "In engineering, safety margins often rely on statistical probability of load distribution (inductive), whereas Popperian preference explicitly rejects probability.",
+        "A chess player may prefer an opening because they believe it leads to a winning position (teleological/inductive), while the Popperian chooses a theory only because it allows for the quickest checkmate of the theory itself if it is wrong."
+      ],
+      "transfer_claims": [
+        "Just as an engineer uses the bridge design that has withstood the strongest simulated storms not because it won't collapse next time, but because it has proven most responsive to stress analysis, the scientist chooses the corroborated theory to maximize error detection.",
+        "Preferring the most tested chess opening is rational not because it guarantees a win, but because its nuances are best understood, allowing for faster adaptation when the opponent deviates."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that acting on a theory inherently entails a psychological or logical commitment to its future reliability, the non-inductive defense fails.",
+        "If 'severity' cannot be quantified or compared between competing theories without invoking probabilistic assumptions about test outcomes."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_009"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_009"
+      ],
+      "search_signal": "productive"
+    },
+    "checker_specs": []
+  }
+}

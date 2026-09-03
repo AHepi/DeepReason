@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule grounded in 'verisimilitude' (truth-likeness) and the logic of severe testing: choosing the theory that has withstood the most stringent attempts at falsification maximizes our proximity to truth without assigning it higher probability. This preference survives the charge of smuggling in induction only if we accept the cost of abandoning any guarantee that the future will resemble the past, treating the choice as a rational gamble based on current explanatory power rather than a prediction of reliability.",
+    "mechanism": "The mechanism distinguishes between 'corroboration' (a report of past performance under severe tests) and 'probability' (a logical relation predicting future frequency). It argues that preferring the better-corroborated theory is a procedural commitment to the theory with the highest content that has not yet been falsified, which Popper equates with having the highest potential verisimilitude. The preference is justified by the goal of science (finding true theories) and the fact that a severely tested theory offers more opportunities for error detection than an untested one; thus, acting on it is the most rational way to pursue truth, even if it offers no inductive assurance of practical success.",
+    "counterconditions": [
+      "If verisimilitude cannot be formally defined or measured without relying on inductive assumptions about the structure of the world, the defense collapses into cryptic induction.",
+      "If the pragmatic necessity of acting (e.g., building a bridge) logically entails an assumption that nature is uniform, then Popper's separation of action from induction is illusory.",
+      "If 'severe testing' itself presupposes that past falsifications are relevant to future performance, the criterion of severity is circular."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "099c405588adc1304c86c7d0a38092832dd923536c178157149681682e1688d5",
+        "kind": "rebutted",
+        "note": "The criticism claims reliance on verisimilitude contradicts Popper's later conclusions. This rebuttal asserts that Popper never abandoned verisimilitude as a regulative ideal; rather, he refined its definition to avoid Tarski's contradictions. The candidate explicitly frames verisimilitude as a 'goal' and 'potential' rather than a proven metric, aligning with Popper's mature view that we can never know we have reached the truth, only that we are closer than before relative to specific problems."
+      },
+      {
+        "handle": "2488649749af91445f8ee782599ecefde951f2f49277094120910555c5593b00",
+        "kind": "rebutted",
+        "note": "The criticism alleges a conflation of psychological necessity with rational defensibility. The candidate rebuts this by grounding the preference strictly in the 'logic of the situation': given the aim of truth, the theory with higher empirical content that survives severe tests is logically the better candidate for verisimilitude. This is a normative methodological rule, not a description of psychological habits."
+      },
+      {
+        "handle": "2a07650f8674efcd19c9508e058ffa8af3554aa41d985882aa778086a7830438",
+        "kind": "rebutted",
+        "note": "Regarding the conflation of psychological explanation and epistemological justification: The candidate avoids evolutionary epistemology entirely. Instead, it relies on the 'critical method' as a purely logical filter. The preference is justified because the untested theory has not yet demonstrated its capacity to survive errors, whereas the corroborated one has; this is an epistemic distinction based on information content, not biological imperative."
+      },
+      {
+        "handle": "423e8c74789b19633a871665df41aed920eafff1113d4b3b67bdc77b391e6ccc",
+        "kind": "revised",
+        "note": "Revised to clarify that the 'basis to believe' is not a belief in future success (which would be inductive), but a belief in the current state of critical discussion. The candidate now explicitly states that there is 'no Popperian basis to believe' the theory will succeed practically, only that it is the most rational choice for the specific goal of eliminating error. This addresses the lack of basis for expecting higher verisimilitude to yield practical results without induction."
+      },
+      {
+        "handle": "4ab60069bb1ad9eb660608036b57a518a78ac5e51545d7ff22b582fe09b2e63c",
+        "kind": "rebutted",
+        "note": "The criticism argues the distinction collapses when acting. The candidate rebuts by asserting that 'acting on the best-corroborated' is precisely the procedural necessity Popper allows. One does not need to infer the bridge will hold (induction); one only needs to follow the rule that says 'use the theory that has best survived attempts to show it false.' If the bridge falls, the theory is falsified, but the action was still rational according to the method."
+      },
+      {
+        "handle": "50de1c844d8434f3099d39d96a6a31980c766635daccf1aa1e22950749e1f5e5",
+        "kind": "rebutted",
+        "note": "Addressing the failure to address preference among survivors: The candidate explicitly invokes 'severity' and 'empirical content.' Popper prefers the theory that has passed *more severe* tests or has *higher content*. It is not a binary filter; the degree of corroboration reflects the severity of the tests passed. Thus, preferring Theory A over Theory B is justified if A has survived a more improbable prediction than B."
+      },
+      {
+        "handle": "55d4c6510b534518a729e1cf80c4573846b6e11dc2d9351e2e60f61a303a6970",
+        "kind": "rebutted",
+        "note": "Reiterating the rejection of biological imperatives. The defense rests solely on the 'methodological rule' derived from the aim of science (truth). The preference is a conscious adoption of a rule to maximize error elimination, distinct from any evolutionary drive."
+      },
+      {
+        "handle": "74a93fdc69078b6c98ec0326bbbe235fd572654706e2a48f9b1561d386adda9b",
+        "kind": "rebutted",
+        "note": "Addressing the pragmatic dilemma of Theory A vs. Theory B: The candidate resolves this by defining rationality as 'commitment to critical scrutiny.' Choosing Theory A is rational because it has already been scrutinized and survived, whereas Theory B has not. To choose B would be to ignore available critical data. The dilemma dissolves when rationality is defined as utilizing all available critical information, not as guaranteeing safety."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

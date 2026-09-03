@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the central tension in Popper's philosophy but fails to engage with the specific directive to 'make the strongest case for each answer' before concluding. The prompt explicitly requires a balanced exploration of whether the preference is defensible on Popper's own terms (e.g., via verisimilitude or critical rationalism as non-inductive justifications) versus the view that it smuggles in induction. The target immediately asserts the negative conclusion ('inevitably smuggles induction') without first constructing the strongest possible defense of the preference using Popperian concepts like 'corroboration as a report on past performance only' or 'rational choice based on critical discussion rather than probability.' By skipping the required dialectical step of fully articulating the non-inductive defense, the target fails to satisfy the problem's structural requirement to compare two strong cases before judging which survives.",
+      "counterexample": null,
+      "premise": "The problem statement demands: 'Make the strongest case for each answer, then say which one survives.'",
+      "premise_evidence": null,
+      "successor_question": "How would a strict Popperian defend the preference for corroborated theories without relying on any assumption of nature's uniformity, perhaps by framing it as a methodological rule for error elimination rather than a prediction of success?"
+    }
+  ]
+}

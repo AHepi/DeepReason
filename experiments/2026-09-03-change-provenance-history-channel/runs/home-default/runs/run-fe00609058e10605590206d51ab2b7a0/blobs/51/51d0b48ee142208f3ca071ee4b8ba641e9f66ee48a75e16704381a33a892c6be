@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'logical severity of past tests' with 'pragmatic utility for future action,' thereby smuggling in induction through the back door of methodology. Popper explicitly rejects the idea that past survival provides any rational basis for expecting future success; however, the target argues we should prefer the better-corroborated theory *for action* specifically because it is the 'best error-detected tool.' If past error-detection has no bearing on future reliability (as strict anti-induction requires), then calling it the 'best' tool for future use is an empty label. To claim it is practically superior for navigating the world (e.g., crossing a bridge) implicitly assumes that the property which allowed it to survive past tests (truth-likeness or stability) will persist, which is precisely the inductive assumption of the uniformity of nature that Popper sought to eliminate. The target admits the cost is a 'non-rational leap,' but this contradicts the prompt's requirement to show the preference is 'defensible on Popper's own terms' as a rational choice; if the choice is non-rational, the preference is not defensible by reason, only by blind faith, which fails to answer how scientists rationally choose between theories.",
+      "counterexample": null,
+      "premise": "Popper holds that corroboration reports only past performance and implies nothing about future reliability or probability.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for better-corroborated theories in action is merely a non-rational leap, how does Popper's framework distinguish scientific action from arbitrary guesswork in practical scenarios?"
+    }
+  ]
+}

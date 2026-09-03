@@ -1,0 +1,79 @@
+{
+  "candidates": [
+    {
+      "content": "Kind: Reduction. The isolated problem (preference without induction) reduces to the procedural rule defined in SRC_005: preference is not an epistemic inference but a dialectical move ('Do not discard...'). REFUTED IF: Scientists explicitly reject a corroborated theory in favor of a falsified one despite no new data, proving preference is not merely procedural but relies on an underlying belief in truth-likeness that exceeds game rules.",
+      "typicality": 0.92,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "This candidate explicitly names 'Reduction' and defines the substantive relation as reducing preference to a procedural rule, satisfying the requirement missed by the target."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "The relation kind 'Reduction' is named, and the connection is structural: the isolated problem's solution is shown to be a subset of the mechanism in SRC_005."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "A specific dependence/reduction is identified between the isolated problem and SRC_005, avoiding vague summaries."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "revised", "note": "Avoids conflating distinct entities; instead, it shows the isolated problem is an instance of the mechanism in SRC_005."},
+        {"handle": "[SRC_010] against SRC_006", "kind": "rebutted", "note": "No contradiction is claimed here; the reduction is consistent with the elimination logic."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Defines a logical connection (reduction) rather than just defining the connection itself."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The refutation condition targets the procedural nature directly, avoiding the epistemic probability trap."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "rebutted", "note": "Explicitly includes 'refuted if' and names the relation kind 'Reduction'."}
+      ]
+    },
+    {
+      "content": "Kind: Shared Mechanism. Both the isolated problem and SRC_003 operate via a 'negative probability' filter where preference emerges solely from the elimination of competitors (modus tollens) rather than positive support. REFUTED IF: A scenario exists where a theory is preferred despite zero competitors being eliminated (e.g., only one theory exists and it is untested), demonstrating that preference can arise without the shared elimination mechanism.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Names 'Shared Mechanism' and details the common process of elimination."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Identifies the specific mechanism (negative filtering) shared by both endpoints."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Connects via the shared logic of deduction via modus tollens."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Demonstrates the common underlying process of subtracting alternatives rather than conflating logic."},
+        {"handle": "[SRC_010] against SRC_006", "kind": "rebutted", "note": "Aligns with the negative probability view, avoiding the false contradiction of inductive bridges."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Proposes a structural connection based on the mechanism of elimination."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "Focuses on elimination, bypassing the epistemic probability issue."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "rebutted", "note": "Meets relation-form criteria with explicit kind and refutation condition."}
+      ]
+    },
+    {
+      "content": "Kind: Contradiction. The isolated problem's demand for a non-inductive justification contradicts SRC_001's reliance on 'verisimilitude' as a metric, because verisimilitude implicitly assumes a uniformity of nature (that closer-to-truth theories survive) which is itself an inductive assumption. REFUTED IF: Verisimilitude can be rigorously defined and measured using purely logical content analysis without any assumption about the future behavior of nature or the distribution of truth.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Explicitly names 'Contradiction' and details the conflict between non-inductive goals and inductive assumptions in verisimilitude."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Defines a clear logical incompatibility between the problem constraints and the foundation's mechanism."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Identifies the specific tension regarding inductive assumptions."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "revised", "note": "Does not conflate logic but highlights a fundamental incompatibility in premises."},
+        {"handle": "[SRC_010] against SRC_006", "kind": "rebutted", "note": "Validates the criticism of inductive bridges by framing verisimilitude as such a bridge."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Proposes a structural contradiction rather than a definitional loop."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "Directly addresses the epistemic probability leak in verisimilitude."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "rebutted", "note": "Includes required 'refuted if' and relation kind."}
+      ]
+    },
+    {
+      "content": "Kind: Abstraction. SRC_002 represents a high-level abstraction of the isolated problem, generalizing 'corroboration' from a specific test result to a global state report of the critical discussion. REFUTED IF: The specific operational details of conducting a severe test (the isolated problem) cannot be derived or understood solely from the abstract state report of the discussion (SRC_002), implying the abstraction loses necessary causal information.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_002"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Names 'Abstraction' and explains the generalization from specific to global."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Links the isolated instance to the generalized concept in SRC_002."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Establishes the relation as one of levels of granularity (specific vs abstract)."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "revised", "note": "Clarifies the relationship as hierarchical abstraction rather than shared operational logic."},
+        {"handle": "[SRC_010] against SRC_006", "kind": "rebutted", "note": "Avoids the induction/elimination conflict by framing it as a change in descriptive level."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Defines a structural relation (abstraction) connecting the two."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The refutation condition tests the sufficiency of the abstraction."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "rebutted", "note": "Complies with format requirements."}
+      ]
+    },
+    {
+      "content": "Kind: Integration. The isolated problem integrates the 'procedural rule' of SRC_005 with the 'negative filter' of SRC_003 to form a hybrid mechanism: preference is a procedural mandate to select the survivor of the negative filter. REFUTED IF: The procedural rule (SRC_005) and the negative filter (SRC_003) are mutually exclusive in practice, such that applying one logically precludes the application of the other (e.g., if a procedural rule demands keeping a falsified theory for social reasons).",
+      "typicality": 0.30,
+      "neighbours": ["SRC_005", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "revised", "note": "Proposes 'Integration' of two foundations, explicitly naming the kind and the components."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Connects the isolated problem to multiple neighbours via a synthesized mechanism."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Identifies a complex relation (integration) rather than a simple summary."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Demonstrates how two distinct mechanisms can coexist in a hybrid model."},
+        {"handle": "[SRC_010] against SRC_006", "kind": "rebutted", "note": "Synthesizes the views rather than positing a contradiction."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Provides a constructive structural link."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "Tests the compatibility of the integrated parts."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "rebutted", "note": "Meets all formatting constraints."}
+      ]
+    }
+  ]
+}

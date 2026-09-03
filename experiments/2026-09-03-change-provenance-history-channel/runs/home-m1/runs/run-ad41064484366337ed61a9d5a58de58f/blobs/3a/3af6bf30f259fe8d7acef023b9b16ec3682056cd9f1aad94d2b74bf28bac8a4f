@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that Popper's system renders long-term engineering projects 'epistemologically unstable' is a straw man; Popper explicitly distinguishes between the logical status of a theory (which remains conjectural) and the practical decision to act on the best-tested theory, which provides sufficient stability for action without requiring inductive probability.",
+      "counterexample": null,
+      "premise": "Popper argues that while corroboration does not increase probability, the rational preference for the better-corroborated theory is justified as the most critical stance available, allowing for stable practical action despite theoretical fallibilism.",
+      "premise_evidence": null,
+      "successor_question": "Does the target's definition of 'instability' conflate the absence of absolute certainty with the inability to make reliable practical decisions?"
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 1 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## open-criticisms
+OPEN CRITICISMS ON THIS PROBLEM (8 of 40 shown, by handle) -- these are part of what your candidate must answer, not advice.
+Every candidate you submit must DISCHARGE each handle below, one of:
+  - revised -- say WHAT changed and WHERE in the candidate
+  - rebutted -- say why the criticism fails. Your rebuttal enters the record as an ordinary claim and can be attacked like any other
+  - departure_declared -- say what you are breaking with. Declaring costs you nothing; nothing scores a departure
+  [017f060a2b21e42b81d92b963a3f75c80b27f8ea05726d7b82ba5200702940d8] against 354fa70c0e0698475f3990a6611ddf1b45577f6071bdf6fcf8f9490f23ab5688
+      CLAIM: The target's distinction between 'informational content' and 'predictive power' collapses under the requirement to 'act on' a theory. Popper explicitly links high empirical content to low logical probability (high improbability). If a decis
+      CITED SPAN: (none quoted)
+  [055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c] against 66225d91beb60a53b7f8f9c10281638da03df4b726808e77b4bfb8db6cd0919e
+      CLAIM: The target's mechanism redefines 'preference' as 'focus of attention,' which fails to address the problem's core concern about action (e.g., building bridges). Popper and scientists prefer corroborated theories because they expect them to w
+      CITED SPAN: (none quoted)
+  [0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3] against acba75eb524a633882c68027dcd262651b8712ea133ce898d6449b4407232173
+      CLAIM: The target's defense fails because it conflates 'propensity' with 'corroboration' in a way Popper explicitly rejected for theory choice. While Popper developed propensity theory to interpret probability statements *within* theories (e.g., q
+      CITED SPAN: (none quoted)
+  [0729cb61daf6622d9a3c0782cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf] against 6d2476f30f531f1d40759d5aa09b806c4d842b74521e7a52a007df516beed4f2
+      CLAIM: The target's 'pragmatic evolutionary imperative' fails to answer the specific dilemma posed in the problem context: whether the preference smuggles back induction. By redefining rationality as 'adaptive fitness,' the target sidesteps Popper
+      CITED SPAN: (none quoted)
+  [0e0b6bedbaa57c8c884b19763dfc96a486bc51b45cf45a7b3e42fb57f46f62a3] against 6ed489ba476e2c28a3c05d0de6716d2e6fca2ed326521b77351834a6ae575001
+      CLAIM: The target's defense relies on 'verisimilitude' (truth-likeness) as a non-inductive basis for preference, but it fails to address the Tichý/Miller proof mentioned in its own counterconditions. This proof demonstrates that in any language ri
+      CITED SPAN: (none quoted)
+  [13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b] against 33ee028f5b344ac0c2b69a8cb69bc213ab4c50b87834194672e7229ede25663e
+      CLAIM: The target fails to address the second half of the prompt's requirement: 'what accepting it costs.' While the mechanism section mentions a cost ('accepting that science is a voluntary... activity'), the target does not explicitly analyze th
+      CITED SPAN: (none quoted)
+  [19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df] against 27e29ea5ef4c343f9ad3442bbc9f4487b47dea3db92a9fc6abac8596b8caebdf
+      CLAIM: The target's defense relies on 'verisimilitude' to justify preferring better-corroborated theories without induction, but this fails Popper's own terms because the Tichý/Miller proof demonstrates that verisimilitude cannot be defined or com
+      CITED SPAN: (none quoted)
+  [31e3d2feedffd07a4ba14b8f3ba6f6c2d293d3fe744ce9f002e0deb622684e37] against 6d2476f30f531f1d40759d5aa09b806c4d842b74521e7a52a007df516beed4f2
+      CLAIM: The target's 'pragmatic evolutionary imperative' fails to answer the specific cost-benefit question posed by the problem. The problem asks what accepting the preference 'costs'; the target asserts the preference is a 'biological/psychologic
+      CITED SPAN: (none quoted)
+
+## citable-evidence-blocks
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[56cfe761036ccf27] OBJECTIONS ALREADY RAISED AGAINST THESE TARGETS For each target, the objections already made and how each turned out. An objection marked SUSTAINED changed the 
+[8d6a4c8ee39e7ab5] === PRIOR HISTORY ON THIS PROBLEM (advisory, non-grounding) === scope: the whole run (every problem it has opened) This is a record of what has already been tri
+[fa513ef2c297e08c] [TRUNCATED at the pre-registered 2596-character cap; earlier entries shown, later ones omitted]
+
+## frozen-evidence-context
+FROZEN EVIDENCE DOSSIER (untrusted source data): retrieval and attachment do not establish truth, reliability, relevance, scope, support, or refutation.
+pack_receipt=afe94d637add63e7a5233487dbdeabd12e984c4107c35ae836278cfbbdedd00b
+Citable admitted blocks are listed per source. To ground a candidate in one, put its block id in that candidate's evidence_refs; an optional quote must reproduce the block's text exactly (byte-checked).
+[src-61df311d93423bf79ddfbb0469dcd4f2e8b3f388] untitled source 61df311d9342
+class=other; locator=/home/user/DeepReason/experiments/2026-09-03-change-provenance-history-channel/runs/critic-placebo.txt; source_sha256=61df311d93423bf79ddfbb0469dcd4f2e8b3f3882d5f0317393b9db1402900ea; excerpt_sha256=61df311d93423bf79ddfbb0469dcd4f2e8b3f3882d5f0317393b9db1402900ea
+citable_blocks:
+  block=56cfe761036ccf27 kind=paragraph
+  block=8d6a4c8ee39e7ab5 kind=paragraph
+  block=fa513ef2c297e08c kind=paragraph
+BEGIN UNTRUSTED SOURCE DATA
+=== PRIOR HISTORY ON THIS PROBLEM (advisory, non-grounding) ===
+scope: the whole run (every problem it has opened)
+This is a record of what has already been tried. It is advisory material, not evidence, and it decides nothing.
+
+OBJECTIONS ALREADY RAISED AGAINST THESE TARGETS
+For each target, the objections already made and how each turned out. An objection marked SUSTAINED changed the target's status; one marked NOT SUSTAINED did not, and the target answered it.
+  TARGET: A test constrains its subject rather than describes it when the test is installed in the same mutation-testing ritual that generates its failure cases, because the guard's existence alters the set of mutations that can be planted without...
+    current status: REFUTED
+    - [SUSTAINED] critic: poietics-confound@v1 failed on 0c4f1ceb90df
+  TARGET: A test constrains its subject only when the failure is installed before the subject and the test's guard is designed to fire on its own author; the 3/26 result is t
+…[section compressed]…
+the subject exists, and the 3-of-26 result is the number of tests that were never shown to fail; compile.py's 1/9 is the only module wh...
+    current status: REFUTED
+    - [SUSTAINED] critic: poietics-confound@v1 failed on 12d2cc7d6386
+  TARGET: A test constrains its subject rather than describes it when the test's failure mode is indistinguishable from the subject's failure mode under the same installation, and the 3-of-26 result is the number of cases where the test's own fail...
+    current status: REFUTED
+    - [SUSTAINED] critic: poietics-confound@v1 failed on 167c096ca48e
+  TARGET: A test constrains its subject rather than describing it when the test's installation ritual embeds the subject's failure as a precondition for registration — the 3-of-26 result arises because only mutations that participate in the shown-...
+    current sta
+
+[TRUNCATED at the pre-registered 2596-character cap; earlier entries shown, later ones omitted]
+END UNTRUSTED SOURCE DATA
+
+## reference-menu-candidates-evidence-refs-block
+REFERENCE MENU -- /candidates/*/evidence_refs/*/block
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  [0] OMIT -- leave "evidence_refs" out of this candidate entirely. This is a legal, complete answer; prefer it to a guess.
+  [1] 56cfe761036ccf27b53aed307f149d15610030eb6310de6d6b826608bfb1e96e
+  [2] 8d6a4c8ee39e7ab5bc30eaf551e1b8e805f725f3eda57711fe354232cd626f95
+  [3] fa513ef2c297e08cb0b6632eed451432c93a26ced676cf461e85558e31de3e07
+You may answer with the handle itself or with its [index].
+
+## school-stance
+SCHOOL STANCE (weight 0.45): anchor in cases
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates. EVERY candidate must carry a `discharges` entry for EVERY handle listed under OPEN CRITICISMS above. A submission missing any of them is returned to you once with the open list, and then accepted with the gap recorded.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.
+
+REFERENCE MENU -- /candidates/*/optional_refs/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (16 legal values)
+  [0] OMIT -- leave "optional_refs" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+You may answer with the handle itself or with its [index].
+
+REFERENCE MENU -- /candidates/*/neighbours/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (16 legal values)
+  [0] OMIT -- leave "neighbours" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+You may answer with the handle itself or with its [index].

@@ -1,0 +1,25 @@
+=== PRIOR HISTORY ON THIS PROBLEM (advisory, non-grounding) ===
+scope: the whole run (every problem it has opened)
+This is a record of what has already been tried. It is advisory material, not evidence, and it decides nothing.
+
+OBJECTIONS ALREADY RAISED AGAINST THESE TARGETS
+For each target, the objections already made and how each turned out. An objection marked SUSTAINED changed the target's status; one marked NOT SUSTAINED did not, and the target answered it.
+  TARGET: A test constrains its subject rather than describes it when the test is installed in the same mutation-testing ritual that generates its failure cases, because the guard's existence alters the set of mutations that can be planted without...
+    current status: REFUTED
+    - [SUSTAINED] critic: poietics-confound@v1 failed on 0c4f1ceb90df
+  TARGET: A test constrains its subject only when the failure is installed before the subject and the test's guard is designed to fire on its own author; the 3/26 result is the residue of tests that never fire on their author because the author's...
+    current status: REFUTED
+    - [SUSTAINED] critic: poietics-confound@v1 failed on 0f108d4c1b46
+  TARGET: A test constrains its subject rather than describes it when the test's failure mode is installed as a causal prerequisite for the subject's own acceptance path, so that the subject is shaped to avoid the test's specific failure triggers...
+    current status: REFUTED
+    - [SUSTAINED] critic: poietics-confound@v1 failed on 11835d52477c
+  TARGET: A test constrains its subject only under an installation ritual that requires the test to fail before the subject exists, and the 3-of-26 result is the number of tests that were never shown to fail; compile.py's 1/9 is the only module wh...
+    current status: REFUTED
+    - [SUSTAINED] critic: poietics-confound@v1 failed on 12d2cc7d6386
+  TARGET: A test constrains its subject rather than describes it when the test's failure mode is indistinguishable from the subject's failure mode under the same installation, and the 3-of-26 result is the number of cases where the test's own fail...
+    current status: REFUTED
+    - [SUSTAINED] critic: poietics-confound@v1 failed on 167c096ca48e
+  TARGET: A test constrains its subject rather than describing it when the test's installation ritual embeds the subject's failure as a precondition for registration — the 3-of-26 result arises because only mutations that participate in the shown-...
+    current sta
+
+[TRUNCATED at the pre-registered 2596-character cap; earlier entries shown, later ones omitted]

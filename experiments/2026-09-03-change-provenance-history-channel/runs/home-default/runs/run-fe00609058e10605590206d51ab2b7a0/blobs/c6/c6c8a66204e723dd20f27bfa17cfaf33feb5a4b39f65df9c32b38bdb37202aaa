@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's analogy between natural selection and scientific preference fails to address the normative core of the problem: Popper's rejection of induction. While natural selection explains why organisms *do* survive (descriptive), it does not justify why scientists *ought* to prefer one theory over another for future action (normative). The target claims preference is merely a 'survival trait' of the community, but this reduces rational scientific choice to a blind causal process, effectively admitting that on Popper's own terms, there is no defensible reason to expect the better-corroborated theory to perform better in the future. This smuggles in induction by assuming the 'fitness' (corroboration) gained retrospectively guarantees prospective success, which is precisely the inductive leap Popper rejected. The target asserts the preference is defensible as a 'causal process,' but the problem asks if it is defensible *on Popper's own terms* as a rational basis for action, not merely as a biological inevitability.",
+      "counterexample": null,
+      "premise": "Popper explicitly rejected the idea that past success (corroboration) provides any logical basis for expecting future success, distinguishing sharply between descriptive accounts of science and normative justifications for theory choice.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is merely a causal habit of the scientific community without normative force, how can Popper distinguish science from pseudoscience or irrationality when both might exhibit similar 'survival traits'?"
+    }
+  ]
+}

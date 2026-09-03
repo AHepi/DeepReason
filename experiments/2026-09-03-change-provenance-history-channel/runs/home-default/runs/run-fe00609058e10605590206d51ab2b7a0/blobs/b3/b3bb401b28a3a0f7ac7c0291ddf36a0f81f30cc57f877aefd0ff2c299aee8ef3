@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target fails to make the 'strongest case' for the opposing view as required by the problem prompt. The prompt explicitly demands making the strongest case for both answers (that the preference is defensible vs. that it smuggles induction) before concluding. The target exclusively argues that the preference smuggles induction back in, ignoring the Popperian counter-argument that preferring a better-corroborated theory is a rational conjecture based on critical testing rather than an inductive inference of probability. By failing to articulate the defense of Popper's own terms (e.g., that acting on the best-tested theory is simply choosing the most informative surviving conjecture without assuming future success), the target does not fulfill the structural requirements of the question.",
+      "counterexample": null,
+      "premise": "The problem prompt requires: 'Make the strongest case for each answer, then say which one survives.'",
+      "premise_evidence": null,
+      "successor_question": "How would a strict Popperian justify acting on a corroborated theory without invoking the uniformity of nature?"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference that the theory is more probable, but as a methodological rule to maximize the potential for future falsification (error elimination), accepting the cost that this preference offers no rational guarantee of predictive success and treats scientific progress as a non-cumulative series of conjectures rather than an approach to certain truth.",
+    "mechanism": "The mechanism distinguishes between 'probability' (logical likelihood of truth) and 'corroboration' (historical report of test severity). Preference is justified functionally: a highly corroborated theory has withstood severe tests, meaning it has high empirical content. By choosing it, scientists select the theory that offers the most precise targets for future refutation. If it fails, we learn more; if it survives, it remains the best available target. This avoids induction because it does not claim the past success predicts future truth, only that the past success identifies the theory with the highest capacity to be proven wrong, which is the engine of Popperian progress.",
+    "counterconditions": [
+      "If corroboration is interpreted as increasing the logical probability of the theory being true.",
+      "If the preference relies on the assumption that nature is uniform (the principle of induction).",
+      "If the choice of theory is based on psychological comfort or pragmatic utility rather than testability.",
+      "If the mechanism claims to guarantee that the preferred theory will survive future tests."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "rebutted",
+        "note": "The criticism assumes the only alternative to convention is verisimilitude-as-truth. The candidate rebuts by grounding preference in 'maximizing falsifiability' (methodological utility) rather than truth-likeness or mere convention, utilizing Popper's concept of empirical content."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "Rebutted by clarifying that the 'objectivity' claimed is procedural (severity of test), not ontological (truth of result). The candidate explicitly denies the preference grounds 'objectivity of result,' aligning with Popper's separation of method from truth acquisition."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "revised",
+        "note": "Revised to explicitly name 'maximizing empirical content/falsifiability' as the third option between 'probability' and 'convention,' directly addressing the false dichotomy charge by inserting the specific Popperian functional justification."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "rebutted",
+        "note": "Rebutted by distinguishing the *function* of the preference (finding errors faster) from the *inductive principle* (expecting success). The candidate argues that minimizing future error risk is achieved by picking the easiest-to-falsify theory, not by assuming it won't be falsified."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate intentionally sidesteps the failed formal definition of verisimilitude, relying instead on the operational definition of corroboration as a report of test severity, which Popper maintained was valid even if verisimilitude could not be formally quantified."
+      },
+      {
+        "handle": "720e994a620e994a62093f4921479eee06c7b2643add166f9ff3ec18dfac4aefd5df7507",
+        "kind": "rebutted",
+        "note": "Rebutted by explicitly stating the cost: 'no rational guarantee of predictive success.' The candidate accepts that we cannot logically justify expecting A to survive future tests, only that A is the most informative vehicle for testing nature."
+      },
+      {
+        "handle": "7970f8e039458c9740bef220092d5b9e1cb2f16f2f90db166ba77751d59bd6a4",
+        "kind": "rebutted",
+        "note": "Rebutted by anchoring the argument strictly in 'logical improbability relative to background knowledge' (severity) as the definition of the preferred theory, explicitly rejecting psychological expectation as the basis for the choice."
+      },
+      {
+        "handle": "8653a93a35d43191d6518c7629ca6b147480c93101961b1f816e7f6208016204",
+        "kind": "revised",
+        "note": "Revised to clarify that the 'cost' is the abandonment of the idea that science converges on truth in a knowable way, accepting instead a model of infinite approximation without certainty, thus resolving the dilemma by embracing the unknowability."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "SURVIVAL_OF_THE_FITTEST_BIOLOGY",
+        "BRIDGE_ENGINEERING_SAFETY_FACTORS"
+      ],
+      "shared_structure": [
+        "Selection based on past performance does not guarantee future survival.",
+        "Preference is given to the entity that has survived the most severe stress tests.",
+        "The goal is not to predict immortality but to identify the most robust candidate for the next challenge.",
+        "Past survival indicates high resistance to specific known threats, not general invulnerability."
+      ],
+      "disanalogies": [
+        "Biological fitness is reproductive success (inductive outcome), whereas Popperian corroboration is a logical status report.",
+        "Engineers use safety factors assuming material consistency (induction), whereas Popper explicitly denies consistency guarantees.",
+        "Natural selection has no conscious agent choosing; scientists actively choose theories based on methodological rules."
+      ],
+      "transfer_claims": [
+        "Just as engineers test bridges to failure to find the strongest design without guaranteeing it will never fall, scientists test theories to find the most corroborated without guaranteeing truth.",
+        "Survival of the fittest describes a historical fact, not a prophecy; similarly, corroboration reports history, not probability."
+      ],
+      "overturn_conditions": [
+        "If it is shown that selecting the 'fittest' bridge inherently requires an inductive belief in material uniformity.",
+        "If biological survival is proven to be a probabilistic indicator of future survival rather than just a historical record.",
+        "If the analogy fails to account for the normative 'ought' of scientific preference versus the descriptive 'is' of natural selection."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_007"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_007",
+        "SRC_012"
+      ]
+    },
+    "checker_specs": []
+  }
+}

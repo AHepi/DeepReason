@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target falsely equates 'preference' with 'propagation,' ignoring Popper's explicit distinction between the psychological act of choosing (which can be rational without being inductive) and the logical status of probability. By reducing the scientist's preference to a passive description of survival, the target fails to address the prompt's core challenge: whether a *normative* justification for action exists on Popperian terms. Popper argues we prefer better-corroborated theories not because they are more probable (induction), but because they have withstood attempts to falsify them, making them the most rational basis for critical discussion and action; the target's evolutionary reductionism incorrectly assumes that avoiding induction requires abandoning rational agency entirely.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between the logical question of probability (which he rejects for corroboration) and the pragmatic/rational question of which theory to prefer for action (which he answers via severity of tests, not natural selection).",
+      "premise_evidence": null,
+      "successor_question": "How does the target's evolutionary model account for Popper's specific argument that preferring a well-tested theory is a rational decision based on critical scrutiny rather than a blind biological imperative?"
+    }
+  ]
+}

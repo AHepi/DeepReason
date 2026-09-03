@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to address the 'smuggling induction' charge because its proposed mechanism ('acceleration of falsification') implicitly relies on the inductive assumption that past error-detection success predicts future utility. Popper explicitly rejected using corroboration as a guide for action unless it could be justified without induction; by arguing we prefer theories to 'maximize the rate of error detection,' the target assumes the unproven premise that the methods which worked before will work again. This makes the preference defensible only by smuggling in the very inductive principle Popper sought to eliminate, rather than offering a purely deductive or methodological justification.",
+      "premise": "Popper held that corroboration is not probability and rejected induction, yet scientists prefer better-corroborated theories.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Can a preference for corroborated theories be justified solely on deductive grounds without assuming the uniformity of nature or the reliability of past performance?"
+    }
+  ]
+}

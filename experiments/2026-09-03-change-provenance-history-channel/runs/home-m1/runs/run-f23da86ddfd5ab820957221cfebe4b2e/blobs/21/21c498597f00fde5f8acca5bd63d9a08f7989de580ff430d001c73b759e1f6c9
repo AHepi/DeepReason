@@ -1,0 +1,89 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference that the theory is more probable, but as a non-inductive, methodological rule to maximize the potential for falsification (learning), accepting the cost that we can never rationally justify the belief that the preferred theory will succeed in the future.",
+    "mechanism": "Popper distinguishes between the logical status of a theory (which remains unproven and improbable) and the methodological decision of which theory to test next. Preferring the highly corroborated theory is a strategic choice because it has withstood severe tests, meaning it has high empirical content. By choosing it, we subject ourselves to the highest risk of refutation. If it fails, we learn more; if it survives, our knowledge grows. This avoids induction because we do not claim the past success predicts future success (probability); we only claim that testing the 'boldest' conjecture currently available is the most efficient engine for error elimination.",
+    "counterconditions": [
+      "If corroboration is interpreted as increasing the subjective probability of future success, the argument collapses into the induction Popper rejected.",
+      "If the scientist acts on the theory believing it is 'true' or 'likely true' rather than merely 'the best available target for criticism', the psychological state smuggles in induction.",
+      "If the concept of 'verisimilitude' (truth-likeness) is required to ground the preference, the argument fails because Popper's formal definition of verisimilitude was logically untenable (as shown by Tichý and Miller)."
+    ],
+    "typicality": 0.85,
+    "analogy": {
+      "source_memory_refs": [
+        "bridge_stress_test_protocol",
+        "chess_opening_selection_heuristic"
+      ],
+      "shared_structure": [
+        "Selection of the option that has survived the most rigorous attempts at failure.",
+        "Decision based on maximizing information gain from potential future failure rather than predicting success.",
+        "Explicit rejection of the idea that past survival guarantees future performance."
+      ],
+      "disanalogies": [
+        "In bridge engineering, past survival often implicitly relies on inductive confidence in material consistency, whereas Popper explicitly denies this consistency for natural laws.",
+        "Chess heuristics often rely on statistical win-rates (inductive probability), whereas Popperian corroboration is strictly non-probabilistic.",
+        "The cost of error in physical testing is catastrophic failure, whereas in Popperian science the 'cost' is merely the loss of a hypothesis, which is viewed as a gain in knowledge."
+      ],
+      "transfer_claims": [
+        "Just as an engineer tests the bridge design that has survived the most extreme simulations not because it is guaranteed to hold, but because its failure would reveal the most about structural limits, scientists prefer corroborated theories to maximize the severity of the next test.",
+        "The preference is a rule of procedure (how to play the game of science) rather than a statement of fact (the state of the board)."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that acting on a theory necessarily entails an expectation of its future success, then the methodological distinction collapses into practical induction.",
+        "If no coherent definition of 'severity' exists that does not implicitly rely on the uniformity of nature."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dilemma by ignoring verisimilitude. This candidate rebuts that by arguing verisimilitude is not necessary for the defense; the defense rests entirely on the methodological rule of maximizing falsifiability (severity). Furthermore, relying on verisimilitude is dangerous given its known formal failures, so the candidate deliberately avoids it to remain robust."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The criticism argues for an objective grounding distinct from convention. This candidate agrees the grounding is objective in terms of logical content and severity, but maintains it is a 'conventionalist decision' in the sense that choosing to value learning over safety is a methodological commitment, not a logical derivation. The rebuttal clarifies that 'convention' here does not mean 'arbitrary' but 'procedural rule'."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "revised",
+        "note": "Revised to explicitly state that the alternative foundation is 'maximization of falsifiability/severity' rather than just 'methodological rule'. The candidate now clarifies that the dichotomy is false not because of a third ontological state, but because the preference is pragmatic/strategic, not epistemic/probabilistic."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "rebutted",
+        "note": "The criticism claims functional identity to induction. This candidate rebuts by distinguishing the *output* of the reasoning: Induction outputs 'Theory A is likely true'; Popperian preference outputs 'Theory A is the most informative target for attack'. The action (using Theory A) is the same, but the justification (the internal logic) is fundamentally different, avoiding the logical problem of induction."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "departure_declared",
+        "note": "Departing from any reliance on 'verisimilitude' as a justificatory mechanism. While Popper hoped verisimilitude would solve this, the candidate declares that the defense must stand without it due to the formal logical failures identified by critics, relying solely on the concept of test severity."
+      },
+      {
+        "handle": "720e994a62093f4921479eee06c7b2643add166f9ff3ec18dfac4aefd5df7507",
+        "kind": "rebutted",
+        "note": "The criticism asks for the cost of denying future likelihood. The candidate answers: The cost is that we act without rational assurance of success. We accept that the theory might fail tomorrow despite yesterday's success. The 'defensibility' lies in the fact that this is the only stance that allows for genuine learning (falsification) without falling into circularity."
+      },
+      {
+        "handle": "7970f8e039458c9740bef220092d5b9e1cb2f16f2f90db166ba77751d59bd6a4",
+        "kind": "rebutted",
+        "note": "The criticism alleges a category error between psychological expectation and logical severity. The candidate rebuts by asserting that Popper's framework demands the suppression of psychological expectation. The 'preference' is a logical selection of the object with the highest empirical content, regardless of the scientist's feelings. If the scientist feels confident, that is a psychological side-effect, not the logical ground of the preference."
+      },
+      {
+        "handle": "8653a93a35d43191d6518c7629ca6b147480c93101961b1f816e7f6208016204",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'smuggling' charge. The candidate now clarifies that induction is only smuggled in if one conflates 'acting on' with 'believing in the probability of'. By strictly maintaining the separation between the decision to test/use and the assessment of truth-probability, the smuggling is prevented."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_006"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "checker_specs": []
+  }
+}

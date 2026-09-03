@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Shared Mechanism. The isolated node 1c110c6075f4 and SRC_002 share the mechanism of 'Evolutionary Selection Pressure' where severe tests function as environmental filters rather than inductive confirmations. REFUTED IF: The mechanism requires any assignment of increased future probability to surviving theories, or if the 'fitness' of a theory is defined by its predictive success rate rather than its current survival status against criticism.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_002", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "The candidate explicitly defines the mechanism as non-probabilistic selection pressure, rejecting the critic's claim that severe testing inherently relies on probative capacity for truth confirmation."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Content now explicitly names 'Shared Mechanism' and includes a distinct 'REFUTED IF' clause detailing failure conditions, satisfying relation-form@578e42df713e."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Added explicit mechanism definition and refutation condition to meet formal requirements."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Structure updated to clearly separate relation kind, mechanism description, and refutation conditions."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The candidate defines the specific mechanism ('Evolutionary Selection Pressure') and does not merely describe a conditional failure state; the 'REFUTED IF' clause specifies the boundary of the mechanism's validity."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Corrected formatting to ensure 'refuted if' logic is present and explicit."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "The refutation condition explicitly targets reliance on predictive success probabilities, maintaining consistency with the non-inductive integration claim."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Ensured the candidate contains the required predicate and relation keywords."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Contradiction. The isolated node 1c110c6075f4 contradicts SRC_004's 'Eliminative Default' stance. While SRC_004 claims preference is merely the refusal to act on refuted theories (passive), 1c110c6075f4 posits an active methodological rule selecting for 'verisimilitude' (truth-likeness). REFUTED IF: It can be demonstrated that 'selecting for verisimilitude' is logically equivalent to 'refusing to act on refuted theories' in all possible worlds, or if the concept of verisimilitude collapses into mere survival without additional informational content.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_004", "SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "departure_declared", "note": "This candidate departs from the assumption that all nodes must share a compatible mechanism; it proposes a contradictory relation instead."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Explicitly names 'Contradiction' as the relation kind and provides a robust 'REFUTED IF' scenario."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Formatted to strictly adhere to relation-form criteria."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Clarified the opposing mechanisms to substantiate the contradiction claim."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The mechanism of contradiction is defined by the tension between passive elimination and active selection for truth-likeness."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Included explicit refutation conditions."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "The contradiction holds regardless of predictive success assumptions, focusing on the nature of the preference rule itself."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Verified presence of required keywords and logical structure."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Abstraction. The isolated node 1c110c6075f4 represents an abstract formulation of the 'Critical Rationalism' found concretely in SRC_005. Where SRC_005 details the methodological rule of selecting high informational content, 1c110c6075f4 abstracts this to a general principle of 'Non-Inductive Preference Logic'. REFUTED IF: The abstract principle fails to apply to the specific case described in SRC_005, or if the specific case in SRC_005 relies on inductive assumptions that the abstract principle explicitly forbids.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_005", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "The abstraction preserves the non-inductive nature of the mechanism, avoiding the probative trap cited by the critic."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Clearly states 'Abstraction' as the relation and defines the refutation condition."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Adjusted to meet all relation-form constraints."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Defined the abstract/concrete relationship clearly."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The mechanism is the mapping from concrete rule to abstract logic, which is well-defined."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Ensured 'refuted if' clause is prominent and logical."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "The abstraction holds even if predictive success is questioned, as it concerns logical structure."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Compliance with relation-form verified."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Integration. The isolated node 1c110c6075f4 integrates the 'Evolutionary Epistemology' of SRC_002 with the 'Verisimilitude' concept of SRC_001, proposing that survival (fitness) is the operational proxy for truth-likeness in a non-probabilistic framework. REFUTED IF: The integration implies that survival guarantees higher truth probability, or if the two source concepts are mutually exclusive (i.e., one cannot simultaneously hold that preference is purely survival-based AND based on truth-likeness).",
+      "typicality": 0.75,
+      "neighbours": ["SRC_001", "SRC_002"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "The integration explicitly denies that survival confirms truth probability, maintaining the non-inductive stance."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Formulated as an 'Integration' with clear refutation criteria."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Updated to satisfy relation-form requirements."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Detailed the integrated mechanism."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The mechanism is the synthesis of fitness and verisimilitude, not just a failure state."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Refutation conditions added."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "The candidate anticipates the critic's objection by making the rejection of probability a core tenet of the integration."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Keywords and structure aligned with criteria."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Dependence. The isolated node 1c110c6075f4 is dependent on SRC_003 for its definition of 'severity'. Without SRC_003's framing of severity as 'logical stringency' rather than 'statistical rarity', the node's claim of non-inductive preference collapses into standard Bayesian updating. REFUTED IF: The node can sustain its non-inductive claim using a purely statistical definition of severity, or if SRC_003 itself implicitly relies on inductive assumptions about the stability of the test environment.",
+      "typicality": 0.90,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "By anchoring dependence on the logical definition of severity, the candidate avoids the probative/truth confirmation pitfall."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Explicitly names 'Dependence' and provides the required refutation condition."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Structured to pass relation-form checks."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Mechanism of dependence (definition of severity) is clearly stated."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The mechanism is the definitional reliance, which is specific and not merely a conditional failure."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Refutation logic included."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "The dependence is on the logical structure, insulating it from predictive success critiques."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "All formal requirements met."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Reduction. The isolated node 1c110c6075f4 reduces the complex methodological rules of SRC_005 to a single heuristic: 'Maximize Informational Risk'. The preference for corroborated theories is nothing more than the byproduct of agents seeking the most falsifiable (risky) conjectures. REFUTED IF: There exists a scenario where an agent prefers a less risky (less informative) theory despite it being better corroborated, or if 'maximizing risk' fails to explain the retention of theories that have survived long-term without new risky predictions.",
+      "typicality": 0.30,
+      "neighbours": ["SRC_005", "SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "departure_declared", "note": "This candidate departs from the standard interpretation of corroboration, reducing it to risk-seeking behavior, thereby sidestepping the induction critique entirely."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Names 'Reduction' and specifies the reduction target and refutation conditions."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Formatted for compliance."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Mechanism defined as heuristic reduction."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The mechanism is the reduction to risk maximization, a specific explanatory model."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Refutation conditions clearly articulated."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "The reductionist view ignores probability, focusing solely on information content/risk."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Criteria satisfied."}
+      ]
+    }
+  ]
+}

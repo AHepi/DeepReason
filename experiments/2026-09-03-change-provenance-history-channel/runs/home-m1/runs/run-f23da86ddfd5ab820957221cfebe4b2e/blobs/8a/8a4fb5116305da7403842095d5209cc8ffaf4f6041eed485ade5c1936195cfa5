@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to address the second half of the problem's directive: 'what accepting it costs.' While it argues that preference is defensible via informational content, it omits the specific cost of this stance (e.g., the inability to rationally expect future success or the pragmatic gap between 'informative' and 'safe' for action), leaving the prompt's requirement for a trade-off analysis unanswered.",
+      "counterexample": null,
+      "premise": "The prompt explicitly asks to 'say which one survives and what accepting it costs'.",
+      "premise_evidence": null,
+      "successor_question": "What is the specific pragmatic cost of acting on a theory solely because it has high informational content, given that Popper assigns it zero probability of being true?"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target conflates Popper's rejection of induction as a logical justification for truth with a prohibition on using past success as a pragmatic guide for action.",
+      "premise_evidence": [
+        {
+          "block": "mechanism",
+          "quote": "Since Popper denies that survival increases probability, the only ground for this expectation is the uniformity of nature (induction). Without this hidden premise, the preference is arbitrary; with it, Popper's system collapses into the very inductivism he sought to replace."
+        }
+      ],
+      "case": "The argument fails because it constructs a false dichotomy: either one assumes the uniformity of nature (induction) or one acts arbitrarily. Popper's actual position offers a third option: acting on the 'best-tested' theory is rational not because we expect the future to resemble the past (an inductive claim), but because we have no better critical basis for choice. The target incorrectly asserts that without an inductive guarantee of success, the preference is 'arbitrary.' In Popper's framework, preferring the better-corroborated theory is the only non-arbitrary choice available to a critical rationalist, precisely *because* it has withstood attempts to falsify it, even if this provides no logical assurance of future performance. By missing this distinction between 'justification of truth' (which requires induction) and 'rational preference for action' (which relies on critical scrutiny), the target misrepresents Popper's solution and attacks a straw man rather than the actual philosophical stance.",
+      "counterexample": [
+        "A doctor choosing a treatment that has survived rigorous clinical trials over one that has been falsified, while explicitly admitting the successful treatment might fail tomorrow, is acting rationally on critical grounds without assuming the uniformity of nature."
+      ],
+      "successor_question": "If the preference for the better-corroborated theory is based solely on its survival of criticism rather than an expectation of future success, does this satisfy the requirement for 'defensible preference' without reintroducing induction?"
+    }
+  ]
+}

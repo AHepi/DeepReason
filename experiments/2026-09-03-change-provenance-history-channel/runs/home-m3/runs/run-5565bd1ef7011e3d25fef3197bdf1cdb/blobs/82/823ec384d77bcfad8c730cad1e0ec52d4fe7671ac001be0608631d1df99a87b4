@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's analogy to 'negative utilitarianism' fails to resolve the problem's core dilemma because minimizing 'known error' (past falsifications) does not logically justify a preference for future action without an inductive assumption that the future will resemble the past. Popper explicitly rejected the idea that past success (surviving tests) implies future reliability; therefore, claiming we should 'act on' the theory with the least known error smuggles in the very induction the prompt asks to avoid, as it assumes the unrefuted parts of the theory will remain unrefuted in the new context of action.",
+      "counterexample": null,
+      "premise": "Popper held that corroboration is not probability and that preferring a better-corroborated theory for action risks smuggling back in induction.",
+      "premise_evidence": null,
+      "successor_question": "If past error minimization cannot justify future action without induction, what non-inductive basis, if any, does Popper offer for choosing one theory over another when practical decisions are required?"
+    }
+  ]
+}

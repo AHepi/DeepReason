@@ -1,0 +1,191 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a rational, non-inductive 'conventionalist decision' grounded in the logical asymmetry of falsification and the goal of verisimilitude, not probability.",
+      "mechanism": "Popper distinguishes between the logical status of a theory (which cannot be made probable by past success) and the pragmatic rationality of choosing the theory that has withstood the most severe tests. This choice is not an induction that the future will resemble the past, but a methodological rule: if we seek truth (verisimilitude), we must prefer the theory that has survived attempts to destroy it, because a falsified theory is known to be false, while an unfalsified one remains a candidate for truth. The 'smuggling' charge fails because the preference is based on the current logical status (unfalsified vs. falsified), not a probabilistic prediction of future performance.",
+      "counterconditions": [
+        "If the preference implies an expectation that the theory will succeed in the future, it becomes inductive.",
+        "If verisimilitude cannot be defined without invoking probability or induction, the defense collapses.",
+        "If the 'conventionalist decision' is arbitrary, it lacks the objective grounding Popper claims."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The criticism claims a false dilemma by ignoring verisimilitude. This candidate explicitly centers verisimilitude as the objective ground for preference, arguing that preferring the unfalsified over the falsified is a logical necessity for truth-seeking, not a mere convention."
+        },
+        {
+          "handle": "[SRC_015] against SRC_003",
+          "kind": "rebutted",
+          "note": "The criticism conflates objectivity of method with result. This candidate clarifies that the preference is a methodological rule (objective method) aimed at verisimilitude (objective goal), without claiming the result (truth) is guaranteed."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The false dichotomy claim is addressed by showing Popper's third way: preference based on logical status (survival of severe tests) rather than probability or arbitrary convention."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "The functional identity to induction is denied. The mechanism relies on the asymmetry of falsification (past failure proves falsehood, past success only proves survival), which is deductive, not inductive."
+        },
+        {
+          "handle": "[SRC_012] against SRC_010",
+          "kind": "rebutted",
+          "note": "While Popper's formal definition of verisimilitude faced issues, the conceptual use of 'closeness to truth' as a regulative ideal remains valid for justifying preference without needing a precise metric."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "The cost is accepting that we act on hope, not knowledge. The preference is rational because it maximizes the chance of retaining truth (by avoiding known falsehoods), even if it doesn't guarantee future success."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "The category error charge is refuted by distinguishing psychological expectation from the logical definition of severity. Severity is defined by the theory's testability and the rigor of the test, not the scientist's feelings."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "The dilemma is resolved by accepting that verisimilitude is unknowable but the direction of progress (away from falsity) is knowable. The mechanism is not merely emotional but logically derived from the aim of science."
+        }
+      ],
+      "optional_refs": ["SRC_003", "SRC_011", "SRC_015"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction because any appeal to 'past success' as a guide for 'future action' presupposes the uniformity of nature, which Popper explicitly rejected.",
+      "mechanism": "Even if framed as a 'conventionalist decision' or 'verisimilitude,' the act of preferring Theory A over Theory B because A survived tests X, Y, Z while B did not, implicitly assumes that the conditions that allowed A to survive will persist or that the properties tested are relevant to future contexts. This is an inductive leap. Popper's attempt to separate 'corroboration' (report of past tests) from 'probability' (likelihood of future truth) fails in practice because the utility of corroboration lies entirely in its predictive power. Without an inductive bridge, corroboration is merely a historical record with no normative force for future choice.",
+      "counterconditions": [
+        "If a non-inductive justification for using past data to guide future action can be formulated.",
+        "If 'verisimilitude' can be operationalized without referencing future potential.",
+        "If the 'conventionalist decision' is shown to be purely arbitrary and not based on the content of the tests."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "Verisimilitude does not solve the problem because claiming a theory is 'closer to truth' based on past tests still requires assuming those tests are indicative of truth, which is inductive."
+        },
+        {
+          "handle": "[SRC_015] against SRC_003",
+          "kind": "rebutted",
+          "note": "The distinction between method and result is insufficient; the method itself (preferring the survivor) relies on an inductive assumption about the value of survival."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "There is no third foundation. Any foundation that uses past performance to justify future preference is inductive by definition."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "revised",
+          "note": "Clarified that the functional identity is exact: minimizing future error risk based on past data is the definition of induction, regardless of Popper's labels."
+        },
+        {
+          "handle": "[SRC_012] against SRC_010",
+          "kind": "rebutted",
+          "note": "The failure of formal verisimilitude supports this view: without a logical definition, it collapses into an intuitive (and thus inductive) guess."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "The cost is high: if induction is smuggled in, Popper's entire system loses its distinctiveness and becomes a variant of Bayesianism or enumerative induction."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "Severity is defined logically, but the *use* of severity to choose theories is a psychological/pragmatic act that inherently involves expectation, reintroducing induction."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "Defining verisimilitude as unknowable admits the gap. Filling that gap with a 'decision' to prefer the survivor is an inductive act disguised as convention."
+        }
+      ],
+      "optional_refs": ["SRC_007", "SRC_009"]
+    },
+    {
+      "claim": "The preference is defensible not as induction nor as pure convention, but as an evolutionary selection mechanism where 'corroboration' signals 'fitness' in the ecosystem of ideas, analogous to biological survival without implying future individual success.",
+      "mechanism": "Drawing on Popper's later evolutionary epistemology, theories are conjectures that undergo selection via severe tests. Preferring a well-corroborated theory is like preferring a species that has survived in a specific niche; it doesn't guarantee the species won't go extinct tomorrow (induction), nor is it an arbitrary rule (convention). It is a recognition of current fitness relative to the environment (tests). The 'cost' is accepting that scientific progress is not a march toward certain truth but a process of error elimination where 'better' means 'currently less refuted,' not 'more likely true.'",
+      "counterconditions": [
+        "If the analogy between biological fitness and theoretical corroboration breaks down regarding the nature of the 'environment'.",
+        "If 'fitness' in science cannot be defined without referencing truth approximation.",
+        "If the evolutionary model itself relies on inductive assumptions about the stability of the selection environment."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "Verisimilitude is reinterpreted as 'adaptive fit' rather than 'truth likeness,' avoiding the logical pitfalls of defining truth distance."
+        },
+        {
+          "handle": "[SRC_015] against SRC_003",
+          "kind": "rebutted",
+          "note": "Objectivity is grounded in the intersubjective nature of the tests (the environment), not the result."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The alternative foundation is evolutionary fitness, which is neither probabilistic nor conventional."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Evolutionary selection is not induction; it is a retrospective accounting of what survived. Future survival is not predicted, only hoped for based on current fit."
+        },
+        {
+          "handle": "[SRC_012] against SRC_010",
+          "kind": "rebutted",
+          "note": "Formal verisimilitude is replaced by the observable metric of 'survival of severe tests,' which is empirically tractable."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "The cost is abandoning the idea that science converges on truth; it only converges on 'less false' or 'better adapted' theories."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "Severity is the intensity of the selection pressure. The preference is for the organism (theory) that survived high pressure, a factual statement, not a psychological expectation."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "The dilemma dissolves: we don't need to know we are getting closer to truth, only that we are eliminating the unfit. The mechanism is error elimination, not truth approximation."
+        }
+      ],
+      "optional_refs": ["SRC_002", "SRC_006"]
+    },
+    {
+      "claim": "The debate rests on a category error: 'preference' in science is not a logical derivation but a pragmatic commitment to a research program, making the question of 'induction vs. convention' moot.",
+      "mechanism": "Following Lakatos and Kuhn (influenced by Popper), scientists do not choose theories based on a single logical rule but commit to research programs. Preferring a corroborated theory is a heuristic for allocating resources to the most promising line of inquiry. This is not induction (predicting truth) nor convention (arbitrary rule), but a strategic gamble. Popper's 'rationality' is thus reconstructed as 'methodological pragmatism.' The cost is admitting that Popper's strict logical demarcation is too narrow to describe actual scientific rationality.",
+      "counterconditions": [
+        "If Popper's framework can accommodate pragmatic heuristics without collapsing into instrumentalism.",
+        "If 'strategic gamble' can be distinguished from inductive betting.",
+        "If the shift to research programs abandons Popper's core falsificationist tenets."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "departure_declared",
+          "note": "Departing from strict Popperian logic to incorporate Lakatosian research programs to resolve the tension."
+        },
+        {
+          "handle": "[SRC_015] against SRC_003",
+          "kind": "rebutted",
+          "note": "Objectivity is redefined as communal critical scrutiny within a research program, not individual logical deduction."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The false dichotomy is resolved by introducing
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

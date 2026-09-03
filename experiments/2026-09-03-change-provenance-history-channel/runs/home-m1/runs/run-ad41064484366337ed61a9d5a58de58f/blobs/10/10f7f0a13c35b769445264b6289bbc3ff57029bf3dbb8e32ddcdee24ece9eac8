@@ -1,0 +1,62 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference of future truth, but as a non-inductive 'critical choice' to subject the most informative surviving theory to the severest possible future tests, thereby accepting the cost that this preference offers no guarantee of practical success or increased verisimilitude probability.",
+    "mechanism": "Eliminative Default with Critical Selection: When multiple theories survive, the agent selects the one with the highest empirical content (boldness) because it provides the best opportunity for future falsification. This selection is a methodological rule for growth, not a probabilistic bet on survival. The 'preference' is purely for the sake of testing, not for the sake of acting on expected utility derived from past performance.",
+    "counterconditions": [
+      "If the agent prefers the theory because they believe it is more likely to succeed in future applications (pragmatic induction), the defense fails.",
+      "If the agent cannot articulate a non-probabilistic reason for choosing Theory A over Theory B when both are unfalsified, the preference smuggles in induction.",
+      "If the 'cost' of accepting this view is admitted to be the inability to rationally justify safety-critical actions (e.g., building a bridge), then the preference is theoretically consistent but practically inert."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dichotomy between 'non-rational convention' and 'critical rational choice.' This candidate explicitly adopts the 'critical rational choice' horn of that dichotomy, arguing the choice is rational because it maximizes testability, not because it predicts truth. Thus, the dichotomy was not false; the target simply chose the valid side the critic claimed was missing."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address the coexistence scenario. The choice between Newtonian and Einsteinian theories (when both survive current tests) is made based on 'empirical content' (Einstein > Newton), not just survival. The revision clarifies that 'better-corroborated' implies 'survived tests despite higher risk,' which distinguishes it from mere survival."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "departure_declared",
+        "note": "Departing from the requirement that a 'preference' must justify 'future success.' This candidate declares that on Popper's terms, a preference can be rational even if it carries zero warrant for future success, provided its goal is falsification rather than verification. The cost is explicitly accepted as part of the claim."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The criticism argues evolutionary analogy smuggles in induction. This candidate rejects the evolutionary/survival-of-the-fittest analogy entirely in favor of a logical/methodological argument based on 'content.' The preference is not for the 'fittest' (survivor) but for the 'boldest' (most testable), which happens to have survived. The distinction breaks the inductive link."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "rebutted",
+        "note": "The criticism conflates causal explanation with normative justification. This candidate provides a normative justification: the rule 'choose the boldest survivor' is justified by the aim of science (growth of knowledge via falsification), not by a causal history of selection. The norm is instrumental to the goal of testing, not a report on causality."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "revised",
+        "note": "Clarified that the 'bet' is not on the theory being true or working, but on the theory being *wrong* soon. The revision emphasizes that preferring the better-corroborated theory is a strategy to find errors faster, rebutting the idea that it is a bet on 'fitness' for action."
+      },
+      {
+        "handle": "406f638f976b926f52618322e0179a9a339b4f66006f5cb9fcdb0f63c060d368",
+        "kind": "rebutted",
+        "note": "The criticism claims conflation of falsification potential with rational preference for action. This candidate accepts the conflation is fatal *if* the goal is successful action, but argues Popper's terms define the goal as *testing*. Therefore, maximizing falsification potential IS the only rational basis for preference within Popper's specific epistemological framework. The criticism assumes a pragmatic goal Popper explicitly brackets."
+      },
+      {
+        "handle": "413118405fe4cbb409c43cbfa166306ea1063926136c533f14184d4050959108",
+        "kind": "revised",
+        "note": "Added explicit acknowledgment of the 'pragmatic core' failure. The revision states clearly that while acting requires expectation, Popper's defense of preference does not supply it; it only supplies a methodological rule for theorists. The candidate now explicitly separates 'theoretical preference' (defensible) from 'practical reliance' (not defensible without extra-Popperian assumptions)."
+      }
+    ],
+    "analogy": null,
+    "evidence_refs": [],
+    "optional_refs": [],
+    "checker_specs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}

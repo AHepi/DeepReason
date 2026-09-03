@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses into the very induction it seeks to avoid by conflating 'maximizing potential for falsification' with a rational basis for 'preference' in action. Popper explicitly rejects the idea that surviving tests makes a theory more likely to be true or successful in the future; therefore, choosing Theory A over Theory B because A has survived *more* severe tests implicitly assumes that past survival is a reliable indicator of future robustness or utility. The target admits this costs 'assurance that our actions are likely to succeed,' yet simultaneously argues the choice is 'defensible' and 'rational.' If the choice offers no increased expectation of success (probability) and no claim to truth, the label 'rational preference' becomes empty rhetoric for an arbitrary existential leap. The analogy to biological selection fails because scientists act *normatively* to achieve specific goals (truth/prediction), whereas evolution has no such goal; if the scientist cannot justify that the 'fittest' theory is *more likely* to solve the problem at hand than a less-tested one, the preference is indistinguishable from the induction Popper rejected, merely renamed as 'critical rationality.'",
+      "counterexample": null,
+      "premise": "Popper holds that corroboration reports past performance only and implies nothing about future reliability or probability of truth.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for a better-corroborated theory provides no rational expectation of future success or higher probability of truth, in what precise sense is it 'rational' to prefer it over a randomly selected untested theory when acting on high-stakes decisions?"
+    }
+  ]
+}

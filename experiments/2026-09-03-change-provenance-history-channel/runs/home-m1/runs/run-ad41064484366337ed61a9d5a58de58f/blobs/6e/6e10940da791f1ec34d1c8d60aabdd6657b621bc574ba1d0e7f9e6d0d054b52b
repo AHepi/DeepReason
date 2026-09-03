@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims the preference for high-content theories is 'non-inductive' because it values 'richness' over 'likelihood.' However, Popper explicitly ties the choice of which theory to 'act on' to practical decision-making. If acting on a theory (e.g., building a bridge based on it) does not involve an expectation that the theory is at least comparatively more reliable or likely to yield successful predictions than its rivals, the action is irrational. By advocating for action based on corroboration while denying any increase in probability (or reliability), the target fails to explain the rational link between 'surviving tests' and 'successful future action' without implicitly reintroducing an inductive assumption that the future will resemble the past (i.e., that past survival indicates future performance). Thus, the distinction between 'preferring richness' and 'smuggling in induction' collapses in the context of action.",
+      "counterexample": null,
+      "premise": "Popper acknowledges that scientists prefer better-corroborated theories when choosing which theory to act on.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration provides no basis for expecting future success (no inductive weight), what rational justification remains for preferring a well-tested theory over an untested one when lives depend on the outcome?"
+    }
+  ]
+}

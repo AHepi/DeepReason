@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a procedural rule of critical rationalism, not an inductive inference. It costs the agent the expectation of future success, accepting instead that the choice is merely the least irrational option among currently unrefuted conjectures.",
+      "mechanism": "Procedural Rationality via Error Elimination: Preference is derived from the logical asymmetry of falsification. Since we cannot verify truth, we select the theory that has withstood the most severe attempts at falsification, not because it is likely true, but because it contains more empirical content and has survived where others failed.",
+      "counterconditions": [
+        "If the agent expects the preferred theory to succeed in future applications based solely on past corroboration.",
+        "If the preference relies on any assumption that nature is uniform.",
+        "If the distinction between 'acting on' and 'believing in' collapses into pragmatic induction."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_003", "kind": "rebutted", "note": "The candidate explicitly distinguishes logical justification (impossible for induction) from procedural necessity (the only rational action available), arguing Popper's defense rests entirely on this separation."},
+        {"handle": "[SRC_012] against SRC_005", "kind": "rebutted", "note": "It rejects the redefinition of probability; instead, it posits corroboration as a non-probabilistic report of past performance, making the dilemma false."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Removed reliance on 'verisimilitude' as a quantitative measure; replaced with 'survival of severe tests' as a qualitative status to avoid Miller-Tichý refutation."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "Clarified that the biological analogy illustrates error elimination, not a conflation of procedural necessity with rational defensibility; the defensibility comes from the logic of falsification, not the analogy."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "revised", "note": "Explicitly abandoned formal verisimilitude calculations; the argument now rests on the logical status of being 'unrefuted' rather than 'truth-like'."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "The candidate presents the strongest case FOR defensibility (procedural rationality) and acknowledges the counter-case (smuggled induction) in the counterconditions, fulfilling the directive."},
+        {"handle": "[SRC_011] against SRC_004", "kind": "rebutted", "note": "Argues that normativity is preserved precisely because the choice is mandated by the logic of the situation (only one unrefuted option remains viable for testing), not by psychological habit."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "rebutted", "note": "Denies that assuming past survival indicates future reliability; asserts the choice is made *despite* no guarantee, which is the definition of non-inductive risk-taking."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_005"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction, rendering Popper's position inconsistent. The 'practical' decision to act on corroborated theories implicitly assumes the principle of uniformity of nature, which Popper explicitly rejected.",
+      "mechanism": "Hidden Inductive Premise: Any decision rule that weights past success (corroboration) as a reason for future selection logically entails an inductive bridge. Without this bridge, the choice between two unrefuted theories is arbitrary, so the preference implies a hidden belief in continuity.",
+      "counterconditions": [
+        "If Popper can provide a non-inductive justification for why past survival matters for future action.",
+        "If the choice can be framed as purely random or aesthetic without losing the essence of scientific method.",
+        "If 'corroboration' is successfully decoupled from any predictive weight."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_003", "kind": "rebutted", "note": "Argues that the 'pragmatic necessity' itself is the inductive step; one cannot claim necessity without assuming the future resembles the past."},
+        {"handle": "[SRC_012] against SRC_005", "kind": "rebutted", "note": "Contends that Popper's 'solution' is merely a verbal disguise for induction, not a genuine logical alternative."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "States that even if verisimilitude fails, the core charge of hidden induction remains valid regardless of the specific metric used for preference."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "Agrees that the biological analogy fails to justify the preference, using this failure to support the claim that no non-inductive justification exists."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Uses the failure of verisimilitude as evidence that Popper's framework lacks the resources to defend preference without collapsing into induction."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Presents the strongest case for the 'smuggled induction' view, while fairly characterizing the opposing proceduralist view in the counterconditions."},
+        {"handle": "[SRC_011] against SRC_004", "kind": "rebutted", "note": "Argues that reducing the preference to a 'psychological fact' admits the loss of logical normativity, confirming the inconsistency."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "rebutted", "note": "Directly supports this criticism: the claim that acting on unrefuted theories is the 'only non-irrational choice' is shown to rely on the very inductive assumption it denies."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_014"]
+    },
+    {
+      "claim": "The dilemma is dissolved by recognizing that scientific preference is an evolutionary adaptation, not a logical derivation. Popper's system survives by treating science as a biological process where 'preference' is simply the retention of fit variants, costing the notion of 'rational agency' in the traditional sense.",
+      "mechanism": "Evolutionary Epistemology: Theories compete like species. Corroboration is not a logical warrant but a signal of fitness. Preference is the mechanism of retention. This bypasses the need for induction or logical justification, grounding the preference in causal efficacy.",
+      "counterconditions": [
+        "If the normative force of science requires more than mere survival (e.g., truth-seeking).",
+        "If the analogy between biological death and logical falsification breaks down regarding agent intent.",
+        "If scientists consciously reject the evolutionary description of their own methodology."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_003", "kind": "departure_declared", "note": "Departs from the requirement to find a 'logical justification'; argues the question presupposes a rationalist framework Popper's evolutionary view transcends."},
+        {"handle": "[SRC_012] against SRC_005", "kind": "rebutted", "note": "Rejects the idea that a 'solution' must be logical; the solution is descriptive and causal."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "Avoids verisimilitude entirely; fitness is defined by survival, not closeness to truth."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "revised", "note": "Embraces the biological analogy fully, arguing the criticism misses the point that the analogy IS the explanation, not just an illustration."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Does not rely on verisimilitude; relies on the fact of survival."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Presents the evolutionary case strongly, contrasting it with the logical/inductive cases."},
+        {"handle": "[SRC_011] against SRC_004", "kind": "departure_declared", "note": "Declares departure from 'normativity' as a logical category; redefines it as systemic stability."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "rebutted", "note": "Argues that 'past survival' is not an indicator of future success in a logical sense, but a causal precondition for being present to act at all."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_008"]
+    },
+    {
+      "claim": "Popper's preference is defensible only if we accept a 'decisionist' interpretation: the choice of theory is an existential leap, not a rational conclusion. This saves Popper from induction but costs science its claim to objective rationality, reducing it to a series of unjustifiable commitments.",
+      "mechanism": "Existential Decisionism: Reason runs out at the point of action. Corroboration informs the agent but does not dictate the choice. The preference is a voluntary commitment (a 'faith' in rational discussion) that cannot be proven without circularity.",
+      "counterconditions": [
+        "If Popper provides a logical bridge between corroboration and action.",
+        "If the 'leap' can be shown to be constrained by rules rather than arbitrary.",
+        "If scientists generally perceive their choices as existential leaps rather than reasoned conclusions."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_003", "kind": "rebutted", "note": "Agrees that logical justification fails, but argues this confirms the decisionist reading rather than refuting the preference."},
+        {"handle": "[SRC_012] against SRC_005", "kind": "rebutted", "note": "Argues Popper's 'solution' is effectively a call for a decision, masking the lack of logical ground."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "Irrelevant to decisionism; the failure of verisimilitude just underscores the need for a non-cognitive leap."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "Accepts that procedural necessity cannot be rationally defended, labeling this gap as the space for decision."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Uses the collapse of verisimilitude to force the decisionist conclusion."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Articulates the decisionist defense clearly against the inductive critique."},
+        {"handle": "[SRC_011] against SRC_004", "kind": "rebutted", "note": "Accepts the loss of strong normativity; argues that 'critical attitude' is a chosen ethic, not a logical imperative."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "rebutted", "note": "Concedes that the choice smuggles in induction IF one demands logical necessity, but denies that necessity is required for a rational life-form."}
+      ],
+      "optional_refs": ["SRC_004", "SRC_011"]
+    }
+  ]
+}

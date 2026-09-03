@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to execute the core directive of the problem context, which explicitly requires making the 'strongest case for each answer' (both the defense of preference and the accusation of smuggling induction) before selecting a survivor. The target immediately asserts a verdict favoring 'Verisimilitude' without first constructing the opposing argument that the preference is indefensible or constitutes hidden induction. By skipping the dialectical construction of the counter-position, the target does not demonstrate that the chosen view 'survives' a trial of strength, rendering the conclusion unsupported by the required comparative analysis.",
+      "counterexample": null,
+      "premise": "The problem context commands: 'Make the strongest case for each answer, then say which one survives'.",
+      "premise_evidence": null,
+      "successor_question": "Can you reconstruct the strongest possible argument that Popper's preference for corroborated theories inevitably smuggles in induction, and then demonstrate specifically how the Verisimilitude defense defeats that specific argument rather than simply asserting it does?"
+    }
+  ]
+}

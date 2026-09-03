@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target fails to make the 'strongest case' for the non-inductive defense as required by the problem prompt. It asserts that action-guiding preference 'necessarily' assumes induction, ignoring Popper's specific counter-argument that preferring the better-corroborated theory is a rational convention or critical choice that does not imply a probabilistic prediction of future success. By dismissing the possibility of a non-inductive rationale for action without engaging with Popper's actual proposed solution (e.g., acting on the theory that has withstood the most severe tests because it is the most open to falsification, not because it is 'more likely' true), the target provides a one-sided argument rather than the balanced analysis requested.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

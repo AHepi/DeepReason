@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies entirely on 'verisimilitude' to justify preferring better-corroborated theories without induction, but it fails to address the fatal logical incoherence of Popper's formal definition of verisimilitude (demonstrated by Tichý and Miller). Since the formal metric for comparing the 'truth-content' of false theories collapses, the claim that preference is defensible on Popper's own terms as a 'comparative goal' lacks the necessary logical machinery to distinguish between false rivals, thereby smuggling in an unjustified assumption that survival of tests correlates with closeness to truth.",
+      "premise": "Popper replaces the inductive goal of 'probability' with the comparative goal of 'verisimilitude'.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "If the formal definition of verisimilitude is logically incoherent for comparing false theories, what non-inductive mechanism does Popper actually provide to rationally prefer one falsifiable theory over another?"
+    }
+  ]
+}

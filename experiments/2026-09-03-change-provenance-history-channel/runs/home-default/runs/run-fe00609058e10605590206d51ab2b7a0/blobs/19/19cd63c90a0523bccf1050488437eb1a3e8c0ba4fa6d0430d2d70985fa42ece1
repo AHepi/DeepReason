@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as the non-inductive justification for preferring better-corroborated theories, but it fails to address the logical collapse of this concept when applied to false theories. As noted in the target's own counterconditions (referencing Tichý and Miller), Popper's formal definition of verisimilitude is incoherent for any theory that is not strictly true. Since scientific history suggests most successful past theories are ultimately false, the mechanism cannot coherently rank them as 'closer to truth' without smuggling in an inductive assumption about the nature of their errors or the structure of reality, thereby failing to provide the promised purely methodological, non-inductive defense.",
+      "counterexample": null,
+      "premise": "Popper's formal definition of verisimilitude is logically incoherent for false theories.",
+      "premise_evidence": null,
+      "successor_question": "Can a non-inductive preference rule be formulated that avoids verisimilitude entirely, perhaps relying solely on informational content or test severity, without implicitly assuming uniformity?"
+    }
+  ]
+}

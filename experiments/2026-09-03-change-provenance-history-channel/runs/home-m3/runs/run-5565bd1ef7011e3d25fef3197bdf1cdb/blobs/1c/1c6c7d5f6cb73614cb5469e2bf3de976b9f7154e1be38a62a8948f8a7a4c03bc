@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's terms as a non-inductive, critical selection rule based on 'verisimilitude' (truth-likeness) and informational content, but accepting this defense costs the admission that science cannot offer rational assurance of future success, only a rationale for preferring the most severely tested (and thus most falsifiable) conjectures as the best current approximations to truth.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which implies induction) and 'critical preference.' Popper argues we prefer theories with higher empirical content because they are more informative and have survived stricter tests. This preference is not a prediction that the theory will remain true (induction), but a strategic choice to act on the theory that has withstood the most severe attempts at refutation, thereby maximizing our proximity to truth (verisimilitude) without claiming probability. The 'cost' is the abandonment of the desire for certainty or probabilistic security in action; we act on the best guess, acknowledging it may fail tomorrow.",
+    "counterconditions": [
+      "If the Tichý/Miller proof holds that verisimilitude cannot be formally defined or compared between false theories, then the claim that corroboration tracks truth-likeness collapses.",
+      "If 'acting on a theory' logically entails an expectation of its future reliability (a probabilistic stance), then the preference smuggles in induction regardless of Popper's semantic distinctions.",
+      "If the distinction between 'informational content' and 'predictive power' is untenable when practical stakes (like building bridges) are involved, the non-inductive defense fails."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "017f060a2b21e42b81d92b963a3f75c80b27f8ea05726d7b82ba5200702940d8",
+        "kind": "rebutted",
+        "note": "The criticism claims the distinction collapses under action requirements. Rebuttal: Popper explicitly separates the logical status of a theory (unproven) from the pragmatic decision to adopt it. Acting on a theory does not require believing it is probable, only that it is the best available option after rigorous criticism. The 'collapse' only occurs if one assumes action requires induction, which is the very premise being challenged."
+      },
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address 'building bridges' scenarios. The revision clarifies that preferring a corroborated theory for bridge-building is not an expectation of success (induction) but a risk-management strategy: choosing the theory that has survived the most severe stress tests minimizes known errors, even if unknown errors remain."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate propensity with corroboration. Propensity interprets single-case probabilities within physical theories; corroboration is a meta-scientific assessment of how well a theory has resisted falsification. The defense relies solely on the latter for theory choice."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c078cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate rejects the framing that rationality must be 'adaptive fitness' or evolutionary imperative. Instead, it adheres strictly to Popper's critical rationalism where rationality is the willingness to subject views to criticism, not biological survival."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Explicitly expanded the 'cost' analysis in the claim and mechanism. The cost is now defined as the loss of 'rational assurance'—the inability to claim that our actions are grounded in likely success, forcing us to accept that all action is ultimately a leap of faith guided only by critical scrutiny."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "While the Tichý/Miller proof challenges the formal quantification of verisimilitude, Popperians argue it does not invalidate the intuitive or qualitative comparison of truth-likeness based on test severity. The defense rests on this qualitative notion, which remains coherent even if a strict formal metric is impossible."
+      },
+      {
+        "handle": "31e3d2feedffd07a4ba14b8f3ba6f6c2d293d3fe744ce9f002e0deb622684e37",
+        "kind": "revised",
+        "note": "Clarified the cost-benefit analysis. The 'benefit' is maximizing informational content and error elimination; the 'cost' is the psychological and philosophical burden of acting without probabilistic security. This directly answers the prompt's requirement to specify what accepting the preference costs."
+      },
+      {
+        "handle": "44f2f6a3d056ae44a83e935fa0d843074fa3a61b24686d802be88631b1dc72a0",
+        "kind": "rebutted",
+        "note": "Reiterated that the candidate acknowledges the Tichý/Miller proof but argues it targets formal metrics, not the conceptual utility of verisimilitude in guiding theory choice. The defense survives by retreating to a qualitative, rather than quantitative, understanding of truth-likeness."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

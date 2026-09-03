@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims Popper's preference is defensible via 'verisimilitude' while admitting this 'costs the framework its formal coherence.' This fails the problem's requirement to identify which case 'survives,' because a position that explicitly concedes the collapse of its own formal bridge (the Miller-Tichý refutation mentioned in counterconditions) does not survive as a coherent defense on Popper's terms. The target identifies the fatal flaw but incorrectly labels the resulting incoherent stance as 'defensible' rather than acknowledging that the non-inductive justification ultimately fails without a working definition of truth-likeness.",
+      "counterexample": null,
+      "premise": "A defense that admits its central mechanism (verisimilitude) lacks formal coherence cannot be considered 'defensible' in a philosophical context demanding logical consistency.",
+      "premise_evidence": null,
+      "successor_question": "If the verisimilitude bridge is broken, can Popper's preference for corroborated theories be defended solely as a non-rational psychological habit, or does this admission force a return to some form of pragmatic induction?"
+    }
+  ]
+}

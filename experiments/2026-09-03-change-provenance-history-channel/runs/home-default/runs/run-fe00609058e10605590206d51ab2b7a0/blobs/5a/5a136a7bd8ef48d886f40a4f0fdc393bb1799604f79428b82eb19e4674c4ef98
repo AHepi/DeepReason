@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories in action is defensible without smuggling induction by reframing 'preference' as a methodological rule to maximize the severity of future tests, not as an inductive bet on truth or reliability; the cost is accepting that acting on a theory offers no rational guarantee of success, only the best available opportunity to learn quickly if we are wrong.",
+    "mechanism": "The mechanism is 'Severe Test Maximization': choosing the theory with the highest corroboration means choosing the one that has survived the most stringent attempts at falsification. By acting on it, we subject our practical endeavors to the sharpest possible knife-edge; if the theory is false, the high-stakes application will likely reveal the error faster and more dramatically than applying a less-tested theory, thereby accelerating the growth of knowledge even in the realm of action.",
+    "counterconditions": [
+      "If the agent requires a probabilistic guarantee of safety (e.g., building a bridge where failure means death), this non-inductive preference is insufficient because it explicitly denies that past survival increases future reliability probability.",
+      "If the definition of 'acting on' implies relying on the theory's truth rather than its testability, the defense collapses into the very induction Popper rejected.",
+      "If the Tichý-Miller critique of verisimilitude holds that we cannot logically compare the truth-content of false theories, then 'better-corroborated' loses its objective ranking power for action."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The criticism cites the Tichý-Miller collapse of formal verisimilitude. This candidate does not rely on formal verisimilitude (truth-content minus falsity-content) to justify preference. Instead, it relies solely on 'corroboration' (survival of severe tests) as a historical record of test severity. The preference is for the theory that has proven itself the hardest to kill, not the one formally calculated to be closest to truth. The logical incoherence of comparing false theories' truth-content does not invalidate the empirical fact that Theory A survived tests that killed Theory B."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, this candidate explicitly rejects 'verisimilitude' as the justification mechanism. The defense rests on the pragmatic methodology of 'error detection speed.' Preferring the better-corroborated theory is a rule to maximize the chance of detecting error soonest if the theory is indeed false. This requires no logical definition of truth-likeness, only the chronological record of test outcomes."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "Revised to clarify that the analogy to natural selection is descriptive of how science evolves, but the normative justification for *action* is strictly methodological: we act on the fittest theory not because it is 'true' (induction), but because it provides the most robust platform for the next potential falsification. The normative core is preserved by defining 'rational action' as 'action aligned with the goal of rapid error elimination,' not 'action aligned with probable success.'"
+      },
+      {
+        "handle": "17f09fa02242185436263f3c9b86d093542003762a8b858119658fbe11d26d6",
+        "kind": "rebutted",
+        "note": "The distinction between 'preferring for criticism' and 'preferring for action' is dissolved by unifying the goal: the goal of action, in a Popperian framework, is also criticism. When we build a bridge using a theory, we are testing that theory under load. We prefer the better-corroborated theory for action precisely because we want the test (the bridge standing or falling) to be a severe test. If we acted on a weakly corroborated theory, the test would be less informative. Thus, the preference logic remains identical for both domains."
+      },
+      {
+        "handle": "205c867384d2a55777e20f3ebdbf380a88e3596428976e9fb159a5d5fe0e8fbb",
+        "kind": "rebutted",
+        "note": "The criticism assumes 'pragmatic reliability' equates to 'inductive probability of success.' This candidate redefines 'pragmatic reliability' as 'proven resistance to falsification so far.' We do not prefer the theory because it is likely to work (induction); we prefer it because it has withstood the most attempts to make it fail. If it fails now, we learn more than if an untested theory failed. The conflation is avoided by strictly adhering to the definition of corroboration as a report of past performance, not a predictor of future frequency."
+      },
+      {
+        "handle": "269bca3c11013395f75db136f55665c38e01f5759a38bfef887ba32a9a7294d4",
+        "kind": "rebutted",
+        "note": "The claim that 'acceleration of falsification' smuggles induction assumes that expecting future utility from past error-detection is inductive. However, Popper's argument is deductive: IF our goal is to find errors quickly, AND Theory A has survived harder tests than Theory B, THEN Theory A is the logically superior tool for finding errors quickly (because it is already vetted against those specific errors). The expectation is not that nature is uniform (induction), but that the logical status of 'surviving a test' permanently alters the set of remaining potential falsifiers."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "Revised to explicitly structure the argument dialectically. Case 1 (Defense): Preference is defensible as a methodological rule for maximizing test severity (as detailed in the claim). Case 2 (Induction Charge): The preference is indefensible if 'acting on' requires any belief in increased probability of truth, as this violates Popper's core prohibition. Resolution: The Defense survives only if we accept the cost that 'rational action' does not mean 'safe action' or 'likely successful action,' but merely 'action most conducive to learning.' The Induction charge succeeds only if the user demands probabilistic assurance, which Popper explicitly refuses to provide."
+      },
+      {
+        "handle": "343e10b5bcf5a8a8cda3a18e5ff5334fcad05a2527c61f22d4b83ec4299bec0b",
+        "kind": "rebutted",
+        "note": "The tension regarding 'acting on' (e.g., bridges) is resolved by acknowledging that Popperian rationality offers no safety guarantee. The defense is that building the bridge with the best-corroborated theory is the most rational way to discover if the theory is false (the bridge falls). If the critic demands a justification that ensures the bridge stands, they are asking for induction. Popper's answer is that we act on the best-tested theory not because it will hold, but because if it doesn't, we have learned the maximum amount possible from the collapse. The 'pragmatic necessity of reliability' is met by the best available means (testing), not by a guarantee."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

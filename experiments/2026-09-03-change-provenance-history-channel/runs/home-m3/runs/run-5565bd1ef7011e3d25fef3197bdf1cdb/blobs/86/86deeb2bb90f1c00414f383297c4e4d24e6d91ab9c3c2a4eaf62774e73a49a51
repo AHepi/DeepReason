@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target falsely presents a dilemma by claiming the preference is defensible 'only if' logic is replaced by adaptive fitness, ignoring Popper's actual solution: the preference is methodological and pragmatic (aiming for truth via severe testing), not inductive or biological. This misrepresents Popper's distinction between the logical status of a theory and the rational choice of which theory to test next.",
+      "counterexample": null,
+      "premise": "Popper explicitly argues that preferring better-corroborated theories is rational because they have withstood attempts at falsification, making them the best candidates for truth without assigning them higher probability.",
+      "premise_evidence": null,
+      "successor_question": "Does the target's claim that one must 'abandon the idea that scientific rationality is purely logical' accurately reflect Popper's view that rationality includes critical discussion and methodological rules rather than just formal deduction?"
+    }
+  ]
+}

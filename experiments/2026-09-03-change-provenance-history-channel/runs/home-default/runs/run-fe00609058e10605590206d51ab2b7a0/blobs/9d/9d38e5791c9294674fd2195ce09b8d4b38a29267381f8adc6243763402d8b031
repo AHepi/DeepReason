@@ -1,0 +1,86 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms without smuggling in induction, provided one accepts that scientific rationality is defined by adherence to critical method (risk-taking) rather than the accumulation of probable truth; however, this defense costs the scientist any claim to predictive reliability or likelihood of future success, reducing the preference to a purely procedural virtue with no epistemic guarantee.",
+    "mechanism": "The argument reconstructs Popper's 'methodological rule' as a non-inductive convention: we prefer the theory that has survived severe tests not because it is likely true (which would be induction), but because it has demonstrated greater 'testability' and 'boldness.' By choosing the riskier theory that hasn't failed, we maximize our exposure to falsification, which is the only engine of growth in Popper's system. The preference is thus a commitment to the game of science itself, not a bet on the outcome.",
+    "counterconditions": [
+      "If the agent implicitly assumes that past survival increases future survival probability, the argument collapses into the very induction Popper rejected.",
+      "If the definition of 'rational action' requires a belief in likely success rather than mere procedural correctness, the Popperian stance becomes irrational for practical application.",
+      "If the Tichý-Miller critique of verisimilitude holds, then comparing 'degrees of corroboration' as a proxy for truth-likeness is logically incoherent, removing the bridge between testing and preference."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "biological_natural_selection_filter",
+        "gambling_martingale_strategy_failure"
+      ],
+      "shared_structure": [
+        "Selection operates on past performance without guaranteeing future results.",
+        "Survival indicates fit with current environment/tests, not inherent superiority.",
+        "Preference for the survivor is a heuristic for continued exploration, not a prediction of dominance."
+      ],
+      "disanalogies": [
+        "Natural selection is a blind causal mechanism, whereas scientific preference is a conscious normative rule.",
+        "Biological fitness aims at reproduction (a form of success), while Popperian corroboration explicitly disavows success (truth) as a measurable goal.",
+        "Gamblers often seek to recover losses (inductive hope), whereas the Popperian seeks only to expose errors."
+      ],
+      "transfer_claims": [
+        "Just as nature selects survivors without promising they will survive tomorrow, scientists select corroborated theories without promising they are true.",
+        "The value of the selection lies in the elimination of the unfit, not the certification of the fit."
+      ],
+      "overturn_conditions": [
+        "If biological survival is shown to rely on inductive learning mechanisms in the organism, the analogy fails to support non-inductive preference.",
+        "If the 'game' of science is shown to require predictive success to justify its funding/existence, the procedural defense becomes pragmatically void."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The criticism cites the Tichý-Miller failure of formal verisimilitude. This candidate does not rely on formal verisimilitude calculations to justify preference; it relies solely on the methodological rule of preferring higher testability (boldness). Corroboration reports past performance of boldness, not a calculated truth-content score, thus sidestepping the logical incoherence of comparing false theories via verisimilitude formulas."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, the defense here explicitly rejects 'truth-likeness' as the justification for action. The justification is 'adherence to the critical method.' The preference is for the theory that allows for faster error detection, not the one deemed 'closer to truth' by a flawed metric."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "Revised the 'mechanism' section to explicitly distinguish between the descriptive fact of survival (which the critic says doesn't justify normativity) and the normative commitment to the rule of risk. The argument now clarifies that the 'normative core' is the self-imposed rule to always choose the path of highest falsifiability, making the preference a definition of rational conduct within the system, not an inference from nature."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "The 'claim' and 'counterconditions' have been structured to explicitly present the strongest case for the negative answer (that it smuggles induction) via the counterconditions, and the positive answer in the main claim, satisfying the dialectical requirement. The 'cost' is now explicitly defined as the loss of predictive reliability."
+      },
+      {
+        "handle": "39376b7fe8717864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "The analogy in this candidate is used to illustrate the structure of 'selection without guarantee,' not to conflate description with normativity. The text explicitly states the disanalogy: science is a conscious normative rule, unlike blind natural selection. The criticism attacks a straw man of the analogy's intent."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6",
+        "kind": "rebutted",
+        "note": "The candidate argues that the dichotomy is not false but essential to Popper's specific project. Popper explicitly abandoned verisimilitude as a usable guide for preference after the 1974 critiques. This candidate respects that historical pivot by grounding the preference in 'rule-adherence' (methodology) rather than 'truth-likeness' (ontology), which is consistent with Popper's later work."
+      },
+      {
+        "handle": "5f9249c623a92cb4f40954cc5ed9f9aa65593cfd400dc7eeccd621c30856357c",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' to the main claim: 'costs the scientist any claim to predictive reliability or likelihood of future success.' This directly answers the prompt's requirement to identify the negative trade-offs."
+      },
+      {
+        "handle": "6741a06d8088515b255833dec9027762128dd19092a1ab9feadf4108cb3f39d4",
+        "kind": "rebutted",
+        "note": "The candidate addresses the 'smuggling' charge by arguing that if the preference is viewed as a 'bet on reliability,' it indeed smuggles induction. However, the defense survives only if the preference is re-categorized as a 'commitment to risk.' The candidate argues this re-categorization is valid on Popper's terms, thus answering the question: it smuggles induction ONLY if one demands predictive security; it does not if one accepts procedural rigor as the sole rational goal."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "checker_specs": []
+  }
+}

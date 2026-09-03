@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the tension between Popper's logical rejection of induction and his practical reliance on corroboration, but fails to execute the core directive of the problem: to 'make the strongest case for each answer' (both that the preference is defensible AND that it smuggles in induction) before concluding. The output jumps immediately to a verdict of 'inconsistency' without first rigorously constructing the defense that the preference is rational on Popperian terms (e.g., via verisimilitude or critical preference) as required by the prompt's explicit instructions.",
+      "counterexample": null,
+      "premise": "The problem explicitly demands: 'Make the strongest case for each answer, then say which one survives.'",
+      "premise_evidence": null,
+      "successor_question": "How would Popper defend the preference for better-corroborated theories using only non-inductive concepts like verisimilitude or critical discussion, and does this defense successfully avoid the charge of smuggling in induction?"
+    }
+  ]
+}

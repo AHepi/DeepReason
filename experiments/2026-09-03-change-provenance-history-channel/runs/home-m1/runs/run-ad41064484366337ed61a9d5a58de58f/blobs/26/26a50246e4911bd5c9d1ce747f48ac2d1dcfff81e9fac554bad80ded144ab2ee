@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'Evolutionary Epistemology' to frame preference as a report on current survival, but this fails to answer the specific cost asked by the problem: without an inductive bridge, preferring the 'fittest' survivor for *future action* is pragmatically indistinguishable from gambling, as Popper's framework explicitly denies that past survival correlates with future truth-likeness or reliability.",
+      "counterexample": null,
+      "premise": "Popper rejects induction and states corroboration is not probability; the problem asks what accepting the preference costs if induction is not smuggled back in.",
+      "premise_evidence": null,
+      "successor_question": "If the preference is merely a report on past survival and implies no expectation of future success, why should a scientist act on it rather than flip a coin among unfalsified theories?"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as the non-inductive bridge for rational preference, but this collapses because Popper's own formal account of verisimilitude was proven logically untenable (by Tichý and Miller), leaving the 'critical preference' without the objective content the target claims it has. If verisimilitude cannot be formally defined or compared without smuggling in induction, then asserting that the better-corroborated theory is 'closer to the truth' is not a defensible Popperian stance but an empty placeholder that fails to answer how one rationally chooses between theories without inductive assumptions.",
+      "premise": "Popper's qualitative and quantitative definitions of verisimilitude were demonstrated to be logically flawed, implying that one cannot objectively claim a theory is closer to the truth based solely on corroboration without invoking inductive logic.",
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot serve as the non-inductive ground for preference due to formal logical failures, what specific mechanism does Popper offer to distinguish 'rational critical preference' from arbitrary guesswork when acting on high-stakes decisions?"
+    }
+  ]
+}

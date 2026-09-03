@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, critical selection mechanism based on 'verisimilitude' (truth-likeness) and informational content, rather than probability; however, accepting this defense costs the scientist the assurance that their chosen theory is likely true or will succeed in the future, reducing rational action to a bold guess with no inductive safety net.",
+    "mechanism": "The mechanism distinguishes between 'logical probability' (which decreases as empirical content increases) and 'corroboration' (a report of past test performance). Preference is not an inference that the theory is more probable to be true (induction), but a strategic choice to act on the theory that has survived the severest tests because it possesses the highest empirical content and thus the greatest potential verisimilitude. The decision rule is: 'Choose the theory that has withstood the most severe attempts at falsification,' which is a procedural norm of critical rationalism, not an inductive principle.",
+    "counterconditions": [
+      "If the Tichý/Miller proof holds that verisimilitude cannot be formally defined or compared in rich languages, then the appeal to verisimilitude collapses as a justification.",
+      "If 'acting on a theory' logically entails an expectation of future success (probability > 0.5), then any preference smuggles in induction regardless of Popper's labels.",
+      "If Popper's own writings on 'propensity' imply a probabilistic interpretation of single-case chances that contradicts his rejection of inductive probability."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "017f060a2b21e42b81d92b963a3f75c80b27f8ea05726d7b82ba5200702940d8",
+        "kind": "rebutted",
+        "note": "The criticism claims a collapse between informational content and predictive power. The candidate rebuts this by asserting Popper's specific distinction: high informational content implies LOW logical probability. The preference is for high content (boldness), not high probability. The 'predictive power' in the criticism is conflated with 'probability of success'; Popper advocates predicting boldly (high content) while admitting the low probability of those predictions being strictly true."
+      },
+      {
+        "handle": "055c1c1f875ed86decb1a1e2dd327139f1ac503cad3bc074504f918657659a0c",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address 'action' (e.g., building bridges). The revision clarifies that acting on a corroborated theory is not based on the expectation it will work (induction), but on the fact that it is the best available target for criticism. If it fails during the bridge building, we learn more. The 'preference' is a methodological commitment to test the strongest available theory, even in practical application."
+      },
+      {
+        "handle": "0633ee7e617199a8a571966d3ef79bea9ac6910e9218560adb8d8e1fa3f6e3b3",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates 'propensity' (Popper's later interpretation of probability within physical theories) from 'corroboration' (the historical record of testing). The defense does not rely on propensity to justify theory choice; it relies on the logical asymmetry between verification and falsification. Propensity is irrelevant to the meta-scientific decision of which theory to prefer."
+      },
+      {
+        "handle": "0729cb61daf6622d9a3c0780cf6ed18505f31955ecdf3ae1817f80ab5ffdd6cf",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate rejects the framing that rationality must answer the 'induction dilemma' by providing an inductive-like guarantee. Instead, it declares a departure from the requirement that rational action needs probabilistic support. Rationality is redefined as critical vigilance, not adaptive fitness or inductive reliability."
+      },
+      {
+        "handle": "0e0b6bedbaa57c8c884b19763dfc96a486bc51b45cf45a7b3e42fb57f46f62a3",
+        "kind": "rebutted",
+        "note": "The candidate acknowledges the Tichý/Miller proof but argues that Popper's informal notion of verisimilitude serves as a regulative ideal rather than a formal metric. The defense survives by claiming that while we cannot calculate verisimilitude, we can rationally conjecture that a theory surviving severe tests is closer to the truth than one that has failed, without assigning a probability to this conjecture."
+      },
+      {
+        "handle": "13e0b2e1b5d33f98ba809c6094d0c2b35bfc838c9faccfbb4bb8d72e4dcf456b",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly state the cost: 'accepting that science is a voluntary activity without assurance.' The analysis now details that the cost is the abandonment of the hope that our best theories are probably true, leaving us with only the comfort of having been rigorous in our errors."
+      },
+      {
+        "handle": "19882b49b93de35bdd5cbe05f1aa9bf93bf591ad20fa096434e8977913cc72df",
+        "kind": "rebutted",
+        "note": "Similar to handle ...62a3, the candidate rebuts by limiting the scope of the Tichý/Miller proof to formal calculability. It argues that the inability to compute verisimilitude does not negate its existence or the rationality of pursuing it via corroboration, provided one accepts the non-probabilistic nature of this pursuit."
+      },
+      {
+        "handle": "31e3d2feedffd07a4ba14b8f3ba6f6c2d293d3fe744ce9f002e0deb622684e37",
+        "kind": "revised",
+        "note": "Revised the 'cost' section to directly answer the specific cost-benefit question. The cost is identified as the loss of 'inductive security.' The benefit is the retention of 'critical integrity.' The trade-off is explicit: one gains a consistent philosophy of science only by sacrificing the psychological comfort of expecting the future to resemble the past."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

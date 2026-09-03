@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation as required by the problem context. Instead of naming a specific kind of relation (e.g., dependence, reduction) and linking the isolated problem to its neighbourhood, the target provides a conditional statement about 'Compatibility' that hinges on a philosophical treatment of 'truth-likeness'. Furthermore, the 'REFUTED IF' clause describes a condition for falsification rather than defining the relation itself or stating what the relation is refuted if, effectively omitting the core requirement to state the relation's substance and endpoints clearly.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

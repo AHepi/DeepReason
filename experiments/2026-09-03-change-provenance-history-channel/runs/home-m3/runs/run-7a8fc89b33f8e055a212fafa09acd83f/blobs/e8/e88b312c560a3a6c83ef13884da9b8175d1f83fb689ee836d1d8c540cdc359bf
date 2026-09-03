@@ -1,0 +1,9 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target incorrectly conflates 'preference for action' with 'belief in future reliability.' Popper explicitly defends the preference for better-corroborated theories as a rational choice based on critical discussion and severity of tests (deductive), not as an inductive inference that the future will resemble the past. The target's mechanism ('Hidden Premise Extraction') falsely attributes the assumption of nature's uniformity to Popper's methodology, ignoring his distinction between the logical status of a theory (unchanged by corroboration) and the pragmatic rationality of preferring the most severely tested theory for practical application. Since the target fails to address Popper's specific argument that this preference avoids induction by relying on deductive test severity rather than probabilistic projection, its claim that the preference 'inevitably smuggles in induction' is unsubstantiated within Popper's own terms."
+    }
+  ]
+}
