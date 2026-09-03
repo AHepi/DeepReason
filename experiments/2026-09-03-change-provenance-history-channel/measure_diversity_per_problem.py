@@ -176,24 +176,32 @@ def _d5(rows: list[dict]) -> float | None:
 
     Reported as NOT MEASURED rather than silently skipped, per the parent
     prereg: a ~523 MB download is not started mid-measurement.
+
+    The import path and the call signature are BOTH load-bearing and both were
+    wrong on the first live run of this instrument. `build_embedder` lives at
+    `deepreason.llm.embedder`, not `deepreason.embedder`, and it takes the
+    model name -- `ops.make_embedder` passes `config.EMBEDDER_MODEL`. Calling
+    it wrongly raised ImportError, which this function catches, so D5 printed
+    "NOT MEASURED (no embedder backend)" on a container where the weights were
+    already warmed and D5 was perfectly measurable. A broad `except` around an
+    optional dependency will report a TYPO as an absent feature; the model name
+    is therefore echoed on the failure path so the next reader can tell the two
+    apart.
     """
     if len(rows) < 2:
         return None
     try:
-        from deepreason.embedder import build_embedder  # type: ignore
-    except Exception:  # noqa: BLE001
-        return None
-    try:
-        embedder = build_embedder()
-        vectors = [embedder.embed(r["claim"]) for r in rows]
-    except Exception:  # noqa: BLE001
-        return None
+        from deepreason.config import Config
+        from deepreason.llm.embedder import build_embedder, cosine
 
-    def cosine(a, b):
-        dot = sum(x * y for x, y in zip(a, b))
-        na = sum(x * x for x in a) ** 0.5
-        nb = sum(y * y for y in b) ** 0.5
-        return dot / (na * nb) if na and nb else 0.0
+        model = Config().EMBEDDER_MODEL
+        if not model:
+            return None
+        embedder = build_embedder(model)
+        vectors = [embedder.embed(r["claim"]) for r in rows]
+    except Exception as exc:  # noqa: BLE001
+        print(f"  [D5 unavailable: {type(exc).__name__}: {str(exc)[:120]}]")
+        return None
 
     pairs = list(itertools.combinations(range(len(rows)), 2))
     return sum(1.0 - cosine(vectors[i], vectors[j]) for i, j in pairs) / len(pairs)

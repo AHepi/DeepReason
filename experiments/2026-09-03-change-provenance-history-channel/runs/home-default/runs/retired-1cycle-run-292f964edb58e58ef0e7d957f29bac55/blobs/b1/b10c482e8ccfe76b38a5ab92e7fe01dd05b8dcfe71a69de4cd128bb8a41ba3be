@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's mechanism claims the preference is for the 'bold conjecture' (high content) rather than the 'survivor,' yet this fails to explain why scientists prefer a high-content theory that has survived tests over an equally high-content theory that has not been tested or has failed. If content alone drove the preference, survival records would be irrelevant; if survival drives it, the target merely renames 'past success' as 'structural property' without escaping the inductive inference that past survival indicates future reliability.",
+      "premise": "Preference requires distinguishing between two theories of equal informational content based on their test history.",
+      "counterexample": [
+        "Theory A (High Content, Survived 10 severe tests)",
+        "Theory B (High Content, Untested)"
+      ],
+      "successor_question": "Does the target's framework provide a non-inductive justification for preferring Theory A over Theory B, or does it implicitly rely on the assumption that past survival predicts future performance?"
+    }
+  ]
+}

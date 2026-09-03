@@ -1,26 +1,35 @@
 #!/bin/bash
-# One M1/M3 arm: 4 cycles, driven ONE CYCLE AT A TIME.
+# One M1/M3 arm: 4 cycles in ONE `reason` call.
 #
-#   arm.sh <home-dir> <arm-label> <none|conjecturer|critic>
+#   arm.sh <home-dir> <arm-label> <none|conjecturer|critic> [source-root]
 #
-# Both arms of a pair use the SAME 1 + continue x3 structure, so the only
-# difference between H0 and H1 (or C0 and C1) is whether a history block is
-# injected between cycles. Running the control as a single `--cycles 4` and
-# the treatment as four steps would have confounded the injection with the
-# launch path.
+# WHY NOT CYCLE-BY-CYCLE. The first version ran `reason --cycles 1` and then
+# `continue --budget cycles=1` three times, injecting fresh history between
+# each. It does not work: the 1-cycle run terminates `budget_exhausted` with
+# `STOPPED_REFUSES_UNFINISHED_WORKFLOW_AUTHORITY` (2 outstanding work items),
+# and every subsequent continue is refused `CONTINUE_TYPED_STOP_REQUIRED`.
+# Measured on M1-H0 run-292f964edb58e58ef0e7d957f29bac55: cycle 1 completed
+# with 18 admitted conjectures, then three continues returned rc=1 and the arm
+# was a 1-cycle arm wearing a 4-cycle label. Parked as a defect (PARKED.md);
+# NOT fixed here, because a defect found mid-change is parked rather than
+# fixed, and because the harness is not what this tranche is measuring.
 #
-# History cannot exist before cycle 0 produces some, so cycle 0 is identical
-# in both arms by construction and the injection can only affect cycles 1-3.
-# That is a property of the design, not a defect, and RESULTS.md states it.
+# The replacement is also closer to the window instruction's own words: H1 is
+# "pack plus a prototype history section rendered OFFLINE from the record".
+# The record is a COMPLETED control root, not the arm's own in-flight cycles.
+# So a treatment arm seeds its scratchpad ONCE, before the run, from the
+# control arm's finished record, and then runs the same single `--cycles 4`
+# call the control ran. The two arms now differ in exactly one thing.
 #
-# Each arm gets its OWN home. That costs one qualification battery per arm and
-# buys two things a shared home cannot: the deterministic run id is free
-# without renaming, and the advisory scratchpad starts EMPTY, so a block
-# injected for a treatment arm cannot reach its own control.
+# Cycle 0 is no longer identical across arms -- the treatment sees history
+# from the first cycle onward. That is a change from the earlier design and it
+# makes the arms MORE comparable, not less: both are one uninterrupted 4-cycle
+# run, and the injected material is fixed for the whole arm instead of growing
+# under it.
 set -u
 cd /home/user/DeepReason
 D=experiments/2026-09-03-change-provenance-history-channel
-HOME_DIR="$1"; LABEL="$2"; MODE="$3"
+HOME_DIR="$1"; LABEL="$2"; MODE="$3"; SRC="${4:-}"
 export DEEPREASON_HOME="$PWD/$HOME_DIR"
 set -a; . $D/env; set +a
 mkdir -p "$DEEPREASON_HOME"
@@ -35,29 +44,26 @@ echo "rc=$?"
 echo "--- qualify ---"
 deepreason qualify --yes; echo "rc=$?"
 
-echo "--- cycle 1 $(date -u +%FT%TZ) ---"
-deepreason reason --cycles 1 --token-budget 400000 "$Q"; echo "rc=$?"
-
-for c in 2 3 4; do
-  ROOT="$(ls -dt $DEEPREASON_HOME/runs/run-* 2>/dev/null | head -1)"
-  if [ -z "$ROOT" ]; then echo "NO ROOT after cycle $((c-1)); stopping"; break; fi
-  echo "--- root: $ROOT ---"
-  if [ "$MODE" != "none" ]; then
-    echo "--- render+inject history before cycle $c $(date -u +%FT%TZ) ---"
-    python $D/render_history.py "$ROOT" --mode "$MODE" \
-      --out "$DEEPREASON_HOME/history-cycle$c.txt"
-    # The injected block is kept OUTSIDE the root: it is an input to the next
-    # cycle, not a record of the last one, and writing into a root would be
-    # editing evidence.
-    deepreason scratch add --file "$DEEPREASON_HOME/history-cycle$c.txt" \
-      --why-keep-this "prior history on this problem (M1/M3 prototype arm)" --json
-    echo "inject-rc=$?"
+if [ "$MODE" != "none" ]; then
+  if [ -z "$SRC" ] || [ ! -f "$SRC/log.jsonl" ]; then
+    echo "ARM INVALID: mode=$MODE needs a completed source root; got '$SRC'."
+    echo "Refusing to run a treatment arm with nothing injected -- it would be"
+    echo "the control wearing a treatment label, and would read as a null result."
+    exit 4
   fi
-  echo "--- cycle $c $(date -u +%FT%TZ) ---"
-  deepreason --root "$ROOT" continue --budget cycles=1 --token-budget 400000
-  echo "rc=$?"
-done
+  echo "--- render history from $SRC $(date -u +%FT%TZ) ---"
+  python $D/render_history.py "$SRC" --mode "$MODE" \
+    --out "$DEEPREASON_HOME/history.txt" || exit 5
+  echo "--- injected block, verbatim, so the arm is auditable ---"
+  cat "$DEEPREASON_HOME/history.txt"
+  echo "--- end injected block ---"
+  deepreason scratch add --file "$DEEPREASON_HOME/history.txt" \
+    --why-keep-this "prior history on this problem (M1/M3 prototype arm)" --json
+  echo "inject-rc=$?"
+fi
 
+echo "--- reason, 4 cycles $(date -u +%FT%TZ) ---"
+deepreason reason --cycles 4 --token-budget 600000 "$Q"; echo "rc=$?"
 ROOT="$(ls -dt $DEEPREASON_HOME/runs/run-* 2>/dev/null | head -1)"
 echo "=== results $(date -u +%FT%TZ) ==="
 deepreason results "$ROOT" --json --verify
