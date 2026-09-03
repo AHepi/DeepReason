@@ -1,0 +1,8 @@
+TARGET CONTENT:
+KIND: abstraction. The whole neighbourhood inherits an abstraction from SRC_001's mechanism: the dynamics is a monotone descent on a potential (cut size), so all claims about the consensus limit abstract to a claim about absorbing states of a strictly monotone potential-descent on a random constraint graph. Under this abstraction, the three answers (0, constant, 1) correspond to three regimes of a single parameter μ = (expected number of reachable local minima) × (mean basin weight), and the correct way to connect the isolated problem to the neighbourhood is to measure μ, not to argue cases. Conjecture: for random 3-regular graphs μ = Θ(n) with per-obstruction basin weight ≈ e^{-c}, giving limit 0 as in SRC_001/SRC_004; SRC_002's Poisson(λ) heuristic is the n→∞ limit of μ only if per-site trapping probability decays like 1/n, which contradicts SRC_003's exp(Θ(n)) obstruction count. It is REFUTED IF the potential-descent abstraction is inexact because a majority flip can leave cut size unchanged (ties), creating plateau walks that are not captured by strict descent — then basin weights are not well-defined by cut size alone and μ is not the controlling quantity.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

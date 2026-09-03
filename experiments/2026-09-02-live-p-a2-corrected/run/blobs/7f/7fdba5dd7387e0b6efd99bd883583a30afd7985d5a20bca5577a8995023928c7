@@ -1,0 +1,8 @@
+TARGET CONTENT:
+05a4074c795b integrates SRC_002's metastable cut-density OU process with SRC_003's quenched randomness: the annealed consensus probability is E[e^{-X(rho*)}], where X is the basin-weighted count of escapes from the metastable plateau, and rho* varies across graph draws. Refuted if the quenched consensus probability is not determined by the graph's rho* and escape count, or if the annealed probability does not lie strictly between 0 and 1.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

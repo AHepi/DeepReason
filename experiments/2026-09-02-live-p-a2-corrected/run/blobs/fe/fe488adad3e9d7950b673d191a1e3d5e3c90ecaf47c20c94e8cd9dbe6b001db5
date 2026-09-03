@@ -1,0 +1,117 @@
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The finite obstruction structures are exactly the locally stable mixed configurations in which the crossing edges form a matching: every vertex has at most one neighbor of the opposite color, so no vertex can flip. The prevalence of reachable obstructions scales like exp(Θ(n)): the expected number of final matchings of size αn is exp(n f(α)) with f(α)>0 for α in (0,1/2), while the consensus basin has probability exp(-Θ(n)).",
+      "mechanism": "Let H be the subgraph of crossing edges. A vertex is unstable exactly when its H-degree is 2 or 3. Flipping such a vertex toggles all three incident edges, reducing total cut size by 1 (degree 2) or 3 (degree 3). The asynchronous process is therefore a cut-decreasing random walk that stops precisely when H has maximum degree 1, i.e. is a matching. On a random 3-regular graph the initial H is a Bernoulli(1/2) subgraph with a giant 2-core; the random flip cascade removes cycles but leaves a linear-size matching, so the final state is a nonempty stable mixed configuration with high probability.",
+      "counterconditions": [
+        "If the initial coloring is biased so that one color has density above the threshold for 2-core percolation, consensus may occur with high probability.",
+        "If the graph is bipartite or has no short cycles, the final matching size may be o(n) and the limit may change.",
+        "If updates are synchronous or if vertices are chosen adversarially, the process may not be cut-decreasing and the conclusion fails."
+      ],
+      "typicality": 0.7,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "The criticism assumes identification of consensus with absence of single-edge obstructions in the initial coloring; this candidate tracks the full cut-decreasing process to the final matching, so initial O(n) crossing edges are explicitly allowed."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate whose scaling-law wording failed pa1-scaling-law; this candidate states an explicit expected-number law with exp(Θ(n)) and exp(-Θ(n)) terms."
+        },
+        {
+          "handle": "SRC_008",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate whose scaling-law wording failed pa1-scaling-law; this candidate states an explicit expected-number law with exp(Θ(n)) and exp(-Θ(n)) terms."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "SRC_012 refutes the total count of all stable mixed configurations being exp(-c n); this candidate claims only that reachable final matchings are exponentially many and consensus is exponentially unlikely, which is compatible with SRC_012's exp(Θ(n)) total count."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate whose scaling-law wording failed pa1-scaling-law; this candidate states an explicit expected-number law with exp(Θ(n)) and exp(-Θ(n)) terms."
+        }
+      ],
+      "optional_refs": ["SRC_012"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to a constant strictly between 0 and 1. The finite obstruction structures are locally stable mixed configurations whose crossing edges form a matching; the final matching size after the cut-decreasing process converges in distribution to a Poisson with finite mean λ, so P(consensus)=P(empty matching)→e^{-λ}.",
+      "mechanism": "The crossing-edge subgraph H evolves by flipping vertices of H-degree 2 or 3. On the locally tree-like random 3-regular graph, each flip removes a local cycle or branch, and the cascade of flips eliminates all but O(1) crossing edges. The remaining isolated crossing edges are asymptotically independent rare events, so their count converges to Poisson(λ); consensus is exactly the event of zero remaining edges.",
+      "counterconditions": [
+        "If the graph has many short cycles that freeze linear-size matchings, the final matching size is Θ(n) and the limit is 0.",
+        "If the initial coloring is not exactly balanced, λ changes and the constant may be 0 or 1.",
+        "If the final matching size has variance Θ(n), no Poisson limit exists."
+      ],
+      "typicality": 0.2,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "This candidate does not use absence of single-edge obstructions in the initial coloring; it uses the final state after all flips, so initial O(n) crossing edges are not an objection."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate whose scaling-law wording failed pa1-scaling-law; this candidate states a Poisson scaling law for the final matching size."
+        },
+        {
+          "handle": "SRC_008",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate whose scaling-law wording failed pa1-scaling-law; this candidate states a Poisson scaling law for the final matching size."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "The exponential total count of stable matchings does not imply they are reachable; my Poisson law is for the final reachable matching, not the total number of stable configurations."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate whose scaling-law wording failed pa1-scaling-law; this candidate states a Poisson scaling law for the final matching size."
+        }
+      ],
+      "optional_refs": ["SRC_017"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 1. The only locally stable mixed configurations are matchings, but their basins of attraction have total measure exp(-c n); the cut-decreasing dynamics almost surely eliminates all crossing edges, so consensus occurs with high probability.",
+      "mechanism": "Each flip of a vertex with two or three crossing neighbors reduces the total number of crossing edges by at least 1. Degree-3 flips remove three crossing edges and can trigger cascades that unravel the entire crossing subgraph. On a random 3-regular graph the initial crossing subgraph has many degree-3 vertices, and the random cascade drives the cut to zero before it can freeze into a matching.",
+      "counterconditions": [
+        "If the graph contains a large induced matching with no degree-3 vertices, the process can freeze.",
+        "If the initial coloring is adversarial or biased, consensus may fail.",
+        "If the dynamics is synchronous, cycles may prevent convergence."
+      ],
+      "typicality": 0.1,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "This candidate does not rely on the initial absence of single-edge obstructions; it claims the dynamics eliminates all crossing edges before stopping."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate whose scaling-law wording failed pa1-scaling-law; this candidate states an exponential basin-size law for stable matchings."
+        },
+        {
+          "handle": "SRC_008",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate whose scaling-law wording failed pa1-scaling-law; this candidate states an exponential basin-size law for stable matchings."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "SRC_012's exponential count of stable matchings is accepted, but those matchings have exponentially small basins; the dynamics avoids them with high probability."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "departure_declared",
+          "note": "Departing from the prior candidate whose scaling-law wording failed pa1-scaling-law; this candidate states an exponential basin-size law for stable matchings."
+        }
+      ]
+    }
+  ]
+}

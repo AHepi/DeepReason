@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target asserts two incompatible limit verdicts: it first says including period-2 orbits 'flips the verdict to consensus probability tending to 0', then concludes 'consensus probability tends to a constant strictly between 0 and 1'. These cannot both be the answer to the same n→∞ question. The claimed Θ(n) expected count of obstructions is also left without a mechanism connecting it to a constant consensus probability; if non-consensus runs have positive constant probability, the expected count must be Θ(n), but the target gives no causal account of the supposed constant-probability atom at zero dissenting vertices."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The quantitative law is internally inconsistent: if the expected number of vertices ending in dissenting matched pairs is Θ(n) with per-vertex constant ρ>0, then the probability of zero such vertices (consensus) is typically exponentially small in n, not a constant strictly between 0 and 1. The target rules out exp(-ρn) but then asserts a constant limit solely by saying the matching forms in correlated blocks; no mechanism is supplied for why correlated blocks would create a constant-probability event of zero count while preserving linear expected count. Also 'probability that this expected count is zero' confuses a deterministic expectation with a random count."
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The expansion argument is invalid: edge expansion Ω(1) means every set S of size ≤ n/2 has at least c|S| boundary edges, which is satisfied by a matching of size Θ(n) when the color classes are balanced. Thus a matching boundary is not 'exceeded' by expansion; it is exactly the right order. The target therefore gives no valid reason for the expected number of frozen mixed configurations to vanish exponentially. In fact, on a 3-regular graph, any perfect matching whose removal leaves a disjoint union of cycles yields a stable mixed coloring, so such obstructions are not obviously rare."
+    }
+  ]
+}

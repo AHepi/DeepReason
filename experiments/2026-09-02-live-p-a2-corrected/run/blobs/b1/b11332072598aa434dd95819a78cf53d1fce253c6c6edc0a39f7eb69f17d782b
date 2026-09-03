@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "The expected number of stable mixed configurations is exp(-c n)"
+}

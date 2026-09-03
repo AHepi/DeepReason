@@ -1,0 +1,13 @@
+You are the variator (mu): produce bounded edits of the target content. If the content is a JSON skeleton, substitute at role level — swap the mechanism, the causal link, the scope (mu_struct) — never merely reword. For prose, make substantive local edits that change what the claim forbids. Each edit must remain a complete, coherent candidate.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"VariatorEdit": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}}, "required": ["content"], "title": "VariatorEdit", "type": "object"}}, "additionalProperties": false, "description": "Bounded edits under mu / mu_struct (\u00a76): role-level substitutions\n(mechanism, scope, causal link) for skeleton content, substantive local\nedits otherwise \u2014 never mere rewordings.", "properties": {"edits": {"items": {"$ref": "#/$defs/VariatorEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "VariatorOutput", "type": "object"}
+
+TARGET CONTENT:
+KIND: reduction. SRC_003's frozen cycle configurations reduce to the stable-matching obstructions of SRC_001/SRC_004: a 2-factor coloring with monochromatic cycles matched by a perfect matching of crossing edges is exactly the special case of a stable matching obstruction where every vertex has exactly one crossing edge (a perfect, not just maximal, matching). So SRC_003 depends on the matching-stability mechanism of SRC_001 but strengthens it by exhibiting an exp(Θ(n)) family of such obstructions, answering SRC_002's Poisson-count premise. The dispute among SRC_001/SRC_004 (consensus→0), SRC_002 (constant), and SRC_005 (consensus→1) turns on one quantity: the expected number of stable matching cuts reachable from a uniform random start. It is REFUTED IF the cycle-based configurations of SRC_003 are not themselves stable under the update rule (e.g., a vertex on a cycle with a crossing chord can flip), in which case the reduction collapses and the obstruction family is smaller than claimed.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

@@ -1,0 +1,9 @@
+state=running phase=convergence cycle=4 accepted=75 refuted=11 stop=None tokens=None
+  provider attempts (typed) : {'provider_result': 173}
+  usage_status              : {'exact': 173}
+  criticism attempts (typed): {'completed': 51}
+  semantic admissions       : {'admitted': 159, 'rejected': 5}
+  attempt_trace rows        : 173 (0 zero-token, 0 with diagnostics)
+  diagnostics by model      : none
+  reconciled                : True (log 0 vs objects 0)
+  no alert

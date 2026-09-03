@@ -1,0 +1,15 @@
+state=None phase=None cycle=None accepted=None refuted=None stop=None tokens=None
+  provider attempts (typed) : {'transport_failure': 10, 'provider_result': 61}
+  usage_status              : {'unknown': 10, 'exact': 61}
+  criticism attempts (typed): {'transport_failure': 4, 'completed': 11}
+  semantic admissions       : {'admitted': 28, 'rejected': 25, 'schema_exhausted': 2}
+  attempt_trace rows        : 71 (10 zero-token, 10 with diagnostics)
+  diagnostics by model      : {'glm-5.3/RemoteDisconnected': 39, 'glm-5.3/HTTPError': 1}
+  reconciled                : True (log 10 vs objects 10)
+  *** ALERT: ZERO-TOKEN CALLS: 10 of 71 provider attempts returned no tokens at all -- [('glm-5.3', 'conjecturer'), ('glm-5.3', 'defender')] ***
+  *** ALERT: TRANSPORT DIAGNOSTICS: 10 attempts carry 40 diagnostics -- {('glm-5.3', 'RemoteDisconnected'): 39, ('glm-5.3', 'HTTPError'): 1} ***
+  *** ALERT: SEAT STREAK: conjecturer seat 1 on ollama-glm-5.3 failed 6 CONSECUTIVE attempts -- this is the F4 seat-exhaustion signature forming; that terminal is not resumable ***
+  *** ALERT: SEAT STREAK: defender seat 0 on ollama-glm-5.3 failed 4 CONSECUTIVE attempts -- this is the F4 seat-exhaustion signature forming; that terminal is not resumable ***
+  *** ALERT: TYPED PROVIDER FAILURES: 10 workflow-provider-attempt-v1 objects say transport_failure -- by seat {('ollama-glm-5.3', 'defender', 0): 4, ('ollama-glm-5.3', 'conjecturer', 1): 6} ***
+  *** ALERT: TYPED CRITICISM FAILURES: 4 criticism-attempt-v1 objects say transport_failure (each retains coverage debt) ***
+  *** ALERT: SCHEMA EXHAUSTED: 2 semantic admissions ran the contract ladder out -- the step immediately before V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY (P5's honest risk) ***

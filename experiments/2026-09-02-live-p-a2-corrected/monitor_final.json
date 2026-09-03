@@ -1,0 +1,33 @@
+{
+ "alerts": [],
+ "attempt_rows": 34,
+ "attempts_with_diagnostics": 0,
+ "consecutive_failures_by_seat": {},
+ "criticism_attempts": {
+  "completed": 7
+ },
+ "diagnostic_kinds": {},
+ "log_side_failures": 0,
+ "object_side_failures": 0,
+ "provider_attempts": {
+  "provider_result": 34
+ },
+ "provider_usage_status": {
+  "exact": 34
+ },
+ "readings_reconciled": true,
+ "semantic_admissions": {
+  "admitted": 32
+ },
+ "state": {
+  "accepted": 0,
+  "cycle": 0,
+  "phase": "stop",
+  "refuted": 0,
+  "state": "failed",
+  "stop_reason": "operational_failure",
+  "tokens": null
+ },
+ "transport_failures_by_seat": {},
+ "zero_token_attempts": 0
+}

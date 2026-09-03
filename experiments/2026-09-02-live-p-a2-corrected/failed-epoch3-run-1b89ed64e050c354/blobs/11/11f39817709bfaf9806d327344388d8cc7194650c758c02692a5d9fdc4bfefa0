@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "The expansion argument is invalid: edge expansion Ω(1) means every set S of size ≤ n/2 has at least c|S| boundary edges, which is satisfied by a matching of size Θ(n) when the color classes are balanced. Thus a matching boundary is not 'exceeded' by expansion; it is exactly the right order."
+}

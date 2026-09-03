@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "Therefore the expected number of stable mixed configurations is O(1), not Theta(exp(c n)) with c approx 0.07-0.1."
+}

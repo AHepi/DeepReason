@@ -1,0 +1,58 @@
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The finite obstruction structures are locally stable mixed configurations in which the set of edges connecting opposite colors is a matching: every vertex has at most one opposite-color neighbor, so each monochromatic induced subgraph has minimum degree at least 2 and its components contain cycles. The expected number of such stable mixed configurations grows like exp(c n) for some c>0, so the probability that the dynamics avoids all traps and reaches consensus is at most exp(-c n).",
+      "mechanism": "Each majority update strictly increases the number of monochromatic edges, so the process is absorbed in a local maximum of monochromatic edges. Stable mixed configurations are exactly cuts whose crossing edges form a matching; on a random 3-regular graph there are exponentially many such cuts because one can independently choose cycle components of each color and match them across a sparse set of edges. Starting from a uniform random coloring, the process is likely to hit one of these exponentially many absorbing traps before eliminating all crossing edges, so consensus is exponentially unlikely.",
+      "counterconditions": [
+        "If the basin of attraction of the two consensus states occupies a 1-o(1) fraction of configurations despite exponentially many stable mixed states, then consensus probability would tend to 1.",
+        "If stable mixed configurations are not reachable from typical initial colorings because their basins are exponentially small, the conclusion fails."
+      ],
+      "typicality": 0.7
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 1. The only locally stable mixed configurations are those where crossing edges form a matching, so each vertex has at most one opposite-color neighbor; these are fragile and require a rare coordinated pattern of monochromatic cycles. The expected number of such obstructions is O(n^3), so the probability of hitting one before consensus vanishes as n grows.",
+      "mechanism": "Majority dynamics on a random 3-regular graph acts like a random greedy increase of monochromatic edges. A stable mixed configuration requires every vertex to have at least two same-color neighbors, which forces crossing edges to be a matching. In a random 3-regular graph, such configurations are rare because they impose many local constraints; the process almost surely cascades to full consensus before freezing.",
+      "counterconditions": [
+        "If the number of stable mixed configurations is exponential rather than polynomial, the consensus probability would tend to 0.",
+        "If there are large basins of attraction around stable mixed configurations, the process could get trapped with positive probability."
+      ],
+      "typicality": 0.2
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to a constant strictly between 0 and 1. The finite obstruction structures are locally stable mixed configurations with crossing edges forming a matching; the smallest such obstructions are single crossing edges whose endpoints each have two same-color neighbors. The expected number of these single-edge obstructions converges to a Poisson(λ) random variable, so the probability of no obstruction and hence consensus tends to e^{-λ}, a constant strictly between 0 and 1.",
+      "mechanism": "The process quickly reaches a stable configuration. Stable mixed configurations are cuts with crossing matching. The dominant obstructions are isolated crossing edges, which appear as a Poisson process on the random graph. Consensus occurs exactly when the initial configuration has no such stable mixed obstruction; the probability of this event is the Poisson avoidance probability e^{-λ}.",
+      "counterconditions": [
+        "If larger stable mixed configurations with many crossing edges are not negligible, the Poisson approximation for single-edge obstructions fails.",
+        "If the dynamics does not reach a stable configuration quickly and instead has a non-negligible chance to escape traps, the constant may be different."
+      ],
+      "typicality": 0.1
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The obstruction structures are locally stable mixed configurations where each color class is a disjoint union of cycles and the crossing edges form a perfect matching between opposite-color cycles. The expected number of such frozen cycle configurations scales like Θ(n) per vertex, so the fraction of configurations that are stable mixed is bounded away from 0, and consensus is not reached whp.",
+      "mechanism": "On a random 3-regular graph, one can construct many stable mixed configurations by taking a 2-factor of the graph and coloring its cycles alternately. These configurations are absorbing because every vertex has two same-color neighbors and one opposite-color neighbor. Since random 3-regular graphs have many 2-factors, the process has a positive probability of being trapped in one of these cycle-based obstructions.",
+      "counterconditions": [
+        "If the dynamics cannot reach these cycle-based configurations from a uniform random start because they require a large number of coordinated flips, the probability of consensus may be higher.",
+        "If the number of 2-factors is o(n) rather than exponential, the scaling law fails."
+      ],
+      "typicality": 0.15
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 1. The only locally stable mixed configurations are those where crossing edges form a matching and each vertex has at most one opposite-color neighbor; these are non-expanding and cannot be reached from a typical random coloring because the initial configuration has a positive density of vertices with two or three opposite-color neighbors. The expected number of stable mixed configurations is exp(-c n), so the probability of consensus is 1-o(1).",
+      "mechanism": "Random 3-regular graphs are expanders. Majority dynamics on expanders rapidly eliminates local disagreements. Stable mixed configurations require a matching of crossing edges, which is a non-expanding cut; such cuts are exponentially rare in random regular graphs. The process therefore reaches consensus whp.",
+      "counterconditions": [
+        "If random 3-regular graphs contain exponentially many stable mixed configurations with large basins, the consensus probability would tend to 0.",
+        "If the initial coloring is not uniform but biased, the result may change."
+      ],
+      "typicality": 0.1
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to a constant strictly between 0 and 1. The finite obstruction structures are locally stable mixed configurations in which crossing edges form a matching and each monochromatic component has minimum degree 2; these are exactly the 2-cores of the two color classes. The expected number of such stable mixed configurations is Θ(n), so the probability that the process lands in a mixed stable state rather than consensus is bounded away from 0 and 1.",
+      "mechanism": "The dynamics is a monotone search for a stable cut. The initial uniform coloring determines a random partition; the process freezes when the crossing edges become a matching. The probability of reaching consensus is the probability that the initial partition's disagreement graph has no 2-core, which is a constant determined by the random graph's local structure.",
+      "counterconditions": [
+        "If the number of stable mixed configurations is exponential, the consensus probability may tend to 0 instead of a constant.",
+        "If the process can escape from stable mixed configurations via simultaneous updates, the absorbing-state assumption fails."
+      ],
+      "typicality": 0.05
+    }
+  ]
+}

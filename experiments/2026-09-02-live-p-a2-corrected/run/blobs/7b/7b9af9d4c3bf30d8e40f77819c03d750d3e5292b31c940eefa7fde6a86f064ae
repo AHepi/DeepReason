@@ -1,0 +1,27 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims SRC_006 reduces to SRC_002's obstruction-counting mechanism and that Θ(1) expected obstructions yields limit e^{-λ}. But the refutation condition only checks the mean; a process can have expected obstructions Θ(1) yet not converge to a Poisson limit because obstructions may be dependent or non-Poisson. Thus the proposed reduction is not established by the stated condition.",
+      "counterexample": [
+        "Let N be 0 with probability 1/2 and 2 with probability 1/2; E[N]=1=Θ(1), but P(N=0)=1/2 ≠ e^{-1}. So Θ(1) expectation alone does not imply the e^{-λ} limit."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": ""
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The target names the relation as shared mechanism, but its refuted-if condition tests whether the basin measure of cycle-based frozen configurations is bounded away from 0. That condition would refute SRC_006's separate claim that the basins are negligible, not the claim that SRC_006 and SRC_003 share a mechanism. Even if the basins are bounded away from 0, both models could still use the same frozen cycle configurations as obstructions, so the stated relation is not actually refuted by the given condition."
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": false,
+      "case": ""
+    }
+  ]
+}

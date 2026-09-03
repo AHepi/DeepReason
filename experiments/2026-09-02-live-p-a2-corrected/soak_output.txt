@@ -1,0 +1,103 @@
+===== SOAK pa2 (P-A2 launch shape) =====
+[soak] stub provider on 127.0.0.1:41955 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/cycle-soak-xed3tj71
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SUMMONS_PER_CYCLE=2 is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SPLIT_BUDGET_SEAT_PROTOCOL='off' is not carried by this manifest's engine config and is restored at run time from this notice
+[soak] built root: manifest 27dae00f0d188437…  criteria ['pa1-limit-verdict@v1', 'pa1-obstruction-structure@v1', 'pa1-scaling-law@v1']
+[soak] QUALIFY FAILED
+
+934f35655f776afe901c3d3dffd66cfcc",
+        "endpoint_id": "ollama-glm-5.3",
+        "evidence_pair_ids": [],
+        "role": "vision_critic",
+        "route_sha256": "b342f30f1bf40443073545d1cc790078e2898b1a5dc15fefcdaa6731053a59c0",
+        "seat": 0,
+        "selected_class": "inactive_no_authorized_contract"
+      }
+    ],
+    "id": "sha256:c30fb8ea6ec67d171a51920d92ad5b7c47ef10769f965676c968568c3d25c9e9",
+    "manifest_digest": "27dae00f0d1884376210275ff230d958c0706cce94d8664843f70990d9b5a446",
+    "qualification_evidence_sha256": "6266283d0ac0e6b5afce44f384646c9e8cfb3754b7813cb1b6cbe555fc3687bb",
+    "schema": "workflow.route-seat-model-classification-plan.v1"
+  },
+  "run_manifest_schema_version": 6,
+  "run_manifest_sha256": "27dae00f0d1884376210275ff230d958c0706cce94d8664843f70990d9b5a446",
+  "schema": "deepreason-production-contract-doctor-v1",
+  "summary": {
+    "alias_failures": 0,
+    "case_count": 460,
+    "eventual_valid_count": 200,
+    "first_pass_valid_count": 200,
+    "pair_count": 23,
+    "qualified": false,
+    "qualified_pair_count": 10,
+    "re_exercised_pair_count": 0,
+    "repair_count": 0,
+    "scope_violations": 0,
+    "semantic_admission_count": 200
+  }
+}
+
+SOAK_PA2_RC=1
+
+===== SOAK hv-grant (grant shape) =====
+[soak] stub provider on 127.0.0.1:39731 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/cycle-soak-1pla8rq1
+[soak] built root: manifest ada36eb62b022456…  criteria ['uhi-energy-balance@v1', 'uhi-nocturnal-release@v1', 'uhi-cross-city-modulator@v1']
+[soak] qualified in 4.5s
+[soak] driving 8 cycles …
+
+========================================================================
+CYCLE SOAK -- case hv-grant
+========================================================================
+  manifest sha256        ada36eb62b022456b20e91cc707ddc9074a9e300e6181c114e8cec1bb941504c
+  criteria               uhi-energy-balance@v1, uhi-nocturnal-release@v1, uhi-cross-city-modulator@v1
+  attached evidence      False
+  cycles requested       8
+  qualification          rc=0 (4.5s)
+  drive                  322.5s, 11 progress events
+
+-- S1 run assertions ---------------------------------------------------
+  [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+  [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+  [PASS] A3-verify-root-clean         0 violation(s)
+  [PASS] A4-cycles-reached            reached cycle 8 of 8 requested; the deepest recorded death was cycle 2
+
+-- S2/S4 seam coverage -------------------------------------------------
+  [PART] D1-seat-contract         seat contracts with repairs
+         reason: seat contracts exercised, but zero repair tasks recorded: an un-induced stub always returns a schema-valid response, so no repair is ever requested. Re-run with --induce-repairs N (and --induce-repair-kind unparseable, or alternate, to reach whole_object_syntax as well as patch)
+         reached: {'workflow-contract-decomposition-transition-v1': 0, 'workflow-provider-attempt-v1': 63}
+  [PASS] D2-route-lease           lease-checked routes with tuning
+         reached: {'workflow-provider-attempt-v1': 63}
+  [PASS] D3-budget-auth           budget authorization
+         reached: {'workflow-dispatch-authorization-v1': 63}
+  [PASS] D4-reservation-bound     reservation/dispatch bounds
+         reached: {'workflow-token-reservation-v2': 63}
+
+-- record census -------------------------------------------------------
+      16  artifact
+       5  commitment
+       1  problem
+       3  warrant
+      63  workflow-context-exposure-v2
+      63  workflow-context-pack-plan-v1
+      63  workflow-dispatch-authorization-v1
+       1  workflow-model-classification-binding-v1
+      63  workflow-provider-attempt-v1
+       1  workflow-route-seat-model-classification-plan-v1
+       1  workflow-run-terminal-commitment-v1
+       1  workflow-run-terminal-result-draft-v1
+      32  workflow-semantic-admission-v1
+      63  workflow-token-reservation-v2
+     253  workflow-work-lifecycle-transition-v1
+      63  workflow-work-preparation-v1
+      32  workflow-work-terminal-v1
+
+[soak] report /tmp/cycle-soak-1pla8rq1/soak-report.json
+[soak] exit 0 (clean)
+SOAK_HVGRANT_RC=0

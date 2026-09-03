@@ -1,0 +1,8 @@
+TARGET CONTENT:
+Compatibility (atypical, deflationary): SRC_002's 'constant strictly between 0 and 1' is compatible with the Θ(n) jamming of SRC_003/SRC_006 IF the constant is read as n→∞ for FIXED graph sizes per realization with a subsequence effect — i.e., the neighborhood's disagreement may be an artifact of two different limits: expected cut size (which concentrates, giving vanishing consensus) versus the indicator of consensus averaged over graph draws (which may not concentrate for 3-regular majority dynamics, whose jamming is a non-self-averaging quantity). On this reading SRC_002 and SRC_003 share mechanism but integrate at the level of non-concentration: consensus probability can tend to a constant while final cut size tends to ∞. It is REFUTED IF the consensus indicator is shown to concentrate over random 3-regular graph draws (annealed = quenched), which would force the two claims into genuine contradiction.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

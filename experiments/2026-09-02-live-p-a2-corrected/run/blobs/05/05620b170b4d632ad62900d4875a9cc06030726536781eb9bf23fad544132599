@@ -1,0 +1,8 @@
+TARGET CONTENT:
+1191498e4fe5 reduces to SRC_006: its obstruction class is the cycle-matching configuration, and SRC_006's perfect matching between opposite-color cycles is the special case where every cycle is monochromatic. Refuted if 1191498e4fe5 cannot derive SRC_006's frozen cycle configurations as a special case of its own obstruction set.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

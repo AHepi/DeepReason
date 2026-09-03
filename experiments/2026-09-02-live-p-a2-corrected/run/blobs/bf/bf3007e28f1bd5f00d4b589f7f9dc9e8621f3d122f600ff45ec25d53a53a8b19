@@ -1,0 +1,8 @@
+TARGET CONTENT:
+Reduction: SRC_002 inherits its 'constant strictly between 0 and 1' claim from SRC_004's Poisson(λ) obstruction-count heuristic, and this reduces to a claim about the REACHABILITY WEIGHT of stable matchings, not their raw count. The shared mechanism with SRC_003/SRC_006 is zero-temperature Glauber descent on cut size; the disagreement is purely about basin geometry: SRC_004/SRC_002 suppose matching basins have total measure bounded away from both 0 and 1, while SRC_003/SRC_006 suppose they cover almost-all cuts. Both reduce to one measurable quantity — the probability that sequential edge elimination terminates at the empty matching. It is REFUTED IF that single quantity is shown to converge to 0 or to 1 (then neither the constant nor the vanishing picture survives as stated).
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

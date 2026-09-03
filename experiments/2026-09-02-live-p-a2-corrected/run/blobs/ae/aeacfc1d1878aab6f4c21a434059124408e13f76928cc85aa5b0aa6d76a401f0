@@ -1,0 +1,1 @@
+{"decisive_point":"the expected number of final matchings of size αn is exp(n f(α)) with f(α)>0 for α in (0,1/2), while the consensus basin has probability exp(-Θ(n))","verdict":"pass"}

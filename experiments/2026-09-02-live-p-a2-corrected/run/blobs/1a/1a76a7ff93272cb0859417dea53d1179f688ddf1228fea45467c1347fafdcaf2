@@ -1,0 +1,8 @@
+TARGET CONTENT:
+05a4074c795b shares mechanism with SRC_005: both treat finite induced stable cycles as the only obstructions, but 05a4074c795b adds a cutoff showing cycles longer than girth O(log n) have negligible basin, sharpening the Poisson count. Refuted if long induced cycles or non-cycle single-edge cuts carry non-vanishing basin mass, or if the expected number of stable cycles diverges with n.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

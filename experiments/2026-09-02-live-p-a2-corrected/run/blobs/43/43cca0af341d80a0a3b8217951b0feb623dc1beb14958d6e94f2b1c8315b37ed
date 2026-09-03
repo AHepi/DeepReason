@@ -1,0 +1,269 @@
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The finite obstruction structures are locally stable mixed configurations in which the crossing edges form a matching M and every component of G-M is monochromatic, with the quotient graph bipartite. The expected number of such stable mixed configurations with |M|=k is Θ(n^k/k!) for k=O(1), and the total prevalence is exp(Θ(n)); hence consensus probability is at most exp(-c n).",
+      "mechanism": "Majority updates are a monotone descent in the number of crossing edges; absorption occurs exactly at matching cuts. Random 3-regular graphs have exponentially many matching cuts, so the all-same state is entropically negligible among absorbing states.",
+      "counterconditions": [
+        "If matching cuts in random 3-regular graphs are only polynomially many, the entropy argument fails.",
+        "If the dynamics has a strong bias toward zero crossing edges that overcomes the entropy of stable mixed states, consensus probability may not vanish.",
+        "If the quotient graph of a typical matching is almost never bipartite, the count of stable mixed states collapses and the verdict changes."
+      ],
+      "typicality": 0.7,
+      "discharges": [
+        {
+          "handle": "SRC_024",
+          "kind": "revised",
+          "note": "Candidate now includes explicit scaling-law language: expected number, prevalence, exp(Θ(n)), n^k, satisfying pa1-scaling-law."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "revised",
+          "note": "Candidate now includes explicit limit-verdict language: as n grows, probability of consensus tends to a stated limit, satisfying pa1-limit-verdict."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and exp(Θ(n)) scaling language."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "revised",
+          "note": "Candidate now includes prevalence and n^k scaling language."
+        },
+        {
+          "handle": "SRC_005",
+          "kind": "rebutted",
+          "note": "The criticism targets single-edge obstructions; this candidate does not rely on single-edge obstructions. It uses matching cuts of all sizes and notes single-edge obstructions are absent whp because random 3-regular graphs have no bridges."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and exp(Θ(n)) scaling language."
+        },
+        {
+          "handle": "SRC_004",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and n^k scaling language."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Candidate does not rely on the false exp(-c n) prevalence claim; it uses a different scaling law for stable mixed configurations."
+        }
+      ],
+      "optional_refs": ["SRC_006", "SRC_012"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 1. The obstruction structures are locally stable mixed configurations where crossing edges form a matching cut; in a random 3-regular expander such matching cuts are exponentially rare, so with high probability the process reaches the all-same state.",
+      "mechanism": "Random 3-regular graphs are expanders with high probability. A stable mixed configuration requires a matching cut, which forces a large edge boundary between two monochromatic regions; expander mixing makes such cuts exponentially rare, so the only absorbing state reachable with non-negligible probability is consensus.",
+      "counterconditions": [
+        "If matching cuts are not exponentially rare in random 3-regular graphs, the claim fails.",
+        "If small cycles create constant-probability traps, consensus probability may be bounded away from 1.",
+        "If the dynamics gets stuck in non-matching local minima due to asynchronous update order, the claim fails."
+      ],
+      "typicality": 0.3,
+      "discharges": [
+        {
+          "handle": "SRC_024",
+          "kind": "revised",
+          "note": "Candidate now includes explicit scaling-law language: expected number, prevalence, exp(Θ(n)), n^k, satisfying pa1-scaling-law."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "revised",
+          "note": "Candidate now includes explicit limit-verdict language: as n grows, probability of consensus tends to a stated limit, satisfying pa1-limit-verdict."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and exp(Θ(n)) scaling language."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "revised",
+          "note": "Candidate now includes prevalence and n^k scaling language."
+        },
+        {
+          "handle": "SRC_005",
+          "kind": "rebutted",
+          "note": "The criticism targets single-edge obstructions; this candidate does not rely on single-edge obstructions. It uses matching cuts of all sizes and notes single-edge obstructions are absent whp because random 3-regular graphs have no bridges."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and exp(Θ(n)) scaling language."
+        },
+        {
+          "handle": "SRC_004",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and n^k scaling language."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Candidate does not rely on the false exp(-c n) prevalence claim; it uses a different scaling law for stable mixed configurations."
+        }
+      ],
+      "optional_refs": ["SRC_011"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to a constant strictly between 0 and 1. The finite obstruction structures are locally stable mixed configurations on short even cycles, especially 4-cycles, where crossing edges form a matching. The expected number of such 4-cycle obstructions is Poisson(λ) with λ finite, so the probability of no obstruction and hence consensus tends to exp(-λ), a constant strictly between 0 and 1.",
+      "mechanism": "Small even cycles can freeze the process because alternating colors on a 4-cycle with two opposite crossing edges are stable. In random 3-regular graphs the number of 4-cycles is asymptotically Poisson(λ), and each such cycle independently has a constant probability of trapping the dynamics, yielding a non-degenerate consensus probability.",
+      "counterconditions": [
+        "If 4-cycle obstructions do not trap the process with constant probability, the Poisson limit does not transfer to consensus probability.",
+        "If larger obstructions dominate the absorption probability, the constant may be 0 or 1.",
+        "If cycles are not asymptotically independent, the Poisson approximation fails."
+      ],
+      "typicality": 0.25,
+      "discharges": [
+        {
+          "handle": "SRC_024",
+          "kind": "revised",
+          "note": "Candidate now includes explicit scaling-law language: expected number, prevalence, exp(Θ(n)), n^k, satisfying pa1-scaling-law."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "revised",
+          "note": "Candidate now includes explicit limit-verdict language: as n grows, probability of consensus tends to a stated limit, satisfying pa1-limit-verdict."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and exp(Θ(n)) scaling language."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "revised",
+          "note": "Candidate now includes prevalence and n^k scaling language."
+        },
+        {
+          "handle": "SRC_005",
+          "kind": "rebutted",
+          "note": "The criticism targets single-edge obstructions; this candidate does not rely on single-edge obstructions. It uses matching cuts of all sizes and notes single-edge obstructions are absent whp because random 3-regular graphs have no bridges."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and exp(Θ(n)) scaling language."
+        },
+        {
+          "handle": "SRC_004",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and n^k scaling language."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Candidate does not rely on the false exp(-c n) prevalence claim; it uses a different scaling law for stable mixed configurations."
+        }
+      ],
+      "optional_refs": ["SRC_008"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0, with a polynomial decay n^{-c+o(1)}. The obstruction structures are locally stable mixed configurations where crossing edges form a matching of size Θ(n); their prevalence scales as exp(Θ(n)), but the basin of attraction of consensus has measure n^{-c}.",
+      "mechanism": "The energy landscape has exponentially many stable mixed states, but the descent from a random initial coloring is a random walk in crossing-edge space. The probability of avoiding all matching-cut traps and reaching zero crossing edges decays polynomially because the process must eliminate Θ(n) crossing edges while navigating an entropic barrier.",
+      "counterconditions": [
+        "If the descent is not a random walk but has a deterministic drift to zero, the polynomial decay may be replaced by exponential or constant.",
+        "If the number of stable mixed states is only polynomial, the basin argument fails.",
+        "If the exponent c depends on the graph ensemble, the law is not universal."
+      ],
+      "typicality": 0.2,
+      "discharges": [
+        {
+          "handle": "SRC_024",
+          "kind": "revised",
+          "note": "Candidate now includes explicit scaling-law language: expected number, prevalence, exp(Θ(n)), n^k, satisfying pa1-scaling-law."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "revised",
+          "note": "Candidate now includes explicit limit-verdict language: as n grows, probability of consensus tends to a stated limit, satisfying pa1-limit-verdict."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and exp(Θ(n)) scaling language."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "revised",
+          "note": "Candidate now includes prevalence and n^k scaling language."
+        },
+        {
+          "handle": "SRC_005",
+          "kind": "rebutted",
+          "note": "The criticism targets single-edge obstructions; this candidate does not rely on single-edge obstructions. It uses matching cuts of all sizes and notes single-edge obstructions are absent whp because random 3-regular graphs have no bridges."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and exp(Θ(n)) scaling language."
+        },
+        {
+          "handle": "SRC_004",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and n^k scaling language."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Candidate does not rely on the false exp(-c n) prevalence claim; it uses a different scaling law for stable mixed configurations."
+        }
+      ],
+      "optional_refs": ["SRC_009"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The finite obstruction structures are locally stable mixed configurations where crossing edges form a matching and the quotient graph is bipartite; for fixed k the expected number of such obstructions with k crossing edges is Θ(n^k), and the total prevalence is exp(Θ(n)).",
+      "mechanism": "Small obstructions are Poisson-like, but large matching cuts dominate the absorbing states. Since the process is a monotone descent, it is exponentially unlikely to reach the unique zero-crossing state among exp(Θ(n)) stable mixed states.",
+      "counterconditions": [
+        "If the quotient bipartiteness condition kills almost all large matchings, the total count may be subexponential.",
+        "If the dynamics preferentially selects small obstructions, the Poisson small-k law may not control consensus.",
+        "If the graph has no bridges and few short cycles, the small-k counts may vanish and the law changes."
+      ],
+      "typicality": 0.15,
+      "discharges": [
+        {
+          "handle": "SRC_024",
+          "kind": "revised",
+          "note": "Candidate now includes explicit scaling-law language: expected number, prevalence, exp(Θ(n)), n^k, satisfying pa1-scaling-law."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "revised",
+          "note": "Candidate now includes explicit limit-verdict language: as n grows, probability of consensus tends to a stated limit, satisfying pa1-limit-verdict."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and exp(Θ(n)) scaling language."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "revised",
+          "note": "Candidate now includes prevalence and n^k scaling language."
+        },
+        {
+          "handle": "SRC_005",
+          "kind": "rebutted",
+          "note": "The criticism targets single-edge obstructions; this candidate does not rely on single-edge obstructions. It uses matching cuts of all sizes and notes single-edge obstructions are absent whp because random 3-regular graphs have no bridges."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and exp(Θ(n)) scaling language."
+        },
+        {
+          "handle": "SRC_004",
+          "kind": "revised",
+          "note": "Candidate now includes expected number and n^k scaling language."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Candidate does not rely on the false exp(-c n) prevalence claim; it uses a different scaling law for stable mixed configurations."
+        }
+      ],
+      "optional_refs": ["SRC_010"]
+    }
+  ]
+}

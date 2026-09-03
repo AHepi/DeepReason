@@ -1,0 +1,21 @@
+[ok  ] clean-control          expect=<no alert>               SILENT (correct)
+[ok  ] zero-token             expect=ZERO-TOKEN CALLS         FIRED
+           -> ZERO-TOKEN CALLS: 1 of 2 provider attempts returned no tokens at all -- [('glm-5.3', 'defender')]
+           -> TYPED PROVIDER FAILURES: 1 workflow-provider-attempt-v1 objects say transport_failure -- by seat {('ollama-glm-5.3', 'defender', 0): 1}
+[ok  ] transport-diagnostic   expect=TRANSPORT DIAGNOSTICS    FIRED
+           -> ZERO-TOKEN CALLS: 1 of 1 provider attempts returned no tokens at all -- [('glm-5.3', 'conjecturer')]
+           -> TRANSPORT DIAGNOSTICS: 1 attempts carry 4 diagnostics -- {('glm-5.3', 'RemoteDisconnected'): 4}
+           -> TYPED PROVIDER FAILURES: 1 workflow-provider-attempt-v1 objects say transport_failure -- by seat {('ollama-glm-5.3', 'conjecturer', 1): 1}
+[ok  ] seat-streak            expect=SEAT STREAK              FIRED
+           -> ZERO-TOKEN CALLS: 2 of 4 provider attempts returned no tokens at all -- [('glm-5.3', 'conjecturer')]
+           -> TRANSPORT DIAGNOSTICS: 2 attempts carry 2 diagnostics -- {('glm-5.3', 'RemoteDisconnected'): 2}
+           -> SEAT STREAK: conjecturer seat 1 on ollama-glm-5.3 failed 2 CONSECUTIVE attempts -- this is the F4 seat-exhaustion signature forming; that terminal is not resumable
+           -> TYPED PROVIDER FAILURES: 2 workflow-provider-attempt-v1 objects say transport_failure -- by seat {('ollama-glm-5.3', 'conjecturer', 1): 2}
+[ok  ] schema-exhausted       expect=SCHEMA EXHAUSTED         FIRED
+           -> SCHEMA EXHAUSTED: 1 semantic admissions ran the contract ladder out -- the step immediately before V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY (P5's honest risk)
+[ok  ] readings-disagree      expect=READINGS DISAGREE        FIRED
+           -> ZERO-TOKEN CALLS: 1 of 1 provider attempts returned no tokens at all -- [('glm-5.3', 'conjecturer')]
+           -> TRANSPORT DIAGNOSTICS: 1 attempts carry 1 diagnostics -- {('glm-5.3', 'RemoteDisconnected'): 1}
+           -> READINGS DISAGREE: log attempt_trace says 1 dead attempts, typed objects say 0. One of these two instruments is wrong -- do not quote either alone
+
+FIXTURE OK: 6 cases, every alert fires and the clean control stays silent

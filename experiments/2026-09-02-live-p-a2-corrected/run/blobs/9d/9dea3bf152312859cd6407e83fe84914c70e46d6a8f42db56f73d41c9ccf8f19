@@ -1,0 +1,8 @@
+TARGET CONTENT:
+1191498e4fe5 abstracts SRC_003, SRC_005, SRC_007, and SRC_008 by treating the consensus limit as a function of a hidden bias parameter rather than a fixed constant. Refuted if it does not specify a parameter whose variation moves the limit among 0, a constant in (0,1), and 1, or if it merely restates the endpoints.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

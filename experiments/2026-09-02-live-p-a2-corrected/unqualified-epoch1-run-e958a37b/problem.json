@@ -1,0 +1,40 @@
+{
+  "criteria": [
+    {
+      "budget": {
+        "extra": {},
+        "steps": 100000,
+        "time_ms": 2000
+      },
+      "eval": "predicate:any(t in content.lower() for t in ('as n', 'n \u2192', 'n ->', 'n\u2192', 'asymptotic', 'in the limit', 'large n', 'n grows', 'n \u2192 \u221e', 'n to infinity', 'limiting')) and any(t in content.lower() for t in ('tends to 1', 'tends to 0', 'tends to one', 'tends to zero', '\u2192 1', '\u2192 0', '-> 1', '-> 0', '1 - o(1)', 'o(1)', 'bounded away', 'strictly between', 'bounded below', 'constant strictly', 'probability of consensus', 'consensus probability', 'with high probability', 'whp', 'vanishes', 'approaches 1', 'approaches 0'))",
+      "id": "pa1-limit-verdict@v1",
+      "observation_valued": false
+    },
+    {
+      "budget": {
+        "extra": {},
+        "steps": 100000,
+        "time_ms": 2000
+      },
+      "eval": "predicate:sum(1 for t in ('locally stable', 'stable mixed', 'frozen', 'blocking', 'absorbing', 'fixed point', 'trapped', 'stuck', 'obstruction', 'deadlock', 'no vertex', 'every vertex', 'each vertex', 'majority of its', 'two of its three', '2 of its 3', 'agrees with', 'same colour', 'same color', 'monochromatic', 'induced subgraph', 'cycle', 'clique', 'minority', 'boundary') if t in content.lower()) >= 2",
+      "id": "pa1-obstruction-structure@v1",
+      "observation_valued": false
+    },
+    {
+      "budget": {
+        "extra": {},
+        "steps": 100000,
+        "time_ms": 2000
+      },
+      "eval": "predicate:any(t in content.lower() for t in ('expected number', 'expected count', 'prevalence', 'density', 'frequency', 'number of such', 'count of', 'how many', 'probability that', 'fraction of')) and any(t in content.lower() for t in ('theta(', '\u0398(', 'omega(', '\u03a9(', 'o(n', '\u0398(n', 'poisson', 'linear in n', 'proportional to n', 'polynomial in n', 'exponentially', 'exp(', 'e^', 'n^', 'log n', 'sqrt(n)', '\u221an', 'per vertex', 'constant times n', 'grows like', 'scales like', 'scales as', 'independent of n', 'converges to a poisson'))",
+      "id": "pa1-scaling-law@v1",
+      "observation_valued": false
+    }
+  ],
+  "problem": {
+    "description": "Consider asynchronous majority dynamics on a random 3-regular graph on n vertices: at each step one uniformly random vertex adopts the majority opinion of its three neighbors. Starting from a uniformly random two-coloring, as n grows, does the probability of reaching unanimous consensus tend to 1, to 0, or to a constant strictly between? Characterize the finite obstruction structures (locally stable mixed configurations) that prevent consensus, and give either a proof sketch or a falsifiable quantitative law for how their prevalence scales with n.",
+    "id": "question-933313a5d9ca6dd86f3052aec6e1f05f"
+  },
+  "schema": "deepreason-text-workload-v1",
+  "sources": []
+}

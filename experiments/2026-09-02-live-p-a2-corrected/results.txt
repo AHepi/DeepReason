@@ -1,0 +1,48 @@
+# Results for /home/user/DeepReason/experiments/2026-09-02-live-p-a2-corrected/run
+  (resolved from a root)
+
+## Question
+  Consider asynchronous majority dynamics on a random 3-regular graph on n vertices: at each step one uniformly random vertex adopts the majority opinion of its three neighbors. Starting from a uniformly random two-coloring, as n grows, does the probability of reaching unanimous consensus tend to 1, to 0, or to a constant strictly between? Characterize the finite obstruction structures (locally stable mixed configurations) that prevent consensus, and give either a proof sketch or a falsifiable quantitative law for how their prevalence scales with n.
+
+## Run
+  run id (the deterministic identity of this run): 1b89ed64e050c354aacd4487ab8fd2106837a45620d6464d6fb1d4b481090078
+  state: failed
+  stop_reason (the typed reason it ended, never a crash): operational_failure
+  cycles completed: 0
+  tokens spent vs budget: 212152 / 3000000
+  manifest (the compiled configuration the run carries) present: yes, schema version 6
+
+## Artifacts
+  accepted / refuted / suspended: 13 / 3 / 0
+  survivors (positions still standing at the end): — not recorded (NO_SURVIVOR_RECORD)
+  frontier (the open edge of the inquiry): — not recorded (NO_FRONTIER_RECORD) artifacts, problem None
+
+## Adjudication (defended trials — a criticism argued and judged)
+  ran: yes
+  judge calls: 18
+  trial verdicts observed: none
+  trials declined (the case did not sustain): defence-sustained=2, ensemble-split=4, referential-integrity=1
+  trials blocked by a guard: none
+
+## Measurement instrument
+  embedder (the model that turned this run's text into vectors, so its novelty, near-duplicate and school-distance readings are on that model's scale): neural (nomic-ai/nomic-embed-text-v1.5)
+
+## Verification
+  verify_root verdict (the replay check that re-derives the whole run from its log and confirms nothing in the record is corrupt or altered): yes
+  read from: stored (pass --verify to re-derive it instead of reading the stored verdict)
+  violations: 0
+  finding families: completion=0, epistemic=0, integrity=0, operational=3, security=26
+
+## Amendment and terminal readiness
+  amendment epochs (later question/evidence appended without editing anything): 0
+  stands at a valid typed terminal: yes (terminal epoch 0)
+  stop reason is resumable: no
+  carries the lifecycle decision `continue` resumes from (the typed STOPPED receipt; without it `continue` refuses CONTINUE_TYPED_STOP_REQUIRED): no
+  the run recorded this reason for refusing that receipt: TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL
+  record verifies on the security channel (the replay findings that mean the record was tampered with, rather than merely incomplete; `continue` and `amend` refuse on these and on nothing else): — not recorded (SECURITY_CHANNEL_NOT_REDERIVED)
+  ready for `deepreason amend` / `deepreason continue`: no
+
+## Not recorded by this root
+  NO_FRONTIER_RECORD
+  NO_SURVIVOR_RECORD
+  SECURITY_CHANNEL_NOT_REDERIVED

@@ -1,0 +1,8 @@
+TARGET CONTENT:
+SRC_006 reduces to SRC_002 and depends on SRC_002's obstruction-counting mechanism: the claim of a constant consensus probability strictly between 0 and 1 is the special case where the expected number of reachable stable-matching obstructions is Θ(1), so the limit is e^{-λ}. Refuted if the expected number of reachable obstructions is o(1) or ω(1).
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

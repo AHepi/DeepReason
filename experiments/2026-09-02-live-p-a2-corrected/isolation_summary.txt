@@ -1,0 +1,10 @@
+cell  reasoning    cap     split    valid
+A     low          32768   off       2/10
+C     low          32768   auto      3/10
+E     low          49152   off       4/10
+B     unset (max)  49152   auto     10/10
+D     unset (max)  49152   off      10/10
+F     unset (max)  32768   off      10/10
+
+every `low` cell FAILS (2-4/10); every default-effort cell PASSES (10/10).
+cap and split protocol vary freely within each group and change nothing.

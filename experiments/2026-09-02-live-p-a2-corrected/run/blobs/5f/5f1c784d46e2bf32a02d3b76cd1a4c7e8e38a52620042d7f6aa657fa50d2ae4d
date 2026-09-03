@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "\"The prevalence of these obstructions in the final state scales as Theta(sqrt(n)) crossing edges with high probability, while the probability of the empty matching, i.e. consensus, converges to a constant c in (0,1).\""
+}

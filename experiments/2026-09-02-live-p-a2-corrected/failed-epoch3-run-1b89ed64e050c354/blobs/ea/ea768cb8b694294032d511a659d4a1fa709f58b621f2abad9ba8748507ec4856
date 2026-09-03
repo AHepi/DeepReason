@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "Concession: the sentence 'In any minimal such mixed configuration the disagreeing edges form a matching (each vertex has exactly one neighbor of the opposite color and two of the same), i.e. ... a perfect matching of cross edges' is false as stated."
+}

@@ -1,0 +1,8 @@
+TARGET CONTENT:
+1191498e4fe5 contradicts SRC_008 by showing that expansion alone does not prevent reachable stable matchings; the expander argument misses that descent can jam before consensus. Refuted if it does not exhibit a positive-probability set of initial colorings on an expander that reaches a stable matching, or if it assumes non-expansion.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

@@ -1,0 +1,8 @@
+TARGET CONTENT:
+KIND: shared mechanism (atypical complement to the modal 'which limit wins' continuation). The neighbourhood argues about the limit of the consensus probability, but all artifacts inherit a single unexamined mechanism from SRC_001: zero-temperature majority descent on a cut performs random greedy edge-elimination, and its terminal state is the same combinatorial object studied in random greedy maximal matching on random 3-regular graphs. If so, the final crossing density ρ of SRC_004 equals the edge-coverage constant of greedy matching, which is a known positive constant — implying SRC_001/SRC_004 are correct on graphs large enough for the descent to decorrelate, while SRC_002's constant-probability claim inherits from finite-size fluctuations that vanish. I propose integration: the consensus probability tends to 0, but the probability that the final matching has size ≤ k decays geometrically in k, so SRC_002's 'constant strictly between 0 and 1' is a finite-n artifact. It is REFUTED IF the greedy-matching analogy fails because majority descent can also INCREASE the number of stable-matching completions available (non-monotone in reachable-set structure), i.e., if the reachable obstruction set is not well-approximated by greedy matching on the initial cut.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

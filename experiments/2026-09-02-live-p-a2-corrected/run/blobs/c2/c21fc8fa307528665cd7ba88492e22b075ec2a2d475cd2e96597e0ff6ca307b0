@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "1191498e4fe5 abstracts SRC_003, SRC_005, SRC_007, and SRC_008 by treating the consensus limit as a function of a hidden bias parameter rather than a fixed constant. Refuted if it does not specify a parameter whose variation moves the limit among 0, a constant in (0,1), and 1, or if it merely restates the endpoints.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_003", "SRC_005", "SRC_007", "SRC_008"]
+    },
+    {
+      "content": "1191498e4fe5 reduces to SRC_006: its obstruction class is the cycle-matching configuration, and SRC_006's perfect matching between opposite-color cycles is the special case where every cycle is monochromatic. Refuted if 1191498e4fe5 cannot derive SRC_006's frozen cycle configurations as a special case of its own obstruction set.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_006"]
+    },
+    {
+      "content": "1191498e4fe5 contradicts SRC_008 by showing that expansion alone does not prevent reachable stable matchings; the expander argument misses that descent can jam before consensus. Refuted if it does not exhibit a positive-probability set of initial colorings on an expander that reaches a stable matching, or if it assumes non-expansion.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_008"]
+    },
+    {
+      "content": "1191498e4fe5 shares mechanism with SRC_003 and SRC_007: monotone cut-size descent under asynchronous majority updates jams at a matching of crossing edges. Refuted if its update rule can increase cut size or its final crossing-edge set is not a matching.",
+      "typicality": 0.8,
+      "neighbours": ["SRC_003", "SRC_007"]
+    },
+    {
+      "content": "1191498e4fe5 integrates SRC_005 and SRC_008 by making SRC_005's constant equal 1 under a biased initial condition, thereby reconciling the constant and consensus-almost-surely regimes. Refuted if it does not specify the bias that collapses the constant to 1 or if it predicts a constant strictly between 0 and 1 for all biases.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_005", "SRC_008"]
+    },
+    {
+      "content": "1191498e4fe5 is compatible with SRC_005 but not with SRC_003/007: it inherits the Poisson obstruction count and predicts a limit strictly between 0 and 1. Refuted if its predicted limit is 0 or 1, or if it does not use a Poisson number of reachable obstructions.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_005"]
+    }
+  ]
+}

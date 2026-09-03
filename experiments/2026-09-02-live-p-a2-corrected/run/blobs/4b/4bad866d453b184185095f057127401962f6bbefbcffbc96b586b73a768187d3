@@ -1,0 +1,8 @@
+TARGET CONTENT:
+SRC_006 shares mechanism with SRC_003: both use frozen cycle configurations (2-factors with monochromatic cycles and opposite-color matching) as obstructions, but SRC_006 claims their basins are negligible. Refuted if the basin measure of cycle-based frozen configurations is bounded away from 0.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

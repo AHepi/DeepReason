@@ -1,0 +1,1 @@
+{"decisive_point":"The defence states: \"Under exactly that specification, E[e^{-X}] = E[e^{-wY}] = exp((λ/w)(e^{-w} - 1)) = exp(λ(e^{-w} - 1)/w), which is precisely the formula the artifact asserts.\"","verdict":"pass"}

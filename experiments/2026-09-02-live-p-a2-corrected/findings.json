@@ -1,0 +1,181 @@
+{
+  "branches": [
+    {
+      "description": "Consider asynchronous majority dynamics on a random 3-regular graph on n vertices: at each step one uniformly random vertex adopts the majority opinion of its three neighbors. Starting from a uniformly random two-coloring, as n grows, does the probability of reaching unanimous consensus tend to 1, to 0, or to a constant strictly between? Characterize the finite obstruction structures (locally stable mixed configurations) that prevent consensus, and give either a proof sketch or a falsifiable quantitative law for how their prevalence scales with n.",
+      "positions_addressing": 10,
+      "problem": "question-933313a5d9ca6dd86f3052aec6e1f05f",
+      "trigger": "seed"
+    }
+  ],
+  "capabilities": {
+    "citations": {},
+    "consumed_packages": 0,
+    "fetched": [],
+    "proposals": []
+  },
+  "criticism": {
+    "attacks_on_refuted": 3,
+    "attacks_recorded": 10,
+    "coverage_debt_records": 8,
+    "criticism_attempts": 7
+  },
+  "positions": {
+    "accepted": [
+      {
+        "claim": "As n grows, the probability of reaching unanimous consensus tends to a constant strictly between 0 and 1, not to 1 or 0.",
+        "id": "513b3472f223",
+        "problems": [
+          "question-933313a5d9ca6dd86f3052aec6e1f05f"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "nu: verdict of pa1-scaling-law@v1 on 005ffbd5709079d789561c5aa152caea47e6dd20519451bd49b9a0bb214b2d25 is sound and relevant",
+        "id": "d9ae544b53a0",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "critic: pa1-scaling-law@v1 failed on 005ffbd57090",
+        "id": "d35a6dd7a77c",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "nu: verdict of pa1-scaling-law@v1 on 363ee7a4329582bf8bb2833ce99ee3968491a6cc12b15b821a00956275589dd4 is sound and relevant",
+        "id": "a9b051224d44",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "critic: pa1-scaling-law@v1 failed on 363ee7a43295",
+        "id": "77102c4075db",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "nu: verdict of pa1-limit-verdict@v1 on eb62c8ac2ca50c777de883ec5980764150d3716279fd4c7fe2f07a1fcc84f25a is sound and relevant",
+        "id": "954f89ea8d07",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "critic: pa1-limit-verdict@v1 failed on eb62c8ac2ca5",
+        "id": "647e1cbeee52",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "On a random 3-regular graph with asynchronous majority dynamics from a uniform random two-coloring, the probability of reaching unanimous consensus as n grows tends to a constant strictly between 0 and 1 (bounded away from both 0 and 1). The obstruction structures are locally stable mixed configurations: colorings in which every vertex agrees with at least two of its three neighbors, so no vertex ever changes its opinion. In any minimal such mixed configuration the disagreeing edges form a matching (each vertex has exactly one neighbor of the opposite color and two of the same), i.e. the verte\u2026",
+        "id": "a3002cb7e64f",
+        "problems": [
+          "question-933313a5d9ca6dd86f3052aec6e1f05f"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The probability of reaching unanimous consensus tends to 1 as n \u2192 \u221e (probability of consensus approaches 1, i.e. is 1 - o(1)): no locally stable mixed obstruction survives on a random 3-regular graph whp. Candidate obstructions are configurations where every vertex agrees with the majority of its three neighbors while the coloring stays mixed; but on a random 3-regular graph, which whp has large girth and is an expander, any such mixed configuration forces the disagreeing-edge structure to be a matching separating large monochromatic induced subgraphs, and random expanders have edge expansion \u2026",
+        "id": "efcd6d295035",
+        "problems": [
+          "question-933313a5d9ca6dd86f3052aec6e1f05f"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "Consensus probability as n grows tends to 0: the dynamics whp gets trapped in a locally stable mixed configuration, because such obstructions are abundant. The obstruction structures are frozen colorings where every vertex has at least two of its three neighbors of its own color; equivalently the disagreeing edges form a subgraph of maximum degree 1 on each side. The simplest and dominant gadget is a pair of adjacent disagreeing-edge endpoints forming an isolated cross-edge between two internally monochromatic induced subtrees. Quantitative law: the expected number of such absorbing mixed conf\u2026",
+        "id": "79e3b803c1fd",
+        "problems": [
+          "question-933313a5d9ca6dd86f3052aec6e1f05f"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "Falsifiable-law candidate (deliberately minimal-commitment): whatever the limiting consensus probability is, the decisive quantity is the density of locally stable mixed configurations, and it obeys a clean quantitative law \u2014 the expected number of vertices that end in a dissenting matched pair after dynamics stabilizes scales like \u0398(n) with an explicit per-vertex constant \u03c1 \u2248 0.05\u20130.15 (empirically measurable), so the probability that this expected count is zero (i.e. consensus) converges to a Poisson-type limit: probability of consensus \u2192 exp(-\u03c1n) is ruled out; instead the count does not con\u2026",
+        "id": "77cde74a5abb",
+        "problems": [
+          "question-933313a5d9ca6dd86f3052aec6e1f05f"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "Counterexample-first structural claim: the correct obstruction characterization must include not only static fixed points but also period-2 orbits, and their inclusion flips the verdict to consensus probability tending to 0 on random 3-regular graphs. Asynchronous majority dynamics on 3-regular graphs is known (Goles\u2013Olkiewicz style results) to eventually enter a cycle of period at most 2; a locally stable mixed configuration in the broad sense is either a frozen fixed point (each vertex agrees with at least two of its three neighbors) or a 2-cycle where a vertex with a tied neighborhood oscil\u2026",
+        "id": "16a45afde6fd",
+        "problems": [
+          "question-933313a5d9ca6dd86f3052aec6e1f05f"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "Atypical, decisive-experiment framing: the entire verdict question reduces to one measurable number \u2014 the probability p_n that a random 3-regular graph admits ANY locally stable mixed coloring reachable from a uniform start. Conjecture: p_n \u2192 p* with 0 < p* < 1, and the consensus probability equals 1 - p* + o(1), i.e. tends to a constant strictly between 0 and 1. Obstruction structure: a locally stable mixed configuration is a two-coloring in which no vertex is in the minority among its neighborhood; every vertex agrees with the majority of its three neighbors; the color classes then have the \u2026",
+        "id": "344055628a4a",
+        "problems": [
+          "question-933313a5d9ca6dd86f3052aec6e1f05f"
+        ],
+        "role": "conjecturer"
+      }
+    ],
+    "refuted": [
+      {
+        "attacked_by": [
+          "d35a6dd7a77c"
+        ],
+        "claim": "As n grows, the probability of reaching unanimous consensus tends to 1 (whp).",
+        "id": "005ffbd57090",
+        "problems": [
+          "question-933313a5d9ca6dd86f3052aec6e1f05f"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "attacked_by": [
+          "77102c4075db"
+        ],
+        "claim": "As n grows, the probability of reaching unanimous consensus tends to 0.",
+        "id": "363ee7a43295",
+        "problems": [
+          "question-933313a5d9ca6dd86f3052aec6e1f05f"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "attacked_by": [
+          "647e1cbeee52"
+        ],
+        "claim": "The probability of consensus tends to a constant strictly between 0 and 1, with the constant controlled by the largest stable 2-core traps, not only short cycles.",
+        "id": "eb62c8ac2ca5",
+        "problems": [
+          "question-933313a5d9ca6dd86f3052aec6e1f05f"
+        ],
+        "role": "conjecturer"
+      }
+    ],
+    "suspended": []
+  },
+  "question": "Consider asynchronous majority dynamics on a random 3-regular graph on n vertices: at each step one uniformly random vertex adopts the majority opinion of its three neighbors. Starting from a uniformly random two-coloring, as n grows, does the probability of reaching unanimous consensus tend to 1, to 0, or to a constant strictly between? Characterize the finite obstruction structures (locally stable mixed configurations) that prevent consensus, and give either a proof sketch or a falsifiable quantitative law for how their prevalence scales with n.",
+  "rivalries": [
+    {
+      "problem": "question-933313a5d9ca6dd86f3052aec6e1f05f",
+      "rival_count": 7,
+      "rivals": [
+        "513b3472f223",
+        "a3002cb7e64f",
+        "efcd6d295035",
+        "79e3b803c1fd",
+        "77cde74a5abb",
+        "16a45afde6fd",
+        "344055628a4a"
+      ]
+    }
+  ],
+  "root": "/home/user/DeepReason/experiments/2026-09-02-live-p-a2-corrected/run",
+  "run": {
+    "cycle": 0,
+    "message": "v6 conjecture context must be planned after durable work preparation",
+    "state": "failed",
+    "stop_reason": "operational_failure",
+    "token_limit": 3000000,
+    "token_spend": 212152
+  },
+  "schema": "deepreason-findings.v1",
+  "starved_branches": []
+}

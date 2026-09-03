@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (conn:1191498e4fe5) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 1191498e4fe5 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@6a924a4a971a: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Compatibility (atypical, deflationary): SRC_002's 'constant strictly between 0 and 1' is compatible with the Θ(n) jamming of SRC_003/SRC_006 IF the constant is read as n→∞ for FIXED graph sizes per realization with a subsequence effect — i.e., the neighborhood's disagreement may be an artifact of two different limits: expected cut size (which concentrates, giving vanishing consensus) versus the indicator of consensus averaged over graph draws (which may not concentrate for 3-regular majority dynamics, whose jamming is a non-self-averaging quantity). On this reading SRC_002 and SRC_003 share mechanism but integrate at the level of non-concentration: consensus probability can tend to a constant while final cut size tends to ∞. It is REFUTED IF the consensus indicator is shown to concentrate over random 3-regular graph draws (annealed = quenched), which would force the two claims into genuine contradiction.
+commitments: hv-floor@2a45b7988522, lineage-ref@6a924a4a971a, relation-form@578e42df713e
+
+TARGET SRC_002
+Contradiction (counterexample-first): SRC_002's constant-in-(0.05,0.5) limit is directly contradicted by the jamming mechanism shared by SRC_003 and SRC_006 — monotone cut-size descent on a random 3-regular graph jams in a stable matching of crossing edges of LINEAR size whp, not in a Poisson-sparse set of obstructions. The constant-limit picture of SRC_004/SRC_002 implicitly assumes Θ(1) reachable obstructions, but the descent dynamics contradicts this: the final matching density ρ>0 concentrates, so the consensus probability tends to 0, not to 1−q. It is REFUTED IF simulations show the final crossing-edge density is o(n) whp or the basin of the empty cut is bounded away from 0 — exactly SRC_004's countercondition, which would vindicate SRC_002 instead.
+commitments: hv-floor@2a45b7988522, lineage-ref@6a924a4a971a, relation-form@578e42df713e
+
+TARGET SRC_003
+Reduction: SRC_002 inherits its 'constant strictly between 0 and 1' claim from SRC_004's Poisson(λ) obstruction-count heuristic, and this reduces to a claim about the REACHABILITY WEIGHT of stable matchings, not their raw count. The shared mechanism with SRC_003/SRC_006 is zero-temperature Glauber descent on cut size; the disagreement is purely about basin geometry: SRC_004/SRC_002 suppose matching basins have total measure bounded away from both 0 and 1, while SRC_003/SRC_006 suppose they cover almost-all cuts. Both reduce to one measurable quantity — the probability that sequential edge elimination terminates at the empty matching. It is REFUTED IF that single quantity is shown to converge to 0 or to 1 (then neither the constant nor the vanishing picture survives as stated).
+commitments: hv-floor@2a45b7988522, lineage-ref@6a924a4a971a, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

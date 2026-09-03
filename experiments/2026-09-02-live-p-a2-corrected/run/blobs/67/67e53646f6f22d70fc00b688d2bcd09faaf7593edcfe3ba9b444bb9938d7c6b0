@@ -1,0 +1,8 @@
+TARGET CONTENT:
+SRC_006 abstracts SRC_001–SRC_005 by identifying the covering principle: on random 3-regular graphs under asynchronous majority, the consensus probability is governed by whether the monotone cut-size descent reaches a jammed matching before the empty cut; the disagreement among the endpoints is a phase transition in graph expansion. Refuted if the final crossing-edge density is not a monotone function of the graph's expansion profile or if the cut size can increase under the dynamics.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

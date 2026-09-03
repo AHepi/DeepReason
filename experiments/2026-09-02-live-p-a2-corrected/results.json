@@ -1,0 +1,92 @@
+{
+  "absences": [
+    "NO_FRONTIER_RECORD",
+    "NO_SURVIVOR_RECORD",
+    "SECURITY_CHANNEL_NOT_REDERIVED"
+  ],
+  "adjudication": {
+    "judge_calls": 18,
+    "ran": true,
+    "trial_blocked": {},
+    "trial_declined": {
+      "defence-sustained": 2,
+      "ensemble-split": 4,
+      "referential-integrity": 1
+    },
+    "trial_observations": {}
+  },
+  "amendment": {
+    "epoch_seqs": [],
+    "epochs": 0
+  },
+  "artifacts": {
+    "accepted": 13,
+    "frontier": {
+      "artifact_ids": {
+        "absent": true,
+        "reason": "NO_FRONTIER_RECORD"
+      },
+      "count": {
+        "absent": true,
+        "reason": "NO_FRONTIER_RECORD"
+      },
+      "problem_id": null
+    },
+    "refuted": 3,
+    "survivor_count": {
+      "absent": true,
+      "reason": "NO_SURVIVOR_RECORD"
+    },
+    "suspended": 0
+  },
+  "embedder": {
+    "backend": "neural",
+    "configured_model": null,
+    "fallback": false,
+    "fallback_reason": null,
+    "fingerprint": "d6e3599ce0377000",
+    "model": "nomic-ai/nomic-embed-text-v1.5",
+    "version": "fastembed-0.8.0+onnxruntime-1.29.0"
+  },
+  "identity": {
+    "manifest_present": true,
+    "manifest_schema_version": 6,
+    "run_id": "1b89ed64e050c354aacd4487ab8fd2106837a45620d6464d6fb1d4b481090078"
+  },
+  "question": "Consider asynchronous majority dynamics on a random 3-regular graph on n vertices: at each step one uniformly random vertex adopts the majority opinion of its three neighbors. Starting from a uniformly random two-coloring, as n grows, does the probability of reaching unanimous consensus tend to 1, to 0, or to a constant strictly between? Characterize the finite obstruction structures (locally stable mixed configurations) that prevent consensus, and give either a proof sketch or a falsifiable quantitative law for how their prevalence scales with n.",
+  "resolved_from": "root",
+  "root": "/home/user/DeepReason/experiments/2026-09-02-live-p-a2-corrected/run",
+  "run": {
+    "cycles_completed": 0,
+    "message": "v6 conjecture context must be planned after durable work preparation",
+    "state": "failed",
+    "stop_reason": "operational_failure",
+    "token_limit": 3000000,
+    "token_spend": 212152
+  },
+  "schema": "deepreason-results.v1",
+  "terminal": {
+    "amend_ready": false,
+    "continuation_authority": false,
+    "lifecycle_refusal": "TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL",
+    "record_security_violations": {
+      "absent": true,
+      "reason": "SECURITY_CHANNEL_NOT_REDERIVED"
+    },
+    "stop_reason_resumable": false,
+    "terminal_epoch": 0,
+    "valid_typed_terminal": true
+  },
+  "verification": {
+    "families": {
+      "completion": 0,
+      "epistemic": 0,
+      "integrity": 0,
+      "operational": 3,
+      "security": 26
+    },
+    "source": "stored",
+    "valid": true,
+    "violations": 0
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "candidates": [
+    {
+      "claim": "As n grows the probability of reaching unanimous consensus tends to 0. The finite obstruction structures are locally stable mixed configurations in which the crossing edges form a matching M: every vertex has at most one opposite-colour neighbour, each component of G-M is monochromatic, and adjacent components across M have opposite colours. The expected number of such obstructions with |M|=αn is exp(n f(α)+o(n)) with f(α)=-(1-2α)log(1-2α)-α log α+α log(3/2), maximised near α*≈0.4; hence their prevalence is exponentially large, not exp(-c n). Consensus is the final matching size zero event and has probability exp(-c n+o(n)) → 0.",
+      "mechanism": "The number of crossing edges is a Lyapunov function: flipping a vertex with two opposite neighbours decreases it by 1, and with three by 3, so the asynchronous process is a random descent that must stop at a local minimum. Local minima are exactly the matching cuts above. Since there are exp(Θ(n)) such local minima with |M|≈α* n, the descent is trapped before reaching the zero-crossing global minimum unless an exponentially rare sequence of flips eliminates every crossing edge.",
+      "counterconditions": [
+        "Fails if the random descent has a hidden drift making the final matching size o(n) with high probability.",
+        "Fails if the component-graph bipartiteness condition reduces the number of valid colourings from exp(Θ(n)) to subexponential.",
+        "Fails if consensus basins are not exponentially small despite the exponential number of stable mixed traps."
+      ],
+      "typicality": 0.7,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "This candidate does not use a Poisson count of single-edge obstructions in the initial colouring as the consensus event. It treats consensus as the final zero-crossing matching after monotone descent, so the criticism does not apply."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "rebutted",
+          "note": "The scaling-law criterion is met by the explicit expected-number law exp(n f(α)) and the consensus probability exp(-c n+o(n)); the cited failure was on a different artifact."
+        },
+        {
+          "handle": "SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate includes 'expected number', 'prevalence', 'exp(' and 'n^' terms, satisfying pa1-scaling-law; the cited failure is not inherited."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Adopted SRC_012: the candidate states stable mixed configurations are exponentially numerous with expected number exp(n f(α)), not exp(-c n). The change appears in the claim and mechanism."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The candidate includes 'expected number', 'prevalence', 'exp(' and 'n^' terms, satisfying pa1-scaling-law; the cited failure is not inherited."
+        }
+      ],
+      "optional_refs": [
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "As n grows the probability of reaching unanimous consensus tends to 1. The finite obstruction structures are locally stable mixed configurations where crossing edges form a matching and each component of G-M is monochromatic, but these are dynamically inaccessible from a uniformly random initial colouring: their basins have total probability exp(-c n). The prevalence of stable mixed configurations is exponentially large in n, yet the probability that the process ever enters one is o(1).",
+      "mechanism": "The crossing-edge count decreases, but the random order of updates acts like a martingale for the signed sum of colours on the 2-core; on a random 3-regular graph the initial colouring has a giant monochromatic component that sweeps the graph. Stable mixed matchings require a frozen boundary of Θ(n) crossing edges, which is a local minimum separated by an energy barrier of height Θ(n); the descent from a random start almost surely crosses the barrier to zero before getting trapped.",
+      "counterconditions": [
+        "Fails if the final matching size has a positive limit in probability.",
+        "Fails if the component-graph bipartiteness condition gives stable mixed states a non-negligible basin.",
+        "Fails if the giant monochromatic component does not expand to consensus because stable mixed traps form inside it."
+      ],
+      "typicality": 0.25,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "This candidate does not equate initial single-edge obstruction counts with consensus; it claims stable mixed states are dynamically inaccessible, so the criticism is irrelevant."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "rebutted",
+          "note": "The candidate includes 'prevalence', 'exponentially large', 'exp(-c n)' and 'probability', satisfying pa1-scaling-law."
+        },
+        {
+          "handle": "SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate includes 'prevalence', 'exponentially large', 'exp(-c n)' and 'probability', satisfying pa1-scaling-law."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "SRC_012's exponential count of stable mixed configurations is accepted, but it does not imply reachability; the candidate separates prevalence from basin probability."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The candidate includes 'prevalence', 'exponentially large', 'exp(-c n)' and 'probability', satisfying pa1-scaling-law."
+        }
+      ],
+      "optional_refs": [
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "As n grows the probability of reaching unanimous consensus tends to a constant p strictly between 0 and 1. The finite obstruction structures are locally stable mixed configurations with crossing edges forming a matching; their prevalence is exp(Θ(n)). The consensus event is equivalent to the initial colouring having a giant monochromatic component that percolates through the random 3-regular graph, which occurs with probability p_c∈(0,1) at the critical site-percolation threshold p=1/2. Thus P(consensus)→p.",
+      "mechanism": "The initial colouring is critical site percolation on a random 3-regular graph. If a giant monochromatic component exists, its boundary vertices flip and the component expands to consensus; if not, the process freezes into a stable mixed matching. The probability of a giant component at p=1/2 is strictly between 0 and 1, so the consensus probability converges to that percolation probability.",
+      "counterconditions": [
+        "Fails if the giant monochromatic component does not guarantee consensus because stable mixed traps can form inside it.",
+        "Fails if the percolation probability at p=1/2 is 0 or 1 for random 3-regular graphs.",
+        "Fails if the final matching size is not determined by the initial giant component but by later random choices."
+      ],
+      "typicality": 0.15,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "This candidate does not use a Poisson count of single-edge obstructions; it uses critical percolation of the initial colouring, so the criticism does not apply."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "rebutted",
+          "note": "The candidate includes 'prevalence', 'exp(Θ(n))', 'probability' and 'constant', satisfying pa1-scaling-law."
+        },
+        {
+          "handle": "SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate includes 'prevalence', 'exp(Θ(n))', 'probability' and 'constant', satisfying pa1-scaling-law."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "SRC_012's exponential count is accepted; the candidate claims the consensus probability is a constant determined by percolation, not by the count of stable states."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The candidate includes 'prevalence', 'exp(Θ(n))', 'probability' and 'constant', satisfying pa1-scaling-law."
+        }
+      ],
+      "optional_refs": [
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "As n grows the probability of reaching unanimous consensus tends to 0. The finite obstruction structures are exactly the stable mixed configurations for which the crossing edges form a matching M and the component graph of G-M is bipartite; each bipartite component graph contributes 2^{c(M)} colourings. The expected number of such obstructions with |M|=αn is exp(n f(α)+o(n)) for α<1/2, and the consensus probability is exp(-c n+o(n)).",
+      "mechanism": "A configuration is stable iff no vertex has two crossing edges, so crossing edges are a matching. Given M, every component of G-M must be monochromatic; the only remaining constraint is that the graph whose nodes are these components and whose edges are M is bipartite. For random 3-regular graphs the number of matchings of size αn is exp(n f(α)+o(n)), and the bipartite component-graph colourings contribute only a polynomial factor, so stable mixed traps are exponentially numerous and the zero-crossing consensus basin is exponentially small.",
+      "counterconditions": [
+        "Fails if the component graph is almost always non-bipartite for relevant α, making the number of valid colourings subexponential.",
+        "Fails if the dynamics does not sample stable configurations according to their count.",
+        "Fails if the final matching size is o(n) with high probability."
+      ],
+      "typicality": 0.6,
+      "discharges": [
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "This candidate does not use a Poisson count of single-edge obstructions; it uses the final matching size after descent, so the criticism does not apply."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "rebutted",
+          "note": "The candidate includes 'expected number', 'exp(n f(α))', 'prevalence' and 'probability', satisfying pa1-scaling-law."
+        },
+        {
+          "handle": "SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate includes 'expected number', 'exp(n f(α))', 'prevalence' and 'probability', satisfying pa1-scaling-law."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Adopted SRC_012: the candidate states stable mixed configurations are exponentially numerous, not exp(-c n). The change appears in the claim and mechanism."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The candidate includes 'expected number', 'exp(n f(α))', 'prevalence' and 'probability', satisfying pa1-scaling-law."
+        }
+      ],
+      "optional_refs": [
+        "SRC_012"
+      ]
+    }
+  ]
+}

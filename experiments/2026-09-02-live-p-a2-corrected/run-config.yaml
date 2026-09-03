@@ -1,0 +1,441 @@
+# P-A1: EVERY module the harness owns, switched on by CONFIGURATION.
+#
+# The tranche instruction is the authority for the seats; PREREG.md §4 is
+# the authority for every non-seat field below, and states the mechanism
+# that makes each requirement reachable without a code edit. Nothing here
+# is inherited silently: a field that ships the way this run wants it is
+# still written down, because silence reads as a copy of a predecessor
+# rather than as a decision.
+#
+# SEATS (operator's, verbatim, tranche instruction):
+#   "deepseek-v4-pro:0813 and glm-5.3 hold ALL generation-side seats: both
+#    as conjecturers, deepseek-v4-pro:0813 as argumentative critic, glm-5.3
+#    as defender. Distribute conjecturer seat instances across both models.
+#    Judges: qwen3.5:397b as judge:0 and gpt-oss:120b as judge:1."
+#
+# Every model id was resolved against the LIVE Ollama Cloud catalogue
+# (https://ollama.com/v1/models, unauthenticated) on 2026-09-01: all four
+# are present in the 19-model list. Compile no longer refuses an unreachable
+# model (operator law 2026-08-12), so a wrong id would not surface until
+# mid-run.
+#
+# P-A2 CORRECTIONS. This file is P-A1's run-config.yaml with FOUR fields
+# moved and nothing else. Every other line -- seats, judges, criticism
+# policy, bridge, capability budgets, calibrated thresholds -- is P-A1's
+# byte for byte, because the tranche measures those five merged fixes
+# against P-A1's typed counts and a second difference would spoil the
+# comparison. The diff to P-A1 is exactly the corrections; PREREG.md §3
+# is the authority for each one and states its evidence.
+#
+# C1/C2  glm-5.3 seats carry `reasoning: "low"` EXPLICITLY, where P-A1
+#   omitted the field. Omitted is not off: Ollama's glm-5.3 page documents
+#   low/high/max defaulting to MAX, and P-A1 ran the reason leg at max
+#   against a 48 640-token budget, which is what pushed those calls past
+#   the ~300 s transport wall (MONITOR_REVIEW.md MR-A). P-S1 measured the
+#   alternatives on 8 trials per setting: `none` 0/8 clean content, `low`
+#   8/8 clean at a median 7 completion tokens against `none`'s 64.
+#   `none` is not in this model's documented set and is never used here.
+#   The committed profile says the same in typed form
+#   (docs/model-profiles/glm-5.3/agent.md, `documented_values: [low, high,
+#   max]`).
+#
+# C3  SPLIT_BUDGET_SEAT_PROTOCOL: off, where P-A1 left it at the shipped
+#   `auto`. With `auto` an explicit `low` still ARMS the two-leg split and
+#   its extraction leg -- now profile-driven since 660cf7192, so the leg
+#   would send glm-5.3's `extraction_value: low` rather than the old
+#   hard-coded `none`. That is a real fix, and it is deliberately NOT the
+#   thing measured here: P-A1's 512-token extraction leg cut the
+#   CONJECTURER schema in 10 of 13 cases on DEEPSEEK too, where the `none`
+#   leak never applied, so the leg's budget is a separate defect from the
+#   leg's reasoning value. Turning the protocol off removes both legs from
+#   the comparison and leaves one seat call per attempt. RESIDUE, stated:
+#   this run therefore measures the profile registry's EXISTENCE and its
+#   stamp, not its extraction_value in flight -- that needs its own tranche.
+#
+# C4  max_tokens 32768 on the glm-5.3 seats, where P-A1 used 49152. This
+#   is the P-C2b-EVIDENCED ceiling (planner output B_r=32256 / B_a=512 at
+#   ceiling 32768, all three legs valid with a natural stop); 49152 was an
+#   extrapolation from it, and P-A1's own header said so. At max effort
+#   P-A1's glm calls crossed the ~300 s transport wall; at `low` they
+#   should not, and the transport fix has NOT merged, so this run does not
+#   invite the wall by asking for a larger cap than anything has measured.
+#   deepseek's seat keeps 49152 unchanged -- it never hit the wall (zero
+#   RemoteDisconnected on that endpoint across P-A1's whole run), so
+#   moving it would be a fifth difference buying nothing.
+#
+# timeout_s stays 1800 on the generation seats, unchanged from P-A1. It is
+# a CEILING, not a target: at `low` the calls should land far inside it,
+# and lowering it would convert a slow-but-succeeding call into a failure
+# this run wants to be able to see and count.
+
+roles:
+  # --- generation side: the two models the operator named ----------------
+  conjecturer:
+    # TWO seat instances, one per model, exactly as the instruction asks
+    # ("distribute conjecturer seat instances across both models"). A role
+    # may carry a LIST of route specs; `_configured_seats` enumerates them
+    # and each becomes its own seat instance -- which is also the unit the
+    # signal contract keys on (DR-INV-signal-contract, "keyed by SEAT
+    # INSTANCE, not role").
+    - &deepseek
+      endpoint: https://ollama.com/v1
+      endpoint_id: ollama-deepseek-v4-pro-0813
+      provider: ollama
+      model: deepseek-v4-pro:0813
+      model_revision: deepseek-v4-pro:0813
+      family: deepseek
+      api_key_env: OLLAMA_API_KEY
+      context_window_tokens: 131072
+      max_tokens: 49152
+      timeout_s: 1800
+      output_mode: json_object
+    - &glm53
+      endpoint: https://ollama.com/v1
+      endpoint_id: ollama-glm-5.3
+      provider: ollama
+      model: glm-5.3
+      model_revision: glm-5.3
+      family: glm
+      api_key_env: OLLAMA_API_KEY
+      context_window_tokens: 131072
+      # C4: the P-C2b-MEASURED ceiling, not P-A1's 49152 extrapolation.
+      max_tokens: 32768
+      timeout_s: 1800
+      output_mode: json_object
+      # C1/C2: EXPLICIT, and the whole point of this run's correction. The
+      # anchor is shared, so every glm-5.3 seat in this file -- conjecturer
+      # seat 1, defender, summarizer, synthesizer, vision_critic,
+      # grounding_reviewer -- carries it. Nothing may veto a configured
+      # value (docs/model-profiles/README.md), so this travels to the
+      # provider exactly as written whatever the profile says.
+      reasoning: "low"
+
+  # "deepseek-v4-pro:0813 as argumentative critic"
+  argumentative_critic: *deepseek
+  # "glm-5.3 as defender"
+  defender: *glm53
+
+  # The remaining generation-side seats, split across the same two models so
+  # that no seat sits on a model the operator did not name. `variator` is
+  # the one that matters most for this tranche: it is the seat P-S1 denied a
+  # transaction contract 171 times, which is why hv and reach never
+  # measured and the Pareto frontier sorted on coverage alone.
+  variator: *deepseek
+  property_designer: *deepseek
+  # `thesis` is the bridge's frozen Stage-B composer_role.
+  thesis: *deepseek
+  # `summarizer` is the bridge's frozen Stage-A ledger_role.
+  summarizer: *glm53
+  synthesizer: *glm53
+  vision_critic: *glm53
+  # `grounding_reviewer` is this run's bridge reviewer_role (see `bridge`
+  # below): the seat that reviews the composed output's grounding.
+  #
+  # C1-EXCEPTION (operator ruling, 2026-09-02, after P-A2 epoch 1 refused
+  # qualification on exactly this seat). This is the ONE glm-5.3 seat that
+  # does NOT carry `reasoning: "low"`, and the exception is measured rather
+  # than assumed. Epoch 1 qualified 22 of 23 pairs; the single failure was
+  # this seat's `groundingrepairwirev1.direct.v1`, 5 of 20 against a
+  # threshold of 19, where P-A1 scored 20 of 20.
+  #
+  # `isolate_grounding_repair.py` then exercised ONLY that pair across six
+  # configurations, ten cases each -- 60 live calls -- and separated the
+  # three fields P-A2 moved at once:
+  #
+  #     low   / 32768 / split off    2/10      unset / 49152 / split auto  10/10
+  #     low   / 32768 / split auto   3/10      unset / 49152 / split off   10/10
+  #     low   / 49152 / split off    4/10      unset / 32768 / split off   10/10
+  #
+  # Perfect separation on the reasoning knob alone: every `low` cell fails,
+  # every default-effort cell passes, while the cap and the split protocol
+  # vary freely WITHIN each group and change nothing. So C3 and C4 are
+  # exonerated for this contract and C1 is the sole cause. The last cell is
+  # this seat's exact shape and scored 10/10.
+  #
+  # Why the exception is narrow rather than a revert: `low` is
+  # measured-CORRECT for the generation seats -- six other glm-5.3 contracts
+  # qualify 20/20 under it -- and those are the seats P-A1's ~300 s
+  # transport wall actually hit. This seat is a bridge seat exercised at
+  # terminal, not in the cycle loop, so restoring its effort re-invites the
+  # wall on the lowest-volume seat in the run.
+  #
+  # The cap stays 32768 with the other glm seats (C4 is untouched): the
+  # measurement says the cap is irrelevant to this contract, so moving it
+  # too would be an unmeasured second difference.
+  grounding_reviewer:
+    endpoint: https://ollama.com/v1
+    endpoint_id: ollama-glm-5.3
+    provider: ollama
+    model: glm-5.3
+    model_revision: glm-5.3
+    family: glm
+    api_key_env: OLLAMA_API_KEY
+    context_window_tokens: 131072
+    max_tokens: 32768
+    timeout_s: 1800
+    output_mode: json_object
+    # `reasoning` DELIBERATELY OMITTED -- the model's documented default is
+    # `max`, and that is the only setting measured to satisfy this contract.
+
+  # --- adjudication side: the two judges the operator named --------------
+  # TWO seats, two genuinely distinct families, which is what
+  # firewall.require_cross_family_judge_ensemble demands (>=2 seats AND >=2
+  # families). It is also the only regime the committed judge evidence
+  # measured favourably: 0-2.5% false conviction of sound work under
+  # cross-family pairing, against 47-60% for every looser configuration
+  # (docs/RESEARCH_JUDGE_BLINDING_2026-08-22.md; the amended judge law,
+  # CLAUDE.md 2026-08-28).
+  judge:
+    - endpoint: https://ollama.com/v1
+      endpoint_id: ollama-qwen3.5-397b
+      provider: ollama
+      model: qwen3.5:397b
+      model_revision: qwen3.5:397b
+      family: qwen
+      api_key_env: OLLAMA_API_KEY
+      context_window_tokens: 131072
+      max_tokens: 32768
+      timeout_s: 1200
+      output_mode: json_object
+    - endpoint: https://ollama.com/v1
+      endpoint_id: ollama-gpt-oss-120b
+      provider: ollama
+      model: gpt-oss:120b
+      model_revision: gpt-oss:120b
+      # Explicit, not inferred. `infer_model_family` would read "gpt" and
+      # return "openai-gpt"; writing it down means the cross-family
+      # boundary does not depend on a substring rule.
+      family: openai-gpt
+      api_key_env: OLLAMA_API_KEY
+      context_window_tokens: 131072
+      max_tokens: 32768
+      timeout_s: 1200
+      output_mode: json_object
+
+# ---------------------------------------------------------------------------
+# R1 -- DEFENDED TRIALS, explicitly.
+# ---------------------------------------------------------------------------
+# These three fields are what `configured_criticism_policy` reads, and the
+# builder ALSO passes the compiled policy explicitly to
+# `compile_run_manifest(criticism_policy=...)` rather than letting the
+# omitted-argument derivation supply it. The tranche instruction requires
+# the explicit form; the canary tranche
+# (experiments/2026-09-01-defect-judge-canary-compile-gap/) is why the
+# derivation exists at all, and P-S1 is what an omitted policy costs: a
+# manifest with `criticism_policy: null`, empty defender/judge/variator
+# trial grants, and 140 criticisms filed as scrutiny observations.
+JUDGE_SEATS_ENABLED: true
+ADJUDICATION_STATUS_AUTHORITY_ENABLED: true
+ENGAGED_CRITICISM_AUTHORITY: defended_trial
+LEGACY_CRITICISM_ENABLED: false
+
+# Judge dispatch must be RATED, not merely enabled: JUDGE_SUMMONS_PER_CYCLE
+# ships at 0 precisely so that flipping the master gate alone changes
+# nothing. Two summons per cycle with the shipped 4-cycle cooldown.
+JUDGE_SUMMONS_PER_CYCLE: 2
+JUDGE_SUMMONS_COOLDOWN: 4
+
+# Bounded advisory rubric trials, opted into while the rubric authority
+# stays observe_only -- the documented shape of that knob. This is a
+# separate organ from the defended-trial circuit above and would otherwise
+# never fire.
+ADVISORY_TRIALS_PER_CYCLE: 1
+
+# ARGUMENTATIVE_AUTHORITY stays observe_only ON PURPOSE, and this is not a
+# module left off. Declaring `trial_required` trips
+# CALIBRATION_RECEIPT_REQUIRED for ANY text workload
+# (authority.py::_preflight_text_authority) against a verifier that is a
+# permanent stub and can never pass. Real status-changing authority for
+# this run arrives through the engaged criticism engine above, which that
+# wall never inspects -- the route P-R1 and the grounded-extension tranche
+# both took.
+ARGUMENTATIVE_AUTHORITY: observe_only
+
+# Schools ON: the conjecture-side attractor-minimisation tool, and the thing
+# the criticism policy's per-school bindings are bindings OF.
+SCHOOL_SEATS_ENABLED: true
+
+# ---------------------------------------------------------------------------
+# R2 -- SIMULATION AND RESEARCH, on with real budgets.
+# ---------------------------------------------------------------------------
+# Both channels ship ON since F3 (2026-08-26) and their budgets live in the
+# compiled capability policy, not here; CHANNELS_DISABLED is the one field
+# that could turn either off, and it is written out empty so that "on" is a
+# decision rather than an omission. The builder binds the contained
+# simulation toolchain, without which an enabled simulation policy refuses
+# with V6_SIMULATION_TOOLCHAIN_REQUIRED.
+CHANNELS_DISABLED: []
+RESEARCH_BACKEND: agent
+RESEARCH_PERIOD: 5
+RESEARCH_COOLDOWN: 3
+RESEARCH_ATTEMPTS_MAX: 5
+RESEARCH_ATTENDED: false
+
+# ---------------------------------------------------------------------------
+# R3 -- THE BRIDGE, composing rather than refusing.
+# ---------------------------------------------------------------------------
+# P-S1 ended with bridge_events: 0 because `bridge.mode` ships
+# "legacy_thesis" and `application/bridge.py` refuses composition with
+# GROUNDED_BRIDGE_POLICY_REQUIRED under it. The mode IS a configuration
+# value (config.py BridgeConfig.mode), so no code edit is needed -- and the
+# ladder calls `deepreason bridge build` at terminal, which is the other
+# half of why P-S1 saw nothing.
+#
+# reviewer_role is `grounding_reviewer`, not the shipped `judge`. Two
+# reasons, both recorded: the operator named qwen3.5 and gpt-oss as JUDGES
+# (adjudication), and `grounding_review` is the ONLY source of behavioural
+# authority for the reviewer seat -- with it off, or pointed elsewhere,
+# that seat qualifies `inactive_no_authorized_contract` and every phase
+# needing it defers `transaction-contract-unavailable` (v6_policy.py's own
+# note on `engaged_bridge_source`).
+bridge:
+  mode: grounded_two_stage
+  grounding_review: true
+  allow_partial: true
+  allow_abstention: true
+  require_claim_ledger: true
+  require_claim_uses: true
+  max_schema_repair_attempts: 2
+  max_grounding_repair_attempts: 4
+  output_section_limit: 32
+  target_profile: plain
+  ledger_role: summarizer
+  composer_role: thesis
+  reviewer_role: grounding_reviewer
+
+# ---------------------------------------------------------------------------
+# R5 -- THE NEAR-DUPLICATE GATE, armed against a MEASURED threshold.
+# ---------------------------------------------------------------------------
+# NEAR_DUP_EPS ships None and the gate fails open to hash-only (100% of
+# P-S1's candidates unscreened). Arming an ABSOLUTE distance requires
+# calibrating it to the embedder first -- the runs/embedder_design record
+# refuted every blind distribution-mapping shortcut.
+#
+# MEASURED 2026-09-01 with `deepreason --root <root> calibrate` on the
+# neural embedder actually configured below (fingerprint d6e3599ce0377000,
+# nomic-ai/nomic-embed-text-v1.5, fastembed-0.8.0+onnxruntime-1.29.0),
+# over THREE independent committed live roots. All three agree:
+#
+#   planted duplicates   min 0.083   median 0.1607  max 0.2608
+#   within-problem sibs  p10 0.032-0.040  median 0.056-0.081
+#   recommended          NEAR_DUP_EPS 0.2608   separable FALSE
+#
+# 0.2608 is the instrument's own recommendation and is re-derivable by that
+# command, which is why it is preferred to any hand-picked number.
+# RESIDUE, stated: `separable` is FALSE -- planted-duplicate distances
+# overlap the sibling tail, so this is the duplicate-CEILING fallback, not
+# a midpoint between separated classes. The consequence is bounded and
+# worth writing down: stage 2 only NARROWS which refuted priors face the
+# stage-3 battery check, and a BLOCK still requires verdict-vector
+# equivalence, so a wide eps costs compute and not admissions.
+NEAR_DUP_EPS: 0.2608
+
+# The convergence tripwire's absolute sibling, armed from the same
+# calibration (`RESEED_DIST_MIN` recommended 0.0401 on the richest corpus,
+# n=721 within-problem pairs). Its ratio-shaped companion RESEED_RATIO_MAX
+# already ships armed at 0.3; leaving this one at None would leave half the
+# school-convergence detector off while calling the run "everything on".
+RESEED_DIST_MIN: 0.0401
+
+# ---------------------------------------------------------------------------
+# R6 -- SCRATCHPAD, and the successor-question channel.
+# ---------------------------------------------------------------------------
+# The advisory scratch workspace ships DISABLED. Everything under it is at
+# its audited default; only `enabled` moves.
+#
+# C6 -- SWITCHED BACK OFF (operator ruling 2026-09-03, after epoch 3).
+#
+# This is the one module P-A2 turned on that P-A1 never actually exercised,
+# and turning it on is what killed epoch 3 at cycle 0. FINDINGS.md F7:
+# `scheduler.py`'s conjecture-context RETRY path re-plans the context and
+# omits the v6 null-out its own primary path performs twelve lines above, so
+# the retry re-enters `conj()` with a live plan and `conj.py:827` refuses it
+# with "v6 conjecture context must be planned after durable work
+# preparation". The ValueError matches none of the handlers beneath it and
+# terminalizes the run.
+#
+# `ConjectureContextStale` -- the exception that selects that retry path -- is
+# raised from exactly three sites, ALL in `scratch/conjecture.py`. So the
+# defect is reachable ONLY through a live scratchpad, and switching the
+# scratchpad off routes around it completely without touching source, which a
+# RUN tranche may not do.
+#
+# WHAT THIS COSTS THE COMPARISON, and it is unusually little: P-A1 had this
+# module configured ON and it DID NOT FIRE -- "no event carries a scratch
+# payload". So the row being dropped is one P-A1 has no live data for either,
+# and the P-A1 -> P-A2 comparison loses nothing it ever had. Every other
+# module, and P1 through P5, get their first real 24-cycle test.
+#
+# RESIDUE: this run therefore says nothing about the scratchpad, and F7 stays
+# open and unfixed. The successor-question destination below still names
+# `scratchpad.v1`, which is the shipped default and is inert while the
+# workspace is off -- minting is OFF too, so nothing routes there either way.
+scratchpad:
+  enabled: false
+
+# Successor questions: the FIELD routing stays at its default destination
+# (on), per the P9 law of 2026-08-29. The MINTING gate stays OFF -- its
+# enablement is an operator launch-time choice and carries the operator's
+# own warning text, so this window does not make it. Both are written out
+# so that "off" here is visibly a decision and not an oversight.
+SUCCESSOR_QUESTION_DESTINATION: scratchpad.v1
+SUCCESSOR_MINTING_ENABLED: false
+
+# ---------------------------------------------------------------------------
+# The rest: written down because "everything on" must be checkable.
+# ---------------------------------------------------------------------------
+# The discharge channel (REBUILD F1): open criticisms render inside the
+# conjecturer's binding block and every later submission carries a typed
+# discharge per handle. The Config default is already this value; it is
+# restated because P-C2's FINDING F-A records that this field is popped
+# from the manifest's config echo, so the line states intent at the place
+# an operator looks for it while the CARRIAGE notice is what actually
+# delivers it.
+DISCHARGE_POLICY: discharge-required.v1
+
+# C3 -- THE SPLIT-BUDGET SEAT PROTOCOL, OFF.
+#
+# P-A1 left this at the shipped `auto`, under which every seat whose
+# reasoning cannot be turned off is split into a REASON leg and a 512-token
+# EXTRACTION leg. Two independent things went wrong there and this run
+# separates them by removing the split entirely:
+#
+#   (a) the extraction leg sent a hard-coded `reasoning_effort: "none"`
+#       (llm/providers.py REASONING_OFF), which on glm-5.3 moves the
+#       thinking trace INTO the content rather than stopping it. Merged fix
+#       660cf7192 makes that value profile-driven, so it would now send
+#       this model's documented `extraction_value: low`.
+#   (b) the leg's 512-token budget does not fit the CONJECTURER schema. That
+#       cut deepseek's extraction leg in 10 of 13 cases, where (a) never
+#       applied at all -- so the budget is a second defect, unfixed, and
+#       still live under `auto`.
+#
+# Turning the protocol off removes both from this comparison and leaves one
+# provider call per attempt, which is also what makes P2's zero-token count
+# a clean before/after against P-A1's.
+#
+# This field is POPPED from the manifest's config echo
+# (run_manifest.py:2469) for the same reason DISCHARGE_POLICY above is: it
+# is transport policy consulted at the adapter's dispatch site and never
+# written to the manifest. The CARRIAGE notice is what actually delivers it
+# to the rebuilt runtime Config, and preflight_pa2.py asserts the delivered
+# value rather than trusting this line.
+# QUOTED, and this is not style: YAML 1.1 resolves a bare `off` to the
+# BOOLEAN False, and this field is Literal["auto","on","off"]. Unquoted,
+# the value that reaches Config is `False`, not "off".
+SPLIT_BUDGET_SEAT_PROTOCOL: "off"
+
+# The controller and the liveness queue, both shipped on, restated for the
+# same reason.
+CONTROLLER: true
+LIVENESS_QUEUE: true
+
+# The neural embedder, restated: every distance threshold above is only
+# valid for this fingerprint.
+EMBEDDER_MODEL: nomic-ai/nomic-embed-text-v1.5
+# "error", not the interactive "fallback": this is an evidence run, and a
+# silent swap of the geometry instrument would invalidate the two
+# calibrated thresholds above without saying so. The ladder pays for the
+# weights in its setup phase (`deepreason embedder-warmup`), so failing
+# closed here costs nothing a warm cache does not already prevent.
+EMBEDDER_FAILURE_POLICY: error

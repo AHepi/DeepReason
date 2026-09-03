@@ -1,0 +1,8 @@
+TARGET CONTENT:
+05a4074c795b contradicts SRC_003's non-concentration law: it asserts the consensus indicator self-averages, so annealed and quenched probabilities coincide and the limit is a single constant, not a non-degenerate random variable e^{-X}. Refuted if the quenched consensus probability remains asymptotically non-degenerate across graph draws, or if basin-weighted Poisson intensities do not concentrate.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

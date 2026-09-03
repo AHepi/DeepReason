@@ -1,0 +1,8 @@
+TARGET CONTENT:
+SRC_006 integrates SRC_005's expander argument with SRC_001's matching obstruction by positing a sharp graph-expansion threshold: below threshold, jammed matchings dominate; above, consensus wins. Refuted if no single graph parameter separates the two regimes or if the transition is not sharp.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

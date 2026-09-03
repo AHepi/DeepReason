@@ -1,0 +1,1 @@
+{"patch":[{"op":"remove","path":"/sidecar"}],"repair.patch.v1":"remove /sidecar which is an extra forbidden field; /candidates subtree is frozen and untouched"}
