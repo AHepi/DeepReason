@@ -1,0 +1,1 @@
+{"decisive_point":"The critic is right that Θ(n) per vertex, i.e., Θ(n^2) total, cannot by itself imply that the fraction of stable mixed configurations is bounded away from 0 among the 2^n starting configurations.","verdict":"fail"}
