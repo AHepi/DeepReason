@@ -1,0 +1,1 @@
+{"decisive_point":"Multiplying by the number of balanced subsets exp(n ln2) yields expected number exp((ln2-0.232)n)=exp(0.461 n), i.e. exponentially many such obstructions.","verdict":"fail"}
