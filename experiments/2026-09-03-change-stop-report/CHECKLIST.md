@@ -1,6 +1,6 @@
 # Checklist for: the stop report — the harness writes the first failure report
 
-State: next=15 blockers=none — the budget STOP raised at step 9 is RESOLVED (REQUEST.md Amendment 2: ceiling raised to 2100 source insertions on the operator's word). All later [COMMIT] steps check against 2100.
+State: next=16 blockers=none — the operational wheel smoke fails identically at the tranche base (7653b04393), so it is NOT this tranche's; parked at step 21, not fixed here. — the budget STOP raised at step 9 is RESOLVED (REQUEST.md Amendment 2: ceiling raised to 2100 source insertions on the operator's word). All later [COMMIT] steps check against 2100.
 
 Re-read REQUEST.md (incl. Amendment 1) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -467,7 +467,7 @@ The naive classifier lives inside `proof/run_regression.py`, OUTSIDE the
 module it judges — CLAUDE.md's treadle lesson: keep whatever judges the
 work outside the cone it judges.
 
-- [ ] 15. (S21, R21, M12) [COMMIT] Run both wheel smokes and record
+- [x] 15. (S21, R21, M12) [COMMIT] Run both wheel smokes and record
       whether any pin moved. SPEC.md M12 predicts none moves because the
       pinned surface is console-script entry-point NAMES, the MCP tool
       set and the MCP schema sha — and no MCP tool is added. Verify, do
@@ -475,6 +475,46 @@ work outside the cone it judges.
       done-when: `python scripts/wheel_smoke.py` → rc 0 AND
       `python -u scripts/wheel_operational_smoke.py` → rc 0; paste both
       rc lines and state explicitly whether any pin changed.
+
+## PROOF FOR STEP 15 (2026-09-03)
+
+**`python scripts/wheel_smoke.py` → rc 0:**
+
+    wheel smoke passed: isolated V6-only contents, clean imports, exact
+    entry points, module parity, MCP registration, and exact MCP schemas
+    WHEEL_SMOKE_RC=0
+
+**NO PIN MOVED, and that was verified rather than assumed.** SPEC.md M12
+predicted it: the pinned surface is console-script entry-point NAMES, the
+MCP tool set and the MCP schema sha. This tranche adds a `deepreason`
+SUBCOMMAND and no MCP tool, so it touches none of them. `git diff` on
+`scripts/wheel_smoke.py` is empty and the smoke passes on the built
+wheel, which together is the proof. R21 is discharged.
+
+**`python -u scripts/wheel_operational_smoke.py` → rc 1**, failing at
+
+    "stage": "continuation_resume"
+    "failure_kind": "assertion_failed"
+    "schema": "deepreason-wheel-operational-failure-v4"
+
+**NOT THIS TRANCHE'S — measured, not assumed.** The same smoke was run in
+a clean `git worktree` at the tranche base `7653b04393`, which contains
+none of this tranche's commits, and fails IDENTICALLY: same stage, same
+failure_kind, same rc. Envelope captured at
+`proof/wheel_operational_base_failure.json`.
+
+    $ git worktree add /tmp/base-tree 7653b04393
+    $ cd /tmp/base-tree && python -u scripts/wheel_operational_smoke.py
+    BASE_RC=1
+    "failure_kind":"assertion_failed"
+    "stage":"continuation_resume"
+
+`docs/AUDIT_BASELINES.md` (lines 195-202) baselines only smoke failures
+naming the MCP schema sha or tool-set pins; this names neither, so by that
+document it is a FINDING. It is not, however, a finding this tranche may
+act on: CLAUDE.md's cross-routing rule is that a defect found mid-change
+is PARKED, not fixed, and REQUEST.md C3 parks "any defect found while
+building" by name. Parked with a ready-to-send prompt at step 21.
 
 ## Group B — the refusal and the configuration-stages page
 
