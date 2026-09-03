@@ -25,6 +25,23 @@ PIDFILE="${PA2_PIDFILE:-$HERE/driver.pid}"
 cd "$REPO" || exit 1
 while true; do
   sleep 300
+  # F6 FIX: liveness is tested at the TOP of the body, BEFORE the commit.
+  # Testing it at the bottom left a window of up to one sleep interval in
+  # which the driver was already gone and this loop was still committing --
+  # which took .git/index.lock out from under the operating session mid-commit
+  # and swept its edits into a generic "snapshot" commit. One last snapshot
+  # after the driver exits is still taken, below, so nothing is lost.
+  if [ -f "$PIDFILE" ] && ! kill -0 "$(cat "$PIDFILE" 2>/dev/null)" 2>/dev/null; then
+    git add -A "$REL" >/dev/null 2>&1 || true
+    if ! git diff --cached --quiet -- "$REL" 2>/dev/null; then
+      git commit -q -m "P-A2 final snapshot, driver exited ($(date -u +%FT%TZ))" -- "$REL" >/dev/null 2>&1 || true
+      for attempt in 1 2 3 4; do
+        git push -u origin "$BRANCH" >/dev/null 2>&1 && break
+        sleep $((2 ** attempt))
+      done
+    fi
+    break
+  fi
   git add -A "$REL" >/dev/null 2>&1 || true
   if ! git diff --cached --quiet -- "$REL" 2>/dev/null; then
     git commit -q -m "P-A2 live-run snapshot ($(date -u +%FT%TZ))" -- "$REL" >/dev/null 2>&1 || true
@@ -33,7 +50,4 @@ while true; do
       sleep $((2 ** attempt))
     done
   fi
-  # The driver is gone when its recorded PID no longer names a live process.
-  [ -f "$PIDFILE" ] || continue
-  kill -0 "$(cat "$PIDFILE" 2>/dev/null)" 2>/dev/null || break
 done
