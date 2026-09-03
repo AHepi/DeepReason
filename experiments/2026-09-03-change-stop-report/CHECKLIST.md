@@ -1,6 +1,6 @@
 # Checklist for: the stop report — the harness writes the first failure report
 
-State: next=12 blockers=none — the budget STOP raised at step 9 is RESOLVED (REQUEST.md Amendment 2: ceiling raised to 2100 source insertions on the operator's word). All later [COMMIT] steps check against 2100.
+State: next=15 blockers=none — the budget STOP raised at step 9 is RESOLVED (REQUEST.md Amendment 2: ceiling raised to 2100 source insertions on the operator's word). All later [COMMIT] steps check against 2100.
 
 Re-read REQUEST.md (incl. Amendment 1) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -393,7 +393,7 @@ The predicted transition, so no drift.
     $ python -m pytest tests/test_stop_report.py tests/test_results_command.py         tests/test_cli_readiness.py tests/test_v6_only_cli_admission.py -q
     136 passed in 46.60s
 
-- [ ] 12. (S18, R18) Write
+- [x] 12. (S18, R18) Write
       `experiments/2026-09-03-change-stop-report/proof/run_regression.py`:
       takes a path per case, runs the report, asserts the required box
       ranking with the evidence quoted, and records for each root the
@@ -402,7 +402,7 @@ The predicted transition, so no drift.
       done-when: the file exists and `--help` (or a dry run with no
       paths) exits 0 listing all eight cases of SPEC.md S18.
 
-- [ ] 13. (S18, R18, contradiction (b)) Extract the six roots read-only
+- [x] 13. (S18, R18, contradiction (b)) Extract the six roots read-only
       to the scratchpad and run the regression; commit the outputs
       under `proof/`.
       done-when: `python experiments/2026-09-03-change-stop-report/proof/run_regression.py`
@@ -410,7 +410,7 @@ The predicted transition, so no drift.
       1, P-A2 epoch 2, Phase-1 M3-C0) and the
       qualification-vindication case; paste the summary line.
 
-- [ ] 14. (S20, R19) [COMMIT] The mutation proof: implement the NAIVE
+- [x] 14. (S20, R19) [COMMIT] The mutation proof: implement the NAIVE
       classifier (read the run-config YAML and blame the seat named in
       the stop message) inside the proof script only — OUTSIDE the
       module it judges — run it over the same cases, capture
@@ -419,6 +419,53 @@ The predicted transition, so no drift.
       done-when: `proof/naive_red.txt` shows ≥ 2 misfiled cases
       (P-A1 and P-A2 epoch 1 at minimum) and `proof/shipped_green.txt`
       shows 0 misfiled; paste both counts.
+
+## PROOF FOR STEPS 12-14 (2026-09-03)
+
+Eight cases, three branches, roots re-materialised read-only by
+`git archive` rather than copied into this branch.
+
+**SHIPPED — `python run_regression.py --extract`:**
+
+    PASS  P-A1 — seat exhaustion behind a transport wall      ENVIRONMENT
+    PASS  P-A1 — qualification vindication (R9)               ENVIRONMENT
+    PASS  P-A2 epoch 1 — one seat x form refused, knob named  MODEL
+    PASS  P-A2 epoch 2 — account usage cap                    ENVIRONMENT
+    PASS  P-A2 epoch 3 — harness box, earned                  HARNESS
+    PASS  Phase-1 429 root — self-inflicted concurrency cap   ENVIRONMENT
+    PASS  Phase-1 M3-C0 — 429 in qualification, no run root   ENVIRONMENT
+    PASS  Phase-1 M1-H0 — a CLEAN terminal attributes no box  (none)
+
+    SHIPPED: 8/8 correct, 0 misfiled
+
+**NAIVE — `python run_regression.py --naive` (the classifier this
+tranche replaces: read the settings, blame the seat the stop names,
+never open the qualification record):**
+
+    FAIL  P-A1                first box 'MODEL', expected 'ENVIRONMENT'
+    FAIL  P-A1 vindication    first box 'MODEL', expected 'ENVIRONMENT'
+    FAIL  P-A2 epoch 1        first box None,    expected 'MODEL'
+    FAIL  P-A2 epoch 2        first box None,    expected 'ENVIRONMENT'
+    PASS  P-A2 epoch 3        first box: HARNESS
+    FAIL  Phase-1 429 root    first box 'HARNESS', expected 'ENVIRONMENT'
+    FAIL  Phase-1 M3-C0       first box None,    expected 'ENVIRONMENT'
+    FAIL  Phase-1 M1-H0       first box 'HARNESS', expected None
+
+    NAIVE: 1/8 correct, 7 misfiled
+
+RED and GREEN on the same eight cases, from the same records. The naive
+reader's first two failures are the operator's own incident reproduced
+exactly: it blames the MODEL on P-A1, the root whose `conjecturer#0`
+passed `conjecturer.turn.v6` 20/20 first-pass with 0 repairs. Its three
+`None` results are the three failures that produced no readable run
+status at all — the rootless class R18 named and the naive reader cannot
+see. Its one PASS is a coincidence, not competence: it reaches HARNESS
+on P-A2 epoch 3 by the rule "the stop message is not about a seat",
+which is the same rule that misfiles the phase-1 429 root.
+
+The naive classifier lives inside `proof/run_regression.py`, OUTSIDE the
+module it judges — CLAUDE.md's treadle lesson: keep whatever judges the
+work outside the cone it judges.
 
 - [ ] 15. (S21, R21, M12) [COMMIT] Run both wheel smokes and record
       whether any pin moved. SPEC.md M12 predicts none moves because the
