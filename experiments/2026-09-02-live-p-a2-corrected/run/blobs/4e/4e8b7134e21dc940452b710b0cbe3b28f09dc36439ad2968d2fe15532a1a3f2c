@@ -1,0 +1,8 @@
+TARGET CONTENT:
+05a4074c795b depends on SRC_002's dynamical phase-transition mechanism: it adopts the claim that majority-3 descent is an unbiased walk in cut density with metastable fixed point rho*≈0.08, and uses that to derive a finite-n correction to the consensus probability. Refuted if the leading-order drift in cut density toward 0 is nonzero, or if simulations show final cut density →0 with n instead of stabilizing at rho*>0.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

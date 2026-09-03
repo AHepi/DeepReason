@@ -1,0 +1,28 @@
+{
+  "edits": [
+    {
+      "content": "05a4074c795b abstracts SRC_001 and SRC_004 by replacing their concrete obstruction structures (matching cuts, induced stable cycles, local minima) with a general random-landscape model: consensus probability is the probability that a random start avoids all reachable local minima, each weighted by the product of escape rates from its basin. Refuted if the escape-rate-weighted product of reachable local minima is not the sufficient statistic for consensus probability, or if static obstructions and dynamical traps require separate non-combinable parameters."
+    },
+    {
+      "content": "05a4074c795b abstracts SRC_001 and SRC_004 by replacing their concrete obstruction structures (matching cuts, induced stable cycles, local minima) with a general random-landscape model: consensus probability is the probability that a random start reaches the global basin before entering any local minimum, each weighted by basin measure. Refuted if the basin-weighted count of reachable local minima is not the sufficient statistic for consensus probability, or if static obstructions and dynamical traps require separate non-combinable parameters."
+    },
+    {
+      "content": "05a4074c795b abstracts SRC_001 and SRC_004 by replacing their concrete obstruction structures (matching cuts, induced stable cycles, local minima) with a general random-landscape model: consensus probability is the probability that a random start avoids all reachable local minima, each weighted by basin measure. Refuted if the basin-weighted count of reachable local minima is not the sufficient statistic for consensus probability, or if spatial obstruction geometry and temporal trapping durations require separate non-combinable parameters."
+    },
+    {
+      "content": "05a4074c795b integrates SRC_001 and SRC_004 by replacing their concrete obstruction structures (matching cuts, induced stable cycles, local minima) with a metastable-state network model: consensus probability is the probability that a random start avoids all absorbing metastable states, each weighted by committor probability. Refuted if the committor-weighted count of absorbing metastable states is not the sufficient statistic for consensus probability, or if static obstructions and dynamical traps require separate non-combinable parameters."
+    },
+    {
+      "content": "05a4074c795b abstracts SRC_001 and SRC_004 by replacing their concrete obstruction structures (matching cuts, induced stable cycles, local minima) with a general random-landscape model: consensus probability is the probability that a random start's trajectory has zero overlap with any reachable local minimum basin, each weighted by basin measure. Refuted if the basin-weighted count of reachable local minima is not the sufficient statistic for consensus probability, or if static obstructions and dynamical traps require separate non-combinable parameters."
+    },
+    {
+      "content": "05a4074c795b abstracts SRC_001 and SRC_004 by replacing their concrete obstruction structures (matching cuts, induced stable cycles, local minima) with a general random-landscape model: consensus probability is the probability that a random start avoids all reachable local minima, each weighted by the inverse barrier height to that minimum. Refuted if the inverse-barrier-weighted count of reachable local minima is not the sufficient statistic for consensus probability, or if static obstructions and dynamical traps require separate non-combinable parameters."
+    },
+    {
+      "content": "05a4074c795b abstracts SRC_001 and SRC_004 by replacing their concrete obstruction structures (matching cuts, induced stable cycles, local minima) with a general random-landscape model: consensus probability is the probability that a random start avoids all reachable local minima, each weighted by basin measure. Refuted if the basin-weighted count of reachable local minima is not the sufficient statistic for consensus probability, or if structural deadlocks and rate-dependent trapping require separate non-combinable parameters."
+    },
+    {
+      "content": "05a4074c795b abstracts SRC_001 and SRC_004 by replacing their concrete obstruction structures (matching cuts, induced stable cycles, local minima) with a general random-landscape model: consensus probability is the probability that a random start avoids all reachable local minima, each weighted by exit time from its basin. Refuted if the exit-time-weighted count of reachable local minima is not the sufficient statistic for consensus probability, or if static obstructions and dynamical traps require separate non-combinable parameters."
+    }
+  ]
+}

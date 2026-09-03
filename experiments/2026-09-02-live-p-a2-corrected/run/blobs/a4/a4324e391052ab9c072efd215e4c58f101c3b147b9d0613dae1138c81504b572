@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "05a4074c795b depends on SRC_002's dynamical phase-transition mechanism: it adopts the claim that majority-3 descent is an unbiased walk in cut density with metastable fixed point rho*≈0.08, and uses that to derive a finite-n correction to the consensus probability. Refuted if the leading-order drift in cut density toward 0 is nonzero, or if simulations show final cut density →0 with n instead of stabilizing at rho*>0.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_002"]
+    },
+    {
+      "content": "05a4074c795b contradicts SRC_003's non-concentration law: it asserts the consensus indicator self-averages, so annealed and quenched probabilities coincide and the limit is a single constant, not a non-degenerate random variable e^{-X}. Refuted if the quenched consensus probability remains asymptotically non-degenerate across graph draws, or if basin-weighted Poisson intensities do not concentrate.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_003"]
+    },
+    {
+      "content": "05a4074c795b abstracts SRC_001 and SRC_004 by replacing their concrete obstruction structures (matching cuts, induced stable cycles, local minima) with a general random-landscape model: consensus probability is the probability that a random start avoids all reachable local minima, each weighted by basin measure. Refuted if the basin-weighted count of reachable local minima is not the sufficient statistic for consensus probability, or if static obstructions and dynamical traps require separate non-combinable parameters.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_001", "SRC_004"]
+    },
+    {
+      "content": "05a4074c795b shares mechanism with SRC_005: both treat finite induced stable cycles as the only obstructions, but 05a4074c795b adds a cutoff showing cycles longer than girth O(log n) have negligible basin, sharpening the Poisson count. Refuted if long induced cycles or non-cycle single-edge cuts carry non-vanishing basin mass, or if the expected number of stable cycles diverges with n.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_005"]
+    },
+    {
+      "content": "05a4074c795b integrates SRC_002's metastable cut-density OU process with SRC_003's quenched randomness: the annealed consensus probability is E[e^{-X(rho*)}], where X is the basin-weighted count of escapes from the metastable plateau, and rho* varies across graph draws. Refuted if the quenched consensus probability is not determined by the graph's rho* and escape count, or if the annealed probability does not lie strictly between 0 and 1.",
+      "typicality": 0.2,
+      "neighbours": ["SRC_002", "SRC_003"]
+    },
+    {
+      "content": "05a4074c795b reduces SRC_004's basin asymmetry to SRC_002's unbiased walk: the large basins are not static obstructions but the metastable plateau around rho*, so the probability of locking before consensus is exp(-Theta(sqrt n)) not 1-exp(-Theta(n)). Refuted if the basin measure of static local minima is comparable to the plateau measure, or if the descent reaches consensus with probability bounded away from 0.",
+      "typicality": 0.1,
+      "neighbours": ["SRC_002", "SRC_004"]
+    }
+  ]
+}
