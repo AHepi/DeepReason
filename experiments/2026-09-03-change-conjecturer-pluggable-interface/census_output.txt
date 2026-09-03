@@ -1,0 +1,152 @@
+CENSUS_CONJECTURER_FAILURES_V1
+roots scanned (carry workflow-provider-attempt-v1): 59
+roots carrying conjecturer-contract attempts:       59
+provider attempts, all roles:                       3308
+provider attempts on a conjecturer contract:        1342
+
+-- by contract (workflow-provider-attempt-v1.contract_id) --
+  conjecturer.turn.v6                    925   completion tokens: min 0, median 1420, max 32768
+  conjecturer.atomic-candidate.v1        413   completion tokens: min 23, median 675, max 23678
+  conjecturer.turn.v7                      4   completion tokens: min 437, median 645, max 677
+
+-- by endpoint (workflow-provider-attempt-v1.route_lease.endpoint_id) --
+  ollama-glm-5.2                         435
+  provider-profile-a3e4b48c4e5354407606d9ca   294
+  provider-profile-2b0b8d5e80f8ceaf2bdb626e   228
+  provider-profile-e800ce9c13e48f6e37338bea    81
+  provider-profile-bc6ec47224efdcf3236d6f37    78
+  ollama-deepseek-v4-flash-0731           74
+  ollama-deepseek-v4-pro-0813             37
+  provider-profile-1acf7f07b4435443938c2ed1    34
+  provider-profile-680afd1bda375c557204cc99    31
+  provider-profile-f1868494ebfc59c794599dd2    25
+  provider-profile-3cb92ff4986f4786fc8ad2f6    11
+  provider-profile-fe58eaf720daea7cd9f7c344    10
+  conjecturer-live-v7                      4
+
+-- terminal outcome (workflow-work-terminal-v1.status/reason_code) --
+  conjecturer.atomic-candidate.v1 @ ollama-deepseek-v4-flash-0731
+          8  completed/atomic_conjecture_output_admitted
+          6  rejected/atomic_conjecture_repair_step_rejected
+          5  rejected/atomic_conjecture_repair_requested
+          2  schema_exhausted/atomic_conjecture_schema_exhausted
+          1  schema_exhausted/atomic_conjecture_repair_unrepairable
+  conjecturer.atomic-candidate.v1 @ ollama-deepseek-v4-pro-0813
+          6  completed/atomic_conjecture_output_admitted
+  conjecturer.atomic-candidate.v1 @ ollama-glm-5.2
+        123  completed/atomic_conjecture_output_admitted
+          5  rejected/atomic_conjecture_repair_requested
+          5  rejected/atomic_conjecture_repair_step_rejected
+          3  schema_exhausted/atomic_conjecture_schema_exhausted
+          1  (no work terminal for this attempt)
+  conjecturer.atomic-candidate.v1 @ provider-profile-2b0b8d5e80f8ceaf2bdb626e
+         72  completed/atomic_conjecture_output_admitted
+          1  schema_exhausted/atomic_conjecture_repair_unrepairable
+          1  rejected/atomic_conjecture_repair_requested
+  conjecturer.atomic-candidate.v1 @ provider-profile-680afd1bda375c557204cc99
+         12  completed/atomic_conjecture_output_admitted
+  conjecturer.atomic-candidate.v1 @ provider-profile-a3e4b48c4e5354407606d9ca
+         84  completed/atomic_conjecture_output_admitted
+  conjecturer.atomic-candidate.v1 @ provider-profile-bc6ec47224efdcf3236d6f37
+         40  completed/atomic_conjecture_output_admitted
+  conjecturer.atomic-candidate.v1 @ provider-profile-e800ce9c13e48f6e37338bea
+         31  completed/atomic_conjecture_output_admitted
+          1  rejected/atomic_conjecture_repair_requested
+  conjecturer.atomic-candidate.v1 @ provider-profile-f1868494ebfc59c794599dd2
+          6  completed/atomic_conjecture_output_admitted
+  conjecturer.turn.v6 @ ollama-deepseek-v4-flash-0731
+         41  completed/semantic_admission_complete
+          4  rejected/conjecture_repair_requested
+          3  schema_exhausted/conjecture_repair_unrepairable
+          3  rejected/conjecture_repair_step_rejected
+          1  schema_exhausted/conjecture_schema_exhausted
+  conjecturer.turn.v6 @ ollama-deepseek-v4-pro-0813
+         26  completed/semantic_admission_complete
+          3  rejected/conjecture_repair_step_rejected
+          1  rejected/conjecture_repair_requested
+          1  schema_exhausted/conjecture_schema_exhausted
+  conjecturer.turn.v6 @ ollama-glm-5.2
+        157  completed/semantic_admission_complete
+         42  (no work terminal for this attempt)
+         38  rejected/conjecture_repair_step_rejected
+         36  rejected/conjecture_repair_requested
+         24  schema_exhausted/conjecture_schema_exhausted
+          1  transport_failed/provider_transport_failure
+  conjecturer.turn.v6 @ provider-profile-1acf7f07b4435443938c2ed1
+         30  completed/semantic_admission_complete
+          4  rejected/conjecture_repair_requested
+  conjecturer.turn.v6 @ provider-profile-2b0b8d5e80f8ceaf2bdb626e
+         52  rejected/conjecture_repair_step_rejected
+         37  rejected/conjecture_repair_requested
+         36  completed/semantic_admission_complete
+          9  schema_exhausted/conjecture_schema_exhausted
+          9  completed/semantic_admission_partial
+          7  rejected/research_semantic_rejected
+          4  schema_exhausted/conjecture_repair_unrepairable
+  conjecturer.turn.v6 @ provider-profile-3cb92ff4986f4786fc8ad2f6
+          5  completed/semantic_admission_partial
+          3  rejected/conjecture_repair_requested
+          2  completed/semantic_admission_complete
+          1  rejected/conjecture_repair_step_rejected
+  conjecturer.turn.v6 @ provider-profile-680afd1bda375c557204cc99
+          7  completed/semantic_admission_complete
+          6  rejected/conjecture_repair_step_rejected
+          3  rejected/conjecture_repair_requested
+          2  schema_exhausted/conjecture_schema_exhausted
+          1  rejected/simulation_semantic_rejected
+  conjecturer.turn.v6 @ provider-profile-a3e4b48c4e5354407606d9ca
+        101  completed/semantic_admission_complete
+         58  rejected/conjecture_repair_step_rejected
+         33  rejected/conjecture_repair_requested
+         14  schema_exhausted/conjecture_schema_exhausted
+          4  completed/semantic_admission_partial
+  conjecturer.turn.v6 @ provider-profile-bc6ec47224efdcf3236d6f37
+         18  rejected/conjecture_repair_step_rejected
+          9  rejected/conjecture_repair_requested
+          5  schema_exhausted/conjecture_schema_exhausted
+          3  completed/semantic_admission_complete
+          2  schema_exhausted/conjecture_repair_unrepairable
+          1  rejected/simulation_semantic_rejected
+  conjecturer.turn.v6 @ provider-profile-e800ce9c13e48f6e37338bea
+         19  rejected/conjecture_repair_step_rejected
+         16  completed/semantic_admission_complete
+          7  rejected/conjecture_repair_requested
+          6  schema_exhausted/conjecture_schema_exhausted
+          1  completed/semantic_admission_partial
+  conjecturer.turn.v6 @ provider-profile-f1868494ebfc59c794599dd2
+          5  completed/semantic_admission_complete
+          5  completed/semantic_admission_partial
+          4  rejected/conjecture_repair_step_rejected
+          4  rejected/conjecture_repair_requested
+          1  schema_exhausted/conjecture_schema_exhausted
+  conjecturer.turn.v6 @ provider-profile-fe58eaf720daea7cd9f7c344
+          5  completed/semantic_admission_partial
+          3  rejected/conjecture_repair_requested
+          1  completed/semantic_admission_complete
+          1  rejected/conjecture_repair_step_rejected
+  conjecturer.turn.v7 @ conjecturer-live-v7
+          4  completed/semantic_admission_complete
+
+-- semantic admission (workflow-semantic-admission-v1.outcome) --
+  conjecturer.atomic-candidate.v1
+        382  admitted
+         15  rejected (+2 diagnostics)
+          8  rejected (+1 diagnostics)
+          5  schema_exhausted (+2 diagnostics)
+          2  schema_exhausted (+1 diagnostics)
+  conjecturer.turn.v6
+        425  admitted
+        247  rejected (+2 diagnostics)
+        109  rejected (+1 diagnostics)
+         48  schema_exhausted (+2 diagnostics)
+         27  admitted (+1 diagnostics)
+         24  schema_exhausted (+1 diagnostics)
+          2  admitted (+2 diagnostics)
+  conjecturer.turn.v7
+          4  admitted
+
+-- pack plans in the record (workflow-context-pack-plan-v1.plan_kind) --
+    1905  dossier
+    1406  combined
+     177  scratch
+      45  citable

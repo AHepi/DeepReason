@@ -1,0 +1,144 @@
+SHOW_FORMS_V1
+
+===== ATOMIC — one candidate per call =====
+  contract_id conjecturer.atomic-candidate.v1 | wire AtomicConjectureCandidateWireV1 | canonical ConjectureTurnV6
+  schema 2144 bytes | 3 nested definitions
+  candidate?: CompactConjectureCandidate
+      content: string
+      typicality: number
+      neighbours?: array
+      evidence_refs?: array  maxItems=8
+          block: string  pattern=^[0-9a-f]{12,64}$
+          quote?: string
+  abstention?: ConjectureAbstentionV1
+      search_signal?: string  enum=['need_context', 'stuck', 'capability_mismatch']
+      note?: string
+  minimal example carried in the prompt: {}
+
+===== TURN — optional capabilities OFF =====
+  contract_id conjecturer.turn.v6 | wire ConjecturerTurnWireV6 | canonical ConjectureTurnV6
+  schema 12429 bytes | 14 nested definitions
+  candidates?: array  maxItems=256
+      content: string
+      typicality: number
+      neighbours?: array
+      evidence_refs?: array  maxItems=8
+          block: string  pattern=^[0-9a-f]{12,64}$
+          quote?: string
+  context_request?: ContextRequestWireV2
+      query?: string
+      requested_visible_aliases?: array  maxItems=64
+      purpose?: string
+  abstention?: ConjectureAbstentionV1
+      search_signal?: string  enum=['need_context', 'stuck', 'capability_mismatch']
+      note?: string
+  minimal example carried in the prompt: {"abstention":{"search_signal":"stuck"}}
+
+===== TURN — LIVE shape (scratch + simulation + research + discharge ON) =====
+  contract_id conjecturer.turn.v6 | wire ConjecturerTurnWireV6 | canonical ConjectureTurnV6
+  schema 15214 bytes | 15 nested definitions
+  candidates?: array  maxItems=256
+      content: string
+      typicality: number
+      neighbours?: array
+      evidence_refs?: array  maxItems=8
+          block: string  pattern=^[0-9a-f]{12,64}$
+          quote?: string
+      discharges?: array  maxItems=32
+          handle: string
+          kind: string  enum=['revised', 'rebutted', 'departure_declared']
+          note?: string
+          where?: string
+  context_request?: ContextRequestWireV2
+      query?: string
+      requested_visible_aliases?: array  maxItems=64
+      desired_retrieval_channels?: array  maxItems=16
+      purpose?: string
+  abstention?: ConjectureAbstentionV1
+      search_signal?: string  enum=['need_context', 'stuck', 'capability_mismatch']
+      note?: string
+  simulation_proposals?: array  maxItems=2
+      request_identifier: string
+      hypothesis: string
+      rival_predictions: array  maxItems=32
+      discriminating_purpose: string
+      declared_assumptions?: array  maxItems=64
+      input_aliases?: array  maxItems=64
+      parameter_definitions?: array  maxItems=256
+          name: string
+          values_json: string
+      requested_seed_set?: array  maxItems=256
+      simulation_mode: string  enum=['declarative_numeric_v1', 'sandboxed_python_v1']
+      model_source: string
+      requested_observables: array  maxItems=128
+      interpretation_conditions: array  maxItems=64
+  scratch_proposal?: ScratchProposalV1
+      new_blocks?: array  maxItems=3
+          local_key: string  pattern=^NEW_[0-9]{3,}$
+          body: ScratchBlockDraftBodyV1
+              content: string
+              why_keep_this?: string
+              unfinished?: string
+              possible_next_move?: string
+              experiment_refs?: array  maxItems=4
+              bears_on_refs?: array  maxItems=4
+      revisions?: array  maxItems=2
+          target_alias: string  pattern=^SCR_[0-9]{3,}$
+          body: ScratchBlockDraftBodyV1
+              content: string
+              why_keep_this?: string
+              unfinished?: string
+              possible_next_move?: string
+              experiment_refs?: array  maxItems=4
+              bears_on_refs?: array  maxItems=4
+      links?: array  maxItems=3
+          from_ref: string  pattern=^(?:SCR|NEW)_[0-9]{3,}$
+          to_ref: string  pattern=^(?:SCR|NEW)_[0-9]{3,}$
+          relation_hint: string
+          because?: string
+          holds_when?: string
+          weakens_when?: string
+          direction?: string  enum=['directed', 'symmetric']
+      unresolved_questions?: array  maxItems=3
+          question: string
+          related_refs?: array  maxItems=64
+      cluster_suggestions?: array  maxItems=2
+          seed_focus: string
+          member_refs: array  maxItems=64
+  research_proposals?: array  maxItems=1
+      request_identifier: string
+      purpose: string
+      urls: array  maxItems=3
+  minimal example carried in the prompt: {"abstention":{"search_signal":"stuck"}}
+
+===== WHAT 'COMPILES' MEANS =====
+  TURN reply   : {"candidates": [{"content": "Heat loss scales with surface area, not volume.", "typicality": 0.25, "neighbours": ["SRC_001"]}]}
+  ATOMIC reply : {"candidate": {"content": "Heat loss scales with surface area, not volume.", "typicality": 0.25, "neighbours": ["SRC_001"]}}
+
+  both compile to ConjectureTurnV6:
+    {
+      "abstention": null,
+      "candidates": [
+        {
+          "content": "Heat loss scales with surface area, not volume.",
+          "evidence_refs": [],
+          "refs": [
+            {
+              "role": "dependence",
+              "target": "artifact-a"
+            }
+          ],
+          "typicality": 0.25
+        }
+      ],
+      "context_request": null,
+      "scratch_proposal": null,
+      "simulation_proposals": []
+    }
+
+  byte-identical canonical artifact from both forms: True
+  note the alias resolution: the wire said neighbours=['SRC_001'],
+  a call-local handle; the canonical artifact carries
+  refs=[{role: dependence, target: artifact-a}], the real identifier.
+  That substitution IS the compile step, and it is the half this
+  tranche's SPEC (S8.3, assumption A2) forbids from ever varying.
