@@ -64,6 +64,7 @@ EXPECTED_MCP_TOOLS = {
 }
 REQUIRED_MODULES = {
     "deepreason/__main__.py",
+    "deepreason/criticism_source.py",
     "deepreason/provider_profile.py",
     "deepreason/qualification.py",
     "deepreason/preparation.py",
@@ -269,6 +270,7 @@ def main(argv: list[str] | None = None) -> int:
         import_check = """
 import importlib.util, json, sys
 import deepreason
+import deepreason.criticism_source
 import deepreason.mcp_registration
 import deepreason.preparation
 import deepreason.provider_profile
