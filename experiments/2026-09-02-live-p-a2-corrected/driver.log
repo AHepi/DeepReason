@@ -797,3 +797,5 @@ NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SPLIT_BUDGET_SEAT_PROTOCOL='off' is not 
 PREFLIGHT OK: 62 checks, 0 failures
 [2026-09-03T01:50:38Z] PREFLIGHT OK rc=0
 [2026-09-03T01:50:38Z] === QUALIFY: production-contract doctor (concurrency=2), full battery expected ===
+[2026-09-03T02:33:05Z] QUALIFY OK rc=0
+[2026-09-03T02:33:05Z] === REASON: run --budget cycles=24 --token-budget 3000000 ===

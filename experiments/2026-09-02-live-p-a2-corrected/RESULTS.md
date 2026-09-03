@@ -258,3 +258,55 @@ P-A1's could not, both soaks are green, and two defects are measured (F4's
 per-contract reasoning sensitivity, F1's recurring stub gap). What it has NOT
 produced is the live before/after against P-A1 that it was built for. Nothing
 in the tranche needs rebuilding to get it — only the cap to clear.
+
+---
+
+## 2026-09-03 · Segment 6 — P6 HOLDS: the per-seat remedy is confirmed, and reasoning finally starts
+
+**What the record shows.** With the account cap cleared (confirmed by a single
+probe call returning HTTP 200 before anything was spent), epoch 3 launched
+01:49:41Z, cleared **62 preflight checks with 0 failures**, and its
+qualification returned **`QUALIFY OK rc=0`** at 02:33:05Z — 42 minutes.
+
+    qualified            true
+    qualified_pair_count 23 of 23
+    eventual_valid_count 460 of 460
+    first_pass_valid     456
+    repair_count         4
+    scope_violations     0
+
+**The pair that blocked epoch 1:**
+
+| | eventual_valid | first_pass | repairs |
+|---|---|---|---|
+| epoch 1 (`low`) | **5 / 20** | 4 | 31 |
+| epoch 3 (default effort) | **20 / 20** | **20** | **0** |
+
+**P6 HOLDS.** Twenty of twenty, every one valid on the FIRST pass with zero
+repair turns spent — not a marginal clearance of the 19-threshold but the
+contract satisfied outright.
+
+**Why this is the load-bearing confirmation of F4.** The isolation probe
+(60 calls, six cells) had already separated the reasoning knob from the cap
+and the split protocol, but it exercised one pair in isolation through the
+doctor's per-case entry point. This is the full battery, on the real launch
+shape, at production scale: had the attribution been wrong — had the cap, the
+split protocol, or something unmeasured been the cause — this is precisely
+where it would have surfaced, because everything except that one seat's
+reasoning knob is byte-identical to the epoch that failed.
+
+It also retires a live hypothesis honestly: epoch 2's refusal genuinely was
+the usage cap and nothing else. Had the amended shape carried a second latent
+defect, 23/23 would not have happened on the first attempt after the cap
+lifted.
+
+**Reasoning has started** — `state=running phase=workload cycle=0`. For the
+first time in this tranche a reasoning cycle is running, so P1–P5 are live
+questions rather than unscored ones. They remain unscored until the typed
+terminal; nothing below is claimed in advance.
+
+**Residue.** P6 says the seat can FILL its contract in a battery of
+representative probes. It does not say the grounding bridge will produce a
+useful repair on this run's actual artifacts — that needs the run to reach a
+terminal with a composed output, which is what the ladder's bridge step at
+terminal exists to test.
