@@ -747,3 +747,14 @@ so you do not re-trust them.
   side). First bound implementation: the build of
   `experiments/2026-09-03-change-conjecturer-pluggable-interface/`,
   amended the same day to cover the critic seat's brief and form.
+  PURPOSE, stated by the operator minutes later (verbatim): "this
+  should work to slowly separate the authority layer to make it truely
+  modular." Reading: the shell is the generation side of a seam whose
+  other side is the AUTHORITY layer — admission, rank, immunity,
+  refutation, warrants, status — and the programme's direction is to
+  pull that layer behind its own declared interface, step by step, so
+  that neither side knows the other's internals. The brief sections
+  still computed inside `rules/conj.py` (the tranche's A6) and the
+  criticism-source socket that refuses to carry score or rank are the
+  two ends of that seam as it stands today; each later step moves one
+  more thing across it, never by editing a consumer.
