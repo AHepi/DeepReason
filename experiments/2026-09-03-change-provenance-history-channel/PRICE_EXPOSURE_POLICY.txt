@@ -1,0 +1,8 @@
+EXPOSURE_POLICY_CONFIG_PRICE_V1
+  proposed Config fields          : PROVENANCE_CHANNELS_ENABLED, SEAT_EXPOSURE_POLICY
+  schema versions checked         : [1, 2, 3, 4, 5, 6]
+  E1 versions moved WITHOUT pop   : [1, 2, 3, 4, 5, 6]
+  E2 versions moved WITH pop      : none
+  E3 subject digest (unpatched)   : 02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713
+
+  VERDICT: ROAD B+ IS DIGEST-PRESERVING: the documented pop recipe keeps source_config_hash byte-identical at every schema version
