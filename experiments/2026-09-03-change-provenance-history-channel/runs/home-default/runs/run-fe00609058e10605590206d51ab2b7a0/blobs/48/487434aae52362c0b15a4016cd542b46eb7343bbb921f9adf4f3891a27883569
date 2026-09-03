@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim that Popper's preference 'smuggles induction back in' relies on a conflation of 'probability' with 'practical preference.' Popper explicitly distinguishes between the logical status of a theory (which cannot be made more probable by tests) and the methodological rule for action (preferring the most severely tested theory because it is the most informative and has withstood the strongest attempts at falsification). The target asserts this preference assumes the 'uniformity of nature' (an inductive principle), but fails to address Popper's specific counter-argument: that preferring the best-tested theory is a rational decision based on the current state of criticism, not a prediction of future success derived from past regularity. By ignoring Popper's distinction between 'corroboration' (a report of past performance) and 'induction' (a logic of future prediction), the target attacks a straw man rather than engaging with the actual defense Popper offers against this exact critique in works like 'The Logic of Scientific Discovery' and 'Conjectures and Refutations'. Therefore, the argument that the preference is 'inconsistent with his methodology' is unsubstantiated because the methodology itself accounts for this preference without invoking induction.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between the logical impossibility of increasing probability via induction and the methodological rationality of preferring theories that have survived severe tests.",
+      "premise_evidence": null,
+      "successor_question": "How does Popper specifically define 'critical preference' to ensure it does not rely on the assumption that the future will resemble the past?"
+    }
+  ]
+}
