@@ -246,12 +246,13 @@ expensive one, because by then the root is committed.
   `workflow/conjecture_recovery.py` and `invariants.py`, owned elsewhere.
 - **The scheduler passes two different school values on one line of work.**
   `_plan_conjecture_context(problem, school_id)` receives the raw allocated id
-  while `conj` receives `school_id if school_id in school_leases else None`.
+  — forwarded unchanged by `_dispatch_conjecture_context_plan`, its only caller
+  — while `conj` receives `school_id if school_id in school_leases else None`.
   They agree today only because `resolve_school_role_lease` either returns a
   lease or raises, so every assigned school is a key in `school_leases`. Make it
   return `None` for some mode and the plan carries a school the turn does not,
   and `conj` refuses the plan it was just handed.
-`check: grep -q "context_plan = self._plan_conjecture_context(problem, school_id)" src/deepreason/scheduler/scheduler.py && grep -q "school_id if school_id in school_leases else None" src/deepreason/scheduler/scheduler.py && grep -q "def _plan_conjecture_context(self, problem, school_id: str | None):" src/deepreason/scheduler/scheduler.py`
+`check: python -c 'import inspect; from deepreason.scheduler.scheduler import Scheduler as S; o = inspect.getsource(S._dispatch_conjecture_context_plan); assert "return self._plan_conjecture_context(problem, school_id)" in o, "the owner no longer forwards the raw allocated id"; assert "self._dispatch_conjecture_context_plan(\n                        problem, school_id\n                    )" in inspect.getsource(S.step)' && grep -q "school_id if school_id in school_leases else None" src/deepreason/scheduler/scheduler.py && grep -q "def _plan_conjecture_context(self, problem, school_id: str | None):" src/deepreason/scheduler/scheduler.py`
 - **Two of the five school comparisons have no test behind them, and the v6 one
   is not the exception it was written up as.** Deleting
   `or context_receipt.school_id != work.school_id` from

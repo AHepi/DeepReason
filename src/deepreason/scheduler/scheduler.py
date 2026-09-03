@@ -1358,6 +1358,23 @@ class Scheduler:
             "crossover": schools.crossover_exemplars(self.harness, school_id),
         }
 
+    def _dispatch_conjecture_context_plan(self, problem, school_id: str | None):
+        """The context plan Conj is dispatched with — the ONLY source of one.
+
+        v6 plans its conjecture context inside Conj, after durable work
+        preparation, and raises on a pre-made plan. The first dispatch and the
+        ConjectureContextStale retry must therefore agree, and when they were
+        two separate expressions they drifted: the retry re-planned without the
+        v6 rule, so any v6 run whose context went stale died with
+        `v6 conjecture context must be planned after durable work preparation`
+        instead of retrying (episode-config arm A, 2026-09-02, cycle 0,
+        71,323 tokens in). Both sites call this; there is nowhere left to drift.
+        """
+
+        if self.run_manifest is not None and self.run_manifest.schema_version == 6:
+            return None
+        return self._plan_conjecture_context(problem, school_id)
+
     def _plan_conjecture_context(self, problem, school_id: str | None):
         manifest = self.run_manifest
         if manifest is None or manifest.schema_version not in {4, 5, 6}:
@@ -2385,11 +2402,11 @@ class Scheduler:
                     )
                     from deepreason.scratch.conjecture import ConjectureContextStale
 
-                    context_plan = self._plan_conjecture_context(problem, school_id)
-                    if self.run_manifest is not None and self.run_manifest.schema_version == 6:
-                        # Controller-v3 persists preparation before its pure
-                        # planners; Conj owns that ordered transaction.
-                        context_plan = None
+                    # Controller-v3 persists preparation before its pure
+                    # planners; Conj owns that ordered transaction.
+                    context_plan = self._dispatch_conjecture_context_plan(
+                        problem, school_id
+                    )
                     shadow_ticket = self._begin_workflow_shadow(
                         problem,
                         school_id if school_id in school_leases else None,
@@ -2448,7 +2465,9 @@ class Scheduler:
                         except ConjectureContextStale:
                             if context_attempt:
                                 raise
-                            context_plan = self._plan_conjecture_context(problem, school_id)
+                            context_plan = self._dispatch_conjecture_context_plan(
+                                problem, school_id
+                            )
                             shadow_ticket = self._begin_workflow_shadow(
                                 problem,
                                 (school_id if school_id in school_leases else None),
