@@ -16,8 +16,10 @@ stop and say so). Preflight: `which deepreason || pip install -e .
 jsonschema --break-system-packages -q`. THEN read CLAUDE.md from this
 checkout (all Operator design laws bind — especially "Formalism is an
 option, never an obligation" and "Tokens are cheap; the agent is
-not"), read `.claude/skills/dr-explain-to-operator/SKILL.md` directly
-with the Read tool and follow it for every message, and read
+not"), read `.claude/skills/pinker-write-for-readers/SKILL.md` directly
+with the Read tool and follow it for every message (together with the
+CLAUDE.md Conventions entry on the operator's explanation style, which
+says what the skill replaced and what still binds), and read
 `.claude/skills/README.md`.
 
 You are the executor for the **two-tier hard question set** — a

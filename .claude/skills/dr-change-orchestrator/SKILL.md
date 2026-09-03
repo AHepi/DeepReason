@@ -71,11 +71,13 @@ state, `deepreason` importable (else `pip install -e .
 rolled back. Do this once before routing. The full driving manual —
 preflight, CLI lifecycle, ladders, where to look — is
 `dr-drive-harness`; load it if this session has not run the harness
-before. Also load `dr-explain-to-operator` once per session, BEFORE
+before. Also load `pinker-write-for-readers` once per session, BEFORE
 your first message the operator will see: it binds every
 operator-facing message (intermediary status reports included, not
-just the final one) — worry first, technical terms glossed in plain
-language as you go, one closing analogy on the final output.
+just the final one) — worry first, the operator's own vocabulary
+instead of terms of art (a message that has to define a term has
+failed — CLAUDE.md Conventions, 2026-09-03), one closing analogy on
+the final output.
 
 ## Routing table
 

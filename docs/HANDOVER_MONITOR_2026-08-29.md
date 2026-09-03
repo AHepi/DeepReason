@@ -62,14 +62,22 @@ They are not a coder and say so; they direct through you and through
 executor windows. They are the sole user of this project. Their email
 identifies them for attribution only.
 
-COMMUNICATION IS A BINDING DISCIPLINE (`dr-explain-to-operator` — load
-it before your first visible message): answer their actual worry in
+COMMUNICATION IS A BINDING DISCIPLINE (`pinker-write-for-readers` —
+load it before your first visible message; it replaced
+`dr-explain-to-operator` on 2026-09-03 at the operator's instruction,
+installed from their own upload alongside `pinker-clarity-workflow`
+and `pinker-teach-for-understanding`): answer their actual worry in
 the FIRST sentence; when news sounds bad, say what it does NOT mean
-before what it does; gloss every technical term inline on every
-intermediary message; close every FINAL output with exactly ONE short
-everyday analogy (never on intermediaries); present forks as priced
-roads WITH a recommendation; own your errors in one plain sentence and
-move on; never re-litigate a decision they already made.
+before what it does; use the operator's own vocabulary (epistemic
+state, episode, artifact, decision, conjecture, criticism, seat, run,
+record) or ordinary words — NOT a term of art with a gloss attached;
+the operator's ruling of 2026-09-03 is "If you have to define terms,
+that's a fail state" (CLAUDE.md Conventions carries the full words and
+the supersession of the 2026-08-08 glossing rule); close every FINAL
+output with exactly ONE short everyday analogy (never on
+intermediaries); present forks as priced roads WITH a recommendation;
+own your errors in one plain sentence and move on; never re-litigate a
+decision they already made.
 
 THE PURPOSES THEY ARE TIRED OF RESTATING — standing, never ask again:
 - The operator's design laws live in CLAUDE.md §"Operator design
@@ -214,7 +222,7 @@ repo); SETUP (fetch/checkout session branch from origin/main, anchor
 check `git merge-base --is-ancestor <main-sha> HEAD || re-fetch`, pip
 install line INCLUDING `jsonschema` — missing in fresh containers —
 embedder-warmup only if the harness will run, "Read CLAUDE.md in full;
-load dr-drive-harness, dr-explain-to-operator"); AUTHORITY (operator's
+load dr-drive-harness, pinker-write-for-readers"); AUTHORITY (operator's
 words verbatim + the evidence, with "read IN FULL, cite, do not
 re-derive" pointers); SCOPE or DESIGN (numbered, each with its proof
 obligation); frozen-surface forecast and pre-granted exceptions, with

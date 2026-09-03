@@ -43,8 +43,9 @@ preflight — branch resync, `deepreason` importable, credential check)
 and §4 (map preflight — `docs/map/INDEX.md` → `INV-frozen-surfaces.md`
 → seam document → record the resolved ids in GOAL.md). Load it if this
 session has not run the harness before. Also load
-`dr-explain-to-operator` once per session, BEFORE your first message
-the operator will see.
+`pinker-write-for-readers` once per session, BEFORE your first message
+the operator will see (it replaced `dr-explain-to-operator` on
+2026-09-03; CLAUDE.md Conventions state what carries over).
 
 The map is maintained by the phases that change code, in the same
 commit — see `dr-execute-step` and `dr-implement-fix`. Nothing else may

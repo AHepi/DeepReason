@@ -56,11 +56,14 @@ Cutting across both families, three skills:
   expectation: it routes each question to the cheapest authority
   (record → framework → operator) and kills false forks before they
   spend operator attention.
-- `dr-explain-to-operator` — communication discipline. Load it once per
-  session, before the first message the operator will see: worry-first,
-  technical terms glossed in-line on every intermediary message, and
-  exactly one closing analogy on every final output (detailed further
-  in Conventions below).
+- `pinker-write-for-readers` — communication discipline. Load it once
+  per session, before the first message the operator will see. It
+  REPLACED `dr-explain-to-operator` on 2026-09-03 at the operator's
+  instruction (installed from their own upload; see Conventions below
+  for what survives of the earlier rules). Its two companions,
+  `pinker-clarity-workflow` (the router) and
+  `pinker-teach-for-understanding` (for explaining a mechanism so the
+  operator can use it, not just hear it), were installed with it.
 
 ## Third lane: treadle
 
@@ -318,24 +321,41 @@ before treating a green soak as full coverage
   the reasoning that produced a finding once the finding is stated. Say
   corrections plainly and move on.
 - The operator's explanation style (recorded 2026-08-06; extended
-  2026-08-08 at their request, and BINDING for every operator-facing
-  message, intermediary and final alike — load
-  `dr-explain-to-operator` at session start): answer their actual
-  worry in the FIRST sentence, before any mechanism. When a finding
-  sounds like bad news, state what it does NOT mean for their intent
-  before what it does. Present forks as real-world roads priced in
-  their terms (what they can do, when, at what cost), with a
-  recommendation. Own your part plainly when a prior instruction or
-  workflow rule caused the confusion. In every INTERMEDIARY message
-  (status updates, phase reports, STOP questions, failure notices),
-  gloss every technical term conservatively in-line — the precise term
-  plus, in plain words, what it is and what it does; when unsure
-  whether a term needs glossing, gloss it. Close every FINAL output
+  2026-08-08 at their request; the skill carrying it REPLACED
+  2026-09-03 — load `pinker-write-for-readers` at session start, and
+  `pinker-teach-for-understanding` when a message must make a
+  mechanism usable): answer their actual worry in the FIRST sentence,
+  before any mechanism. When a finding sounds like bad news, state
+  what it does NOT mean for their intent before what it does. Present
+  forks as real-world roads priced in their terms (what they can do,
+  when, at what cost), with a recommendation. Own your part plainly
+  when a prior instruction or workflow rule caused the confusion.
+  Internal artifacts keep full precision. Close every FINAL output
   with ONE short, accurate everyday analogy ("the fire marshal
   certifies the room as arranged, or each chair individually") —
-  required on the last message, never on intermediaries. Internal
-  artifacts keep full precision; anything shown to the operator
-  carries its plain-language meaning alongside.
+  required on the last message, never on intermediaries; the new
+  skill's analogy test applies (map the parts, say where it breaks,
+  never let it stand in for the mechanism).
+  SUPERSEDED within this rule, 2026-09-03: the 2026-08-08 instruction
+  to "gloss every technical term conservatively in-line" on every
+  intermediary message. The operator's words the same day: "No
+  technical jargon like seed, traunch, bike shedding, dogfooding,
+  cold start, dependency injection, idempotent, heisenbug or anything
+  of the sort. If you need to rely on a concept, translate into terms
+  I know like epistemic state, episode, artifact, decision. Human
+  words. If you have to define terms, that's a fail state." Then, on
+  uploading the Pinker skills: "Can you install this to replace the
+  other one about communicating with me." Operational reading: do not
+  gloss a term of art — do not use it. Say the thing in the
+  operator's own vocabulary (epistemic state, episode, artifact,
+  decision, conjecture, criticism, seat, run, record) or in ordinary
+  words; a message that has to stop and define something has already
+  failed. Requirement numbers, commit hashes and error codes stay
+  out of operator-facing prose unless the operator has to go to
+  them; when one must appear, its meaning for the work is stated in
+  the same sentence. The old skill text remains in git history
+  (`git log --diff-filter=D -- .claude/skills/dr-explain-to-operator`)
+  for anyone reconstructing why earlier messages read as they do.
 - Commits: one defect or one change per commit; message states what,
   why, the live evidence (run ids), and "Full gate: N passed, 0
   failed" when code changed. Push with retry (2s/4s/8s/16s backoff).
