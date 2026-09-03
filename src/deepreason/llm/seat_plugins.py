@@ -51,6 +51,10 @@ class _Plugin:
     # returned from `render`, so a layout's composition can be read -- and
     # checked -- without running a render.
     section_id = ""
+    # Which reference-menu handle kinds this section's content makes citable.
+    # Declared statically so a layout can be CHECKED without a render, and so
+    # the registry rather than the plugin decides what menu accompanies it.
+    declared_handle_kinds: tuple[str, ...] = ()
     parameters_model: type[BaseModel] = NoParams
 
     def render(
@@ -248,6 +252,7 @@ class CitableEvidenceParams(BaseModel):
 class _CitableEvidence(_Plugin):
     plugin_id = "dr.evidence.citable"
     section_id = "citable-evidence-blocks"
+    declared_handle_kinds = ("citable_block",)
     parameters_model = CitableEvidenceParams
 
     def render(self, request, params):
@@ -261,7 +266,7 @@ class _CitableEvidence(_Plugin):
         return SectionRenderV1(
             section_id=self.section_id,
             text=context,
-            declared_handle_kinds=("citable_block",),
+            declared_handle_kinds=self.declared_handle_kinds,
         )
 
 

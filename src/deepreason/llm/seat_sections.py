@@ -383,6 +383,44 @@ _LAYOUT_REGISTRY: dict[str, SeatPackLayoutV1] = {}
 _DEFAULT_LAYOUT_FOR_SEAT: dict[str, str] = {}
 
 
+# A plugin is EVIDENCE-FAMILY if it renders admitted evidence -- by naming
+# itself so, or by declaring the handle kinds that make evidence citable.
+EVIDENCE_FAMILY_PREFIX = "dr.evidence."
+
+
+def _refuse_undisclosed_evidence(layout: SeatPackLayoutV1) -> None:
+    """An evidence-family section must be one whose ABSENCE is disclosed.
+
+    A dropped section leaves no header, so a pack whose evidence the budget cut
+    looks exactly like a run with no admitted evidence in it -- and a seat that
+    cannot tell those apart stops citing. `DISCLOSED_ON_DROP` is what forces
+    the `context-withheld` notice instead, and a layout that put an evidence
+    plugin outside that set would re-open the silent path by configuration.
+    Refused here rather than at render, so the operator learns at load.
+    """
+
+    from deepreason.llm.packs import DISCLOSED_ON_DROP
+
+    for entry in layout.entries:
+        try:
+            plugin = resolve_section_plugin(entry.plugin_id, entry.plugin_version)
+        except SeatSectionError:
+            # Resolution failures are that function's to report, with its own
+            # code; this check does not want to mask one.
+            continue
+        evidence = entry.plugin_id.startswith(EVIDENCE_FAMILY_PREFIX) or bool(
+            getattr(plugin, "declared_handle_kinds", ())
+        )
+        section_id = getattr(plugin, "section_id", "")
+        if evidence and section_id not in DISCLOSED_ON_DROP:
+            raise SeatSectionError(
+                "SEAT_PACK_LAYOUT_EVIDENCE_NOT_DISCLOSED",
+                f"{entry.plugin_id!r} renders evidence as section "
+                f"{section_id!r}, which is not in DISCLOSED_ON_DROP; a "
+                "budget cut would remove it with no signal",
+            )
+
+
 def register_seat_pack_layout(
     layout: SeatPackLayoutV1, *, default_for_seat: str | None = None
 ) -> SeatPackLayoutV1:
@@ -390,6 +428,7 @@ def register_seat_pack_layout(
     for the reason `register_layout_policy` refuses it: an id names ONE
     composition, or two runs citing it do not mean the same thing."""
 
+    _refuse_undisclosed_evidence(layout)
     existing = _LAYOUT_REGISTRY.get(layout.layout_id)
     if existing is not None and existing != layout:
         raise SeatSectionError(

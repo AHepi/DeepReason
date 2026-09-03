@@ -1,6 +1,6 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=23 blockers=DIFF BUDGET EXCEEDED at the step-22 boundary (1545 of 1500 src/ insertions) — a STOP under dr-change-orchestrator §3; options priced below Phase 4, recommendation is road A — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
+State: next=24 blockers=none — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
 verbatim: "Given what read from the other windows, the plugin one. Since all
 three other windows have completed." Build window open; branch
 `claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
@@ -543,7 +543,7 @@ print('ok')"` -> `ok`
       class was renamed to `_ProblemStatement` — someone else's invariant is
       not loosened to fit my naming.
 
-- [ ] 23. (S5, S6) [COMMIT] Wire `declared_handle_kinds` for BOTH seats: the
+- [x] 23. (S5, S6) [COMMIT] Wire `declared_handle_kinds` for BOTH seats: the
       REGISTRY, not the plugin, renders menus through `menu_renders_for` at
       priority 4; an evidence-family plugin outside `DISCLOSED_ON_DROP` is a
       typed refusal at layout construction (the critic's
@@ -552,6 +552,25 @@ print('ok')"` -> `ok`
       -> `0 failed`, including a case proving a free-text evidence plugin
       still yields a pack in which every bound `citable_block_ids` entry
       appears literally (`A1`)
+
+      DONE 2026-09-03.
+      ```
+      $ python -m pytest tests/test_seat_section_citation.py -q
+      ....                                                             [100%]
+      4 passed in 0.12s
+      ```
+      `declared_handle_kinds` became a STATIC class attribute, so a layout is
+      checkable without running a render. The A1 case registers an operator-
+      style free-text evidence plugin that mentions NO handle at all, swaps it
+      into a copy of the shipped conjecturer layout, and asserts all three
+      bound `citable_block_ids` still appear literally in the pack — because
+      the menu is rendered by the walk's caller, never by a plugin.
+      Structurally pinned too: `menu_renders_for` and `_menu_sections` appear
+      nowhere in `seat_plugins.py`, and `_menu_sections(reference_menus, 4)`
+      appears exactly twice in `packs.py`, once per seat.
+      The S6 refusal (`SEAT_PACK_LAYOUT_EVIDENCE_NOT_DISCLOSED`) fires at
+      REGISTRATION, with a positive anchor asserting both shipped layouts
+      actually satisfy it — otherwise the refusal would be vacuous.
 
 ---
 
@@ -615,7 +634,11 @@ one is chosen):
 | B — finish the BRIEF half only (steps 23-30, 37-41) and park the FORM half (31-36) as its own tranche | lands near 1900; the swap test (R20) still ships, because a shell can name the forms that already exist | the leniency normalisations N1-N5 and per-model form selection wait |
 | C — stop at step 22 and ship the two briefs as a walk, parking everything else | lands at 1545 | the shell registry, R20's swap test, and the whole form half wait |
 
-**Recommendation: A.** The ceiling was set at ~1500 in the amendment before
+**RESOLVED 2026-09-03: the operator chose road A** — raise the ceiling to
+~2400 `src/` insertions and finish §17 as planned. Step 46's ceiling is
+updated accordingly and nothing already built is discarded.
+
+**Recommendation was A.** The ceiling was set at ~1500 in the amendment before
 anyone had measured what extracting thirty sections costs, and the measurement
 says the extraction alone is 896 of it. B and C both leave `R20` — the
 operator's actual amendment, "the conjecturer seat could be used to replace the
@@ -801,8 +824,9 @@ print('ok')"` -> `ok`
       `"frozen_surface_verdict": "CLEAR"`. **Anything else is a STOP**:
       request the grant in a document before proceeding.
 
-- [ ] 46. (all) Diff budget check (SPEC §17.8, ~1500 lines of `src/`).
-      done-when: `python tools/diff_budget.py e91f4fcc3 --ceiling 1500
+- [ ] 46. (all) Diff budget check (SPEC §17.8, ~2400 lines of `src/` — raised
+      by the operator 2026-09-03 on the measured step-22 overrun).
+      done-when: `python tools/diff_budget.py e91f4fcc3 --ceiling 2400
       --paths 'src/*'` -> `"verdict": "WITHIN"`, or a stated,
       operator-visible overrun
 

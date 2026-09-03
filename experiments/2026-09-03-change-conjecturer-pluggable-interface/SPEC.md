@@ -719,6 +719,16 @@ the critic's thirteen seeded plugins, its layout, the shell registry and the
 seat-agnostic renames. `tools/diff_budget.py` is the instrument; exceeding it
 is a stop.
 
+**RAISED TO ~2400 by the operator, 2026-09-03**, on a measured overrun at the
+step-22 boundary: 1545 `src/` insertions against the 1500 ceiling, with the
+remaining steps estimated near 2250. The operator was shown the number, the
+reason (785 of those 1545 lines are the thirty sections MOVED out of
+`packs.py`, which is why that file also shows 549 deletions — net growth is
++996, and the instrument pays twice for a move) and three priced roads. They
+chose to raise the ceiling and finish, over parking the form half or stopping
+at the two briefs. The stop record, with the instrument's own output, is in
+`CHECKLIST.md` after Phase 4.
+
 **Frozen-surface forecast: still NO CONTACT.** Measured over the amended
 target list — `llm/packs.py`, `packs/ir.py`, `packs/allocate.py`,
 `llm/layout.py`, `llm/roles.py`, `llm/wire.py`, `rules/conj.py`,
