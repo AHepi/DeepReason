@@ -1,0 +1,94 @@
+## problem
+PROBLEM p-golden
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night?
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- k-lineage: program:lineage_ref
+- k-surface: predicate:names_a_surface
+
+## open-criticisms
+OPEN CRITICISMS (discharge every handle):
+- OC-1: no candidate has addressed wind speed.
+
+## capability-result-context
+RECORDED SIMULATION OBSERVATION (fresh work):
+This is the output of the named program under the named inputs and execution conditions. It is not a universal fact and does not automatically establish the requesting hypothesis.
+program: sky_view_factor(canyon_ratio=1.4) -> 0.41
+
+## mandatory-interface
+FOUNDATION (adjudicated groundwork this problem builds on — your candidate MUST implement it faithfully):
+--- foundation artifact aaf7a8cfb73afb79a21fa9d876823f4a7378b860b043a51b007b249384309642 ---
+FOUNDATION: the surviving stage-1 design — a two-layer surface energy balance with an explicit sky view factor term.
+REQUIRED: every candidate's "refs" MUST include {"target": "aaf7a8cfb73afb79a21fa9d876823f4a7378b860b043a51b007b249384309642", "role": "dependence"} for the foundation it builds on — candidates without this ref are refuted mechanically.
+
+## active-properties
+ACTIVE PROPERTIES (conjectured standards the run has validated — candidates violating them are refuted by execution):
+- every candidate names the surface it exchanges heat with.
+
+## citable-evidence-blocks
+CITABLE BLOCKS:
+- EV-001
+- EV-002
+- EV-003
+
+## frame-crisis
+FRAME CRISIS: two accepted artifacts disagree about whether advection is in scope.
+
+## frame-slice
+FRAME SLICE: the run is arguing inside a surface-energy-balance frame.
+
+## frozen-evidence-context
+FROZEN EVIDENCE (attached, digest-bound):
+- EV-001: hourly screen-level temperatures, 12 station pairs, one clear-sky August.
+
+## reference-menu-candidates-evidence-refs-block
+REFERENCE MENU -- /candidates/*/evidence_refs/*/block
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  [0] OMIT -- leave "evidence_refs" out of this candidate entirely. This is a legal, complete answer; prefer it to a guess.
+  [1] EV-001
+  [2] EV-002
+  [3] EV-003
+You may answer with the handle itself or with its [index].
+
+## school-stance
+SCHOOL STANCE (weight 0.62): prefer explanations grounded in surface energy balance over explanations grounded in emissions.
+
+## experimental-generation-context
+GENERATION CONTEXT (attention only; truth, admission, and verifier standards are unchanged):
+prior rounds converged on radiative terms; the convective side is unexplored.
+
+## scratch-advisory-context
+SCRATCH (advisory; nothing here is admitted evidence):
+- B1: the countryside cools faster because its sky view factor is close to one.
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural) — each entry is its CLAIM, distilled; request an alias through context_request to read that artifact whole:
+- aaf7a8cfb73afb79a21fa9d876823f4a7378b860b043a51b007b249384309642: FOUNDATION: the surviving stage-1 design — a two-layer surface energy balance with an explicit sky view factor term.
+- 3444759d51d764eb819887cf6061572822412a8e6ac260896add9452b4de1195: """every candidate names the surface it exchanges heat with.""" def check(candidate):     return 'surface' in candidate
+
+## crossover
+CROSSOVER (a divergent lineage from the most distant school — your school just reseeded on convergence; reconcile or bridge these, do NOT echo your own lineage):
+- 511433d9f35883271a8093c9b05241f36961fa7d48433d4f9e143736921e4810: ACCEPTED CANDIDATE 1: stored heat released from masonry after sunset keeps the urban boundary layer 1 degrees warmer.
+
+## complement-directive
+COMPLEMENT DIRECTIVE: produce the attempt these summaries make least likely — avoid the modal continuation of the neighbourhood.
+
+## diversity-specifications
+DIVERSITY SPECIFICATIONS (binding — candidate k MUST realize spec k):
+  spec 1: a mechanism operating at the street canyon scale
+  spec 2: a mechanism operating at the regional boundary layer scale
+  spec 3: a mechanism that would be falsified by a windy night
+
+## live-neighbourhood
+LIVE NEIGHBOURHOOD (accepted and still standing — shown whole because these are the ones to build on or beat):
+- 511433d9f35883271a8093c9b05241f36961fa7d48433d4f9e143736921e4810: ACCEPTED CANDIDATE 1: stored heat released from masonry after sunset keeps the urban boundary layer 1 degrees warmer.
+- 6571540f6a6f787d350851ffcbe69ae633070b5a268d2a8af53e570500d98a88: ACCEPTED CANDIDATE 2: stored heat released from masonry after sunset keeps the urban boundary layer 2 degrees warmer.
+
+## output-contract
+DIRECTIVE: return up to 3 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates. EVERY candidate must carry a `discharges` entry for EVERY handle listed under OPEN CRITICISMS above. A submission missing any of them is returned to you once with the open list, and then accepted with the gap recorded.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM p-golden
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night?

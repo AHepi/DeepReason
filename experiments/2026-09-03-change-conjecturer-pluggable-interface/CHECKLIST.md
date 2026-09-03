@@ -1,7 +1,10 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=1 blockers=AWAITING OPERATOR APPROVAL of SPEC.md — this window
-is DESIGN PHASE ONLY (`R12`) and executes NO step below.
+State: next=4 blockers=none — SPEC.md APPROVED by the operator 2026-09-03,
+verbatim: "Given what read from the other windows, the plugin one. Since all
+three other windows have completed." Build window open; branch
+`claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
+window's branch wherever step 42 names it).
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per `dr-execute-step` invocation. Never mark a step done without
@@ -26,7 +29,7 @@ in that step's own document before code:
 
 ## Phase 0 — preflight and the golden that everything is measured against
 
-- [ ] 1. (all) Session preflight per `dr-drive-harness` §1: resync the
+- [x] 1. (all) Session preflight per `dr-drive-harness` §1: resync the
       branch, `pip install -e . --break-system-packages -q`, then
       `python -m pip install pytest pytest-xdist jsonschema
       --break-system-packages -q` (the gate's own deps; `pyproject.toml`
@@ -34,7 +37,16 @@ in that step's own document before code:
       done-when: `python -c "import deepreason, xdist, jsonschema; print('ok')"`
       -> `ok`
 
-- [ ] 2. (S10.4) Capture the byte-identical-default GOLDEN from the BASE
+      DONE 2026-09-03. Base `7d7996302` (>= the required `7d7996302e`).
+      `pip install -e . --break-system-packages -q` and
+      `python -m pip install pytest pytest-xdist jsonschema
+      --break-system-packages -q` both returned clean.
+      ```
+      $ python -c "import deepreason, xdist, jsonschema; print('ok')"
+      ok
+      ```
+
+- [x] 2. (S10.4) Capture the byte-identical-default GOLDEN from the BASE
       COMMIT, before any refactor exists. Write
       `tests/fixtures/conj_pack_legacy_v0/` holding, for a fixed committed
       record and a fixed set of `render_conj_pack` arguments, the exact
@@ -46,12 +58,50 @@ in that step's own document before code:
       -> `2` or more, AND one fixture file contains the literal
       `CONTEXT WITHHELD FOR BUDGET`
 
-- [ ] 3. (S10.4) [COMMIT] Write `tests/test_conj_pack_legacy_golden.py`
+      DONE 2026-09-03. `git diff --stat 2d84a86cd..HEAD -- src/deepreason/llm/packs.py
+      src/deepreason/packs/ src/deepreason/llm/layout.py` is EMPTY, so the
+      golden captured from this window's base `7d7996302` is byte-identical to
+      the one the spec's base `2d84a86cd` would have produced.
+      Inputs live in `tests/conj_pack_golden_cases.py` as literals (artifact
+      ids are content-derived, so the state is reproducible on any machine).
+      FIVE cases, which between them reach all twenty section slots, the menu
+      section, the withheld notice and the restated question:
+      `minimal` (a bare first cycle), `maximal`, `withheld`, `legacy_layout`,
+      `superseded`.
+      ```
+      $ python -c "import pathlib; d=pathlib.Path('tests/fixtures/conj_pack_legacy_v0'); fs=sorted(d.glob('*.txt')); print(len(fs)); assert len(fs)>=2"
+      5
+      $ grep -l "CONTEXT WITHHELD FOR BUDGET" tests/fixtures/conj_pack_legacy_v0/*.txt
+      tests/fixtures/conj_pack_legacy_v0/withheld.txt
+      ```
+
+- [x] 3. (S10.4) [COMMIT] Write `tests/test_conj_pack_legacy_golden.py`
       asserting `render_conj_pack` reproduces each fixture byte-for-byte,
       and prove it can FAIL by running it against a one-character mutation
       of a fixture.
       done-when: `python -m pytest tests/test_conj_pack_legacy_golden.py -q`
       -> `0 failed`, AND the pasted RED run of the mutated fixture
+
+      DONE 2026-09-03. GREEN on the tree:
+      ```
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py -q
+      ........                                                          [100%]
+      8 passed in 0.28s
+      ```
+      RED against a ONE-CHARACTER mutation of `maximal.txt`
+      (`PROBLEM p-golden` -> `PROBLEM p-golded`), then restored:
+      ```
+      E           ## problem
+      E         - PROBLEM p-golded
+      E         + PROBLEM p-golden
+      FAILED tests/test_conj_pack_legacy_golden.py::
+        test_the_default_render_is_byte_identical_to_the_committed_golden[maximal]
+      1 failed, 7 passed in 0.31s
+      ```
+      Instruments at the commit boundary:
+      `DIFF_BUDGET_RESULT_V1 ... "areas": {"src/*": 0}, "verdict": "WITHIN"`;
+      `blast_radius.py --against 7d7996302` -> `frozen_surface_verdict: CLEAR`,
+      contacts `[]`, adjacent `[]`, no reachability drift.
 
 ## Phase 1 — the map, written before the code it describes
 

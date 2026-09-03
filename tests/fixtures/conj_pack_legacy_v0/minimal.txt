@@ -1,0 +1,15 @@
+## problem
+PROBLEM p-golden-bare
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night?
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- k-surface: predicate:names_a_surface
+
+## output-contract
+DIRECTIVE: return exactly 2 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM p-golden-bare
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night?
