@@ -264,6 +264,15 @@ def test_every_dropped_field_the_managed_path_can_set_round_trips():
         # field is now asserted to round-trip like the other 24 -- rather than
         # relaxing anything.
         "SUCCESSOR_QUESTION_DESTINATION": "elsewhere.v1-probe",
+        # The transport knobs (2026-09-03). Same reason as the two above, and
+        # the same shape of update: the tranche that added them found this test
+        # RED because its first design made TRANSPORT a nested policy MODEL,
+        # which cannot round trip at all -- `_strict_carried_value` refuses to
+        # coerce a notice's dict back into a model. Flattening to scalars is
+        # what makes the assertion below reachable, so these rows EXTEND
+        # coverage rather than accommodate a weakness.
+        "TRANSPORT_RETRY_POLICY": "identical-v0",
+        "TRANSPORT_STREAMING": "off",
     }
     carried = 0
     for field in dropped:
@@ -286,12 +295,13 @@ def test_every_dropped_field_the_managed_path_can_set_round_trips():
         manifest = _manifest(_profile(), config_updates={field: want})
         assert getattr(config_from_run_manifest(manifest), field) == want, field
         carried += 1
-    # 26 = the 27 unconditionally dropped fields minus host-owned
+    # 29 = the 30 unconditionally dropped fields minus host-owned
     # CHANNELS_DISABLED. Was 24 (of 25) until the successor channel's two
-    # switches landed under the 2026-08-30 frozen-surface-4 grant. The literal
-    # is kept beside the derived value on purpose: `len(dropped) - 1` alone
-    # would stay true if the drop set silently SHRANK.
-    assert carried == len(dropped) - 1 == 26
+    # switches landed under the 2026-08-30 frozen-surface-4 grant, then 26 (of
+    # 27), then 29 (of 30) with the transport policy's three knobs under the
+    # 2026-09-03 grant. The literal is kept beside the derived value on purpose:
+    # `len(dropped) - 1` alone would stay true if the drop set silently SHRANK.
+    assert carried == len(dropped) - 1 == 29
 
 
 def test_carriage_moves_no_qualification_subject_digest_it_did_not_already_move():

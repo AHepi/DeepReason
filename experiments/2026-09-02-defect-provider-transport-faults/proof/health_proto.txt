@@ -1,0 +1,10 @@
+== run
+  argumentative_critic#0       calls=12   attempts=12   faults=0   zero_byte=0   streak=0   last=None             fault_time=0.0min
+  conjecturer#0                calls=30   attempts=30   faults=0   zero_byte=0   streak=0   last=None             fault_time=0.0min
+  conjecturer#1                calls=17   attempts=35   faults=6   zero_byte=6   streak=6   last=zero_byte_close  fault_time=118.0min
+  defender#0                   calls=8    attempts=20   faults=4   zero_byte=4   streak=4   last=zero_byte_close  fault_time=78.3min
+  judge#0                      calls=2    attempts=2    faults=0   zero_byte=0   streak=0   last=None             fault_time=0.0min
+  judge#1                      calls=2    attempts=2    faults=0   zero_byte=0   streak=0   last=None             fault_time=0.0min
+== completed-epoch2-run-9e48a36b1dec91ee
+  argumentative_critic#0       calls=155  attempts=155  faults=0   zero_byte=0   streak=0   last=None             fault_time=0.0min
+  conjecturer#0                calls=125  attempts=287  faults=54  zero_byte=54  streak=54  last=connect_failure  fault_time=13.1min

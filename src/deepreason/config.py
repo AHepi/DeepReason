@@ -742,6 +742,20 @@ class Config(BaseModel):
     # Q7: emission saturates around 256-512 tokens, so spending more on it only
     # takes budget away from the leg that needs it.
     SPLIT_BUDGET_EXTRACTION_TOKENS: int = Field(default=512, gt=0)
+    # Provider transport retry and its surfacing. THREE SCALARS, not one nested
+    # policy model: a carriage notice serialises a model as a dict and
+    # `_strict_carried_value` refuses to coerce a dict back into a model, so a
+    # model-valued dropped field cannot round trip and breaks the run that sets
+    # it. Measured 2026-09-03: a non-streaming call whose generation exceeds
+    # ~300 s is closed by the far end having written no body
+    # (300.510/300.268/300.210/300.289 s across two model families); the same
+    # call with `stream: true` completes at 369.6 s and at 756.5 s.
+    TRANSPORT_RETRY_POLICY: str = "stream-the-retry-v1"
+    # "auto" streams ONLY the retry after such a close, so a call that never
+    # meets the wall sends the bytes it sends today and records what it records
+    # today.
+    TRANSPORT_STREAMING: Literal["auto", "on", "off"] = "auto"
+    TRANSPORT_DEAD_SEAT_STREAK: int = Field(default=3, ge=1)
     roles: dict[
         str,
         dict[str, Any] | list[dict[str, Any]] | None,

@@ -31,6 +31,27 @@ def _io_path(path: Path) -> Path:
 
 
 
+class ProviderSeatHealth(BaseModel):
+    """One seat's transport condition over the run so far.
+
+    `last_fault_kind` is the closed vocabulary in `llm/transport_policy.py`, not
+    free text: a monitor greps it. The counters are cumulative, so a row is
+    readable without the rows before it.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    endpoint_id: str = ""
+    model: str = ""
+    calls: int = Field(default=0, ge=0)
+    attempts: int = Field(default=0, ge=0)
+    faults: int = Field(default=0, ge=0)
+    zero_byte_returns: int = Field(default=0, ge=0)
+    last_fault_kind: str | None = None
+    max_zero_byte_streak: int = Field(default=0, ge=0)
+    fault_ms: int = Field(default=0, ge=0)
+
+
 class ProgressEvent(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -63,6 +84,11 @@ class ProgressEvent(BaseModel):
     # Optional with a default, so every progress line written before the field
     # existed still validates under this model's ``extra="forbid"``.
     terminal_lifecycle_refusal: str | None = Field(default=None, max_length=120)
+    # Per-seat provider condition, so a watcher tailing this file can see a dead
+    # provider. Defaults to None, NOT to {}: a default that is a legal value
+    # asserts every seat is healthy on rows that measured nothing, which is the
+    # `token_spend` incident (20 of 59 roots carry a false zero) one field over.
+    provider_health: dict[str, ProviderSeatHealth] | None = None
 
 
 def _atomic_json(path: Path, value: dict) -> None:

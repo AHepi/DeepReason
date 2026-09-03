@@ -1,0 +1,22 @@
+{
+  "cap": 49152,
+  "condition": "transport",
+  "elapsed_s": 1048.167,
+  "error": "transport failed after retries: null content (finish_reason='length')",
+  "fault_kind": "zero_byte_close",
+  "finish_reason": null,
+  "outcome": "EndpointError",
+  "policy": "stream-the-retry-v1",
+  "reasoning_chars": 0,
+  "streamed_attempts": 3,
+  "streaming_mode": "auto",
+  "transport_attempts": 4,
+  "transport_diagnostics": [
+    "RemoteDisconnected:Remote end closed connection without response",
+    "_TransientBody:null content (finish_reason='length')",
+    "_TransientBody:null content (finish_reason='length')",
+    "_TransientBody:null content (finish_reason='length')"
+  ],
+  "usage": null,
+  "zero_byte_returns": 1
+}

@@ -1,0 +1,14 @@
+A1 glm-5.3 cap=16384 stream=False elapsed=176.717s status=200 tokens=16384 exc=None
+A2 glm-5.3 cap=24576 stream=False elapsed=268.813s status=200 tokens=24576 exc=None
+A3 glm-5.3 cap=32768 stream=False elapsed=300.51s status=None tokens=None exc=RemoteDisconnected
+B1 glm-5.3 cap=16384 stream=True elapsed=174.898s status=200 tokens=None exc=None
+A4 glm-5.3 cap=49152 stream=False elapsed=300.268s status=None tokens=None exc=RemoteDisconnected
+B2 glm-5.3 cap=24576 stream=True elapsed=313.916s status=200 tokens=None exc=None
+B3 glm-5.3 cap=32768 stream=True elapsed=369.639s status=200 tokens=None exc=None
+C1 deepseek-v4-pro:0813 cap=49152 stream=False elapsed=229.056s status=200 tokens=27096 exc=None
+C2 deepseek-v4-pro:0813 cap=49152 stream=True elapsed=116.114s status=200 tokens=None exc=None
+D1 glm-5.3 cap=49152 stream=False elapsed=300.21s status=None tokens=None exc=RemoteDisconnected
+B4 glm-5.3 cap=49152 stream=True elapsed=756.511s status=200 tokens=None exc=None
+E1 deepseek-v4-pro:0813 cap=49152 stream=False elapsed=300.289s status=None tokens=None exc=RemoteDisconnected
+D2 glm-5.3 cap=49152 stream=True elapsed=516.091s status=200 tokens=None exc=None
+E2 deepseek-v4-pro:0813 cap=49152 stream=True elapsed=264.429s status=200 tokens=None exc=None

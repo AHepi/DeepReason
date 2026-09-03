@@ -1,0 +1,80 @@
+=== MUTATION 1: policy always retries identically (the pre-fix behaviour) ===
+FAILED tests/test_provider_transport_faults.py::test_a_zero_byte_wall_is_not_answered_with_an_identical_resend
+FAILED tests/test_provider_transport_faults.py::test_a_streamed_retry_succeeds_where_the_first_attempt_died
+FAILED tests/test_provider_transport_faults.py::test_a_streamed_retry_records_what_a_plain_success_would_have_recorded
+FAILED tests/test_provider_transport_faults.py::test_a_call_that_asked_for_logprobs_is_never_streamed
+FAILED tests/test_provider_transport_faults.py::test_the_total_wall_time_of_a_dead_seat_is_bounded
+5 failed, 11 passed in 11.45s
+
+=== MUTATION 2: the stream's terminal-chunk guard removed ===
+tests/test_provider_transport_faults.py:259: Failed
+=========================== short test summary info ============================
+FAILED tests/test_provider_transport_faults.py::test_a_stream_that_stops_early_is_a_failure_not_a_short_answer
+1 failed, 15 passed in 4.39s
+
+=== MUTATION 3: usage no longer requested on the streamed retry ===
+tests/test_provider_transport_faults.py:214: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_provider_transport_faults.py::test_a_streamed_retry_succeeds_where_the_first_attempt_died
+1 failed, 15 passed in 4.31s
+
+=== MUTATION 4: provider_health defaults to {} instead of a typed absence ===
+tests/test_provider_transport_faults.py:407: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_provider_transport_faults.py::test_a_progress_row_that_measured_nothing_says_so_rather_than_claiming_zero
+1 failed, 15 passed in 4.31s
+
+=== MUTATION 5: the results provider-health block removed ===
+................                                                         [100%]
+16 passed in 4.40s
+
+=== RESTORED ===
+................                                                         [100%]
+16 passed in 4.28s
+=== MUTATION 5 (re-run after tightening): the results heading renamed ===
+tests/test_provider_transport_faults.py:459: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_provider_transport_faults.py::test_results_renders_a_provider_health_heading
+1 failed, 15 passed in 4.33s
+
+=== MUTATION 6: the per-seat summary derivation always reports healthy ===
+................                                                         [100%]
+16 passed in 4.27s
+
+=== RESTORED ===
+................                                                         [100%]
+16 passed in 4.42s
+=== MUTATION 6 (re-run): the derivation stops counting faults ===
+tests/test_provider_transport_faults.py:503: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_provider_transport_faults.py::test_the_derivation_counts_a_real_committed_fault_rather_than_reporting_healthy
+1 failed, 16 passed in 6.33s
+
+=== MUTATION 7: the classifier calls every fault 'other' ===
+FAILED tests/test_provider_transport_faults.py::test_the_two_real_diagnostic_strings_classify_as_different_kinds
+FAILED tests/test_provider_transport_faults.py::test_the_total_wall_time_of_a_dead_seat_is_bounded
+FAILED tests/test_provider_transport_faults.py::test_the_endpoint_reports_zero_byte_faults_separately_from_other_faults
+FAILED tests/test_provider_transport_faults.py::test_the_derivation_counts_a_real_committed_fault_rather_than_reporting_healthy
+8 failed, 9 passed in 11.88s
+
+=== RESTORED ===
+.................                                                        [100%]
+17 passed in 4.73s
+=== MUTATION 8: the streak notice is never emitted ===
+=========================== short test summary info ============================
+FAILED tests/test_provider_transport_faults.py::test_a_dead_seat_streak_emits_a_typed_notice_once_and_does_not_stop_the_run
+1 failed, 18 passed in 5.59s
+
+=== MUTATION 9: the notice is emitted every time (not idempotent) ===
+=========================== short test summary info ============================
+FAILED tests/test_provider_transport_faults.py::test_a_dead_seat_streak_emits_a_typed_notice_once_and_does_not_stop_the_run
+1 failed, 18 passed in 5.39s
+
+=== MUTATION 10: the threshold is ignored (always discloses) ===
+=========================== short test summary info ============================
+FAILED tests/test_provider_transport_faults.py::test_a_healthy_run_emits_no_dead_seat_notice
+1 failed, 18 passed in 5.43s
+
+=== RESTORED ===
+...................                                                      [100%]
+19 passed in 5.34s

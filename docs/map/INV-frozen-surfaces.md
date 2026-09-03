@@ -228,6 +228,73 @@ assert not {'split_leg', 'split_max_tokens'} & set(A.model_fields)
 " && python -m pytest tests/test_split_leg_recording.py -q`
 `check: python -m pytest tests/test_split_leg_recording.py::test_an_attempt_from_a_committed_root_deserialises_with_no_legs -q`
 
+**Granted contact, 2026-09-03 — the transport retry policy's Config echo line.**
+The tranche instruction forecast this contact ("prefer a Config value or an
+endpoint-profile behaviour that leaves the manifest and route bytes untouched,
+and argue it in FIX.md") and the grant was requested at
+`experiments/2026-09-02-defect-provider-transport-faults/FIX.md` §4, before a
+line of the policy existed, with `tools/blast_radius.py`'s own
+`frozen_surface_verdict: CONTACT` and its single contact row pasted and
+disposed. The operator granted it the same day; the disposition is ledgered at
+that tranche's FIX.md.
+
+What moved: THREE `data.pop` statements at four spaces in
+`_versioned_source_config_data` — `TRANSPORT_RETRY_POLICY`,
+`TRANSPORT_STREAMING`, `TRANSPORT_DEAD_SEAT_STREAK` — unconditional, joining the
+twenty-odd knobs already there, with the comment block each of its neighbours
+carries. **Insertions only — 11 and 0.** No schema, no validator, no field, no
+digest input.
+
+The grant asked for ONE line and this is three; the widening is recorded here
+rather than absorbed. It is not a design choice: the first implementation used a
+single nested `TransportPolicy` model, and the P10 regression test
+(`test_every_dropped_field_the_managed_path_can_set_round_trips`) found that a
+model-valued dropped field cannot round trip AT ALL — a carriage notice
+serialises it as a dict, and `_strict_carried_value` refuses to coerce a dict
+back into a model, by design ("a record must not buy a run by coercion"). A run
+setting the knob would have compiled and then refused to rebuild. Three scalars
+are what the carriage machinery accepts, and what every other dropped knob
+already is. Prior grants of this same recipe covered two lines (the split-budget
+knobs) and three (the judge knobs) at once.
+
+The safety argument is the same one every knob above it carries, and it runs the
+OTHER way from the usual reading of this surface: the pop is what PREVENTS the
+change. Without it the new `Config.TRANSPORT_POLICY` field enters
+`engine_config_json`, moving `source_config_hash`, every manifest digest and
+every qualification subject digest — the `ENGAGED_CRITICISM_AUTHORITY` incident
+(`docs/ERRATA.md` E44) exactly. With it, nothing moves, and that is measured
+rather than asserted: `test_the_shipped_qualification_subject_digest_does_not_move`
+passes on the changed tree.
+
+Why the knob is on `Config` at all rather than a constant: the operator's
+modularity law (2026-08-26) — every behavior a run can vary is reachable as
+configuration, never by editing code — and the 2026-08-28 seat law, which
+requires every gate to be switchable per run. It is ONE nested field rather than
+four flat ones precisely because each field costs a line on this surface.
+
+Zero contact anywhere else, and `blast_radius`'s `frozen_adjacent_contacts` is
+EMPTY: `route_fingerprint` is not touched, no `Route` field moves, and
+`route_sha256` is byte-identical. The two `invariants.py` constraints the design
+obeys — the authorized-cap set and the `transport_profile` vocabulary — were
+reached by READING that surface, not by changing it.
+
+`check: python -c "
+from deepreason.config import Config
+from deepreason.run_manifest import _versioned_source_config_data, config_from_run_manifest
+KNOBS = ('TRANSPORT_RETRY_POLICY', 'TRANSPORT_STREAMING', 'TRANSPORT_DEAD_SEAT_STREAK')
+for version in (1, 2, 3, 4, 5, 6):
+    echoed = _versioned_source_config_data(Config(), version)
+    for knob in KNOBS:
+        assert knob not in echoed, (knob, version)
+# Dropped is only half of it: a knob the echo drops must still round trip
+# through its carriage notice, or setting it breaks the run that set it.
+import sys; sys.path.insert(0, '.')
+from tests.test_reusable_qualification import _manifest, _profile
+for field, want in zip(KNOBS, ('identical-v0', 'off', 7)):
+    manifest = _manifest(_profile(), config_updates={field: want})
+    assert getattr(config_from_run_manifest(manifest), field) == want, field
+" && python -m pytest tests/ -q -k test_the_shipped_qualification_subject_digest_does_not_move`
+
 **Granted contact, 2026-08-27 — the sandbox attribute boundary (the escape fix).**
 The operator granted this contact IN CHAT, conditionally, after being shown the
 verdict it unblocks: "can you fix please. Frozen surface changes are permitted
