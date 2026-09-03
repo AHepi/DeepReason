@@ -1,6 +1,6 @@
 # Checklist for: the stop report — the harness writes the first failure report
 
-State: next=21 blockers=none — Group A and Group B complete. The operational wheel smoke failure is parked (P2), not this tranche's. — the budget STOP raised at step 9 is RESOLVED (REQUEST.md Amendment 2: ceiling raised to 2100 source insertions on the operator's word). All later [COMMIT] steps check against 2100.
+State: next=23 blockers=none — Groups A and B complete; PARKED.md written and the frozen-surface gate re-run CLEAR. Step 23 (full gate) is running. — the budget STOP raised at step 9 is RESOLVED (REQUEST.md Amendment 2: ceiling raised to 2100 source insertions on the operator's word). All later [COMMIT] steps check against 2100.
 
 Re-read REQUEST.md (incl. Amendment 1) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -643,20 +643,56 @@ P-A1 qualification row that contradicted the window the operator caught.
 
 ## Shared close
 
-- [ ] 21. (S24, C3) Write `PARKED.md` with one paste-ready fenced prompt
+- [x] 21. (S24, C3) Write `PARKED.md` with one paste-ready fenced prompt
       per park: the six not-carried fields (surface 4, priced); the P2
       config-echo gap if it blocked section 1 (say so either way); and
       any defect found while building.
       done-when: `PARKED.md` exists and contains one fenced code block
       per park, each a complete standalone prompt.
 
-- [ ] 22. (M13, S1) Re-run the frozen-surface gate with the NEW files
+- [x] 22. (M13, S1) Re-run the frozen-surface gate with the NEW files
       present — SPEC.md M13 excluded them because the tool refuses a
       declared path that does not exist yet.
       done-when: `python tools/blast_radius.py --files <all targets incl.
       the new ones> --symbols <the new symbols>` →
       `"frozen_surface_verdict": "CLEAR"` with
       `frozen_surface_contacts: []`; paste the verdict verbatim.
+
+## PROOF FOR STEPS 21-22 (2026-09-03)
+
+**Step 21** — `PARKED.md` written with three entries, each carrying a
+complete paste-ready prompt where a prompt is the right remedy:
+
+  * **P1** the six engine-config fields the manifest does not carry —
+    frozen surface 4, DESIGN-AND-STOP prompt that prices three roads and
+    requires the grant be requested in SPEC.md before code, per the
+    documented recipe.
+  * **P2** the installed-wheel operational smoke failing at
+    `continuation_resume` — measured pre-existing at the tranche base,
+    envelope committed, framed as a fork the record can decide.
+  * **P3** the tranche instruction's own root inventory, written from
+    narrative rather than `git ls-tree`. Deliberately NO prompt: the
+    remedy would be an `authoring-skills` rule, and that skill's own E1
+    tripwire requires TWO recorded instances before a rule is written.
+    This is instance one, so it is recorded and left alone.
+
+**Step 22** — the frozen-surface gate re-run with every new file present,
+which is what SPEC.md M13 owed (it had to exclude files that did not yet
+exist, because the tool refuses a declared path that is absent):
+
+    frozen_surface_contacts: []
+    frozen_adjacent_contacts: []
+    frozen_surface_verdict: CLEAR
+      reach: stop_report           REACHABLE
+      reach: render_stop_report    REACHABLE
+      reach: resolve_report_source REACHABLE
+
+    "This change touches none of the five frozen surfaces. 3 test file(s)
+     and 7 map document(s) assert on the touched targets today."
+
+No `frozen_surface_contacts` entry absent from SPEC.md's forecast (both
+are empty), and no unpredicted `newly_dead`/`newly_live` reachability
+direction. No drift.
 
 - [ ] 23. (S22, R22) Full gate on an otherwise idle box (never
       concurrently with `docs_verify` — `dr-drive-harness` §5b).
