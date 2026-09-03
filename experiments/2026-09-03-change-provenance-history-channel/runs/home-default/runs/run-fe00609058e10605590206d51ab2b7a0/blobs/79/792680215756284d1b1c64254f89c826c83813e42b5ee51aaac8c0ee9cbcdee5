@@ -1,0 +1,82 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Abstraction. The isolated node (scientific preference) is an abstraction of the neighbourhood's evolutionary mechanism (natural selection), where 'corroboration' functions as the fitness landscape. Refuted If: The specific causal steps of biological mutation and reproduction can be shown to have no structural isomorphism with the logical steps of conjecture and refutation, rendering the 'fitness' metaphor a category error rather than a functional mapping.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_001", "SRC_002", "SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "The candidate does not claim evolution lacks normativity; it claims scientific preference is an abstracted form of that mechanism, preserving the normative element as 'error elimination' rather than 'survival'."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "The relation is defined as abstraction, not reduction, avoiding the requirement to show science lacks what evolution has; instead, it shows science inherits the structure without the biological substrate."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Explicitly addresses the retrospective/prospective gap by defining the relation as structural isomorphism (abstraction) rather than temporal equivalence."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "The relation is explicitly named 'Abstraction' and defined via structural isomorphism, not merely analogy."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "rebutted", "note": "The mechanism of abstraction is detailed: mapping biological fitness to corroboration severity, not skipping to the refutation condition."},
+        {"handle": "[SRC_013] against SRC_007", "kind": "revised", "note": "Defines the shared mechanism as 'selection under constraints' where the constraints differ (predation vs. falsification) but the selection logic is identical."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Contradiction. The isolated node's reliance on 'prospective preference' fundamentally contradicts the neighbourhood's 'retrospective fitness' mechanism. Refuted If: It can be demonstrated that scientific preference is actually entirely retrospective (based only on past tests) and that the feeling of prospective utility is a psychological illusion, thereby collapsing the contradiction into identity.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_010", "kind": "departure_declared", "note": "Departing from the assumption that the relation must be harmonious; this candidate posits a fundamental tension."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "The criticism assumes a reductionist frame; this candidate argues the endpoints are incompatible, making the lack of shared normative elements the core feature."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "rebutted", "note": "The candidate explicitly centers the 'normative gap' as the source of contradiction, directly addressing the criticism's concern."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "The relation is defined as logical contradiction between prospective and retrospective time-arrows, not an analogy."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "rebutted", "note": "The mechanism is the clash of temporal directions in selection, which is defined before the refutation condition."},
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "No shared mechanism is claimed; the relation is defined by the absence of a shared temporal mechanism."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Integration. The isolated node integrates the neighbourhood's descriptive mechanism (evolution) with a prescriptive rule (methodological falsificationism) to create a hybrid 'epistemic selection' process. Refuted If: The prescriptive rule can be shown to be fully reducible to the descriptive mechanism alone, making the 'integration' redundant and the added normative layer superfluous.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_004", "SRC_005", "SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_010", "kind": "revised", "note": "Clarifies that evolution provides the descriptive engine, while falsificationism provides the normative steering, correcting the mischaracterization of evolution's role."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "The candidate argues science *adds* a normative element to the causal mechanism, rather than lacking one."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Explicitly models the integration of retrospective fitness and prospective preference as distinct inputs to the hybrid process."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Defines integration as the functional coupling of two distinct systems (biological and methodological), not just an analogy."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Details the mechanism: biological selection generates variants, methodological rules select among them based on future risk."},
+        {"handle": "[SRC_013] against SRC_007", "kind": "revised", "note": "Specifies the causal steps: variation (biology/logic) -> selection (fitness/severity) -> retention (survival/corroboration)."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Shared Mechanism (Formal). Both nodes instantiate a 'Negative Feedback Loop' where stability is achieved only through the continuous generation and elimination of instability. Refuted If: The mathematical or logical structure of the feedback loop in biological ecosystems is proven to be topologically distinct from the feedback loop in scientific discourse (e.g., one converges, the other diverges).",
+      "typicality": 0.45,
+      "neighbours": ["SRC_002", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "Focuses on the formal structure of feedback, bypassing the normative/descriptive content debate entirely."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "The shared mechanism is cybernetic (feedback), not normative, sidestepping the claim about missing normative elements."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "rebutted", "note": "The mechanism is defined formally as negative feedback, rendering the retrospective/prospective distinction a surface feature, not a structural one."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "The link is a formal structural identity (negative feedback), not an analogy."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Explicitly defines the mechanism as 'error-correcting negative feedback' before stating the refutation condition."},
+        {"handle": "[SRC_013] against SRC_007", "kind": "revised", "note": "Details the causal steps of the feedback loop: perturbation, detection, correction, applicable to both domains."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Dependence. The validity of the isolated node's 'preference' concept is strictly dependent on the neighbourhood's 'evolutionary' reality; without a real evolutionary process generating robust theories, the methodological preference would be arbitrary. Refuted If: Scientific preference can be justified purely a priori or logically without any reference to an underlying evolutionary or causal process of theory generation.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_005", "SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "Does not claim evolution lacks normativity, but that scientific normativity depends on evolutionary success."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "The dependence is ontological (science needs evolution to work), not reductive (science is just evolution)."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Addresses the gap by stating the dependence is on the *outcome* of evolution (robustness), not its temporal direction."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Defines dependence as a precondition for validity, not an analogical link."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Explains the mechanism: evolutionary filtering creates the pool of candidates that methodological preference then selects."},
+        {"handle": "[SRC_013] against SRC_007", "kind": "revised", "note": "Identifies the shared mechanism as 'filtering', where evolution filters organisms and science filters ideas, with the latter depending on the former's efficacy."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Inheritance. The isolated node inherits the 'survival of the fittest' dynamic from the neighbourhood but mutates the definition of 'fitness' from 'reproductive success' to 'informational content'. Refuted If: The definition of 'fitness' in science (informational content) can be shown to be operationally identical to 'reproductive success' (citation count/funding), nullifying the claimed mutation and reducing the relation to simple identity.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_003", "SRC_004", "SRC_002"],
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "Acknowledges evolution has a normative element (survival) which science inherits and transforms, rather than lacking it."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "revised", "note": "Clarifies that science inherits the *mechanism* but modifies the *metric*, addressing the causal mechanism critique."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "rebutted", "note": "The inheritance model explicitly accounts for the shift from retrospective (biology) to prospective (science) metrics."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Defines inheritance as a lineage relationship with modification, distinct from mere analogy."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Details the mechanism of inheritance: transmission of the selection principle with a mutated fitness function."},
+        {"handle": "[SRC_013] against SRC_007", "kind": "revised", "note": "Specifies the causal steps: variation, selection based on new fitness metric (content), and retention."}
+      ]
+    }
+  ]
+}

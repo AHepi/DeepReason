@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's analogy fails because it conflates the descriptive mechanism of biological survival with the normative justification required for scientific preference. While natural selection explains why organisms survive retrospectively without implying future success, Popper's problem concerns whether scientists are *rationally justified* in preferring one theory over another for future action. By reducing this preference to a 'causal mechanism' or 'evolutionary adaptation,' the target sidesteps the core philosophical challenge: providing a non-inductive *reason* for the preference. If the preference is merely a causal trait like eye color, it offers no defense against the charge of smuggling in induction; it simply asserts that scientists act this way, not that they *should*. Thus, the target fails to make the preference defensible on Popper's own terms, which demand a logical (albeit non-probabilistic) account of rational choice, not just a sociological description of community behavior.",
+      "counterexample": null,
+      "premise": "Popper's framework requires a normative justification for preferring better-corroborated theories to avoid irrationalism, not merely a descriptive causal explanation of why scientists do so.",
+      "premise_evidence": null,
+      "successor_question": "If scientific preference is merely a causal trait analogous to biological fitness, how does Popper distinguish rational scientific action from arbitrary instinct without reintroducing a normative principle that looks suspiciously like induction?"
+    }
+  ]
+}

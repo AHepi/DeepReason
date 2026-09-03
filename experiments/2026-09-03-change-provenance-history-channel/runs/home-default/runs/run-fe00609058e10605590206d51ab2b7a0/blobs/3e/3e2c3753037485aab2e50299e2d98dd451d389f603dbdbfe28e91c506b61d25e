@@ -1,0 +1,82 @@
+{
+  "candidates": [
+    {
+      "content": "Kind: Shared Mechanism. The isolated node and the neighbourhood share the mechanism of 'error-elimination via selective retention,' where scientific corroboration and biological fitness both function as filters that remove non-viable variants without guaranteeing the truth or optimality of survivors. Refuted If: It is demonstrated that scientific preference requires a normative justification (e.g., rational obligation) that biological selection inherently lacks, making the causal parallel insufficient to explain the *validity* of preferring one theory over another.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_001", "SRC_002", "SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "The candidate does not claim evolution lacks normativity; it claims the *mechanism* of selection is shared. The refutation condition explicitly tests if a missing normative element breaks the analogy, addressing the criticism's core concern."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "The proposal defines the shared mechanism as 'selective retention' rather than asserting science lacks normativity. The 'Refuted If' clause directly engages the requirement to address the normative gap."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Revised to explicitly distinguish between retrospective fitness and prospective preference in the 'Refuted If' condition, acknowledging the temporal asymmetry criticized."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "The relation is defined structurally as 'selective retention' (a functional link), not merely by analogy. The mechanism describes how both systems process variants."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Added specific definition of the mechanism ('error-elimination via selective retention') before stating the refutation condition."},
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "The causal steps are defined as variation, testing/severe trial, and elimination of failures. This substantiates the shared mechanism beyond mere assertion."}
+      ]
+    },
+    {
+      "content": "Kind: Contradiction. The isolated node's reliance on 'strategic preference' contradicts the neighbourhood's evolutionary model if scientific rationality demands a prospective justification (why we *should* prefer) that natural selection's retrospective filtering (what *did* survive) cannot provide. Refuted If: One can demonstrate that the strategic choice to use past survival as a heuristic for future success is itself an evolved trait, thereby collapsing the distinction between prospective rationality and retrospective adaptation.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "This candidate posits a contradiction based on the normative gap, directly engaging the criticism that previous reductions failed to address it."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "The content explicitly frames the problem as a clash between prospective normative needs and retrospective causal mechanisms."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Clarified that the contradiction arises specifically from the inability of retrospective mechanisms to ground prospective norms, addressing the 'normative gap' critique."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "The relation is a logical contradiction derived from the definitions of the endpoints, not an analogy."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Explicitly defined the mechanism of 'retrospective filtering' vs 'prospective justification' to establish the grounds for contradiction."},
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "The causal steps of natural selection are contrasted with the logical requirements of rational preference to show incompatibility."}
+      ]
+    },
+    {
+      "content": "Kind: Abstraction. The concept of 'fitness' in the neighbourhood is an abstraction of 'corroboration' in the isolated node, where both represent a measure of resistance to elimination under stress, stripped of their specific domain contents (genes vs. propositions). Refuted If: It is shown that 'corroboration' entails a semantic or logical dimension (truth-likeness) that 'fitness' purely causal dimensions cannot abstract, rendering the abstraction lossy to the point of uselessness for epistemic goals.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_001", "SRC_004", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "The candidate treats the normative element as the potential 'lossy' part of the abstraction, directly addressing the criticism regarding mischaracterization."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "revised", "note": "Refined the 'Refuted If' to specifically test if the semantic/logical dimension of science prevents valid abstraction from biological causality."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "rebutted", "note": "Acknowledges the gap by defining the abstraction as stripping domain content, and sets the failure condition on whether essential normative content is lost."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Defines the structural link as 'resistance to elimination under stress,' which applies to both domains functionally."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Defined the abstraction mechanism clearly: mapping specific domain instances to a general property of 'survival under stress.'"},
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "Details the shared causal step of 'stress application' and 'failure removal' as the basis for the abstract concept."}
+      ]
+    },
+    {
+      "content": "Kind: Integration. The isolated node integrates with the neighbourhood by treating scientific methodology as a conscious, accelerated instantiation of the unconscious evolutionary algorithm found in biology, where scientists act as the 'environment' applying severe tests. Refuted If: The role of the scientist as a normative agent who designs tests based on theory (top-down) proves fundamentally different from the blind, bottom-up pressure of a natural environment, breaking the integration model.",
+      "typicality": 0.70,
+      "neighbours": ["SRC_002", "SRC_003", "SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "Addresses the normative element by framing the scientist's agency as the source of normativity within the integrated system."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "revised", "note": "Modified to explicitly contrast 'conscious design' vs 'blind pressure' in the refutation condition."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "rebutted", "note": "The integration hypothesis accepts the normative gap but proposes it is bridged by human agency, which the refutation condition challenges."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "revised", "note": "Defined the functional link as 'accelerated instantiation,' moving beyond simple analogy to a structural claim about process speed and intent."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "rebutted", "note": "Explains the mechanism: scientists simulate environmental pressure through deliberate test design."},
+        {"handle": "[SRC_013] against SRC_007", "kind": "revised", "note": "Specified the causal steps: hypothesis generation (mutation) followed by deliberate severe testing (selection pressure)."}
+      ]
+    },
+    {
+      "content": "Kind: Dependence. The validity of the isolated node's 'preference for corroborated theories' depends entirely on the neighbourhood's assertion that 'truth-likeness' correlates with 'survival of severe tests,' a correlation established by evolutionary success in biology but unproven in logic. Refuted If: It is demonstrated that biological survival correlates with reproductive success in a specific niche, not with any universal 'truth' or 'fitness' applicable to the abstract environment of scientific theories.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_001", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "The dependence is framed on the *correlation* between survival and quality, sidestepping the claim that evolution itself possesses normativity."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "revised", "note": "Clarified that the dependence is on the *transferability* of the survival-quality correlation from biology to science."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "rebutted", "note": "Directly addresses the normative gap by making the dependence conditional on the validity of the biological analogy for epistemic goals."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Defines the link as a logical dependence of the scientific rule on the empirical success of the biological model."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Explicitly states the mechanism of dependence: the assumption that 'survival implies quality' transfers across domains."},
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "Identifies the shared mechanism as 'correlation between survival and underlying quality,' questioning its universality."}
+      ]
+    },
+    {
+      "content": "Kind: Reduction. The phenomenon of 'scientific preference' reduces to 'evolutionary conditioning' of the research community, where what we call 'rational choice' is merely the behavioral output of a group selected for error-eliminating habits. Refuted If: Normative ethical or logical obligations in science (e.g., honesty, consistency) are shown to be binding even when they reduce reproductive or communal 'fitness,' proving they cannot be reduced to evolutionary mechanisms alone.",
+      "typicality": 0.30,
+      "neighbours": ["SRC_002", "SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_010", "kind": "revised", "note": "Sharpened the 'Refuted If' to target the specific failure mode: normative obligations that contradict evolutionary fitness."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "The reduction claim is bold and explicitly invites the counter-argument regarding normative elements that defy evolutionary logic."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Addressed the normative gap by positing that if normativity exists independent of fitness, the reduction fails."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Defines the reduction as 'behavioral output of selection,' a functional/structural claim rather than a loose analogy."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Defined the mechanism of reduction: rational choices are re-interpreted as selected behavioral traits."},
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "Outlines the causal chain: genetic/cultural selection -> habit formation -> perceived rational preference."}
+      ]
+    }
+  ]
+}
