@@ -253,15 +253,61 @@ assert _failure_code(refusal) != _failure_code(quota), 'the two conditions must 
   collapsed `low`/`medium` up to `high`, silently billing maximum-cost
   reasoning for the cheapest configured setting.
 `check: python -m pytest tests/test_providers.py::test_thinking_off_rule_knows_where_the_knob_is_real_and_what_off_means tests/test_review_fixes.py::test_deepseek_low_effort_stays_cheap -q`
-- **Retrying an identical wait after a read timeout fails identically.** Two
-  variator calls were dropped live after four 120s waits while ~110s
-  generations were succeeding at the same endpoint. `TIMEOUT_FACTORS = (1, 2)`
-  makes the retry wait twice as long and makes a second read timeout terminal,
-  bounding total wait at 3x rather than opening a ladder. Separately,
-  `IncompleteRead` is an `http.client.HTTPException`, not an `OSError`: it
-  escaped the retryable net and killed two runs at cycle 1, so the exception
-  tuple names it explicitly.
-`check: grep -q "^TIMEOUT_FACTORS = (1, 2)$" src/deepreason/llm/endpoints.py && grep -q "http.client.HTTPException" src/deepreason/llm/endpoints.py && python -m pytest tests/test_llm.py::test_second_read_timeout_is_terminal_and_bounded tests/test_llm.py::test_retry_covers_mid_stream_disconnects -q`
+- **Retrying an identical REQUEST fails identically, and the lesson was learned
+  for only one of the two branches.** First half, fixed 2026-08: two variator
+  calls were dropped live after four 120s waits while ~110s generations were
+  succeeding at the same endpoint. `TIMEOUT_FACTORS = (1, 2)` makes the retry
+  wait twice as long and makes a second read timeout terminal, bounding total
+  wait at 3x rather than opening a ladder. Separately, `IncompleteRead` is an
+  `http.client.HTTPException`, not an `OSError`: it escaped the retryable net
+  and killed two runs at cycle 1, so the exception tuple names it explicitly.
+
+  Second half, and the reason this entry is rewritten rather than added to:
+  that reasoning was encoded in `_timed_out()` for `TimeoutError` ONLY, so a
+  `RemoteDisconnected` — the strictly worse case, where zero bytes arrived and
+  the wall is on the far side — kept the unbounded identical ladder. Ten of
+  glm-5.3's 25 calls in run `4565139800f5ca02` therefore cost ~1215 s each and
+  returned nothing: four byte-identical resends against a wall, 3.27 h of a
+  4.94 h run. Run `9e48a36b1dec91ee` is the same shape with a different kind,
+  54 faults on one seat.
+
+  Fixed 2026-09-03 by MEASURING the wall rather than inferring it (17 calls,
+  `experiments/2026-09-02-defect-provider-transport-faults/REPRO.md`): four
+  non-streaming calls closed at 300.510 / 300.268 / 300.210 / 300.289 s with
+  zero bytes, across glm-5.3 AND deepseek-v4-pro:0813 — a 0.3-second range is a
+  timer on the path, not a model's fault. The same cap streamed completed at
+  369.6 s and at 756.5 s. So a `zero_byte_close` now bounds at
+  `ZERO_BYTE_WALL_MAX_ATTEMPTS = 2` and the retry is the SAME request on a
+  framing that survives.
+
+  Three things about that fix are easy to get wrong and two were got wrong once
+  here. FIRST, the retry may NOT shrink `max_tokens`: `invariants.py` requires
+  every recorded `attempt.max_tokens` to be the route's or one a PRIOR logged
+  controller policy authorized, and `llm/` may not write to the log, so a cap
+  chosen at this layer could never be authorized and every such run would fail
+  replay validation — a cap change arms the NEXT call, exactly as compact
+  recovery does. SECOND, a streamed attempt may NOT record
+  `transport_profile: "streaming"`: that field is pinned to the manifest's
+  profile or `"compact"`, and a third value fails `attempt-profile-authority`.
+  Streaming therefore records nothing at all, which is the property that makes
+  it a transport change rather than an evidence change. THIRD, a streamed body
+  reports NO usage unless `stream_options.include_usage` is sent, and an
+  unreported spend defeats the hard ceiling — the fix asks for it, and no chunk
+  carries `logprobs` at all, so a call that asked for logprobs stays
+  non-streaming.
+`check: grep -q "^TIMEOUT_FACTORS = (1, 2)$" src/deepreason/llm/endpoints.py && grep -q "http.client.HTTPException" src/deepreason/llm/endpoints.py && grep -q "^ZERO_BYTE_WALL_MAX_ATTEMPTS = 2$" src/deepreason/llm/transport_policy.py && grep -q "include_usage" src/deepreason/llm/endpoints.py && ! grep -q "transport_profile" src/deepreason/llm/transport_policy.py && python -c "
+import ast, inspect, pathlib
+from deepreason.llm import endpoints
+# Over the AST, not the text: this module's own docstring says why it may not
+# name max_tokens, and a substring check would read that as the violation.
+tree = ast.parse(pathlib.Path('src/deepreason/llm/transport_policy.py').read_text())
+names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
+names |= {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
+names |= {k.value for k in ast.walk(tree) if isinstance(k, ast.Constant) and isinstance(k.value, str) and k.value.count(chr(10)) == 0}
+assert 'max_tokens' not in names, 'the retry policy must never choose a cap'
+src = inspect.getsource(endpoints.OpenAICompatEndpoint.complete)
+assert 'request_logprobs' in src and 'stream_options' in src
+" && python -m pytest tests/test_llm.py::test_second_read_timeout_is_terminal_and_bounded tests/test_llm.py::test_retry_covers_mid_stream_disconnects tests/test_provider_transport_faults.py -q`
 - **A truthy usage block does not mean the missing side is zero.** Providers
   routinely report only `total_tokens`, or only one side. Treating the object's
   truthiness as "usage known" under-counted spend — found in-band by the

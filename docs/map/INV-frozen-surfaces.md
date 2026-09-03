@@ -228,6 +228,50 @@ assert not {'split_leg', 'split_max_tokens'} & set(A.model_fields)
 " && python -m pytest tests/test_split_leg_recording.py -q`
 `check: python -m pytest tests/test_split_leg_recording.py::test_an_attempt_from_a_committed_root_deserialises_with_no_legs -q`
 
+**Granted contact, 2026-09-03 — the transport retry policy's Config echo line.**
+The tranche instruction forecast this contact ("prefer a Config value or an
+endpoint-profile behaviour that leaves the manifest and route bytes untouched,
+and argue it in FIX.md") and the grant was requested at
+`experiments/2026-09-02-defect-provider-transport-faults/FIX.md` §4, before a
+line of the policy existed, with `tools/blast_radius.py`'s own
+`frozen_surface_verdict: CONTACT` and its single contact row pasted and
+disposed. The operator granted it the same day; the disposition is ledgered at
+that tranche's FIX.md.
+
+What moved: ONE `data.pop("TRANSPORT_POLICY", None)` statement at four spaces in
+`_versioned_source_config_data`, unconditional, joining the twenty-odd knobs
+already there, with the eight comment lines each of its neighbours carries.
+**Insertions only — 9 and 0.** No schema, no validator, no field, no digest
+input.
+
+The safety argument is the same one every knob above it carries, and it runs the
+OTHER way from the usual reading of this surface: the pop is what PREVENTS the
+change. Without it the new `Config.TRANSPORT_POLICY` field enters
+`engine_config_json`, moving `source_config_hash`, every manifest digest and
+every qualification subject digest — the `ENGAGED_CRITICISM_AUTHORITY` incident
+(`docs/ERRATA.md` E44) exactly. With it, nothing moves, and that is measured
+rather than asserted: `test_the_shipped_qualification_subject_digest_does_not_move`
+passes on the changed tree.
+
+Why the knob is on `Config` at all rather than a constant: the operator's
+modularity law (2026-08-26) — every behavior a run can vary is reachable as
+configuration, never by editing code — and the 2026-08-28 seat law, which
+requires every gate to be switchable per run. It is ONE nested field rather than
+four flat ones precisely because each field costs a line on this surface.
+
+Zero contact anywhere else, and `blast_radius`'s `frozen_adjacent_contacts` is
+EMPTY: `route_fingerprint` is not touched, no `Route` field moves, and
+`route_sha256` is byte-identical. The two `invariants.py` constraints the design
+obeys — the authorized-cap set and the `transport_profile` vocabulary — were
+reached by READING that surface, not by changing it.
+
+`check: test "$(grep -c "data.pop(\"TRANSPORT_POLICY\", None)" src/deepreason/run_manifest.py)" -eq 1 && grep -q "^    data.pop(\"TRANSPORT_POLICY\", None)$" src/deepreason/run_manifest.py && python -c "
+from deepreason.config import Config
+from deepreason.run_manifest import _versioned_source_config_data
+for version in (1, 2, 3, 4, 5, 6):
+    assert 'TRANSPORT_POLICY' not in _versioned_source_config_data(Config(), version)
+" && python -m pytest tests/ -q -k test_the_shipped_qualification_subject_digest_does_not_move`
+
 **Granted contact, 2026-08-27 — the sandbox attribute boundary (the escape fix).**
 The operator granted this contact IN CHAT, conditionally, after being shown the
 verdict it unblocks: "can you fix please. Frozen surface changes are permitted

@@ -2027,3 +2027,45 @@ number, and the CONTAINER-CONDITIONAL row is retired — this tranche narrowed
 that check from two whole pytest files to four node ids, taking it from
 160-213 s (54-71% of docs_verify's 300 s ceiling) to **1 s**, so it no longer
 has a margin problem to be conditional about.
+
+## E68 — the 2026-08-26 tranche read a remote hang-up as its own client timeout, and said the record carried no error text
+
+**What the document says.** `experiments/2026-08-26-pc2-rematch/PREREG.md:479-480`:
+
+> "**The arithmetic names the cause.** `1 095 567 ms / 180 s = 6.09` — six
+> consecutive 180-second socket timeouts against the seat's `timeout_s: 180`,
+> retried and cut off each time. Eighteen minutes spent, nothing recorded, no
+> tokens counted, and NO ERROR TEXT ANYWHERE IN THE RECORD".
+
+**What the record shows.** Both halves are falsified by that run's own
+diagnostic blob,
+`retired-transport-timeout180-run-42ad288038dd606c/blobs/41/4132d994891c4c491df3ccea4b153d609d314bf714a2a7335233d9ad60dad68d`:
+
+```json
+{"error": "transport failed after retries: Remote end closed connection without response",
+ "transport_diagnostics": ["TimeoutError:The read operation timed out",
+                           "RemoteDisconnected:Remote end closed connection without response",
+                           "RemoteDisconnected:Remote end closed connection without response",
+                           "RemoteDisconnected:Remote end closed connection without response"]}
+```
+
+There IS error text, and it is not six timeouts. **Four attempts: one client
+read timeout at 180 s, then three server-side disconnects.** The arithmetic that
+fits is `(1095.6 - 180 - 14) / 3 = 300.5 s` per disconnect, where 14 s is the
+`_BACKOFFS` ladder — the same ~300 s that P-A1 recorded six days later and that
+`experiments/2026-09-02-defect-provider-transport-faults/` measured deliberately
+at **300.32 s ± 0.11 s** across two model families.
+
+The consequence is larger than the arithmetic: **the wall was in the committed
+record on 2026-08-26 and was read as a client timeout for a week.** That
+tranche's Amendment 2 raised `timeout_s` to 900, which cannot address a remote
+close and did not; its own `CORRECTION.md:53-54` later conceded the stated cause
+was wrong for a different reason again. This is the invariant CLAUDE.md states
+for cycle-0 deaths, one layer out: read the diagnostic blob before theorising
+about the number.
+
+**Where corrected.** Here, and in `docs/map/SUB-llm.md`'s Traps entry, which now
+carries both branches of the identical-retry lesson and the measured wall.
+`experiments/2026-08-26-pc2-rematch/PREREG.md` is an EXPERIMENT artifact — a
+dated record of what that tranche believed — and is not rewritten in place; this
+entry is the pointer that stops a later reader trusting its arithmetic.

@@ -11,6 +11,8 @@ import urllib.error
 import urllib.request
 
 from deepreason.llm.repair import OutputMechanism
+from deepreason.llm.transport_policy import classify as classify_transport
+from deepreason.llm.transport_policy import decide as decide_transport
 
 _RETRYABLE_HTTP = {429, 500, 502, 503, 504}
 _BACKOFFS = (2, 4, 8)
@@ -37,6 +39,67 @@ chars ::= ([^"\\] | "\\" (["\\/bfnrt] | "u" hex hex hex hex))*
 number ::= "-"? ("0" | [1-9] [0-9]*) ("." [0-9]+)? ([eE] [+-]? [0-9]+)?
 hex ::= [0-9a-fA-F]
 ws ::= [ \t\n\r]*'''
+
+
+def _read_streamed(response) -> dict:
+    """Reassemble an OpenAI-compatible SSE body into the non-streaming shape.
+
+    The point of streaming here is transport, never presentation: the same
+    model output must produce the same record, so this returns exactly the dict
+    a non-streaming call would have returned. Proven against a real SSE body
+    (experiments/2026-09-02-defect-provider-transport-faults/probe/raw/H1.sse):
+    content and reasoning arrive as deltas, `finish_reason` on its own chunk
+    with an empty delta, `usage` on a chunk with no choices at all, terminated
+    by `data: [DONE]`.
+
+    A stream that stops early is a FAILURE, not a short answer: the provider
+    documents that a stream can return 200, emit partial tokens, and then fail
+    with an `error` object, so a truncated body must not be read as a
+    completion (docs/OLLAMA_CLOUD_OPERATIONS.md §2).
+    """
+
+    content: list[str] = []
+    reasoning: list[str] = []
+    finish_reason = None
+    usage = None
+    terminated = False
+    for raw in response:
+        line = raw.strip()
+        if not line:
+            continue
+        if line.startswith(b"data:"):
+            line = line[5:].strip()
+        if line == b"[DONE]":
+            terminated = True
+            continue
+        try:
+            chunk = json.loads(line)
+        except ValueError:
+            continue
+        if not isinstance(chunk, dict):
+            continue
+        if chunk.get("error"):
+            raise _TransientBody(f"error in stream: {chunk['error']!r}")
+        if chunk.get("usage"):
+            usage = chunk["usage"]
+        for choice in chunk.get("choices") or ():
+            delta = choice.get("delta") or {}
+            if delta.get("content"):
+                content.append(delta["content"])
+            for key in ("reasoning", "reasoning_content"):
+                if delta.get(key):
+                    reasoning.append(delta[key])
+            if choice.get("finish_reason"):
+                finish_reason = choice["finish_reason"]
+    if not terminated:
+        raise _TransientBody("stream ended without a terminal chunk")
+    message: dict = {"content": "".join(content) if content else None}
+    if reasoning:
+        message["reasoning"] = "".join(reasoning)
+    return {
+        "choices": [{"message": message, "finish_reason": finish_reason}],
+        "usage": usage,
+    }
 
 
 class EndpointError(RuntimeError):
@@ -320,6 +383,15 @@ class OpenAICompatEndpoint:
         self.last_reasoning_trace: str | None = None
         self.last_transport_attempts = 0
         self.last_transport_diagnostics: list[str] = []
+        # A zero-byte close is a wall, not a transient fault, and the surfacing
+        # layer needs the SHAPE of a fault rather than its prose.
+        self.last_zero_byte_returns = 0
+        self.last_fault_kind: str | None = None
+        self.last_streamed_attempts = 0
+        self.transport_policy = None
+
+    def _policy_value(self, name, default):
+        return getattr(self.transport_policy, name, default)
 
     def build_body(
         self,
@@ -407,6 +479,9 @@ class OpenAICompatEndpoint:
         self.last_reasoning_trace = None
         self.last_transport_attempts = 0
         self.last_transport_diagnostics = []
+        self.last_zero_byte_returns = 0
+        self.last_fault_kind = None
+        self.last_streamed_attempts = 0
         body = self.build_body(
             prompt,
             images,
@@ -420,11 +495,28 @@ class OpenAICompatEndpoint:
         headers = {"Content-Type": "application/json"}
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
-        request = urllib.request.Request(
-            self.name.rstrip("/") + "/chat/completions",
-            data=json.dumps(body).encode(),
-            headers=headers,
+
+        # No chunk of a streamed response carries `logprobs` (measured
+        # 2026-09-03 against a real SSE body), so a call that asked for them
+        # cannot be answered by the reassembly below.
+        streaming_mode = str(self._policy_value("streaming", "auto"))
+        streaming_available = (
+            streaming_mode != "off" and not self.request_logprobs
         )
+        streaming = streaming_available and streaming_mode == "on"
+
+        def _build_request() -> urllib.request.Request:
+            payload = dict(body)
+            if streaming:
+                payload["stream"] = True
+                # Without this the streamed framing reports no usage at all,
+                # and an unreported spend defeats the hard token ceiling.
+                payload["stream_options"] = {"include_usage": True}
+            return urllib.request.Request(
+                self.name.rstrip("/") + "/chat/completions",
+                data=json.dumps(payload).encode(),
+                headers=headers,
+            )
 
         # Bounded read-timeout escalation (TIMEOUT_FACTORS): retrying an
         # identical wait after a read timeout fails identically (observed
@@ -452,21 +544,53 @@ class OpenAICompatEndpoint:
             )
 
         def _once() -> dict:
-            nonlocal read_timeouts
+            nonlocal read_timeouts, streaming
+            attempt_index = self.last_transport_attempts
             self.last_transport_attempts += 1
             timeout = self.timeout_s * TIMEOUT_FACTORS[read_timeouts]
+            if streaming:
+                self.last_streamed_attempts += 1
             try:
                 # The stall can hit at connect/first byte (urlopen) or
                 # mid-body (json.load reading the socket): both count.
-                with urllib.request.urlopen(request, timeout=timeout) as response:
+                with urllib.request.urlopen(
+                    _build_request(), timeout=timeout
+                ) as response:
                     try:
-                        data = json.load(response)
+                        data = (
+                            _read_streamed(response)
+                            if streaming
+                            else json.load(response)
+                        )
                     except ValueError as e:
                         # 200 with a non-JSON body (gateway/proxy hiccup):
                         # transient in practice — let the retry loop take it.
                         raise _TransientBody(f"non-JSON response body: {e}") from e
             except Exception as e:
                 _note_transport(e)
+                kind = classify_transport(self.last_transport_diagnostics[-1])
+                self.last_fault_kind = kind
+                if kind == "zero_byte_close":
+                    self.last_zero_byte_returns += 1
+                    decision = decide_transport(
+                        self._policy_value("policy_id", None),
+                        kind,
+                        attempt_index,
+                        streaming_available and not streaming,
+                    )
+                    if decision.action == "retry_streaming":
+                        streaming = True
+                    elif decision.action == "stand_down":
+                        # EndpointError is not retryable: terminal by design.
+                        # Resending identical bytes into a fixed wall meets it
+                        # again — measured 2026-09-03 at 300.32s +/- 0.11s
+                        # across two model families.
+                        raise EndpointError(
+                            f"remote closed with no body after "
+                            f"{self.last_transport_attempts} attempt(s): "
+                            f"{decision.reason}",
+                            condition="zero_byte_wall",
+                        ) from e
                 if _timed_out(e):
                     read_timeouts += 1
                     if read_timeouts >= len(TIMEOUT_FACTORS):

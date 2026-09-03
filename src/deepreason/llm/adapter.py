@@ -1897,6 +1897,15 @@ def build_adapter(
         endpoint = _endpoint_from_spec(spec)
         if endpoint is not None:
             endpoints[role] = endpoint
+    # Attached after construction, beside endpoint_id/family/model_revision and
+    # for the same reason: the retry policy is process health, not route
+    # identity, so it stays out of EndpointLease.verify's equality set and out
+    # of route_sha256.
+    transport_policy = getattr(config, "TRANSPORT_POLICY", None)
+    for built in endpoints.values():
+        for endpoint in built if isinstance(built, list) else [built]:
+            if hasattr(endpoint, "transport_policy"):
+                endpoint.transport_policy = transport_policy
     leases = leases_from_manifest(run_manifest) if run_manifest is not None else None
     adapter = LLMAdapter(
         endpoints,
