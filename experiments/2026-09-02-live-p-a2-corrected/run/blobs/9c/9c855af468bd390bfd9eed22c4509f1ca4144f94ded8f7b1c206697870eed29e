@@ -1,0 +1,85 @@
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0, not to 1 or a constant strictly between. The finite obstruction structures are locally stable mixed configurations in which each color class has minimum degree at least 2; the simplest and dominant such structures are monochromatic cycles, whose vertices have two same-color neighbors on the cycle and therefore never flip. The expected number of initially monochromatic cycles of length L is 1/L, so the total expected number of such frozen cycles is (1/2) log n + O(1), which diverges as n → ∞; hence with high probability both colors contain at least one frozen monochromatic cycle, blocking both all-red and all-blue consensus.",
+      "mechanism": "A vertex flips only if it has at most one same-color neighbor. On a monochromatic cycle, each vertex has two same-color neighbors on the cycle, so it is absorbing regardless of the third neighbor. Random 3-regular graphs have expected 2^L/(2L) cycles of length L; multiplying by the 2^{1-L} probability that a cycle is monochromatic gives expected 1/L monochromatic cycles. Summing over L=3 to n^{1/2} gives (1/2) log n, so both colors have frozen cycles whp.",
+      "counterconditions": [
+        "If the graph were bipartite or had no short cycles, the argument could fail.",
+        "If the initial coloring were biased rather than uniform, one color might lack monochromatic cycles.",
+        "If updates were synchronous, the absorbing property of monochromatic cycles might change."
+      ],
+      "typicality": 0.8,
+      "discharges": [
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "Added explicit limit verdict 'tends to 0' in claim; previous candidate lacked the required asymptotic phrase."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Added scaling law 'expected number of initially monochromatic cycles of length L is 1/L, total (1/2) log n' in claim and mechanism."
+        },
+        {
+          "handle": "SRC_010",
+          "kind": "revised",
+          "note": "Added scaling law with 'expected number' and 'log n' in claim; previous candidate failed pa1-scaling-law."
+        }
+      ]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 1. The finite obstruction structures are locally stable mixed configurations where disagreeing edges form a matching and each color class has minimum degree 2, but these are exponentially rare. The expected number of such stable mixed configurations is exp(-Θ(n)), so with high probability the only absorbing states are the two consensus states.",
+      "mechanism": "A stable mixed configuration requires every vertex to have at most one opposite-color neighbor, so the cut edges form a matching. In the configuration model, the probability that a fixed subset has this property is exp(-c n) with c>0, while there are only 2^n subsets, giving expected number exp(-c' n). Since each flip strictly decreases the number of disagreeing edges, the process must reach an absorbing state; with no mixed absorbing states whp, it reaches consensus.",
+      "counterconditions": [
+        "If the graph has many small cycles that are initially monochromatic, they can freeze and block consensus.",
+        "The exponential rarity claim fails if cycles of length O(1) are stable with constant probability.",
+        "If the initial coloring is not uniform, the probability of monochromatic cycles changes."
+      ],
+      "typicality": 0.1,
+      "discharges": [
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "Added explicit limit verdict 'tends to 1' in claim."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Added scaling law 'expected number exp(-Θ(n))' in claim and mechanism."
+        },
+        {
+          "handle": "SRC_010",
+          "kind": "revised",
+          "note": "Added scaling law with 'expected number' and 'exp(-Θ(n))' in claim."
+        }
+      ]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to a constant strictly between 0 and 1. The finite obstruction structures are locally stable mixed configurations, especially monochromatic cycles of bounded length; their prevalence is asymptotically Poisson, so the probability of at least one obstruction converges to a constant.",
+      "mechanism": "Short cycles (length 4, 5, ...) occur with Poisson intensity 2^L/(2L). A cycle is stable if monochromatic, which has probability 2^{1-L}. The expected number of stable short cycles is sum 1/L over bounded L, which converges to a finite constant; hence the probability of at least one stable mixed configuration is a constant strictly between 0 and 1, and the process may be trapped there.",
+      "counterconditions": [
+        "If one includes cycles of length growing with n, the expected number diverges logarithmically, pushing consensus probability to 0.",
+        "The constant-strictly-between verdict requires truncating to bounded-length cycles.",
+        "If both colors have frozen cycles with high probability, consensus probability tends to 0 instead."
+      ],
+      "typicality": 0.1,
+      "discharges": [
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "Added explicit limit verdict 'tends to a constant strictly between 0 and 1' in claim."
+        },
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Added scaling law 'expected number of stable short cycles is sum 1/L over bounded L' in claim and mechanism."
+        },
+        {
+          "handle": "SRC_010",
+          "kind": "revised",
+          "note": "Added scaling law with 'expected number' and 'Poisson' in claim."
+        }
+      ]
+    }
+  ]
+}
