@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the preference for better-corroborated theories is defensible as a 'verisimilitude heuristic' that avoids induction, yet simultaneously admits this approach loses the guarantee of progress and cannot confirm if we are getting closer to truth.",
+      "case": "The target fails to resolve the central dilemma of whether this preference 'smuggles back in induction.' By defining verisimilitude as an unknowable state ('we can never know if we are actually getting closer') and the mechanism as merely eliminating error with only 'hope' of improvement, the target effectively concedes that the scientist's *preference* for one theory over another lacks a rational, non-inductive foundation. If the mechanism offers no reason to believe Theory A (more corroborated) is objectively closer to truth than Theory B, then preferring A is either arbitrary or relies on the inductive assumption that past success (error elimination) predicts future proximity to truth. The target asserts the view is 'defensible' but provides no defense against the charge that acting on 'hope' without epistemic justification is precisely the pragmatic induction Popper sought to avoid, thus failing to answer 'which one survives' with a coherent argument.",
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "If we cannot know if error elimination leads to truth-likeness, what non-inductive rational principle compels a scientist to prefer the corroborated theory rather than treating the choice as a blind guess?"
+    }
+  ]
+}

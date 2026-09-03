@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims that preferring a better-corroborated theory is defensible on Popper's terms solely as a methodological rule for error elimination, explicitly denying it involves an inductive inference about future success or reliability.",
+      "case": "The target's defense collapses when addressing the 'acting on' component of the problem. Popper and scientists prefer corroborated theories not merely to 'subject them to further risk' (which could be done by choosing the most falsifiable regardless of past performance), but because they expect these theories to work in practical application (e.g., building bridges). The target asserts the preference is a 'deductive assessment of past performance' and 'not a probabilistic prediction of future success.' However, if the preference does not rely on the assumption that the future will resemble the past (i.e., that a theory which survived severe tests is more likely to survive future tests or yield true predictions), then the preference is arbitrary. If the target insists the preference is *only* for maximizing error detection, it fails to explain why scientists act on the theory as if it were true in high-stakes scenarios. By severing the link between corroboration and any expectation of future validity, the target renders the 'preference' irrational for the very purpose (action) cited in the prompt, thereby smuggling in induction implicitly while explicitly denying it, or else making the preference indefensible for action.",
+      "counterexample": [
+        "An engineer choosing Theory A (highly corroborated) over Theory B (falsified) to build a bridge is acting on the expectation that Theory A will hold true in the future. If, as the target claims, this preference implies no 'probabilistic prediction of future success,' the engineer has no rational basis within Popper's system to choose A over B for the specific goal of the bridge not collapsing, only for the goal of potentially learning faster if it does."
+      ],
+      "successor_question": "If corroboration provides no grounds for expecting future success, on what non-inductive basis does Popper justify acting on the best-corroborated theory rather than the most recently conjectured one?"
+    }
+  ]
+}

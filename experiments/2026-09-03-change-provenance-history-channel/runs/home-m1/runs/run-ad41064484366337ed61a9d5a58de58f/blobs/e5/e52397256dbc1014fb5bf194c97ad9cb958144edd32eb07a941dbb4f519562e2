@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future truth, but as a non-inductive 'critical choice' to subject the most informative surviving theory to the severest possible future tests, thereby maximizing the rate of error elimination; accepting this costs the scientist any rational assurance that the chosen theory will succeed in practice or correspond to reality, reducing the preference to a methodological gamble rather than an epistemic justification.",
+    "mechanism": "Reinterpretation of 'preference' from a predictive bet (inductive) to a strategic selection for falsification potential (critical), where the 'best' theory is simply the one currently offering the highest leverage for learning, regardless of its probability of being true.",
+    "counterconditions": [
+      "If the scientist acts on the theory expecting it to work (e.g., building a bridge), they have implicitly reverted to induction.",
+      "If corroboration provides no grounds for expecting future success, the preference is practically empty and indistinguishable from random choice for action-oriented agents.",
+      "If the 'critical choice' relies on the assumption that nature is uniform enough for past severe tests to matter for future test design, it smuggles in a meta-inductive principle."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dichotomy between 'non-rational convention' and 'critical rational choice.' This candidate explicitly adopts the 'critical rational choice' frame but argues that without an inductive bridge, this choice lacks normative force for *action*, only for *testing*. The rebuttal holds that while Popper calls it rational, the cost analysis shows it fails to justify the specific kind of preference scientists actually exhibit (expectation of success)."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address the coexistence of unrefuted theories. The selection criterion is not just survival, but 'informational content' combined with survival. The theory with higher content that has survived is preferred because it offers more opportunities for falsification, addressing the Newton vs. Einstein scenario by favoring the more precise (higher content) survivor."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "rebutted",
+        "note": "The criticism argues evolutionary epistemology fails to answer the cost. This candidate accepts the cost: the 'fittest' survivor is only fittest for *surviving tests so far*, not for *future utility*. The defense does not claim evolutionary success implies future truth; it claims it implies current robustness against known errors. The cost is exactly the lack of inductive bridge the criticism demands."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "departure_declared",
+        "note": "Departing from the interpretation that 'evolutionary selection' justifies the preference. Instead, the candidate asserts the preference is purely methodological (choose the best target for shooting), not evolutionary (choose the strongest species). The analogy to biological fitness is rejected as smuggling induction; the mechanism is strictly logical (maximize test severity)."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "rebutted",
+        "note": "The criticism distinguishes causal explanation from normative justification. This candidate agrees and argues that Popper's 'normative' justification is weak: it norms only the *search for truth*, not the *reliance on truth*. The defense survives by admitting it cannot normatively justify acting *as if* the theory is true, only acting *to test* the theory further."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "revised",
+        "note": "Clarified that the 'pragmatic bet' is not on the theory's success, but on the efficiency of the scientific process. The revision removes the language of 'betting on the fittest' which implies outcome prediction, replacing it with 'selecting the most vulnerable target' which implies process optimization."
+      },
+      {
+        "handle": "406f638f976b926f52618322e0179a9a339b4f66006f5cb9fcdb0f63c060d368",
+        "kind": "rebutted",
+        "note": "The criticism claims conflation of falsification potential with preference for action. This candidate strictly separates them: preference for *testing* is justified by falsification potential; preference for *action* (building bridges) is admitted to be unjustifiable on Popper's terms without smuggling induction. The defense survives by limiting the scope of 'defensible preference' to the context of inquiry, not application."
+      },
+      {
+        "handle": "413118405fe4cbb409c43cbfa166306ea1063926136c533f14184d4050959108",
+        "kind": "rebutted",
+        "note": "Addressed the core issue: acting requires expectation. The candidate concedes that if 'preference' means 'acting with expectation of success,' Popper has no defense. However, if 'preference' means 'choosing which theory to scrutinize next,' the defense holds. The survival of the argument depends on redefining the scientist's 'preference' away from practical reliance and toward critical scrutiny."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "military_strategy_target_selection",
+        "debugging_complex_software"
+      ],
+      "shared_structure": [
+        "Selecting the most complex/central component to test next does not imply it is the most likely to fail, but that testing it yields the most information.",
+        "Past survival of a component under stress indicates robustness against known attacks, not immunity to future ones.",
+        "Preference is driven by the goal of system improvement (finding bugs/defeating enemy), not by confidence in the component's permanence."
+      ],
+      "disanalogies": [
+        "In science, we often must *use* the theory (build the bridge), whereas a general can choose *not* to use a specific strategy if it's deemed unreliable.",
+        "Biological evolution selects for reproduction, not for 'truth' or 'information content', making the evolutionary analogy imperfect for epistemic goals."
+      ],
+      "transfer_claims": [
+        "Just as a general targets the enemy's strongest point to break their defense fastest, a scientist should target the most corroborated theory to break it (or confirm its resilience) fastest.",
+        "Debugging the module that has survived the most tests yet remains complex is more productive than debugging simple, already-verified modules."
+      ],
+      "overturn_conditions": [
+        "If the goal of science is defined as 'successful prediction' rather than 'error elimination', the analogy collapses.",
+        "If the 'strongest point' in military strategy is avoided because attacking it is too costly (risk of failure), the analogy fails to justify preference for action."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

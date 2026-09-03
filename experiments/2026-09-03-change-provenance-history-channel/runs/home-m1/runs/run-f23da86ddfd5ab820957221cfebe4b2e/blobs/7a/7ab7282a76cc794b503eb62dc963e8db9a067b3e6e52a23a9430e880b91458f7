@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target conflates the logical definition of test severity with the psychological expectation of failure, misrepresenting Popper's criterion as inherently inductive.",
+      "case": "The argument fails because it equates 'severity' with a probabilistic expectation ('would likely fail'), whereas Popper defines severity logically based on the improbability of the prediction relative to background knowledge, not an inductive generalization about nature. A test is severe if the theory forbids what background knowledge permits; this is a deductive relation between statements, not an inductive inference about future regularities. By claiming severity 'presupposes regularities,' the target attacks a straw man of Popper's logic rather than his actual demarcation criterion, which relies on the content of the theory, not the probability of its survival.",
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "If severity is purely a logical relation between a theory and background knowledge, does the preference for corroborated theories require any assumption about the uniformity of nature?"
+    }
+  ]
+}
