@@ -1,0 +1,28 @@
+{
+  "edits": [
+    {
+      "content": "1191498e4fe5 is compatible with SRC_005 but not with SRC_003/007: it inherits a binomial obstruction count and predicts a limit strictly between 0 and 1. Refuted if its predicted limit is 0 or 1, or if it does not use a binomial number of reachable obstructions."
+    },
+    {
+      "content": "1191498e4fe5 is compatible with SRC_003 but not with SRC_005/007: it inherits the Poisson obstruction count and predicts a limit strictly between 0 and 1. Refuted if its predicted limit is 0 or 1, or if it does not use a Poisson number of reachable obstructions."
+    },
+    {
+      "content": "1191498e4fe5 is compatible with SRC_005 but not with SRC_003/007: it inherits the Poisson obstruction count and predicts a limit strictly between 0 and 1/2. Refuted if its predicted limit is 0 or 1/2, or if it does not use a Poisson number of reachable obstructions."
+    },
+    {
+      "content": "1191498e4fe5 is compatible with SRC_005 but not with SRC_003/007: it reduces to the Poisson obstruction count and predicts a limit strictly between 0 and 1. Refuted if its predicted limit is 0 or 1, or if it does not use a Poisson number of reachable obstructions."
+    },
+    {
+      "content": "1191498e4fe5 is compatible with SRC_005 but not with SRC_003/007: it inherits the Poisson obstruction count and predicts a limit strictly between 0 and 1. Refuted if its predicted limit is 0 or 1, or if it uses a deterministic number of reachable obstructions."
+    },
+    {
+      "content": "1191498e4fe5 is compatible with SRC_007 but not with SRC_003/005: it inherits a Gaussian obstruction count and predicts a limit strictly between 0 and 1. Refuted if its predicted limit is 0 or 1, or if it does not use a Gaussian number of reachable obstructions."
+    },
+    {
+      "content": "1191498e4fe5 is compatible with SRC_005 but not with SRC_003/007: it inherits the Poisson obstruction count and predicts a limit equal to 1/2. Refuted if its predicted limit is not 1/2, or if it does not use a Poisson number of reachable obstructions."
+    },
+    {
+      "content": "1191498e4fe5 is compatible with SRC_005 but not with SRC_003/007: it inherits the Poisson obstruction count and predicts a limit strictly between 0 and 1. Refuted if its predicted limit is outside (0,1), or if it does not use a Poisson number of reachable obstructions."
+    }
+  ]
+}

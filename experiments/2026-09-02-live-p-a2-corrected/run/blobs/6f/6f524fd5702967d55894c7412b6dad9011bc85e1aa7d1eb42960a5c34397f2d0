@@ -1,0 +1,28 @@
+{
+  "edits": [
+    {
+      "content": "1191498e4fe5 contradicts SRC_008 by showing that high conductance alone does not prevent reachable stable matchings; the high-conductance argument misses that descent can cycle before consensus. Refuted if it does not exhibit a positive-probability set of initial colorings on a high-conductance graph that reaches a stable matching, or if it assumes bounded degree."
+    },
+    {
+      "content": "1191498e4fe5 contradicts SRC_008 by showing that expansion alone does not guarantee convergence to stable matchings; the expander argument misses that descent can stall at local minima before consensus. Refuted if it does not exhibit a positive-probability set of initial colorings on an expander that reaches a stable matching, or if it depends on non-expansion."
+    },
+    {
+      "content": "1191498e4fe5 contradicts SRC_008 by showing that expansion alone does not prevent reachable stable matchings; the expander argument misses that descent can jam before consensus. Refuted if it does not exhibit a positive-probability set of initial configurations on a random regular graph that reaches a Nash equilibrium, or if it reduces to non-expansion."
+    },
+    {
+      "content": "1191498e4fe5 contradicts SRC_008 by showing that spectral gap alone does not prevent reachable stable matchings; the spectral expander argument misses that descent can oscillate before consensus. Refuted if it does not exhibit a positive-probability set of initial colorings on a spectral expander that reaches a stable matching, or if it shares mechanism with non-expansion."
+    },
+    {
+      "content": "1191498e4fe5 contradicts SRC_008 by showing that expansion alone does not prevent reachable stable matchings; the expander argument misses that asynchronous updates can deadlock before consensus. Refuted if it does not exhibit a positive-probability set of initial colorings on an expander that reaches a stable matching, or if it is compatible with non-expansion."
+    },
+    {
+      "content": "1191498e4fe5 contradicts SRC_008 by showing that expansion alone does not prevent reachable stable matchings; the expander argument misses that descent can jam before consensus. Refuted if it does not exhibit a positive-probability set of initial assignments on an expander that reaches a proper coloring, or if it inherits non-expansion."
+    },
+    {
+      "content": "1191498e4fe5 contradicts SRC_008 by showing that edge expansion alone does not prevent reachable stable matchings; the edge expander argument misses that descent can get trapped in absorbing states before consensus. Refuted if it does not exhibit a positive-probability set of initial colorings on an edge expander that reaches a stable matching, or if it integrates non-expansion."
+    },
+    {
+      "content": "1191498e4fe5 contradicts SRC_008 by showing that expansion alone does not prevent reachable stable matchings; the expander argument misses that the potential function can plateau before consensus. Refuted if it does not exhibit a positive-probability set of initial colorings on an expander that reaches a stable matching, or if it abstracts non-expansion."
+    }
+  ]
+}
