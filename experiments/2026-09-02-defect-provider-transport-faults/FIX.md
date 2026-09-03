@@ -358,3 +358,23 @@ there is **one frozen-surface contact, requested in §4**. Under
 `dr-propose-fix`'s rule that is a STOP for operator direction on §4 and §5.
 Everything outside `run_manifest.py`'s single `data.pop` line is ordinary
 defect work needing no grant.
+
+---
+
+## Operator disposition, 2026-09-03 — both questions answered
+
+Asked as two batched decisions with the recommendation first, per
+`dr-ask-the-right-question`. Both came back as the recommendation:
+
+- **§4 frozen-surface grant: GRANTED.** "Grant it (recommended)" — the one
+  unconditional four-space `data.pop("TRANSPORT_POLICY", None)` line in
+  `_versioned_source_config_data`, insertions only, 1 and 0. The grant covers
+  that line and nothing else; every other frozen surface stays untouched, and
+  `frozen_adjacent_contacts` remains empty.
+- **§5 dead-provider-streak policy: ROAD A.** "Notice only, standdown next
+  (recommended)" — the typed notice and the per-seat counters ship; the run does
+  not stop and no seat is stood down in this tranche. Road C (stand the seat
+  down and continue on the healthy seats) stays parked as `PARKED.md` P1, which
+  depends on exactly the counters this tranche lands.
+
+Implementation proceeds under `dr-implement-fix` on this disposition.
