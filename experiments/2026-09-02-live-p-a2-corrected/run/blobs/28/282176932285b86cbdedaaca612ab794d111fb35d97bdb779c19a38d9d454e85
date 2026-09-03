@@ -1,0 +1,76 @@
+{
+  "candidates": [
+    {
+      "content": "The isolated artifact 1191498e4fe5 abstracts the neighbourhood's five claims into a covering principle: the consensus limit is set by the typical basin measure of reachable stable-matching obstructions, not by the count of obstructions alone. It depends on SRC_002 for the Poisson-λ form and on SRC_001/SRC_004/SRC_005 for the basin-measure alternatives. Refuted if the isolated artifact does not mention obstruction basins or consensus probability, or if it predicts the same limit for all five neighbourhood claims without a parameter distinguishing them.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_001", "SRC_002", "SRC_004", "SRC_005"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "revised",
+          "note": "Content now includes explicit relation kind and a 'refuted if' clause, satisfying relation-form; previous failure was missing the predicate."
+        }
+      ]
+    },
+    {
+      "content": "SRC_005 contradicts SRC_001, SRC_003, and SRC_004 on the n→∞ consensus limit: SRC_005 says 1, the others say 0. The isolated artifact inherits this contradiction if it asserts a single model-independent limit. This candidate depends on SRC_001 for the zero-limit claim and on SRC_005 for the one-limit claim. Refuted if SRC_005 and SRC_001 use identical graph ensembles, initial distributions, and update rules yet still yield different limits.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_001", "SRC_003", "SRC_004", "SRC_005"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "revised",
+          "note": "Content now includes explicit relation kind and a 'refuted if' clause, satisfying relation-form; previous failure was missing the predicate."
+        }
+      ]
+    },
+    {
+      "content": "The isolated artifact shares mechanism with SRC_001, SRC_002, SRC_004, and SRC_005: zero-temperature majority dynamics on random 3-regular graphs monotonically descends in cut size and jams at a stable matching of crossing edges. This candidate depends on SRC_001 for the monotone-descent mechanism. Refuted if the isolated artifact's dynamics is not monotone in cut size, or if it allows a vertex with two same-colour neighbours to flip and increase crossing edges.",
+      "typicality": 0.8,
+      "neighbours": ["SRC_001", "SRC_002", "SRC_004", "SRC_005"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "revised",
+          "note": "Content now includes explicit relation kind and a 'refuted if' clause, satisfying relation-form; previous failure was missing the predicate."
+        }
+      ]
+    },
+    {
+      "content": "The isolated artifact reduces to SRC_002's Poisson-obstruction model when the number of reachable stable matchings is Θ(1) and their basins are approximately independent; then consensus probability tends to e^{-λ}. This candidate depends on SRC_002 for the Poisson-λ form. Refuted if the isolated artifact's final crossing-edge count is Θ(n) with high probability, or if the stable matchings' basins overlap so heavily that the Poisson approximation fails.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_001", "SRC_002", "SRC_004"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "revised",
+          "note": "Content now includes explicit relation kind and a 'refuted if' clause, satisfying relation-form; previous failure was missing the predicate."
+        }
+      ]
+    },
+    {
+      "content": "The isolated artifact integrates SRC_001 and SRC_005 by separating quenched graph-expansion effects from annealed obstruction counts: on typical high-expansion graphs the empty cut basin is large (SRC_005), while on rare low-expansion graphs stable matchings trap the process (SRC_001). This candidate depends on SRC_001 and SRC_005 for the two limiting regimes. Refuted if the isolated artifact does not condition on graph expansion or if it treats the random graph average as identical to the typical instance.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_001", "SRC_005"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "revised",
+          "note": "Content now includes explicit relation kind and a 'refuted if' clause, satisfying relation-form; previous failure was missing the predicate."
+        }
+      ]
+    },
+    {
+      "content": "SRC_002 is compatible with SRC_001 and SRC_004 only if the constant λ in SRC_002 is allowed to diverge with n, making e^{-λ}→0; otherwise they are incompatible. The isolated artifact states this compatibility condition explicitly. This candidate depends on SRC_002 for the constant-limit form. Refuted if SRC_002's λ is bounded and SRC_001's stable-matching basins still cover almost all initial cuts.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_001", "SRC_002", "SRC_004"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "revised",
+          "note": "Content now includes explicit relation kind and a 'refuted if' clause, satisfying relation-form; previous failure was missing the predicate."
+        }
+      ]
+    }
+  ]
+}

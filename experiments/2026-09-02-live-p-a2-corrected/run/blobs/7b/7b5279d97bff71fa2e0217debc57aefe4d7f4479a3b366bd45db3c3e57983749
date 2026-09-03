@@ -1,0 +1,28 @@
+{
+  "edits": [
+    {
+      "content": "SRC_006 reduces to SRC_002 and depends on SRC_002's cycle-counting mechanism: the claim of a constant consensus probability strictly between 0 and 1 is the special case where the expected number of reachable stable-matching cycles is Θ(1), so the limit is e^{-λ}. Refuted if the expected number of reachable cycles is o(1) or ω(1)."
+    },
+    {
+      "content": "SRC_006 contradicts SRC_002 and depends on SRC_002's obstruction-counting mechanism: the claim of a constant consensus probability strictly between 0 and 1 is the special case where the expected number of reachable stable-matching obstructions is Θ(1), so the limit is 1 - e^{-λ}. Refuted if the expected number of reachable obstructions is o(1) or ω(1)."
+    },
+    {
+      "content": "SRC_006 reduces to SRC_002 and depends on SRC_002's obstruction-counting mechanism: the claim of a consensus probability exactly 1/2 is the special case where the expected number of reachable stable-matching obstructions is Θ(1), so the limit is e^{-λ}. Refuted if the expected number of reachable obstructions is o(1) or ω(1)."
+    },
+    {
+      "content": "SRC_006 reduces to SRC_002 and shares mechanism with SRC_002's obstruction-counting: the claim of a constant consensus probability strictly between 0 and 1 is the special case where the expected number of reachable stable-matching obstructions is Θ(1), so the limit is e^{-λ}. Refuted if the expected number of reachable obstructions is not Θ(1) but instead Θ(log n) or Θ(n)."
+    },
+    {
+      "content": "SRC_006 reduces to SRC_002 and depends on SRC_002's obstruction-counting mechanism: the claim of a constant consensus probability strictly between 0 and 1 is the special case where the expected number of reachable stable-matching obstructions is λ, so the limit is 1/(1+λ). Refuted if the expected number of reachable obstructions is o(1) or ω(1)."
+    },
+    {
+      "content": "SRC_006 abstracts SRC_002 and depends on SRC_002's preference-cycle mechanism: the claim of a constant consensus probability strictly between 0 and 1 is the special case where the expected number of reachable stable-matching preference cycles is Θ(1), so the limit is e^{-λ}. Refuted if the expected number of reachable preference cycles is o(1) or ω(1)."
+    },
+    {
+      "content": "SRC_006 inherits from SRC_002 and depends on SRC_002's obstruction-counting mechanism: the claim of a consensus probability approaching 1 is the special case where the expected number of reachable stable-matching obstructions is Θ(1), so the limit is e^{-λ}. Refuted if the expected number of reachable obstructions is o(1) or ω(1)."
+    },
+    {
+      "content": "SRC_006 is compatible with SRC_002 and depends on SRC_002's blocking-pair mechanism: the claim of a constant consensus probability strictly between 0 and 1 is the special case where the expected number of reachable stable-matching blocking pairs is Θ(1), so the limit is e^{-λ}. Refuted if the expected number of reachable blocking pairs is 0 or unbounded."
+    }
+  ]
+}

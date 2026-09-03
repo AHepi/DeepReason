@@ -1,0 +1,28 @@
+{
+  "edits": [
+    {
+      "content": "SRC_006 contradicts SRC_001 and SRC_004: it asserts consensus probability tends to 1, whereas they assert it tends to 0 via logarithmic-size frozen clusters. Refuted if simulations from uniform random cuts on random 3-regular graphs show final crossing-edge density bounded away from 0."
+    },
+    {
+      "content": "SRC_006 contradicts SRC_001 and SRC_004: it asserts consensus probability tends to 1, whereas they assert it tends to 0 via linear-size jammed matchings. Refuted if simulations from adversarial initial opinions on random 4-regular expanders show final crossing-edge density bounded away from 0."
+    },
+    {
+      "content": "SRC_006 contradicts SRC_001 and SRC_004: it asserts final disagreement density tends to 0, whereas they assert it tends to 1 via linear-size jammed matchings. Refuted if simulations from uniform random cuts on random 3-regular graphs show final crossing-edge density bounded away from 0."
+    },
+    {
+      "content": "SRC_006 contradicts SRC_001 and SRC_004: it asserts consensus probability tends to 1, whereas they assert it tends to 0 via linear-size jammed matchings. Refuted if simulations from uniform random cuts on random 3-regular graphs show final consensus time exceeding any polynomial bound."
+    },
+    {
+      "content": "SRC_006 contradicts SRC_001 and SRC_004: it asserts consensus probability tends to 1, whereas they assert it tends to 0 via constant-size blocking sets. Refuted if simulations from random initial colorings on random 5-regular graphs show final crossing-edge density bounded away from 0."
+    },
+    {
+      "content": "SRC_006 contradicts SRC_001 and SRC_004: it asserts fraction of monochromatic edges tends to 1, whereas they assert it tends to 1/2 via linear-size jammed matchings. Refuted if simulations from uniform random cuts on random 3-regular graphs show final fraction of monochromatic edges bounded away from 1."
+    },
+    {
+      "content": "SRC_006 contradicts SRC_001 and SRC_004: it asserts consensus probability tends to 1, whereas they assert it tends to 0 via spectral gap collapse. Refuted if simulations from random initial opinions on Erdős–Rényi graphs show final disagreement density bounded away from 0."
+    },
+    {
+      "content": "SRC_006 contradicts SRC_001 and SRC_004: it asserts probability of exact consensus tends to 0.5, whereas they assert it tends to 0 via percolation bottlenecks. Refuted if simulations from balanced partitions on random regular hypergraphs show final cut size linear."
+    }
+  ]
+}

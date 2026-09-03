@@ -1,0 +1,28 @@
+{
+  "edits": [
+    {
+      "content": "SRC_006 shares mechanism with SRC_003: both use frozen path configurations (Hamiltonian paths with monochromatic edges and opposite-color endpoints) as obstructions, but SRC_006 claims their basins are negligible. Refuted if the basin measure of path-based frozen configurations is bounded away from 0."
+    },
+    {
+      "content": "SRC_006 shares mechanism with SRC_003: both use frozen cycle configurations (2-factors with monochromatic cycles and opposite-color matching) as obstructions, but SRC_006 claims their basins are negligible. Refuted if the basin measure of cycle-based frozen configurations is exactly 1."
+    },
+    {
+      "content": "SRC_006 shares mechanism with SRC_003: both use frozen cycle configurations (2-factors with monochromatic cycles and opposite-color matching) as obstructions, but SRC_006 claims only the basins of opposite-color matchings are negligible. Refuted if the basin measure of cycle-based frozen configurations is bounded away from 0."
+    },
+    {
+      "content": "SRC_006 contradicts SRC_003: while SRC_003 treats frozen cycle configurations (2-factors with monochromatic cycles and opposite-color matching) as obstructions with positive basin measure, SRC_006 claims their basins are negligible. Refuted if the basin measure of cycle-based frozen configurations is bounded away from 0."
+    },
+    {
+      "content": "SRC_006 inherits its obstruction mechanism from SRC_003: both use frozen cycle configurations (2-factors with monochromatic cycles and opposite-color matching) as obstructions, but SRC_006 claims their basins are negligible. Refuted if the basin measure of all frozen configurations is bounded away from 0."
+    },
+    {
+      "content": "SRC_006 reduces to SRC_003: both use frozen cycle configurations (2-factors with monochromatic cycles and opposite-color matching) as obstructions, but SRC_006 claims their basins are negligible. Refuted if the basin measure of cycle-based frozen configurations is not o(1)."
+    },
+    {
+      "content": "SRC_006 is compatible with SRC_003: both use frozen matching configurations (perfect matchings with monochromatic edges and opposite-color cycles) as obstructions, but SRC_006 claims their basins are negligible. Refuted if the basin measure of matching-based frozen configurations is bounded away from 0."
+    },
+    {
+      "content": "SRC_006 abstracts SRC_003: both use frozen cycle configurations (2-factors with monochromatic cycles and opposite-color matching) as obstructions, but SRC_006 claims their basins are negligible. Refuted if the basin measure of 2-factor obstructions is bounded away from 0."
+    }
+  ]
+}

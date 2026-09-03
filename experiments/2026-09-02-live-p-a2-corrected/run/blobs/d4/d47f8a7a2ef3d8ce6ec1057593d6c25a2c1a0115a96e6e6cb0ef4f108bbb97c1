@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001's compatibility is obtained by weakening SRC_003/SRC_006's Θ(n) jamming to an expected-cut-size statement. If the final cut size is Θ(n) whp, then the consensus indicator is 0 whp and therefore concentrates at 0; SRC_002's constant positive limit is contradicted, not compatible. The target's own phrase 'expected cut size (which concentrates, giving vanishing consensus)' concedes this, then asserts the opposite. The 'subsequence effect' is undefined and cannot make a whp linear final cut compatible with a positive limiting consensus probability."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The claimed contradiction depends on an unsupported inference: that SRC_002's constant limit 'implicitly assumes Θ(1) reachable obstructions.' A constant consensus probability is a statement about the measure of the empty-cut basin, not the number of obstructions; a dynamics can have Θ(n) stable matchings and still leave a positive-measure basin for the empty cut if those matchings are not reachable from typical initial cuts. Since the target does not rule this out, the contradiction is asserted rather than derived."
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The stated REFUTED IF condition is logically false for one disjunct: if the probability of terminating at the empty matching converges to 0, then the vanishing-consensus picture of SRC_003/SRC_006 survives exactly as stated, not 'neither the constant nor the vanishing picture.' Only convergence to 1 would refute both. Thus the target's own refutation criterion misstates the consequence of convergence to 0."
+    }
+  ]
+}
