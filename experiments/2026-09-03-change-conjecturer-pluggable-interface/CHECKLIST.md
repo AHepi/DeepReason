@@ -1,6 +1,6 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=9 blockers=none — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
+State: next=12 blockers=none — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
 verbatim: "Given what read from the other windows, the plugin one. Since all
 three other windows have completed." Build window open; branch
 `claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
@@ -320,7 +320,7 @@ print('ok')"` -> `ok`
 
 ## Phase 2 — the seat-section interface (seat-agnostic, §17.1)
 
-- [ ] 9. (S1.1-S1.4, §17.1) Add `src/deepreason/llm/seat_sections.py` with
+- [x] 9. (S1.1-S1.4, §17.1) Add `src/deepreason/llm/seat_sections.py` with
       `SeatSectionPluginV1`, `SectionRequestV1` (frozen), `SectionRenderV1`,
       `SectionReceiptV1`. NO registry and NO consumer yet — types only.
       None of the four carries a seat name or a seat field.
@@ -331,13 +331,34 @@ for m in (SectionRequestV1, SectionRenderV1, SectionReceiptV1):
     assert not [f for f in m.model_fields if 'seat' in f.lower()], m
 print('ok')"` -> `ok`
 
-- [ ] 10. (S1.3) Write `tests/test_seat_section_contract.py`: an empty `text`
+      DONE 2026-09-03. `src/deepreason/llm/seat_sections.py`; types only, no
+      registry and no consumer in this step. `SectionReceiptV1`'s disposition
+      check runs in `__init__` rather than a validator, because pydantic wraps
+      anything a validator raises into a `ValidationError` and the point of a
+      typed refusal is that a caller can read its `code`.
+      ```
+      $ python -c "... (the done-criterion) ..."
+      ok
+      ```
+
+- [x] 10. (S1.3) Write `tests/test_seat_section_contract.py`: an empty `text`
       is an ERROR while `None` is a legal absence — the distinction the
       allocator's drop signal depends on (`DR-INV-render-layout` Traps).
       done-when: `python -m pytest tests/test_seat_section_contract.py -q`
       -> `0 failed`
+      ```
+      $ python -m pytest tests/test_seat_section_contract.py -q
+      .............                                                    [100%]
+      13 passed in 0.07s
+      ```
+      Thirteen cases, including: an empty `text` raises; `None` is legal; a
+      ONE-CHARACTER render is legal (the floor is empty, not short); request
+      and render are frozen and closed; `absent` and `dropped` stay distinct
+      dispositions; an undeclared disposition raises with
+      `code == 'SEAT_SECTION_DISPOSITION_UNKNOWN'` (asserted on the CODE, not
+      on a message a gutted guard would keep).
 
-- [ ] 11. (S2.1-S2.3) [COMMIT] Add `SECTION_PLUGIN_REGISTRY`,
+- [x] 11. (S2.1-S2.3) [COMMIT] Add `SECTION_PLUGIN_REGISTRY`,
       `register_section_plugin`, `resolve_section_plugin` — modelled on
       `llm/layout.py::register_layout_policy`. Version resolution: pinned
       exact, unpinned highest. Re-registering one id with different values
@@ -345,6 +366,17 @@ print('ok')"` -> `ok`
       done-when: `python -m pytest tests/test_seat_section_registry.py -q`
       -> `0 failed`, including a case asserting an unregistered id is a
       TYPED refusal and NOT a load-by-path (S3.2)
+      ```
+      $ python -m pytest tests/test_seat_section_registry.py -q
+      .......                                                          [100%]
+      7 passed in 0.17s
+      ```
+      The load-by-path case plants an executable `dr.evil.py` in the working
+      directory and asserts that `resolve_section_plugin` refuses `dr.evil`,
+      `./dr.evil.py`, the absolute path and the bare filename with
+      `SEAT_SECTION_PLUGIN_UNKNOWN` — never a filesystem lookup. Version
+      resolution is NUMERIC, with a regression case proving `1.10.0` resolves
+      above `1.9.0`; a plain string sort gets that backwards.
 
 ## Phase 3 — the layouts, and the seeded plugins for both seats
 
