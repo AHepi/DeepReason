@@ -303,6 +303,11 @@ def _provider_health(events: list[dict]) -> dict[str, Any]:
         role = llm.get("role")
         if role is None:
             continue
+        # `LLMCall.truncated` is the admissible truncation signal. The
+        # per-attempt finish reason is a correctness signal that nothing
+        # outside the provider adapter may consume (the seats/evidence law,
+        # DR-SUB-ontology): reading it here would turn it into evidence.
+        call_truncated = bool(llm.get("truncated"))
         for attempt in llm.get("attempt_trace") or []:
             key = (role, attempt.get("seat") or 0, attempt.get("endpoint_id") or "")
             row = per_seat.setdefault(key, {
@@ -326,13 +331,13 @@ def _provider_health(events: list[dict]) -> dict[str, Any]:
             path = attempt.get("validation_path") or ""
             if path:
                 row["validation_paths"][path] = row["validation_paths"].get(path, 0) + 1
+            if call_truncated:
+                row["truncated_at_cap"] += 1
+                if invalid:
+                    row["truncated_when_invalid"] += 1
             for leg in _walk_attempt(attempt):
                 if leg.get("tokens") == 0 or leg.get("usage_unknown"):
                     row["zero_token_returns"] += 1
-                if leg.get("natural_stop") is False and leg.get("tokens"):
-                    row["truncated_at_cap"] += 1
-                    if invalid:
-                        row["truncated_when_invalid"] += 1
                 for fault in leg.get("transport_diagnostics") or []:
                     text = str(fault)
                     kind = text.split(":", 1)[0]
