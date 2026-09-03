@@ -103,3 +103,26 @@ to continuing past that unavailable prerequisite while preserving its result
 as RED. It does not convert any unrelated RED gate row into PASS, authorize
 carrying one into delivery, or permit a shim, weakened check, out-of-scope
 repair, or change to the implemented contract.
+
+### 2026-09-03 — baseline disposition for environment-only gate reds
+
+> Operator amendment R13: every full-gate and docs_verify RED row that
+> reproduces on the untouched tranche base under the same container is
+> an environment-only known-not-yours baseline. Record each such row
+> with its base-reproduction evidence, dispose them as baseline, and
+> proceed to delivery. This authorizes no row that does not reproduce on
+> the base.
+
+R13 (process): a full-gate or `docs_verify` RED row that reproduces on the
+untouched tranche base **in the same container** is an environment-only
+KNOWN-NOT-YOURS baseline. Each such row must be recorded together with its
+base-reproduction evidence and disposed as baseline; validation then proceeds
+to delivery. R13 authorizes nothing for a row that does not reproduce on the
+base: any such row remains blocking and is either explained as change-owned
+and fixed, or stopped on.
+
+R13 supersedes the delivery block recorded in the 2026-09-01 VALIDATION.md
+verdict (`FAIL`) for base-reproducing rows only. It does not widen the
+tranche, does not authorize a shim, a weakened check, a skipped or xfailed
+test, or any change to the implemented contract, and does not convert
+S5's zero-failure wording into a lower bar for change-owned rows.
