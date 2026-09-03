@@ -43,7 +43,7 @@ anything under `mini/`, and the env-var generator hook in
 |---|---|---|
 | 1. test file byte-identical to `06b0d9fd9`'s | PASS | VERIFY.md §1 |
 | 2. mutation proof re-run ON MAIN, identical test bytes | PASS — 5 passed / 2 failed 3 passed / 5 passed | REPRO.md §Results, `mutation.log` |
-| 3. `pytest tests/ -q -n 4` → 0 failed | <!-- GATE1 --> | VERIFY.md §3 |
+| 3. `pytest tests/ -q -n 4` → 0 failed | **PASS — 4694 passed, 6 skipped, 0 failed** | VERIFY.md §3 |
 | 4. `docs_verify` no delta beyond rows this tranche repairs | <!-- DV1 --> | VERIFY.md §4 |
 
 ## The map, moved in the same commit

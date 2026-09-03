@@ -25,7 +25,32 @@ than a new claim.
 
 ## 3. Full gate
 
-<!-- GATE -->
+    $ python -m pytest tests/ -q -n 4
+    4694 passed, 6 skipped in 1624.94s (0:27:04)
+
+**PASS — 0 failed.** No assertion was weakened and no fixture was
+touched to get there; the only test file this tranche adds is the
+regression one, taken verbatim.
+
+Two things worth recording against `docs/AUDIT_BASELINES.md`:
+
+- The baseline names a KNOWN-FLAKY set under `-n 4` — 3 tests in
+  `tests/test_mcp_run.py` and 2 in `tests/test_mcp_scratch_bridge.py`,
+  thread-join timing, green on a serial re-run. **None of them fired**,
+  so no serial re-run was needed and none is being leaned on. Recorded
+  because a green gate that happens not to have tripped the known
+  flakes is worth distinguishing from one that tripped them and was
+  re-run.
+- The 6 skips are collection-level skips, not failures, and the
+  baseline pins `0 failed` rather than a passed count — CLAUDE.md is
+  explicit that the passed total moves every tranche and must not be
+  pinned here.
+
+Wall clock was **27:04**, roughly double the ~14 min CLAUDE.md
+documents. That is this container being slow, not the suite growing:
+the ring runs earlier in the tranche showed the same stretch
+(53 scheduler tests in 29 s). Noted so a later reader does not read the
+duration as a regression.
 
 ## 4. docs_verify
 
