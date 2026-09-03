@@ -92,87 +92,57 @@ stub, not in the harness, and does not touch what the live run can do.
 
 ## Column 2 / Column 3 — FIRED LIVE, and P-A1 → P-A2
 
-**Column 2 is EMPTY, and that is the tranche's result rather than a gap in
-it.** Neither epoch reached a reasoning cycle:
+**Epoch 3 ran.** Qualification passed 23/23 and the run reached a typed
+terminal, so this column is real. It is also SHORT: the run died at **cycle 0
+of 24** on a defect none of the predictions anticipated (FINDINGS.md F7), so
+every "fewer" below means "one cycle instead of five", not "worse".
 
-| epoch | manifest | what happened | cycles run |
+Run `1b89ed64e050c354…`, 2026-09-03, **cycle 0**, 212 152 / 3 000 000 tokens,
+`state: failed`, `stop_reason: operational_failure`, message *"v6 conjecture
+context must be planned after durable work preparation"*, **`verify_root`
+violations: 0**.
+
+| module | P-A1 | P-A2 | P-A1 → P-A2 |
 |---|---|---|---|
-| 1 | `e958a37b` | qualification refused after 96 min: 22/23 pairs, the single failure `groundingrepairwirev1.direct.v1` on glm-5.3 at 5/20 (FINDINGS.md F4) | **0** |
-| 2 | *(amended shape)* | qualification refused after 26 min: 5/23 pairs, `ENDPOINT_HTTP_429` throughout — the account's session usage limit (FINDINGS.md F5) | **0** |
+| conjecture | FIRED: 7 Conj, 47 calls | **FIRED**: 2 Conj, 4 calls | fewer — died at cycle 0 |
+| criticism | FIRED: 5 Crit, 12 calls | **FIRED**: 3 Crit, 4 calls | fewer — cycle 0 |
+| defender seat | FIRED: 8 calls | **FIRED**: 7 calls | ≈ same, in 1 cycle not 5 |
+| judge ensemble | FIRED: 4 calls | **FIRED**: 18 calls | **4 → 18** |
+| defended trial | FIRED: 6 declined, 0 scrutiny | **FIRED**: 7 trials, **0 scrutiny** | holds, more trials |
+| adjudication / status authority | FIRED: 25 status_changed | **FIRED**: 12 status_changed | fewer — cycle 0 |
+| **variator / hv** | did-not-fire: 0 calls, **19 deferrals** | did-not-fire: **1 call, 0 deferrals** | **deferrals 19 → 0** |
+| reach | did-not-fire | did-not-fire | unchanged |
+| pairwise discrimination | did-not-fire | did-not-fire | unchanged |
+| **scratchpad** | **did-not-fire** | **FIRED: 4 events** | **NEW — and it killed the run (F7)** |
+| successor questions | did-not-fire (minting OFF) | did-not-fire (minting OFF) | unchanged, as designed |
+| simulation capability | did-not-fire | did-not-fire | unchanged — cycle 0 |
+| research capability | FIRED: research-awaiting-agent ×1 | did-not-fire | **lost — died before its period** |
+| attached evidence | did-not-fire (empty dossier) | did-not-fire (empty dossier) | unchanged, by design |
+| premise channel | FIRED: 7 DECLINED, 6 offers | **FIRED**: 7 DECLINED, 1 offer | same direction |
+| discharge channel | FIRED: 6 reask, 19 undischarged | **FIRED**: 2 reask, 18 undischarged | ≈ same |
+| near-duplicate gate | FIRED (armed at 0.2608) | **FIRED** (armed at 0.2608) | unchanged |
+| school convergence | did-not-fire (healthy) | did-not-fire (healthy) | unchanged |
+| allocation controller | FIRED: 5 signal kinds | **FIRED**: 2 signal kinds | fewer — cycle 0 |
+| config referee | did-not-fire (died cycle 5 of cadence 6) | did-not-fire (died cycle 0) | unchanged, same cause |
+| **split-budget seat protocol** | **FIRED: 36 reason + 36 extract legs** | **did-not-fire: no split_legs** | **C3 CONFIRMED — protocol off** |
+| capture / Pareto frontier | FIRED: 7 signals ×6 | **FIRED**: 7 signals ×1 | fewer — cycle 0 |
+| grounded bridge | did-not-fire (refused downstream) | did-not-fire (refused downstream) | unchanged — needs a terminal |
+| replay validation | FIRED: 0 violations | **FIRED: 0 violations** | unchanged — record intact |
 
-So there is no `log.jsonl`, no `state_diff`, no `llm.role` count and no
-capability state for P-A2. **Every row below would be a fabrication if it
-carried a P-A2 verdict**, and the honest table is the one that says so once,
-loudly, rather than twenty-four times in a column of dashes.
+### The four rows that carry the tranche
 
-What CAN be said, and is said in Column 1 above, is that every module is
-CONFIGURED and reachable — read off the compiled manifest and the runtime
-Config, which are complete before any provider call and were verified at
-62/62 preflight checks on the amended shape.
-
-### The P-A1 baseline, re-derived on this checkout
-
-Column 3 needs P-A1's side to come from the SAME instrument and the SAME code
-version as P-A2's would have, so `module_census.py` was run against P-A1's
-committed root here rather than quoting P-A1's prose. That side is real and is
-recorded now, so a later window resuming this tranche starts with the
-comparison half-built instead of re-deriving it:
-
-| module | P-A1 (re-derived) | evidence |
-|---|---|---|
-| conjecture (rules/conj) | **FIRED** | Conj events=7, conjecturer calls=47 |
-| criticism (rules/crit) | **FIRED** | Crit events=5, argumentative_critic calls=12 |
-| defender seat | **FIRED** | defender calls=8 |
-| judge ensemble | **FIRED** | judge calls=4 |
-| defended trial (status-changing criticism) | **FIRED** | {"first trial seqs": [359, 404, 405], "judge calls": 4, "scrutiny (observe-only filings)": 0,... |
-| pairwise discrimination | **did-not-fire** | no pairwise-observation event (F2: the pairwise-discrimination phase is one of the eleven def... |
-| adjudication / status authority | **FIRED** | 25 events carry status_changed; first seqs [6, 7, 8] |
-| variator / hv measurement | **did-not-fire** | NO hv_set in the record; variator calls=0; deferrals=19 |
-| reach measurement | **did-not-fire** | NO reach_set in the record |
-| scratchpad (advisory workshop) | **did-not-fire** | no event carries a scratch payload |
-| successor questions | **did-not-fire** | no successor-* signal in the record |
-| simulation capability | **did-not-fire** | no simulation-* signal; deferrals={('premise-demarcation-variation', 'variator'): 1, ('hv-spo... |
-| research capability | **FIRED** | {"research-awaiting-agent": 1} |
-| attached evidence / dossier | **did-not-fire** | the channel is OPEN but the dossier is EMPTY by design (PREREG §4 R6): nothing to cite is the... |
-| premise channel | **FIRED** | {"premise-answer:DECLINED": 7, "premise.batch-translation-offered.v1": 6, "premise.work-invit... |
-| discharge channel | **FIRED** | {"discharge-reask": 6, "discharge-undischarged": 19} |
-| near-duplicate / anti-relapse gate | **FIRED** | {"relapse.log.jsonl": true, "signals": {}} |
-| school convergence / reseed | **did-not-fire** | no school-convergence or reseed signal (the tripwires are armed and did not fire) |
-| allocation controller / signals | **FIRED** | {"allocation.seat-repair.v1": 17, "allocation.seat-truncation.v1": 17, "allocation.seed-linea... |
-| config referee | **did-not-fire** | no config-referee signal in the record |
-| split-budget seat protocol | **FIRED** | {"extract": 36, "reason": 36} |
-| capture / Pareto frontier | **FIRED** | {"capture14.attack-target-entropy.v1": 6, "capture14.criticism-debt.v1": 6, "capture14.exogen... |
-| grounded bridge (ledger + composition) | **did-not-fire** | bridge build produced no readable JSON -- see bridge-build.stderr.log |
-| replay validation (verify_root) | **did-not-fire** | verify_root produced no readable JSON |
-
-**P-A1: 13 FIRED · 11 did-not-fire** (the two extra `did-not-fire` rows here
-versus P-A1's own table are `grounded bridge` and `replay validation`, which
-the census reads from ladder-written sibling JSON files that live in P-A1's
-tranche directory rather than inside its root — an artifact of re-deriving
-from the root alone, not a disagreement about what P-A1 did).
-
-### What the third column would have measured
-
-Recorded so the question is not lost, and so a resumed tranche knows exactly
-which rows carry the weight:
-
-- `variator / hv` — P-A1: **NO `hv_set`, 0 variator calls, 19 deferrals.**
-  The row P3 turns on, and the one most likely to move: `hv-floor` and
-  `hv-spot-check` both map to `variator.direct.v1` in
-  `workflow/legacy_phase_contracts.py`, the deferral gate now consults that
-  table rather than `schema_version` literals, and this manifest holds the
-  grant.
-- `defended trial` — P-A1: 6 `trial-declined`, **0 `scrutiny`**, only 2 of
-  the 6 reaching judges. The row P1 turns on.
-- `grounded bridge` — P-A1: did-not-fire, refused
-  `BRIDGE_REASONING_NOT_COMPLETED` downstream of the run's failure. It needs a
-  run that reaches a terminal at all.
-- `simulation capability`, `scratchpad`, `config referee` — P-A1: did-not-fire,
-  each for a different typed reason (no proposal in 5 cycles; no scratch
-  payload; died at cycle 5, one short of the referee's first firing at cadence
-  6). All three are cycle-depth questions that 24 cycles could answer and 5
-  could not.
-
-The five pre-registered predictions P1–P5, and Amendment 1's P6, are all
-**UNSCORED**. That is recorded as an unscored outcome, never as a negative
-one: an unrun prediction is not a refuted prediction.
+1. **split-budget seat protocol: FIRED → did-not-fire.** C3 confirmed on the
+   live record, not just on the rebuilt Config. P-A1 ran 36 reason + 36
+   extraction legs; P-A2 recorded no `split_legs` structure on any attempt.
+   One provider call per attempt, as intended.
+2. **variator deferrals: 19 → 0, and one variator call actually made.** The
+   merged deferral-gate fix (`5f34e4d00`) demonstrably works: the phase is no
+   longer refused for being v6. `hv_set` is still 0 — but the run died at
+   cycle 0, so this neither confirms nor refutes that `hv` would have been
+   measured. It confirms only that the gate stopped blocking it.
+3. **scratchpad: did-not-fire → FIRED.** The one module that newly came alive,
+   and the reason the run died: the retry path it reaches has a missing v6
+   guard (F7). A module switched on by configuration took the run down.
+4. **judge calls: 4 → 18** in one fifth of the cycles, with **0 `scrutiny`**
+   in both. The criticism circuit is convening far more adjudication per cycle
+   than P-A1 managed.

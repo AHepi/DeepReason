@@ -244,6 +244,91 @@ liveness at the TOP of the loop body, before the commit, not at the bottom.
 
 ---
 
+## F7 — the conjecture-context RETRY path omits the v6 guard the primary path has (NEW DEFECT, killed the run at cycle 0)
+
+**Status:** open, new, and reproducible by configuration. This is the defect
+that ended epoch 3, and it is not any of the ones this tranche set out to
+measure.
+
+**What the record shows.** Epoch 3 qualified 23/23, ran real work, and then
+died at **cycle 0**:
+
+    state                       failed
+    stop_reason                 operational_failure
+    message                     "v6 conjecture context must be planned after
+                                 durable work preparation"
+    cycle                       0        token_spend 212 152 / 3 000 000
+    terminal_lifecycle_refusal  TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL
+    verify_root                 0 violations
+
+**It is NOT the F4 seat death that P5 named as its honest risk.** No
+`workflow-route-seat-insufficient-capability-v1` object exists in the root.
+The last provider call before the stop (seq 295, deepseek conjecturer) was
+`valid=True` at 30 389 tokens — **the model succeeded; the harness refused its
+own next step.**
+
+**The cause, located in the code after the record ruled out a model fault.**
+`rules/conj.py:827` raises that exact ValueError when a v6 run is handed a
+non-`None` `conjecture_context_plan`. There is exactly one caller
+(`scheduler/scheduler.py:2434`), and the primary path is correct — at 2387-2392
+it plans the context and then, on v6, **nulls it**:
+
+```python
+context_plan = self._plan_conjecture_context(problem, school_id)
+if self.run_manifest is not None and self.run_manifest.schema_version == 6:
+    # Controller-v3 persists preparation before its pure planners;
+    # Conj owns that ordered transaction.
+    context_plan = None
+```
+
+The RETRY path, twelve lines below at 2448-2451, does not:
+
+```python
+except ConjectureContextStale:
+    if context_attempt:
+        raise
+    context_plan = self._plan_conjecture_context(problem, school_id)   # <- no v6 null-out
+```
+
+The loop then re-enters `conj(..., conjecture_context_plan=context_plan)` with
+a live plan on a v6 manifest, `conj.py:827` raises, and the ValueError is
+caught by none of the handlers below it (`WorkBudgetDenied`,
+`SchemaRepairError`/`EndpointError`, `RouteFirewallError`, …), so it
+propagates and terminalizes the run.
+
+**Why P-A1 never hit it, and P-A2 did — the reachability condition.**
+`ConjectureContextStale` is raised from exactly three sites, all in
+`scratch/conjecture.py` (lines 324, 432, 661) — the SCRATCHPAD's
+conjecture-context machinery. So the retry path is reachable only when the
+scratchpad is live enough to build a context that can go stale.
+
+| | scratchpad | outcome |
+|---|---|---|
+| P-A1 | configured ON but **did-not-fire** (no event carried a scratch payload) | never stale, retry path never taken, defect never reached |
+| P-A2 | configured ON and **FIRED** — 4 `Scratch` events carrying payloads | context went stale, retry path taken, guard missing, run dead |
+
+**This is therefore a defect that hides behind a module not firing.** Any
+configuration that switches the scratchpad on AND actually uses it will meet
+it on a v6 run. That makes it a direct hazard to the operator's own modularity
+law: a customization point reachable purely by configuration takes the run
+down.
+
+**Proposed fix, for a change tranche and not this one.** Null the plan on v6
+in the retry path exactly as the primary path does — a one-line change at
+`scheduler.py:2451`, or better, hoist the v6 decision into
+`_plan_conjecture_context` so a third caller cannot reintroduce the same
+omission. The regression test writes itself: a v6 manifest with the scratchpad
+enabled, forced through one `ConjectureContextStale`, must reach cycle 1.
+
+**A second, independent defect visible in the same terminal.** The stop
+carries `terminal_lifecycle_refusal:
+TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL` — the run is intact
+(`verify_root` 0 violations) and NOT continuable, which is the same violation
+of the 2026-08-29 continuability law that P-A1 recorded. Two independent runs
+now show a clean record that no operation can resume.
+
+---
+
 ## F2 — `SPLIT_BUDGET_SEAT_PROTOCOL` cannot be read off the configuration file (OBSERVATION, working as designed)
 
 **Status:** not a defect. Recorded because it cost this tranche a probe and

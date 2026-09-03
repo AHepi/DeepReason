@@ -310,3 +310,86 @@ representative probes. It does not say the grounding bridge will produce a
 useful repair on this run's actual artifacts — that needs the run to reach a
 terminal with a composed output, which is what the ladder's bridge step at
 terminal exists to test.
+
+---
+
+## 2026-09-03 · Segment 7 — the run reached a terminal, and died at cycle 0 on a defect nobody predicted
+
+**What the record shows.** Epoch 3 qualified 23/23, spent 212 152 of
+3 000 000 tokens, and stopped at **cycle 0 of 24**:
+
+    state    failed     stop_reason  operational_failure
+    message  "v6 conjecture context must be planned after durable work preparation"
+    verify_root  0 violations
+    terminal_lifecycle_refusal  TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL
+
+**It is not the seat death P5 named as its honest risk.** No
+`workflow-route-seat-insufficient-capability-v1` object exists. The last
+provider call before the stop was `valid=True` at 30 389 tokens — the model
+succeeded and the harness refused its own next step.
+
+**The cause (F7), found by reading the record first and the code second.**
+`rules/conj.py:827` refuses a non-`None` `conjecture_context_plan` on v6. Its
+one caller nulls the plan on v6 in the primary path
+(`scheduler.py:2387-2392`) and **does not null it in the
+`except ConjectureContextStale` retry path** twelve lines below. The retry
+re-enters `conj()` with a live plan, the ValueError matches none of the
+handlers beneath it, and the run terminalizes.
+
+`ConjectureContextStale` is raised only from `scratch/conjecture.py` — so the
+path is reachable **only when the scratchpad is live**. P-A1's scratchpad
+never fired; P-A2's fired 4 times. **The defect was hiding behind a module
+that had never run.** Any configuration that switches the scratchpad on and
+actually uses it meets it on a v6 run, which makes it a direct hazard to the
+modularity law: a customization point reachable purely by configuration takes
+the run down.
+
+---
+
+### Scoring the six pre-registered predictions
+
+| | prediction | verdict | the typed counts |
+|---|---|---|---|
+| **P1** | zero `scrutiny`; defended trials convened | **HOLDS** | **0 scrutiny**; 7 trials, 7 defender calls, **18 judge calls** (P-A1: 4) |
+| **P2** | zero zero-token calls; no `RemoteDisconnected` | **HOLDS** | **34 attempts, all `provider_result`, exact usage; 0 zero-token, 0 transport diagnostics.** P-A1: 10 dead of 71, 40 diagnostics, all glm-5.3 |
+| **P3** | ≥1 `hv_set` and ≥1 hv-floor verdict | **REFUTED, uninformatively** | 0 `hv_set`. But **deferrals 19 → 0 and 1 variator call made** — the gate stopped blocking; the run died before hv could complete |
+| **P4** | ≥1 seed-answering artifact on the frontier | **REFUTED, uninformatively** | `NO_FRONTIER_RECORD` — no frontier was computed at cycle 0. 13 artifacts accepted, 3 refuted |
+| **P5** | typed terminal without `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` | **HOLDS on its words, fails on its intent** | The named failure did **not** occur — no such object. But the run failed anyway, on F7 |
+| **P6** | qualification 23/23, grounding-repair ≥19/20 | **HOLDS** | 23/23 pairs, 460/460 cases; the blocked seat **5/20 → 20/20, all first-pass, 0 repairs** |
+
+**Two hold outright, one holds on its wording, two are refuted by a death that
+happened before they could be tested, and the amendment's own prediction
+holds.** P3 and P4 are recorded as refuted rather than unscored because their
+counts are genuinely zero — but their zeros carry no information about the
+mechanisms they were written to test, and saying otherwise would be the
+dishonest reading.
+
+### What the tranche actually established
+
+1. **P2 is the headline.** The transport failure that consumed 66% of P-A1's
+   wall clock is **gone**: 34 of 34 calls returned real tokens, zero
+   diagnostics, on the seats that produced 40 faults before. `reasoning: low`
+   on the generation seats did what it was predicted to do.
+2. **C3 is confirmed on the live record**, not just on the rebuilt Config: no
+   attempt recorded a `split_legs` structure, where P-A1 ran 36 reason + 36
+   extraction legs.
+3. **The hv deferral gate is fixed**: 19 deferrals → 0, and the variator was
+   actually called. Whether `hv` then *measures* remains open.
+4. **F4 is confirmed at production scale** by P6: the one seat's reasoning
+   knob was the whole cause, and 20/20 first-pass is not a marginal result.
+5. **F7 is new, and is the most valuable thing this run produced** — a defect
+   that only appears once the scratchpad is genuinely used, which is why three
+   prior tranches never saw it.
+
+### Residue
+
+- **The comparison P-A2 was built for still does not exist.** One cycle
+  against P-A1's five is not a before/after on reasoning behaviour; every
+  "fewer" in the coverage table is cycle depth, not quality.
+- **P3 and P4 remain genuinely open.** Their mechanisms were never exercised.
+- **The continuability law is violated again**: `verify_root` is clean and the
+  terminal still refuses `amend`/`continue`
+  (`TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL`). Two independent runs now
+  show an intact record no operation can resume.
+- **F7 is not fixed here.** This is a run tranche; the one-line remedy and its
+  regression test belong to a change tranche.
