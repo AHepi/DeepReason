@@ -1,7 +1,12 @@
 # SPEC — provenance history as a seat-queryable channel
 
-**STATUS: DRAFT. Sections marked `[PENDING M#]` are not final and must not be
-implemented from.** Every such section is blocked on a measurement that was
+**STATUS: COMPLETE for Phase 1, pending operator approval of this document and
+`CHECKLIST.md` (C8). All measurements have landed; no section is still
+`[PENDING]`.** One stop condition is OPEN and is stated in §4: C13 triggers
+because M3 was inconclusive.
+
+**Original status line, kept for the record:** "DRAFT. Sections marked
+`[PENDING M#]` are not final and must not be implemented from." Every such section is blocked on a measurement that was
 pre-registered in `PREREG.md` before the arms launched. Phase 1 ends when the
 M-results land, those sections close, and the operator approves this document
 and `CHECKLIST.md` (C8). No production code is written in this phase.
@@ -175,9 +180,22 @@ fields, popped in `_versioned_source_config_data` so they never enter
 covers this SHAPE; field names and count are fixed in `CHECKLIST.md`, and any
 departure from insertions-only or from digest preservation is a fresh stop.
 
-**S10 — DEFAULTS. `[PENDING M1, M3]`** The conjecturer default and the critic
-default are decided by the measurements, by the table pre-registered in
-`PREREG.md` §3 before any arm ran, and not by whoever reads the numbers:
+**S10 — DEFAULTS. CLOSED by M1 and M3.**
+
+*Conjecturer: history ON by default.* M1 (`RESULTS_M1.md`) found the treatment
+arm produced conjectures that were semantically more spread (D5 0.179 vs 0.147,
++21.8%; D4 +2.9% by an unrelated method) and **21.6% cheaper per admitted
+conjecture** (9,870 vs 12,597 tokens) — the last of which FALSIFIED the
+registered prediction that history would cost more. The default is ON because
+nothing measured argued against it and the cost objection was the one concrete
+argument, and it failed. It is a DEFAULT, not a law: S8 makes it switchable
+per run, and the honest strength of the evidence is one paired run on one
+question, with quality unmeasured.
+
+*Critic: BLIND by default, and this is a STOP.* M3 (`RESULTS_M3.md`) was
+INCONCLUSIVE on every pre-registered measure — both record-derived measures are
+structurally unable to discriminate (PARKED P7), and blind judging was not run.
+The decision follows the table below, fixed before any arm ran:
 
 | M3 outcome | critic default |
 |---|---|
@@ -189,11 +207,14 @@ Blind remains available as a default in every branch regardless of outcome
 (monitor's reading point 3), because R7 is the operator's own hypothesis and
 the shipped behaviour.
 
-**S11 — critics get an ask path or they do not get one.** Per §1.1 a critic
-cannot request anything today. If M3 says INFORMED, this spec must either build
-the critic-side request path or specify harness-side exposure without a
-request; if M3 says BLIND, neither is built in Phase 2 and the channel exists
-for conjecturers only. `[PENDING M3]`
+**S11 — critics get NO ask path in Phase 2. CLOSED by M3.** Per §1.1 a critic
+cannot request anything today, and M3 gave no evidence for changing that. The
+channel therefore ships for CONJECTURER seats only. The critic-side request
+path is not built, not stubbed, and not designed here; the exposure policy
+(S7-S9) still carries a critic key so a later run can switch it on without a
+code edit, which is what C1's ungated-seats law requires. Revisit only on a
+measurement that discriminates — `RESULTS_M3.md` names the three things that
+would produce one.
 
 ---
 
@@ -234,7 +255,7 @@ pack budget at all.
 
 ---
 
-## 6. The anti-attractor shaping rule (R8) `[PENDING M1]`
+## 6. The anti-attractor shaping rule (R8) — CLOSED by M1, provisionally
 
 **CORRECTION, from PARKED P7, before any of this is implemented.** The rule's
 second limb — failed attacks — cannot be built from `att`. A not-landed attack
@@ -245,7 +266,7 @@ anything, or dropped and said to be dropped. M1's treatment arm ran with this
 limb empty, so the hypothesis was tested at half strength — and the missing
 half is the one R8 most directly names.
 
-**S15 — exposure is SHAPED, not complete.** Refuted lineages and failed attacks
+**S15 — exposure is SHAPED, not complete. CLOSED by M1, at half strength.** Refuted lineages and failed attacks
 are shown; the winning lineage is shown only on explicit request. The
 hypothesis is that showing what has already died is anti-attractor information
 while showing the winner is the attractor itself. This is registered in
@@ -253,8 +274,20 @@ while showing the winner is the attractor itself. This is registered in
 near-duplicate rate — and the render that tests it withholds the winner by
 construction (`render_history.py`).
 
-**If M1 shows H1 RAISES the near-duplicate rate, S15 is wrong as specified and
-may not be adopted.** That is a C13 stop, not an adjustable parameter.
+**Outcome.** M1 did NOT show H1 raising the near-duplicate rate, so S15 is not
+refuted — but it is not confirmed either. The near-duplicate measure was at
+FLOOR in both arms (1 pair of 903 vs 0 of 861), so the registered rule was
+refused rather than applied, and the rule itself is recorded as the wrong
+instrument for a question this saturated.
+
+**S15 is adopted PROVISIONALLY, and the qualification is not decoration.** Per
+PARKED P7 the rule's second limb — failed attacks — could not be rendered at
+all, because a not-landed attack mints no warrant and so leaves no edge. M1's
+treatment arm ran with that limb EMPTY. The anti-attractor hypothesis was
+therefore tested with only its refuted-claims half, and the missing half is the
+one R8 most directly names. Phase 2 must source failed objections from
+criticism records that warranted nothing before S15 can be said to have been
+tested at all.
 
 ---
 
@@ -288,8 +321,8 @@ monitor's reading point 5), which is why the two are separable at all.
 
 ## 9. Acceptance checks
 
-One per specification item, each falsifiable. `[PENDING]` rows close when their
-measurement lands.
+One per specification item, each falsifiable. Every row is closed; the three
+that were blocked on measurements now carry their outcome.
 
 | item | acceptance check |
 |---|---|
@@ -302,11 +335,11 @@ measurement lands.
 | S7 | two seats of the same role carry independent policies |
 | S8 | switching a channel off emits a findable typed notice — not merely off |
 | S9 | `source_config_hash` byte-identical at all six schema versions; the fields never reach `engine_config_json` |
-| S10 | `[PENDING M1, M3]` |
-| S11 | `[PENDING M3]` |
+| S10 | conjecturer default ON, critic default BLIND; both switchable per S8. Closed by M1/M3 |
+| S11 | no critic ask path in Phase 2; the policy still carries a critic key so a run can switch exposure on without a code edit |
 | S12 | a query result appears as a `workflow-context-exposure-v2` receipt; `verify_root` green; no new object kind |
 | S13 | an answer that would exceed the remaining pack budget is bounded before render |
-| S15 | `[PENDING M1]` |
+| S15 | adopted provisionally; the failed-attack limb must be sourced outside `att` (P7) before it counts as tested |
 | S16 | the episode switch is reachable as configuration with no code edit |
 
 ---

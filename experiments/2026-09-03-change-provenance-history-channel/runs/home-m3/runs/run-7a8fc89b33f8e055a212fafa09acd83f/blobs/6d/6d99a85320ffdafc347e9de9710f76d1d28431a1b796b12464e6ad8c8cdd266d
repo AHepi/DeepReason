@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of truth, but as a non-inductive methodological rule grounded in verisimilitude (truth-likeness) and the pragmatic necessity of acting on the best-tested available option, though this stance costs the framework its formal coherence regarding verisimilitude definitions and forces a concession that 'rational preference' is distinct from 'logical probability'.",
+    "mechanism": "The argument reconstructs Popper's distinction between the logical status of a theory (which remains unproven) and the meta-scientific rule of preference. It posits that while corroboration reports past performance without predicting future success (blocking induction), the choice to act on the most severely tested theory is a rational procedural mandate aimed at maximizing verisimilitude. This mechanism treats the preference as a 'conjectural bet' rather than a probabilistic calculation, thereby attempting to bypass Hume's problem while justifying scientific practice.",
+    "counterconditions": [
+      "If the Miller-Tichý refutation of verisimilitude holds universally, then the bridge between corroboration and truth-likeness collapses, rendering the preference arbitrary within Popper's logic.",
+      "If 'pragmatic necessity' is admitted as a sufficient reason for preference, then the distinction between logical justification and practical action dissolves, effectively smuggling in a form of pragmatic induction.",
+      "If Popper's own behavior in choosing theories implies a belief in their higher probability of truth, then his explicit denial that corroboration equals probability is inconsistent with his implicit epistemic commitments."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The candidate explicitly distinguishes between 'logical justification' (which Popper denies exists for induction) and 'methodological rule' (which he affirms). The rebuttal argues that the criticism conflates the two by assuming a preference requires a logical proof of truth, whereas Popper offers a procedural rationale for action without such proof."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "revised",
+        "note": "Revised to clarify that Popper's solution is not merely a redefinition of probability but a shift to a non-probabilistic metric (verisimilitude) and a procedural rule. The claim now explicitly states that the dilemma is avoided by rejecting the premise that preference must be based on probability."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be73990a91bfccedd76a3db90a87926c01",
+        "kind": "departure_declared",
+        "note": "Declared departure from the assumption that the Miller-Tichý refutation is fatal to all notions of truth-likeness. The candidate proceeds by treating verisimilitude as a regulative ideal necessary for the argument, acknowledging the formal critique but arguing that Popper's system functionally relies on an intuitive, if formally problematic, version of it."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The candidate rejects the conflation charge by defining 'rational defensibility' in Popperian terms as adherence to critical methods, not biological survival. The analogy to evolution is used only illustratively; the core defense rests on the logical asymmetry between falsification and verification, which provides the non-inductive reason for preference."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "Revised to acknowledge that Popper struggled with the formal definition of verisimilitude post-1974. The claim now frames verisimilitude as a 'costly commitment' that Popper retained despite formal difficulties, rather than asserting it as a fully resolved formal tool."
+      },
+      {
+        "handle": "60ef0d6b71db19114ca85499b1bdf00dea34b3d51f9c0ada0d35365043649fc0",
+        "kind": "rebutted",
+        "note": "The candidate directly addresses the normative question by arguing that the 'preference' is defensible as a normative rule of conduct (methodology) rather than a descriptive account of belief formation. It asserts that Popper's own behavior is consistent with following a self-imposed rule to prefer the best-tested theory, even without believing it is probably true."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "revised",
+        "note": "Revised to explicitly include the 'strongest case' for the opposing view (that the preference smuggles in induction) within the counterconditions and the final cost analysis, ensuring both sides of the dilemma are represented as required by the problem statement."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The candidate argues that accepting the preference as a methodological rule does not reduce science to mere psychology; rather, it preserves normativity by establishing a critical standard (severity of test) that dictates choice, distinguishing it from arbitrary psychological habit."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["legal_precedent_selection", "medical_triage_protocols"],
+      "shared_structure": [
+        "Decision making under uncertainty without probabilistic certainty",
+        "Preference for options with the most rigorous past testing/screening",
+        "Separation of procedural justification from ontological guarantee"
+      ],
+      "disanalogies": [
+        "Legal precedents aim for consistency with past rulings, whereas Popper seeks discontinuity via falsification",
+        "Medical triage often relies on statistical survival rates (inductive), which Popper explicitly rejects for theory choice"
+      ],
+      "transfer_claims": [
+        "Just as a judge follows precedent not because it is infallible but because it is the most tested legal path, a scientist prefers corroborated theories as the most tested informational path",
+        "Procedural rationality can exist independently of predictive certainty in both domains"
+      ],
+      "overturn_conditions": [
+        "If legal precedent is shown to rely entirely on inductive generalization of fairness, the analogy fails to support Popper's non-inductive claim",
+        "If medical triage protocols are proven to be purely heuristic with no rational defense beyond survival bias, the structural parallel collapses"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

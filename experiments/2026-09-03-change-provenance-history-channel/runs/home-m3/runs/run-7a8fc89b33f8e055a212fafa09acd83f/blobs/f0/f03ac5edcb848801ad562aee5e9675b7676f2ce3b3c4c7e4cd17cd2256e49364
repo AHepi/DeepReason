@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference to truth or probability, but as a non-inductive methodological rule grounded in the 'principle of transference': if we must act, we should act on the theory that has withstood the most severe tests because it offers the best chance of avoiding error, even though this provides no logical guarantee of future success. This avoids smuggling in induction by explicitly rejecting the premise that past success increases future probability, instead framing the preference as a rational decision under uncertainty where the only available metric of robustness is severity of testing.",
+    "mechanism": "The argument reconstructs Popper's distinction between the logical status of a theory (which remains unfalsified but never probable) and the pragmatic rationality of choosing it for action. It leverages the concept of 'severity' to define corroboration not as accumulated positive instances (induction) but as the survival of risky predictions. The mechanism transfers the burden from justifying truth-likeness (which Miller/Tichý refuted) to justifying error-avoidance as a procedural norm.",
+    "counterconditions": [
+      "If corroboration is shown to logically entail a probabilistic increase in truth likelihood, the non-inductive defense collapses.",
+      "If the 'principle of transference' itself relies on an implicit assumption that the future will resemble the past, the charge of smuggled induction stands.",
+      "If acting on the best-corroborated theory cannot be distinguished from acting on the most probable theory in terms of expected utility, the distinction is merely verbal."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates logical justification (no probability increase) from pragmatic necessity (action rule), arguing the preference is defensible precisely because it accepts this gap rather than conflating them."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "rebutted",
+        "note": "The candidate does not redefine probability; it rejects probability as the criterion entirely, substituting 'severity of test survival' as the basis for the procedural rule, which aligns with Popper's actual solution."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be73990a91bfccedd76a3db90a87926c01",
+        "kind": "revised",
+        "note": "Revised to explicitly abandon 'verisimilitude' as a bridge. The defense now rests solely on error-avoidance and severity, acknowledging Miller/Tichý's refutation of formal verisimilitude while retaining the intuitive drive to prefer robust theories without claiming they are 'closer to truth' in a measurable sense."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The analogy to evolution is not used; instead, the argument relies on the logical structure of decision theory under ignorance, distinguishing procedural necessity from rational defensibility by defining rationality as adherence to the method most likely to detect errors, not to predict truths."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "Explicitly states that verisimilitude is abandoned as a formal guide. The preference is justified by the 'survival of severe tests' metric alone, which remains coherent even if verisimilitude is not."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "rebutted",
+        "note": "The candidate presents the strongest case for defensibility (error-avoidance via severity) and implicitly addresses the counter-case by showing why the induction charge fails if the probabilistic link is severed, fulfilling the directive to weigh both sides."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The cost identified is not the loss of all normativity, but the loss of 'truth-directed' normativity. The candidate argues Popper retains a 'error-avoidance' normativity, which is distinct and sufficient for scientific practice without invoking induction."
+      },
+      {
+        "handle": "900d96a45b619700ca7b8bd3c22cf6543d0c74e7f033d5be40ecec34562a7dbb",
+        "kind": "rebutted",
+        "note": "The candidate defines 'rational defensibility' strictly within Popper's framework as adherence to the method of severe testing, arguing that this methodological preference IS the rational defense, rendering the alleged conflation a misunderstanding of Popper's redefinition of rationality."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["biological_evolution_survival", "courtroom_adversarial_testing"],
+      "shared_structure": [
+        "Survival of severe challenges indicates robustness, not future certainty.",
+        "Selection is based on elimination of weak candidates, not confirmation of strong ones.",
+        "Preference for the survivor is pragmatic, not predictive."
+      ],
+      "disanalogies": [
+        "Biological survival has no intentional agent making a choice; science does.",
+        "Courtroom verdicts aim for a binary true/false; scientific theories remain conjectural."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the fighter who survived the hardest bouts (not because they are invincible, but because they haven't lost yet), we act on the theory that survived severe tests.",
+        "The rationality lies in the selection process (severity), not the outcome (truth)."
+      ],
+      "overturn_conditions": [
+        "If survival in biological evolution is shown to correlate with future fitness in a way that implies induction, the analogy fails.",
+        "If adversarial testing in courts is shown to reliably produce true verdicts rather than just unrefuted claims, the disanalogy collapses."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

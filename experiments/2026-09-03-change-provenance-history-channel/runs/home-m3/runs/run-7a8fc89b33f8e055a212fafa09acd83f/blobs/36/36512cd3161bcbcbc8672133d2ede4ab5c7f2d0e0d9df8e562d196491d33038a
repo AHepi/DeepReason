@@ -1,0 +1,62 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of truth, but as a non-inductive methodological rule grounded in the logic of falsification: we prefer the theory that has survived severe tests because it has higher empirical content and has not yet been falsified, making it the best available target for future criticism. This preference does not smuggle in induction because it makes no claim about the future probability of the theory being true; it only asserts that, relative to our current critical discussion, this theory is the most worthy of further testing. The cost of accepting this view is the abandonment of the hope that science converges toward probable truth or even definable verisimilitude (given the Miller-Tichý refutation), leaving us with a purely procedural rationality where 'progress' is defined solely by the elimination of error, not the accumulation of confirmed knowledge.",
+    "mechanism": "The argument reconstructs Popper's distinction between the logical status of a theory (which cannot be probabilified) and the methodological decision of which theory to subject to further tests. It leverages the concept of 'empirical content' (boldness) to explain why surviving severe tests matters: a bold theory that survives is more informative than a cautious one, regardless of its truth probability. It addresses the Miller-Tichý refutation by conceding that verisimilitude cannot be formally defined as a guide, forcing the defense to rest entirely on the negative achievement of error elimination rather than positive approximation to truth.",
+    "counterconditions": [
+      "If one can demonstrate that acting on the best-corroborated theory logically entails an assumption that the future will resemble the past (induction), then the preference is indefensible on Popperian terms.",
+      "If the Miller-Tichý refutation implies that we cannot even rationally claim a falsified theory is 'further from the truth' than a surviving one, then the basis for preferring the survivor collapses into arbitrary convention.",
+      "If Popper's own practical advice to scientists relies on tacit inductive assumptions despite his explicit denials, then his system is internally inconsistent."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The candidate explicitly distinguishes between 'logical justification of truth' (which Popper rejects) and 'methodological rule for test selection' (which he accepts). The rebuttal argues that the criticism conflates these two; Popper's defense is precisely that the preference is pragmatic/procedural, not a logical proof of probability, so the target does not fail but succeeds by making this distinction central."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "rebutted",
+        "note": "The candidate avoids the false dilemma of redefining probability. Instead, it adopts Popper's actual solution: preference is based on 'survival of severe tests' and 'high empirical content,' which are distinct from probability. The claim clarifies that the preference is for the theory that offers the best opportunity for learning (via potential falsification), not the one likely to be true."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be781309f41efbf83ee12b50af6bda6c89",
+        "kind": "revised",
+        "note": "Revised to explicitly concede the Miller-Tichý refutation of formal verisimilitude. The candidate no longer relies on verisimilitude as a coherent substitute for probability but instead grounds the preference strictly in the 'logic of falsification' and 'error elimination,' acknowledging that we cannot measure distance to truth, only the fact of having not yet been proven wrong."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The candidate rejects the biological evolution analogy entirely, relying instead on the logical asymmetry between verification and falsification. It argues that the 'rational defensibility' comes from the deductive validity of modus tollens (falsification), not a procedural necessity akin to natural selection. The preference is rational because it maximizes the rate of error detection, a deductive goal."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "rebutted",
+        "note": "Agrees that Popper abandoned formal verisimilitude as a quantitative guide. The candidate defends the preference without invoking verisimilitude as a measurable quantity, using it only in a qualitative, informal sense of 'not yet falsified,' which remains valid even if the formal definition failed. The core mechanism is error elimination, not truth approximation."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for BOTH answers as required. It first articulates the defense (preference as methodological rule for error elimination) and then details the opposing case (that this smuggles in induction via the assumption that surviving tests indicates reliability). It concludes by weighing them, satisfying the directive."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The candidate accepts the cost of losing strong normativity regarding 'truth convergence' but argues this does not reduce science to mere psychology. The normativity is preserved in the logical obligation to seek falsifications; the preference is normative because it is the only rule consistent with the goal of eliminating error, distinct from the non-rational 'context of discovery'."
+      },
+      {
+        "handle": "900d96a45b619700ca7b8bd3c22cf6543d0c74e7f033d5be40ecec34562a7dbb",
+        "kind": "rebutted",
+        "note": "The candidate argues that for Popper, 'methodological preference' IS the only form of 'rational defensibility' available. Since logical justification for truth is impossible, rationality consists entirely in adhering to methods that maximize critical scrutiny. Therefore, showing the preference is a sound methodological rule IS showing it is rationally defensible; the criticism assumes a type of rationality (justificatory) that Popper explicitly rejects."
+      }
+    ],
+    "analogy": null,
+    "evidence_refs": [],
+    "optional_refs": [],
+    "checker_specs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}

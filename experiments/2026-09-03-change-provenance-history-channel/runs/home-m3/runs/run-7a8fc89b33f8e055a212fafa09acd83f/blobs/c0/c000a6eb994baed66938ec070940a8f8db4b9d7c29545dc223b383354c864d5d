@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies that preferring better-corroborated theories for future action relies on the assumption that past performance predicts future reliability (uniformity of nature). Since Popper explicitly rejected induction and the uniformity of nature as a logical principle, acting on corroboration without this inductive bridge renders the preference arbitrary or contradictory within his own strict anti-inductive framework. The target's mechanism accurately describes this 'Hidden Inductive Leap' which smuggles induction back in.",
+      "counterexample": null,
+      "premise": "Popper rejected the principle of the uniformity of nature and induction, yet acting on corroboration requires assuming the future will resemble the past.",
+      "premise_evidence": null,
+      "successor_question": "Can Popper's notion of 'verisimilitude' (truth-likeness) provide a non-inductive justification for preferring corroborated theories, or does it also implicitly rely on inductive assumptions?"
+    }
+  ]
+}

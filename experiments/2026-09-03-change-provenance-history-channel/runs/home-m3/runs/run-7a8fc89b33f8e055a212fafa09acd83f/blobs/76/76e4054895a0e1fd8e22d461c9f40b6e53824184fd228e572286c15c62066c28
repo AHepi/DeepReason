@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of truth, but as a non-inductive methodological rule grounded in the objective logic of testing: we prefer the theory that has survived the most severe tests because it has exposed itself to the greatest risk of falsification and failed to be eliminated, thereby offering the best available opportunity for future error detection. This preference does not smuggle in induction because it makes no probabilistic claim about the future; it is a strategic choice to maximize the growth of knowledge by retaining the most informative (and thus most testable) survivor. The cost of accepting this view is the abandonment of any guarantee that science converges toward truth or that acting on the best-corroborated theory is 'rational' in the sense of maximizing expected utility; it is rational only in the negative sense of minimizing the chance of clinging to a readily falsifiable error.",
+    "mechanism": "Reframe corroboration as a measure of a theory's 'testability surplus' rather than its likelihood. The mechanism is a decision rule: 'Select the hypothesis that has withstood the most stringent attempts at refutation,' justified solely by the fact that such a hypothesis contains more empirical content and thus offers more opportunities for future learning if it is false. This avoids induction by refusing to project past survival into future success, treating the preference as a procedural imperative for critical inquiry rather than an epistemic warrant for belief.",
+    "counterconditions": [
+      "If one insists that 'preference' implies an expectation of future success, then Popper's position collapses into hidden induction.",
+      "If the concept of 'severity' of tests cannot be defined without presupposing background theories that are themselves inductively supported.",
+      "If the goal of science is defined as finding true theories rather than eliminating false ones, rendering the 'survivor' strategy insufficient."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'justification for action' with 'inductive prediction.' My claim distinguishes them: the justification is purely methodological (maximize error detection), not pragmatic in the sense of assuming future regularity. The preference is a rule for conducting tests, not a bet on outcomes."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "rebutted",
+        "note": "I do not present a false dilemma nor redefine probability. I argue that the preference is defensible *without* redefining probability, by shifting the ground from 'likelihood of truth' to 'capacity for further testing.' Popper's solution is exactly this shift to a non-probabilistic metric of empirical content."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be73990a91bfccedd76a3db90a87926c01",
+        "kind": "revised",
+        "note": "Revised to explicitly avoid relying on 'verisimilitude' as a positive metric. The argument now rests solely on 'empirical content' and 'risk of falsification,' which remain coherent even if verisimilitude is formally problematic. The preference is for the theory with the highest surviving informational content, not the one 'closest to truth'."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "No biological analogy is used. The defense relies strictly on the logical asymmetry between verification and falsification. The 'procedural necessity' is derived from the definition of scientific progress as error elimination, which is a logical requirement of Popper's framework, not an inductive habit."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "Explicitly removed any dependence on 'verisimilitude' as a guide. The argument now stands on the coherence of 'corroboration as a report of past test severity' and the methodological rule to 'retain the most severely tested theory' to facilitate future falsification, bypassing the need for a formal theory of truth-likeness."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for defensibility (methodological rule for error detection) and the strongest case against it (cost of losing normative guarantees of truth/convergence). The conclusion weighs these, satisfying the directive to make both cases."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The cost identified is precisely the loss of strong normativity regarding 'truth convergence.' The argument accepts that Popper's distinction leaves us with a 'negative rationality' (avoiding error) rather than a 'positive rationality' (finding truth), which is the exact cost the problem asks to identify."
+      },
+      {
+        "handle": "900d96a45b619700ca7b8bd3c22cf6543d0c74e7f033d5be40ecec34562a7dbb",
+        "kind": "rebutted",
+        "note": "The defense argues that within Popper's system, 'methodological preference' *is* the only form of 'rational defensibility' available. To demand more is to demand induction. Thus, the preference is defensible *on Popper's own terms* precisely because it limits rationality to methodological rules, rejecting the conflation the critic alleges."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

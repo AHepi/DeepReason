@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target falsely claims that adopting a Darwinian epistemology requires abandoning the 'rational agent' model entirely. Popper explicitly argued that critical preference is a rational act based on the logical content of theories and their survival of tests, not merely a biological adaptation. By conflating the evolutionary origin of ideas with the rational justification for preferring them, the target constructs a false dilemma: one can accept that knowledge grows via variation and selection (evolutionary) while maintaining that the scientist's choice to prefer the better-tested theory is a reasoned decision based on available evidence (rational), without smuggling in induction or reducing the agent to a passive biological vessel.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between the context of discovery (which may be psychological or evolutionary) and the context of justification (which is logical).",
+      "premise_evidence": null,
+      "successor_question": "How does Popper's concept of 'critical preference' allow for rational agency without relying on inductive probability?"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target successfully constructs the strongest case for both sides as requested: it defends Popper's preference as a non-inductive methodological rule aimed at verisimilitude, while simultaneously identifying the fatal cost to this defense (the Miller-Tichý refutation). It correctly concludes that while the preference is defensible as a procedural imperative, accepting it costs the framework its formal coherence regarding verisimilitude. The response directly addresses the prompt's requirement to 'say which one survives and what accepting it costs' by noting the internal instability caused by the refutation.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

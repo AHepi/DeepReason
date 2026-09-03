@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of truth, but as a non-inductive methodological rule grounded in the aim of science to find true theories with high content; however, accepting this defense costs the ability to claim that such preferences make a theory 'more likely' to be true in any probabilistic sense, forcing a strict separation between rational action and epistemic probability.",
+    "mechanism": "The argument proceeds by distinguishing between the logical status of a theory (which remains unprobabilized by tests) and the procedural rationality of choosing the theory that has best withstood attempts at falsification. It leverages Popper's concept of 'verisimilitude' (truth-likeness) cautiously, acknowledging the Miller-Tichý critique but arguing that Popper's later appeal to 'corroboration as a guide to verisimilitude' functions as a metaphysical hope or regulative ideal rather than a formal logic, thereby avoiding the smuggling of induction while admitting a gap in formal justification.",
+    "counterconditions": [
+      "If the Miller-Tichý refutation of verisimilitude is taken as final and exhaustive, then Popper has no non-inductive bridge between corroboration and truth-likeness, rendering the preference irrational on his own strict logical terms.",
+      "If 'rational defensibility' is defined strictly as requiring a increase in logical probability, then Popper's preference fails by definition, as he explicitly denies corroboration increases probability.",
+      "If the practical necessity of acting on the best-corroborated theory is conflated with a logical justification for its truth, the argument collapses into the very induction Popper rejected."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The candidate explicitly distinguishes logical justification (which Popper denies exists for induction) from procedural rationality (which he affirms based on the aim of truth). The rebuttal clarifies that the preference is a methodological rule, not a logical proof of probability, thus avoiding the alleged conflation."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "revised",
+        "note": "Revised to clarify that Popper's solution is not merely redefining probability but positing a non-probabilistic link (corroboration as an indicator of verisimilitude) that operates outside the calculus of probability entirely, addressing the false dilemma charge."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be73990a91bfccedd76a3db90a87926c01",
+        "kind": "departure_declared",
+        "note": "Declared departure from the requirement that verisimilitude must be formally coherent in a strict logical sense to serve as a guide; instead, the candidate treats it as a regulative ideal or metaphysical assumption necessary for the practice of science, which Popper himself hinted at in later works."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The candidate rejects the biological evolution analogy as the primary defense, relying instead on the specific Popperian distinction between the logic of testing and the methodology of choice, thereby directly addressing the need for a non-inductive reason without conflating necessity with defensibility."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "Revised to acknowledge Popper's struggle with verisimilitude post-Miller/Tichý, framing the reliance not on a solved formal problem but on the unresolved but necessary 'hope' that corroboration tracks truth-likeness, which is the cost of the position."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for both sides: first, that the preference smuggles in induction if one demands probabilistic justification; second, that it is defensible if one accepts non-probabilistic methodological rules. It then adjudicates in favor of the latter with stated costs."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The candidate addresses the normativity issue by arguing that Popper's distinction preserves normativity through the 'aim of truth' rather than through a logic of discovery, rejecting the false dilemma that one must choose between psychological fact and logical normativity."
+      },
+      {
+        "handle": "900d96a45b619700ca7b8bd3c22cf6543d0c74e7f033d5be40ecec34562a7dbb",
+        "kind": "revised",
+        "note": "Revised to sharpen the definition of 'rational defensibility' within Popper's framework, specifying that it refers to consistency with the goal of eliminating error rather than increasing the probability of truth, thus resolving the conflation charge."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_003"],
+      "shared_structure": [
+        "Selection mechanism operates without guaranteeing future success",
+        "Past performance is used as a filter, not a predictor of probability",
+        "The system aims for an ideal (truth/survival) without claiming to have reached it"
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious aim, whereas Popperian science has the explicit normative aim of truth",
+        "Survival in nature is immediate and reproductive, while corroboration in science is retrospective and logical",
+        "Evolutionary fitness is relative to an environment, while scientific truth is intended to be absolute (or closer to it)"
+      ],
+      "transfer_claims": [
+        "Just as we prefer organisms that have survived severe environmental tests without assuming they are immortal, we prefer theories that have survived severe tests without assuming they are probable.",
+        "The rationality of the preference lies in the rigor of the test, not in the statistical likelihood of the outcome."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that survival in evolution implies a probabilistic increase in future survival rates in a way that corroboration does not for theories.",
+        "If the normative aim of truth in science is proven to be incoherent without a probabilistic foundation."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
