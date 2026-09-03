@@ -492,3 +492,30 @@ cherry-picking are all forms of taking `main` into this branch and are treated
 as covered by the same instruction; if a base move is ever needed it is a
 question for the operator, not a judgement call.
 
+
+
+---
+
+### Amendment 2 — 2026-09-03, mid-run
+
+Operator message, verbatim, while the M1 arms were in flight:
+
+> "Just tell me when runs are complete. Don't interpret."
+
+**R15 (process)** — report run COMPLETION; do not report interpretation of
+results in chat.
+
+**C15 (standing, communication)** — this NARROWS what reaches the operator's
+eyes, and it does not narrow what reaches the record. Interpretation,
+prediction outcomes and residue still go into each measurement's RESULTS.md,
+because PREREG.md §4 and C12 require them there and this instruction is about
+chat, not about the ledger. What changes is that intermediary chat messages
+report state and completion only.
+
+Note for whoever reads this next: C15 sits alongside the standing
+explanation-style law (CLAUDE.md 2026-08-06/2026-08-08, `dr-explain-to-operator`),
+which requires glossed terms and a closing analogy. Where the two meet, C15
+wins on VOLUME -- fewer messages, less commentary -- and the style law still
+governs the messages that are sent. R15 is not a licence to drop the honest
+residue from a final report; it is an instruction to stop narrating in
+progress.
