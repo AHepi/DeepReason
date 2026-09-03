@@ -93,6 +93,22 @@ POLICIES = {
 }
 
 
+class TransportSettings:
+    """What an endpoint needs from the run's transport configuration.
+
+    Assembled from Config's three scalars rather than being a Config field
+    itself: a carriage notice serialises a model as a dict and the manifest
+    reader refuses to coerce a dict back into a model, so a model-valued Config
+    field cannot survive the managed path.
+    """
+
+    __slots__ = ("policy_id", "streaming")
+
+    def __init__(self, policy_id=DEFAULT_POLICY_ID, streaming="auto") -> None:
+        self.policy_id = str(policy_id or DEFAULT_POLICY_ID)
+        self.streaming = str(streaming or "auto")
+
+
 def resolve(policy_id):
     """The policy for an id, and the id actually used.
 

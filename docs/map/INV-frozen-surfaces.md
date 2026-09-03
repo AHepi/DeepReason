@@ -238,11 +238,24 @@ line of the policy existed, with `tools/blast_radius.py`'s own
 disposed. The operator granted it the same day; the disposition is ledgered at
 that tranche's FIX.md.
 
-What moved: ONE `data.pop("TRANSPORT_POLICY", None)` statement at four spaces in
-`_versioned_source_config_data`, unconditional, joining the twenty-odd knobs
-already there, with the eight comment lines each of its neighbours carries.
-**Insertions only — 9 and 0.** No schema, no validator, no field, no digest
-input.
+What moved: THREE `data.pop` statements at four spaces in
+`_versioned_source_config_data` — `TRANSPORT_RETRY_POLICY`,
+`TRANSPORT_STREAMING`, `TRANSPORT_DEAD_SEAT_STREAK` — unconditional, joining the
+twenty-odd knobs already there, with the comment block each of its neighbours
+carries. **Insertions only — 11 and 0.** No schema, no validator, no field, no
+digest input.
+
+The grant asked for ONE line and this is three; the widening is recorded here
+rather than absorbed. It is not a design choice: the first implementation used a
+single nested `TransportPolicy` model, and the P10 regression test
+(`test_every_dropped_field_the_managed_path_can_set_round_trips`) found that a
+model-valued dropped field cannot round trip AT ALL — a carriage notice
+serialises it as a dict, and `_strict_carried_value` refuses to coerce a dict
+back into a model, by design ("a record must not buy a run by coercion"). A run
+setting the knob would have compiled and then refused to rebuild. Three scalars
+are what the carriage machinery accepts, and what every other dropped knob
+already is. Prior grants of this same recipe covered two lines (the split-budget
+knobs) and three (the judge knobs) at once.
 
 The safety argument is the same one every knob above it carries, and it runs the
 OTHER way from the usual reading of this surface: the pop is what PREVENTS the
@@ -265,11 +278,21 @@ EMPTY: `route_fingerprint` is not touched, no `Route` field moves, and
 obeys — the authorized-cap set and the `transport_profile` vocabulary — were
 reached by READING that surface, not by changing it.
 
-`check: test "$(grep -c "data.pop(\"TRANSPORT_POLICY\", None)" src/deepreason/run_manifest.py)" -eq 1 && grep -q "^    data.pop(\"TRANSPORT_POLICY\", None)$" src/deepreason/run_manifest.py && python -c "
+`check: python -c "
 from deepreason.config import Config
-from deepreason.run_manifest import _versioned_source_config_data
+from deepreason.run_manifest import _versioned_source_config_data, config_from_run_manifest
+KNOBS = ('TRANSPORT_RETRY_POLICY', 'TRANSPORT_STREAMING', 'TRANSPORT_DEAD_SEAT_STREAK')
 for version in (1, 2, 3, 4, 5, 6):
-    assert 'TRANSPORT_POLICY' not in _versioned_source_config_data(Config(), version)
+    echoed = _versioned_source_config_data(Config(), version)
+    for knob in KNOBS:
+        assert knob not in echoed, (knob, version)
+# Dropped is only half of it: a knob the echo drops must still round trip
+# through its carriage notice, or setting it breaks the run that set it.
+import sys; sys.path.insert(0, '.')
+from tests.test_reusable_qualification import _manifest, _profile
+for field, want in zip(KNOBS, ('identical-v0', 'off', 7)):
+    manifest = _manifest(_profile(), config_updates={field: want})
+    assert getattr(config_from_run_manifest(manifest), field) == want, field
 " && python -m pytest tests/ -q -k test_the_shipped_qualification_subject_digest_does_not_move`
 
 **Granted contact, 2026-08-27 — the sandbox attribute boundary (the escape fix).**

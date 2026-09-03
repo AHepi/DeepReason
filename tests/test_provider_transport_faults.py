@@ -557,7 +557,7 @@ def test_a_dead_seat_streak_emits_a_typed_notice_once_and_does_not_stop_the_run(
     shutil.copytree(source, root)
 
     config = Config()
-    config.TRANSPORT_POLICY.dead_seat_streak = 1
+    config.TRANSPORT_DEAD_SEAT_STREAK = 1
 
     class _Bound:
         # The two methods under test, over a harness and a config and nothing
@@ -602,7 +602,7 @@ def test_a_healthy_run_emits_no_dead_seat_notice(tmp_path):
     shutil.copytree(source, root)
 
     config = Config()
-    config.TRANSPORT_POLICY.dead_seat_streak = 99
+    config.TRANSPORT_DEAD_SEAT_STREAK = 99
 
     class _Bound:
         _provider_health = Scheduler._provider_health

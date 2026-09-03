@@ -1901,7 +1901,12 @@ def build_adapter(
     # for the same reason: the retry policy is process health, not route
     # identity, so it stays out of EndpointLease.verify's equality set and out
     # of route_sha256.
-    transport_policy = getattr(config, "TRANSPORT_POLICY", None)
+    from deepreason.llm.transport_policy import TransportSettings
+
+    transport_policy = TransportSettings(
+        policy_id=getattr(config, "TRANSPORT_RETRY_POLICY", None),
+        streaming=getattr(config, "TRANSPORT_STREAMING", "auto"),
+    )
     for built in endpoints.values():
         for endpoint in built if isinstance(built, list) else [built]:
             if hasattr(endpoint, "transport_policy"):

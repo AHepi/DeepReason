@@ -3070,12 +3070,7 @@ class Scheduler:
         from deepreason.runtime.provider_health import dead_seats, seat_health
 
         health = seat_health(self.harness)
-        threshold = int(
-            getattr(
-                getattr(self.config, "TRANSPORT_POLICY", None), "dead_seat_streak", 0
-            )
-            or 0
-        )
+        threshold = int(getattr(self.config, "TRANSPORT_DEAD_SEAT_STREAK", 0) or 0)
         for instance in dead_seats(health, threshold):
             row = health[instance]
             inputs = [

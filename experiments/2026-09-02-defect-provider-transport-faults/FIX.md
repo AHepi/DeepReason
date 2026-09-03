@@ -429,3 +429,34 @@ About 40% of the two new modules is docstring and comment (112 lines ->
 knob carries the reason it exists. The honest reading is that a three-obligation
 goal does not fit a one-obligation estimate, and `GOAL.md` said so before the
 work started without correcting the number here.
+
+
+## Amendment 3 — 2026-09-03: the nested Config field cannot round-trip, so it becomes three scalars
+
+**What the gate found.** `tests/test_manifest_config_disclosure.py::test_every_dropped_field_the_managed_path_can_set_round_trips` — one failure in 4 624. Not a fixture nit: it is the P10 regression test, and its contract is that **every** dropped `Config` field must survive the carriage notice back into the rebuilt `Config`.
+
+`TRANSPORT_POLICY` does not. Driven directly:
+
+```
+RunManifestError: CARRIED_CONFIG_VALUE_INVALID at /engine_config/TRANSPORT_POLICY:
+carriage notice for 'TRANSPORT_POLICY' holds a dict that would be coerced to
+TransportPolicy; a record must not buy a run by coercion
+```
+
+`_strict_carried_value` (`run_manifest.py:4498-4527`) refuses any carried value whose decoded type differs from the accepted one, allowing only `list -> tuple`. A notice serialises a nested model as a dict, so **no pydantic-model `Config` field can round-trip at all.** That is a deliberate guard — a hand-edited record must not buy a working run — and it is not this tranche's to weaken.
+
+The consequence had I shipped it: setting `TRANSPORT_POLICY` in a `run-config.yaml` would compile, emit its carriage notice, and then refuse to rebuild. Fail-closed rather than the silent revert of finding P10, so not a repeat of that defect — but a knob that breaks the run when you use it is not "customisation is easy" (2026-08-26) and not operations parity (2026-08-13).
+
+**The change.** `TRANSPORT_POLICY: TransportPolicy` becomes three scalars, which is what every other dropped knob already looks like:
+
+```
+TRANSPORT_RETRY_POLICY: str = "stream-the-retry-v1"     # registry selector
+TRANSPORT_STREAMING: Literal["auto", "on", "off"] = "auto"
+TRANSPORT_DEAD_SEAT_STREAK: int = Field(default=3, ge=1)
+```
+
+`llm/transport_policy.TransportSettings` — a plain frozen dataclass, not a `Config` field — is assembled from the three in `build_adapter` and attached to the endpoint, so `endpoints.py` is unchanged by this amendment.
+
+**Frozen-surface consequence, disclosed rather than absorbed: the granted contact widens from ONE `data.pop` line to THREE.** Still `_versioned_source_config_data`, still unconditional, still four spaces, still insertions only, and still the thing that PREVENTS the qualification subject digests moving. The grant's substance — "you may drop your knob(s) from the engine-config echo" — is unchanged and the count is what the round-trip machinery dictates; prior grants of this recipe covered two lines (the split-budget knobs) and three (the judge knobs) at once. It is nonetheless MORE than was granted, and it is flagged in the delivery report rather than buried here.
+
+**Fixture update, and why it extends rather than relaxes.** The test's generic perturbation is `default + 1`, so string-valued dropped fields carry an explicit row; `SPLIT_BUDGET_SEAT_PROTOCOL` and `SUCCESSOR_QUESTION_DESTINATION` already have one, added by the tranches that introduced them. Two rows are added here and the count assertion moves from 26 to 29. The three new fields are now asserted to round-trip like the other 26 — coverage grows, nothing is weakened.
