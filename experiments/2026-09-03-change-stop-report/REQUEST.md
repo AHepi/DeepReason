@@ -332,3 +332,32 @@ DELIVERY.md reconciles R1-R28. The Q1c fork is CLOSED.
 Recorded per `dr-ask-the-right-question` §2, the "do it" row: the
 operator approved EXACTLY the recommended options as stated, which is
 approval of those plans and not a licence to widen any of them.
+
+
+### Amendment 2 — 2026-09-03, the budget ceiling raised
+
+Raised at step 9 as a STOP (`dr-execute-step` §6: an EXCEEDED
+`diff_budget.py` verdict is a stop, not a footnote). The operator was
+given the measured overrun, its cause, and three priced roads. Their
+selection, verbatim as the option label chosen:
+
+> "Raise the ceiling, continue (Recommended)"
+
+**R29 (process):** SPEC.md's ~1 307-line source ceiling is SUPERSEDED by
+a ceiling of **2 100 source insertions** across `src/deepreason`,
+`tests`, `docs/map` and `.claude/skills` (1 561 landed at step 9, ~420
+projected for Group B and the proof script, plus headroom). The tranche
+ledger under `experiments/` and generated proof outputs remain artifacts
+and are not counted, as SPEC.md's Budget section already stated. R28's
+two-commit-group shape is unchanged.
+
+Recorded cause, so the overrun is not read as scope creep: every line
+traces to an existing R number. The excess is three capabilities the
+LIVE RECORD forced, none of which the estimate could have contained
+because the estimate was written before the roots were read —
+(1) the `root-no-log` third source kind, because R18's P-A2 epochs 1 and
+2 are neither a run root nor a bare home; (2) the clean-stop guard,
+because R6 must not manufacture blame for a run that reached a clean
+terminal; (3) the vindication-scoping fix, because R9 must not let one
+seat's pass excuse a different seat's failure. Each ships with its own
+regression test in commit 72046a17b4.

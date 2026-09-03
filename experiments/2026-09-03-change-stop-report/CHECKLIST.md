@@ -1,6 +1,6 @@
 # Checklist for: the stop report — the harness writes the first failure report
 
-State: next=10 blockers=BUDGET STOP — diff_budget.py returns EXCEEDED (1561 source insertions vs SPEC.md's 1307 ceiling). Steps 3-9 are complete and green; step 10 waits on the operator's word. See the STOP block below step 9.
+State: next=10 blockers=none — the budget STOP raised at step 9 is RESOLVED (REQUEST.md Amendment 2: ceiling raised to 2100 source insertions on the operator's word). All later [COMMIT] steps check against 2100.
 
 Re-read REQUEST.md (incl. Amendment 1) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -318,6 +318,12 @@ vindicate another). Each is covered by a regression test in this commit.
 
 Per `dr-execute-step` §6 this is a STOP, not a footnote. Decision put to
 the operator at step 9; step 10 does not start until it is answered.
+
+**RESOLVED 2026-09-03** — operator: "Raise the ceiling, continue
+(Recommended)". Ledgered as REQUEST.md Amendment 2 / R29: the ceiling is
+now 2 100 source insertions across `src/deepreason`, `tests`,
+`docs/map` and `.claude/skills`. Every later [COMMIT] step checks
+`diff_budget.py` against 2100, not 1307.
 
 - [ ] 10. (R26, M10) Add the CLI subcommand `deepreason stop-report
       <root-or-home> [--json] [--config FILE] [--verify]` to
