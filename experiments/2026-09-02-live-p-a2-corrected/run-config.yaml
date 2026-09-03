@@ -342,8 +342,36 @@ RESEED_DIST_MIN: 0.0401
 # ---------------------------------------------------------------------------
 # The advisory scratch workspace ships DISABLED. Everything under it is at
 # its audited default; only `enabled` moves.
+#
+# C6 -- SWITCHED BACK OFF (operator ruling 2026-09-03, after epoch 3).
+#
+# This is the one module P-A2 turned on that P-A1 never actually exercised,
+# and turning it on is what killed epoch 3 at cycle 0. FINDINGS.md F7:
+# `scheduler.py`'s conjecture-context RETRY path re-plans the context and
+# omits the v6 null-out its own primary path performs twelve lines above, so
+# the retry re-enters `conj()` with a live plan and `conj.py:827` refuses it
+# with "v6 conjecture context must be planned after durable work
+# preparation". The ValueError matches none of the handlers beneath it and
+# terminalizes the run.
+#
+# `ConjectureContextStale` -- the exception that selects that retry path -- is
+# raised from exactly three sites, ALL in `scratch/conjecture.py`. So the
+# defect is reachable ONLY through a live scratchpad, and switching the
+# scratchpad off routes around it completely without touching source, which a
+# RUN tranche may not do.
+#
+# WHAT THIS COSTS THE COMPARISON, and it is unusually little: P-A1 had this
+# module configured ON and it DID NOT FIRE -- "no event carries a scratch
+# payload". So the row being dropped is one P-A1 has no live data for either,
+# and the P-A1 -> P-A2 comparison loses nothing it ever had. Every other
+# module, and P1 through P5, get their first real 24-cycle test.
+#
+# RESIDUE: this run therefore says nothing about the scratchpad, and F7 stays
+# open and unfixed. The successor-question destination below still names
+# `scratchpad.v1`, which is the shipped default and is inert while the
+# workspace is off -- minting is OFF too, so nothing routes there either way.
 scratchpad:
-  enabled: true
+  enabled: false
 
 # Successor questions: the FIELD routing stays at its default destination
 # (on), per the P9 law of 2026-08-29. The MINTING gate stays OFF -- its

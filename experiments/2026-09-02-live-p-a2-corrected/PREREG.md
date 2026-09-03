@@ -160,6 +160,58 @@ epoch 1. Epoch 1's own artifacts are preserved unedited.
 
 ---
 
+### AMENDMENT 2 — 2026-09-03, after epoch 3 died at cycle 0 on F7
+
+**Frozen before epoch 4's first live call. Epoch 1's and Amendment 1's text
+are unchanged.**
+
+**What happened.** Epoch 3 qualified 23/23 (P6 held), ran real work — 34
+clean provider calls, 13 accepted artifacts, 18 judge calls — and died at
+**cycle 0 of 24**: `operational_failure`, *"v6 conjecture context must be
+planned after durable work preparation"*, `verify_root` 0 violations. Not the
+seat death P5 named: the last provider call was valid at 30 389 tokens. The
+model succeeded and the harness refused its own next step.
+
+**The cause (FINDINGS.md F7).** `scheduler.py`'s conjecture-context retry path
+re-plans the context and omits the v6 null-out its primary path performs
+twelve lines above; the retry re-enters `conj()` with a live plan and
+`conj.py:827` refuses it. `ConjectureContextStale`, the exception selecting
+that path, is raised from three sites, **all in `scratch/conjecture.py`** — so
+the defect is reachable ONLY through a live scratchpad.
+
+**The amendment (operator ruling, 2026-09-03): C6 — `scratchpad.enabled:
+false`.** Pure configuration; a RUN tranche may not edit source, and this
+routes around F7 completely.
+
+**What it costs the comparison, and it is unusually little.** P-A1 had this
+module configured ON and **it did not fire** — no event in P-A1's record
+carries a scratch payload. So the row being dropped is one P-A1 has no live
+data for either, and the P-A1 → P-A2 comparison loses nothing it ever had.
+
+**What it costs in honesty, stated plainly.** This run says NOTHING about the
+scratchpad, and F7 stays open and unfixed. P-A2's claim to be "every module
+on" is now false in exactly one place, and that place is named here rather
+than left for a reader to notice.
+
+**A new prediction, registered now.**
+
+> **P7 — the run passes cycle 0.** Epoch 4 reaches **cycle ≥ 1** and does not
+> stop with `"v6 conjecture context must be planned after durable work
+> preparation"`.
+>
+> Refuted if it dies at cycle 0 again. If it dies at cycle 0 on that SAME
+> message with the scratchpad off, then F7's reachability analysis is wrong —
+> `ConjectureContextStale` would have another source — and that is a finding
+> against F7 and a STOP, not a fifth epoch.
+
+**P1–P5 are unchanged and finally get their first full-depth test.** Their
+P-A1 baselines and refutation conditions stand exactly as §4 froze them.
+
+**Cost:** removing the scratch contracts changes the qualification subject
+digest, so the full ~96-minute battery re-runs; nothing is cached.
+
+---
+
 ### What is held CONSTANT from P-A1 (and gated, so it cannot drift)
 
 Seats (deepseek-v4-pro:0813 + glm-5.3 on all generation seats, deepseek

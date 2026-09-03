@@ -295,8 +295,24 @@ def main() -> int:
     )
 
     # ---- R6 scratchpad, dossier channel, successor questions --------------
-    check("R6", "the scratch workspace is enabled", manifest.scratch_policy.enabled)
-    check("R6", "the runtime Config agrees", runtime.scratchpad.enabled)
+    # C6 (operator ruling 2026-09-03): the scratch workspace is DELIBERATELY
+    # OFF, and the gate is inverted rather than deleted. A deleted gate would
+    # let the module drift back on silently -- which is exactly the failure
+    # this run is routing around, since a live scratchpad is the sole way to
+    # reach F7's missing v6 guard and it killed epoch 3 at cycle 0.
+    check(
+        "C6",
+        "the scratch workspace is OFF (F7 is reachable only through a live one)",
+        manifest.scratch_policy is not None and not manifest.scratch_policy.enabled,
+        f"manifest.scratch_policy.enabled="
+        f"{manifest.scratch_policy.enabled if manifest.scratch_policy else None}",
+    )
+    check(
+        "C6",
+        "the rebuilt runtime Config agrees the workspace is OFF",
+        not runtime.scratchpad.enabled,
+        f"runtime.scratchpad.enabled={runtime.scratchpad.enabled}",
+    )
     check(
         "R6",
         "the attached-evidence channel is open",

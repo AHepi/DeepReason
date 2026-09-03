@@ -1,0 +1,12 @@
+[soak] stub provider on 127.0.0.1:44483 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/cycle-soak-kb1w7ilu
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SUMMONS_PER_CYCLE=2 is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SPLIT_BUDGET_SEAT_PROTOCOL='off' is not carried by this manifest's engine config and is restored at run time from this notice
+[soak] built root: manifest f29b54934e80ec80…  criteria ['pa1-limit-verdict@v1', 'pa1-obstruction-structure@v1', 'pa1-scaling-law@v1']
+[soak] qualified in 11.5s
+[soak] driving 24 cycles …
