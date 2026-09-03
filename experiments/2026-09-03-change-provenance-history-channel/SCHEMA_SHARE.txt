@@ -1,0 +1,46 @@
+
+=== experiments/2026-08-26-pc2-rematch/run ===
+  attempts with a stored prompt blob : 135
+  prompts with NO delimitable schema : 12
+  prompts measured                   : 123
+  mean prompt chars                  : 21,691
+  mean schema chars                  : 15,102
+  mean schema SHARE                  : 67.1%
+  min / max share                    : 55.0% / 78.8%
+  mean recorded prompt_tokens        : 6,835
+  (characters are NOT tokens; both are reported so the two are never conflated)
+  by contract:
+      conjecturer.atomic-candidate.v1: n=37  prompt~11,179 chars  schema~6,154 chars  share 55.1%
+      conjecturer.turn.v6: n=86  prompt~26,214 chars  schema~18,951 chars  share 72.3%
+
+=== experiments/2026-08-25-change-constructive-frontier/run ===
+  attempts with a stored prompt blob : 292
+  prompts with NO delimitable schema : 28
+  prompts measured                   : 264
+  mean prompt chars                  : 7,041
+  mean schema chars                  : 4,484
+  mean schema SHARE                  : 50.1%
+  min / max share                    : 34.6% / 87.7%
+  mean recorded prompt_tokens        : 2,019
+  (characters are NOT tokens; both are reported so the two are never conflated)
+  by contract:
+      batch-critic.v2: n=172  prompt~3,055 chars  schema~1,275 chars  share 42.2%
+      conjecturer.atomic-candidate.v1: n=39  prompt~8,325 chars  schema~3,863 chars  share 46.0%
+      conjecturer.turn.v6: n=50  prompt~19,976 chars  schema~16,202 chars  share 81.4%
+      critic.atomic-target.v1: n=3  prompt~3,287 chars  schema~1,253 chars  share 38.2%
+
+=== experiments/2026-08-25-poietics-program/run ===
+  attempts with a stored prompt blob : 163
+  prompts with NO delimitable schema : 18
+  prompts measured                   : 145
+  mean prompt chars                  : 9,731
+  mean schema chars                  : 4,086
+  mean schema SHARE                  : 33.2%
+  min / max share                    : 10.8% / 60.9%
+  mean recorded prompt_tokens        : 2,831
+  (characters are NOT tokens; both are reported so the two are never conflated)
+  by contract:
+      batch-critic.v2: n=109  prompt~5,726 chars  schema~1,275 chars  share 27.0%
+      conjecturer.atomic-candidate.v1: n=6  prompt~7,339 chars  schema~2,314 chars  share 31.5%
+      conjecturer.turn.v6: n=27  prompt~26,867 chars  schema~16,141 chars  share 60.0%
+      critic.atomic-target.v1: n=3  prompt~5,794 chars  schema~1,253 chars  share 21.7%
