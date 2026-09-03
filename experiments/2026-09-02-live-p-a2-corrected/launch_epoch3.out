@@ -205,3 +205,70 @@ PREFLIGHT OK: 62 checks, 0 failures
 [2026-09-03T02:53:13Z] === BRIDGE: build the grounded final output for question-933313a5d9ca6dd86f3052aec6e1f05f ===
 [2026-09-03T02:53:16Z] BRIDGE BUILD rc=1 -- see /home/user/DeepReason/experiments/2026-09-02-live-p-a2-corrected/bridge-build.{json,stderr.log}
 [2026-09-03T02:53:20Z] === AUDIT: verify_root + findings + results + capture + frontier ===
+[2026-09-03T02:53:50Z] === AUDIT: transport/outcome census (monitor_pa2.py) ===
+state=failed phase=stop cycle=0 accepted=0 refuted=0 stop=operational_failure tokens=None
+  provider attempts (typed) : {'provider_result': 34}
+  usage_status              : {'exact': 34}
+  criticism attempts (typed): {'completed': 7}
+  semantic admissions       : {'admitted': 32}
+  attempt_trace rows        : 34 (0 zero-token, 0 with diagnostics)
+  diagnostics by model      : none
+  reconciled                : True (log 0 vs objects 0)
+  no alert
+[2026-09-03T02:53:50Z] === AUDIT: artifact Pareto frontier before/after (rescore.py) ===
+root: 2026-09-02-live-p-a2-corrected/run
+artifacts 20 | survivors 7 | problems 1
+hv entries 0 (nonzero 0) | reach entries 0 (nonzero 0)
+
+installed-code check: shipped pareto_scores == NEW (OVERRUN leaves the denominator)
+
+PARETO_AXES ['hv', 'reach', 'coverage']
+frontier BEFORE (OVERRUN penalised): 6 of 7
+frontier AFTER  (OVERRUN excluded) : 7 of 7
+  before -- on frontier {'seed': 6}
+            dominated   {'seed': 1}
+  after  -- on frontier {'seed': 7}
+            dominated   {}
+
+ before  after  artifact       answers        eval pass fail over  cov-before  cov-after
+----------------------------------------------------------------------------------------
+  FRONT  FRONT  16a45afde6fd   seed              7    4    0    3      0.5714     1.0000
+  FRONT  FRONT  344055628a4a   seed              7    4    0    3      0.5714     1.0000
+  FRONT  FRONT  513b3472f223   seed              7    4    0    3      0.5714     1.0000
+  FRONT  FRONT  77cde74a5abb   seed              7    4    0    3      0.5714     1.0000
+  FRONT  FRONT  79e3b803c1fd   seed              7    4    0    3      0.5714     1.0000
+      .  FRONT  a3002cb7e64f   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+  FRONT  FRONT  efcd6d295035   seed              7    4    0    3      0.5714     1.0000
+
+OVERRUN reason census (all survivors)
+    22  observation requires registered evidence
+[2026-09-03T02:53:53Z] === CENSUS: module coverage + the measured known-open defects ===
+  conjecture (rules/conj)            FIRED        Conj events=2, conjecturer calls=4
+  criticism (rules/crit)             FIRED        Crit events=3, argumentative_critic calls=4
+  defender seat                      FIRED        defender calls=7
+  judge ensemble                     FIRED        judge calls=18
+  defended trial (status-changing criticism) FIRED        {'first trial seqs': [71, 151, 168], 'judge calls': 18, 'scrutiny (observe-only filings)': 0, 'trial-blocked': {}, 'trial-declined': 7, 'trial-observation': 0}
+  pairwise discrimination            did-not-fire no pairwise-observation event (F2: the pairwise-discrimination phase is one of the eleven deferred on v6)
+  adjudication / status authority    FIRED        12 events carry status_changed; first seqs [6, 7, 8]
+  variator / hv measurement          did-not-fire NO hv_set in the record; variator calls=1; deferrals=0
+  reach measurement                  did-not-fire NO reach_set in the record
+  scratchpad (advisory workshop)     FIRED        4 events carry a scratch payload; Scratch rule events=4
+  successor questions                did-not-fire no successor-* signal in the record
+  simulation capability              did-not-fire no simulation-* signal; deferrals={}
+  research capability                did-not-fire no research-* signal in the record
+  attached evidence / dossier        did-not-fire the channel is OPEN but the dossier is EMPTY by design (PREREG §4 R6): nothing to cite is the typed reason, not a malfunction
+  premise channel                    FIRED        {'premise-answer:DECLINED': 7, 'premise.batch-translation-offered.v1': 1}
+  discharge channel                  FIRED        {'discharge-reask': 2, 'discharge-undischarged': 18}
+  near-duplicate / anti-relapse gate FIRED        {'relapse.log.jsonl': True, 'signals': {}}
+  school convergence / reseed        did-not-fire no school-convergence or reseed signal (the tripwires are armed and did not fire)
+  allocation controller / signals    FIRED        {'allocation.seed-lineage-share.v1': 1, 'controller-authority': 1}
+  config referee                     did-not-fire no config-referee signal in the record
+  split-budget seat protocol         did-not-fire no attempt recorded a split_legs structure
+  capture / Pareto frontier          FIRED        {'capture14.attack-target-entropy.v1': 1, 'capture14.criticism-debt.v1': 1, 'capture14.exogenous-grounding-ratio.v1': 1, 'capture14.reinstatement-rate.v1': 1, 'capture14.stream-contraction.v1': 1, 'capture14.validity-attack-rate.v1': 1}
+  grounded bridge (ledger + composition) did-not-fire bridge build produced no readable JSON -- see bridge-build.stderr.log
+  replay validation (verify_root)    FIRED        {'violations': 0}
+  --- measured known-open defects ---
+  D1_frontier_composition: {'frontier_txt': 'see frontier.txt (the typed surface)', 'members': [], 'note': "PREREG §6.1 -- how many frontier members answer the operator's seed question vs a harness-minted problem", 'problems_spawned': 1, 'seed_problem_id': 'question-933313a5d9ca6dd86f3052aec6e1f05f'}
+  D2_criticism_to_new_problem_trigger_rate: {'criticisms': 3, 'note': 'PREREG §6.2 -- P-S1 measured 0 of 1,293', 'spawn_events': 1, 'successor_signals': {}}
+  D3_premise_citation_rate: {'all_premise_signals': {'premise-answer:DECLINED': 7, 'premise.batch-translation-offered.v1': 1}, 'byte_check_outcomes': {}, 'invitation_dispositions': {'DECLINED': 7}, 'note': 'PREREG §6.3 -- P-S1 measured 1 CITED against 122 DECLINED'}
+[2026-09-03T02:53:53Z] === DONE: judge only typed outcomes -- state, stop_reason, verify_root, the record ===

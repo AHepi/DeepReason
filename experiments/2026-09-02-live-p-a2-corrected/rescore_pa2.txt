@@ -1,0 +1,26 @@
+root: 2026-09-02-live-p-a2-corrected/run
+artifacts 20 | survivors 7 | problems 1
+hv entries 0 (nonzero 0) | reach entries 0 (nonzero 0)
+
+installed-code check: shipped pareto_scores == NEW (OVERRUN leaves the denominator)
+
+PARETO_AXES ['hv', 'reach', 'coverage']
+frontier BEFORE (OVERRUN penalised): 6 of 7
+frontier AFTER  (OVERRUN excluded) : 7 of 7
+  before -- on frontier {'seed': 6}
+            dominated   {'seed': 1}
+  after  -- on frontier {'seed': 7}
+            dominated   {}
+
+ before  after  artifact       answers        eval pass fail over  cov-before  cov-after
+----------------------------------------------------------------------------------------
+  FRONT  FRONT  16a45afde6fd   seed              7    4    0    3      0.5714     1.0000
+  FRONT  FRONT  344055628a4a   seed              7    4    0    3      0.5714     1.0000
+  FRONT  FRONT  513b3472f223   seed              7    4    0    3      0.5714     1.0000
+  FRONT  FRONT  77cde74a5abb   seed              7    4    0    3      0.5714     1.0000
+  FRONT  FRONT  79e3b803c1fd   seed              7    4    0    3      0.5714     1.0000
+      .  FRONT  a3002cb7e64f   seed              8    4    0    4      0.5000     1.0000  <== MOVED ON
+  FRONT  FRONT  efcd6d295035   seed              7    4    0    3      0.5714     1.0000
+
+OVERRUN reason census (all survivors)
+    22  observation requires registered evidence
