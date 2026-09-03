@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "decisive_point": "A random count can have expectation Θ(n) and yet P(count = 0) bounded away from 0: e.g., a two-outcome mixture where with constant probability the count concentrates at 0 and with complementary probability it concentrates at Θ(n); the expectation is linear while the zero-probability is a constant."
+}

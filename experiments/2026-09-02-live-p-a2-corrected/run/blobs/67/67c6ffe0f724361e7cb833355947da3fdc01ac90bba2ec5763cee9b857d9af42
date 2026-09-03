@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "The target's mechanism step claiming expansion 'exceeds what a matching can support' is therefore unsound as stated"
+}
