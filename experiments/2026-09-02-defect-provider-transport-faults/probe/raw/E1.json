@@ -1,0 +1,20 @@
+{
+  "arm": "E1",
+  "bytes_received": 0,
+  "chunks": 0,
+  "completion_tokens": null,
+  "elapsed_s": 300.289,
+  "exception_str": "Remote end closed connection without response",
+  "exception_type": "RemoteDisconnected",
+  "finish_reason": null,
+  "http_status": null,
+  "max_tokens": 49152,
+  "model": "deepseek-v4-pro:0813",
+  "proxy_recent_relay_failures_after": [],
+  "response_headers": null,
+  "stream": false,
+  "t_first_body_byte": null,
+  "t_headers": null,
+  "t_last_byte": null,
+  "t_submit": "2026-09-03T15:53:52Z"
+}

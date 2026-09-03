@@ -45,6 +45,8 @@ ARMS = [
     ("E1", DEEPSEEK, 49152, False), ("E2", DEEPSEEK, 49152, True),
     ("F1", GLM, 2048, False), ("F2", GLM, 2048, True),
     ("G1", GLM, 49152, False), ("G2", GLM, 49152, True),
+    # PREREG Amendment 1: does the endpoint honour stream_options.include_usage?
+    ("H1", GLM, 2048, "usage"),
 ]
 
 _write_lock = threading.Lock()
@@ -75,6 +77,8 @@ def run_arm(arm: str, model: str, max_tokens: int, stream: bool) -> dict:
     }
     if stream:
         body["stream"] = True
+        if stream == "usage":
+            body["stream_options"] = {"include_usage": True}
     request = urllib.request.Request(
         URL,
         data=json.dumps(body).encode(),
@@ -115,7 +119,13 @@ def run_arm(arm: str, model: str, max_tokens: int, stream: bool) -> dict:
             row["t_first_body_byte"] = first_body
             row["bytes_received"] = len(received)
             row["t_last_byte"] = round(time.monotonic() - started, 3)
-            row.update(_parse(bytes(received), stream))
+            row.update(_parse(bytes(received), bool(stream)))
+            if arm.startswith("H"):
+                # Amendment 1 also needs GROUND TRUTH for the reassembly
+                # design: the exact SSE framing, so a reader can be shown to
+                # rebuild the non-streaming dict shape byte-for-byte rather
+                # than by assumption. Same call, extra recording.
+                (RAW / f"{arm}.sse").write_bytes(bytes(received))
     except Exception as error:
         row["exception_type"] = type(error).__name__
         row["exception_str"] = str(error)[:500]
