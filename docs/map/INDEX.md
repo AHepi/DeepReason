@@ -138,10 +138,11 @@ traffic at all.
 | — | periphery × verification | `SEAM-periphery-x-verification.md` |
 | — | llm × scheduler | `SEAM-llm-x-scheduler.md` |
 | — | calculus × rules | `SEAM-calculus-x-rules.md` |
+| — | packs-and-token-economy × rules | `SEAM-packs-and-token-economy-x-rules.md` |
 | — | llm × model-profiles | — not yet written |
 | — | model-profiles × scheduler | — not yet written |
 
-The last ten carry no import-count because at least one side is a concept
+The last eleven carry no import-count because at least one side is a concept
 rather than a package, the agreement is enforced without a direct import, or —
 the periphery × verification and calculus × rules cases — every import between
 the sides is function-local, which the coupling metric cannot see. The adjudication ×

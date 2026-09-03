@@ -159,3 +159,150 @@ Run python tools/docs_verify.py in FULL mode before committing.
 
 OUT OF SCOPE: any src/ change; the other two undocumented seams.
 ```
+
+---
+
+## P4 — `render_batch_crit_pack` is a third renderer the shell never reaches
+
+**What.** `llm/packs.py::render_batch_crit_pack` (line 972) renders a
+batched criticism call under its own contract (`batch-critic.v2`) with its
+own section set. Amendment 2's build converts `render_conj_pack` and
+`render_crit_pack` into layout walks and leaves this one a hardcoded
+renderer, so one of the three brief renderers in the tree is still a code
+edit away from every change.
+
+**Why it is parked and not done.** The batch renderer's sections are keyed
+to a batch of targets rather than one, so its layout entries would need a
+per-target repetition construct the section-plugin protocol does not have
+(`SPEC.md` §2 `S1.1`: one `render` call, one section). That is a protocol
+extension, not an extraction, and extending a protocol inside the tranche
+that first ships it is how a protocol acquires a feature nobody has used.
+
+```
+EXECUTOR WINDOW — CHANGE TRANCHE: bring the batch criticism renderer onto
+the seat shell
+
+Read CLAUDE.md fully, including the seat-is-a-shell law (2026-09-03). Then
+load dr-change-orchestrator, dr-drive-harness, dr-ask-the-right-question and
+pinker-write-for-readers. Start at dr-capture-request with THIS prompt as
+the authority. Base on main at or after the merge of
+claude/conjecturer-pluggable-interface-7v3es6.
+
+WHAT EXISTS. That branch made llm/packs.py::render_conj_pack and
+render_crit_pack walks over a registered SeatPackLayoutV1 of seeded dr.*
+section plugins, with SeatShellV1 pairing a layout, a form and a role-prompt
+template per seat. render_batch_crit_pack (packs.py, the batch-critic.v2
+contract) was left out: its sections repeat per target, and one plugin
+render call produces one section.
+
+THE QUESTION TO DECIDE FIRST, in SPEC.md, before code: does the
+section-plugin protocol gain a repetition construct (a plugin returning a
+tuple of SectionRenderV1), or does the batch renderer compose N single-target
+plugin renders in the walk? Price both against the byte-identical-default
+acceptance test, which applies here exactly as it did there: capture a golden
+for render_batch_crit_pack from the base commit BEFORE any refactor, and if
+it cannot pass, the refactor is wrong -- never update the fixture.
+
+FROZEN SURFACES: forecast NO CONTACT, same as the parent tranche. Paste
+tools/blast_radius.py's own verdict into SPEC.md and hold the parent's three
+decisions: selection by argument/env never Config never the manifest, no new
+contract id, no new verify_root check.
+
+OUT OF SCOPE: the judge, defender, variator and synthesizer seats (P5); any
+second conjecturer or criticism KIND (P6).
+```
+
+---
+
+## P5 — four seats still have hardcoded briefs
+
+**What.** The judge, defender, variator and synthesizer seats dispatch
+through `wire_contract_for` with their own renderers and role-prompt
+templates. Amendment 2 covers the conjecturer and the critic; these four are
+untouched, so the seat-is-a-shell law holds for two seats out of six.
+
+**Why it is parked.** The operator's amendment named one swap — the
+conjecturer's shell in the critic's place — and the two-seat build is what
+makes that swap demonstrable. Extending to four more seats in the same
+tranche would widen a change already at ~1500 lines of `src/`, and the
+judge seat in particular sits under a live operator caution
+(CLAUDE.md's amended judge law) that deserves its own reading.
+
+```
+EXECUTOR WINDOW — CHANGE TRANCHE: bring the remaining four seats onto the
+seat shell
+
+Read CLAUDE.md fully, including the seat-is-a-shell law (2026-09-03) and the
+AMENDED judge law (2026-08-28) -- the judge seat is the one with measured
+evidence attached, and any design touching it consults that evidence first.
+Then load dr-change-orchestrator, dr-drive-harness,
+dr-ask-the-right-question and pinker-write-for-readers. Start at
+dr-capture-request. Base on main at or after the merge of
+claude/conjecturer-pluggable-interface-7v3es6.
+
+WHAT: the judge, defender, variator and synthesizer seats each have a
+hardcoded brief renderer and a module-literal role-prompt template. Bring
+each onto SeatPackLayoutV1 + SeatShellV1 exactly as that branch did for the
+conjecturer and the critic: seeded dr.* plugins per section, a
+seat-pack.<seat>.legacy-v0 layout, a seat.<seat>.legacy-v0 shell, and a
+byte-identical-default golden per seat captured from the base commit BEFORE
+any refactor. If a golden cannot pass, the refactor is wrong -- STOP, never
+update the fixture.
+
+BLINDING CONSTRAINT for the judge seat: docs/RESEARCH_JUDGE_BLINDING_
+2026-08-22.md measured that provenance exposure carries the bias and that a
+present-but-blank slot is worse than a filled one, so a judge layout must
+OMIT provenance sections entirely rather than render them empty. shell_id and
+layout_id are provenance for this purpose.
+
+OUT OF SCOPE: the batch criticism renderer (P4); any second conjecturer or
+criticism KIND (P6); any new contract id.
+```
+
+---
+
+## P6 — the second conjecturer kind and the second criticism kind
+
+**What.** The operator's Amendment 2 states future intent twice: "conjecturers
+will need to be split in two" (`R22`) and "criticism will need two different
+types" (`R23`). Neither says WHAT the two kinds are, and the amendment's own
+framing — "I'm thinking in the future that..." — is intent, not a request.
+
+**Disposition.** `SeatShellV1` is built so that each of these is a THIRD
+registered pairing rather than a code edit; that is the whole reason the
+registry exists (`SPEC.md` §17.4). Nothing is built for them here, and
+nothing should be until the operator says what the two kinds are — a
+registry entry guessed at is a shape that will have to be un-shipped.
+
+```
+EXECUTOR WINDOW — DESIGN TRANCHE: what are the two conjecturer kinds and the
+two criticism kinds?
+
+Read CLAUDE.md fully, including the seat-is-a-shell law (2026-09-03). Then
+load dr-change-orchestrator, dr-drive-harness, dr-ask-the-right-question and
+pinker-write-for-readers. Start at dr-capture-request. Base on main at or
+after the merge of claude/conjecturer-pluggable-interface-7v3es6.
+
+THIS TRANCHE NEEDS AN OPERATOR ANSWER BEFORE IT NEEDS A DESIGN. The operator
+said, verbatim (2026-09-03): "I'm thinking in the future that conjecturers
+will need to be split in two and criticism will need two different types."
+They did not say what the two are. Do not guess: ask ONE batched question,
+with the record's own evidence attached, and stop.
+
+WHAT TO ATTACH TO THE QUESTION, because it makes the answer cheaper. The
+record already measures two conjecturer FORMS behaving very differently:
+conjecturer.turn.v6 admits at 51.5% and conjecturer.atomic-candidate.v1 at
+92.7% over 59 committed roots (experiments/2026-09-03-change-conjecturer-
+pluggable-interface/census_conjecturer_failures.py), and the atomic form is
+reachable only after the composite one exhausts its repair grant (PARKED.md
+P2). And criticism already has two structurally different sources: the
+argumentative critic and the criticism-source socket. So the operator may be
+naming a split the tree half-has already, or a new one.
+
+WHAT NOT TO DO: register a SeatShellV1 for a kind nobody has defined. The
+registry exists so this costs a registration when the answer arrives; a
+guessed entry costs an un-shipping.
+
+OUT OF SCOPE: everything in P4 and P5; any new contract id; any frozen
+surface.
+```
