@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "The target’s mechanism clause states that the cut edges are \"forcing the cut edges to be an induced matching,\" but the critic shows \"a stable mixed configuration requires only that the cut edges form a matching, not an induced matching\" (SRC_001 mischaracterizes the obstruction class)."
+}

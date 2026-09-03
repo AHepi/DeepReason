@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 mischaracterizes the obstruction class: a stable mixed configuration requires only that the cut edges form a matching, not an induced matching. Two cut edges can be connected by a same-colored edge between their endpoints. For example, take cut edges uv and xy with u,x red and v,y blue, and add edge ux; give u and x a third red neighbor, v and y two blue neighbors. Then every vertex has at most one opposite neighbor, so the configuration is locally stable, but the cut edges uv and xy are not induced. This invalidates the claimed 'induced matching' obstruction structure and the associated count of traps.",
+      "counterexample": [
+        "Cut edges uv and xy; u,x red, v,y blue; edge ux present; u's other neighbor red, x's other neighbor red, v's other two blue, y's other two blue. This is a stable matching cut but not an induced matching."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002's quantitative law is false: for a fixed cycle of length ℓ, the probability that a random coloring makes it a stable two-tone cycle with all third neighbors matching is 2^{1-2ℓ} (alternating cycle colors times off-cycle matches). Since the expected number of ℓ-cycles in a random 3-regular graph is ~2^ℓ/(2ℓ), the expected number of such stable-cycle obstructions is ~2^{-ℓ}/ℓ. Summing over ℓ gives O(1), not Θ(log n). Thus the claimed Θ(log n) prevalence and the inference to consensus probability → 0 collapse.",
+      "counterexample": [
+        "E[stable ℓ-cycle obstructions] ≈ (2^ℓ/(2ℓ))·2^{1-2ℓ} = 2^{-ℓ}/ℓ; ∑_{ℓ≥3} 2^{-ℓ}/ℓ < 0.1."
+      ]
+    }
+  ]
+}
