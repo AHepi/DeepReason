@@ -1,0 +1,135 @@
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The finite obstruction structures are locally stable mixed configurations in which the crossing edges form a matching: every vertex has at most one opposite-color neighbor, so no vertex flips. The expected number of such stable cuts as a fraction of all two-colorings is exp(-c n), but their basins cover almost all random initial cuts; the final number of crossing edges is Θ(n) with high probability, so consensus probability vanishes.",
+      "mechanism": "The number of crossing edges is non-increasing under asynchronous majority updates: a vertex with two opposite neighbors flips and reduces cut size by 1, and a vertex with three opposite neighbors reduces it by 3. Starting from a uniform random cut with about 3n/4 crossing edges, the process descends monotonically to a local minimum. On a random 3-regular graph this zero-temperature Glauber descent jams in a stable matching of crossing edges of linear size; the empty cut's basin is exponentially small, so consensus is not reached whp.",
+      "counterconditions": [
+        "If the basin of the empty cut is actually 1-o(1) because stable matching cuts are not reachable from typical initial cuts, then the consensus probability would tend to 1.",
+        "If the final matching size is o(n), then the obstruction prevalence would be sublinear and consensus could tend to 1 or to a constant."
+      ],
+      "typicality": 0.7,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "The criticism confuses initial stability with final absorption. The claim does not rely on absence of single-edge obstructions in the initial coloring; it relies on the monotone cut-size descent reaching a stable matching. The initial O(n) crossing edges are the starting point that gets reduced to a linear matching, not to zero."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "We break with the failed scaling-law formulation in SRC_010. Our scaling law is stated as a fraction exp(-c n) of all colorings and a final crossing-edge count Θ(n), not the previous Poisson count."
+        }
+      ],
+      "optional_refs": ["SRC_008"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 1. The only locally stable mixed configurations are those where crossing edges form a matching and each vertex has at most one opposite-color neighbor; these are non-expanding cuts and are exponentially rare, with expected number exp(-c n). The process cannot reach them from a typical random initial coloring, so consensus occurs with probability 1-o(1).",
+      "mechanism": "Random 3-regular graphs are expanders. Majority dynamics on expanders rapidly eliminates local disagreements. Stable mixed configurations require a matching of crossing edges, which is a non-expanding cut; such cuts are exponentially rare in random regular graphs. The initial random coloring has a positive density of vertices with two or three opposite-color neighbors, and the monotone decrease of cut size drives the system to the empty cut.",
+      "counterconditions": [
+        "If random 3-regular graphs contain exponentially many stable mixed configurations with large basins, the consensus probability would tend to 0.",
+        "If the final cut size is Θ(n) with high probability, the claim fails."
+      ],
+      "typicality": 0.2,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "The criticism about initial stability is irrelevant: we count reachable stable cuts, not initial single-edge obstructions. The initial O(n) crossing edges are eliminated by the dynamics."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "We replace the failed scaling law with expected number exp(-c n) of stable mixed configurations and basin size exp(-c' n), so consensus is 1-o(1)."
+        }
+      ],
+      "optional_refs": ["SRC_009"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to a constant strictly between 0 and 1. The finite obstruction structures are locally stable mixed configurations where crossing edges form a matching. The expected number of such obstructions that are reachable before consensus is Θ(1), so the probability of hitting one converges to a constant.",
+      "mechanism": "The process is a monotone descent on cut size. The final state is either the empty cut or a stable matching. If the number of stable matchings of small size is Poisson(λ) and their basins have total probability bounded away from 0 and 1, then the consensus probability tends to a constant such as e^{-λ}.",
+      "counterconditions": [
+        "If stable matchings are exponentially many or their basins cover almost all initial cuts, the constant would be 0 or 1.",
+        "If the number of reachable obstructions is o(1) or ω(1), the limit would not be a constant strictly between."
+      ],
+      "typicality": 0.1,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "We do not claim absence of single-edge obstructions in the initial coloring; we count final stable matchings reached by the descent, and the Poisson count is for those final obstructions, not initial ones."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "We break with the failed scaling law; our law is a Poisson count of final obstructions, not the previous formulation."
+        }
+      ],
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The obstruction structures are locally stable mixed configurations where each color class is a disjoint union of cycles and the crossing edges form a perfect matching between opposite-color cycles. The expected number of such frozen cycle configurations is exp(Θ(n)), and their basins cover a positive fraction of initial configurations, so consensus is not reached whp.",
+      "mechanism": "Random 3-regular graphs have exponentially many 2-factors. Coloring each cycle monochromatically and matching opposite colors gives stable configurations because every vertex has two same-color neighbors and one opposite-color neighbor. The dynamics gets trapped in these cycle-based obstructions before reaching consensus.",
+      "counterconditions": [
+        "If the number of 2-factors is o(2^n) and their basins are small, consensus may tend to 1.",
+        "If the dynamics cannot reach these cycle-based configurations from a uniform random start because they require many coordinated flips, the probability of consensus may be higher."
+      ],
+      "typicality": 0.15,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "The criticism is about initial stability; our claim is about final absorption into cycle-based obstructions, not initial single-edge obstructions."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "We correct the scaling law to expected number exp(Θ(n)) of cycle-based obstructions, not the failed Poisson count."
+        }
+      ],
+      "optional_refs": ["SRC_008"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The finite obstruction structures are locally stable mixed configurations where crossing edges form a matching. The final number of crossing edges is Θ(n) with high probability; specifically, the density of crossing edges converges to a constant ρ>0, so consensus probability vanishes.",
+      "mechanism": "The cut size decreases monotonically. The process is a random sequential elimination of crossing edges that jams at a matching. On random 3-regular graphs, the final matching has linear size; the empty cut is not reached because the descent gets stuck earlier.",
+      "counterconditions": [
+        "If the final matching size is o(n) or the empty cut basin is 1-o(1), the claim fails.",
+        "If the density ρ is zero, consensus would tend to 1."
+      ],
+      "typicality": 0.3,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "Initial O(n) crossing edges are the starting point; the final matching is the obstruction, not an initial single-edge obstruction."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "We break with the failed scaling law; our law is final crossing-edge density ρ, not the previous Poisson count."
+        }
+      ]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 1. Obstruction structures are stable mixed configurations where crossing edges form a matching; these are non-expanding cuts and are exponentially rare. The expected number of such stable mixed configurations is exp(-c n), so the probability of hitting one is o(1).",
+      "mechanism": "Random 3-regular graphs are expanders; majority dynamics rapidly eliminates local disagreements. Stable matching cuts require a non-expanding cut, which is exponentially rare in random regular graphs. The process therefore reaches consensus whp.",
+      "counterconditions": [
+        "If random 3-regular graphs contain exponentially many stable mixed configurations with large basins, consensus probability would tend to 0.",
+        "If the initial coloring is not uniform but biased, the result may change."
+      ],
+      "typicality": 0.1,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "The criticism about initial stability is irrelevant; we count final stable cuts, not initial single-edge obstructions."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "We replace the failed scaling law with expected number exp(-c n) of stable mixed configurations."
+        }
+      ],
+      "optional_refs": ["SRC_009"]
+    }
+  ]
+}

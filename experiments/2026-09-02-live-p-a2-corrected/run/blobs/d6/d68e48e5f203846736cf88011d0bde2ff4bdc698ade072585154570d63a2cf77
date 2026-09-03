@@ -1,0 +1,114 @@
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 1. The finite obstruction structures are locally stable mixed configurations in which the crossing edges form a matching and each vertex has at most one opposite-color neighbor; these are exactly matching cuts. The expected number of such matching cuts scales like exp(Θ(n)), but their basin fraction under the monotone descent scales like exp(-Θ(n)), so the probability of being trapped vanishes.",
+      "mechanism": "Starting from a uniformly random two-coloring, there are O(n) vertices with two or three opposite-color neighbors. Each update flips a vertex with at least two opposite-color neighbors and strictly reduces the number of crossing edges, so the process is a monotone descent in cut size. On a random 3-regular expander this descent annihilates defects; reaching a matching cut requires a precise frozen arrangement of defects, which has exponentially small basin. Hence consensus occurs with high probability.",
+      "counterconditions": [
+        "If matching cuts have basins of size exp(Θ(n)) covering a positive fraction of configurations, the consensus probability would be bounded away from 1.",
+        "If random 3-regular graphs are not sufficiently expanding, the defect annihilation argument fails."
+      ],
+      "typicality": 0.6,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "The criticism attacks an argument from initial absence of single-edge obstructions. This candidate does not use initial stability; it uses the basin size of matching cuts under the monotone descent, which is exponentially small."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "Added explicit scaling law: expected number of matching cuts is exp(Θ(n)), basin fraction exp(-Θ(n))."
+        }
+      ],
+      "optional_refs": ["SRC_009"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The obstruction structures are locally stable mixed configurations where crossing edges form a matching and each vertex has at most one opposite-color neighbor; equivalently matching cuts. The expected number of such matching cuts with minority fraction α scales like exp(n g(α)) with g(α)>0 for an interval of α, so there are exponentially many traps and the process gets stuck with high probability.",
+      "mechanism": "The dynamics is a monotone descent in cut size. Starting from a random cut of size 3n/4, it stops at the first local minimum with maximum cut-degree at most one. Random 3-regular graphs have exponentially many matching cuts; their basins cover all but an exponentially small fraction of configurations, so the global minimum empty cut is reached with probability exp(-Θ(n)).",
+      "counterconditions": [
+        "If the basins of matching cuts are exponentially small, consensus would win with high probability.",
+        "If random 3-regular graphs have no large matching cuts, the trap count would be subexponential."
+      ],
+      "typicality": 0.5,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Do not use initial absence of single-edge obstructions; instead count basins of matching cuts reached by the monotone descent."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "Explicit scaling law exp(n g(α)) for the expected number of matching cuts."
+        }
+      ],
+      "optional_refs": ["SRC_008"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to a constant c strictly between 0 and 1. The obstruction structures are locally stable mixed configurations where crossing edges form a matching and each vertex has at most one opposite-color neighbor. The expected number of such matching cuts scales like exp(Θ(n)), but the process at critical initial density 1/2 has a positive probability of reaching consensus and a positive probability of being trapped; the consensus probability converges to c.",
+      "mechanism": "The one-sided version of the dynamics is 2-neighbor bootstrap percolation on a random 3-regular graph, whose critical density is 1/2. Starting from a uniformly random coloring is exactly critical. At criticality, the probability that one color takes over converges to a constant c in (0,1), while with probability 1-c the process freezes in a matching cut. Thus the limit is strictly between.",
+      "counterconditions": [
+        "If the critical bootstrap percolation probability is 0 or 1, the constant would be 0 or 1.",
+        "If the two-sided process couples differently from one-sided bootstrap percolation, the constant may change."
+      ],
+      "typicality": 0.4,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "The criticism about initial absence of single-edge obstructions does not apply; the constant comes from critical bootstrap percolation, not initial stability."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "Added scaling law: expected number of matching cuts is exp(Θ(n)); consensus probability is c."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 0. The obstruction structures are locally stable mixed configurations where each color class is a disjoint union of cycles and the crossing edges form a perfect matching between opposite-color cycles. The expected number of such frozen cycle configurations scales like exp(Θ(n)), so the process has a positive probability of being trapped, and consensus is not reached with high probability.",
+      "mechanism": "On a random 3-regular graph, take a 2-factor and color its cycles alternately; crossing edges form a perfect matching. These configurations are absorbing because every vertex has two same-color neighbors and one opposite-color neighbor. Random 3-regular graphs have exponentially many 2-factors, so the process has many traps.",
+      "counterconditions": [
+        "If these cycle configurations are not reachable from a uniform random start because they require many coordinated flips, the probability of consensus may be higher.",
+        "If the number of 2-factors is o(n) rather than exponential, the scaling law fails."
+      ],
+      "typicality": 0.3,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Do not rely on initial absence; count reachable cycle traps."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "Explicit scaling law exp(Θ(n)) for number of 2-factor obstructions."
+        }
+      ],
+      "optional_refs": ["SRC_008"]
+    },
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to 1. The only locally stable mixed configurations are those where crossing edges form a matching and each vertex has at most one opposite-color neighbor; these are non-expanding matching cuts. The expected number of stable mixed configurations is exp(-c n) relative to all colorings, so the probability of consensus is 1-o(1).",
+      "mechanism": "Random 3-regular graphs are expanders. Majority dynamics on expanders rapidly eliminates local disagreements. Stable mixed configurations require a matching cut, which is a non-expanding cut; such cuts are exponentially rare in random regular graphs. The process therefore reaches consensus with high probability.",
+      "counterconditions": [
+        "If random 3-regular graphs contain exponentially many stable mixed configurations with large basins, the consensus probability would tend to 0.",
+        "If the initial coloring is not uniform but biased, the result may change."
+      ],
+      "typicality": 0.5,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "rebutted",
+          "note": "The criticism attacks initial absence; this candidate uses expander mixing and rarity of matching cuts, not initial stability."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "Added scaling law: expected number of stable mixed configurations is exp(-c n) fraction."
+        }
+      ],
+      "optional_refs": ["SRC_009"]
+    }
+  ]
+}
