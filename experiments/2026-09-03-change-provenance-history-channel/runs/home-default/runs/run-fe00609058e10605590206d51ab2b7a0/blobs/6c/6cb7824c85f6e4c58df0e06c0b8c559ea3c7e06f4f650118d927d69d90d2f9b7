@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes a 'reduction' relation but fails the 'refuted if' condition by mischaracterizing the endpoints. The problem requires showing science's causal mechanism lacks a normative element that evolution has; however, biological evolution inherently contains a normative element (fitness/survival success), and science's causal mechanism (empirical testing) is descriptive. Since the supposed missing element actually exists in the analogue (evolution), the specific refutation condition described is not met, rendering the proposed relation's validity claim unsupported by the stated refutation logic.",
+      "counterexample": null,
+      "premise": "The target claims the relation is refuted IF science requires a normative element that evolution lacks.",
+      "premise_evidence": null,
+      "successor_question": "Does the concept of 'fitness' in natural selection constitute a normative element comparable to epistemic justification in science?"
+    }
+  ]
+}

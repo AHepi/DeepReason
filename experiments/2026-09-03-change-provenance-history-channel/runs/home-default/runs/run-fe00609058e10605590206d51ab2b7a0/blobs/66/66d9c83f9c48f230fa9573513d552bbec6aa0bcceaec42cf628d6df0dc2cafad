@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is merely a 'methodological fiction' fails to address the problem's core challenge regarding 'high-stakes decisions.' While comparing science to chess works for low-stakes theoretical play, Popper himself acknowledged acting on theories in real-world contexts (e.g., engineering, medicine). In these domains, treating the basis of action as a 'fiction' is insufficient; agents require a rational belief that the chosen theory is at least practically reliable or closer to truth (verisimilitude). By reducing the justification to a constitutive rule akin to game rules, the target ignores the normative weight scientists place on corroboration when lives or resources are at risk, effectively smuggling in an unacknowledged pragmatic induction rather than offering a defensible Popperian account of rational action.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between the logical status of theories (unproven) and the practical necessity of choosing the best-tested theory for action, often invoking verisimilitude to bridge this gap.",
+      "premise_evidence": null,
+      "successor_question": "If the preference is just a rule of the 'game,' how does Popper justify risking lives on a bridge built using a theory he admits is logically no more probable than a refuted one?"
+    }
+  ]
+}

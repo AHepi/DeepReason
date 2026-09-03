@@ -1,0 +1,21 @@
+{
+  "candidate": {
+    "content": "The preference for corroborated theories reduces to a strategic selection mechanism analogous to natural selection, refuted if the prospective nature of scientific prediction cannot be reconciled with the retrospective character of biological fitness without smuggling in induction.",
+    "typicality": 0.85,
+    "neighbours": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_004"
+    ],
+    "evidence_refs": [
+      {
+        "block": "003718cc784c",
+        "quote": "Science is an evolutionary process. Corroboration marks a theory as having high 'fitness' in the environment of severe tests."
+      },
+      {
+        "block": "2b2849a64e01",
+        "quote": "Corroboration functions as a 'causal mechanism' of selection analogous to natural selection, where preference is a survival trait of the scientific community rather than a logical proof of truth"
+      }
+    ]
+  }
+}

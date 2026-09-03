@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) to justify preferring better-corroborated theories without induction. However, Popper's own formal attempt to define verisimilitude logically failed because it was shown (by Tichý and Miller in 1974) that under standard logical definitions, a false theory with more content cannot be compared as 'closer to the truth' than another false theory unless one entails the other. Since most scientific theories are strictly false (as Popper admitted), the concept of verisimilitude collapses into incoherence without probabilistic assumptions about the distribution of truth-values or content, which Popper explicitly rejected. Therefore, the preference smuggles in induction because the only coherent way to interpret 'better corroboration' as a guide to future action is to assume the future will resemble the past (induction), rendering the 'non-inductive' claim untenable.",
+      "premise": "Popper's formal definition of verisimilitude was proven logically inconsistent for comparing false theories, leaving no non-probabilistic basis for claiming one false theory is 'closer to the truth' than another.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "If verisimilitude cannot be formally defined without probability, does Popper's system force scientists to rely on sheer convention rather than rational preference when choosing between falsified theories?"
+    }
+  ]
+}

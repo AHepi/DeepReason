@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes a 'reduction' relation but fails the 'REFUTED IF' condition by ignoring the normative gap: it equates retrospective biological fitness with prospective scientific preference without addressing how a descriptive mechanism (natural selection) can generate the normative guidance required for future theory choice, rendering the reduction invalid as stated.",
+      "counterexample": null,
+      "premise": "Scientific preference requires normative guidance for prospective action, whereas biological fitness is purely retrospective.",
+      "premise_evidence": null,
+      "successor_question": "Can a purely descriptive evolutionary mechanism account for the normative requirements of prospective scientific theory selection?"
+    }
+  ]
+}

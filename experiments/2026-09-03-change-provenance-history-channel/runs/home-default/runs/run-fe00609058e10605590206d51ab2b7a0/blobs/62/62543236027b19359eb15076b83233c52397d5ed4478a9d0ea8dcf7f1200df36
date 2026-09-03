@@ -1,0 +1,324 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic, non-inductive rule of action based on verisimilitude (truth-likeness), where the cost is accepting that we can never know if our theories are true, only that they are closer to the truth than their falsified rivals.",
+      "mechanism": "Popper replaces the inductive goal of 'probability' with the comparative metric of 'verisimilitude'. A theory with higher corroboration has survived more severe tests, implying it has greater truth-content and/or less falsity-content than a rival. The preference is rational not because the theory is likely true, but because it is the best available approximation of truth. This avoids induction by refusing to assign a probability value to the theory itself.",
+      "counterconditions": [
+        "If the formal definition of verisimilitude remains logically incoherent for comparing false theories, rendering the metric unusable.",
+        "If acting on a theory necessarily implies an assumption of its future reliability, which is an inductive leap regardless of the label 'verisimilitude'."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "While Tichý and Miller showed Popper's *original* quantitative definition of verisimilitude was incoherent for false theories, Popper and later defenders (like Oddie) developed qualitative or revised quantitative accounts that restore the concept's utility for comparing theories without requiring logical completeness. The defense relies on the *concept* of truth-likeness as a regulative ideal, not the specific failed 1963 formula."
+        },
+        {
+          "handle": "[SRC_017] against SRC_005",
+          "kind": "rebutted",
+          "note": "Same as above: the failure of the initial formalization does not invalidate the entire philosophical project of verisimilitude. Subsequent developments in truth-likeness logic address the Tichý/Miller objection, allowing the preference to remain defensible on revised Popperian terms."
+        },
+        {
+          "handle": "[SRC_020] against SRC_007",
+          "kind": "rebutted",
+          "note": "This candidate does not rely on the natural selection analogy (SRC_007) but on the normative concept of verisimilitude. Therefore, the criticism that the analogy fails to address the normative core is moot; the normativity is supplied directly by the rational pursuit of truth-likeness."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate explicitly invokes verisimilitude, rejecting the false dichotomy. It argues that rationality is defined by the pursuit of truth-likeness via severe testing, which is distinct from both rule-adherence alone and probable truth."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "revised",
+          "note": "Revised to explicitly state the cost: 'accepting that we can never know if our theories are true, only that they are closer to the truth.' This addresses the requirement to identify negative trade-offs."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate argues that the preference is for 'truth-likeness' (a static comparative property), not 'future reliability' (a dynamic inductive prediction). While scientists may psychologically feel it is reliable, the *logical justification* on Popper's terms does not smuggle in induction if strictly confined to comparative verisimilitude."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "Addresses the Tichý/Miller objection by distinguishing between the failed original definition and the robustness of the revised concept of verisimilitude in contemporary philosophy of science."
+        },
+        {
+          "handle": "[SRC_019] against SRC_018",
+          "kind": "rebutted",
+          "note": "This candidate does not use the biological analogy criticized in SRC_019/SRC_018, relying instead on the epistemic argument of verisimilitude."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The preference smuggles induction back in because acting on corroboration necessarily assumes the uniformity of nature or the stability of laws, which Popper explicitly rejected; the only defensible stance is a radical skepticism where preference is merely a psychological habit with no rational justification.",
+      "mechanism": "Any decision to act on a theory (e.g., build a bridge using Newtonian physics) presupposes that the future will resemble the past regarding that theory's validity. This is the definition of induction. Popper's attempt to label this 'pragmatic' or 'evolutionary' is semantic sleight of hand. If corroboration gives no reason to believe a theory will work tomorrow, then preferring it is irrational unless one secretly assumes inductive regularity.",
+      "counterconditions": [
+        "If a non-inductive basis for action can be found, such as a purely conventional or decision-theoretic rule that does not rely on nature's uniformity.",
+        "If 'preference' is redefined strictly as 'selection for further testing' rather than 'selection for application'."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate agrees with the criticism that verisimilitude is problematic but goes further to argue that *any* preference mechanism fails. The incoherence of verisimilitude supports the view that no non-inductive justification exists."
+        },
+        {
+          "handle": "[SRC_017] against SRC_005",
+          "kind": "rebutted",
+          "note": "The failure of verisimilitude strengthens this candidate's claim that there is no logical bridge between corroboration and preference, leaving induction as the only remaining explanation for scientific behavior."
+        },
+        {
+          "handle": "[SRC_020] against SRC_007",
+          "kind": "rebutted",
+          "note": "This candidate aligns with the criticism that descriptive mechanisms (like evolution) cannot justify normative preferences. It concludes that since no normative justification exists without induction, the preference is indefensible on Popper's strict terms."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Rejects the verisimilitude solution entirely, arguing that it is a failed attempt to mask induction. The dichotomy is accepted: either induction or irrationality."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "revised",
+          "note": "Explicitly states the cost: 'radical skepticism where preference is merely a psychological habit with no rational justification.' This identifies the sacrifice of rational agency as the trade-off."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Directly answers that yes, it smuggles induction in. The 'risk/leverage' argument is dismissed as ignoring the fundamental assumption of stability required to take that risk seriously."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "Uses the failure of verisimilitude as primary evidence that the anti-inductive project fails, forcing the conclusion that induction is unavoidable."
+        },
+        {
+          "handle": "[SRC_019] against SRC_018",
+          "kind": "rebutted",
+          "note": "Agrees that analogies fail to provide normative justification, concluding that without induction, there is *no* justification, making the preference irrational."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The preference is defensible as a methodological rule for error elimination, analogous to natural selection, where the 'cost' is the abandonment of any claim to certainty or final truth; the surviving answer is the evolutionary one, provided we accept that 'rationality' means 'conducive to knowledge growth' rather than 'logically guaranteed'.",
+      "mechanism": "Science is an evolutionary process. Corroboration marks a theory as having high 'fitness' in the environment of severe tests. Preferring it is like an organism preferring traits that have survived predation. It is not an inductive prediction of eternal survival, but a strategic choice to build upon the most robust foundation currently available to maximize the rate of error detection. Induction is not smuggled in because the goal is not truth-probability but the acceleration of falsification.",
+      "counterconditions": [
+        "If the analogy breaks down because biological fitness is retrospective while scientific preference is prospective.",
+        "If the 'causal mechanism' of science requires a normative element that evolution lacks."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "This candidate departs from the verisimilitude-based defense (SRC_005) entirely, relying instead on the evolutionary analogy (SRC_007) and methodological rules, rendering the Tichý/Miller critique of verisimilitude irrelevant to this specific line of reasoning."
+        },
+        {
+          "handle": "[SRC_017] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departure from verisimilitude; this argument stands on evolutionary epistemology, not truth-likeness metrics."
+        },
+        {
+          "handle": "[SRC_020] against SRC_007",
+          "kind": "rebutted",
+          "note": "The normative core is supplied by the *goal* of the scientific community: error elimination. The analogy explains the *mechanism* of selection, while the normativity comes from the explicit aim of science (critical rationalism). The preference is normative because it serves the agreed-upon goal of growth."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Redefines rationality as 'adherence to the method of error elimination.' Verisimilitude is not required; the 'fittest' theory is simply the one that allows the next step of criticism to be most effective."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "revised",
+          "note": "Clarifies the cost: 'abandonment of any claim to certainty or final truth.' The trade-off is giving up the dream of finality for the reality of progress."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that scientists prefer corroborated theories *because* they are good platforms for further falsification, not because they believe them to be probably true. The 'inductive feeling' is a psychological side effect, not the logical justification."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "departure_declared",
+          "note": "Does not rely on verisimilitude, so the incoherence of its definition is not a threat to this candidate."
+        },
+        {
+          "handle": "[SRC_019] against SRC_018",
+          "kind": "rebutted",
+          "note": "The justification is not derived *from* the analogy alone but from the conjunction of the analogy (descriptive mechanism) and the critical rationalist imperative (normative goal). The analogy illustrates how the norm is implemented efficiently."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves if we view corroboration as a measure of informational content and test severity, making the preference a choice for higher risk and higher potential yield, not safety or probability; the cost is accepting that we choose theories *because* they are unlikely to be true (bold), yet they are the only ones worth testing.",
+      "mechanism": "Popper values bold conjectures (low logical probability). A highly corroborated theory is one that took a great risk (high empirical content) and survived. Scientists prefer it not because it is 'safe' (probable), but because it has proven its robustness against high-risk tests. The preference is for the theory that offers the most leverage for future falsification. This is a decision-theoretic choice for maximum information gain, completely orthogonal to inductive probability.",
+      "counterconditions": [
+        "If scientists actually prefer corroborated theories because they believe them to be 'true' or 'reliable' in an inductive sense.",
+        "If high corroboration inevitably leads to a psychological sense of certainty that mimics induction."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "This candidate bypasses the verisimilitude debate entirely, grounding the preference in 'informational content' and 'risk' rather than truth-likeness."
+        },
+        {
+          "handle": "[SRC_017] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Irrelevant to this candidate as it does not invoke verisimilitude."
+        },
+        {
+          "handle": "[SRC_020] against SRC_007",
+          "kind": "departure_declared",
+          "note": "Does not use the evolutionary analogy; relies on information theory and decision theory."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Rejects the need for verisimilitude. Rationality is defined as maximizing informational yield. The preference is for the 'boldest survivor,' which is a coherent non-inductive criterion."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "revised",
+          "note": "Identifies the cost: 'accepting that we choose theories *because* they are unlikely to be true (bold).' The paradox is the feature, not the bug."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Directly addresses the 'smuggling' charge by reframing the motivation: scientists act on these theories to break them, not because they expect them to hold forever. The 'inductive' expectation of stability is explicitly rejected as the motive."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "departure_declared",
+          "note": "No reliance on verisimilitude."
+        },
+        {
+          "handle": "[SRC_019] against SRC_018",
+          "kind": "departure_declared",
+          "note": "No reliance on biological analogy."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The preference is a performative contradiction in Popper's system: it is logically indefensible on his strict terms, yet pragmatically unavoidable; the surviving answer is that Popperianism requires a 'dual-track' mind where one rejects induction theoretically but practices it operationally, costing the system its internal consistency.",
+      "mechanism": "Popper's system demands we treat corroboration as non-inductive, yet human cognition and practical action require inductive assumptions to function. The 'preference' is therefore a necessary fiction. We act *as if* the future resembles the past because we must, while saying *that* we don't believe it. This creates a split between the 'logic of discovery' (purely deductive/critical) and the 'psychology/pragmatics of action' (implicitly inductive).",
+      "counterconditions": [
+        "If a third way exists that integrates action and logic without contradiction.",
+        "If 'pragmatic necessity' can be framed as a non-inductive rule of survival rather than an inductive belief."
+      ],
+      "typicality": 0.35,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Agrees that verisimilitude fails (supporting the 'indefensible' part of the claim) but adds that the *practice* continues regardless, highlighting the contradiction."
+        },
+        {
+          "handle": "[SRC_017] against SRC_005",
+          "kind": "rebutted",
+          "note": "Uses the failure of verisimilitude to prove that the logical defense is impossible, reinforcing the 'performative contradiction' thesis."
+        },
+        {
+          "handle": "[SRC_020] against SRC_007",
+          "kind": "rebutted",
+          "note": "Accepts that the analogy fails to bridge the gap, which supports the conclusion that there *is* no bridge, only a pragmatic jump (contradiction)."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Argues that the 'false dichotomy' is real: we try to use verisimilitude, it fails, and we are left with the contradiction. The candidate embraces the tension rather than resolving it."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "revised",
+          "note": "The cost is explicitly 'internal consistency.' The system survives only by tolerating a fundamental rift between theory and practice."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Confirms that induction *is* smuggled in, but argues this is an unavoidable feature of human agency, not a fixable bug in the logic. The 'risk' argument is a cover story for this necessary smuggling."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "Cites the incoherence of verisimilitude as proof that the logical track is broken, leaving only the pragmatic/inductive track operational."
+        },
+        {
+          "handle": "[SRC_019] against SRC_018",
+          "kind": "rebutted",
+          "note": "Agrees the analogy fails to justify, concluding that the lack of justification forces the 'dual-track' compromise."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is defensible only if we redefine 'rationality' as 'fidelity to the critical method' rather than 'optimization for truth'; the cost is that science becomes a game with arbitrary rules, losing its claim to describe reality, gaining only the coherence of a self-consistent procedure.",
+      "mechanism": "If we strip away all claims to truth, probability, and verisimilitude, what remains is a set of procedural rules: 'prefer the theory that has survived the toughest attempts to kill it.' This is rational only in the sense of playing a game correctly. It does not connect to the world (no induction), nor does it approximate truth (no verisimilitude). It is a closed loop of criticism. The preference is defensible as 'rule-following,' but the cost is instrumentalism: science no longer tells us about reality, only about the history of our own criticisms.",
+      "counterconditions": [
+        "If the critical method can be shown to converge on truth without induction.",
+        "If 'rule-following' inherently implies a belief in the utility of the rules, which reintroduces induction."
+      ],
+      "typicality": 0.25,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Accepts the failure of verisimilitude and pivots to pure proceduralism. If truth-likeness is incoherent, then we must retreat to rule-following."
+        },
+        {
+          "handle": "[SRC_017] against SRC_005",
+          "kind": "rebutted",
+          "note": "Same as above: the failure of verisimilitude forces the move to instrumentalism/proceduralism."
+        },
+        {
+          "handle": "[SRC_020] against SRC_007",
+          "kind": "rebutted",
+          "note": "Rejects the evolutionary analogy's normative power, replacing it with the normativity of 'game rules.' The preference is justified only by the desire to play the 'science game' well."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Embraces the 'rule-adherence' side of the dichotomy fully, admitting that this sacrifices the 'probable truth' side entirely."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "revised",
+          "note": "The cost is severe: 'science becomes a game with arbitrary rules, losing its claim to describe reality.' This is the ultimate sacrifice of realism."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Denies that induction is smuggled in because the system makes no claims about the future or reality. It is purely about internal consistency of the method."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "Uses the incoherence of verisimilitude to justify abandoning realism entirely in favor of procedural rationality."
+        },
+        {
+          "handle": "[SRC_019] against SRC_018",
+          "kind": "rebutted",
+          "note": "Agrees that descriptive analogies fail, so the justification must be purely conventional/normative within the closed system of critical rationalism."
+        }
+      ],
+      "optional_refs": []
+    }
+  ]
+}

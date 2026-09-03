@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes a 'reduction' relation but fails to substantively define the shared mechanism between 'strategic selection in science' and 'natural selection'. It asserts an analogy without detailing the specific causal steps or structural isomorphism that would constitute a genuine reduction. Furthermore, the 'refuted if' condition is stated as a hypothetical dependency ('if the causal mechanism... requires') rather than demonstrating that this normative element is actually present and missing in evolution, leaving the relation incomplete and the refutation condition unverified.",
+      "counterexample": null,
+      "premise": "A substantive reduction relation requires explicit mapping of mechanisms between domains, not just an asserted analogy, and a 'refuted if' clause must address actual conditions rather than hypothetical ones.",
+      "premise_evidence": null,
+      "successor_question": "What specific causal steps in scientific theory selection map directly to genetic mutation and differential reproduction to justify the claim of reduction?"
+    }
+  ]
+}

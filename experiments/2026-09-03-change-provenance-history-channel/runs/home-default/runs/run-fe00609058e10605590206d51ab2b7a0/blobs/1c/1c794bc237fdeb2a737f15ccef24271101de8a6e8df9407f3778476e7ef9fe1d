@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) to justify preferring better-corroborated theories without induction, but this fails Popper's own terms because Popper explicitly abandoned the formal definition of verisimilitude after it was proven logically incoherent (by Miller and Tichý in 1974). The proof demonstrated that under Popper's own criteria, a false theory with more content cannot be strictly compared to another false theory to determine which is 'closer' to the truth. Therefore, invoking verisimilitude as a rational basis for preference smuggles in an unjustified assumption about the structure of truth that Popper's later philosophy could not support, leaving the preference for corroborated theories without the non-inductive logical foundation the target claims.",
+      "counterexample": null,
+      "premise": "Popper abandoned his formal definition of verisimilitude after proofs by Miller and Tichý showed it was logically incoherent for comparing false theories.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot formally ground the preference for corroborated theories, does Popper's position ultimately reduce to a psychological habit rather than a rational rule?"
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic, non-inductive rule of action based on verisimilitude (truth-likeness), where scientists choose the theory that has survived the severest tests because it is currently the closest approximation to truth, not because it is probable.",
+      "mechanism": "Popper distinguishes between 'probability' (logical likelihood) and 'verisimilitude' (closeness to truth). A theory with high empirical content that survives severe testing has high verisimilitude. The scientist's preference is a rational choice to act on the best available approximation of truth to solve problems, without assuming the future will resemble the past (induction).",
+      "counterconditions": [
+        "If the definition of verisimilitude relies on inductive assumptions about the stability of laws.",
+        "If acting on a theory necessarily implies a belief in its future success, which is an inductive leap."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "While Tichý and Miller showed flaws in Popper's *quantitative* definition of verisimilitude for false theories, the *qualitative* concept remains viable for comparing a true theory to a false one or two false theories where one entails the other. The defense here relies on the qualitative intuition that surviving severe tests increases truth-content relative to falsity-content, which is not logically incoherent even if the formal calculus was flawed."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "This is not a false dichotomy. Popper explicitly separated 'rationality as adherence to critical rules' from 'rationality as maximizing probable truth.' The argument defends the preference as adhering to the rule: 'Act on the theory with the highest degree of corroboration (severe test survival),' which is a methodological rule, not a claim about probability."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate does not sidestep the induction question; it answers it by denying the premise that preference requires an assumption of uniformity. The preference is for the theory that has *already* eliminated more error. Acting on it is a decision to use the best current tool, not a prediction that it will work forever. If it fails tomorrow, the preference was still rational today based on available information."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Preferring a theory does not assume the uniformity of nature. It assumes only that the theory has withstood attempts to falsify it *so far*. Popper's solution is that we do not need to assume nature is uniform to prefer the theory that has survived the most rigorous attempts to show it isn't. The 'prediction' is merely a conjecture subject to immediate falsification, not an inductive certainty."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The preference smuggles induction back in because acting on corroboration necessarily assumes the uniformity of nature or the stability of laws, which Popper explicitly rejected, making any practical reliance on past test results an implicit inductive inference.",
+      "mechanism": "To prefer Theory A over Theory B because A survived tests yesterday is to assume that the conditions governing A's survival will persist today. This is the principle of the uniformity of nature. Without this assumption, past corroboration is irrelevant to future action. Therefore, the scientist's behavior contradicts Popper's anti-inductive stance.",
+      "counterconditions": [
+        "If one can formulate a rule of action that relies on past data without assuming the future resembles the past.",
+        "If 'preference' is interpreted as a temporary heuristic rather than a justified belief in future performance."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "This candidate departs from the verisimilitude defense entirely. It argues that regardless of the logical coherence of verisimilitude, the *act* of preferring based on it collapses into induction in practice."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The criticism claims a false dichotomy, but this candidate argues the dichotomy is real: either you believe the theory is probably true (induction) or you have no rational basis to prefer it for action. If Popper claims a third way, he is masking an inductive assumption under the label of 'methodological rule.'"
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate directly addresses the smuggling charge. It asserts that redefining preference as 'risk' or 'leverage' is semantic cover for the underlying psychological and practical necessity of assuming stability. Scientists act *as if* the future will be like the past; that is induction by any functional definition."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to clarify that Popper's specific solution (corroboration as a report of past performance) fails precisely because it cannot bridge the gap to future action without the hidden premise of uniformity. The mechanism now explicitly states that the 'report' is useless for decision-making without the inductive leap."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Corroboration functions as a 'causal mechanism' of selection analogous to natural selection, where preference is a survival trait of the scientific community rather than a logical proof of truth, rendering the induction debate category-mistaken.",
+      "mechanism": "Just as organisms are selected for fitness without implying they are 'perfect' or 'probable' to survive forever, theories are selected for corroboration. The scientist's preference is an evolutionary adaptation of the research community to maximize error elimination. It is defensible not as logic, but as a causal process of knowledge growth where the 'fittest' (most tested) theories are the only ones available for further mutation and testing.",
+      "counterconditions": [
+        "If the analogy breaks down because biological fitness is retrospective while scientific preference is prospective.",
+        "If the 'causal mechanism' of science requires a normative element that evolution lacks."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The Tichý/Miller critique applies to logical definitions of truth-content. An evolutionary model bypasses logical definitions of verisimilitude entirely, treating 'truth-likeness' as an emergent property of the selection process, not a static metric to be calculated."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The dichotomy is dissolved by changing the framework from epistemology to evolutionary epistemology. Rationality is not about rule-adherence vs. probability, but about the systemic efficiency of error elimination."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The tension regarding 'smuggling induction' vanishes if preference is seen as a blind variation and selective retention mechanism. The scientist doesn't 'assume' uniformity; the system retains what works until it doesn't. No inductive justification is needed for the mechanism to function."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "This misrepresents the evolutionary view. The preference is not a 'prediction' in the logical sense, but a behavioral disposition shaped by the history of falsification. It does not assume uniformity; it exploits local regularities until they break."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves if we view corroboration as a measure of informational content and test severity, making the preference a choice for higher risk and higher potential yield, not safety or probability.",
+      "mechanism": "Popper values bold conjectures. A highly corroborated theory is one that took a great risk (high empirical content) and survived. Scientists prefer it not because it is 'safe' (probable), but because it has proven its robustness against high-risk tests. The preference is for the theory that offers the most leverage for future falsification, aligning with the goal of rapid error elimination rather than inductive security.",
+      "counterconditions": [
+        "If scientists actually prefer corroborated theories because they believe them to be 'true' or 'reliable' in an inductive sense.",
+        "If high corroboration inevitably leads to a psychological sense of certainty that mimics induction."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "This approach avoids the formal definition of verisimilitude criticized by Tichý and Miller by focusing on 'severity of test' and 'empirical content,' which remain coherent concepts in Popper's logic even if the truth-content calculus failed."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "It rejects the dichotomy by introducing a third term: 'informational yield.' The preference is rational because it maximizes the potential for learning (falsification), not because it maximizes truth probability or mere rule-following."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "This directly answers the 'smuggling' charge. Scientists prefer the risky theory *because* it is risky and has survived. They are not assuming it will continue to survive (induction); they are choosing the path that will most quickly reveal if it is false. If it fails, the goal is achieved."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The mechanism clarifies that the preference is not a prediction of future success, but a strategic choice for maximum exposure to falsification. Assuming uniformity would be counter-productive to this goal, as it would encourage seeking confirmation rather than refutation."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict terms and represents a necessary pragmatic contradiction: scientists must act 'as if' induction were true to function, even while acknowledging its logical invalidity, forcing a departure from pure Popperian rationality.",
+      "mechanism": "Popper's system creates a gap between logical critique and practical action. To cross this gap, scientists implicitly adopt a 'pragmatic induction'—a willingness to bet on the future resembling the past despite knowing there is no logical warrant. This saves scientific practice but abandons Popper's claim to have solved the problem of induction without residue.",
+      "counterconditions": [
+        "If a non-inductive bridge between critique and action can be formally constructed.",
+        "If 'pragmatic induction' can be redefined as a non-inductive heuristic."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departure declared: This candidate accepts the Tichý/Miller critique as fatal to the verisimilitude defense and argues that no amount of tweaking the definition can save the non-inductive preference."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The dichotomy is accepted but resolved by admitting that 'rule-adherence' fails in the real world without an implicit belief in 'probable truth.' The cost is admitting Popper was wrong about the completeness of his solution."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "This candidate agrees that the target (SRC_008) sidesteps the issue. It argues that 'risk' and 'leverage' are insufficient motivators for action without the hidden engine of inductive expectation. The 'smuggling' is real and unavoidable."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to strengthen the claim that Popper's specific solution is insufficient. The mechanism now posits that the 'assumption of uniformity' is not a mistake scientists make, but a necessary precondition for any action, which Popper failed to fully excise from his philosophy of science."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is defensible only if we reinterpret 'rationality' not as individual logical consistency, but as social institutional design, where the preference for corroborated theories is a norm enforced to stabilize scientific discourse, independent of individual inductive beliefs.",
+      "mechanism": "Science is a social institution. The rule 'prefer the better-corroborated theory' is a constitutive norm of this institution, similar to 'check your king' in chess. It does not require individual scientists to believe in induction; it requires them to follow the rule to participate in the game. The 'smuggling' of induction is a psychological side-effect, not a logical requirement of the institutional rule.",
+      "counterconditions": [
+        "If the institutional rule itself cannot be justified without appealing to the inductive success of science.",
+        "If individual scientists cannot separate their personal actions from institutional norms."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The logical incoherence of verisimilitude is irrelevant to institutional norms. The norm is justified by its function in maintaining community cohesion and progress, not by its correspondence to a logical metric of truth."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The dichotomy is resolved by shifting the locus of rationality from the individual mind to the social structure. One can adhere to the rule (rationality 1) without believing in probable truth (rationality 2), because the rule's validity is social, not probabilistic."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The core tension is dissolved. Scientists may feel they are smuggling induction, but structurally, they are just following the rules of the scientific game. The 'preference' is a compliance mechanism, not an epistemic judgment."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The mechanism claims that assuming uniformity is not required for institutional stability. The institution works even if everyone knows the laws might change tomorrow; the rule simply ensures we all agree on which theory to test next."
+        }
+      ],
+      "optional_refs": []
+    }
+  ]
+}

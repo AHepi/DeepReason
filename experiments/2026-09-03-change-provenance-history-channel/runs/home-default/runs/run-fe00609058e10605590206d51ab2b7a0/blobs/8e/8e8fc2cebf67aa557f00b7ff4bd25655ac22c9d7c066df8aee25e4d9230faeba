@@ -1,0 +1,20 @@
+{
+  "candidate": {
+    "content": "The preference for corroborated theories reduces to a strategic selection mechanism analogous to natural selection, refuted if the causal mechanism of science requires a normative element that evolution lacks.",
+    "typicality": 0.85,
+    "neighbours": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "evidence_refs": [
+      {
+        "block": "003718cc784c",
+        "quote": "If the 'causal mechanism' of science requires a normative element that evolution lacks."
+      },
+      {
+        "block": "003718cc784c",
+        "quote": "Science is an evolutionary process. Corroboration marks a theory as having high 'fitness' in the environment of severe tests."
+      }
+    ]
+  }
+}

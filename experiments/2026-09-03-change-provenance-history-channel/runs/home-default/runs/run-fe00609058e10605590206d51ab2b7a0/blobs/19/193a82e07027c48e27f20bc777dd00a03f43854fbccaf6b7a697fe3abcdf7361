@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target falsely attributes 'instrumentalism' and the loss of descriptive claim to Popper's position, ignoring that Popper explicitly defends 'verisimilitude' (truth-likeness) as a non-inductive metric. The preference for better-corroborated theories is defensible on Popper's terms not merely as 'rule-following' in an arbitrary game, but because surviving severe tests increases a theory's verisimilitude content without assigning it probability. By claiming the cost is that science 'loses its claim to describe reality,' the target constructs a straw man that contradicts Popper's core assertion that we can rationally prefer theories that are closer to the truth, even if we cannot know them to be true or probable.",
+      "counterexample": null,
+      "premise": "Popper's concept of verisimilitude allows for a preference of theories based on their closeness to truth without relying on induction or probability.",
+      "premise_evidence": null,
+      "successor_question": "How does the target reconcile its claim that Popper's method severs the link to reality with Popper's explicit writings on verisimilitude as a guide to truth?"
+    }
+  ]
+}

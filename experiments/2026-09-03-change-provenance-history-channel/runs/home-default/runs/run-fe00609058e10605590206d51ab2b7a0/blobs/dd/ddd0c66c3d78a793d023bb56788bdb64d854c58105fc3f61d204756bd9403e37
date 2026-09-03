@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes a 'reduction' relation but fails to define the specific mechanism of reduction or explain how scientific prediction maps onto biological fitness. Instead, it immediately jumps to the 'refuted if' condition without establishing the substantive connection required by the problem context. A summary of the analogy is not a relation; the target omits the 'what it is' part of the proposed relation, rendering the subsequent refutation condition ungrounded.",
+      "premise": "A substantive relation requires naming the kind and stating what the relation IS before stating what would refute it; providing only an analogy summary and a refutation condition does not constitute a proposed relation.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "What is the specific mapping function or shared mechanism that constitutes the reduction of theory selection to natural selection, distinct from the mere assertion that they are analogous?"
+    }
+  ]
+}

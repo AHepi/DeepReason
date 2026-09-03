@@ -1,0 +1,20 @@
+{
+  "candidate": {
+    "content": "The isolated node 003718cc784c INTEGRATES with the foundational artifacts by establishing that scientific preference is a strategic evolutionary mechanism rather than a logical proof; this relation is REFUTED IF the analogy between biological fitness (retrospective) and scientific corroboration (prospective) breaks down, or if the normative element required for scientific 'causal mechanisms' cannot be sustained without inductive logic.",
+    "typicality": 0.72,
+    "neighbours": [
+      "SRC_003",
+      "SRC_005"
+    ],
+    "evidence_refs": [
+      {
+        "block": "003718cc784c1026",
+        "quote": "Science is an evolutionary process. Corroboration marks a theory as having high 'fitness' in the environment of severe tests."
+      },
+      {
+        "block": "2b2849a64e01",
+        "quote": "Corroboration functions as a 'causal mechanism' of selection analogous to natural selection, where preference is a survival trait of the scientific community rather than a logical proof of truth"
+      }
+    ]
+  }
+}

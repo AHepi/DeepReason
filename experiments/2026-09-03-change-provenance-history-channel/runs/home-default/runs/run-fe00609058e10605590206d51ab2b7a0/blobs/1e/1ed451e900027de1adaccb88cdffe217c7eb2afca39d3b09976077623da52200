@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes a 'reduction' relation but fails the 'refuted if' condition by mischaracterizing the endpoints. The statement claims biological evolution 'inherently lacks' a normative element, which is a false premise; evolutionary theory includes normative-like selection pressures (fitness norms). Furthermore, the reduction is superficial because it equates a strategic epistemic mechanism with a blind causal process without explaining the shared mechanism of 'selection' in sufficient detail to satisfy the requirement for a substantive relation over a mere summary.",
+      "counterexample": null,
+      "premise": "The target asserts that biological evolution inherently lacks a normative element, which refutes its own reduction claim if false, and fails to define the shared mechanism beyond the analogy itself.",
+      "premise_evidence": [
+        {
+          "block": "2a45b7988522",
+          "quote": "The preference for corroborated theories reduces to a strategic selection mechanism analogous to natural selection, refuted if the causal mechanism of science requires a normative element that biological evolution inherently lacks."
+        }
+      ],
+      "successor_question": "Does the 'fitness' criterion in biological evolution constitute a form of normative pressure that invalidates the claim that evolution 'inherently lacks' a normative element?"
+    }
+  ]
+}

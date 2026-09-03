@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target falsely equates 'pragmatic preference' with 'inductive belief,' ignoring Popper's explicit solution that preferring better-corroborated theories is a critical-rational decision based on the aim of truth, not an inductive inference that the future will resemble the past.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between the logical question of justification (which he rejects) and the pragmatic question of which theory to choose for action (which he answers via the aim of truth and severity of tests).",
+      "premise_evidence": null,
+      "successor_question": "How does Popper specifically define the rationality of action without relying on the principle of induction in 'The Logic of Scientific Discovery' or 'Conjectures and Refutations'?"
+    }
+  ]
+}
