@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'rational preference' based on critical discussion, not inductive probability. It relies on the meta-scientific goal of truth-likeness (verisimilitude) rather than predictive success derived from past uniformity.",
+      "mechanism": "Critical Rationalism distinguishes between the logical probability of a theory (which remains zero or undefined for universal laws) and the rational decision to prefer the theory that has withstood the most severe tests. This preference is a procedural rule for error elimination, not an inductive inference that the future will resemble the past.",
+      "counterconditions": [
+        "If the agent implicitly assumes that surviving past tests increases the likelihood of surviving future tests.",
+        "If the concept of 'verisimilitude' cannot be defined without relying on probabilistic assumptions.",
+        "If the preference is shown to be functionally identical to Bayesian updating in practice."
+      ],
+      "typicality": 0.92,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "The candidate explicitly adopts Popper's 'rational preference' and 'critical discussion' as the third way, rejecting the false dichotomy between probability and convention."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "rebutted", "note": "The mechanism clarifies that minimizing future error risk is a goal of the methodology, not an inductive prediction that the risk *will* be minimized; it is a bet on the best current guess, not a law of nature."},
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The cost is accepting that we have no guarantee of success; the preference is defensible because it is the only non-arbitrary method available for seeking truth, even if it offers no inductive security."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Verisimilitude serves as the regulative ideal guiding the preference; its unknowability does not invalidate the rationality of aiming for it via corroboration."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "The candidate centers 'rational preference' exactly as Popper defined it, avoiding the biological/logical false dichotomy."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The distinction between the psychological act of choosing and the logical status of probability is maintained; the choice is rational precisely because it acknowledges the lack of logical probability."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The reason for preference is the severity of tests passed (content), not an assumption of nature's uniformity, thus avoiding the inductive smuggle."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "The candidate treats verisimilitude as the semantic goal and evolutionary selection as the epistemic process, keeping them distinct but complementary in Popper's later thought."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_005", "SRC_015"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system. Any practical reliance on past test survival to guide future action constitutes an inductive principle, regardless of Popper's verbal denials.",
+      "mechanism": "Pragmatic Induction: While Popper denies the logical validity of induction, his prescription to 'prefer the better-tested theory' functions as an inductive rule in practice. If past performance is not taken as evidence for future performance, the preference is arbitrary; if it is, then induction is present by definition.",
+      "counterconditions": [
+        "If a non-inductive justification for acting on past success can be rigorously formulated.",
+        "If the preference can be shown to be purely conventional with no claim to reliability.",
+        "If 'rationality' can be defined entirely independently of expected success."
+      ],
+      "typicality": 0.88,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "The candidate argues that 'rational preference' is merely a label for disguised induction; the alleged 'third way' collapses under pragmatic scrutiny."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "revised", "note": "Refined to emphasize that functional identity to induction is sufficient to count as smuggling, regardless of intent."},
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The cost is admitting Popper's system is inconsistent; the candidate asserts this inconsistency is fatal to the defense."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "The unknowability of verisimilitude reinforces the charge: without it, we are left with nothing but past success, which forces induction."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "The candidate rejects the 'rational preference' distinction as semantic window-dressing for the underlying inductive habit."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "Argues that the psychological act of choosing *based on past tests* logically entails an inductive premise, making the distinction irrelevant."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "Contends that any reason preferring survival over non-survival *must* assume some uniformity, however weak, to be non-arbitrary."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "Claims that conflating verisimilitude and selection is exactly where the inductive leak occurs, as selection implies progress toward truth."}
+      ],
+      "optional_refs": ["SRC_008", "SRC_011", "SRC_009"]
+    },
+    {
+      "claim": "The preference is defensible only if accepted as a 'conventionalist' decision to adopt a specific methodology (falsificationism) for the sake of scientific growth, abandoning the claim that this methodology tracks truth or probability.",
+      "mechanism": "Methodological Conventionalism: Scientists prefer corroborated theories not because they are likely true or will succeed, but because this rule maximizes the speed of error detection. It is a self-imposed rule of the game of science, not a description of reality or a logical necessity.",
+      "counterconditions": [
+        "If Popper explicitly claims the methodology leads to truth (verisimilitude) rather than just faster falsification.",
+        "If the preference cannot be separated from the hope of predictive success.",
+        "If 'growth' itself relies on an inductive assumption that new theories will be better."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_003", "kind": "departure_declared", "note": "Departs from the idea that Popper offered a robust 'rational' foundation; instead posits a pragmatic convention."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "rebutted", "note": "Denies that maximizing error detection is inductive; it is a structural feature of the chosen method, not a prediction."},
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The cost is giving up the claim that science gets closer to truth; we only get better at finding errors."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "revised", "note": "Clarifies that verisimilitude is abandoned in favor of pure falsifiability growth."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "Reframes 'rational preference' as 'methodological consistency' rather than a bridge to truth."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "Accepts the reduction to psychological/pragmatic choice, denying it needs logical grounding."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "Asserts the preference is arbitrary in a cosmic sense but necessary for the specific game of science."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "Embraces the separation: selection is for growth, verisimilitude is discarded as a metric."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_004"]
+    },
+    {
+      "claim": "The dilemma dissolves when viewing corroboration as a measure of 'informational content' survived, not probability. Preference is for the theory with the highest empirical content that has not yet been refuted, which is a logical relation, not an inductive one.",
+      "mechanism": "Content-Based Selection: Corroboration reports how much risky content a theory has survived. We prefer high-content survivors because they tell us more about the world, even if we assign them zero probability. The preference is for informativeness, not likelihood.",
+      "counterconditions": [
+        "If scientists actually care more about safety/probability than informational content.",
+        "If 'surviving tests' cannot be decoupled from 'likely to survive future tests'.",
+        "If high content necessarily implies low survivability in the long run."
+      ],
+      "typicality": 0.78,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "Identifies 'informational content' as the specific alternative foundation Popper proposed."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "rebutted", "note": "Distinguishes between preferring high content (logical) and expecting it to last (inductive)."},
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The cost is accepting that we prefer bold guesses that might fail tomorrow, simply because they are bold."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Uses content as the proxy for verisimilitude without claiming knowledge of truth."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "Grounds rationality in the logic of content, not biology or convention."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The preference is for the logical property of 'high content survived', distinct from psychological propagation."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The reason is the value of information, not an assumption of nature's uniformity."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "Aligns selection strictly with content survival, sidestepping quantitative verisimilitude issues."}
+      ],
+      "optional_refs": ["SRC_006", "SRC_007"]
+    }
+  ]
+}

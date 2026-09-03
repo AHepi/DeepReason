@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes 'Methodological Necessity' as the substantive relation but fails to define a clear 'REFUTED IF' condition that functions as a logical boundary for the relation itself. Instead, it offers a conditional statement about scientific preference operating without regularity, which describes a scenario for falsifying the principle rather than defining the relation's limits or endpoints as required by the problem context.",
+      "counterexample": null,
+      "premise": "The problem requires naming a relation kind and stating what it is REFUTED IF, implying a definition of the relation's scope or failure conditions, not just an empirical test of the principle's validity.",
+      "premise_evidence": null,
+      "successor_question": "How does the stated 'REFUTED IF' condition specifically delineate the boundaries of the 'Methodological Necessity' relation rather than merely providing a method to disprove the underlying axiom?"
+    }
+  ]
+}

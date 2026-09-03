@@ -1,0 +1,30 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@9261702262a03956a8f85903: program:reasoning_observation_pending
+- reason-counter@07ab516e72a4fc8aa82d9514: program:reasoning_observation_pending
+- reason-counter@ce2abafb4970a0ff62d89b37: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference that the theory is more probable, but as a non-inductive 'conventionalist decision' to act on the theory that has withstood the most severe tests, thereby maximizing the objective chance of learning from future errors; accepting this costs us any guarantee of practical success or proximity to truth, reducing scientific action to a gamble where the only rational metric is the severity of potential falsification rather than expected utility.","counterconditions":[{"case":"If the agent requires a probability greater than 0.5 to act, the Popperian framework collapses into induction.","checker_spec":null,"eval":"observation"},{"case":"If 'verisimilitude' is invoked as a knowable quantity to justify preference, the argument fails due to Popper's own admission of its logical undefinability.","checker_spec":null,"eval":"observation"},{"case":"If the preference is claimed to minimize the risk of practical failure (e.g., bridge collapse) rather than maximize the speed of theoretical correction, it surreptitiously relies on inductive assumptions about nature's uniformity.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The mechanism distinguishes between the logical status of a theory (which remains unproven and improbable) and the methodological rule for action (which selects the theory offering the highest informational content and testability). By treating the preference as a rule of procedure rather than a statement of fact, the agent avoids the inductive leap: one does not believe Theory A will work because it worked before, but chooses Theory A because it exposes the agent to the most rigorous possible test, ensuring that if error exists, it is found quickly. This converts the 'smuggled induction' into an explicit commitment to rapid error elimination.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9261702262a03956a8f85903, reason-counter@07ab516e72a4fc8aa82d9514, reason-counter@ce2abafb4970a0ff62d89b37
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

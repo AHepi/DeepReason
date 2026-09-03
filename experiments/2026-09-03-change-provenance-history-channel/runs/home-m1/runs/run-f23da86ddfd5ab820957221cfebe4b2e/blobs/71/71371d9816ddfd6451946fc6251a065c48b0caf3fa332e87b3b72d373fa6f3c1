@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction if re-framed as a methodological rule of 'critical selection' rather than an epistemic probability assignment; however, this defense survives only at the cost of admitting that science cannot rationally justify the expectation that the future will resemble the past, reducing the preference to a non-rational 'faith' in the uniformity of nature or a purely conventional decision to act as if corroboration matters.",
+    "mechanism": "The argument distinguishes between 'epistemic justification' (which Popper denies is possible for universal laws) and 'methodological utility' (choosing the theory that has withstood the severest tests as the best target for future falsification). The preference is not based on the belief that the theory is true or probable, but on the strategic goal of maximizing error elimination. If Theory A has survived severe tests where Theory B failed, A is the 'fitter' survivor to subject to further testing. This avoids induction because it makes no claim about A's future success, only its current status as the most rigorously tested available option.",
+    "counterconditions": [
+      "If the agent acts on Theory A expecting it to succeed in future applications (e.g., building a bridge), they are implicitly relying on an inductive leap that past success predicts future reliability, which Popper explicitly forbids.",
+      "If the preference is merely conventional, then choosing the less-corroborated theory is equally rational, undermining the normative force of scientific practice.",
+      "If 'verisimilitude' (truth-likeness) is invoked to ground the preference, the argument collapses because Popper's own logical definition of verisimilitude was proven formally inconsistent by Tichý and Miller."
+    ],
+    "typicality": 0.85,
+    "analogy": {
+      "source_memory_refs": [
+        "Evolutionary natural selection: organisms are selected not because they are guaranteed to survive tomorrow, but because they have survived yesterday's pressures.",
+        "Legal cross-examination: a witness whose testimony survives aggressive questioning is preferred for the verdict, not because they are certainly telling the truth, but because they have withstood the best available attempt to falsify them."
+      ],
+      "shared_structure": [
+        "Selection based on survival of severe tests rather than positive verification.",
+        "Distinction between 'fitness' (survival so far) and 'guaranteed future performance'.",
+        "Rejection of probabilistic accumulation of confirmation."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of truth, whereas scientific methodology explicitly aims at truth-like content.",
+        "Legal systems often rely on probabilistic standards ('beyond reasonable doubt'), whereas Popper strictly bans probabilistic support for theories.",
+        "Natural selection operates on random variation, while scientific conjecture involves creative, non-random human insight."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the fittest organism without knowing the future environment, we act on the best-corroborated theory without knowing future test outcomes.",
+        "The 'preference' is a procedural heuristic for error elimination, not an ontological claim about the world's stability."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that acting on the best-corroborated theory necessarily entails an assumption of nature's uniformity, the non-inductive defense fails.",
+        "If the distinction between 'methodological rule' and 'inductive principle' is shown to be verbal only, with no practical difference in action-guidance."
+      ]
+    },
+    "discharges": [
+      {
+        "handle": "059c75cb550e1b3f17f7e4cf17ed53b0cb31a7935eefc2fc97ccf46fb5dae5c0",
+        "kind": "revised",
+        "note": "Explicitly incorporated the 'metaphysical faith' cost into the main claim and mechanism, acknowledging that the defense survives only by accepting this non-rational foundation as a necessary precondition for action."
+      },
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dilemma regarding convention vs. verisimilitude. The candidate rebuts by arguing that 'critical selection' is a third path: it is neither a blind convention nor a reliance on the failed formal concept of verisimilitude, but a strategic choice for maximal testability. The preference is grounded in the logic of falsification, not truth-likeness metrics."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The candidate maintains that conflating objectivity of method with result is precisely the error the criticism accuses the target of. The defense argues that Popper's framework grounds preference in the *method* of severe testing, which is objective, while explicitly denying any objective guarantee of the *result* (truth or future success)."
+      },
+      {
+        "handle": "3dd7e6e5900af409fe538c843fc9a16df138e02b954e617cb086b0f92122ce4f",
+        "kind": "revised",
+        "note": "Clarified the mechanism to emphasize that projecting past survival into future preference is NOT done. The preference is for the theory that is currently the 'best tested,' not the one predicted to pass future tests. The 'leap' is admitted as a cost (faith/convention) if one expects future success, but the methodological preference itself does not require it."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "rebutted",
+        "note": "Rejects the false dichotomy. The alternative foundation is 'critical rationalism' itself: the principle that we should always prefer the theory that has been most severely tested and not yet falsified, simply because it offers the most informative target for further criticism. This is a normative rule of conduct, not an ontological claim about probability or convention."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "revised",
+        "note": "Accepted the functional similarity to induction in *practice* but maintained the logical distinction in *justification*. The revision explicitly states that while the action looks inductive, the rationale (error elimination) is deductive. The cost is admitting that the 'pragmatic' bridge between the two requires a non-rational decision."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on the formal definition of verisimilitude, which indeed failed. Instead, it relies on the informal notion of 'survival of the fittest' in terms of informational content and test severity. The argument stands even if verisimilitude cannot be formally quantified, as long as we can compare the severity of tests passed."
+      },
+      {
+        "handle": "720e994a62093f4921479eee06c7b2643add166f9ff3ec18dfac4aefd5df7507",
+        "kind": "revised",
+        "note": "Directly addressed the cost: accepting this view means we cannot rationally justify the expectation that Theory A will work tomorrow. We choose A only because it is the most interesting falsehood we have left. If we need to build a bridge, we must add a 'decision' or 'faith' component that Popper's pure logic does not provide. This cost is now central to the conclusion."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'logical content' with 'risk minimization' in a way that secretly relies on induction. Popper explicitly rejects the idea that past survival (corroboration) makes a theory more likely to succeed in the future. The target argues we should choose the best-corroborated theory to 'minimize the risk' of immediate failure. However, asserting that a theory which survived past tests is *less risky* (i.e., more likely to survive the next test) than an untested or falsified one is itself an inductive inference. If the future does not resemble the past, the 'best-corroborated' theory offers no logical guarantee of being a safer bet than any other unfalsified theory. By framing the choice as a 'minimax strategy' based on past performance, the target smuggles in the very principle of uniformity of nature that Popper sought to eliminate, rendering the preference indefensible on strictly Popperian terms without accepting induction.",
+      "counterexample": null,
+      "premise": "Popper's rejection of induction entails that past corroboration provides no logical basis for predicting future success or minimizing future error risk.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration cannot justify a preference based on risk minimization, does Popper's framework leave scientists with no rational basis for preferring one unfalsified theory over another when action is required?"
+    }
+  ]
+}

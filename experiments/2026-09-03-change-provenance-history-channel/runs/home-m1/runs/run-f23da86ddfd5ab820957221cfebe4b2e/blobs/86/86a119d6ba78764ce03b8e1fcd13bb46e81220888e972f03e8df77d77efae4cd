@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference that the theory is more probable, but as a non-inductive 'conventionalist decision' to act on the theory that has withstood the most severe tests, thereby maximizing the objective chance of learning from future errors; accepting this costs us any guarantee of practical success or proximity to truth, reducing scientific action to a gamble where the only rational metric is the severity of potential falsification rather than expected utility.",
+    "mechanism": "The mechanism distinguishes between the logical status of a theory (which remains unproven and improbable) and the methodological rule for action (which selects the theory offering the highest informational content and testability). By treating the preference as a rule of procedure rather than a statement of fact, the agent avoids the inductive leap: one does not believe Theory A will work because it worked before, but chooses Theory A because it exposes the agent to the most rigorous possible test, ensuring that if error exists, it is found quickly. This converts the 'smuggled induction' into an explicit commitment to rapid error elimination.",
+    "counterconditions": [
+      "If the agent requires a probability greater than 0.5 to act, the Popperian framework collapses into induction.",
+      "If 'verisimilitude' is invoked as a knowable quantity to justify preference, the argument fails due to Popper's own admission of its logical undefinability.",
+      "If the preference is claimed to minimize the risk of practical failure (e.g., bridge collapse) rather than maximize the speed of theoretical correction, it surreptitiously relies on inductive assumptions about nature's uniformity."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dilemma by ignoring verisimilitude. This rebuttal holds that invoking verisimilitude as a *known* justification fails because Popper explicitly stated we cannot know which theory is closer to the truth. The defense rests precisely on *not* knowing verisimilitude, but choosing the most testable option conventionally."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The criticism conflates objectivity of method with result. The candidate explicitly separates these: the method (severe testing) is objective, but the result (truth/probability) is not assumed. The preference is for the method's capacity to reveal error, not the result's certainty."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "revised",
+        "note": "Revised to clarify that the 'false dichotomy' charge is met by introducing the third category of 'methodological convention.' The preference is neither inductive nor purely arbitrary; it is a rule adopted to facilitate the growth of knowledge through falsification."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "rebutted",
+        "note": "The functional identity to induction is denied. Induction infers future success from past success. The Popperian rule infers nothing about the future; it merely selects the hypothesis that allows the future to be tested most severely. The goal is error detection, not error avoidance via prediction."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "rebutted",
+        "note": "Agrees that formal verisimilitude failed. The candidate does not rely on verisimilitude as a measurable justification but on 'content' and 'testability' as proxies for the *potential* to approach truth, without claiming we know we are doing so."
+      },
+      {
+        "handle": "720e994a620e994a62093f4921479eee06c7b2643add166f9ff3ec18dfac4aefd5df7507",
+        "kind": "rebutted",
+        "note": "Addresses the cost: The cost is indeed that we have no rational basis to expect the bridge to stand. We only have a rational basis to say that if the bridge falls, we will learn more about physics faster than if we used a less testable theory. Practical success is a hopeful byproduct, not a logical guarantee."
+      },
+      {
+        "handle": "7970f8e039458c9740bef220092d5b9e1cb2f16f2f90db166ba77751d59bd6a4",
+        "kind": "rebutted",
+        "note": "Rejects the category error charge. Severity is defined logically (improbability relative to background knowledge), but the *preference* for severe tests is a psychological/volitional act of the scientist. The candidate maintains this distinction: the definition is logical, the choice to act on it is conventional."
+      },
+      {
+        "handle": "8653a93a35d43191d6518c7629ca6b147480c93101961b1f816e7f6208016204",
+        "kind": "rebutted",
+        "note": "The dilemma is resolved by accepting the 'cost' explicitly: we do not know if we are getting closer. The preference is justified solely by the fact that it is the only strategy compatible with the logic of falsification. To demand more is to demand induction, which Popper rejects."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

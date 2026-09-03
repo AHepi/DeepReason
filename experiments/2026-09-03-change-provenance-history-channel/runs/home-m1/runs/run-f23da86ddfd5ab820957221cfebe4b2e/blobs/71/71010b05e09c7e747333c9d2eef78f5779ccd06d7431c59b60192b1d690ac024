@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that Popper's preference is merely a 'pragmatic convention' lacking logical foundation contradicts Popper's explicit distinction between the 'logical' problem of induction and the 'psychological' or 'pragmatic' necessity of acting. Popper defends the preference for better-corroborated theories not as an inductive inference (which would assign probability) but as a rational choice based on the severity of tests passed, which is a logical feature of his methodology (verisimilitude), not a mere admission of a gap. By framing it as a 'rule of thumb' that 'acknowledges its own lack of logical foundation,' the target misrepresents Popper's argument that the preference is logically defensible *without* induction, thereby failing to make the strongest case for the 'defensible' answer as required by the problem context.",
+      "counterexample": null,
+      "premise": "Popper argues that preferring a well-tested theory is rational because it has withstood severe attempts at falsification, not because it is probable, thus providing a non-inductive logical basis for preference.",
+      "premise_evidence": null,
+      "successor_question": "Does characterizing Popper's preference as a 'pragmatic convention' rather than a 'rational choice based on test severity' fundamentally misrepresent his solution to the problem of acting without induction?"
+    }
+  ]
+}

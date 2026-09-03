@@ -1,0 +1,262 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'convention of action' grounded in the logical asymmetry of falsification, not probabilistic confirmation.",
+      "mechanism": "Popper distinguishes between the logical status of a theory (which remains unproven) and the pragmatic rationality of choosing the best-tested theory for action. This choice relies on the meta-scientific decision to prefer theories that have withstood severe tests because they contain more empirical content, not because they are likely true. The 'smuggling' charge fails because the preference is explicitly framed as a rule of method, not an inference about the future.",
+      "counterconditions": [
+        "If the agent believes the chosen theory is probably true based on past success.",
+        "If the preference rule itself requires an inductive justification to be adopted.",
+        "If 'acting on' a theory logically entails believing its predictions will hold."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate explicitly rejects the false dichotomy by positing a third category: 'rational convention based on logical content.' It argues Popper's foundation is the logical asymmetry (falsifiability), not probability or mere whim."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate clarifies that resolving the dilemma does not require knowing we are closer to truth (verisimilitude as a state), but rather acting on the hypothesis that the most severely tested theory is the best available guess, which is a procedural stance, not an ontological claim."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "revised",
+          "note": "Revised to emphasize that 'acting on' involves selecting the theory with the highest informative content for the specific problem situation, rather than just subjecting it to risk. The preference is for the theory that offers the most precise potential for falsification in the current context."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate addresses the 'act on' component by defining action-selection as a critical choice between competing conjectures, where the criterion is severity of past tests, explicitly denying that this constitutes an inductive leap regarding future performance."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "The argument clarifies that acting on the best-tested theory does not assume the future *will* resemble the past, but rather that we have no better basis for action than the theory that has survived the most rigorous attempts to refute it. It is a negative justification (no other theory is better), not a positive inductive one."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate reinforces that 'severity' is defined logically by the improbability of the prediction relative to background knowledge, not by a probabilistic expectation of failure. Thus, preferring severe tests is a preference for high informational content, not an inductive gamble."
+        }
+      ],
+      "typicality": 0.92,
+      "optional_refs": ["SRC_006", "SRC_002"]
+    },
+    {
+      "claim": "The preference for corroborated theories inevitably smuggles induction back into Popper's system because any rationale for preferring survival over non-survival implicitly assumes the uniformity of nature.",
+      "mechanism": "Even if labeled a 'convention,' the act of preferring a theory because it survived tests implies an expectation that it will continue to work or that survival is a marker of reliability. Without an inductive bridge, the fact that a theory survived yesterday provides zero logical leverage for choosing it today. Therefore, Popper's 'rational preference' is indistinguishable from Humean custom disguised as methodology.",
+      "counterconditions": [
+        "If a non-inductive reason can be given for why survival matters for future action.",
+        "If the preference is purely aesthetic or arbitrary.",
+        "If 'acting on' a theory does not involve any expectation of successful outcomes."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate argues that Popper's 'alternative foundation' (logical asymmetry) fails to explain *preference*. Asymmetry explains falsification, but only induction explains why we trust the unfalsified. The dichotomy stands: either it's probability (induction) or it's groundless."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate agrees the dilemma is unresolved by Popper. The claim is that defining verisimilitude as unknowable admits defeat; if we can't know we are closer, preferring the 'closer' one is pure induction by another name."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The defense collapses because 'subjecting to further risk' is not why scientists act; they act to build bridges. If the choice isn't based on expected success (induction), then Popper cannot explain the practical success of science without smuggling in induction."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate asserts that the prompt correctly identifies the flaw: 'acting on' requires a belief in future efficacy. Popper's attempt to separate the logic of discovery from the psychology of action fails here; the action itself betrays the inductive assumption."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Contrary to Popper's explicit argument, this candidate claims that acting *precisely because* it was best-tested *is* assuming the future resembles the past. To deny this is to engage in semantic sleight of hand."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate argues that even if severity is logical, the *preference* for severe tests presupposes that passing them is significant for future performance, which is an inductive step. Logical definition cannot mask the inductive utility."
+        }
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_003", "SRC_004"]
+    },
+    {
+      "claim": "The preference is defensible via an evolutionary analogy: corroboration functions as a fitness signal in a landscape of conjectures, where 'survival' indicates robustness against error elimination, not probabilistic truth.",
+      "mechanism": "Drawing on Popper's later evolutionary epistemology, theories compete like species. Corroboration is not probability but a report of survival in a hostile environment of tests. We prefer the 'fittest' (best-corroborated) theory not because we induce it will survive tomorrow, but because it is the only one currently known to be adapted to the problem environment. This bypasses induction by shifting the framework from justification to selection.",
+      "counterconditions": [
+        "If biological fitness implies future survival via induction.",
+        "If the analogy breaks down because theories do not reproduce.",
+        "If 'robustness' is merely a synonym for 'high probability'."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The evolutionary mechanism provides the 'explicit alternative foundation' missing in the criticism. It grounds preference in objective fitness (survival of tests) rather than subjective probability or arbitrary convention."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The dilemma is resolved by redefining 'getting closer' as 'eliminating less fit variants.' We don't need to know we are close to truth, only that we have eliminated the clearly false. The preference is for the remaining variant, which is a deductive consequence of elimination."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Scientists act on the fittest theory because it is the most adapted to the current environment. This is not just about risking it again, but using the most robust tool available, analogous to an animal using a learned behavior that hasn't failed yet."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'act on' component is explained as utilizing the currently dominant variant in the ecosystem of ideas. This requires no induction, only recognition of current fitness status."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Evolution does not assume the future *will* resemble the past; it operates on the variation present now. Similarly, science selects the best current theory without guaranteeing future success, thus avoiding the inductive assumption."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Severity in this view is the intensity of the environmental pressure. Surviving severe pressure indicates high fitness (informational content), not probabilistic likelihood. The preference is for high fitness, which is an objective state."
+        }
+      ],
+      "typicality": 0.78,
+      "optional_refs": ["SRC_003", "SRC_005"]
+    },
+    {
+      "claim": "The debate dissolves if we accept that 'preference' in Popper's system is a psychological inevitability for agents seeking truth, which Popper acknowledges as distinct from the logical validity of the theory itself.",
+      "mechanism": "Popper admits that while logic forbids induction, human psychology naturally expects regularity. The 'preference' is a description of how fallible humans operate within the critical method, not a logical proof that the preferred theory is better. The cost of accepting this is admitting that Popper's system describes an ideal logic of science that humans approximate through unavoidable inductive habits, creating a dual-system view.",
+      "counterconditions": [
+        "If Popper claims the preference is logically necessary.",
+        "If the psychological explanation undermines the normative force of the method.",
+        "If the 'dual-system' creates an unbridgeable gap between logic and practice."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "departure_declared",
+          "note": "Departing from the search for a purely logical foundation. The candidate asserts the foundation is psycho-logical: humans *must* prefer what works, and Popper's system regulates this instinct, rather than replacing it with pure logic."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The dilemma is sidestepped: we prefer because we are built to seek truth, not because we have a logical guarantee. The 'unknowable' nature of verisimilitude is accepted, but the drive towards it is taken as a primitive fact of agency."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The 'acting on' component is explained as the manifestation of the truth-seeking instinct. Popper doesn't need to justify it logically; he only needs to channel it critically."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The prompt's observation that Popper himself prefers corroborated theories supports this: even the architect of falsificationism relies on human intuition, regulated by criticism, not pure deduction."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Acting on the best-tested theory is the rational expression of the human desire for truth, acknowledging that while we can't prove the future will resemble the past, we cannot act otherwise."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Severity appeals to our intuitive sense of risk. The preference is a blend of logical appreciation of content and psychological weighting of survival, which Popper accepts as the human condition."
+        }
+      ],
+      "typicality": 0.65,
+      "optional_refs": ["SRC_001", "SRC_007"]
+    },
+    {
+      "claim": "The preference is defensible as a 'critical choice' where the cost of error is minimized by choosing the theory with the highest empirical content, regardless of its truth probability.",
+      "mechanism": "In decision-theoretic terms, choosing the highly corroborated theory minimizes the risk of adopting a easily falsifiable (low content) theory that might fail immediately. It is a minimax strategy: the best-corroborated theory has proven it can withstand high-content attacks. This is a strategic choice based on the logical structure of the theories (content), not an inductive inference about their truth.",
+      "counterconditions": [
+        "If minimizing error risk implicitly assumes past performance predicts future stability.",
+        "If 'empirical content' is correlated with truth probability.",
+        "If the minimax strategy itself requires inductive validation."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The 'false dichotomy' is resolved by introducing decision theory. The foundation is rational choice under uncertainty, using logical content as the metric, distinct from both probability and convention."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "We don't need to know we are closer to truth; we only need to know which theory exposes us to the least immediate risk of refutation. This is a knowable, logical property."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Scientists act on this basis to avoid immediate failure. Choosing the most robust (high content, well-tested) theory is the safest bet for engineering, not because it's 'true', but because it's 'hard to break'."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'act on' component is a decision problem. Popper's terms allow for rational action based on critical assessment of content, without invoking induction."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "This strategy does not assume the future resembles the past; it assumes that a theory that hasn't broken yet is currently less likely to break *given our current knowledge*, which is a statement of ignorance, not induction."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Severity measures content. Preferring high content is a logical preference for informativeness, not a probabilistic expectation. The 'likelihood of failure' is a logical measure of testability, not a frequency prediction."
+        }
+      ],
+      "typicality": 0.72,
+      "optional_refs": ["SRC_004", "SRC_008"]
+    },
+    {
+      "claim": "Accepting that the preference smuggles in induction forces a revision of Popper's 'demarcation' criterion, suggesting that science is inherently inductive but constrained by critical rationality.",
+      "mechanism": "If the strongest case for 'smuggling' survives, it implies Popper's strict separation of context of discovery (inductive/psychological) and context of justification (deductive/logical) is untenable. The cost is abandoning the dream of a purely deductive science. Instead, we accept a 'mitigated induction' where corroboration provides a non-demonstrative but rational support, blending Popper's critical method with a Bayesian-like degree of confidence that stops short of full probability.",
+      "counterconditions": [
+        "If Popper's system can be saved by refining the definition of 'convention'.",
+        "If 'mitigated induction' collapses back into standard positivism.",
+        "If the cost of abandoning pure deduction is too high for the philosophy of science."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate accepts the dichotomy: if it's not probability, it's groundless. Since it's not groundless (scientists do it rationally), it must be a form of probability/induction, forcing the revision."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "This view accepts the dilemma's force: we *do* act as if we are getting closer. The solution is to admit this 'as if' is a weak form of induction, revising Popper to accommodate it."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The 'acting on' component is the smoking gun. It proves induction is operational. The defense that it's just 'risking' is insufficient for real-world action, necessitating the admission of inductive elements."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "By focusing on 'acting on', this candidate validates the criticism that Popper's own behavior contradicts his strict logic, requiring a synthesis of critical rationalism and inductive pragmatism."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate argues that acting *because* of past tests *is* assuming future resemblance. Denying this is self-deception. The honest path is to revise Popper to include this necessary inductive step."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "While severity is logical, the *weight* we give to it in action is inductive. This candidate proposes separating the logical definition of severity from the inductive weight assigned to it in practice."
+        }
+      ],
+      "typicality": 0.55,
+      "optional_refs": ["SRC_009", "SRC_010"]
+    }
+  ]
+}

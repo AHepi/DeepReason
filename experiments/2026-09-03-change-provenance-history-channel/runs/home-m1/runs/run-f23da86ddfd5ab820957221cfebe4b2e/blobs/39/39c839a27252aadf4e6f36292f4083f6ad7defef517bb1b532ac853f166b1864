@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference that the theory is more probable, but as a non-inductive, methodological rule to select the theory with the highest 'verisimilitude' (truth-likeness) and greatest empirical content, accepting the cost that this preference offers no guarantee of future success and relies on a metaphysical faith in the uniformity of nature which remains unjustified by logic.",
+    "mechanism": "The mechanism distinguishes between 'probability' (logical likelihood based on past frequency) and 'corroboration' (a report on how well a theory has withstood severe tests). By preferring the theory with higher content that has survived stricter tests, scientists maximize the potential for learning from error (falsification) and approximate truth (verisimilitude) without asserting that the theory is statistically more likely to be true. This avoids induction by treating the choice as a rational convention for progress rather than a logical derivation of future reliability.",
+    "counterconditions": [
+      "If corroboration is shown to logically entail a higher probability of future survival, the distinction collapses into induction.",
+      "If 'verisimilitude' cannot be defined without relying on inductive assumptions about the structure of reality, the defense fails.",
+      "If the preference for corroborated theories yields no better practical results than random selection, the methodological rule is empty."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "rebutted",
+        "note": "The candidate explicitly integrates 'verisimilitude' as the grounding for preference, rejecting the false dilemma that it must be either probability or mere convention. It argues verisimilitude provides an objective, albeit fallible, aim distinct from probabilistic induction."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The response clarifies that the 'convention' is methodological (how we choose to act) not ontological (what the result is), preserving the objectivity of the test severity while acknowledging the decision to prefer is a rule of the game, not a law of nature."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "revised",
+        "note": "Revised to explicitly name 'empirical content' alongside verisimilitude as the alternative foundation, ensuring the dichotomy between probability and convention is bridged by the specific Popperian concept of information content."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "rebutted",
+        "note": "Argues that minimizing future error risk is a pragmatic goal of the methodology, not a logical claim that the risk is objectively lower due to past performance; the 'identity' claimed by the critic confuses the intent of the scientist with the logical status of the inference."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "departure_declared",
+        "note": "Departure declared: While acknowledging Popper's formal struggles with defining verisimilitude, this candidate adopts the *concept* as a regulative ideal necessary for the defense, arguing that the failure of the formal definition does not invalidate the methodological utility of aiming for truth-likeness."
+      },
+      {
+        "handle": "720e994a620e994a62093f4921479eee06c7b2643add166f9ff3ec18dfac4aefd5df7507",
+        "kind": "rebutted",
+        "note": "The cost is explicitly stated in the claim: 'no guarantee of future success.' The defense survives precisely because it admits we cannot know if A will survive future tests, only that A is the better candidate for testing based on current knowledge."
+      },
+      {
+        "handle": "7970f8e039458c9740bef220092d5b9e1cb2f16f2f90db166ba77751d59bd6a4",
+        "kind": "rebutted",
+        "note": "Clarifies that the preference is based on the logical definition of test severity (improbability of the evidence given the theory) and not psychological expectation, thereby avoiding the category error."
+      },
+      {
+        "handle": "8653a93a35d43191d6518c7629ca6b147480c93101961b1f816e7f6208016204",
+        "kind": "revised",
+        "note": "Revised to explicitly accept the 'cost' that the mechanism relies on an unjustifiable metaphysical faith, resolving the dilemma by admitting the smuggling of induction is avoided only by accepting a non-rational (but critical) commitment to realism."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

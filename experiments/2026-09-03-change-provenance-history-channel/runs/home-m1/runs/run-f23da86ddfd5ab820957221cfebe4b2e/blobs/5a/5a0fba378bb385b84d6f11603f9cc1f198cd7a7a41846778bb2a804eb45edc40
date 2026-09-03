@@ -1,0 +1,76 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference about future success, but as a non-inductive methodological rule grounded in the objective logic of situation: we prefer the theory that has withstood the most severe tests because it currently possesses the highest degree of 'verisimilitude' (truth-likeness) and offers the best chance for learning through falsification, even if we cannot assign it a higher probability of being true or surviving future tests.",
+    "mechanism": "The mechanism distinguishes between 'inductive justification' (claiming past survival makes future survival probable) and 'methodological selection' (choosing the theory that currently best approximates truth based on its content and test history). By framing preference as a decision to adopt the theory with the highest empirical content and greatest resistance to falsification so far, Popper avoids the inductive leap. The preference is a rational choice within the game of science to maximize potential knowledge growth, acknowledging that the chosen theory may still be false tomorrow. This relies on the concept of verisimilitude as a comparative measure of closeness to truth, distinct from probability.",
+    "counterconditions": [
+      "If Popper's formal definition of verisimilitude is logically incoherent or collapses into probability, the defense fails.",
+      "If the act of projecting 'past survival' as a reason for 'future preference' inherently assumes the uniformity of nature regardless of explicit denial.",
+      "If the distinction between 'methodological rule' and 'inductive principle' is merely semantic and functionally identical in practice."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "059c75cb550e1b3f17f7e4cf17ed53b0cb31a7935eefc2fc97ccf46fb5dae5c0",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'metaphysical faith' with 'methodological decision.' Popper does not rely on a faith in uniformity to justify the preference; rather, he explicitly adopts a convention to act *as if* the best-tested theory is the most promising for further testing. This is a pragmatic rule for the conduct of inquiry, not an ontological claim about nature's uniformity."
+      },
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly center 'verisimilitude' as the objective grounding for preference, clarifying that it is not a mere conventionalist decision but a rational assessment of which theory is currently closest to the truth based on logical content and test severity."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The criticism correctly notes the distinction between method and result, but the candidate already accounts for this by grounding preference in the objective state of the theory (its verisimilitude and content) rather than a subjective convention. The preference is objective insofar as the test history and logical content are public and intersubjective."
+      },
+      {
+        "handle": "3dd7e6e5900af409fe538c843fc9a16df138e02b954e617cb086b0f92122ce4f",
+        "kind": "rebutted",
+        "note": "Projecting past survival into a reason for future preference is only inductive if one claims it increases the *probability* of future success. Popper's view is that we prefer it because it is the *best available instrument* for finding errors. If it fails tomorrow, we learn more than if we had chosen a weaker theory. The 'leap' is pragmatic, not probabilistic."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "revised",
+        "note": "Clarified that the alternative foundation is 'verisimilitude' and 'empirical content,' rejecting the false dichotomy that preference must be either probabilistic or purely arbitrary convention."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "rebutted",
+        "note": "Functional identity does not imply logical identity. While the *action* looks like induction, the *justification* differs fundamentally: induction justifies belief in future regularity; Popper justifies selection for maximal testability and potential falsification. The goal is not prediction reliability but error elimination speed."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate accepts the risk that Popper's formal account of verisimilitude faced technical difficulties (as noted by Miller and Tichý), but argues that the *intuitive* and *methodological* core of preferring information-rich, well-tested theories remains valid even if the strict logical formalization requires refinement. The defense rests on the spirit of the methodology rather than the failed formal proof."
+      },
+      {
+        "handle": "720e994a62093f4921479eee06c7b2643add166f9ff3ec18dfac4aefd5df7507",
+        "kind": "rebutted",
+        "note": "The cost accepted is that we cannot guarantee the preferred theory will survive future tests. The benefit is that if it fails, it yields greater informational gain (higher content) than a less tested theory. The preference is defensible because it optimizes the *process* of learning, not the *outcome* of being right."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["evolutionary_selection_mechanism"],
+      "shared_structure": [
+        "Selection based on past performance without guarantee of future success",
+        "Preference for traits/theories that maximize adaptability/informational content",
+        "Process-oriented optimization rather than outcome prediction"
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious agent making methodological choices",
+        "Scientific preference involves explicit logical critique, not just environmental filtering"
+      ],
+      "transfer_claims": [
+        "Just as organisms with traits surviving past environments are selected for future breeding without assuming the environment won't change, theories surviving past tests are selected for future scrutiny without assuming they are true."
+      ],
+      "overturn_conditions": [
+        "If evolutionary selection is shown to rely on implicit inductive assumptions about environmental stability that parallel scientific induction."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the central tension in Popper's philosophy regarding the preference for corroborated theories. It accurately frames the 'performative contradiction' argument as the strongest case against Popper, noting that practical reliance on past tests implies an inductive belief about future success. The target also appropriately lists valid counterconditions (psychological state, random choice, non-inductive principles) that would need to be addressed to fully resolve the problem. Since the machine-evaluated commitments confirm the structural validity of the reasoning envelope and the target's content aligns with the philosophical debate without making demonstrably false claims about the problem scope, no specific fault is found.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

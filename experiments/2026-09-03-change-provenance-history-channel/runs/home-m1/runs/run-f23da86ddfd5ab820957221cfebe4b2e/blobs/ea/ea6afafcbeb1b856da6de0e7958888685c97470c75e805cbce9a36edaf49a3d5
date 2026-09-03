@@ -1,0 +1,64 @@
+{
+  "candidates": [
+    {
+      "content": "The problem of 'smuggled induction' (027c9b5f9c1f) DEPENDS ON the mechanism described in SRC_001 regarding the definition of test severity. The relation is REFUTED IF it can be demonstrated that 'severity' is a purely logical property derived from content incompatibility alone, requiring no probabilistic expectation of failure based on background knowledge.",
+      "evidence_refs": [
+        {
+          "block": "4c85452bc9bcff8ec0d66b4634a6fbb4894f4eeaff2b12c521a5b553713eed58",
+          "quote": "The definition of a 'severe test' relies on background knowledge. We judge a test as severe because, given our current understanding, a false theory would likely fail it."
+        }
+      ],
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "The isolated connection issue REDUCES TO the pragmatic induction argument found in SRC_004. The relation holds that preferring corroborated theories functions as an inductive rule regardless of verbal denial. This relation is REFUTED IF a rigorous non-inductive justification for acting on past success can be formulated that does not rely on the uniformity of nature.",
+      "evidence_refs": [
+        {
+          "block": "cbaf926b4cc17c2d9b84fbfe7511a1aca435d9fb831dd982e8d58bcea27abfb3",
+          "quote": "If past performance is not taken as evidence for future performance, the preference is arbitrary; if it is, then induction is present by definition."
+        }
+      ],
+      "neighbours": [
+        "SRC_004"
+      ],
+      "typicality": 0.88
+    },
+    {
+      "content": "The problem CONTRADICTS the methodological conventionalism stance of SRC_005. While SRC_005 claims the preference is a self-imposed rule devoid of truth claims, the problem suggests this preference inevitably smuggles in an assumption of reliability. This contradiction is REFUTED IF Popper explicitly limits the methodology to error detection speed without any implicit hope for predictive success or growth.",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_005"
+      ],
+      "typicality": 0.75
+    },
+    {
+      "content": "The connection INTEGRATES the arguments of SRC_002 and SRC_003 into a unified 'Mitigated Induction' framework. It posits that the 'smuggling' is not a flaw but a necessary feature where corroboration provides rational support short of probability. This integration is REFUTED IF the cost of abandoning pure deduction renders the philosophy of science indistinguishable from standard positivism.",
+      "evidence_refs": [
+        {
+          "block": "426c91fb917ad6f13bb55a3365b9baa87568aa1cbb028b9459b0f3f0f67b7fb1",
+          "quote": "Instead, we accept a 'mitigated induction' where corroboration provides a non-demonstrative but rational support"
+        }
+      ],
+      "neighbours": [
+        "SRC_002",
+        "SRC_003"
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "An atypical view: The problem ABSTRACTS the specific debates in SRC_001-SRC_005 into a general principle of 'Methodological Necessity,' arguing that all critical rationalism secretly relies on a hidden axiom of continuity. This abstraction is REFUTED IF any single instance of scientific preference can be shown to operate entirely without an expectation of future regularity.",
+      "evidence_refs": [],
+      "neighbours": [
+        "SRC_001",
+        "SRC_002",
+        "SRC_003",
+        "SRC_004",
+        "SRC_005"
+      ],
+      "typicality": 0.30
+    }
+  ]
+}

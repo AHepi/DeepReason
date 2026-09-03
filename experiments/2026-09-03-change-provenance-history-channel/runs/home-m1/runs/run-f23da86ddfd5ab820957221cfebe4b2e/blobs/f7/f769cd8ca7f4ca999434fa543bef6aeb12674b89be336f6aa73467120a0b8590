@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's central argument rests on a category error by conflating the psychological 'expectation' of a scientist with the logical definition of test severity. Popper explicitly defines severity in terms of logical improbability relative to background knowledge (the degree to which the test outcome is forbidden by the theory given what we already know), not via an inductive inference that nature will behave regularly. The target claims that judging a test as severe presupposes 'regularities in nature' and is 'inherently probabilistic,' but this misrepresents Popper's deductive framework where severity is a measure of informational content and logical risk, not an inductive probability of failure. By attacking a straw-man version of severity based on empirical likelihood rather than logical content, the target fails to demonstrate that Popper smuggles in induction; it merely shows that a probabilistic interpretation of severity would be circular, which Popper rejects.",
+      "counterexample": null,
+      "premise": "Popper defines the severity of a test logically by the improbability of the evidence given the background knowledge and the theory's boldness, distinct from any inductive assumption about nature's uniformity.",
+      "premise_evidence": null,
+      "successor_question": "If severity is strictly a logical relation of content and incompatibility rather than an empirical expectation of failure, does the preference for corroborated theories remain defensible without invoking any form of inductive reliance on the future matching the past?"
+    }
+  ]
+}

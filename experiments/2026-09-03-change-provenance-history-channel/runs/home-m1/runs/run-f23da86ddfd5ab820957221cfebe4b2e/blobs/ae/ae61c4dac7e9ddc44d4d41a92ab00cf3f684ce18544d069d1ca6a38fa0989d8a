@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses because the preference for 'better-corroborated' theories implicitly relies on the very inductive assumption Popper rejected: that past survival under severe tests is a reliable indicator of future performance or verisimilitude. By advising scientists to 'prefer' one theory over another for action, the target smuggles in a probabilistic expectation (that the preferred theory will not fail immediately), which contradicts the claim that corroboration is merely a historical report card with no predictive power.",
+      "counterexample": null,
+      "premise": "Popper explicitly denied that corroboration implies any increase in probability or likelihood of future success.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration offers no inductive weight, what rational basis exists for preferring Theory A over Theory B for critical applications other than an implicit belief that past success predicts future reliability?"
+    }
+  ]
+}

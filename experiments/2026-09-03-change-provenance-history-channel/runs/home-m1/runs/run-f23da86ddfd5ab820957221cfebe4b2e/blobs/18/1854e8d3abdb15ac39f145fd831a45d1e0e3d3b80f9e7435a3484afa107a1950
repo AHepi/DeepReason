@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the central tension in Popper's philosophy but fails to execute the full prompt requirement of making the 'strongest case for each answer' before concluding; it presents the anti-induction view as the primary claim while relegating potential defenses (like verisimilitude or critical preference) to 'counterconditions' rather than a fully developed opposing argument, thus failing the specific structural demand of the problem context.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

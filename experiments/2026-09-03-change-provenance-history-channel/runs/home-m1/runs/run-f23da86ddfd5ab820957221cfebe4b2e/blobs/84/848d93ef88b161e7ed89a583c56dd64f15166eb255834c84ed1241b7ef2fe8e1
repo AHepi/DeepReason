@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a distinction between 'strategic selection for testability' and 'preference for action' that collapses under the problem's specific constraint: acting on a theory (e.g., building a bridge or administering a drug) inherently requires an expectation of future reliability. By framing the choice merely as a rule to 'maximize potential for learning from error,' the target fails to justify why a scientist should *prefer* the better-corroborated theory for *practical application* rather than the most easily falsifiable one (which might be novel but untested). If the goal is strictly 'learning from error,' a fragile, bold conjecture offers higher informational gain upon failure than a robust, well-tested one. Therefore, the actual preference for the *survivor* of severe tests smuggles in the inductive assumption that past survival is a reliable guide to future performance, contradicting the claim that this is purely a non-inductive conventionalist decision.",
+      "counterexample": null,
+      "premise": "Acting on a theory for practical purposes necessitates an expectation of its future success, not just its capacity to generate errors.",
+      "premise_evidence": null,
+      "successor_question": "If the goal is maximizing information gain via falsification, why does Popperian methodology prioritize theories that have *already* survived tests over new, highly risky conjectures when making practical decisions?"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that preferring the 'fittest' theory bypasses induction fails because the act of projecting past survival (corroboration) into a reason for future preference constitutes an inductive leap. Popper explicitly rejected using past performance as a guide to future reliability unless one assumes the future will resemble the past (the principle of induction). By arguing we should prefer the best-corroborated theory *because* it has survived tests, the target smuggles in the very inductive assumption Popper sought to eliminate: that a theory's history of non-falsification is a rational indicator of its future utility or robustness. The evolutionary analogy describes a mechanism of selection but does not provide a non-inductive *justification* for the scientist's active choice; it merely renames the inductive habit as 'selection.'",
+      "counterexample": null,
+      "premise": "Popper maintained that no number of successful tests can logically justify the belief that a theory will continue to succeed, and that relying on such success for practical preference without an inductive bridge contradicts his core rejection of induction.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for the best-corroborated theory is not based on the inductive expectation that it will perform well in the future, what specific non-inductive logical link connects 'past survival' to 'rational choice' in Popper's framework?"
+    }
+  ]
+}

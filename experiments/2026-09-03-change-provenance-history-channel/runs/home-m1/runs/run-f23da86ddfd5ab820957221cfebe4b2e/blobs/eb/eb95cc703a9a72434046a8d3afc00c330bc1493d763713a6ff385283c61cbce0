@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction if interpreted as a methodological rule of 'critical selection' rather than an epistemic probability assignment; however, this defense costs the scientist any rational assurance that the preferred theory will succeed in the future, reducing the preference to a non-justified 'faith' in the stability of the world which Popper admits is metaphysical.",
+    "mechanism": "The argument distinguishes between 'epistemic justification' (which requires induction to claim future success) and 'methodological utility' (which selects the theory that has withstood the most severe tests as the best target for future falsification). By preferring the highly corroborated theory, we are not betting on its truth, but choosing the most informative error-detector. If it fails next, we learn more. The 'preference' is thus a strategic choice to maximize learning potential, not a prediction of survival.",
+    "counterconditions": [
+      "If the goal of science is defined as finding true theories rather than eliminating false ones, this mechanism collapses into induction.",
+      "If the 'metaphysical faith' in uniformity is required to act on the theory (e.g., building a bridge), the distinction between methodological rule and inductive belief vanishes in practice.",
+      "If verisimilitude (truth-likeness) cannot be formally defined without probabilistic assumptions, the claim that we are 'closer to truth' lacks logical footing."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "059c75cb550e1b3f17f7e4cf17ed53b0cb31a7935eefc2fc97ccf46fb5dae5c0",
+        "kind": "rebutted",
+        "note": "The criticism conflates the 'metaphysical faith' needed for *action* (living in the world) with the *logical justification* of the scientific method itself. Popper allows the former as a psychological necessity while maintaining the latter is purely critical and non-inductive."
+      },
+      {
+        "handle": "07d2f10d01e7b5976a1a35fec085baf9d2ad2e0517855467c4719106f9430612",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly address 'verisimilitude'. While Popper invoked it, the candidate now clarifies that without a successful formal definition of verisimilitude (as noted in other criticisms), the preference rests solely on 'critical selection' utility, not on a measurable closeness to truth."
+      },
+      {
+        "handle": "32c8e418c24cfe4366a16c14808512105623e1465c76cc3be4480763fe80049e",
+        "kind": "rebutted",
+        "note": "The distinction stands: Popper's 'objectivity of method' refers to the public testability and severity of tests, not the 'objectivity of result' (truth). The preference is for the method that yields the most objective results (falsifications), regardless of whether the current theory is true."
+      },
+      {
+        "handle": "3dd7e6e5900af409fe538c843fc9a16df138e02b954e617cb086b0f92122ce4f",
+        "kind": "departure_declared",
+        "note": "Departing from the strict view that *any* projection of past performance is induction. The candidate argues that projecting past performance for the specific purpose of *selecting a target for attack* is a deductive strategy of risk maximization, not an inductive inference of safety."
+      },
+      {
+        "handle": "49b933dadc62b63b59098c57873624285a0b24eade8b3a8d1fc6a59fb36c6105",
+        "kind": "rebutted",
+        "note": "The dichotomy is not false because the alternative foundation proposed (critical selection utility) is neither 'probability' nor 'mere convention' in the arbitrary sense; it is a rule grounded in the logic of falsifiability: prefer the theory that risks the most."
+      },
+      {
+        "handle": "605ff1954b616ea5b2ed456495e8952a3412cf9422e614619b532c73a5f4144d",
+        "kind": "revised",
+        "note": "Clarified that the functional identity to induction only holds if the *goal* is prediction/safety. If the goal is error elimination, the function diverges: induction seeks the safest bet; critical selection seeks the most vulnerable target that hasn't broken yet."
+      },
+      {
+        "handle": "65fe60335fb7d936f1605acbac9e68818fb5efa35df3455058350fb3da0aecc5",
+        "kind": "rebutted",
+        "note": "Acknowledged the failure of formal verisimilitude, but argued this does not invalidate the *heuristic* preference for high-content theories. The preference remains valid as a methodological heuristic even if the ontological claim of 'truth-likeness' is logically unsupported."
+      },
+      {
+        "handle": "720e994a62093f4921479eee06c7b2643add166f9ff3ec18dfac4aefd5df7507",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' to the main claim: accepting this defense means admitting we have no rational basis to expect the theory to work tomorrow, only that it is the best one to test. This answers the specific cost question regarding the gap between past survival and future expectation."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["evolutionary_fitness_landscape"],
+      "shared_structure": [
+        "Selection based on past survival does not guarantee future survival.",
+        "Preference for the 'fittest' is a strategy to find flaws, not a promise of permanence.",
+        "The environment (nature) may change, rendering past fitness irrelevant."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of error detection; science does.",
+        "Organisms do not choose to be tested; scientists actively construct severe tests.",
+        "Evolutionary fitness is reproductive success; scientific corroboration is resistance to falsification."
+      ],
+      "transfer_claims": [
+        "Just as biologists study the fittest organism to understand limits of life, scientists study the best-corroborated theory to understand limits of current knowledge.",
+        "Preferring the fittest organism for study is not an induction that it will survive forever."
+      ],
+      "overturn_conditions": [
+        "If biological fitness were proven to be a reliable predictor of infinite future survival.",
+        "If scientific theories were selected randomly rather than by severe testing."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
