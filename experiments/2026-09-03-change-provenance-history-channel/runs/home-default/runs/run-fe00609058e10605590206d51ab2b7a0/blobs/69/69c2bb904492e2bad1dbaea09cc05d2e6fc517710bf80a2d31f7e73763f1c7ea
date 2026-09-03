@@ -1,0 +1,40 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Abstraction. The isolated problem 21bf799e7dd5 is an abstracted instance of the procedural rule defined in SRC_005, where the specific 'dilemma' of the isolated node represents a state of critical discussion frozen in time. It is REFUTED IF the isolated problem requires a positive epistemic probability to be resolved, rather than merely a procedural decision to prefer one state over another based on non-falsification.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_005"],
+      "evidence_refs": []
+    },
+    {
+      "content": "Relation Kind: Contradiction. The isolated problem 21bf799e7dd5 posits a need for connection that implies an inductive bridge, which directly contradicts the mechanism in SRC_003 that asserts preference arises solely from the elimination of competitors (negative probability) without any positive linking mechanism. It is REFUTED IF establishing a substantive relation between the isolated node and its neighborhood inherently relies on assigning positive weight or likelihood to the connection itself.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_003"],
+      "evidence_refs": []
+    },
+    {
+      "content": "Relation Kind: Shared Mechanism. Both the isolated problem 21bf799e7dd5 and the claim in SRC_001 operate on the mechanism of 'critical preference' based on verisimilitude; the isolation represents a theory with high empirical content but no current rival, making the 'connection' a redundant articulation of its standing as the sole viable candidate. It is REFUTED IF the resolution of the isolated problem demands a probabilistic calculation of truth rather than a comparative assessment of truth-likeness against falsified alternatives.",
+      "typicality": 0.70,
+      "neighbours": ["SRC_001"],
+      "evidence_refs": []
+    },
+    {
+      "content": "Relation Kind: Reduction. The isolated problem 21bf799e7dd5 reduces to the historical report described in SRC_002; the 'connection' sought is nothing more than the recording of the fact that the isolated node has survived testing up to the present moment, devoid of any predictive power regarding future neighborhood interactions. It is REFUTED IF the isolated problem implies that the surviving theory (the connected node) possesses a higher likelihood of future success or stability compared to untested neighbors.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_002"],
+      "evidence_refs": []
+    },
+    {
+      "content": "Relation Kind: Integration. The isolated problem 21bf799e7dd5 integrates with SRC_004 by treating the 'distance from truth' (verisimilitude) as the connective tissue; the isolation is merely a measurement artifact where the error content is unknown but the truth content is maximized relative to the local neighborhood. It is REFUTED IF the concept of 'severe test' used to establish this integration implicitly depends on inductive background knowledge about the uniformity of the neighborhood structure.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_004"],
+      "evidence_refs": []
+    },
+    {
+      "content": "Relation Kind: Dependence (Anti-Inductive). The isolated problem 21bf799e7dd5 is strictly dependent on the negation of the mechanism in SRC_003; it can only exist as a valid philosophical object if the 'negative probability filter' fails to eliminate it, thereby granting it status not by what it is, but by the total absence of what it is not. It is REFUTED IF there exists even one unfalsified competitor in the neighborhood that shares the same empirical content, rendering the 'survivor' status ambiguous and the dependence relation void.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_003"],
+      "evidence_refs": []
+    }
+  ]
+}

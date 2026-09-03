@@ -1,0 +1,187 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'critical preference' rooted in verisimilitude (truth-likeness), not probability. We prefer the theory that has survived severe tests because it has withstood attempts to falsify it, suggesting it is closer to the truth than a refuted or untested rival, without assigning it a higher logical probability.",
+      "mechanism": "Verisimilitude-based Critical Preference: The mechanism is non-inductive; it relies on the logical asymmetry between verification and falsification. A theory with high corroboration has simply not yet been shown false despite rigorous testing, making it the best available guess at truth (highest verisimilitude) compared to rivals that are either falsified or have faced fewer tests.",
+      "counterconditions": [
+        "If verisimilitude cannot be defined without inductive assumptions about the future resembling the past.",
+        "If the preference implies a belief that the future will resemble the past (induction).",
+        "If Popper explicitly rejected verisimilitude as a solution to this specific problem in his later works."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "While Popper struggled with defining verisimilitude formally, he never abandoned it as the *intent* of critical preference. The rebuttal argues that the *concept* remains valid even if the formal metric was problematic; the preference is for the theory that appears more truth-like due to surviving severe tests, not one that is probabilistically true."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The defense distinguishes between psychological habit and rational methodology. Popper's preference is a methodological rule: 'Choose the theory that has best withstood criticism.' This is a rational decision based on current logical status (unfalsified vs falsified), not a psychological conflation."
+        },
+        {
+          "handle": "[SRC_021] against SRC_007",
+          "kind": "rebutted",
+          "note": "This candidate does not rely on evolutionary epistemology as a justification. It relies strictly on the logical status of 'survival of severe tests' as an indicator of potential truth-content, which is a core Popperian tenet distinct from biological imperatives."
+        },
+        {
+          "handle": "[SRC_015] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to acknowledge that while verisimilitude lacks a perfect formal metric, it functions as a regulative ideal. The preference is defensible as acting on the best available estimate of truth-content derived from negative results (falsifications of rivals), not positive induction."
+        },
+        {
+          "handle": "[SRC_020] against SRC_006",
+          "kind": "rebutted",
+          "note": "Acting on the best-corroborated theory is consistent with Popper's procedural rules. The distinction holds because 'acting' does not imply 'believing to be true/probable,' but rather 'selecting as the most promising basis for further criticism and application.'"
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Corroboration is not binary in practice; it grades the severity of tests passed. Popper allows for comparing the degree of corroboration based on the severity and number of tests survived, which justifies preferring Theory A over Theory B without invoking probability."
+        },
+        {
+          "handle": "[SRC_022] against SRC_011",
+          "kind": "rebutted",
+          "note": "Similar to SRC_021, this candidate grounds the preference in methodological rationality (critical scrutiny) rather than biological evolution. The 'dual-aspect' charge is rejected; the justification is purely epistemic/methodological."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Rationality in Popper's sense is the commitment to critical scrutiny. Preferring the tested theory is rational because it has been scrutinized and survived, whereas the untested one has not. This addresses the pragmatic dilemma by defining rational action as action based on the most severely tested information available."
+        }
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_005",
+        "SRC_017"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories smuggles induction back into Popper's system. Despite his denials, choosing a theory for action because it has worked in the past implicitly assumes it will work in the future, which is the very definition of inductive inference that Popper sought to eliminate.",
+      "mechanism": "Hidden Inductive Leap: The mechanism is the unavoidable pragmatic necessity of assuming uniformity of nature. When scientists act on a corroborated theory, they are betting on its future success based on past performance, which constitutes an inductive assumption regardless of how it is labeled ('corroboration' vs 'probability').",
+      "counterconditions": [
+        "If Popper can demonstrate a non-inductive basis for practical action.",
+        "If 'corroboration' can be shown to refer only to past performance with no implication for the future.",
+        "If the preference is shown to be purely arbitrary or aesthetic rather than truth-directed."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate argues that the failure of verisimilitude to provide a non-inductive bridge confirms that induction is smuggled in. The criticism regarding Popper's later conclusions supports the view that he could not satisfactorily resolve this without implicit induction."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "revised",
+          "note": "Revised to clarify that the 'conflation' charged by critics is actually the inevitable collapse of Popper's distinction under pragmatic pressure. The psychological necessity becomes the rational justification because no other ground exists."
+        },
+        {
+          "handle": "[SRC_021] against SRC_007",
+          "kind": "departure_declared",
+          "note": "Departure declared: This candidate accepts that evolutionary epistemology might be the only honest explanation for why we prefer corroborated theories, even if Popper rejected it as a *justification*. The 'smuggling' is a biological inevitability."
+        },
+        {
+          "handle": "[SRC_015] against SRC_005",
+          "kind": "rebutted",
+          "note": "Agrees with the criticism that verisimilitude fails. The candidate posits that this failure proves the necessity of induction. Without inductive assumptions, there is indeed no Popperian basis for preference, forcing the admission of induction."
+        },
+        {
+          "handle": "[SRC_020] against SRC_006",
+          "kind": "rebutted",
+          "note": "Argues that the distinction collapses precisely because 'acting on' implies a prediction of future success. If Popper allows acting on the best-corroborated, he implicitly accepts the inductive principle that past success predicts future utility."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The gradation of corroboration is itself an inductive measure. Counting past successes (survived tests) to rank theories is an inductive procedure, contradicting the claim that corroboration is non-inductive."
+        },
+        {
+          "handle": "[SRC_022] against SRC_011",
+          "kind": "rebutted",
+          "note": "While Popper rejected evolutionary justification, this candidate argues that the 'smuggling' of induction is effectively an evolutionary trait. The methodological rule cannot stand without the underlying inductive habit."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Addresses the dilemma by asserting that rationality *requires* induction for action. A purely critical rationality that refuses to prefer the tested over the untested for future action is practically paralyzed, thus forcing the inductive move."
+        }
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_016"
+      ]
+    },
+    {
+      "claim": "The preference is defensible not as an epistemic claim about truth or probability, but as a procedural rule of 'rational choice under uncertainty' akin to decision theory, where the cost of error is minimized by selecting the hypothesis that has been most rigorously attempted and failed to be killed.",
+      "mechanism": "Procedural Minimax Strategy: The mechanism is a decision-theoretic approach. We choose the corroborated theory not because it is likely true, but because it is the safest bet against known errors. It minimizes the risk of relying on a theory already known to be false (falsified) or one that is fragile (untested).",
+      "counterconditions": [
+        "If this procedural rule implicitly assumes that avoiding known falsehoods leads to better future outcomes (induction).",
+        "If Popper explicitly framed his solution in decision-theoretic terms (he largely did not).",
+        "If the 'cost of error' cannot be assessed without inductive probabilities."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to shift away from verisimilitude as the primary justification towards a procedural minimax argument. This sidesteps the formal difficulties of verisimilitude cited in the criticism."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "This is not a conflation of psychology and rationality; it is a deliberate methodological stance. The rationality lies in the procedure of minimizing known risks, which is defensible without claiming the theory is probable."
+        },
+        {
+          "handle": "[SRC_021] against SRC_007",
+          "kind": "rebutted",
+          "note": "The justification is methodological (minimizing error), not evolutionary. It does not rely on biological imperatives but on a logical assessment of current knowledge states (falsified vs. unfalsified)."
+        },
+        {
+          "handle": "[SRC_015] against SRC_005",
+          "kind": "rebutted",
+          "note": "This approach does not require verisimilitude as a metric of truth, but as a heuristic for error avoidance. Thus, the lack of a formal verisimilitude metric does not undermine the procedural defense."
+        },
+        {
+          "handle": "[SRC_020] against SRC_006",
+          "kind": "rebutted",
+          "note": "The distinction holds because 'procedural necessity' is exactly what guides action when epistemic certainty is impossible. Acting on the best-corroborated is the procedural outcome of the minimax strategy."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The gradation of corroboration reflects the severity of the 'attack' survived. Choosing the one that survived the strongest attack is a rational procedural choice, not an inductive inference of probability."
+        },
+        {
+          "handle": "[SRC_022] against SRC_011",
+          "kind": "rebutted",
+          "note": "Rejects the biological imperative interpretation. The preference is a conscious methodological rule for error management, fully consistent with Popper's rejection of evolutionary epistemology as a *justification*."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Rationality as critical scrutiny includes the scrutiny of potential errors. Preferring the tested theory is the result of having scrutinized it more heavily and found it wanting of falsification, making it the procedurally rational choice."
+        }
+      ],
+      "typicality": 0.60,
+      "optional_refs": [
+        "SRC_001",
+        "SRC_019"
+      ]
+    },
+    {
+      "claim": "The tension is resolved by viewing corroboration as a historical report of survival, where the preference for the survivor is a 'non-rational' (but not irrational) commitment to the game of science itself. It is a volitional act of sticking to the rules of the game, not a logical derivation.",
+      "mechanism": "Volitional Commitment to the Game: The mechanism is a Wittgensteinian 'form of life' or a Kuhnian 'paradigm' adherence. Scientists prefer corroborated theories because they have committed to the social practice of science, which defines 'good science' as that which survives severe tests. It is a normative commitment, not a logical proof.",
+      "counterconditions": [
+        "If Popper would accept a 'non-rational' basis for scientific preference.",
+        "If this reduces science to mere convention or sociology.",
+        "If the 'game' itself relies on inductive success to sustain player interest."
+      ],
+      "discharges": [
+        {
+          "handle
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

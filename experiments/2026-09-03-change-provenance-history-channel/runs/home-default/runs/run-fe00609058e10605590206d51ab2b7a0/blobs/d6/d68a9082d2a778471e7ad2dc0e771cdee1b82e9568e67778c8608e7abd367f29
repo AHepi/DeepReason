@@ -1,0 +1,64 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: SHARED MECHANISM. The isolated problem (preference without induction) and SRC_003 share the mechanism of 'Negative Filtering': preference is not assigned positively to a survivor but emerges as the residual state after competitors are eliminated via falsification. REFUTED IF: A scenario exists where all competing theories remain unfalsified yet a rational preference for one over the others is still logically mandated without invoking inductive probability or arbitrary choice.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "The candidate does not claim a contradiction between positive linking and negative elimination; it explicitly defines the relation as a SHARED MECHANISM of negative filtering, resolving the alleged tension by unifying the concepts under elimination logic."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Revised to explicitly name the relation kind ('SHARED MECHANISM') and define the structural connection ('Negative Filtering') rather than merely summarizing endpoints."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "The content explicitly includes the phrase 'refuted if' and names the relation kind 'shared mechanism', satisfying relation-form@578e42df713e."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Same as above; the required predicates are present and correctly formed."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Revised to establish a distinct structural connection (the mechanism of negative filtering) rather than asserting redundancy."}
+      ]
+    },
+    {
+      "content": "Relation Kind: DEPENDENCE. The viability of the 'procedural necessity' argument in the isolated problem depends entirely on the 'historical report' definition found in SRC_005. Without accepting corroboration as a purely historical record with no predictive power, the procedural rule collapses into an inductive wager. REFUTED IF: Scientists can rationally follow a procedural preference rule for corroborated theories while simultaneously believing those theories have a higher probability of being true, without violating the non-inductive constraint.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "No contradiction is posited; the dependence is linear and consistent with the negative probability framework."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Explicitly states 'Relation Kind: DEPENDENCE' and details the logical reliance of the procedural rule on the historical definition."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Contains 'refuted if' and 'depends on', meeting the schema requirements."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Schema compliance confirmed via explicit keywords."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Defines a specific logical dependence rather than a redundant assertion."}
+      ]
+    },
+    {
+      "content": "Relation Kind: CONTRADICTION. The isolated problem's goal of establishing a 'rational preference' contradicts the strict 'negative probability' stance of SRC_003 if 'preference' implies any degree of positive confidence. If preference is merely the absence of alternatives, it cannot guide action in underdetermined fields (multiple survivors), rendering the 'rational' aspect void. REFUTED IF: One can demonstrate a coherent decision theory where 'preference' operates solely as a tie-breaker among equals without attributing any positive weight or confidence to the chosen option.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "revised", "note": "This candidate embraces the tension noted in the criticism but frames it as a substantive CONTRADICTION to be resolved, rather than denying the tension exists."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Clearly identifies the relation as CONTRADICTION and specifies the logical conflict regarding 'positive confidence' vs 'absence of alternatives'."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Includes 'refuted if' and 'contradicts' (via the kind declaration)."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Keywords present."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Proposes a specific logical friction point rather than a redundant summary."}
+      ]
+    },
+    {
+      "content": "Relation Kind: ABSTRACTION. The 'critical preference' described in the isolated problem is a high-level abstraction of the specific 'verisimilitude' mechanism detailed in SRC_004. While SRC_004 grounds preference in 'truth-likeness', the isolated problem abstracts this to a general 'pragmatic decision rule' applicable even if verisimilitude is unmeasurable. REFUTED IF: The pragmatic decision rule fails to function or loses its rational justification when the underlying concept of verisimilitude (distance from truth) is removed or proven incoherent.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "The relation is one of abstraction, not contradiction; it bridges the specific mechanism to the general rule."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Explicitly names the relation 'ABSTRACTION' and maps the specific mechanism to the general rule."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Contains 'refuted if' and 'abstracts'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Compliant."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Establishes a hierarchical relation (abstraction) rather than redundancy."}
+      ]
+    },
+    {
+      "content": "Relation Kind: COMPATIBILITY. The 'procedural necessity' of the isolated problem is compatible with the 'negative probability' filter of SRC_003 only under the condition of 'finite competitors'. In an infinite hypothesis space, elimination never yields a unique survivor, making the procedural rule incompatible with the goal of selecting a single theory. REFUTED IF: A method exists to apply the negative probability filter to an infinite set of hypotheses such that a single preferred theory emerges without invoking inductive priors to prune the space.",
+      "typicality": 0.30,
+      "neighbours": ["SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "Addresses the compatibility conditionally, avoiding the false dichotomy of the criticism."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Defines the relation as CONDITIONAL COMPATIBILITY based on the cardinality of the hypothesis space."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Includes 'refuted if' and 'compatible with'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Compliant."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Introduces a boundary condition (finite vs infinite) to define the relation substantively."}
+      ]
+    }
+  ]
+}

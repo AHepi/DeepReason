@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) to justify preferring better-corroborated theories without induction, but this fails to address Popper's own later admission that verisimilitude cannot be formally defined or measured for false theories. Since most scientific theories are strictly false (containing some falsity), the metric 'content of truth minus content of falsity' yields undefined or negative results that cannot be compared, rendering the 'critical preference' logically incoherent on Popper's own terms unless it implicitly assumes an inductive leap that the theory is 'approximately true' in a way that correlates with future success.",
+      "counterexample": null,
+      "premise": "Popper explicitly retracted the formal viability of verisimilitude as a comparative measure for false theories in his later work (e.g., after Tichý and Miller's criticisms), acknowledging that one cannot logically assert a false theory is 'closer to the truth' than another false theory based solely on test survival without extra-logical assumptions.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude is not a calculable metric for false theories, what non-inductive logical mechanism does Popper offer to explain why a scientist should prefer Theory A over Theory B when both are known to be false?"
+    }
+  ]
+}

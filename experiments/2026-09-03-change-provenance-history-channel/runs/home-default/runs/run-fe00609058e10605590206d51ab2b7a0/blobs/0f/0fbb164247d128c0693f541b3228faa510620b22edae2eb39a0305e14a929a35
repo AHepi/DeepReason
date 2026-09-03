@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation between the isolated problem (conn:21bf799e7dd5) and its neighborhood as required. Instead of linking the specific isolated problem to a neighbor via a named mechanism, the target describes a 'Shared Mechanism' between the isolated problem and 'SRC_003'. However, SRC_003 is not provided in the input context as part of the 'neighbourhood' for conn:21bf799e7dd5, nor is the nature of the connection between conn:21bf799e7dd5 and SRC_003 established. The response effectively hallucinates a neighbor (SRC_003) and asserts a relation to it without grounding it in the provided context, thereby failing the core instruction to connect the isolated problem to *its* neighbourhood. Furthermore, the 'REFUTED IF' condition describes a failure of the mechanism's utility (underdetermination) rather than refuting the existence of the proposed relation itself, which conflates the robustness of a theory with the validity of the structural link.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": "Which specific item in the provided neighbourhood does conn:21bf799e7dd5 connect to, and what evidence in the context supports the existence of this neighbor?"
+    }
+  ]
+}

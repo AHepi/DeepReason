@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation between the isolated problem and its neighbourhood as required. Instead of identifying a specific dependence, reduction, shared mechanism, or other valid relation kind connecting the two, the response defines the 'Relation Kind' as 'Abstraction' but then proceeds to describe the internal logic of the isolated problem itself (abstracting SRC_002 into a general principle). The 'REFUTED IF' clause describes a condition under which this internal abstraction would fail, rather than stating what the proposed *relation* between the problem and its neighbourhood is refuted if. Consequently, it provides a summary of endpoints (the problem's own nature) rather than a connective relation between distinct entities.",
+      "premise": null,
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": null
+    }
+  ]
+}

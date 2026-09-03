@@ -1,0 +1,76 @@
+{
+  "candidates": [
+    {
+      "content": "KIND: Reduction. The isolated problem (preference without induction) reduces to the mechanism in SRC_005 (procedural necessity). RELATION: The 'inductive bridge' is not a missing link but a category error; preference is reduced to a rule of game-state management. REFUTED IF: A scientist can demonstrate a case where they prefer a falsified theory over an unfalsified one purely based on epistemic probability rather than procedural rules, or if the 'game' of science is proven to have a goal (Truth) that cannot be approached via procedural moves alone.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_005", "SRC_007"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "The contradiction is resolved by reducing the 'bridge' to a non-existent requirement; preference arises from elimination (SRC_003/005), making the 'positive link' unnecessary."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Explicitly defined the relation as 'Reduction' of the problem to the procedural mechanism, avoiding mere summary."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Content includes 'reduces to' and 'refuted if', satisfying relation-form@578e42df713e."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Content includes 'reduces to' and 'refuted if', satisfying relation-form@578e42df713e."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Defined a specific structural reduction rather than asserting redundancy."}
+      ]
+    },
+    {
+      "content": "KIND: Contradiction. The isolated problem contradicts the assumption in SRC_001 that 'verisimilitude' acts as a proxy for truth-likeness without induction. RELATION: If preference is purely procedural (SRC_005), then 'verisimilitude' is an empty metaphor, contradicting SRC_001's claim that it grounds rational wagering. REFUTED IF: It can be shown that 'verisimilitude' provides a non-procedural, objective metric for theory choice that operates independently of the 'game' rules, or if procedural rules inherently generate verisimilitude estimates.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_001", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "departure_declared", "note": "Departing from the attempt to reconcile; instead asserting a fundamental contradiction between proceduralism and verisimilitude."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Proposed 'Contradiction' as the substantive relation with clear endpoints."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Uses 'contradicts' and 'refuted if' explicitly."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Uses 'contradicts' and 'refuted if' explicitly."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Established a distinct logical conflict rather than redundancy."}
+      ]
+    },
+    {
+      "content": "KIND: Shared Mechanism. Both the isolated problem and SRC_003 share the mechanism of 'Negative Filtering'. RELATION: The preference for Theory T is not due to T's attributes but due to the elimination of ~T competitors. This mechanism is shared between the definition of corroboration in SRC_003 and the solution to the isolation problem. REFUTED IF: Underdetermination is absolute (infinite unfalsified theories exist), rendering negative filtering incapable of producing a unique 'best available' candidate, thus breaking the mechanism's utility for preference.",
+      "typicality": 0.90,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "Clarifies that 'negative probability' (elimination) is the mechanism, removing the need for a positive inductive bridge."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Identified 'Shared Mechanism' as the relation type."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Contains 'shares mechanism' and 'refuted if'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Contains 'shares mechanism' and 'refuted if'."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Defined the shared mechanism explicitly rather than calling the connection redundant."}
+      ]
+    },
+    {
+      "content": "KIND: Abstraction. The isolated problem is an abstraction of the specific historical reports in SRC_002. RELATION: SRC_002 describes corroboration as a 'report of state'; the isolated problem abstracts this to a general principle of 'Procedural Necessity' applicable beyond history to any decision matrix. REFUTED IF: The 'report of state' in SRC_002 contains essential temporal/historical indices that cannot be removed without losing the meaning of 'corroboration', making the abstraction invalid.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_002", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "Frames the relation as abstraction, bypassing the induction/elimination tension by elevating the concept."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Proposed 'Abstraction' as the substantive relation."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Uses 'abstracts' and 'refuted if'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Uses 'abstracts' and 'refuted if'."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Defined a hierarchical relation (abstraction) instead of redundancy."}
+      ]
+    },
+    {
+      "content": "KIND: Dependence. The viability of the 'critical preference' in SRC_004 depends on the 'procedural necessity' defined in SRC_005. RELATION: Without the procedural rule (do not discard unfalsified theories), the concept of 'verisimilitude' in SRC_004 has no operational traction; it becomes a metaphysical ghost. REFUTED IF: Verisimilitude can be measured or estimated directly through empirical content analysis without invoking the procedural rule of retaining unfalsified theories.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_004", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "Shows dependence of the positive concept (verisimilitude) on the negative/procedural mechanism, resolving the apparent contradiction."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Stated 'Dependence' clearly with conditions."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Uses 'depends on' and 'refuted if'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Uses 'depends on' and 'refuted if'."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Defined a conditional dependency rather than redundancy."}
+      ]
+    },
+    {
+      "content": "KIND: Integration. The isolated problem integrates the 'negative probability' of SRC_003 with the 'verisimilitude' of SRC_001 into a dual-aspect monism. RELATION: Preference is simultaneously a procedural elimination (SRC_003) and a rational bet on truth-likeness (SRC_001); they are two descriptions of the same event. REFUTED IF: It is demonstrated that one can logically hold the procedural view without committing to any notion of truth-likeness, or vice versa, proving they are not integrated but independent.",
+      "typicality": 0.40,
+      "neighbours": ["SRC_001", "SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_007", "kind": "rebutted", "note": "Integrates the opposing views as dual aspects, dissolving the contradiction by claiming they describe the same phenomenon."},
+        {"handle": "[SRC_014] against SRC_008", "kind": "revised", "note": "Proposed 'Integration' as the substantive relation."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Uses 'integrates' and 'refuted if'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Uses 'integrates' and 'refuted if'."},
+        {"handle": "[SRC_015] against SRC_009", "kind": "revised", "note": "Proposed a synthetic integration rather than redundancy."}
+      ]
+    }
+  ]
+}

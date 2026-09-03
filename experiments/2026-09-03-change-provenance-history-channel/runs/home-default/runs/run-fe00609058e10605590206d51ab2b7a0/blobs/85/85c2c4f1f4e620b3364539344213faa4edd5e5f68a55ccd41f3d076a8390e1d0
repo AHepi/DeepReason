@@ -1,0 +1,94 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Reduction. The isolated problem (preference for corroborated theories) reduces to the procedural rule defined in SRC_005: 'Do not discard a theory that has not been falsified.' This is not an epistemic inference but a game move. REFUTED IF: Scientists can demonstrate a case where they retained a falsified theory over an unfalsified one specifically because they believed the falsified one was 'more likely true' based on inductive probability, thereby proving preference is driven by epistemic judgment rather than procedural necessity.",
+      "typicality": 0.92,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "revised", "note": "Explicitly named 'Reduction' and defined the substantive relation as the reduction of preference to a procedural game move, quoting the rule from SRC_005."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Clearly states the relation kind ('Reduction') and links the isolated problem to the neighbourhood via the specific mechanism of procedural necessity."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Identifies 'Reduction' as the specific dependence, connecting the isolated problem to SRC_005's procedural rule."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "The candidate does not claim a shared mechanism between distinct entities but a reduction of the isolated problem's logic to the foundational rule in SRC_005."},
+        {"handle": "[SRC_010] against SRC_006", "kind": "rebutted", "note": "No contradiction is claimed here; the candidate posits a consistent reduction to procedural rules, avoiding the inductive bridge issue entirely."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "revised", "note": "Defines a structural logical connection (Reduction) rather than just defining 'connection'."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "The REFUTED IF condition correctly targets the presence of 'epistemic probability' driving the choice, which would invalidate the reduction to pure procedure."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "revised", "note": "Content explicitly includes 'refuted if' and names the relation kind 'Reduction'."}
+    },
+    {
+      "content": "Relation Kind: Shared Mechanism. Both the isolated problem and SRC_003 operate on the mechanism of 'Negative Probability Filtering.' Preference arises not from adding weight to a theory but from subtracting competitors via falsification. REFUTED IF: A scenario exists where a theory is preferred despite no competitors being eliminated (i.e., underdetermination persists with multiple unfalsified theories), yet a positive preference is still assigned based on features other than survival.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "revised", "note": "Defines the substantive relation as 'Shared Mechanism' centered on negative filtering."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Names the specific relation kind and links endpoints via the filtering mechanism."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Identifies 'Shared Mechanism' as the connection type."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "revised", "note": "Demonstrates the common underlying process: elimination of alternatives via modus tollens, applicable to both the isolated problem and SRC_003."},
+        {"handle": "[SRC_010] against SRC_006", "kind": "rebutted", "note": "The mechanism is purely negative (elimination), avoiding the false contradiction of needing a positive inductive bridge."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "revised", "note": "Proposes a structural logical connection (shared deductive mechanism) rather than a definition of connection."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "REFUTED IF correctly identifies that if preference relies on anything other than competitor elimination (like epistemic probability), the shared mechanism claim fails."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "revised", "note": "Includes 'refuted if' and names 'Shared Mechanism'."}
+    },
+    {
+      "content": "Relation Kind: Contradiction. The isolated problem's implicit demand for a 'reason to prefer' contradicts SRC_002's assertion that corroboration offers 'no guidance on what to believe, only on what to test next.' If the isolated problem requires a justificatory basis for action beyond testing, it fundamentally conflicts with the procedural agnosticism of SRC_002. REFUTED IF: One can formulate a coherent scientific practice that strictly follows SRC_002's procedural rules while simultaneously satisfying the isolated problem's requirement for a 'substantive relation' without invoking belief or epistemic probability.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_002"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "revised", "note": "Proposes 'Contradiction' as the substantive relation, explicitly detailing the conflict between demanding a reason to prefer and offering no guidance on belief."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Names 'Contradiction' and links the isolated problem to SRC_002 via the tension between justification and proceduralism."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Identifies 'Contradiction' as the specific relation kind."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "This is not a conflation of operational logic but a deliberate highlighting of a logical incompatibility between the problem's framing and the source's conclusion."},
+        {"handle": "[SRC_010] against SRC_006", "kind": "rebutted", "note": "The candidate embraces the tension rather than falsely resolving it; the contradiction is the point."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "revised", "note": "Defines a logical connection (incompatibility) between the endpoints."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "REFUTED IF tests whether the contradiction can be dissolved within a coherent practice, which would invalidate the claim of contradiction."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "revised", "note": "Contains 'refuted if' and names 'Contradiction'."}
+    },
+    {
+      "content": "Relation Kind: Abstraction. The isolated problem is a concrete instance of the abstract principle in SRC_004: 'Critical Preference' based on verisimilitude. The specific act of choosing a corroborated theory abstracts to the general rule of betting on truth-likeness without assigning probability. REFUTED IF: The preference for corroborated theories can be shown to rely on a metric that is NOT verisimilitude (e.g., simplicity, aesthetic beauty, or social consensus) and cannot be mapped to the 'distance from truth' concept.",
+      "typicality": 0.78,
+      "neighbours": ["SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "revised", "note": "Defines the relation as 'Abstraction,' linking the specific problem to the general principle of critical preference."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Names 'Abstraction' and explains the link between the instance and the principle."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Identifies 'Abstraction' as the relation kind."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "The candidate does not conflate distinct entities but shows how one is an instantiation of the other's abstract rule."},
+        {"handle": "[SRC_010] against SRC_006", "kind": "rebutted", "note": "Verisimilitude provides a non-inductive basis for the 'bridge,' resolving the alleged contradiction."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "revised", "note": "Proposes a structural connection (instantiation/abstraction) between the problem and the source."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "REFUTED IF correctly targets the reliance on non-verisimilitude metrics, which would break the abstraction link."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "revised", "note": "Includes 'refuted if' and names 'Abstraction'."}
+    },
+    {
+      "content": "Relation Kind: Dependence. The validity of the isolated problem's solution depends entirely on the historical reportage mechanism in SRC_005. Without the premise that corroboration is merely a report of 'not yet refuted,' the problem of justifying preference becomes unsolvable within Popperian constraints. REFUTED IF: A justification for preferring corroborated theories can be constructed that does not rely on the historical/procedural definition of corroboration (e.g., using Bayesian updating or inference to the best explanation).",
+      "typicality": 0.88,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "revised", "note": "Explicitly names 'Dependence' and details the reliance on SRC_005's historical reportage mechanism."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "States the relation kind ('Dependence') and the specific dependency link."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Identifies 'Dependence' as the substantive relation."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "The candidate argues for a logical dependency, not a shared operational mechanism between distinct entities."},
+        {"handle": "[SRC_010] against SRC_006", "kind": "rebutted", "note": "The dependence is on the procedural definition, which explicitly rejects inductive bridges, avoiding the contradiction."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "revised", "note": "Defines a logical dependency structure between the problem's solvability and the source's premise."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "REFUTED IF tests if alternative justifications (non-procedural) exist, which would negate the dependence."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "revised", "note": "Contains 'refuted if' and names 'Dependence'."}
+    },
+    {
+      "content": "Relation Kind: Integration. The isolated problem integrates the 'negative filter' of SRC_003 with the 'procedural rule' of SRC_005 to form a cohesive decision protocol: Filter competitors (SRC_003) then apply the rule of retention (SRC_005). REFUTED IF: The two mechanisms (negative filtering and procedural retention) are shown to be mutually exclusive in practice, such that applying the filter necessarily violates the procedural rule or vice versa.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "revised", "note": "Proposes 'Integration' as the relation, combining elements from SRC_003 and SRC_005."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Names 'Integration' and describes how the isolated problem synthesizes the neighbourhood artifacts."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Identifies 'Integration' as the specific relation kind."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "revised", "note": "Demonstrates how the two distinct logics (filtering and retention) are combined into a single protocol, rather than conflated."},
+        {"handle": "[SRC_010] against SRC_006", "kind": "rebutted", "note": "The integration resolves the tension by sequencing the operations: filter first, then apply procedural rule."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "revised", "note": "Defines a structural synthesis between the problem and the neighbourhood components."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "revised", "note": "REFUTED IF targets the compatibility of the two mechanisms; if they clash, integration fails."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "revised", "note": "Includes 'refuted if' and names 'Integration'."}
+    }
+  ]
+}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}
