@@ -1,5 +1,5 @@
 <!-- DR-SUB-workflow -->
-Verified-at: 66e56fe88
+Verified-at: 0fd78a0c8
 Verify: python -m pytest tests/test_workflow_reducer_c0.py tests/test_workflow_models_c0.py tests/test_workflow_control_replay_c1.py tests/test_workflow_stop_lifecycle_c4.py tests/test_workflow_resume_lifecycle_c4.py tests/test_workflow_repair_authority_c4.py tests/test_v6_controller3_replay_verification.py -q
 Owns: src/deepreason/workflow/
 Seams: DR-SEAM-harness-x-workflow, DR-SEAM-llm-x-workflow, DR-SEAM-rules-x-workflow, DR-SEAM-scheduler-x-workflow, DR-SEAM-scratch-x-workflow
@@ -172,6 +172,30 @@ model or the reducer — it materializes only what the records already say.
 
 ## Traps
 
+- **The STOPPED receipt refused on work in progress, so no run could be
+  resumed — clean, failed or killed alike.** `build_stopped_lifecycle` refused
+  whenever `snapshot.outstanding_work` OR `snapshot.unconsumed_bound_call_seqs`
+  was non-empty. Only the second is a safety property: an unconsumed bound call
+  is a provider result nobody has read, and closing a stop over one forces a
+  resume to re-issue the call or drop a recorded result. The first is work in
+  progress, and the system already owns its remedy —
+  `Scheduler._recover_workflow_prefixes` runs before the first resumed cycle and
+  raises if it cannot finish. Measured across four committed roots and three
+  stub shapes: **every refusing root had ZERO unconsumed provider calls** while
+  carrying 31/11/6/6/3/2 outstanding items, so the refusal never once fired for
+  the reason it exists. Runs `4565139800f5ca020e2b74acff45355c1277a9d510068a8e8b4ed65813f1a49c`
+  (P-A1, failed), `63e48f57415d05323b608a84f138ee5c22c274d7d8ebccc2e219b613d7c3a722`
+  (P-A2 epoch 4, killed then finalized) and `run-fe00609058e10605590206d51ab2b7a0`
+  (a clean four-cycle completion) all reported `verify_root` violations: 0 and
+  all refused `continue`. FIXED 2026-09-03
+  (`experiments/2026-09-03-defect-stopped-run-resumption/`). Two things about
+  the fix a later reader will be tempted to undo: the predicate moves at FIVE
+  sites at once — build and apply, STOPPED and RESUMED — because a receipt
+  granted by one and refused by another produces a root that terminates and then
+  refuses one layer later; and the receipt still never AUTHORIZES a
+  continuation, which the SECURITY-channel integrity gate decides at
+  continue/amend time (`docs/ERRATA.md` E61).
+`check: python -m pytest tests/test_stopped_run_resumption.py::test_outstanding_work_with_no_unread_result_takes_the_receipt tests/test_stopped_run_resumption.py::test_an_unread_provider_result_still_refuses_the_receipt tests/test_stopped_run_resumption.py::test_every_receipt_predicate_asks_the_same_question -q`
 - **A repaired atomic child is a DIFFERENT work item, and the merge must name
   it.** In jolt `run-b4d6dfda0c20676a864a051fbc97bda4`, decomposition merges
   containing a repaired child were reported non-replay-valid — two findings, at
@@ -199,11 +223,19 @@ model or the reducer — it materializes only what the records already say.
   terminal (`BRIDGE_STAGE_A_FAILED`); the campaign's bridges had only ever
   succeeded on the bare stops that typed stops replaced. `_post_terminal_
   composition_call` now admits exactly the calls whose preparation carries a
-  `source_terminal_commitment_ref` under a resumable stop reason. Ordinary
+  `source_terminal_commitment_ref` under a COMPOSABLE stop reason. Ordinary
   work-bound calls after a stop stay forbidden — continuing the reasoning still
   requires typed RESUMED authority — and so does composition after a
-  non-resumable stop.
-`check: grep -q 'RESUMABLE_STOP_REASONS = frozenset({"converged", "budget_exhausted"})' src/deepreason/workflow/lifecycle.py && python -m pytest tests/test_bridge_after_typed_stop.py::test_terminal_bound_composition_call_survives_a_resumable_stop tests/test_bridge_after_typed_stop.py::test_ordinary_work_after_a_typed_stop_stays_forbidden tests/test_bridge_after_typed_stop.py::test_composition_after_a_non_resumable_stop_stays_forbidden -q`
+  non-composable stop.
+  **Which set it reads changed on 2026-09-03 and the distinction is the point.**
+  It read `RESUMABLE_STOP_REASONS` until resumption widened to failure terminals
+  (`docs/ERRATA.md` E61); had it kept reading it, that widening would silently
+  have admitted bridge composition after an `operational_failure` — a change
+  nobody asked for, arriving as a side effect of an unrelated one. The two sets
+  are now separate because they answer different questions: whether a run may be
+  RESUMED, and whether a frozen terminal may be COMPOSED FROM. `COMPOSABLE_STOP_REASONS`
+  holds the value this trap was written about; only add to it deliberately.
+`check: python -c "import inspect; from deepreason.workflow import replay; from deepreason.workflow.lifecycle import COMPOSABLE_STOP_REASONS as C, RESUMABLE_STOP_REASONS as R; s = inspect.getsource(replay.WorkflowReplayState._post_terminal_composition_call); assert C == {'converged', 'budget_exhausted'}, C; assert C < R, (C, R); assert 'if reason not in COMPOSABLE_STOP_REASONS:' in s; assert 'if reason not in RESUMABLE_STOP_REASONS:' not in s" && python -m pytest tests/test_bridge_after_typed_stop.py::test_terminal_bound_composition_call_survives_a_resumable_stop tests/test_bridge_after_typed_stop.py::test_ordinary_work_after_a_typed_stop_stays_forbidden tests/test_bridge_after_typed_stop.py::test_composition_after_a_non_resumable_stop_stays_forbidden tests/test_stopped_run_resumption.py::test_widening_resumption_did_not_widen_bridge_composition -q`
 - **A census over committed roots cannot tell you what the TESTS cover.**
   `RESUMABLE_STOP_REASONS` is enforced twice — `lifecycle.py:273` while
   BUILDING a resume decision (surfaced by `prepare_continuation` as

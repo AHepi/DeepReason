@@ -1116,9 +1116,12 @@ class WorkflowReplayState:
         reason = getattr(
             getattr(decision, "deterministic_decision", None), "reason", None
         )
-        from deepreason.workflow.lifecycle import RESUMABLE_STOP_REASONS
+        from deepreason.workflow.lifecycle import COMPOSABLE_STOP_REASONS
 
-        if reason not in RESUMABLE_STOP_REASONS:
+        # Deliberately NOT RESUMABLE_STOP_REASONS: composing from a frozen
+        # terminal and resuming one are different permissions, and resumption
+        # widened to failure terminals on 2026-08-29 while this did not.
+        if reason not in COMPOSABLE_STOP_REASONS:
             return False
         transaction = self.transaction_work.get(call.work_order_id)
         preparation = getattr(transaction, "preparation", None)
@@ -2148,11 +2151,14 @@ class WorkflowReplayState:
         )
         if expected_snapshot != snapshot:
             raise ValueError("lifecycle outstanding-work snapshot does not replay")
-        if snapshot.outstanding_work or snapshot.unconsumed_bound_call_seqs:
+        # Narrowed with build_stopped_lifecycle: only an unread provider result
+        # may veto the receipt.  Outstanding work is carried by the snapshot and
+        # re-entered on resume; forgetting it was never what this guarded.
+        if snapshot.unconsumed_bound_call_seqs:
             raise ValueError("STOPPED cannot forget unfinished workflow authority")
-        from deepreason.workflow.lifecycle import _is_runtime_exhaustion
+        from deepreason.workflow.lifecycle import _is_runtime_decided
 
-        if _is_runtime_exhaustion(decision.deterministic_decision):
+        if _is_runtime_decided(decision.deterministic_decision):
             # Runtime exhaustion consumes no controller authority; the
             # receipt must declare exactly that (see build_stopped_lifecycle).
             if (
@@ -2272,7 +2278,7 @@ class WorkflowReplayState:
         )
         if expected_snapshot != snapshot:
             raise ValueError("resume outstanding-work snapshot does not replay")
-        if snapshot.outstanding_work or snapshot.unconsumed_bound_call_seqs:
+        if snapshot.unconsumed_bound_call_seqs:
             raise ValueError("RESUMED cannot forget unfinished workflow authority")
         manifest = self._run_manifest
         commitment_policy = getattr(manifest, "terminal_commitment_policy", None)

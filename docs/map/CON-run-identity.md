@@ -1,5 +1,5 @@
 <!-- DR-CON-run-identity -->
-Verified-at: ae869296
+Verified-at: 0fd78a0c8
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/preparation.py, src/deepreason/application/text_runs.py, src/deepreason/runtime/continuation.py, src/deepreason/runtime/progress.py, src/deepreason/amendment/apply.py, src/deepreason/amendment/models.py, src/deepreason/amendment/state.py, src/deepreason/ui/status.py
 Seams: 
@@ -229,6 +229,21 @@ them, including the two that were never renamed.
 
 ## Traps
 
+- **`finalize` reached a terminal and `run-status.json` went on saying
+  `running`.** `run-status.json` is `progress.jsonl`'s last line, and
+  terminalization writes the LOG; `finalize_stopped_root` called
+  `terminalize_text_run` without emitting a progress record, so a root it
+  successfully finalized kept whatever state the killed process had left — which
+  is `running` on every root `finalize` exists for. Every reader over that file
+  then described a finished run as in flight, `deepreason stop-report`'s
+  continuability section included, which answered `continue: UNKNOWN — the run
+  is in state 'running'` about a root standing at a valid terminal. Observed on
+  P-A2 epoch 4 (`63e48f57415d05323b608a84f138ee5c22c274d7d8ebccc2e219b613d7c3a722`,
+  `finalize` rc=0, status still `running`) and reproduced on the stub. FIXED
+  2026-09-03 (`experiments/2026-09-03-defect-stopped-run-resumption/`). The
+  emission is best-effort by design: the terminal is already durable in the log
+  when it runs, so a progress-write failure must not un-finalize the root.
+`check: grep -q "ProgressSink" src/deepreason/application/text_runs.py && python -c "import inspect; from deepreason.application.text_runs import finalize_stopped_root as f; s = inspect.getsource(f); assert 'ProgressSink(' in s and 'activity=\"finalized\"' in s, 'finalize no longer emits a progress record: run-status.json will keep the killed process state'"`
 - **Two different things are called `run_id`.** `progress.jsonl` and
   `run-status.json` carry `run_id = manifest.sha256`; the CLI's `reason` payload
   and every MCP handle carry `run_id = managed_run_id`. They are never equal.

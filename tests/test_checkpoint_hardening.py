@@ -65,41 +65,59 @@ def _failed_root(tmp_path, monkeypatch, *, name):
 
 
 def test_a_failure_terminal_records_why_it_cannot_be_continued(tmp_path, monkeypatch):
-    """R7: a stop that cannot assure continuability is a defect unless it SAYS so.
+    """R7, as the operator finally settled it: a failure terminal IS continuable.
 
-    This terminal writes every checkpoint FILE -- run-stop.json, checkpoint.json,
-    run-result.json, a progress line -- and takes no STOPPED lifecycle receipt,
-    so `continue` refuses CONTINUE_TYPED_STOP_REQUIRED.  Before this tranche the
-    record said nothing about that; 16 committed roots stand in exactly that
-    state.
+    This test asserted the opposite until 2026-09-03, and its own name still
+    carries the question it was asking. What it used to pin --
+    `terminal_lifecycle_refusal: TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL`
+    and "the record's claim is TRUE: this terminal really cannot be continued"
+    -- was the half-measure available before the operator ruled: the 2026-08-30
+    tranche could make the un-continuable terminal HONEST but not continuable,
+    and said so.
+
+    The operator's law of 2026-08-29 (CLAUDE.md) answers it: "clean stop. with
+    an assurance that continuing is possible. Too often an operational failure
+    overlooks securing enough checkpoints to allow relaunches." So a failure
+    terminal now takes the SAME typed STOPPED receipt a clean stop takes,
+    carrying `operational_failure` as its reason, and has nothing left to
+    refuse. Whether THIS root may actually be resumed is decided where the same
+    law puts it -- the SECURITY-channel integrity gate at continue/amend time,
+    which `tests/test_jailbreak_gate.py` owns.
+
+    Superseded claim recorded at `docs/ERRATA.md` E-stopped-run-resumption;
+    the 16 committed roots that stand in the old shape are frozen evidence of
+    it and are not rewritten (old runs owe the future nothing, 2026-08-14).
     """
 
     root = _failed_root(tmp_path, monkeypatch, name="ordinary-failure-terminal")
 
     result = json.loads((root / "run-result.json").read_text())
     assert result["state"] == "failed"
-    refusal = result["terminal_lifecycle_refusal"]
-    assert refusal["schema"] == "deepreason-terminal-lifecycle-refusal-v1"
-    assert refusal["code"] == "TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL"
-    assert refusal["stop_reason"] == "operational_failure"
-    # The record does not name the code `continue` will raise: that also
-    # depends on what the operator passes and on any earlier resume decision,
-    # so naming it would be one verb guessing at another's predicate.
-    assert "continue_refusal" not in refusal
+    assert result["stop"]["reason"] == "operational_failure"
+    # Nothing to refuse: the receipt was taken.  The v2 terminal envelope
+    # serializes with exclude_none, so "no refusal" is an ABSENT key here and a
+    # null in the progress record -- the same shape a clean stop publishes.
+    assert result.get("terminal_lifecycle_refusal") is None
 
     status = json.loads((root / "run-status.json").read_text())
     assert status["stop_reason"] == "operational_failure"
-    assert (
-        status["terminal_lifecycle_refusal"]
-        == "TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL"
-    )
+    assert status["terminal_lifecycle_refusal"] is None
 
-    # The record's claim is TRUE: this terminal really cannot be continued.
+    # The receipt is REAL and carries the failure's own reason -- not a clean
+    # reason borrowed to buy continuability.
+    from deepreason.harness import Harness
+
+    decision = Harness(root, read_only=True).workflow_state.terminal_lifecycle_decision
+    assert decision is not None
+    assert decision.deterministic_decision.reason == "operational_failure"
+
+    # And the whole point: this terminal really can be continued now.
     with tempfile.TemporaryDirectory() as scratch:
         copy = _copy(root, scratch)
-        with pytest.raises(ValueError) as raised:
-            prepare_continuation(copy, cycles=1, tokens=10, check_operator_lock=False)
-    assert str(raised.value) == "CONTINUE_TYPED_STOP_REQUIRED"
+        prepared = prepare_continuation(
+            copy, cycles=1, tokens=10, check_operator_lock=False
+        )
+    assert prepared["schema"] == "deepreason-continuation-v1"
 
 
 def test_a_terminal_that_wrote_no_checkpoint_records_that_fact(tmp_path, monkeypatch):

@@ -2243,3 +2243,76 @@ WARRANTS. The violator was an arithmetic consumer in another subsystem, which
 minted a de-facto fail by division without ever using the word. When a document
 states a rule about one KIND of consumer, ask which other kinds exist: a rule
 phrased semantically does not bind a reader that only counts.
+
+---
+
+## 2026-09-03
+
+**E61 — "failure terminals stay non-resumable" was a design decision the
+operator later reversed, and three committed documents plus one gate test
+still stated it as settled.** Corrected by
+`experiments/2026-09-03-defect-stopped-run-resumption/`.
+
+What the documents said:
+
+- `src/deepreason/workflow/lifecycle.py:26-28` (owner decision 4a, 2026-07-27):
+  "Failure terminals stay non-resumable."
+- `src/deepreason/application/text_runs.py` (the failure branch's comment):
+  "a failure terminal takes no STOPPED lifecycle receipt, so these checkpoints
+  cannot authorize a continuation", with `TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL`
+  recorded to say so, noting 16 committed roots stand that way.
+- `tests/test_checkpoint_hardening.py::test_a_failure_terminal_records_why_it_cannot_be_continued`
+  asserted it as a guarantee: "The record's claim is TRUE: this terminal really
+  cannot be continued."
+- `src/deepreason/application/text_runs.py::_record_exhaustion_lifecycle_stop`'s
+  docstring left the governing question open: "Whether unfinished authority
+  OUGHT to block continuation is a separate, open question."
+
+What the record shows. The operator ANSWERED that open question on 2026-08-29
+(CLAUDE.md, verbatim): "clean stop. with an assurance that continuing is
+possible. Too often an operational failure overlooks securing enough
+checkpoints to allow relaunches or forgets to ensure continuing is possible
+that trigger corrupted stops." Under that law every terminal — clean or failed
+— must leave checkpoints sufficient for relaunch, so a terminal that declines
+the receipt by design is a defect rather than a policy. Measured cost, on
+roots whose own `verify_root` reports `violations: 0`:
+`4565139800f5ca020e2b74acff45355c1277a9d510068a8e8b4ed65813f1a49c` (P-A1,
+failed at cycle 5 with 1 093 086 of 3 000 000 tokens spent),
+`63e48f57415d05323b608a84f138ee5c22c274d7d8ebccc2e219b613d7c3a722` (P-A2 epoch
+4, killed then finalized, still refused), and `run-fe00609058e10605590206d51ab2b7a0`
+(a clean four-cycle completion, exit code 0, refused all the same). Census of
+committed roots the same day: 19 `operational_failure` roots and 7
+`budget_exhausted` roots carry no typed receipt.
+
+**The 2026-07-27 decision is not corrected as an error.** It was right for its
+own date and its comment is rewritten to say it is superseded, not deleted.
+What was wrong was carrying it forward as settled after the operator ruled
+otherwise — and, in the test, as a *guarantee* rather than as the half-measure
+its own tranche said it was (`experiments/2026-08-30-change-checkpoint-hardening/`
+PARKED F9 recorded that the integrity gate the same law asks for was built,
+measured and parked; the un-continuable terminal was made HONEST because it
+could not yet be made CONTINUABLE).
+
+**Where corrected.** All four sites, in the fixing tranche's own commit. The
+receipt is now refused if and only if the stop would close over a provider call
+whose result nobody has read (`snapshot.unconsumed_bound_call_seqs`), which is
+what the refusal was always for; work that is merely outstanding is recorded in
+the snapshot and re-entered by `Scheduler._recover_workflow_prefixes`. Whether
+a given root may be resumed is decided by the SECURITY-channel integrity gate at
+continue/amend time, unchanged since 971860c42.
+
+**The 16 committed roots are NOT made continuable retroactively** and are not
+rewritten. Old runs owe the future nothing (operator law, 2026-08-14); they
+remain frozen evidence of the shape, and they are now the WITNESS SET for
+`CONTINUE_TYPED_STOP_REQUIRED` in `tests/test_continuation.py`, which selects
+them by the recorded refusal rather than by stop reason.
+
+**The generalisable lesson.** A test that pins a KNOWN half-measure as though it
+were the finished guarantee is how a superseded decision outlives the ruling
+that replaced it. `test_a_failure_terminal_records_why_it_cannot_be_continued`
+was correct on the day it was written and its own tranche said in writing that
+the real fix was parked — but the assertion it left behind said "this terminal
+really cannot be continued", with no marker that the sentence had an expiry.
+When a tranche knowingly ships half of a law, its tests should assert the half
+it shipped ("the refusal is recorded") and not the half it did not ("and the
+refusal is right").
