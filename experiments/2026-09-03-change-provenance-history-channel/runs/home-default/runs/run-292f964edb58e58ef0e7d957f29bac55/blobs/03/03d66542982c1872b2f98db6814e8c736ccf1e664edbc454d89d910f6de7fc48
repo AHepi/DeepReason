@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target mischaracterizes Popper's resolution by conflating 'preference for action' with 'inductive inference.' Popper explicitly distinguishes between the logical status of a theory (which remains unproven) and the pragmatic decision to act on the best-tested theory. The target claims this preference 'smuggles back in induction' because it relies on an evolutionary instinct; however, acting on an instinct for survival without claiming that instinct guarantees truth or probability is not induction. Induction requires the logical leap that past success makes future success probable. Popper's 'biological pragmatism' accepts the instinct as a non-rational drive for the 'context of discovery' or action, while maintaining that the 'context of justification' remains purely deductive. By labeling this pragmatic choice a 'performative contradiction,' the target ignores Popper's core distinction: one can rationally choose to act on a corroborated theory *without* believing it is more likely to be true, thus avoiding the reinstatement of induction entirely.",
+      "counterexample": null,
+      "premise": "Acting on a hypothesis based on severe testing does not entail believing the hypothesis is probable.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is merely a pragmatic bet rather than an inductive inference, does the 'will to learn' require any logical grounding at all, or is it simply a brute fact of biological existence?"
+    }
+  ]
+}

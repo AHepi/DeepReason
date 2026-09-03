@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "Popper explicitly rejected Kantian 'regulative ideals' and any methodological postulate that assumes the uniformity of nature, as these constitute the very inductive assumptions his critical rationalism was designed to eliminate.",
+      "case": "The target's defense relies on importing a Kantian 'regulative ideal' to justify preferring better-corroborated theories, which directly contradicts Popper's anti-Kantian stance. Popper argued that science requires no such postulates; the preference for corroborated theories is purely pragmatic and tentative, based on the idea that a theory that has withstood severe tests is a better candidate for criticism and further testing, not because we must 'act as if' the future resembles the past. By framing the preference as a 'necessary postulate' akin to Kant, the target smuggles back the inductive principle Popper rejected under the guise of methodology, failing to show how the preference is defensible on Popper's own strictly non-inductive, non-Kantian terms.",
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "If Popper rejects all regulative ideals regarding nature's uniformity, what specific non-inductive, non-Kantian mechanism does he propose to explain why scientists should prefer a well-tested theory over an untested one without implying any increase in reliability or probability?"
+    }
+  ]
+}

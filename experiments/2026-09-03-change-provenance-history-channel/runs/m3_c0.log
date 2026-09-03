@@ -1,0 +1,15 @@
+=== arm M3-C0 (mode=none) started 2026-09-03T01:02:40Z ===
+--- setup ---
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/2026-09-03-change-provenance-history-channel/runs/home-c0/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+rc=0
+--- qualify ---
+MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so nothing here can say whether reasoning='none' leaves hidden reasoning on. The run proceeds and sends exactly what you configured. To have this answered, write $DEEPREASON_HOME/model-profiles/<model-id>/agent.md.
+Qualification will test ollama/qwen3.5:397b; maximum expected provider calls: 1140. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+qualification cases: 1/300qualification cases: 2/300qualification cases: 3/300qualification cases: 4/300qualification cases: 5/300qualification cases: 6/300qualification cases: 7/300qualification cases: 8/300qualification cases: 9/300qualification cases: 10/300qualification cases: 11/300qualification cases: 12/300qualification cases: 13/300qualification cases: 14/300qualification cases: 15/300qualification cases: 16/300qualification cases: 17/300qualification cases: 18/300qualification cases: 19/300qualification cases: 20/300qualification cases: 21/320qualification cases: 22/320qualification cases: 23/320qualification cases: 24/320qualification cases: 25/320qualification cases: 26/320qualification cases: 27/320qualification cases: 28/320qualification cases: 29/320qualification cases: 30/320qualification cases: 31/320qualification cases: 32/320qualification cases: 33/320qualification cases: 34/320qualification cases: 35/320qualification cases: 36/320qualification cases: 37/320qualification cases: 38/320qualification cases: 39/320qualification cases: 40/320qualification cases: 41/320qualification cases: 42/320qualification cases: 43/320qualification cases: 44/320qualification cases: 45/320qualification cases: 46/320qualification cases: 47/320qualification cases: 48/320qualification cases: 49/320qualification cases: 50/320qualification cases: 51/320qualification cases: 52/320qualification cases: 53/320qualification cases: 54/320qualification cases: 55/320qualification cases: 56/320qualification cases: 57/320qualification cases: 58/320qualification cases: 59/320qualification cases: 60/320qualification cases: 61/340qualification cases: 62/340qualification cases: 63/340qualification cases: 64/340qualification cases: 65/340qualification cases: 66/340

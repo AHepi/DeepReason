@@ -1,0 +1,232 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, pragmatic rule of action: we prefer the theory that has withstood the most severe tests not because it is more likely to be true, but because it is the most rational basis for decision-making in the absence of certainty, akin to betting on the horse with the best track record without assuming the future must resemble the past.",
+      "mechanism": "Pragmatic Rationality without Inductive Leap: The mechanism separates 'truth-likeness' (verisimilitude) from 'rational acceptability for action.' Corroboration reports past performance; preference reports a decision rule. The link is not logical entailment (induction) but critical selection: among competing conjectures, the one that has survived the fiercest criticism is the only one not yet eliminated, making it the sole survivor worthy of provisional trust.",
+      "counterconditions": [
+        "If the agent cannot articulate a reason for preferring survival over random choice without implicitly assuming uniformity of nature.",
+        "If 'rational action' is defined strictly as maximizing expected utility based on probabilities, rendering non-probabilistic corroboration irrelevant.",
+        "If Popper's own writings on verisimilitude imply that survival *does* increase likelihood of truth, contradicting the non-inductive stance."
+      ],
+      "typicality": 0.92,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate does not assert that the pragmatic defense reduces science to a game without direction; rather, it posits 'error elimination' as the teleological direction. The preference is for the theory that has eliminated the most error potential, which is a directional process even if not probabilistic."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate explicitly rejects 'minimizing expected error' in the probabilistic sense. Instead, it relies on 'maximizing critical scrutiny survived.' No calculation of future frequency is performed; only the current status of 'not yet falsified' is used as a selection criterion."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "revised",
+          "note": "Clarified distinction: The preference is not for the 'boldness' alone (initial choice) nor 'survival' alone (past record), but for the conjunction: a bold theory that *has* survived. The mechanism now emphasizes that survival validates the boldness, making the specific instance preferable to untested boldness or tested timidity."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate maintains the straw man charge against the critic. It argues that preferring a survivor for action is not a prediction that it *will* survive future tests (inductive prediction), but a recognition that it is the *only* option not currently known to be false. Action requires a premise; the survivor is the only non-refuted premise available."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "The defense is strictly on Popper's own terms: it utilizes his concepts of falsification, severity, and the rejection of induction. It accepts the cost (no guarantee of truth) which Popper himself acknowledged, thus remaining within his normative framework."
+        }
+      ],
+      "optional_refs": ["SRC_005", "SRC_007"]
+    },
+    {
+      "claim": "The preference smuggles induction back in because any rationale for preferring a theory based on its past survival necessarily presupposes the principle that the future will resemble the past, or that nature is uniform enough for past test results to be relevant to future performance, which is the very definition of the inductive inference Popper sought to eliminate.",
+      "mechanism": "Hidden Inductive Premise: The mechanism identifies the gap between 'Theory T survived tests t1...tn' and 'We should prefer T for action at t(n+1).' Bridging this gap requires the hidden premise: 'If T survived past tests, it is likely to succeed in future applications.' This premise is inductive. Without it, the preference is arbitrary; with it, Popper's system collapses into the induction he rejected.",
+      "counterconditions": [
+        "If a non-inductive bridge can be constructed (e.g., via verisimilitude or informational content) that justifies preference without predicting future success.",
+        "If 'preference' is redefined as merely 'tentative adoption for further testing' rather than 'basis for practical action'.",
+        "If the uniformity of nature is treated as a methodological postulate rather than an empirical belief, escaping the charge of empirical induction."
+      ],
+      "typicality": 0.88,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "This candidate supports the view that the pragmatic defense fails, thereby agreeing with the critic that the 'false dilemma' charge might be misplaced if the dilemma is real. The candidate argues the reduction to a 'game without direction' is accurate if induction is absent."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate fully endorses the criticism. It argues that 'minimizing expected error' is indeed the unstated goal, and achieving it requires the inductive assumption that past error rates predict future ones."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate argues that the conflation identified by the critic is inevitable. Whether choosing the bold theory initially or preferring it after survival, the justification for *acting* on it always reverts to the inductive hope that its past success indicates future reliability."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Rejects the 'straw man' defense. It asserts that distinguishing between 'rational preference' and 'inductive prediction' is semantic hair-splitting; if the preference guides action effectively, it functionally serves as an inductive prediction, regardless of Popper's labeling."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "revised",
+          "note": "Refined to acknowledge that while Popper's *terms* were anti-inductive, the *application* of those terms to practical preference inevitably violates them. Thus, the preference is indefensible *on his own terms* because his terms cannot support the practice without contradiction."
+        }
+      ],
+      "optional_refs": ["SRC_006", "SRC_010"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view corroboration not as a report on past success nor a predictor of future truth, but as a measure of a theory's informational content and testability; we prefer high-content theories that have survived because they represent the highest risk taken and overcome, maximizing our potential for learning and error elimination regardless of their probability.",
+      "mechanism": "Informational Utility Shift: The mechanism shifts the metric from 'probability of truth' to 'informational yield.' A highly corroborated theory is one with high falsifiability (content) that has not yet been falsified. Preferring it maximizes the 'growth of knowledge' (Popper's goal) because it offers the most precise targets for future refutation. The preference is for the 'best teacher,' not the 'truest description.'",
+      "counterconditions": [
+        "If scientists prefer low-content, tautological theories that are easy to survive (which they generally do not).",
+        "If 'informational content' cannot be rigorously defined without resorting to probabilistic measures (e.g., Kolmogorov complexity issues).",
+        "If the goal of science is ultimately truth (verisimilitude) rather than just learning, rendering the 'teacher' argument insufficient for action."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "This approach redefines 'teleological direction' as 'maximization of informational content.' It is not a aimless game; it is a directed search for high-content errors. Thus, the false dilemma claim is rebutted by offering a third way: direction via content, not probability."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "No 'expected error' is calculated. The preference is structural: we choose the theory with the highest logical content that remains unfalsified. This is a logical relation, not an inductive extrapolation of frequencies."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Resolves the conflation by stating the preference is for the *property* of 'high content + survival.' The initial choice is for high content; the subsequent preference is for that same high content *proven* robust. The continuity is in the content, not an inductive leap."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Agrees that it is not an inductive prediction of truth. It is a strategic choice for maximal learning. The 'straw man' is the idea that scientists need truth-probability to act; they only need a strategy for growth, which this provides."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "This is defensible on Popper's own terms as it aligns perfectly with his later emphasis on verisimilitude and content. It answers the normative question by redefining the norm from 'truth acquisition' to 'knowledge growth.'"
+        }
+      ],
+      "optional_refs": ["SRC_008", "SRC_013"]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict logical terms, representing a performative contradiction where Popper the logician denies induction while Popper the scientist relies on it; the only coherent resolution is to accept that critical rationalism secretly depends on a weak, naturalized form of induction that it refuses to name.",
+      "mechanism": "Performative Contradiction / Naturalized Induction: The mechanism posits that human cognition and scientific practice are inherently inductive. Popper's attempt to purify science of induction creates a formal system that cannot account for its own application. The 'preference' is the crack in the armor where naturalized induction leaks back in, disguised as 'pragmatism' or 'critical preference.'",
+      "counterconditions": [
+        "If a purely deductive account of preference can be formulated that satisfies both logical rigor and practical utility.",
+        "If 'naturalized induction' can be shown to be distinct from the Humean induction Popper rejected.",
+        "If the 'contradiction' is merely apparent and resolvable through a more nuanced understanding of 'rationality'."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "departure_declared",
+          "note": "Departure: This candidate accepts the critic's premise that the pragmatic defense fails, but goes further to declare that Popper's entire project contains an unavoidable performative contradiction, rather than just a 'cost'."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Supports the criticism fully. The 'smuggling' is not accidental but necessary. The candidate argues that 'minimizing expected error' is the true, unnamed engine of the preference."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that the distinction between initial choice and subsequent preference is irrelevant because both rely on the same hidden inductive faith in the stability of the world."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Rejects the straw man defense. It claims the distinction between 'preference' and 'prediction' is a rhetorical device to hide the inductive core of scientific reasoning."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "revised",
+          "note": "Clarifies that while the preference is indefensible on Popper's *stated* terms, it is defensible on *naturalized* terms. The cost is admitting Popper's logical framework is incomplete."
+        }
+      ],
+      "optional_refs": ["SRC_006", "SRC_011"]
+    },
+    {
+      "claim": "The preference is defensible if we treat 'corroboration' as a meta-logical indicator of a theory's resilience, where the 'cost' is accepting that science does not progress toward 'Truth' with a capital T, but rather toward 'Robustness'—the ability to withstand increasingly sophisticated attacks without collapsing.",
+      "mechanism": "Resilience Teleology: Replaces 'Verisimilitude' (closeness to truth) with 'Resilience' (capacity to survive). The mechanism argues that in a complex, unknown universe, 'truth' is inaccessible, but 'resilience' is observable. Preferring the resilient theory is rational because it is the most adaptable tool for navigation, independent of whether it mirrors reality.",
+      "counterconditions": [
+        "If 'resilience' correlates perfectly with 'truth' in the long run, effectively reintroducing induction via the back door.",
+        "If scientists explicitly claim to seek truth, making the shift to 'resilience' a revisionist history of scientific motivation.",
+        "If a fragile theory turns out to be true, undermining the heuristic value of resilience."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Reframes the 'lack of teleological direction' as a shift in telos: from Truth to Resilience. This is a coherent direction, defeating the false dilemma."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Denies that assessing resilience requires induction. It requires only historical accounting of attacks survived. Future success is not predicted; current robustness is utilized."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "The preference for the specific theory is based on its *demonstrated* resilience, distinguishing it from other bold theories that failed. This resolves the conflation by focusing on the differential outcome of testing."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Maintains that preferring resilience is not predicting truth. It is selecting the strongest shield. The straw man is the assumption that scientists only act on truth-predictions."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "revised",
+          "note": "Accepts that this moves slightly away from Popper's explicit 'verisimilitude' language but argues it is a faithful extension of his 'critical rationalism' spirit, thus defensible on his broader terms."
+        }
+      ],
+      "optional_refs": ["SRC_007", "SRC_014"]
+    },
+    {
+      "claim": "The strongest case for the 'induction smuggling' view survives: Popper's system creates a vacuum of justification for action that can only be filled by the very inductive habits he banned, meaning the 'preference' is a psychological inevitability masquerading as a logical rule, and accepting this costs us the illusion of a purely deductive science.",
+      "mechanism": "Psychological Necessity vs. Logical Impossibility: The mechanism asserts that while Popper successfully demolished the *logic* of induction, he failed to provide a *psychological* or *pragmatic* substitute that doesn't covertly rely on it. Humans are inductive creatures; our 'preference' is a biological imperative, not a logical derivation. Popper's error was trying to logicalize a biological habit.",
+      "counterconditions": [
+        "If a non-human AI could operate on Popperian principles without induction.",
+        "If 'psychological inevitability' can be formalized into a non-inductive decision theory.",
+        "If the 'cost' of losing the deductive illusion is outweighed by the gain in honest acknowledgment of scientific practice."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Agrees with the critic that the pragmatic defense is weak, but attributes the weakness to the impossibility of separating human psychology from inductive patterns, rather than a flaw in the concept of survival games."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Strongly supports the claim that 'minimizing expected error' is the hidden driver. The candidate argues this driver is inductive by definition."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that the conflation is real because the human mind cannot distinguish between 'preferring for action' and 'expecting to work' without sliding into induction."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Rejects the straw man defense. It posits that the distinction is cognitively unstable; to prefer X for action *is* to predict X will work, which is induction."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "revised",
+          "note": "Concludes that while the preference is indefensible on Popper's *logical* terms, it is unavoidable on *human* terms. The cost is admitting Popper's normative project was partially utopian."
+        }
+      ],
+      "optional_refs": ["SRC_006", "SRC_010", "SRC_014"]
+    }
+  ]
+}

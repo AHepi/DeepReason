@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the preference for better-corroborated theories is merely a biological imperative, rendering Popper's logical justification irrelevant and a category mistake.",
+      "case": "The target fails to answer the specific question posed, which asks whether the preference is defensible 'on Popper's own terms.' Popper's project was explicitly normative and logical, seeking to distinguish science from non-science through methodological rules, not to reduce scientific rationality to evolutionary psychology. By dismissing the need for a logical basis as a 'category mistake,' the target sidesteps the central philosophical problem: whether acting on corroboration implicitly relies on the principle of induction (that the future will resemble the past) which Popper rejected. The target substitutes a descriptive evolutionary explanation for the required normative analysis, thereby failing to address whether the preference smuggles induction back in or how it can be justified without it within Popper's framework.",
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "If the preference is only a biological adaptation with no logical justification, does this imply that scientific rationality is an illusion and that we cannot distinguish between a scientist preferring a tested theory and a gambler preferring a lucky number, both acting on mere psychological impulses?"
+    }
+  ]
+}
