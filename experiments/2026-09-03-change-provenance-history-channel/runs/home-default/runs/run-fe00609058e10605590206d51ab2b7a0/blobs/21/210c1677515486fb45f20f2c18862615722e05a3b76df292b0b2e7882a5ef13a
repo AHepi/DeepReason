@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target fails to execute the core directive of the problem, which explicitly requires making the 'strongest case for each answer' (both that the preference is defensible AND that it smuggles in induction) before rendering a verdict. The target presents only the argument for inconsistency (the 'smuggling' view) while completely omitting the counter-argument regarding the pragmatic distinction between logical probability and rational choice based on severity of tests. By failing to articulate the defense of Popper's position as requested, the target does not fulfill the problem's structural requirements.",
+      "counterexample": null,
+      "premise": "The problem statement commands: 'Make the strongest case for each answer, then say which one survives...'",
+      "premise_evidence": null,
+      "successor_question": "How would the target reconstruct the argument that preferring a better-corroborated theory is rational without invoking induction, perhaps by appealing to the asymmetry of falsification or the concept of verisimilitude?"
+    }
+  ]
+}
