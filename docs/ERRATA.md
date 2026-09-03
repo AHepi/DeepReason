@@ -2243,3 +2243,45 @@ WARRANTS. The violator was an arithmetic consumer in another subsystem, which
 minted a de-facto fail by division without ever using the word. When a document
 states a rule about one KIND of consumer, ask which other kinds exist: a rule
 phrased semantically does not bind a reader that only counts.
+
+## E71 — `AUDIT_BASELINES.md`'s docs_verify failure LIST is incomplete on a capable full clone: a second check still costs more than the verifier's own ceiling
+
+**What the document says.** `docs/AUDIT_BASELINES.md` gives docs_verify as
+"On this container's SHALLOW clone the total is 5 OR 6 failed; on a full clone,
+2 or 3", states that "the failure LIST below is what a delta is measured
+against", and — per E67, which corrected the same half of the same file —
+RETIRES the CONTAINER-CONDITIONAL class: the one row that "runs two whole
+pytest files" was narrowed from 160-213 s to 1 s, "so it no longer has a margin
+problem to be conditional about". E67's own text asserts the list "is still
+right".
+
+**What the record shows.** On a full, unshallowed clone with the judge-canary
+branch ref fetched, on a 4-CPU container, `python tools/docs_verify.py` reports
+**3 failed** — and the third row is not in the list. It is
+`docs/map/CON-run-identity.md:298`, which pairs three greps with a whole pytest
+file (`tests/test_jailbreak_gate.py`) and reports `TIMEOUT after 300s`. Run
+ALONE and serially, per the file's own one-command disposal rule, it PASSES:
+`9 passed in 345.31s (0:05:45)`, exit 0. The CLAIM holds; the CHECK costs 345 s
+against `tools/docs_verify.py`'s 300 s per-check ceiling, so it cannot return a
+verdict inside the verifier on this box even with nothing else running. It
+reproduced identically on the untouched base `762178b63` and on the head tree.
+
+The arithmetic total is not what is wrong — 3 is inside "2 or 3". The LIST is,
+and the list is the part the file says a delta is measured against. The
+transferable point is narrower than E67's: **retiring one instance of a class
+is not retiring the class.** E67 fixed the `SUB-application.md` row and wrote
+the conditional class off; a second check with the identical pathology was
+sitting unlisted in another document the whole time, and the totals kept
+matching because the count it contributed was the count the retired row used
+to contribute.
+
+**Where corrected.** UNCORRECTED here, deliberately.
+`docs/AUDIT_BASELINES.md` may only move in the tranche that moves the value,
+and this is a behaviour tranche. Parked with a ready-to-send prompt as P6 of
+`experiments/2026-09-01-change-open-criticism-interface/PARKED.md`, which asks
+for the same narrowing E67 records for `SUB-application.md` — name only the
+node ids that exercise the continuation/amend integrity clause, mutation-prove
+the narrowed check goes RED when the clause is removed from either verb, and
+move `docs/AUDIT_BASELINES.md` in that same commit. Evidence:
+`experiments/2026-09-01-change-open-criticism-interface/proof/revalidation-2026-09-03.txt`
+§A.
