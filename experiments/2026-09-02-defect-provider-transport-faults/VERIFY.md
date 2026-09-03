@@ -96,6 +96,120 @@ in the grant record itself, and in the delivery report, not absorbed. Still
 unconditional, still four spaces, still **11 insertions and 0 deletions** against
 the tranche base.
 
-## 5. Live attempt
+## 5. Live attempts — two, the maximum this workflow allows
 
-_PENDING — the single guarded live check is running; its typed result is appended here when it lands._
+`GOAL.md` did not require live proof; the tranche instruction offered ONE
+optional guarded check "only if P2 held", and `dr-verify-outcome` allows one
+relaunch. Both are recorded, including the one that proves less than hoped.
+
+### Attempt 1 (`probe/raw/LIVE_attempt1.json`) — the mechanism, confirmed
+
+The SHIPPED client, not the probe script, at a cap the probe proved cannot
+finish inside the wall, policy at its default:
+
+```
+transport_diagnostics[0] = "RemoteDisconnected: ..."   <- the wall, ~300 s
+fault_kind = "zero_byte_close"   zero_byte_returns = 1
+streamed_attempts = 3
+transport_diagnostics[1..3] = "_TransientBody: null content (finish_reason='length')"
+elapsed 1048.167 s
+```
+
+Read precisely: the non-streaming attempt met the wall and was **classified
+correctly**; the policy **retried as a stream**; and the streamed attempts **did
+not die at the wall** — they ran ~249 s each, were read through to their
+terminal chunk, and parsed cleanly into the non-streaming shape (a truncated
+body would have raised "stream ended without a terminal chunk", and a
+`null content` diagnostic can only arise AFTER a successful parse). That is the
+mechanism end to end, on the real endpoint.
+
+What it did NOT produce is a usable answer, and the cause is not the transport:
+glm-5.3 with the reasoning knob omitted spent the whole 49 152-token cap on
+thinking and returned `finish_reason: 'length'` with null content. That is the
+reasoning-burn phenomenon the P-A1 monitor review already recorded, owned by the
+model-profile window, reproduced here incidentally by running at P-A1's own
+configuration.
+
+**The honest statement for that configuration:** it used to fail as a TRANSPORT
+fault after 1215 s of four identical resends; it now fails as a typed,
+correctly-attributed CONTENT failure after 1048 s, with the record naming the
+wall it met. The wall fix does not make this configuration answer. It stops the
+wall being the reason and makes the real reason visible.
+
+### Attempt 2 (`probe/raw/LIVE_attempt2.json`) — INCONCLUSIVE for the fixed path
+
+The relaunch, with `allow_empty_content=True` (the harness's own shape for a leg
+where an empty answer is still a leg that ran), to show what attempt 1 could
+not — the streamed reply's own usage.
+
+```
+elapsed 271.480 s   transport_attempts = 1   streamed_attempts = 0
+zero_byte_returns = 0   transport_diagnostics = []
+usage = {"prompt_tokens": 75, "completion_tokens": 49152, "total_tokens": 49227}
+```
+
+**It never reached the fixed path.** The same call, same cap, same prompt
+finished on its FIRST non-streaming attempt in 271.5 s — under the wall — so no
+fault occurred and nothing was streamed. Inconclusive for the streamed path, and
+said so rather than counted as a pass.
+
+It is not a wasted call. 49 152 completion tokens in 271.5 s is **181 tok/s**,
+against the **~92 tok/s** every probe arm measured an hour earlier — a **2x
+throughput swing on the same model and cap**. That is a measurement in its own
+right, and it explains two things the probe left open: why the same call lands
+either side of a fixed 300 s wall from one hour to the next, and P-A1's lone
+839 s non-streaming success, which needed no special mechanism if throughput can
+halve.
+
+It also shows a non-streamed reply reporting a full usage block. The claim that a
+STREAMED reply does too rests on probe arm `H1`, which measured it directly, and
+on the offline tests — not on this attempt.
+
+## 6. Verdict
+
+**PASS (offline), CONFIRMED-live for the mechanism, INCONCLUSIVE-live for the
+end-to-end answer.**
+
+Every clause of `GOAL.md`'s machine-decidable criterion passes and is
+mutation-proven; the whole-tree gate is 0 failed; the live attempt confirms the
+wall, its classification, and the streamed retry surviving it on the real
+endpoint. What no live attempt showed is a streamed retry returning usable
+CONTENT, because the configuration that reliably reaches the wall is also the
+one that burns its cap on hidden reasoning. The offline regression remains the
+proof of correctness, as this workflow requires.
+
+## 7. Residue (honest)
+
+- **No live call has returned usable content through the streamed retry.** The
+  configuration that reaches the wall (large cap, reasoning unset) is the one
+  that burns the cap on thinking; a configuration that answers is fast enough to
+  finish under the wall. Fixing that is the model-profile window's, not this
+  one's. The offline stub proves the reassembly; the live record proves the
+  survival; nothing yet proves the pair together.
+- **P-A1's 839 s success is now PLAUSIBLY explained** by the 2x throughput swing
+  measured in attempt 2, but not demonstrated. Downgraded from "anomaly" to
+  "unconfirmed explanation" — no more.
+- **The mechanism is narrowed, not identified.** An idle-gap timer and a
+  first-byte deadline both predict every measured row; no arm was slow enough to
+  its first byte to separate them. Ruled out: a queue-admission deadline, and a
+  cap on total duration.
+- **The failing component is not named.** Client-side an edge close and a proxy
+  close are the same bytes; `recentRelayFailures` clears only this container's
+  own relay.
+- **One afternoon, one key, one container.** Nothing shows the wall is stable
+  over time, across accounts, or across regions.
+- **A dead seat still kills a run** (`PARKED.md` P1), and the streak notice does
+  not stop a run (operator disposition, road A).
+- **`CON-run-identity.md:298` cannot pass** at 357 s against a 300 s ceiling —
+  found here, not this tranche's, parked as P7.
+- **The granted contact widened from one `data.pop` line to three**, for the
+  reason §4 gives. Disclosed, not absorbed.
+
+## 8. Errata
+
+`docs/ERRATA.md` **E68** — `experiments/2026-08-26-pc2-rematch/PREREG.md:479-480`
+claimed "six consecutive 180-second socket timeouts" and "NO ERROR TEXT ANYWHERE
+IN THE RECORD". Its own diagnostic blob shows FOUR attempts — one client read
+timeout at 180 s, then three `RemoteDisconnected` — with the error text present,
+and the arithmetic that fits is 300.5 s per disconnect. **The wall was in the
+committed record on 2026-08-26 and was read as a client timeout for a week.**

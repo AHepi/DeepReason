@@ -1,0 +1,20 @@
+{
+  "cap": 49152,
+  "content_chars": 0,
+  "elapsed_s": 271.48,
+  "fault_kind": null,
+  "finish_reason": "length",
+  "outcome": "completed",
+  "policy": "stream-the-retry-v1",
+  "reasoning_chars": 111676,
+  "streamed_attempts": 0,
+  "streaming_mode": "auto",
+  "transport_attempts": 1,
+  "transport_diagnostics": [],
+  "usage": {
+    "completion_tokens": 49152,
+    "prompt_tokens": 75,
+    "total_tokens": 49227
+  },
+  "zero_byte_returns": 0
+}

@@ -81,10 +81,14 @@ is cut. Streaming, B3's headers arrive at 0.629 s and bytes flow for 369 s.
 
 ## The residue — what remains unproven
 
-- **P-A1's one 839 s non-streaming success (43 281 tokens) is not explained.**
-  Every non-streaming arm here either finished under the wall or died at it;
-  none survived past it. That call remains an anomaly against a mechanism
-  otherwise measured to 0.3 s, and this probe did not reproduce it.
+- **P-A1's one 839 s non-streaming success (43 281 tokens) has a PLAUSIBLE
+  explanation, not a demonstration.** The live relaunch measured the same model
+  at the same cap running at **181 tok/s**, against the **~92 tok/s** every
+  probe arm measured an hour earlier — a 2x throughput swing. A wall fixed in
+  TIME meets a generation of varying SPEED, so the same call lands either side
+  of it from one hour to the next, and an 839 s success needs no special
+  mechanism. Recorded as an unconfirmed explanation; the probe did not
+  reproduce the 839 s call itself.
 - **The mechanism is narrowed, not identified.** An idle-gap timer and a
   first-byte deadline both predict every row in the table; no streaming arm was
   slow enough to its first byte to separate them. A queue-admission deadline is
@@ -102,3 +106,37 @@ is cut. Streaming, B3's headers arrive at 0.629 s and bytes flow for 369 s.
 Accepted does not mean true. What is measured is the wall and the streaming
 survival; what is fixed is the blind retry and the blind surfaces; what is not
 fixed is everything in `PARKED.md`.
+
+
+---
+
+## 2026-09-03 — the live confirmation, and what it did not confirm
+
+Two attempts, the maximum this workflow allows. Full typed rows at
+`probe/raw/LIVE_attempt1.json` and `LIVE_attempt2.json`; the reading is in
+`VERIFY.md` §5.
+
+**Attempt 1 confirmed the mechanism on the real endpoint.** The shipped client
+met the wall, classified it `zero_byte_close`, retried as a stream, and the
+streamed attempts ran ~249 s each past the wall and parsed cleanly. It did not
+return usable content, and the reason was not the transport: glm-5.3 with the
+reasoning knob omitted burned the whole 49 152-token cap on thinking and
+returned `finish_reason: 'length'` with null content — reproducing, at P-A1's
+own configuration, the reasoning-burn finding the model-profile window owns.
+
+So for that configuration the change is: **a transport fault after 1215 s of
+four identical resends becomes a typed, correctly-attributed content failure
+after 1048 s, with the record naming the wall it met.** The wall fix does not
+make it answer. It stops the wall being the reason.
+
+**Attempt 2 never reached the fixed path**, and is recorded as inconclusive
+rather than counted: the same call finished on its first non-streaming attempt
+in 271.5 s, under the wall. Its value is the 2x throughput swing above.
+
+**What no live attempt has shown** is a streamed retry returning usable content,
+because the configuration that reliably reaches the wall is the one that burns
+its cap on hidden reasoning, and a configuration that answers finishes under the
+wall. The offline stub proves the reassembly; the live record proves the
+survival; nothing yet proves the pair together. That is the sharpest piece of
+residue this tranche leaves, and it is a configuration problem rather than a
+transport one.
