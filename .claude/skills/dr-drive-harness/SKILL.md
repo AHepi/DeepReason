@@ -155,6 +155,7 @@ Record first, code second, theory last. In order:
 
 | Look at | It tells you |
 |---|---|
+| `deepreason stop-report <root-or-home>` | **run this first.** What actually ran per seat, what qualification already knew, provider health, the stop classified into CONFIGURATION / ENVIRONMENT / MODEL / HARNESS ranked by evidence, and whether `continue` would be accepted. Derives the four rows below and the qualification rows hand-reading skips. `dr-diagnose` gates on its section 4 |
 | `<root>/run-status.json` | state, stop_reason, message — often the whole answer |
 | `<root>/progress.jsonl` | which cycle/phase/token count it died at |
 | `<root>/REPLAY_VALIDATION.json`, `verify_root(<root>)` | typed violations: check name + detail (open the root READ-ONLY — a writable open repairs, i.e. destroys, the evidence) |

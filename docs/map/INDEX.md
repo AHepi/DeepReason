@@ -21,6 +21,8 @@ contract: ID grammar, the check rule, and how a document is updated.
 | find where something lives | the subsystem table below |
 | change how two things interact | the seam table, then `REC-change-a-seam.md` |
 | know whether you are allowed to change it | `INV-frozen-surfaces.md` — **first, always** |
+| find out why a run stopped, before theorising about it | `deepreason stop-report <root>`, then `CON-configuration-stages.md` |
+| work out where a setting was lost between your file and the seat | `CON-configuration-stages.md` |
 | know what a particular MODEL does with a reasoning value, or describe a new model | `CON-model-profiles.md` — the document a human writes, never a source edit |
 | know which outside-reaching channels a run has, and how one is turned off | `INV-evidence-channels.md` |
 | know whether a channel that says ON can actually reach the capability it enables | `SEAM-capabilities-x-channels.md` |
@@ -78,6 +80,7 @@ than you need.
 | `CON-discharge-channel.md` | criticism in the writer's working context, and what it takes to discharge it |
 | `CON-successor-questions.md` | the question a criticism proposes should be asked next: where it goes, and the gate that can turn it into a problem |
 | `CON-model-profiles.md` | one model's settings as a document a human wrote: where it lives, what it may say, and what the harness is allowed to conclude from its absence |
+| `CON-configuration-stages.md` | the four stages a setting passes through — your file, the compiled manifest, run-time restoration from notices, what the seat receives — and the command that reveals each |
 
 ## Invariants and recipes
 

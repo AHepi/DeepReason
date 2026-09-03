@@ -1,6 +1,6 @@
 # Checklist for: the stop report — the harness writes the first failure report
 
-State: next=16 blockers=none — the operational wheel smoke fails identically at the tranche base (7653b04393), so it is NOT this tranche's; parked at step 21, not fixed here. — the budget STOP raised at step 9 is RESOLVED (REQUEST.md Amendment 2: ceiling raised to 2100 source insertions on the operator's word). All later [COMMIT] steps check against 2100.
+State: next=21 blockers=none — Group A and Group B complete. The operational wheel smoke failure is parked (P2), not this tranche's. — the budget STOP raised at step 9 is RESOLVED (REQUEST.md Amendment 2: ceiling raised to 2100 source insertions on the operator's word). All later [COMMIT] steps check against 2100.
 
 Re-read REQUEST.md (incl. Amendment 1) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -518,7 +518,7 @@ building" by name. Parked with a ready-to-send prompt at step 21.
 
 ## Group B — the refusal and the configuration-stages page
 
-- [ ] 16. (S15, S16, R16, R17) Create
+- [x] 16. (S15, S16, R16, R17) Create
       `docs/map/CON-configuration-stages.md` to `docs/map/SCHEMA.md`:
       the four stages a setting passes through (operator's file →
       compiled manifest → run-time restoration from notices → what the
@@ -529,7 +529,7 @@ building" by name. Parked with a ready-to-send prompt at step 21.
       `python tools/docs_verify.py --audit` reports none of this
       document's checks as unable to fail; paste both.
 
-- [ ] 17. (S17, R23, C7) Register the new document in
+- [x] 17. (S17, R23, C7) Register the new document in
       `docs/map/INDEX.md` (concept table + routing row) and update
       `docs/map/SUB-application.md` for the new module and the new
       subcommand — in the SAME commit, per the map law. Re-check
@@ -539,10 +539,10 @@ building" by name. Parked with a ready-to-send prompt at step 21.
       reference resolves, AND `python tools/docs_verify.py` → 0 failed;
       paste both.
 
-- [ ] 18. (R23) [COMMIT] Commit the map documents.
+- [x] 18. (R23) [COMMIT] Commit the map documents.
       done-when: `git status --porcelain` empty for `docs/map/`.
 
-- [ ] 19. (S13, R13, R14, R15) Load the `authoring-skills` skill, then
+- [x] 19. (S13, R13, R14, R15) Load the `authoring-skills` skill, then
       amend `.claude/skills/dr-diagnose/SKILL.md`: DIAGNOSIS.md must
       OPEN with the stop report's section 4 pasted verbatim; no phase
       may name a defect, a seat, or a model as the cause without citing
@@ -554,12 +554,92 @@ building" by name. Parked with a ready-to-send prompt at step 21.
       and the operator's verbatim sentence appears in the file; paste
       both greps.
 
-- [ ] 20. (S14, R13) [COMMIT] Amend
+- [x] 20. (S14, R13) [COMMIT] Amend
       `.claude/skills/dr-drive-harness/SKILL.md` §5 so the "where to
       look when something breaks" table names the stop report FIRST,
       above the per-file rows it subsumes. Commit both skill edits.
       done-when: the stop-report row precedes the `run-status.json` row
       in that table — paste the table.
+
+## PROOF FOR STEPS 16-20 (2026-09-03)
+
+**Steps 16-18 — the map.** `docs/map/CON-configuration-stages.md` created
+(163 lines, under R17's "short enough to read at the moment of doubt"),
+registered in `INDEX.md` (a concept row and two routing rows), and
+`SUB-application.md` given the new module's entry-point block with its
+own check. `SUB-periphery.md` was checked and NOT edited: it owns
+`mcp_server.py`, not `cli/`, and no MCP tool was added.
+
+    $ python tools/docs_verify.py --links
+    docs_verify --links: 0 dangling reference(s), 75 document(s)   RC=0
+
+    $ python tools/docs_verify.py
+    docs_verify [full]: 75 documents, 1326 checks, 4 workers
+      FAIL SEAM-llm-x-rules.md:54: unparseable check ...
+      FAIL CON-run-identity.md:211: git log -M --diff-filter=R ...
+      FAIL INV-frozen-surfaces.md:181: test "$(find experiments runs ...
+    docs_verify: 3 failed
+
+ALL THREE ARE RECORDED BASELINES, not this tranche's — matched against
+`docs/AUDIT_BASELINES.md` by name, not by counting:
+
+  * `SEAM-llm-x-rules.md:54` — baselines line 67, "a lost closing
+    backtick merged the check with the paragraph after it", parked P3.
+  * `INV-frozen-surfaces.md:181` — baselines line 68, "the census
+    asserting ZERO committed `transport_failure` attempts; one exists, in
+    a root committed 2026-08-26", parked P-D3. Verified not ours: the one
+    matching file is
+    `experiments/2026-08-26-pc2-rematch/retired-transport-timeout180-run-42ad288038dd606c/`,
+    and this tranche commits no run root at all.
+  * `CON-run-identity.md:211` — baselines line 90, a SHALLOW-clone-only
+    git-history row.
+
+    $ python tools/docs_verify.py --audit
+    SEAM-llm-x-rules.md:54: unparseable check ...
+    docs_verify --audit: 1 finding(s)
+
+The one finding is the pre-existing P3 above, which
+`docs/AUDIT_BASELINES.md:67` calls "the single finding keeping `--audit`
+above zero". `CON-configuration-stages.md` is named nowhere in the audit
+output: none of its checks is vacuous or unparseable. R16's accept met.
+
+The count fell from 6 to 3 during this step. One of the three repaired
+was OURS and is worth naming: `SUB-ontology.md`'s census pins
+`LLMAttempt.natural_stop` to three files because the field is "WRITTEN
+AND NEVER READ — letting a guard, rank, status, label or warrant consume
+it would make it an evidence signal, which the seats/evidence law
+forbids". The first draft of the report read it to count truncation, which
+would have turned a correctness signal into evidence that RANKS a box —
+precisely the law's target. Truncation now comes from `LLMCall.truncated`,
+which is lawfully consumed elsewhere (`controller.py`, `report.py`).
+`tests/test_seats_evidence_law.py::test_natural_stop_is_recorded_and_never_consumed`
+passes, and all 8 regression cases still land correctly. The other two
+were cleared by `git fetch origin claude/deepreason-p-s1-commitments-wowcib`,
+the remedy the baselines name at line 83 for the judge-canary row.
+
+**Steps 19-20 — the refusal.** `dr-diagnose/SKILL.md` gains "Step 1 — run
+the stop report, and open DIAGNOSIS.md with it", before the Traps read
+and before any code. It carries a real GATE
+(`grep -q "THE STOP, CLASSIFIED" DIAGNOSIS.md`), an outlet table (one per
+prohibition, per `authoring-skills` X1), and names what it displaces
+(`run-status.json` and `REPLAY_VALIDATION.json` drop from rows 1 and 4 of
+a hand-read list to a deeper dive entered after the report names a box),
+per E4. `dr-drive-harness` §5's table now opens with the stop-report row.
+
+    | Look at | It tells you |
+    |---|---|
+    | `deepreason stop-report <root-or-home>` | **run this first.** ... |
+    | `<root>/run-status.json` | state, stop_reason, message ... |
+
+**A conflict between R15 and `authoring-skills` W5, resolved rather than
+picked.** R15 says the incident is quoted in the skill; W5 says
+"Mechanize the lesson as a GATE ... delete the story. History lives in
+ERRATA.md, not in instructions." Both are honoured by splitting them: the
+RULE and its GATE are in `dr-diagnose/SKILL.md`, and the operator's
+verbatim words are in `docs/ERRATA_EXECUTOR.md` X12 — the ledger whose
+own stated scope is `.claude/skills/`, "THE PROCESS, not the codebase".
+X12 also carries the measured cost (NAIVE 1/8 vs SHIPPED 8/8) and the
+P-A1 qualification row that contradicted the window the operator caught.
 
 ## Shared close
 

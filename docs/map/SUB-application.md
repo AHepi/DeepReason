@@ -109,6 +109,49 @@ No `Seams:` entries yet.
   service dispatch and may not construct a `Harness`
   (`test_clients_have_only_thin_service_dispatch_and_one_registry`).
 `check: for s in results_summary render_results resolve_results_root embedder_summary embedder_summary_for_root; do grep -q "^def $s(" src/deepreason/application/results.py || exit 1; done; grep -q "from deepreason.findings import findings_summary" src/deepreason/application/results.py && python -c "import ast, pathlib; src = pathlib.Path('src/deepreason/cli/main.py').read_text(); f = [n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef) and n.name == '_cmd_reason'][0]; body = ast.get_source_segment(src, f); assert 'embedder_line(embedder_summary_for_root(' in body, 'the run terminal must report the embedder it measured with'; assert not [n for n in ast.walk(f) if isinstance(n, ast.Assign) and any(isinstance(x, ast.Subscript) and getattr(x.value, 'id', '') == 'payload' and getattr(getattr(x, 'slice', None), 'value', None) == 'embedder' for x in n.targets)], 'the embedder must NOT become a key on the durable result payload: MCP run_result must stay byte-identical to CLI stdout'; assert 'Harness(' not in body, 'the client stays thin: the application layer opens the root'" && ! grep -rn "embedder" src/deepreason/runtime/terminal_authority.py && python -m pytest tests/test_results_command.py::test_results_summary_writes_nothing_into_a_committed_root tests/test_results_command.py::test_absent_facts_are_typed_absences_not_omitted_keys tests/test_results_command.py::test_verification_reads_the_stored_verdict_and_does_not_replay tests/test_results_command.py::test_top_level_help_names_the_results_verb tests/test_results_command.py::test_results_surfaces_the_embedder_and_names_a_fallback_loudly tests/test_results_command.py::test_results_embedder_absence_is_typed_not_a_failure -q`
+- `application.stop_report.stop_report` / `render_stop_report` /
+  `resolve_report_source` — the typed FIRST FAILURE REPORT behind
+  `deepreason stop-report`, and the only reader in this package that
+  answers "why did this stop, and whose fault is it not". A pure reader:
+  it opens no `Harness` of its own, delegates `--verify` to
+  `invariants.verify_root` (which opens `read_only=True`), and writes
+  nothing into a root. It resolves THREE source kinds where
+  `resolve_results_root` resolves one — `root`, `root-no-log` (a run that
+  compiled a manifest and failed its qualification gate before opening a
+  log) and `home-no-root` — because a configuration error caught by the
+  gate never mints a run root, and that is the failure class an operator
+  most needs a report for. It reads a run-config YAML ONLY when one is
+  passed, and only to diff what was written against what compiled: the
+  `yaml` import lives inside `_config_diff` alone, so no other path can
+  reach it. Its four-box classification RANKS by evidence and never
+  asserts a defect; `HARNESS` is claimable only when the other three are
+  ruled out with cited evidence, and a clean terminal attributes no box
+  at all. See `DR-CON-configuration-stages` for the four stages it reads.
+`check: for s in stop_report render_stop_report resolve_report_source; do grep -q "^def $s(" src/deepreason/application/stop_report.py || exit 1; done; python -c "
+import ast, inspect
+from deepreason.application import stop_report as m
+src = inspect.getsource(m)
+assert 'Harness(' not in src, 'the report opens no Harness of its own'
+tree = ast.parse(src)
+holders = set()
+for node in ast.walk(tree):
+    if not isinstance(node, (ast.Import, ast.ImportFrom)):
+        continue
+    if not any(a.name.split('.')[0] == 'yaml' for a in node.names):
+        continue
+    holders.update(f.name for f in ast.walk(tree)
+                   if isinstance(f, ast.FunctionDef)
+                   and any(c is node for c in ast.walk(f)))
+assert holders == {'_config_diff'}, holders
+" && python -c "
+import ast, pathlib
+src = pathlib.Path('src/deepreason/cli/main.py').read_text()
+tree = ast.parse(src)
+main = [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == '_main'][0]
+body = ast.get_source_segment(src, main)
+assert 'stop-report' in body, 'the subcommand must dispatch from the CLI'
+" && python -m pytest tests/test_stop_report.py -q`
+
 - `application.SCRATCH_QUERY_SERVICE.execute` — dispatches the closed scratch
   query union; every branch is read-only except the explicit record-direct-open.
 - `application.intents.start_text_run_intent` / `continue_text_run_intent` /
