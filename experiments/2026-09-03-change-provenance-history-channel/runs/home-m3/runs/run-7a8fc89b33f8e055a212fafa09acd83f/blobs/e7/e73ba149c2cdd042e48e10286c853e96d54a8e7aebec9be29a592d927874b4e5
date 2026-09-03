@@ -1,0 +1,24 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target's central claim that action-guiding preference 'necessarily assumes' past success is a reliable guide to future success conflates Popper's specific notion of induction (justifying truth or probability) with the pragmatic selection of the best-tested theory as a critical decision rule.",
+      "premise_evidence": [
+        {
+          "block": "mechanism",
+          "quote": "To prefer Theory A over Theory B for the purpose of action (e.g., building a bridge) is to assert that Theory A is more likely to yield successful outcomes."
+        },
+        {
+          "block": "mechanism",
+          "quote": "Bridging this gap requires the premise that the future will resemble the past (the principle of induction)."
+        }
+      ],
+      "case": "The argument fails because it misrepresents the Popperian justification for action. Popper does not need to assume the future will resemble the past (induction) to prefer a well-corroborated theory; he only needs to acknowledge that the well-corroborated theory has withstood attempts at falsification while its rivals have not (or have failed more severely). The preference is not an assertion that the theory is 'more likely' to be true or succeed (which would be probabilistic/inductive), but a rational choice to act on the theory that currently best survives criticism. The target incorrectly asserts that any preference implies a belief in future reliability based on past success, whereas for Popper, it is simply the recognition that the unrefuted theory is the only one logically standing, making the alternative (choosing a falsified theory) irrational without invoking induction.",
+      "counterexample": [
+        "A scientist chooses a bridge design based on Theory A (which survived severe stress tests) over Theory B (which failed a similar test). This choice does not require believing Theory A will definitely hold in the future (induction), but merely acknowledges that Theory B is known to be false under those conditions, while Theory A remains possibly true. The decision is based on the logical asymmetry between verification and falsification, not an inductive leap."
+      ],
+      "successor_question": "If the preference for the better-corroborated theory is based solely on the logical status of having survived falsification rather than an expectation of future success, how does Popper address the skeptic who asks why we should care about surviving past tests if that guarantees nothing about the future?"
+    }
+  ]
+}

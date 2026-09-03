@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that accepting Popper's preference as a 'psychological or sociological fact' costs the 'normativity of science' is a false dilemma. Popper explicitly distinguishes between the logical status of theories (which remains non-probabilistic) and the critical method as a normative rule for action. Preferring the better-corroborated theory is a rational decision based on the severity of tests passed (a logical relation), not an inductive inference of future probability. Therefore, one can maintain both the rejection of induction and the normativity of scientific method without reducing the preference to a mere descriptive sociological fact.",
+      "counterexample": null,
+      "premise": "Popper argues that while corroboration does not increase probability, it indicates which theory has withstood the severest tests, making it the rational choice for critical discussion and practical application.",
+      "premise_evidence": null,
+      "successor_question": "Does Popper's concept of 'critical preference' successfully bridge the gap between descriptive history of science and normative methodology without invoking induction?"
+    }
+  ]
+}

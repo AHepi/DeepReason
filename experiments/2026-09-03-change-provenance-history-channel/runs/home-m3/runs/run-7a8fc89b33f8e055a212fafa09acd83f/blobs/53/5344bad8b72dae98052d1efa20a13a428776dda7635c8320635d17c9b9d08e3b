@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on an analogy to biological evolution that conflates 'procedural necessity' with 'rational defensibility,' failing to address Popper's specific requirement for a non-inductive reason to prefer one theory over another for future action.",
+      "counterexample": null,
+      "premise": "Popper explicitly rejected the idea that survival of tests provides any positive reason (even procedural) to expect future success, distinguishing sharply between 'corroboration' (past performance) and 'verisimilitude' or predictive reliability.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration offers no inductive weight, what specific non-inductive criterion does Popper provide to justify acting on the 'last man standing' rather than choosing randomly among unfalsified theories?"
+    }
+  ]
+}
