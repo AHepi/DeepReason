@@ -1,4 +1,4 @@
-extracting into /tmp/stop-report-roots-7szp0mh6
+extracting into /tmp/stop-report-roots-q238pkk1
   extracted 1 path(s) from origin/claude/live-reasoning-p-a1-bv65kl
   extracted 3 path(s) from origin/claude/executor-live-run-p-a2-84hyco
   extracted 3 path(s) from origin/claude/executor-window-phase-1-s5ex6w
