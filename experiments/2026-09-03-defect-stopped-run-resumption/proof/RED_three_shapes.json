@@ -1,0 +1,47 @@
+{
+  "clean": {
+    "continue_rc": 1,
+    "continue_stderr": "CONTINUE_TYPED_STOP_REQUIRED",
+    "cycle": 8,
+    "cycle_after": 8,
+    "cycle_before": 8,
+    "outstanding_work": 31,
+    "record_verification_refusal": null,
+    "root": "/tmp/claude-0/-home-user-DeepReason/03ceba01-893f-52dd-bca9-6d97b22acf59/scratchpad/shapes-red/clean/run",
+    "state": "completed",
+    "stop_reason": "budget_exhausted",
+    "terminal_lifecycle_decision": false,
+    "terminal_lifecycle_refusal": "STOPPED_REFUSES_UNFINISHED_WORKFLOW_AUTHORITY",
+    "unconsumed_provider_calls": 0
+  },
+  "failed": {
+    "continue_rc": 1,
+    "continue_stderr": "CONTINUE_TYPED_STOP_REQUIRED",
+    "cycle": 1,
+    "cycle_after": 1,
+    "cycle_before": 1,
+    "outstanding_work": 3,
+    "record_verification_refusal": null,
+    "root": "/tmp/claude-0/-home-user-DeepReason/03ceba01-893f-52dd-bca9-6d97b22acf59/scratchpad/shapes-red/failed/run",
+    "state": "failed",
+    "stop_reason": "operational_failure",
+    "terminal_lifecycle_decision": false,
+    "terminal_lifecycle_refusal": "TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL",
+    "unconsumed_provider_calls": 0
+  },
+  "killed": {
+    "continue_rc": 1,
+    "continue_stderr": "CONTINUE_TYPED_STOP_REQUIRED",
+    "cycle": 2,
+    "cycle_after": 2,
+    "cycle_before": 2,
+    "outstanding_work": 11,
+    "record_verification_refusal": null,
+    "root": "/tmp/claude-0/-home-user-DeepReason/03ceba01-893f-52dd-bca9-6d97b22acf59/scratchpad/shapes-red/killed/run",
+    "state": "running",
+    "stop_reason": null,
+    "terminal_lifecycle_decision": false,
+    "terminal_lifecycle_refusal": null,
+    "unconsumed_provider_calls": 0
+  }
+}
