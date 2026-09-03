@@ -11,9 +11,6 @@ three, ledgered as R26 (new subcommand), R27 (rootless mode in scope) and
 R28 (one tranche, two commit groups). The "Questions for operator"
 section is retained verbatim as the record of what was asked and what it
 cost; every fork in it is CLOSED.
-non-empty (Q1, plus a scope fork the record forced). Per
-`dr-change-orchestrator` and `dr-spec-change` step 2, no implementation
-begins until those are answered.
 
 ---
 
