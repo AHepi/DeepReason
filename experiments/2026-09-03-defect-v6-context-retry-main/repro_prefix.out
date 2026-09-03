@@ -1,0 +1,14 @@
+context_plan assignments in Scheduler.step: 3
+  line  252 (rel):  context_plan = self._plan_conjecture_context(problem, school_id)
+  line  256 (rel):  context_plan = None
+  line  315 (rel):  context_plan = self._plan_conjecture_context(problem, school_id)
+
+_plan_conjecture_context call sites inside step: 2
+v6 null-outs (context_plan = None): 1
+
+VERDICT: REPRODUCED -- two planner call sites, only ONE null-out.
+The second (ConjectureContextStale retry) hands conj a live plan.
+
+rules/conj.py guard the retry value reaches:
+    conjecture_context_plan is not None:
+    raise ValueError("v6 conjecture context must be planned after durable work preparation")
