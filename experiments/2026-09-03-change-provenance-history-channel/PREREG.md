@@ -355,3 +355,64 @@ therefore comparable to cycle 0 of its control, and only cycles 1-3 carry the
 treatment. That is the same exposure profile the original cycle-by-cycle design
 would have produced, and it is the residue to state in RESULTS.md: M1 and M3
 measure the effect of history on three of four cycles, not four of four.
+
+
+---
+
+## Amendment 4 — M1 runs through the EVIDENCE channel, with a placebo control
+
+Operator, asked to choose between abandoning the live M1/M3 arms and running
+them through a different channel: **"no keep going."** So M1 runs.
+
+**Why the channel changed.** PARKED P6 establishes that the scratch channel
+cannot deliver a document to a multi-cycle run without production code — three
+routes, three typed refusals (`MANIFEST_FILE_UNAVAILABLE` before the run,
+`SCRATCH_ROOT_BUSY` during it, `CONTINUE_TYPED_STOP_REQUIRED` between cycles).
+`deepreason reason --attach` works before the root exists, so it is the only
+remaining route that reaches the seats without touching `src/`.
+
+**What that costs, stated because it changes what M1 answers.** The scratchpad
+is declared `advisory_non_grounding`; an attached dossier is EVIDENCE and can
+ground a claim. M1 therefore now measures whether HISTORY CONTENT changes what
+conjecturers produce — which is R6, the operator's actual question — and NOT
+whether the advisory channel SPEC.md designs behaves the same way. A positive
+result licenses "history content helps"; it does not license "the scratchpad
+channel works", and it licenses even less than the original design would have.
+
+**Both arms attach, and this is the part that makes it a measurement.**
+
+| arm | attachment |
+|---|---|
+| **H0P** (control) | a real, structurally identical history document rendered from an UNRELATED committed run (`2026-08-25-poietics-program`), capped to 2,601 bytes |
+| **H1R** (treatment) | the history of THIS problem, rendered from the completed H0 control root, 2,624 bytes |
+
+A no-attachment control was rejected: it would differ from the treatment in TWO
+ways — the history content AND the mere presence of an evidence dossier in the
+pack — and no result could separate them. The placebo isolates "history OF THIS
+PROBLEM" from "a history-shaped document exists". The two documents are
+length-matched to within 1% (2,603 vs 2,624 bytes) and share the same headings,
+register and structure.
+
+The placebo is deliberately NOT the frontier run's history, which was tried
+first and discarded: its claims are geometry POINT-lists, so obviously
+off-topic that they would function as a distractor rather than a control and
+could make the treatment look good for the wrong reason. The poietics history
+is philosophy-of-methodology prose about a different question — same shape,
+same register, no information about Popper and corroboration.
+
+**Qualification.** `--attached-evidence` is required to match `--attach`
+(CLAUDE.md's opt-in rule), and it qualifies a separate subject, so these arms
+pay one battery between them — both share `home-m1`, and their run ids differ
+by dossier digest so they do not collide.
+
+**Concurrency 2, deliberately.** `qualify --concurrency` defaults to 4 and its
+own help text says to lower it when the provider rate-limits. Five arms at 4
+apiece is what produced the `ENDPOINT_HTTP_429` storm that destroyed two arms
+(P3, P4). This is the knob that would have prevented it.
+
+**Order: control first.** If the budget ends mid-chain, what exists is a
+control and a measured baseline, not a treatment arm with nothing to compare
+against.
+
+**Unchanged:** the measures, the thresholds, the decision rules and the
+registered predictions of §1. M3 is untouched and remains queued behind M1.

@@ -1,0 +1,37 @@
+=== M1-H0P started 2026-09-03T03:04:22Z ===
+--- attachment (2603 bytes), verbatim, so the arm is auditable ---
+=== PRIOR HISTORY ON THIS PROBLEM (advisory, non-grounding) ===
+scope: the whole run (every problem it has opened)
+This is a record of what has already been tried. It is advisory material, not evidence, and it decides nothing.
+
+WHAT HAS ALREADY BEEN REFUTED ON THIS PROBLEM
+These claims were proposed and did NOT survive criticism. They are shown so they are not proposed again in another form. The claims that DID survive are deliberately not listed here.
+  - REFUTED: A test constrains its subject rather than describes it when the test is installed in the same mutation-testing ritual that generates its failure cases, because the guard's existence alters the set of mutations that can be planted without...
+      refuted by: critic: poietics-confound@v1 failed on 0c4f1ceb90df
+  - REFUTED: A test constrains its subject only when the failure is installed before the subject and the test's guard is designed to fire on its own author; the 3/26 result is the residue of tests that never fire on their author because the author's...
+      refuted by: critic: poietics-confound@v1 failed on 0f108d4c1b46
+  - REFUTED: A test constrains its subject rather than describes it when the test's failure mode is installed as a causal prerequisite for the subject's own acceptance path, so that the subject is shaped to avoid the test's specific failure triggers...
+      refuted by: critic: poietics-confound@v1 failed on 11835d52477c
+  - REFUTED: A test constrains its subject only under an installation ritual that requires the test to fail before the subject exists, and the 3-of-26 result is the number of tests that were never shown to fail; compile.py's 1/9 is the only module wh...
+      refuted by: critic: poietics-confound@v1 failed on 12d2cc7d6386
+  - REFUTED: A test constrains its subject rather than describes it when the test's failure mode is indistinguishable from the subject's failure mode under the same installation, and the 3-of-26 result is the number of cases where the test's own fail...
+      refuted by: critic: poietics-confound@v1 failed on 167c096ca48e
+  - REFUTED: A test constrains its subject rather than describing it when the test's installation ritual embeds the subject's failure as a precondition for registration — the 3-of-26 result arises because only mutations that participate in the shown-...
+      refuted by: critic: poietics-confound@v1 failed on 19e49b62dc9d
+  - REFUTED: A test constrains rather than describes only when the subject is installed under a prior fai
+
+[TRUNCATED at the pre-registered 2624-character cap; earlier entries shown, later ones omitted]--- end attachment ---
+--- setup ---
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/2026-09-03-change-provenance-history-channel/runs/home-m1/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+rc=0
+--- qualify (attached-evidence subject, concurrency 2) ---
+MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so nothing here can say whether reasoning='none' leaves hidden reasoning on. The run proceeds and sends exactly what you configured. To have this answered, write $DEEPREASON_HOME/model-profiles/<model-id>/agent.md.
+Qualification will test ollama/qwen3.5:397b; maximum expected provider calls: 1140. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+qualification cases: 1/300qualification cases: 2/300qualification cases: 3/300qualification cases: 4/300qualification cases: 5/300qualification cases: 6/300qualification cases: 7/300qualification cases: 8/300qualification cases: 9/300qualification cases: 10/300qualification cases: 11/300qualification cases: 12/300qualification cases: 13/300qualification cases: 14/300qualification cases: 15/300qualification cases: 16/300qualification cases: 17/300qualification cases: 18/300qualification cases: 19/300qualification cases: 20/300qualification cases: 21/300qualification cases: 22/300qualification cases: 23/300qualification cases: 24/300qualification cases: 25/300qualification cases: 26/300qualification cases: 27/300qualification cases: 28/300qualification cases: 29/300qualification cases: 30/300qualification cases: 31/300qualification cases: 32/300qualification cases: 33/300qualification cases: 34/300qualification cases: 35/300qualification cases: 36/300qualification cases: 37/300qualification cases: 38/300qualification cases: 39/300qualification cases: 40/300qualification cases: 41/300qualification cases: 42/300qualification cases: 43/300qualification cases: 44/300qualification cases: 45/300qualification cases: 46/300qualification cases: 47/300qualification cases: 48/300qualification cases: 49/300qualification cases: 50/300qualification cases: 51/300qualification cases: 52/300qualification cases: 53/300qualification cases: 54/300qualification cases: 55/300qualification cases: 56/300qualification cases: 57/300qualification cases: 58/300
