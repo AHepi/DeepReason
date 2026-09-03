@@ -1,0 +1,32 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+Let me understand what's being asked. This is "STEP 2 OF 2 - SERIALIZE ONLY." I need to return only one JSON value matching the given closed schema. The deliberation so far is empty (nothing).
+
+So I need to produce a JSON object matching `ReasoningConjecturerTurnWireV6`. The schema requires at least one of the following (via allOf/anyOf):
+- candidates (minItems 1)
+- context_request (non-null)
+- abstention (non-null)
+- simulation_proposals (minItems 1)
+- scratch_proposal (non-null)
+- research_proposals (minItems 1)
+
+If abstention is present, then candidates must be empty (maxItems 0), research_proposals empty, scratch_proposal null, simulation_proposals empty.
+
+There's no deliberation context provided. Since the deliberation is empty, I don't have source memories or context to build candidates with evidence refs. What should I do?
+
+Options:
+1. Abstention with search_signal "need_context" — a responsible no-proposal signal, since there's no deliberation/context to ground candidates.
+2. Context request — asking for context with a query.
+3. Scratch proposal — imaginative workshop, which doesn't require grounding.
+
+Given "DELIBERATION SO FAR (may be truncated, or empty): (nothing)", the most defensible move is probably to request context or abstain with need_context. The abstention route: ConjectureAbstentionV1 has search_signal enum ["need_context", "stuck", "capability_mismatch"] and optional note.
+
+Alternatively, a context_request (ContextRequestWireV2) requires at least one of: query (non-null string), requested_visible_aliases (minItems 1), or desired_retrieval_channels (minItems 1). Plus optional purpose.
+
+Which is more appropriate? The task says "SERIALIZE ONLY" — step 2 of 2. Presumably step 1 was deliberation (thinking), and this is serialization. With no deliberation and no context given, the responsible output could be an abstention with "need_context" signal, or a context request.
+
+Actually, a context_request makes sense: ask for context to work with. But I don't know what the research topic is — there's no conversation context at all. Hmm. Without knowing the topic, a context request would need a query about... something. I could ask for the visible aliases or recent retrieval channels: e.g.,
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

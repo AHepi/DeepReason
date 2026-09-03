@@ -1,0 +1,29 @@
+{
+  "adjudicator": {
+    "attack_target_entropy": null,
+    "criticism_debt": 0.6363636363636364,
+    "g_churn": 0,
+    "n_attacks": 0,
+    "refutations": 0,
+    "reinstatement_rate": null,
+    "validity_attack_rate": 0.0
+  },
+  "evidence_lambda": 0.0,
+  "generator": {
+    "dist_slope": 0.1370420889686288,
+    "inter_school_dist_ratio": 1.0066802303519986,
+    "inter_school_min_dist": 0.6728325660079763,
+    "mean_pairwise_dist": 0.668367715707213,
+    "mean_token_surprisal": null,
+    "stream_len": 15,
+    "surprisal_slope": null
+  },
+  "lambda": 1.0,
+  "raw_flags": {
+    "adjudication_ritual": false,
+    "attractor_orbiting": false,
+    "grounding_decay": false,
+    "lineage_stagnation": false,
+    "school_convergence": false
+  }
+}

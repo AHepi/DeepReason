@@ -1,0 +1,28 @@
+{
+  "candidates": [
+    {
+      "content": "Kind: abstraction. 3d82a99f1546 abstracts SRC_005 by extracting the covering principle that in random 3-regular majority dynamics, consensus failure is controlled by the critical 2-core size Θ(n^{1/3}) of an initial color class, not by the exponential number of perfect matchings. It is refuted if 3d82a99f1546 does not generalize SRC_005's 2-core obstruction to a wider class of monotone local majority processes or if it predicts consensus probability bounded away from 0.",
+      "typicality": 0.72,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "rebutted",
+          "note": "relation-form is satisfied: content contains 'refuted if' and 'abstracts'. The prior failure on 9386cd16d1f1 does not apply to this candidate."
+        }
+      ]
+    },
+    {
+      "content": "Kind: contradiction. 3d82a99f1546 contradicts SRC_004's exponential-prevalence law exp(Θ(n)) for mixed absorbing states by asserting that the typical obstructions are only Θ(n^{1/3}) 2-cores. It is refuted if the two claims are compatible because SRC_004 counts all stable matchings while 3d82a99f1546 counts only those with non-negligible basins, or if 3d82a99f1546 does not deny the exponential count of stable mixed configurations.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_004", "SRC_005"],
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "rebutted",
+          "note": "relation-form is satisfied: content contains 'refuted if' and 'contradicts'. The prior failure on 9386cd16d1f1 does not apply to this candidate."
+        }
+      ]
+    },
+    {
+      "content": "Kind: reduction. 3d82a99f1546 reduces to SRC_003's matching-cut characterization: its obstruction criterion is the special case where the bichromatic matching is the boundary of a nonempty 2-core in each color

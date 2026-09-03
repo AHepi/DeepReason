@@ -1,0 +1,31 @@
+The user wants me to serialize a JSON value matching the schema. The deliberation is empty ("(nothing)"). So I need to produce either a candidate or an abstention.
+
+The schema requires either "candidate" or "abstention" (oneOf on required fields).
+
+Since there's no deliberation context, no memories, no source materials — I have no grounding for a candidate. The honest move is to abstain with a "need_context" signal, since there's nothing to reason from. Alternatively "stuck".
+
+Given the deliberation is empty, I have no context at all. The appropriate abstention signal would be "need_context" — I need context to produce anything.
+
+Let me construct:
+
+```json
+{
+  "abstention": {
+    "search_signal": "need_context",
+    "note": "No deliberation context was provided; there are no source memories, open criticisms, or task framing from which to ground a candidate proposal. Producing a claim, mechanism, or analogy without any admitted dossier blocks or prior reasoning would be ungrounded speculation, so no candidate is offered."
+  }
+}
+```
+
+The note has minLength 1, maxLength 8192 — fine.
+
+The top-level object has additionalProperties false, properties abstention and candidate. The allOf oneOf requires exactly one of candidate/abstention present. With only abstention, it satisfies the oneOf (only one branch's required is met).
+
+Return ONLY one JSON value. So output just the JSON.```json
+{
+  "abstention": {
+    "search_signal": "need_context",
+    "note": "No deliberation context was provided (empty input). There are no source memories, admitted dossier blocks, prior claims, or open criticisms available from which to ground a candidate's claim, mechanism, counterconditions, evidence refs, or analogy. Emitting a proposal under these conditions would be ungrounded conjecture rather than reasoning, so I abstain and signal that context is needed before any candidate can responsibly be serialized."
+  }
+}
+```

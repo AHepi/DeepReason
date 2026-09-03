@@ -1063,6 +1063,46 @@ def response_for_schema(schema: dict, prompt: str) -> dict:
         }
     if title in {"ClusterGuideWireV1", "ClusterGuideMinimalWireV1"}:
         return {"working_focus": "One temporary navigation focus."}
+    if title == "ConfigRefereeWireV1":
+        # The config referee ships OFF (`engaged_config_referee_policy` returns
+        # None on an unset DEEPREASON_CONFIG_REFEREE), so until P-A1 no soak
+        # case granted its contract and the generic synthesiser below was never
+        # asked for one. It cannot produce a value here, and an unsatisfied
+        # fixture is an HTTP 500 that trips the qualification circuit breaker
+        # for the WHOLE endpoint -- 20 failures, then every later case on that
+        # route is skipped as cascade. Conservative by construction: the
+        # fixture never reports mistuning and never recommends a change, so a
+        # soak can exercise the dispatch path without the referee steering it.
+        return {
+            "verdict": "config_effective",
+            "assessment": "The bounded loopback fixture observes no mistuning.",
+            "cited_seqs": [0],
+            "recommendation": "no_change",
+        }
+    if title == "GroundingRepairWireV1":
+        # Same story on the bridge side: the grounding-repair contract is
+        # granted only under `bridge.mode: grounded_two_stage` with
+        # `grounding_review` on, which no committed soak case configured before
+        # P-A1. This schema is the one shape the generic synthesiser provably
+        # cannot handle -- its allOf/if/then branches make `replacement_text`,
+        # `resolution` and `resolution_reason` required or forbidden depending
+        # on `action`, and a walker that fills properties independently cannot
+        # satisfy a cross-field implication.
+        #
+        # `remove_span` is the correct fixture and the choice is not arbitrary.
+        # STRUCTURALLY it is the one action that accepts no substantive field,
+        # so it satisfies every conditional branch by carrying nothing.  IN
+        # SCOPE it is the only action present in EVERY entry of
+        # `bridge.repair._ALLOWED_BY_STATUS`, and the contract the caller
+        # advertises is NARROWED to one finding status's permitted actions
+        # while the advertised JSON Schema still `$ref`s the full
+        # `CorrectionMode` enum.  A fixture chosen from the schema alone can
+        # therefore be structurally valid and still out of scope -- which is
+        # exactly what happens with `correct_wording`, forbidden under
+        # MISCLASSIFIED, the status the production-contract doctor's own probe
+        # uses: it validates, then `_admit_production_probe_output` raises
+        # BRIDGE_REPAIR_ACTION_FORBIDDEN and the case burns a repair turn.
+        return {"action": "remove_span"}
     if title == "BoundBridgeCompositionWireV2":
         # Stage-B composition binds every span to one of the ledger handles
         # frozen in the advertised schema; ``answered`` requires at least one

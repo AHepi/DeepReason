@@ -1,0 +1,38 @@
+{
+  "abstention": {
+    "search_signal": "need_context",
+    "note": "No source memories or visible aliases are available in this turn to ground a responsible reasoning candidate, simulation proposal, or research fetch. I need context before proposing a mechanism and counterconditions."
+  },
+  "candidates": [],
+  "context_request": {
+    "query": "Relevant source memories, visible aliases, and prior reasoning or evidence about the current problem",
+    "purpose": "Gather grounding material before proposing a reasoning candidate",
+    "requested_visible_aliases": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_003",
+      "SRC_004",
+      "SRC_005",
+      "SRC_006",
+      "SRC_007",
+      "SRC_008",
+      "SRC_009",
+      "SRC_010",
+      "SRC_011",
+      "SRC_012",
+      "SRC_013",
+      "SRC_014",
+      "SRC_015"
+    ],
+    "desired_retrieval_channels": [
+      "focus",
+      "recent",
+      "semantic",
+      "keyword",
+      "link"
+    ]
+  },
+  "research_proposals": [],
+  "scratch_proposal": null,
+  "simulation_proposals": []
+}

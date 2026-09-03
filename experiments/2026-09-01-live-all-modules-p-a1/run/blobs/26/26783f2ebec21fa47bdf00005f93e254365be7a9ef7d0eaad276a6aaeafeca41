@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The claimed equivalence between stable mixed configurations and perfect matchings whose complement is a monochromatic 2-factor is false. A stable state only forces bichromatic edges to be a matching; in a monochromatic component, vertices not incident to that matching have degree 3, and extending the bichromatic matching to a perfect matching requires a matching covering exactly those degree-3 vertices. Such a matching need not exist. Example: take two copies of H with vertices u,v,a,b,c,d,e,f and edges u-a,u-b,u-c,v-d,v-e,v-f,a-b,c-d,e-f; color one copy red and the other blue, and pair the six leaf stubs between copies. The graph is 3-regular, the bichromatic edges form a matching, so the coloring is stable, but in each monochromatic component the only degree-3 vertices u and v are nonadjacent, so no perfect matching M' extending M can make G-M' a 2-factor of monochromatic cycles.",
+      "counterexample": [
+        "Two copies of H = (V={u,v,a,b,c,d,e,f}, E={u-a,u-b,u-c,v-d,v-e,v-f,a-b,c-d,e-f}), one red and one blue, with corresponding leaf stubs paired between copies; bichromatic edges form a matching but u and v are nonadjacent degree-3 vertices in each monochromatic component."
+      ],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The proposed reduction is refuted by its own stated criterion. There exists a stable mixed state that is not a monochromatic cycle coloring of G-M for any perfect matching M. Take two copies of H = (V={u,v,a,b,c,d,e,f}, E={u-a,u-b,u-c,v-d,v-e,v-f,a-b,c-d,e-f}), one red and one blue, with corresponding leaf stubs paired between copies. The bichromatic edges form a matching, so the state is stable, but each monochromatic component has two nonadjacent degree-3 vertices; therefore no perfect matching M' can reduce the component to cycles"
+    }
+  ]
+}

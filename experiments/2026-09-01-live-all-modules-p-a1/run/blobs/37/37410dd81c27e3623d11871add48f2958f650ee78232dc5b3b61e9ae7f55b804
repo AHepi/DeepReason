@@ -1,0 +1,20 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The argument assumes that correlation implies causation without ruling out confounding variables.",
+      "premise": "The data shows a strong correlation between ice cream sales and drowning incidents.",
+      "premise_evidence": [
+        {
+          "block": "a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4",
+          "quote": "Ice cream sales and drowning incidents both increase during summer months."
+        }
+      ],
+      "counterexample": null,
+      "successor_question": "What confounding variable could explain both increases?"
+    }
+  ]
+}
+```

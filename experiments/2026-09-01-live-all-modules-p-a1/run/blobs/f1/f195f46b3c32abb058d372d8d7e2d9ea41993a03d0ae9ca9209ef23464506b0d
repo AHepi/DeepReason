@@ -1,0 +1,22 @@
+STEP 2 OF 2 - SERIALIZE ONLY.
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+DELIBERATION SO FAR (may be truncated, or empty):
+
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target infers the consensus probability from the number of absorbing states: it says that because there are exp(Θ(n)) mixed absorbing states and only one consensus state, the process is exponentially more likely to be trapped in a mixed matching. This is a non sequitur. The dynamics is not a uniform draw from absorbing states, and monotonicity of bichromatic edges only guarantees absorption into some matching, not the relative basin sizes. The target itself lists 'basin of consensus is exponentially larger than the basin of mixed states' as an unresolved countercondition, but provides no drift, martingale, or basin-size argument. Therefore the claimed exp(-Θ(n)) law for consensus probability is unsupported.",
+      "counterexample": [
+        "A Markov chain with one consensus absorbing state and 2^n mixed absorbing states can still have consensus probability 1-o(1) if every non-consensus state transitions to consensus with probability 1/n and to a mixed state with probability 1/n^2; hence the number of absorbing states alone does not determine the limit."
+      ],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": "What is the actual basin size of the empty cut under the monotone cut-size dynamics, and does it scale as exp(-Θ(n))?"
+    }
+  ]
+}

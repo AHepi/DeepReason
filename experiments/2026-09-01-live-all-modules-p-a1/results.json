@@ -1,0 +1,86 @@
+{
+  "absences": [
+    "NO_FRONTIER_RECORD",
+    "NO_SURVIVOR_RECORD"
+  ],
+  "adjudication": {
+    "judge_calls": 4,
+    "ran": true,
+    "trial_blocked": {},
+    "trial_declined": {
+      "ensemble-split": 2,
+      "execution-backed": 4
+    },
+    "trial_observations": {}
+  },
+  "amendment": {
+    "epoch_seqs": [],
+    "epochs": 0
+  },
+  "artifacts": {
+    "accepted": 25,
+    "frontier": {
+      "artifact_ids": {
+        "absent": true,
+        "reason": "NO_FRONTIER_RECORD"
+      },
+      "count": {
+        "absent": true,
+        "reason": "NO_FRONTIER_RECORD"
+      },
+      "problem_id": null
+    },
+    "refuted": 4,
+    "survivor_count": {
+      "absent": true,
+      "reason": "NO_SURVIVOR_RECORD"
+    },
+    "suspended": 0
+  },
+  "embedder": {
+    "backend": "neural",
+    "configured_model": null,
+    "fallback": false,
+    "fallback_reason": null,
+    "fingerprint": "d6e3599ce0377000",
+    "model": "nomic-ai/nomic-embed-text-v1.5",
+    "version": "fastembed-0.8.0+onnxruntime-1.29.0"
+  },
+  "identity": {
+    "manifest_present": true,
+    "manifest_schema_version": 6,
+    "run_id": "4565139800f5ca020e2b74acff45355c1277a9d510068a8e8b4ed65813f1a49c"
+  },
+  "question": "Consider asynchronous majority dynamics on a random 3-regular graph on n vertices: at each step one uniformly random vertex adopts the majority opinion of its three neighbors. Starting from a uniformly random two-coloring, as n grows, does the probability of reaching unanimous consensus tend to 1, to 0, or to a constant strictly between? Characterize the finite obstruction structures (locally stable mixed configurations) that prevent consensus, and give either a proof sketch or a falsifiable quantitative law for how their prevalence scales with n.",
+  "resolved_from": "root",
+  "root": "/home/user/DeepReason/experiments/2026-09-01-live-all-modules-p-a1/run",
+  "run": {
+    "cycles_completed": 5,
+    "message": "V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at /workflow/insufficient_capability_by_route_seat: route seat has terminally exhausted its smallest authorized contract",
+    "state": "failed",
+    "stop_reason": "operational_failure",
+    "token_limit": 3000000,
+    "token_spend": 1093086
+  },
+  "schema": "deepreason-results.v1",
+  "terminal": {
+    "amend_ready": false,
+    "continuation_authority": false,
+    "lifecycle_refusal": "TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL",
+    "stop_reason_resumable": false,
+    "terminal_epoch": 0,
+    "valid_typed_terminal": true
+  },
+  "verification": {
+    "families": {
+      "completion": 21,
+      "epistemic": 0,
+      "integrity": 0,
+      "operational": 44,
+      "security": 10
+    },
+    "source": "stored",
+    "valid": true,
+    "violations": 0
+  }
+}

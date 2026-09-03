@@ -1,0 +1,21 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "As n grows, the probability of reaching unanimous consensus tends to a constant strictly between 0 and 1, specifically exp(-λ) with λ = ∑_{k≥3} 2^{-k}/k = ln 2 - 5/8 ≈ 0.0681, so consensus probability ≈ 0.934. The finite obstruction structures are locally stable mixed configurations whose bichromatic edge set is a matching; the only such structures that occur with non-negligible probability are initial monochromatic cycles with all external neighbors opposite. Their prevalence is asymptotically Poisson(λ), independent of n.",
+      "mechanism": "Majority update is zero-temperature Glauber descent on the number of bichromatic edges. A configuration is stable iff every vertex has at most one bichromatic incident edge, i.e. the bichromatic edges form a matching. Any nonempty matching cut contains a monochromatic cycle whose external neighbors are opposite. The expected number of cycles of length k in a random 3-regular graph is 2^k/(2k); the probability a given cycle is initially stable is 2^{1-2k}. Thus expected initial stable cycles is ∑ 2^{-k}/k = λ. By Poisson convergence, the number is Poisson(λ). If none exists, the descent reaches the empty matching (consensus) with probability 1-o(1) because larger matching cuts have o(1) basin probability.",
+      "counterconditions": [
+        "If the dynamics creates stable cycles from non-stable initial configurations with probability bounded away from 0, the consensus probability drops below exp(-λ) and may tend to 0.",
+        "If the number of Θ(n)-sized matching cuts is exponential and their basins have total probability tending to 1, the limit is 0.",
+        "If the graph contains a 2-factor with many cycles, unions of cycles may be reached with non-negligible probability."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "SRC_007",
+          "kind": "departure_declared",
+          "note": "New candidate; the cited pa1-scaling-law failure on e59166f9a720 does not apply."
+        },
+        {
+          "handle": "SRC_009",
+          "kind": "departure_declared",

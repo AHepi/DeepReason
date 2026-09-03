@@ -1,0 +1,200 @@
+[2026-09-01T08:59:30Z] === P-A1: all modules on, four models, seed question 933313a5... ===
+[2026-09-01T08:59:30Z] === SETUP: embedder warm-up (idempotent) ===
+embedder-warmup: initializing nomic-ai/nomic-embed-text-v1.5 (~523 MB of ONNX weights on first use, cached at /tmp/fastembed_cache); this is a one-time cost per cache, not per run ...
+embedder-warmup: ready in 5.0s — nomic-ai/nomic-embed-text-v1.5 (fastembed-0.8.0+onnxruntime-1.29.0)
+{
+  "model": "nomic-ai/nomic-embed-text-v1.5",
+  "sentinel": "d6e3599ce0377000",
+  "version": "fastembed-0.8.0+onnxruntime-1.29.0"
+}
+[2026-09-01T08:59:36Z] === SETUP: build_manifest_pa1.py -> /home/user/DeepReason/experiments/2026-09-01-live-all-modules-p-a1/run ===
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SUMMONS_PER_CYCLE=2 is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+{
+  "attached_evidence_enabled": true,
+  "bridge_mode": "grounded_two_stage",
+  "bridge_reviewer_role": "grounding_reviewer",
+  "compile_notices": [
+    {
+      "code": "ENGINE_CONFIG_FIELD_NOT_CARRIED",
+      "message": "ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice",
+      "pointer": "/engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED"
+    },
+    {
+      "code": "ENGINE_CONFIG_FIELD_NOT_CARRIED",
+      "message": "ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config and is restored at run time from this notice",
+      "pointer": "/engine_config/ENGAGED_CRITICISM_AUTHORITY"
+    },
+    {
+      "code": "ENGINE_CONFIG_FIELD_NOT_CARRIED",
+      "message": "JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice",
+      "pointer": "/engine_config/JUDGE_SEATS_ENABLED"
+    },
+    {
+      "code": "ENGINE_CONFIG_FIELD_NOT_CARRIED",
+      "message": "JUDGE_SUMMONS_PER_CYCLE=2 is not carried by this manifest's engine config and is restored at run time from this notice",
+      "pointer": "/engine_config/JUDGE_SUMMONS_PER_CYCLE"
+    },
+    {
+      "code": "ENGINE_CONFIG_FIELD_NOT_CARRIED",
+      "message": "LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)",
+      "pointer": "/engine_config/LEGACY_CRITICISM_ENABLED"
+    },
+    {
+      "code": "ENGINE_CONFIG_FIELD_NOT_CARRIED",
+      "message": "SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice",
+      "pointer": "/engine_config/SCHOOL_SEATS_ENABLED"
+    }
+  ],
+  "config_referee_cadence": 6,
+  "criteria": [
+    "pa1-limit-verdict@v1",
+    "pa1-obstruction-structure@v1",
+    "pa1-scaling-law@v1"
+  ],
+  "criticism_authority": "defended_trial",
+  "criticism_bindings": 4,
+  "dossier_sources": 0,
+  "manifest_sha256": "4565139800f5ca020e2b74acff45355c1277a9d510068a8e8b4ed65813f1a49c",
+  "problem_id": "question-933313a5d9ca6dd86f3052aec6e1f05f",
+  "question_sha256": "933313a5d9ca6dd86f3052aec6e1f05f395ad00586e08096bd40d1be733d7560",
+  "research_enabled": true,
+  "roles": {
+    "argumentative_critic": 1,
+    "conjecturer": 2,
+    "defender": 1,
+    "grounding_reviewer": 1,
+    "judge": 2,
+    "property_designer": 1,
+    "summarizer": 1,
+    "synthesizer": 1,
+    "thesis": 1,
+    "variator": 1,
+    "vision_critic": 1
+  },
+  "run_input_digest": "4bffdeffd8e32778c5dc768d34e43eb464c143289986c642637f4fef86847dd4",
+  "runtime_adjudication_status_authority": true,
+  "runtime_bridge_mode": "grounded_two_stage",
+  "runtime_judge_seats_enabled": true,
+  "runtime_judge_summons_per_cycle": 2,
+  "runtime_near_dup_eps": 0.2608,
+  "runtime_scratchpad_enabled": true,
+  "runtime_successor_minting_enabled": false,
+  "school_execution_mode": "route_bound",
+  "simulation_budget": {
+    "executions": 12,
+    "network_policy": "forbidden",
+    "requests": 12,
+    "wall_ms": 20000
+  },
+  "simulation_enabled": true,
+  "simulation_toolchain": "python@deepreason-public-contained.v1",
+  "trial_contract_grants": {
+    "defender": [
+      "defender.direct.v1"
+    ],
+    "judge": [
+      "judgeruling.direct.v1"
+    ],
+    "variator": [
+      "variator.direct.v1"
+    ]
+  }
+}
+[2026-09-01T08:59:38Z] SETUP OK rc=0
+[2026-09-01T08:59:38Z] === PREFLIGHT: 49 typed gates over the compiled manifest and its runtime Config ===
+[ok  ] §2   question bytes match the frozen digest  -- 933313a5d9ca6dd86f3052aec6e1f05f395ad00586e08096bd40d1be733d7560
+[ok  ] §2   predicate is sandbox-legal: pa1-limit-verdict@v1
+[ok  ] §2   predicate is sandbox-legal: pa1-obstruction-structure@v1
+[ok  ] §2   predicate is sandbox-legal: pa1-scaling-law@v1
+[ok  ] §2   the on-target answer passes all three criteria  -- {'pa1-limit-verdict@v1': 'pass', 'pa1-obstruction-structure@v1': 'pass', 'pa1-scaling-law@v1': 'pass'}
+[ok  ] §2   discrimination: verdict+structure, no law  -- {'pa1-limit-verdict@v1': 'pass', 'pa1-obstruction-structure@v1': 'pass', 'pa1-scaling-law@v1': 'fail'}
+[ok  ] §2   discrimination: verdict+law, no structure  -- {'pa1-limit-verdict@v1': 'pass', 'pa1-obstruction-structure@v1': 'fail', 'pa1-scaling-law@v1': 'pass'}
+[ok  ] §2   discrimination: generic waffle  -- {'pa1-limit-verdict@v1': 'fail', 'pa1-obstruction-structure@v1': 'fail', 'pa1-scaling-law@v1': 'fail'}
+[ok  ] §2   discrimination: empty  -- {'pa1-limit-verdict@v1': 'fail', 'pa1-obstruction-structure@v1': 'fail', 'pa1-scaling-law@v1': 'fail'}
+[ok  ] R1   a criticism policy is STORED on the manifest
+[ok  ] R1   stored authority is defended_trial  -- defended_trial
+[ok  ] R1   one binding per seeded school  -- 4 bindings / N_SCHOOLS=4
+[ok  ] R4   defender seats hold a non-empty behavioural contract grant  -- {'defender[0]': ['defender.direct.v1']}
+[ok  ] R4   judge seats hold a non-empty behavioural contract grant  -- {'judge[0]': ['judgeruling.direct.v1'], 'judge[1]': ['judgeruling.direct.v1']}
+[ok  ] R4   variator seats hold a non-empty behavioural contract grant  -- {'variator[0]': ['variator.direct.v1']}
+[ok  ] R4   PARETO_AXES still names hv, reach and coverage  -- ['hv', 'reach', 'coverage']
+[ok  ] R2   simulation capability enabled
+[ok  ] R2   simulation runs the CONTAINED runner  -- simulation.container.v1
+[ok  ] R2   this host can actually create the containment namespace  -- a contained policy on a host without it refuses EVERY execution
+[ok  ] R2   the containment envelope is the audited one  -- only the request/execution COUNTS were raised (PREREG §4 R2)
+[ok  ] R2   the raised simulation budget is in force  -- 12 requests / 12 executions
+[ok  ] R2   research capability enabled
+[ok  ] R2   research carries a non-empty domain allowlist  -- ('arxiv.org', 'en.wikipedia.org')
+[ok  ] R2   the config referee is armed  -- 6
+[ok  ] R3   bridge mode is grounded_two_stage  -- grounded_two_stage
+[ok  ] R3   grounding review is on
+[ok  ] R3   the reviewer seat is the grounding_reviewer, not a judge  -- grounding_reviewer
+[ok  ] R3   the rebuilt runtime Config agrees about the bridge mode  -- grounded_two_stage
+[ok  ] R5   NEAR_DUP_EPS is armed at the calibrated value  -- 0.2608
+[ok  ] R5   RESEED_DIST_MIN is armed at the calibrated value  -- 0.0401
+[ok  ] R5   the embedder those thresholds were calibrated for is the one configured  -- nomic-ai/nomic-embed-text-v1.5
+[ok  ] R6   the scratch workspace is enabled
+[ok  ] R6   the runtime Config agrees
+[ok  ] R6   the attached-evidence channel is open  -- maximum_sources=16
+[ok  ] R6   successor-question routing is at its default destination  -- scratchpad.v1
+[ok  ] R6   successor MINTING is OFF (an operator launch-time choice)  -- False
+[ok  ] R7   no policy signal is open-loop on this topology  -- []
+[ok  ] R7   all seven policy signals are accounted for  -- ('allocation.seat-truncation.v1', 'allocation.seat-repair.v1', 'dropped-call', 'allocation.policy-authorized.v1', 'allocation.policy-contested.v1', 'allocation.seed-lineage-share.v1', 'allocation.wander-throttled.v1')
+[ok  ] P10  every dropped switch has a carriage notice  -- exact match
+[ok  ] P10  runtime Config restored ADJUDICATION_STATUS_AUTHORITY_ENABLED  -- True
+[ok  ] P10  runtime Config restored ENGAGED_CRITICISM_AUTHORITY  -- 'defended_trial'
+[ok  ] P10  runtime Config restored JUDGE_SEATS_ENABLED  -- True
+[ok  ] P10  runtime Config restored JUDGE_SUMMONS_PER_CYCLE  -- 2
+[ok  ] P10  runtime Config restored LEGACY_CRITICISM_ENABLED  -- False
+[ok  ] P10  runtime Config restored SCHOOL_SEATS_ENABLED  -- True
+[ok  ] §3   the conjecturer role carries TWO seat instances  -- ['deepseek-v4-pro:0813', 'glm-5.3']
+[ok  ] §3   the judge ensemble is >=2 seats across >=2 families  -- ['qwen3.5:397b', 'gpt-oss:120b'] families=['openai-gpt', 'qwen']
+[ok  ] §3   every generation-side seat sits on a model the operator named  -- ['deepseek-v4-pro:0813', 'glm-5.3']
+[ok  ] §4   schools are ROUTE-BOUND across the conjecturer seats  -- [('school-0', 0, 'ollama-deepseek-v4-pro-0813'), ('school-1', 1, 'ollama-glm-5.3'), ('school-2', 0, 'ollama-deepseek-v4-pro-0813'), ('school-3', 1, 'ollama-glm-5.3')]
+[ok  ] §3   every seat names a model the provider lists  -- all 4 present
+
+PREFLIGHT OK: 50 checks, 0 failures
+[2026-09-01T08:59:40Z] PREFLIGHT OK rc=0
+[2026-09-01T08:59:40Z] === QUALIFY: production-contract doctor (concurrency=2), full battery expected ===
+[2026-09-01T10:10:57Z] QUALIFY OK rc=0
+[2026-09-01T10:10:57Z] === REASON: run --budget cycles=24 --token-budget 3000000 ===
+[2026-09-01T15:12:45Z] REASON rc=5 -- see /home/user/DeepReason/experiments/2026-09-01-live-all-modules-p-a1/reason.{log,stderr.log} (a non-zero rc here can still be a typed stop; audit before treating it as failure)
+[2026-09-01T15:12:45Z] REASON stop_reason=operational_failure
+[2026-09-01T15:12:45Z] === BRIDGE: build the grounded final output for question-933313a5d9ca6dd86f3052aec6e1f05f ===
+[2026-09-01T15:12:52Z] BRIDGE BUILD rc=1 -- see /home/user/DeepReason/experiments/2026-09-01-live-all-modules-p-a1/bridge-build.{json,stderr.log}
+[2026-09-01T15:12:59Z] === AUDIT: verify_root + findings + results + capture + frontier ===
+[2026-09-01T15:14:29Z] === CENSUS: module coverage + the three measured known-open defects ===
+  conjecture (rules/conj)            FIRED        Conj events=7, conjecturer calls=47
+  criticism (rules/crit)             FIRED        Crit events=5, argumentative_critic calls=12
+  defender seat                      FIRED        defender calls=8
+  judge ensemble                     FIRED        judge calls=4
+  defended trial (status-changing criticism) FIRED        {'first trial seqs': [359, 404, 405], 'judge calls': 4, 'scrutiny (observe-only filings)': 0, 'trial-blocked': {}, 'trial-declined': 6, 'trial-observation': 0}
+  pairwise discrimination            did-not-fire no pairwise-observation event (F2: the pairwise-discrimination phase is one of the eleven deferred on v6)
+  adjudication / status authority    FIRED        25 events carry status_changed; first seqs [6, 7, 8]
+  variator / hv measurement          did-not-fire NO hv_set in the record; variator calls=0; deferrals=19
+  reach measurement                  did-not-fire NO reach_set in the record
+  scratchpad (advisory workshop)     did-not-fire no event carries a scratch payload
+  successor questions                did-not-fire no successor-* signal in the record
+  simulation capability              did-not-fire no simulation-* signal; deferrals={('premise-demarcation-variation', 'variator'): 1, ('hv-spot-check', 'variator'): 10, ('pairwise-discrimination', 'judge'): 1, ('hv-floor', 'variator'): 8}
+  research capability                FIRED        {'research-awaiting-agent': 1}
+  attached evidence / dossier        did-not-fire the channel is OPEN but the dossier is EMPTY by design (PREREG §4 R6): nothing to cite is the typed reason, not a malfunction
+  premise channel                    FIRED        {'premise-answer:DECLINED': 7, 'premise.batch-translation-offered.v1': 6, 'premise.work-invited.v1': 2}
+  discharge channel                  FIRED        {'discharge-reask': 6, 'discharge-undischarged': 19}
+  near-duplicate / anti-relapse gate FIRED        {'relapse.log.jsonl': True, 'signals': {}}
+  school convergence / reseed        did-not-fire no school-convergence or reseed signal (the tripwires are armed and did not fire)
+  allocation controller / signals    FIRED        {'allocation.seat-repair.v1': 17, 'allocation.seat-truncation.v1': 17, 'allocation.seed-lineage-share.v1': 6, 'allocation.wander-throttled.v1': 1, 'controller-authority': 1}
+  config referee                     did-not-fire no config-referee signal in the record
+  split-budget seat protocol         FIRED        {'extract': 36, 'reason': 36}
+  capture / Pareto frontier          FIRED        {'capture14.attack-target-entropy.v1': 6, 'capture14.criticism-debt.v1': 6, 'capture14.exogenous-grounding-ratio.v1': 6, 'capture14.hysteresis-mode.v1': 1, 'capture14.reinstatement-rate.v1': 6, 'capture14.stream-contraction.v1': 6, 'capture14.validity-attack-rate.v1': 6}
+  grounded bridge (ledger + composition) did-not-fire bridge build produced no readable JSON -- see bridge-build.stderr.log
+  replay validation (verify_root)    FIRED        {'violations': 0}
+  --- measured known-open defects ---
+  D1_frontier_composition: {'frontier_txt': 'see frontier.txt (the typed surface)', 'members': [], 'note': "PREREG §6.1 -- how many frontier members answer the operator's seed question vs a harness-minted problem", 'problems_spawned': 14, 'seed_problem_id': 'question-933313a5d9ca6dd86f3052aec6e1f05f'}
+  D2_criticism_to_new_problem_trigger_rate: {'criticisms': 5, 'note': 'PREREG §6.2 -- P-S1 measured 0 of 1,293', 'spawn_events': 14, 'successor_signals': {}}
+  D3_premise_citation_rate: {'all_premise_signals': {'premise-answer:DECLINED': 7, 'premise.batch-translation-offered.v1': 6, 'premise.work-invited.v1': 2}, 'byte_check_outcomes': {}, 'invitation_dispositions': {'DECLINED': 7}, 'note': 'PREREG §6.3 -- P-S1 measured 1 CITED against 122 DECLINED'}
+[2026-09-01T15:14:29Z] === DONE: judge only typed outcomes -- state, stop_reason, verify_root, the record ===

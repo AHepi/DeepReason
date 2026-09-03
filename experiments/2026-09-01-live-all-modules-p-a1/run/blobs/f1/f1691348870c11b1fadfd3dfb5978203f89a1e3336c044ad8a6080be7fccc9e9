@@ -1,0 +1,22 @@
+STEP 2 OF 2 - SERIALIZE ONLY.
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+DELIBERATION SO FAR (may be truncated, or empty):
+
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target mischaracterizes the typical obstruction. It claims typical stable mixed configurations are perfect matching cuts: remove a perfect matching M and color the resulting cycles. But stable mixed configurations correspond to any matching boundary M, not only perfect matchings. For a boundary matching of size αn, the expected number of stable configurations is exp(n h(α)) up to polynomial factors, with h(α) = -α log α - (1-2α)log(1-2α) - α - α log 2 + 2α log 3 - 1.5 log 3 + ((3-2α)/2)log(3-2α) - (3-2α)/2 + 1.5. This h is maximized at α=0.3, where h(0.3)≈0.58, while h(0.5)=log(2/√3)≈0.14. Thus perfect-matching cuts are exponentially subdominant; the typical obstruction has a boundary matching of size about 0.3n, and G-M is not a disjoint union of cycles but has many degree-3 vertices. This mischaracterizes the finite obstruction structures the problem asks for.",
+      "counterexample": [
+        "For α=0.3, expected number of matchings of size αn is exp(0.58n), dwarfing the perfect matching count exp(0.1438n)."
+      ],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}
