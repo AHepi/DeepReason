@@ -30,15 +30,19 @@ substring match, and a derivation nothing pinned until a test was added against
 the one committed root carrying a real transport failure. Both fixed; both
 recorded here rather than quietly.
 
-Whole-tree gate:
+Whole-tree gate, run THREE times, and all three are recorded because two of them
+are part of the evidence rather than noise:
 
 ```
-$ python -m pytest tests/ -q -n 4
-4624 passed, 6 skipped in 1622.68s (0:27:02)     rc=0
+run 1  (before the round-trip fix)     1 failed, 4623 passed, 6 skipped   0:27:00
+run 2  (after it, before the census fix) 4624 passed, 6 skipped           0:27:02   rc=0
+run 3  (the TRUE final tree)           4624 passed, 6 skipped in 1616.93s 0:26:56   rc=0
 ```
 
-**0 failed.** Not on the first attempt: the gate found one failure in 4 624, and
-it was a real defect in this tranche's design rather than a fixture — see §4.
+**0 failed on the final tree.** Run 1's single failure in 4 624 was a real defect
+in this tranche's design rather than a fixture — §4. Run 3 exists because a code
+change (the signal-census fix, §2) landed after run 2, and a gate result on a
+tree that is not the one being shipped is not a gate result.
 
 ## 2. `docs_verify` — 8 failed, every one dispositioned
 
