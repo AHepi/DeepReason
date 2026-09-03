@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that Popper has 'no metric' other than informational content is false because it ignores 'severity of test' as a distinct, non-probabilistic metric for preference. Popper explicitly defends acting on the better-corroborated theory not because it is more 'reliable' in an inductive sense, but because it has withstood the most stringent attempts at falsification. The target conflates 'practical reliability' (which implies future truth probability) with 'rational preferability based on past critical performance.' By framing the scientist's preference as requiring a 'metric of value' correlating to reliability, the target imposes an inductive requirement that Popper's system specifically rejects, thereby attacking a straw man rather than engaging with Popper's actual defense: that preferring the severely tested theory is the only rational course in the absence of induction, even if it guarantees no future success.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between corroboration (report of past test performance) and probability (inductive likelihood), arguing that preference for the former is defensible without smuggling in induction.",
+      "premise_evidence": null,
+      "successor_question": "How does Popper define 'rational action' if it cannot rely on any expectation of future success derived from past corroboration?"
+    }
+  ]
+}

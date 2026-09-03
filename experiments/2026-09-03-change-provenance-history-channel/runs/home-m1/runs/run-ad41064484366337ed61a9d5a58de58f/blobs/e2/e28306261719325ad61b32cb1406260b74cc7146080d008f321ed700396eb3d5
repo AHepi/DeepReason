@@ -1,0 +1,196 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, methodological rule of 'critical preference' based on verisimilitude (truth-likeness), not probability.",
+      "mechanism": "Popper distinguishes between logical probability (which remains zero or low for universal laws) and verisimilitude (closeness to truth). A theory that survives severe tests has demonstrated higher content and resilience, suggesting it is closer to the truth than a falsified rival. The scientist's preference is a rational bet on truth-likeness, justified by the logical asymmetry of falsification, not by an inductive inference that the future will resemble the past.",
+      "counterconditions": [
+        "If verisimilitude cannot be defined without invoking probabilistic assumptions about unobserved cases.",
+        "If the definition of 'severe test' implicitly relies on inductive expectations of regularity."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "The criticism conflates causal explanation with normative justification. Popper's argument is normative: given two theories, one falsified and one not, logic dictates we prefer the unfalsified one as a candidate for truth. This is not an evolutionary description of why scientists do it, but a logical prescription for critical rationalism."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Verisimilitude does not smuggle in induction because it is a comparative logical relation based on existing evidence (falsifications), not a predictive probability. It claims T1 is closer to truth than T2 *given* current tests, not that T1 will survive future tests with high probability."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Accepting a methodological rule is not assuming induction as a metaphysical principle. Popper rejects induction as a source of justification/truth, but accepts methodological rules (like 'prefer the better tested') as conventions for conducting science, which are themselves open to criticism."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate explicitly utilizes Popper's metric of 'severity of test' and 'degree of corroboration' as the basis for the preference, aligning with the criticism's assertion that these metrics exist, while clarifying they function non-probabilistically."
+        }
+      ],
+      "optional_refs": ["SRC_007", "SRC_006", "SRC_009"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system, rendering his anti-induction stance inconsistent when applied to practical action.",
+      "mechanism": "To prefer Theory A over Theory B for action implies an expectation that A will perform better in the future (or in untested domains) than B. Since past performance (corroboration) logically entails nothing about future performance without the Principle of Induction, any agent acting on corroboration is implicitly assuming the uniformity of nature. Popper's 'critical preference' is thus a verbal disguise for inductive habit.",
+      "counterconditions": [
+        "If one can act on a theory without any expectation of its future success.",
+        "If 'preference' is redefined purely as 'current status' with no forward-looking component."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "revised",
+          "note": "Revised to acknowledge that while Popper intends a normative distinction, the *act* of choosing for practical application necessarily bridges the gap between past tests and future utility, which is the domain of induction. The rebuttal fails because action implies prediction."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "This candidate argues that verisimilitude *does* collapse into induction because claiming a theory is 'closer to truth' based on past tests assumes the structure of reality revealed so far persists, which is an inductive leap."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Treating induction as a 'methodological assumption' is exactly what Popper forbade; he insisted induction is logically invalid. Therefore, using it as a method contradicts his core logical thesis."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "While Popper provides the metric of severity, this candidate argues the *application* of that metric to guide action transforms it into a proxy for probability, violating the spirit of his anti-induction."
+        }
+      ],
+      "optional_refs": ["SRC_008", "SRC_010"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view scientific preference not as a belief in truth or probability, but as a Darwinian selection mechanism where 'preference' simply means 'retention for further testing'.",
+      "mechanism": "Popper's epistemology is evolutionary. Theories are conjectures; tests are selection pressures. 'Preferring' a corroborated theory means keeping it in the pool of surviving candidates while eliminating falsified ones. This requires no induction (expectation of future success) and no claim of increased probability. It is merely a statement of current survival status. Action based on this is a tentative trial, not a confident prediction.",
+      "counterconditions": [
+        "If scientists claim more than mere retention (e.g., confidence in engineering applications).",
+        "If the 'survival' of a theory is interpreted as evidence of its fitness (which invites induction)."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "departure_declared",
+          "note": "Departing from the strict separation of causal/normative. In an evolutionary framework, the causal mechanism of selection *is* the normative justification for retention. There is no external 'should', only the internal logic of the selection process."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Verisimilitude is replaced here by 'survival value'. No metric of truth-likeness is needed, only the binary fact of non-falsification, avoiding the collapse into induction."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "This approach does not assume induction as a regulative ideal; it assumes only that falsification eliminates error. It is a negative heuristic, not a positive inductive one."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Severity of test is reinterpreted as the intensity of the selection pressure, not a measure of confirmation. The candidate accepts the metric but changes its ontological weight."
+        }
+      ],
+      "optional_refs": ["SRC_004", "SRC_003"]
+    },
+    {
+      "claim": "Popper's system forces a pragmatic contradiction: the philosopher denies induction, but the scientist (even Popper) must live by it, making the system descriptively false of actual science and prescriptively unusable for real-world stakes.",
+      "mechanism": "When stakes are high (e.g., building a bridge), relying solely on 'non-falsification' without an inductive belief that the laws holding today will hold tomorrow is irrational. Popper's insistence that corroboration adds no probability leaves the scientist with no rational basis for action other than blind guesswork disguised as critical preference. Thus, the system fails its own test of rationality.",
+      "counterconditions": [
+        "If 'rationality' is redefined to exclude probabilistic expectations.",
+        "If one can demonstrate successful action based purely on error elimination without positive expectation."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "The criticism focuses on the conflation of explanation and justification. This candidate argues that the failure of justification (due to lack of induction) makes the explanation of scientific practice (which uses induction) incompatible with Popper's norms."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Agrees that verisimilitude fails to save the system because it cannot bridge the gap to practical certainty required for action."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Supports the view that trying to salvage induction as a methodological rule is a direct contradiction of Popper's explicit refutations, leaving the system bankrupt for action."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Argues that the metric of severity is insufficient to justify action without the implicit inductive step the criticism denies exists."
+        }
+      ],
+      "optional_refs": ["SRC_005"]
+    },
+    {
+      "claim": "The preference is defensible only if we accept that 'rationality' in science is local and retrospective (avoiding known errors) rather than global and prospective (predicting truth), costing us the comfort of expecting the future to resemble the past.",
+      "mechanism": "We accept Popper's terms by radically downsizing our epistemic ambitions. We prefer the better-corroborated theory not because we think it is true or probable, but because it is the *least wrong* known option. The cost is acknowledging that acting on this preference is a gamble with no guarantee of success, grounded only in the fact that alternatives have already failed. This is a stoic rationality of error avoidance.",
+      "counterconditions": [
+        "If society demands guarantees of safety that 'least wrong' cannot provide.",
+        "If the definition of 'preference' inherently includes an expectation of success."
+      ],
+      "typicality": 0.90,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "The normative justification is precisely this local error avoidance. It is not an evolutionary description but a conscious ethical choice to minimize known harm/error."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Verisimilitude is interpreted strictly as 'distance from known falsity', avoiding any positive claim about truth that would require induction."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "This is not adopting induction as a regulative ideal; it is adopting 'fallibilism' as a regulative ideal. The distinction is crucial: we regulate by seeking errors, not by assuming regularity."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Uses the severity metric to quantify how much error has been ruled out, fitting the 'least wrong' narrative perfectly."
+        }
+      ],
+      "optional_refs": ["SRC_001", "SRC_014"]
+    },
+    {
+      "claim": "The tension is a pseudo-problem arising from a category mistake: Popper's 'corroboration' reports on the *history* of a theory, while 'probability' and 'action' concern its *future*. One can rationally prefer a theory with a clean history for future action without believing the history causes the future success.",
+      "mechanism": "Just as one might prefer a car with no past breakdowns for a trip, not because the past guarantees the future, but because the absence of known defects is the only available data for decision-making. This is a heuristic of 'no known defeaters'. It respects Popper's ban on induction (no claim of necessary connection) while justifying preference (maximizing available information).",
+      "counterconditions": [
+        "If the 'no known defeaters' heuristic implicitly assumes the stability of the car's components (induction).",
+        "If rational action requires more than just the absence of negative data."
+      ],
+      "typicality": 0.70,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "The justification is informational, not causal. We prefer the theory because it holds more informational content (fewer falsifications), not because an evolutionary force selected it."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Avoids verisimilitude entirely in favor of an information-theoretic account of 'defeaters', sidestepping the induction trap."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "This heuristic is a rule of thumb derived from logic (modus tollens), not an inductive assumption about nature's uniformity."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Reframes 'severity of test' as the depth of the search for defeaters. A severe test is one that looked hard for a flaw and found none."
+        }
+      ],
+      "optional_refs": ["SRC_002", "SRC_013"]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference that the theory is true or probable, but as a critical-rational decision to adopt the theory that has withstood the most severe attempts at falsification, thereby maximizing verisimilitude (truth-likeness) without assigning probability. This preference smuggles in induction only if one conflates 'acting on the best available theory' with 'believing the theory will remain successful in the future'; Popper's solution costs the scientist any guarantee of future success, requiring instead a commitment to treat the preferred theory as the most worthy target for further attempted refutation.",
+    "mechanism": "Critical Rational Choice via Verisimilitude Maximization: The mechanism distinguishes between the logical status of a theory (always uncertain) and the methodological rule for action (choose the one that has survived the hardest tests). By framing the choice as a bet on which theory offers the highest content and thus the highest potential closeness to truth (verisimilitude), rather than a prediction of future performance based on past frequency, the agent avoids the inductive leap. The 'cost' is the abandonment of security: the chosen theory may fail tomorrow, but it was still the rational choice today given the current state of criticism.",
+    "counterconditions": [
+      "If the Tichý-Miller theorem proves that verisimilitude cannot be non-probabilistically compared between false theories, then the metric for choice collapses.",
+      "If 'acting on a theory' logically entails assuming its future reliability (a regulative ideal), then the distinction between methodological acceptance and inductive belief dissolves.",
+      "If multiple unrefuted theories exist with equal severity of tests passed, the mechanism fails to provide a tie-breaking rule without invoking arbitrary preference."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The criticism claims a false dichotomy between 'non-rational convention' and 'critical rational choice.' This candidate explicitly adopts the 'critical rational choice' horn of that dichotomy, arguing the preference is rational because it maximizes verisimilitude, not because it is a blind convention. The rebuttal stands by clarifying that Popper's solution is precisely this third way: rational action without probabilistic justification."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address the scenario of multiple coexisting unrefuted theories. The revision adds a countercondition acknowledging that if test severity is equal, the mechanism requires a tie-breaker (e.g., informational content), which must also be non-inductive. The claim now emphasizes 'severity of tests' as the differentiator rather than mere survival."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "rebutted",
+        "note": "The criticism argues that evolutionary epistemology fails to answer the 'cost' of lacking an inductive bridge. This candidate rebuts by defining the cost explicitly: the loss of guaranteed future success. The defense does not claim the 'fittest' will survive tomorrow, only that it is the most informative guess today. The lack of an inductive bridge is the feature, not the bug; the cost is accepted as the price of avoiding dogmatism."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The claim that preferring 'fittest survivors' smuggles in induction assumes that 'past survival' is being used as a predictor of 'future survival.' This candidate rebuts by asserting that in Popper's framework, past survival is used only as a measure of how thoroughly the theory has been tested (its corroboration), not as a statistical basis for future prediction. The preference is for the theory that has been most rigorously examined, not the one statistically likely to win."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "rebutted",
+        "note": "The criticism conflates causal explanation with normative justification. This candidate clarifies that the normative justification is the imperative to seek truth (verisimilitude). We prefer the better-corroborated theory not because evolution caused us to, but because critical rationality dictates we choose the hypothesis that has best resisted our attempts to destroy it, as it contains the most empirical content."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "Similar to previous points, this candidate rejects the premise that a 'pragmatic bet' on the fittest survivor implies an inductive expectation of continued fitness. The bet is pragmatic in the sense of being the best available means to the end of finding truth, not in the sense of gambling on odds derived from past frequencies. The 'bet' is on content, not continuity."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate rejects the assumption that 'methodological acceptance' necessarily entails 'assuming future success.' It departs from the view that acting on a theory requires a regulative ideal of continuity. Instead, it posits that one can act on a theory while fully expecting it might be falsified by the very next experiment, viewing the action as a temporary deployment of the best current error-elimination tool."
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "revised",
+        "note": "Revised the claim to acknowledge the Tichý-Miller theorem as a critical vulnerability. The mechanism now frames verisimilitude as a 'regulative ideal' or a 'hope' rather than a calculable metric, admitting that while we cannot formally prove theory A is closer to truth than theory B if both are false, the methodological rule remains to prefer the one with higher content and stricter test survival. This accepts the formal limitation while preserving the practical rule."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["biological_natural_selection_process"],
+      "shared_structure": [
+        "Selection occurs based on survival against environmental pressures (tests).",
+        "Survival does not guarantee future existence or perfection.",
+        "The 'fittest' is defined retrospectively by what has not been eliminated."
+      ],
+      "disanalogies": [
+        "Biological fitness aims at reproduction/survival of the organism; scientific corroboration aims at elimination of error and approach to truth.",
+        "Natural selection has no foresight or goal; critical rationality has the explicit normative goal of truth.",
+        "In biology, 'fitness' is often tautological; in Popper's science, 'corroboration' is tied to the logical severity of the test, not just survival."
+      ],
+      "transfer_claims": [
+        "Just as we rely on the currently surviving species as the best adapted to current conditions without assuming they will never go extinct, we rely on corroborated theories as the best adapted to current evidence without assuming they are true."
+      ],
+      "overturn_conditions": [
+        "If biological survival is shown to be purely random with respect to adaptation, the analogy fails to support 'rational' preference.",
+        "If scientific test severity cannot be objectively ranked, the parallel to environmental pressure breaks down."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

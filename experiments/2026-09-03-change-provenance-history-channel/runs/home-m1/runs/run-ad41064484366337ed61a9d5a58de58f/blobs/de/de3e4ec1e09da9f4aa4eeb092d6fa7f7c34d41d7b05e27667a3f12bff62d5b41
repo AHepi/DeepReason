@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses because it conflates 'critical preference' (an epistemic rule for testing) with 'practical action' (a pragmatic choice for survival), failing to explain how a scientist can rationally act on a theory without assuming its future reliability. The target admits the cost is a 'leap of faith' and lack of 'rational assurance,' which effectively concedes that on Popper's own terms, the preference for action is irrational, thereby failing to defend the preference as requested by the problem.",
+      "counterexample": null,
+      "premise": "The problem asks if the preference for better-corroborated theories in action is defensible on Popper's terms; the target argues it is defensible only as a methodological rule for testing, but admits it offers no rational basis for practical action, requiring a 'leap of faith'.",
+      "premise_evidence": [
+        {
+          "block": "3f87be63a642d7dbf3fbcbd4",
+          "quote": "accepting this defense costs the scientist any rational assurance that the preferred theory is practically reliable for action, forcing a leap of faith that Popper admits is unavoidable but critics argue renders the preference irrational for practical purposes."
+        }
+      ],
+      "successor_question": "If the target admits the preference requires a 'leap of faith' devoid of rational assurance for action, does this not confirm the critic's view that Popper smuggles in induction psychologically while rejecting it logically, rather than providing a coherent defense?"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms as a non-inductive, methodological rule to maximize 'truth-content' (verisimilitude) and informational yield, rather than a probabilistic bet on future success; however, accepting this defense costs the scientist any rational assurance that the preferred theory will actually work in the next instance, reducing scientific action to a bold, unjustified gamble on the 'most informative error' rather than a reliable guide to truth.",
+    "mechanism": "Non-Inductive Verisimilitude Maximization: The mechanism posits that corroboration reports only past performance (logical relation between theory and evidence) but serves as a selection criterion for 'potential truth-content.' By choosing the theory that has survived the severest tests, the scientist selects the one with the highest empirical content and thus the highest potential verisimilitude, without asserting it is more likely to be true or to survive future tests. This treats theory choice as an optimization of learning potential, not a prediction of utility.",
+    "counterconditions": [
+      "If the Tichý-Miller theorem holds that verisimilitude cannot be logically defined within Popper's falsificationist framework, then the 'truth-content' justification collapses into inductive assumption.",
+      "If acting on a theory inherently requires assuming its future reliability (even pragmatically), then the distinction between 'methodological preference' and 'inductive belief' is merely semantic.",
+      "If two theories have equal corroboration but different ontological commitments, the mechanism provides no basis for choice without smuggling in prior probabilities."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "rebutted",
+        "note": "The criticism claims the mechanism fails when multiple unrefuted theories coexist. The proposed candidate addresses this by specifying 'severest tests' as the tie-breaker: among surviving theories, the one subjected to and surviving the most severe (least probable) tests is preferred for its higher informational content, resolving the coexistence scenario without induction."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "revised",
+        "note": "Revised to explicitly articulate the 'cost': the candidate now admits that this defense strips the scientist of rational assurance for future success. The 'evolutionary' analogy is replaced with a strict 'informational yield' argument to avoid the charge of smuggling induction via biological fitness metaphors."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The criticism argues evolutionary epistemology smuggles in induction. The candidate rebuts this by rejecting the evolutionary analogy entirely in favor of a logical argument about 'content': preferring high-content theories is a rule to learn faster if false, not a belief that they are 'fitter' to survive. No temporal projection is made."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "rebutted",
+        "note": "The criticism conflates causal explanation with normative justification. The candidate clarifies that the norm is purely methodological: 'Choose the theory that offers the most opportunity to be falsified next.' This is a normative rule for growth of knowledge, not a causal claim about why theories survive, thus satisfying Popper's separation."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "revised",
+        "note": "Revised to remove the 'pragmatic bet' language which invited the induction charge. The preference is now framed strictly as a 'maximization of testability,' where the 'bet' is explicitly acknowledged as irrational in the probabilistic sense but rational in the heuristic sense of seeking truth."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "rebutted",
+        "note": "The criticism claims methodological acceptance implies probabilistic weighting. The candidate rebuts by asserting that 'acceptance for testing' is binary and temporary, carrying zero weight regarding truth probability. The 'regulative ideal' is simply 'do not stop testing,' not 'assume it works.'"
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate acknowledges the Tichý-Miller critique undermines the formal logic of verisimilitude but proceeds by treating 'verisimilitude' as a pre-formal intuitive guide (a 'hope') rather than a logically definable metric, accepting the cost that the justification is ultimately dogmatic rather than logical."
+      },
+      {
+        "handle": "5e2df92cb9e1b33a910e9a6b9b29a1f0c4895a11d9c8ac63dac5bc9e45163026",
+        "kind": "rebutted",
+        "note": "The criticism claims the target sidesteps the induction question. The candidate directly answers: Yes, it smuggles in induction IF one demands predictive reliability; NO, it does not if one accepts the goal is merely maximal information exposure. The dilemma is resolved by redefining the goal of science from 'true predictions' to 'high-content errors.'"
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_004"],
+      "shared_structure": [
+        "Selection based on survival of severe stress without inferring future durability.",
+        "Preference driven by magnitude of risk undertaken rather than history of success.",
+        "Goal is elimination of falsehoods rather than accumulation of confirmed truths."
+      ],
+      "disanalogies": [
+        "Biological evolution has no teleological goal of 'truth,' whereas Popperian science explicitly aims at verisimilitude.",
+        "Natural selection operates on reproduction rates (frequency), while Popperian selection operates on logical content (quality).",
+        "Organisms do not 'choose' to be tested; scientists actively construct severe tests."
+      ],
+      "transfer_claims": [
+        "Just as we study the organism that survived the harshest winter to understand resilience limits, not to guarantee it survives the next, we prefer corroborated theories to understand nature's limits, not to guarantee prediction.",
+        "The 'fittest' in science is the most falsifiable, not the most adaptable, transferring the value of vulnerability over robustness."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that acting on a theory logically entails assigning it non-zero probability of future success.",
+        "If the concept of 'informational content' is proven to be inextricably linked to subjective prior probabilities."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_004"
+      ]
+    }
+  }
+}

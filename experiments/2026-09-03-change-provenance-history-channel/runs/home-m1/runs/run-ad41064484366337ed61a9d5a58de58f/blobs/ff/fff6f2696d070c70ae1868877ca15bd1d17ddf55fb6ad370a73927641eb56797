@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'Evolutionary Epistemology' to frame preference as a report on 'current survival status,' but this fails to answer the problem's specific challenge regarding action: Popper himself preferred better-corroborated theories for *future* action (e.g., building bridges). If the preference is merely a backward-looking report on past tests, it provides no rational basis for expecting the theory to work in the future; if it does provide such a basis, it implicitly assumes the future will resemble the past (uniformity of nature), which is the very inductive principle Popper rejected. The target asserts the preference is 'non-inductive' but does not explain how a selection based on past survival justifies future reliance without smuggling in induction.",
+      "counterexample": null,
+      "premise": "Popper advocated acting on the best-corroborated theory for practical purposes, implying an expectation of future reliability.",
+      "premise_evidence": null,
+      "successor_question": "How can one rationally act on a theory for future applications based solely on past survival without assuming that past performance indicates future results?"
+    }
+  ]
+}

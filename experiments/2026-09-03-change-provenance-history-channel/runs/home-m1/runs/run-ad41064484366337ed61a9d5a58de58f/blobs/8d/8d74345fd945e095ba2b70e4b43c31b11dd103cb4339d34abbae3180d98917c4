@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Kind: Shared Mechanism. The isolated node 1c110c6075f4 and the foundation artifacts (SRC_001, SRC_003, SRC_005) share the mechanism of 'Critical Preference as Non-Inductive Selection'. This mechanism operates by treating severe test survival not as evidence of truth probability, but as a filter that eliminates falsified competitors, leaving the surviving theory as the default choice for action. REFUTED IF: The selection process implicitly assigns a higher subjective probability of future success to the surviving theory based on its past performance, thereby collapsing the distinction between 'best current conjecture' and 'most likely true', which reintroduces the inductive fallacy the mechanism seeks to avoid.",
+      "typicality": 0.92,
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "The candidate explicitly defines the mechanism as non-inductive selection where survival does not imply higher probability, directly addressing the criticism that severe testing relies on probative capacity implying truth."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Content now explicitly names 'Shared Mechanism' and includes a detailed 'REFUTED IF' clause describing the specific failure condition regarding induction."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Added explicit mechanism definition and refutation condition to satisfy relation-form criteria."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Structured the response to clearly separate the relation kind, the mechanism description, and the refutation condition."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The candidate defines the specific mechanism ('Critical Preference as Non-Inductive Selection') rather than just describing a conditional failure state; the 'REFUTED IF' clause specifies the condition under which the mechanism itself fails, not the relation."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Ensured the 'REFUTED IF' clause is present and logically connected to the mechanism's integrity."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "The refutation condition clarifies that if the mechanism relies on predictive success probabilities, it fails; this aligns with the criticism without contradicting the core claim of non-inductive preference."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Corrected formatting to ensure all required elements (kind, mechanism, refuted if) are explicitly stated."}
+      ],
+      "neighbours": ["SRC_001", "SRC_003", "SRC_005"]
+    },
+    {
+      "content": "Kind: Contradiction. The isolated node 1c110c6075f4 stands in contradiction to any interpretation of Popperian corroboration that equates 'survival of severe tests' with 'increased verisimilitude' or 'truth-likeness' unless verisimilitude is strictly defined as informational content rather than proximity to truth. REFUTED IF: It can be demonstrated that acting on a theory necessarily entails a belief in its higher likelihood of truth compared to falsified alternatives, making the 'non-inductive' claim a semantic disguise for an underlying inductive commitment.",
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "By framing the relation as a contradiction to probabilistic interpretations, the candidate accepts the critic's premise that severe testing often implies probability, but argues this invalidates the non-inductive claim rather than the testing mechanism itself."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Explicitly named 'Contradiction' as the relation kind and provided a clear 'REFUTED IF' scenario."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Clarified the specific point of contradiction regarding verisimilitude definitions."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Structured to meet the substantive relation requirement by defining the opposing viewpoints clearly."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The mechanism of contradiction is defined as the incompatibility between 'acting on a theory' and 'not believing it is more likely true'."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Included the mandatory 'REFUTED IF' clause focusing on the necessity of inductive belief for action."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "The candidate agrees that if prediction relies on probability, the non-inductive stance fails, which is exactly what the 'REFUTED IF' clause posits."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Ensured all structural requirements for the relation proposal are met."}
+      ],
+      "neighbours": ["SRC_002", "SRC_004"]
+    },
+    {
+      "content": "Kind: Abstraction. The isolated node 1c110c6075f4 represents an abstraction of the 'Evolutionary Epistemology' model found in SRC_002 and SRC_003, where 'severe testing' is abstracted into 'environmental pressure' and 'theory preference' is abstracted into 'species survival'. REFUTED IF: The analogy breaks down such that the 'environment' (testing regime) is not independent of the 'organism' (theory) but is constructed by the scientific community in a way that biases survival towards currently fashionable paradigms, thus rendering the selection process circular rather than objective.",
+      "typicality": 0.68,
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "The abstraction shifts the focus from logical probative capacity to systemic survival, bypassing the specific critique about induction in testing by reframing it as environmental adaptation."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Defined the relation as 'Abstraction' and specified the mapping between testing and environmental pressure."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Added the 'REFUTED IF' condition regarding the independence of the testing environment."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Clearly articulated the abstract relationship and its potential failure mode."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The mechanism is the structural mapping of evolutionary concepts to epistemological ones, which is explicitly defined."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Included the refutation condition concerning circularity in paradigm selection."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Acknowledges that if the environment is biased, the evolutionary analogy fails to support non-inductive preference."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Formatted to ensure all criteria for a substantive relation are satisfied."}
+      ],
+      "neighbours": ["SRC_002", "SRC_003"]
+    },
+    {
+      "content": "Kind: Dependence. The validity of the isolated node 1c110c6075f4 as a rational guide for action depends entirely on the 'Eliminative Default' mechanism described in SRC_004, where preference is merely the absence of eliminated alternatives. REFUTED IF: There exists a scenario with multiple unrefuted theories where the cost of error varies significantly between them, forcing the agent to estimate probabilities of truth to make a rational choice, thereby proving that mere elimination is insufficient for decision-making and that induction is unavoidable.",
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "The dependence is on the *lack* of probative capacity for truth, relying solely on elimination; the refutation condition addresses what happens when elimination is insufficient."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Explicitly stated 'Dependence' and the specific mechanism ('Eliminative Default')."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Formulated a precise 'REFUTED IF' clause involving variable error costs and multiple survivors."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Clarified the dependency relationship and the conditions for its failure."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The mechanism is defined as 'Eliminative Default', and the refutation condition explains exactly when this mechanism fails to support action."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Ensured the refutation condition is robust and directly challenges the sufficiency of the mechanism."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Agrees that if prediction requires probability (due to varying costs), the non-inductive elimination strategy fails."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Met all structural requirements for the relation proposal."}
+      ],
+      "neighbours": ["SRC_004"]
+    },
+    {
+      "content": "Kind: Integration. The isolated node 1c110c6075f4 integrates the 'Critical Rationalism' of SRC_001 with the 'Evolutionary Epistemology' of SRC_002 by proposing that individual rational choice (critical preference) is the micro-level manifestation of the macro-level evolutionary selection of ideas. REFUTED IF: The individual scientist's cognitive processes are shown to be fundamentally incapable of performing the 'severe testing' required for evolution without relying on heuristic biases that are essentially inductive, thus severing the link between rational agency and evolutionary selection.",
+      "typicality": 0.55,
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "The integration posits that the 'non-inductive' nature is a systemic property, not necessarily an individual cognitive one, addressing the critique about the nature of testing."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Defined the relation as 'Integration' and specified the micro/macro level connection."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Added the 'REFUTED IF' condition regarding cognitive limitations and inductive heuristics."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Clearly described the integrated mechanism and its potential breakdown."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The mechanism is the mapping of individual choice to systemic selection, with a clear failure condition."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Included the refutation condition about the impossibility of non-inductive cognition at the individual level."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Accepts that if individual cognition is inductive, the integration fails to support a purely non-inductive framework."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Ensured all formal requirements for the relation are present."}
+      ],
+      "neighbours": ["SRC_001", "SRC_002"]
+    },
+    {
+      "content": "Kind: Compatibility. The isolated node 1c110c6075f4 is compatible with the 'Methodological Rule' in SRC_005 provided that 'rationality' is redefined as 'procedural adherence to criticism' rather than 'optimization for truth'. REFUTED IF: The definition of 'rationality' cannot be decoupled from truth-seeking goals in any meaningful sense, such that a procedure ignoring truth probability is deemed irrational by any standard agent model, rendering the compatibility nominal and practically useless.",
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "The compatibility rests on redefining rationality, sidestepping the issue of whether testing itself implies truth probability."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "revised", "note": "Stated 'Compatibility' as the relation and the condition of redefined rationality."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Formulated the 'REFUTED IF' clause around the inseparability of rationality and truth-seeking."},
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Defined the specific terms under which compatibility holds and fails."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The mechanism is the semantic shift in the definition of rationality, with a clear refutation path."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "revised", "note": "Included the refutation condition challenging the viability of the redefined rationality."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Acknowledges that if rationality requires truth optimization, the compatibility collapses."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "revised", "note": "Met all structural criteria for the relation proposal."}
+      ],
+      "neighbours": ["SRC_005"]
+    }
+  ]
+}

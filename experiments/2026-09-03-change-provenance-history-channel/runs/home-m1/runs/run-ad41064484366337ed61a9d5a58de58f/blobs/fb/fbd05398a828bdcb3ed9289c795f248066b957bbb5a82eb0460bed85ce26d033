@@ -1,0 +1,196 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'methodological bet' on verisimilitude (truth-likeness), where corroboration reports past severity but the choice targets future closeness to truth without assuming nature's uniformity.",
+      "mechanism": "Corroboration functions as a comparative metric of logical content and test severity survived, not probability. The scientist chooses the theory with higher verisimilitude because it has withstood attempts to falsify its high content, making it the 'best guess' available, while explicitly acknowledging it may be false tomorrow. This avoids induction by treating the choice as a regulative ideal rather than a prediction of success.",
+      "counterconditions": [
+        "If the Tichý-Miller theorem proves verisimilitude cannot be defined within Popper's own logic, this mechanism collapses.",
+        "If choosing the 'best guess' implicitly requires assuming the future will resemble the past regarding test outcomes, induction is smuggled in."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The 'methodological bet' does not require an eliminative default that leaves only one theory; it allows coexistence of unrefuted theories but ranks them by severity of tests passed, providing a decision rule for action without claiming the lower-ranked ones are false."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Evolutionary epistemology is not the primary justification here; the justification is logical (verisimilitude via severity). The cost is accepting that we act on guesses that might be wrong, not that the 'fittest' will survive."
+        },
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "The analogy to biological selection is descriptive of how science evolves, not the normative justification for the individual scientist's choice. The choice is justified by the logical structure of the tests, not the history of survival."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The causal explanation (survival) is distinct from the normative justification (logical content/severity). Popper's defense rests on the latter: we prefer the theory that has risked more and lost less, not merely the one that happened to survive."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'pragmatic bet' is not on continued success (induction) but on the current state of knowledge. We act on the theory that is currently least likely to be false based on severe testing, accepting the risk that it might fail the next test."
+        },
+        {
+          "handle": "[SRC_011] against SRC_002",
+          "kind": "rebutted",
+          "note": "Methodological acceptance is a decision to use a theory as a basis for action and further testing, not a probabilistic weighting. It assumes nothing about the future other than the fallibility of the current choice."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "revised",
+          "note": "Acknowledging the Tichý-Miller critique, the mechanism shifts from formal verisimilitude to 'potential falsifiability' and 'test severity' as the proxy for truth-likeness, avoiding the formal definition that was undermined."
+        },
+        {
+          "handle": "[SRC_014] against SRC_005",
+          "kind": "rebutted",
+          "note": "The preference is not redefined away from truth; it is a preference for the theory closest to truth (verisimilitude) based on informational content and test severity, directly addressing the induction charge by denying any probability increase."
+        }
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "The preference inevitably smuggles induction back in because any rational preference for action based on past performance logically entails an assumption that the future will resemble the past, which is the very principle of induction Popper sought to eliminate.",
+      "mechanism": "Rational action requires a bridge between 'has survived' and 'will succeed.' Without this bridge, preferring Theory A over Theory B is arbitrary. If Popper claims the preference is rational, he must assume the regularity of nature (induction). If he claims it is irrational/arbitrary, he undermines the practice of science. Thus, the 'Popperian solution' is a verbal sleight of hand masking an inductive commitment.",
+      "counterconditions": [
+        "If a form of rationality exists that does not rely on predictive success (e.g., purely aesthetic or ethical choice), the charge fails.",
+        "If 'preference' is redefined as mere habit without rational grounding, the charge holds but dissolves the problem into psychology."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The criticism of 'Eliminative Default' is moot here because the argument is that *any* selection mechanism between coexisting theories implies an inductive expectation of future performance."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "This candidate agrees that evolutionary epistemology fails to answer the cost; the cost is the admission that Popperian science is ultimately grounded in an unjustifiable inductive habit."
+        },
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "The analogy to biological selection is precisely where the induction is smuggled in: assuming that what worked before will work again is the definition of induction."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The distinction between causal and normative collapses when the 'norm' is to act successfully. To normatively prefer a theory for action is to causally expect it to work."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'pragmatic bet' is only rational if one expects the odds to hold, which is an inductive assumption. Betting on the 'currently fittest' without expecting it to remain fit is gambling, not science."
+        },
+        {
+          "handle": "[SRC_011] against SRC_002",
+          "kind": "rebutted",
+          "note": "Methodological acceptance *is* probabilistic weighting in disguise. To say 'I accept this for action' is to assign it a higher subjective probability of success than its rivals."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "Even if verisimilitude is flawed, the attempt to use it reveals the desperate need for an inductive bridge. The failure of verisimilitude confirms that no non-inductive bridge exists."
+        },
+        {
+          "handle": "[SRC_014] against SRC_005",
+          "kind": "rebutted",
+          "note": "Redefining preference as 'informational content' sidesteps the practical necessity of prediction. Scientists act to change the world, requiring predictions, which requires induction."
+        }
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The dilemma is dissolved by recognizing that scientific preference is not a truth-claim or a probability assignment, but a 'conventionalist decision' to treat the best-tested theory as the new baseline for falsification, costing us the comfort of knowing why we choose it.",
+      "mechanism": "Popper's system is a methodology of rules, not a theory of knowledge. The rule is: 'Always subject the most severely tested theory to new tests.' The preference is simply the operational consequence of this rule. We do not believe it is true or probable; we simply use it as the starting point for the next attempt to kill it. This avoids induction by refusing to make any claim about the future other than the commitment to test.",
+      "counterconditions": [
+        "If the 'rule' itself cannot be justified without circularity or induction, the dissolution fails.",
+        "If scientists actually *believe* the theories they act on, this conventionalist description is psychologically false."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The rule applies to all unrefuted theories by subjecting the best-tested one to new fire; it doesn't need to eliminate others immediately, just prioritize the testing queue."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Evolutionary epistemology is irrelevant; the justification is procedural/conventional. The cost is admitting the procedure has no external validation."
+        },
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "No analogy is needed. The rule is self-justifying within the closed system of critical rationalism. Induction is not smuggled in because no prediction is made."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The normative justification *is* the rule itself. Popper maintains the distinction by refusing to ground the rule in anything outside the method."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "It is not a bet on survival; it is a commitment to severity. We choose the hard target because it yields more information if it breaks."
+        },
+        {
+          "handle": "[SRC_011] against SRC_002",
+          "kind": "rebutted",
+          "note": "Methodological acceptance is explicitly non-probabilistic. It is a decision to probe, not to trust."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "Verisimilitude is not required for this view. The baseline is chosen for its testability, not its truth-likeness."
+        },
+        {
+          "handle": "[SRC_014] against SRC_005",
+          "kind": "rebutted",
+          "note": "The core dilemma assumes a need for justification of belief. This candidate denies that belief is the goal; the goal is error elimination."
+        }
+      ],
+      "typicality": 0.60,
+      "optional_refs": [
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if we abandon Popper's strict separation of context of discovery and context of justification, allowing a naturalized epistemology where 'induction' is replaced by 'adaptive learning' which is biologically real but logically invalid.",
+      "mechanism": "Scientists prefer corroborated theories because human cognition is evolved to detect patterns. This is a factual description of science as a natural phenomenon. It is defensible on 'Popper's terms' only if we stretch those terms to include naturalism. The cost is admitting that Popper's logical purity was impossible and that science rests on biological instincts that function *as if* they were inductive.",
+      "counterconditions": [
+        "If Popper strictly forbids naturalizing epistemology, this candidate violates his terms.",
+        "If 'adaptive learning' is just induction renamed, the problem remains unsolved."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "departure_declared",
+          "note": "Departing from the constraint that the solution must be purely logical; embracing a psychological/biological explanation."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "This candidate fully embraces evolutionary epistemology as the *only* answer, accepting the cost that it is not a logical justification but a causal explanation."
+        },
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "Yes, it smuggles in induction, but argues that this smuggling is unavoidable and biologically necessary. The 'defense' is that we have no choice."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The causal explanation *becomes* the normative justification in a naturalized framework: we *should* follow our evolved instincts because they are our only tool."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "The

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the central tension in Popper's philosophy regarding the pragmatic necessity of induction for action, but it fails to address the specific requirement to 'make the strongest case for each answer' and determine 'which one survives.' By presenting only the argument that induction is smuggled in, without fairly constructing or refuting the opposing view (that preference is defensible without induction, e.g., via verisimilitude or critical preference), the response is incomplete relative to the problem's explicit instructions.",
+      "counterexample": null,
+      "premise": "The problem explicitly asks to 'Make the strongest case for each answer, then say which one survives and what accepting it costs.'",
+      "premise_evidence": null,
+      "successor_question": "How would a Popperian defend the preference for better-corroborated theories without relying on the assumption that past success predicts future utility?"
+    }
+  ]
+}

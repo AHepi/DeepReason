@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms not as an inductive inference that the theory is more likely true, but as a methodological rule to select the theory with the highest empirical content and thus the greatest capacity for future falsification; accepting this costs us the ability to claim rational assurance that the chosen theory will succeed in practice, reducing scientific action to a non-justified 'leap' guided only by the aim of maximizing testability.",
+    "mechanism": "Reframe 'preference' from a truth-tracking probability estimate to a risk-maximizing strategy: the scientist chooses the theory that has survived the severest tests because it is the most informative (least probable a priori) and therefore offers the best opportunity to learn something new if it fails next. This avoids induction by refusing to project past success into future reliability, instead projecting it into future vulnerability.",
+    "counterconditions": [
+      "If the goal of science is defined as practical success or prediction rather than rapid error elimination, this mechanism fails to justify the preference.",
+      "If 'severe testing' cannot be defined without implicitly assuming some regularity of nature (an inductive premise), the distinction collapses.",
+      "If acting on a theory inherently requires an expectation of its continued validity, the 'leap' is indistinguishable from hidden induction."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "popper_conjectures_refutations_ch10",
+        "popper_logic_scientific_discovery_sec79"
+      ],
+      "shared_structure": [
+        "Selection based on survival of severe trials",
+        "Rejection of probability as a measure of merit",
+        "Distinction between choosing for action and believing to be true"
+      ],
+      "disanalogies": [
+        "Biological fitness implies future reproductive success; Popperian corroboration explicitly denies implying future predictive success.",
+        "Natural selection is a causal process; methodological selection is a normative rule."
+      ],
+      "transfer_claims": [
+        "Just as we study the fittest organism to understand adaptation limits, we adopt the best-corroborated theory to understand nature's limits.",
+        "Preference is a report on current status, not a prophecy of future performance."
+      ],
+      "overturn_conditions": [
+        "Demonstration that 'severity' of a test logically entails an assumption of uniformity of nature.",
+        "Proof that no agent can act on a theory without assigning it some degree of subjective probability > 0.5."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "rebutted",
+        "note": "The criticism assumes the mechanism must eliminate unrefuted theories to work. The proposed mechanism addresses coexistence by selecting the one with highest content/severity survival for *testing*, not by declaring others false. It explains choice among survivors via 'informational yield', not elimination."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "rebutted",
+        "note": "The cost admitted is precisely the lack of an inductive bridge. The defense argues this is a feature, not a bug: the 'cost' is the abandonment of rational certainty for action. The preference is justified as maximizing learning potential, not ensuring survival."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The analogy to biological fitness is limited strictly to the 'survival so far' descriptive fact. The normative jump is not 'it survived so it will survive' (induction) but 'it survived severe tests so it is highly informative' (logical content). The induction charge is evaded by changing the goal from truth-probability to information-gain."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates causal history (why it survived) from normative justification (why choose it). The justification is purely methodological: to further the aim of science (falsification), one must test the most vulnerable (best-corroborated) theory. No causal necessity is claimed."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "The 'pragmatic bet' is not on the theory being true or working, but on it being the most efficient tool for generating new errors. The criticism fails because it assumes the bet is on success; Popper's bet is on the speed of failure detection."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "rebutted",
+        "note": "Methodological acceptance is redefined here not as 'assuming it will succeed' but as 'treating it as the current best target for attack'. The regulative ideal is 'maximize error elimination', not 'maximize predictive accuracy'. Thus no probabilistic weighting is smuggled in."
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "departure_declared",
+        "note": "This candidate departs from reliance on 'verisimilitude' as a positive metric. Instead, it relies solely on 'corroboration' as a historical report of test severity passed, combined with 'content' as a logical measure. The Tichý-Miller critique of verisimilitude is sidestepped by not claiming the theory is closer to truth, only that it is more informative."
+      },
+      {
+        "handle": "5e2df92cb9e1b33a910e9a6b9b29a1f0c4895a11d7c8ac63dac5bc9e45163026",
+        "kind": "rebutted",
+        "note": "The candidate directly answers the smuggling charge: it admits the preference looks like induction if the goal is truth/success, but argues it is not induction if the goal is testability. The dilemma is resolved by rejecting the premise that scientists prefer theories because they expect them to work; they prefer them because they expect them to teach us something when they eventually fail."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

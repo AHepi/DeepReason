@@ -1,0 +1,102 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a non-inductive, methodological rule to maximize 'truth-content' (verisimilitude) rather than probability, but accepting this costs the scientist any guarantee that the preferred theory will succeed in future applications, forcing a distinction between 'rational choice of object' and 'rational expectation of outcome.'",
+    "mechanism": "The mechanism distinguishes between the logical status of a theory (which remains unproven and improbable) and the meta-scientific rule of preferring the theory that has withstood the most severe tests because it possesses the highest empirical content and thus the greatest potential closeness to the truth (verisimilitude). This preference is a decision to test the boldest conjecture, not an inductive inference that past success predicts future success.",
+    "counterconditions": [
+      "If the Tichý-Miller theorem holds that verisimilitude cannot be logically defined for false theories, then the appeal to truth-content collapses into an implicit probabilistic assumption.",
+      "If acting on a theory necessarily implies an expectation of its future success, then the methodological rule secretly reintroduces the principle of induction it claims to reject.",
+      "If multiple unfalsified theories exist with equal empirical content, the rule provides no basis for choice, reverting to arbitrary selection."
+    ],
+    "typicality": 0.85,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "shared_structure": [
+        "Selection based on survival of severe trials rather than accumulation of positive instances.",
+        "Distinction between the object of choice (the theory) and the justification for the choice procedure.",
+        "Rejection of predictive certainty in favor of critical openness."
+      ],
+      "disanalogies": [
+        "Biological evolution selects for reproductive fitness which is tautologically defined by survival, whereas scientific selection aims at truth-likeness which is not guaranteed by survival.",
+        "In biology, the 'preference' is causal and unconscious; in Popperian science, the preference is a conscious, normative methodological decision.",
+        "Evolutionary success accumulates over generations; Popperian corroboration is strictly relative to the current state of criticism and does not accumulate probability."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the fittest organism without knowing the future environment, we act on the best-corroborated theory without knowing future test results.",
+        "The rationality lies in the rigor of the testing process (the filter), not in the properties of the survivor.",
+        "Preferring the bold theory maximizes the rate of learning even if it increases the risk of immediate error."
+      ],
+      "overturn_conditions": [
+        "Demonstration that 'severity' of a test cannot be defined without relying on inductive background assumptions.",
+        "Proof that scientists inevitably rely on probabilistic expectations when making practical decisions based on theories.",
+        "Evidence that Popper himself relied on inductive principles in his personal scientific judgments outside his formal philosophy."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "evidence_refs": [],
+    "discharges": [
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "rebutted",
+        "note": "The candidate addresses the coexistence of unrefuted theories by invoking 'empirical content' and 'severity' as tie-breakers; the choice is not between any survivors, but specifically the one that has survived the *most severe* tests, which correlates with higher information content.",
+        "where": "mechanism and counterconditions[2]"
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "rebutted",
+        "note": "The cost is explicitly stated in the claim: the loss of guaranteed future success. The defense does not promise the 'fittest' will survive tomorrow, only that it is the most rational object of choice today given our goal of finding truth.",
+        "where": "claim"
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The analogy to biological selection is used illustratively to explain the filtering process, but the justification relies on the logical concept of 'verisimilitude' and 'information content,' not on an inductive inference from past survival to future validity.",
+        "where": "analogy.disanalogies[0] and mechanism"
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "revised",
+        "note": "Clarified that the normative justification is the maximization of truth-content (a static property of the theory relative to evidence), distinct from the causal explanation of survival. The revision emphasizes that the 'should' is methodological, not predictive.",
+        "where": "mechanism"
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "The 'pragmatic bet' is not on the theory's continued truth, but on the efficiency of the critical method. We choose the theory that offers the most opportunity for falsification and thus the fastest route to truth, regardless of whether it turns out to be true.",
+        "where": "analogy.transfer_claims[2]"
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "rebutted",
+        "note": "Methodological acceptance is defined precisely as the refusal to assign probability. The 'regulative ideal' is the pursuit of truth, not the assumption of its attainment. The candidate maintains the separation between acting on a theory and believing it probable.",
+        "where": "claim and mechanism"
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "departure_declared",
+        "note": "This candidate departs from a strict reliance on the formal definition of verisimilitude (acknowledging the Tichý-Miller problem) and instead grounds the preference in the intuitive and methodological value of 'empirical content' and 'severity' as proxies for truth-likeness, accepting that a perfect logical metric may be unavailable.",
+        "where": "counterconditions[0]"
+      },
+      {
+        "handle": "5e2df92cb9e1b33a910e9a6b9b29a1f0c4895a11d9c8ac63dac5bc9e45163026",
+        "kind": "rebutted",
+        "note": "The candidate directly answers the smuggling charge by asserting that the preference is for 'informational content' precisely to avoid the inductive trap. The dilemma is resolved by rejecting the premise that rational action requires an expectation of future success (induction); rational action only requires adherence to the most critical method.",
+        "where": "claim and mechanism"
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_007"
+      ]
+    },
+    "checker_specs": [],
+    "optional_refs": [
+      "SRC_003",
+      "SRC_007"
+    ]
+  }
+}

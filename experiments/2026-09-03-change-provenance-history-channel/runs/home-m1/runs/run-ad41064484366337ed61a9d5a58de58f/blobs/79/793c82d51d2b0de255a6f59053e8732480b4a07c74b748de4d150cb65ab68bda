@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's core mechanism reframes preference as a 'risk-maximizing strategy' to choose the theory with the 'greatest capacity for future falsification.' This directly contradicts the problem context which notes that scientists (and Popper) prefer better-corroborated theories when 'choosing which theory to act on.' In practical application (acting), agents seek reliability and predictive success, not vulnerability. A theory selected specifically because it is 'most informative' and thus 'most likely to fail next' is irrational for guiding action (e.g., building a bridge or administering medicine). The target fails to explain how maximizing the chance of future error constitutes a defensible basis for present action, thereby smuggling in an unstated assumption that the theory will *not* fail immediately, which re-introduces the very inductive confidence the argument claims to reject.",
+      "counterexample": null,
+      "premise": "Acting on a theory requires an expectation of its short-term reliability, whereas the target advocates selecting theories based on their high probability of future falsification.",
+      "premise_evidence": null,
+      "successor_question": "If the chosen theory is selected for its high likelihood of being falsified next, what rational basis does the agent have for relying on it for any immediate practical decision?"
+    }
+  ]
+}

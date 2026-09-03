@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation as required because the 'REFUTED IF' condition describes an internal tension within the proposed abstraction (the need for induction) rather than establishing a specific relational link (dependence, reduction, shared mechanism, etc.) between the isolated node 1c110c6075f4 and its neighbourhood. The prompt explicitly states that 'a summary of the endpoints is not a relation'; similarly, stating that an abstraction 'fails to be pure' due to an inherent requirement is a critique of the abstraction's validity, not a definition of its structural relationship to other nodes. The target identifies the kind as 'Abstraction' but the content of the 'REFUTED IF' clause undermines the existence of the relation itself rather than defining what the relation *is* (e.g., it does not say 'Node A abstracts Node B by hiding detail X', but rather 'Node A claims to abstract Node B but fails because...'). Thus, no substantive relation is successfully named and stated.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

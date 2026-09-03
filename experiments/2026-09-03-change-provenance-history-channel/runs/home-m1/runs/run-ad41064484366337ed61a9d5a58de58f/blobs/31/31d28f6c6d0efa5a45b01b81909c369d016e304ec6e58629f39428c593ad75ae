@@ -1,0 +1,32 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"const": "SRC_001", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+{"attack":false,"target_alias":"SRC_001"}
+
+INPUT:
+## problem-context
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@585cd8a62247cf6158305d8d: program:reasoning_observation_pending
+- reason-counter@4a301864f58925430e10127b: program:reasoning_observation_pending
+- reason-counter@bc8e95a2ede11542b6571972: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 87c428e8419a547d09c2a8e2b7320743ba15499b73c4876d72abd5ff56e316d4
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Biological selection is causal/blind; scientific choice is normative/conscious","Biological fitness aims at reproduction; scientific corroboration aims at truth-content elimination","Organisms do not 'choose' to be fit; scientists actively 'prefer' based on critical rules"],"overturn_conditions":["If biological evolution is shown to be teleological (aimed at truth)","If scientific theory choice is shown to be entirely random relative to test severity"],"shared_structure":["Selection based on survival of severe challenges","Preference for the variant with highest resilience so far","No guarantee of future survival despite past success"],"source_memory_refs":["biological_selection_process"],"transfer_claims":["Just as we expect the fittest organism to survive the next season without guarantee, we expect the best-corroborated theory to withstand the next test without logical necessity","The value lies in the rigor of the test survived, not the mere fact of survival"]},"claim":"The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference of future success, but as a non-justificationist 'critical choice' grounded in the methodological rule to prefer the theory with greater empirical content and severity of testing; however, accepting this defense costs the scientist any rational guarantee that the preferred theory will work in practice, reducing the preference to a bold conjecture about which error has been most thoroughly eliminated so far.","counterconditions":[{"case":"If the preference implies any probability assignment >0.5 to the theory's future success, it violates Popper's anti-induction stance.","checker_spec":null,"eval":"observation"},{"case":"If the mechanism cannot explain why a scientist should act on the corroborated theory rather than flipping a coin between unfalsified theories, it fails the pragmatic test.","checker_spec":null,"eval":"observation"},{"case":"If the 'content' argument secretly relies on the uniformity of nature (that what worked before will work again), it smuggles in induction.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Critical Choice via Content Maximization: The mechanism distinguishes between 'justification' (which requires induction) and 'choice' (which relies on comparing logical content and test severity). A scientist prefers Theory B over Theory A not because B is more likely true, but because B has survived tests that would have falsified A, meaning B contains more information about the world. The 'cost' is the admission that this preference offers no security against future falsification; it is a decision to bet on the theory that has told us more, acknowledging that it might still be wrong tomorrow.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (res

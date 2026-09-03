@@ -1,0 +1,87 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference that the theory is more likely true, but as a critical rational choice to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing the potential for learning from error; accepting this costs us the assurance that our actions are probabilistically safe or that the future will resemble the past.",
+    "mechanism": "Critical Rational Choice via Severity Maximization: The agent selects the theory that offers the highest 'information content' relative to its survival of tests. Since bold theories (high content) are easier to falsify, their survival indicates a higher degree of corroboration. Acting on them is a commitment to the method of trial and error, not a prediction of success based on past frequency.",
+    "counterconditions": [
+      "If the agent believes the chosen theory is statistically more likely to succeed in the next instance, they have smuggled in induction.",
+      "If the agent cannot articulate a non-probabilistic reason for preferring Theory A over Theory B when both are unfalsified, the preference is arbitrary.",
+      "If the cost of acting on the falsified theory is catastrophic and irreversible, pure Popperian risk-taking may be ethically indefensible without some inductive safety net."
+    ],
+    "typicality": 0.85,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "shared_structure": [
+        "Selection of an option based on survival of stress tests rather than probability of success.",
+        "Distinction between the history of performance and the prediction of future performance.",
+        "Acceptance of uncertainty as a permanent condition of rational action."
+      ],
+      "disanalogies": [
+        "Biological evolution lacks a conscious agent making a 'choice' for future utility, whereas the scientist explicitly chooses a theory for action.",
+        "In engineering stress testing, survival often implies a probabilistic increase in reliability (inductive), which Popper explicitly denies for scientific theories.",
+        "The 'cost' in biological selection is death (removal), whereas in science the cost is merely the rejection of the theory, allowing the agent to survive and try again."
+      ],
+      "transfer_claims": [
+        "Just as a bridge that survives high-load testing is preferred for crossing not because it is 'probabilistically safer' in a Bayesian sense, but because it has demonstrated capacity to withstand the specific forces it was designed to resist, a corroborated theory is preferred for its demonstrated resistance to falsification.",
+        "The preference is a report on the current state of criticism, not a prophecy of future truth."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that 'severity' of a test logically entails a higher probability of the hypothesis being true.",
+        "If Popper's own writings reveal he relied on an implicit principle of uniformity of nature when discussing practical application."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "evidence_refs": [],
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The candidate explicitly rejects the 'false dichotomy' by defining the preference as a 'critical rational choice' grounded in severity maximization, distinct from both irrational convention and inductive probability, directly addressing the critic's concern about Popper's actual solution."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "rebutted",
+        "note": "The mechanism addresses the coexistence of unrefuted theories by introducing 'severity' and 'information content' as tie-breakers; we prefer the bolder theory that has survived more severe tests, not just any surviving theory."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "revised",
+        "note": "Revised to explicitly state the 'cost': the loss of assurance that the future will resemble the past. The defense now clarifies that evolutionary epistemology describes the process, but the justification for *action* is the immediate logical status of the theory (unfalsified + severe testing), not a guarantee of future fitness."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The analogy to biological selection is used descriptively for the growth of knowledge, but the normative justification for the scientist's choice is explicitly framed as 'maximizing potential for learning from error,' which does not assume the future will mirror the past (induction)."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes causal explanation from normative justification by grounding the norm in the 'logic of situation': given the goal of finding truth/error, the only rational move is to test the boldest conjectures. This is a means-end rationality, not a causal claim about why scientists do act."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "Clarified that 'currently fittest survivor' is a metaphor for 'most severely tested without falsification.' The bet is not on the theory's continued success (which would be inductive) but on the efficiency of the error-elimination process if the theory fails."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates 'methodological acceptance' (acting as if true for the sake of testing/application) from 'probabilistic weighting.' The regulative ideal is 'truth,' but the operational rule is 'avoid falsification,' which requires no assumption of continuity."
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "departure_declared",
+        "note": "Departing from reliance on 'verisimilitude' as the primary metric due to the Tichý-Miller theorem complications. The candidate instead relies solely on 'corroboration' defined by severity of tests and information content, avoiding the formal pitfalls of verisimilitude calculations."
+      }
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

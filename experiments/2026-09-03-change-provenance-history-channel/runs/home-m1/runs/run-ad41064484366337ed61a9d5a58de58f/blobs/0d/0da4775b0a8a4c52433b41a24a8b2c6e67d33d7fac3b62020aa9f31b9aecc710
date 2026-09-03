@@ -1,0 +1,328 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, methodological rule of 'critical rationalism' that selects the theory with the highest informational content and severest test survival, without assigning it higher probability of truth.",
+      "mechanism": "Methodological selection based on verisimilitude (truth-likeness) and informational content rather than probabilistic induction. The scientist acts on the theory that has withstood the most severe tests because it is the best current conjecture, not because it is likely to be true.",
+      "counterconditions": [
+        "If the agent assumes the future will resemble the past in the theory's success.",
+        "If the preference implies a higher degree of belief or subjective probability.",
+        "If the choice is justified by an expectation of future predictive success derived from past performance."
+      ],
+      "typicality": 0.92,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "The 'Eliminative Default' does address coexistence by ranking surviving theories by severity of tests passed; the one with the highest corroboration is the 'best tested' survivor, providing a clear selection criterion without needing to eliminate all others first."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Evolutionary epistemology describes the process, but the normative justification is the logical status of the theory: the better-corroborated theory has survived more rigorous attempts at falsification, making it the rational choice for action until refuted."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "Popper distinguishes between the causal history of survival and the logical justification for preference. The justification is that the theory has the highest degree of corroboration (a report on past tests), which is the only rational basis for choice in the absence of proof."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'pragmatic bet' is not on future success via induction, but on the current status of the theory as the most severely tested. It is a bet on the present state of knowledge, not a prediction of the future derived from the past."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Methodological acceptance is a decision to treat a theory as the working hypothesis, not a probabilistic weighting. It explicitly rejects the assumption that it will continue to succeed, acknowledging it might be refuted tomorrow."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "This is not a false dilemma. Popper offers a third way: preferring the theory with the highest corroboration is a logical consequence of the goal to find truth by eliminating error, not an inductive leap or radical skepticism."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "The charge of category error fails because the 'descriptive mechanism' (survival) provides the 'normative justification' (corroboration report). The report on past tests is the only available ground for rational preference."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Accepting the logical status as conjectural does not make engineering unstable; it mandates vigilance. The preference is for the best current tool, acknowledged as potentially flawed, which is the stablest position possible for a fallibilist."
+        }
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_001", "SRC_007"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because acting on a theory requires an implicit assumption that its past success is a reliable guide to its future utility, which is the definition of inductive reasoning.",
+      "mechanism": "Pragmatic necessity forces an inductive bridge. To choose Theory A over Theory B for action (e.g., building a bridge) implies believing A is more likely to hold up under future stress, which translates corroboration into a proxy for probability.",
+      "counterconditions": [
+        "If the agent can act without any expectation of future consistency.",
+        "If 'corroboration' can be shown to have zero bearing on future decision-making utility.",
+        "If the choice is purely random or aesthetic rather than based on test history."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "revised",
+          "note": "Revised to acknowledge that while eliminative default handles refutation, the *selection* among survivors relies on an inductive intuition that past survival predicts future reliability, which the original mechanism tried to deny."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "The cost is indeed high: it means Popper's system cannot fully escape induction in practice. The 'fittest' survivor is only preferred if we assume fitness persists, which is an inductive assumption."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The conflation is unavoidable in action. One cannot normatively justify preferring X for future action based on X's past without implicitly claiming a connection between past and future, which is the inductive principle."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'pragmatic bet' defense fails because a bet implies odds. If the odds aren't probabilistic, what are they? They are effectively degrees of confidence derived from past performance, i.e., induction."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Methodological acceptance *is* the smuggling. To accept a theory as a basis for action is to regulate one's expectations of the world based on that theory, which is precisely the inductive move Popper rejected."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "It is a false dilemma only if one ignores the practical reality of action. In practice, the only alternative to induction is paralysis. Popper's 'solution' is a verbal shield that cracks under the weight of actual decision-making."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "The category error charge stands because the target tries to derive an 'ought' (prefer this) from an 'is' (it survived) without a bridging principle. That bridge is induction."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Distinguishing logical status from practical action doesn't solve the problem; it highlights it. The practical action *requires* an inductive leap that the logical status forbids, creating a dualism that undermines the system's coherence."
+        }
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_002", "SRC_015"]
+    },
+    {
+      "claim": "The preference is defensible only if reinterpreted as a 'decision under uncertainty' where corroboration serves as a tie-breaker among equally unproven conjectures, accepting the cost that this makes scientific progress a series of non-rational (but critical) guesses.",
+      "mechanism": "Decision theory applied to falsificationism. Since no theory is probable, choice is arbitrary unless constrained by the rule: 'Choose the most severely tested.' This rule is a convention, not a logical derivation, avoiding induction by admitting its own conventional status.",
+      "counterconditions": [
+        "If the convention itself is justified by its past success (circular/inductive).",
+        "If scientists feel compelled by logic rather than convention.",
+        "If the tie-breaker implies a difference in truth-value."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "revised",
+          "note": "Clarified that the mechanism is a conventional tie-breaker, not an eliminative logic that determines truth. It addresses coexistence by providing a procedural rule, not an ontological ranking."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "departure_declared",
+          "note": "Departing from the idea that evolutionary epistemology provides a *justification*. Instead, it provides a *description* of how conventions evolve. The justification is simply that we must choose, and this is our chosen rule."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The normative justification is the acceptance of the convention itself. Popper argues we *should* adopt this convention because it fosters critical discussion, not because it tracks truth probabilistically."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'bet' is on the efficacy of the convention, not the theory. We bet that following the rule of choosing the best-tested theory yields better results than random choice, which is a meta-conventional claim, not an inductive one about the theory."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Methodological acceptance is explicitly conventional. It does not assume the theory will succeed; it assumes that *acting as if* it might succeed while testing it rigorously is the best game in town."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "This avoids the dilemma by accepting that the preference is not 'rational' in the sense of being logically compelled by evidence (induction), but 'rational' in the sense of being a agreed-upon rule of the scientific game."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "The conflation is resolved by separating the descriptive (survival) from the normative (convention to prefer survivors). The norm is imposed by the scientific community, not derived from nature."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Engineering projects are stable because the convention is stable, not because the theories are. We agree to build with the best-tested steel, knowing it might fail, but agreeing that this is the responsible way to build."
+        }
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_005", "SRC_014"]
+    },
+    {
+      "claim": "Popper's distinction collapses under the pressure of 'verisimilitude' (truth-likeness); if we prefer theory A over B, we must believe A is closer to the truth, which assigns a quasi-probabilistic weight to corroboration, effectively reinstating induction.",
+      "mechanism": "Verisimilitude as a hidden probability metric. The concept of 'closer to truth' functions cognitively as a probability assignment, even if labeled otherwise. The preference for high corroboration is a heuristic for maximizing verisimilitude, which is an inductive inference.",
+      "counterconditions": [
+        "If verisimilitude can be defined without reference to future success.",
+        "If 'closeness to truth' has no behavioral implications for preference.",
+        "If the preference is shown to be independent of truth-likeness claims."
+      ],
+      "typicality": 0.78,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "The core scenario of coexisting theories is resolved by comparing their verisimilitude. The one with higher corroboration is judged to have higher verisimilitude, providing the selection mechanism."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "The cost is admitting that 'evolutionary' progress toward truth implies an inductive belief that the evolutionary process tracks truth. Without this, 'fittest' is meaningless."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The causal explanation (survival) is linked to the normative justification (verisimilitude) by the assumption that severe tests filter for truth-likeness. This assumption is inductive."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'pragmatic bet' is a bet on verisimilitude. Betting that the most tested theory is closest to truth is an inductive wager on the correlation between testing and truth-approximation."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Methodological acceptance of a theory as 'more verisimilar' is functionally identical to assigning it higher probability. The label change does not alter the cognitive operation."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "The dilemma is real. Either we accept induction (via verisimilitude) or we have no basis for preference. Popper's attempt to thread the needle with 'corroboration' fails because corroboration is just verisimilitude in disguise."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "The category error charge is correct: you cannot get normative force from descriptive survival without the inductive bridge of verisimilitude."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Engineering stability relies on the belief that the 'more verisimilar' theory is safer. This belief is inductive. Denying it makes the preference irrational; accepting it admits induction."
+        }
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_004", "SRC_011"]
+    },
+    {
+      "claim": "The preference is a 'rational faith' in the growth of knowledge, defensible only as an ethical stance of the scientist rather than a logical consequence of evidence, costing Popper the claim that his system is purely logical.",
+      "mechanism": "Ethical imperatives of the scientific community. The choice to prefer corroborated theories is a moral commitment to the ideal of truth-seeking, not a logical deduction. It transforms the problem from epistemology to ethics.",
+      "counterconditions": [
+        "If the ethical stance can be derived logically from the definition of science.",
+        "If the preference is shown to be logically necessary rather than ethically chosen.",
+        "If the 'faith' is shown to be unnecessary for the practice of science."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "revised",
+          "note": "Revised to frame the selection among coexisting theories as an ethical choice to support the most promising avenue of inquiry, rather than a logical elimination."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "departure_declared",
+          "note": "Departing from the search for a logical justification. The 'cost' is admitting that the foundation of scientific preference is ethical/volitional, not logical."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The normative justification *is* the ethical commitment. Popper's 'logic' is actually a set of ethical rules for scientists. The conflation charge misses that the 'norm' is ethical, not logical."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'bet' is an act of faith in the scientific enterprise. It is not a calculation of odds but a commitment to the method."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Methodological acceptance is an ethical vow to treat the theory seriously. It smuggles in nothing because it never claimed to be probabilistic; it claimed to be a rule of conduct."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "It avoids the dilemma by changing the domain. It's not skepticism vs. induction; it's nihilism vs. ethical commitment to truth."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "The category error is on the critic: they expect a logical derivation where an ethical prescription was offered."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Engineering is stable because of the ethical consensus to use the best available knowledge. The instability of the theory is accepted as part of the human condition."
+        }
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_003", "SRC_013"]
+    },
+    {
+      "claim": "The problem dissolves if we view corroboration as a measure of 'informational content' retained after testing; we prefer the theory with more content because it says more about the world, regardless of its truth probability, making the preference non-inductive.",
+      "mechanism": "Informational content maximization. Corroboration reports how much risky content has survived. We prefer the theory that risks more and survives, as it provides more information. This is a preference for richness, not likelihood.",
+      "counterconditions": [
+        "If the preference for richness implies a belief that richer theories are more likely true.",
+        "If 'informational content' cannot be separated from 'probability of truth' in decision contexts.",
+        "If acting on a high-content theory requires assuming its truth."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "The mechanism addresses coexistence by comparing informational content. The theory with higher content that survives is preferred because it is more informative, not because it is more probable."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Evolutionary epistemology supports this: evolution favors complexity/adaptation (content). The cost of accepting this is low; it just requires valuing information over safety."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The justification is the value of information. We prefer the theory that tells us more. This is a normative value judgment, not an inductive inference."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'bet' is on information gain. Even if the theory is false, it taught us more. The preference is for the most educational path, which is non-inductive."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Methodological acceptance is acceptance of a high-information framework. It does not assume truth, only utility in expanding knowledge."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "This is the genuine third way. Not skepticism (we do prefer), not induction (we don't assume truth), but content-maximization."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "No category error. Descriptive survival of high-content theories justifies normative preference for high-content theories based on the goal of science (knowledge growth)."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Engineering uses the most informative model to maximize control. If it fails, we learn more. The instability is a feature, not a bug."
+        }
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_006", "SRC_010"]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the central tension in Popper's philosophy regarding the pragmatic justification for preferring corroborated theories. It accurately argues that acting on a theory implies an expectation of future consistency, which functions as an inductive bridge, directly addressing the prompt's requirement to make the strongest case for whether the preference smuggles in induction. The claim is substantively aligned with standard interpretations of the problem context without violating any commitments.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

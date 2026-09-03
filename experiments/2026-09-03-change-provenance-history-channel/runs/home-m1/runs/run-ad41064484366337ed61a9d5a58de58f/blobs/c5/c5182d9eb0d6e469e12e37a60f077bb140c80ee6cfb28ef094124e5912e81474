@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims the nodes share a 'non-inductive mechanism' where tests rule out errors without confirming truths. However, the definition of 'Severe Testing' (the shared mechanism cited) inherently relies on the probative capacity of a test, which is defined by the low probability of the evidence occurring if the hypothesis were false (P(E|~H) is low). This probabilistic assessment is an inductive measure of likelihood. By defining severity through this probabilistic filter, the mechanism explicitly invokes the 'probabilistic measure of likelihood' that the target's own 'REFUTED IF' clause states would invalidate the claim of a shared non-inductive mechanism. Thus, the mechanism described contradicts the condition required for the relation to hold.",
+      "premise": null,
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": null
+    }
+  ]
+}

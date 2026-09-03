@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim of 'performative contradiction' mischaracterizes Popper's epistemology by conflating 'corroboration' with 'inductive justification.' Popper explicitly frames the rejection of induction as a bold conjecture open to refutation (addressing the target's own countercondition), not as an inductively derived universal truth. The preference for better-corroborated theories is defended on non-inductive grounds of critical rationality and verisimilitude, not probability, meaning the alleged circularity does not exist within Popper's specific terms.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between the logical problem of induction (which he argues is unsolvable) and the pragmatic methodological rule of preferring theories that have survived severe tests.",
+      "premise_evidence": null,
+      "successor_question": "If the rejection of induction is treated as a fallible conjecture rather than a dogmatic axiom, does the charge of performative contradiction still hold?"
+    }
+  ]
+}

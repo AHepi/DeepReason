@@ -1,0 +1,94 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms not as an inductive inference that the future will resemble the past, but as a non-inductive methodological rule to select the theory with the highest 'verisimilitude' (truth-likeness) and informational content, thereby maximizing the severity of potential future falsification; however, accepting this defense costs the scientist any rational assurance that the preferred theory is practically reliable for action, forcing a leap of faith that Popper admits is unavoidable but critics argue renders the preference irrational for practical purposes.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which Popper rejects) and 'critical preference' (which he accepts). It argues that choosing the best-tested theory is not betting on its future success (induction) but rather choosing the most informative target for the next attempt at refutation. If it survives, we learn more; if it falls, we eliminate a stronger candidate. The preference is purely epistemic and critical, not pragmatic in the sense of guaranteeing safety or success.",
+    "counterconditions": [
+      "If the Tichý-Miller theorem holds, rendering 'verisimilitude' formally undefined within Popper's logic, then the claim that we can rationally prefer one unrefuted theory over another collapses.",
+      "If acting on a theory necessarily implies an expectation of its continued success (a pragmatic induction), then Popper's distinction between critical preference and inductive belief is merely verbal.",
+      "If scientists cannot separate their psychological confidence from logical corroboration, the 'preference' inevitably smuggles in probabilistic thinking."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_004",
+        "SRC_009"
+      ],
+      "shared_structure": [
+        "Selection without prediction of future fitness",
+        "Preference based on past performance without assuming continuity",
+        "Goal is elimination of the weak rather than confirmation of the strong"
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious agent making a 'choice' for future utility, whereas scientists do act with intent.",
+        "Survival in nature is a binary state (alive/dead), while scientific theory acceptance is a gradient of reliance.",
+        "Evolution does not require a justification for why the fittest *should* be the model for the next generation, whereas science demands a rationale for action."
+      ],
+      "transfer_claims": [
+        "Just as nature selects the fittest without predicting the future environment, scientists select the best-corroborated theory without predicting its future truth.",
+        "The 'cost' in biology is extinction; the 'cost' in Popperian science is the loss of verisimilitude and the need to restart the critical process."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that biological selection implicitly relies on environmental stability (a form of induction), the analogy fails to exonerate Popper.",
+        "If the concept of 'fittest' in evolution is retrospectively defined rather than prospectively useful, the parallel to corroboration breaks down."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "rebutted",
+        "note": "The criticism assumes the problem requires a mechanism for choosing between coexisting theories based on probability. The candidate rebuts this by asserting Popper's mechanism is not probabilistic selection but 'critical preference' based on informational content and test severity, which remains valid even with multiple unrefuted theories."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "rebutted",
+        "note": "The candidate addresses the 'cost' explicitly: the cost is the lack of rational assurance for practical reliability. It argues that Popper accepts this cost (the leap of faith) as necessary, distinguishing 'survival report' from 'inductive bridge' by denying the latter is needed for methodological choice."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "Rebutted by clarifying that the evolutionary analogy is structural (selection without foresight), not justificatory of future success. The candidate argues that preferring the 'fittest' survivor is a report on current logical status, not an inductive prediction, thus avoiding smuggling induction."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "revised",
+        "note": "Revised to explicitly separate causal explanation (why a theory survived tests) from normative justification (why we choose it). The candidate now emphasizes that the justification is purely methodological (maximizing error detection), not normative in the sense of guaranteeing right action."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "The candidate rebuts the claim that this is a 'pragmatic bet' by redefining the bet: it is a bet on where to look for errors, not a bet on safety. The 'fittest' is chosen because it offers the best chance of learning, not because it is expected to work."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate rejects the premise that 'methodological acceptance' must equate to 'probabilistic weighting.' It departs from the critic's assumption that any action implies a probability assignment, positing instead a non-probabilistic 'critical preference.'"
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "rebutted",
+        "note": "Acknowledges the Tichý-Miller threat but rebuts by noting Popper's later attempts to refine verisimilitude qualitatively. The candidate argues that even without a perfect formal metric, the intuitive logical notion of 'content + survival' suffices for methodological preference, if not for formal proof."
+      },
+      {
+        "handle": "5e2df92cb9e1b33a910e9a6b9b29a1f0c4895a11d9c8ac63dac5bc9e4563026",
+        "kind": "rebutted",
+        "note": "The candidate directly answers whether induction is smuggled in: No, because the preference is for 'informational content' and 'test severity,' not 'expected truth.' The dilemma is sidestepped by changing the goal from 'truth acquisition' to 'error elimination.'"
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_009",
+      "SRC_012"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_009",
+        "SRC_012"
+      ],
+      "search_signal": "productive"
+    },
+    "checker_specs": []
+  }
+}

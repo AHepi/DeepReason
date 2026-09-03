@@ -1,0 +1,90 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference of future truth, but as a non-inductive, critical rational choice to adopt the theory with the highest 'verisimilitude-likeness' (content and testability) for the purpose of further criticism, accepting the cost that this preference offers no guarantee of practical success or proximity to truth.",
+    "mechanism": "Critical Rational Choice via Content Maximization: The mechanism distinguishes between 'justification for belief' (which Popper rejects) and 'preference for action/criticism' (which he accepts). A scientist prefers Theory A over Theory B because A has survived more severe tests, implying A has higher empirical content and is logically stronger, not because A is more probable. This preference is a decision to use the best available tool for generating new errors, rather than a bet on correctness.",
+    "counterconditions": [
+      "If the agent requires a probabilistic guarantee of future success to act, the Popperian defense fails.",
+      "If 'preference' is defined strictly as 'assigning higher subjective probability,' the defense collapses into induction.",
+      "If the context demands a theory for high-stakes engineering where 'best guess' is insufficient without reliability metrics."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "shared_structure": [
+        "Selection of an instrument based on past performance without assuming future consistency.",
+        "Distinction between 'fitness for current environment' and 'guarantee of survival'.",
+        "Preference driven by information richness rather than safety."
+      ],
+      "disanalogies": [
+        "Biological evolution is blind and non-rational, whereas scientific preference is a conscious critical decision.",
+        "In biology, 'fitness' equals reproductive success; in science, 'corroboration' equals survival of falsification attempts, which are distinct logical categories.",
+        "Evolution has no goal of truth; science explicitly aims at verisimilitude even if unattainable."
+      ],
+      "transfer_claims": [
+        "Just as one uses a map that hasn't failed yet without believing it is perfect, scientists use corroborated theories without believing them true.",
+        "The 'fittest' theory is simply the one currently offering the most leverage for discovery, not the one closest to final truth."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that acting on a theory logically entails an assumption of its future reliability.",
+        "If Popper's own writings admit that pragmatic preference secretly relies on the uniformity of nature."
+      ]
+    },
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids the false dichotomy by framing the preference as a 'critical rational choice' grounded in content maximization, directly addressing the criticism that the target created a binary between irrational convention and induction."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "rebutted",
+        "note": "The mechanism addresses coexisting unrefuted theories by selecting the one with 'higher empirical content' and 'severe test survival,' providing a discriminator where simple survival does not."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "revised",
+        "note": "Revised to explicitly state the 'cost' as the lack of guarantee for practical success, directly answering the specific cost requirement the criticism noted was missing."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The analogy is clarified to show that unlike biological induction, this is a logical choice based on current information content, not an extrapolation of past survival rates to future probabilities."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "rebutted",
+        "note": "The claim distinguishes normative justification for *criticism* (adopt the strongest theory to break it) from causal explanation, aligning with Popper's separation of context of discovery vs. justification."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "Clarified that 'currently fittest' refers to logical strength and testability, not a pragmatic bet on future survival, thus avoiding the inductive smuggle."
+      },
+      {
+        "handle": "406f638f976b926f52618322e0179a9a339b4f66006f5cb9fcdb0f63c060d368",
+        "kind": "rebutted",
+        "note": "The defense separates 'maximizing potential for falsification' (a methodological goal) from 'rational basis for preference in action' (choosing the best tool), showing they are compatible without induction."
+      },
+      {
+        "handle": "413118405fe4cbb409c43cbfa166306ea1063926136c533f14184d4050959108",
+        "kind": "departure_declared",
+        "note": "Departing from the requirement that acting requires an 'expectation of future success' in the probabilistic sense; the candidate asserts action can be based on 'critical readiness' instead."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_003",
+      "SRC_007"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

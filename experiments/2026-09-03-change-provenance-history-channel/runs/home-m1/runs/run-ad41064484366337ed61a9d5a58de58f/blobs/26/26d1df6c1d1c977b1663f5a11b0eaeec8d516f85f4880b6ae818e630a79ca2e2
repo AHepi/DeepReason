@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims that preferring a highly corroborated theory is rational because it offers 'informational content' and acts as a 'precise tool,' even if known to be false.",
+      "case": "The target's distinction between 'depth of insight' and 'likelihood of truth' collapses when addressing the problem's core constraint: acting on the theory for practical applications (e.g., bridge building). If a theory is 'known to be false' (as the target admits we expect them to be eventually refuted), its specific predictions are logically unreliable. Popper explicitly rejected the idea that survival of tests makes a theory more probable; however, the target fails to explain why a scientist should prefer Theory A (highly tested, bold, but false) over Theory B (less tested, less bold, but potentially true) for action without implicitly assigning a higher probability of reliability to A based on its past performance. By asserting that 'informational content' alone justifies preference for action, the target smuggles in an inductive assumption: that the property which made the theory informative (boldness/survival) correlates with future success in application. Without this hidden inductive bridge, preferring a 'known false' theory for critical infrastructure is irrational, regardless of its 'depth.' The target asserts the dilemma dissolves but merely restates the preference without providing the non-inductive justification for *action* that the prompt demands.",
+      "counterexample": [
+        "Consider two theories for bridge loading limits: Theory A predicts a precise limit of 10.5 tons and has survived 100 tests (high corroboration/high content), but contains a fundamental flaw making it strictly false. Theory B predicts a vague range of 5-20 tons and has survived 5 tests (low corroboration/low content), and happens to be true. If the engineer knows Theory A is false (as per the target's 'likely false' stance), choosing A over B for safety implies believing A is *more likely to work* in the next instance. This belief relies on the inductive inference that past survival predicts future reliability, which the target claims to avoid by citing 'content.' Content alone does not guarantee the next truck won't collapse the bridge if the theory is false; only probability (which Popper denies increases) or induction (which Popper rejects) can justify that specific choice for action."
+      ],
+      "successor_question": "If corroboration does not increase the probability of a theory's predictions being correct in the next instance, what non-inductive logical mechanism allows a scientist to rationally choose a 'false' high-content theory over a 'true' low-content theory for life-critical applications?",
+      "premise_evidence": null
+    }
+  ]
+}

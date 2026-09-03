@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target mischaracterizes Popper's 'preference' as epistemic weighting rather than a pragmatic decision rule; Popper explicitly distinguishes between the logical status of a theory (which remains unfalsified but not probable) and the rational choice to act on the best-tested theory, meaning the 'cost' described is a feature of avoiding dogmatism, not an instability that prevents action.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

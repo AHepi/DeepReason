@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference that the theory is more likely true, but as a critical rational choice to act on the theory that has withstood the most severe tests, acknowledging that this choice carries no guarantee of future success and costs the agent any claim to probabilistic security.",
+    "mechanism": "Critical Rational Choice via Severe Testing: The mechanism distinguishes between the logical status of a theory (which remains conjectural) and the methodological rule for action. Preference is justified by the degree of 'corroboration' (a report on past performance under severe tests), which serves as a non-probabilistic indicator of a theory's resilience. The agent chooses the 'fittest' survivor not because it is probable, but because it is the best available target for further criticism and the most reliable guide for action given the current state of knowledge, explicitly rejecting the induction that past success ensures future success.",
+    "counterconditions": [
+      "If the preference implies an expectation that the theory will continue to succeed based solely on past success, it smuggles in induction.",
+      "If the concept of 'verisimilitude' (truth-likeness) is required to justify the preference, the Tichý-Miller theorem undermines the defense within Popper's formal framework.",
+      "If the choice between multiple unrefuted theories cannot be made without assigning differential weight based on past performance, the distinction between corroboration and probability collapses."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The candidate agrees that the preference is a 'critical rational choice' but clarifies that this does not create a false dichotomy; rather, it defines the only permissible space for action where induction is explicitly renounced. The defense holds that the choice is rational precisely because it accepts the lack of probabilistic justification."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "rebutted",
+        "note": "The mechanism addresses coexisting unrefuted theories by prioritizing the one that has survived the *most severe* tests, not just any tests. Corroboration is comparative; even if both survive, the one subjected to and surviving a more stringent test is preferred for action, resolving the selection problem without invoking probability."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "rebutted",
+        "note": "The cost accepted is precisely the lack of an inductive bridge. The defense argues that preferring the 'fittest' survivor is rational *despite* this lack, not because of a hidden bridge. The 'cost' is the acceptance of fallibility and the absence of certainty, which is the core Popperian position."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The analogy to biological selection is descriptive of the process of elimination, not a normative justification relying on induction. The rebuttal asserts that choosing the survivor is a methodological rule for progress, not a prediction that the survivor will persist, thus avoiding the smuggling of induction."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates the causal history (why it survived) from the normative rule (why we choose it). The justification is that acting on the most severely tested theory is the most rational way to expose error, regardless of causal explanations for its past survival."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "Reiterates that the 'bet' is not on future success in a probabilistic sense, but on the utility of the theory as a basis for further testing. The 'pragmatic bet' is defined as a commitment to falsifiability, not a prediction of truth."
+      },
+      {
+        "handle": "5c80190574995e7600639ac68613611d092e9f25a84106c4581ec08e37f4c059",
+        "kind": "rebutted",
+        "note": "Methodological acceptance is distinguished from probabilistic weighting by its explicit denial of future guarantees. The 'regulative ideal' is the pursuit of truth through error elimination, not the assumption of continuity."
+      },
+      {
+        "handle": "5ce273b6d76a083a6e91af44b10a64f812521552c85bdfdef932619feacaa0a0",
+        "kind": "departure_declared",
+        "note": "This candidate departs from reliance on 'verisimilitude' as a formal metric due to the Tichý-Miller critique, grounding the preference instead solely on the comparative severity of tests passed (corroboration) without claiming proximity to truth."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

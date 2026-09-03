@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'Eliminative Default' mechanism fails to address the problem's core scenario where multiple unrefuted theories coexist. The prompt explicitly asks how a scientist chooses between surviving theories (e.g., Newtonian vs. Einsteinian gravity before a decisive test), not how they avoid refuted ones. By reducing preference to a default state of 'non-refutation,' the target ignores the active selection required when elimination is incomplete, thereby failing to explain the defensible basis for preferring the *better*-corroborated theory over the merely unrefuted one without smuggling in induction.",
+      "counterexample": null,
+      "premise": "If there are multiple unrefuted theories, requiring a choice between them.",
+      "premise_evidence": null,
+      "successor_question": "How does Popper justify acting on Theory A rather than Theory B when both have survived all tests so far, if corroboration provides no probabilistic guidance?"
+    }
+  ]
+}

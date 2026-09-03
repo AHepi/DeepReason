@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's solution smuggles induction back in by conflating 'methodological acceptance' with the very probabilistic weighting Popper rejected; if acting on a theory requires assuming it will continue to succeed (a regulative ideal), this constitutes an inductive inference about the future reliability of the method, which Popper explicitly forbade as irrational.",
+      "counterexample": null,
+      "premise": "Popper rejects any principle that assigns higher probability or expected success to a theory based on past performance, labeling such moves as inductive.",
+      "premise_evidence": null,
+      "successor_question": "Can a 'regulative ideal' that guides action toward better-corroborated theories be formulated without implicitly asserting that past corroboration makes future success more likely?"
+    }
+  ]
+}

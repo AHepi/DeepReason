@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference of future truth, but as a non-inductive 'critical choice' to subject the most informative surviving theory to the severest possible future tests, thereby accepting the cost that this preference offers no guarantee of practical success or increased verisimilitude.",
+    "mechanism": "Eliminative Default with Critical Choice: When multiple theories survive, the scientist selects the one with the highest empirical content (and thus corroboration) because it is the most vulnerable to falsification. This maximizes the rate of error elimination (learning), which is the sole rational goal of science. The 'preference' is a commitment to risk, not a bet on safety.",
+    "counterconditions": [
+      "If the agent requires a probability > 0.5 that the chosen theory will succeed in the next application to justify action, the Popperian defense fails.",
+      "If 'corroboration' is interpreted as a measure of past performance predicting future reliability rather than a report of current test severity, the defense collapses into induction.",
+      "If the context demands a theory that is 'safe' for critical infrastructure rather than 'informative' for theoretical progress, the critical choice mechanism is inappropriate."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "1bbaa85e5e6079fac8574988c7f77761dc8e29e3b8dabce347c8290f0ce47474",
+        "kind": "rebutted",
+        "note": "The candidate explicitly rejects the 'false dichotomy' by defining the preference as a 'critical choice' for testability, which is neither a non-rational convention nor an inductive probability, directly addressing the criticism's core objection."
+      },
+      {
+        "handle": "215a701216b7f722fb2ad39a0f7f21c0c0010679058864ddd486abb3ec554ccc",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly handle 'multiple unrefuted theories' by introducing the tie-breaker of 'highest empirical content' (informational richness) rather than mere survival, ensuring a selection criterion exists even when falsification has not yet occurred."
+      },
+      {
+        "handle": "22867cbbd4c7d03233b3678b5041582fab2cfe0519e1f44feeaeef1dacfe0bb9",
+        "kind": "departure_declared",
+        "note": "Declared departure from the expectation that a rational preference must offer a 'bridge' to future success; the candidate accepts the cost that no such bridge exists, framing the preference solely as an optimization of the learning process."
+      },
+      {
+        "handle": "22ccbb89cf3b1f6ce9dc7a2dcae9ddc3e2ace5c7fcf2eed0c8bc07a29c504462",
+        "kind": "rebutted",
+        "note": "The analogy to biological fitness is rebutted by clarifying that 'fittest' in this context means 'most testable,' not 'most likely to survive.' Selecting the most testable theory does not assume it will survive future tests; it assumes that if it fails, we learn more."
+      },
+      {
+        "handle": "23eed044f5c987a0e96292fdc3168ea1ae3455994a6e5d26d6b204a808f28404",
+        "kind": "revised",
+        "note": "Clarified the distinction between causal explanation and normative justification: the norm is derived from the goal of 'error elimination,' not the causal history of survival. The revision makes the normative goal explicit in the mechanism."
+      },
+      {
+        "handle": "2e059135189855cf7e6237ae32e94548b68316951bcd55d5b5105128e14629b6",
+        "kind": "rebutted",
+        "note": "The criticism confuses 'betting on the fittest' with 'betting on truth.' The candidate rebuts by stating the 'bet' is strictly on the potential for information gain, which is consistent with Popper's rejection of probabilistic truth."
+      },
+      {
+        "handle": "406f638f976b926f52618322e0179a9a339b4f66006f5cb9fcdb0f63c060d368",
+        "kind": "revised",
+        "note": "Refined the definition of 'preference' to ensure it is not conflated with 'maximizing potential for falsification' as a proxy for truth, but rather as the direct operationalization of the scientific method's goal: rapid error detection."
+      },
+      {
+        "handle": "413118405fe4cbb409c43cbfa1663926136c533f14184d4050959108",
+        "kind": "rebutted",
+        "note": "The candidate accepts that acting requires expectation but argues the expectation is 'this theory will yield the most decisive test result,' not 'this theory will work.' This shifts the pragmatic core from successful application to successful interrogation."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "biological_selection_pressure",
+        "stress_testing_engineering_protocols"
+      ],
+      "shared_structure": [
+        "Selection of the most vulnerable candidate to maximize system robustness over time.",
+        "Preference based on capacity to reveal flaws rather than history of success.",
+        "Goal oriented towards long-term adaptation/learning rather than short-term survival certainty."
+      ],
+      "disanalogies": [
+        "Biological selection is blind and causal; Popperian choice is conscious and normative.",
+        "Engineering stress tests aim to certify safety for use; Popperian tests aim to refute for replacement.",
+        "Natural selection retains the survivor; critical preference temporarily utilizes the survivor while actively seeking its downfall."
+      ],
+      "transfer_claims": [
+        "Just as engineers stress-test the weakest link to improve the whole, scientists should prefer the most falsifiable theory to improve knowledge.",
+        "The 'fitness' of a theory is inversely proportional to its immunity to testing, unlike biological fitness."
+      ],
+      "overturn_conditions": [
+        "If a less corroborated theory demonstrates higher explanatory power for a novel phenomenon, the preference rule must invert.",
+        "If the cost of error in a specific application is catastrophic (e.g., bridge building), the 'critical choice' mechanism is overridden by a precautionary principle."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
