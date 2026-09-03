@@ -679,3 +679,26 @@ the running truth of what has been proven, broken, fixed, and parked —
 and `docs/ERRATA.md`, the append-only ledger of corrections to committed
 documents: it says which document claims have already been found wrong,
 so you do not re-trust them.
+
+- **Success is progress over the no-harness baseline; correctness and
+  completeness are not the goal** (2026-09-03, operator's words verbatim:
+  "a complete answer isn't the goal. Neither is correctness. The
+  condition of success it something materially better than what's
+  produced without it. Correctness is irrelevant. Please remember that
+  for future designs. Poppers epistemology is about progress, not
+  truth."): the acceptance criterion for any run, feature, or design is
+  that its output is MATERIALLY BETTER than what the same model produces
+  WITHOUT the harness on the same question — measured blind, against
+  criteria written before any output is read, at matched spend where
+  spend matters. "Better" is Popperian progress: more error eliminated,
+  survivors harder to vary, bolder conjectures that survived criticism,
+  deeper successor problems — never "is the answer true" and never "did
+  the run reach a composed answer". A finished, correct-looking answer
+  that a single model call would have produced equally well is a FAILED
+  run; an unfinished run whose surviving conjectures are demonstrably
+  better than the single call's is a successful one. Consequences for
+  designs: every live experiment carries a no-harness baseline arm or
+  cites one; "reached a terminal" and "composed an answer" are
+  operational health checks, not success conditions; and no design may
+  be justified by correctness alone. Ledgered by the monitor at the
+  operator's instruction.
