@@ -456,3 +456,55 @@ history whose "failed attacks" section was empty for this reason. Its measured
 effect therefore comes from the REFUTED-claims limb alone. The anti-attractor
 hypothesis was tested at half strength, and the half that was missing is the
 half R8 most directly names.
+
+
+---
+
+## P7 CORRECTED — the failed objections were never missing; my instrument was
+
+**This entry corrects P7, which was half wrong in the expensive direction.**
+
+P7 said an unwarranted objection "leaves no trace in `att` at all". True, and
+useless as stated, because I went on to treat it as meaning the record does not
+retain failed objections. **It does.** `rules/crit.py`'s `observe_only` path
+registers one as a critic-role artifact with NO warrants and writes a
+`["scrutiny", target, critic]` Measure — its own docstring says "the case is
+scrutiny evidence, never a status change ... Registers the case as a critic-role
+artifact with NO warrants". Target, text and all are kept.
+
+**Measured on the two M3 arms:**
+
+| | C0P blind | C1I informed |
+|---|---|---|
+| critic artifacts | 52 | 38 |
+| of those, warranted | 3 | 1 |
+| of those, UNWARRANTED | 49 | 37 |
+| scrutiny events | 46 | 36 |
+| `att` edges | 3 | 1 |
+
+So criticism is ABUNDANT and landing is RARE. The old instrument read only the
+3 and the 1. That is why its "sustain rate" was 1.000 on every root ever
+checked: every edge in `att` is by construction an attack that landed, so the
+measure was reporting its own definition back. It could never have been
+anything else, and I described that as a fact about the harness rather than
+about my query.
+
+**What this costs and what it saves.** It cost the M3 conclusion, which was
+reported as "inconclusive, structurally" when the data to decide it was sitting
+in the same roots. It saves a production change: the operator asked for the
+critic to be temporarily fixed so history's influence could be measured, and
+the critic does not need fixing. `measure_criticism_v2.py` reads what was
+always there.
+
+**What SPEC.md must change.** §2's `attacks(X)` row and §6's S15 both carry a
+caveat sourced from the wrong half of P7 — that the not-landed limb "needs a
+source that is NOT `att`". That source EXISTS and is named: scrutiny Measures
+plus unwarranted critic artifacts. CHECKLIST.md Step 1, which was "source
+failed objections outside `att`, or prove it cannot be done", is now answerable
+in an afternoon rather than being the step that could kill the design.
+
+**The standing lesson, which is the reason this is written up at length.** A
+measure computed over a relation that is DEFINED by the property being measured
+cannot fail. `docs_verify --audit` refuses map checks that cannot fail; the same
+standard was owed here and I did not apply it until the operator's instruction
+forced a second look.
