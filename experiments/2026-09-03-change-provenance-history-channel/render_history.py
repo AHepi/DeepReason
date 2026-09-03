@@ -147,6 +147,26 @@ def _addr_map(state) -> dict[str, str]:
 
 
 def _on_problem(state, problem: str | None) -> set[str]:
+    """Artifacts in scope. `None` means THE WHOLE RUN, and that is the default.
+
+    Scoping the history to the seed problem alone was the first design and it
+    rendered an EMPTY section. Measured on the completed M1-H0 control: the run
+    holds 6 REFUTED artifacts and 6 attack edges, all of them present in
+    `state.addr` -- and ZERO of either fall inside the seed problem's scope.
+    Criticism in that run landed on adjacent problems the run spawned
+    (`disc:question-...`, `conn:...`), not on the seed problem's own artifacts.
+    So a seed-scoped history section says "(nothing refuted yet)" on a run that
+    refuted six things, and the treatment arm becomes the control wearing a
+    label.
+
+    Widening is not a loosening of C11. C11 fixes the unit of the DIVERSITY
+    MEASUREMENT -- seed-question candidates only -- and that is untouched;
+    `measure_diversity_per_problem.py` still reports the seed problem alone.
+    This is a different question: what history a seat is SHOWN. The operator's
+    R6 is "conjectures themselves usually have a long history", and a
+    conjecture's history plainly includes the criticism that landed on the
+    problems its investigation spawned.
+    """
     if problem is None:
         return set(state.status)
     return {a for a, p in _addr_map(state).items() if p == problem}
@@ -256,10 +276,10 @@ def main() -> int:
         )
         return 0
 
-    problem = args.problem or _seed_problem(state)
+    problem = args.problem  # None => whole run; see _on_problem
     header = [
         "=== PRIOR HISTORY ON THIS PROBLEM (advisory, non-grounding) ===",
-        f"problem: {problem}",
+        f"scope: {problem or 'the whole run (every problem it has opened)'}",
         "This is a record of what has already been tried. It is advisory "
         "material, not evidence, and it decides nothing.",
         "",

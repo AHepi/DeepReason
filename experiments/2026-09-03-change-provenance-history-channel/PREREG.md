@@ -290,3 +290,68 @@ C1. Concurrency never exceeds 2 under this plan, against the cap of 3.
 **One thing this amendment does not do.** It does not touch the criteria, the
 arms, the measures, the thresholds or the predictions of M1 and M3. Those stay
 exactly as registered before any arm launched.
+
+
+---
+
+## Amendment 2 — the H1/C1 history section is scoped to the WHOLE RUN, 2026-09-03
+
+Written after the M1 CONTROL completed and BEFORE any treatment arm produced a
+single conjecture, so no result influenced it. Forced by a measured property of
+the control's record, not by a preference.
+
+**What §1 said.** "every artifact on the SEED PROBLEM whose status is REFUTED"
+and "every attack edge that did NOT change a status".
+
+**Why that cannot stand.** Measured on the completed M1-H0 control
+(`run-fe00609058e10605590206d51ab2b7a0`): the run holds **6 REFUTED artifacts
+and 6 attack edges, all present in `state.addr`, and ZERO of either inside the
+seed problem's scope**. Criticism in that run landed on the problems the
+investigation spawned (`disc:question-…`, `conn:…`), not on the seed problem's
+own artifacts. The seed-scoped render therefore produced a section reading
+"(nothing refuted yet)" and "(no failed attacks yet)" — 668 characters of
+headings — on a run that had refuted six things.
+
+An empty section makes H1 the control wearing a treatment label. M1 would then
+have returned "history makes no difference", which would have looked like a
+finding and been an artifact of the render.
+
+**What changes.** The rendered history covers the whole run — every problem it
+has opened. Nothing else about M1 or M3 changes.
+
+**This is NOT a loosening of C11**, and the distinction matters. C11 fixes the
+unit of the DIVERSITY MEASUREMENT — seed-question candidates only — and that is
+untouched: `measure_diversity_per_problem.py` still reports the seed problem
+alone, and the H0 control's numbers above were computed that way. This
+amendment is about a different thing: what history a seat is SHOWN. The
+operator's R6 is "conjectures themselves usually have a long history", and a
+conjecture's history plainly includes the criticism that landed on the problems
+its own investigation opened.
+
+**Verified before relaunch, not after.** The widened render on the same control
+root produces 6 refuted claims each with the criticism that refuted it. A guard
+in `arm.sh` now REFUSES a treatment arm whose rendered history has no content
+(exit 6), so this specific failure can never again be paid for with a full
+battery and four cycles.
+
+---
+
+## Amendment 3 — where the history is injected, 2026-09-03
+
+Also written before any treatment arm produced a conjecture.
+
+`deepreason scratch add` writes into a RUN ROOT, not into a home. Called
+against a home with no run yet it fails `MANIFEST_FILE_UNAVAILABLE at
+/run-manifest.json`. The pre-seed design in §0 ("inject it through the existing
+scratch channel … before the run") is therefore impossible as written: the
+first H1 attempt's injection returned rc=1 and the run proceeded anyway, giving
+a treatment arm with nothing injected.
+
+`deepreason --root <root> scratch add` DOES work (verified rc=0). So the arm now
+launches the run in the background, waits for its root to appear, and injects
+into it. **Consequence, stated rather than hidden: the block lands during cycle
+0 and is available to the cycles after it.** Cycle 0 of a treatment arm is
+therefore comparable to cycle 0 of its control, and only cycles 1-3 carry the
+treatment. That is the same exposure profile the original cycle-by-cycle design
+would have produced, and it is the residue to state in RESULTS.md: M1 and M3
+measure the effect of history on three of four cycles, not four of four.

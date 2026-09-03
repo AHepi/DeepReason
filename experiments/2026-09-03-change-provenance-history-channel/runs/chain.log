@@ -1,5 +1,4 @@
-### chain start 2026-09-03T01:41:36Z
-### H0 2026-09-03T01:41:36Z
-### H0 rc=0
-### H0 OK root=home-default/runs/run-fe00609058e10605590206d51ab2b7a0
-### H1 2026-09-03T02:21:04Z
+### chain start 2026-09-03T02:29:43Z
+### M1-H0 SKIPPED -- usable root already present
+### H0 root=home-default/runs/run-fe00609058e10605590206d51ab2b7a0
+### M1-H1 starting 2026-09-03T02:30:23Z

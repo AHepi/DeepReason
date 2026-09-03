@@ -1,31 +1,3 @@
-=== arm M1-H1 (mode=conjecturer) started 2026-09-03T02:30:23Z ===
---- setup ---
-Let's set DeepReason up (one time, ~30 seconds).
-
-
-Done. Provider profile: /home/user/DeepReason/experiments/2026-09-03-change-provenance-history-channel/runs/home-h1/provider.yaml
-Credential reference: OLLAMA_API_KEY (already available)
-
-Provider configuration saved. Qualification remains an explicit action.
-Next action: deepreason qualify
-rc=0
---- qualify ---
-MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so nothing here can say whether reasoning='none' leaves hidden reasoning on. The run proceeds and sends exactly what you configured. To have this answered, write $DEEPREASON_HOME/model-profiles/<model-id>/agent.md.
-Qualified: ollama/qwen3.5:397b
-Qualification tier: full
-Qualification state: ready
-Next action: deepreason reason "YOUR QUESTION"
-rc=0
---- render history from /home/user/DeepReason/experiments/2026-09-03-change-provenance-history-channel/runs/home-default/runs/run-fe00609058e10605590206d51ab2b7a0 2026-09-03T02:30:25Z ---
-{
-  "wrote": "/home/user/DeepReason/experiments/2026-09-03-change-provenance-history-channel/runs/home-h1/history.txt",
-  "mode": "conjecturer",
-  "problem": null,
-  "chars": 2624,
-  "cap": 4000,
-  "truncated": false
-}
---- injected block, verbatim, so the arm is auditable ---
 === PRIOR HISTORY ON THIS PROBLEM (advisory, non-grounding) ===
 scope: the whole run (every problem it has opened)
 This is a record of what has already been tried. It is advisory material, not evidence, and it decides nothing.
@@ -47,17 +19,4 @@ These claims were proposed and did NOT survive criticism. They are shown so they
 
 ATTACKS THAT WERE TRIED AND DID NOT LAND
 These objections were raised and failed to change the target's status. Raising them again is unlikely to be productive.
-  (no failed attacks yet)--- end injected block ---
---- reason, 4 cycles 2026-09-03T02:30:31Z ---
-MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so nothing here can say whether reasoning='none' leaves hidden reasoning on. The run proceeds and sends exactly what you configured. To have this answered, write $DEEPREASON_HOME/model-profiles/<model-id>/agent.md.
---- injecting into /home/user/DeepReason/experiments/2026-09-03-change-provenance-history-channel/runs/home-h1/runs/run-fe00609058e10605590206d51ab2b7a0 2026-09-03T02:30:36Z ---
-{
-  "error": {
-    "code": "SCRATCH_ROOT_BUSY",
-    "location": "",
-    "message": "another operator owns this run root"
-  },
-  "ok": false,
-  "schema": "deepreason-cli-error-v1"
-}
-inject-rc=1
+  (no failed attacks yet)
