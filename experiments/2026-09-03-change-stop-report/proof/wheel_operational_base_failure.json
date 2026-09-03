@@ -1,0 +1,15 @@
+{
+  "cleanup_completed": true,
+  "detail_code": null,
+  "durable_result_binding": "unknown",
+  "exit_status": null,
+  "failure_kind": "assertion_failed",
+  "first_lifecycle_state": "not_observed",
+  "last_lifecycle_state": "not_observed",
+  "last_progress_phase": "not_observed",
+  "mcp_liveness": "alive",
+  "platform_family": "linux",
+  "schema": "deepreason-wheel-operational-failure-v4",
+  "stage": "continuation_resume",
+  "timeout": false
+}

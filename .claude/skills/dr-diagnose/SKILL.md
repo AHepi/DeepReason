@@ -8,9 +8,51 @@ description: Locate the cause of a DeepReason defect from the typed record, not 
 Input: GOAL.md. Output: DIAGNOSIS.md naming ONE primary cause. You
 read the record first and the code second. You change nothing.
 
-## Read the map's Traps FIRST — it is cheaper than the record
+## Step 1 — run the stop report, and open DIAGNOSIS.md with it
 
-Before opening the record, read the `Traps` section of the map document
+Run this before reading any code, any log, and any run-config file:
+
+    deepreason stop-report <root-or-home>
+
+Paste its section 4 (`THE STOP, CLASSIFIED`) verbatim as the FIRST
+section of DIAGNOSIS.md, before writing anything of your own. Cite a
+report line by section number for every claim naming a defect, a seat, or
+a model as the cause.
+
+GATE, run before you commit DIAGNOSIS.md:
+
+    grep -q "THE STOP, CLASSIFIED" DIAGNOSIS.md
+
+Exit 0 = pass. Exit 1 = the phase is `not-done`; STOP and report that.
+
+The report accepts three source kinds, so a run that never opened a log
+still has one: a run root, a run directory that compiled a manifest and
+failed its qualification gate (`root-no-log`), and a home whose
+qualification is cached (`home-no-root`).
+
+When the failure has no run root and no home at all — a smoke harness, a
+build, a tool — write one line in DIAGNOSIS.md naming which of the three
+kinds was absent, and paste that instrument's own typed failure envelope
+in place of section 4. The GATE above still applies to everything else.
+
+Outlets, one per prohibition:
+
+| You cannot... | Then |
+|---|---|
+| produce the report | STOP; report `not-done` with the command's stderr |
+| cite a report line for a cause | PARK the hypothesis; diagnose what you can cite |
+| find any typed source | paste the instrument's failure envelope, and say which kind was absent |
+
+This displaces the old ordering, in which `run-status.json` and
+`REPLAY_VALIDATION.json` were rows 1 and 4 of "Where the truth lives"
+and each reader re-derived them by hand. The report derives all of it,
+plus the qualification rows and provider health that hand-reading
+skipped. Those rows below are now the DEEPER DIVE, entered after the
+report names a box.
+
+## Read the map's Traps SECOND — it is cheaper than the record
+
+After the report names a box, read the `Traps` section of the map document
 covering the suspect subsystem (`docs/map/SUB-*.md`, `CON-*.md`,
 `SEAM-*.md`). Traps are the accumulated memory of what has actually
 gone wrong there, and a recurrence is the cheapest diagnosis available.
@@ -24,9 +66,10 @@ explanation, and checking is nearly free.
 If the diagnosis turns out to be a NEW failure mode, `dr-implement-fix`
 will add it to that document's Traps as part of the fix commit.
 
-## Where the truth lives (in priority order)
+## Where the truth lives — the deeper dive
 
-For a failed or suspect run root `<root>`:
+Enter this after the stop report names a box, to establish the mechanism
+the box only points at. For a failed or suspect run root `<root>`:
 
 1. `<root>/run-status.json` — state, stop_reason, message. The message
    often IS the answer (e.g. a KeyError'd source id, a typed
@@ -79,7 +122,12 @@ implicated source file, and only that file plus at most two neighbors.
 ## DIAGNOSIS.md template
 
     # Diagnosis: <one line naming the mechanism>
-    Primary cause: <mechanism, one paragraph max>
+
+    ## Stop report, section 4 (pasted verbatim, before anything of mine)
+    <the output of `deepreason stop-report <root-or-home>`, section 4>
+
+    Primary cause: <mechanism, one paragraph max; every clause naming a
+      defect, a seat, or a model cites a report line above>
     Evidence:
       - <record pointer: file/seq/object id> -> <what it shows>
       - <repeat; minimum 2 pointers, at least 1 non-code>
@@ -90,6 +138,8 @@ implicated source file, and only that file plus at most two neighbors.
 
 ## Exit criteria
 
+- `grep -q "THE STOP, CLASSIFIED" DIAGNOSIS.md` exits 0.
+- Every cause naming a defect, a seat, or a model cites a report line.
 - DIAGNOSIS.md committed and pushed; PARKED.md updated if applicable.
 - No code modified. No fix sketched beyond the mechanism name.
 - Return to the orchestrator.

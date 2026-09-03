@@ -1,0 +1,25 @@
+extracting into /tmp/stop-report-roots-q238pkk1
+  extracted 1 path(s) from origin/claude/live-reasoning-p-a1-bv65kl
+  extracted 3 path(s) from origin/claude/executor-live-run-p-a2-84hyco
+  extracted 3 path(s) from origin/claude/executor-window-phase-1-s5ex6w
+
+=== SHIPPED classifier over 8 recorded cases ===
+
+PASS  P-A1 — seat exhaustion behind a transport wall
+        first box: ENVIRONMENT
+PASS  P-A1 — qualification vindication (R9's second sentence)
+        first box: ENVIRONMENT
+PASS  P-A2 epoch 1 — one seat x form refused, and the knob is named
+        first box: MODEL
+PASS  P-A2 epoch 2 — account usage cap
+        first box: ENVIRONMENT
+PASS  P-A2 epoch 3 — the harness box, earned by ruling out the others
+        first box: HARNESS
+PASS  Phase-1 429 root — self-inflicted concurrency cap
+        first box: ENVIRONMENT
+PASS  Phase-1 M3-C0 — 429 during qualification, no run root at all
+        first box: ENVIRONMENT
+PASS  Phase-1 M1-H0 — a CLEAN terminal attributes no box
+        first box: None
+
+SHIPPED: 8/8 correct, 0 misfiled

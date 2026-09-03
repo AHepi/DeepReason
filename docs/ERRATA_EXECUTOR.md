@@ -498,3 +498,66 @@ convention treats a delivered tranche's artifacts as closed record
 (see E16/E17 above: "a closed tranche's parked item, not edited"; O1's
 own documents "remain unmodified"). The correction stands here, in the
 process ledger, per that same precedent.
+
+---
+
+## X12 — the first failure report was written from the settings file, not the record (2026-09-03)
+
+**Claim corrected.** No infrastructure document required a diagnosing
+window to derive its first account of a failure FROM THE RECORD. Both
+`dr-diagnose` and `dr-drive-harness` §5 said "record first, code second"
+and then listed files to read by hand, which let a window read its own
+run-config and describe the run from it. Three windows did.
+
+**The operator's words, verbatim (2026-09-03), which are the authority
+for the change:**
+
+> "the other windows keep making a lot of mistakes. I can't tell if
+>  they're causing the crashes or not. The window that said criticism
+>  fails to leave a trace was wrong. One window reported a crash happened
+>  because a conjecturer seat kept failing to fill a form. When I said
+>  that particular model passed qualification with ease, it double
+>  checked and realised it's config was off. So many of these mistakes
+>  it's hard to tell genuine failure from merely a bad manifest. What do
+>  you recommend? Ab errors report? A better agent.md that walks LLMs
+>  through how configuration works?"
+
+**What the record shows, measured not recalled.** The evidence
+contradicting the conjecturer-seat report was already on disk when that
+report was written. P-A1 (`origin/claude/live-reasoning-p-a1-bv65kl`,
+run `4565139800f5ca02`), `production-contract-qualification.json`:
+
+    conjecturer#0 conjecturer.turn.v6 ep=ollama-deepseek-v4-pro-0813
+        first=20/20 eventual=20 repairs=0 qualified=True
+
+The window blamed a seat that had passed its form at full marks, first
+pass, with zero repairs.
+
+**Measured cost of the reading style, not asserted.** The classifier the
+change replaces — read the settings, blame the seat the stop message
+names, never open the qualification record — was implemented and run over
+eight recorded failures alongside the shipped one
+(`experiments/2026-09-03-change-stop-report/proof/naive_red.txt` vs
+`shipped_green.txt`): **NAIVE 1/8 correct, 7 misfiled; SHIPPED 8/8, 0
+misfiled.** Its single pass is coincidence — it reaches the right box by
+the same rule that misfiles two others.
+
+**Disposition — mechanized, per `authoring-skills` W5, which puts the
+lesson in a GATE and the story here.** `deepreason stop-report` now
+derives the first account from the record alone; `dr-diagnose` step 1
+requires its section 4 pasted verbatim at the top of DIAGNOSIS.md and
+gates on `grep -q "THE STOP, CLASSIFIED" DIAGNOSIS.md`; `dr-drive-harness`
+§5 lists it as the first instrument. R15 of that tranche asked for the
+incident to be quoted in the skill; W5 forbids incident stories in
+instructions and names this ledger as where history lives. Both are
+honoured by splitting them: the rule and its GATE are in the skill, the
+quote is here.
+
+**Also corrected, and worth its own line.** The tranche's own instruction
+named six committed roots for its regression proof. Three produced no run
+root at all — they died during qualification — and a fourth was miscast
+as an environment failure when it is a clean, completed run. The
+instruction was written from tranche narratives rather than from
+`git ls-tree`, which is the same failure mode one level up. Reconciled in
+that tranche's SPEC.md under "THE MATERIAL CONTRADICTION"; parked as P3
+rather than made a rule, per this ledger's own two-instances tripwire.
