@@ -10,3 +10,52 @@ NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SPLIT_BUDGET_SEAT_PROTOCOL='off' is not 
 [soak] built root: manifest f29b54934e80ec80…  criteria ['pa1-limit-verdict@v1', 'pa1-obstruction-structure@v1', 'pa1-scaling-law@v1']
 [soak] qualified in 11.5s
 [soak] driving 24 cycles …
+
+========================================================================
+CYCLE SOAK -- case pa2
+========================================================================
+  manifest sha256        f29b54934e80ec8038c2b3e2fa199f24a915d80be1345947b6764b71ae07c746
+  criteria               pa1-limit-verdict@v1, pa1-obstruction-structure@v1, pa1-scaling-law@v1
+  attached evidence      True
+  cycles requested       24
+  qualification          rc=0 (11.5s)
+  drive                  1166.1s, 27 progress events
+
+-- S1 run assertions ---------------------------------------------------
+  [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+  [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+  [PASS] A3-verify-root-clean         0 violation(s)
+  [PASS] A4-cycles-reached            reached cycle 24 of 24 requested; the deepest recorded death was cycle 2
+
+-- S2/S4 seam coverage -------------------------------------------------
+  [PART] D1-seat-contract         seat contracts with repairs
+         reason: seat contracts exercised, but zero repair tasks recorded: an un-induced stub always returns a schema-valid response, so no repair is ever requested. Re-run with --induce-repairs N (and --induce-repair-kind unparseable, or alternate, to reach whole_object_syntax as well as patch)
+         reached: {'workflow-contract-decomposition-transition-v1': 0, 'workflow-provider-attempt-v1': 194}
+  [PASS] D2-route-lease           lease-checked routes with tuning
+         reached: {'workflow-provider-attempt-v1': 194}
+  [PASS] D3-budget-auth           budget authorization
+         reached: {'workflow-dispatch-authorization-v1': 194}
+  [PASS] D4-reservation-bound     reservation/dispatch bounds
+         reached: {'workflow-token-reservation-v2': 194}
+
+-- record census -------------------------------------------------------
+      24  artifact
+       5  commitment
+       1  problem
+       3  warrant
+     194  workflow-context-exposure-v2
+     194  workflow-context-pack-plan-v1
+     194  workflow-dispatch-authorization-v1
+       1  workflow-model-classification-binding-v1
+     194  workflow-provider-attempt-v1
+       1  workflow-route-seat-model-classification-plan-v1
+       1  workflow-run-terminal-commitment-v1
+       1  workflow-run-terminal-result-draft-v1
+      99  workflow-semantic-admission-v1
+     194  workflow-token-reservation-v2
+     780  workflow-work-lifecycle-transition-v1
+     194  workflow-work-preparation-v1
+      99  workflow-work-terminal-v1
+
+[soak] report /tmp/cycle-soak-kb1w7ilu/soak-report.json
+[soak] exit 0 (clean)
