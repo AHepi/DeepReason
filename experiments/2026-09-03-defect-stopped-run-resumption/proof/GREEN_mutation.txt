@@ -1,0 +1,10 @@
+# Control, AFTER the fix -- must read the same as proof/RED_mutation.txt
+# python proof/mutate_one_byte.py <root> <tampered-copy>
+
+target endpoint: http://127.0.0.1:46449/v1
+record_verification_refusal -> the record does not verify on the security channel: attempt-route, frozen-route
+continue rc= 1 | CONTINUE_RECORD_NOT_VERIFIED: the record does not verify on the security channel: attempt-route, frozen-route
+
+Identical to the RED run except the stub's ephemeral port (34047 -> 46449),
+which is assigned per run. The lifecycle refusal is gone; the security
+refusal is untouched.

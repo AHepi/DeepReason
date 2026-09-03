@@ -230,20 +230,33 @@ def _refusal(code: str, detail: str, **facts) -> dict[str, Any]:
     }
 
 
-def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
-    """Record a typed, continuable STOPPED receipt for a budget-exhausted run.
+def _record_lifecycle_stop(harness, manifest, *, policy, metrics, reason):
+    """Record a typed, continuable STOPPED receipt for one terminal.
+
+    Every terminal reason the runtime decides comes through here — a budget
+    exhaustion and an operational failure alike.  The operator's law of
+    2026-08-29 makes that mandatory rather than tidy: every terminal, clean or
+    failed, must leave checkpoints sufficient for relaunch, so a failure
+    terminal that declined the receipt by declaration produced roots no
+    operation could touch (16 committed roots, plus P-A1
+    ``4565139800f5ca020e2b74acff45355c1277a9d510068a8e8b4ed65813f1a49c``).
 
     Returns ``(stop_record, None)`` on success, or ``(None, refusal)`` when
     this root cannot carry the receipt — the caller then keeps the bare stop
-    record and the terminal stays non-resumable, exactly as before.
+    record and the terminal stays non-resumable.
 
     The refusal is RETURNED rather than swallowed because the terminal it
     produces is indistinguishable, from outside, from a continuable one: a
     bare ``except ValueError: return None`` here published roots reporting
     ``ready for continue: yes`` that ``continue`` refused with
-    CONTINUE_TYPED_STOP_REQUIRED (P6; audit 2026-08-28 finding F-C).  Whether
-    unfinished authority OUGHT to block continuation is a separate, open
-    question — this path only stops hiding that it does.
+    CONTINUE_TYPED_STOP_REQUIRED (P6; audit 2026-08-28 finding F-C).
+
+    The question this docstring used to record as open — whether unfinished
+    authority OUGHT to block continuation — was ANSWERED by the operator on
+    2026-08-29 and is answered in the code it describes: only an unread
+    provider result blocks the receipt now (``workflow/lifecycle.py``), and
+    whether a given root may be resumed is decided by the SECURITY-channel
+    integrity gate at continue/amend time, never by this receipt alone.
     """
 
     from deepreason.runtime.stop import (
@@ -285,7 +298,7 @@ def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
         )
     stop_event_seq = harness._next_seq
     record = build_stop_record(
-        reason="budget_exhausted",
+        reason=reason,
         policy=policy,
         metrics=metrics,
         event_seq=stop_event_seq,
@@ -299,7 +312,7 @@ def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
             workflow_profile=control.workflow_profile,
             policy=policy,
             metrics=metrics,
-            deterministic_decision=StopDecision(stop=True, reason="budget_exhausted"),
+            deterministic_decision=StopDecision(stop=True, reason=reason),
             controller_state_before=idle,
             controller_state_after=idle,
             stop_event_seq=stop_event_seq,
@@ -411,8 +424,9 @@ def terminalize_text_run(
             # owned control plane, unfinished workflow authority) keeps the
             # bare fail-closed stop AND records why, so the terminal it
             # publishes cannot be mistaken for a continuable one.
-            stop, lifecycle_refusal = _record_exhaustion_lifecycle_stop(
-                harness, manifest, policy=policy, metrics=metrics
+            stop, lifecycle_refusal = _record_lifecycle_stop(
+                harness, manifest, policy=policy, metrics=metrics,
+                reason=stop_reason,
             )
         if stop is None:
             harness.record_measure(
@@ -604,6 +618,7 @@ def finalize_stopped_root(root: Path | str) -> dict[str, Any]:
         config_from_run_manifest,
         load_run_manifest,
     )
+    from deepreason.runtime.progress import ProgressSink
     from deepreason.runtime.terminal_authority import derive_terminal_authority
     from deepreason.scheduler.scheduler import run_report
 
@@ -643,7 +658,8 @@ def finalize_stopped_root(root: Path | str) -> dict[str, Any]:
         # TERMINAL_POST_HORIZON_EVENT_UNAUTHORIZED. Finalization appends the
         # terminal records and nothing else.
         report = run_report(harness, config_from_run_manifest(manifest))
-        return terminalize_text_run(
+        cycle = completed_cycles(harness)
+        payload = terminalize_text_run(
             harness,
             manifest,
             root=root,
@@ -660,8 +676,32 @@ def finalize_stopped_root(root: Path | str) -> dict[str, Any]:
                         "no model call",
             },
             problem_id=spec.problem.id,
-            latest_cycle=completed_cycles(harness),
+            latest_cycle=cycle,
         )
+        # `run-status.json` is progress.jsonl's LAST line, and terminalization
+        # writes the log rather than the progress stream.  Without this line a
+        # finalized root keeps whatever state the killed process left --
+        # `running` on every root finalize exists for -- so every reader over
+        # that file, `stop-report`'s continuability section included, describes
+        # a run that has since reached a terminal as still in flight.
+        try:
+            ProgressSink(
+                root, run_id=manifest.sha256, workload="text"
+            ).emit(
+                state=str(payload.get("state") or "completed"),
+                phase="stop",
+                activity="finalized",
+                cycle=cycle,
+                token_spend=log_token_spend(harness),
+                determinate=False,
+                stop_reason=(payload.get("stop") or {}).get("reason"),
+                terminal_lifecycle_refusal=(
+                    (payload.get("terminal_lifecycle_refusal") or {}).get("code")
+                ),
+            )
+        except Exception:  # noqa: BLE001 - the terminal is already durable
+            pass
+        return payload
     finally:
         locks.release()
 
@@ -1586,22 +1626,39 @@ class TextRunApplicationService:
             policy = StopPolicy()
             metrics = StopMetrics(cycle=latest_cycle)
             try:
-                harness.record_measure(
-                    inputs=[
-                        "run-stop",
-                        policy.digest,
-                        json.dumps(metrics.model_dump(mode="json"), sort_keys=True),
-                        "operational_failure",
-                        str(harness._next_seq),
-                    ]
-                )
-                stop = write_stop_record(
-                    root,
+                # A failure terminal takes the SAME receipt a clean stop takes,
+                # carrying its own reason.  It used to decline one by
+                # declaration, which left every failed run permanently beyond
+                # `continue` and `amend` however sound its record was (16
+                # committed roots, and live P-A1
+                # 4565139800f5ca020e2b74acff45355c1277a9d510068a8e8b4ed65813f1a49c).
+                # The operator's law of 2026-08-29 requires every terminal to
+                # leave checkpoints sufficient for relaunch; what decides
+                # whether THIS root may be resumed is the SECURITY-channel
+                # integrity gate at continue/amend time, not the terminal.
+                stop, lifecycle_refusal = _record_lifecycle_stop(
+                    harness, manifest, policy=policy, metrics=metrics,
                     reason="operational_failure",
-                    policy=policy,
-                    metrics=metrics,
-                    event_seq=max(0, harness._next_seq - 1),
                 )
+                if stop is None:
+                    harness.record_measure(
+                        inputs=[
+                            "run-stop",
+                            policy.digest,
+                            json.dumps(
+                                metrics.model_dump(mode="json"), sort_keys=True
+                            ),
+                            "operational_failure",
+                            str(harness._next_seq),
+                        ]
+                    )
+                    stop = write_stop_record(
+                        root,
+                        reason="operational_failure",
+                        policy=policy,
+                        metrics=metrics,
+                        event_seq=max(0, harness._next_seq - 1),
+                    )
                 _atomic_json(
                     root / "checkpoint.json",
                     {
@@ -1611,25 +1668,6 @@ class TextRunApplicationService:
                         "event_seq": harness._next_seq,
                     },
                 )
-                # Every checkpoint FILE is now on disk and no STOPPED
-                # lifecycle receipt was taken, so `continue` will refuse this
-                # root.  Recording that here is what stops the terminal from
-                # looking, from outside, like one that could be picked up
-                # again (16 committed roots stand in exactly this state and
-                # say nothing about it).
-                # Which code `continue` will raise is NOT recorded: it also
-                # depends on the cycles and tokens the operator later passes,
-                # and on a resume decision an earlier continuation may have
-                # left, so a terminal that named one would be guessing at
-                # another verb's predicate (measured: 15 of the 16 committed
-                # roots of this shape refuse CONTINUE_TYPED_STOP_REQUIRED, one
-                # refuses CONTINUE_RESUME_RECOVERY_MISMATCH).
-                not_continuable = _refusal(
-                    "TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL",
-                    "a failure terminal takes no STOPPED lifecycle receipt, so "
-                    "these checkpoints cannot authorize a continuation",
-                    stop_reason="operational_failure",
-                )
                 payload = _v6_run_result(root, manifest, {
                     "schema": "deepreason-run-result-v1",
                     "state": "failed",
@@ -1637,7 +1675,7 @@ class TextRunApplicationService:
                     "error_type": type(error).__name__,
                     "error": str(error)[:2000],
                     "stop": stop,
-                    "terminal_lifecycle_refusal": not_continuable,
+                    "terminal_lifecycle_refusal": lifecycle_refusal,
                 }, harness=harness)
                 payload = finalize_terminal_result(harness, manifest, payload)
                 _atomic_json(root / "run-result.json", payload)
@@ -1651,7 +1689,9 @@ class TextRunApplicationService:
                     determinate=False,
                     message=str(error)[:500],
                     stop_reason="operational_failure",
-                    terminal_lifecycle_refusal=not_continuable["code"],
+                    terminal_lifecycle_refusal=(
+                        lifecycle_refusal["code"] if lifecycle_refusal else None
+                    ),
                 )
                 notify(failed)
             except Exception:

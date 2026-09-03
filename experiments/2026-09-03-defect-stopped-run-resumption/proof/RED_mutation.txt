@@ -1,0 +1,9 @@
+# RED/GREEN control — the integrity gate on a tampered copy of the clean root
+# python proof/mutate_one_byte.py <root> <tampered-copy>
+
+target endpoint: http://127.0.0.1:34047/v1
+record_verification_refusal -> the record does not verify on the security channel: attempt-route, frozen-route
+continue rc= 1 | CONTINUE_RECORD_NOT_VERIFIED: the record does not verify on the security channel: attempt-route, frozen-route
+
+This half must read IDENTICALLY after the fix. It is the control that proves
+the fix removed a LIFECYCLE refusal and not the SECURITY gate.

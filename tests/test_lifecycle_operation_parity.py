@@ -352,7 +352,7 @@ def test_finalize_resumes_after_an_interrupted_terminalization(
     """
 
     from deepreason.application.text_runs import (
-        _record_exhaustion_lifecycle_stop,
+        _record_lifecycle_stop,
     )
     from deepreason.ontology import Rule
     from deepreason.runtime.stop import StopMetrics, StopPolicy
@@ -367,8 +367,9 @@ def test_finalize_resumes_after_an_interrupted_terminalization(
     _no_provider_scheduler()(harness, None, 1, None)
     # Exactly the state the killed process left: a durable typed stop, no
     # terminal commitment, no result.
-    stop, refusal = _record_exhaustion_lifecycle_stop(
-        harness, manifest, policy=StopPolicy(), metrics=StopMetrics(cycle=1)
+    stop, refusal = _record_lifecycle_stop(
+        harness, manifest, policy=StopPolicy(), metrics=StopMetrics(cycle=1),
+        reason="budget_exhausted",
     )
     assert stop is not None
     # This root's workflow holds no unfinished authority, so the receipt is

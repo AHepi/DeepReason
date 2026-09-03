@@ -1,5 +1,5 @@
 <!-- DR-SUB-application -->
-Verified-at: a82872b38
+Verified-at: 0fd78a0c8
 Verify: python -m pytest tests/test_v6_only_cli_admission.py tests/test_v6_only_application_admission.py tests/test_easy.py -q && python -m pytest tests/test_application_text_runs_d0.py tests/test_r0_terminal_verification.py tests/test_continuation.py tests/test_stop_policy.py tests/test_progress.py -q
 Owns: src/deepreason/application/, src/deepreason/workflows/, src/deepreason/cli/, src/deepreason/runtime/, src/deepreason/easy.py, src/deepreason/intake_form.py, src/deepreason/shallow.py
 Seams: 
@@ -262,6 +262,25 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
 
 ## Traps
 
+- **A failure terminal declined its lifecycle receipt by declaration, and every
+  failed run was therefore beyond `continue` and `amend` forever.** The except
+  branch of `terminalize_text_run` wrote every checkpoint FILE and then recorded
+  `TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL` instead of taking the receipt,
+  on the 2026-07-27 reading that failure terminals are not resumable. The
+  operator reversed that on 2026-08-29 ("clean stop. with an assurance that
+  continuing is possible"), which makes a terminal that cannot assure
+  continuability a defect rather than a policy. Cost, on records whose own
+  `verify_root` reports `violations: 0`: 16 committed roots plus P-A1
+  `4565139800f5ca020e2b74acff45355c1277a9d510068a8e8b4ed65813f1a49c`, which died
+  at cycle 5 having spent 1 093 086 of 3 000 000 tokens and could not be picked
+  up. FIXED 2026-09-03 — the failure terminal now calls the SAME
+  `_record_lifecycle_stop` the clean path calls, passing its own stop reason, and
+  records a refusal only if the builder actually returns one. Note what is NOT
+  the fix and would be wrong: giving the failure terminal a clean stop reason to
+  buy continuability. It carries `operational_failure` into its receipt, and
+  `RESUMABLE_STOP_REASONS` was widened to admit it
+  (`experiments/2026-09-03-defect-stopped-run-resumption/`, `docs/ERRATA.md` E61).
+`check: python -m pytest tests/test_checkpoint_hardening.py::test_a_failure_terminal_records_why_it_cannot_be_continued tests/test_stopped_run_resumption.py::test_the_terminal_and_the_results_surface_describe_the_same_root -q`
 - **Assuming a verb that reads a root has checked the root.** Until 2026-08-31 neither `continue` nor `amend` consulted any replay verdict, so a one-byte flip of a recorded provider endpoint bought an amendment epoch AND a resumption, while the root's own `REPLAY_VALIDATION.json` still published `valid: true` (`experiments/2026-08-31-defect-jailbreak-gate-closure/proof/RED-forge_amend_ready.txt`). Two things about the fix are easy to get wrong and were both got wrong once. FIRST, it must RE-DERIVE: the stored verdict is part of the record and forges with it. SECOND, it must ask the SECURITY channel and not `verify_root`'s whole verdict — the 2026-08-30 attempt asked the whole verdict, turned eight lifecycle tests red where its spec predicted one, and was reverted (`experiments/2026-08-30-change-checkpoint-hardening/proof/gate_collisions.md`). Three of those eight assert roads that REPAIR an invalid record, so a gate on the whole verdict strands the very roots the recovery paths exist for. The public accessor `verify_root_report(root).security_valid` is NOT the narrowing: it also counts DERIVED findings, and on the largest committed root that is 494 `transaction-authority` findings reading `unknown v6 task kind` — version skew, not tampering.
 `check: python -m pytest tests/test_jailbreak_gate.py::test_a_record_that_is_merely_incomplete_still_passes_the_gate tests/test_jailbreak_gate.py::test_the_gate_agrees_with_the_reports_own_channel_classification tests/test_jailbreak_gate.py::test_a_refused_verb_writes_nothing_into_the_tampered_root -q`
 
@@ -404,8 +423,16 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   roots hold the complete checkpoint FILE set and cannot be continued, and 15
   of the 16 carry no continuation authority at all. FIXED 2026-08-30
   (`experiments/2026-08-30-change-checkpoint-hardening`) by recording the fact,
-  not by making the terminals resumable — that reading is parked as an operator
-  call. NOT fixed on the third exit, the one taken when a terminal commitment
+  not by making the terminals resumable — that reading was parked as an operator
+  call. **The operator made it on 2026-08-29 and the parked half shipped
+  2026-09-03**: a failure terminal now TAKES the receipt (carrying
+  `operational_failure`), so there is nothing left to record and
+  `TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL` no longer exists in the tree
+  (`experiments/2026-09-03-defect-stopped-run-resumption/`, `docs/ERRATA.md`
+  E61). The 16 roots keep the old shape as frozen evidence and are the witness
+  set `tests/test_continuation.py` selects. `TERMINAL_NO_CHECKPOINT_WRITTEN`
+  is untouched: a terminal that could not write a checkpoint at all still has
+  nothing to offer a continuation. NOT fixed on the third exit, the one taken when a terminal commitment
   is already open: it emits a `failed` progress line carrying
   `TERMINAL_PUBLICATION_RECOVERY_REQUIRED` as prose in `message`, writes no
   `run-result.json`, and records no refusal. Measured in that tranche's skeptic
@@ -413,7 +440,7 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   `completed` and a typed "cannot continue" left behind on a root that was
   continued would be a second wrong record, not a fix. No schema moved: `RunResultV2` is `extra="allow"` and
   `ProgressEvent.terminal_lifecycle_refusal` already existed with a default.
-`check: grep -q "TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL" src/deepreason/application/text_runs.py && grep -q "TERMINAL_NO_CHECKPOINT_WRITTEN" src/deepreason/application/text_runs.py && python -m pytest tests/test_checkpoint_hardening.py::test_a_failure_terminal_records_why_it_cannot_be_continued tests/test_checkpoint_hardening.py::test_a_terminal_that_wrote_no_checkpoint_records_that_fact -q`
+`check: ! grep -q "TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL" src/deepreason/application/text_runs.py && grep -q "TERMINAL_NO_CHECKPOINT_WRITTEN" src/deepreason/application/text_runs.py && python -m pytest tests/test_checkpoint_hardening.py::test_a_failure_terminal_records_why_it_cannot_be_continued tests/test_checkpoint_hardening.py::test_a_terminal_that_wrote_no_checkpoint_records_that_fact -q`
 - **There is ONE run path, and `cli/` is not allowed to be a second one.**
   The bare `deepreason run --run-manifest` path used to call
   `ops.run_scheduler` and then print. Grounded-extension run
@@ -505,13 +532,19 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   is now `fence_seq > resume_event_seq` (a fence AHEAD is still refused)
   rather than inequality. FIXED 2026-08-13.
 `check: grep -q "fence_seq > current_resume.resume_event_seq" src/deepreason/runtime/continuation.py && ! grep -q 'or fence.get("event_seq") != current_resume.resume_event_seq' src/deepreason/runtime/continuation.py && python -m pytest tests/test_continuation.py::test_continue_keeps_manifest_and_appends_after_stop tests/test_continuation.py::test_continue_rejects_tampered_stop_digest tests/test_v6_resumed_terminal_revalidation.py::test_public_recovery_completes_while_original_replay_refresh_is_interrupted tests/test_v6_resumed_terminal_revalidation.py::test_restart_recovers_stale_preceding_epoch_without_redispatch -q`
-- **A budget-exhausted run must end with a typed STOPPED receipt, or it can
-  never be continued.** `_record_exhaustion_lifecycle_stop` gives the exhaustion
-  a lifecycle receipt so `budget_exhausted` counts as resumable; a root that
-  cannot take one (no owned control plane, or unfinished workflow authority)
-  deliberately falls back to the bare fail-closed stop record. Both branches
-  exist; deleting either changes what a budget stop means for the record.
-`check: grep -q "^def _record_exhaustion_lifecycle_stop(" src/deepreason/application/text_runs.py && python -m pytest tests/test_v6_resumed_terminal_revalidation.py::test_budget_exhausted_terminal_is_a_typed_resumable_stop -q`
+- **A run must end with a typed STOPPED receipt, or it can never be continued.**
+  `_record_lifecycle_stop` gives the terminal a lifecycle receipt carrying its
+  own stop reason, so the stop counts as resumable; a root that cannot take one
+  (no owned control plane, or a stop that would close over an unread provider
+  result) deliberately falls back to the bare fail-closed stop record. Both
+  branches exist; deleting either changes what a stop means for the record.
+  It was `_record_exhaustion_lifecycle_stop` and served the budget terminal
+  ALONE until 2026-09-03, when the failure terminal — which used to decline the
+  receipt by declaration — began calling the same function with its own reason.
+  That is the operations-parity law applied to terminalization: one receipt
+  path, not two kept in agreement
+  (`experiments/2026-09-03-defect-stopped-run-resumption/`).
+`check: grep -q "^def _record_lifecycle_stop(" src/deepreason/application/text_runs.py && test "$(grep -c "_record_lifecycle_stop(" src/deepreason/application/text_runs.py)" -eq 3 && python -m pytest tests/test_v6_resumed_terminal_revalidation.py::test_budget_exhausted_terminal_is_a_typed_resumable_stop tests/test_checkpoint_hardening.py::test_a_failure_terminal_records_why_it_cannot_be_continued -q`
 - **That decision changed a property an out-of-map instrument asserted, and
   nothing pointed at it.** `2d4ca2e1` moved `budget_exhausted` into
   `RESUMABLE_STOP_REASONS` and updated its own test, but

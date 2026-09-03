@@ -24,8 +24,23 @@ from deepreason.workflow.models import (
 
 # Owner decision 4a (2026-07-27): a budget-exhausted public run is a typed,
 # quiescent stop and continues under a fresh explicit budget, exactly like a
-# converged one.  Failure terminals stay non-resumable.
-RESUMABLE_STOP_REASONS = frozenset({"converged", "budget_exhausted"})
+# converged one.  Its closing clause -- "Failure terminals stay
+# non-resumable" -- is SUPERSEDED by the operator's law of 2026-08-29:
+# every terminal, clean or failed, must leave checkpoints sufficient for
+# relaunch, and a stop that cannot assure continuability is itself a defect.
+# What decides whether a given root may actually be resumed is the
+# SECURITY-channel integrity gate at continue/amend time
+# (`runtime/continuation.py`), never membership of this set.
+RESUMABLE_STOP_REASONS = frozenset(
+    {"converged", "budget_exhausted", "operational_failure"}
+)
+
+# The bridge composes FROM a frozen terminal rather than extending it, which
+# is a different question from whether the run may be resumed, and it must not
+# move when resumption widens.  One frozenset answering both is how a
+# resumption change would silently alter what may be composed out of a failed
+# run; the sets are separate so that cannot happen by omission.
+COMPOSABLE_STOP_REASONS = frozenset({"converged", "budget_exhausted"})
 
 
 class UnfinishedWorkflowAuthorityError(ValueError):
@@ -152,12 +167,21 @@ def outstanding_work_snapshot(
     )
 
 
-def _is_runtime_exhaustion(decision: StopDecision) -> bool:
-    """True for the one stop the runtime, not the controller, decides."""
+# Neither reason is reached through StopController.evaluate: the cycle loop and
+# token meter decide exhaustion, and an unhandled error decides operational
+# failure.  A receipt for either therefore has no controller evaluation to
+# replay and must declare that no controller authority was consumed.
+_RUNTIME_DECIDED_STOP_REASONS = frozenset(
+    {"budget_exhausted", "operational_failure"}
+)
+
+
+def _is_runtime_decided(decision: StopDecision) -> bool:
+    """True for the stops the runtime, not the controller, decides."""
 
     return (
         decision.stop
-        and decision.reason == "budget_exhausted"
+        and decision.reason in _RUNTIME_DECIDED_STOP_REASONS
         and decision.escape_action is None
     )
 
@@ -205,14 +229,11 @@ def build_stopped_lifecycle(
     )
     if not deterministic_decision.stop or deterministic_decision.reason is None:
         raise ValueError("only a deterministic terminal decision may emit STOPPED")
-    if _is_runtime_exhaustion(deterministic_decision):
-        # Budget exhaustion is decided by the runtime cycle loop and token
-        # meter, not by the deterministic StopController, so there is no
-        # controller evaluation to replay.  The receipt instead declares
-        # that no controller authority was consumed (identical before and
-        # after states); the stop-record digest binding and the quiescent
-        # outstanding-work snapshot below still carry the resumption
-        # safety properties.
+    if _is_runtime_decided(deterministic_decision):
+        # The receipt declares that no controller authority was consumed
+        # (identical before and after states); the stop-record digest binding
+        # and the unread-provider-authority check below carry the resumption
+        # safety properties instead.
         if controller_state_before != controller_state_after:
             raise ValueError(
                 "exhaustion STOPPED requires unchanged controller state"
@@ -239,7 +260,16 @@ def build_stopped_lifecycle(
         controller_version=controller_version,
         event_fence_seq=stop_event_seq - 1,
     )
-    if snapshot.outstanding_work or snapshot.unconsumed_bound_call_seqs:
+    # ONLY unread provider authority may veto the receipt.  An unconsumed bound
+    # call is a provider result nobody has read, so closing a stop over one
+    # forces resumption to either re-issue the call (two calls recorded for one
+    # authority) or drop a result the record already holds.  Work that is
+    # merely OUTSTANDING carries no such result: it is recorded in the snapshot
+    # above and re-entered by `Scheduler._recover_workflow_prefixes`, which
+    # runs before the first resumed cycle and raises if it cannot finish.
+    # Refusing on it instead withheld the receipt for a condition whose remedy
+    # is the operation the withheld receipt blocks.
+    if snapshot.unconsumed_bound_call_seqs:
         raise UnfinishedWorkflowAuthorityError(snapshot)
     observation = StopMetricsObservationV1.create(
         manifest_digest=manifest_digest,
@@ -315,7 +345,7 @@ def build_resumed_lifecycle(
         # and the fresh outstanding-work snapshot below still refuses any
         # unfinished authority.
         raise ValueError("terminal process digest differs from current replay")
-    if terminal_snapshot.outstanding_work or terminal_snapshot.unconsumed_bound_call_seqs:
+    if terminal_snapshot.unconsumed_bound_call_seqs:
         raise ValueError("terminal checkpoint contains unfinished provider work")
     if continuation_seq != len(workflow_state.resume_decisions):
         raise ValueError("continuation sequence differs from replayed resume history")
@@ -327,7 +357,10 @@ def build_resumed_lifecycle(
         controller_version=controller_version,
         event_fence_seq=resume_event_seq - 1,
     )
-    if snapshot.outstanding_work or snapshot.unconsumed_bound_call_seqs:
+    # Symmetric with build_stopped_lifecycle: a stop that may be TAKEN over
+    # outstanding work must be RESUMABLE over it, or the receipt is granted and
+    # refused one layer later.
+    if snapshot.unconsumed_bound_call_seqs:
         raise ValueError("RESUMED refuses unfinished workflow authority")
     decision = WorkflowResumeDecisionV1.create(
         manifest_digest=manifest_digest,
@@ -353,6 +386,7 @@ def build_resumed_lifecycle(
 
 
 __all__ = [
+    "COMPOSABLE_STOP_REASONS",
     "RESUMABLE_STOP_REASONS",
     "build_resumed_lifecycle",
     "build_stopped_lifecycle",

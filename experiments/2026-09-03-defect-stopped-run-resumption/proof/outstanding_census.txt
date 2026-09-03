@@ -1,0 +1,44 @@
+
+P-A1 4565139800 (failed terminal)
+  outstanding work items      : 6
+  unconsumed provider calls   : 0  []
+  terminal_lifecycle_decision : False
+    - sha256:06b99b3 kind=REPAIR outcome=provider_result admissions=[] terminal=None
+    - sha256:172c2b1 kind=REPAIR outcome=provider_result admissions=[] terminal=None
+    - sha256:22c8b5a kind=REPAIR outcome=provider_result admissions=[] terminal=None
+    - sha256:410ad84 kind=REPAIR outcome=provider_result admissions=[] terminal=None
+    - sha256:79e161a kind=REPAIR outcome=provider_result admissions=[] terminal=None
+    - sha256:d5f16ab kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+
+P-A2 e4 63e48f5741 (killed, then finalized)
+  outstanding work items      : 10
+  unconsumed provider calls   : 0  []
+  terminal_lifecycle_decision : False
+    - sha256:01500b8 kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:0dfa00c kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:17e7114 kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:2171df6 kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:8ce42d2 kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:93672cb kind=CRITICISM outcome=None admissions=[] terminal=None
+    - sha256:ac53b79 kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:b6308d8 kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:cab11b2 kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:f6f09ee kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+
+1-cycle 292f964edb (clean)
+  outstanding work items      : 2
+  unconsumed provider calls   : 0  []
+  terminal_lifecycle_decision : False
+    - sha256:0507660 kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:7d8ade6 kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+
+4-cycle fe00609058 (clean control)
+  outstanding work items      : 6
+  unconsumed provider calls   : 0  []
+  terminal_lifecycle_decision : False
+    - sha256:2c02510 kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:4e90f08 kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:6afc02c kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:8984177 kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:91a35d7 kind=CONJECTURE outcome=provider_result admissions=[] terminal=None
+    - sha256:a09905e kind=CONJECTURE outcome=provider_result admissions=[] terminal=None

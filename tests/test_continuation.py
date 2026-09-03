@@ -11,7 +11,6 @@ from deepreason.config import Config
 from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
 from deepreason.runtime.continuation import prepare_continuation
 from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
-from deepreason.workflow.lifecycle import RESUMABLE_STOP_REASONS
 
 
 def _manifest():
@@ -91,19 +90,22 @@ def test_continue_rejects_tampered_stop_digest(tmp_path, monkeypatch):
         raise AssertionError("tampered stop record was accepted")
 
 
-def _non_resumable_committed_roots() -> list[tuple[Path, str]]:
-    """Committed roots whose recorded stop reason cannot authorize a resume.
+def _receiptless_committed_roots() -> list[tuple[Path, str]]:
+    """Committed roots that recorded a REFUSED lifecycle receipt.
 
-    Selected from each root's OWN ``run-stop.json`` rather than from a list of
-    names, and against the product's own ``RESUMABLE_STOP_REASONS`` rather than
-    a literal: a change that reclassifies these stops empties the set and trips
-    the guard below instead of leaving the assertion passing over nothing.
+    Selected from each root's own files rather than from a list of names: a
+    change that stops producing this shape empties the set and trips the guard
+    below instead of leaving the assertion passing over nothing.
 
-    Reading the reason is deliberately cheaper than reading the condition the
-    code under test branches on. Opening a Harness per root to inspect
-    ``terminal_lifecycle_decision`` replays every root (~63s) and asserts that
-    branch back at itself; a root that somehow carried a receipt raises a
-    DIFFERENT error below and fails loudly rather than being skipped.
+    The selector reads the RECORDED fact, not a proxy for it. It used to filter
+    by stop REASON, declaring that cheaper than reading the condition the code
+    branches on -- true, but the reason only stood in for "took no receipt",
+    and the two parted company on 2026-08-29 when a failure terminal began
+    taking one (``docs/ERRATA.md`` E-stopped-run-resumption). A non-null
+    ``terminal_lifecycle_refusal`` in ``run-result.json`` IS the root saying it
+    took no receipt, costs one file read rather than a ~63s replay, and is not
+    an inference. A root that somehow carried a receipt raises a DIFFERENT
+    error below and fails loudly rather than being skipped.
     """
 
     tracked = subprocess.run(
@@ -116,7 +118,14 @@ def _non_resumable_committed_roots() -> list[tuple[Path, str]]:
     witnesses = []
     for root in roots:
         reason = json.loads((root / "run-stop.json").read_text()).get("reason")
-        if reason in RESUMABLE_STOP_REASONS:
+        result_path = root / "run-result.json"
+        if not result_path.exists():
+            continue
+        try:
+            recorded = json.loads(result_path.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(recorded.get("terminal_lifecycle_refusal"), dict):
             continue
         continuations = root / "continuations.jsonl"
         if continuations.exists() and continuations.stat().st_size > 0:
@@ -138,15 +147,19 @@ def test_a_stop_with_no_typed_receipt_refuses_continuation():
     run executes, so 2d4ca2e1 could change what a budget-exhausted stop
     authorizes and leave the gate green for nine days.
 
-    The witnesses are committed roots that really stopped -- today five
-    operational_failure roots, e.g. failed-epoch1-run-9175f0ec -- not fixtures
-    asserting the state into existence.
+    The witnesses are committed roots that really stopped -- today ten of them,
+    seven refused STOPPED_REFUSES_UNFINISHED_WORKFLOW_AUTHORITY and three
+    TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL -- not fixtures asserting the
+    state into existence. They are frozen evidence of a shape the code no
+    longer produces: since 2026-08-29 every terminal takes the receipt, so no
+    NEW root joins this set, and that is why the guard below matters more than
+    it did, not less.
     """
 
-    witnesses = _non_resumable_committed_roots()
+    witnesses = _receiptless_committed_roots()
     assert witnesses, (
-        "no committed root carries a non-resumable stop; "
-        "the refusal has lost its witness"
+        "no committed root records a refused lifecycle receipt; "
+        "CONTINUE_TYPED_STOP_REQUIRED has lost its witness"
     )
 
     for root, reason in witnesses:

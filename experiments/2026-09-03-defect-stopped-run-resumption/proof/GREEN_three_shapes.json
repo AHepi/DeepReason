@@ -1,0 +1,47 @@
+{
+  "clean": {
+    "continue_rc": 0,
+    "continue_stderr": "",
+    "cycle": 8,
+    "cycle_after": 10,
+    "cycle_before": 8,
+    "outstanding_work": 31,
+    "record_verification_refusal": null,
+    "root": "/tmp/claude-0/-home-user-DeepReason/03ceba01-893f-52dd-bca9-6d97b22acf59/scratchpad/shapes-green/clean/run",
+    "state": "completed",
+    "stop_reason": "budget_exhausted",
+    "terminal_lifecycle_decision": true,
+    "terminal_lifecycle_refusal": null,
+    "unconsumed_provider_calls": 0
+  },
+  "failed": {
+    "continue_rc": 0,
+    "continue_stderr": "",
+    "cycle": 1,
+    "cycle_after": 3,
+    "cycle_before": 1,
+    "outstanding_work": 3,
+    "record_verification_refusal": null,
+    "root": "/tmp/claude-0/-home-user-DeepReason/03ceba01-893f-52dd-bca9-6d97b22acf59/scratchpad/shapes-green/failed/run",
+    "state": "failed",
+    "stop_reason": "operational_failure",
+    "terminal_lifecycle_decision": true,
+    "terminal_lifecycle_refusal": null,
+    "unconsumed_provider_calls": 0
+  },
+  "killed": {
+    "continue_rc": 0,
+    "continue_stderr": "",
+    "cycle": 3,
+    "cycle_after": 5,
+    "cycle_before": 3,
+    "outstanding_work": 8,
+    "record_verification_refusal": null,
+    "root": "/tmp/claude-0/-home-user-DeepReason/03ceba01-893f-52dd-bca9-6d97b22acf59/scratchpad/shapes-green/killed/run",
+    "state": "completed",
+    "stop_reason": "budget_exhausted",
+    "terminal_lifecycle_decision": true,
+    "terminal_lifecycle_refusal": null,
+    "unconsumed_provider_calls": 0
+  }
+}

@@ -1,0 +1,40 @@
+
+=== shape: clean ===
+    state: completed
+    stop_reason: budget_exhausted
+    terminal_lifecycle_refusal: None
+    cycle: 8
+    outstanding_work: 31
+    unconsumed_provider_calls: 0
+    terminal_lifecycle_decision: True
+    record_verification_refusal: None
+    continue rc=0 
+    cycle after continue: 10 (was 8)
+
+=== shape: failed ===
+    state: failed
+    stop_reason: operational_failure
+    terminal_lifecycle_refusal: None
+    cycle: 1
+    outstanding_work: 3
+    unconsumed_provider_calls: 0
+    terminal_lifecycle_decision: True
+    record_verification_refusal: None
+    continue rc=0 
+    cycle after continue: 3 (was 1)
+
+=== shape: killed ===
+    [killed] state before finalize: running
+    [killed] finalize rc=0 
+    state: completed
+    stop_reason: budget_exhausted
+    terminal_lifecycle_refusal: None
+    cycle: 3
+    outstanding_work: 8
+    unconsumed_provider_calls: 0
+    terminal_lifecycle_decision: True
+    record_verification_refusal: None
+    continue rc=0 
+    cycle after continue: 5 (was 3)
+
+verdicts -> /tmp/claude-0/-home-user-DeepReason/03ceba01-893f-52dd-bca9-6d97b22acf59/scratchpad/shapes-green/verdicts.json
