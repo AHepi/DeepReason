@@ -1,6 +1,6 @@
 # Checklist for: the stop report — the harness writes the first failure report
 
-State: next=10 blockers=none — the budget STOP raised at step 9 is RESOLVED (REQUEST.md Amendment 2: ceiling raised to 2100 source insertions on the operator's word). All later [COMMIT] steps check against 2100.
+State: next=12 blockers=none — the budget STOP raised at step 9 is RESOLVED (REQUEST.md Amendment 2: ceiling raised to 2100 source insertions on the operator's word). All later [COMMIT] steps check against 2100.
 
 Re-read REQUEST.md (incl. Amendment 1) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -325,7 +325,7 @@ now 2 100 source insertions across `src/deepreason`, `tests`,
 `docs/map` and `.claude/skills`. Every later [COMMIT] step checks
 `diff_budget.py` against 2100, not 1307.
 
-- [ ] 10. (R26, M10) Add the CLI subcommand `deepreason stop-report
+- [x] 10. (R26, M10) Add the CLI subcommand `deepreason stop-report
       <root-or-home> [--json] [--config FILE] [--verify]` to
       `src/deepreason/cli/main.py` as THIN DISPATCH ONLY.
       done-when: `deepreason stop-report --help` exits 0 and prints the
@@ -335,11 +335,63 @@ now 2 100 source insertions across `src/deepreason`, `tests`,
       `test_clients_have_only_thin_service_dispatch_and_one_registry`)
       passes, proving no `Harness(` entered `cli/`.
 
-- [ ] 11. (R26) [COMMIT] Run the subsystem test ring for the touched
+- [x] 11. (R26) [COMMIT] Run the subsystem test ring for the touched
       area and commit the CLI surface.
       done-when: `python -m pytest tests/test_stop_report.py
       tests/test_results_command.py tests/test_cli_readiness.py
       tests/test_v6_only_cli_admission.py -q` → 0 failed; paste it.
+
+## PROOF FOR STEPS 10-11 (2026-09-03)
+
+**Step 10** — the subcommand, thin dispatch only:
+
+    $ deepreason stop-report --help
+    usage: deepreason stop-report [-h] [--json] [--config CONFIG] [--verify]
+                                  [path]
+    positional arguments:
+      path             run root or home (default: $DEEPREASON_HOME, else
+                       ~/.deepreason)
+    options:
+      --json           emit the typed report as JSON
+      --config CONFIG  a run-config YAML to diff against the compiled
+                       manifest; the ONLY input read from outside the record
+      --verify         re-derive the verify_root verdict instead of reading
+                       the stored one
+
+    $ python -m pytest tests/test_application_text_runs_d0.py         -k thin_service_dispatch -q
+    1 passed, 11 deselected
+
+No `Harness(` entered `cli/`: the dispatch imports the application layer
+and returns. End-to-end on the real P-A1 root, section 4, exit 0:
+
+    ### 1. ENVIRONMENT — SUPPORTED
+    - evidence FOR: transport wall: 41 RemoteDisconnected on endpoint
+      ollama-glm-5.3
+    ### 2. HARNESS — NO EVIDENCE EITHER WAY
+    - note: not claimable: ENVIRONMENT, MODEL still holds evidence.
+    ### 3. CONFIGURATION — RULED OUT
+    ### 4. MODEL — SUPPORTED
+    - evidence FOR: the stop names seat exhaustion: "V6_ROUTE_SEAT_...
+    - note: conjecturer#0 passed qualification 20/20 first-pass on
+      conjecturer.turn.v6 with 0 repairs
+
+That last note is the tranche's whole point, printed by a command rather
+than reconstructed by a window.
+
+**Reachability drift check** (owed from step 9, where all three symbols
+read UNREACHABLE with no caller yet):
+
+    frozen_surface_verdict: CLEAR | contacts: [] | adjacent: []
+      stop_report          REACHABLE
+      render_stop_report   REACHABLE
+      resolve_report_source REACHABLE
+
+The predicted transition, so no drift.
+
+**Step 11** — the ring:
+
+    $ python -m pytest tests/test_stop_report.py tests/test_results_command.py         tests/test_cli_readiness.py tests/test_v6_only_cli_admission.py -q
+    136 passed in 46.60s
 
 - [ ] 12. (S18, R18) Write
       `experiments/2026-09-03-change-stop-report/proof/run_regression.py`:

@@ -554,6 +554,29 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="re-derive the verify_root verdict instead of reading the stored one",
     )
+    stop_report_cmd = sub.add_parser(
+        "stop-report",
+        help="why a run stopped: what actually ran, what the pre-run check "
+             "knew, provider health, the stop classified into four boxes, "
+             "and whether it can be continued",
+    )
+    stop_report_cmd.add_argument(
+        "path",
+        nargs="?",
+        help="run root or home (default: $DEEPREASON_HOME, else ~/.deepreason)",
+    )
+    stop_report_cmd.add_argument("--json", action="store_true",
+                                 help="emit the typed report as JSON")
+    stop_report_cmd.add_argument(
+        "--config",
+        help="a run-config YAML to diff against the compiled manifest; the "
+             "ONLY input read from outside the record",
+    )
+    stop_report_cmd.add_argument(
+        "--verify",
+        action="store_true",
+        help="re-derive the verify_root verdict instead of reading the stored one",
+    )
     findings_parser = sub.add_parser(
         "findings",
         help="reader-facing findings summary: rivalries, refutations, "
@@ -1233,6 +1256,32 @@ def _main(argv: list[str] | None = None) -> int:
         harness = Harness(Path(args.root))
         config = load_config(Path(args.config) if args.config else None)
         print(json.dumps(eval_report(harness, config), indent=2, sort_keys=True))
+        return 0
+
+    if args.command == "stop-report":
+        # Thin dispatch: the application layer opens the root. Clients may
+        # not construct a Harness
+        # (test_clients_have_only_thin_service_dispatch_and_one_registry).
+        from deepreason.application.stop_report import (
+            StopReportError,
+            render_stop_report,
+            stop_report,
+        )
+        from deepreason.easy import base_dir
+
+        try:
+            report = stop_report(
+                args.path if args.path else base_dir(),
+                config_path=args.config,
+                verify=args.verify,
+            )
+        except StopReportError as error:
+            print(str(error), file=sys.stderr)
+            return 1
+        if args.json:
+            print(json.dumps(report, indent=2, sort_keys=True))
+        else:
+            print(render_stop_report(report), end="")
         return 0
 
     if args.command == "results":
