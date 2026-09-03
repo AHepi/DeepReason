@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'dual-aspect' defense fails because it conflates the psychological explanation of why scientists prefer a theory with the normative justification for that preference. Popper's problem is strictly about whether the preference is *rational* (defensible on his terms), not merely why it occurs biologically. By reducing the preference to an evolutionary imperative ('cognitive apparatus is evolved'), the target admits that, on Popper's own logical terms, there is no rational basis for preferring the better-corroborated theory over the worse one. This does not 'defend' the preference; it sidesteps the charge of smuggling induction by replacing epistemic justification with biological description, thereby leaving the scientist with no rational ground to claim the preferred theory is closer to truth or more reliable for action than its rivals.",
+      "premise": "Popper's problem asks if the preference for better-corroborated theories is defensible on his own terms (which reject induction), or if it smuggles induction back in.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "If the preference is solely based on evolutionary survival value rather than logical corroboration, can a Popperian scientist still claim their chosen theory is objectively superior to a less corroborated but equally 'fit' alternative?"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target's mechanism claims preference is defensible solely because competitors are eliminated, implying that if multiple theories survive, no basis for preference exists.",
+      "premise_evidence": [
+        {
+          "block": "a6d12847385b369aa9f85b5f",
+          "quote": "We prefer Theory A not because A is likely true, but because B, C, and D have been proven false... The cost is that if all theories remain unfalsified, we have no basis for preference"
+        }
+      ],
+      "case": "The target fails to address the core tension in the problem: Popper himself preferred *better*-corroborated theories even when multiple rivals survived. By reducing corroboration to a binary 'eliminated/not eliminated' filter, the target cannot explain why Popper would choose a theory that has survived *severe* tests over one that has survived only *lenient* tests if neither is falsified. The problem explicitly asks about the preference for the 'better-corroborated' theory, not just the 'unfalsified' one. The target's model leads to the paralysis it admits ('no basis for preference') precisely in the scenario where scientists (and Popper) actually make choices, thus failing to defend the preference on Popper's own terms regarding severity.",
+      "counterexample": [
+        "Theory X survives a test that was highly risky (high potential for falsification). Theory Y survives a test that was trivial (low potential for falsification). Neither is falsified. Under the target's 'negative probability filter,' both are equally 'survivors,' yet Popper insists we prefer X. The target offers no mechanism for this distinction."
+      ],
+      "successor_question": "If the elimination of competitors is insufficient to distinguish between two unfalsified theories, what specific deductive rule allows Popper to rank the 'severity' of the tests they survived without invoking inductive assumptions about the likelihood of those tests detecting errors?"
+    }
+  ]
+}

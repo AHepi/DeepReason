@@ -519,3 +519,36 @@ wins on VOLUME -- fewer messages, less commentary -- and the style law still
 governs the messages that are sent. R15 is not a licence to drop the honest
 residue from a final report; it is an instruction to stop narrating in
 progress.
+
+
+---
+
+### Amendment 3 — 2026-09-03, concurrency cap and completeness preference
+
+Operator, verbatim:
+
+> "You can only run 3 concurrently. And I may run out of tokens. SO ID prefer a
+>  run complete than have a bunch incomplete"
+
+**R16 (process)** — at most 3 concurrent runs.
+
+**R17 (process)** — prefer ONE COMPLETE measurement over several incomplete
+ones when the budget is at risk.
+
+**C16 (standing)** — both bind every later phase of this tranche and any
+successor. Under R17 the ordering rule is: finish a measurement before starting
+another, and when a cut is needed, cut the measurement that gates the least of
+SPEC.md rather than the one that is cheapest to stop.
+
+**Disposition, recorded in PREREG.md Amendment 1:** M2 descoped to its offline
+sub-measurement, which was already complete; M1 and M3 run to completion,
+serialised, at a maximum concurrency of 2.
+
+Also fixed under R16, and worth recording because it was invisible: three
+`deepreason qualify` processes from the FIRST arm design had been reparented to
+init and were still running -- and still spending tokens -- 17 minutes after
+the `arm.sh` shells that spawned them were killed. One of them was qualifying
+`home-c0`, the same home a live control arm was qualifying at that moment.
+Killing a driver shell does not kill its provider work; the children must be
+killed by PID too. That is why the concurrency count read 5 when the intended
+count was 2.

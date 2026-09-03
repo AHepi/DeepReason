@@ -1,0 +1,27 @@
+## problem-context
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@e29758bf768734ae2a515153: program:reasoning_observation_pending
+- reason-counter@bfa18b5f1645c99a6c9cc83c: program:reasoning_observation_pending
+- reason-counter@1598c3a0b8ff72232e90a8d0: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET d4f50f37aae5c45728951af71e8987bf944a213545c6fe4cafcdb64f48d89814
+{"analogy":null,"claim":"The preference is defensible as a 'methodological fiction': scientists must act *as if* the better-corroborated theory is true to facilitate further testing, even while knowing logically that it may be false. This is a pragmatic stance required for the growth of knowledge, not an ontological claim.","counterconditions":[{"case":"If this 'fiction' leads to dogmatism that prevents the consideration of radically different alternatives.","checker_spec":null,"eval":"observation"},{"case":"If the strategy fails to produce more rapid falsifications than random selection.","checker_spec":null,"eval":"observation"},{"case":"If Popper explicitly rejected instrumentalist or fictionalist interpretations of theory choice.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Science progresses by treating the best-tested theory as the 'working truth' temporarily. This is not induction (believing it is probably true) nor verisimilitude (knowing it is closer to truth), but a strategic decision to maximize the efficiency of falsification. If we treated all unfalsified theories as equal, research would stall. The preference is a tool for generating new problems, not a conclusion about the world.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+DIRECTIVE: mount the strongest NEW specific case against TARGET d4f50f37aae5c45728951af71e8987bf944a213545c6fe4cafcdb64f48d89814, or attack=false if you find no genuine fault.

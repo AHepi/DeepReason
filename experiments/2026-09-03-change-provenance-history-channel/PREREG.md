@@ -235,3 +235,58 @@ reported without them.
    similarity) are fixed before launch but arbitrary.** They are the same
    number used consistently, which makes arms comparable to each other; it does
    not make either an absolute measure of restatement.
+
+
+---
+
+## Amendment 1 — M2 DESCOPED, 2026-09-03, on operator instruction
+
+Operator, verbatim, while eight arms were in flight:
+
+> "You can only run 3 concurrently. And I may run out of tokens. SO ID prefer a
+>  run complete than have a bunch incomplete"
+
+**What changed.** Two binding constraints: a hard cap of 3 concurrent runs, and
+a preference for COMPLETE measurements over a larger number of partial ones.
+Eight arms at once satisfied neither.
+
+**What was cut, and why M2 rather than M1 or M3.** The four M2 pack-budget
+rungs were stopped and are NOT RUN. M2 was chosen on three grounds, stated so
+the choice can be argued with:
+
+1. **Its most valuable part is already measured, and measured offline.** The
+   window instruction asks M2 to "record separately the share of each prompt
+   that is the JSON schema". That is done, from 532 committed prompt blobs, with
+   no API calls at all (`SCHEMA_SHARE.txt`, §2 above): 60.0-81.4% of a
+   `conjecturer.turn.v6` prompt is schema, confirming P-A1 almost exactly. That
+   finding is what §5 of SPEC.md actually leans on. The live sweep would have
+   added a quality curve, not the structural fact.
+2. **It was the most expensive of the three.** `PACK_TOKEN_BUDGET` moves the
+   qualification subject digest, so each rung pays its own full battery — four
+   batteries before a single reasoning cycle. M1 and M3 pay two each.
+3. **It gates the least.** SPEC.md's pending items are S10 (defaults), S11
+   (critic ask path) and S15 (anti-attractor rule); every one of them is blocked
+   on M1 or M3, none on M2. M2's contribution to the spec, S13/S14, is already
+   written from the offline measurement.
+
+**State at the stop, recorded rather than rounded off.** No rung reached a run
+root; all four died in qualification, at 268, 271, 270 and 262 cases of 360.
+The tokens spent on those four partial batteries bought nothing and are a real
+cost of the original eight-arm plan. Recorded as a cost, not written off.
+
+**What M2's result is now.** PARTIAL, and it must be reported that way in
+RESULTS.md: the schema-share sub-measurement is COMPLETE and stands; the
+four-rung quality-and-cost sweep is NOT RUN and its registered predictions in
+§2 above — a flat or non-monotonic quality curve, monotonically rising cost,
+possible starvation at 24000 — are UNTESTED. They are left in this document
+unchanged rather than deleted, so a later tranche can run the sweep against
+predictions that were registered before anyone saw a number.
+
+**Sequencing under the new cap.** M1 completes first: H0 then H1, so if the
+budget runs out mid-way the tranche holds one whole measurement rather than two
+halves. M3 follows: C0 (already in flight beside H0, giving 2 concurrent) then
+C1. Concurrency never exceeds 2 under this plan, against the cap of 3.
+
+**One thing this amendment does not do.** It does not touch the criteria, the
+arms, the measures, the thresholds or the predictions of M1 and M3. Those stay
+exactly as registered before any arm launched.
