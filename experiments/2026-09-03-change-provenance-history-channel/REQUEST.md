@@ -552,3 +552,48 @@ the `arm.sh` shells that spawned them were killed. One of them was qualifying
 Killing a driver shell does not kill its provider work; the children must be
 killed by PID too. That is why the concurrency count read 5 when the intended
 count was 2.
+
+
+---
+
+### Amendment 4 — 2026-09-03, credential rotated
+
+Operator, verbatim (the key value itself is NOT reproduced; see below):
+
+> "use this one from now on"
+
+**R18 (process)** — use the newly supplied Ollama credential for all further
+provider work.
+
+**THE KEY IS NOT IN THIS FILE.** As with Amendment 1, the redaction is recorded
+rather than performed silently so a reader comparing the operator's message
+against this ledger can see something was deliberately withheld. Identified
+here only by fingerprint: prefix `6466ca83`, length 57. The previous key
+(prefix `df5fdd8c`) is superseded.
+
+**Where it went.** `experiments/2026-09-03-change-provenance-history-channel/env`,
+mode 600, matched by `.gitignore:50` (`experiments/**/env`) and confirmed
+untracked. `runs/arm.sh` re-sources that file at the start of every arm and
+passes only the VARIABLE NAME to the harness (`--credential-env
+OLLAMA_API_KEY`), so each remaining arm picks up the rotation with no further
+action and no key value reaches a config, manifest or run root.
+
+**A near-miss worth recording.** The old file was first copied to
+`env.prev-key-backup` before being overwritten. That name is NOT matched by
+`experiments/**/env`, so the backup was untracked-but-committable and the next
+`git add -A` would have committed a live credential. It was deleted rather than
+kept. The lesson generalises past this tranche: the ignore rule protects one
+exact filename, so any sibling of it — a backup, a `.bak`, an `env.old` — is
+outside the protection.
+
+**In-flight work, and the judgement call.** M1-H0 was mid-run at cycle 2 with 51
+admitted conjectures when the rotation arrived, holding the OLD key in its
+process environment. It was allowed to finish rather than be restarted, on the
+evidence that the old key was still working: zero auth failures (401/403/quota)
+and zero transport failures in its log at the moment of rotation. "Use this one
+from now on" is read as governing future provider work, not as an instruction
+to discard half a completed control arm — which would also cost a re-run the
+operator's "prefer a run complete" is trying to avoid. If the old key was
+rotated BECAUSE it is exhausted or revoked, H0 will fail on its own and be
+relaunched on the new key; that costs no more than restarting it now would
+have. Override in one word if the intent was to kill it immediately.

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation as required by the problem context. Instead of naming a specific kind of relation (e.g., dependence, reduction) and stating what it is refuted if, the target provides a meta-commentary on a supposed contradiction with an external source (SRC_004). The content describes a logical scenario involving 'category mistake' defenses but does not instantiate the requested 'SUBSTANTIVE relation' between the isolated node and its neighbourhood. Consequently, it violates the core instruction to 'propose a SUBSTANTIVE relation... naming its kind'.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

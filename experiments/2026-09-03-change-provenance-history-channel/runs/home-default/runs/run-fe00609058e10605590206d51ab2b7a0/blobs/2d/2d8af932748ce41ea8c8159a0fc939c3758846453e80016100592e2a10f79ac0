@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Kind: Shared Mechanism. The isolated node and SRC_005 share the mechanism of 'Strategic Error Elimination,' where preference is a forward-looking heuristic to maximize the rate of falsification, not a backward-looking judgment of fitness. Refuted If: The scientific community adopts a theory primarily because it feels 'safe' or 'probable' (inductive security) rather than because it offers the highest risk and leverage for future testing, thereby collapsing the strategic distinction between biological survival and scientific preference.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "The candidate does not claim evolution lacks normativity; it claims the *mechanism* of preference in science is strategic (forward-looking) whereas biological fitness is retrospective. The refutation condition targets the motivation (safety vs. risk), not the existence of norms."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Explicitly named the relation kind 'Shared Mechanism' and included the mandatory 'Refuted If' clause describing a specific failure mode of the mechanism."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "The 'Refuted If' condition describes a plausible alternative reality (scientists seeking safety) that would nullify the proposed relation. It does not need to be currently true; it defines the boundary where the relation breaks."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "The relation does not require science to lack normativity entirely, but to lack the *specific* normative element of inductive certainty. The mechanism is about error elimination speed, not truth probability."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Moved beyond abstract analogy by specifying the causal mechanism: 'preference as a forward-looking heuristic to maximize falsification rate' versus 'retrospective survival'."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "The gap is addressed by distinguishing retrospective fitness (biology) from prospective strategic choice (science). The relation holds only if science operates on the latter; if it conflates them, the relation is refuted."},
+        {"handle": "SRC_010", "kind": "revised", "note": "Defined the link structurally: both systems use a selection process, but the *function* of preference differs (survival trait vs. strategic tool for error elimination)."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Added a concrete 'Refuted If' scenario: 'If the scientific community adopts a theory primarily because it feels safe...'"}
+      ]
+    },
+    {
+      "content": "Kind: Contradiction. The isolated node's implication that scientific preference is a direct analogue to biological fitness contradicts the foundational requirement that science must actively seek high-risk conjectures, whereas biology passively retains what survives. Refuted If: It can be demonstrated that the primary driver of scientific theory choice is the accumulation of positive instances (verification) rather than the survival of severe tests (falsification), making the 'evolutionary' model of science descriptively false.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_003"],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "The contradiction arises from the *directionality* of the mechanism (active risk-seeking vs. passive survival), not the presence of norms. Evolution has norms of survival; science has norms of risk."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Clearly stated the kind as 'Contradiction' and provided a specific empirical condition for refutation."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "The condition 'If the primary driver... is verification' is a substantive claim about scientific practice that, if true, would destroy the evolutionary analogy. It is a valid refutation condition."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "The argument focuses on the *methodological* difference (risk vs. safety), acknowledging that both domains have normative structures but arguing they are opposed in this specific context."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Specified the structural integration: the conflict between 'passive retention' in biology and 'active risk-seeking' in science."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "Addressed the normative gap by positing that the 'norm' of science is anti-inductive, directly contradicting the 'norm' of biological retention."},
+        {"handle": "SRC_010", "kind": "revised", "note": "Replaced analogy with a functional contradiction: one system optimizes for stability (biology), the other for instability/high-content (science)."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Provided the specific scenario: 'If the primary driver of scientific theory choice is the accumulation of positive instances...'"}
+      ]
+    },
+    {
+      "content": "Kind: Abstraction. The relationship between the isolated node and SRC_004 is one of Abstraction, where 'Corroboration' is the abstract formalization of 'Survival' stripped of its temporal retrospection. Refuted If: The concept of corroboration cannot be mathematically or logically defined without referencing the historical frequency of past successes, thereby re-introducing the retrospective element that the abstraction attempts to remove.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_004"],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "The abstraction does not deny norms in evolution but abstracts the *structure* of selection while altering the *temporal orientation* of the preference."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Identified the kind as 'Abstraction' and set a rigorous logical condition for refutation regarding the definition of corroboration."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "The refutation condition challenges the very possibility of the abstraction. If corroboration *requires* history, the abstraction fails. This is a valid and strong condition."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "The abstraction specifically targets the 'normative element' of inductive inference, arguing that corroboration is a measure of content, not probability."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Defined the structural link: Corroboration = Survival - Retrospection + Content. The refutation condition attacks the feasibility of this subtraction."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "The gap is bridged by defining the abstract variable 'fitness' differently in each domain: one as 'past survival', the other as 'future testability'."},
+        {"handle": "SRC_010", "kind": "revised", "note": "Established a functional link where the abstract concept serves different operational roles in the two systems."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Stated the concrete failure mode: 'If corroboration cannot be defined without referencing historical frequency...'"}
+      ]
+    },
+    {
+      "content": "Kind: Dependence. The validity of the isolated node's claim depends entirely on SRC_002's assertion that the 'causal mechanism' of science is purely error-elimination without any inductive support. Refuted If: Any form of inductive reasoning (even weak or pragmatic) is shown to be a necessary precondition for scientists to prefer one corroborated theory over another, rendering the pure error-elimination model insufficient to explain scientific preference.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_002"],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "The dependence is on the *sufficiency* of error-elimination, not the absence of all norms. The refutation condition allows for norms if they are inductive."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Explicitly labeled 'Dependence' and provided a clear conditional for when the dependence breaks."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "The condition 'If any form of inductive reasoning... is shown to be necessary' is a substantive philosophical claim that, if proven, refutes the dependence on a pure Popperian mechanism."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Acknowledges the normative element (induction) but argues the relation holds only if that element is *not* necessary. The refutation condition tests exactly this."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Clarified the causal integration: The isolated node functions *only if* SRC_002's strict non-inductive stance holds."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "Directly addresses the normative gap by making the relation contingent on the absence of inductive necessity."},
+        {"handle": "SRC_010", "kind": "revised", "note": "Defined the link as a logical dependency: Node A is valid iff Premise B (no induction needed) is true."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Formulated the specific breakdown: 'If any form of inductive reasoning... is shown to be a necessary precondition...'"}
+      ]
+    },
+    {
+      "content": "Kind: Integration. The isolated node integrates with SRC_001 by treating 'Scientific Preference' as a second-order evolutionary trait: just as organisms evolve to survive, the scientific community evolves the *rule* of preferring falsifiable theories to ensure the survival of the knowledge corpus. Refuted If: The adoption of falsificationism in science is shown to be a result of conscious philosophical decree or social convention rather than an emergent, evolutionary-like selection process among research programs.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_001"],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "The integration posits a meta-level similarity (evolution of rules) without claiming the base mechanisms are identical in their normative content."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Named the relation 'Integration' and specified the level of integration (second-order trait)."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "The refutation condition targets the *origin* of the rule (conscious decree vs. emergent selection). If it's just a decree, the evolutionary integration fails."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Distinguishes between the normative content of the rule itself and the evolutionary mechanism that selected the rule."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Established structural integration: Science evolves *methods* just as biology evolves *traits*. The refutation condition tests the mechanism of this methodological evolution."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "Bridges the gap by suggesting the 'norm' of falsification is itself an evolved trait, not a static logical requirement."},
+        {"handle": "SRC_010", "kind": "revised", "note": "Linked the nodes via a hierarchical evolutionary process: biological evolution -> cognitive capacity -> cultural evolution of scientific methods."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Specific refutation scenario: 'If the adoption of falsificationism... is shown to be a result of conscious philosophical decree...'"}
+      ]
+    },
+    {
+      "content": "Kind: Reduction. The phenomenon of 'Scientific Preference' described in the isolated node reduces to the 'Causal Mechanism' of SRC_005, provided we redefine 'rationality' strictly as 'conducive to knowledge growth' rather than 'logical guarantee'. Refuted If: Scientists are demonstrated to prefer theories based on aesthetic, social, or psychological factors (e.g., simplicity, authority, comfort) that are independent of the theory's capacity for error elimination, proving that 'preference' is not reducible to the epistemic mechanism alone.",
+      "typicality": 0.90,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "The reduction is conditional on a specific definition of rationality. It does not deny other norms exist, but claims they are not the *reductive base* of scientific preference in this framework."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Clearly stated 'Reduction' and the necessary definitional constraint. Provided a multi-factor refutation condition."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "The condition lists alternative drivers (aesthetic, social) that, if dominant, would break the reduction. This is a robust empirical test."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "The reduction explicitly limits the scope to 'epistemic mechanism', acknowledging other norms but excluding them from the reductive explanation."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Defined the causal reduction: Preference = f(Error Elimination Capacity). The refutation condition introduces confounding variables."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "Addresses the normative gap by asserting that non-epistemic norms are noise, not signal, in the specific context of rational scientific preference."},
+        {"handle": "SRC_010", "kind": "revised", "note": "Established a functional reduction where the complex behavior of 'preference' is explained entirely by the single variable of 'error elimination potential'."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Concrete refutation: 'If scientists are demonstrated to prefer theories based on aesthetic, social, or psychological factors...'"}
+      ]
+    }
+  ]
+}

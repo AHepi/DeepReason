@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims a 'Shared Mechanism' of 'retrospective filtering' between biological evolution and scientific theory selection. However, the 'Refuted If' condition creates a logical contradiction within the argument itself: it asserts that if science relies on 'prospective probability calculation (induction),' the shared mechanism is broken. This presupposes that 'retrospective filtering' and 'prospective induction' are mutually exclusive. In reality, any system that filters based on past performance (retrospective) does so precisely because it infers a prospective utility (induction). The target falsely dichotomizes the descriptive mechanism (survival of the fittest/corroborated) from the normative justification (expectation of future success), thereby failing to define a coherent 'Shared Mechanism' that holds under the very conditions it sets for its own refutation.",
+      "premise": null,
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Can a mechanism be purely retrospective if its selection criterion is defined by the expectation of future robustness?"
+    }
+  ]
+}
