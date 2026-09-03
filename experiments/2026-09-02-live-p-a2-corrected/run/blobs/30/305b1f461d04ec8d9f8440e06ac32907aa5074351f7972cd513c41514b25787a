@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "These claims are mutually inconsistent: if H_n = Theta(sqrt(n)) with probability 1-o(1), then P(H_n=0) = o(1), so the probability of the empty matching, i.e. consensus, cannot converge to a positive constant."
+}
