@@ -414,3 +414,81 @@ phase that lands the mini generator, is undetermined.
 
 (append-only; later operator messages land here as R13… or "R2a supersedes
 R2", each with its verbatim quote)
+
+---
+
+### Amendment 1 — 2026-09-03, answering the Phase 1 stop
+
+The monitor stopped and asked for exactly two things: an API key to run
+M1/M2/M3, and a frozen-surface grant for the per-seat exposure policy as
+`Config` fields under the documented digest-preserving recipe. The stop closed
+with the monitor's own statement of what would follow: *"A 'yes' and a key is
+enough; I'll run the measurements and bring you SPEC.md."*
+
+The operator replied with a credential and then, verbatim:
+
+> "make the changes and push. But never merge with main."
+
+**The credential is NOT reproduced here.** REQUEST.md is a committed file and
+this ledger's verbatim rule is not a licence to commit a secret. The key was
+written to `experiments/2026-09-03-change-provenance-history-channel/env`,
+which `git check-ignore` confirms is ignored by `.gitignore:50`
+(`experiments/**/env`, the line this tranche added in its first commit), mode
+600, and which `git status` does not see. This redaction is recorded rather
+than performed silently, because a reader comparing the operator's message to
+this file must be able to see that something was deliberately withheld and
+why.
+
+**R13 (process) — the new standing instruction, verbatim:**
+> "But never merge with main."
+
+Recorded as **C14** below rather than as a requirement about the feature: it
+binds how this tranche is delivered, not what it builds.
+
+**R14 (process) — the approval, verbatim:**
+> "make the changes and push."
+
+**How R14 is read, and the reading is stated here so it can be overruled
+cheaply.** Under `dr-ask-the-right-question`'s operator-reading table, "do it"
+after a stated plan is *approval of EXACTLY that plan* — never a licence to
+widen. The plan stated in the stop was: run the three measurements, then bring
+SPEC.md. So R14 authorises:
+
+1. the frozen-surface grant that was asked for — two `Config` fields plus two
+   `data.pop` lines in `_versioned_source_config_data`, insertions-only and
+   digest-preserving, measured at `PRICE_EXPOSURE_POLICY.txt` (E1 moves the
+   hash at all six schema versions without the pop; E2 is byte-identical with
+   it). Recorded as **G1** below;
+2. running M1, M2 and M3 against the pre-registered arms in `PREREG.md`;
+3. writing SPEC.md and CHECKLIST.md and pushing them.
+
+It does **not** authorise writing the feature's production code in this phase.
+C8 (the window instruction) ends Phase 1 at an approved SPEC and PLAN, and C9
+puts implementation in Phase 2 "after the operator approves SPEC.md and
+CHECKLIST.md". Nothing in R14 mentions the spec, the checklist or the phase
+boundary, and the sentence it answers said the deliverable would be SPEC.md.
+Reading "make the changes" as "implement the feature now" would therefore
+overturn two written constraints on the strength of three words that already
+have a narrower reading fitting the exchange exactly. If the operator meant
+the wider one, one word restores it and the grant G1 is already in hand.
+
+**G1 — frozen-surface grant, GRANTED 2026-09-03 (surface 4, `run_manifest.py`).**
+Scope: the per-seat exposure policy reaches a run as `Config` fields, popped in
+`_versioned_source_config_data` so they never enter `engine_config_json`. This
+is the recipe granted twice before on this surface — 2026-08-23 split-budget
+knobs, 2026-08-26 F3 knobs — and its price was measured before the grant was
+requested rather than after. The grant is for the SHAPE; the exact field names
+and count are SPEC.md's to fix, and any departure from insertions-only or from
+digest preservation is a fresh stop, not covered here.
+
+**C14 (standing, this tranche and its successors) — verbatim:**
+> "never merge with main"
+
+Operational reading: work stays on `claude/executor-window-phase-1-s5ex6w`;
+no merge of `main` into this branch and no merge of this branch into `main`.
+This is compatible with, and stricter than, C9's existing prohibition on
+merging the model-profile experiment branch. Rebasing, fast-forwarding and
+cherry-picking are all forms of taking `main` into this branch and are treated
+as covered by the same instruction; if a base move is ever needed it is a
+question for the operator, not a judgement call.
+
