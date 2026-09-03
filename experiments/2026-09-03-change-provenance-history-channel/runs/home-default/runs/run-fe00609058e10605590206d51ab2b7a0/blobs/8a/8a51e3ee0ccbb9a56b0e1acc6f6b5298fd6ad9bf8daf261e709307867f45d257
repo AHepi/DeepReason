@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories in action is defensible without smuggling induction if framed as a non-inductive 'methodological bet' on the theory with the highest surviving informative content, where the cost of acceptance is the explicit renunciation of any claim that the theory is probably true or reliable for long-term prediction.",
+    "mechanism": "The mechanism distinguishes between 'corroboration as a report of past performance' (which implies no future probability) and 'preference as a strategic choice to maximize the rate of error elimination.' By choosing the most severely tested theory, scientists maximize the chance of quickly falsifying a false theory, thereby accelerating progress toward truth (verisimilitude) without assuming the future will resemble the past. The preference is rational not because the theory is likely true, but because it is the most efficient vehicle for further testing.",
+    "counterconditions": [
+      "If the agent requires a guarantee of safety or reliability for high-stakes action (e.g., bridge building), Popper's framework cannot provide it without illicitly importing inductive assumptions about the stability of natural laws.",
+      "If the definition of 'verisimilitude' relies on comparing truth-content and falsity-content of false theories, the Tichý-Miller proof renders the comparative basis for preference logically incoherent.",
+      "If the 'methodological bet' implicitly assumes that a theory which survived severe tests yesterday is more likely to survive today, it collapses into the very induction Popper rejected."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "departure_declared",
+        "note": "This candidate departs from relying on Popper's formal quantitative definition of verisimilitude (which Tichý/Miller refuted) and instead adopts a qualitative, methodological interpretation of 'closer to truth' based on surviving severe tests of high informational content, treating verisimilitude as a regulative ideal rather than a calculable metric."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "departure_declared",
+        "note": "Departing from the requirement to solve the formal logical problem of verisimilitude; the defense rests solely on the pragmatic rationality of selecting the best-tested theory as the most fruitful target for future falsification, regardless of whether its 'truth-likeness' can be formally ordered."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "rebutted",
+        "note": "The analogy to natural selection is not meant to provide a normative justification directly but to illustrate the descriptive mechanism of error elimination. The normative core is addressed by the 'methodological bet': we *ought* to choose the best-tested theory because it offers the highest potential for learning (falsification), not because it guarantees survival."
+      },
+      {
+        "handle": "17f09fa02242185436263f3c9b86d093542003762a28b858119658fbe11d26d6",
+        "kind": "revised",
+        "note": "Revised to explicitly distinguish 'preferring for criticism' from 'preferring for action.' The claim now argues that 'action' in Popper's sense is itself a form of test (putting the theory at risk in the real world), so the preference remains methodological even when acting, provided one does not assume the action will succeed safely."
+      },
+      {
+        "handle": "205c867384d2a55776e20f3ebdbf380a88e3596428976e9fb159a5d5fe0e8fbb",
+        "kind": "rebutted",
+        "note": "The rebuttal asserts that conflating methodological preference with pragmatic reliability is only a failure if the agent demands certainty. Popper's defense holds if the agent accepts that 'acting on' a theory is simply exposing it to a new, severe test in the practical domain, without expecting a positive outcome."
+      },
+      {
+        "handle": "269bca3c11013395f75db136f55665c38e01f5759a38bfef887ba32a9a7294d4",
+        "kind": "rebutted",
+        "note": "The mechanism of 'acceleration of falsification' does not assume past success predicts future utility; it assumes only that a theory with higher content and surviving tests has *more* opportunities to be falsified soon. It is a structural claim about information content, not an inductive projection of stability."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "Revised to ensure the dialectical structure is explicit: The claim presents the strongest case for defensibility (the methodological bet), while the counterconditions articulate the strongest case for the 'smuggling induction' charge (the need for reliability and the Tichý-Miller collapse). The conclusion weighs these."
+      },
+      {
+        "handle": "343e10b5bcf5a8a8cda3a18e5ff5334fcad0a2527c61f22d4b83ec4299bec0b",
+        "kind": "rebutted",
+        "note": "The tension regarding 'acting on' (e.g., bridge building) is resolved by admitting Popper cannot justify the bridge's safety. The defense is that a Popperian engineer builds the bridge *to test* the theory of statics in a severe way, fully accepting the risk of collapse as a valid falsification, rather than building it because they believe it will stand."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

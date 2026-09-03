@@ -47,10 +47,23 @@ record") and is what `runs/arm.sh` now does. No harness code was touched.
 
 **Not investigated, and stated so the next runner does not inherit a guess.**
 Whether the refusal is correct and the `stop_reason_resumable: true` is the bug,
-or the reverse; whether `--cycles 1` specifically leaves the two work items
-outstanding or whether any cycle count does; and whether the four-cycle run now
-in flight terminates the same way. The last of these will be answerable from
-this tranche's own committed roots once the arms finish.
+or the reverse; and whether `--cycles 1` specifically leaves the two work items
+outstanding or whether any cycle count does.
+
+**ONE SUB-QUESTION IS NOW ANSWERED, from this tranche's own evidence.** The
+third open item asked whether a four-cycle run terminates the way the one-cycle
+run did. IT DOES. The completed M1-H0 control
+(`home-default/runs/run-fe00609058e10605590206d51ab2b7a0`) ran all four cycles,
+reached `state: completed` with `stop_reason: budget_exhausted` and exit code
+0 — a clean, successful run by every other measure, 47 admitted conjectures —
+and its terminal STILL carries
+`terminal_lifecycle_refusal: STOPPED_REFUSES_UNFINISHED_WORKFLOW_AUTHORITY`.
+
+So the refusal is NOT an artifact of a truncated one-cycle run. It attaches to
+an ordinary successful managed run at its natural budget terminal. That
+narrows the fork sharply and raises the stakes: under the operator's 2026-08-29
+law every terminal must leave checkpoints sufficient for relaunch, and this is
+the ordinary case, not an edge one.
 
 ### Ready-to-send prompt
 
@@ -228,3 +241,98 @@ against a treatment that completes 4 cycles measures the crash, not the
 history. Under the operator's "prefer a run complete", a re-run that yields one
 valid measurement beats two arms that cannot be compared. The cost is one extra
 full run.
+
+
+---
+
+## P5 — every run in this tranche used the HASHING embedder, and CLAUDE.md says it should not have
+
+**What.** `deepreason results` on the completed M1-H0 root prints
+`embedder: hashing (hashing-128)`. The run's whole internal geometry — novelty,
+similarity, scratch retrieval — ran on the zero-dependency hashing default
+rather than the neural embedder.
+
+**Why that is surprising rather than routine.** Four facts, each checked rather
+than assumed:
+
+1. `deepreason embedder-warmup` ran in this tranche's setup and reported
+   `ready in 17.6s — nomic-ai/nomic-embed-text-v1.5`.
+2. The weights are present: `/tmp/fastembed_cache` is 523 MB right now.
+3. The embedder builds on demand right now: `build_embedder(Config().EMBEDDER_MODEL)`
+   returns a `NeuralEmbedder` with dim 768.
+4. `Config().EMBEDDER_MODEL` defaults to `nomic-ai/nomic-embed-text-v1.5`.
+
+CLAUDE.md states the consequence those four should have: "`pip install -e .`
+carries fastembed (core since 2026-08-16), so `EMBEDDER_MODEL`'s neural default
+is armed by the ordinary install."
+
+**Where it actually diverges, from the record.** The run's own compiled manifest
+carries `EMBEDDER_MODEL: None` inside `engine_config_json` — the key is
+PRESENT and its value is NULL, not the `Config` default. So
+`ops.make_embedder`'s first branch fires (`if not config.EMBEDDER_MODEL: return
+None`) and the Scheduler builds the hashing default.
+
+**This is why NO `embedder-fallback` was recorded, and that part is correct.**
+`make_embedder` records `embedder-fallback` only on the "set but unavailable"
+path. This run took the "unset, so use the documented zero-dependency default"
+path, which is silent by design. The log carries zero `embedder-fallback`
+entries, which is the honest record of what happened — the degradation is
+visible through `deepreason results`, as CLAUDE.md promises, just not as a log
+measure.
+
+**The fork, unresolved, and stated as a fork rather than a conclusion.**
+  W — the compile path is wrong to null out `EMBEDDER_MODEL`, and the neural
+      default should reach a managed run as CLAUDE.md says it does;
+  R — nulling it is deliberate (determinism, or keeping a ~523 MB dependency
+      off the qualification subject), and CLAUDE.md's sentence is the thing
+      that has drifted.
+Not investigated here. Which one holds decides whether this is a code defect or
+a documentation defect, and they need opposite fixes.
+
+**Effect on this tranche's measurements: none on the comparison, some on
+interpretation.** Every arm compiles the same way, so H0/H1 and C0/C1 are
+affected identically and the M1/M3 contrasts stand. Two things must be said in
+RESULTS.md rather than left implicit: the harness's own novelty and
+scratch-similarity behaviour in these runs is hashing-based, so anything the
+runs did that depends on semantic geometry was done with the weaker
+instrument; and the D5 figures reported by
+`measure_diversity_per_problem.py` are computed OFFLINE with the neural
+embedder, so D5 measures a geometry the runs themselves never used. That is not
+wrong — D5 is a post-hoc measure of the claims — but the two must not be
+described as if they were the same instrument.
+
+### Ready-to-send prompt
+
+```
+Route: deepreason-orchestrator (defect) OR the docs lane, depending on which
+fork survives — that is the first thing to settle, not something to assume.
+
+GOAL: does a managed `deepreason reason` run get the neural embedder that
+Config() defaults to, and that CLAUDE.md says the ordinary install arms?
+
+Evidence to start from, all committed in
+experiments/2026-09-03-change-provenance-history-channel/:
+  - runs/home-default/runs/run-fe00609058e10605590206d51ab2b7a0/run-manifest.json
+    -> json.loads(engine_config_json)["EMBEDDER_MODEL"] is None, key present
+  - the same run's `deepreason results` output: "embedder: hashing (hashing-128)"
+  - that run's log.jsonl: ZERO "embedder-fallback" measures (correct for the
+    unset path, so do not treat their absence as a bug on its own)
+  - /tmp/fastembed_cache present at 523 MB; build_embedder(Config().EMBEDDER_MODEL)
+    returns NeuralEmbedder dim 768 on this container
+
+Decide between:
+  W — the compile path nulls EMBEDDER_MODEL wrongly; managed runs should get the
+      neural default. Fix the compile path, and check the qualification subject
+      digest price BEFORE changing anything, the compile-gap way.
+  R — nulling is deliberate and CLAUDE.md's "armed by the ordinary install"
+      sentence has drifted. Then this is a docs fix plus an ERRATA entry, and
+      the code is correct.
+
+Find WHERE the null is introduced first (compile_run_manifest and its config
+echo), then decide. Do not "fix" it by defaulting the value at read time in
+ops.make_embedder — that would hide the compile behaviour rather than settle it.
+
+END STATE: DIAGNOSIS.md naming which fork the record supports, and either a
+FIX.md with the digest price measured, or a docs/ERRATA.md entry correcting
+CLAUDE.md.
+```

@@ -1,0 +1,79 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms strictly as a 'critical selection rule' that maximizes the rate of error elimination, not as a guide to truth or probability. The surviving answer is that the preference is methodologically rational but epistemically empty; the cost is accepting that science offers no justification for acting on a theory other than the fact that it has not yet been killed, rendering 'action' a leap of faith distinct from 'scientific preference'.",
+      "mechanism": "Reframes 'preference' not as an expectation of success (induction) but as a strategic choice to test the most vulnerable point in our knowledge. By choosing the theory with the highest empirical content (and thus highest corroboration if it survives), we maximize the potential for learning. Acting on it is a non-scientific, pragmatic decision made outside the logical scope of corroboration.",
+      "counterconditions": [
+        "If acting on a theory necessarily implies an expectation of its future success, then the distinction between 'methodological preference' and 'inductive belief' collapses.",
+        "If the 'rate of error elimination' cannot be shown to converge on useful models without assuming the uniformity of nature, the strategy fails pragmatically."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "This candidate avoids verisimilitude entirely, relying instead on 'empirical content' and 'error elimination rate,' sidestepping the Tichý/Miller incoherence proof regarding truth-content minus falsity-content."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "Same as above; the mechanism does not depend on a formal definition of verisimilitude but on the logical asymmetry between verification and falsification."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "revised", "note": "Clarified that the biological analogy is heuristic for 'blind variation,' but the normative force comes from the logical goal of maximizing test severity, not from the descriptive fact of survival."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Explicitly distinguishes 'preferring for criticism' (scientific) from 'preferring for action' (pragmatic/extra-scientific), arguing Popper only defends the former scientifically."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "rebutted", "note": "Concedes that 'pragmatic reliability' is not claimed by the theory; the candidate argues the preference is for 'testability,' not reliability, and any move to action is a separate, non-rational (in Popper's strict sense) step."},
+        {"handle": "[SRC_022] against SRC_010", "kind": "rebutted", "note": "Argues that 'acceleration of falsification' relies on the logical possibility of falsification, not an inductive assumption that past success predicts future utility."},
+        {"handle": "[SRC_014] against SRC_005", "kind": "revised", "note": "Structured the claim to explicitly present the strongest case for 'defensible' (error elimination) and 'smuggling induction' (the leap to action), then adjudicated between them."},
+        {"handle": "[SRC_017] against SRC_016", "kind": "rebutted", "note": "Maintains that the tension is real and unresolved within science itself; the solution is to admit that 'acting' (building bridges) requires a decision principle external to Popperian corroboration."}
+      ],
+      "optional_refs": ["SRC_013"]
+    },
+    {
+      "claim": "The preference smuggles induction back in because the very act of 'choosing to act' on a corroborated theory logically entails a premise that the future will resemble the past (uniformity of nature). The surviving answer is that Popper's system is internally inconsistent regarding action: it forbids induction logically but demands it pragmatically. The cost of accepting this is acknowledging Popper failed to solve the problem of induction for practical life, restricting his philosophy to a purely negative, critical logic.",
+      "mechanism": "Identifies the performative contradiction in 'acting on' a theory. To build a bridge using Theory A over Theory B because A is better corroborated is to bet on A's future validity. This bet is an inductive inference. Since Popper rejects all inductive justification, he has no resources within his system to justify this bet, forcing him to rely on the very intuition he outlawed.",
+      "counterconditions": [
+        "If 'acting on' can be redefined as 'testing in practice' without expectation of success, the inductive charge fails.",
+        "If a non-inductive decision theory (e.g., based on game theory or minimax regret) can justify the preference without assuming uniformity."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_004] against SRC_002", "kind": "departure_declared", "note": "This candidate accepts the failure of verisimilitude as a given and argues that even without it, the act of preference remains inductive."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "Agrees verisimilitude failed, but argues the deeper problem is the pragmatic necessity of induction, which exists regardless of verisimilitude definitions."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "Argues that the natural selection analogy actually supports the induction charge: organisms survive because the environment *remains* stable enough for their traits to work, which is an inductive reality."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Contends that the distinction between 'criticism' and 'action' is artificial; in real science, testing often involves acting (experiments), and if that action assumes stability, induction is present."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "revised", "note": "Strengthens the claim that 'methodological preference' inevitably bleeds into 'pragmatic reliability' whenever resources are committed based on past performance."},
+        {"handle": "[SRC_022] against SRC_010", "kind": "rebutted", "note": "Asserts that 'acceleration of falsification' only makes sense as a goal if one assumes that eliminating errors leads to better future outcomes, an inductive hope."},
+        {"handle": "[SRC_014] against SRC_005", "kind": "revised", "note": "Explicitly constructs the 'strongest case' for the defense (as a strawman) before demolishing it with the induction argument."},
+        {"handle": "[SRC_017] against SRC_016", "kind": "rebutted", "note": "Argues the tension is fatal: one cannot consistently hold Popper's views on induction and also recommend building bridges based on corroboration."}
+      ],
+      "optional_refs": ["SRC_009", "SRC_012"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view corroboration not as a measure of truth or probability, but as a measure of 'informational density' and 'risk taken.' The preference is defensible as a choice to engage with the most informative (and dangerous) ideas. The surviving answer is a third way: neither inductive nor purely procedural, but 'evolutionary epistemology' where preference is simply the retention of variants that have survived environmental pressure. The cost is abandoning the idea that science is a rational justification process at all, reducing it to a blind evolutionary algorithm.",
+      "mechanism": "Applies a strict evolutionary analogy: theories are mutations, tests are environmental pressures. 'Preference' is just the description of which mutations persist. There is no 'smuggling' of induction because there is no 'reasoning' agent making a probabilistic bet; there is only a selection mechanism. Rationality is an emergent property of the system, not a precondition.",
+      "counterconditions": [
+        "If scientists are conscious agents making choices rather than passive vessels for theory selection, the evolutionary analogy fails to account for the normativity of 'should'.",
+        "If the 'environment' (nature) changes unpredictably such that past survival guarantees nothing about future informational value."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "Avoids verisimilitude calculations entirely by treating 'survival' as a brute fact of selection, not a logical subtraction of falsity."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "Similar to above; the mechanism relies on the descriptive power of evolution, not the logical coherence of truth-likeness."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "revised", "note": "Embraces the descriptive nature of natural selection but argues that in an evolutionary framework, 'descriptive' IS 'normative' for the organism/theory that wishes to survive."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "departure_declared", "note": "Rejects the premise that 'acting on' requires a special philosophical justification; in this view, acting is simply the behavioral expression of the selected theory."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "rebutted", "note": "Dissolves the conflation by denying that 'preference' implies a mental state of reliability; it implies only a structural position in the ecosystem of ideas."},
+        {"handle": "[SRC_022] against SRC_010", "kind": "rebutted", "note": "Argues that 'acceleration of falsification' is an evolutionary advantage, not an inductive prediction; it works because it kills off weak variants faster, regardless of future laws."},
+        {"handle": "[SRC_014] against SRC_005", "kind": "revised", "note": "Presents the 'defensible' case via evolutionary logic and the 'induction' case as a category error of applying human rationality standards to a blind process."},
+        {"handle": "[SRC_017] against SRC_016", "kind": "rebutted", "note": "Claims the tension vanishes when we stop viewing science as a search for justified true belief and start viewing it as a survival contest."}
+      ],
+      "optional_refs": ["SRC_010", "SRC_015"]
+    },
+    {
+      "claim": "The preference is defensible only if we accept a 'conventionalist' interpretation: the rule 'prefer the better-corroborated theory' is a self-imposed convention of the scientific community, akin to the rules of a game. It is not derived from logic or nature. The surviving answer is that the preference is arbitrary but necessary for the game of science to continue. The cost is radical instrumentalism: science describes nothing real, and its rules have no anchor in truth, only in social agreement to play by them.",
+      "mechanism": "Treats Popper's methodology as a set of constitutive rules. Just as a chess player prefers a move that controls the center not because it guarantees a win (induction) but because it follows the strategic conventions of chess, a scientist prefers corroborated theories by convention. This avoids induction by making the preference a definition of 'doing science' rather than a claim about the world.",
+      "counterconditions": [
+        "If the conventions of science change historically, the 'defensibility' becomes relative and loses its universal force.",
+        "If scientists believe they are discovering truth rather than playing a game, this conventionalist account fails to describe actual scientific motivation."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "Verisimilitude is irrelevant here; the preference is based on agreed-upon rules, not on a metric of truth-content."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "The failure of logical verisimilitude supports the conventionalist view: since we can't logically define truth-likeness, we must agree on rules arbitrarily."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "revised", "note": "Shifts the analogy from natural selection (descriptive) to game theory (normative/conventional), addressing the core of the normative critique."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Argues that 'acting on' is simply making a move in the game; the distinction between testing and acting is blurred by the fact that both are moves governed by convention."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "rebutted", "note": "Denies that 'reliability' is the goal; 'adherence to method' is the goal. Reliability is a hoped-for side effect, not the justification."},
+        {"handle": "[SRC_022] against SRC_010", "kind": "rebutted", "note": "The 'acceleration of falsification' is a rule of the game, not an inductive hypothesis. We play this way because we decided to, not because we think it will work."}
+      ],
+      "optional_refs

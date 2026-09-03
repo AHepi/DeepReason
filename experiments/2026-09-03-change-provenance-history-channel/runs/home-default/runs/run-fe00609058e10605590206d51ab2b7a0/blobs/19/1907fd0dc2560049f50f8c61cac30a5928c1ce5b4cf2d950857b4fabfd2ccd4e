@@ -1,0 +1,83 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference to truth, but as a non-inductive 'rule of action' grounded in the meta-scientific goal of verisimilitude (truth-likeness), where acting on the best-tested theory is the only rational strategy to maximize content while minimizing known error, even if probability remains unchanged.",
+      "mechanism": "Meta-scientific Rule Selection: The agent adopts a procedural rule ('Always act on the most severely tested theory') because this rule has the highest known potential to approximate truth (verisimilitude) without asserting that the specific instance is probable. The justification is retrospective (the rule survived criticism) rather than prospective (the theory will likely be true).",
+      "counterconditions": [
+        "If the agent believes the untested theory has higher explanatory power despite lower corroboration.",
+        "If the cost of acting on a false theory is negligible compared to the cost of delay.",
+        "If the definition of 'severe test' is manipulated to favor a specific theory artificially."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "The candidate explicitly avoids relying on Popper's failed formal definition of verisimilitude for comparing false theories. Instead, it relies on the *methodological commitment* to seek verisimilitude as a guiding star, which remains coherent even if the precise logical metric for false theories is flawed. The defense is pragmatic, not logical-comparative."},
+        {"handle": "[SRC_009] against SRC_002", "kind": "rebutted", "note": "Similar to SRC_005, the argument does not claim a logical proof that Theory A is closer to truth than Theory B using Tichý/Miller's refuted metrics. It claims that preferring the corroborated theory is the only *non-arbitrary* heuristic available that aligns with the goal of verisimilitude, acknowledging the logical gap but filling it with methodological necessity."},
+        {"handle": "[SRC_015] against SRC_003", "kind": "revised", "note": "Revised to clarify that the 'rule of action' is normative because it is constitutive of the critical rationalist ethic. It is not merely descriptive of survival; it is a prescriptive duty to minimize harm from error, which provides the normative force missing in pure natural selection analogies."},
+        {"handle": "[SRC_017] against SRC_008", "kind": "rebutted", "note": "The candidate presents the strongest case for defensibility (meta-scientific rule) and implicitly addresses the counter-case (smuggling induction) by defining the limits of the rule. The conclusion identifies the cost: accepting that rationality is about rule-adherence rather than probability assessment."},
+        {"handle": "[SRC_022] against SRC_020", "kind": "rebutted", "note": "The distinction between methodological goal and pragmatic reliability is maintained by framing the 'preference' as a decision rule under ignorance. We act on the corroborated theory not because it is reliable (probable), but because it is the only one that has not yet been shown to fail in ways relevant to the action, satisfying the pragmatic necessity without claiming reliability."},
+        {"handle": "[SRC_016] against SRC_007", "kind": "revised", "note": "Clarified that the analogy to natural selection is illustrative of the *process* of elimination, but the *justification* for the preference comes from the critical rationalist ethic (duty to avoid known error), thus avoiding the conflation of descriptive survival with normative justification."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "rebutted", "note": "The candidate rejects the false dichotomy by introducing a third option: rationality defined by adherence to a critical method aimed at verisimilitude. This neither assumes probable truth nor ignores verisimilitude; it treats verisimilitude as a regulative ideal rather than a calculable quantity."},
+        {"handle": "[SRC_023] against SRC_021", "kind": "rebutted", "note": "Acknowledges the collapse of formal verisimilitude measures but argues that the *concept* remains valid as a directional goal. The preference is defensible as the only orientation toward this goal that respects the prohibition on induction, even if the distance to the goal cannot be precisely measured between two false theories."}
+      ],
+      "optional_refs": ["SRC_010"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because any decision to 'act on' a theory logically presupposes the principle of the uniformity of nature (that the future will resemble the past), which is the very definition of induction Popper sought to eliminate.",
+      "mechanism": "Pragmatic Contradiction Detection: The act of building a bridge or administering medicine based on past tests entails a belief that the laws governing the bridge or medicine will hold in the future. This belief cannot be derived from logic alone (Hume's problem) and thus requires an inductive leap, rendering the 'non-inductive' claim self-refuting in practice.",
+      "counterconditions": [
+        "If the agent acts solely to test the theory further rather than to achieve a practical outcome.",
+        "If the agent accepts the risk of catastrophe as part of the experimental process.",
+        "If the 'preference' is redefined as a temporary heuristic with no expectation of success."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_002", "kind": "departure_declared", "note": "This candidate departs from defenses relying on verisimilitude entirely, arguing that the failure of verisimilitude metrics is irrelevant because the core issue is the inductive presupposition of action itself, not the comparison of theories."},
+        {"handle": "[SRC_009] against SRC_002", "kind": "rebutted", "note": "While agreeing that verisimilitude failed, this candidate argues that the deeper failure is the attempt to separate action from induction. The criticism focuses on the wrong target (verisimilitude) when the fatal flaw is the pragmatic context of 'acting on' a theory."},
+        {"handle": "[SRC_015] against SRC_003", "kind": "rebutted", "note": "The candidate agrees that natural selection is descriptive, but argues that Popper's own insistence on 'acting' introduces a normative dimension that *requires* induction. The failure of the analogy highlights the impossibility of a non-inductive norm for action."},
+        {"handle": "[SRC_017] against SRC_008", "kind": "rebutted", "note": "The candidate fully develops the 'smuggling induction' case as the surviving answer, detailing why the 'defensible' case ultimately collapses under the weight of pragmatic necessity, thus fulfilling the dialectical requirement."},
+        {"handle": "[SRC_022] against SRC_020", "kind": "rebutted", "note": "The candidate asserts that the tension regarding 'acting on' a theory is unresolvable on Popper's terms. The conflation identified by the critic is actually the inevitable result of trying to apply a non-inductive logic to a world requiring predictive reliability."},
+        {"handle": "[SRC_016] against SRC_007", "kind": "revised", "note": "Refined to state that the 'category mistake' is not in the analogy, but in Popper's belief that a normative rule for action can exist without an inductive foundation. The descriptive mechanism of survival cannot generate the normative 'ought' of action without induction."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "rebutted", "note": "Rejects the idea that 'verisimilitude' offers a way out. Even if verisimilitude were coherent, acting on it would still require the inductive assumption that pursuing verisimilitude leads to better outcomes, which is itself an inductive claim."},
+        {"handle": "[SRC_023] against SRC_021", "kind": "rebutted", "note": "Agrees that verisimilitude fails but argues this is secondary. The primary failure is the inability to justify action without induction. The collapse of verisimilitude just removes a potential (but flawed) prop, leaving the inductive gap exposed."}
+      ],
+      "optional_refs": ["SRC_011"]
+    },
+    {
+      "claim": "The preference is defensible only if we reconceptualize scientific rationality not as a search for truth or probability, but as a 'game' with constitutive rules where 'acting on the best-corroborated theory' is a move required to keep playing, analogous to following the rules of chess regardless of whether they lead to 'truth' outside the board.",
+      "mechanism": "Constitutive Rule Fiction: Scientific practice is framed as a self-contained linguistic and methodological game. The 'preference' is not a claim about the world (induction) nor a measure of truth (verisimilitude), but a rule internal to the institution of science. Violating it means exiting the game of science, not making a logical error.",
+      "counterconditions": [
+        "If the stakes of the 'game' involve real-world life and death, breaking the fourth wall of the fiction.",
+        "If scientists themselves believe they are discovering truth rather than playing a game.",
+        "If the rules of the game are shown to be arbitrary rather than conducive to any external goal."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "This approach bypasses the need for a logical definition of verisimilitude entirely. The 'truth-content' is irrelevant; what matters is adherence to the rules of the scientific game. The Tichý/Miller critique applies to ontological claims, not constitutive rules."},
+        {"handle": "[SRC_009] against SRC_002", "kind": "rebutted", "note": "Same as above. The failure of verisimilitude as a logical concept does not impact its status as a fictional goal within the methodological narrative of science."},
+        {"handle": "[SRC_015] against SRC_003", "kind": "revised", "note": "Explicitly frames the 'normative core' as internal to the game. The 'ought' comes from the desire to participate in the scientific community, not from an external moral duty or biological survival, thus sidestepping the descriptive/normative divide."},
+        {"handle": "[SRC_017] against SRC_008", "kind": "rebutted", "note": "Presents the 'game' defense as the strongest case for defensibility, contrasting it with the 'induction' critique. The conclusion accepts the cost: science becomes a sophisticated form of make-believe that happens to work, losing its claim to unique epistemic authority."},
+        {"handle": "[SRC_022] against SRC_020", "kind": "rebutted", "note": "Addresses the 'acting on' tension by declaring that in the context of the game, 'acting' is just another move. The pragmatic necessity of reliability is an external concern that the game-structure brackets out. If the bridge falls, the player made a valid move that happened to lose."},
+        {"handle": "[SRC_016] against SRC_007", "kind": "rebutted", "note": "Denies the need for a substantive link between biology and science. The analogy is purely structural: both are systems with rules of elimination. The normative force is entirely internal to the system's definitions."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "revised", "note": "Clarifies that the dichotomy is not between rule-adherence and probable truth, but between playing the game and not playing. Verisimilitude is retained as a 'useful fiction' within the game, not a logical reality."},
+        {"handle": "[SRC_023] against SRC_021", "kind": "rebutted", "note": "The collapse of formal verisimilitude is accepted as proof that it is indeed a fiction. This supports the 'methodological fiction' thesis rather than refuting it."}
+      ],
+      "optional_refs": ["SRC_013"]
+    },
+    {
+      "claim": "The preference for corroborated theories is a biological imperative disguised as epistemology: scientists prefer them because communities that do so survive, and those that don't go extinct. The 'defense' is purely descriptive evolutionary psychology, and any normative dressing is post-hoc rationalization.",
+      "mechanism": "Evolutionary Reductionism: Reduces the epistemic norm to a survival trait. The 'preference' exists not because it is rational or true, but because it was selected for. The feeling of 'defensibility' is an adaptive illusion to ensure compliance with the survival-enhancing behavior.",
+      "counterconditions": [
+        "If a scientific community survives while systematically preferring less corroborated theories (e.g., through luck or alternative strategies).",
+        "If individual scientists act against the community interest based on corroborated evidence.",
+        "If the timeline of scientific method development is too short for such a specific trait to evolve."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_002", "kind": "departure_declared", "note": "Departs from all logical/epistemic defenses. The coherence of verisimilitude is irrelevant to an evolutionary explanation which cares only about survival outcomes, not logical consistency."},
+        {"handle": "[SRC_009] against SRC_002
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

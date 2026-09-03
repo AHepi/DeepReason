@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories in action is defensible without smuggling induction by reframing 'preference' as a methodological rule to maximize the severity of future tests (falsifiability), not as an inductive inference of truth or reliability. The cost of this defense is the acceptance that acting on such theories carries no rational guarantee of success, rendering practical action a non-rational 'leap' consistent with critical rationalism but disconnected from probabilistic safety.",
+    "mechanism": "The mechanism distinguishes between 'context of discovery/action' and 'context of justification.' Preference is justified solely by the logical fact that a highly corroborated theory has survived the severest tests so far, making it the best target for further attempts at falsification. Choosing it for action is a pragmatic decision to use the current 'best error-detected' tool, acknowledging that its past survival implies nothing about its future performance (rejecting the uniformity of nature).",
+    "counterconditions": [
+      "If the agent believes the theory is likely true because it survived tests, they have smuggled in induction.",
+      "If the agent acts expecting the bridge to hold based on past performance, they are relying on inductive reliability.",
+      "If the definition of 'corroboration' implicitly contains a probability measure, the distinction collapses."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The criticism targets verisimilitude (truth-likeness) as the justification. This candidate explicitly rejects verisimilitude and probabilistic truth as the basis for action, relying instead on the logical status of 'surviving severe tests' as a marker for potential falsifiability, thus bypassing the Tichý/Miller incoherence proof which applies to quantitative truth-content comparisons."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, this candidate does not rely on Popper's failed formal definition of verisimilitude. It grounds preference in the comparative history of test severity (corroboration report), which remains logically coherent even if the theory is false, avoiding the specific logical failure cited."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "rebutted",
+        "note": "The candidate addresses the normative core by defining the norm as 'maximize opportunity for error detection' rather than 'maximize survival chance.' The preference is normative for the growth of knowledge, and the extension to action is framed as a consistent application of using the sharpest available knife, not a prediction that the knife won't break."
+      },
+      {
+        "handle": "17f09fa02242185436263f3c9b86d093542003762a28b858119658fbe11d26d6",
+        "kind": "revised",
+        "note": "Revised to explicitly distinguish 'preferring for action' as a pragmatic leap devoid of epistemic guarantee. The rebuttal clarifies that Popper can prefer a theory for action only in the sense that it is the most informative conjecture currently available, not because it is safer. The 'collapse' is avoided by admitting the lack of safety guarantees."
+      },
+      {
+        "handle": "205c867384d2a55777e20f3ebdbf380a88e3596428976e9fb159a5d5fe0e8fbb",
+        "kind": "rebutted",
+        "note": "The candidate concedes the conflation charge if one assumes action requires reliability. It rebuts by asserting that for Popper, action does not require rational reliability, only a decided conjecture. The preference is methodological (choose the most testable), and the 'pragmatic reliability' is an illusion the critic expects but Popper denies."
+      },
+      {
+        "handle": "269bca3c11013395f75db136f55665c38e01f5759a38bfef887ba32a9a7294d4",
+        "kind": "rebutted",
+        "note": "The mechanism ('maximize severity of future tests') does not assume past success predicts future utility. It assumes only that the theory is currently the most vulnerable to new tests. The 'acceleration of falsification' is a goal, not a prediction of outcome, thus avoiding the inductive assumption that past error-detection success guarantees future results."
+      },
+      {
+        "handle": "2eeaa14a1f72ab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "rebutted",
+        "note": "The claim explicitly constructs the strongest case for the defense (methodological consistency) and embeds the strongest case for the accusation (the necessity of assuming reliability for action) within the 'cost' analysis, satisfying the dialectical requirement by showing the defense survives only by accepting a radical disconnect between rationality and practical security."
+      },
+      {
+        "handle": "343e10b5bcf5a8a8cda3a18e5ff5334fcad05a2527c61f22d4b83ec4299bec0b",
+        "kind": "revised",
+        "note": "Revised to clarify that the tension regarding 'acting on' (e.g., building a bridge) is resolved by admitting that Popperian rationality offers no comfort for the bridge-builder. The defense survives by declaring that the 'preference' is purely epistemic (best guess for testing), and the act of building is a non-rational commitment to that guess, thereby resolving the conflation by separating the domains entirely."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

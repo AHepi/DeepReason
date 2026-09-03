@@ -1,0 +1,83 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a methodological rule of 'critical rationality' that maximizes the potential for error detection (verisimilitude), provided one accepts the cost of abandoning 'practical reliability' as a guarantee and treating theory choice as a non-justificatory gamble.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'psychological expectation' (induction) and 'logical preference' (corroboration). It posits that preferring a severely tested theory is akin to choosing the most informative map known to contain errors over a blank map; the preference is for higher content and stricter testability, not higher probability of truth. The mechanism relies on the normative definition of science as error-elimination rather than truth-accumulation.",
+    "counterconditions": [
+      "If the Tichý-Miller proof renders all comparisons of verisimilitude between false theories logically impossible, then the preference lacks a formal basis.",
+      "If 'acting on' a theory (e.g., engineering) inherently requires an inductive assumption of stability, then Popper's methodological rule collapses into pragmatic induction.",
+      "If the definition of rationality must include probable success for action, then Popper's 'critical rationality' is insufficient for real-world application."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The candidate acknowledges the Tichý-Miller collapse of Popper's *quantitative* verisimilitude but argues this does not invalidate the *qualitative* preference for theories that have survived more severe tests. The defense shifts from a calculated 'truth-content minus falsity-content' to a procedural heuristic: we prefer the theory that has withstood attempts to kill it, not because we know it is closer to truth in a measurable sense, but because it is the only one left standing in the critical process. The criticism attacks a specific formalization, not the core methodological imperative."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, the candidate concedes the logical failure of the formal definition but maintains that the *intuition* of verisimilitude drives the preference without needing the failed calculus. The rebuttal asserts that Popper's later work accepted these limitations yet maintained that corroboration reports the history of criticism, which is sufficient for preference without invoking the broken formal metric."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "Revised to explicitly distinguish between the descriptive analogy of natural selection and the normative rule of critical rationality. The candidate now clarifies that while natural selection describes survival, Popper's preference is a *normative commitment* to the method of conjecture and refutation. We *ought* to prefer the better-tested theory because doing so accelerates error elimination, which is the defined goal of science, whereas the biological analogy merely illustrates the competitive landscape."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "The claim and mechanism have been structured to first present the strongest case for defensibility (methodological rule) and then immediately address the strongest counter-case (the smuggling of induction via practical action). The conclusion explicitly weighs these, stating the preference survives only if one accepts the high cost of relinquishing guarantees of practical reliability."
+      },
+      {
+        "handle": "343e10b5bcf5a8a8cda3a18e5ff5334fcad032f8ea9da96337e03277b2bc0b68a",
+        "kind": "rebutted",
+        "note": "The candidate argues that the criticism conflates 'reliability' with 'truth'. Popper's defense is that we act on the best-tested theory not because it is reliable (probable to succeed), but because it is the most rational bet given our ignorance. If the bridge falls, the theory was falsified; until then, acting on it is the only non-arbitrary choice available to a critical rationalist. The tension is resolved by accepting that 'acting on' is always a gamble, not a justified prediction."
+      },
+      {
+        "handle": "39376b7fe8717864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "Reiterated that the analogy is illustrative of the *process* of elimination, not the *justification* for the norm. The normative force comes from the definition of scientific rationality as the pursuit of truth through error elimination, not from the biological fact of survival. The criticism fails because it demands the analogy carry the normative weight alone, which the candidate does not assert."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6",
+        "kind": "departure_declared",
+        "note": "The candidate declares a departure from the assumption that 'verisimilitude' must be a coherent, comparative logical metric to serve as a basis for preference. Instead, it adopts the view that 'verisimilitude' functions as a regulative ideal or horizon that guides the preference for bold, well-tested theories, even if the precise distance to truth cannot be logically calculated between two false theories."
+      },
+      {
+        "handle": "42eaa01a96703402341867220e2fe7e8047d04b0761bc0aafe6c66cb5a39057c",
+        "kind": "rebutted",
+        "note": "Addresses the Tichý-Miller critique by arguing that the collapse of the formal definition does not entail the collapse of the concept's utility. The preference for better-corroborated theories rests on the *severity* of tests passed, which is independent of the ability to calculate truth-content. The criticism assumes that without the formal calculus, the preference is baseless; the candidate rebuts that the history of severe testing provides the necessary, albeit non-probabilistic, basis."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "biological_natural_selection",
+        "map_making_cartography",
+        "courtroom_adversarial_process"
+      ],
+      "shared_structure": [
+        "Elimination of weak candidates through rigorous testing",
+        "Survival indicates robustness against specific attacks, not absolute truth",
+        "Preference for the survivor is a procedural necessity, not a probabilistic inference"
+      ],
+      "disanalogies": [
+        "Natural selection has no normative goal; scientific preference explicitly aims at truth/error-elimination",
+        "Biological survival is retrospective; scientific action requires prospective commitment",
+        "Organisms do not 'choose' to act on their traits; scientists must consciously decide which theory to apply"
+      ],
+      "transfer_claims": [
+        "Just as we trust the organism that survived a plague to have some resistance, we trust the theory that survived falsification attempts to have some verisimilitude",
+        "The process of elimination is the only valid generator of preference in both domains"
+      ],
+      "overturn_conditions": [
+        "If the environment changes such that past resistance predicts future vulnerability (non-stationarity)",
+        "If the 'tests' applied were not actually severe or relevant to the domain of action"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

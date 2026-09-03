@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference to truth, but as a methodological rule for selecting the most 'testable' (and thus most informative) target for future falsification; however, this defense survives only by accepting that scientific action relies on a pragmatic leap where 'best available' substitutes for 'probable,' effectively costing the system any claim to rational assurance of success in practical application.",
+    "mechanism": "The argument reconstructs Popper's distinction between the logical status of a theory (which cannot be probabilified) and the methodological rule of preference (which maximizes informational content). It posits that preferring a severely tested theory is equivalent to preferring the theory that has survived the hardest attempts to kill it, thereby offering the highest potential for learning if it is eventually false. The mechanism resolves the induction charge by reframing preference as a commitment to rigorous testing rather than a prediction of future performance, while acknowledging that 'acting on' such a theory (e.g., building a bridge) requires a non-rational, pragmatic decision to treat the unrefuted as provisionally reliable.",
+    "counterconditions": [
+      "If verisimilitude (truth-likeness) is required to justify action, the argument fails because Tichý and Miller demonstrated Popper's formal definition of verisimilitude is logically incoherent for comparing false theories.",
+      "If the preference implies any probability increase based on past survival, it smuggles in the very induction Popper rejected.",
+      "If the normative justification for action cannot be separated from the descriptive fact of survival, the analogy to natural selection collapses."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The candidate explicitly concedes the collapse of formal verisimilitude in the counterconditions and main claim, arguing instead that Popper's defense rests on 'methodological rule' and 'informational content' rather than a logical measure of truth-likeness. The rebuttal is that the prompt asks for defensibility on Popper's terms regarding *preference*, which can be sustained via methodological rules even if the formal metric of verisimilitude failed."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, the candidate bypasses the need for a successful formal definition of verisimilitude by grounding the preference in the severity of tests passed (corroboration) as a marker of testability, not truth-content. The failure of the formal definition does not invalidate the methodological imperative to prefer the most risky, yet surviving, hypothesis."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "Revised to explicitly distinguish between the descriptive mechanism of survival (natural selection) and the normative rule of preference. The candidate now argues that the normativity comes from the *goal* of falsification (learning), not the fact of survival itself, addressing the gap between 'is' and 'ought'."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "Revised to ensure the dialectical structure is explicit: the claim presents the strongest case for defensibility (methodological rule), the counterconditions present the strongest case for indefensibility (induction smuggling/verisimilitude collapse), and the mechanism synthesizes the survivor."
+      },
+      {
+        "handle": "343e10b5bcf5a8a8cda3a18e5ff5334fcad03a2527c61f22d4b83ec4299bec0b",
+        "kind": "rebutted",
+        "note": "The candidate rebuts by asserting that Popper's system does not promise 'reliability' in the pragmatic sense (bridge building) but only 'rationality of choice' relative to the goal of truth-seeking. The cost admitted in the claim ('pragmatic leap') directly addresses the tension: acting requires stepping outside strict Popperian logic into pragmatism."
+      },
+      {
+        "handle": "39376b7fe8717864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "Rebutted by clarifying that the analogy to natural selection is illustrative of the *process* of elimination, not the *justification* for preference. The justification is normative (we ought to test the bold), not descriptive (it survived)."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dichotomy by proposing a third option: preference based on 'degree of corroboration' as a report of past test severity, which is neither a probability nor a measure of verisimilitude, but a logical appraisal of how well the theory has withstood attempted refutation."
+      },
+      {
+        "handle": "42eaa01a96703402341867220e2fe7e8047d04b0761bc0aafe6c66cb5a39057c",
+        "kind": "rebutted",
+        "note": "Addressed by shifting the ground from 'verisimilitude' to 'corroboration as a report of test severity'. The collapse of verisimilitude is acknowledged as a cost, but the core defense of preference remains intact via the methodological rule of seeking high testability."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

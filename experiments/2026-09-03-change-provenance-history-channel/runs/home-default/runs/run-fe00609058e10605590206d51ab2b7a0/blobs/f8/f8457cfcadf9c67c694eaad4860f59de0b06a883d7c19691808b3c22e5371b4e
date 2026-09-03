@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future reliability, but as a critical selection mechanism analogous to natural selection: we prefer the theory that has survived the severest tests because it contains more empirical content and has withstood attempts to falsify it, making it the best available target for further criticism, without assigning it a higher probability of truth.",
+    "mechanism": "Evolutionary Epistemology and Critical Rationalism: The preference is pragmatic and methodological, not logical or probabilistic. Just as natural selection favors organisms adapted to past environments without guaranteeing future survival, critical rationalism favors theories that have survived severe tests without guaranteeing they are true or probable. The 'cost' of accepting this is the abandonment of the desire for positive justification; we act on the best-tested theory knowing it may still be false, simply because it is the most informative and least easily refuted option currently available.",
+    "counterconditions": [
+      "If the preference implies that the theory is more likely to be true (inductive leap).",
+      "If the preference relies on a coherent definition of verisimilitude that compares false theories (given Tichý/Miller objections).",
+      "If the agent requires a guarantee of practical success (e.g., the bridge will not fall) rather than a commitment to rigorous testing."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on Popper's formal definition of verisimilitude to compare false theories. Instead, it grounds the preference in 'survival of severe tests' and 'empirical content,' which remains valid even if the quantitative measure of truth-likeness failed. The defense shifts from 'closer to truth' to 'better tested.'"
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Rebutted by clarifying that the argument does not depend on the success of Popper's quantitative verisimilitude. The preference is justified by the logical asymmetry of falsification (one counterexample destroys, many supports do not prove) and the pragmatic need to choose the most informative conjecture, not by a calculated degree of truth-likeness."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "rebutted",
+        "note": "The analogy to natural selection is presented as a structural parallel for the *process* of selection, not a derivation of normative force from descriptive facts. The normativity comes from the critical rationalist goal of error elimination, not from the fact of survival itself. We *choose* to eliminate error; nature just eliminates the unfit."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "revised",
+        "note": "The claim now explicitly frames the 'strongest case' for the defense (evolutionary selection without induction) and implicitly addresses the counter-case (that it smuggles induction) by defining the boundary conditions where the preference would become inductive (if it claimed increased probability)."
+      },
+      {
+        "handle": "343e10b5bcf5a8a8cda3a18e5ff5334fcad032f8ea9da96337e03277b2bc0b68a",
+        "kind": "rebutted",
+        "note": "The distinction between methodological goals and pragmatic necessity is maintained by asserting that acting on the best-tested theory is the only rational action *consistent with fallibilism*. We build the bridge using the best-tested physics not because we know it will hold, but because any untested alternative is known to be less reliable (having been tested less or failed earlier)."
+      },
+      {
+        "handle": "39376b7fe8717864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "Clarified that the analogy does not conflate description with normativity. The normative rule is 'seek to falsify'; the preference for the survivor is a derivative heuristic for where to aim the next test, or which tool to use when no better one exists, not a claim that survival proves fitness."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dichotomy by refusing to use verisimilitude as the primary justification. It argues that rule-adherence (to critical methods) is the sole source of rationality in Popper's system, and 'truth-likeness' is a regulative ideal, not a measurable quantity used for decision-making between false theories."
+      },
+      {
+        "handle": "42eaa01a96703402341867220e2fe7e8047d04b0761bc0aafe6c66cb5a39057c",
+        "kind": "rebutted",
+        "note": "Addressed by decoupling the preference from the failed formalism of verisimilitude. The defense rests entirely on the severity of tests passed and the informational content, which are logically robust concepts in Popper's framework independent of the Tichý/Miller critique."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["biological_natural_selection"],
+      "shared_structure": [
+        "Variation generates diverse candidates (theories/organisms).",
+        "Severe testing (environmental pressure/experiments) eliminates the unfit/falsified.",
+        "Survivors are preferred not because they are proven perfect, but because they have demonstrated resilience.",
+        "Future success is not guaranteed, only past failure is ruled out."
+      ],
+      "disanalogies": [
+        "Natural selection is blind and non-teleological; scientific preference is a conscious, critical choice aimed at error elimination.",
+        "Organisms die permanently; falsified theories can be revised or resurrected in modified forms.",
+        "Biological fitness is relative to a specific environment; scientific corroboration aims for universal explanatory power."
+      ],
+      "transfer_claims": [
+        "Preference for the survivor is rational without implying certainty of future survival.",
+        "The process explains progress (adaptation/knowledge growth) without requiring induction."
+      ],
+      "overturn_conditions": [
+        "If one demonstrates that choosing the survivor logically entails a belief in its future success.",
+        "If no non-inductive criterion for 'severity' of a test can be defined."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

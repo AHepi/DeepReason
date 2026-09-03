@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's central claim—that Popperian preference is a 'pragmatic gamble without epistemic justification' which 'costs the scientist any claim to predictive reliability'—fails to answer the specific question of whether the preference is *defensible*. By reducing the defense to a mere gamble devoid of rational weight regarding future success, the target effectively concedes that the preference is *not* defensible on Popper's own terms for the purpose of action (choosing a theory to act on). This contradicts the requirement to make the 'strongest case' for defensibility; a truly strong defense would argue that critical rationality *provides* a non-inductive form of epistemic justification (e.g., via verisimilitude or the logic of situational analysis) that makes the preference rational, rather than dismissing it as an unjustified gamble. The target's conclusion that there is 'no epistemic justification' renders the preference indefensible for acting scientists, thus failing to resolve the tension posed in the problem context.",
+      "counterexample": null,
+      "premise": "A defense of a scientific preference for action must provide a rationale that makes the preference rational to follow; describing it as an 'unjustified gamble' constitutes an admission that it is not defensible for the purpose of guiding action.",
+      "premise_evidence": null,
+      "successor_question": "How can Popper's framework provide a non-inductive epistemic justification for preferring better-corroborated theories that avoids characterizing the choice as a mere 'pragmatic gamble'?"
+    }
+  ]
+}

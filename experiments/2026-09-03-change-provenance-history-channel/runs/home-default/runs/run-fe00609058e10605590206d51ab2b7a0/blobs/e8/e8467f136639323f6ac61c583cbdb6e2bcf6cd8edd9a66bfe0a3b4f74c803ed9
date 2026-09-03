@@ -1,0 +1,126 @@
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 2 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## open-criticisms
+OPEN CRITICISMS ON THIS PROBLEM (8 of 39 shown, by handle) -- these are part of what your candidate must answer, not advice.
+Every candidate you submit must DISCHARGE each handle below, one of:
+  - revised -- say WHAT changed and WHERE in the candidate
+  - rebutted -- say why the criticism fails. Your rebuttal enters the record as an ordinary claim and can be attacked like any other
+  - departure_declared -- say what you are breaking with. Declaring costs you nothing; nothing scores a departure
+  [0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7] against dfcf7c92365776fc82abb1ee43092fa0080a01d6c56795f700f26eac2fe93626
+      CLAIM: The argument fails because Popper's own formal definition of verisimilitude (truth-content minus falsity-content) was proven by Tichý and Miller in 1974 to be logically incoherent for comparing false theories. Since all scientific theories
+      CITED SPAN: (none quoted)
+  [0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593] against dfcf7c92365776fc82abb1ee43092fa0080a01d6c56795f700f26eac2fe93626
+      CLAIM: The target's defense relies on 'verisimilitude' (truth-likeness) to justify preferring better-corroborated theories without induction. However, Popper's own formal attempt to define verisimilitude logically failed because it was shown (by T
+      CITED SPAN: (none quoted)
+  [1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe] against b3c0511b432396d0e2d2bf8490349317b336851e22777534cc85e5e6886fa5de
+      CLAIM: The target's analogy between natural selection and scientific preference fails to address the normative core of the problem: Popper's rejection of induction. While natural selection explains why organisms *do* survive (descriptive), it does
+      CITED SPAN: (none quoted)
+  [17f09fa02242185436263f3c9b86d093542003762a28b858119658fbe11d26d6] against f46df76d1609172540645130efb0f2bf189da7575070c1d9aa17da145ddc8e21
+      CLAIM: The target's defense collapses under the 'acting on' countercondition because it fails to distinguish between 'preferring for criticism' and 'preferring for action.' While Popper can defensibly prefer a theory for further testing based on c
+      CITED SPAN: (none quoted)
+  [205c867384d2a55772e20f3ebdbf380a88e3596428976e9fb159a5d5fe0e8fbb] against d2268e4d76cca76f4eb3aec86f130e6c5cf80dc569565775c39849f350ab5816
+      CLAIM: The target's defense collapses because it conflates 'methodological preference for testability' with 'pragmatic reliability for action.' While Popper can consistently prefer a highly corroborated theory for further testing (to maximize pote
+      CITED SPAN: (none quoted)
+  [269bca3c11013395f75db136f55665c38e01f5759a38bfef887ba32a9a7294d4] against 003718cc784c1026759d441cbe548fb1375af2ed024df3ffdf107d0ed8bb0983
+      CLAIM: The target's defense fails to address the 'smuggling induction' charge because its proposed mechanism ('acceleration of falsification') implicitly relies on the inductive assumption that past error-detection success predicts future utility.
+      CITED SPAN: (none quoted)
+  [2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f] against 461dc629214617dbaa5eef2d9a41102e3759a1e582b7aef13f1829d19fb0b561
+      CLAIM: The target fails to answer the specific prompt requirement to 'Make the strongest case for each answer' before concluding. The prompt explicitly demands a dialectical structure presenting both the defense (preference is defensible) and the
+      CITED SPAN: (none quoted)
+  [343e10b5bcf5a8a8cda3a18e5ff5334fcad05a2527c61f22d4b83ec4299bec0b] against d78f3bb377b4cbc7dc6f190f018c5f3a49032f8ea9da96337e03277b2bc0b68a
+      CLAIM: The target's defense fails to resolve the specific tension regarding 'acting on' a theory (e.g., building a bridge) because it conflates the methodological goal of falsification with the pragmatic necessity of reliability. While the target
+      CITED SPAN: (none quoted)
+
+## school-stance
+SCHOOL STANCE (weight 0.40): anchor in cases
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural) — each entry is its CLAIM, distilled; request an alias through context_request to read that artifact whole:
+- 8929789f0ae19d5b1c2537f758719daf17f9908ce1fb0ca3fa0cc60fe9f2a2a3: {"school_policy": {"school": "school-3", "stance": "empiric"}}
+- c7cfd51c03fd34d6bef2793840f761426a4e9dc465061122ab338e21f401964f: The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic, non-inductive rule of action based on verisimilitude (truth-like …[clipped; request this alias for the whole text]
+- 4b2eeb3e0a62f5f9845a2e14bc0f32093832218517472521de8fa1cf72e9b671: The preference smuggles induction back in because acting on corroboration necessarily assumes the uniformity of nature or the stability of laws, which Popper ex …[clipped; request this alias for the whole text]
+- 003718cc784c1026759d441cbe548fb1375af2ed024df3ffdf107d0ed8bb0983: The preference is defensible as a methodological rule for error elimination, analogous to natural selection, where the 'cost' is the abandonment of any claim to …[clipped; request this alias for the whole text]
+- 340cc594cc6ef2f98c92cdd64651c59c1e0ffbfa10070a9cb126731287ef1d14: The dilemma dissolves if we view corroboration as a measure of informational content and test severity, making the preference a choice for higher risk and highe …[clipped; request this alias for the whole text]
+- 7661d0a8e73865f2903fe307bac118c3fe3ed8c983acc1b5fd303db293370ad1: The preference is a performative contradiction in Popper's system: it is logically indefensible on his strict terms, yet pragmatically unavoidable; the survivin …[clipped; request this alias for the whole text]
+
+## complement-directive
+COMPLEMENT DIRECTIVE: produce the attempt these summaries make least likely — avoid the modal continuation of the neighbourhood.
+
+## live-neighbourhood
+LIVE NEIGHBOURHOOD (accepted and still standing — shown whole because these are the ones to build on or beat):
+- b4ca62284f907f2027abcdfaf31a0c03d7eba89b271e3d8ae11ee7b7578edeff: {"analogy":null,"claim":"The preference is defensible only if we redefine 'rationality' as 'fidelity to the critical method' rather than 'optimization for truth'; the cost is that science becomes a game with arbitrary rules, losing its claim to describe reality, gaining only the coherence of a self-consistent procedure.","counterconditions":[{"case":"If the critical method can be shown to converge on truth without induction.","checker_spec":null,"eval":"observation"},{"case":"If 'rule-following' inherently implies a belief in the utility of the rules, which reintroduces induction.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If we strip away all claims to truth, probability, and verisimilitude, what remains is a set of procedural rules: 'prefer the theory that has survived the toughest attempts to kill it.' This is rational only in the sense of playing a game correctly. It does not connect to the world (no induction), nor does it approximate truth (no verisimilitude). It is a closed loop of criticism. The preference is defensible as 'rule-following,' but the cost is instrumentalism: science no longer tells us about reality, only about the history of our own criticisms.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+- a72f4489bf4af7285de7785713e1702c46c9f4d47c8c66229aaa415abb160f5b: Relation Kind: Dependence (Scientific Preference Depends on Biological Analogy for Coherence). The problem asserts that the coherence of scientific preference (as non-inductive) is dependent on the biological analogy; without the model of blind variation and selective retention, the concept of 'corroboration without induction' collapses into irrationalism. Refuted If: It is shown that scientific preference can be fully grounded in logical pragmatism or social epistemology without any reference to biological evolution, proving the analogy is heuristic rather than foundational.
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates. EVERY candidate must carry a `discharges` entry for EVERY handle listed under OPEN CRITICISMS above. A submission missing any of them is returned to you once with the open list, and then accepted with the gap recorded.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.
+
+REFERENCE MENU -- /candidates/*/optional_refs/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (22 legal values)
+  [0] OMIT -- leave "optional_refs" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+  [18] SRC_018
+  [19] SRC_019
+  [20] SRC_020
+  [21] SRC_021
+  [22] SRC_022
+You may answer with the handle itself or with its [index].
+
+REFERENCE MENU -- /candidates/*/neighbours/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (22 legal values)
+  [0] OMIT -- leave "neighbours" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+  [18] SRC_018
+  [19] SRC_019
+  [20] SRC_020
+  [21] SRC_021
+  [22] SRC_022
+You may answer with the handle itself or with its [index].

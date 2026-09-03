@@ -1,0 +1,86 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule grounded in the objective history of severe testing; however, accepting this defense costs us the ability to claim that such theories are 'more likely' to be true or reliable in a probabilistic sense, restricting rational action to a gamble on the theory with the highest verisimilitude (truth-likeness) despite the known logical difficulties in formally defining that metric for false theories.",
+    "mechanism": "The argument proceeds by distinguishing between 'justification' (which requires induction) and 'preferability' (which relies on the asymmetry of falsification). It posits that choosing the best-tested theory is akin to choosing the strongest player in a tournament based on past matches, not to predict they will win the next match with high probability, but because they have survived the most rigorous attempts to eliminate them. This shifts the normative core from 'expectation of truth' to 'adherence to the critical method.' The mechanism explicitly addresses the Tichý/Miller collapse of verisimilitude by treating verisimilitude as a regulative ideal rather than a computable metric, arguing that while we cannot calculate it, the process of severe testing is the only known engine for approaching it.",
+    "counterconditions": [
+      "If one demands that rational action requires a positive probability assignment to the success of the theory, then Popper's view collapses into irrationalism.",
+      "If the formal definition of verisimilitude is strictly required for any comparison of false theories, then Popper's defense fails logically.",
+      "If the analogy to natural selection is interpreted as providing a normative justification rather than a descriptive parallel, the argument commits the naturalistic fallacy."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_012",
+        "SRC_015"
+      ],
+      "shared_structure": [
+        "Selection based on survival of severe trials rather than intrinsic probability.",
+        "Distinction between retrospective filtering and prospective prediction.",
+        "Reliance on a regulative ideal (fitness/truth-likeness) that is not directly computable."
+      ],
+      "disanalogies": [
+        "Biological survival is descriptive and causal; scientific preference is normative and methodological.",
+        "Organisms do not 'choose' strategies; scientists actively select theories based on critical discussion.",
+        "Natural selection has no goal of 'truth'; science explicitly aims at verisimilitude."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the fittest organism without knowing the future environment, we act on the best-corroborated theory without knowing the future tests.",
+        "The failure to define fitness perfectly does not stop biologists from identifying the fittest; similarly, the Tichý/Miller problem does not stop scientists from identifying the best-tested."
+      ],
+      "overturn_conditions": [
+        "Demonstration that biological fitness can be precisely calculated in a way verisimilitude cannot.",
+        "Proof that acting on non-probabilistic preferences inevitably leads to worse outcomes than random guessing."
+      ]
+    },
+    "evidence_refs": [],
+    "discharges": [
+      {
+        "handle": "0a9fc1ad4de08f8d194f3d0ab0c33324d1b2c92d77cff8aa96e09171aab363b7",
+        "kind": "rebutted",
+        "note": "The criticism correctly identifies the Tichý/Miller collapse of Popper's *formal* definition of verisimilitude. However, the candidate rebuts the claim that this destroys the *preference* itself. The defense argues that scientists operate with a qualitative, intuitive grasp of verisimilitude (truth-likeness) driven by severe testing, even if the formal logic for comparing two false theories is broken. The preference remains defensible as a methodological rule ('choose the most severely tested') even if the underlying metric cannot be formally computed for every case."
+      },
+      {
+        "handle": "0e96bbfa3c5f8f8069fca6bf7c7634a9761c33ff2f60bc6fc94e99c11a4b6593",
+        "kind": "rebutted",
+        "note": "Similar to the above, this criticism targets the reliance on a failed formal definition. The rebuttal is that Popper's later work and the spirit of his philosophy treat verisimilitude as a regulative ideal. The preference for corroborated theories does not require a perfect logical formula for truth-content minus falsity-content to be rational; it only requires the acceptance that severe testing is the best available means to approach that ideal, acknowledging the formal gap without letting it paralyze action."
+      },
+      {
+        "handle": "1205abd0a9c072dab6896a5dc141fcec2daa4d2abd3ec9f04edb1bcb1d28dcbe",
+        "kind": "revised",
+        "note": "The candidate has been revised to explicitly separate the descriptive power of the natural selection analogy from the normative justification. The text now clarifies that the analogy illustrates the *structure* of selection (survival of the fitted/tested), while the normative force comes solely from the methodological commitment to critical rationalism, not from the biological fact itself."
+      },
+      {
+        "handle": "2eeaa14a1f7eab10f9421a3dd3ad37980d3a798d610323d19fe06b7e32ca704f",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the 'strongest case' for the defense (methodological rule vs. induction) and the 'strongest case' against it (the demand for probabilistic reliability and the verisimilitude collapse). It concludes by weighing these, satisfying the dialectical requirement of the prompt."
+      },
+      {
+        "handle": "343e10b5bcf5a8a8cda3a18e5ff5334fcad032f8ea9da96337e032772bc0b68a",
+        "kind": "rebutted",
+        "note": "The criticism claims a conflation of falsification goals with pragmatic reliability. The candidate rebuts this by asserting that for Popper, 'pragmatic reliability' in the sense of guaranteed success is impossible. The defense accepts that we cannot guarantee the bridge won't fall, but argues that using the best-tested theory is the *only* rational way to minimize the risk of known errors, which is distinct from claiming positive reliability."
+      },
+      {
+        "handle": "39376b7fe8717864c48a1ef32e91cf6a7e433a1d703faa69d78aa264e752682f",
+        "kind": "rebutted",
+        "note": "Addressed by clarifying that the analogy is structural, not justificatory. The normative justification is derived from the imperative to seek truth via error elimination, not from the biological mechanism itself."
+      },
+      {
+        "handle": "3a247386bc86f9e7b5c598f9c8a58e73df2ac567de18e1470c5730a79d7431c6",
+        "kind": "revised",
+        "note": "The candidate was revised to avoid presenting a strict false dichotomy. It now acknowledges verisimilitude as the intended goal but argues that the *operational definition* of that goal must remain qualitative and procedural (severe testing) due to the formal logical issues, rather than abandoning the concept entirely."
+      },
+      {
+        "handle": "42eaa01a96703402341867220e2fe7e8047d04b0761bc0aafe6c66cb5a39057c",
+        "kind": "rebutted",
+        "note": "Reiterated that the logical collapse of the *formal* definition does not entail the collapse of the *concept* as a guide for action. The defense rests on the pragmatic necessity of having a selection criterion, where 'most severely tested' is the only non-inductive candidate available."
+      }
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_012",
+        "SRC_015"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
