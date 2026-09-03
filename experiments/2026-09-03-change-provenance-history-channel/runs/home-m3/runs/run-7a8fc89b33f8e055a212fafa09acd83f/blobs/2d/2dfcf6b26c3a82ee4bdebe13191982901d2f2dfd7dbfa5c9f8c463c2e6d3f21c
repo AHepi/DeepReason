@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of truth, but as a non-inductive methodological rule grounded in the aim of science to find true explanatory theories; however, accepting this defense costs the ability to claim that such a preference makes the theory *more likely* to be true in a probabilistic sense, forcing a reliance on the unproven metaphysical assumption that the universe is law-governed and that severe tests actually eliminate falsehoods rather than merely selecting for local fitness.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'justification' (inductive probability) and 'criticism' (corroboration). It posits that preferring a corroborated theory is rational because it has survived attempts to falsify it, whereas a falsified theory is known to be false. The preference is thus a choice between 'known false' and 'not yet known false,' which is a logical distinction, not a probabilistic one. The mechanism addresses the 'smuggling induction' charge by reframing the preference as a procedural necessity for the growth of knowledge (verisimilitude) rather than a prediction of future success based on past frequency.",
+    "counterconditions": [
+      "If the concept of verisimilitude (truth-likeness) is formally incoherent as argued by Miller and Tichý, then the bridge between corroboration and 'closeness to truth' collapses, rendering the preference arbitrary.",
+      "If the aim of science is redefined from 'truth' to 'empirical adequacy' or 'survival,' then the preference for corroborated theories becomes purely pragmatic and loses its epistemic defensibility within Popper's realist framework.",
+      "If the 'metaphysical axiom' that nature is uniform is required to justify the bet on corroborated theories, then Popper has implicitly reintroduced a form of induction under the guise of metaphysics."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The candidate explicitly distinguishes between 'logical justification' (which Popper denies exists for induction) and 'methodological defensibility' (which relies on the goal of truth). The rebuttal argues that the preference is not a conflation but a deliberate separation: we act on the best-corroborated theory *because* it is the only one not known to be false, not because we believe it is probable."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "revised",
+        "note": "Revised to clarify that Popper's solution is not merely 'procedural' in a bureaucratic sense, but is rooted in the logical asymmetry between verification and falsification. The text now emphasizes that the preference is defensible *only if* one accepts the realist aim of science, avoiding the false dilemma mentioned in the criticism."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be73990a91bfccedd76a3db90a87926c01",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate acknowledges the Miller-Tichý refutation of formal verisimilitude but argues that Popperians can retreat to a qualitative or intuitive notion of 'closeness to truth' as a regulative ideal, even if a formal quantitative measure is impossible. This breaks with strict formalism to save the methodological intuition."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The candidate rejects the biological evolution analogy as the primary defense. Instead, it relies on the logical status of 'falsified' vs 'unfalsified.' The rebuttal states that procedural necessity *is* the rational defensibility in a fallibilist framework where certainty is impossible; there is no deeper 'non-inductive reason' other than the avoidance of known error."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "Revised to explicitly state that while the *formal* definition of verisimilitude failed, the *concept* remains the motivating force for theory choice. The argument now frames verisimilitude as a necessary metaphysical postulate rather than a proven logical property, directly addressing the abandonment concern."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "revised",
+        "note": "Revised to ensure both sides of the dilemma are presented with equal strength. The 'strongest case' for the defense (non-inductive methodological rule) is now fully articulated alongside the 'strongest case' for the prosecution (smuggled induction via metaphysical assumptions), fulfilling the problem's directive."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The candidate argues that reducing the preference to a 'psychological fact' does indeed cost the normativity of science. If there is no rational reason to prefer the unfalsified over the falsified other than habit, then science loses its claim to rational progress. The rebuttal maintains that Popper's distinction requires a normative commitment to truth, not just a description of behavior."
+      },
+      {
+        "handle": "a3a496115ceba9824b3999689584a02fdb9c6dc5e7fda0e921e397f592ae3eb7",
+        "kind": "revised",
+        "note": "Revised to directly answer whether induction is smuggled in. The conclusion now explicitly states: 'Yes, a form of induction is smuggled in, but it is a metaphysical induction (faith in the uniformity of nature) rather than a logical one.' This directly engages the core epistemological challenge instead of sidestepping it."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_pressure",
+        "legal_burden_of_proof"
+      ],
+      "shared_structure": [
+        "Survival of a hypothesis is analogous to the survival of an organism: it indicates fitness relative to the environment (tests), not inherent superiority or future guarantee.",
+        "The status of 'not guilty' in law is analogous to 'not falsified' in science: it permits action (release/preference) without asserting positive truth/probability."
+      ],
+      "disanalogies": [
+        "Biological evolution has no telos (goal of truth), whereas Popperian science explicitly aims at truth, making the analogy imperfect for justifying epistemic progress.",
+        "Legal systems operate on binary verdicts for specific events, while scientific theories are universal statements subject to infinite potential tests."
+      ],
+      "transfer_claims": [
+        "Just as we rationally bet on the surviving organism to continue surviving in the short term without assuming it is immortal, we rationally bet on the corroborated theory without assuming it is probable.",
+        "The burden of proof lies on the challenger (falsifier); until met, the default position (preference) stands rationally."
+      ],
+      "overturn_conditions": [
+        "If the environment (nature) changes its laws arbitrarily, the evolutionary analogy fails to support any preference for past survivors.",
+        "If the legal system is shown to be systematically biased against the truth, the 'not guilty' verdict loses its rational weight for action."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

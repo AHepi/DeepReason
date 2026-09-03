@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that preferring corroborated theories is merely 'conjectural risk management' fails to resolve the problem's core tension regarding action. The problem asks if this preference smuggles induction back in when scientists *act* on a theory. The target asserts that untested theories are 'known to be even more risky,' but within Popper's strict framework, an untested theory has no logical probability status (neither high nor low) compared to a tested one; they are both equally conjectural. By asserting a comparative knowledge of risk ('even more risky') to justify action, the target implicitly relies on an inductive principle—that past error-elimination predicts future reliability or lower risk—which is precisely the induction Popper rejected. The target does not explain how one derives a actionable hierarchy of 'risk' from purely negative test results without assuming the uniformity of nature or the stability of laws, thus failing to show the preference is defensible on Popper's own terms without smuggling in induction.",
+      "counterexample": null,
+      "premise": "Popper explicitly denied that surviving tests increases the probability or reliability of a theory for future predictions, maintaining that all universal laws remain equally improbable.",
+      "premise_evidence": null,
+      "successor_question": "If untested theories are not logically 'riskier' than tested ones in Popper's system, what non-inductive metric allows a scientist to rank them for practical action?"
+    }
+  ]
+}

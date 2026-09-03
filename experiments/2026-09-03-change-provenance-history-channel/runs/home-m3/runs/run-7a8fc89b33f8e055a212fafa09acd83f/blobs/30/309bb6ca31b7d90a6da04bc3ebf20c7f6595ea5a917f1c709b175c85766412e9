@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses when addressing the specific constraint of 'choosing which theory to act on.' While preferring a bold theory for further testing aligns with Popper's goal of learning velocity, acting on a theory (e.g., building a bridge or administering a drug) inherently requires an expectation of reliability or safety. The target admits the cost is 'admitting that science aims for rapid failure,' but this aim is incompatible with the pragmatic necessity of action, which seeks to avoid failure. By framing the preference solely as a strategy for 'maximizing learning velocity,' the target fails to justify why one should *act* on a theory known to be potentially false and aimed at rapid refutation, thereby smuggling in an inductive assumption that the currently corroborated theory is the 'safest' bet for successful action.",
+      "counterexample": null,
+      "premise": "Acting on a theory implies a need for predictive reliability, whereas the target defines the preference purely as a mechanism for accelerating falsification.",
+      "premise_evidence": null,
+      "successor_question": "If the goal of acting on a theory is not inductive safety, what non-inductive criterion does Popper provide to distinguish between acting on a well-corroborated theory versus a random guess when human lives are at stake?"
+    }
+  ]
+}

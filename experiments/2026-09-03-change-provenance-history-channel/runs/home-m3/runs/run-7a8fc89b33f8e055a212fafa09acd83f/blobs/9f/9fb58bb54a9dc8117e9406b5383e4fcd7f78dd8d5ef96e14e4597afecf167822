@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target falsely claims that accepting a Darwinian epistemology requires abandoning the 'rational agent' model entirely. Popper explicitly argues that the preference for better-corroborated theories is rational precisely because it aligns with the critical method (selecting the theory that has withstood the most severe tests), not because it implies probability or truth. The target conflates 'logical justification via induction' (which Popper rejects) with 'rational preference via criticism' (which Popper defends). By asserting the choice is merely a 'biological fact' and not a 'logical justification,' the target ignores Popper's specific argument that acting on the best-tested theory is the only rational course of action in the absence of induction, thus failing to make the strongest case for the defensibility of the preference on Popper's own terms.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between justification (proving a theory true/probable) and rational preference (choosing the best-tested theory for action), arguing the latter is defensible without induction.",
+      "premise_evidence": null,
+      "successor_question": "How does Popper define 'rationality' in the context of theory choice if it is divorced from both probabilistic justification and biological instinct?"
+    }
+  ]
+}

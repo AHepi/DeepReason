@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the central tension in Popper's philosophy regarding the preference for corroborated theories, but it fails to engage with the 'strongest case' for the opposing view as explicitly required by the problem context. The problem asks to make the strongest case for *each* answer (that the preference is defensible vs. that it smuggles induction) before concluding. The target only presents the argument that induction is smuggled in, ignoring the potential Popperian defense based on critical preference or verisimilitude without inductive inference. Therefore, it does not fully satisfy the problem's instruction to evaluate both sides before deciding which survives.",
+      "counterexample": null,
+      "premise": "The problem context requires making the strongest case for each answer before stating which one survives.",
+      "premise_evidence": null,
+      "successor_question": "How would a strict Popperian defend the preference for better-corroborated theories without relying on any assumption that the future will resemble the past?"
+    }
+  ]
+}

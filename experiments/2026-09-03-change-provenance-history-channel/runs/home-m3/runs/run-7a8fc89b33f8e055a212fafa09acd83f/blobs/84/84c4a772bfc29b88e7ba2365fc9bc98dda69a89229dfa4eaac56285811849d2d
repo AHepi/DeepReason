@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the central tension in Popper's philosophy regarding the 'Inductive Leak' but fails to execute the full prompt requirement of making the strongest case for the opposing view (that preference is defensible on non-inductive terms) before concluding. The prompt explicitly demands a dialectical structure ('Make the strongest case for each answer, then say which one survives'), whereas the target provides a one-sided argument asserting the leak exists without adequately developing or refuting the specific Popperian counter-argument that preference is based on verisimilitude or critical rationalism rather than probabilistic induction.",
+      "counterexample": null,
+      "premise": "The prompt requires a balanced evaluation of two opposing answers before selecting a survivor, but the target only argues for one side.",
+      "premise_evidence": null,
+      "successor_question": "How would Popper defend the preference for better-corroborated theories using the concept of verisimilitude without relying on inductive assumptions?"
+    }
+  ]
+}

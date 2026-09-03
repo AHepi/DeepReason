@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that accepting Popper's preference as a 'psychological or sociological fact' costs 'the normativity of science' is a false dilemma. Popper explicitly distinguishes between the 'logic of discovery' (which he rejects as non-existent) and the 'methodology of science' (which provides normative rules for criticism). One can maintain strong normativity regarding *how* to test and criticize theories (the core of Popper's rationality) while admitting that the ultimate *preference* for acting on a well-tested theory is a pragmatic, non-justified decision. The target incorrectly assumes that without a logical proof of probability (induction), there can be no normative framework at all, ignoring Popper's specific notion of 'rational action' as critical discussion rather than justified belief.",
+      "counterexample": null,
+      "premise": "Popper separates the normative rules of methodological criticism from the psychological act of preferring a theory for action.",
+      "premise_evidence": null,
+      "successor_question": "Does Popper's concept of 'rational action' rely on logical justification of the chosen theory, or solely on the rationality of the critical process preceding the choice?"
+    }
+  ]
+}

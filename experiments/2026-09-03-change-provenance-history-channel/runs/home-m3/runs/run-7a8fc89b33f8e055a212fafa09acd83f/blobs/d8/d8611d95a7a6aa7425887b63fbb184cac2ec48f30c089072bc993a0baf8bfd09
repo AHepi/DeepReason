@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation between the two specified endpoints. Instead of defining a direct logical contradiction, dependence, or shared mechanism between 'preference for better-corroborated theories' and the 'claim that such preference smuggles induction', the target describes a meta-argument about whether one concept (conjectural risk management) entails another (uniformity of nature). This is an argument about the validity of a defense mechanism, not a substantive relation between the primary endpoints themselves. Furthermore, the 'REFUTED IF' condition describes a scenario where the preference *validates* the hidden leap, which would establish compatibility or inheritance rather than the claimed contradiction, rendering the stated relation kind incoherent with its own refutation condition.",
+      "counterexample": null,
+      "premise": "A substantive relation must directly link the endpoints (e.g., A contradicts B), whereas the target links Endpoint A to a third concept (Risk Management) to argue about Endpoint B's validity.",
+      "premise_evidence": null,
+      "successor_question": "Does the preference for better-corroborated theories directly contradict the claim of smuggling induction, or does it merely attempt to refute that claim without establishing a logical incompatibility?"
+    }
+  ]
+}

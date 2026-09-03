@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the core tension in Popper's philosophy but fails to engage with the specific directive to 'make the strongest case for each answer' and determine 'which one survives.' By presenting only the argument that preference smuggles in induction (the 'No' answer) and omitting the counter-argument that preference is a pragmatic, non-inductive necessity for action (the 'Yes' answer), the target provides an incomplete analysis. It asserts a conclusion without performing the required comparative evaluation of the two opposing views demanded by the problem context.",
+      "counterexample": null,
+      "premise": "The problem explicitly requires making the strongest case for both the defense and the criticism of the preference before selecting a survivor.",
+      "premise_evidence": null,
+      "successor_question": "How would Popper justify acting on a corroborated theory if he strictly forbids any assumption that past success predicts future reliability?"
+    }
+  ]
+}

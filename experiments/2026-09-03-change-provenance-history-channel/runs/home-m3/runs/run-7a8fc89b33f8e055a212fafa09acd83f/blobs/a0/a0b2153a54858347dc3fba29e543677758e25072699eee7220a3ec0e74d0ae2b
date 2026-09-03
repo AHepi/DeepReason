@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the central tension in Popper's philosophy regarding the preference for corroborated theories. It accurately articulates the 'Inductive Leak' argument: that moving from a historical report of survival to a future-oriented preference for action implicitly relies on the uniformity of nature, which constitutes the very induction Popper sought to reject. The target also appropriately lists the specific counterconditions (non-inductive rationality or redefining preference as a heuristic) that would be required to defend Popper, demonstrating a complete understanding of the problem space without making unfounded claims.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

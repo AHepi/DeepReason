@@ -1,0 +1,169 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'conjectural risk management' strategy: we prefer the theory that has survived the most severe tests not because it is more likely true, but because it has demonstrated greater empirical content and resilience, making it the most informative target for future falsification attempts.",
+      "mechanism": "Reframing 'preference' from a probabilistic judgment of truth to a methodological choice of the most testable (and thus most valuable) conjecture. The 'cost' is accepting that this preference offers no guarantee of future success or proximity to truth, only a commitment to the most rigorous available error-elimination path.",
+      "counterconditions": [
+        "If the preferred theory fails the next test while a less-corroborated rival survives, the preference was merely a heuristic gamble, not a rational necessity.",
+        "If 'severity' of tests cannot be defined without inductive assumptions about background knowledge, the non-inductive defense collapses."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "The defense does not rely on biological analogy conflating necessity with defensibility; it relies on the logical asymmetry between verification and falsification. The preference is procedural (choose the best target) not ontological (assume the target is fit)."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "This argument explicitly avoids verisimilitude. It grounds preference in 'empirical content' and 'testability,' which remain coherent in Popper's framework even if verisimilitude was abandoned."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "revised",
+          "note": "Previous iterations may have omitted the case for defensibility. This candidate centers entirely on the 'defensible' case via risk management, while the counterconditions articulate the 'smuggled induction' failure mode."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "No appeal to verisimilitude is made. The mechanism relies solely on the degree of corroboration as a report of past performance, not a measure of truth-likeness."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The tension regarding action is resolved by defining action-preference as 'betting on the most informative error,' not 'betting on the truth.' This preserves the non-inductive stance while allowing for pragmatic action."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "Agrees that past corroboration provides no inductive reason for future success. The claim is that it provides a *critical* reason: the highly corroborated theory has nowhere left to hide errors, making it the optimal vehicle for progress."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The normativity is preserved not as a logical proof of truth, but as a normative rule of method: 'Always subject the boldest conjectures to the severest tests.' Preference follows the rule, not a probability calculation."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Does not redefine probability. It redefines the utility function of the scientist: maximizing learning potential (error elimination) rather than maximizing probability of being right."
+        }
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_010"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because any decision to act on a theory (e.g., building a bridge based on physics) implicitly assumes that the future will resemble the past regarding the theory's validity.",
+      "mechanism": "Exposing the pragmatic contradiction: Popper forbids inferring 'true' from 'survived tests,' yet his own advice to 'prefer' the survivor for action entails an implicit premise that survival predicts future reliability. Without this inductive bridge, 'preference' is arbitrary.",
+      "counterconditions": [
+        "If one can demonstrate a purely logical or evolutionary imperative to prefer survivors without assuming future resemblance, the induction charge fails.",
+        "If 'action' can be decoupled from 'expectation of success' (e.g., acting simply to test), the pragmatic need for induction vanishes."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "This argument attacks the core logic of preference itself, regardless of biological analogies. It asserts that *any* preference for action implies an inductive leap, making the analogy irrelevant to the fundamental flaw."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "This critique stands independently of verisimilitude. It targets the transition from 'corroborated' to 'preferred for action,' which requires an assumption of stability (induction) regardless of truth-likeness metrics."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "revised",
+          "note": "This candidate fully develops the 'smuggled induction' case, which was previously underrepresented. It treats the 'defensible' case as the countercondition to be tested."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The argument does not depend on verisimilitude failing; it depends on the gap between 'past survival' and 'future utility' requiring an inductive fill-in, rendering the specific metric of truth-likeness secondary."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Directly addresses the core tension: acting on a theory *is* assuming it will work. To deny this is to render action irrational or random, which contradicts the scientific aim of reliable control over nature."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "Confirms the criticism: without inductive assumptions, past corroboration is logically inert regarding future choices. Therefore, any preference *must* smuggle induction."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Rejects the distinction between logical status and practical preference. If the practical preference lacks logical grounding (due to no induction), then the 'normativity' of science becomes a psychological habit, not a rational principle."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Argues that Popper's solution (preferring without probability) is verbal sleight of hand. If the preference guides action, it functions exactly like probability, effectively reintroducing induction under a new name."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_014"
+      ]
+    },
+    {
+      "claim": "The dilemma is dissolved by viewing scientific preference as an evolutionary selection mechanism where 'rationality' is an emergent property of the system, not a requirement for individual agents; thus, the preference is defensible as a systemic feature without requiring individual inductive justification.",
+      "mechanism": "Shifting the locus of rationality from the individual scientist's justification to the population-level dynamics of theory selection. The 'cost' is abandoning the idea that individual scientists must have a non-inductive *reason* for their choice; they merely participate in a blind variation and selective retention process.",
+      "counterconditions": [
+        "If individual agency and rational justification are essential to the definition of 'science' (vs. mere biological adaptation), this dissolution fails.",
+        "If the evolutionary analogy cannot account for the normative 'ought' of scientific method without circularity, the systemic defense collapses."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "revised",
+          "note": "Explicitly accepts the 'biological evolution' analogy but reframes it: it concedes the conflation of 'procedural necessity' with 'rational defensibility' at the individual level to save rationality at the systemic level."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "Does not rely on verisimilitude as a guide. It relies on survival of the fittest (most adaptable) theories. Verisimilitude is irrelevant if the goal is systemic persistence rather than truth approximation."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "Presents a third way distinct from the binary 'defensible vs. smuggled induction' by changing the metaphysical ground of the debate to evolutionary epistemology."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "Verisimilitude comparisons are unnecessary in a pure selection model; only relative fitness (survival) matters."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the requirement that 'action' needs a conscious rational basis. Action here is a behavioral output of a selected cognitive trait, needing no further justification."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "Past corroboration indicates 'fitness' in the current environment. No induction about the future is needed if we accept that maladapted theories (and scientists) will simply go extinct."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Normativity is redefined as 'systemic stability.' What is 'good' is what keeps the scientific enterprise alive, not what satisfies a logical criterion of justification."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Rejects the framing that preference must be a logical proxy for probability. Preference is a behavioral disposition selected for its utility in error elimination."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_008"
+      ]
+    }
+  ]
+}

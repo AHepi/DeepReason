@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation between 'isolated 013ff21c4893' and its neighbourhood as required by the problem context. Instead of connecting the specific isolated entity to external neighbors via dependence, reduction, or integration, the target describes an internal shared mechanism between two other arguments (SRC_002 and SRC_003). This constitutes a scope error where the endpoints of the relation are not the requested isolated entity and its neighbourhood, but rather two third-party concepts, leaving the primary connective task unaddressed.",
+      "premise": "The problem context explicitly demands a relation connecting 'isolated 013ff21c4893' to its neighbourhood, whereas the target provides a relation between SRC_002 and SRC_003.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "What is the specific substantive relation connecting isolated 013ff21c4893 to its immediate neighbourhood?"
+    }
+  ]
+}

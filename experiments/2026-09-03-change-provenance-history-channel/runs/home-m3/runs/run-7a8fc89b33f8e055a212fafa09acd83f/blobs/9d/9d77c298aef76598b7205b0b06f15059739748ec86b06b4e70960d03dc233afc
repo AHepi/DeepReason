@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference that the theory is true or probable, but as a methodological rule to select the theory with the highest empirical content and thus the greatest capacity for future falsification; this preference survives only if one accepts the cost of abandoning the goal of 'justified belief' in favor of 'optimal testability,' rendering scientific action a pragmatic gamble rather than a rational expectation of success.",
+    "mechanism": "The argument reconstructs Popper's distinction between the logical status of a theory (which remains unproven) and the procedural rule for theory choice (which maximizes risk). It posits that choosing the best-corroborated theory is equivalent to choosing the most severely tested survivor, which logically implies it has withstood the strongest attempts at refutation. This avoids induction because it makes no claim about the future performance of the theory based on past success, but rather selects the theory that currently offers the most precise targets for potential error. The defense relies on the concept of 'verisimilitude' (truth-likeness) as a regulative ideal rather than a quantifiable metric, acknowledging Miller and Tichý's refutation of its formal definition while retaining its heuristic value for directing research toward higher content.",
+    "counterconditions": [
+      "If verisimilitude is strictly incoherent as argued by Miller and Tichý, then the link between corroboration and closeness to truth is severed, leaving the preference as merely psychological habit.",
+      "If the preference implies any expectation that the future will resemble the past (even pragmatically), it smuggles in the very principle of induction Popper rejected.",
+      "If scientists act on corroborated theories because they believe them to be practically reliable, this belief constitutes an implicit probabilistic judgment, violating Popper's anti-probabilist stance."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'justification for belief' with 'justification for action.' The candidate explicitly defends the preference as a procedural rule for maximizing testability (action), not as a logical proof of truth (belief), thereby maintaining Popper's separation of logic and pragmatics without smuggling in induction."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "rebutted",
+        "note": "The candidate does not present a false dilemma nor redefine probability. Instead, it argues that the preference is defensible precisely because it rejects probabilistic interpretation entirely, grounding the choice in empirical content and severity of tests, which is Popper's actual solution."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be73990a91bfccedd76a3db90a87926c01",
+        "kind": "revised",
+        "note": "Revised the mechanism to acknowledge that while Miller and Tichý refuted the formal quantification of verisimilitude, Popper retained it as a qualitative, regulative ideal. The defense now rests on verisimilitude as a directional guide for research rather than a coherent logical substitute for probability."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The analogy to evolution is not used to conflate necessity with defensibility. The rebuttal clarifies that the 'non-inductive reason' is the logical property of high empirical content: we prefer the theory that says more and risks more, not because it survived, but because its survival indicates it has not yet been shown false despite high risk."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "Adjusted the claim to state that Popper did not fully abandon verisimilitude as a guide but retreated from its formal definition. The candidate now argues that the preference holds if we accept verisimilitude as a metaphysical hope or regulative principle, costing us the ability to formally measure progress."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for both sides: the defense (methodological rule for testability) and the attack (smuggling induction via hidden expectations). It concludes that the defense survives only at the high cost of normativity, satisfying the prompt's requirement."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The candidate agrees that the loss of normativity is the specific cost. It argues that accepting Popper's view means science loses its claim to 'rational justification' for believing theories are true, reducing it to a critical process without a positive epistemic payoff, which is exactly the dilemma Popper forces us to accept."
+      },
+      {
+        "handle": "a3a496115ceba9824b3999689584a02fdb9c6dc5e7fda0e921e397f592ae3eb7",
+        "kind": "rebutted",
+        "note": "The candidate directly addresses whether induction is smuggled in. It concludes that if the preference relies on any expectation of future success based on past tests, induction is indeed smuggled in. The defense survives ONLY if we strip away all expectation of success and view the choice purely as selecting the best target for future attacks."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

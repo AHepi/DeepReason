@@ -1,0 +1,227 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'conjectural risk management' strategy: we prefer the theory that has survived the most severe tests not because it is likely true, but because it has demonstrated greater empirical content and resilience, making it the best available target for future falsification attempts.",
+      "mechanism": "Reframing 'preference' from a probabilistic bet on truth to a strategic selection of the most informative error-elimination vehicle. The mechanism is the asymmetry of falsification: a highly corroborated theory has withstood more potential refutations, so acting on it maximizes the chance of learning something new if it fails, whereas acting on a weakly tested theory risks trivial failure.",
+      "counterconditions": [
+        "If the preferred theory fails a new test, the loss of information must be greater than if a less corroborated theory had failed.",
+        "If the scientist acts on the theory expecting it to succeed (practical success), they are implicitly assuming induction.",
+        "If 'risk management' itself relies on an inductive assumption that past resistance predicts future resistance."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "The defense does not rely on biological analogy conflating procedural necessity with rational defensibility. Instead, it relies on the logical asymmetry of falsification (a core Popperian tenet) to justify the preference as a rational strategy for maximizing empirical content, distinct from evolutionary 'fitness' which implies survival probability."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "This argument explicitly avoids verisimilitude. It grounds preference in 'empirical content' and 'severity of tests passed,' which remain coherent in Popper's later work even if the formal definition of truth-likeness was abandoned. We prefer the theory that says more and has survived more, not the one closer to the truth."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "revised",
+          "note": "Previous iterations may have omitted the case for defensibility. This candidate explicitly constructs the 'strongest case' for defensibility via the risk-management/conceptual-content argument before evaluating its costs."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "No appeal to verisimilitude is made. The justification rests entirely on the methodological goal of bold conjecture and severe testing. The 'better' theory is simply the one that has proven more fertile for testing, regardless of its truth-likeness."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The tension regarding action is resolved by distinguishing between 'expectation of success' (inductive) and 'selection of the best critical target' (non-inductive). When acting, the Popperian chooses the theory that offers the most precise predictions to be tested, not the one expected to work. If it works, it is a surprise; if it fails, we learn."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "Past corroboration provides no inductive reason to believe the theory will hold. It provides a non-inductive reason to believe the theory is *worth* testing further. The preference is for the object of inquiry, not the outcome of the inquiry."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "This preserves normativity by defining the rational agent as one who seeks to maximize learning potential (error elimination). It is not merely a psychological fact but a normative rule of the 'critical method': always attack the strongest link to break the chain of ignorance fastest."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "This does not redefine probability. It rejects the need for probability in theory choice entirely. The preference is based on 'corroboration' (a historical report of test severity) which is logically distinct from 'probability' (a measure of likelihood). The false dilemma is dissolving the requirement for probability altogether."
+        }
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's framework because any decision to act on a theory (e.g., building a bridge based on physics) implicitly assumes that the future will resemble the past, specifically that the laws which held during testing will hold during application.",
+      "mechanism": "The 'Pragmatic Contradiction': Popper's logic forbids inferring future validity from past survival, yet his methodology requires acting as if future validity is implied. The mechanism is the unavoidable pragmatic commitment inherent in 'action.' To prefer Theory A over Theory B for practical use is to bet on A's future reliability, which is an inductive bet.",
+      "counterconditions": [
+        "If the agent acts without any expectation of the theory holding, the action is irrational or random.",
+        "If Popper admits a 'principle of transference' where corroboration transfers to practical reliability, he has reintroduced induction.",
+        "If the 'cost' of accepting this view is admitting that pure non-inductive science is impossible for acting agents."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "This argument does not rely on biological analogy. It relies on the logical structure of practical action. The 'smuggling' occurs not via evolution but via the necessity of prediction in any real-world application of theory."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "This critique does not depend on verisimilitude. It argues that even without claiming the theory is 'truer,' the act of *using* it presupposes its reliability, which is an inductive assumption about the uniformity of nature."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "revised",
+          "note": "This candidate focuses exclusively on the 'smuggling induction' side of the prompt's requirement to make the strongest case for each answer, detailing the pragmatic contradiction."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The failure identified here is not about defining verisimilitude but about the gap between 'survived tests' and 'safe to use.' Bridging that gap requires induction, regardless of truth-likeness metrics."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "This directly addresses the core tension: 'conjectural risk management' fails when the stakes involve physical safety or engineering. One cannot 'manage risk' by choosing the most-falsifiable theory if one actually expects the bridge to stand. The expectation of standing is inductive."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "Agrees that past corroboration provides no logical guarantee. The point is that scientists *act* as if it does. The smuggling happens in the behavior, not the formal logic. Popper's own advice to prefer corroborated theories for action betrays his formal prohibition."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Distinguishing logical status from psychological fact doesn't save the normativity. If the normative rule is 'prefer corroborated theories for action,' and action implies expecting success, the normativity itself is inductive."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Redefining probability isn't the issue. The issue is that 'preference for action' is functionally equivalent to assigning higher subjective probability, regardless of what Popper calls it. The smuggling is semantic and pragmatic."
+        }
+      ],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "The surviving view is that the preference is defensible only if we accept the cost of abandoning the idea that science aims at 'practical success' or 'reliable prediction' in the traditional sense; instead, science aims solely at 'truth approximation' through error elimination, and 'acting' on a theory is merely setting up the next experiment on a grand scale.",
+      "mechanism": "Radical Fallibilism as a Way of Life. The mechanism is reinterpreting all 'action' as 'experimental deployment.' When an engineer builds a bridge, they are not asserting it will hold; they are testing the theory of structural mechanics in a high-stakes environment. If it falls, the theory is falsified. The preference for corroborated theories is just preferring the hypotheses that have survived previous rounds of this cosmic testing.",
+      "counterconditions": [
+        "If society refuses to accept bridge collapses as 'valuable data' rather than 'failures,' this view is socially unsustainable.",
+        "If the scientist feels genuine confidence (not just hope) that the bridge will stand, they are lying about their epistemic state.",
+        "If 'truth approximation' cannot be defined without induction (see verisimilitude problems), the whole edifice collapses."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "departure_declared",
+          "note": "Departing from the need to justify 'rational defensibility' in standard pragmatic terms. The defense here is purely internal to the critical method: it is rational only if one accepts the goal of error elimination above all else, including safety or success."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "This approach sidesteps verisimilitude by treating 'truth approximation' as a regulative ideal rather than a measurable quantity. We act to learn, not because we think we are close to the truth."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "revised",
+          "note": "Synthesizes the previous two candidates to offer the resolution requested: which view survives and at what cost. The cost is the alienation of science from common-sense notions of reliability."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "Since we are not claiming the theory is 'true' or 'likely,' the incoherence of verisimilitude comparisons is irrelevant. We are only claiming the theory is 'currently undefeated.'"},
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Resolves the action tension by redefining action as 'large-scale testing.' The preference is defensible because it selects the best candidate for the next test, even if that test involves human lives (a morally difficult but logically consistent stance)."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "Correctly identifies that past corroboration gives no inductive support. This candidate embraces that lack of support as a feature: we act precisely because we know the theory might fail, hoping to find out how."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Normativity is preserved but shifted. The norm is 'be bold in testing,' not 'be safe in predicting.' This is a costly shift for applied science."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Avoids the false dilemma by refusing to play the probability game. The preference is categorical (choose the unrefuted) not probabilistic."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "Popper's distinction between 'corroboration' and 'probability' is a linguistic sleight of hand that collapses under the pressure of decision theory: any agent maximizing expected utility must assign higher subjective probability to corroborated theories, meaning Popper's 'preference' is indistinguishable from Bayesian updating in practice.",
+      "mechanism": "Decision-Theoretic Collapse. The mechanism is the Dutch Book argument: if an agent prefers Corroborated-A over Uncorroborated-B for action but assigns them equal probability, they can be pumped for money in a betting scenario involving the outcomes of those actions. Therefore, 'preference' entails 'higher subjective probability,' reintroducing induction via the back door of rational choice theory.",
+      "counterconditions": [
+        "If the agent refuses to bet on the outcome (believing the outcome is fundamentally unpredictable), they cannot act rationally in a decision-theoretic sense.",
+        "If Popper rejects Expected Utility Theory as a normative model for scientists, he must provide an alternative calculus of action.",
+        "If 'subjective probability' is admitted, the ban on induction is effectively lifted."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "Uses decision theory, not biological analogy. The conflation is shown to be mathematical (utility maximization) rather than metaphorical."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "Does not use verisimilitude. Uses the coherence of belief/action pairs. Even if truth-likeness is undefined, the *utility* of acting on a theory requires a probability assignment."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "revised",
+          "note": "Provides a strong, formalized case for the 'smuggling induction' verdict using modern decision theory, complementing the pragmatic argument in Candidate 2."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The problem isn't defining verisimilitude; it's that rational action *requires* probability assignments. Popper's attempt to have preference without probability is mathematically unstable."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Directly attacks the 'risk management' defense. Risk management *is* probability management. You cannot manage risk without estimating probabilities, which requires induction."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "Argues that while logical probability doesn't increase, *subjective* probability (degree of belief) must increase for a rational actor, thereby smuggling induction into the psychology of the scientist."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Challenges the idea that this is just a 'psychological fact.' It is a logical requirement of rational agency. To be normative is to be consistent; inconsistency (preferring A but believing A and B equally likely) is irrational."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Shows that redefining terms doesn't help. If 'preference' functions exactly like 'high probability' in all decision contexts, then it *is* probability, regardless of the label."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_010"
+      ]
+    }
+  ]
+}

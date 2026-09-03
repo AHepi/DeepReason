@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to address the 'smuggling induction' charge because its core mechanism—preferring theories with greater 'empirical content and resilience' as the 'most informative target for future falsification'—implicitly relies on an inductive assumption that past resilience is a reliable indicator of future testability value. If past survival (resilience) does not probabilistically or logically correlate with the theory's capacity to yield new, severe tests (informative content) compared to a less-corroborated rival, then the preference is arbitrary. The target asserts this correlation as a methodological fact but provides no non-inductive justification for why a theory that survived tests A, B, and C is inherently a better candidate for test D than a theory that survived only A and B, other than the inductive intuition that 'what worked before will work again' in terms of generating progress.",
+      "counterexample": null,
+      "premise": "Popper explicitly rejected any notion that past success makes a theory more likely to be true or more valuable for future science unless that value can be derived without inductive assumptions.",
+      "premise_evidence": null,
+      "successor_question": "Can you articulate a specific, non-inductive logical link between a theory's history of surviving severe tests and its potential to generate novel, high-content predictions, distinct from the mere hope that nature remains uniform?"
+    }
+  ]
+}

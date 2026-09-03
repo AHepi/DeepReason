@@ -1,0 +1,184 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'critical preference' based on verisimilitude (truth-likeness), not probability. We prefer the theory that has withstood more severe tests because it is logically closer to the truth, even if we cannot assign it a higher probability of being true.",
+      "mechanism": "Critical Preference via Verisimilitude: The argument distinguishes between logical probability (which remains low or undefined for universal laws) and verisimilitude (content of truth minus content of falsity). Surviving severe tests increases our rational expectation of verisimilitude without invoking inductive inference about future success.",
+      "counterconditions": [
+        "If verisimilitude is formally incoherent within Popper's framework (as later critics argued), this defense collapses.",
+        "If 'rational expectation' implicitly relies on the uniformity of nature (induction), the distinction fails."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The defense does not rely on biological analogy conflating procedural necessity with rational defensibility; it relies on the logical concept of verisimilitude as a distinct metric from probability, explicitly formulated by Popper to address theory choice without induction."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "revised",
+          "note": "Revised to acknowledge Popper's later struggles with formalizing verisimilitude. The claim now posits that while the *formal* definition faced issues, the *methodological* commitment to truth-likeness remains the only non-inductive bridge available in his system, distinguishing it from probabilistic confirmation."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "This candidate presents the strongest case FOR defensibility (Verisimilitude). The requirement to present both sides is met by the existence of other candidates in this distribution (e.g., Candidate 2) which argue the opposing view; this specific candidate focuses on maximizing the strength of the affirmative argument."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The claim maintains normativity by grounding preference in the logical goal of science (truth) rather than mere psychological habit. It argues that preferring higher verisimilitude is a rational imperative derived from the definition of scientific aims, not a sociological fact."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "The argument does not redefine probability; it explicitly rejects probability as the basis for preference. Instead, it substitutes 'verisimilitude' as a separate, non-probabilistic category, adhering strictly to Popper's solution rather than ignoring it."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "Acting on a theory with higher verisimilitude is defended as the most rational bet for truth, even without guaranteed predictive success. The 'cost' is accepting that we act on fallible guesses, but the preference itself is justified by the logical proximity to truth, not by an inductive guarantee of safety."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories smuggles induction back into Popper's system. Any reason to believe a theory that survived past tests will continue to succeed (or is safer to act upon) necessarily assumes the uniformity of nature or the reliability of past performance as a guide to the future, which is the definition of induction.",
+      "mechanism": "The Inductive Leak: The argument asserts that 'corroboration' is merely a historical report. To move from 'Theory T survived tests t1...tn' to 'We should prefer T for action/future testing' requires a bridging principle that the future will resemble the past. Without this, the preference is arbitrary.",
+      "counterconditions": [
+        "If Popper can demonstrate a non-inductive principle of rationality (e.g., critical rationalism) that mandates learning from errors without assuming uniformity.",
+        "If 'preference' is redefined purely as a heuristic for generating new falsifications rather than a belief in future reliability."
+      ],
+      "typicality": 0.88,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "This argument does not rely on biological analogy; it relies on the logical structure of Hume's problem of induction applied to Popper's specific distinction between corroboration and probability."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "This argument does not depend on verisimilitude. It attacks the very possibility of any non-inductive bridge, rendering the failure of verisimilitude supportive rather than damaging to this claim."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "This candidate presents the strongest case AGAINST defensibility (Inductive Smuggling). The paired Candidate 1 provides the affirmative case, satisfying the problem's requirement for a dialectical presentation across the proposal set."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The claim argues that reducing the preference to a 'psychological fact' is exactly what happens when the logical justification fails. If no non-inductive logic exists, the 'normativity' Popper claims is illusory, leaving only sociology/psychology."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "The argument contends that Popper's proposed solution (critical preference) is verbal sleight-of-hand. Merely labeling the preference 'non-inductive' does not make it so if the underlying reasoning still depends on the reliability of past tests."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "In the context of 'acting on' a theory (e.g., engineering), the stakes reveal the inductive assumption. One would not act on a corroborated theory unless one assumed its corroboration indicated future reliability, which is an inductive leap."
+        }
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The surviving answer is that the preference is defensible but at the cost of abandoning 'justification' entirely in favor of 'conjectural risk management.' We prefer corroborated theories not because they are likely true or safe, but because they have been error-tested and found wanting in fewer ways, making them the best available targets for further elimination of error.",
+      "mechanism": "Error Elimination as Rational Action: This synthesis argues that Popper's system survives by redefining 'rational preference' as the strategy of maximizing the speed of error elimination. Acting on a corroborated theory is a gamble that accepts high risk, justified only by the fact that alternative untested theories are known to be even more risky (untested).",
+      "counterconditions": [
+        "If scientists require a minimum threshold of safety/probability before acting, this 'risk management' view is insufficient for real-world application.",
+        "If 'best available' implies a comparative judgment of likelihood, induction creeps back in."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departure: This candidate rejects the framing of 'procedural necessity vs rational defensibility' entirely. It posits that rationality IS the procedure of error elimination; there is no external standard of defensibility outside the evolutionary process of conjecture and refutation."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "revised",
+          "note": "Revised to sidestep the formal incoherence of verisimilitude by focusing on 'degree of corroboration' as a report of test severity passed, not a measure of truth content. The preference is for the theory that offers the most informative potential falsification, not the highest truth-likeness."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "This candidate synthesizes the previous two to provide the final verdict requested ('say which one survives'). It integrates the strongest points of both the verisimilitude defense and the inductive critique to form a third way."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The cost IS the loss of traditional normativity. This candidate accepts the critic's point that Popperian normativity is different from classical justification, arguing that 'critical rationality' is a distinct, weaker, but sufficient normative framework."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Agrees that redefining probability is wrong, but argues the solution isn't verisimilitude alone, but a shift in the goal of science from 'finding truth' to 'eliminating error,' which changes the criteria for preference."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "revised",
+          "note": "Revised to explicitly address 'acting on.' When acting, we choose the theory that has been most rigorously scrutinized, not because it is safe, but because our ignorance of its flaws is minimized compared to untested rivals. The 'cost' is acknowledging we might still blow up the bridge."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "Popper's preference is a pragmatic convention masquerading as logic. The 'defensibility' is purely sociological: the scientific community agrees to treat corroboration as a currency for theory choice to facilitate communication and progress, without any underlying logical or metaphysical guarantee.",
+      "mechanism": "Sociological Conventionalism: This atypical view suggests Popper's 'rationality' is an emergent property of scientific practice, not a foundational logical rule. The preference is defensible only as a successful social technology for organizing inquiry, not as a response to Hume.",
+      "counterconditions": [
+        "If Popper explicitly rejected sociological reductions of logic (which he did).",
+        "If the preference can be shown to have logical force independent of community agreement."
+      ],
+      "typicality": 0.35,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "This view embraces the 'procedural' aspect but denies it needs 'rational defensibility' in the foundational sense. It argues the critic's demand for a non-inductive logical reason is a category error."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Irrelevant to this claim, as this claim abandons the search for logical coherence (verisimilitude) in favor of pragmatic utility."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "Presents a third option (Pragmatism) that challenges the binary of 'Defensible on Popper's terms' vs 'Smuggled Induction' by rejecting Popper's own terms as insufficient."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Explicitly agrees with the critic that the dilemma is false, but concludes that the result is a loss of logical normativity, reducing science to a sophisticated form of custom."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Argues that Popper's 'explicit solution' is just a linguistic convention that fails to solve the philosophical problem, serving only to keep the scientific game running."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "When acting, we follow the convention because it usually works (a pragmatic, arguably inductive, reason), admitting that 'Popper's terms' cannot strictly justify the action without this pragmatic leak."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_011"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' to justify preference without induction, but this fails the problem's constraint to argue on 'Popper's own terms' because Popper explicitly abandoned verisimilitude as a formal solution after the Miller-Tichý refutation demonstrated it was logically incoherent within his falsificationist framework. By resurrecting a concept Popper himself conceded was defective to solve the dilemma, the target smuggles in a metaphysical assumption rather than providing a defensible methodological rule grounded strictly in corroboration reports, thereby failing to show how the preference is rational without relying on the very inductive principle (that higher verisimilitude tracks future success) it claims to avoid.",
+      "counterexample": null,
+      "premise": "Popper acknowledged the Miller-Tichý objection rendered his formal definition of verisimilitude untenable, leaving it as an undefined regulative ideal rather than a functional metric for decision-making.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be calculated or formally defined within Popper's system, does invoking it as a justification for action not merely rename the inductive leap rather than eliminate it?"
+    }
+  ]
+}

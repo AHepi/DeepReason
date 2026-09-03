@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference that the theory is more likely true, but as a critical rationalist rule of action: we act on the theory that has withstood the most severe tests because it offers the best available (though fallible) grasp of reality, while explicitly rejecting the notion that this survival increases its logical probability. The cost of accepting this view is the abandonment of 'probabilistic security'—the comfort of believing our actions are backed by high statistical likelihood—and the acceptance that all scientific action remains a bold conjecture, even when based on extensive corroboration.",
+    "mechanism": "The argument distinguishes between 'logical probability' (which Popper rejects as increased by testing) and 'rational preferability for action' (which he accepts). It posits that corroboration reports past performance under severe tests, serving as a critical filter rather than an inductive booster. The preference is justified pragmatically and critically: since we must act, and since falsified theories are known to be false while corroborated ones are merely not-yet-falsified, the latter are the only rational candidates for action. This avoids induction by refusing to claim the future will resemble the past; it simply states that among current options, the unrefuted one is the only non-irrational choice.",
+    "counterconditions": [
+      "If corroboration is shown to logically entail a higher probability of future success, the distinction collapses into induction.",
+      "If Popper's own writings imply he relied on an implicit inductive principle when choosing theories for practical application.",
+      "If the concept of 'verisimilitude' (truth-likeness), often used to bridge this gap, is proven formally incoherent within Popper's framework, leaving no metric for 'better' theories other than survival."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'justification for truth' with 'justification for action.' The candidate explicitly separates these: the preference is not a logical proof of truth (which would require induction) but a procedural rule for action based on the absence of falsification. This is consistent with Popper's critical rationalism."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "rebutted",
+        "note": "The candidate does not present a false dilemma nor redefine probability. Instead, it adheres to Popper's specific solution: preferring the better-corroborated theory is a rule of method, not a statement about the world's probabilistic structure. The defense rests on the asymmetry between verification and falsification."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be781309f41efbf83ee12b50af6bda6c89",
+        "kind": "revised",
+        "note": "Revised to acknowledge the Miller-Tichý refutation of verisimilitude. The candidate now relies solely on the 'survival of severe tests' as the criterion for preference, avoiding any formal claims about degrees of truth-likeness which Popper later conceded were problematic."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The analogy to evolution is not the core of the defense here. The core is the logical asymmetry: we know the falsified theory is false; we do not know the corroborated one is true, but it is the only one not known to be false. This is a critical, not biological, argument."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "Explicitly removed reliance on 'verisimilitude' as a quantitative guide. The argument now frames 'better' strictly as 'more severely tested and not yet falsified,' sidestepping the formal incoherence issues raised by Miller and Tichý."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "rebutted",
+        "note": "The candidate presents the strongest case for defensibility: that acting on the best-tested theory is the only rational option in the absence of certainty. It contrasts this with the induction-smuggling view by highlighting the cost (loss of probabilistic security) to show the trade-off clearly."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The cost identified is not the loss of normativity, but the loss of 'probabilistic security.' Normativity is preserved through the rational imperative to avoid known errors (falsified theories). The distinction between logic of discovery and justification is maintained by focusing on the justification of the *choice* to act."
+      },
+      {
+        "handle": "a3a496115ceba9824b3999689584a02fdb9c6dc5e7fda0e921e397f592ae3eb7",
+        "kind": "rebutted",
+        "note": "The candidate directly addresses whether induction is smuggled in. It argues 'no' by defining the preference as a critical rule (avoiding the known false) rather than an inductive prediction (expecting the future to match the past). The 'conjectural bet' is not a sidestep but the precise mechanism of non-inductive action."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference that the theory is more likely true, but as a rational procedural rule grounded in the metaphysical aim of science (verisimilitude) and the logical asymmetry of falsification; however, accepting this defense costs the scientist any guarantee that the preferred theory is actually closer to the truth, reducing the preference to a 'rational gamble' rather than an epistemic certainty.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'probability' (inductive support) and 'corroboration' (logical report of past test performance). It posits that preferring the better-corroborated theory is rational because, given the goal of finding true theories (verisimilitude), the theory that has survived the severest tests is the one that has done the most to expose itself to falsification and failed. This is not an inductive leap that it will survive future tests, but a strategic choice based on the only available evidence of its empirical content. The mechanism addresses the 'smuggling induction' charge by reframing the preference as a methodological imperative derived from the definition of scientific progress, not a probabilistic calculation.",
+    "counterconditions": [
+      "If the concept of verisimilitude is formally incoherent (as argued by Miller and Tichý), then the metaphysical aim grounding the preference collapses.",
+      "If the preference cannot be distinguished from a pragmatic necessity without a normative reason, then it fails to be a rational defense and becomes mere habit.",
+      "If surviving severe tests provides no logical basis for expecting future success even as a conjecture, then the preference is arbitrary."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0533c0ff32f3b2860a7cdb63a201e8a4781309f41efbf83ee12b50af6bda6c89",
+        "kind": "rebutted",
+        "note": "The candidate explicitly distinguishes between 'logical justification' (which denies increased probability) and 'rational procedural rule' (which affirms preference based on the aim of verisimilitude). The rebuttal argues that Popper's framework allows for a non-inductive normative reason: the theory with higher corroboration has demonstrated greater empirical content and resilience, making it the rational choice for the specific goal of truth-seeking, even if this doesn't increase its logical probability."
+      },
+      {
+        "handle": "1cf483d65eb181eea5ffda8b6733c7e7cf3b085ca4f8626bfa71621e4d96d389",
+        "kind": "rebutted",
+        "note": "The candidate does not present a false dilemma nor redefine probability. Instead, it adheres to Popper's strict separation: probability remains inductive (and thus rejected), while corroboration is a historical report. The defense relies on the 'rational gamble' aspect of Popper's solution, where the preference is justified by the aim of science (truth) combined with the logical fact that the better-corroborated theory has withstood more attempts to destroy it, not by redefining terms."
+      },
+      {
+        "handle": "3a08a5d21bcc25e22d4471ce9476f4be73990a91bfccedd76a3db90a87926c01",
+        "kind": "revised",
+        "note": "Revised to acknowledge the Miller-Tichý refutation of the formal definition of verisimilitude. The candidate now frames verisimilitude not as a formally calculable metric (which is impossible per the criticism) but as a regulative ideal or metaphysical assumption that guides the procedural rule. The defense shifts from 'verisimilitude as a coherent substitute' to 'verisimilitude as an undefinable but necessary aim' that makes the preference rational despite the lack of a formal measure."
+      },
+      {
+        "handle": "3b6e4a5f6eb3b26ea3760f84224ff13de0d548c860da916a657705e478e673dd",
+        "kind": "rebutted",
+        "note": "The candidate avoids biological analogies entirely. It addresses the requirement for a 'non-inductive reason' by deriving the preference from the logical asymmetry of falsification and the stated aim of science. The reason is non-inductive because it does not predict future success based on past success; rather, it selects the theory that has currently best satisfied the condition of being 'worthy of testing' and has survived, which is a logical status, not an inductive projection."
+      },
+      {
+        "handle": "51bb8e3e479eab53a9ae69f4146756e0f979f90ff9ae3833b379c02cf29f79a4",
+        "kind": "revised",
+        "note": "Revised to clarify that the argument does not rely on verisimilitude as a 'viable guide' in the sense of a measurable quantity (which Popper abandoned as formally definable). Instead, it uses verisimilitude as the underlying metaphysical motivation for the methodological rule. The candidate concedes that we cannot measure closeness to truth but maintains that the *intent* to approach truth justifies the rule of preferring the theory that has survived the severest tests, as this is the only available proxy for empirical content."
+      },
+      {
+        "handle": "65df3e0f7ad6b47ee4db942151b3f3b92ca3e78c7c57842aebb4f68946509c2d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for BOTH answers as required. The first part defends the preference on Popperian terms (procedural rationality); the second part (embedded in the 'costs' and counterconditions) articulates the strong case that it DOES smuggle in induction (or at least leaves a gap that only induction could fill), concluding that the defense survives only by accepting a 'rational gamble' without epistemic guarantee."
+      },
+      {
+        "handle": "6d8a08dd969445016b8be6bf4cdffea2fa4ebc966531753256f4c2140a93c871",
+        "kind": "rebutted",
+        "note": "The candidate clarifies that the cost is not the total loss of normativity, but a transformation of normativity from 'epistemic certainty' to 'methodological consistency.' It argues that Popper's distinction preserves normativity by binding the scientist to the rule that best serves the aim of truth (severe testing), even if the link to actual truth is not guaranteed. The 'false dilemma' is avoided by showing that a normative rule can exist without a guarantee of success."
+      },
+      {
+        "handle": "a3a496115ceba9824b3999689584a02fdb9c6dc5e7fda0e921e397f592ae3eb7",
+        "kind": "rebutted",
+        "note": "The candidate directly answers whether the preference smuggles in induction: it argues it does NOT if viewed as a methodological rule derived from the aim of science, but it ADMITS that it feels like induction because it relies on a hope (metaphysical axiom) that nature is uniform enough for severe tests to matter. The 'conjectural bet' is not a sidestep but the core of Popper's answer: we act AS IF induction works because we have no other way to pursue truth, but we do not CLAIM it works logically."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["evolutionary_selection_process"],
+      "shared_structure": [
+        "Selection operates on past performance without guaranteeing future survival.",
+        "The 'fittest' or 'best-corroborated' entity is chosen procedurally, not because it is proven to be the ultimate truth/survivor.",
+        "The process is rational relative to a goal (survival/truth) despite lacking inductive certainty."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious aim, whereas Popperian science has the explicit regulative ideal of truth.",
+        "Natural selection is blind, while the scientist's preference is a deliberate rational commitment.",
+        "Evolutionary fitness is relative to a specific environment, while corroboration aims at universal laws."
+      ],
+      "transfer_claims": [
+        "Just as organisms are selected based on past survival without a guarantee of future fitness, theories are preferred based on past corroboration without a guarantee of future truth.",
+        "The rationality of the choice lies in the alignment with the system's goal (survival/truth), not in a predictive proof."
+      ],
+      "overturn_conditions": [
+        "If the goal of science is redefined away from truth (e.g., to mere instrumental prediction), the analogy and the defense collapse.",
+        "If past performance is shown to be logically irrelevant to even a conjectural estimate of future performance in a way that breaks the 'severe test' logic."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
