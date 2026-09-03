@@ -186,6 +186,43 @@ cell names a symbol the check greps for.
 
 ## Traps
 
+- **A rule repeated at two dispatch sites is a rule at one of them, and the
+  other one killed a run.** `Scheduler.step` produced its conjecture context
+  plan from TWO independent expressions: the primary dispatch planned it and
+  then, under v6, nulled it (`context_plan = None`) because controller-v3
+  appends durable preparation before its pure planners and `rules/conj.py:827`
+  raises `v6 conjecture context must be planned after durable work preparation`
+  on a pre-made plan. The `ConjectureContextStale` handler sixty lines below
+  re-planned with a second expression that carried no v6 rule, so a v6 run
+  whose context went stale retried with exactly what Conj refuses. `ValueError`
+  is caught by none of the handlers around the dispatch, so it propagated and
+  terminalized the run. By construction that retry is the ONLY path on which a
+  v6 run can reach the raise. Latent in every v6 run that authors scratch
+  material — `ConjectureContextStale` is raised from three sites, all in
+  `scratch/conjecture.py`, so the retry is reachable only when the scratchpad
+  is live enough to build a context that can go stale; the trigger is
+  stochastic, not configuration-specific. Live evidence, two roots: P-A2 epoch
+  3, run `63e48f57415d05323b608a84f138ee5c22c274d7d8ebccc2e219b613d7c3a722`
+  (`experiments/2026-09-02-live-p-a2-corrected/FINDINGS.md` F7 — `failed` /
+  `operational_failure` at cycle 0, `verify_root` 0 violations, last provider
+  call `valid=True`: the model succeeded and the harness refused its own next
+  step); and episode-config arm A, root
+  `run-cd878ff440f61294de34bea1fd45f8ad` (run id
+  `ddd04beda27574b911d439cb95aadc40328d9a7a4276a39dd7aef8a53d4c6f90`, cycle 0,
+  71 323 tokens, `TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL`) — of three
+  arms on the same question only A authored scratch, and only A died. FIXED
+  2026-09-03 (`experiments/2026-09-03-defect-v6-context-retry-main/`; the fix
+  originates at `06b0d9fd9` on branch `claude/model-profile-registry-opkgal`):
+  `_dispatch_conjecture_context_plan` is the ONE owner of a dispatch-time
+  context plan and both sites call it, so there is nowhere left to drift — and
+  its v6 branch SKIPS the planner rather than discarding its result, so a v6
+  retry no longer spends work building a plan that will be refused. The
+  enduring rule is the structural half: a behaviour test alone passes happily
+  while a second call site bypasses the rule, which is why the regression binds
+  the call graph by AST — the method name occurs in this module's own prose and
+  a string search would score a comment as a call site.
+`check: python -m pytest tests/test_scheduler_v6_context_plan_retry.py -q`
+
 - **A gate that reads only `schema_version` cannot be opened by any
   configuration, and eleven phases died on that line.**
   `_defer_untransactional_v6_phase` (`scheduler.py:696`) computed its whole

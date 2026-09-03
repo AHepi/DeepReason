@@ -57,7 +57,7 @@ calls.
 | Authority binding | `scheduler/scheduler.py` | `adapter.bind_v6_authority(harness, run_manifest)` | one adapter, one harness, one manifest — fixed at construction, not per call |
 | Dispatch gate | `scheduler/scheduler.py` | the `run_manifest=` argument of `conj(...)` | whether the rule opens a transaction at all; `None` for any non-active mode |
 | Legacy-phase authority | `scheduler/scheduler.py`, `workflow/legacy_phase_contracts.py` | `_defer_untransactional_v6_phase` → `seat_may_dispatch_legacy_phase` | whether an optional legacy model phase is completion DEBT or a dispatch: the seat's manifest grant decides, not `schema_version` |
-| Preparation ordering | `scheduler/scheduler.py` | `context_plan = None` under v6 | controller-v3 appends preparation before its pure planners, so the scheduler must not pre-plan context |
+| Preparation ordering | `scheduler/scheduler.py` | `_dispatch_conjecture_context_plan` (the ONLY source of a dispatched context plan) | controller-v3 appends preparation before its pure planners, so the scheduler must not pre-plan context — one owner, because when the first dispatch and the `ConjectureContextStale` retry were two expressions they drifted and killed a run |
 | Transaction bracket | `rules/conj.py`, `rules/crit.py`, `scratch/authoring.py`, `referee.py` | `InquiryTransactionService(...)` | the rule that makes the call opens and settles it |
 | Recovery entry | `scheduler/scheduler.py` | `run` → `_recover_workflow_prefixes` (latched by `_workflow_recovery_done`) | no cycle starts over an open work order; leftover authority raises |
 | Recovery engine | `workflow/transaction_service.py` | `recover_incomplete` | unissued → `abandoned`; issued-unanswered → `abandoned`; unadmitted result → returned for validation |
@@ -81,9 +81,13 @@ load-bearing: the guard, then the binding, then any workflow object at all.
 The scheduler's only lever over whether a transaction exists is the argument it
 passes: `conj` opens an `InquiryTransactionService` only when handed a manifest,
 and the scheduler hands one only for schema 4/5/6 in an active control-plane
-mode. Under v6 it additionally nulls the context plan it just built, because the
-preparation must be the first durable record of the turn.
-`check: python -c 'import inspect; from deepreason.scheduler.scheduler import Scheduler as S; g = inspect.getsource(S.step); assert g.index("_plan_conjecture_context(problem, school_id)") < g.index("context_plan = None") < g.index("admitted = conj("); assert "schema_version in {4, 5, 6}" in g and "in {\"active_conjecture\", \"active_inquiry\"}" in g; import deepreason.rules.conj as C; c = inspect.getsource(C.conj); assert c.index("if run_manifest is not None:") < c.index("InquiryTransactionService")'`
+mode. Under v6 it dispatches NO context plan at all, because the preparation
+must be the first durable record of the turn — and it must do so at every
+dispatch site, which is why there is exactly one owner rather than a rule
+repeated per site. When it was repeated, the `ConjectureContextStale` retry
+carried no copy of it and handed `conj` exactly what `conj` refuses
+(`SUB-scheduler.md` Traps, arm A / P-A2 F7).
+`check: python -c 'import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; g = inspect.getsource(S.step); a = [n for n in ast.walk(ast.parse(textwrap.dedent(g))) if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "context_plan" for t in n.targets)]; assert a, "no context_plan assignment in step"; assert all(isinstance(n.value, ast.Call) and getattr(n.value.func, "attr", "") == "_dispatch_conjecture_context_plan" for n in a), "a dispatch site bypasses the owner"; assert g.index("_dispatch_conjecture_context_plan") < g.index("admitted = conj("); o = inspect.getsource(S._dispatch_conjecture_context_plan); assert o.index("schema_version == 6") < o.index("return None") < o.index("return self._plan_conjecture_context("); assert "schema_version in {4, 5, 6}" in g and "in {\"active_conjecture\", \"active_inquiry\"}" in g; import deepreason.rules.conj as C; c = inspect.getsource(C.conj); assert c.index("if run_manifest is not None:") < c.index("InquiryTransactionService")'`
 
 Recovery is the first statement of `run()`, latched so it happens once per
 `Scheduler`, and fail-closed: anything it cannot settle raises rather than
