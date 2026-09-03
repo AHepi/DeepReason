@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's quantitative law is internally inconsistent. It states the expected number of distinct interface components surviving at freeze time is Poisson with mean lambda ~ (log n)/n * 0 (i.e., zero), then immediately says the coarsening freezes with interface length linear in n and the final interface must resolve to a matching. A matching of linear size has Θ(n) components, not a Poisson number with mean zero. If the mean were zero, the probability of any stable mixed obstruction would vanish, forcing consensus probability to tend to 1, contradicting the claimed 1 - q with q in (0.05, 0.5). Thus the target fails to provide a coherent falsifiable quantitative law for obstruction prevalence.",
+      "premise": null,
+      "counterexample": null,
+      "successor_question": null
+    }
+  ]
+}
