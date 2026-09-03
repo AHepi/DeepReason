@@ -393,3 +393,91 @@ dishonest reading.
   show an intact record no operation can resume.
 - **F7 is not fixed here.** This is a run tranche; the one-line remedy and its
   regression test belong to a change tranche.
+
+---
+
+## 2026-09-03 · Segment 8 — epoch 4: the comparison finally exists, and the environment ended it
+
+**What the record shows.** Epoch 4 qualified **17/17 pairs, 340/340 cases**
+(17 not 23 because the six scratch contracts leave the battery with the
+workspace off — the C6 amendment visible in the subject itself), reached
+**cycle 4 of 24**, and was then **killed by a container restart**, not by a
+defect. `driver.log` never received its `REASON rc=` line, which is how a
+kill is distinguished from a terminal.
+
+    events 1947 | artifacts 94 | survivors 50 | problems 92 | warrants 12
+    accepted 82 | refuted 12 | tokens 1 120 515 / 3 000 000
+    173 provider attempts | transport_dropped 0 | usage_unknown 0
+    verify_root: 1 violation (foreign-criticism, in-flight), integrity_valid true
+
+### The six predictions, plus both amendments, scored on typed counts
+
+| | prediction | verdict | counts (P-A1 → P-A2) |
+|---|---|---|---|
+| **P1** | zero `scrutiny`; defended trials convened | **HOLDS** | scrutiny **0 → 0**; trials **6 → 39**; defender calls **8 → 25**; judge calls **4 → 58** |
+| **P2** | zero zero-token calls; no `RemoteDisconnected` | **HOLDS** | **10 dead of 71 → 0 dead of 173**; diagnostics **40 → 0**; `transport_dropped` 0 |
+| **P3** | ≥1 `hv_set` **and** ≥1 hv-floor verdict | **SPLIT: first half holds, second unmet** | `hv_set` **0 → 31**; deferrals **19 → 2**. No hv-floor verdict — every hv value is 1.0 and the floor fires only below `hv_min` |
+| **P4** | ≥1 seed-answering artifact on the frontier | **HOLDS** | frontier seed artifacts **0 of 7 → 3 of 29** |
+| **P5** | typed terminal without `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` | **HOLDS on its words; unresolved on intent** | no such object; but the run was killed, not terminated on its own |
+| **P6** | qualification 23/23, grounding-repair ≥19/20 | **HOLDS (twice)** | epoch 3: 23/23, seat 20/20. epoch 4: 17/17, seat 20/20 |
+| **P7** | reaches cycle ≥ 1 without the F7 message | **HOLDS** | reached **cycle 4**; F7 never fired with the scratchpad off |
+
+**Four of the seven hold outright, one holds in half, one holds on its words,
+and none is refuted by the harness.** The only thing that stopped this run was
+the container.
+
+### What the tranche set out to measure, and did
+
+- **The transport failure is gone, decisively.** P-A1: 10 dead calls of 71,
+  40 `RemoteDisconnected` diagnostics, 66% of wall clock. P-A2: **0 of 173**.
+  That is 2.4× the call volume with zero faults.
+- **`hv` is measurable on v6 for the first time** — 31 values against a
+  three-root history of zero (P-A1 0/19 deferrals, P-R1 0/117).
+- **The frontier inversion is broken.** P-A1's frontier was 7 members, all
+  harness-minted `connection`, **zero** answering the operator's question.
+  P-A2's carries **3 seed-answering artifacts** among 29.
+- **The criticism circuit is running far harder**: 39 trials and 58 judge
+  calls in 4 cycles, against 6 and 4 in P-A1's 5.
+- **78 positions stand formally accepted**, preserved as unresolved rivals
+  rather than merged — genuine competing answers on consensus probability
+  tending to 0, to 1, and to a constant between.
+
+### F8 — a killed run cannot be resumed, and finalize does not rescue it
+
+The container kill left the root in state `running` with no stop record.
+`deepreason continue` refused `CONTINUE_STOP_REQUIRED`. `deepreason finalize`
+DID write a typed terminal (`budget_exhausted`, the clean stop the
+2026-08-29 law asks for) — and the terminal is still refused:
+
+    STOPPED_REFUSES_UNFINISHED_WORKFLOW_AUTHORITY
+    "10 outstanding work items, 0 unconsumed bound calls"
+
+So the work items in flight at the moment of the kill make the run
+permanently un-continuable. This is the third distinct instance in this
+tranche of an intact record that no operation can resume — P-A1 and epoch 3
+via `TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL`, epoch 4 via outstanding
+workflow authority — and it is exactly the "corrupted stop" the operator's
+2026-08-29 law was written against.
+
+**Its practical consequence is a hard limit on this environment.** At the
+measured pace (4 cycles in ~1h30m ≈ 22 min/cycle) a 24-cycle run needs ~9
+hours of reasoning. Container restarts have interrupted this session roughly
+every 2 hours. With resumption blocked, **a 24-cycle run is not completable
+here** — not because of any defect this tranche introduced, but because the
+recovery path the continuability law promises does not work after a kill.
+
+### Residue
+
+- **P3's second half is genuinely unmet, not merely untested.** No hv-floor
+  verdict exists because no hv value fell below the floor. That is a healthy
+  reading, but P3 as written asked for the verdict and did not get it.
+- **The run is 4 cycles, not 24.** Every count above is a 4-cycle count
+  against P-A1's 5-cycle one; the per-cycle rates are the honest comparison
+  and the totals flatter P-A2 in some rows and P-A1 in others.
+- **This run says nothing about the scratchpad** (off by C6) and F7 stays
+  open and unfixed.
+- **116 `security` findings** appear in finalize's `verification.summary.v2`
+  with `security_valid: false`, alongside `integrity_valid: true` and one
+  replay violation. What that channel counts has NOT been characterised here
+  and is not claimed to be a containment breach; it is recorded as an open
+  question for a reader with the verification instrument in hand.

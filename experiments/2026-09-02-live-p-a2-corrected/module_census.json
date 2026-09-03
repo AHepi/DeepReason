@@ -1,71 +1,75 @@
 {
- "deferred_model_phases": {},
- "events": 299,
+ "deferred_model_phases": {
+  "pairwise-discrimination/judge": 1,
+  "premise-demarcation-variation/variator": 1
+ },
+ "events": 1947,
  "llm_calls_by_role": {
-  "argumentative_critic": 4,
-  "conjecturer": 4,
-  "defender": 7,
-  "judge": 18,
-  "variator": 1
+  "argumentative_critic": 31,
+  "conjecturer": 26,
+  "defender": 25,
+  "judge": 58,
+  "variator": 33
  },
  "measured": {
   "D1_frontier_composition": {
    "frontier_txt": "see frontier.txt (the typed surface)",
    "members": [],
    "note": "PREREG \u00a76.1 -- how many frontier members answer the operator's seed question vs a harness-minted problem",
-   "problems_spawned": 1,
+   "problems_spawned": 92,
    "seed_problem_id": "question-933313a5d9ca6dd86f3052aec6e1f05f"
   },
   "D2_criticism_to_new_problem_trigger_rate": {
-   "criticisms": 3,
+   "criticisms": 12,
    "note": "PREREG \u00a76.2 -- P-S1 measured 0 of 1,293",
-   "spawn_events": 1,
+   "spawn_events": 92,
    "successor_signals": {}
   },
   "D3_premise_citation_rate": {
    "all_premise_signals": {
-    "premise-answer:DECLINED": 7,
-    "premise.batch-translation-offered.v1": 1
+    "premise-answer:DECLINED": 23,
+    "premise.batch-translation-offered.v1": 5,
+    "premise.work-invited.v1": 1
    },
    "byte_check_outcomes": {},
    "invitation_dispositions": {
-    "DECLINED": 7
+    "DECLINED": 23
    },
    "note": "PREREG \u00a76.3 -- P-S1 measured 1 CITED against 122 DECLINED"
   }
  },
  "modules": [
   {
-   "evidence": "Conj events=2, conjecturer calls=4",
+   "evidence": "Conj events=13, conjecturer calls=26",
    "module": "conjecture (rules/conj)",
    "verdict": "FIRED"
   },
   {
-   "evidence": "Crit events=3, argumentative_critic calls=4",
+   "evidence": "Crit events=12, argumentative_critic calls=31",
    "module": "criticism (rules/crit)",
    "verdict": "FIRED"
   },
   {
-   "evidence": "defender calls=7",
+   "evidence": "defender calls=25",
    "module": "defender seat",
    "verdict": "FIRED"
   },
   {
-   "evidence": "judge calls=18",
+   "evidence": "judge calls=58",
    "module": "judge ensemble",
    "verdict": "FIRED"
   },
   {
    "evidence": {
     "first trial seqs": [
-     71,
-     151,
-     168
+     70,
+     138,
+     155
     ],
-    "judge calls": 18,
+    "judge calls": 58,
     "scrutiny (observe-only filings)": 0,
     "trial-blocked": {},
-    "trial-declined": 7,
+    "trial-declined": 39,
     "trial-observation": 0
    },
    "module": "defended trial (status-changing criticism)",
@@ -77,14 +81,14 @@
    "verdict": "did-not-fire"
   },
   {
-   "evidence": "12 events carry status_changed; first seqs [6, 7, 8]",
+   "evidence": "45 events carry status_changed; first seqs [6, 7, 8]",
    "module": "adjudication / status authority",
    "verdict": "FIRED"
   },
   {
-   "evidence": "NO hv_set in the record; variator calls=1; deferrals=0",
+   "evidence": "31 events carry hv_set; first seqs [608, 739, 745]; variator calls=33",
    "module": "variator / hv measurement",
-   "verdict": "did-not-fire"
+   "verdict": "FIRED"
   },
   {
    "evidence": "NO reach_set in the record",
@@ -92,9 +96,9 @@
    "verdict": "did-not-fire"
   },
   {
-   "evidence": "4 events carry a scratch payload; Scratch rule events=4",
+   "evidence": "no event carries a scratch payload",
    "module": "scratchpad (advisory workshop)",
-   "verdict": "FIRED"
+   "verdict": "did-not-fire"
   },
   {
    "evidence": "no successor-* signal in the record",
@@ -102,14 +106,16 @@
    "verdict": "did-not-fire"
   },
   {
-   "evidence": "no simulation-* signal; deferrals={}",
+   "evidence": "no simulation-* signal; deferrals={('premise-demarcation-variation', 'variator'): 1, ('pairwise-discrimination', 'judge'): 1}",
    "module": "simulation capability",
    "verdict": "did-not-fire"
   },
   {
-   "evidence": "no research-* signal in the record",
+   "evidence": {
+    "research-awaiting-agent": 1
+   },
    "module": "research capability",
-   "verdict": "did-not-fire"
+   "verdict": "FIRED"
   },
   {
    "evidence": "the channel is OPEN but the dossier is EMPTY by design (PREREG \u00a74 R6): nothing to cite is the typed reason, not a malfunction",
@@ -118,16 +124,17 @@
   },
   {
    "evidence": {
-    "premise-answer:DECLINED": 7,
-    "premise.batch-translation-offered.v1": 1
+    "premise-answer:DECLINED": 23,
+    "premise.batch-translation-offered.v1": 5,
+    "premise.work-invited.v1": 1
    },
    "module": "premise channel",
    "verdict": "FIRED"
   },
   {
    "evidence": {
-    "discharge-reask": 2,
-    "discharge-undischarged": 18
+    "discharge-reask": 9,
+    "discharge-undischarged": 146
    },
    "module": "discharge channel",
    "verdict": "FIRED"
@@ -147,7 +154,10 @@
   },
   {
    "evidence": {
-    "allocation.seed-lineage-share.v1": 1,
+    "allocation.seat-repair.v1": 28,
+    "allocation.seat-truncation.v1": 28,
+    "allocation.seed-lineage-share.v1": 5,
+    "allocation.wander-throttled.v1": 1,
     "controller-authority": 1
    },
    "module": "allocation controller / signals",
@@ -165,12 +175,13 @@
   },
   {
    "evidence": {
-    "capture14.attack-target-entropy.v1": 1,
-    "capture14.criticism-debt.v1": 1,
-    "capture14.exogenous-grounding-ratio.v1": 1,
-    "capture14.reinstatement-rate.v1": 1,
-    "capture14.stream-contraction.v1": 1,
-    "capture14.validity-attack-rate.v1": 1
+    "capture14.attack-target-entropy.v1": 5,
+    "capture14.criticism-debt.v1": 5,
+    "capture14.exogenous-grounding-ratio.v1": 5,
+    "capture14.hysteresis-mode.v1": 1,
+    "capture14.reinstatement-rate.v1": 5,
+    "capture14.stream-contraction.v1": 5,
+    "capture14.validity-attack-rate.v1": 5
    },
    "module": "capture / Pareto frontier",
    "verdict": "FIRED"
@@ -189,83 +200,79 @@
   }
  ],
  "objects": {
-  "artifact": 20,
-  "commitment": 35,
-  "criticism-assignment-v1": 7,
-  "criticism-attempt-v1": 7,
-  "criticism-coverage-debt-v1": 8,
-  "problem": 1,
-  "scratch-advisory-context": 1,
-  "scratch-attention-receipt": 1,
-  "scratch-block": 2,
-  "warrant": 3,
-  "workflow-context-exposure-v2": 34,
-  "workflow-context-pack-plan-v1": 35,
-  "workflow-dispatch-authorization-v1": 34,
+  "artifact": 94,
+  "commitment": 119,
+  "criticism-assignment-v1": 52,
+  "criticism-attempt-v1": 51,
+  "criticism-coverage-debt-v1": 88,
+  "problem": 92,
+  "warrant": 12,
+  "workflow-context-exposure-v2": 174,
+  "workflow-context-pack-plan-v1": 174,
+  "workflow-dispatch-authorization-v1": 174,
   "workflow-model-classification-binding-v1": 1,
-  "workflow-provider-attempt-v1": 34,
+  "workflow-provider-attempt-v1": 173,
   "workflow-route-seat-model-classification-plan-v1": 1,
   "workflow-run-terminal-commitment-v1": 1,
   "workflow-run-terminal-result-draft-v1": 1,
-  "workflow-semantic-admission-v1": 32,
-  "workflow-token-reservation-v2": 34,
-  "workflow-work-lifecycle-transition-v1": 166,
-  "workflow-work-preparation-v1": 34,
-  "workflow-work-terminal-v1": 32
+  "workflow-semantic-admission-v1": 164,
+  "workflow-token-reservation-v2": 174,
+  "workflow-work-lifecycle-transition-v1": 849,
+  "workflow-work-preparation-v1": 174,
+  "workflow-work-terminal-v1": 164
  },
- "root": "/home/user/DeepReason/experiments/2026-09-02-live-p-a2-corrected/run",
+ "root": "run",
  "rules": {
-  "Conj": 2,
-  "Control": 168,
-  "Crit": 3,
-  "Measure": 79,
-  "Refl": 4,
-  "Register": 38,
-  "Scratch": 4,
-  "Spawn": 1
+  "Conj": 13,
+  "Control": 851,
+  "Crit": 12,
+  "Measure": 840,
+  "Refl": 8,
+  "Register": 131,
+  "Spawn": 92
  },
- "run_state": "failed",
- "stop_reason": "operational_failure",
+ "run_state": "running",
+ "stop_reason": "budget_exhausted",
  "top_signals": {
-  "criticism.assignment.v1": 7,
-  "criticism.attempt.v1": 7,
-  "criticism.coverage-debt.v1": 8,
-  "discharge-undischarged": 18,
-  "foreign-criticism-coverage.v1": 7,
-  "premise-answer:DECLINED": 7,
-  "sha256:0dbdee4f695ce430f101737a789123ea9bf6cecb4127743c80b504873fac6abb": 5,
-  "sha256:0f7d54b8b61354ea8bf094808c533f744dff9c0acb7d55a223594ab07056e609": 5,
-  "sha256:26c6d477ad0ac5f230761c22689b779bc1cab017caa247e8ca6f5eefc0531461": 3,
-  "sha256:30bc5d30eb8df1450cfeeb08aa8fd8e102bef7321e621a42683c14ddd9b43094": 5,
-  "sha256:3afafa7236f66ca81441ba162475953f7edf6cbaed68931fc046ae9f7e65ae15": 5,
-  "sha256:3c5a6411c510c49413430813bd136e47d78e2aa808076601df408f4b82395f1c": 5,
-  "sha256:3d09ccb2e2842b839fc18c19c49d4fc3fcb4a0036df3bc37a39742d5ce44aaa0": 5,
-  "sha256:591ec0c263fa980b8a09606e633aeed6b0e2a7b712e084f58334b4792f10c0e7": 5,
-  "sha256:5944009096d5a33e1a17607905b6cc0453a457da93984817f84152f935e61db3": 5,
-  "sha256:5d925ae5f1793a40bf797ce0f43aaa22c29ae612ff5a21a35e55fd49613eb16d": 5,
-  "sha256:63aa9f749407422ccddef4787cdca8f5304107fd34d3b75320fa220935b282ef": 5,
-  "sha256:645a95c67983f4b197845b73cfcdf8e774539a9d2b30f9a44c4b32091fb2741a": 5,
-  "sha256:6c9cb9016fdf385415e469d731ec3c57df020c4c58cb432f2fa8cc3cd4229308": 5,
-  "sha256:6deaf7fec9eb08d9dce7dba5721fcb940e2c00e539ea00bf452d59b42ca6f46f": 5,
-  "sha256:71f6d5bccc762a2ac5fdf755e7265a8760708081b8697bc77ed9d35dda7dc858": 5,
-  "sha256:75dc83a01ceb6fac36648427ea18fd8f0783e6d9a54813d39bf450b646ec1e77": 5,
-  "sha256:86ca911b2b4386ea98b658671f477772cf9903e4fe8139b0cf3b7b2229b419f4": 5,
-  "sha256:897b6d01fa6b5b891dd58c8ef97471dc0cc938797e336646233ec4c78be1b2ed": 5,
-  "sha256:938cc0b3c6ea52f629a84656a1999b9b704479b463da8f86181c4310d0e22e94": 5,
-  "sha256:96998a0185ed28e8f59e23a13a2de9b02096c2e1e7ccc6dacc20589463502b27": 5,
-  "sha256:a3d8088a66c8bacb0eb18482363c99efe03dcb772ada5bf2a5df1fbc7eb964e4": 5,
-  "sha256:a6038c7ac662283d6d1926612a100bd1346f92191dd4662b8a71ad35013e0895": 5,
-  "sha256:c04e03ba585e2a21f72c156af334d2ef337c47ef61bd2a6957cfac40f4acba02": 5,
-  "sha256:c051db0fdfbe01ca5c05299897d5cf7a49c4604cce9892d3c18294ccabd4f1c4": 5,
-  "sha256:c8f0edb2abd187288d232e37eec39a0c1c60a4ff27ab2c268bdb2dd727e3997c": 5,
-  "sha256:ce51f313012ba7c17ca02df0eed53b870debe0f04903886d5c6a12f0c8df60d8": 5,
-  "sha256:d2c1d44ba52d4865280c57aa036f831d112c8af8ee0ba13a07249cb68470f448": 5,
-  "sha256:e3a7d9972beea75d0c4fd75f26dc448e37bb7e7953f4e3084e86eee33babb6ba": 5,
-  "sha256:e70095bb04b578b8bb16001fd912d0549d209b32590bf86f27a0a88bb970539b": 5,
-  "sha256:e85b5ded858cb7815afb66087a33dc9c22a199bf0ea38c173b24d0a93903f99c": 5,
-  "sha256:ece3ecc1009a4f8249fb280676c6211cd6aca6a77e896714fa2a8327249a339e": 5,
-  "sha256:ed15e4bbe4cfdc3f93e50c6c59884ecaf4dae761752d73570eae71d17052a5a3": 5,
-  "sha256:ef0e5752b8c9d045791746c99b7f2ad4d63389cc07777d688c82eb806634c353": 5,
-  "trial-declined": 7
+  "allocation.seat-repair.v1": 28,
+  "allocation.seat-truncation.v1": 28,
+  "allocation.seed-lineage-share.v1": 5,
+  "capture14.attack-target-entropy.v1": 5,
+  "capture14.criticism-debt.v1": 5,
+  "capture14.exogenous-grounding-ratio.v1": 5,
+  "capture14.reinstatement-rate.v1": 5,
+  "capture14.stream-contraction.v1": 5,
+  "capture14.validity-attack-rate.v1": 5,
+  "criticism.assignment.v1": 52,
+  "criticism.attack-target-entropy.v1": 5,
+  "criticism.attempt.v1": 51,
+  "criticism.coverage-debt.v1": 310,
+  "cycle": 5,
+  "discharge-reask": 9,
+  "discharge-undischarged": 146,
+  "foreign-criticism-coverage.v1": 51,
+  "premise-answer:DECLINED": 23,
+  "premise.batch-translation-offered.v1": 5,
+  "problem.independence-resolution-rate.v1": 5,
+  "problem.thrash.v1": 5,
+  "question-933313a5d9ca6dd86f3052aec6e1f05f": 9,
+  "sha256:08a5644a509b3c5c41f02b1b3b328f0155377ba2ae28e4db2888f385a8ac4950": 5,
+  "sha256:182fc26d089c896d56aeb4ea9bbaa4465317213cac5df2ddaae3b67e18bad430": 5,
+  "sha256:41fcda2fd2064411a533164541c2b2d47988a644d45d23ea557007aea6c10916": 5,
+  "sha256:58298a4f70721c014a3933f350b1e57a298227937d7d203fd1cb873bf6f90eb6": 5,
+  "sha256:721cdac4abddc562bb40086c9f156d10e8399df3890b383bcc0bc8a401ee1a68": 5,
+  "sha256:7700db2198523a01ae39363479f38712f8823fee8a30c97e160c726bd7beb4d1": 5,
+  "sha256:7949c5302f8f04664a45ff4348c79937df8dc696b2b7504661e04f2c10a1b7ae": 5,
+  "sha256:84ec58bd23ac970ab1e76078d2813e6793604d32b42561e6464d16546a41a382": 5,
+  "sha256:a08318285614856f7d7376740350d12db39fb011d533da826d6bf8b81b51f6a2": 5,
+  "sha256:a7ea3d4481fddb0f80b484c5ad87c22fb0b6fb6a0b2215709895827384b5088d": 5,
+  "sha256:aed95aaceb295485e6eb7b2940db1a37d0177b0e2024fdb80e88db78501896e2": 5,
+  "sha256:b4ac2aef78767c7a9d1371125e7bedc128e44661918a9acd2553a79e6fef6115": 5,
+  "sha256:bcfb38d7c31c4c72de5c94c6de9947bf76e4245987f396565ede1d30230352c2": 5,
+  "sha256:c9cb38e1dafbd017d16e414b073954820047140faa2fa01c7525397fe501f5e4": 5,
+  "sha256:dacc9518e0d3597a88a296520c53a7ab7cf1dbbe797d04a85210ebb658af01e3": 5,
+  "sha256:e60afa30c0189012b204858f3570802e7946edf972d8fb094e93e6b93d4a8b3e": 5,
+  "sha256:e73ed96ee53cae197c93df002898a58038fe07307162b0277c4129a7bccbbe9e": 5,
+  "trial-declined": 39
  }
 }
