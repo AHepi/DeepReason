@@ -70,8 +70,8 @@ FRONTIER = REPO / "experiments" / "2026-08-25-change-constructive-frontier"
 REMATCH = REPO / "experiments" / "2026-08-26-pc2-rematch"
 SYMMETRIC = REPO / "experiments" / "2026-08-27-pc2b-symmetric-reasoning"
 SPLIT_LEGS = REPO / "experiments" / "2026-08-27-defect-split-leg-recording"
-HV_GRANT = REPO / "experiments" / "2026-09-02-defect-hv-v6-reachability"
 ALL_MODULES = REPO / "experiments" / "2026-09-01-live-all-modules-p-a1"
+HV_GRANT = REPO / "experiments" / "2026-09-02-defect-hv-v6-reachability"
 
 # The deepest cycle any of the four recorded deaths reached.  A soak that
 # stops at or below this depth has not looked where they died.
@@ -321,6 +321,17 @@ CASES: dict[str, SoakCase] = {
         builder="build_manifest",
         builder_dir=REACH_RICH,
         attached_evidence=False,
+    ),
+    "reach-rich": SoakCase(
+        id="reach-rich",
+        description=(
+            "the reach-rich epoch-1 shape: identical to epoch3 except "
+            "attached evidence DISABLED (the one field epoch 3 moved)"
+        ),
+        config_path=REACH_RICH / "run-config.yaml",
+        builder="build_manifest",
+        attached_evidence=False,
+    ),
     "pa1": SoakCase(
         id="pa1",
         description=(
@@ -346,16 +357,6 @@ CASES: dict[str, SoakCase] = {
         # The LAUNCH's own depth and budget, not a sample of them.
         default_cycles=24,
         default_token_budget=3_000_000,
-    ),
-    "reach-rich": SoakCase(
-        id="reach-rich",
-        description=(
-            "the reach-rich epoch-1 shape: identical to epoch3 except "
-            "attached evidence DISABLED (the one field epoch 3 moved)"
-        ),
-        config_path=REACH_RICH / "run-config.yaml",
-        builder="build_manifest",
-        attached_evidence=False,
     ),
 }
 
