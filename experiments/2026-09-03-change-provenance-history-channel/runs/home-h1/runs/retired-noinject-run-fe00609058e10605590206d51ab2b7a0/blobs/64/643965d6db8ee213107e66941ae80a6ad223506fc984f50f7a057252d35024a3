@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the dilemma dissolves by relegating preference to 'psychological or sociological fact' fails to address the specific prompt requirement to determine if the preference is 'defensible on Popper's own terms.' Popper explicitly sought a rational methodology (critical rationalism) to guide theory choice without induction; dismissing the preference as merely an evolutionary/biological impulse concedes that Popper's epistemology offers no *rational* defense for acting on corroboration. This contradicts Popper's own insistence that his philosophy provides a rational basis for preferring one theory over another (e.g., in 'Conjectures and Refutations'), thereby failing to make the 'strongest case' for the affirmative side as requested by the problem context.",
+      "counterexample": null,
+      "premise": "Popper argued that while corroboration does not imply probability, it provides a rational basis for preferring one theory over another for critical discussion and practical application.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is purely biological and not rationally defensible within Popper's epistemology, does this not validate the critic's charge that Popper smuggles in induction when he personally advocates for such theories?"
+    }
+  ]
+}

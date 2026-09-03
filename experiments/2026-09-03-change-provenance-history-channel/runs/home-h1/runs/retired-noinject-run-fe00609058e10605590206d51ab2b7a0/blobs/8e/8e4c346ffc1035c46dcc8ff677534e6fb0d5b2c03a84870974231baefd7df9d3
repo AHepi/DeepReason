@@ -1,0 +1,95 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic, non-inductive rule of action based on verisimilitude (truth-likeness), not probability.",
+      "mechanism": "Popper distinguishes between the logical status of a theory (which remains unproven and improbable) and the rational basis for preferring one theory over another for practical application. The mechanism is 'critical preference': we prefer the theory that has withstood the most severe tests because it has shown greater capacity to survive falsification attempts, suggesting it is closer to the truth (higher verisimilitude), even if we cannot assign it a higher probability. This is a decision rule, not an inductive inference.",
+      "counterconditions": [
+        "If 'verisimilitude' implicitly relies on the assumption that the future will resemble the past (uniformity of nature).",
+        "If the definition of 'severe test' secretly presupposes inductive reliability of background knowledge."
+      ],
+      "typicality": 0.92,
+      "optional_refs": [
+        "SRC_003"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference smuggles induction back in because acting on corroboration necessarily assumes that a theory's past performance is a reliable guide to its future success.",
+      "mechanism": "The mechanism is 'pragmatic circularity'. To choose Theory A over Theory B because A survived tests while B did not is to act on the expectation that A will continue to succeed where B might fail. This expectation is an inductive leap: it assumes that the structural features that allowed A to survive past tests will persist in future applications. Without this inductive bridge, the choice is arbitrary, rendering Popper's advice to 'act on the best tested theory' empty or self-contradictory.",
+      "counterconditions": [
+        "If Popper explicitly denies any expectation of future success and frames the choice purely as a commitment to critical scrutiny.",
+        "If the 'choice' is merely a heuristic for generating new falsifications rather than a guide for technological application."
+      ],
+      "typicality": 0.88,
+      "optional_refs": [
+        "SRC_002"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The dilemma dissolves if corroboration is viewed strictly as a historical report of test outcomes, making the 'preference' a psychological or sociological fact rather than a logical justification.",
+      "mechanism": "The mechanism is 'descriptive vs. normative separation'. Popper's system describes how science *should* work logically (falsification), but the actual *preference* scientists exhibit is a biological or evolutionary adaptation. We prefer well-tested theories because organisms that ignore regularities die out. This preference is defensible as an evolutionary imperative, not a logical derivation within Popper's epistemology. It costs Popper the ability to provide a purely rational foundation for scientific practice, relegating the 'choice' to the realm of psychology or biology.",
+      "counterconditions": [
+        "If Popper claims his philosophy provides a rational basis for action, not just a logic of discovery.",
+        "If the evolutionary argument itself relies on inductive assumptions about survival."
+      ],
+      "typicality": 0.65,
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is defensible only by accepting a 'methodological falsificationism' where the decision to accept a theory is a convention, not a truth claim, costing the system any claim to describing reality.",
+      "mechanism": "The mechanism is 'conventionalist stop-gap'. Scientists agree by convention to treat highly corroborated theories as 'accepted' until further notice. This stops the infinite regress of justification. The cost is radical instrumentalism: science becomes a game of creating useful fictions rather than uncovering truth. The preference is defensible as a rule of the game, but it abandons the realist intuition that better-corroborated theories are actually 'better' descriptions of the world.",
+      "counterconditions": [
+        "If Popper insists on scientific realism despite his methodological conventions.",
+        "If the convention itself requires an inductive justification to be adopted rationally."
+      ],
+      "typicality": 0.72,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The strongest case survives for the 'Verisimilitude' defense, but it costs Popper the rigor of his own probabilistic arguments, forcing him to rely on a metaphysical hope rather than logic.",
+      "mechanism": "The mechanism is 'metaphysical wager'. The verdict favors the first candidate (Verisimilitude) because it preserves the active role of the scientist without formally invoking induction. However, the cost is high: 'Verisimilitude' functions as a faith-based postulate that nature allows for progressive approximation to truth. It survives as a 'rational myth' necessary for the practice of science, acknowledging that while logic forbids induction, life demands a substitute, which Popper supplies via the concept of truth-likeness.",
+      "counterconditions": [
+        "If the concept of verisimilitude can be formally defined without circularity (a known difficulty in Popper's later work).",
+        "If the 'wager' is indistinguishable from the inductive principle it seeks to replace."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_002"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Popper's position is unstable because 'severity' of tests cannot be defined without inductive background knowledge, making the entire edifice of corroboration dependent on the very thing it rejects.",
+      "mechanism": "The mechanism is 'background dependence'. A test is only 'severe' if we have good reason to believe the outcome is unlikely given current knowledge. Assessing this 'unlikelihood' requires inductive confidence in our background theories. Therefore, corroboration is parasitic on induction. The preference for corroborated theories is thus doubly inductive: once in defining the test, and again in projecting the result. This costs Popper the purity of his demarcation criterion.",
+      "counterconditions": [
+        "If 'severity' can be defined purely logically or syntactically without reference to empirical probabilities.",
+        "If background knowledge is treated as conjectural and subject to falsification, breaking the inductive chain."
+      ],
+      "typicality": 0.55,
+      "optional_refs": [
+        "SRC_002"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ]
+}

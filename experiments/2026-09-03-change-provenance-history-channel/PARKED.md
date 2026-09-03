@@ -336,3 +336,60 @@ END STATE: DIAGNOSIS.md naming which fork the record supports, and either a
 FIX.md with the digest price measured, or a docs/ERRATA.md entry correcting
 CLAUDE.md.
 ```
+
+
+---
+
+## P6 — the scratch channel CANNOT deliver history to a multi-cycle run without code
+
+Not a defect, and not a workaround-in-waiting: a structural fact that blocks the
+window instruction's own prototype method. Established by three measurements,
+each with its typed refusal.
+
+**The instruction.** The M1 H1 and M3 C1 arms were to render a history section
+offline and inject it "via the existing scratch channel or a pre-built pack
+file", with no code under `src/`.
+
+**Why the scratch channel cannot do it.**
+
+1. **Before the run: no root, no scratch.** `deepreason scratch add` operates on
+   a RUN ROOT. Against a home with no run yet it fails
+   `MANIFEST_FILE_UNAVAILABLE at /run-manifest.json`. So a home cannot be
+   pre-seeded.
+2. **During the run: the root is locked.** `deepreason --root <root> scratch
+   add` against a live run fails `SCRATCH_ROOT_BUSY: another operator owns this
+   run root`. The reasoning process holds the operator lock for the run's
+   duration.
+3. **Between cycles: continue is refused.** The remaining route is
+   `reason --cycles 1` (lock released, injection then works — verified rc=0 on
+   an idle root), inject, `continue`. That is exactly the design PARKED P1
+   killed: `CONTINUE_TYPED_STOP_REQUIRED`, and P1's update shows the blocking
+   refusal attaches to four-cycle runs too, not just truncated ones.
+
+So the three routes close in sequence, and they close for good reasons rather
+than by oversight: a home is not a record, a live record has one writer, and a
+stop that cannot assure continuation refuses to be resumed. Each refusal is the
+system protecting the record.
+
+**What this does NOT mean.** It says nothing about whether provenance history
+helps a conjecturer. That question is untouched and still open. It says the
+OFFLINE PROTOTYPE ROUTE is unavailable, so the question cannot be answered
+without either a different channel or the Phase 2 implementation the spec
+already describes.
+
+**The one channel that does work pre-run, and its cost.** `deepreason reason
+--attach FILE` admits a text or markdown document as EVIDENCE and binds it into
+the run in one step. It works before the root exists, so no lock is involved.
+Its cost is epistemic and not small: the scratchpad is declared
+`advisory_non_grounding`, evidence is not. A history section admitted as
+evidence can ground a claim, which is precisely what R1's "another type of
+scratchpad" says it must not do. It also changes run identity via the dossier
+digest, so a control arm would need a matched placebo attachment or the two
+arms would differ in two ways rather than one.
+
+**Disposition: STOPPED AND PUT TO THE OPERATOR.** The remaining choices spend
+real tokens on a changed design, and the operator has said the budget is at
+risk and that they prefer complete runs to many partial ones. Choosing
+unilaterally between "re-run both M1 arms through the evidence channel with a
+placebo control" and "report M1/M3 as not run" is a budget decision, not a
+technical one.
