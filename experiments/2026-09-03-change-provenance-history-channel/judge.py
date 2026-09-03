@@ -46,6 +46,8 @@ import os
 import pathlib
 import statistics
 import sys
+import time
+import urllib.error
 import urllib.request
 import uuid
 
@@ -145,7 +147,19 @@ def harvest() -> int:
     return 0
 
 
-def _ask(key: str, text: str) -> dict | None:
+def _ask(key: str, text: str, attempts: int = 4) -> dict | None:
+    """One judge call, with backoff.
+
+    The first run of this script had NO retry and no pacing, and it shows in
+    its own log: usable scores stalled at 38 while rows kept being consumed --
+    rows 38 to 50 failed in an unbroken block, which is a rate limit, not
+    twelve unlucky candidates. Three calls per candidate with no pause is the
+    same mistake, at a smaller scale, that cost two whole arms earlier in this
+    tranche (PARKED P3, P4). A transport failure is now retried with
+    exponential backoff and distinguished in the return value from a genuine
+    parse failure, so a rate-limited call can no longer be silently recorded as
+    a candidate the judges could not score.
+    """
     body = json.dumps(
         {
             "model": MODEL,
@@ -158,36 +172,44 @@ def _ask(key: str, text: str) -> dict | None:
             # it every judge call returns an EMPTY content field: the model
             # spends the whole completion cap on hidden reasoning and emits
             # nothing, which is the exact failure CLAUDE.md documents for
-            # reasoning models ("a hard question can burn the whole completion
-            # cap on hidden reasoning and emit nothing"). Measured here: with
-            # `reasoning: none` content_len=694 and valid JSON; with `think:
-            # false` or with a 3000-token cap and no reasoning field, 0 both
-            # times -- so it is the parameter that matters, not the cap.
-            # It also matches the arms' own profile (`reasoning: none`), so the
-            # judges score under the same condition the candidates were written
-            # under.
+            # reasoning models. Measured: `reasoning: none` -> 694 chars of
+            # valid JSON; `think: false` -> 0; a 3000-token cap with no
+            # reasoning field -> 0. It is the parameter, not the cap. It also
+            # matches the arms' own profile, so judges score under the same
+            # condition the candidates were written under.
             "reasoning": {"effort": "none"},
         }
     ).encode()
-    req = urllib.request.Request(
-        ENDPOINT,
-        data=body,
-        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=180) as r:
-            out = json.loads(r.read())
-        content = out["choices"][0]["message"]["content"]
+    for attempt in range(attempts):
+        try:
+            req = urllib.request.Request(
+                ENDPOINT,
+                data=body,
+                headers={
+                    "Authorization": f"Bearer {key}",
+                    "Content-Type": "application/json",
+                },
+            )
+            with urllib.request.urlopen(req, timeout=180) as r:
+                out = json.loads(r.read())
+        except Exception:  # noqa: BLE001 - transport; retry
+            time.sleep(2 ** attempt)
+            continue
+        content = (out.get("choices") or [{}])[0].get("message", {}).get("content") or ""
         start, end = content.find("{"), content.rfind("}")
         if start < 0 or end < 0:
-            return None
-        parsed = json.loads(content[start : end + 1])
-        scores = [int(parsed[f"c{i}"]) for i in range(1, 6)]
+            time.sleep(2 ** attempt)
+            continue
+        try:
+            parsed = json.loads(content[start : end + 1])
+            scores = [int(parsed[f"c{i}"]) for i in range(1, 6)]
+        except Exception:  # noqa: BLE001
+            time.sleep(2 ** attempt)
+            continue
         if any(s < 0 or s > 3 for s in scores):
             return None
         return {"scores": scores, "total": sum(scores), "why": parsed.get("why")}
-    except Exception:  # noqa: BLE001
-        return None
+    return None
 
 
 def score() -> int:
@@ -207,6 +229,7 @@ def score() -> int:
             got = _ask(key, row["text"])
             if got:
                 judges.append(got)
+            time.sleep(1.0)  # pace the endpoint; see _ask
         if not judges:
             out[row["bid"]] = {"failed": True}
         else:
