@@ -7,6 +7,20 @@ default. Expected: the first attempt is non-streaming and dies at ~300 s, the
 policy retries as a stream, and the call returns content.
 
 One call. Judged on typed outcomes only.
+
+ATTEMPT 2 (2026-09-03). Attempt 1 is preserved at `raw/LIVE_attempt1.json` and
+confirmed the wall and the policy: one non-streaming attempt died
+`RemoteDisconnected`, `fault_kind` `zero_byte_close`, and the policy retried as
+a stream three times, each running ~249 s past the wall and parsing cleanly.
+What it could NOT show was the streamed response's own usage, because glm-5.3
+with the reasoning knob omitted spent the whole 49 152-token cap on thinking and
+returned `finish_reason: 'length'` with null content — the reasoning-burn
+phenomenon another window owns, reproduced here incidentally.
+
+`allow_empty_content=True` is the harness's own call shape for a leg where an
+empty answer is still a leg that ran. It lets that response through instead of
+retrying it, so this attempt can show what the first could not: a streamed reply
+completing past the wall AND reporting its token usage.
 """
 
 import json
@@ -45,7 +59,7 @@ def main() -> int:
            "streaming_mode": endpoint.transport_policy.streaming}
     started = time.monotonic()
     try:
-        content = endpoint.complete(PROMPT)
+        content = endpoint.complete(PROMPT, allow_empty_content=True)
         row["outcome"] = "completed"
         row["content_chars"] = len(content)
     except EndpointError as error:
