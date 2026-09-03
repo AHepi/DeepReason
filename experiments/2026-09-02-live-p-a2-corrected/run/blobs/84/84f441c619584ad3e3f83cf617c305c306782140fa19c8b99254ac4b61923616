@@ -1,0 +1,1 @@
+{"verdict":"pass","decisive_point":"A corrected λ of ~0.00036 (or ~0.00072 over both orientations) still gives a positive probability 1−e^{−λ'} > 0 that a stable seed exists, and with probability ≈ 1/2 the opposite colour wins globally, so the consensus probability is still strictly bounded away from 1."}
