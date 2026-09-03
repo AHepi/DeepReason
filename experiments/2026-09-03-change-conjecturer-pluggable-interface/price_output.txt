@@ -1,0 +1,93 @@
+PRICE_FORM_REGISTRY_V1
+[
+  {
+    "baseline_manifest_sha256": "1950b3d0ee2281137ee3a54def61252b129a955ff30a938feb9044d5ed7ff628",
+    "baseline_subject_digest": "f7cfbb9c3dc37375103e0de968f017f8883e5525229c5ce63b8a72e309b5ef38",
+    "case": "experiments/2026-08-25-change-constructive-frontier/run/run-manifest.json",
+    "engine_config_json_carried": true,
+    "road_A_moves": false,
+    "road_A_off_manifest": "f7cfbb9c3dc37375103e0de968f017f8883e5525229c5ce63b8a72e309b5ef38",
+    "road_B_carried_moves": true,
+    "road_B_config_field_carried": "9bb50eaab7625f24bd6fe61da1a53c5bd41d22323275da02e60850332010f3da",
+    "road_B_config_field_dropped": "f7cfbb9c3dc37375103e0de968f017f8883e5525229c5ce63b8a72e309b5ef38",
+    "road_B_dropped_moves": false,
+    "road_C_form_selected_in_manifest": null,
+    "road_C_from": "conjecturer.turn.v6",
+    "road_C_moves": true,
+    "road_C_qualification_refusal": "QualificationError: QUALIFICATION_POLICY_PRESET_MISMATCH: reusable qualification requires the repository-owned V6 policy preset",
+    "road_C_to": "conjecturer.turn.v7"
+  },
+  {
+    "baseline_manifest_sha256": "1b31f0065687bd24f64bb08acae1245446b4b31c31b90b141ff95cd5759c9a97",
+    "baseline_subject_digest": "0279485745575ffe9f246421837f630e26f1390c36a70e8ce71548bcc2e0d4d1",
+    "case": "experiments/2026-08-25-poietics-program/run/run-manifest.json",
+    "engine_config_json_carried": true,
+    "road_A_moves": false,
+    "road_A_off_manifest": "0279485745575ffe9f246421837f630e26f1390c36a70e8ce71548bcc2e0d4d1",
+    "road_B_carried_moves": true,
+    "road_B_config_field_carried": "f8f641295a539f7359121b974809065fdccb99be9a96d605fd9c4c14fdbe3bc6",
+    "road_B_config_field_dropped": "0279485745575ffe9f246421837f630e26f1390c36a70e8ce71548bcc2e0d4d1",
+    "road_B_dropped_moves": false,
+    "road_C_form_selected_in_manifest": null,
+    "road_C_from": "conjecturer.turn.v6",
+    "road_C_moves": true,
+    "road_C_qualification_refusal": "QualificationError: QUALIFICATION_POLICY_PRESET_MISMATCH: reusable qualification requires the repository-owned V6 policy preset",
+    "road_C_to": "conjecturer.turn.v7"
+  },
+  {
+    "baseline_manifest_sha256": "957f4446dcc6d07a8114846ef5061858dcb3370ca35a990481bb045e9b52bd7e",
+    "baseline_subject_digest": "4c635be9e9ab49cfa4c60c1e76828bbd31d6ed2e3c27cdfc7d9174e5a893f160",
+    "case": "experiments/2026-08-26-pc2-rematch/run/run-manifest.json",
+    "engine_config_json_carried": true,
+    "road_A_moves": false,
+    "road_A_off_manifest": "4c635be9e9ab49cfa4c60c1e76828bbd31d6ed2e3c27cdfc7d9174e5a893f160",
+    "road_B_carried_moves": true,
+    "road_B_config_field_carried": "484a9ed6b3e491e3194924f60fcf5b040f309c3dc222c3de0db6d38a8f25d50e",
+    "road_B_config_field_dropped": "4c635be9e9ab49cfa4c60c1e76828bbd31d6ed2e3c27cdfc7d9174e5a893f160",
+    "road_B_dropped_moves": false,
+    "road_C_form_selected_in_manifest": null,
+    "road_C_from": "conjecturer.turn.v6",
+    "road_C_moves": true,
+    "road_C_qualification_refusal": "QualificationError: QUALIFICATION_POLICY_PRESET_MISMATCH: reusable qualification requires the repository-owned V6 policy preset",
+    "road_C_to": "conjecturer.turn.v7"
+  },
+  {
+    "baseline_manifest_sha256": "7f30058aafdd549fbca817074f426809ea44f7840da4ffdab95c64e82c76ed7c",
+    "baseline_subject_digest": "6e086c401b2dfb141cf3bbe92eb2753b87ba1c6ff4d2a37cb0a63f4606fb36bd",
+    "case": "experiments/2026-08-26-pc2-rematch/run_h3/run-manifest.json",
+    "engine_config_json_carried": true,
+    "road_A_moves": false,
+    "road_A_off_manifest": "6e086c401b2dfb141cf3bbe92eb2753b87ba1c6ff4d2a37cb0a63f4606fb36bd",
+    "road_B_carried_moves": true,
+    "road_B_config_field_carried": "4b57073f633b303b3ad0438c889e908ff1408e306ed102839bd757e9c9095554",
+    "road_B_config_field_dropped": "6e086c401b2dfb141cf3bbe92eb2753b87ba1c6ff4d2a37cb0a63f4606fb36bd",
+    "road_B_dropped_moves": false,
+    "road_C_form_selected_in_manifest": null,
+    "road_C_from": "conjecturer.turn.v6",
+    "road_C_moves": true,
+    "road_C_qualification_refusal": "QualificationError: QUALIFICATION_POLICY_PRESET_MISMATCH: reusable qualification requires the repository-owned V6 policy preset",
+    "road_C_to": "conjecturer.turn.v7"
+  }
+]
+
+VERDICT
+  experiments/2026-08-25-change-constructive-frontier/run/run-manifest.json
+    road A (off-manifest selection): digest unchanged -- price 0
+    road B (Config knob, CARRIED):   MOVES -- full battery reruns
+    road B (Config knob, DROPPED):   digest unchanged -- price 0
+    road C (form id in manifest):    REFUSED at qualification -- QualificationError: QUALIFICATION_POLICY_PRESET_MISMATCH: reusable qualification requires the repository-owned V6 policy preset
+  experiments/2026-08-25-poietics-program/run/run-manifest.json
+    road A (off-manifest selection): digest unchanged -- price 0
+    road B (Config knob, CARRIED):   MOVES -- full battery reruns
+    road B (Config knob, DROPPED):   digest unchanged -- price 0
+    road C (form id in manifest):    REFUSED at qualification -- QualificationError: QUALIFICATION_POLICY_PRESET_MISMATCH: reusable qualification requires the repository-owned V6 policy preset
+  experiments/2026-08-26-pc2-rematch/run/run-manifest.json
+    road A (off-manifest selection): digest unchanged -- price 0
+    road B (Config knob, CARRIED):   MOVES -- full battery reruns
+    road B (Config knob, DROPPED):   digest unchanged -- price 0
+    road C (form id in manifest):    REFUSED at qualification -- QualificationError: QUALIFICATION_POLICY_PRESET_MISMATCH: reusable qualification requires the repository-owned V6 policy preset
+  experiments/2026-08-26-pc2-rematch/run_h3/run-manifest.json
+    road A (off-manifest selection): digest unchanged -- price 0
+    road B (Config knob, CARRIED):   MOVES -- full battery reruns
+    road B (Config knob, DROPPED):   digest unchanged -- price 0
+    road C (form id in manifest):    REFUSED at qualification -- QualificationError: QUALIFICATION_POLICY_PRESET_MISMATCH: reusable qualification requires the repository-owned V6 policy preset
