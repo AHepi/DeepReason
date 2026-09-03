@@ -179,3 +179,41 @@ covers — confirmed with `git check-ignore` before the file is written. It is
 never echoed, never printed into `probe/raw/`, and never committed. The probe
 script reads it via `os.environ` after sourcing that file and redacts the
 `Authorization` header from every recorded response-header dump.
+
+---
+
+## Amendment 1 — 2026-09-03, after the control arms, before the extra call
+
+**What changed:** one arm added, `H1` — glm-5.3, `max_tokens` 2048, `"stream":
+true`, plus `"stream_options": {"include_usage": true}`. Call 17 of the 20-call
+budget; the two spare arms `G1`/`G2` are unused, so no arm is displaced.
+
+**Why, and why it could not wait for FIX.md.** The frozen §3 body deliberately
+sends nothing the harness does not send, and the harness sends no
+`stream_options`. Control arm `F2` (glm-5.3, cap 2048, streaming) came back
+`status=200`, terminal chunk present, 18 chunks, **`completion_tokens: None`** —
+the OpenAI-compatible streaming framing carries no usage block unless it is
+asked for. That is not a curiosity: `SUB-llm.md` Traps records that
+under-counting provider usage "is not cosmetic: it defeats the hard ceiling",
+and `usage_unknown: true` is one of the three fields that make a P-A1 fault
+recognisable in the first place. A streaming implementation that silently
+stopped reporting usage would fix the wall by breaking the budget.
+
+So P2 as originally worded — "streaming survives past 300 s" — is necessary but
+not sufficient for the fix the goal asks for. The sufficient question is P2
+AND P2b:
+
+- **P2b.** Ollama's `/v1/chat/completions` honours `stream_options:
+  {"include_usage": true}` and returns a usage block in the terminal chunk.
+
+**Decision rule, fixed now:** P2b accepted if `H1` returns a
+`completion_tokens` integer. **If P2b is FALSE, streaming is not built even if
+P2 is true** — the same STOP, for a different and better reason, and FIX.md
+records that the wall stays unfixed rather than trading a visible failure for
+an invisible one. The alternative roads (estimate usage from the reassembled
+content; ask the operator to accept `usage_unknown` on streamed calls) are
+FIX.md's to price, not this document's to choose.
+
+**What is NOT changed:** the arms already running, the fixed prompt, the client
+timeout, the concurrency cap, the P1/P2/P3 decision rules, and the budget.
+`H1` runs only after the main batch drains, so the 3-in-flight cap holds.
