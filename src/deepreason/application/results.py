@@ -33,6 +33,7 @@ ABSENCE_REASONS = frozenset(
         "NO_FINDING_FAMILIES",
         "NO_FRONTIER_RECORD",
         "NO_LIFECYCLE_REFUSAL_RECORD",
+        "NO_PROVIDER_ATTEMPTS",
         "NO_REPLAY_VALIDATION_JSON",
         "NO_RUN_IDENTITY_RECORD",
         "NO_RUN_INPUT",
@@ -373,6 +374,60 @@ def embedder_summary(harness) -> dict[str, Any]:
     }
 
 
+def provider_health_summary(harness) -> dict[str, Any]:
+    """What the run's provider transport actually did, per seat.
+
+    Both facts an operator needs already ride the attempt trace -- how many
+    transport attempts a call cost, and what the fault was -- and until this
+    block existed neither reached any surface anyone reads. P-S1 (run
+    9e48a36b1dec91ee) ran 15 of 24 cycles against a dead provider with 54 typed
+    transport failures named in none of its 13 summary documents; P-A1 (run
+    4565139800f5ca02) spent 3.27 h of a 4.94 h run on ten calls that returned
+    nothing. Deriving it here puts it on the one surface an operator opens.
+
+    Read-only: the same derivation the progress rows use, so the two surfaces
+    cannot disagree about a run's provider condition.
+    """
+
+    from deepreason.runtime.provider_health import seat_health
+
+    seats = seat_health(harness)
+    if not seats:
+        return _absent("NO_PROVIDER_ATTEMPTS")
+    return {
+        "seats": seats,
+        "total_calls": sum(row["calls"] for row in seats.values()),
+        "total_attempts": sum(row["attempts"] for row in seats.values()),
+        "total_faults": sum(row["faults"] for row in seats.values()),
+        "total_zero_byte_returns": sum(
+            row["zero_byte_returns"] for row in seats.values()
+        ),
+        "fault_minutes": round(
+            sum(row["fault_ms"] for row in seats.values()) / 60000, 1
+        ),
+        "worst_zero_byte_streak": max(
+            row["max_zero_byte_streak"] for row in seats.values()
+        ),
+    }
+
+
+def provider_health_line(health: dict[str, Any]) -> str:
+    """One line per seat, loud when a seat stopped answering."""
+
+    if _is_absent(health):
+        return _show(health)
+    lines = []
+    for instance, row in health["seats"].items():
+        state = "healthy" if not row["faults"] else f"{row['last_fault_kind']}"
+        lines.append(
+            f"    {instance} ({row['model']}): {row['calls']} calls, "
+            f"{row['attempts']} transport attempts, {row['faults']} faults, "
+            f"{row['zero_byte_returns']} returned nothing "
+            f"(longest run of nothing: {row['max_zero_byte_streak']}) — {state}"
+        )
+    return "\n".join(lines)
+
+
 def embedder_summary_for_root(root: Path | str) -> dict[str, Any]:
     """`embedder_summary` for a root PATH, opened read-only here.
 
@@ -658,6 +713,17 @@ def render_results(summary: dict[str, Any]) -> str:
         f"its novelty, near-duplicate and school-distance readings are on "
         f"that model's scale): {embedder_line(summary['embedder'])}",
         "",
+        "## Provider health",
+        f"  transport faults (a provider call that reached no model — the "
+        f"connection dropped, timed out, or was refused — counted per seat, "
+        f"so a dead provider is visible while the run is still going): "
+        f"{_provider_health_headline(summary['provider_health'])}",
+        *(
+            [provider_health_line(summary["provider_health"])]
+            if not _is_absent(summary["provider_health"])
+            else []
+        ),
+        "",
         "## Verification",
         f"  verify_root verdict (the replay check that re-derives the whole run "
         f"from its log and confirms nothing in the record is corrupt or "
@@ -694,6 +760,16 @@ def render_results(summary: dict[str, Any]) -> str:
             *(f"  {reason}" for reason in summary["absences"]),
         ]
     return "\n".join(lines)
+
+
+def _provider_health_headline(health: Any) -> str:
+    if _is_absent(health):
+        return _show(health)
+    return (
+        f"{health['total_faults']} of {health['total_calls']} calls, "
+        f"{health['total_zero_byte_returns']} returning nothing, "
+        f"{health['fault_minutes']} minutes spent on them"
+    )
 
 
 def _collect_absences(value: Any, into: set[str]) -> None:
@@ -750,6 +826,7 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
         "artifacts": _artifacts(positions, status, result, replayed_state),
         "adjudication": _adjudication(harness),
         "embedder": embedder_summary(harness),
+        "provider_health": provider_health_summary(harness),
         "verification": _verification(
             root, replay, result, verify=verify, report=report
         ),

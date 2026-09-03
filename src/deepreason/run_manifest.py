@@ -2513,6 +2513,15 @@ def _versioned_source_config_data(
     # hash has already moved.
     data.pop("SUCCESSOR_QUESTION_DESTINATION", None)
     data.pop("SUCCESSOR_MINTING_ENABLED", None)
+    # The transport retry policy (granted contact, 2026-09-03; see
+    # DR-INV-frozen-surfaces). Here for the reason every knob above is: it is
+    # consulted at the adapter's dispatch site INSIDE a run and is never written
+    # to the manifest. Its effect IS recorded, and per attempt rather than per
+    # manifest -- transport_attempts, transport_diagnostics and the per-seat
+    # health block say what the transport did on each call. Dropping it also
+    # keeps a transport choice from costing every home a ~14-minute
+    # qualification battery for a subject whose behaviour contract is unchanged.
+    data.pop("TRANSPORT_POLICY", None)
     return data
 
 

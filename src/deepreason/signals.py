@@ -439,7 +439,28 @@ _PREFIX_MEANINGS: dict[str, str] = {
 # `unspecified` records the absence of.
 # ---------------------------------------------------------------------------
 
+# The tag an emitter uses, named once so a producer cannot spell it differently
+# from its declaration below.
+DEAD_SEAT_STREAK_SIGNAL = "provider.dead-seat-streak.v1"
+
+
 _DECLARED: tuple[SignalDeclaration, ...] = (
+    # Provider transport condition, disclosed per seat (2026-09-03).
+    SignalDeclaration(
+        name="provider.dead-seat-streak.v1",
+        unit="count",
+        semantics="consecutive provider calls on ONE seat instance that "
+                  "returned no tokens after a transport fault, at the moment "
+                  "the count reached the run's disclosure threshold (inputs: "
+                  "[signal, seat instance, streak, last fault kind]). It says "
+                  "the far end stopped answering that seat and nothing else: "
+                  "not that the seat's model is wrong, not that its work is "
+                  "bad, and never an input to any status -- a run that sees it "
+                  "discloses and keeps going (operator disposition 2026-09-03). "
+                  "Read within the cycle that emitted it: a seat that answers "
+                  "again resets the streak",
+        staleness="cycle",
+    ),
     # The successor-question channel's mint receipt (operator law, 2026-08-29).
     SignalDeclaration(
         name="successor-problem-minted",

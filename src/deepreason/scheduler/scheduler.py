@@ -20,6 +20,7 @@ from deepreason.capture.pareto import frontier
 from deepreason.llm.adapter import SchemaRepairError, WorkflowAuthorizationError
 from deepreason.llm.budget import TokenBudgetExceeded
 from deepreason.llm.endpoints import EndpointError
+from deepreason.signals import DEAD_SEAT_STREAK_SIGNAL
 from deepreason.llm.firewall import (
     RouteFirewallError,
     SchoolRouteResolutionError,
@@ -3056,7 +3057,46 @@ class Scheduler:
         )
         return metrics, after
 
+    def _provider_health(self):
+        """Per-seat transport condition, and the streak disclosure.
+
+        Disclose, never die: a dead seat is named in the record and in the row a
+        monitor tails, and the run keeps going (operator disposition
+        2026-09-03). Emitted once per seat per streak crossing -- the guard
+        searches the record rather than an in-memory flag, so a resumed run
+        neither re-discloses nor falls silent.
+        """
+
+        from deepreason.runtime.provider_health import dead_seats, seat_health
+
+        health = seat_health(self.harness)
+        threshold = int(
+            getattr(
+                getattr(self.config, "TRANSPORT_POLICY", None), "dead_seat_streak", 0
+            )
+            or 0
+        )
+        for instance in dead_seats(health, threshold):
+            row = health[instance]
+            inputs = [
+                DEAD_SEAT_STREAK_SIGNAL,
+                instance,
+                str(row["max_zero_byte_streak"]),
+                str(row["last_fault_kind"]),
+            ]
+            if not self._measure_recorded(inputs):
+                self.harness.record_measure(inputs=inputs)
+        return health
+
+    def _measure_recorded(self, inputs) -> bool:
+        wanted = [str(value) for value in inputs]
+        for event in self.harness.log.read():
+            if [str(value) for value in (event.inputs or ())] == wanted:
+                return True
+        return False
+
     def _emit_progress(self, metrics, decision) -> None:
+        health = self._provider_health()
         if self.progress_sink is None:
             return
         from deepreason.status_display import display_status_counts
@@ -3094,6 +3134,7 @@ class Scheduler:
             queued_checks=metrics.pending_deterministic_checks,
             determinate=False,
             stop_reason=decision.reason if stopped else None,
+            provider_health=health,
         )
 
     def _record_stop(self, decision, metrics, controller_state_before=None) -> None:

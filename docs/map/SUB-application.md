@@ -219,6 +219,30 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
 
 ## Traps
 
+- **A run could not see its own provider dying.** `ProgressEvent` carried 24
+  keys and not one of them matched `transport|provider|health|fault`, and
+  `deepreason results` had 17 absence codes and no provider block — so P-S1
+  (run `9e48a36b1dec91ee`) ran 15 of 24 cycles against a dead provider, with 54
+  typed `transport_failure` attempt objects in the record, and named them in 0
+  of its 13 summary documents; its dead cycles were reported as a milestone MET.
+  P-A1 (run `4565139800f5ca02`) repeated it and spent 3.27 h of a 4.94 h run on
+  ten calls that returned nothing. The record held the receipts throughout —
+  P-S1's `REPLAY_VALIDATION.json` even publishes `provider_transport_attempts:
+  442` against `attempts: 280` — and nothing named or printed them. Fixed
+  2026-09-03: one derivation (`runtime/provider_health.py`) feeds both surfaces,
+  so they cannot disagree. The trap that remains is the DEFAULT: `provider_health`
+  defaults to `None`, never `{}`, because an empty map on a row that measured
+  nothing asserts every seat is healthy — the `token_spend` incident one field
+  over, where an omitted keyword asserted a spend of zero and 20 of 59 roots
+  carry the false zero. A default is not an absence.
+`check: python -c "
+from deepreason.runtime.progress import ProgressEvent
+from deepreason.application.results import ABSENCE_REASONS
+f = ProgressEvent.model_fields['provider_health']
+assert f.default is None, f.default
+assert 'NO_PROVIDER_ATTEMPTS' in ABSENCE_REASONS
+" && grep -q "## Provider health" src/deepreason/application/results.py && grep -q "provider_health=health," src/deepreason/scheduler/scheduler.py && python -m pytest tests/test_provider_transport_faults.py -q -k "progress or results"`
+
 - **Assuming a verb that reads a root has checked the root.** Until 2026-08-31 neither `continue` nor `amend` consulted any replay verdict, so a one-byte flip of a recorded provider endpoint bought an amendment epoch AND a resumption, while the root's own `REPLAY_VALIDATION.json` still published `valid: true` (`experiments/2026-08-31-defect-jailbreak-gate-closure/proof/RED-forge_amend_ready.txt`). Two things about the fix are easy to get wrong and were both got wrong once. FIRST, it must RE-DERIVE: the stored verdict is part of the record and forges with it. SECOND, it must ask the SECURITY channel and not `verify_root`'s whole verdict — the 2026-08-30 attempt asked the whole verdict, turned eight lifecycle tests red where its spec predicted one, and was reverted (`experiments/2026-08-30-change-checkpoint-hardening/proof/gate_collisions.md`). Three of those eight assert roads that REPAIR an invalid record, so a gate on the whole verdict strands the very roots the recovery paths exist for. The public accessor `verify_root_report(root).security_valid` is NOT the narrowing: it also counts DERIVED findings, and on the largest committed root that is 494 `transaction-authority` findings reading `unknown v6 task kind` — version skew, not tampering.
 `check: python -m pytest tests/test_jailbreak_gate.py::test_a_record_that_is_merely_incomplete_still_passes_the_gate tests/test_jailbreak_gate.py::test_the_gate_agrees_with_the_reports_own_channel_classification tests/test_jailbreak_gate.py::test_a_refused_verb_writes_nothing_into_the_tampered_root -q`
 

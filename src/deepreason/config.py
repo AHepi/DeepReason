@@ -86,6 +86,26 @@ class EndpointSpec(BaseModel):
         return value
 
 
+class TransportPolicy(BaseModel):
+    """How a provider transport fault is answered, and when a seat's condition
+    is disclosed.
+
+    Measured 2026-09-03 (experiments/2026-09-02-defect-provider-transport-faults):
+    a non-streaming call whose generation exceeds ~300 s is closed by the far
+    end having written no body -- 300.510/300.268/300.210/300.289 s across two
+    model families -- and the same call with `stream: true` completes at 369.6 s
+    and at 756.5 s. `streaming: "auto"` therefore streams only the retry after
+    such a close, so a call that never meets the wall sends the bytes it sends
+    today and records what it records today.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    policy_id: str = "stream-the-retry-v1"
+    streaming: Literal["auto", "on", "off"] = "auto"
+    dead_seat_streak: int = Field(default=3, ge=1)
+
+
 class ImportPolicy(BaseModel):
     """One typed policy boundary for project-local browser dependencies.
 
@@ -742,6 +762,11 @@ class Config(BaseModel):
     # Q7: emission saturates around 256-512 tokens, so spending more on it only
     # takes budget away from the leg that needs it.
     SPLIT_BUDGET_EXTRACTION_TOKENS: int = Field(default=512, gt=0)
+    # Provider transport retry and its surfacing. One nested field rather than
+    # four flat ones: each Config field costs a line on frozen surface 4 (the
+    # engine-config echo must drop it or every qualification subject digest
+    # moves), and the four values are one policy.
+    TRANSPORT_POLICY: TransportPolicy = Field(default_factory=TransportPolicy)
     roles: dict[
         str,
         dict[str, Any] | list[dict[str, Any]] | None,
