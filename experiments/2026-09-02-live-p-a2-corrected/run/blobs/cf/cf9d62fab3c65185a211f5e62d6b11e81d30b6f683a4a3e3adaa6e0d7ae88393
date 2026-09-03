@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001's mechanism is impossible under the stated dynamics. When a vertex flips, the number of crossing edges incident to it changes by 3 - 2k, where k is the number of neighbors of the opposite color. A flip occurs only when k >= 2, so the change is -1 (k=2) or -3 (k=3). Thus the cut size is a strictly decreasing Lyapunov function until no vertex has k >= 2. There is no unbiased or mean-reverting walk in cut density, no positive fixed point rho* ~ 0.08, and no Ornstein-Uhlenbeck fluctuations around it. The claimed exp(-Theta(sqrt(n))) absorption from an OU process is not the dynamics of this model.",
+      "premise": null,
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "SRC_002 mischaracterizes the finite obstructions. It lists 'short stable cycles' as locally stable mixed configurations, but under the stated rule a vertex on an alternating cycle has two neighbors of the opposite color and therefore flips, so such a cycle is not locally stable. The actual locally stable mixed configurations are exactly those where the bichromatic edges form a matching and each endpoint has its other two neighbors in its own color; cycles do not satisfy this. This error in the obstruction characterization undermines the claimed basin argument.",
+      "premise": null,
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": null
+    }
+  ]
+}
