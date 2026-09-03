@@ -264,3 +264,205 @@ def resolve_section_plugin(
     return SECTION_PLUGIN_REGISTRY[
         (plugin_id, max(versions, key=_version_key))
     ]
+
+
+# ---------------------------------------------------------------------------
+# The layout — which plugins a seat's brief is assembled from, in what order,
+# under what budget. The FREE layer: parameter values inside declared
+# envelopes, refused typed at construction rather than silently clamped.
+#
+# Selection is by ID, from an argument or the environment, and NEVER from
+# `Config` or the manifest. That is not a preference, it is measured:
+# `run_manifest.py::_source_config_data` dumps every `Config` field into
+# `engine_config_json` and `qualification.py` folds that into every
+# qualification subject digest, so a layout knob on `Config` would move the
+# digest of every qualification bundle in the tree -- four committed manifests
+# tested, identical verdict
+# (`experiments/2026-09-03-change-conjecturer-pluggable-interface/`
+# FEASIBILITY.md §6.2). The transport tranche measured the other half of it:
+# a `Config` field holding a pydantic model cannot round-trip through the
+# manifest's carriage notice at all.
+# ---------------------------------------------------------------------------
+
+SEAT_PACK_LAYOUT_ENV = "DEEPREASON_SEAT_PACK_LAYOUT"
+
+# The allocator orders by `(priority, id)` and reserves 99 for the withheld
+# notice and 100 for the restated question, so an entry may not claim either.
+MAXIMUM_ENTRY_PRIORITY = 98
+MAXIMUM_MIN_TOKENS = 4096
+MAXIMUM_RENDER_BYTES = 1_048_576
+
+
+class SeatPackLayoutEntryV1(BaseModel):
+    """One plugin's place in one seat's brief.
+
+    `priority`, `droppable`, `compressible` and `min_tokens` are ALLOCATION
+    facts and live here rather than in the plugin, which is what lets two
+    seats share one plugin at different priorities: the conjecturer carries
+    `citable-evidence-blocks` at 4 and the critic at 6, and neither bends the
+    plugin to do it.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    plugin_id: str = Field(min_length=1)
+    plugin_version: str | None = None
+    priority: int = Field(ge=1, le=MAXIMUM_ENTRY_PRIORITY)
+    droppable: bool = False
+    compressible: bool = False
+    min_tokens: int = Field(default=0, ge=0, le=MAXIMUM_MIN_TOKENS)
+    max_render_bytes: int | None = Field(
+        default=None, ge=1, le=MAXIMUM_RENDER_BYTES
+    )
+    params: Mapping[str, Any] = Field(default_factory=dict)
+
+    def __init__(self, **data: Any) -> None:
+        # Refused, never clamped, and refused BEFORE pydantic so the caller
+        # reads a code rather than a wrapped ValidationError. A silently
+        # clamped value is a configuration that did not do what it says, which
+        # is the failure the FREE layer's envelope exists to prevent.
+        for field, ceiling in (
+            ("priority", MAXIMUM_ENTRY_PRIORITY),
+            ("min_tokens", MAXIMUM_MIN_TOKENS),
+            ("max_render_bytes", MAXIMUM_RENDER_BYTES),
+        ):
+            value = data.get(field)
+            if isinstance(value, int) and not isinstance(value, bool):
+                if value > ceiling or (field != "min_tokens" and value < 1):
+                    raise SeatSectionError(
+                        "SEAT_PACK_LAYOUT_OUT_OF_ENVELOPE",
+                        f"{field}={value} is outside its declared envelope "
+                        f"(1..{ceiling}); values are refused, never clamped",
+                    )
+                if field == "min_tokens" and value < 0:
+                    raise SeatSectionError(
+                        "SEAT_PACK_LAYOUT_OUT_OF_ENVELOPE",
+                        f"min_tokens={value} is negative",
+                    )
+        super().__init__(**data)
+
+
+class SeatPackLayoutV1(BaseModel):
+    """One seat's brief, as an ordered list of plugin entries.
+
+    The direct sibling of `RenderLayoutPolicyV1`, which governs ARRANGEMENT
+    (where a rendered prompt puts what it carries). This governs COMPOSITION
+    (which parts it carries at all). A run reads both.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    layout_id: str = Field(min_length=1, max_length=96)
+    layout_version: str = Field(default="1.0.0", min_length=1)
+    entries: tuple[SeatPackLayoutEntryV1, ...] = ()
+
+    def __init__(self, **data: Any) -> None:
+        super().__init__(**data)
+        seen: set[str] = set()
+        for entry in self.entries:
+            if entry.plugin_id in seen:
+                raise SeatSectionError(
+                    "SEAT_PACK_LAYOUT_DUPLICATE_PLUGIN",
+                    f"{entry.plugin_id!r} appears twice in "
+                    f"{self.layout_id!r}; a section id renders once per pack",
+                )
+            seen.add(entry.plugin_id)
+
+    @property
+    def plugin_ids(self) -> tuple[str, ...]:
+        return tuple(entry.plugin_id for entry in self.entries)
+
+    def entry_for(self, plugin_id: str) -> SeatPackLayoutEntryV1 | None:
+        for entry in self.entries:
+            if entry.plugin_id == plugin_id:
+                return entry
+        return None
+
+
+_LAYOUT_REGISTRY: dict[str, SeatPackLayoutV1] = {}
+_DEFAULT_LAYOUT_FOR_SEAT: dict[str, str] = {}
+
+
+def register_seat_pack_layout(
+    layout: SeatPackLayoutV1, *, default_for_seat: str | None = None
+) -> SeatPackLayoutV1:
+    """Add a layout. Re-registering one id with different values is refused,
+    for the reason `register_layout_policy` refuses it: an id names ONE
+    composition, or two runs citing it do not mean the same thing."""
+
+    existing = _LAYOUT_REGISTRY.get(layout.layout_id)
+    if existing is not None and existing != layout:
+        raise SeatSectionError(
+            "SEAT_PACK_LAYOUT_CONFLICT",
+            f"layout id {layout.layout_id!r} is already registered with "
+            "different values",
+        )
+    _LAYOUT_REGISTRY[layout.layout_id] = layout
+    if default_for_seat is not None:
+        _DEFAULT_LAYOUT_FOR_SEAT[default_for_seat] = layout.layout_id
+    return layout
+
+
+def seat_pack_layout_ids() -> tuple[str, ...]:
+    return tuple(sorted(_LAYOUT_REGISTRY))
+
+
+def _environment_assignments(raw: str) -> dict[str, str]:
+    """Parse `conjecturer=<id>,critic=<id>`.
+
+    One process renders every seat, so a single-valued variable could not say
+    which seat it meant. A malformed term is a TYPED REFUSAL naming it, never
+    a silent fallback to the default -- a configuration that quietly did
+    nothing is the shape the all-configurations law calls a gate the operator
+    cannot turn on.
+    """
+
+    assignments: dict[str, str] = {}
+    for term in raw.split(","):
+        term = term.strip()
+        if not term:
+            continue
+        seat, separator, layout_id = term.partition("=")
+        if not separator or not seat.strip() or not layout_id.strip():
+            raise SeatSectionError(
+                "SEAT_PACK_LAYOUT_ASSIGNMENT_MALFORMED",
+                f"{term!r} is not `<seat>=<layout_id>` in "
+                f"{SEAT_PACK_LAYOUT_ENV}",
+            )
+        assignments[seat.strip()] = layout_id.strip()
+    return assignments
+
+
+def resolve_seat_pack_layout(
+    seat_id: str, layout_id: str | None = None
+) -> SeatPackLayoutV1:
+    """Explicit argument, then the environment, then the seat's default.
+
+    Resolved PER CALL rather than bound at import, so selecting a composition
+    through the environment takes effect without a restart -- the property
+    `DR-INV-render-layout` already relies on for arrangement.
+    """
+
+    import os
+
+    requested = layout_id
+    if requested is None:
+        raw = os.environ.get(SEAT_PACK_LAYOUT_ENV) or ""
+        if raw.strip():
+            requested = _environment_assignments(raw).get(seat_id)
+    if requested is None:
+        requested = _DEFAULT_LAYOUT_FOR_SEAT.get(seat_id)
+    if requested is None:
+        raise SeatSectionError(
+            "SEAT_PACK_LAYOUT_NO_DEFAULT",
+            f"no default seat pack layout for seat {seat_id!r}; registered: "
+            + ", ".join(seat_pack_layout_ids()),
+        )
+    layout = _LAYOUT_REGISTRY.get(requested)
+    if layout is None:
+        raise SeatSectionError(
+            "SEAT_PACK_LAYOUT_UNKNOWN",
+            f"no seat pack layout {requested!r}; registered: "
+            + ", ".join(seat_pack_layout_ids()),
+        )
+    return layout

@@ -1,6 +1,6 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=12 blockers=none — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
+State: next=23 blockers=DIFF BUDGET EXCEEDED at the step-22 boundary (1545 of 1500 src/ insertions) — a STOP under dr-change-orchestrator §3; options priced below Phase 4, recommendation is road A — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
 verbatim: "Given what read from the other windows, the plugin one. Since all
 three other windows have completed." Build window open; branch
 `claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
@@ -380,15 +380,23 @@ print('ok')"` -> `ok`
 
 ## Phase 3 — the layouts, and the seeded plugins for both seats
 
-- [ ] 12. (S10.1, §17.1) Add `SeatPackLayoutV1` with per-entry
+- [x] 12. (S10.1, §17.1) Add `SeatPackLayoutV1` with per-entry
       `priority`/`droppable`/`compressible`/`min_tokens`/`max_render_bytes`
       /`params`, envelopes refused typed at construction, never clamped
       (SPEC §9, FREE layer).
       done-when: `python -m pytest tests/test_seat_pack_layout.py -q`
       -> `0 failed`, including one out-of-envelope value raising rather
       than clamping
+      ```
+      $ python -m pytest tests/test_seat_pack_layout.py -q
+      ...............                                                  [100%]
+      15 passed in 0.12s
+      ```
+      Priorities 99 and 100 are OUTSIDE the envelope, because the allocator
+      reserves them for the withheld notice and the restated question; an
+      entry claiming either would interleave with them.
 
-- [ ] 13. (S10.2, S9.4, §17.1) Add selection: argument ->
+- [x] 13. (S10.2, S9.4, §17.1) Add selection: argument ->
       `DEEPREASON_SEAT_PACK_LAYOUT` (a per-seat assignment list,
       `conjecturer=<id>,critic=<id>`) -> default. A malformed term is a
       typed refusal naming it, never a silent fallback. Add the guard test
@@ -401,8 +409,17 @@ assert not bad, bad
 from deepreason.llm.seat_sections import SEAT_PACK_LAYOUT_ENV
 assert SEAT_PACK_LAYOUT_ENV == 'DEEPREASON_SEAT_PACK_LAYOUT'
 print('ok')"` -> `ok`
+      ```
+      $ python -c "... (the done-criterion) ..."
+      ok
+      ```
+      The variable is a PER-SEAT assignment list (`conjecturer=<id>,critic=<id>`)
+      because one process renders every seat, so a single-valued variable could
+      not say which seat it meant. A malformed term raises
+      `SEAT_PACK_LAYOUT_ASSIGNMENT_MALFORMED` naming it, never a silent
+      fallback — three malformed shapes are tested.
 
-- [ ] 14. (S1.5) [COMMIT] Seed the twenty CONJECTURER `dr.*` plugins, one
+- [x] 14. (S1.5) [COMMIT] Seed the twenty CONJECTURER `dr.*` plugins, one
       per row of FEASIBILITY §1's table, each a mechanical extraction of
       the existing text at default parameters. NO renderer change yet.
       done-when: `python -c "
@@ -416,7 +433,7 @@ print(len({k[0] for k in SECTION_PLUGIN_REGISTRY}))"` -> `20` or more
       -> `0 failed`, including a case proving `include_refuted=false`
       renders no REFUTED artifact
 
-- [ ] 16. (S1.7) Register `dr.episodes.slot`: present in the registry,
+- [x] 16. (S1.7) Register `dr.episodes.slot`: present in the registry,
       absent from every shipped layout, `render` returns `None`, docstring
       states the operator has not decided what episodes are (`R13`).
       done-when: `python -c "
@@ -425,13 +442,13 @@ resolve_section_plugin('dr.episodes.slot')
 assert 'dr.episodes.slot' not in {e.plugin_id for e in L.entries}
 print('ok')"` -> `ok`
 
-- [ ] 17. (S10.3, §17.1) [COMMIT] Define
+- [x] 17. (S10.3, §17.1) [COMMIT] Define
       `seat-pack.conjecturer.legacy-v0` reproducing FEASIBILITY §1's table
       exactly — same twenty ids, priorities, flags and caps.
       done-when: `python -m pytest tests/test_seat_pack_layout.py -k conjecturer_legacy -q`
       -> `0 failed`
 
-- [ ] 18. (§17.2) Seed the THIRTEEN CRITIC `dr.*` plugins, per §17.2's
+- [x] 18. (§17.2) Seed the THIRTEEN CRITIC `dr.*` plugins, per §17.2's
       table. `dr.frame.crisis`, `dr.frame.slice` and `dr.evidence.citable`
       are SHARED with the conjecturer's set — the critic's differences are
       layout-entry values plus `dr.evidence.citable`'s
@@ -440,7 +457,7 @@ print('ok')"` -> `ok`
       -> `0 failed`, including a case asserting the three shared ids resolve
       to the SAME plugin object for both seats
 
-- [ ] 19. (§17.1, §17.3) [COMMIT] Define `seat-pack.critic.legacy-v0`
+- [x] 19. (§17.1, §17.3) [COMMIT] Define `seat-pack.critic.legacy-v0`
       reproducing `render_crit_pack`'s thirteen sections exactly — same ids,
       priorities, flags and caps.
       done-when: `python -m pytest tests/test_seat_pack_layout.py -k critic_legacy -q`
@@ -448,7 +465,7 @@ print('ok')"` -> `ok`
 
 ## Phase 4 — the renderers walk their layouts (the load-bearing refactor)
 
-- [ ] 20. (S1, S2.3, S10.3) Rewrite `render_conj_pack` to resolve every
+- [x] 20. (S1, S2.3, S10.3) Rewrite `render_conj_pack` to resolve every
       section through `resolve_section_plugin` and walk the layout, with
       `A6` respected: the nine caller-computed contexts arrive in
       `SectionRequestV1.supplied` and their plugins FORMAT them. Update
@@ -458,17 +475,73 @@ print('ok')"` -> `ok`
       -> `0 failed` — **the byte-identical default (S10.4). If this cannot
       pass, the refactor is wrong: STOP, do not update the fixture.**
 
-- [ ] 21. (§17.2, §17.3) Rewrite `render_crit_pack` the same way, its four
+      DONE 2026-09-03. **THE ACCEPTANCE TEST THE TRANCHE TURNS ON, PASSED
+      WITHOUT TOUCHING A FIXTURE.**
+      ```
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py -q
+      ........                                                         [100%]
+      8 passed in 0.29s
+      ```
+      And the old path is GONE rather than bypassed — `render_conj_pack` now
+      makes ZERO `_pack_section` calls and exactly one `_walk_seat_layout`
+      call, and neither the DIRECTIVE nor the NEIGHBOURHOOD literal survives
+      inside it:
+      ```
+      Counter({'_walk_seat_layout': 1, '_menu_sections': 1,
+               '_allocate_sections': 1, '_question_section': 1})
+      DIRECTIVE literal still in render_conj_pack: False
+      NEIGHBOURHOOD literal still in render_conj_pack: False
+      ```
+      Map moved in the same commit: `DR-CON-packs-and-token-economy` (eight
+      new "Where it lives" rows, the "a brief is COMPOSED, not written"
+      section, three new checks), `DR-INV-render-layout` (a new "arrangement
+      is not composition" section), and the new seam document.
+
+- [x] 21. (§17.2, §17.3) Rewrite `render_crit_pack` the same way, its four
       caller-computed contexts arriving in `supplied`.
       done-when: `python -m pytest tests/test_crit_pack_legacy_golden.py -q`
       -> `0 failed` — **the same stop rule applies.**
 
-- [ ] 22. (S1) Run the affected test ring for BOTH seats (iterate on the
+      DONE 2026-09-03. Also passed without touching a fixture.
+      ```
+      $ python -m pytest tests/test_crit_pack_legacy_golden.py -q
+      .......                                                          [100%]
+      7 passed in 0.20s
+      ```
+
+- [x] 22. (S1) Run the affected test ring for BOTH seats (iterate on the
       ring, gate at the boundary — CLAUDE.md).
       done-when: `python -m pytest tests/test_render_layout_rules.py
       tests/test_render_layout_policy.py tests/test_frame_render.py
       tests/test_discharge_channel.py tests/test_reference_menu.py
       tests/test_pack_prefix.py tests/test_crit_batch.py -q` -> `0 failed`
+
+      DONE 2026-09-03, and widened beyond the listed ring to EVERY test file
+      that mentions either renderer or any new module:
+      ```
+      $ python -m pytest $(grep -rl --include='*.py' \
+          "render_conj_pack\|render_crit_pack\|seat_sections\|seat_plugins\|seat_layouts" \
+          tests/) -q
+      391 passed, 1 skipped in 59.33s
+      ```
+      THREE tests failed first and were RE-AIMED, not weakened — each pinned
+      the LOCATION of a decision that legitimately moved, and each re-aim is
+      a stronger check than the one it replaces:
+      - `test_render_layout_policy.py::test_limb2_every_layout_decision_is_read_from_the_policy`
+        pinned three layout fields against `render_conj_pack`; two are now
+        read by the plugins that own those sections, so the consumer table
+        names those three CLASSES individually. Finer, not looser.
+      - `..::test_limb2_carry_forward_goes_through_the_policy_not_the_raw_head`
+        pinned `_head` at 3 in one file; two call sites moved, so the count is
+        pinned PER FILE (1 + 2) as well as in total. A fourth site in either
+        file is now caught, where before it could hide.
+      - `test_discharge_channel.py::test_the_render_lands_in_the_binding_block_not_a_sidebar`
+        parsed priorities out of the source; they are DATA now, so it reads
+        the layout entries the allocator will actually use.
+      One further collision was mine: a plugin class named `_Problem` tripped
+      `SEAM-llm-x-rules`'s regex for ontology constructors (`Problem\(`). The
+      class was renamed to `_ProblemStatement` — someone else's invariant is
+      not loosened to fit my naming.
 
 - [ ] 23. (S5, S6) [COMMIT] Wire `declared_handle_kinds` for BOTH seats: the
       REGISTRY, not the plugin, renders menus through `menu_renders_for` at
@@ -479,6 +552,75 @@ print('ok')"` -> `ok`
       -> `0 failed`, including a case proving a free-text evidence plugin
       still yields a pack in which every bound `citable_block_ids` entry
       appears literally (`A1`)
+
+---
+
+## STOP — the diff budget is exceeded (recorded 2026-09-03, at the step-22
+## commit boundary)
+
+`dr-execute-step` step 6 runs `tools/diff_budget.py` at every `[COMMIT]`
+boundary and treats `EXCEEDED` as a STOP in the standard format, never a
+footnote. It is exceeded.
+
+```
+$ python tools/diff_budget.py e91f4fcc3 --ceiling 1500 --paths 'src/*'
+{"result_type": "DIFF_BUDGET_RESULT_V1", "base": "e91f4fcc3",
+ "areas": {"src/*": 1545}, "total_insertions": 1545,
+ "ceiling": 1500, "verdict": "EXCEEDED"}
+
+$ git diff --numstat e91f4fcc3 -- 'src/*'
+181  549  src/deepreason/llm/packs.py
+111    0  src/deepreason/llm/seat_layouts.py
+785    0  src/deepreason/llm/seat_plugins.py
+468    0  src/deepreason/llm/seat_sections.py
+4 files changed, 1545 insertions(+), 549 deletions(-)
+```
+
+**What the number is measuring.** The instrument counts INSERTIONS, and this
+tranche's largest file is a MOVE: 785 of those 1545 lines are the twenty
+conjecturer and ten critic sections extracted out of `packs.py`, which is why
+`packs.py` also shows 549 deletions. Net growth of `src/` is +996, not +1545.
+A move-heavy refactor pays the instrument twice for the same text. That is a
+property of the instrument, disclosed rather than argued around — the ceiling
+names this instrument, so 1545 against 1500 is EXCEEDED however the lines got
+there.
+
+**And the overrun will grow.** Steps 23-44 still owe the record object kind,
+the template layer, home-directory loading, the role-prompt registry, the
+shell registry, form selection and the five normalisations. Estimated at
+roughly +700 more `src/` insertions, landing near 2250 — about 50% over the
+amended ceiling, not 3%.
+
+**Frozen surfaces are unaffected and stay CLEAR:**
+```
+$ python tools/blast_radius.py --files src/deepreason/llm/packs.py \
+    src/deepreason/llm/seat_sections.py src/deepreason/llm/seat_plugins.py \
+    src/deepreason/llm/seat_layouts.py \
+    --symbols render_conj_pack render_crit_pack _walk_seat_layout \
+    _pack_section _allocate_sections --against e91f4fcc3
+frozen_surface_verdict CLEAR   contacts []   adjacent []   drift []
+```
+
+**Everything committed to this point is proven and green**, so the stop costs
+nothing already done: both goldens byte-identical, 391 passed across every
+test file touching the renderers, every affected map document's checks re-run
+with 0 non-baseline failures.
+
+**Options, priced** (put to the operator; nothing below step 22 proceeds until
+one is chosen):
+
+| road | what it costs | what it gives up |
+|---|---|---|
+| A — raise the ceiling to ~2400 `src/` insertions and finish §17 as planned | nothing already built is discarded; the tranche completes | the ceiling stops being a real bound for this tranche |
+| B — finish the BRIEF half only (steps 23-30, 37-41) and park the FORM half (31-36) as its own tranche | lands near 1900; the swap test (R20) still ships, because a shell can name the forms that already exist | the leniency normalisations N1-N5 and per-model form selection wait |
+| C — stop at step 22 and ship the two briefs as a walk, parking everything else | lands at 1545 | the shell registry, R20's swap test, and the whole form half wait |
+
+**Recommendation: A.** The ceiling was set at ~1500 in the amendment before
+anyone had measured what extracting thirty sections costs, and the measurement
+says the extraction alone is 896 of it. B and C both leave `R20` — the
+operator's actual amendment, "the conjecturer seat could be used to replace the
+critic seat" — either unproven (C) or proven without the form half that makes a
+shell a shell (B). The overrun buys the thing that was asked for.
 
 ## Phase 5 — the record
 

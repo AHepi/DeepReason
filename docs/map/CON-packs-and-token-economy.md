@@ -1,5 +1,5 @@
 <!-- DR-CON-packs-and-token-economy -->
-Verified-at: 5f7e413d6
+Verified-at: 0d399f748
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/packs.py, src/deepreason/packs/allocate.py, src/deepreason/packs/ir.py, src/deepreason/llm/budget.py, src/deepreason/llm/profiles.py, src/deepreason/llm/adapter.py, src/deepreason/rules/crit.py
 Seams: DR-SEAM-packs-and-token-economy-x-rules
@@ -37,6 +37,12 @@ section mandatory.
 | Section construction (pins `max_tokens` to the source, so a section never renders more than it has) | `src/deepreason/llm/packs.py` | `_pack_section` |
 | Conjecture pack (20 section slots + the question) | `src/deepreason/llm/packs.py` | `render_conj_pack` |
 | Single-target criticism pack (13 section slots + the question) | `src/deepreason/llm/packs.py` | `render_crit_pack` |
+| The ONE way either of those builds a section | `src/deepreason/llm/packs.py` | `_walk_seat_layout` |
+| What a section plugin is, and its typed receipt | `src/deepreason/llm/seat_sections.py` | `SeatSectionPluginV1`, `SectionRequestV1`, `SectionRenderV1`, `SectionReceiptV1` |
+| The plugin registry, and layout selection | `src/deepreason/llm/seat_sections.py` | `register_section_plugin`, `resolve_section_plugin`, `resolve_seat_pack_layout`, `SEAT_PACK_LAYOUT_ENV` |
+| Which sections a seat's brief is composed FROM | `src/deepreason/llm/seat_sections.py` | `SeatPackLayoutV1`, `SeatPackLayoutEntryV1` |
+| The shipped compositions | `src/deepreason/llm/seat_layouts.py` | `CONJECTURER_LEGACY_LAYOUT`, `CRITIC_LEGACY_LAYOUT` |
+| The seeded plugins (20 conjecturer + 10 critic + the episode slot) | `src/deepreason/llm/seat_plugins.py` | `CONJECTURER_PLUGINS`, `CRITIC_PLUGINS`, `ensure_seeded` |
 | Batch criticism pack — NOT on the IR | `src/deepreason/llm/packs.py` | `render_batch_crit_pack`, `_clip` |
 | Auxiliary packs — NOT on the IR | `src/deepreason/llm/packs.py` | `render_experiment_pack`, `render_property_pack`, `render_cx_retry_pack` |
 | "Already budgeted, do not re-clip" marker | `src/deepreason/llm/packs.py` | `AllocatedPack` |
@@ -59,6 +65,51 @@ section mandatory.
 | Meter prompt bound (chars/3) | `src/deepreason/llm/budget.py` | `conservative_prompt_bound` |
 | Transactional reservation bound | `src/deepreason/workflow/transaction_service.py` | `prompt_bound` |
 
+**A brief is COMPOSED, not written.** Since 2026-09-03 neither renderer
+builds a section itself: both walk a registered `SeatPackLayoutV1` through
+`_walk_seat_layout`, resolving every entry through `resolve_section_plugin`.
+A section's TEXT belongs to its plugin; its PRIORITY and its
+droppable/compressible/`min_tokens` bounds belong to the layout entry. That
+split is what lets two seats share one plugin: `dr.frame.crisis`,
+`dr.frame.slice` and `dr.evidence.citable` render the same section for the
+conjecturer and the critic, at different priorities and floors, without either
+seat forking the plugin.
+
+The consequence to design around: **adding a section to a brief is a
+registration plus a layout entry, never a source edit.** Which is also why the
+section table above can no longer be read out of one function — read the
+layouts.
+`check: python -c "
+import ast, pathlib
+src = pathlib.Path('src/deepreason/llm/packs.py').read_text()
+tree = ast.parse(src)
+built = {}
+for name in ('render_conj_pack', 'render_crit_pack'):
+    fn = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == name)
+    built[name] = sum(
+        1 for c in ast.walk(fn)
+        if isinstance(c, ast.Call) and getattr(c.func, 'id', '') == '_pack_section'
+    )
+    walks = sum(
+        1 for c in ast.walk(fn)
+        if isinstance(c, ast.Call) and getattr(c.func, 'id', '') == '_walk_seat_layout'
+    )
+    assert walks == 1, (name, walks)
+assert built == {'render_conj_pack': 0, 'render_crit_pack': 0}, built
+"`
+`check: python -c "
+from deepreason.llm.seat_layouts import CONJECTURER_LEGACY_LAYOUT as C, CRITIC_LEGACY_LAYOUT as R
+shared = {e.plugin_id for e in C.entries} & {e.plugin_id for e in R.entries}
+assert shared == {'dr.frame.crisis', 'dr.frame.slice', 'dr.evidence.citable'}, shared
+conj = {e.plugin_id: e for e in C.entries}
+crit = {e.plugin_id: e for e in R.entries}
+assert conj['dr.evidence.citable'].priority == 4
+assert crit['dr.evidence.citable'].priority == 6
+assert crit['dr.evidence.citable'].params == {'requires_invitation': True}
+assert conj['dr.evidence.citable'].params == {}
+"`
+`check: python -m pytest tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py -q`
+
 ## The rules it obeys
 
 **A non-droppable, non-compressible section is retained in full, even when it
@@ -80,7 +131,8 @@ tie-break is load-bearing in `render_crit_pack`: `target` and
 `target-support-chain` both sit at priority 4, and the chain follows the
 content it supports only because `"target" < "target-support-chain"`.
 `check: grep -qF 'sorted(ir.sections, key=lambda section: (section.priority, section.id))' src/deepreason/packs/allocate.py`
-`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());F={n.name:n for n in T.body if isinstance(n,ast.FunctionDef)};S=lambda k:{ast.literal_eval(c.args[0]):c.args[2].value for c in ast.walk(F[k]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section'};Q=lambda k:sum(1 for c in ast.walk(F[k]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_question_section');j=S('render_conj_pack');r=S('render_crit_pack');assert len(j)==20 and len(r)==13;assert Q('render_conj_pack')==1 and Q('render_crit_pack')==1;assert r['target']==r['target-support-chain']==4;assert j['frame-slice']==r['frame-slice']==j['frame-crisis']==r['frame-crisis']==4;assert j['criteria']==j['open-criticisms']==2 and j['mandatory-interface']==3;assert j['live-neighbourhood']==j['output-contract']==12 and j['superseded-conjectures']==j['neighbourhood']==8"`
+`check: python -c "from deepreason.llm.seat_layouts import CONJECTURER_LEGACY_LAYOUT as C, CRITIC_LEGACY_LAYOUT as R;from deepreason.llm.seat_plugins import ensure_seeded;from deepreason.llm.seat_sections import resolve_section_plugin;ensure_seeded();T=lambda l:{resolve_section_plugin(e.plugin_id,e.plugin_version).section_id:e for e in l.entries};j=T(C);r=T(R);import ast,pathlib;P=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());F={n.name:n for n in P.body if isinstance(n,ast.FunctionDef)};Q=lambda k:sum(1 for c in ast.walk(F[k]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_question_section');assert len(j)==20 and len(r)==13,(len(j),len(r));assert Q('render_conj_pack')==1 and Q('render_crit_pack')==1;assert r['target'].priority==r['target-support-chain'].priority==4;assert j['frame-slice'].priority==r['frame-slice'].priority==j['frame-crisis'].priority==r['frame-crisis'].priority==4;assert j['criteria'].priority==j['open-criticisms'].priority==2 and j['mandatory-interface'].priority==3;assert j['live-neighbourhood'].priority==j['output-contract'].priority==12 and j['superseded-conjectures'].priority==j['neighbourhood'].priority==8"`
+
 
 **The tie-break is load-bearing a second time, and this one carries meaning
 rather than presentation.** `open-criticisms` sits at priority 2 WITH
@@ -103,7 +155,7 @@ and a compressible section can lose its middle while still looking present.
 Exact is affordable because every dimension is capped by the policy
 (`handles_n`, `claim_head_chars`, `span_head_chars`), and where a cap bites the
 render says so in band.
-`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());K={};[K.setdefault(c.args[0].value,[]).append({k.arg:getattr(k.value,'value',None) for k in c.keywords}) for c in ast.walk(T) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section' and isinstance(c.args[0],ast.Constant) and c.args[0].value=='open-criticisms'];assert len(K['open-criticisms'])==1 and K['open-criticisms'][0]['droppable'] is False and K['open-criticisms'][0]['compressible'] is False, K"`
+`check: python -c "from deepreason.llm.seat_layouts import CONJECTURER_LEGACY_LAYOUT as C, CRITIC_LEGACY_LAYOUT as R;from deepreason.llm.seat_plugins import ensure_seeded;from deepreason.llm.seat_sections import resolve_section_plugin;ensure_seeded();T=lambda l:{resolve_section_plugin(e.plugin_id,e.plugin_version).section_id:e for e in l.entries};j=T(C);r=T(R);assert j['open-criticisms'].droppable is False and j['open-criticisms'].compressible is False, j['open-criticisms']"`
 `check: python -m pytest tests/test_discharge_channel.py::test_the_render_lands_in_the_binding_block_not_a_sidebar tests/test_discharge_channel.py::test_a_criticism_at_cycle_k_still_renders_at_the_terminal_cycle -q`
 
 **The submission precondition rides the output contract, not the section.**
@@ -180,7 +232,7 @@ signal. Every droppable section in `packs.py` is compressible — read off the
 `_pack_section` call sites structurally, not by line adjacency, because a check
 that greps for the forbidden pairing goes silently vacuous the moment the calls
 are reformatted. The second check exhibits the overshoot.
-`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());K=[{k.arg:getattr(k.value,'value',None) for k in c.keywords} for c in ast.walk(T) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section'];D=[k for k in K if k.get('droppable') is True];assert D and all(k.get('compressible') is True for k in D)"`
+`check: python -c "from deepreason.llm.seat_layouts import CONJECTURER_LEGACY_LAYOUT as C, CRITIC_LEGACY_LAYOUT as R;from deepreason.llm.seat_plugins import ensure_seeded;from deepreason.llm.seat_sections import resolve_section_plugin;ensure_seeded();T=lambda l:{resolve_section_plugin(e.plugin_id,e.plugin_version).section_id:e for e in l.entries};j=T(C);r=T(R);D=[e for e in list(C.entries)+list(R.entries) if e.droppable];assert D and all(e.compressible for e in D), [e.plugin_id for e in D if not e.compressible]"`
 `check: python -c "from deepreason.packs import PackIR, PackSection, allocate_pack; s=PackSection(id='d', text_ref='inline:'+('x'*4000), priority=1, min_tokens=10, max_tokens=1000, droppable=True, compressible=False, cache_group='d'); r=allocate_pack(PackIR(profile='p', template_role='critic', target_tokens=50, sections=(s,))); assert r.allocated_tokens==1000 and r.mandatory_overflow==0"`
 
 **NEGATIVE — the frame slice is never droppable, and its CRISIS half is never
@@ -221,7 +273,7 @@ decay in context regardless of placement, so the load-bearing parts are the
 allocator flags here and the deterministic `held_frame_obligations` subtraction
 in `calculus/render.py` — neither of which depends on the model honouring
 anything it was shown.
-`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());K={};[K.setdefault(c.args[0].value,[]).append({k.arg:getattr(k.value,'value',None) for k in c.keywords}) for c in ast.walk(T) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section' and isinstance(c.args[0],ast.Constant) and c.args[0].value in ('frame-slice','frame-crisis')];assert len(K['frame-slice'])==2 and all(k['droppable'] is False and k['compressible'] is True for k in K['frame-slice']), K;assert len(K['frame-crisis'])==2 and all(k['droppable'] is False and k['compressible'] is False for k in K['frame-crisis']), K"`
+`check: python -c "from deepreason.llm.seat_layouts import CONJECTURER_LEGACY_LAYOUT as C, CRITIC_LEGACY_LAYOUT as R;from deepreason.llm.seat_plugins import ensure_seeded;from deepreason.llm.seat_sections import resolve_section_plugin;ensure_seeded();T=lambda l:{resolve_section_plugin(e.plugin_id,e.plugin_version).section_id:e for e in l.entries};j=T(C);r=T(R);S=[j['frame-slice'],r['frame-slice']];X=[j['frame-crisis'],r['frame-crisis']];assert all(e.droppable is False and e.compressible is True for e in S), S;assert all(e.droppable is False and e.compressible is False for e in X), X;assert j['frame-slice'].plugin_id==r['frame-slice'].plugin_id=='dr.frame.slice';assert j['frame-crisis'].plugin_id==r['frame-crisis'].plugin_id=='dr.frame.crisis'"`
 `check: python -m pytest tests/test_frame_render.py::test_the_frame_slice_survives_a_budget_that_drops_everything_optional tests/test_frame_render.py::test_the_exact_crisis_section_is_bounded_by_construction -q`
 
 **NEGATIVE — the critic's target may never be excerpted.** The `target` section

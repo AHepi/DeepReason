@@ -1,5 +1,5 @@
 <!-- DR-INV-render-layout -->
-Verified-at: 5f7e413d6
+Verified-at: 0d399f748
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/layout.py
 Seams: 
@@ -52,6 +52,33 @@ assert r.merge_head_label_blocks and not l.merge_head_label_blocks
 assert r.live_verbatim_n == 2 and l.live_verbatim_n == 0
 "`
 `check: python -m pytest tests/test_render_layout_policy.py -q`
+
+## Its sibling: arrangement is not composition
+
+`RenderLayoutPolicyV1` governs ARRANGEMENT — where a rendered prompt puts what
+it carries, and how much of one artifact is shown. `SeatPackLayoutV1`
+(`DR-CON-packs-and-token-economy`, `llm/seat_sections.py`) governs
+COMPOSITION — which sections the prompt carries at all, from which plugins, at
+which priorities. A run reads BOTH, and they are selected the same way and for
+the same measured reason: by id, from an argument or the environment, never
+from `Config` and never from the manifest, because either would move every
+qualification subject digest in the tree.
+
+The two are not interchangeable and neither subsumes the other. Turning
+`superseded_summary_n` up is an ARRANGEMENT change that puts refuted lines
+back in front of a seat; removing `dr.history.v1` from a layout is a
+COMPOSITION change that removes the section entirely. A design that tried to
+express one through the other would have to give a policy field per plugin, or
+a plugin per policy value.
+`check: python -c "
+from deepreason.llm.layout import LAYOUT_POLICY_ENV
+from deepreason.llm.seat_sections import SEAT_PACK_LAYOUT_ENV
+from deepreason.config import Config
+assert LAYOUT_POLICY_ENV != SEAT_PACK_LAYOUT_ENV
+fields = {f.upper() for f in Config.model_fields}
+assert LAYOUT_POLICY_ENV not in fields and SEAT_PACK_LAYOUT_ENV not in fields
+assert not [f for f in fields if 'SEAT_PACK' in f or 'SECTION_PLUGIN' in f]
+"`
 
 ## Entry points
 
@@ -155,12 +182,20 @@ else:
   the policy without touching it.** The remaining `_head` call sites are the
   three that are NOT carry-forward of prior conjectures — the retry pack,
   standing attacks, and support content — and their count is pinned rather
-  than their intent asserted, because a fourth would be a bypass.
+  than their intent asserted, because a fourth would be a bypass. Two of the
+  three moved into `llm/seat_plugins.py` on 2026-09-03, when the briefs became
+  walks over registered section plugins and the sections that own those call
+  sites moved with them; the count is now pinned PER FILE as well as in total,
+  so a fourth site in either file is caught.
 `check: python -c "
 import pathlib
-src = pathlib.Path('src/deepreason/llm/packs.py').read_text()
-assert src.count('_head(state,') == 3, src.count('_head(state,')
-assert 'def _distilled(' in src
+packs = pathlib.Path('src/deepreason/llm/packs.py').read_text()
+plugins = pathlib.Path('src/deepreason/llm/seat_plugins.py').read_text()
+here, there = packs.count('_head(state,'), plugins.count('_head(request.state,')
+assert here == 1, here
+assert there == 2, there
+assert here + there == 3
+assert 'def _distilled(' in packs
 "`
 - **`cli/doctor.py`'s qualification probes carry the OLD judge shape on
   purpose.** Changing them would move a qualification subject digest, which

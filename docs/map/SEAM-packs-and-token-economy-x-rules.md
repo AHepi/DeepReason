@@ -1,5 +1,5 @@
 <!-- DR-SEAM-packs-and-token-economy-x-rules -->
-Verified-at: a0d36323f
+Verified-at: 0d399f748
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/packs.py, src/deepreason/rules/conj.py
 Sides: DR-CON-packs-and-token-economy, DR-SUB-rules
@@ -51,9 +51,11 @@ assert not (names & banned), sorted(names & banned)
 
 `render_conj_pack` accepts nine arguments that are not knobs but CONTENT, each
 carrying one conditional block of the conjecturer's brief. `rules/conj.py::conj`
-computes all nine and passes them at its single call site; the renderer wraps
-each in a fixed header, gives it a fixed priority and fixed drop/compress flags,
-and never asks where it came from.
+computes all nine and passes them at its single call site; the renderer puts
+them into `SectionRequestV1.supplied` under those same names, and the section
+plugin that owns each one wraps it in its header. The priority and the
+drop/compress flags come from the layout entry. Neither the plugin nor the
+layout asks where the content came from.
 
 | argument | section id it becomes | why the rule computes it |
 |---|---|---|
@@ -85,12 +87,40 @@ assert SUPPLIED <= passed, sorted(SUPPLIED - passed)
 "`
 
 Nine of the brief's twenty section slots therefore have their content decided
-outside the renderer. That is why a change making the brief pluggable cannot
-reach every slot by rewriting `render_conj_pack` alone: for these nine, a
-section plugin FORMATS a value the caller supplies, and moving the computation
-itself behind the interface would drag the dossier, fence-sequence and
-work-order plumbing across this seam
+outside the renderer, and the critic's four are the same shape
+(`premise_invitation`, `citable_evidence_context`, `frame_slice_context`,
+`frame_crisis_context`). That is why making the briefs pluggable did not reach
+every slot by rewriting the renderers alone: for these, a section plugin
+FORMATS a value the caller supplies, and moving the computation itself behind
+the interface would drag the dossier, fence-sequence and work-order plumbing
+across this seam
 (`experiments/2026-09-03-change-conjecturer-pluggable-interface/SPEC.md`, A6).
+
+**This is the seam the seat-is-a-shell law is aimed at.** The operator's stated
+purpose for that law (CLAUDE.md, 2026-09-03) is "to slowly separate the
+authority layer to make it truely modular", and these thirteen caller-computed
+contexts are the generation side of exactly this boundary as it stands today.
+Each later step moves one more of them across, by registration rather than by
+editing a consumer.
+`check: python -c "
+import ast, pathlib
+fn = next(n for n in ast.walk(ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text()))
+          if isinstance(n, ast.FunctionDef) and n.name == 'render_crit_pack')
+calls = [c for c in ast.walk(fn)
+         if isinstance(c, ast.Call) and getattr(c.func, 'id', '') == '_walk_seat_layout']
+assert len(calls) == 1, len(calls)
+supplied = next(k for c in calls for k in c.keywords if False)
+" 2>/dev/null; python -c "
+import ast, pathlib
+src = pathlib.Path('src/deepreason/llm/packs.py').read_text()
+fn = next(n for n in ast.walk(ast.parse(src))
+          if isinstance(n, ast.FunctionDef) and n.name == 'render_crit_pack')
+body = ast.get_source_segment(src, fn)
+for key in ('premise_invitation', 'citable_evidence_context',
+            'frame_slice_context', 'frame_crisis_context'):
+    assert f'\"{key}\": {key}' in body, key
+assert '_walk_seat_layout(' in body and '_pack_section(' not in body
+"`
 
 ### The four post-allocation re-wraps, and the marker that makes them safe
 
