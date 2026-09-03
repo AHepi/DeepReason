@@ -1,6 +1,6 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=24 blockers=none — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
+State: next=26 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
 verbatim: "Given what read from the other windows, the plugin one. Since all
 three other windows have completed." Build window open; branch
 `claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
@@ -647,12 +647,63 @@ shell a shell (B). The overrun buys the thing that was asked for.
 
 ## Phase 5 — the record
 
-- [ ] 24. (S7.1, S7.2, §17.4) Add the `workflow.context-section-plan.v1`
+- [~] 24. (S7.1, S7.2, §17.4) Add the `workflow.context-section-plan.v1`
       object kind and write one per rendered pack, for both seats. It
       carries the SHELL id that actually ran (§17.5 assertion 2).
       done-when: `python -m pytest tests/test_seat_section_record.py -q`
       -> `0 failed`, including a case asserting `disposition` is `dropped`
       for a section the allocator cut
+
+      **PARTIAL, AND A STOP ON ITS SECOND HALF (2026-09-03).** The receipts
+      are BUILT and reachable; WRITING them to the record needs an operator
+      grant that this tranche's forecast said would not be needed.
+
+      **What the instrument says.** SPEC §13 forecast NO CONTACT, and
+      `dr-execute-step` calls any contact not named in SPEC.md DRIFT and a
+      STOP in the standard format. Measured on the files a new object kind
+      requires:
+      ```
+      $ python tools/blast_radius.py --files src/deepreason/harness.py \
+          src/deepreason/storage/objects.py \
+          src/deepreason/workflow/transaction.py \
+          src/deepreason/workflow/replay.py \
+          --symbols ContextPackPlanV1 --against e91f4fcc3
+      frozen_surface_verdict CONTACT
+        - harness.py event application and well-formedness | DIRECT   | src/deepreason/harness.py
+        - harness.py event application and well-formedness | SYMBOL_INDIRECT | ContextPackPlanV1
+      frozen_adjacent_contacts []
+      ```
+      This is FROZEN SURFACE 2. The contact is one line — a new entry in
+      `harness.py::record_workflow_transition`'s `schema_by_type` map — but
+      the surface does not distinguish small edits from large ones, and
+      CLAUDE.md is explicit: never without explicit operator approval.
+
+      **The cheaper road was checked and is WORSE, on evidence.**
+      FEASIBILITY §4 option (b) reuses the existing
+      `workflow-context-pack-plan-v1` family with a new `plan_kind`, which
+      touches no frozen surface. It does not fit: `VisibleContextItemV1.alias`
+      is patterned `^(SRC|SIM|SCR|EVD)_[0-9]{3,}$` and its `namespace` is a
+      closed enum of four EVIDENCE CHANNELS
+      (`workflow/transaction.py:131-146`). A section row carries a
+      `plugin_id`, a `plugin_version`, a `parameters_digest` and a
+      `disposition` — none of which is an alias or a channel. Taking road (b)
+      would mean widening a pattern and an enum that 3 533 committed rows
+      already use, which changes what an existing record family MEANS. A new
+      kind is additive and invisible to every reader that does not ask for
+      it; overloading an old one is not.
+
+      **DONE in this step, needing no grant:** the walk builds a
+      `SectionReceiptV1` for every entry it visits — `rendered` with byte
+      counts, or `absent` when the plugin declined — and `render_conj_pack`
+      and `render_crit_pack` now accept an optional `receipts` list the walk
+      appends to, so a caller that has the harness can retrieve them without
+      the renderer's return type changing. `tests/test_seat_section_record.py`
+      proves the receipts are correct, including the `dropped` disposition
+      for a section the allocator cut.
+
+      **PARKED until the grant:** the object kind itself and the write.
+      Nothing else in this tranche depends on it — §17.5's swap test asserts
+      the shell id on the receipt, which exists either way.
 
 - [ ] 25. (S7.3, decision 3) [COMMIT] Prove surface 3 is untouched: no new
       `verify_root` check, and `invariants.py`/`verification/` do not

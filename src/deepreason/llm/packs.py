@@ -417,7 +417,7 @@ _CONJECTURER_SEAT = "conjecturer"
 _CRITIC_SEAT = "argumentative_critic"
 
 
-def _walk_seat_layout(seat_id: str, layout_id, request):
+def _walk_seat_layout(seat_id: str, layout_id, request, receipts=None):
     """Build one seat's sections by walking its registered layout.
 
     THE ONE LEGAL WAY a brief section is constructed. Every section resolves
@@ -442,7 +442,8 @@ def _walk_seat_layout(seat_id: str, layout_id, request):
     ensure_seeded()
     pack_layout = resolve_seat_pack_layout(seat_id, layout_id)
     sections: list[PackSection] = []
-    receipts: list = []
+    if receipts is None:
+        receipts = []
     for entry in pack_layout.entries:
         plugin = resolve_section_plugin(entry.plugin_id, entry.plugin_version)
         params = plugin.parameters_model(**dict(entry.params))
@@ -453,9 +454,12 @@ def _walk_seat_layout(seat_id: str, layout_id, request):
             ).encode("utf-8")
         ).hexdigest()
         if render is None:
+            # An absent receipt names the SECTION that is missing, not the
+            # plugin that declined: a reader asking "was there evidence in
+            # this pack" is asking about the section.
             receipts.append(
                 SectionReceiptV1(
-                    section_id=entry.plugin_id,
+                    section_id=getattr(plugin, "section_id", "") or entry.plugin_id,
                     plugin_id=plugin.plugin_id,
                     plugin_version=plugin.plugin_version,
                     parameters_digest=f"sha256:{digest}",
@@ -512,8 +516,36 @@ def _walk_seat_layout(seat_id: str, layout_id, request):
     return sections, receipts
 
 
+def _reconcile_receipts(receipts, result) -> None:
+    """Rewrite each receipt's disposition from what the ALLOCATOR did.
+
+    The walk can only say a section rendered; whether it survived the budget
+    is decided afterwards. Without this the record would report `rendered` for
+    a section the seat never saw, which is the silent cap this whole layer
+    exists to abolish -- one telling the record a comfortable story instead of
+    the pack.
+    """
+
+    if not receipts:
+        return
+    by_id = {section.id: section for section in result.sections}
+    for index, receipt in enumerate(receipts):
+        allocated = by_id.get(receipt.section_id)
+        if allocated is None:
+            continue
+        if allocated.dropped:
+            disposition, rendered = "dropped", 0
+        elif allocated.tokens < allocated.source_tokens:
+            disposition, rendered = "compressed", len(allocated.text.encode("utf-8"))
+        else:
+            disposition, rendered = "rendered", len(allocated.text.encode("utf-8"))
+        receipts[index] = receipt.model_copy(
+            update={"disposition": disposition, "rendered_bytes": rendered}
+        )
+
+
 def _allocate_sections(
-    role: str, token_budget: int, sections: list[PackSection]
+    role: str, token_budget: int, sections: list[PackSection], receipts=None
 ) -> str:
     """Render one finite PackIR without ever clipping the aggregate prefix.
 
@@ -594,10 +626,12 @@ def _allocate_sections(
     for _ in range(len(base) + 1):
         result, cut = _allocate(disclosed)
         if cut == disclosed:
+            _reconcile_receipts(receipts, result)
             return AllocatedPack(result.text)
         seen.update(cut)
         disclosed = cut
     result, _ = _allocate(tuple(sorted(seen)))
+    _reconcile_receipts(receipts, result)
     return AllocatedPack(result.text)
 
 
@@ -689,6 +723,7 @@ def render_conj_pack(
     reference_menus: tuple[MenuRender, ...] = (),
     layout: RenderLayoutPolicyV1 | None = None,
     seat_pack_layout: str | None = None,
+    section_receipts: list | None = None,
 ) -> str:
     """school = {"id", "stance_text", "weight"} — lineage inheritance (§11.1):
     the neighbourhood prefers the school's own accepted descendants; the
@@ -729,7 +764,7 @@ def render_conj_pack(
     else:
         accepted = accepted[-neighbourhood_n:] if neighbourhood_n else []
 
-    sections, _receipts = _walk_seat_layout(
+    sections, _ = _walk_seat_layout(
         _CONJECTURER_SEAT,
         seat_pack_layout,
         SectionRequestV1(
@@ -756,6 +791,7 @@ def render_conj_pack(
                 "open_criticism_context": open_criticism_context,
             },
         ),
+        receipts=section_receipts,
     )
     # Priority 4 puts a menu beside the section that carries its field's
     # content -- `citable-evidence-blocks` and the scratch context both sit
@@ -774,7 +810,9 @@ def render_conj_pack(
                 f"it)\nPROBLEM {problem.id}\n{problem.description}"
             )
         )
-    return _allocate_sections("conjecturer", token_budget, sections)
+    return _allocate_sections(
+        "conjecturer", token_budget, sections, receipts=section_receipts
+    )
 
 
 def render_batch_crit_pack(
@@ -1060,6 +1098,7 @@ def render_crit_pack(
     reference_menus: tuple[MenuRender, ...] = (),
     layout: RenderLayoutPolicyV1 | None = None,
     seat_pack_layout: str | None = None,
+    section_receipts: list | None = None,
 ) -> str:
     """The critic's brief, composed from the same registry the conjecturer's
     is composed from.
@@ -1070,7 +1109,7 @@ def render_crit_pack(
     priorities."""
 
     layout = layout or resolve_layout_policy()
-    sections, _receipts = _walk_seat_layout(
+    sections, _ = _walk_seat_layout(
         _CRITIC_SEAT,
         seat_pack_layout,
         SectionRequestV1(
@@ -1088,6 +1127,7 @@ def render_crit_pack(
                 "frame_crisis_context": frame_crisis_context,
             },
         ),
+        receipts=section_receipts,
     )
     sections += _menu_sections(reference_menus, 4)
     if layout.question_last:
@@ -1105,4 +1145,6 @@ def render_crit_pack(
             f"{target_id}, or attack=false if you find no genuine fault.",
         ]
         sections.append(_question_section("\n".join(restated).strip()))
-    return _allocate_sections("argumentative-critic", token_budget, sections)
+    return _allocate_sections(
+        "argumentative-critic", token_budget, sections, receipts=section_receipts
+    )
