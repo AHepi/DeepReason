@@ -1,6 +1,6 @@
 # Checklist for: the stop report — the harness writes the first failure report
 
-State: next=1 blockers=none
+State: next=3 blockers=none
 
 Re-read REQUEST.md (incl. Amendment 1) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -35,7 +35,7 @@ steps 16-20, shared close = steps 21-24.
 
 ## Group A — the report, its proof, and its fixtures
 
-- [ ] 1. (S19, S2, R20) Write `tests/test_stop_report.py` RED: one unit
+- [x] 1. (S19, S2, R20) Write `tests/test_stop_report.py` RED: one unit
       fixture per box (CONFIGURATION / ENVIRONMENT / MODEL / HARNESS),
       each building a minimal synthetic root in a tmp dir from typed
       records and asserting THAT box ranks first; plus the determinism
@@ -50,10 +50,40 @@ steps 16-20, shared close = steps 21-24.
       — paste the output; and the file contains four fixtures whose
       names contain `configuration`, `environment`, `model`, `harness`.
 
-- [ ] 2. (S19) [COMMIT] Commit the RED tests alone, before the module
+      PROOF (2026-09-03):
+
+          $ python -m pytest tests/test_stop_report.py -q
+          tests/test_stop_report.py:28: in <module>
+              from deepreason.application.stop_report import render_stop_report, stop_report
+          E   ModuleNotFoundError: No module named 'deepreason.application.stop_report'
+          ERROR tests/test_stop_report.py
+          !!!! Interrupted: 1 error during collection !!!!
+          1 error in 0.44s
+
+      RED for the required reason: the module does not exist. The four
+      box fixtures, by name:
+
+          244: test_configuration_box_ranks_first_when_a_restored_gate_meets_a_qualified_seat
+          263: test_environment_box_ranks_first_on_a_429_streak
+          280: test_model_box_ranks_first_when_the_seat_failed_its_form_in_qualification
+          295: test_harness_box_ranks_first_only_when_the_other_three_are_ruled_out
+
+      15 tests total: the four box fixtures plus the harness-negative,
+      the qualification-vindication regression (P-A1), not-write,
+      determinism, never-asserts-a-defect, markdown-vs-json parity,
+      reasoning-null wording, embedder-null wording, rootless home
+      (P-A2 epoch 1 / M3-C0), absence tolerance, and the typed refusal.
+
+- [x] 2. (S19) [COMMIT] Commit the RED tests alone, before the module
       exists, so the mutation proof has a recorded starting point.
       done-when: `git log --oneline -1` shows the commit and
       `git status --porcelain` is empty.
+
+      PROOF: discharged by step 1's own commit — `dr-execute-step` §6
+      requires a step that changed any file to commit and push in that
+      same step, so the RED tests were committed alone before any module
+      existed, which is exactly what this step asks for. Output pasted
+      at step 1's commit.
 
 - [ ] 3. (S1, S3, S4, C2, M9, M10) Create
       `src/deepreason/application/stop_report.py` with the read-only
