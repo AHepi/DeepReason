@@ -1,0 +1,1 @@
+{"decisive_point":"The inference from exponentially many stable mixed configurations to an exponential upper bound on consensus probability is unjustified. The target gives no basin-size or reachability estimate from the uniform random initial coloring, so the claimed 'at most exp(-cn)' does not follow.","verdict":"fail"}
