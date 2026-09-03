@@ -1,0 +1,121 @@
+command:
+python -m pytest tests/ -q -n 4
+
+final result after relative-import and wheel-pin hardening:
+12 failed, 4577 passed, 26 skipped in 708.99s (0:11:48)
+
+done criterion:
+NOT MET: the command did not end with 0 failed. No failure was skipped,
+xfail-marked, edited, or reported as GREEN.
+
+change-owned result:
+tests/test_criticism_source_contract.py contributed 13 passes. The final total
+contains one more pass than the pre-hardening run (4577 versus 4576) and the
+same twelve failures. The defended-trial ring independently passed 16 tests.
+
+failure attribution:
+
+1-2. tests/test_campaign_cli.py, two installed-module tests
+HEAD: the child interpreter uses -I, clears PYTHONPATH, and cannot find the
+editable user-site deepreason install.
+BASE: both failures reproduced at 2ec5512499a06b528664538c828d9d33e73a594b
+under the same /opt/codex primary interpreter, with the same
+ModuleNotFoundError before campaign behavior.
+
+3. test_the_shipped_qualification_subject_digest_does_not_move
+HEAD: expected 83454b08365d...; this container produced 8d26382b23cd....
+DISPOSITION: operator-recorded KNOWN-NOT-YOURS absolute Python toolchain path
+and version condition. The shipped test and pin remain unchanged.
+
+4-5. tests/test_brokered_simulation.py, two AF_UNIX tests
+HEAD: socket.socket(AF_UNIX, SOCK_STREAM) raised PermissionError [Errno 1].
+BASE: both reproduced at the tranche base before broker behavior; exact base
+line `2 failed in 0.11s`.
+
+6. test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal
+HEAD: scheduler recorded DENIED / runner_unavailable and no result package.
+BASE: same empty result-package failure reproduced in a detached worktree;
+exact base line `1 failed in 1.88s`.
+
+7. test_an_unknown_runner_compiles_and_is_disclosed_never_refused
+HEAD: the host adds SIMULATION_RUNNER_UNAVAILABLE beside the expected unknown
+runner notice because no real network-denial namespace is available.
+BASE: identical two-notice cardinality failure reproduced at the tranche base.
+
+8. test_the_grounded_tranche_config_enters_through_the_new_door
+HEAD: compiled toolchain is /opt/codex/.../python3.12 with digest 06006911...;
+the committed fixture is /usr/bin/python3.11 with digest 5bbd3c1b....
+BASE: the exact path and digest mismatch reproduced at the tranche base.
+Rows 7-8 together ended `2 failed in 0.98s` in their base control.
+
+9-12. trusted workload code/formal checks
+HEAD: expected pass/7/overrun/pass became fail/1/fail/fail under this
+container's nested containment restrictions.
+BASE: all four shapes reproduced unchanged at the tranche base; exact base
+line `4 failed in 1.78s`.
+
+base-control hygiene:
+Every detached worktree was bound to the base source through PYTHONPATH,
+remained clean, and was removed. No historical root was changed. These controls
+establish non-attribution to this tranche; they do not make the failed checks
+pass.
+
+exact failing-node census:
+tests/test_campaign_cli.py::test_installed_campaign_module_help_has_no_source_tree_dependency
+tests/test_campaign_cli.py::test_installed_campaign_module_audits_one_existing_root
+tests/test_allocation_signal_consumption.py::test_the_shipped_qualification_subject_digest_does_not_move
+tests/test_brokered_simulation.py::test_a_program_can_ask_the_broker_and_is_bounded_by_it
+tests/test_brokered_simulation.py::test_the_broker_pins_the_model_and_caps_the_calls
+tests/test_v6_engaged_public_defaults.py::test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal
+tests/test_simulation_runner_default.py::test_an_unknown_runner_compiles_and_is_disclosed_never_refused
+tests/test_single_run_path.py::test_the_grounded_tranche_config_enters_through_the_new_door
+tests/test_workload_code.py::test_trusted_check_runs_after_patch_and_is_content_addressed
+tests/test_workload_code.py::test_failed_declared_check_is_an_ordinary_fail
+tests/test_workload_formal.py::test_check_limit_is_positive_and_enforced_as_finite_result_items
+tests/test_workload_formal.py::test_trusted_code_check_has_no_network_when_seccomp_is_available
+
+fresh detached-base controls, 2026-09-01:
+base: 2ec5512499a06b528664538c828d9d33e73a594b
+worktree: /tmp/deepreason-base-env-AVDo4n (clean, then removed)
+interpreter: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python
+
+PYTHONPATH=/tmp/deepreason-base-env-AVDo4n/src python -m pytest tests/test_campaign_cli.py -q
+result: 2 failed in 0.09s. Both exact nodeids above failed because their `-I`
+child could not find `deepreason.experiments.campaign_cli` and reported
+`ModuleNotFoundError: No module named 'deepreason'`.
+
+PYTHONPATH=/tmp/deepreason-base-env-AVDo4n/src python -m pytest tests/test_brokered_simulation.py -q
+result: 2 failed, 1 passed in 0.11s. The two exact nodeids above both raised
+`PermissionError: [Errno 1] Operation not permitted` while constructing an
+`AF_UNIX` stream socket.
+
+PYTHONPATH=/tmp/deepreason-base-env-AVDo4n/src python -m pytest tests/test_simulation_runner_default.py::test_an_unknown_runner_compiles_and_is_disclosed_never_refused tests/test_single_run_path.py::test_the_grounded_tranche_config_enters_through_the_new_door -q
+result: 2 failed in 0.71s. The first received both
+`SIMULATION_RUNNER_UNKNOWN` and host-added `SIMULATION_RUNNER_UNAVAILABLE`.
+The second compared `/opt/codex/.../python3.12`, digest `060069118579...`, with
+the committed `/usr/bin/python3.11`, digest `5bbd3c1b01d9...`.
+
+PYTHONPATH=/tmp/deepreason-base-env-AVDo4n/src python -m pytest tests/test_workload_code.py::test_trusted_check_runs_after_patch_and_is_content_addressed tests/test_workload_code.py::test_failed_declared_check_is_an_ordinary_fail tests/test_workload_formal.py::test_check_limit_is_positive_and_enforced_as_finite_result_items tests/test_workload_formal.py::test_trusted_code_check_has_no_network_when_seccomp_is_available -q
+result: 4 failed in 0.19s. Expected `pass`, return code `7`, `overrun`, and
+`pass`; the contained host produced `fail`, return code `1`, `fail`, and
+`fail`, respectively.
+
+The final two controls were rerun in fresh detached base worktree
+`/tmp/deepreason-base-last-BsgKDd` (clean, then removed):
+
+PYTHONPATH=/tmp/deepreason-base-last-BsgKDd/src python -m pytest tests/test_allocation_signal_consumption.py::test_the_shipped_qualification_subject_digest_does_not_move -q
+result: 1 failed in 0.54s at line 464. Expected
+`83454b08365d695de25e9705892b19eaf14af472a9cd6286aff4f8bf155f8874`;
+actual `8d26382b23cd3369d35f3456d7432b85954266c969ed25f255e2f787581b517f`.
+
+PYTHONPATH=/tmp/deepreason-base-last-BsgKDd/src python -m pytest tests/test_v6_engaged_public_defaults.py::test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal -q
+result: 1 failed in 1.78s at line 1044 after `scheduler.step()`; unpacking
+`state.result_packages.values()` found zero packages. The HEAD diagnostic also
+records the typed `DENIED / runner_unavailable` transition.
+
+These controls are attribution evidence only and remain blocking RED. The
+qualification row is also the operator-recorded absolute-toolchain
+KNOWN-NOT-YOURS condition.
+
+unresolved change-owned failure: none
+environment/base failures still RED: 12

@@ -429,7 +429,7 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   `operational_failure`), so there is nothing left to record and
   `TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL` no longer exists in the tree
   (`experiments/2026-09-03-defect-stopped-run-resumption/`, `docs/ERRATA.md`
-  E61). The 16 roots keep the old shape as frozen evidence and are the witness
+  E71 — renumbered at merge from E61). The 16 roots keep the old shape as frozen evidence and are the witness
   set `tests/test_continuation.py` selects. `TERMINAL_NO_CHECKPOINT_WRITTEN`
   is untouched: a terminal that could not write a checkpoint at all still has
   nothing to offer a continuation. NOT fixed on the third exit, the one taken when a terminal commitment

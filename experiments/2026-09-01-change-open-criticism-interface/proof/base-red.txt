@@ -1,0 +1,12 @@
+$ python -m pytest tests/test_criticism_source_contract.py -q
+exit: 2
+
+==================================== ERRORS ====================================
+___________ ERROR collecting tests/test_criticism_source_contract.py ___________
+tests/test_criticism_source_contract.py:9: in <module>
+    from deepreason import criticism_source as cs
+E   ImportError: cannot import name 'criticism_source' from 'deepreason'
+=========================== short test summary info ============================
+ERROR tests/test_criticism_source_contract.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.27s

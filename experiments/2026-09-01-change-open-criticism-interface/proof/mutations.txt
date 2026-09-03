@@ -1,0 +1,95 @@
+MUTATION PROOFS — contribution-only criticism-source contract
+
+score mutant
+mutation: add `score: float | None = None` to CriticismContributionV1
+command: python -m pytest tests/test_criticism_source_contract.py::test_contract_fields_are_closed_contract -q
+score mutant exit: 1
+output:
+F                                                                        [100%]
+E       AssertionError: assert {'codec', 'content', 'score'} == {'codec', 'content'}
+E         Extra items in the left set:
+E         'score'
+FAILED tests/test_criticism_source_contract.py::test_contract_fields_are_closed_contract
+1 failed in 0.18s
+
+score restore
+mutation removed: `score: float | None = None`
+command: python -m pytest tests/test_criticism_source_contract.py::test_contract_fields_are_closed_contract -q
+score restore exit: 0
+output:
+.                                                                        [100%]
+1 passed in 0.09s
+
+priority mutant
+mutation: add `priority: int | None = None` to CriticismSourceManifestV1
+command: python -m pytest tests/test_criticism_source_contract.py::test_contract_fields_are_closed_contract -q
+priority mutant exit: 1
+output:
+F                                                                        [100%]
+E       AssertionError: manifest field census contains extra item `priority`
+E         Extra items in the left set:
+E         'priority'
+FAILED tests/test_criticism_source_contract.py::test_contract_fields_are_closed_contract
+1 failed in 0.14s
+
+priority restore
+mutation removed: `priority: int | None = None`
+command: python -m pytest tests/test_criticism_source_contract.py::test_contract_fields_are_closed_contract -q
+priority restore exit: 0
+output:
+.                                                                        [100%]
+1 passed in 0.10s
+
+reverse-import mutant
+mutation: add `from deepreason import criticism_source` to src/deepreason/__init__.py
+command: python -m pytest tests/test_criticism_source_contract.py::test_registry_is_deliberately_unwired_from_shipped_graph -q
+reverse-import mutant exit: 1
+output:
+F                                                                        [100%]
+E       AssertionError: assert ['src/deepreason/__init__.py'] == []
+FAILED tests/test_criticism_source_contract.py::test_registry_is_deliberately_unwired_from_shipped_graph
+1 failed in 1.46s
+
+reverse-import restore
+mutation removed: `from deepreason import criticism_source`
+command: python -m pytest tests/test_criticism_source_contract.py::test_registry_is_deliberately_unwired_from_shipped_graph -q
+reverse-import restore exit: 0
+output:
+.                                                                        [100%]
+1 passed in 1.92s
+
+relative reverse-import mutant
+mutation: add `from . import criticism_source` to src/deepreason/__init__.py
+command: python -m pytest tests/test_criticism_source_contract.py::test_registry_is_deliberately_unwired_from_shipped_graph -q
+relative reverse-import mutant exit: 1
+output:
+F                                                                        [100%]
+E       AssertionError: assert ['src/deepreason/__init__.py'] == []
+FAILED tests/test_criticism_source_contract.py::test_registry_is_deliberately_unwired_from_shipped_graph
+1 failed in 1.56s
+
+relative reverse-import restore
+mutation removed: `from . import criticism_source`
+command: python -m pytest tests/test_criticism_source_contract.py::test_registry_is_deliberately_unwired_from_shipped_graph tests/test_criticism_source_contract.py::test_module_has_no_deepreason_dependency -q
+relative reverse-import restore exit: 0
+output:
+..                                                                       [100%]
+2 passed in 1.52s
+
+outbound relative dependency mutant
+mutation: add `from . import config` to src/deepreason/criticism_source.py
+command: python -m pytest tests/test_criticism_source_contract.py::test_module_has_no_deepreason_dependency -q
+outbound relative dependency mutant exit: 1
+output:
+F                                                                        [100%]
+E       AssertionError: assert not [(1, '')]
+FAILED tests/test_criticism_source_contract.py::test_module_has_no_deepreason_dependency
+1 failed in 0.10s
+
+outbound relative dependency restore
+mutation removed: `from . import config`
+command: python -m pytest tests/test_criticism_source_contract.py::test_module_has_no_deepreason_dependency -q
+outbound relative dependency restore exit: 0
+output:
+.                                                                        [100%]
+1 passed in 0.05s

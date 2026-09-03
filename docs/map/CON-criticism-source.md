@@ -1,7 +1,7 @@
 <!-- DR-CON-criticism-source -->
 Verified-at: bc3175394
 Verify: python tools/docs_verify.py
-Owns: src/deepreason/rules/crit.py
+Owns: src/deepreason/rules/crit.py, src/deepreason/criticism_source.py
 Seams: DR-SEAM-rules-x-scratch
 Seams-undocumented: criticism-source x authority, criticism-source x llm, criticism-source x manifest, criticism-source x scheduler
 
@@ -19,6 +19,14 @@ path is gated by `Config.ARGUMENTATIVE_AUTHORITY`/the manifest's frozen
 become a status change. The socket is this module's contract, distinct
 from `DR-SUB-rules`'s package-wide concern and from `DR-CON-authority`'s
 concern (which governs ALL text adjudication, not only criticism's).
+
+`criticism_source.py` is a second, deliberately unwired socket for optional
+sources. The host binds the target; a named source may return only opaque
+content and a codec as transport data, with no dedicated epistemic or
+authority-control field. Registry construction and invocation are explicit,
+and local decline, absence, or failure neither selects another source nor
+changes the graph.
+`check: python -m pytest tests/test_criticism_source_contract.py -q -k 'registry or operational_result or independent or host_bound'`
 
 ## The socket contract — what it promises, what it is handed, what it must never do
 
@@ -69,6 +77,7 @@ warrant.
 | Authority resolution (manifest word -> Config word) | `rules/crit.py` | `_resolve_authority`, `_authority` |
 | Critic-side school conditioning | `rules/crit.py` | `_critic_execution` |
 | What `crit_fuzz` probes with | `rules/experiment.py` | `accepted_generators`, `active_properties`, `promoted_properties` |
+| Optional contribution-only source API | `criticism_source.py` | `CriticismSourceRegistry`, `invoke_criticism_source`, `describe_criticism_sources` |
 
 ## Where to change what
 
