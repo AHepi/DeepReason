@@ -1,6 +1,6 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=45 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
+State: next=49 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
 verbatim: "Given what read from the other windows, the plugin one. Since all
 three other windows have completed." Build window open; branch
 `claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
@@ -1144,11 +1144,17 @@ print('ok')"` -> `ok`
       pin), and step 24's new object kind (a DIRECT surface-2 contact, parked
       for a grant rather than taken).
 
-- [ ] 46. (all) Diff budget check (SPEC §17.8, ~2400 lines of `src/` — raised
+- [x] 46. (all) Diff budget check (SPEC §17.8, ~2400 lines of `src/` — raised
       by the operator 2026-09-03 on the measured step-22 overrun).
       done-when: `python tools/diff_budget.py e91f4fcc3 --ceiling 2400
       --paths 'src/*'` -> `"verdict": "WITHIN"`, or a stated,
       operator-visible overrun
+      ```
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "e91f4fcc3",
+       "areas": {"src/*": 2385}, "ceiling": 2400, "verdict": "WITHIN"}
+      ```
+      2385 of the raised 2400. The overrun WAS stated and operator-visible at
+      the step-22 boundary; the operator chose road A and the ceiling rose.
 
 - [x] 47. (all) Map check, FULL mode — `--fast` reuses cached results and
       CANNOT catch a document a `src/` change just broke. Run on an
@@ -1187,11 +1193,21 @@ print('ok')"` -> `ok`
       prose mention is not coupling, so the comment was reworded rather than
       someone else's census bumped to absorb it.
 
-- [ ] 48. (all) Full gate, alone on the box.
+- [x] 48. (all) Full gate, alone on the box.
       done-when: `python -m pytest tests/ -q -n 4` -> output ends
       `N passed, 0 failed` (paste it). Compare N against
       `docs/AUDIT_BASELINES.md`; 0 failed is the only acceptable result and
       no assertion is weakened to get there.
+      ```
+      $ python -m pytest tests/ -q -n 4
+      4956 passed, 6 skipped in 908.23s (0:15:08)
+      ```
+      **0 failed.** Run twice: once at 4956 passed before the last comment
+      reword, and again on the delivered tree, same result. No assertion was
+      weakened anywhere in this tranche. Where a check went red it was either
+      RE-AIMED at where its subject moved (three tests, five map checks, each
+      recorded at its step with the reason) or the CODE was narrowed to stay
+      inside a stated boundary (N4, on the doctor suite's evidence).
 
 - [ ] 49. (all) [COMMIT] Tranche commit: one change, message stating what,
       why, the evidence, and `Full gate: N passed, 0 failed`.
