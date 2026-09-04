@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=1 blockers=none
+State: next=2 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -20,10 +20,28 @@ as an omission.
 
 ---
 
-- [ ] 1. (S5) Write `select.py`: the deterministic target selector over
-      the six roots M1 names, and run it to produce `SELECTION.json`.
-      done-when: `python select.py --write` prints `120 selected` and
-      re-running prints an identical `SELECTION.sha256`.
+- [x] 1. (S5, A9, A11) Write `select_targets.py`: the deterministic target selector over
+      the roots M1 names, and run it to produce `SELECTION.json`.
+      done-when: `python select_targets.py --write` prints `120 selected`
+      and re-running prints an identical `SELECTION.sha256`.
+      DONE:
+          120 selected
+          eligible seen: 137
+          with recorded history: 120
+          SELECTION.sha256: b07661e35069277c476a994420af14a5eec629e29e9be9f2a0978a7e60ce4e53
+          --- rerun ---
+          120 selected
+          eligible seen: 137
+          with recorded history: 120
+          SELECTION.sha256: b07661e35069277c476a994420af14a5eec629e29e9be9f2a0978a7e60ce4e53
+          all have history: True
+          planted/clean with history: 60 60
+          schools: school-0 33, school-1 28, school-2 27, school-3 32
+      Three findings during this step, all in SPEC Amendment 1: A9 (the
+      eligibility rule gained a history clause, or F2 would have run at
+      70 observations per level against the 99 it needs), A10 (no
+      rebuttal exists in any source root, so F2 is prior-objection
+      exposure), A11 (the file was renamed off the stdlib's `select`).
 
 - [ ] 2. (S5, S6) [COMMIT] Write `plant.py`: the six mutators, the
       single-difference assertion, and `DEFECT_KEY.json`.

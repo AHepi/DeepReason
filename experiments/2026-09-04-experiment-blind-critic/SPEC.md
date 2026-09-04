@@ -582,3 +582,75 @@ transferable half separated in A4; `court_calibration_corpus.py` read
 and its inapplicable half measured in M2; `seat-pack.critic.legacy-v0`
 censused by rendering in M3); options priced with rejections citing
 measurements; nothing in this spec is untraceable to an R or C number.
+
+---
+
+# Amendment 1 (2026-09-04, during step 1, BEFORE the freeze line)
+
+Three things the record said once I actually read it, all of which
+change the spec above. Recorded here rather than typed into a step,
+because two of them narrow what this tranche can claim.
+
+## A9 (amends S5) — eligibility now requires recorded criticism history
+
+**Measured.** Of the 238 eligible artifacts, **137 carry at least one
+recorded objection** and 101 carry none. Under S5's original rule
+(order by digest, take 120), only **35 of the 60 planted targets** would
+have had any history at all — so for the other 25, cell C01 would have
+rendered nothing and been byte-identical to C00. F2's effective sample
+would have been 70 observations per level against the 99 the arithmetic
+demands, and the factor the operator asked about second would have been
+the underpowered one.
+
+**Fixed.** Eligibility gains one clause: the artifact must carry at
+least one recorded objection. 137 qualify, 120 are taken, so every
+target in the set can carry F2 and every cell comparison is over the
+same 120. F1 is unaffected — provenance renders on all of them.
+
+**What this costs, stated.** The pool narrows from 238 to 137, and
+`experiments/2026-09-02-live-p-a2-corrected/run` drops out entirely (its
+accepted conjectures carry no recorded objections). The request named
+P-A2's frontier as an obvious pool; it is now absent, and the reason is
+the record's, not a preference. The remaining five roots are the history
+experiment's own candidate roots, which the request named alongside it.
+
+    accept (replaces S5's): `SELECTION.json` lists 120 ids each with a
+    non-empty `history`; re-running the selector reproduces the same 120
+    ids, the same split and the same `SELECTION.sha256`.
+
+## A10 (amends S3, R3) — F2 is PRIOR-OBJECTION exposure, not rebuttal history
+
+**Measured**, across the source roots:
+
+    discharge-undischarged   140  (run-5565bd1e)   244  (run-fe006090)
+    discharge-reask            7                     10
+    discharge kinds actually recorded: NONE
+      (`revised`, `rebutted`, `departure_declared` -- zero events)
+    landed objections (att edges) among the 137: 0
+
+So **no rebuttal exists in any source root**, and no objection ever
+landed. R3 asks for "rebuttal + discharge history"; the record holds the
+objections, the fact that none of them landed, and the fact that the
+author submitted without discharging them. That is what cell C01 and
+cell C11 will carry, and it is all any configuration could carry,
+because the content R3 names was never written.
+
+**Consequence for the verdict, fixed here so it is not decided later.**
+F2's verdict is about PRIOR-OBJECTION EXPOSURE: does showing a critic
+what has already been objected to, and that it was not answered, change
+what the critic finds? RESULTS.md states the factor in those words and
+records the gap against R3's own wording in the residue. This tranche
+cannot answer the 2026-09-03 hypothesis in its full form — "criticism
+without fully understanding the reasoning behind a conjecture" — because
+the reasoning-behind-a-conjecture half is not in the record to show or
+withhold.
+
+## A11 (amends S5) — the selector is `select_targets.py`, not `select.py`
+
+`select.py` shadows the standard library's `select` module and broke the
+first import of it. Renamed. No other change.
+
+**Rubric re-run: 6/6 yes.** Every amended item keeps a machine-decidable
+accept; the blast-radius census and frozen-surface forecast are
+unaffected (no `src/` symbol changes); the two narrowings are traced to
+R3 and R6 and to pasted measurements.
