@@ -1,0 +1,175 @@
+# Checklist for: four evidence states over the record, and a per-cycle
+# declaration that criticism ran in full
+
+State: next=1 blockers=none
+Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
+One step per dr-execute-step invocation.
+
+Map ids this plan was scoped from (map preflight, `docs/map/INDEX.md`):
+`DR-INV-frozen-surfaces` (read first; gate verdict CLEAR, SPEC.md),
+`DR-CON-warrants-and-attacks` (what a warranted attack IS),
+`DR-SEAM-scheduler-x-rules` and `DR-SEAM-scheduler-x-workflow` (read BEFORE
+the two subsystems, per the one ordering rule — they own the executable
+checks that constrain how `_arg_crit` may be edited, listed in step 5),
+`DR-SUB-scheduler`, `DR-SUB-application`, `DR-SUB-adjudication`,
+`DR-SUB-rules`, `DR-CON-authority`, `DR-CON-criticism-source`,
+`DR-SUB-evaluation`, `DR-SUB-verification`, `DR-SUB-harness`.
+
+New map document this tranche creates: `DR-CON-evidence-states` (step 18).
+
+## The four map checks that constrain the scheduler edit
+
+Read once, before step 5; each is an executable `check:` that MUST stay green.
+
+1. `SEAM-scheduler-x-workflow.md:367` asserts the VERBATIM substring
+   `"if criticism_policy is not None:\n            self._foreign_arg_crit()\n            return"`
+   inside `_arg_crit`, and that `"argumentative-criticism"` does NOT appear in
+   it. => the `cut:foreign` declaration may NOT be inserted between
+   `_foreign_arg_crit()` and its `return`. It is emitted at the END of
+   `_foreign_arg_crit` instead.
+2. `SEAM-scheduler-x-workflow.md:122` asserts four call sites appear in order
+   inside `_foreign_arg_crit`. Appending an emission AFTER the last of them
+   keeps it green.
+3. `SEAM-scheduler-x-rules.md:170` asserts verbatim indentation of the
+   `crit_fuzz` block inside `if config.RECRIT_STANDING:` and the index order
+   `crit_fuzz` < `eligible.append(aid)` < `self._arg_crit_this_cycle += 1`.
+   => nothing may be inserted inside that block.
+4. `SEAM-scheduler-x-rules.md:136` asserts `_arg_crit` contains EXACTLY ONE
+   `crit_argumentative_batch` call and it carries NO keywords.
+
+---
+
+- [ ] 1. (S1) Create `src/deepreason/views/evidence_states.py`: `EvidenceState`
+      enum and `evidence_states(harness)` implementing SPEC.md S1's five
+      definitions and four rules, reading only `state.att`, `state.status`,
+      `state.artifacts`, the trial measure signals, and (when present) the
+      `complete` declarations. Absence-tolerant: a root with no declaration is
+      handled, never an error (reader-before-writer guardrail).
+      done-when: `python -c "from deepreason.views.evidence_states import EvidenceState; assert [s.value for s in EvidenceState] == ['open','supported','refuted','contested']"` exits 0
+      AND `python -c "import pathlib; from deepreason.harness import Harness; from deepreason.views.evidence_states import evidence_states; h=Harness(pathlib.Path('experiments/2026-09-02-live-p-a2-corrected/run'), read_only=True); print(len(evidence_states(h)))"` prints a non-zero count
+
+- [ ] 2. (S8) Write `tests/test_evidence_states.py`: one test per state on
+      fixtures COPIED from committed roots into `tmp_path`, plus the
+      predates-the-declaration test (S6) and `test_absence_needs_the_declaration`
+      (the completeness rule, R11's named obligation).
+      done-when: `python -m pytest tests/test_evidence_states.py -q` -> 0 failed
+
+- [ ] 3. (S8) [COMMIT] Mutation-prove M1-M4 of SPEC.md S8: plant each mutant in
+      the reader, watch the named test go RED, revert, watch green. Transcripts
+      to `experiments/2026-09-04-change-evidence-states/proof/`.
+      done-when: `proof/M1.txt` .. `proof/M4.txt` each exist and each contains
+      both a "failed" line (mutant) and a "passed" line (revert)
+
+- [ ] 4. (S2) Create `src/deepreason/runtime/criticism_dispatch.py`:
+      `CRITICISM_DISPATCH_SIGNAL`, the closed outcome vocabulary, and
+      `declare_criticism_dispatch(harness, *, cycle, outcome, planned,
+      dispatched, targets)`. Shaped on `runtime/seat_retirement.py`.
+      done-when: `python -c "from deepreason.runtime.criticism_dispatch import CRITICISM_DISPATCH_SIGNAL, OUTCOMES; assert CRITICISM_DISPATCH_SIGNAL=='criticism.dispatch.v1'; assert set(OUTCOMES)=={'complete','cut:budget','cut:seat','cut:call','cut:foreign'}"` exits 0
+
+- [ ] 5. (S2) Emit the declaration from `Scheduler._arg_crit` (three exits) and
+      from the END of `Scheduler._foreign_arg_crit` (`cut:foreign`), obeying all
+      four map checks listed above.
+      done-when: `python -m pytest tests/test_crit_batch.py tests/test_budget.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_foreign_school_criticism_scheduler_c3.py -q` -> 0 failed
+
+- [ ] 6. (S2) Write `tests/test_criticism_dispatch_declaration.py`: exactly one
+      declaration per criticism pass; `complete` on a clean pass; `cut:budget`
+      when `ARG_CRIT_PER_CYCLE` truncates; `cut:seat` when the critic role is
+      unavailable; `cut:call` when a batch is dropped.
+      done-when: `python -m pytest tests/test_criticism_dispatch_declaration.py -q` -> 0 failed
+
+- [ ] 7. (S1, S2) Wire the licence: `evidence_states` reads `complete`
+      declarations so an un-attacked artifact they name reads SUPPORTED, and
+      one they do not name stays OPEN.
+      done-when: `python -m pytest tests/test_evidence_states.py -k "licence or absence" -q` -> 0 failed
+
+- [ ] 8. (S8) [COMMIT] Mutation-prove M5 (the completeness rule dropped —
+      absence counts as SUPPORTED with no declaration).
+      done-when: `proof/M5.txt` exists showing
+      `test_absence_needs_the_declaration` FAILED under the mutant and PASSED
+      on revert
+
+- [ ] 9. (S3) Write `tests/test_evidence_states_law_line.py` — spelling half
+      (no forbidden name under scheduler/, adjudication/, rules/; PERMITTED
+      empty) and behavioural half (computing the reading appends no event and
+      moves no status).
+      done-when: `python -m pytest tests/test_evidence_states_law_line.py -q` -> 0 failed
+
+- [ ] 10. (S8) [COMMIT] Mutation-prove M6 and M7 (reader named inside
+      `scheduler/`; reader appends a measure).
+      done-when: `proof/M6.txt` and `proof/M7.txt` each show the law-line test
+      FAILED under the mutant and PASSED on revert
+
+- [ ] 11. (S1, S2, S3, S8) [COMMIT] Commit 1 of SPEC.md's split: the reading,
+       the declaration, the law line, their tests and proofs, plus the
+       `DR-SUB-scheduler` map edit describing the declaration `_arg_crit` now
+       files (map moves in the SAME commit).
+       done-when: `python tools/docs_verify.py` -> 0 failed beyond the C4 known
+       rows, AND `python -m pytest tests/test_evidence_states.py tests/test_criticism_dispatch_declaration.py tests/test_evidence_states_law_line.py -q` -> 0 failed
+
+- [ ] 12. (S4) Add the `evidence_states` section to `results_summary` and the
+       `## Evidence states` block plus the per-artifact frontier column to
+       `render_results`, in the operator's vocabulary.
+       done-when: `python -m pytest tests/test_results_command.py -q` -> 0 failed
+       AND `deepreason results experiments/2026-09-02-live-p-a2-corrected/run --json | python -c "import json,sys; d=json.load(sys.stdin); print(d['evidence_states']['counts'])"` prints the four keys
+
+- [ ] 13. (S5) Add the `evidence_states` section to `stop_report` and
+       `render_stop_report`, with the typed absence on `home-no-root` and
+       `root-no-log`.
+       done-when: `python -m pytest tests/test_stop_report.py -q` -> 0 failed
+       AND `deepreason stop-report experiments/2026-09-02-live-p-a2-corrected/run | grep -c "Evidence states"` prints 1
+
+- [ ] 14. (S6) Prove the committed roots are untouched by the surfaces.
+       done-when: `git status --porcelain experiments/ | head` is EMPTY after
+       steps 12-13 ran against a committed root
+
+- [ ] 15. (S4, S5, S6) [COMMIT] Commit 2 of the split: the surfaces, plus the
+       `DR-SUB-application` map edit for the new section.
+       done-when: `python tools/docs_verify.py` -> 0 failed beyond C4, AND
+       `python -m pytest tests/test_results_command.py tests/test_stop_report.py -q` -> 0 failed
+
+- [ ] 16. (S7) Capture each instrument's DEFAULT output BEFORE the change
+       (`proof/instruments_before.txt`), then add `--survivors-only` to both
+       `analyse_form_arms.py` and `measure_diversity_per_problem.py`.
+       done-when: `proof/instruments_before.txt` exists AND
+       `python experiments/2026-09-03-change-conjecturer-pluggable-interface/analyse_form_arms.py --self-test` prints `ok`
+
+- [ ] 17. (S7, S8) Write `tests/test_survivors_only_switch.py`: default output
+       byte-identical to the before-capture (R8), and the switch restricts to
+       SUPPORTED artifacts.
+       done-when: `python -m pytest tests/test_survivors_only_switch.py -q` -> 0 failed
+
+- [ ] 18. (S10) Create `docs/map/CON-evidence-states.md` per `SCHEMA.md`, with
+       four checks each first RUN AGAINST THE PRE-CHANGE TREE to confirm it
+       FAILS. Add the `INDEX.md` routing row and concept-table row.
+       done-when: `python tools/docs_verify.py --audit` reports no finding for
+       `CON-evidence-states.md`, AND `python tools/docs_verify.py --links` -> 0 failed
+
+- [ ] 19. (S9) Write `census.py` (runs the SHIPPED reader over every committed
+       root, tables OPEN vs SUPPORTED on the frontier) and paste its output into
+       `CENSUS.md`.
+       done-when: `python experiments/2026-09-04-change-evidence-states/census.py`
+       exits 0 and `CENSUS.md` contains its pasted table
+
+- [ ] 20. (S7, S9, S10) [COMMIT] Commit 3 of the split: the baseline hook, the
+       census, the map document.
+       done-when: `python tools/docs_verify.py` -> 0 failed beyond C4
+
+- [ ] 21. (all) Map gate, FULL mode (not `--fast`; `src/` changed).
+       done-when: `python tools/docs_verify.py` -> 0 failed beyond the C4 known
+       rows (SEAM-llm-x-rules.md:54, INV-frozen-surfaces.md:181 and :736,
+       CON-run-identity.md:211/213/215/298), pasted
+
+- [ ] 22. (all) Frozen-surface re-check over the REAL files, now that they
+       exist (SPEC.md's forecast promised this step).
+       done-when: `python tools/blast_radius.py --files <every changed src file>
+       --symbols <every new top-level def> --against 33f92e88c7` reports
+       `frozen_surface_verdict: CLEAR` and no unpredicted `newly_live` /
+       `newly_dead`, pasted
+
+- [ ] 23. (all) Full gate, ALONE on an idle box (never concurrent with
+       docs_verify).
+       done-when: output ends `N passed, 0 failed` (pasted)
+
+- [ ] 24. (all) [COMMIT] Push and confirm clean tree.
+       done-when: `git status --porcelain` is empty AND the branch head is on
+       origin
