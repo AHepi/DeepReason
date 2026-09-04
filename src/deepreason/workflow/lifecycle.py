@@ -32,7 +32,14 @@ from deepreason.workflow.models import (
 # SECURITY-channel integrity gate at continue/amend time
 # (`runtime/continuation.py`), never membership of this set.
 RESUMABLE_STOP_REASONS = frozenset(
-    {"converged", "budget_exhausted", "operational_failure"}
+    {
+        "converged",
+        "budget_exhausted",
+        "operational_failure",
+        # Every seat stood down. Resumable is the whole point: the provider
+        # comes back and the run picks up where it stopped.
+        "provider_unavailable",
+    }
 )
 
 # The bridge composes FROM a frozen terminal rather than extending it, which
@@ -172,7 +179,7 @@ def outstanding_work_snapshot(
 # failure.  A receipt for either therefore has no controller evaluation to
 # replay and must declare that no controller authority was consumed.
 _RUNTIME_DECIDED_STOP_REASONS = frozenset(
-    {"budget_exhausted", "operational_failure"}
+    {"budget_exhausted", "operational_failure", "provider_unavailable"}
 )
 
 

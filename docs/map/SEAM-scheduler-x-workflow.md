@@ -252,6 +252,40 @@ Deleting `self._recover_workflow_prefixes()` from `run()` fails
 
 ## Traps
 
+- **One seat's typed exhaustion was answered by a whole-run exit, and it can
+  reach that exit by TWO different roads.** P-A1 `run-4565139800f5ca02`
+  terminated `operational_failure` on
+  `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` while its other conjecturer seat had
+  answered 30 attempts with zero faults on a healthy endpoint and all four of
+  its criticism bindings pointed at that seat. The workflow plane was right:
+  `insufficient_capability_by_route_seat` is keyed per seat and the four
+  guards that read it refuse per seat. The scheduler had no arm that could
+  absorb one — `WorkBudgetDenied` and `(SchemaRepairError, EndpointError)` skip
+  to the next school, `(RouteFirewallError, TokenBudgetExceeded,
+  WorkflowAuthorizationError)` exit fail-closed, and `RunManifestError` matched
+  none, so it reached the terminalizer. **The second road is the one an
+  exception arm would have missed**: when the dead seat's next dispatch carries
+  the payload whose atomic decomposition the exhaustion left incomplete,
+  `rules/conj.py` enters recovery and `workflow/atomic_recovery.py` raises
+  `ValueError("atomic child is terminally failed")` BEFORE that guard is
+  consulted at all. P-A1 took the first road only because it had many problems;
+  a one-problem run takes the second on the next cycle. FIXED 2026-09-04
+  (`experiments/2026-09-04-defect-dead-seat-retirement/`) by deciding
+  retirement where the seat is CHOSEN — the school is dropped from `assigned`
+  before `conj` is entered — which closes both roads with one change. The
+  refusals themselves are untouched. The generalisation worth keeping: a
+  per-seat refusal needs a per-seat CALLER, and a fix wired into a guard covers
+  only the callers that reach that guard.
+`check: python -m pytest tests/test_dead_seat_retirement.py::test_the_p_a1_shape_runs_on_the_healthy_seat_after_the_dead_one_exhausts tests/test_dead_seat_retirement.py::test_a_dead_seat_does_not_kill_the_run_through_the_atomic_recovery_road -q`
+`check: python -c "
+import inspect
+from deepreason.scheduler.scheduler import Scheduler as S
+src = inspect.getsource(S.step)
+# The partition must run BEFORE the school loop that dispatches conjecture,
+# or only the guarded road is covered.
+assert src.index('_retired_seats()') < src.index('for school_id in assigned:')
+assert '_record_seat_retirement' in src
+"`
 - **A budget denial arrives already terminalized, and the scheduler's job is to
   absorb it.** Live regression `run-e542c3c1`, the first referee-enabled ladder:
   the cycle-4 config review was token-budget-denied inside `service.issue`,

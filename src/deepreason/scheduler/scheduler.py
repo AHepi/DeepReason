@@ -21,6 +21,10 @@ from deepreason.llm.adapter import SchemaRepairError, WorkflowAuthorizationError
 from deepreason.llm.budget import TokenBudgetExceeded
 from deepreason.llm.endpoints import EndpointError
 from deepreason.signals import DEAD_SEAT_STREAK_SIGNAL
+from deepreason.runtime.seat_retirement import (
+    RETIRED_SIGNAL,
+    RETIREMENT_DISABLED_SIGNAL,
+)
 from deepreason.llm.firewall import (
     RouteFirewallError,
     SchoolRouteResolutionError,
@@ -818,7 +822,7 @@ class Scheduler:
             return
         if self._cycles == 0 or self._cycles % policy.cadence_cycles != 0:
             return
-        if not self.adapter.has_role("argumentative_critic"):
+        if not self._role_available("argumentative_critic"):
             return
         from deepreason.referee import run_config_referee
 
@@ -1434,7 +1438,7 @@ class Scheduler:
                     kappa.id,
                 ):
                     continue
-                if not self.adapter.has_role("judge") or not config.JUDGE_SEATS_ENABLED:
+                if not self._judge_ensemble_available() or not config.JUDGE_SEATS_ENABLED:
                     continue
                 if not self._judge_summons_admitted(f"{artifact.id}:{kappa.id}"):
                     continue
@@ -1523,7 +1527,7 @@ class Scheduler:
             if self.run_manifest is not None and self.run_manifest.schema_version in {4, 5, 6}
             else None
         )
-        if not self.adapter.has_role("argumentative_critic"):
+        if not self._role_available("argumentative_critic"):
             if criticism_policy is not None:
                 # Reachable since all-configs-allowed made an incomplete
                 # criticism binding compile: the impossibility must surface
@@ -1712,6 +1716,15 @@ class Scheduler:
                 raise RouteFirewallError(
                     "foreign criticism plan differs from its resolved route lease"
                 )
+            if (lease.role, lease.seat) in self._retired_seats():
+                # Dropped in the resolution pass, which exists so one bad
+                # binding leaves no partial provider spend. The targets this
+                # batch would have covered stay in the coverage debt built
+                # below, named by `outstanding_school_ids`.
+                self._record_seat_retirement(
+                    self._retired_seats()[(lease.role, lease.seat)]
+                )
+                continue
             resolved_batches.append((batch, lease))
 
         for batch, lease in resolved_batches:
@@ -2189,6 +2202,7 @@ class Scheduler:
         # progress is tail-able, and stalls become diagnosable post hoc.
         harness.record_measure(inputs=["cycle", str(self._cycles), problem.id if problem else "-"])
         self._disclose_wander()
+        self._record_retirement_disabled()
         self._selection_window.append(problem.id if problem else "-")
         del self._selection_window[:-_THRASH_WINDOW]
         self._record_detection_signals()
@@ -2218,7 +2232,7 @@ class Scheduler:
         # frame assertions' own bytes (Q2a).
         succession = is_succession_trial(harness, problem.id)
         if problem.provenance.trigger == SpawnTrigger.DISCRIMINATION and (
-            succession or self.adapter.has_role("judge")
+            succession or self._judge_ensemble_available()
         ):
             from deepreason.informal.trial import pairwise_discriminate
 
@@ -2327,6 +2341,33 @@ class Scheduler:
                 for school_id in assigned
                 if school_id is not None
             }
+            # Stand a dead seat down HERE, where the seat is chosen, rather than
+            # in an exception arm below. P-A1 (run 4565139800f5ca02) reaches its
+            # death through the insufficient-capability guard, but a run whose
+            # next dispatch carries the payload the exhaustion left mid-
+            # decomposition reaches it through atomic recovery first, which
+            # raises from a different module and before that guard is consulted.
+            # Skipping the school closes both.
+            retired = self._retired_seats()
+            live = []
+            for school_id in assigned:
+                lease = school_leases.get(school_id)
+                if lease is not None and (lease.role, lease.seat) in retired:
+                    self._record_seat_retirement(retired[(lease.role, lease.seat)])
+                    self.diagnostics.append(
+                        {
+                            "cycle": self._cycles,
+                            "school_skipped_retired_seat": school_id,
+                            "seat": retired[(lease.role, lease.seat)].instance,
+                        }
+                    )
+                    continue
+                live.append(school_id)
+            # An empty list is a cycle that dispatches no conjecture and then
+            # does its ordinary per-cycle work. Whether the RUN ends is
+            # `run()`'s question, asked of every seat rather than of this
+            # problem's allocation.
+            assigned = live
 
         # Level-2 diversity injection: one spec call per step, shared across
         # schools (inter-school diversity comes from stances; specs fight
@@ -2642,7 +2683,7 @@ class Scheduler:
         so the sweep cannot scale with the artifact population.
         """
         harness = self.harness
-        if not self.adapter.has_role("variator"):
+        if not self._role_available("variator"):
             premise_rent_sweep(harness, decided=self._premise_decided)
             return
         if self._defer_untransactional_v6_phase(
@@ -2664,8 +2705,8 @@ class Scheduler:
         if (
             self._cycles == 0
             or self._cycles % self.config.AUDIT_PERIOD != 0
-            or not self.adapter.has_role("judge")
-            or not self.adapter.has_role("variator")
+            or not self._judge_ensemble_available()
+            or not self._role_available("variator")
             or not self.config.JUDGE_SEATS_ENABLED
         ):
             return
@@ -2743,7 +2784,7 @@ class Scheduler:
             config.GEN_PROPOSE_PERIOD <= 0
             or config.FUZZ_N <= 0
             or self._cycles % config.GEN_PROPOSE_PERIOD != 0
-            or not self.adapter.has_role("conjecturer")
+            or not self._role_available("conjecturer")
         ):
             return
         from deepreason.oracle import PROPERTY_PROGRAM
@@ -2784,8 +2825,8 @@ class Scheduler:
             config.PROP_PROPOSE_PERIOD <= 0
             or config.FUZZ_N <= 0
             or self._cycles % config.PROP_PROPOSE_PERIOD != 0
-            or not self.adapter.has_role("property_designer")
-            or not self.adapter.has_role("judge")
+            or not self._role_available("property_designer")
+            or not self._judge_ensemble_available()
             or not config.JUDGE_SEATS_ENABLED
         ):
             return
@@ -2866,7 +2907,7 @@ class Scheduler:
         Attention-only cache — screenshots are recorded once per candidate,
         so one look is complete coverage."""
         config = self.config
-        if config.VISION_CRIT_PER_CYCLE <= 0 or not self.adapter.has_role("vision_critic"):
+        if config.VISION_CRIT_PER_CYCLE <= 0 or not self._role_available("vision_critic"):
             return
         from deepreason.rules.act import browser_evidence
         from deepreason.rules.vision import crit_vision
@@ -2990,7 +3031,7 @@ class Scheduler:
         cannot emit K whole-document edits of a multi-KB app inside its
         completion window — every attempt was a guaranteed length-limit drop
         (observed live). Attention-only machinery, so skipping is legal."""
-        if not self.adapter.has_role("variator"):
+        if not self._role_available("variator"):
             return
         from deepreason.programs import content_text
 
@@ -3156,6 +3197,139 @@ class Scheduler:
             )
         return health
 
+    def _role_available(self, role: str) -> bool:
+        """The role is configured AND at least one of its seats is dispatchable.
+
+        A retired seat's LEASE is unchanged, so every preflight still passes and
+        the dispatch reaches the insufficient-capability guard and raises. This
+        is the one question every phase asks before spending on a role, so it is
+        the one place the answer has to account for a stood-down seat.
+        """
+
+        from deepreason.runtime.seat_retirement import live_seats
+
+        if not self.adapter.has_role(role):
+            return False
+        # An adapter with no lease table cannot have a retired seat: retirement
+        # is keyed by the frozen route identity a lease carries.
+        leases = getattr(self.adapter, "leases", None) or {}
+        configured = len(leases.get(role, ()) or ())
+        if not configured:
+            return True
+        retired = self._retired_seats()
+        if live_seats(retired, role, configured):
+            return True
+        for seat in range(configured):
+            entry = retired.get((role, seat))
+            if entry is not None:
+                self._record_seat_retirement(entry)
+        return False
+
+    def _judge_ensemble_available(self) -> bool:
+        """Judge work is available only if the WHOLE ensemble still is.
+
+        The cross-family predicate is not relaxed when a seat goes: the measured
+        0-2.5% false-conviction regime is the cross-family one, and every looser
+        configuration measured over-convicts at 47-60%
+        (docs/RESEARCH_JUDGE_BLINDING_2026-08-22.md; the amended judge law,
+        2026-08-28). Running one judge to avoid a skip would trade the good
+        regime for the bad one.
+        """
+
+        if not self._role_available("judge"):
+            return False
+        leases = getattr(self.adapter, "leases", None) or {}
+        configured = len(leases.get("judge", ()) or ())
+        if configured < 2:
+            return True
+        retired = self._retired_seats()
+        gone = [retired[("judge", seat)] for seat in range(configured)
+                if ("judge", seat) in retired]
+        for entry in gone:
+            self._record_seat_retirement(entry)
+        return not gone
+
+    def _every_conjecturer_seat_retired(self) -> bool:
+        """True when no conjecturer seat is left to dispatch to.
+
+        Asked of the CONFIGURED seat count, never of a shrunk one: a run whose
+        seat count moved mid-run would rename every seat instance it had
+        already recorded.
+        """
+
+        from deepreason.runtime.seat_retirement import live_seats
+
+        leases = getattr(self.adapter, "leases", None) or {}
+        configured = len(leases.get("conjecturer", ()) or ())
+        if not configured:
+            return False
+        return not live_seats(self._retired_seats(), "conjecturer", configured)
+
+    def _stop_provider_unavailable(self, stop_snapshot) -> None:
+        """Terminate clean because every conjecturer seat is stood down."""
+
+        from deepreason.runtime.stop import StopDecision
+
+        for retirement in self._retired_seats().values():
+            self._record_seat_retirement(retirement)
+        decision = StopDecision(stop=True, reason="provider_unavailable")
+        self.last_stop_decision = decision
+        if self.stop_controller is None or stop_snapshot is None:
+            return
+        metrics, _after = self._stop_metrics(stop_snapshot, len(self.diagnostics))
+        controller_state_before = self.stop_controller.snapshot()
+        self._emit_progress(metrics, decision)
+        self._record_stop(decision, metrics, controller_state_before)
+
+    def _retired_seats(self):
+        """Seats stood down, recomputed per cycle from the record.
+
+        Not cached across cycles: a seat retires mid-run, and an in-memory flag
+        taken at construction would answer for a run that had not started yet.
+        """
+
+        from deepreason.runtime.seat_retirement import retired_seats
+
+        return retired_seats(self.harness, self.config, self.run_manifest)
+
+    def _record_seat_retirement(self, retirement) -> None:
+        """One `seat.retired.v1` receipt per seat per run.
+
+        The dedupe searches the RECORD rather than an in-memory flag, so a
+        resumed run neither re-discloses nor falls silent -- the property the
+        dead-seat-streak emit site already has.
+        """
+
+        tail = retirement.measure_inputs()
+        if self._measure_recorded([RETIRED_SIGNAL, *tail]):
+            return
+        # The signal census (DR-SUB-scheduler) reads the LITERAL at this call
+        # site, so the name is spelled here rather than passed in a variable;
+        # a variable makes the emission invisible to the check that exists to
+        # catch an undeclared signal.
+        self.harness.record_measure(inputs=["seat.retired.v1", *tail])
+
+    def _record_retirement_disabled(self) -> None:
+        """The ungated-seats law's typed warning, once per run.
+
+        Switching a gate off is never a refusal and never silence.
+        """
+
+        from deepreason.runtime.seat_retirement import (
+            RETIREMENT_DISABLED_WARNING,
+            resolve_policy,
+        )
+
+        policy, _fallback = resolve_policy(self.config)
+        if policy != "off":
+            return
+        tail = [policy, RETIREMENT_DISABLED_WARNING]
+        if self._measure_recorded([RETIREMENT_DISABLED_SIGNAL, *tail]):
+            return
+        self.harness.record_measure(
+            inputs=["seat.retirement-disabled.v1", *tail]
+        )
+
     def _measure_recorded(self, inputs) -> bool:
         wanted = [str(value) for value in inputs]
         for event in self.harness.log.read():
@@ -3293,6 +3467,14 @@ class Scheduler:
         stop_snapshot = self._stop_snapshot() if self.stop_controller is not None else None
         for _ in range(cycles):
             try:
+                if self._every_conjecturer_seat_retired():
+                    # A clean stop, not a failure: nothing is left that can
+                    # generate, and the operator's law of 2026-08-29 requires
+                    # such a terminal to secure continuation rather than to
+                    # tidy a death. `_record_stop` writes the STOPPED lifecycle
+                    # receipt, which is what `continue` reads.
+                    self._stop_provider_unavailable(stop_snapshot)
+                    break
                 diagnostic_start = len(self.diagnostics)
                 self.step()
                 if on_cycle is not None and on_cycle(self):

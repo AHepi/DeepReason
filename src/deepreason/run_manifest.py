@@ -2524,6 +2524,13 @@ def _versioned_source_config_data(
     data.pop("TRANSPORT_RETRY_POLICY", None)
     data.pop("TRANSPORT_STREAMING", None)
     data.pop("TRANSPORT_DEAD_SEAT_STREAK", None)
+    # Seat retirement (granted contact, 2026-09-04; see
+    # DR-INV-frozen-surfaces). Same reason as the three above: the switch is
+    # read inside a run at the seat-selection site, never written to the
+    # manifest, and its effect IS recorded -- one seat.retired.v1 receipt per
+    # stood-down seat. Dropping it keeps every manifest and qualification
+    # digest byte-identical.
+    data.pop("SEAT_RETIREMENT_POLICY", None)
     return data
 
 

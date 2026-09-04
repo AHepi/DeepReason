@@ -1,0 +1,21 @@
+# Work-terminal census per route seat, run 4565139800f5ca02
+# derived read-only from objects/ on 2026-09-04
+# preparations=72 terminals=66
+ 11  argumentative_critic#0 ollama-deepseek-v4-pro-0813 completed         critic_output_admitted
+  1  argumentative_critic#0 ollama-deepseek-v4-pro-0813 rejected          critic_repair_requested
+  1  conjecturer#0 ollama-deepseek-v4-pro-0813     abandoned         context_no_additional_context
+  9  conjecturer#0 ollama-deepseek-v4-pro-0813     completed         semantic_admission_complete
+ 12  conjecturer#0 ollama-deepseek-v4-pro-0813     rejected          conjecture_repair_requested
+  3  conjecturer#0 ollama-deepseek-v4-pro-0813     rejected          conjecture_repair_step_rejected
+  2  conjecturer#1 ollama-glm-5.3                  completed         atomic_conjecture_output_admitted
+  3  conjecturer#1 ollama-glm-5.3                  rejected          atomic_conjecture_repair_requested
+  1  conjecturer#1 ollama-glm-5.3                  rejected          conjecture_repair_requested
+  3  conjecturer#1 ollama-glm-5.3                  rejected          conjecture_repair_step_rejected
+  1  conjecturer#1 ollama-glm-5.3                  schema_exhausted  atomic_conjecture_repair_unrepairable
+  1  conjecturer#1 ollama-glm-5.3                  schema_exhausted  conjecture_schema_exhausted
+  6  conjecturer#1 ollama-glm-5.3                  transport_failed  provider_transport_failure
+  2  defender#0 ollama-glm-5.3                     completed         trial_output_admitted
+  2  defender#0 ollama-glm-5.3                     rejected          trial_repair_requested
+  4  defender#0 ollama-glm-5.3                     transport_failed  trial_transport_failure
+  2  judge#0 ollama-qwen3.5-397b                   completed         trial_output_admitted
+  2  judge#1 ollama-gpt-oss-120b                   completed         trial_output_admitted

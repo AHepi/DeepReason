@@ -320,6 +320,75 @@ for field, want in zip(KNOBS, ('identical-v0', 'off', 7)):
     assert getattr(config_from_run_manifest(manifest), field) == want, field
 " && python -m pytest tests/ -q -k test_the_shipped_qualification_subject_digest_does_not_move`
 
+**Granted contact, 2026-09-04 — the seat-retirement switch's Config echo line.**
+The tranche instruction forecast a surface-2 contact (a new typed event kind)
+and asked that the existing notice channel be preferred if it could carry
+retirement without one. It could, so the forecast contact never happened:
+`tools/blast_radius.py` reports `harness.py` in neither contact list, because
+the exhaustion trigger reuses `RouteSeatInsufficientCapabilityV1` — the record
+that already states the fact per seat — and the standdown decision rides
+`record_measure`, the channel `provider.dead-seat-streak.v1` already uses. What
+DID contact is this surface, and the grant was requested at
+`experiments/2026-09-04-defect-dead-seat-retirement/FIX.md` §2b before a line
+of code existed, with `blast_radius`'s own `frozen_surface_verdict: CONTACT`
+and its single row pasted. The operator granted it the same day: "Grant it
+(recommended)".
+
+What moved: ONE `data.pop("SEAT_RETIREMENT_POLICY", None)` statement at four
+spaces in `_versioned_source_config_data`, unconditional, joining the thirty
+knobs already there, with the comment block each of its neighbours carries.
+**Insertions only — 8 and 0.** No schema, no validator, no field, no digest
+input.
+
+ONE flat scalar rather than a model, and that is the 2026-09-03 grant's own
+measured lesson rather than a preference: `_strict_carried_value` refuses to
+coerce a carriage notice's dict back into a model, so a model-valued dropped
+field compiles and then refuses to rebuild. ONE knob rather than two: the
+streak threshold is `TRANSPORT_DEAD_SEAT_STREAK`, which already exists, is
+already popped under that grant, and already means exactly "consecutive
+zero-byte returns on one seat". A second threshold would be a second spelling
+of one fact.
+
+The safety argument is the one every knob above it carries, and it runs the
+OTHER way from the usual reading of this surface: the pop is what PREVENTS the
+change. Without it the new `Config.SEAT_RETIREMENT_POLICY` field enters
+`engine_config_json`, moving `source_config_hash`, every manifest digest and
+every qualification subject digest — the `ENGAGED_CRITICISM_AUTHORITY` incident
+(`docs/ERRATA.md` E44) exactly. With it, nothing moves, and that is measured:
+`test_the_shipped_qualification_subject_digest_does_not_move` passes on the
+changed tree, and the drop-set round-trip test rose from 29 of 30 dropped
+fields to 30 of 31.
+
+Zero contact anywhere else, and `frozen_adjacent_contacts` is EMPTY:
+`route_fingerprint` is not touched, no `Route` field moves, `route_sha256` is
+byte-identical, and `capabilities/state.py`, `harness.py`, `invariants.py`,
+`verification/` and `qualification.py` take no contact at all.
+
+`check: python -c "
+from deepreason.config import Config
+from deepreason.run_manifest import _versioned_source_config_data, config_from_run_manifest
+for version in (1, 2, 3, 4, 5, 6):
+    echoed = _versioned_source_config_data(Config(), version)
+    assert 'SEAT_RETIREMENT_POLICY' not in echoed, version
+# Dropped is only half of it: a knob the echo drops must still round trip
+# through its carriage notice, or setting it breaks the run that set it.
+import sys; sys.path.insert(0, '.')
+from tests.test_reusable_qualification import _manifest, _profile
+manifest = _manifest(_profile(), config_updates={'SEAT_RETIREMENT_POLICY': 'off'})
+assert config_from_run_manifest(manifest).SEAT_RETIREMENT_POLICY == 'off'
+" && test "$(grep -c 'data.pop("SEAT_RETIREMENT_POLICY"' src/deepreason/run_manifest.py)" -eq 1`
+`check: python -c "
+import json, subprocess
+out = subprocess.run(
+    ['python', 'tools/blast_radius.py', '--files',
+     'src/deepreason/scheduler/scheduler.py', 'src/deepreason/config.py',
+     'src/deepreason/run_manifest.py', 'src/deepreason/runtime/seat_retirement.py'],
+    capture_output=True, text=True, check=True).stdout
+rows = json.loads(out)['frozen_surface_contacts']
+assert [row['target'] for row in rows] == ['src/deepreason/run_manifest.py'], rows
+assert json.loads(out)['frozen_adjacent_contacts'] == []
+"`
+
 **Granted contact, 2026-08-27 — the sandbox attribute boundary (the escape fix).**
 The operator granted this contact IN CHAT, conditionally, after being shown the
 verdict it unblocks: "can you fix please. Frozen surface changes are permitted
@@ -386,7 +455,53 @@ from deepreason.verification import simulation
 assert 'forbidden_attribute(node.attr)' in inspect.getsource(simulation._guard)
 "`
 `check: python -m pytest tests/test_sandbox_guard.py -q`
-`check: ! git diff --name-only origin/main...HEAD | grep -qE "capabilities/state\.py|/harness\.py|/invariants\.py|/run_manifest\.py|/qualification\.py|llm/firewall\.py"`
+The third check below is the branch-wide tripwire. It used to read
+`! git diff --name-only origin/main...HEAD | grep -qE <the six surface paths>`,
+which asserted the 2026-08-27 tranche touched none of them. That form stopped
+being able to say what it meant the moment that tranche merged: on any later
+branch the same command reads THAT branch's diff, so the check turned red on
+the first granted contact anywhere in the six files — barring exactly what this
+document exists to permit, and it did, on the 2026-09-04 grant below. It now
+asserts the claim that is actually invariant: **every frozen-surface file this
+branch touches must be LEDGERED here as a granted contact.** An ungranted
+contact still turns it red, which is the whole job; a granted one does not.
+Re-aimed 2026-09-04 (`experiments/2026-09-04-defect-dead-seat-retirement/`,
+`docs/ERRATA.md` E74).
+
+**Its residue, stated rather than hidden: it is COARSE.** A file that carries
+any ledgered grant is not re-checked by this tripwire at all, so today it can
+only fire on `capabilities/state.py` and `qualification.py` — the two of the six
+with no grant yet (measured:
+`experiments/2026-09-04-defect-dead-seat-retirement/proof/tripwire_can_fail.txt`).
+That is strictly more than the old form, which could not pass at all and was
+therefore ignored, but it is less than a per-tranche check. What actually
+guards a NEW contact on an already-granted file is `tools/blast_radius.py`,
+which reports `CONTACT` whatever this document ledgers, and the workflow rule
+that every row it prints is disposed in FIX.md before code is written.
+
+`check: python -c "
+import pathlib, re, subprocess
+SURFACES = {
+    'src/deepreason/capabilities/state.py',
+    'src/deepreason/harness.py',
+    'src/deepreason/invariants.py',
+    'src/deepreason/run_manifest.py',
+    'src/deepreason/qualification.py',
+    'src/deepreason/llm/firewall.py',
+}
+changed = set(subprocess.run(
+    ['git', 'diff', '--name-only', 'origin/main...HEAD', '--', 'src/'],
+    capture_output=True, text=True).stdout.split())
+doc = pathlib.Path('docs/map/INV-frozen-surfaces.md').read_text()
+ledgered = set()
+for block in doc.split('**Granted contact')[1:]:
+    head = block[:block.index(chr(10) + chr(10))] if chr(10) + chr(10) in block else block
+    for path in SURFACES:
+        if path.rsplit('/', 1)[1] in head or path in block[:3000]:
+            ledgered.add(path)
+ungranted = sorted((changed & SURFACES) - ledgered)
+assert not ungranted, ungranted
+"`
 
 ### 4. Manifest schemas AND their validators — `run_manifest.py`
 

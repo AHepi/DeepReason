@@ -1,0 +1,39 @@
+# Mutation proofs, 2026-09-04 -- each shows the suite goes RED when the fix is removed.
+
+== MUTATION 1: retired_seats() always returns {} (no seat is ever stood down)
+src/deepreason/workflow/transaction_service.py:265: RunManifestError
+=========================== short test summary info ============================
+FAILED tests/test_dead_seat_retirement.py::test_the_p_a1_shape_runs_on_the_healthy_seat_after_the_dead_one_exhausts
+FAILED tests/test_dead_seat_retirement.py::test_a_dead_seat_does_not_kill_the_run_through_the_atomic_recovery_road
+FAILED tests/test_dead_seat_retirement.py::test_the_retirement_is_typed_and_names_the_seat_endpoint_and_trigger
+FAILED tests/test_dead_seat_retirement.py::test_the_receipt_is_written_once_per_seat_however_many_cycles_run
+FAILED tests/test_dead_seat_retirement.py::test_dispatch_moves_to_the_healthy_seat_and_never_returns_to_the_dead_one
+FAILED tests/test_dead_seat_retirement.py::test_deepreason_results_reports_the_retirement_and_a_typed_absence
+FAILED tests/test_dead_seat_retirement.py::test_an_unknown_policy_falls_back_and_discloses_rather_than_refusing
+FAILED tests/test_dead_seat_retirement.py::test_retirement_never_changes_a_seat_instance_spelling
+FAILED tests/test_dead_seat_retirement.py::test_every_seat_dead_stops_clean_on_a_reason_that_permits_continue
+FAILED tests/test_dead_seat_retirement.py::test_the_all_dead_stop_writes_the_record_a_continuation_reads
+FAILED tests/test_dead_seat_retirement.py::test_a_recovered_provider_lets_the_stopped_run_carry_on
+11 failed, 4 passed in 27.42s
+
+== MUTATION 2: the all-dead stop reports operational_failure instead of provider_unavailable
+tests/test_dead_seat_retirement.py:615: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_dead_seat_retirement.py::test_every_seat_dead_stops_clean_on_a_reason_that_permits_continue
+FAILED tests/test_dead_seat_retirement.py::test_the_all_dead_stop_writes_the_record_a_continuation_reads
+FAILED tests/test_dead_seat_retirement.py::test_a_recovered_provider_lets_the_stopped_run_carry_on
+3 failed, 12 passed in 36.12s
+
+== MUTATION 3: the school loop stops skipping retired schools
+FAILED tests/test_dead_seat_retirement.py::test_the_p_a1_shape_runs_on_the_healthy_seat_after_the_dead_one_exhausts
+FAILED tests/test_dead_seat_retirement.py::test_a_dead_seat_does_not_kill_the_run_through_the_atomic_recovery_road
+FAILED tests/test_dead_seat_retirement.py::test_the_retirement_is_typed_and_names_the_seat_endpoint_and_trigger
+FAILED tests/test_dead_seat_retirement.py::test_the_receipt_is_written_once_per_seat_however_many_cycles_run
+FAILED tests/test_dead_seat_retirement.py::test_dispatch_moves_to_the_healthy_seat_and_never_returns_to_the_dead_one
+FAILED tests/test_dead_seat_retirement.py::test_deepreason_results_reports_the_retirement_and_a_typed_absence
+FAILED tests/test_dead_seat_retirement.py::test_an_unknown_policy_falls_back_and_discloses_rather_than_refusing
+7 failed, 8 passed in 26.21s
+
+== RESTORED: the shipped tree
+...............                                                          [100%]
+15 passed in 36.78s

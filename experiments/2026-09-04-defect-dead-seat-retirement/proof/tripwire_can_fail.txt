@@ -1,0 +1,4 @@
+src/deepreason/qualification.py -> would fail: True ['src/deepreason/qualification.py']
+src/deepreason/capabilities/state.py -> would fail: True ['src/deepreason/capabilities/state.py']
+
+ledgered (a contact here would NOT fail): ['src/deepreason/harness.py', 'src/deepreason/invariants.py', 'src/deepreason/llm/firewall.py', 'src/deepreason/run_manifest.py']
