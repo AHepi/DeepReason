@@ -19,7 +19,9 @@ from __future__ import annotations
 from deepreason.llm.seat_sections import (
     SeatPackLayoutEntryV1,
     SeatPackLayoutV1,
+    SeatShellV1,
     register_seat_pack_layout,
+    register_seat_shell,
 )
 
 CONJECTURER_SEAT = "conjecturer"
@@ -104,8 +106,30 @@ CRITIC_LEGACY_LAYOUT = SeatPackLayoutV1(
 )
 
 
+# The two shipped shells reproduce today's two seats exactly. A third pairing
+# -- a second conjecturer kind, a second criticism kind -- is a registration
+# when the operator says what it is (R22, R23), not a code change.
+CONJECTURER_LEGACY_SHELL = SeatShellV1(
+    shell_id="seat.conjecturer.legacy-v0",
+    seat_id=CONJECTURER_SEAT,
+    layout_id=CONJECTURER_LEGACY_LAYOUT_ID,
+    form_id="conjecturer.turn.v6",
+    role_prompt_template_id="role-prompt.legacy-v0",
+)
+
+CRITIC_LEGACY_SHELL = SeatShellV1(
+    shell_id="seat.critic.legacy-v0",
+    seat_id=CRITIC_SEAT,
+    layout_id=CRITIC_LEGACY_LAYOUT_ID,
+    form_id="argumentative_critic.compact.v1",
+    role_prompt_template_id="role-prompt.legacy-v0",
+)
+
+
 def register_shipped_layouts() -> None:
     register_seat_pack_layout(
         CONJECTURER_LEGACY_LAYOUT, default_for_seat=CONJECTURER_SEAT
     )
     register_seat_pack_layout(CRITIC_LEGACY_LAYOUT, default_for_seat=CRITIC_SEAT)
+    register_seat_shell(CONJECTURER_LEGACY_SHELL, default_for_seat=CONJECTURER_SEAT)
+    register_seat_shell(CRITIC_LEGACY_SHELL, default_for_seat=CRITIC_SEAT)

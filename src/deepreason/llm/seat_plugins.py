@@ -55,6 +55,14 @@ class _Plugin:
     # Declared statically so a layout can be CHECKED without a render, and so
     # the registry rather than the plugin decides what menu accompanies it.
     declared_handle_kinds: tuple[str, ...] = ()
+    # What this plugin's render CANNOT do without. Declared rather than
+    # discovered, because a shell is meant to be bindable in another seat's
+    # place (R20) and the seats do not carry the same inputs: a critic's
+    # request has no problem, a conjecturer's has no target. A plugin whose
+    # required input is absent DECLINES -- the protocol's `None`, "this
+    # section has nothing this cycle" -- instead of raising. `"problem"` names
+    # the request field; every other entry names a `supplied` key.
+    requires: tuple[str, ...] = ()
     parameters_model: type[BaseModel] = NoParams
 
     def render(
@@ -99,6 +107,7 @@ def _verbatim(plugin_id: str, section_id: str, supplied_key: str):
 class _ProblemStatement(_Plugin):
     plugin_id = "dr.problem"
     section_id = "problem"
+    requires = ("problem",)
 
     def render(self, request, params):
         problem = request.problem
@@ -112,6 +121,7 @@ class _ProblemStatement(_Plugin):
 class _Criteria(_Plugin):
     plugin_id = "dr.criteria"
     section_id = "criteria"
+    requires = ("problem",)
 
     def render(self, request, params):
         problem = request.problem
@@ -129,6 +139,7 @@ class _Criteria(_Plugin):
 class _MandatoryInterface(_Plugin):
     plugin_id = "dr.mandatory-interface"
     section_id = "mandatory-interface"
+    requires = ("problem",)
 
     def render(self, request, params):
         from deepreason.llm.packs import _lineage_foundation
@@ -157,6 +168,7 @@ class ActivePropertiesParams(BaseModel):
 class _ActiveProperties(_Plugin):
     plugin_id = "dr.active-properties"
     section_id = "active-properties"
+    requires = ("problem",)
     parameters_model = ActivePropertiesParams
 
     def render(self, request, params):
@@ -527,6 +539,7 @@ _FrameSlice = _verbatim("dr.frame.slice", "frame-slice", "frame_slice_context")
 class _ProblemContext(_Plugin):
     plugin_id = "dr.problem-context"
     section_id = "problem-context"
+    requires = ("target_id",)
 
     def render(self, request, params):
         from deepreason.llm.packs import _problem_context
@@ -547,6 +560,7 @@ class _ProblemContext(_Plugin):
 class _TargetCommitments(_Plugin):
     plugin_id = "dr.target-commitments"
     section_id = "target-commitments"
+    requires = ("target_id",)
 
     def render(self, request, params):
         from deepreason.llm.packs import _execution_spec_lines
@@ -588,6 +602,7 @@ class StandingAttacksParams(BaseModel):
 class _StandingAttacks(_Plugin):
     plugin_id = "dr.standing-attacks"
     section_id = "standing-attacks"
+    requires = ("target_id",)
     parameters_model = StandingAttacksParams
 
     def render(self, request, params):
@@ -616,6 +631,7 @@ class _StandingAttacks(_Plugin):
 class _TargetSupportChain(_Plugin):
     plugin_id = "dr.target.support-chain"
     section_id = "target-support-chain"
+    requires = ("target_id",)
 
     def render(self, request, params):
         target = request.state.artifacts[_supplied(request, "target_id")]
@@ -635,6 +651,7 @@ class _TargetSupportChain(_Plugin):
 class _TargetSupportContent(_Plugin):
     plugin_id = "dr.target.support-content"
     section_id = "target-support-content"
+    requires = ("target_id",)
 
     def render(self, request, params):
         from deepreason.llm.packs import _head
@@ -663,6 +680,7 @@ class _TargetSupportContent(_Plugin):
 class _Target(_Plugin):
     plugin_id = "dr.target"
     section_id = "target"
+    requires = ("target_id",)
 
     def render(self, request, params):
         from deepreason.programs import content_text
@@ -679,6 +697,7 @@ class _Target(_Plugin):
 class _CounterexampleRecourse(_Plugin):
     plugin_id = "dr.counterexample-recourse"
     section_id = "counterexample-recourse"
+    requires = ("target_id",)
 
     def render(self, request, params):
         from deepreason.llm.packs import (

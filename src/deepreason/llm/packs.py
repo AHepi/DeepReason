@@ -447,7 +447,22 @@ def _walk_seat_layout(seat_id: str, layout_id, request, receipts=None):
     for entry in pack_layout.entries:
         plugin = resolve_section_plugin(entry.plugin_id, entry.plugin_version)
         params = plugin.parameters_model(**dict(entry.params))
-        render = plugin.render(request, params)
+        # A plugin whose declared input this seat does not carry DECLINES.
+        # This is what makes a shell portable between seats (R20): the
+        # conjecturer's brief bound in the critic's place renders the sections
+        # a critic request can feed and records the rest as absent, rather
+        # than raising on the first one that wanted a problem.
+        missing = [
+            name
+            for name in getattr(plugin, "requires", ())
+            if (request.problem is None)
+            if name == "problem"
+        ] + [
+            name
+            for name in getattr(plugin, "requires", ())
+            if name != "problem" and not request.supplied.get(name)
+        ]
+        render = None if missing else plugin.render(request, params)
         digest = hashlib.sha256(
             json.dumps(
                 params.model_dump(mode="json"), sort_keys=True

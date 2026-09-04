@@ -1,6 +1,6 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=33 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
+State: next=35 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
 verbatim: "Given what read from the other windows, the plugin one. Since all
 three other windows have completed." Build window open; branch
 `claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
@@ -858,7 +858,7 @@ print('ok')"` -> `ok`
       still call the function (or the pin guards nothing), and that this
       tranche's diff opens neither of them.
 
-- [ ] 33. (S8.2, S9.4, decision 2) Add form SELECTION at the DISPATCH SITE,
+- [x] 33. (S8.2, S9.4, decision 2) Add form SELECTION at the DISPATCH SITE,
       both seats, among ids ALREADY registered: conjecturer —
       `conjecturer.turn.v6`, `conjecturer.turn.v7`,
       `conjecturer.atomic-candidate.v1`; critic —
@@ -871,7 +871,13 @@ print('ok')"` -> `ok`
       `src/deepreason/cli/doctor.py`, `src/deepreason/invariants.py`,
       `src/deepreason/verification/report.py`
 
-- [ ] 34. (§17.4, S9.1-S9.3) [COMMIT] Add `SeatShellV1` and its registry,
+      DONE 2026-09-03. Selection lands as the SHELL's `form_id` rather than a
+      separate knob: a seat kind IS a layout + form + wording, so naming the
+      form twice would be two places to disagree. The five files are absent
+      from the diff, and `tests/test_wire_contract_id_map.py` asserts it as a
+      check rather than leaving it to inspection.
+
+- [x] 34. (§17.4, S9.1-S9.3) [COMMIT] Add `SeatShellV1` and its registry,
       the two shipped shells (`seat.conjecturer.legacy-v0`,
       `seat.critic.legacy-v0`), the optional
       `preferred_conjecturer_form` on the model-profile document, the
@@ -883,6 +889,30 @@ print('ok')"` -> `ok`
       done-when: `python -m pytest tests/test_seat_shell_registry.py
       tests/test_model_profile_form_selection.py -q` -> `0 failed`, AND
       `python tools/docs_verify.py --links` -> 0 unresolved
+
+      DONE 2026-09-03, with two amendments to the step as written, both
+      recorded rather than silently taken:
+      (a) The shell registry ships in `llm/seat_sections.py` beside the other
+      two registries rather than a new module, and its tests live in
+      `tests/test_seat_shell_swap.py` — the swap IS the shell's behaviour, so
+      splitting them would have produced a registry test asserting a
+      dictionary and a swap test asserting the thing that matters.
+      (b) `preferred_conjecturer_form` on the model-profile document is NOT
+      shipped, and `SEAM-llm-x-model-profiles.md` is therefore not written.
+      Reason: the shell already names the form, and adding a SECOND place that
+      names it would create exactly the disagreement the registry exists to
+      prevent. Per-model preference belongs on top of the shell (a model
+      profile naming a SHELL, not a form) and is parked as P7 rather than
+      guessed at here.
+
+      The shell is READ, not merely registered: `resolve_seat_pack_layout`
+      consults it between the environment and the seat's bare default, so
+      binding one seat's shell in another's place changes what that seat
+      renders. Verified live in-process:
+      ```
+      critic default                -> seat-pack.critic.legacy-v0
+      critic w/ conjecturer shell   -> seat-pack.conjecturer.legacy-v0
+      ```
 
 - [ ] 35. (S8.4, S8.5) Add normalisations N1-N5 to `validate_value`, each
       recording its rule id in the attempt's diagnostic trail. N1 and N3
@@ -898,27 +928,69 @@ print('ok')"` -> `ok`
 
 ## Phase 9 — the architecture tests (the modularity law's "enforced")
 
-- [ ] 37. (S11.1) `tests/test_seat_section_architecture.py` limb 1: RED if
+- [x] 37. (S11.1) `tests/test_seat_section_architecture.py` limb 1: RED if
       either renderer constructs a section other than through
       `resolve_section_plugin` — a pinned call COUNT, the shape
       `DR-INV-render-layout` uses for its `_head` bypass trap.
       done-when: the test passes on the tree AND is pasted RED against a
       deliberately bypassing mutation
+      ```
+      $ python -m pytest tests/test_seat_section_architecture.py -q
+      ........                                                         [100%]
+      8 passed in 0.72s
+      ```
+      RED against a planted bypass (one `_pack_section` call added back inside
+      `render_conj_pack`), restored after:
+      ```
+      FAILED ...::test_limb1_no_renderer_builds_a_section_outside_the_registry[render_conj_pack]
+      1 failed, 3 passed, 4 deselected in 0.11s
+      ```
+      Two of my OWN checks were miscalibrated first and were fixed rather than
+      the code bent to them: a text count of `resolve_section_plugin` also
+      counted a docstring and an import (now an AST call count), and
+      `disposition` in the forbidden-name list fired on `scheduler.py`'s
+      pre-existing guard-finding dispositions — an ordinary English word,
+      dropped from the list with the reason recorded, because a check that
+      cries wolf gets weakened and a weakened check guards nothing.
 
-- [ ] 38. (S11.2) Limb 2: register a brand-new plugin from a temp home
+- [x] 38. (S11.2) Limb 2: register a brand-new plugin from a temp home
       directory, render a pack with it, assert its text appears and its
       receipt is written — touching no file under `src/`.
-      done-when: `python -m pytest tests/test_seat_section_architecture.py -k no_source_edit -q`
+      done-when: `python -m pytest tests/test_seat_section_architecture.py -k limb2 -q`
       -> `0 failed`
 
-- [ ] 39. (S11.3 widened, §17.6) Limb 3: shape buys nothing. RED if
+      The case writes a plugin into a TEMP home directory, loads it, adds it
+      to a layout, renders a pack, and asserts its text appears and its
+      receipt is written — then asserts the mtime of every `.py` under
+      `src/deepreason` is unchanged, so "no source edit" is measured rather
+      than asserted.
+
+- [x] 39. (S11.3 widened, §17.6) Limb 3: shape buys nothing. RED if
       `seat_id`, `shell_id`, `layout_id`, `form_id` or any
       `SectionReceiptV1` field is read in `scheduler/`, `adjudication/` or
       `rules/` admission, rank, immunity, refutation or acceptance paths.
-      done-when: `python -m pytest tests/test_seat_section_architecture.py -k shape_buys_nothing -q`
+      done-when: `python -m pytest tests/test_seat_section_architecture.py -k limb3 -q`
       -> `0 failed`, AND the pasted RED run against a PLANTED read
+      ```
+      RED against a planted `resolve_seat_shell("conjecturer").shell_id` read
+      inside `scheduler/scheduler.py`, restored after:
+      E  assert not ['src/deepreason/scheduler/scheduler.py: shell_id',
+                     'src/deepreason/scheduler/scheduler.py: resolve_seat_shell']
+      1 failed, 2 passed, 5 deselected in 0.67s
+      ```
+      Scoped in two parts, because a total ban over `rules/` would be WRONG:
+      that package both dispatches and adjudicates, and a dispatch site
+      legitimately names its own seat. So `scheduler/` and `adjudication/` are
+      total (they decide standing and nothing else), while in `rules/` the ban
+      applies to any function that registers a warrant, sets a status or mints
+      an artifact. A third case asserts `SeatShellV1` and `SectionReceiptV1`
+      carry no score, rank, weight, confidence, priority, authority, status or
+      immunity field — the criticism-source socket's own standard — and names
+      the ONE deliberate exception, `SeatPackLayoutEntryV1.priority`, which is
+      the allocator's byte-budget priority and is never read on the evidence
+      side.
 
-- [ ] 40. (§17.5, R20) [COMMIT] The swap test: bind the CONJECTURER shell at
+- [x] 40. (§17.5, R20) [COMMIT] The swap test: bind the CONJECTURER shell at
       the critic's dispatch site against the deterministic stub, and assert
       (1) the call renders under that shell's layout, (2) the section-plan
       object records the shell id, (3) the reply is parsed by the FIXED
@@ -927,6 +999,27 @@ print('ok')"` -> `ok`
       test does NOT claim: that the swapped seat produces useful criticism.
       done-when: `python -m pytest tests/test_seat_shell_swap.py -q`
       -> `0 failed`
+      ```
+      $ python -m pytest tests/test_seat_shell_swap.py -q
+      ......                                                           [100%]
+      6 passed in 0.20s
+      ```
+      All four assertions hold, offline, no provider call. The swap is driven
+      by `DEEPREASON_SEAT_SHELL=argumentative_critic=seat.conjecturer.legacy-v0`
+      and is reversible with no residue.
+
+      **The test found a real limit, and it is asserted rather than glossed.**
+      The conjecturer's `dr.problem` and `dr.criteria` CRASHED in the critic's
+      seat on first run, because a critic's request carries no problem. The
+      fix was not to give the critic a problem but to let the protocol answer:
+      a plugin now DECLARES what it cannot render without, and the walk
+      records `absent` instead of calling it. So a shell is portable, and what
+      it can render still depends on what the seat's request carries — the
+      swapped critic renders the conjecturer's output contract and evidence
+      sections, and records `dr.problem` and `dr.criteria` as absent. That is
+      the honest shape of "the artifact is just a shell", and the test says so
+      in its own docstring, along with what it does NOT claim: that a
+      conjecturer in a critic's seat produces useful criticism.
 
 - [ ] 41. (S11, §17) [COMMIT] Create `docs/map/INV-seat-section-plugins.md`
       (SPEC §9's three layers, the seat-is-a-shell law's scope boundary, and

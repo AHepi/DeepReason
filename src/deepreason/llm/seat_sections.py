@@ -487,6 +487,9 @@ def resolve_seat_pack_layout(
     Resolved PER CALL rather than bound at import, so selecting a composition
     through the environment takes effect without a restart -- the property
     `DR-INV-render-layout` already relies on for arrangement.
+
+    Order: explicit argument, then `DEEPREASON_SEAT_PACK_LAYOUT`, then the
+    seat's SHELL, then the seat's bare default.
     """
 
     import os
@@ -496,6 +499,15 @@ def resolve_seat_pack_layout(
         raw = os.environ.get(SEAT_PACK_LAYOUT_ENV) or ""
         if raw.strip():
             requested = _environment_assignments(raw).get(seat_id)
+    if requested is None:
+        # The SHELL is consulted before the seat's bare default, because the
+        # shell is what a seat kind IS: binding the conjecturer's shell in the
+        # critic's place must change what the critic renders, or the pairing
+        # would be a registry nobody reads.
+        try:
+            requested = resolve_seat_shell(seat_id).layout_id
+        except SeatSectionError:
+            requested = None
     if requested is None:
         requested = _DEFAULT_LAYOUT_FOR_SEAT.get(seat_id)
     if requested is None:
@@ -663,3 +675,101 @@ def _template_plugin(path):
             return SectionRenderV1(section_id=self.section_id, text=text)
 
     return _Template()
+
+
+# ---------------------------------------------------------------------------
+# The seat shell — the pairing that IS a seat kind.
+#
+# "A seat is a shell: its input and its output define it" (CLAUDE.md,
+# 2026-09-03). What makes a seat a conjecturer or a critic is the BRIEF it is
+# shown and the FORM it is asked to fill, so a seat kind is a registered
+# pairing of a layout, a form and a wording -- never a code path with the
+# seat's name on it. Binding the conjecturer's pairing where the critic's is
+# bound is therefore a registry lookup, which is what
+# `tests/test_seat_shell_swap.py` demonstrates.
+#
+# R22 and R23 -- "conjecturers will need to be split in two", "criticism will
+# need two different types" -- are why this exists. Each is a THIRD registered
+# pairing when the operator says what the two kinds are; neither is built here.
+#
+# NO SCORE, RANK, WEIGHT, CONFIDENCE, PRIORITY OR AUTHORITY FIELD. The shell
+# is the generation side; shape may never buy standing on the evidence side
+# (the formalism-optional law, and the criticism-source socket's own
+# standard). `tests/test_seat_section_architecture.py` goes red if one appears.
+# ---------------------------------------------------------------------------
+
+SEAT_SHELL_ENV = "DEEPREASON_SEAT_SHELL"
+
+
+class SeatShellV1(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    shell_id: str = Field(min_length=1, max_length=96)
+    shell_version: str = Field(default="1.0.0", min_length=1)
+    seat_id: str = Field(min_length=1, max_length=64)
+    layout_id: str = Field(min_length=1, max_length=96)
+    form_id: str = Field(min_length=1, max_length=96)
+    role_prompt_template_id: str = Field(min_length=1, max_length=96)
+
+
+_SHELL_REGISTRY: dict[str, SeatShellV1] = {}
+_DEFAULT_SHELL_FOR_SEAT: dict[str, str] = {}
+
+
+def register_seat_shell(
+    shell: SeatShellV1, *, default_for_seat: str | None = None
+) -> SeatShellV1:
+    existing = _SHELL_REGISTRY.get(shell.shell_id)
+    if existing is not None and existing != shell:
+        raise SeatSectionError(
+            "SEAT_SHELL_CONFLICT",
+            f"shell id {shell.shell_id!r} is already registered with "
+            "different values",
+        )
+    _SHELL_REGISTRY[shell.shell_id] = shell
+    if default_for_seat is not None:
+        _DEFAULT_SHELL_FOR_SEAT[default_for_seat] = shell.shell_id
+    return shell
+
+
+def seat_shell_ids() -> tuple[str, ...]:
+    return tuple(sorted(_SHELL_REGISTRY))
+
+
+def resolve_seat_shell(seat_id: str, shell_id: str | None = None) -> SeatShellV1:
+    """Explicit argument, then `DEEPREASON_SEAT_SHELL`, then the seat's
+    default. Never `Config`, never the manifest -- decision (1) of SPEC §13.
+
+    Selecting a shell emits no refusal: the ungated-seats law says any model
+    may sit in any seat and no flag may gate a seat-configuration path. An
+    UNREGISTERED id is refused at the point of use, which is the
+    all-configurations law's own shape -- impossibility surfaces where it
+    bites, not at compile.
+    """
+
+    import os
+
+    from deepreason.llm.seat_plugins import ensure_seeded
+
+    ensure_seeded()
+    requested = shell_id
+    if requested is None:
+        raw = os.environ.get(SEAT_SHELL_ENV) or ""
+        if raw.strip():
+            requested = _environment_assignments(raw).get(seat_id)
+    if requested is None:
+        requested = _DEFAULT_SHELL_FOR_SEAT.get(seat_id)
+    if requested is None:
+        raise SeatSectionError(
+            "SEAT_SHELL_NO_DEFAULT",
+            f"no default shell for seat {seat_id!r}; registered: "
+            + ", ".join(seat_shell_ids()),
+        )
+    shell = _SHELL_REGISTRY.get(requested)
+    if shell is None:
+        raise SeatSectionError(
+            "SEAT_SHELL_UNKNOWN",
+            f"no seat shell {requested!r}; registered: "
+            + ", ".join(seat_shell_ids()),
+        )
+    return shell

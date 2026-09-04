@@ -306,3 +306,62 @@ guessed entry costs an un-shipping.
 OUT OF SCOPE: everything in P4 and P5; any new contract id; any frozen
 surface.
 ```
+
+---
+
+## P7 — a model profile that names a SHELL, not a form
+
+**What.** `SPEC.md` S9.1 proposed an optional `preferred_conjecturer_form` on
+the model-profile document, so a model could name the form it does best with.
+It is NOT shipped, and the reason is a conflict the build surfaced rather than
+a shortage of time: the SEAT SHELL already names the form
+(`SeatShellV1.form_id`). A profile naming a form directly would create a
+second place that decides the same thing, which is exactly the disagreement
+the registry exists to prevent — and the resolution order would then have to
+arbitrate between a shell that says one form and a profile that says another.
+
+**Disposition.** Per-model preference belongs one level up: a model profile
+naming a SHELL. That composes (the shell still pairs a layout, a form and a
+wording) and it needs no arbitration. It also crosses the `llm x
+model-profiles` seam, which `docs/map/INDEX.md` still lists as not yet
+written, so the seam document is written by that tranche rather than this one.
+
+```
+EXECUTOR WINDOW — CHANGE TRANCHE: let a model profile name the seat shell it
+does best with
+
+Read CLAUDE.md fully, including the seat-is-a-shell law (2026-09-03). Then
+load dr-change-orchestrator, dr-drive-harness, dr-ask-the-right-question and
+pinker-write-for-readers. Start at dr-capture-request. Base on main at or
+after the merge of claude/conjecturer-pluggable-interface-7v3es6.
+
+WHAT EXISTS. That branch shipped SeatShellV1(seat_id, layout_id, form_id,
+role_prompt_template_id) with a registry and resolution: argument ->
+DEEPREASON_SEAT_SHELL -> the seat's default. Two shells ship, reproducing
+today's conjecturer and today's critic.
+
+WHAT TO ADD: an OPTIONAL preferred_shell on the model-profile document
+(docs/map/CON-model-profiles.md; the operator's own agent.md in their home
+directory), and a resolution step between the environment and the seat
+default. Optional, and its absence means nothing -- that concept's own stance
+is that the harness "holds no per-model opinion of its own" and "says so
+rather than guessing". Selecting one emits a typed NOTICE, never a refusal
+(the ungated-seats law, 2026-08-28).
+
+DO NOT put a form id on the profile. The shell already names the form, and two
+places naming it is the disagreement the registry exists to prevent -- that is
+why the parent tranche parked this instead of shipping SPEC S9.1 as written.
+
+MAP: write docs/map/SEAM-llm-x-model-profiles.md in the SAME commit;
+docs/map/INDEX.md lists that seam as not yet written and this is the work that
+crosses it.
+
+FROZEN SURFACES: forecast NO CONTACT. Hold the parent's four decisions:
+selection by argument/env never Config never the manifest; no new contract id;
+no new verify_root check; and wire_contract_for keeps returning the same
+contract_id for every input it resolves today (its answers are folded into a
+replay authority set at invariants.py:1233 and a qualification subject at
+run_manifest.py:2074 -- tests/test_wire_contract_id_map.py pins them).
+
+OUT OF SCOPE: everything in P4, P5 and P6.
+```
