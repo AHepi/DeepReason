@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=2 blockers=none
+State: next=3 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -43,11 +43,23 @@ as an omission.
       rebuttal exists in any source root, so F2 is prior-objection
       exposure), A11 (the file was renamed off the stdlib's `select`).
 
-- [ ] 2. (S5, S6) [COMMIT] Write `plant.py`: the six mutators, the
+- [x] 2. (S5, S6) [COMMIT] Write `plant.py`: the six mutators, the
       single-difference assertion, and `DEFECT_KEY.json`.
       done-when: `python plant.py --write` prints `60 pairs, 10 per
       class` and `assert_single_difference` passes on all 60; a second
       run reproduces `DEFECT_KEY.json` byte-for-byte.
+      DONE:
+          60 pairs, 10 per class
+            unsupported-comparison: 10
+            causal-non-sequitur: 10
+            evidence-misquotation: 10
+            circular-mechanism: 10
+            scope-contradiction: 10
+            vacuous-forbidden-case: 10
+          DEFECT_KEY.sha256: b1813c10848092fe849a53a611146bf86a6c609e1eccbdbd6671af82d95b4b74
+          --- rerun --- identical digest
+          sha256sum DEFECT_KEY.json ->
+            b1813c10848092fe849a53a611146bf86a6c609e1eccbdbd6671af82d95b4b74
 
 - [ ] 3. (S1, S2, S3, S4) Write `cells.py`: the two operator plugins and
       the four layout registrations, plus the census renderer.
