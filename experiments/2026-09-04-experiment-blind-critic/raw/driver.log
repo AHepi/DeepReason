@@ -1,0 +1,4 @@
+[bench] cell C00 -> seat-pack.critic.exp-C00  (120 targets)
+[bench] 20 calls, 0 failed  last=C00/T021 ok=True
+[bench] 40 calls, 0 failed  last=C00/T040 ok=True
+[bench] 60 calls, 0 failed  last=C00/T061 ok=True
