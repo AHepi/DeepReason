@@ -44,6 +44,31 @@ re-derivation of an old log produces a state its own record never held.
 
 `check: grep -q "class Harness" src/deepreason/harness.py`
 
+**Granted contact, 2026-09-04 — the section plan, a new record kind.** The
+seat-shell build (`experiments/2026-09-03-change-conjecturer-pluggable-
+interface/`) stopped at CHECKLIST step 24 and asked for one thing: a new
+record object kind, `workflow-context-section-plan-v1`, so the receipts a
+rendered brief already builds can be WRITTEN to the run. The request carried
+`tools/blast_radius.py`'s own `CONTACT` rows and the disposal of the cheaper
+road (reusing the pack-plan family would have widened an alias pattern and a
+four-value enum that 3 533 committed rows use). The operator's reply, in full:
+"granted" (that tranche's `REQUEST.md` §1c, R25).
+
+What moved: one line in `record_transaction_transition`'s schema map and the
+same kind in the `work_issued` allowed set — the first granted contact this
+surface has carried. The kind has a FIXED position in the canonical
+`work_issued` shape (after the pack plans, before the reservation), because
+`workflow/replay.py` compares the whole schema sequence and a record that could
+sit anywhere would make two orderings of one attempt both valid. The grant
+covers registration and well-formedness for THIS kind only: not a new
+`verify_root` check (surface 3 untouched, proven at that tranche's step 25),
+not any change to how an existing record is applied. The critic's plan is NOT
+written (PARKED P8: its pack is rendered before its transaction opens).
+Ledgered here by the monitor at merge; the window filed the grant in its own
+REQUEST.md and VALIDATION.md but not in this document.
+
+`check: grep -q 'SectionPlanV1: "workflow-context-section-plan-v1"' src/deepreason/harness.py && ! grep -q "section-plan" src/deepreason/invariants.py && ! grep -rq "section-plan" src/deepreason/verification/`
+
 ### 3. Replay-validation record formats — `invariants.py`, `verification/`
 
 `verify_root` and the epistemic-check report. Their output shape is compared
