@@ -1120,12 +1120,29 @@ print('ok')"` -> `ok`
 
 ## Phase 11 — the gate and delivery
 
-- [ ] 45. (§13, §17.9) Frozen-surface disclosure: re-run the gate's own
+- [x] 45. (§13, §17.9) Frozen-surface disclosure: re-run the gate's own
       instrument over the ACTUAL diff and paste the result.
       done-when: `python tools/blast_radius.py --files $(git diff
       --name-only e91f4fcc3..HEAD -- 'src/*') --against e91f4fcc3` ->
       `"frozen_surface_verdict": "CLEAR"`. **Anything else is a STOP**:
       request the grant in a document before proceeding.
+
+      DONE 2026-09-04, over the ACTUAL diff (eight files under `src/`):
+      ```
+      verdict: CLEAR   contacts: []   adjacent: []   drift: []
+      ```
+      And the independent confirmation, `INV-frozen-surfaces.md:364`'s branch
+      tripwire, run directly:
+      ```
+      $ ! git diff --name-only origin/main...HEAD | grep -qE \
+          "capabilities/state\.py|/harness\.py|/invariants\.py|/run_manifest\.py|/qualification\.py|llm/firewall\.py"
+      GREEN (no frozen path touched)
+      ```
+      Two of the four decisions were nearly reversed during the build and
+      both were caught by instruments rather than by reading: §17.9's
+      `wire_contract_for` contact (disposed into decision 4 and step 32's
+      pin), and step 24's new object kind (a DIRECT surface-2 contact, parked
+      for a grant rather than taken).
 
 - [ ] 46. (all) Diff budget check (SPEC §17.8, ~2400 lines of `src/` — raised
       by the operator 2026-09-03 on the measured step-22 overrun).
@@ -1133,13 +1150,42 @@ print('ok')"` -> `ok`
       --paths 'src/*'` -> `"verdict": "WITHIN"`, or a stated,
       operator-visible overrun
 
-- [ ] 47. (all) Map check, FULL mode — `--fast` reuses cached results and
+- [x] 47. (all) Map check, FULL mode — `--fast` reuses cached results and
       CANNOT catch a document a `src/` change just broke. Run on an
       otherwise idle box: never concurrently with the gate.
       done-when: `python tools/docs_verify.py` -> failures are the
       `docs/AUDIT_BASELINES.md` shallow-clone rows and NOTHING ELSE (5 or 6
       expected here; each row named), AND `python tools/docs_verify.py
       --audit` -> no finding naming a document this tranche wrote
+
+      DONE 2026-09-04, and it took TWO passes because the first found five
+      failures that were MINE:
+      ```
+      $ python tools/docs_verify.py        (second pass)
+      docs_verify [full]: 78 documents, 1356 checks, 4 workers
+        FAIL SEAM-llm-x-rules.md:54       (baseline, AUDIT_BASELINES:67)
+        FAIL CON-run-identity.md:211/213/215  (baseline, shallow clone)
+        FAIL INV-frozen-surfaces.md:181   (baseline, AUDIT_BASELINES:68)
+        FAIL INV-frozen-surfaces.md:736   (environment: an absent branch)
+      docs_verify: 6 failed
+      ```
+      All six are the rows step 5 already classified; none names a document
+      this tranche wrote. `CON-run-identity.md:313`, the 300 s-ceiling row,
+      passed this time — it is the documented variable one.
+
+      The five that were mine were all the same class as the three test
+      failures at step 22: checks pinning the LOCATION of something that
+      legitimately moved. Each was RE-AIMED, none weakened —
+      `SEAM-rules-x-scratch.md` (the scratch section's flags, now read from
+      the layout; and `render_crit_pack`'s signature, which gained two
+      arguments), `SEAM-schools-x-scratch.md` (the same for school-stance),
+      `SEAM-llm-x-rules.md:100` (the firewall-then-resolution-then-validation
+      ORDER, whose statement gained a name).
+      The fifth was mine in a different way and was fixed in the CODE:
+      `SEAM-llm-x-manifest.md:44` counts files coupling `llm/` to the
+      manifest, and a COMMENT of mine naming `run_manifest.py` tripped it. A
+      prose mention is not coupling, so the comment was reworded rather than
+      someone else's census bumped to absorb it.
 
 - [ ] 48. (all) Full gate, alone on the box.
       done-when: `python -m pytest tests/ -q -n 4` -> output ends

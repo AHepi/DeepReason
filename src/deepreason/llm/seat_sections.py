@@ -280,7 +280,7 @@ def resolve_section_plugin(
 #
 # Selection is by ID, from an argument or the environment, and NEVER from
 # `Config` or the manifest. That is not a preference, it is measured:
-# `run_manifest.py::_source_config_data` dumps every `Config` field into
+# The manifest's `_source_config_data` dump carries every `Config` field into
 # `engine_config_json` and `qualification.py` folds that into every
 # qualification subject digest, so a layout knob on `Config` would move the
 # digest of every qualification bundle in the tree -- four committed manifests

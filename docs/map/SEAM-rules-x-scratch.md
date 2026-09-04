@@ -65,7 +65,7 @@ to the formal fence at the same call.
 
 Scratch reaches a conjecture pack only through the typed record, in a section
 the allocator may not drop or compress.
-`check: grep -q "scratch_context = RenderedScratchPackV1.model_validate(scratch_context)" src/deepreason/llm/packs.py && grep -A 5 '"scratch-advisory-context",' src/deepreason/llm/packs.py | grep -q "droppable=False" && grep -A 5 '"scratch-advisory-context",' src/deepreason/llm/packs.py | grep -q "compressible=False" && grep -q "^class RenderedScratchPackV1" src/deepreason/scratch/render.py`
+`check: grep -q "RenderedScratchPackV1.model_validate(scratch)" src/deepreason/llm/seat_plugins.py && grep -q "^class RenderedScratchPackV1" src/deepreason/scratch/render.py && python -c "from deepreason.llm.seat_layouts import CONJECTURER_LEGACY_LAYOUT as C, CRITIC_LEGACY_LAYOUT as R;from deepreason.llm.seat_plugins import ensure_seeded;from deepreason.llm.seat_sections import resolve_section_plugin;ensure_seeded();T=lambda l:{resolve_section_plugin(e.plugin_id,e.plugin_version).section_id:e for e in l.entries};j=T(C);r=T(R);e=j['scratch-advisory-context'];assert e.droppable is False and e.compressible is False, e;assert 'scratch-advisory-context' not in r, 'a critic pack carries no scratch'"`
 
 The planned context carries one fence for both logs, matched to the attention
 pack it was built from; a plan whose fence has moved cannot commit, a historical
@@ -113,7 +113,8 @@ declared on a critic contract, and `rules/crit.py`'s menu builder asks for
 citable blocks only.
 
 `check: python -m pytest tests/test_reference_menu.py -k "no_critic_menu_can_carry_scratch_content" -q`
-`check: python -c "import inspect;from deepreason.llm import packs;F={n:inspect.signature(getattr(packs,n)) for n in dir(packs) if n.startswith('render_') and callable(getattr(packs,n))};bad=[n for n,s in F.items() if any('scratch' in p for p in s.parameters)];assert bad==['render_conj_pack'],bad;C={n:list(s.parameters) for n,s in F.items() if 'crit' in n};assert C=={'render_crit_pack':['target_id','state','commitments','blobs','token_budget','premise_invitation','citable_evidence_context','frame_slice_context','frame_crisis_context','reference_menus','layout'],'render_batch_crit_pack':['target_ids','state','commitments','blobs','token_budget','simulation_proposals','simulation_enabled','premise_invitation','citable_evidence_context','reference_menus']},C" && python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_pack_cannot_be_given_scratch -q`
+`check: python -c "import inspect;from deepreason.llm import packs;F={n:inspect.signature(getattr(packs,n)) for n in dir(packs) if n.startswith('render_') and callable(getattr(packs,n))};bad=[n for n,s in F.items() if any('scratch' in p for p in s.parameters)];assert bad==['render_conj_pack'],bad;C={n:list(s.parameters) for n,s in F.items() if 'crit' in n};assert C=={'render_crit_pack':['target_id','state','commitments','blobs','token_budget','premise_invitation','citable_evidence_context','frame_slice_context','frame_crisis_context','reference_menus','layout','seat_pack_layout','section_receipts'],'render_batch_crit_pack':['target_ids','state','commitments','blobs','token_budget','simulation_proposals','simulation_enabled','premise_invitation','citable_evidence_context','reference_menus']},C" && python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_pack_cannot_be_given_scratch -q`
+
 
 **Criticism cannot WRITE to the workshop either.** The conjecturer turn contract
 takes `scratch_aliases` and its wire model carries `scratch_proposal`; no critic
