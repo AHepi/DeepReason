@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=6 blockers=none
+State: next=7 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -109,9 +109,18 @@ as an omission.
           b07661e35069277c476a994420af14a5eec629e29e9be9f2a0978a7e60ce4e53  SELECTION.json
           ls raw -> No such file or directory   (nothing measured yet)
 
-- [ ] 6. (S16, R19) Green soak on the launch config.
+- [x] 6. (S16, R19) Green soak on the launch config.
       done-when: `python -u scripts/cycle_soak.py --case <case>` exits 0
       and its tail is pasted into `SOAK.txt`.
+      DONE:
+          --case epoch3      rc=0  [soak] exit 0 (clean)
+          --case reach-rich  rc=0  [soak] exit 0 (clean)
+          --case pc1         rc=1  V6_SIMULATION_TOOLCHAIN_REQUIRED  -> PARKED
+          --case pc2         rc=1  same                              -> PARKED
+      epoch3 is solo glm-5.2 across all eleven roles, which is this
+      tranche's critic seat model. The two red cases are a pre-existing
+      manifest-compile failure this tranche did not cause and does not
+      fix; they go to PARKED.md at step 13.
 
 - [ ] 7. (S16, A6) Write `bench.py` and prove it end-to-end on FOUR
       calls (one target, four cells) before the full launch.
