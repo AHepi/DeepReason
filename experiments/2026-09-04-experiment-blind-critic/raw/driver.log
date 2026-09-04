@@ -16,3 +16,5 @@
 [bench] 260 calls, 0 failed  last=C01/T021 ok=True
 [bench] 280 calls, 0 failed  last=C01/T041 ok=True
 [bench] 300 calls, 0 failed  last=C01/T059 ok=True
+[bench] 320 calls, 0 failed  last=C01/T080 ok=True
+[bench] 340 calls, 0 failed  last=C01/T098 ok=True
