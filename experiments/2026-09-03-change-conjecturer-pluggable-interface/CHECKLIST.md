@@ -1,6 +1,6 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=35 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
+State: next=41 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
 verbatim: "Given what read from the other windows, the plugin one. Since all
 three other windows have completed." Build window open; branch
 `claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
@@ -914,17 +914,52 @@ print('ok')"` -> `ok`
       critic w/ conjecturer shell   -> seat-pack.conjecturer.legacy-v0
       ```
 
-- [ ] 35. (S8.4, S8.5) Add normalisations N1-N5 to `validate_value`, each
+- [x] 35. (S8.4, S8.5) Add normalisations N1-N5 to `validate_value`, each
       recording its rule id in the attempt's diagnostic trail. N1 and N3
       already partly ship — extend, do not duplicate.
       done-when: `python -m pytest tests/test_wire_normalisation.py -q`
       -> `0 failed`
 
-- [ ] 36. (S11.4) [COMMIT] Prove leniency changes no verdict: for each of
+      DONE 2026-09-04. N1 and N3 already shipped and were EXTENDED, not
+      duplicated: N1's existing branch is untouched and N5/N2/N4 run before
+      it; N3 is `_resolve_menu_indices`, which now records its rule id when it
+      actually changes a value.
+
+- [x] 36. (S11.4) [COMMIT] Prove leniency changes no verdict: for each of
       N1-N5, a strict reply and its loosened twin compile to the SAME
       canonical artifact byte-for-byte.
       done-when: `python -m pytest tests/test_wire_normalisation.py -k identical -q`
       -> `0 failed`, five cases
+      ```
+      $ python -m pytest tests/test_wire_normalisation.py -q
+      .........                                                        [100%]
+      9 passed in 0.10s
+      ```
+      All five proven, NONE skipped. N4 was first written against the
+      conjecturer's turn contract, which requires every field it declares, so
+      it SKIPPED — an unproven rule reporting as a pass. It is now proven
+      against `ArgumentativeCriticOutput`, which carries four optional fields.
+
+      **N4 WAS NARROWED, on evidence, by SPEC §8.4's own stop condition.**
+      As specified it deleted an optional field supplied as `null` OR as an
+      empty string. The wide ring caught what that costs: three tests in
+      `tests/test_cli_production_doctor_v6.py` went red, because the repair
+      protocol's own fixture is `{"finding": "supported", "message": ""}` — an
+      empty string a contract REJECTS deliberately, so the model tries again.
+      Deleting it turned a refusal into an acceptance, which is a verdict
+      change, which A3 makes a STOP rather than a judgment call. So N4 now
+      applies to `null` only; `""` is a supplied value and stays the
+      contract's business. A companion test asserts the narrowing and records
+      the measurement that forced it, and the doctor suite is green again
+      (75 passed).
+
+      The boundary itself is a check, not prose: `_normalise_shape` may
+      rewrite SHAPE, and a test walks every leaf of the strict reply and each
+      loosened twin and asserts the leaf multiset is unchanged — so a rule
+      that touched a VALUE would fail whether or not anyone thought to write a
+      case for it. Two negative anchors keep it honest: a reply needing no
+      normalisation records NO rule (or the record could not say how much
+      leniency bought), and a genuinely malformed reply is still refused.
 
 ## Phase 9 — the architecture tests (the modularity law's "enforced")
 
