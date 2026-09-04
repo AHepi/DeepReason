@@ -6,3 +6,6 @@
 [bench] 100 calls, 0 failed  last=C00/T100 ok=True
 [bench] 120 calls, 0 failed  last=C00/T120 ok=True
 [bench] cell C10 -> seat-pack.critic.exp-C10  (120 targets)
+[bench] 140 calls, 0 failed  last=C10/T021 ok=True
+[bench] 160 calls, 0 failed  last=C10/T040 ok=True
+[bench] 180 calls, 0 failed  last=C10/T061 ok=True
