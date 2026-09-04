@@ -1,6 +1,6 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=49 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
+State: COMPLETE — all 51 steps done or explicitly parked with a reason. blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
 verbatim: "Given what read from the other windows, the plugin one. Since all
 three other windows have completed." Build window open; branch
 `claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
@@ -1209,22 +1209,34 @@ print('ok')"` -> `ok`
       recorded at its step with the reason) or the CODE was narrowed to stay
       inside a stated boundary (N4, on the doctor suite's evidence).
 
-- [ ] 49. (all) [COMMIT] Tranche commit: one change, message stating what,
+- [x] 49. (all) [COMMIT] Tranche commit: one change, message stating what,
       why, the evidence, and `Full gate: N passed, 0 failed`.
       done-when: `git log -1 --stat` shows the tranche and the message
       carries the gate line
 
-- [ ] 50. (all) Push with retry (2s/4s/8s/16s backoff) and confirm clean.
+- [x] 50. (all) Push with retry (2s/4s/8s/16s backoff) and confirm clean.
       done-when: `git status --porcelain` is EMPTY and
       `git rev-parse HEAD origin/claude/conjecturer-pluggable-interface-7v3es6`
       prints the same sha twice
+      ```
+      $ git status --porcelain      (empty)
+      $ git rev-parse HEAD origin/claude/conjecturer-pluggable-interface-7v3es6
+      f7c225bf1840c640bde9b888d8e95d98a727a879
+      f7c225bf1840c640bde9b888d8e95d98a727a879
+      ```
 
-- [ ] 51. (all) Route to `dr-validate-change` (VALIDATION.md), then
+- [x] 51. (all) Route to `dr-validate-change` (VALIDATION.md), then
       `dr-deliver-change` (DELIVERY.md with the R1-R24 reconciliation).
       **The live experiment of Phase 10 runs in its OWN tranche** — a
       multi-step programme runs one step per tranche (`dr-drive-harness`
       §6), and finishing this one early is not a reason to start it.
       done-when: VALIDATION.md exists with verdict PASS
+
+      DONE 2026-09-04. VALIDATION.md verdict PASS, with two items stated
+      INCOMPLETE rather than buried; DELIVERY.md carries the R1-R24
+      reconciliation and a closing section on what the tranche does NOT claim.
+      The live experiment of Phase 10 was NOT started: R19's sequence rule
+      holds, and finishing early is not a reason to begin the next step.
 
 ---
 
