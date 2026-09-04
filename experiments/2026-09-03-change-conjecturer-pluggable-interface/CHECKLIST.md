@@ -1,6 +1,6 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=31 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
+State: next=33 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
 verbatim: "Given what read from the other windows, the plugin one. Since all
 three other windows have completed." Build window open; branch
 `claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
@@ -804,13 +804,26 @@ print('ok')"` -> `ok`
 
 ## Phase 8 — the form (C1 only), both seats
 
-- [ ] 31. (S8.2) Make the role-prompt wrapper selectable: `roles.py`
+- [x] 31. (S8.2) Make the role-prompt wrapper selectable: `roles.py`
       `TEMPLATES`/`COMPACT_TEMPLATES` become a registered, versioned
       template registry; the shipped default reproduces today's bytes.
       done-when: `python -m pytest tests/test_role_prompt_registry.py -q`
       -> `0 failed`, including a byte-identical-default case
+      ```
+      $ python -m pytest tests/test_role_prompt_registry.py -q
+      ...................................................              [100%]
+      51 passed in 0.06s
+      ```
+      Byte-identical is checked PER ROLE on both the standard and the compact
+      path. The legacy template is built FROM `roles.py`'s own dicts by
+      reference rather than retyped — a transcription could drift from the
+      bytes every committed root was rendered under, and the whole value of
+      this default is that it has not. A bypass trap pins that
+      `render_role_prompt` no longer indexes `TEMPLATES` directly: without it
+      a renderer that ignored the registry would pass every behaviour test
+      above, precisely because the default is byte-identical.
 
-- [ ] 32. (§17.9, decision 4) Pin `wire_contract_for`'s existing mapping.
+- [x] 32. (§17.9, decision 4) Pin `wire_contract_for`'s existing mapping.
       A committed table of `(role, output_model, profile) -> contract_id`
       captured from the base commit, asserted unchanged — this is what keeps
       `invariants.py:1233`'s replay authority set and
@@ -819,6 +832,31 @@ print('ok')"` -> `ok`
       go RED.
       done-when: `python -m pytest tests/test_wire_contract_id_map.py -q`
       -> `0 failed`, AND the pasted RED run of the mutation
+      ```
+      $ python -m pytest tests/test_wire_contract_id_map.py -q
+      ...........................                                      [100%]
+      27 passed in 0.10s
+      ```
+      RED against a mutation of ONE returned id
+      (`argumentative_critic.compact.v1` -> `...v2` in `wire.py`), restored
+      after:
+      ```
+      FAILED tests/test_wire_contract_id_map.py::
+        test_the_contract_id_for_a_frozen_input_has_not_moved[key0-argumentative_critic.compact.v1]
+      1 failed, 26 passed in 0.12s
+      ```
+      **The table is CAPTURED, not authored.** Six rows were hand-guessed
+      first and were WRONG (`reasoning.conjecturer.compact.v2`,
+      `judge_pairwise.compact.v1`, `variator.direct.v1`,
+      `synthesizer.direct.v1` are the real ids); the table was regenerated
+      from the tree rather than the code bent to the guess. It is deliberately
+      NOT a sweep over every model class: a sweep would go red when someone
+      adds an unrelated contract, making it noise. It covers exactly the
+      inputs whose answers reach a frozen surface, plus the forms this
+      tranche's seats select among — all three profiles of each, asserted
+      complete. Two further checks keep it honest: that both frozen callers
+      still call the function (or the pin guards nothing), and that this
+      tranche's diff opens neither of them.
 
 - [ ] 33. (S8.2, S9.4, decision 2) Add form SELECTION at the DISPATCH SITE,
       both seats, among ids ALREADY registered: conjecturer —

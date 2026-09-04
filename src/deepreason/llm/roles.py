@@ -382,13 +382,24 @@ def render_role_prompt(
     example: str = "",
     aliases: str = "",
     layout: RenderLayoutPolicyV1 | None = None,
+    role_prompt_template: str | None = None,
 ) -> str:
-    """Render a profile-specific role prompt without changing role meaning."""
+    """Render a profile-specific role prompt without changing role meaning.
+
+    `role_prompt_template` selects the WORDING that wraps the brief, resolved
+    the same way the layout policy is: argument, then the environment, then
+    the shipped default, which reproduces today's bytes. Wrapping is
+    PRESENTATION -- it may not change what a reply must contain, which is the
+    contract's business (`DR-SEAM-llm-x-rules`).
+    """
+    from deepreason.llm.role_prompts import resolve_role_prompt_template
+
     layout = layout or resolve_layout_policy()
     spec = get_profile(profile)
+    wording = resolve_role_prompt_template(role_prompt_template)
     if spec.name != ModelProfile.COMPACT:
-        return TEMPLATES[role].format(schema=schema, pack=pack)
-    directive = COMPACT_TEMPLATES.get(role, "Complete the one task in the input.")
+        return wording.standard_for(role).format(schema=schema, pack=pack)
+    directive = wording.compact_directive_for(role)
     # A label and the body it labels are ONE block, not two. The U-shape
     # re-instantiates inside every delimiter-bounded interval, so a bare
     # "INPUT:" on its own buys a block boundary and a dead zone for six
