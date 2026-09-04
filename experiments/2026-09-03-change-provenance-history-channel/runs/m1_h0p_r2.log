@@ -1337,3 +1337,179 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
 embedder: hashing (hashing-128)
 rc=0
 === results 2026-09-04T23:22:25Z ===
+{
+  "absences": [
+    "NO_LIFECYCLE_REFUSAL_RECORD",
+    "NO_SEAT_RETIREMENT"
+  ],
+  "adjudication": {
+    "judge_calls": 0,
+    "ran": false,
+    "trial_blocked": {},
+    "trial_declined": {},
+    "trial_observations": {}
+  },
+  "amendment": {
+    "epoch_seqs": [],
+    "epochs": 0
+  },
+  "artifacts": {
+    "accepted": 135,
+    "frontier": {
+      "artifact_ids": [
+        "05ac106600a369a18a8a9d9804d13ce488981a2b82f74183f121d583a9e31f40",
+        "0a55af79111297cb6e348fb6842307efbb989233d5cd01b8986d3ab9ddf03d77",
+        "0d64405bfceb076ee37a421ff1dfdfe9d3e4e1e835b9e69f16ad32f777023422",
+        "11dcfafffd03651fd56a823bd820b88ce33aeb923bddd85bb054c246c9d1f553",
+        "1ddb259890880286201f3a8df51e325138d9168d6972226ed48d300872dd7ffa",
+        "2147bdc444fcd0080543c93e5ff25035311484d80cbdd3ce19f7be029a5946a3",
+        "242c582b625fdcd71d0c7da09725240184f2d911792836944aea613e91fe5f09",
+        "26256c59a5073f67bfe0478893b98e0f575ff6d3a015b8e7e6e73662f210bad6",
+        "3336fd63efd5e88279afbf3ed6d4dc17c2c54e6ee1978fdda1fdca73059af785",
+        "347dc4ffc63d3fc2f1d80f17163be6d2cdd9ceb64598372f5ac2e467382ecfdc",
+        "360ebad73c822f62ef9310ee29f82447c64dc4a5585f32933fc8772412b53465",
+        "3f12ae7291a8fd2b8f8272cc3fa5c473168df808bcb00131231dfbf1b26b165c",
+        "3f4a2f7e0b519bf7a74a1cf9dc6f5567852a42b1bfc44aa0b989d1ef83c443bf",
+        "4944841f8f038d65ee0c712536f1f42ad67b5fb5e30783479d6ab69154571e7e",
+        "4edfbb6793cea99b673f8d720307322d73df27a4710cec6908bb615ec71e3a53",
+        "4ffd85638dce3bb2e9d00e6663914a3971b6c84ca5772345197ec4508835daa9",
+        "50fda35a005df3a9e53dad1b4223c32fc0a6ceeb904f93e3c79e356c39401957",
+        "515fe6735b6c1e002f9a4ffc8ee1f998167a3e69c82e80b203412d1aed5d493d",
+        "532738f1d777b92103dad568cc693283fe92abd4a8494054a5c2262db399c0ac",
+        "5b38b1238c0ce67d968ce66c276ee07127cd8860e39418939e353640a1a475cc",
+        "5be3950e7222cc2cef8c91ba35d9e1a8b1210bcd471f23ad91d6ff712ac6870b",
+        "5be68ecc2517c2ab50a77c9da8f39554936c2cff87f5af3c20ee417ba03c7c23",
+        "5f46827ae9632b99d1515dd8e993748d87f1c7e67c5b069dcf018f3210ca49ac",
+        "63ad735fce4055d4a81bea986a33c237343101f9945358996ba91111fd98909f",
+        "6508071f87dfcd69dfced0cbfc764e68ca3e70a009f3454b9ce3d84cd0ee2b95",
+        "7253e2140601e3fc78569f24f5442ae643dee0e4e5aa901929815a9e64407a57",
+        "79144a2e09818370a945071676f79bf25c2553353a4cc95b994f27a0c22ee501",
+        "7a6147c85a1b95fb4664a1b7e27e294393fc35900cf8732a2dd6df74507db272",
+        "7b2ba5ff7619592483bf7a53597eb63f69fd1ef126ee074d0cf5cdfcf734fa02",
+        "7e482adad9b16e4fac5afd524d1ea7c2e96846a4569f4edfb7c5ba64bfaa2eaa",
+        "7e77a4a03d9bcefe80710869525590f9a0d0cc740df8c6967f97057e10ac5770",
+        "84fbfa51f8ca8af1e3607a46c157bc2c04899d15151dba968d2d85fb813c0139",
+        "8ac8014c3870f80f440c13607aab7132171a0e4831c3bab4fd8f574602de81c7",
+        "8df88b27e016af7285d682a2a88cf8a6268525dc8aec91aae3c82ba3ff94ea54",
+        "92f4f85089fbede40fe3592c85f2a3f69350d9e6306c294073e8b9e63d267585",
+        "932ee45d2dbd1d77d3d038fbd7e73dd704973e7a92a03ecc64cba4190d1a2d7a",
+        "986d121d0f6003db8ea7d9935eff7b50ef3fd19cdf6dab156a987766c91cbb77",
+        "9cd665e00e92ac6187bb7ae13e03a4dc856dc582836ea6243fd1480493cd8ff0",
+        "9ea0756f5c7e71c28e9965bb535b212d1da491f196cc40099f6f56bf1c65a35a",
+        "a1038a961e87de72762d76cefb849c40706d9761ec1e5ac695b3ecd9ed29c010",
+        "a132764ec58da84f4587a66a3f063022d8874d80a6bd2bbf76cfa3a1db1bc3b8",
+        "a32d2054d0bc2873a4ab9c14e5fdeee56c7227d8cd06ca4d8aa14b75830eb708",
+        "b15904c94152f5560ec14b7d7503fb810025b8f693b5ae2d2387e5faaf364c09",
+        "b1b2c7fede0c1c0331bb525c7d36679280b9ed515ad2dd4879cc029befe5e80e",
+        "b42a88bb8a5fb45fc14593a0ebd7304b2d6b1b7362ca128c8773665e6cfae00f",
+        "b48be3982c5f596373e36ab8a7a3bdec938b104eb825f7d270dd0c380725c43d",
+        "b581c58762ade589468f1fd951fb0e28e47f802258c338ce5c77aa7c7d9f8e23",
+        "b854f658248e1c9b4c0c679104b34a989765ec17fcef37e0eff18837fc9704f8",
+        "b9f7d2778e85544fcb6ad533c76499ef5785f9a98a42bcc5adb069a20d614095",
+        "c361c4eaac2a55f2a71f100cdf0c863c5ff9bb7226426ac202dd03d0b4fe0b60",
+        "ccca7e7042a139a5b905146bd21112937827143f732c930115cf31a818f4bf2b",
+        "d02acc43c3484194f90545229d412a88a7193f0bcd24723e6ad91a4ab6f75bf6",
+        "d73a0a89c9d3a9dfd318fa0e45938870efa318f7cd38daed2e47b7e3b229a714",
+        "e5d2dc0d00df8e6d9a7e6342476adfca81481d80bbea418a139087cde35b23df",
+        "e76088f85b2bb8e1f5e9a6decf52d2e9da1c5360859df813d96ba10ca8142ded",
+        "ebb954a0efc7f69ba80eeb9ff0792afd855db17986dd927cb56bc5fbcdb5376a",
+        "ec1e65d6299760349c5850300a043668a755e55a73311fc665146211acd08595",
+        "ef9bacff6ddf14924bd1c82238dd46c883da1f61f00d8bbd7e27489531576b66",
+        "f18773d6de9e654be08f43e340d28cc9d563268b843b6303dede10f66d4d5133",
+        "f78cbd404a0cd8ff207db9e6aa754db8a67098a2ffd0d342085d49e1e4fd1cb6"
+      ],
+      "count": 60,
+      "problem_id": "question-ba75796c3facc7a3d0d448d6eaa09a2e"
+    },
+    "refuted": 7,
+    "survivor_count": 60,
+    "suspended": 0
+  },
+  "embedder": {
+    "backend": "hashing",
+    "configured_model": null,
+    "fallback": false,
+    "fallback_reason": null,
+    "fingerprint": "4226e035204776db",
+    "model": "hashing-128",
+    "version": "1"
+  },
+  "identity": {
+    "manifest_present": true,
+    "manifest_schema_version": 6,
+    "run_id": "ba77e372043f54386008ee4808fea64523aee32fbbb9abdf9a6bf2542cde8a61"
+  },
+  "provider_health": {
+    "fault_minutes": 0.0,
+    "seats": {
+      "argumentative_critic": {
+        "attempts": 92,
+        "calls": 92,
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "fault_ms": 0,
+        "faults": 0,
+        "last_fault_kind": null,
+        "max_zero_byte_streak": 0,
+        "model": "qwen3.5:397b",
+        "zero_byte_returns": 0
+      },
+      "conjecturer": {
+        "attempts": 41,
+        "calls": 41,
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "fault_ms": 0,
+        "faults": 0,
+        "last_fault_kind": null,
+        "max_zero_byte_streak": 0,
+        "model": "qwen3.5:397b",
+        "zero_byte_returns": 0
+      }
+    },
+    "total_attempts": 133,
+    "total_calls": 133,
+    "total_faults": 0,
+    "total_zero_byte_returns": 0,
+    "worst_zero_byte_streak": 0
+  },
+  "question": "Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.",
+  "resolved_from": "root",
+  "root": "/home/user/DeepReason/experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r2/runs/run-ad41064484366337ed61a9d5a58de58f",
+  "run": {
+    "cycles_completed": 4,
+    "message": "",
+    "state": "completed",
+    "stop_reason": "budget_exhausted",
+    "token_limit": 600000,
+    "token_spend": 516589
+  },
+  "schema": "deepreason-results.v1",
+  "seat_retirement": {
+    "absent": true,
+    "reason": "NO_SEAT_RETIREMENT"
+  },
+  "terminal": {
+    "amend_ready": true,
+    "continuation_authority": true,
+    "lifecycle_refusal": {
+      "absent": true,
+      "reason": "NO_LIFECYCLE_REFUSAL_RECORD"
+    },
+    "record_security_violations": [],
+    "stop_reason_resumable": true,
+    "terminal_epoch": 0,
+    "valid_typed_terminal": true
+  },
+  "verification": {
+    "families": {
+      "completion": 88,
+      "epistemic": 0,
+      "integrity": 0,
+      "operational": 25,
+      "security": 0
+    },
+    "source": "rederived",
+    "valid": true,
+    "violations": 0
+  }
+}
+=== M1-H0P-r2 finished 2026-09-04T23:25:36Z ===

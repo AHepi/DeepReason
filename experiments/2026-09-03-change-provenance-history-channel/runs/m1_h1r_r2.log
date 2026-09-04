@@ -1,0 +1,34 @@
+=== M1-H1R-r2 started 2026-09-04T23:25:36Z  home=home-m1-r2 ===
+--- attachment 2624 bytes, sha256 2128a3da74a6e39f50e5e8cf912b8f978f25756e5f33bed0590405572fa89123 ---
+--- setup ---
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r2/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+rc=0
+--- qualify (attached-evidence subject, concurrency 2) ---
+MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so nothing here can say whether reasoning='none' leaves hidden reasoning on. The run proceeds and sends exactly what you configured. To have this answered, write $DEEPREASON_HOME/model-profiles/<model-id>/agent.md.
+Qualified: ollama/qwen3.5:397b
+Qualification tier: full
+Qualification state: ready
+Next action: deepreason reason "YOUR QUESTION"
+rc=0
+--- reason, 4 cycles, attached 2026-09-04T23:25:38Z ---
+MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so nothing here can say whether reasoning='none' leaves hidden reasoning on. The run proceeds and sends exactly what you configured. To have this answered, write $DEEPREASON_HOME/model-profiles/<model-id>/agent.md.
+{
+  "evidence": {
+    "blocks": {
+      "paragraph": 3
+    },
+    "evidence_dossier_digest": "8a9f516885a13db74bab4977750d6ad2ecdea0bd0e113712f4132a275ec071b2",
+    "refusals": [],
+    "sources_admitted": 1,
+    "tiers": {
+      "evidence": 3
+    }
+  }
+}
