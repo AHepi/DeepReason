@@ -10522,5 +10522,133 @@
     }
    }
   ]
+ },
+ "fb1b57cf-a1e1-46a8-b08e-5af478a2634b": {
+  "judges": 3,
+  "totals": [
+   11,
+   11,
+   11
+  ],
+  "median": 11,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     1,
+     2,
+     3,
+     3,
+     2
+    ],
+    "total": 11,
+    "why": {
+     "c1": "Only the 'defensible' case is argued; the 'smuggles induction' side is absent rather than stated at strength.",
+     "c2": "References error elimination and verisimilitude but misses specific Popperian machinery like the distinction between corroboration reports and probability or the Salmon reply.",
+     "c3": "Clearly commits to the verdict that the preference is defensible as a pragmatic rule.",
+     "c4": "Identifies a genuine, uncomfortable cost: the loss of formally rigorous tracking of verisimilitude and retreat to procedural conventionalism.",
+     "c5": "Avoids redefining corroboration but leans heavily on the 'pragmatic' label which risks the cheap exit of naming the tension rather than fully resolving the inductive charge."
+    }
+   },
+   {
+    "scores": [
+     1,
+     2,
+     3,
+     3,
+     2
+    ],
+    "total": 11,
+    "why": {
+     "c1": "The case for 'smuggling induction' is asserted as a consequence of the verdict rather than being developed as a strong, independent argument beforehand.",
+     "c2": "It correctly identifies corroboration as a report on past performance and links the preference to error elimination, though it lacks specific engagement with the Salmon/Realism debate details.",
+     "c3": "The response clearly commits to the view that the preference is defensible on pragmatic grounds while explicitly rejecting the inductive interpretation.",
+     "c4": "The cost is specific and painful: abandoning the claim that science rigorously tracks verisimilitude or guarantees progress toward truth.",
+     "c5": "It avoids dissolving the tension but leans heavily on the 'pragmatic' label to resolve the issue, which borders on the cheap exit the criterion warns against."
+    }
+   },
+   {
+    "scores": [
+     1,
+     2,
+     3,
+     3,
+     2
+    ],
+    "total": 11,
+    "why": {
+     "c1": "Only the 'defensible' case is argued; the 'smuggles induction' side is absent rather than stated at strength.",
+     "c2": "References error elimination and verisimilitude but misses specific Popperian machinery like the Salmon reply or the precise definition of corroboration reports.",
+     "c3": "Clearly commits to the verdict that the preference is defensible as a pragmatic rule.",
+     "c4": "Identifies a genuine, uncomfortable cost: the loss of formally rigorous claims to truth-likeness (verisimilitude).",
+     "c5": "Avoids redefining corroboration but leans heavily on the 'pragmatic' label which risks the second cheap exit without fully resolving the tension."
+    }
+   }
+  ]
+ },
+ "fe9b3b8b-e195-4a69-9274-e9b61ad501c3": {
+  "judges": 3,
+  "totals": [
+   2,
+   2,
+   2
+  ],
+  "median": 2,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     0,
+     0
+    ],
+    "total": 2,
+    "why": {
+     "c1": "Only the case for smuggling induction is made; the defense of Popper's own terms is entirely absent.",
+     "c2": "Mentions verisimilitude but fails to engage with the specific machinery of corroboration as a report on past tests or the pragmatic preference argument.",
+     "c3": "States a verdict clearly, though it lacks the required comparative analysis of which side survives a fair fight.",
+     "c4": "No specific cost of accepting the verdict is identified; the response merely asserts the collapse of the distinction.",
+     "c5": "Takes the cheap exit by dissolving the tension through an assertion of collapse rather than holding and answering the conflict."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     0,
+     0
+    ],
+    "total": 2,
+    "why": {
+     "c1": "Only the 'smuggles induction' case is made; the defense of Popper's own terms is entirely absent.",
+     "c2": "Mentions verisimilitude but fails to engage with the specific machinery of corroboration as a report on past tests or the pragmatic preference argument.",
+     "c3": "States a verdict against Popper but lacks the required comparative structure of choosing between two fully argued sides.",
+     "c4": "No specific cost of accepting the verdict is identified or analyzed.",
+     "c5": "Takes the cheap exit by asserting the distinction collapses rather than holding and answering the tension."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     0,
+     0
+    ],
+    "total": 2,
+    "why": {
+     "c1": "Only the 'smuggles induction' case is made; the defense of Popper's own terms is entirely absent.",
+     "c2": "Mentions verisimilitude but fails to engage with the specific machinery of corroboration as a report on past tests or the pragmatic preference argument.",
+     "c3": "States a verdict against Popper but lacks the required comparative structure of choosing between two fully argued sides.",
+     "c4": "No specific cost of accepting the verdict is identified or analyzed.",
+     "c5": "Takes the cheap exit by asserting the distinction collapses rather than holding and answering the tension."
+    }
+   }
+  ]
  }
 }

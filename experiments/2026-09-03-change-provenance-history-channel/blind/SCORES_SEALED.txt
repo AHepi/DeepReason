@@ -1,0 +1,29 @@
+SCORES_SEALED_V1
+=================
+
+This file exists so the order of two events is provable rather than asserted:
+the scores were finished and fixed BEFORE the arm mapping was opened.
+
+Sealed  : 2026-09-04, immediately after the 167th candidate was scored and
+          BEFORE `blind/keymap.json` was read by anything.
+File    : blind/scores.json
+sha256  : d8fbebf0e2ba115edb35d3f0d6524cfe6832cc1f8f5b131e874aac4c90638d2d
+bytes   : 415643
+
+Contents at seal:
+  entries                              167
+  candidates in blind/candidates.jsonl 167
+  bid sets identical                   yes
+  entries recording a scoring failure  0
+  judges per candidate                 3 for 166, 1 for one
+  contested (>4 of 15 judge spread)    4
+  pooled candidate totals              min 0.0, max 14.0, mean 5.778 of 15
+
+The one candidate with a single surviving judge was scored in the inherited
+90 and is kept as written, per the window instruction that every existing
+score stands. Its total is one judge's, not a median of three.
+
+To re-check this seal at any later commit:
+  sha256sum blind/scores.json
+Any difference means the score file moved after the mapping was opened, and
+every per-arm number derived from it is void.
