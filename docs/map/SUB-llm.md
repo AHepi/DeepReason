@@ -291,6 +291,32 @@ funcs = {n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
 assert 'reasoning_disabled' not in funcs
 assert {'reasoning_body', 'reasoning_knob_available', 'infer_provider'} <= funcs, funcs
 "`
+- **The configuration VALUE and the wire FIELD share the word "reasoning", and
+  reading one as the other reported a working launch config as broken.** On
+  2026-09-04 a four-model probe recorded Ollama Cloud refusing
+  `{"reasoning": "none"}` with HTTP 400 -- `json: cannot unmarshal string into
+  Go struct field ChatCompletionRequest.reasoning of type openai.Reasoning` --
+  and the finding was parked as "the newest committed launch config binds
+  exactly that value on its critic seat"
+  (`experiments/2026-09-04-experiment-blind-critic/PARKED.md` P2). It binds the
+  VALUE. `_ollama_reasoning` spells that value as `reasoning_effort`, so the
+  refused field appears in no request the harness has ever built. The launch
+  config's own run had already made 99 provider attempts with zero faults the
+  day before, and a 45-call probe the day after accepted 42 of 42
+  harness-built bodies across six models and the whole neutral vocabulary,
+  refusing only the hand-built control
+  (`experiments/2026-09-04-fix-provider-reasoning-contract/PROBE.json`).
+  NOT A CODE DEFECT -- no `src/` line changed. What it cost was a tranche, and
+  what it left behind is the pin: no adapter may put a STRING directly under
+  `reasoning`, because that is the one shape the provider rejects before
+  generating anything. An OBJECT under `reasoning` is accepted, so the rule is
+  about the string and not about the key.
+  **The shape, so the next one is caught earlier:** a provider seam names
+  fields, a run config names values, and when a value and a field are spelled
+  the same the record cannot tell you which one a report meant. Build the
+  request and look at its keys -- `build_body` is callable offline and takes
+  one line -- before believing any claim about what the harness sends.
+`check: python -m pytest tests/test_provider_reasoning_wire_contract.py -q`
 - **Retrying an identical REQUEST fails identically, and the lesson was learned
   for only one of the two branches.** First half, fixed 2026-08: two variator
   calls were dropped live after four 120s waits while ~110s generations were

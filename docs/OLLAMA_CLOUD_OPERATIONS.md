@@ -98,3 +98,93 @@ Nothing below is answered by the documentation. Run these and record the results
 - Whether a `429` means "wait" or "stop".
 
 If any of these matters to a decision and has not been measured, say so and stop rather than guessing.
+
+---
+
+## 9. The reasoning field: measured contract
+
+**Retrieved:** 2026-09-04, by probe rather than by documentation — none of
+this is published anywhere. **Transcript:**
+`experiments/2026-09-04-fix-provider-reasoning-contract/PROBE.json`
+(45 calls, concurrency 3, key read at call time from a gitignored `env`
+file and absent from the transcript). Every claim here is tagged
+`[MEASURED]`: it is neither documented by the provider nor inferred, and
+it decays — re-run
+`experiments/2026-09-04-fix-provider-reasoning-contract/probe_reasoning.py`
+rather than trusting the date.
+
+### What the endpoint accepts
+
+`[MEASURED]` `reasoning_effort`, as a **string**, is accepted on every
+model probed, at every value of the harness's neutral vocabulary
+(`none`, `low`, `medium`, `high`, `max`, and integer budgets, which the
+adapter collapses to `low`/`high`). This is the field
+`llm/providers.py::_ollama_reasoning` sends, and it is what every
+committed provider profile therefore puts on the wire.
+
+| model | origin | values sent | accepted | reasoning chars at `none` |
+|---|---|---|---|---|
+| `qwen3.5:397b` | catalog | 7 | 7/7 | 0 |
+| `glm-5.2` | catalog | 7 | 7/7 | 0 |
+| `kimi-k2.6` | catalog | 7 | 7/7 | 0 |
+| `deepseek-v4-pro` | catalog | 7 | 7/7 | 0 |
+| `glm-5.3` | model-profile-only | 7 | 7/7 | 0 |
+| `gpt-oss:120b` | model-profile-only | 7 | 7/7 | 311 |
+
+"catalog" means the model appears in a committed provider profile
+(`git ls-files | grep provider.yaml$`); "model-profile-only" means it
+carries a committed document under `docs/model-profiles/` but no
+committed provider profile. 42 of 42 bodies accepted; the six built with
+no reasoning value at all are included in those counts.
+
+### What the endpoint refuses
+
+`[MEASURED]` A **bare string under `reasoning`** is refused with HTTP 400
+before anything is generated:
+
+    request : {"model": "qwen3.5:397b", ..., "reasoning": "none"}
+    response: HTTP 400
+      {"error":{"message":"json: cannot unmarshal string into Go struct
+       field ChatCompletionRequest.reasoning of type openai.Reasoning
+       (ref: 746b8d0b-fe11-4f62-a912-50c6a45018c1)",
+       "type":"invalid_request_error", ...}}
+
+`[MEASURED]` An **object under `reasoning`** is accepted, and suppresses
+the trace as `reasoning_effort: "none"` does:
+
+    request : {..., "reasoning": {"effort": "none"}}
+    response: HTTP 200, content '{"ok":true}', 0 reasoning characters
+
+`[MEASURED]` `think: false` is accepted and does **not** suppress
+reasoning: HTTP 200 with 891 characters of trace returned. It is not a
+way to switch thinking off on this endpoint.
+
+`[MEASURED]` **Authentication is checked before the body is parsed.** All
+three shapes above return HTTP 401 `Unauthorized` without a key,
+identically. A shape question cannot be answered by an unkeyed probe.
+
+### Two model facts the same probe measured
+
+Recorded here because the probe recorded them, and flagged as MODEL facts
+which belong in that model's own document (`DR-CON-model-profiles`), not
+in any provider table:
+
+`[MEASURED]` `gpt-oss:120b` still returns 311 characters of reasoning at
+`reasoning_effort: "none"`, where the other five models return zero.
+
+`[MEASURED]` `glm-5.3` at `none` returned its trace inside
+`message.content` ahead of the answer, rather than in the reasoning
+channel — a live confirmation of the recorded trap in `DR-SUB-llm`
+("`none` does not stop the thinking there, it stops the SEPARATION").
+Its committed document already says to use `low`.
+
+### The distinction this section exists to keep
+
+The configuration value `"none"` and the wire field `reasoning` are
+different things that share a word. A run config binding
+`reasoning: "none"` is not sending a field called `reasoning`; it is
+sending the neutral VALUE, which each provider adapter spells in its own
+field. Reading the first as the second is how a working launch config
+came to be reported as broken
+(`experiments/2026-09-04-experiment-blind-critic/PARKED.md` P2, corrected
+in `docs/ERRATA.md`).

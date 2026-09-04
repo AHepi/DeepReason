@@ -143,6 +143,47 @@ against a code fix; this is a documentation-and-regression fix and the
 code half is zero, so the budget's purpose — bounding the blast radius —
 is met with room to spare.
 
+### AMENDED at implementation — the estimate was wrong and the gate says so
+
+    python tools/diff_budget.py fdf35ef06 --ceiling 160 --paths \
+      tests/test_provider_reasoning_wire_contract.py \
+      docs/OLLAMA_CLOUD_OPERATIONS.md docs/map/SUB-llm.md docs/ERRATA.md
+
+    {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "fdf35ef06",
+     "areas": {"tests/test_provider_reasoning_wire_contract.py": 156,
+               "docs/OLLAMA_CLOUD_OPERATIONS.md": 90,
+               "docs/map/SUB-llm.md": 26,
+               "docs/ERRATA.md": 52},
+     "total_insertions": 324, "ceiling": 160, "verdict": "EXCEEDED"}
+
+**324 insertions against 160.** The estimate under-counted the test by a
+factor of two (156 actual against ~70 estimated: the mutation-proof
+docstrings, the absence-tolerant fallback route, and the transcribed
+launch-config copy are most of it) and did not count the errata at all
+until it was written.
+
+**`git diff fdf35ef06 --stat -- src/` is empty.** Zero production lines.
+
+**Disposition: PROCEED, decided without asking, and disclosed rather
+than footnoted.** The dominance test (`dr-ask-the-right-question` §4):
+every line of the overage is something the tranche's own instruction
+demanded in as many words — "the provider's current contract is recorded
+in `docs/OLLAMA_CLOUD_OPERATIONS.md` with the probe transcript" (90),
+"offline regression for the request shape per provider, mutation-proven"
+(156), and this repo's standing rule that a committed document found
+wrong is corrected by appending to the errata (52). Cutting to 160 would
+mean deleting part of what was asked for in order to satisfy a ceiling
+written for a code fix that turned out not to be needed. No operator
+holding the recorded values — smallest correct change, honesty over
+polish, evidence recorded — chooses that.
+
+What the ceiling exists to bound is behaviour blast radius, and that is
+measured at zero here by two instruments: `diff_budget` reports no `src/`
+area, and `blast_radius` returned `CLEAR`. Recorded here, in the commit
+message, and in the operator-facing report, so the overage cannot pass
+unnoticed. Reversible on request: the errata entry and the operations
+section are separable commits if the operator wants them split out.
+
 ## Approval gate
 
 Class `defect` per GOAL.md, no frozen surface (`CLEAR` above), no `src/`
