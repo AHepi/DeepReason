@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=14 blockers=none
+State: next=15 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -282,11 +282,14 @@ as an omission.
           P4 the critic may never read the target's structured fields
           P5 no run in this tree has ever discharged a criticism
 
-- [ ] 14. (S18) Targeted gate ring: the tests that pin the shipped
+- [x] 14. (S18) Targeted gate ring: the tests that pin the shipped
       critic brief and the seat-section interface.
       done-when: `python -m pytest tests/test_crit_pack_legacy_golden.py
       tests/test_seat_section_architecture.py tests/test_seat_pack_layout.py
       tests/test_seat_section_registry.py -q` -> `0 failed` (paste it).
+      DONE:
+          ..................................... [100%]
+          37 passed in 1.55s
 
 - [ ] 15. (all) Map check: `python tools/docs_verify.py`
       done-when: 0 failed, and `--audit` reports 0 new findings.
