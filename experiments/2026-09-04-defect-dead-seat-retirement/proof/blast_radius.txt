@@ -1,0 +1,22 @@
+{
+  "result_type": "BLAST_RADIUS_RESULT_V1",
+  "base": null,
+  "frozen_surface_contacts": [
+    {
+      "surface": "manifest schemas and validators (run_manifest.py)",
+      "tier": "DIRECT",
+      "target": "src/deepreason/run_manifest.py",
+      "detail": "target file is surface path src/deepreason/run_manifest.py"
+    }
+  ],
+  "frozen_adjacent_contacts": [],
+  "disclosure_summary": "This change touches 1 of the five frozen surfaces (locked-down files that a change can silently corrupt old, already-recorded runs by touching): manifest schemas and validators (run_manifest.py). 4 test file(s) and 8 map document(s) assert on the touched targets today.",
+  "frozen_surface_verdict": "CONTACT",
+  "consumers_qualification_digest": [
+    {
+      "target": "src/deepreason/run_manifest.py",
+      "tier": "CONFIRMED",
+      "detail": "target file is part of the manifest/qualification surface itself"
+    }
+  ]
+}
