@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's argument is circular and fails to answer the comparative question. It defines 'better' tautologically as 'compliant with the harness schema,' thereby asserting the harness is superior by definition rather than demonstrating that bounded harnesses produce conjectures with higher truth-value, utility, or survival rates in an objective sense compared to single model calls. This ignores the prompt's implied metric of quality (truth/novelty) in favor of a self-referential structural metric.",
+      "counterexample": null,
+      "premise": "A bounded harness produces better surviving conjectures not by improving the quality of individual generations, but by enforcing a 'structural viability' filter that single calls lack; survival is defined by adherence to the harness's schema, making the harness superior by tautology within its own operational domain.",
+      "premise_evidence": null,
+      "successor_question": "If 'better' is redefined to mean 'higher probability of being factually true' rather than 'structurally compliant,' does the bounded harness still outperform a single model call?"
+    }
+  ]
+}

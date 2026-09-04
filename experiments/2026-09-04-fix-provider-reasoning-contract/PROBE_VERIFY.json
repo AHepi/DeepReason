@@ -1,0 +1,1553 @@
+{
+ "base_url": "https://ollama.com/v1",
+ "rows": [
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "qwen3.5:397b",
+   "reasoning_value": null,
+   "wire_keys": [
+    "max_tokens",
+    "response_format"
+   ],
+   "body": {
+    "model": "qwen3.5:397b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    }
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 680,
+   "usage": {
+    "prompt_tokens": 24,
+    "completion_tokens": 192,
+    "total_tokens": 216
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "qwen3.5:397b",
+   "reasoning_value": "none",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "qwen3.5:397b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "none"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 0,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 5,
+    "total_tokens": 31
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "qwen3.5:397b",
+   "reasoning_value": "low",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "qwen3.5:397b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "low"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 897,
+   "usage": {
+    "prompt_tokens": 24,
+    "completion_tokens": 253,
+    "total_tokens": 277
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "qwen3.5:397b",
+   "reasoning_value": "medium",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "qwen3.5:397b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "medium"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 644,
+   "usage": {
+    "prompt_tokens": 24,
+    "completion_tokens": 181,
+    "total_tokens": 205
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "qwen3.5:397b",
+   "reasoning_value": "high",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "qwen3.5:397b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "high"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 669,
+   "usage": {
+    "prompt_tokens": 24,
+    "completion_tokens": 190,
+    "total_tokens": 214
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "qwen3.5:397b",
+   "reasoning_value": "max",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "qwen3.5:397b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "max"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 664,
+   "usage": {
+    "prompt_tokens": 24,
+    "completion_tokens": 195,
+    "total_tokens": 219
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "qwen3.5:397b",
+   "reasoning_value": 512,
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "qwen3.5:397b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "low"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 665,
+   "usage": {
+    "prompt_tokens": 24,
+    "completion_tokens": 189,
+    "total_tokens": 213
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "glm-5.2",
+   "reasoning_value": null,
+   "wire_keys": [
+    "max_tokens",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.2",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    }
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 333,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 95,
+    "total_tokens": 121
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "glm-5.2",
+   "reasoning_value": "none",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.2",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "none"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 0,
+   "usage": {
+    "prompt_tokens": 20,
+    "completion_tokens": 6,
+    "total_tokens": 26
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "glm-5.2",
+   "reasoning_value": "low",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.2",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "low"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 351,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 101,
+    "total_tokens": 127
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "glm-5.2",
+   "reasoning_value": "medium",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.2",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "medium"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 309,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 90,
+    "total_tokens": 116
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "glm-5.2",
+   "reasoning_value": "high",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.2",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "high"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 382,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 105,
+    "total_tokens": 131
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "glm-5.2",
+   "reasoning_value": "max",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.2",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "max"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 392,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 107,
+    "total_tokens": 133
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "glm-5.2",
+   "reasoning_value": 512,
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.2",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "low"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 283,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 81,
+    "total_tokens": 107
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "kimi-k2.6",
+   "reasoning_value": null,
+   "wire_keys": [
+    "max_tokens",
+    "response_format"
+   ],
+   "body": {
+    "model": "kimi-k2.6",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    }
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 182,
+   "usage": {
+    "prompt_tokens": 22,
+    "completion_tokens": 47,
+    "total_tokens": 69
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "kimi-k2.6",
+   "reasoning_value": "none",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "kimi-k2.6",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "none"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 0,
+   "usage": {
+    "prompt_tokens": 23,
+    "completion_tokens": 6,
+    "total_tokens": 29
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "kimi-k2.6",
+   "reasoning_value": "low",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "kimi-k2.6",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "low"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 410,
+   "usage": {
+    "prompt_tokens": 22,
+    "completion_tokens": 102,
+    "total_tokens": 124
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "kimi-k2.6",
+   "reasoning_value": "medium",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "kimi-k2.6",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "medium"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 298,
+   "usage": {
+    "prompt_tokens": 22,
+    "completion_tokens": 80,
+    "total_tokens": 102
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "kimi-k2.6",
+   "reasoning_value": "high",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "kimi-k2.6",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "high"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 421,
+   "usage": {
+    "prompt_tokens": 22,
+    "completion_tokens": 110,
+    "total_tokens": 132
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "kimi-k2.6",
+   "reasoning_value": "max",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "kimi-k2.6",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "max"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 454,
+   "usage": {
+    "prompt_tokens": 22,
+    "completion_tokens": 107,
+    "total_tokens": 129
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "kimi-k2.6",
+   "reasoning_value": 512,
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "kimi-k2.6",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "low"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 221,
+   "usage": {
+    "prompt_tokens": 22,
+    "completion_tokens": 52,
+    "total_tokens": 74
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "deepseek-v4-pro",
+   "reasoning_value": null,
+   "wire_keys": [
+    "max_tokens",
+    "response_format"
+   ],
+   "body": {
+    "model": "deepseek-v4-pro",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    }
+   },
+   "http": 503,
+   "accepted": false,
+   "error": "{\"error\":{\"message\":\"model 'deepseek-v4-pro:0813' is temporarily overloaded, please retry shortly or try a different model (ref: 26796209-6e2f-4630-b285-6faf7876a51b)\",\"type\":\"api_error\",\"param\":null,\"code\":null}}\n",
+   "verdict": "UNAVAILABLE"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "deepseek-v4-pro",
+   "reasoning_value": "none",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "deepseek-v4-pro",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "none"
+   },
+   "http": 503,
+   "accepted": false,
+   "error": "{\"error\":{\"message\":\"model 'deepseek-v4-pro:0813' is temporarily overloaded, please retry shortly or try a different model (ref: b37abd48-2521-40ce-9fd4-59605faad30b)\",\"type\":\"api_error\",\"param\":null,\"code\":null}}\n",
+   "verdict": "UNAVAILABLE"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "deepseek-v4-pro",
+   "reasoning_value": "low",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "deepseek-v4-pro",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "low"
+   },
+   "http": 503,
+   "accepted": false,
+   "error": "{\"error\":{\"message\":\"model 'deepseek-v4-pro:0813' is temporarily overloaded, please retry shortly or try a different model (ref: ae275e1a-209c-492a-a619-d0748e964894)\",\"type\":\"api_error\",\"param\":null,\"code\":null}}\n",
+   "verdict": "UNAVAILABLE"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "deepseek-v4-pro",
+   "reasoning_value": "medium",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "deepseek-v4-pro",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "medium"
+   },
+   "http": 503,
+   "accepted": false,
+   "error": "{\"error\":{\"message\":\"model 'deepseek-v4-pro:0813' is temporarily overloaded, please retry shortly or try a different model (ref: c3e8ab89-fe5d-4bdb-9b23-7ec1bf2d2a8c)\",\"type\":\"api_error\",\"param\":null,\"code\":null}}\n",
+   "verdict": "UNAVAILABLE"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "deepseek-v4-pro",
+   "reasoning_value": "high",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "deepseek-v4-pro",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "high"
+   },
+   "http": 503,
+   "accepted": false,
+   "error": "{\"error\":{\"message\":\"model 'deepseek-v4-pro:0813' is temporarily overloaded, please retry shortly or try a different model (ref: ce5b48d2-616f-49bd-88dc-149d32e85c76)\",\"type\":\"api_error\",\"param\":null,\"code\":null}}\n",
+   "verdict": "UNAVAILABLE"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "deepseek-v4-pro",
+   "reasoning_value": "max",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "deepseek-v4-pro",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "max"
+   },
+   "http": 503,
+   "accepted": false,
+   "error": "{\"error\":{\"message\":\"model 'deepseek-v4-pro:0813' is temporarily overloaded, please retry shortly or try a different model (ref: 3df93f49-0a03-4341-9f49-79175469ca51)\",\"type\":\"api_error\",\"param\":null,\"code\":null}}\n",
+   "verdict": "UNAVAILABLE"
+  },
+  {
+   "kind": "harness",
+   "origin": "catalog",
+   "model": "deepseek-v4-pro",
+   "reasoning_value": 512,
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "deepseek-v4-pro",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "low"
+   },
+   "http": 503,
+   "accepted": false,
+   "error": "{\"error\":{\"message\":\"model 'deepseek-v4-pro:0813' is temporarily overloaded, please retry shortly or try a different model (ref: 30143ec6-8875-4962-9c9b-a001275da6e0)\",\"type\":\"api_error\",\"param\":null,\"code\":null}}\n",
+   "verdict": "UNAVAILABLE"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "glm-5.3",
+   "reasoning_value": null,
+   "wire_keys": [
+    "max_tokens",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.3",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    }
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 675,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 146,
+    "total_tokens": 172
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "glm-5.3",
+   "reasoning_value": "none",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.3",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "none"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "The user is asking me to reply with exactly a specific JSON and nothing else: {\"ok\":true}\n\nThis is a simple, benign requ",
+   "reasoning_chars": 0,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 108,
+    "total_tokens": 134
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "glm-5.3",
+   "reasoning_value": "low",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.3",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "low"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 0,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 7,
+    "total_tokens": 33
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "glm-5.3",
+   "reasoning_value": "medium",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.3",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "medium"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 450,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 97,
+    "total_tokens": 123
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "glm-5.3",
+   "reasoning_value": "high",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.3",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "high"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 28,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 13,
+    "total_tokens": 39
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "glm-5.3",
+   "reasoning_value": "max",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.3",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "max"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 276,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 66,
+    "total_tokens": 92
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "glm-5.3",
+   "reasoning_value": 512,
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "glm-5.3",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "low"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 28,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 13,
+    "total_tokens": 39
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "gpt-oss:120b",
+   "reasoning_value": null,
+   "wire_keys": [
+    "max_tokens",
+    "response_format"
+   ],
+   "body": {
+    "model": "gpt-oss:120b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    }
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 243,
+   "usage": {
+    "prompt_tokens": 81,
+    "completion_tokens": 68,
+    "total_tokens": 149
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "gpt-oss:120b",
+   "reasoning_value": "none",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "gpt-oss:120b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "none"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 188,
+   "usage": {
+    "prompt_tokens": 76,
+    "completion_tokens": 57,
+    "total_tokens": 133
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "gpt-oss:120b",
+   "reasoning_value": "low",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "gpt-oss:120b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "low"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 33,
+   "usage": {
+    "prompt_tokens": 81,
+    "completion_tokens": 22,
+    "total_tokens": 103
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "gpt-oss:120b",
+   "reasoning_value": "medium",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "gpt-oss:120b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "medium"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 443,
+   "usage": {
+    "prompt_tokens": 81,
+    "completion_tokens": 109,
+    "total_tokens": 190
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "gpt-oss:120b",
+   "reasoning_value": "high",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "gpt-oss:120b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "high"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 797,
+   "usage": {
+    "prompt_tokens": 81,
+    "completion_tokens": 186,
+    "total_tokens": 267
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "gpt-oss:120b",
+   "reasoning_value": "max",
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "gpt-oss:120b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "max"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 493,
+   "usage": {
+    "prompt_tokens": 81,
+    "completion_tokens": 119,
+    "total_tokens": 200
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "harness",
+   "origin": "model-profile-only",
+   "model": "gpt-oss:120b",
+   "reasoning_value": 512,
+   "wire_keys": [
+    "max_tokens",
+    "reasoning_effort",
+    "response_format"
+   ],
+   "body": {
+    "model": "gpt-oss:120b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning_effort": "low"
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 29,
+   "usage": {
+    "prompt_tokens": 81,
+    "completion_tokens": 22,
+    "total_tokens": 103
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "control",
+   "origin": "control",
+   "model": "qwen3.5:397b",
+   "reasoning_value": "bare-reasoning-string (the 2026-09-04 probe's shape)",
+   "wire_keys": [
+    "reasoning"
+   ],
+   "body": {
+    "model": "qwen3.5:397b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning": "none"
+   },
+   "http": 400,
+   "accepted": false,
+   "error": "{\"error\":{\"message\":\"json: cannot unmarshal string into Go struct field ChatCompletionRequest.reasoning of type openai.Reasoning (ref: 05dca7ef-ad58-406d-acd4-2b2b16d71500)\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":null}}\n",
+   "verdict": "CONTRACT_REFUSED"
+  },
+  {
+   "kind": "control",
+   "origin": "control",
+   "model": "qwen3.5:397b",
+   "reasoning_value": "reasoning-object",
+   "wire_keys": [
+    "reasoning"
+   ],
+   "body": {
+    "model": "qwen3.5:397b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "reasoning": {
+     "effort": "none"
+    }
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 0,
+   "usage": {
+    "prompt_tokens": 26,
+    "completion_tokens": 5,
+    "total_tokens": 31
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  },
+  {
+   "kind": "control",
+   "origin": "control",
+   "model": "qwen3.5:397b",
+   "reasoning_value": "think-false",
+   "wire_keys": [
+    "think"
+   ],
+   "body": {
+    "model": "qwen3.5:397b",
+    "messages": [
+     {
+      "role": "user",
+      "content": "Reply with exactly this JSON and nothing else: {\"ok\":true}"
+     }
+    ],
+    "max_tokens": 2000,
+    "response_format": {
+     "type": "json_object"
+    },
+    "think": false
+   },
+   "http": 200,
+   "accepted": true,
+   "content": "{\"ok\":true}",
+   "reasoning_chars": 1111,
+   "usage": {
+    "prompt_tokens": 24,
+    "completion_tokens": 302,
+    "total_tokens": 326
+   },
+   "finish_reason": "stop",
+   "verdict": "ACCEPTED"
+  }
+ ]
+}

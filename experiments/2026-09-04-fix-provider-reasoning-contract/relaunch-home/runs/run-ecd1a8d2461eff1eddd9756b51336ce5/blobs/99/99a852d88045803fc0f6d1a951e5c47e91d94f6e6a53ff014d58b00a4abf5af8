@@ -1,0 +1,130 @@
+{
+  "candidates": [
+    {
+      "claim": "A bounded harness produces better surviving conjectures not by selection, but by enforcing a 'structural scaffold' that prevents the model from drifting into syntactically valid but semantically vacuous regions of the output space, which single calls frequently inhabit.",
+      "mechanism": "Constraint-induced focus: The harness acts as a rigid skeleton (the 'bounded' part) that forces the model's generative capacity to fill specific causal slots. A single call lacks this skeleton, allowing the model to optimize for fluency over factual density, resulting in high-entropy noise that fails the 'survival' filter of rigorous scrutiny.",
+      "counterconditions": [
+        "If the problem domain is inherently unstructured or poetic, the scaffold becomes a straitjacket that suppresses the only valid solutions.",
+        "If the model's pre-training already internalizes the specific structural constraints of the school stance, the external harness adds redundant overhead without quality gain.",
+        "If the 'survival' metric rewards novelty over adherence to form, the harness's rigid structure will systematically filter out the best candidates."
+      ],
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The criticism assumes 'gradient descent' requires differentiability. Here, the 'loss landscape' is discrete (valid/invalid structure), and the 'steps' are the iterative refinement of the scaffold, not weight updates. The analogy holds for discrete optimization via rejection."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "revised", "note": "Revised to explicitly define the filter function H(C) as 'adherence to the causal mechanism schema' rather than a vague example. The structural constraint is the mandatory presence of a 'because' clause linking premise to conclusion."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "The claim directly answers the comparative question: 'Yes, because the scaffold prevents semantic drift.' The evidence is the higher density of causally linked statements in harness outputs vs single calls."},
+        {"handle": "[SRC_016] against SRC_011", "kind": "rebutted", "note": "The mechanism does not rely on self-diagnosis. It relies on the harness rejecting outputs that *fail* to meet the structural schema. The model doesn't need to know it's wrong; the harness simply discards the non-compliant output."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "The dichotomy is not false; it is necessary. 'Predictability' here refers to the structural form, which is a prerequisite for the 'survival' filter to operate. Without predictable form, 'better' cannot be measured."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "rebutted", "note": "There is no contradiction. A single call produces 'better' raw material in terms of entropy, but 'worse' surviving conjectures because it lacks the formal trappings required to survive the specific filtering process defined by the problem."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "revised", "note": "Revised to acknowledge that survival is determined by the filtering mechanism. The advantage is not 'purely statistical' independent of logic; it is statistical *within* the subspace defined by the logical constraints of the harness."},
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "The mechanism description states the harness prevents drift. This is consistent with outperforming single calls at *all* temperatures, though the margin of victory is largest at high temperatures where single calls drift most."}
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_006", "SRC_007"]
+    },
+    {
+      "claim": "The bounded harness yields superior surviving conjectures solely through an 'Extreme Value' effect: by generating N samples and applying a trivial filter, it statistically guarantees a maximum quality strictly greater than a single sample C_1, regardless of the filter's intelligence.",
+      "mechanism": "Statistical maximization: If the probability of a 'good' conjecture is p > 0, then P(at least one good in N) = 1 - (1-p)^N. As N increases, this approaches 1. The 'bounded' nature ensures the samples are distinct enough (via temperature or prompt variation) to approximate independence.",
+      "counterconditions": [
+        "If the model's output distribution is highly mode-collapsed (p ≈ 0 for novel truths), increasing N yields diminishing returns.",
+        "If the cost of generation scales linearly with N, the efficiency ratio may favor a single, perfectly prompted call.",
+        "If the 'harness' introduces correlation between samples (e.g., by carrying forward errors), the independence assumption fails."
+      ],
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "departure_declared", "note": "Departing from the 'gradient descent' analogy entirely. This candidate relies on probability theory, not optimization landscapes."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "rebutted", "note": "The 'structural constraints' are minimal: simply being a valid JSON object or text block. The filter H(C) is binary: 'is this a complete sentence?' The specificity criticized is unnecessary for the statistical argument to hold."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "The answer is a direct 'Yes' based on the mathematical certainty of extreme value theory. The supporting evidence is the formula 1 - (1-p)^N."},
+        {"handle": "[SRC_016] against SRC_011", "kind": "rebutted", "note": "No self-diagnosis is required. The harness acts as a blind sieve. It does not correct errors; it merely waits for a non-error to appear by chance."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "The claim addresses 'surviving conjectures' directly: the survivor is the max(C_1...C_N). Predictability is irrelevant; only the existence of a tail in the distribution matters."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "rebutted", "note": "The single call's lack of 'formal trappings' is precisely why it loses. The harness's trivial filter (e.g., 'must have a conclusion') is enough to disqualify the unstructured single call."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The advantage IS purely statistical. The selection logic can be dumb (e.g., 'longest string'). As long as it filters out the bottom 99%, the top 1% of N samples will beat the top 1% of 1 sample."},
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "The temperature argument is a red herring. Even at low temperature, N samples provide a wider coverage of the local mode than 1 sample, increasing the chance of hitting the peak."}
+      ],
+      "typicality": 0.92,
+      "optional_refs": ["SRC_008"]
+    },
+    {
+      "claim": "A single model call produces better surviving conjectures in novel domains because the bounded harness introduces a 'confirmation bias' loop, whereas a single call retains the entropy necessary for genuine discovery.",
+      "mechanism": "Entropy preservation vs. constraint collapse: The harness imposes rigid structural requirements that prune unconventional but potentially valid solution paths. A single call samples from the full prior distribution, preserving low-probability, high-reward trajectories that the harness would prematurely discard as 'non-compliant'.",
+      "counterconditions": [
+        "If the definition of 'better' strictly requires adherence to the school stance (e.g., mechanist explanation), then non-compliant discoveries are by definition inferior.",
+        "If the problem domain is well-understood and constrained, the high-entropy approach yields mostly noise rather than discovery.",
+        "If the harness includes a mechanism for temporarily relaxing constraints (simulated annealing), this disadvantage is mitigated."
+      ],
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The criticism attacks the 'gradient descent' analogy used by others. This candidate rejects that analogy and posits a 'random walk' model where constraints act as walls, not gradients."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "rebutted", "note": "The criticism demands specific constraints. This candidate argues that the *lack* of specific constraints in the single call is its strength, and the *presence* of any constraint in the harness is the weakness."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "The answer is 'No, not in novel domains.' The evidence is the historical pattern of breakthroughs coming from outside established frameworks (which harnesses enforce)."},
+        {"handle": "[SRC_016] against SRC_011", "kind": "rebutted", "note": "The mechanism relies on the harness's *inability* to diagnose novelty. It treats novel structures as errors. Thus, the failure of self-diagnosis is the feature that protects the single call's output."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "The 'false dichotomy' is actually the core insight. Predictability (harness) trades off against Survivability-in-novel-contexts (single call)."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "rebutted", "note": "The 'formal trappings' are the trap. A conjecture that survives a rigid harness may be formally perfect but substantively wrong. The single call's 'unstructured' output may be the only one containing the seed of truth."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The advantage is NOT statistical. It is qualitative. One high-entropy sample can outweigh 1000 low-entropy, conformist samples if the goal is discovery."},
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "The temperature argument supports this view: high temperature makes the harness fail (by producing non-compliant noise), while the single call thrives on that same noise."}
+      ],
+      "typicality": 0.45,
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "The bounded harness outperforms single calls only when the task involves 'multi-hop reasoning' where intermediate steps must be validated before proceeding; for single-step insights, the harness adds latency with no quality gain.",
+      "mechanism": "Step-wise validation gate: The harness breaks the problem into sub-tasks. Each sub-task output is vetted. If it fails, the chain restarts or backtracks. A single call attempts the whole chain in one go, suffering from compounding error probabilities (P(success) = p^n).",
+      "counterconditions": [
+        "If the model has been fine-tuned on long-chain reasoning tasks, the single call's compounding error rate drops significantly.",
+        "If the 'harness' introduces context window limits that truncate the chain, the multi-hop advantage is lost.",
+        "If the problem is a 'trick question' requiring a leap of intuition rather than linear steps, the harness will get stuck in local minima."
+      ],
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "revised", "note": "Clarified that the 'gradient descent' analogy applies to the *search strategy* of the harness (backtracking to improve), not the model's internal weights."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "revised", "note": "Defined H(C) as 'logical consistency with previous steps'. The structural constraint is the dependency graph of the reasoning chain."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "The answer is conditional: 'Yes for multi-hop, No for single-step.' This nuance is the direct answer supported by the error-compounding mechanism."},
+        {"handle": "[SRC_016] against SRC_011", "kind": "rebutted", "note": "The harness does not require the *model* to self-diagnose. The *harness logic* performs the diagnosis by comparing step N to step N-1."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "Predictability is essential here. We predict that step 2 follows step 1. If the single call jumps to step 5, it fails the 'survival' check of logical flow."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "rebutted", "note": "The single call's output is 'better' only if it gets lucky. Statistically, the harness's step-wise verification yields a higher survival rate for complex chains."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The advantage is not statistical sampling; it is algorithmic decomposition. The harness changes the *structure* of the computation, not just the number of samples."},
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "High temperature hurts the harness here because it increases the variance of intermediate steps, causing more backtracks. Low temperature is preferred for deterministic chaining."}
+      ],
+      "typicality": 0.78,
+      "optional_refs": ["SRC_005", "SRC_006"]
+    },
+    {
+      "claim": "The 'bounded harness' creates a 'simulated peer-review' environment where the model acts as both author and critic, leading to conjectures that are more robust to adversarial scrutiny than those from a single call.",
+      "mechanism": "Adversarial self-reflection: The harness prompts the model to generate a critique of its own output before finalizing it. This internalizes the 'survival' criteria. A single call lacks this reflection phase, producing naive outputs that fail upon first external contact.",
+      "counterconditions": [
+        "If the model lacks the capability to critically evaluate its own domain-specific output, the 'critique' is hallucinated and misleading.",
+        "If the 'harness' forces a specific critique format that doesn't match the problem's actual failure modes, the robustness is illusory.",
+        "If the time cost of the reflection loop exceeds the value of the marginal quality gain, the harness is inefficient."
+      ],
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The analogy is to 'peer review', not gradient descent. The 'steps' are revision cycles, driven by textual feedback, not mathematical gradients."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "revised", "note": "H(C) is defined as 'passes the self-generated critique'. The structural constraint is the presence of a 'Critique' and 'Revision' section."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "Direct answer: 'Yes, because the pre-screening via self-critique filters out fragile arguments before they are even submitted as survivors.'"},
+        {"handle": "[SRC_016] against SRC_011", "kind": "rebutted", "note": "The mechanism assumes the model *can* spot inconsistencies when prompted specifically to do so ('Find the flaw'), even if it can't do so spontaneously."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "Predictability of the critique process ensures that only arguments surviving a standard set of attacks are produced. This directly addresses 'surviving conjectures'."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "rebutted", "note": "The single call's lack of 'formal trappings' (like a critique section) means it hasn't been stress-tested. The harness's output has."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The advantage is procedural, not statistical. It's about the *process* of refinement, not the number of raw samples."},
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "High temperature might help generate diverse critiques, but the mechanism works best with moderate temperature to ensure the critique is coherent."}
+      ],
+      "typicality": 0.65,
+      "optional_refs": ["SRC_005"]
+    },
+    {
+      "claim": "Neither approach consistently produces 'better' survivors; the outcome depends entirely on the alignment between the harness's implicit bias and the ground truth of the problem domain.",
+      "mechanism": "Bias-Variance Tradeoff in Reasoning: The harness reduces variance (more consistent, structured outputs) but increases bias (towards the school's stance). The single call has high variance and low bias. 'Better' is undefined without knowing if the domain requires precision (harness wins) or exploration (single call wins).",
+      "counterconditions": [
+        "If the 'school stance' is fundamentally flawed or outdated, the harness will systematically produce confident wrong answers.",
+        "If the evaluation metric penalizes inconsistency heavily, the harness will always win regardless of truth.",
+        "If the problem is underspecified, the single call's diverse guesses may cover the solution space better than the harness's narrow focus."
+      ],
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "departure_declared", "note": "Departing from the idea that one mechanism is universally superior. Adopting a contingency view."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "rebutted", "note": "The criticism asks for specific constraints. This candidate argues the constraints are arbitrary and their value is contingent, not intrinsic."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "The answer is 'It depends.' This is the only honest answer given the trade-off between bias and variance."},
+        {"handle": "[SRC_016] against SRC_011", "kind": "rebutted", "note": "Self-diagnosis is irrelevant if the harness's bias is misaligned with reality. The harness will confidently diagnose 'errors' that are actually truths."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "The 'false dichotomy' is resolved by introducing a third dimension: Domain Alignment. Predictability helps only if the predictable path is the right one."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "rebutted", "note": "The single call's 'unstructured' nature is a feature when the structure of the truth is unknown. The harness's structure is a bug in such cases."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Statistical advantages vanish if the distribution being sampled is biased away from the truth. Quality > Quantity."},
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "Temperature effects are secondary to the primary driver: the alignment of the harness's constraints with the problem's ontology."}
+      ],
+      "typicality": 0.30,
+      "optional_refs": ["SRC_001", "SRC_002"]
+    }
+  ]
+}

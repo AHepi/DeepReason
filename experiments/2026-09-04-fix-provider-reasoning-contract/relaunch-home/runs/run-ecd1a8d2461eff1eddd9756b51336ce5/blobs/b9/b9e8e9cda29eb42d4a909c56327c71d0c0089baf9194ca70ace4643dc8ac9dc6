@@ -1,0 +1,35 @@
+## problem-context
+PROBLEM CONTEXT (question-f400f9c649401a1fd1188ac39e8dbddd) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Does a bounded harness produce better surviving conjectures than one model call?
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@131519f149ecad390addc7ef: program:reasoning_observation_pending
+- reason-counter@3896613b545fed252e4bca81: program:reasoning_observation_pending
+- reason-counter@0bd429946655bf8c4addab3f: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 26ab16603da1bccc644f69d319ea4f74aa0b7de7ab27363373bb4195f4755430
+{"analogy":null,"claim":"A single model call produces superior conjectures in novel domains because the bounded harness introduces a bias toward known patterns (overfitting to the school stance), whereas a single call retains the entropy necessary for genuine discovery.","counterconditions":[{"case":"If the definition of 'better' strictly requires adherence to the school stance (e.g., mechanist explanation), then non-compliant discoveries are by definition inferior.","checker_spec":null,"eval":"observation"},{"case":"If the problem domain is well-understood and constrained, the high-entropy approach yields mostly noise rather than discovery.","checker_spec":null,"eval":"observation"},{"case":"If the harness includes a mechanism for temporarily relaxing constraints (simulated annealing), this disadvantage is mitigated.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Entropy preservation vs. constraint collapse: The harness imposes rigid structural requirements (e.g., 'demand a causal mechanism') that prune unconventional but potentially valid solution paths. A single call samples from the full prior distribution, preserving low-probability, high-reward trajectories that the harness would prematurely discard as 'non-compliant'.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- 74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845 [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- 74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM CONTEXT (question-f400f9c649401a1fd1188ac39e8dbddd) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Does a bounded harness produce better surviving conjectures than one model call?
+
+DIRECTIVE: mount the strongest NEW specific case against TARGET 26ab16603da1bccc644f69d319ea4f74aa0b7de7ab27363373bb4195f4755430, or attack=false if you find no genuine fault.

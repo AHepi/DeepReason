@@ -1,0 +1,214 @@
+{
+  "candidates": [
+    {
+      "claim": "A bounded harness produces better surviving conjectures not by improving the quality of individual generations, but by enforcing a 'structural viability' filter that single calls lack; survival is defined by adherence to the harness's schema, making the harness superior by tautology within its own operational domain.",
+      "mechanism": "Schema-enforced selection: The harness acts as a rigid sieve where 'better' is operationally defined as 'compliant with the reasoning envelope'. A single call generates unconstrained text which, while potentially creative, has a near-zero probability of satisfying the strict structural requirements (premises, derivations, counterconditions) needed to 'survive' as a formal artifact in this system.",
+      "counterconditions": [
+        "If the definition of 'better' shifts from structural compliance to raw truth-value or novelty independent of format, the single call may outperform the harness.",
+        "If the harness's schema is fundamentally misaligned with the problem domain (e.g., requiring causal mechanisms for purely statistical phenomena), the harness will systematically filter out correct answers."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The criticism assumes 'gradient descent' requires differentiability. This candidate reframes the mechanism as discrete 'schema enforcement' rather than continuous optimization, rendering the differentiability objection irrelevant. The harness performs a discrete projection onto the valid subspace of the reasoning envelope."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "revised",
+          "note": "Revised to explicitly acknowledge that 'survival' is determined by the filtering mechanism. The claim now posits that this filtering is the *source* of the advantage (structural viability) rather than claiming the advantage is independent of selection logic."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate does not equate high-variance with low-quality. It argues that high-variance outputs (from single calls) have low *survival probability* specifically because they fail structural constraints, regardless of their potential latent truth. Survival here is a measure of format compliance, not epistemic quality."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate addresses the 'surviving' constraint by defining survival strictly as successful serialization into the required JSON schema. Overhead and corruption are treated as external failure modes, not part of the logical comparison of 'producing surviving conjectures'."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The bounded harness yields superior surviving conjectures through 'iterative error correction': intermediate steps in the harness allow the model to detect and repair logical inconsistencies before finalization, a capability absent in single-shot generation where errors are baked into the final output.",
+      "mechanism": "Self-correcting chain-of-thought: The harness forces the model to generate intermediate artifacts (premises, definitions). If these are flawed, subsequent steps (derivation, counterconditions) become impossible to complete coherently, prompting the model (or the harness via rejection sampling) to revise the earlier steps. Single calls lack this feedback loop.",
+      "counterconditions": [
+        "If the model suffers from 'context contamination' where early errors bias later corrections rather than fixing them, the harness could degrade performance.",
+        "If the problem is trivial enough that a single call achieves 100% accuracy, the overhead of the harness provides no marginal gain."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "departure_declared",
+          "note": "Departing from the 'gradient descent' analogy entirely. This candidate relies on symbolic consistency checking and logical dependency resolution, which are discrete operations unrelated to differentiable loss landscapes."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The claim explicitly depends on the selection logic (the ability to reject/revise based on intermediate failures). The advantage is *caused* by the filtering and revision process, directly countering the idea that it is purely statistical."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "High variance is acknowledged as useful for exploration, but this candidate argues that for *survival* (producing a coherent, valid argument), low variance (consistency) is preferred. The harness trades exploration depth for structural robustness."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "revised",
+          "note": "Clarified that 'surviving' implies passing internal consistency checks. The candidate now explicitly contrasts the 'depth' of reasoning (enabled by steps) against the 'breadth' of a single call, addressing the comparative constraint."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "In novel domains with sparse priors, a single model call produces better conjectures because the bounded harness imposes a 'cognitive straightjacket' that forces novel insights into ill-fitting pre-existing schemas, thereby distorting or destroying the insight during the formatting process.",
+      "mechanism": "Entropy preservation vs. schema collapse: Novel truths often violate standard logical forms initially. The harness demands immediate structuring (premises -> derivation), forcing the model to hallucinate connections to fit the mold. A single call allows the raw, unstructured insight to survive intact, even if it lacks formal trappings.",
+      "counterconditions": [
+        "If the 'novel domain' still obeys fundamental laws of logic that the schema captures, the harness may help articulate the insight more clearly.",
+        "If the evaluation metric strictly requires the structured format, the unstructured single-call output technically 'fails to survive' regardless of its truth content."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "This candidate rejects the optimization metaphor entirely. It frames the harness as a source of bias (overfitting to structure) rather than an optimizer. The 'steps' are seen as constraints that reduce the search space too aggressively."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that the selection logic is actively harmful in this regime. The 'statistical advantage' of N samples is negated if the selection criteria (schema compliance) systematically filters out the most innovative (non-compliant) solutions."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "revised",
+          "note": "Explicitly adopts the stance that high-variance outputs are the *primary* source of value in novel domains. The revision clarifies that the harness's filtering of high-variance items is a bug, not a feature, in this specific context."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Addresses the 'surviving' constraint by redefining 'better' as 'higher truth potential' rather than 'format compliance'. It argues that if the question implies epistemic value, the harness fails; if it implies bureaucratic survival, the harness wins trivially."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "The bounded harness outperforms single calls only when the 'temperature' of the model is high; at low temperatures, the harness adds redundant verification, but at high temperatures, it provides necessary guardrails to prevent hallucination from derailing the entire conjecture.",
+      "mechanism": "Variance damping via structural anchoring: High-temperature sampling explores widely but drifts. The harness anchors the generation at each step (premises must be stated, derivations must follow), preventing the drift from accumulating into total nonsense. Single calls at high temp often produce coherent-sounding but logically void streams.",
+      "counterconditions": [
+        "If the model's intrinsic coherence is high even at high temperatures, the anchoring provides diminishing returns.",
+        "If the problem requires lateral thinking that looks like 'drift' to the verifier, the harness will incorrectly penalize valid paths."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "revised",
+          "note": "Refined the analogy: instead of gradient descent, the mechanism is described as 'error accumulation prevention'. The steps act as reset points for logical consistency, not necessarily directed steps toward a minimum."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The advantage is conditional on the generation parameters (temperature). It is not purely statistical (N samples) nor purely logical (selection); it is an interaction effect between model stochasticity and structural constraints."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Distinguishes between 'productive variance' (exploration) and 'destructive variance' (hallucination). The harness filters the latter while ideally preserving the former, whereas a single call risks collapsing into the latter."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Directly addresses the 'surviving' aspect: at high temp, single calls rarely 'survive' logical scrutiny. The harness ensures survival by enforcing local consistency at each step."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "A bounded harness creates an illusion of superiority by optimizing for 'explainability' rather than 'correctness'; it produces conjectures that are easier for humans to verify (due to structure) but not necessarily more likely to be true than those from a single call.",
+      "mechanism": "Pedagogical framing bias: The harness forces the model to generate arguments in a human-readable format (premise-conclusion). This makes the output appear more robust because flaws are localized and explicit, whereas single-call flaws are buried in prose. Survival is biased towards 'verifiable' rather than 'true'.",
+      "counterconditions": [
+        "If 'better' is defined by human trust or adoption, then explainability is a valid component of quality, making the harness objectively better.",
+        "If automated checkers can parse unstructured prose as effectively as structured JSON, this advantage disappears."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "departure_declared",
+          "note": "Departing from the optimization/learning paradigm. This candidate views the harness as a communication interface, not a reasoning engine. The 'steps' are for the reader, not the model."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Challenges the premise that 'surviving' means 'being correct'. Suggests 'surviving' means 'passing human review'. The selection logic is biased towards rhetorical clarity, not statistical truth."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Posits that high-variance single calls might contain deeper truths that are simply harder to extract/verify. The harness sacrifices this depth for surface-level clarity."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "revised",
+          "note": "Clarifies the comparison: The harness produces 'better surviving' conjectures only if 'better' includes 'ease of verification'. If 'better' means 'ground truth alignment', the comparison is unresolved."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "The bounded harness fails to produce better surviving conjectures in adversarial environments because its rigid structure provides a predictable attack surface for 'jailbreak' style logical traps, whereas the entropy of a single call makes it harder to engineer specific failures.",
+      "mechanism": "Structural fragility: Adversaries can craft inputs that exploit the specific dependencies required by the harness (e.g., forcing a contradiction between 'premises' and 'definitions'). A single call's amorphous output is less susceptible to targeted logical sabotage because it lacks fixed anchor points.",
+      "counterconditions": [
+        "If the adversary's goal is to produce *any* false statement, both methods are equally vulnerable.",
+        "If the harness includes adversarial training or robustness checks in its 'selection logic', this vulnerability is mitigated."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Rejects the idea that structure aids convergence. In adversarial settings, structure aids exploitation. The 'steps' are not guiding towards truth but towards a predictable trap."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that the selection logic is the weak point. An adversary can game the filter. Purely statistical sampling (single call) is harder to game because there is no filter to manipulate."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Suggests that in adversarial contexts, high variance (randomness) is a defense mechanism. Filtering for structure removes this defensive noise."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Addresses 'surviving' in the context of adversarial attacks. The harness's conjectures might 'survive' internal checks but fail externally against an attacker, whereas single calls might survive by being unintelligible to the attacker."
+        }
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_007"
+      ]
+    }
+  ]
+}

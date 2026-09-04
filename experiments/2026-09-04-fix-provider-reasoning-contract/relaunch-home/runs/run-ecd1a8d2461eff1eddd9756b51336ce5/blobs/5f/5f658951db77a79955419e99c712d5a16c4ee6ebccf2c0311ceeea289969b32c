@@ -1,0 +1,30 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+PROBLEM CONTEXT (question-f400f9c649401a1fd1188ac39e8dbddd) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Does a bounded harness produce better surviving conjectures than one model call?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@71522e8f67a0b0fd88951ec2: program:reasoning_observation_pending
+- reason-counter@64de622dc131550638aabaaf: program:reasoning_observation_pending
+- reason-counter@3d34b0060ebfa2eb54eea4b1: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A bounded harness produces better surviving conjectures primarily through 'Structural Scaffolding,' where the constraints act as a cognitive guide that prevents the model from abandoning complex reasoning paths prematurely, rather than through selection or statistical sampling.","counterconditions":[{"case":"If the structural constraints are misaligned with the problem domain (e.g., demanding a causal mechanism for a purely correlational problem), the harness will systematically produce confident but incorrect conjectures.","checker_spec":null,"eval":"observation"},{"case":"If the model lacks the inherent capability to follow multi-step structural instructions, the harness may induce 'constraint collapse,' where the model fills fields with nonsense just to satisfy the format.","checker_spec":null,"eval":"observation"},{"case":"If the problem requires lateral thinking that violates standard structural norms, the harness will suppress the optimal solution.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Constraint-Guided Reasoning: The harness's bounds (e.g., requiring specific fields like 'mechanism' or 'evidence') force the model to allocate attention to structural completeness during generation. This reduces the probability of generating syntactically valid but semantically hollow outputs (hallucinations) that often occur in single, unconstrained calls. The 'survival' is a byproduct of higher initial quality, not post-hoc filtering.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@71522e8f67a0b0fd88951ec2, reason-counter@64de622dc131550638aabaaf, reason-counter@3d34b0060ebfa2eb54eea4b1
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

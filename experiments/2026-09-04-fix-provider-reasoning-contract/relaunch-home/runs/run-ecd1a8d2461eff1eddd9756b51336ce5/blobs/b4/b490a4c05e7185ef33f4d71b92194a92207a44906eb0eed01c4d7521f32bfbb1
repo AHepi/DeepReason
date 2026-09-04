@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims the bounded harness yields superior conjectures via 'iterative error correction,' but this mechanism relies on the model's ability to accurately self-diagnose logical inconsistencies in intermediate steps. If the model suffers from 'context contamination' or hallucination, it may incorrectly validate flawed premises or introduce new errors during the 'repair' phase, leading to a final output that is confidently incorrect rather than corrected. Since the target admits this vulnerability as a countercondition but still asserts the general superiority of the harness without quantifying the frequency of successful vs. failed corrections, the claim that the harness inherently produces 'better' surviving conjectures is unsubstantiated for models prone to self-deception.",
+      "counterexample": null,
+      "premise": "Self-correction mechanisms can amplify errors if the model cannot distinguish between valid and invalid intermediate states.",
+      "premise_evidence": null,
+      "successor_question": "What empirical evidence exists that the rate of successful error correction in the bounded harness exceeds the rate of error amplification due to context contamination?"
+    }
+  ]
+}

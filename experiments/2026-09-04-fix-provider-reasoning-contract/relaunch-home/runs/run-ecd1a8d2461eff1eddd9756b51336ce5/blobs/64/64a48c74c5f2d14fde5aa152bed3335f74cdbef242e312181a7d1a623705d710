@@ -1,0 +1,202 @@
+{
+  "candidates": [
+    {
+      "claim": "A bounded harness produces better surviving conjectures primarily through 'Iterative Error Correction,' where the serialization of intermediate states allows the model to detect and repair logical inconsistencies that a single-shot call would propagate as fatal flaws.",
+      "mechanism": "Stateful Debugging Loop: The harness acts as a short-term memory buffer, enabling the model to treat its own previous output as input for critique and refinement, effectively simulating a multi-turn debugging session within a single logical unit.",
+      "counterconditions": [
+        "If the problem domain requires a holistic insight that is destroyed by decomposition (e.g., Gestalt perception), the iterative approach may fail to converge on the solution.",
+        "If the serialization overhead introduces significant latency or token limits that truncate the reasoning chain before completion.",
+        "If the model lacks the capability to critically evaluate its own outputs (self-reflection deficit), the loop reinforces errors rather than correcting them."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The criticism assumes 'gradient descent' requires differentiability. This candidate reframes the mechanism as 'Discrete Error Correction,' which operates on symbolic logic and consistency checks, not continuous loss landscapes. The 'steps' are logical repairs, not gradient updates."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "revised",
+          "note": "Revised to acknowledge that survival is not purely statistical but causal. The claim now explicitly states that the harness's filtering mechanism (error correction) actively improves quality, rather than just sampling until a hit occurs."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "High variance is not equated with low quality here. Instead, the harness is posited to reduce 'destructive variance' (logical contradictions) while preserving 'constructive variance' (novel hypotheses) through targeted repair, distinguishing noise from signal."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate addresses the 'surviving' constraint by defining survival as 'logical consistency after refinement.' While serialization has costs, the net gain in consistency for complex problems outweighs the risk of state corruption, provided the context window is sufficient."
+        }
+      ],
+      "optional_refs": ["SRC_006"]
+    },
+    {
+      "claim": "The bounded harness outperforms a single call by enforcing 'Structural Compliance,' acting as a sieve that forces raw generative entropy into a format compatible with the specific evaluation criteria of the problem domain.",
+      "mechanism": "Constraint-Driven Pruning: The harness imposes rigid structural requirements (schema, format, logical steps) that filter out semantically valid but structurally unusable outputs, increasing the density of 'survivable' conjectures.",
+      "counterconditions": [
+        "If the optimal solution lies outside the predefined structural constraints imposed by the harness.",
+        "If the cost of generating compliant structures exceeds the benefit of the increased survival rate.",
+        "If the single model call is prompted with equally rigorous structural constraints, negating the harness's unique advantage."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "departure_declared",
+          "note": "Departing from the 'chain-of-thought' analogy entirely. This candidate relies on 'Structural Compliance,' which is a filtering process, not a learning or stepping process."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Agrees that survival is determined by filtering, but argues this validates the harness over the statistical argument. The 'selection logic' is the core value proposition, not an incidental feature."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Clarifies that 'high-variance' in the context of structural compliance often means 'non-compliant.' In domains requiring strict adherence to protocol, non-compliance is indeed low-quality, regardless of creative merit."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "revised",
+          "note": "Refined to explicitly compare 'surviving' rates under identical structural constraints. The claim now asserts that the harness enforces these constraints more reliably than a single prompt due to iterative feedback."
+        }
+      ],
+      "optional_refs": ["SRC_005"]
+    },
+    {
+      "claim": "A single model call produces superior conjectures in novel domains because the bounded harness introduces a bias toward known patterns (overfitting to the school stance), whereas a single call retains the entropy necessary for genuine discovery.",
+      "mechanism": "Entropy preservation vs. constraint collapse: The harness imposes rigid structural requirements that prune unconventional but potentially valid solution paths. A single call samples from the full prior distribution, preserving low-probability, high-reward trajectories.",
+      "counterconditions": [
+        "If the definition of 'better' strictly requires adherence to the school stance, then non-compliant discoveries are by definition inferior.",
+        "If the problem domain is well-understood and constrained, the high-entropy approach yields mostly noise rather than discovery.",
+        "If the harness includes a mechanism for temporarily relaxing constraints (simulated annealing), this disadvantage is mitigated."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "This candidate aligns with the skepticism of analogies to optimization. It argues that the 'chain-of-thought' effect is actually a 'constraint collapse' that harms novelty."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Challenges the statistical advantage by arguing that if the harness biases the distribution away from the true solution (due to overfitting), increasing N only yields more confident wrong answers."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "revised",
+          "note": "Explicitly adopts the stance that high variance is a feature, not a bug, in novel domains. The claim is revised to specify 'novel domains' as the condition where the single call wins."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Argues that 'surviving' in a biased harness means surviving the bias, not necessarily being correct. The single call's lack of serialization overhead preserves the integrity of the original probabilistic sample."
+        }
+      ],
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "The bounded harness creates a 'Simulated Peer Review' environment where the model generates a conjecture and then immediately attempts to falsify it, with only those surviving the self-critique being presented as final.",
+      "mechanism": "Adversarial Self-Simulation: The harness splits the generation process into 'Proposer' and 'Critic' roles (even within the same model weights), leveraging the model's ability to switch contexts to find flaws before external evaluation.",
+      "counterconditions": [
+        "If the model's 'Critic' persona is weaker than its 'Proposer' persona, leading to false positives (rejecting good ideas).",
+        "If the adversarial dynamic leads to overly conservative conjectures that avoid risk rather than seeking truth.",
+        "If the computational cost of the double-pass (propose + critique) reduces the total number of unique ideas explored compared to single-shot sampling."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "revised",
+          "note": "Replaces the 'gradient descent' analogy with 'Adversarial Simulation.' The steps are not toward a minimum loss, but toward passing a boolean 'critique' check."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Survival here is not statistical luck but the result of an active falsification process. The selection logic is intrinsic to the generation mechanism."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Distinguishes between 'random variance' and 'explored variance.' The harness reduces random noise but increases the variance of *tested* hypotheses, which is valuable."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Addresses the 'surviving' constraint by defining survival as 'withstood self-critique.' Serialization is the medium for the critic's input, making it essential rather than a hindrance."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The advantage of the bounded harness is contextual: it excels in 'Convergent' tasks (logic, math, code) where errors are fatal, but underperforms in 'Divergent' tasks (creative writing, hypothesis generation) where connectivity matters more than correctness.",
+      "mechanism": "Task-Topology Matching: The harness functions as a local optimizer, effective in smooth, convex problem spaces (convergent) but prone to getting stuck in local minima or pruning necessary bridges in rugged, disconnected spaces (divergent).",
+      "counterconditions": [
+        "If the problem domain cannot be clearly classified as convergent or divergent.",
+        "If the single model call is capable of internal chain-of-thought reasoning that mimics the harness without external serialization.",
+        "If the definition of 'better' shifts from 'correctness' to 'novelty' even in convergent tasks."
+      ],
+      "typicality": 0.90,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Refines the gradient descent analogy: it is valid *only* for convergent tasks (smooth landscapes). The criticism holds for divergent tasks, which this candidate explicitly excludes from the harness's superiority claim."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "revised",
+          "note": "Nuances the statistical claim: statistical sampling helps in divergent tasks, but logical filtering (harness) helps in convergent ones. Survival depends on the task topology."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Clarifies that 'high-variance' is desirable in divergent tasks but detrimental in convergent ones. The harness appropriately suppresses variance where it constitutes error."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Acknowledges serialization overhead but argues it is a necessary tax for convergence. In divergent tasks, the overhead is indeed a net negative, supporting the conditional nature of the claim."
+        }
+      ],
+      "optional_refs": ["SRC_005", "SRC_007"]
+    },
+    {
+      "claim": "A bounded harness produces better surviving conjectures because it mitigates 'Context Drift,' keeping the reasoning anchored to the original problem statement across multiple steps, whereas a single long call tends to hallucinate or lose the thread.",
+      "mechanism": "Anchor Reinforcement: By breaking the problem into discrete, validated chunks, the harness repeatedly re-injects the core constraints and problem definition, preventing the cumulative drift common in long-context generation.",
+      "counterconditions": [
+        "If the problem is simple enough that context drift does not occur within a single call.",
+        "If the harness's chunking strategy breaks coherent thoughts that require long-range dependency to resolve.",
+        "If the model has a sufficiently large context window and attention mechanism to maintain focus without external anchoring."
+      ],
+      "typicality": 0.70,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Moves away from 'gradient descent' to 'Attention Reset.' The mechanism is about refreshing the context window's focus, not optimizing a loss function."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Survival here is defined as 'relevance to the prompt.' The harness ensures relevance through reinforcement, not just statistical probability."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Argues that in the context of long-form reasoning, 'variance' often manifests as 'drift.' Reducing this variance improves quality by maintaining fidelity to the problem."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "revised",
+          "note": "Explicitly links 'surviving' to 'remaining on-topic.' The serialization overhead is justified as the cost of preventing drift, which is a primary cause of failure in single long calls."
+        }
+      ],
+      "optional_refs": ["SRC_006"]
+    }
+  ]
+}

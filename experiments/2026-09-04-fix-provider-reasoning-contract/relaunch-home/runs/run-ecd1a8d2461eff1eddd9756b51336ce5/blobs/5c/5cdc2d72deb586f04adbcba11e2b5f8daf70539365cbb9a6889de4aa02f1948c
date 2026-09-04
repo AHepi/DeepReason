@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that a single model call produces 'better surviving conjectures' is internally contradictory because it admits the unstructured output 'lacks formal trappings.' In the context of the problem asking for 'surviving' conjectures within a harness framework, survival inherently requires adherence to the schema. An insight that cannot be formatted due to 'schema collapse' does not survive the process; it is discarded. Therefore, the bounded harness does not destroy valid insights but correctly filters out those that cannot be articulated within the required logical structure, making the structured approach superior for producing *surviving* (usable/verifiable) conjectures.",
+      "counterexample": null,
+      "premise": "A conjecture that cannot be formatted into the required schema does not 'survive' the evaluation process, regardless of its raw truth content.",
+      "premise_evidence": null,
+      "successor_question": "If an insight cannot be expressed in the required formal schema, can it truly be considered a 'surviving conjecture' in a system designed to validate structured reasoning?"
+    }
+  ]
+}

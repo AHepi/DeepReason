@@ -68,6 +68,53 @@ transcript path; no code changes.
 
 ---
 
+## P3 — a budget denial at 114 226 of 120 000 tokens terminated `operational_failure`, not `budget_exhausted`
+
+**What.** This tranche's own verification relaunch,
+`experiments/2026-09-04-fix-provider-reasoning-contract/relaunch-home/runs/run-ecd1a8d2461eff1eddd9756b51336ce5`,
+stopped `state: failed`, `stop_reason: operational_failure`, message
+`token budget denied transactional work sha256:c01bc9d1...`, having spent
+114 226 of the 120 000 tokens it was given. CLAUDE.md's operator law of
+2026-08-29 says a budget denial on an exhausted budget terminates
+`budget_exhausted` and clean, never `operational_failure` — the operator's
+own words were "clean stop. with an assurance that continuing is
+possible." The assurance half holds: `continue` and `amend` are both
+ACCEPTED and the record replays valid with zero violations. It is the
+CLASSIFICATION that looks wrong, and only that.
+
+Not adjudicated here, deliberately: whether the harness should treat "the
+next reservation does not fit in the remaining 5 774 tokens" as exhaustion
+is a design question this tranche has no mandate over, and the run was a
+verification instrument rather than the subject.
+
+**Ready to send:**
+
+```
+Route: deepreason-orchestrator (defect).
+Goal: decide whether a token-budget denial raised when the remaining budget
+cannot cover the next reservation is an exhausted budget, and make the terminal
+match the answer. Today it terminates `state: failed`, `stop_reason:
+operational_failure`; the operator's 2026-08-29 law says a budget denial on an
+exhausted budget is a clean `budget_exhausted`. The run had spent 114226 of
+120000 tokens, so this is the exhaustion case if anything is.
+Evidence: experiments/2026-09-04-fix-provider-reasoning-contract/relaunch-home/
+runs/run-ecd1a8d2461eff1eddd9756b51336ce5 (run-status.json, its 29
+workflow-provider-attempt-v1 objects all `provider_result`, REPLAY_VALIDATION
+valid with 0 violations); `deepreason stop-report` on it rules ENVIRONMENT out,
+so nothing about the provider is involved; PARKED.md P3 is this entry. The law
+is CLAUDE.md, "Exhaustion is a clean stop".
+Note the law's other half already holds and must not regress: `continue` and
+`amend` are both ACCEPTED on this root, so whatever changes must keep
+continuability intact.
+End state: a budget denial on an exhausted budget reaches `budget_exhausted`,
+with a regression driving a run to that boundary, and the distinction between
+this case and a genuine operational failure stated where the next reader will
+find it — or the record says why `operational_failure` is right here and the
+law does not reach this case.
+```
+
+---
+
 ## Not parked, because it is this tranche's own finding, now corrected
 
 The premise of `experiments/2026-09-04-experiment-blind-critic/PARKED.md`

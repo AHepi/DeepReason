@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the advantage is 'purely statistical' and independent of 'selection logic' is false because the problem specifically asks about 'surviving' conjectures. In a bounded harness, survival is determined by a filtering mechanism (the harness logic) applied to the samples. If the selection logic is flawed or biased, increasing N (samples) may only yield more low-quality survivors that pass the filter, whereas a single, highly optimized model call could produce a superior conjecture that bypasses the need for statistical filtering. The target ignores the interaction between the generation distribution and the specific survival criteria defined by the harness, incorrectly attributing success solely to sample size rather than the efficacy of the selection process.",
+      "counterexample": null,
+      "premise": "The problem asks if a bounded harness produces better 'surviving' conjectures, implying a selection process is integral to the outcome, not just the generation count.",
+      "premise_evidence": null,
+      "successor_question": "How does the specific selection logic of the bounded harness interact with the model's output distribution to determine the quality of surviving conjectures?"
+    }
+  ]
+}
