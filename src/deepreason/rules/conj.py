@@ -36,6 +36,7 @@ from deepreason.llm.contracts import CandidateRef, ConjectureCandidate, Conjectu
 from deepreason.llm.endpoints import EndpointError
 from deepreason.llm.firewall import EndpointLease, RouteFirewallError
 from deepreason.llm.packs import AllocatedPack, aliases_for_pack, render_conj_pack
+from deepreason.rules._section_plan import section_plans as _section_plans
 from deepreason.llm import reference_menu
 from deepreason.llm.repair import SchemaRepairError
 from deepreason.llm.wire import (
@@ -1434,6 +1435,9 @@ def conj(
         if active_v6
         else ()
     )
+    # The renderer fills this as it walks the layout; it becomes the run's
+    # section plan below (R25, operator grant 2026-09-04).
+    section_receipts: list = []
     pack = render_conj_pack(
         problem,
         harness.state,
@@ -1460,6 +1464,7 @@ def conj(
         open_criticism_context=open_criticism_context,
         allow_no_candidate_outcome=active_v4 or active_v6,
         reference_menus=pre_allocation_menus,
+        section_receipts=section_receipts,
     )
     scratch_aliases = {}
     v6_scratch_rendered_text = None
@@ -1891,6 +1896,9 @@ def conj(
             raise ValueError("v6 conjecture preview changed frozen call authority")
         from deepreason.workflow.transaction import WorkBudgetDenied
 
+        section_plans = _section_plans(
+            transaction_service, transaction_preparation, section_receipts
+        )
         try:
             if conjecture_context_plan is not None:
                 reserved_dispatch = transaction_service.reserve_dispatch(
@@ -1904,6 +1912,7 @@ def conj(
                     plans=transaction_plans,
                     prompt=prompt,
                     max_tokens=maximum_tokens,
+                    section_plans=section_plans,
                 )
         except WorkBudgetDenied:
             if v6_context_continuation is not None:
@@ -1928,6 +1937,7 @@ def conj(
                     reserved_dispatch,
                     plans=transaction_plans,
                     prompt=prompt,
+                    section_plans=section_plans,
                 )
             except Exception:
                 reserved_dispatch.release()

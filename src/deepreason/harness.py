@@ -1052,6 +1052,7 @@ class Harness:
             DispatchAuthorizationBundleV1,
             ProviderAttemptV1,
             RouteSeatInsufficientCapabilityV1,
+            SectionPlanV1,
             SemanticAdmissionV1,
             TokenReservationV2,
             WorkLifecycleTransitionV1,
@@ -1067,6 +1068,13 @@ class Harness:
         schema_by_type = {
             WorkPreparationV1: "workflow-work-preparation-v1",
             ContextPackPlanV1: "workflow-context-pack-plan-v1",
+            # Operator grant, 2026-09-04 (experiments/2026-09-03-change-
+            # conjecturer-pluggable-interface/REQUEST.md §1c). A SIBLING of the
+            # pack plan, not a variant: that family's rows are aliased evidence
+            # channels, and a section row is a plugin, a version and an
+            # allocation outcome. Additive to a root and invisible to every
+            # reader that does not ask for it.
+            SectionPlanV1: "workflow-context-section-plan-v1",
             TokenReservationV2: "workflow-token-reservation-v2",
             ContextExposureReceiptV2: "workflow-context-exposure-v2",
             DispatchAuthorizationBundleV1: "workflow-dispatch-authorization-v1",
@@ -1113,6 +1121,7 @@ class Harness:
                     kind
                     not in {
                         ContextPackPlanV1,
+                        SectionPlanV1,
                         TokenReservationV2,
                         ContextExposureReceiptV2,
                         DispatchAuthorizationBundleV1,

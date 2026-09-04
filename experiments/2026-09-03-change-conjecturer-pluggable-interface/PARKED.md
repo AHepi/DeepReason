@@ -365,3 +365,64 @@ run_manifest.py:2074 -- tests/test_wire_contract_id_map.py pins them).
 
 OUT OF SCOPE: everything in P4, P5 and P6.
 ```
+
+---
+
+## P8 — the critic seat's section plan is not written, and why
+
+**What.** Under the operator's 2026-09-04 grant, a rendered brief now writes a
+`workflow.context-section-plan.v1` naming every section, its plugin, its
+version, its parameter digest and what the allocator did with it. That happens
+for the CONJECTURER seat. It does not happen for the critic.
+
+**Why it is structural, not unfinished.** The critic's transactional dispatch
+never renders a pack at the point it issues one.
+`rules/crit.py::_v6_transactional_atomic_critic_call` receives a
+`pack_factory` that reads its pack out of a BLOB written earlier by the
+contract decomposition, and the batch path renders many targets through a
+factory before the transaction opens. The section receipts are produced by the
+renderer, so at the critic's issue site they do not exist. Making them exist
+means changing how the critic's packs travel between decomposition and
+dispatch — a restructuring the grant did not cover and that no wiring change
+reaches.
+
+```
+EXECUTOR WINDOW — CHANGE TRANCHE: carry the critic's section receipts to its
+dispatch site
+
+Read CLAUDE.md fully, including the seat-is-a-shell law (2026-09-03). Then load
+dr-change-orchestrator, dr-drive-harness, dr-ask-the-right-question and
+pinker-write-for-readers. Start at dr-capture-request. Base on main at or after
+the merge of claude/conjecturer-pluggable-interface-7v3es6.
+
+WHAT EXISTS. That branch added workflow.context-section-plan.v1 and writes one
+per conjecturer dispatch: rules/conj.py collects the renderer's
+section_receipts and hands a plan to both issue() and finalize_dispatch(). The
+record model, the service builder (InquiryTransactionService.section_plan) and
+all four registrations are done and need no repeat.
+
+WHAT IS MISSING. The critic never writes one, because its packs are rendered
+before its transaction opens: _v6_transactional_atomic_critic_call reads its
+pack from transition.child_context_refs via a blob, and the batch path renders
+through primary_pack_factory. Decide FIRST, in SPEC.md, before code: do the
+receipts travel WITH the pack (stored beside the blob the decomposition
+writes), or does the critic render inside its transaction as the conjecturer
+does? Price both -- the second is the smaller record change and the larger
+behavioural one.
+
+THE SHAPE RULE THAT WILL BITE YOU, stated so you do not find it as nine red
+tests: workflow/replay.py compares the WHOLE schema sequence of a work_issued
+phase against a canonical order. A section plan sits AFTER the pack plans and
+BEFORE the reservation. Adding one anywhere else raises
+"work_issued has a noncanonical record shape".
+
+FROZEN SURFACES: surface 2 is ALREADY granted for this record kind
+(experiments/2026-09-03-change-conjecturer-pluggable-interface/REQUEST.md §1c),
+and that grant covers registration and well-formedness for THIS kind only. It
+does not cover a new kind, a new verify_root check (SPEC §13 decision 3
+stands), or any change to how an existing record is applied. Paste
+tools/blast_radius.py's rows into SPEC.md and dispose of each.
+
+OUT OF SCOPE: the batch criticism renderer's own brief (P4); the four other
+seats (P5).
+```

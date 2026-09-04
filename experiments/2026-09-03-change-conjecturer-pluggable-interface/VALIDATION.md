@@ -30,10 +30,11 @@ critic ones, both menu sections, the withheld notice and the restated question.
 
 ```
 $ python -m pytest tests/ -q -n 4
-4956 passed, 6 skipped in 908.23s (0:15:08)
+4961 passed, 6 skipped in 942.26s (0:15:42)
 ```
 
-0 failed. Run twice, the second time on the delivered tree.
+0 failed, with the granted record write in. Run three times across the
+tranche; the pre-grant tree was 4956 passed.
 
 **No assertion was weakened.** Eight checks went red during the build. Three
 were tests and five were map checks; every one of them pinned the LOCATION of
@@ -67,8 +68,30 @@ $ python tools/blast_radius.py --files $(git diff --name-only e91f4fcc3..HEAD --
 verdict: CLEAR   contacts: []   adjacent: []   drift: []
 ```
 
-And the independent confirmation, `INV-frozen-surfaces.md:364`'s own branch
-tripwire, run directly: GREEN — this branch touches no frozen path.
+**AMENDED 2026-09-04, after the operator's grant.** The branch now touches
+frozen surface 2 deliberately, so both instruments say so:
+
+```
+$ python tools/blast_radius.py --files <the working tree's src/ changes> \
+      --symbols record_transaction_transition SectionPlanV1 --against e91f4fcc3
+verdict: CONTACT
+ - harness.py event application and well-formedness | DIRECT | src/deepreason/harness.py
+ - harness.py event application and well-formedness | SYMBOL_INDIRECT | record_transaction_transition
+ - harness.py event application and well-formedness | SYMBOL_INDIRECT | SectionPlanV1
+```
+
+And `INV-frozen-surfaces.md:364`'s branch tripwire now FIRES, which is the
+tripwire doing its job rather than a regression: it fires on any branch
+touching a frozen path, and this one does, under `REQUEST.md` §1c. It was
+GREEN through steps 1-45 and turned red only at the granted commit. **The
+check is not weakened to silence it** — a tripwire that exempts the case it
+was built for is not a tripwire.
+
+Surface 3 is UNTOUCHED and that proof matters more now than before, because
+surface 2 was opened: neither `invariants.py` nor `verification/report.py`
+mentions the new kind, and no `verify_root` check was added (step 25).
+
+The pre-grant reading is kept below for the record.
 
 The forecast held, but NOT by luck: the instrument disagreed with it twice and
 both disagreements are disposed on the record rather than argued away.
@@ -142,8 +165,12 @@ none naming a document this tranche wrote.
 
 ## §6 What is INCOMPLETE, stated plainly
 
-1. **Section receipts are built but not written to the run record.** Needs a
-   frozen-surface-2 grant. Everything else works without it.
+1. ~~**Section receipts are built but not written to the run record.**~~
+   **CLOSED 2026-09-04 by the operator's grant** (`REQUEST.md` §1c, `R25`).
+   Written for the CONJECTURER seat. NOT written for the critic, and that
+   half is structural rather than unfinished: its transactional dispatch reads
+   its pack out of a blob written earlier, so the receipts do not exist where
+   the transaction is issued. Parked as P8.
 2. **`preferred_conjecturer_form` (SPEC S9.1) is not shipped**, and
    `SEAM-llm-x-model-profiles.md` is therefore not written. Parked as P7 with
    the reason: the shell already names the form, and a second place naming it
@@ -152,4 +179,12 @@ none naming a document this tranche wrote.
 Neither is a silent omission and neither blocks the tranche's own acceptance
 test.
 
-**VERDICT: PASS.**
+## §7 The diff budget, after the grant
+
+**EXCEEDED, and disclosed rather than absorbed: 2575 `src/` insertions against
+the 2400 the operator raised it to.** The whole 190-line overrun is the granted
+work — the record model, its four registrations, the service builder, the
+canonical-shape position and the conjecturer's write path. Nothing else grew.
+
+**VERDICT: PASS**, with the budget overrun and the two parked halves (P7, P8)
+stated rather than absorbed.
