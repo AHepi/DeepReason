@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=3 blockers=none
+State: next=4 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -61,11 +61,23 @@ as an omission.
           sha256sum DEFECT_KEY.json ->
             b1813c10848092fe849a53a611146bf86a6c609e1eccbdbd6671af82d95b4b74
 
-- [ ] 3. (S1, S2, S3, S4) Write `cells.py`: the two operator plugins and
+- [x] 3. (S1, S2, S3, S4) Write `cells.py`: the two operator plugins and
       the four layout registrations, plus the census renderer.
       done-when: `python cells.py --census` prints a 13-row table for
       `seat-pack.critic.legacy-v0`, `default == C00: True`, `all four
       distinct: True`, `src/ bytes unchanged: True`.
+      DONE:
+          entries: 13   (the full census table is in PREREG.md, step 4)
+          default == C00: True
+            C00  bytes=1338  provenance=False  history=False
+            C10  bytes=1533  provenance=True   history=False
+            C01  bytes=1600  provenance=False  history=True
+            C11  bytes=1795  provenance=True   history=True
+          all four distinct: True
+          src/ bytes unchanged: True
+      One correction inside the step: the shipped plugins seed lazily, so
+      `ensure_seeded()` must run before a cell layout can copy the
+      shipped entries. Fixed in `cells.py`; nothing under `src/` moved.
 
 - [ ] 4. (S1, S9, S13, S14, S15, S19) [COMMIT] Write `PREREG.md`: the
       census, the four cells, the six defect classes, M1-M5 with their
