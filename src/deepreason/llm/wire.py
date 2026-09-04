@@ -990,7 +990,92 @@ class WireContract(Generic[CanonicalOutput]):
         schema = self.model_json_schema()
         _reject_unknown_fields(value, schema, schema)
 
+    # SHAPE normalisations, and shape ONLY. Each rewrites how a reply is
+    # PACKAGED so it can compile; none touches a VALUE. That boundary is the
+    # whole of what makes them safe, and it is the tranche's own stop
+    # condition: a normalisation that changed which handle is cited, which
+    # commitment is discharged, or whether a candidate abstains would change
+    # what is admitted, and would be refused rather than tuned
+    # (`experiments/2026-09-03-change-conjecturer-pluggable-interface/SPEC.md`
+    # §8.4). `tests/test_wire_normalisation.py` proves each pair compiles to a
+    # byte-identical canonical artifact.
+    #
+    # Every application records its rule id, so "how much did leniency buy" is
+    # answerable from the record rather than from argument.
+    NORMALISATION_RULES = ("N1", "N2", "N3", "N4", "N5")
+
+    def _normalise_shape(self, value: Any, applied: list[str]) -> Any:
+        """N1, N2, N4 and N5. N3 is `_resolve_menu_indices`, which runs after
+        the control-field firewall because it reads model output."""
+
+        # N5 -- the whole object wrapped in one redundant key naming the
+        # contract. The E42 spelling class is this shape.
+        if isinstance(value, dict) and len(value) == 1:
+            only_key, inner = next(iter(value.items()))
+            if isinstance(inner, dict) and only_key not in self._schema_properties():
+                value = inner
+                applied.append("N5")
+
+        # N1 -- a single-element array wrapping the one expected object.
+        if isinstance(value, list) and len(value) == 1 and isinstance(value[0], dict):
+            value = value[0]
+            applied.append("N1")
+
+        if not isinstance(value, dict):
+            return value
+        properties = self._schema_properties()
+        out = dict(value)
+        for field, spec in properties.items():
+            if field not in out:
+                continue
+            current = out[field]
+            # N2 -- a scalar where a one-element array is required, on a field
+            # whose item type it matches.
+            if spec.get("type") == "array" and not isinstance(current, (list, tuple)):
+                items = spec.get("items") or {}
+                # An item described by `$ref` or `anyOf` is an object: the
+                # schema names a `$defs` entry rather than a primitive type.
+                item = items.get("type") or (
+                    "object" if ("$ref" in items or "anyOf" in items) else None
+                )
+                matches = {
+                    "string": str,
+                    "integer": int,
+                    "number": (int, float),
+                    "boolean": bool,
+                    "object": dict,
+                }.get(item)
+                if matches is not None and isinstance(current, matches):
+                    out[field] = [current]
+                    applied.append("N2")
+                    continue
+            # N4 -- an absent OPTIONAL field supplied as `null`.
+            #
+            # NARROWED from SPEC §8.4's "null or empty string", by that
+            # section's own stop condition, on evidence rather than taste.
+            # `null` is unambiguously "I am not supplying this", so deleting it
+            # yields the artifact an omitting reply would have produced. An
+            # EMPTY STRING is a supplied value, and a contract may reject it
+            # deliberately: `tests/test_cli_production_doctor_v6.py` plants
+            # `{"finding": "supported", "message": ""}` precisely so the repair
+            # protocol makes the model try again. Deleting that field turned a
+            # REFUSAL into an ACCEPTANCE -- a verdict change, which A3 makes a
+            # stop rather than a judgment call.
+            if current is None and field not in self._schema_required():
+                del out[field]
+                applied.append("N4")
+        return out
+
+    def _schema_properties(self) -> dict:
+        return (self.model_json_schema() or {}).get("properties", {}) or {}
+
+    def _schema_required(self) -> set:
+        return set((self.model_json_schema() or {}).get("required", ()) or ())
+
     def validate_value(self, value: Any) -> BaseModel:
+        applied: list[str] = []
+        value = self._normalise_shape(value, applied)
+        self.normalisations_applied = tuple(applied)
         if isinstance(value, list) and len(value) == 1 and isinstance(value[0], dict):
             # An unambiguous single-element array wrapping the one expected
             # object is transport noise, tolerated exactly like a narrated
@@ -1007,7 +1092,10 @@ class WireContract(Generic[CanonicalOutput]):
         # value with one this call already listed as legal, or delete an
         # optional one -- it never adds a key -- but it still runs downstream
         # of the firewall so the ordering needs no argument to be safe.
-        value = self._resolve_menu_indices(value)
+        resolved = self._resolve_menu_indices(value)
+        if resolved != value:
+            self.normalisations_applied = self.normalisations_applied + ("N3",)
+        value = resolved
         try:
             return self.wire_model.model_validate(value)
         except ValidationError as error:

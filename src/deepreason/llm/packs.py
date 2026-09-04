@@ -13,6 +13,7 @@ content, directives), so provider prefix caches bill the repeated head at
 the cached rate. Ordering is presentation only — zero epistemic content.
 """
 
+import hashlib
 import json
 
 from deepreason.ontology.commitment import Commitment
@@ -31,6 +32,7 @@ from deepreason.llm.reference_menu import (
     REFERENCE_FIELD_DECLARATIONS,
     MenuRender,
 )
+from deepreason.llm.seat_sections import SectionRequestV1
 from deepreason.llm.wire import AliasTable
 
 _CHARS_PER_TOKEN = 4
@@ -411,8 +413,154 @@ def _menu_sections(
     ]
 
 
+_CONJECTURER_SEAT = "conjecturer"
+_CRITIC_SEAT = "argumentative_critic"
+
+
+def _walk_seat_layout(seat_id: str, layout_id, request, receipts=None):
+    """Build one seat's sections by walking its registered layout.
+
+    THE ONE LEGAL WAY a brief section is constructed. Every section resolves
+    through `resolve_section_plugin`, so adding a section to a brief is a
+    registration plus a layout entry and never a source edit -- which is the
+    half of the modularity law a behaviour test alone would miss, and what
+    `tests/test_seat_section_architecture.py` goes red on.
+
+    Allocation facts come from the LAYOUT ENTRY unless the plugin overrides
+    them, which is what lets two seats share one plugin at different
+    priorities.
+    """
+
+    from deepreason.llm.seat_plugins import ensure_seeded
+    from deepreason.llm.seat_sections import (
+        SeatSectionError,
+        SectionReceiptV1,
+        resolve_seat_pack_layout,
+        resolve_section_plugin,
+    )
+
+    ensure_seeded()
+    pack_layout = resolve_seat_pack_layout(seat_id, layout_id)
+    sections: list[PackSection] = []
+    if receipts is None:
+        receipts = []
+    for entry in pack_layout.entries:
+        plugin = resolve_section_plugin(entry.plugin_id, entry.plugin_version)
+        params = plugin.parameters_model(**dict(entry.params))
+        # A plugin whose declared input this seat does not carry DECLINES.
+        # This is what makes a shell portable between seats (R20): the
+        # conjecturer's brief bound in the critic's place renders the sections
+        # a critic request can feed and records the rest as absent, rather
+        # than raising on the first one that wanted a problem.
+        missing = [
+            name
+            for name in getattr(plugin, "requires", ())
+            if (request.problem is None)
+            if name == "problem"
+        ] + [
+            name
+            for name in getattr(plugin, "requires", ())
+            if name != "problem" and not request.supplied.get(name)
+        ]
+        render = None if missing else plugin.render(request, params)
+        digest = hashlib.sha256(
+            json.dumps(
+                params.model_dump(mode="json"), sort_keys=True
+            ).encode("utf-8")
+        ).hexdigest()
+        if render is None:
+            # An absent receipt names the SECTION that is missing, not the
+            # plugin that declined: a reader asking "was there evidence in
+            # this pack" is asking about the section.
+            receipts.append(
+                SectionReceiptV1(
+                    section_id=getattr(plugin, "section_id", "") or entry.plugin_id,
+                    plugin_id=plugin.plugin_id,
+                    plugin_version=plugin.plugin_version,
+                    parameters_digest=f"sha256:{digest}",
+                    source_bytes=0,
+                    rendered_bytes=0,
+                    disposition="absent",
+                )
+            )
+            continue
+        source_bytes = len(render.text.encode("utf-8"))
+        if (
+            entry.max_render_bytes is not None
+            and source_bytes > entry.max_render_bytes
+        ):
+            # NO SILENT CAPS: an overrun names its plugin and stops, because a
+            # clip here would be a second budget applied under the first one's
+            # accounting.
+            raise SeatSectionError(
+                "SEAT_SECTION_RENDER_OVERRUN",
+                f"{plugin.plugin_id!r} rendered {source_bytes} bytes over its "
+                f"declared ceiling of {entry.max_render_bytes}",
+            )
+        sections.append(
+            _pack_section(
+                render.section_id,
+                render.text,
+                entry.priority if render.priority is None else render.priority,
+                droppable=(
+                    entry.droppable if render.droppable is None
+                    else render.droppable
+                ),
+                compressible=(
+                    entry.compressible if render.compressible is None
+                    else render.compressible
+                ),
+                min_tokens=(
+                    entry.min_tokens if render.min_tokens is None
+                    else render.min_tokens
+                ),
+                provenance_refs=render.provenance_refs,
+            )
+        )
+        receipts.append(
+            SectionReceiptV1(
+                section_id=render.section_id,
+                plugin_id=plugin.plugin_id,
+                plugin_version=plugin.plugin_version,
+                parameters_digest=f"sha256:{digest}",
+                source_bytes=source_bytes,
+                rendered_bytes=source_bytes,
+                disposition="rendered",
+            )
+        )
+    return sections, receipts
+
+
+def _reconcile_receipts(receipts, result) -> None:
+    """Rewrite each receipt's disposition from what the ALLOCATOR did.
+
+    The walk can only say a section rendered; whether it survived the budget
+    is decided afterwards. Without this the record would report `rendered` for
+    a section the seat never saw, which is the silent cap this whole layer
+    exists to abolish -- one telling the record a comfortable story instead of
+    the pack.
+    """
+
+    if not receipts:
+        return
+    by_id = {section.id: section for section in result.sections}
+    for index, receipt in enumerate(receipts):
+        allocated = by_id.get(receipt.section_id)
+        if allocated is None:
+            continue
+        if allocated.dropped:
+            disposition, rendered = "dropped", 0
+        elif allocated.tokens < allocated.source_tokens:
+            disposition, rendered = "compressed", len(allocated.text.encode("utf-8"))
+        else:
+            disposition, rendered = "rendered", len(allocated.text.encode("utf-8"))
+        receipts[index] = receipt.model_copy(
+            update={"disposition": disposition, "rendered_bytes": rendered}
+        )
+
+
 def _allocate_sections(
-    role: str, token_budget: int, sections: list[PackSection]
+    role: str, token_budget: int, sections: list[PackSection], receipts=None
 ) -> str:
     """Render one finite PackIR without ever clipping the aggregate prefix.
 
@@ -493,10 +641,12 @@ def _allocate_sections(
     for _ in range(len(base) + 1):
         result, cut = _allocate(disclosed)
         if cut == disclosed:
+            _reconcile_receipts(receipts, result)
             return AllocatedPack(result.text)
         seen.update(cut)
         disclosed = cut
     result, _ = _allocate(tuple(sorted(seen)))
+    _reconcile_receipts(receipts, result)
     return AllocatedPack(result.text)
 
 
@@ -587,6 +737,8 @@ def render_conj_pack(
     allow_no_candidate_outcome: bool = False,
     reference_menus: tuple[MenuRender, ...] = (),
     layout: RenderLayoutPolicyV1 | None = None,
+    seat_pack_layout: str | None = None,
+    section_receipts: list | None = None,
 ) -> str:
     """school = {"id", "stance_text", "weight"} — lineage inheritance (§11.1):
     the neighbourhood prefers the school's own accepted descendants; the
@@ -598,86 +750,19 @@ def render_conj_pack(
 
     layout is the render layout policy (DR-INV-render-layout); resolved per
     call rather than bound at import, so selecting an arrangement through the
-    environment takes effect without a restart."""
+    environment takes effect without a restart.
+
+    seat_pack_layout names the COMPOSITION -- which sections this brief is
+    assembled from, in what order, under what budget. Resolved the same way
+    and for the same reason: argument, then DEEPREASON_SEAT_PACK_LAYOUT, then
+    the seat's default. Never a Config field and never a manifest field, which
+    would move every qualification subject digest in the tree."""
     layout = layout or resolve_layout_policy()
-    sections = [
-        _pack_section(
-            "problem",
-            f"PROBLEM {problem.id}\n{problem.description}",
-            1,
-            droppable=False,
-            compressible=False,
-            provenance_refs=(problem.id,),
-        )
-    ]
-    criteria = ["CRITERIA (commitments every candidate will carry and face):"]
-    for cid in problem.criteria:
-        kappa = commitments.get(cid)
-        criteria.append(f"- {cid}: {kappa.eval if kappa else '(schema pending)'}")
-    sections.append(
-        _pack_section(
-            "criteria",
-            "\n".join(criteria),
-            2,
-            droppable=False,
-            compressible=False,
-            provenance_refs=tuple(problem.criteria),
-        )
-    )
-    if open_criticism_context:
-        # PRIORITY 2, beside `criteria`, and that placement IS the change.
-        # `allocate_pack` admits in (priority, id) order, so "criteria" <
-        # "open-criticisms" puts the open indictments in the block stating what
-        # a candidate is BOUND BY -- above `mandatory-interface` (3) and far
-        # above the advisory sections. Q5 measured the alternative: criticism
-        # reaching a solver through a separable ADVICE field is neglected,
-        # while criticism entering the working context with discharge-required
-        # re-submission is the interface that coupled. A sidebar here would be
-        # the same content in the place that was measured not to work.
-        #
-        # Non-droppable AND non-compressible for the two failures Rung 6 paid
-        # for: a dropped section leaves no header, so a problem whose
-        # criticisms the budget cut is byte-indistinguishable from one with
-        # none; and a compressible section can lose its middle while still
-        # looking present. Exact is affordable because every dimension is
-        # capped by the policy in `discharge/channel.py`.
-        sections.append(
-            _pack_section(
-                "open-criticisms",
-                open_criticism_context,
-                2,
-                droppable=False,
-                compressible=False,
-            )
-        )
-    # FOUNDATION before the volatile sections: frozen into the lineage
-    # commitment's id, hence static per problem (cache-prefix, angle 4).
-    foundation = _lineage_foundation(problem, state, commitments, blobs)
-    if foundation:
-        sections.append(
-            _pack_section(
-                "mandatory-interface",
-                "\n".join(foundation).strip(),
-                3,
-                droppable=False,
-                compressible=False,
-                provenance_refs=tuple(problem.criteria),
-            )
-        )
-    claims = _active_property_claims(state, blobs, problem.criteria)
-    if claims:
-        sections.append(
-            _pack_section(
-                "active-properties",
-                "ACTIVE PROPERTIES (conjectured standards the run has "
-                "validated — candidates violating them are refuted by "
-                "execution):\n" + "\n".join(f"- {c[:200]}" for c in claims),
-                4,
-                droppable=True,
-                compressible=True,
-                min_tokens=24,
-            )
-        )
+    # The neighbourhood set is computed ONCE here rather than inside a plugin:
+    # it depends on the school's lineage ordering and on `neighbourhood_n`,
+    # and two plugins read it (`dr.neighbourhood` and `dr.neighbourhood.live`
+    # split it by `layout.live_verbatim_n`). Computing it twice would let the
+    # two disagree.
     suppressed = set(suppressed_exemplars)
     accepted = [
         aid
@@ -693,271 +778,45 @@ def render_conj_pack(
         accepted = (lineage + others)[:neighbourhood_n]
     else:
         accepted = accepted[-neighbourhood_n:] if neighbourhood_n else []
-    # Stance before neighbourhood: the stance text is stable per school while
-    # the neighbourhood changes every cycle — cache-prefix ordering (angle 4).
-    if school is not None and school.get("weight", 0) > 0:
-        sections.append(
-            _pack_section(
-                "school-stance",
-                f"SCHOOL STANCE (weight {school['weight']:.2f}): "
-                f"{school['stance_text']}",
-                5,
-                droppable=False,
-                compressible=True,
-                min_tokens=24,
-            )
-        )
-    if generation_context:
-        sections.append(
-            _pack_section(
-                "experimental-generation-context",
-                "GENERATION CONTEXT (attention only; truth, admission, and "
-                "verifier standards are unchanged):\n" + generation_context,
-                6,
-                droppable=False,
-                compressible=False,
-            )
-        )
-    if scratch_context is not None:
-        from deepreason.scratch.render import RenderedScratchPackV1
 
-        scratch_context = RenderedScratchPackV1.model_validate(scratch_context)
-        sections.append(
-            _pack_section(
-                "scratch-advisory-context",
-                scratch_context.text,
-                7,
-                droppable=False,
-                compressible=False,
-            )
-        )
-    if frozen_evidence_context:
-        sections.append(
-            _pack_section(
-                "frozen-evidence-context",
-                frozen_evidence_context,
-                4,
-                droppable=True,
-                compressible=True,
-                min_tokens=64,
-            )
-        )
-    if citable_evidence_context:
-        sections.append(
-            _pack_section(
-                "citable-evidence-blocks",
-                citable_evidence_context,
-                4,
-                droppable=True,
-                compressible=True,
-                min_tokens=64,
-            )
-        )
-    if capability_result_context:
-        sections.append(
-            _pack_section(
-                "capability-result-context",
-                "RECORDED SIMULATION OBSERVATION (fresh work):\n"
-                "This is the output of the named program under the named inputs and "
-                "execution conditions. It is not a universal fact and does not "
-                "automatically establish the requesting hypothesis.\n"
-                + capability_result_context,
-                3,
-                droppable=False,
-                compressible=False,
-            )
-        )
-    if frame_crisis_context:
-        # EXACT, and it sorts before "frame-slice" on id so the crisis leads.
-        # A frame renders its own open indictments in every pack in its scope
-        # (§9.5). Droppable would let budget pressure remove them silently --
-        # a dropped section leaves no header. Compressible would do the same
-        # thing more quietly still: the first version of this carried the
-        # wounds and the digest in ONE compressible section, and at a tight
-        # budget `_bounded_view` cut the STANDING ATTACKERS block out of a
-        # pack that still showed a frame. Bounded by construction in
-        # `calculus/render.py`, which is what makes exact affordable.
-        sections.append(
-            _pack_section(
-                "frame-crisis",
-                frame_crisis_context,
-                4,
-                droppable=False,
-                compressible=False,
-            )
-        )
-    if frame_slice_context:
-        # The articulation digest, and this half IS "compressed; expandable by
-        # view" in §9.5's own words -- the expansion is `deepreason standing
-        # --json`. Non-droppable so a frame never renders as absent.
-        sections.append(
-            _pack_section(
-                "frame-slice",
-                frame_slice_context,
-                4,
-                droppable=False,
-                compressible=True,
-                min_tokens=96,
-            )
-        )
-    # The most recent accepted artifacts render WHOLE and LATE; the rest are
-    # distilled here. Live material placed near the question is the one row of
-    # the research note's table that asks for verbatim, and it asks for FEW --
-    # a late slot amplifies whatever occupies it, distractors included.
-    live = list(accepted[-layout.live_verbatim_n:]) if layout.live_verbatim_n else []
-    distilled_ids = [aid for aid in accepted if aid not in set(live)]
-    if distilled_ids:
-        header = "NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural)"
-        if layout.retrieval_note and layout.distil_carry_forward:
-            header += f" — {_CARRY_FORWARD_ROUTE}"
-        neighbourhood = [header + ":"]
-        for aid in distilled_ids:
-            neighbourhood.append(f"- {aid}: {_distilled(state, aid, blobs, layout)}")
-        sections.append(
-            _pack_section(
-                "neighbourhood",
-                "\n".join(neighbourhood),
-                8,
-                droppable=True,
-                compressible=True,
-                min_tokens=32,
-                provenance_refs=tuple(distilled_ids),
-            )
-        )
-    if live:
-        live_lines = [
-            "LIVE NEIGHBOURHOOD (accepted and still standing — shown whole "
-            "because these are the ones to build on or beat):"
-        ]
-        for aid in live:
-            live_lines.append(f"- {aid}: {content_text(state.artifacts[aid], blobs)}")
-        sections.append(
-            _pack_section(
-                "live-neighbourhood",
-                "\n".join(live_lines),
-                12,
-                droppable=True,
-                compressible=True,
-                min_tokens=32,
-                provenance_refs=tuple(live),
-            )
-        )
-    if layout.superseded_summary_n:
-        # OFF by default, and the default is the point. Rendering refuted
-        # artifacts back to the seat whose job is to leave them is an
-        # EPISTEMIC change, not a layout one; the research note's own table
-        # gives "Middle or omit" for this row, and omission is what this tree
-        # ships. The capability exists so the question can be settled by a
-        # calibration run rather than by argument.
-        superseded = [
-            aid
-            for aid, status in state.status.items()
-            if status == Status.REFUTED and aid not in suppressed
-        ][-layout.superseded_summary_n:]
-        if superseded:
-            header = (
-                "SUPERSEDED (refuted — do not re-propose these; they are here "
-                "so you can tell a new idea from a repeat)"
-            )
-            if layout.retrieval_note and layout.distil_carry_forward:
-                header += f" — {_CARRY_FORWARD_ROUTE}"
-            lines = [header + ":"]
-            for aid in superseded:
-                lines.append(f"- {aid}: {_distilled(state, aid, blobs, layout)}")
-            sections.append(
-                _pack_section(
-                    "superseded-conjectures",
-                    "\n".join(lines),
-                    8,
-                    droppable=True,
-                    compressible=True,
-                    min_tokens=24,
-                    provenance_refs=tuple(superseded),
-                )
-            )
-    crossover = (school or {}).get("crossover") if school else None
-    if crossover:
-        crossover_lines = [
-            "CROSSOVER (a divergent lineage from the most distant school — "
-            "your school just reseeded on convergence; reconcile or bridge "
-            "these, do NOT echo your own lineage):",
-        ]
-        for aid in crossover:
-            if aid in state.artifacts and aid not in suppressed:
-                crossover_lines.append(
-                    f"- {aid}: {_distilled(state, aid, blobs, layout)}"
-                )
-        sections.append(
-            _pack_section(
-                "crossover",
-                "\n".join(crossover_lines),
-                9,
-                droppable=True,
-                compressible=True,
-                min_tokens=24,
-                provenance_refs=tuple(crossover),
-            )
-        )
-    if complement:
-        sections.append(
-            _pack_section(
-                "complement-directive",
-                "COMPLEMENT DIRECTIVE: produce the attempt these summaries make "
-                "least likely — avoid the modal continuation of the neighbourhood.",
-                10,
-                droppable=False,
-                compressible=False,
-            )
-        )
-    if specs:
-        sections.append(
-            _pack_section(
-                "diversity-specifications",
-                "DIVERSITY SPECIFICATIONS (binding — candidate k MUST realize spec k):\n"
-                + "\n".join(f"  spec {i + 1}: {s}" for i, s in enumerate(specs)),
-                11,
-                droppable=False,
-                compressible=False,
-            )
-        )
-    directive = (
-        f"DIRECTIVE: return up to {vs_k} diverse candidates with typicality "
-        "estimates. You may instead or additionally request bounded context, "
-        "or abstain when no responsible proposal is available. Return at "
-        "least one meaningful outcome; never invent a candidate to fill a "
-        "quota. Include atypical candidates when proposing candidates."
-        if allow_no_candidate_outcome
-        else f"DIRECTIVE: return exactly {vs_k} diverse candidates with "
-        "typicality estimates. Include atypical candidates, not just the "
-        "modal answer."
-    )
-    if open_criticism_context:
-        # The obligation is on the SUBMISSION, so it belongs in the contract
-        # the submission is written against. Rendering the criticisms without
-        # this line would leave them advisory in effect however prominently
-        # they sat -- the interface Q5 measured as neglected. Note what this
-        # is NOT: it does not ask the writer to acknowledge anything.
-        # ACK-required was tested and LOWERED accuracy; every discharge kind
-        # demands substantive content instead.
-        directive += (
-            " EVERY candidate must carry a `discharges` entry for EVERY handle "
-            "listed under OPEN CRITICISMS above. A submission missing any of "
-            "them is returned to you once with the open list, and then accepted "
-            "with the gap recorded."
-        )
-    sections.append(
-        _pack_section(
-            "output-contract",
-            directive,
-            12,
-            droppable=False,
-            compressible=False,
-        )
+    sections, _ = _walk_seat_layout(
+        _CONJECTURER_SEAT,
+        seat_pack_layout,
+        SectionRequestV1(
+            problem=problem,
+            state=state,
+            commitments=commitments,
+            blobs=blobs,
+            layout=layout,
+            supplied={
+                "accepted": tuple(accepted),
+                "suppressed_exemplars": tuple(suppressed_exemplars),
+                "school": school,
+                "complement": complement,
+                "specs": specs,
+                "vs_k": vs_k,
+                "allow_no_candidate_outcome": allow_no_candidate_outcome,
+                "generation_context": generation_context,
+                "scratch_context": scratch_context,
+                "frozen_evidence_context": frozen_evidence_context,
+                "citable_evidence_context": citable_evidence_context,
+                "capability_result_context": capability_result_context,
+                "frame_slice_context": frame_slice_context,
+                "frame_crisis_context": frame_crisis_context,
+                "open_criticism_context": open_criticism_context,
+            },
+        ),
+        receipts=section_receipts,
     )
     # Priority 4 puts a menu beside the section that carries its field's
     # content -- `citable-evidence-blocks` and the scratch context both sit
     # at 4 -- so the legal set is adjacent to what it is legal FOR, rather
     # than in a block of its own at the end of the pack.
+    #
+    # Rendered by the WALK, never by a plugin: a plugin may render evidence
+    # however it likes, but it may not also suppress the menu, because a menu
+    # changes what the model is SHOWN and may never change what the harness
+    # ACCEPTS (`DR-INV-reference-menu`, FROZEN clause (b)).
     sections += _menu_sections(reference_menus, 4)
     if layout.question_last:
         sections.append(
@@ -966,7 +825,9 @@ def render_conj_pack(
                 f"it)\nPROBLEM {problem.id}\n{problem.description}"
             )
         )
-    return _allocate_sections("conjecturer", token_budget, sections)
+    return _allocate_sections(
+        "conjecturer", token_budget, sections, receipts=section_receipts
+    )
 
 
 def render_batch_crit_pack(
@@ -1251,226 +1112,54 @@ def render_crit_pack(
     frame_crisis_context: str | None = None,
     reference_menus: tuple[MenuRender, ...] = (),
     layout: RenderLayoutPolicyV1 | None = None,
+    seat_pack_layout: str | None = None,
+    section_receipts: list | None = None,
 ) -> str:
+    """The critic's brief, composed from the same registry the conjecturer's
+    is composed from.
+
+    A seat is a shell: what makes this one a critic is the LAYOUT it walks and
+    the FORM it is asked to fill, both registered configuration. Three of its
+    thirteen sections are literally the conjecturer's own plugins at different
+    priorities."""
+
     layout = layout or resolve_layout_policy()
-    target = state.artifacts[target_id]
-    # Commitments render BEFORE the target (angle 4): problem criteria lead
-    # each interface list, so sibling targets share this section verbatim
-    # and the cacheable prefix runs through it.
-    context_limit = 900 if token_budget <= 1200 else 1500
-    problem_context = _problem_context(
-        state, [target_id], description_limit=context_limit
-    )
-    commitments_lines = [
-        "TARGET COMMITMENTS (the target's declared attack surface):"
-    ]
-    for cid in target.interface.commitments:
-        kappa = commitments.get(cid)
-        commitments_lines.append(
-            f"- {cid}: {kappa.eval if kappa else '(unregistered)'}"
-        )
-        if kappa is not None:
-            commitments_lines += _execution_spec_lines(kappa)
-    sections: list[PackSection] = []
-    if problem_context:
-        sections.append(
-            _pack_section(
-                "problem-context",
-                "\n".join(problem_context).strip(),
-                1,
-                droppable=False,
-                compressible=True,
-                min_tokens=64,
-            )
-        )
-    sections.extend(
-        [
-            _pack_section(
-                "target-commitments",
-                "\n".join(commitments_lines),
-                2,
-                droppable=False,
-                compressible=False,
-                provenance_refs=tuple(target.interface.commitments),
-            ),
-            _pack_section(
-                "machine-evaluation-boundary",
-                _MACHINE_EVAL_NOTE,
-                3,
-                droppable=False,
-                compressible=False,
-            ),
-        ]
-    )
-    optional_suffix: list[str] = []
-    attackers = [x for x, t in sorted(state.att) if t == target_id][:ATTACKERS_N]
-    if attackers:
-        optional_suffix.append("STANDING ATTACKS (do not repeat these):")
-        for x in attackers:
-            status = state.status.get(x)
-            optional_suffix.append(
-                f"- {x} [{status.value if status else '?'}]: "
-                f"{_head(state, x, blobs)}"
-            )
-        sections.append(
-            _pack_section(
-                "standing-attacks",
-                "\n".join(optional_suffix),
-                5,
-                droppable=True,
-                compressible=True,
-                min_tokens=24,
-                provenance_refs=tuple(attackers),
-            )
-        )
-    # The declared support chain is part of the argument, not context around
-    # it: a case that a target is unsupported cannot be mounted or answered
-    # without seeing what the target claims to rest on. Ids and roles are
-    # exact, because a chain missing an entry reads as a chain that has none.
-    # The referents' text is separately droppable — losing it costs the critic
-    # detail, losing the declaration would misstate the argument.
-    support = target.interface.refs
-    if support:
-        sections.append(
-            _pack_section(
-                "target-support-chain",
-                "\n".join(
-                    ["TARGET SUPPORT CHAIN (what the target declares it rests on):"]
-                    + [f"- {ref.target} [{ref.role.value}]" for ref in support]
-                ),
-                4,  # sorts after "target" on id; the chain follows what it supports
-                droppable=False,
-                compressible=False,
-                provenance_refs=tuple(ref.target for ref in support),
-            )
-        )
-        known = [ref for ref in support if ref.target in state.artifacts]
-        if known:
-            sections.append(
-                _pack_section(
-                    "target-support-content",
-                    "\n".join(
-                        ["SUPPORT CONTENT:"]
-                        + [
-                            f"- {ref.target}: {_head(state, ref.target, blobs)}"
-                            for ref in known
-                        ]
-                    ),
-                    6,
-                    droppable=True,
-                    compressible=True,
-                    min_tokens=24,
-                    provenance_refs=tuple(ref.target for ref in known),
-                )
-            )
-    if frame_crisis_context:
-        # The critic needs this half for a reason the conjecturer does not: an
-        # UNDECLARED conflict with the frame is criticisable as a silent
-        # assumption, and a critic who cannot see what was declared cannot
-        # tell the two apart. Exact, for the same reason as in the conjecture
-        # pack.
-        sections.append(
-            _pack_section(
-                "frame-crisis",
-                frame_crisis_context,
-                4,
-                droppable=False,
-                compressible=False,
-            )
-        )
-    if frame_slice_context:
-        sections.append(
-            _pack_section(
-                "frame-slice",
-                frame_slice_context,
-                4,
-                droppable=False,
-                compressible=True,
-                min_tokens=96,
-            )
-        )
-    counterexample_note = (
-        _COUNTEREXAMPLE_NOTE
-        if _carries_execution_oracle(target, commitments)
-        else ""
-    )
-    directive = (
-        "DIRECTIVE: mount the strongest NEW specific case against the target, "
-        "or attack=false if you find no genuine fault."
-    )
-    # The target arrives whole. An excerpted argument cannot be refuted on the
-    # bytes that were omitted, so budgeting it silently converted a transport
-    # limit into an epistemic one. The section is mandatory and exact, so the
-    # allocator retains it in full and an oversize prompt becomes a typed
-    # envelope failure at dispatch rather than a quietly partial case.
-    target_text = content_text(target, blobs)
-    sections.append(
-        _pack_section(
-            "target",
-            f"TARGET {target_id}\n{target_text}",
-            4,
-            droppable=False,
-            compressible=False,
-            provenance_refs=(target_id,),
-        )
-    )
-    if counterexample_note:
-        sections.append(
-            _pack_section(
-                "counterexample-recourse",
-                counterexample_note,
-                6,
-                droppable=False,
-                compressible=False,
-            )
-        )
-    if premise_invitation is not None:
-        # Droppable: an invitation the budget cannot afford is an invitation
-        # not made this call, which costs nothing — the producer offers it
-        # again next time the problem is worked. Compressible with it, per the
-        # allocator's droppable/compressible pairing rule.
-        sections.append(
-            _pack_section(
-                "premise-invitation",
-                premise_invitation_note(
-                    premise_invitation, citable=bool(citable_evidence_context)
-                ),
-                6,
-                droppable=True,
-                compressible=True,
-                min_tokens=32,
-            )
-        )
-        if citable_evidence_context:
-            # Droppable with the invitation it serves, and never without it:
-            # a legend the critic can see while the invitation was dropped
-            # would list ids nothing asked it to cite.
-            sections.append(
-                _pack_section(
-                    "citable-evidence-blocks",
-                    citable_evidence_context,
-                    6,
-                    droppable=True,
-                    compressible=True,
-                    min_tokens=32,
-                )
-            )
-    sections.append(
-        _pack_section(
-            "output-contract",
-            directive,
-            7,
-            droppable=False,
-            compressible=False,
-        )
+    sections, _ = _walk_seat_layout(
+        _CRITIC_SEAT,
+        seat_pack_layout,
+        SectionRequestV1(
+            problem=None,
+            state=state,
+            commitments=commitments,
+            blobs=blobs,
+            layout=layout,
+            supplied={
+                "target_id": target_id,
+                "token_budget": token_budget,
+                "premise_invitation": premise_invitation,
+                "citable_evidence_context": citable_evidence_context,
+                "frame_slice_context": frame_slice_context,
+                "frame_crisis_context": frame_crisis_context,
+            },
+        ),
+        receipts=section_receipts,
     )
     sections += _menu_sections(reference_menus, 4)
     if layout.question_last:
+        # The critic's question restates the problem AND names its target: a
+        # restatement that dropped the target would let a late-attention seat
+        # answer about the problem rather than about the artifact.
         restated = [
             "QUESTION (restated last, so nothing load-bearing follows it)",
-            *problem_context,
+            *_problem_context(
+                state,
+                [target_id],
+                description_limit=900 if token_budget <= 1200 else 1500,
+            ),
             f"DIRECTIVE: mount the strongest NEW specific case against TARGET "
             f"{target_id}, or attack=false if you find no genuine fault.",
         ]
         sections.append(_question_section("\n".join(restated).strip()))
-    return _allocate_sections("argumentative-critic", token_budget, sections)
+    return _allocate_sections(
+        "argumentative-critic", token_budget, sections, receipts=section_receipts
+    )

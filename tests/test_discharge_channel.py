@@ -215,45 +215,41 @@ def test_the_render_lands_in_the_binding_block_not_a_sidebar(harness, policy):
     and above every advisory section. A pack that merely MENTIONED criticism
     somewhere would pass a text search and fail this.
     """
-    import ast
-    import pathlib
+    # Re-aimed 2026-09-03 when the brief became a walk over registered section
+    # plugins: these priorities and flags used to be literals inside
+    # `render_conj_pack` and are now entries in `seat-pack.conjecturer.
+    # legacy-v0`. The CLAIM is unchanged and the check is stronger -- it reads
+    # the value the allocator will actually use, instead of parsing the source
+    # that used to produce it.
+    from deepreason.llm.seat_layouts import CONJECTURER_LEGACY_LAYOUT
+    from deepreason.llm.seat_plugins import ensure_seeded
+
+    ensure_seeded()
 
     problem = _problem(harness)
     target = _candidate(harness, problem)
     critic = _scrutiny(harness, target, "critic: the solar contribution is omitted")
 
-    source = pathlib.Path("src/deepreason/llm/packs.py").read_text()
-    tree = ast.parse(source)
-    conj = next(
-        n for n in tree.body
-        if isinstance(n, ast.FunctionDef) and n.name == "render_conj_pack"
-    )
-    priorities = {
-        ast.literal_eval(c.args[0]): c.args[2].value
-        for c in ast.walk(conj)
-        if isinstance(c, ast.Call) and getattr(c.func, "id", "") == "_pack_section"
-    }
-    keywords = {
-        ast.literal_eval(c.args[0]): {k.arg: getattr(k.value, "value", None) for k in c.keywords}
-        for c in ast.walk(conj)
-        if isinstance(c, ast.Call) and getattr(c.func, "id", "") == "_pack_section"
-    }
+    def _entry(plugin_id):
+        entry = CONJECTURER_LEGACY_LAYOUT.entry_for(plugin_id)
+        assert entry is not None, plugin_id
+        return entry
 
-    assert priorities["criteria"] == 2                    # positive anchor
-    assert priorities["open-criticisms"] == 2
-    assert priorities["mandatory-interface"] == 3
+    assert _entry("dr.criteria").priority == 2            # positive anchor
+    assert _entry("dr.open-criticisms").priority == 2
+    assert _entry("dr.mandatory-interface").priority == 3
     # The ordering claim itself, in the exact terms `allocate_pack` sorts by
     # (`sorted(ir.sections, key=lambda s: (s.priority, s.id))`), so this fails
     # if either the priority or the section id changes the resulting order.
     assert (2, "criteria") < (2, "open-criticisms") < (3, "mandatory-interface")
-    for advisory in ("neighbourhood", "scratch-advisory-context"):
-        assert priorities["open-criticisms"] < priorities[advisory]
+    for advisory in ("dr.neighbourhood", "dr.scratch-advisory"):
+        assert _entry("dr.open-criticisms").priority < _entry(advisory).priority
 
     # Neither droppable nor compressible: a dropped section leaves no header,
     # and Rung 6 measured a compressible one losing its middle at a tight
     # budget while still looking present.
-    assert keywords["open-criticisms"]["droppable"] is False
-    assert keywords["open-criticisms"]["compressible"] is False
+    assert _entry("dr.open-criticisms").droppable is False
+    assert _entry("dr.open-criticisms").compressible is False
 
     pack = render_conj_pack(
         problem, harness.state, harness.commitments, harness.blobs,

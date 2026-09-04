@@ -104,13 +104,25 @@ def test_re_registering_one_id_with_different_values_is_refused():
 # which is the half of the modularity law a behaviour test alone misses.
 # ---------------------------------------------------------------------------
 
+# Re-aimed 2026-09-03: the brief became a walk over registered section
+# plugins, so two of the three arrangements `render_conj_pack` used to read
+# are now read by the plugins that own those sections. The CLAIM is unchanged
+# -- a layout decision is READ from the policy, never held as a constant --
+# and the check got finer, because each reader is now pinned individually
+# instead of three fields being pinned against one function.
 _CONSUMERS = {
     "src/deepreason/llm/packs.py": {
-        "render_conj_pack": ("question_last", "live_verbatim_n",
-                             "superseded_summary_n"),
+        "render_conj_pack": ("question_last",),
         "render_crit_pack": ("question_last",),
         "_distilled": ("distil_carry_forward", "distilled_head_chars",
                        "retrieval_note"),
+    },
+    "src/deepreason/llm/seat_plugins.py": {
+        "_Neighbourhood": ("live_verbatim_n", "retrieval_note",
+                           "distil_carry_forward"),
+        "_LiveNeighbourhood": ("live_verbatim_n",),
+        "_History": ("superseded_summary_n", "retrieval_note",
+                     "distil_carry_forward"),
     },
     "src/deepreason/llm/roles.py": {
         "render_role_prompt": ("merge_head_label_blocks",),
@@ -123,10 +135,18 @@ _CONSUMERS = {
 
 
 def _function_source(path: str, name: str) -> str:
-    tree = ast.parse(pathlib.Path(path).read_text())
+    """The source of one function OR one class.
+
+    Classes are accepted because a section plugin's layout reads live in its
+    `render` method, and every plugin's method carries that same name -- so
+    the consumer that must be pinned is the class, not a function name that
+    would match thirty of them.
+    """
+    text = pathlib.Path(path).read_text()
+    tree = ast.parse(text)
     for node in ast.walk(tree):
-        if isinstance(node, ast.FunctionDef) and node.name == name:
-            return ast.get_source_segment(pathlib.Path(path).read_text(), node)
+        if isinstance(node, (ast.FunctionDef, ast.ClassDef)) and node.name == name:
+            return ast.get_source_segment(text, node)
     raise AssertionError(f"{name} not found in {path}")
 
 
@@ -160,10 +180,21 @@ def test_limb2_carry_forward_goes_through_the_policy_not_the_raw_head():
     conjectures -- the retry pack, standing attacks, and support content. A
     fourth call site would be a carry-forward rendered outside the policy, so
     the count is pinned rather than the intent asserted."""
-    source = pathlib.Path("src/deepreason/llm/packs.py").read_text()
-    assert source.count("_head(state,") == 3, source.count("_head(state,")
-    for renderer in ("render_conj_pack",):
-        assert "_head(state," not in _function_source(
+    # Re-aimed 2026-09-03: two of the three call sites moved into the section
+    # plugins that own their sections (standing attacks, support content),
+    # where the state arrives on the request. The TOTAL is what the claim is
+    # about, so it is pinned across both files AND per file, which is stricter
+    # than the single-file count it replaces -- moving a fourth call site into
+    # the plugin module can no longer hide under an unchanged packs.py count.
+    packs = pathlib.Path("src/deepreason/llm/packs.py").read_text()
+    plugins = pathlib.Path("src/deepreason/llm/seat_plugins.py").read_text()
+    in_packs = packs.count("_head(state,")
+    in_plugins = plugins.count("_head(request.state,")
+    assert in_packs == 1, in_packs           # the retry pack
+    assert in_plugins == 2, in_plugins       # standing attacks, support content
+    assert in_packs + in_plugins == 3
+    for renderer in ("render_conj_pack", "render_crit_pack"):
+        assert "_head(" not in _function_source(
             "src/deepreason/llm/packs.py", renderer
         )
 

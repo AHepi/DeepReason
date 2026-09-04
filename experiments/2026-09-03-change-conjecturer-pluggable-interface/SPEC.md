@@ -14,6 +14,12 @@ then `FEASIBILITY.md`, then this, then `CHECKLIST.md`.
 **No production code is written in this window.** Approval by the operator
 is the gate between this document and any implementation.
 
+**APPENDED 2026-09-03, build window** (a pointer, not a revision of anything
+above it): the operator approved this spec and amended it the same day.
+The amendment is `REQUEST.md` §1b and **§17 below**, which REPLACES §14's
+"designs nothing for the critic" and changes nothing else. Read §17 after
+§16. Build base: `main` at `e91f4fcc3`.
+
 ---
 
 ## §0 Scope
@@ -528,3 +534,285 @@ twenty seeded plugins, which are mechanical extractions of existing text.
 
 **Status: STEP 2 complete.** `CHECKLIST.md` next. Then STOP for the
 operator's approval — no implementation in this window.
+
+---
+
+## §17 Amendment 2 — the seat is a shell
+
+Authority: `REQUEST.md` §1b, the operator's words of 2026-09-03, ledgered the
+same day as the standing law "A seat is a shell: its input and its output
+define it" (CLAUDE.md; commits `8dc11da15`, `e91f4fcc3`).
+
+**This section REPLACES §14's "This spec designs nothing for the critic and
+ships nothing for it." It changes nothing else in this document.** Every
+decision in §0-§16 stands, including the road (A + template layer + C1), the
+three frozen-surface decisions of §13, the assumptions of §1, and the
+leniency boundary of §8.4. What changes is the SCOPE: both seats, and a
+registered pairing that names which brief goes with which form.
+
+### §17.0 Why the amendment is small in code and large in meaning
+
+§14 already designed the section-plugin protocol to be seat-agnostic —
+`SectionRequestV1` carries no conjecturer-specific field and the registry is
+keyed by plugin id rather than by seat. The amendment collects on that: the
+critic's renderer has the same shape as the conjecturer's (thirteen section
+slots plus the menus and the question, the same `_pack_section` /
+`_allocate_sections` / `_menu_sections(…, 4)` / `_question_section`
+machinery), so extending the walk to it adds a second layout and a second
+seeded plugin set rather than a second mechanism.
+
+### §17.1 (a) Seat-agnostic names
+
+Every name that would have carried "conj" carries "seat" instead.
+
+| §0-§16 name | §17 name |
+|---|---|
+| `ConjecturerSectionPluginV1` | `SeatSectionPluginV1` |
+| `llm/conj_sections.py` | `llm/seat_sections.py` |
+| `ConjecturerPackLayoutV1` | `SeatPackLayoutV1` |
+| `SECTION_PLUGIN_REGISTRY` | unchanged — it never carried a seat name |
+| `conj-pack.legacy-v0` | `seat-pack.conjecturer.legacy-v0` |
+| — | `seat-pack.critic.legacy-v0` |
+| `DEEPREASON_CONJ_PACK_LAYOUT` | `DEEPREASON_SEAT_PACK_LAYOUT` |
+
+`SectionRequestV1`, `SectionRenderV1` and `SectionReceiptV1` carry NO seat
+name and no seat field — a receipt that named its seat would be the evidence
+side learning a generation-side fact, which `S11.3` (widened at §17.6) makes
+a failing check.
+
+**Decision (1) of §13 still binds, and the environment form carries the seat
+because one process renders both.** Selection is argument → environment →
+default, and the environment variable is a per-seat assignment list:
+
+    DEEPREASON_SEAT_PACK_LAYOUT=conjecturer=<layout_id>,critic=<layout_id>
+
+Never a `Config` field, never a manifest field. The measured reason is
+unchanged (FEASIBILITY §6.2: the carried variant moves every qualification
+subject digest; the off-manifest variant moves none), and it is reinforced by
+what the transport tranche measured — a `Config` field holding a pydantic
+model cannot round-trip through the manifest's carriage notice at all.
+A malformed assignment is a typed refusal at resolution naming the offending
+term, never a silent fallback to the default.
+
+### §17.2 (b) `render_crit_pack` walks a layout
+
+`packs.py:1242` becomes the same loop `render_conj_pack` becomes, under the
+same `A6` rule: the caller-computed contexts arrive in
+`SectionRequestV1.supplied` and their plugins FORMAT them; nothing moves out
+of `rules/crit.py`.
+
+The critic's four caller-supplied contexts are `premise_invitation`,
+`citable_evidence_context`, `frame_slice_context`, `frame_crisis_context`,
+plus `reference_menus` — a subset of the conjecturer's nine, so `supplied`
+needs no new key.
+
+Its thirteen sections become seeded `dr.*` plugins. **A plugin id is SHARED
+when the section's text is the same section, and separate when it is not** —
+priority, drop/compress flags and caps live in the LAYOUT ENTRY, so two seats
+may share one plugin at different priorities without either bending.
+
+| critic section | plugin | shared with the conjecturer? |
+|---|---|---|
+| `problem-context` | `dr.problem.context` | no — the conjecturer's `problem` is the problem statement, this is a multi-problem context block |
+| `target-commitments` | `dr.target.commitments` | no |
+| `machine-evaluation-boundary` | `dr.machine-evaluation-boundary` | no |
+| `target` | `dr.target` | no |
+| `target-support-chain` | `dr.target.support-chain` | no |
+| `target-support-content` | `dr.target.support-content` | no |
+| `standing-attacks` | `dr.standing-attacks` | no |
+| `frame-crisis` | `dr.frame.crisis` | **YES** — both render the caller's context verbatim |
+| `frame-slice` | `dr.frame.slice` | **YES** — same |
+| `citable-evidence-blocks` | `dr.evidence.citable` | **YES**, with a parameter: the critic's entry sets `requires_invitation=true` (default `false`), because the critic renders the legend only alongside the premise invitation it serves |
+| `premise-invitation` | `dr.premise-invitation` | no |
+| `counterexample-recourse` | `dr.counterexample-recourse` | no |
+| `output-contract` | `dr.output-contract.critic` | no — a different directive; the conjecturer's is `dr.output-contract.conjecturer` |
+
+The menu sections and the restated question are rendered by the registry and
+the layout exactly as for the conjecturer (`S5`, and the question's
+`_question_section` rule). `standing-attacks` and `premise-invitation` are
+already in `DISCLOSED_ON_DROP`, so `S6`'s refusal — an evidence-family plugin
+registered outside that set is a typed refusal at layout construction —
+covers the critic's side unchanged.
+
+### §17.3 (c) `S10.4` applies to BOTH seats
+
+The byte-identical-default acceptance test is now two goldens, each captured
+from the build window's BASE COMMIT before any refactor exists, with a
+minimal and a maximal case per seat — four fixture files at least.
+
+**If EITHER golden cannot pass, the refactor is wrong and the tranche STOPS.
+A fixture is never updated to make a test pass** (`S10.4`, unchanged).
+
+### §17.4 (d) The seat-kind registry
+
+    class SeatShellV1(BaseModel):          # frozen, extra="forbid"
+        shell_id: str
+        seat_id: str                       # the dispatch role: "conjecturer",
+                                           # "argumentative_critic"
+        layout_id: str
+        form_id: str
+        role_prompt_template_id: str
+
+Registered and versioned like the section-plugin registry and the layout
+registry (§9's VERSIONED layer): `register_seat_shell`, `resolve_seat_shell`,
+a shell id names ONE pairing or two runs citing it do not mean the same
+thing. Two shells ship, reproducing today's behaviour exactly:
+
+| shell_id | seat_id | layout_id | form_id |
+|---|---|---|---|
+| `seat.conjecturer.legacy-v0` | `conjecturer` | `seat-pack.conjecturer.legacy-v0` | `conjecturer.turn.v6` |
+| `seat.critic.legacy-v0` | `argumentative_critic` | `seat-pack.critic.legacy-v0` | `argumentative_critic.compact.v1` |
+
+**R22/R23 are the reason this registry exists.** A second conjecturer kind or
+a second criticism kind is a THIRD registered pairing, added by registering
+it; neither is built here (§17.7).
+
+`SeatShellV1` carries NO score, rank, weight, confidence, priority or
+authority field — the standard the criticism-source socket set, owed here
+too, and `S11.3` (widened) is the check that goes red when one is added.
+
+### §17.5 (e) The test that makes `R20` checkable
+
+`R20` is an obligation on the DELIVERABLE, so it gets a demonstration and not
+a shape argument. Offline, against the deterministic stub, at the critic's
+dispatch site in `rules/crit.py`: bind the CONJECTURER shell where the
+critic's is bound, and assert four things.
+
+1. the call renders under the bound shell's layout, not the critic's;
+2. the section-plan object (`S7.1`) records the shell id that actually ran;
+3. the wire reply is parsed by the FIXED parse half of whichever form the
+   shell names (`A2`, `S8.3`);
+4. `expected_target` and the alias binding are UNCHANGED — the critic's
+   target-binding is authority-side, and swapping a shell may not move it.
+
+**What the test does NOT claim, stated in its own docstring:** that a
+conjecturer shell in a critic's seat produces useful criticism. It proves the
+SHELL IS SWAPPABLE. Whether the swap is a good idea is an experiment
+(`S12`), and this tranche's answer to it is "not measured".
+
+### §17.6 (f) `S11.3` widens to the law's own "enforced" clause
+
+RED if `seat_id`, `shell_id`, `layout_id`, `form_id` or any
+`SectionReceiptV1` field is read anywhere in `scheduler/`, `adjudication/` or
+`rules/` admission, rank, immunity, refutation or acceptance paths.
+Mutation-proven by planting one such read and watching it go red — a
+reachability assertion that has never been shown to fail is not a check
+(`docs_verify --audit`'s own standard).
+
+This is the law's SCOPE BOUNDARY made checkable: the shell is about how
+content is GENERATED, and what counts as evidence does not vary with it.
+
+### §17.7 (g) Out of scope, parked with prompts
+
+- `render_batch_crit_pack` (`packs.py:972`) — a third renderer with its own
+  batching contract.
+- The judge, defender, variator and synthesizer seats.
+- Any SECOND conjecturer kind or SECOND criticism kind (`R22`, `R23`).
+- Everything §0 already excluded, road C2 above all.
+
+Each gets a ready-to-send prompt in `PARKED.md`.
+
+### §17.8 (h) Budget and the frozen-surface forecast
+
+**Diff budget amended: ~1500 lines of `src/`** (was ~900), the increase being
+the critic's thirteen seeded plugins, its layout, the shell registry and the
+seat-agnostic renames. `tools/diff_budget.py` is the instrument; exceeding it
+is a stop.
+
+**RAISED TO ~2400 by the operator, 2026-09-03**, on a measured overrun at the
+step-22 boundary: 1545 `src/` insertions against the 1500 ceiling, with the
+remaining steps estimated near 2250. The operator was shown the number, the
+reason (785 of those 1545 lines are the thirty sections MOVED out of
+`packs.py`, which is why that file also shows 549 deletions — net growth is
++996, and the instrument pays twice for a move) and three priced roads. They
+chose to raise the ceiling and finish, over parking the form half or stopping
+at the two briefs. The stop record, with the instrument's own output, is in
+`CHECKLIST.md` after Phase 4.
+
+**Frozen-surface forecast: still NO CONTACT.** Measured over the amended
+target list — `llm/packs.py`, `packs/ir.py`, `packs/allocate.py`,
+`llm/layout.py`, `llm/roles.py`, `llm/wire.py`, `rules/conj.py`,
+`rules/crit.py`, `model_profiles/registry.py`, with symbols
+`render_conj_pack`, `render_crit_pack`, `_pack_section`,
+`_allocate_sections`, `wire_contract_for`, `validate_value` — the result is
+pasted at §17.9. The three decisions of §13 are unchanged and still hold the
+verdict: selection by argument/env only, no new contract id, no new
+`verify_root` check.
+
+The critic's form selection is `C1` on the critic's side: among ids ALREADY
+registered — `argumentative_critic.compact.v1` (what `wire_contract_for`
+assigns the `argumentative_critic` role today, `wire.py:2638`) and
+`critic.atomic-target.v1` (`ATOMIC_CRITIC_CONTRACT_V1`, `wire.py:2677`).
+**No new contract id** (§13 decision 2).
+
+### §17.9 `blast_radius.py` over the amended target list
+
+Measured on the build window's base `7d7996302`, over the §17.8 target
+list. **The verdict depends on ONE declared symbol, and that dependence is
+itself the finding.**
+
+**Run 1 — the full amended list, INCLUDING the symbol `wire_contract_for`:**
+
+    "result_type": "BLAST_RADIUS_RESULT_V1",
+    "frozen_surface_verdict": "CONTACT",
+    "frozen_adjacent_contacts": [],
+    "frozen_surface_contacts": [
+      {"surface": "replay-validation record formats (invariants.py)",
+       "tier": "SYMBOL_INDIRECT", "target": "wire_contract_for",
+       "detail": "'wire_contract_for' referenced in
+                  src/deepreason/invariants.py
+                  (grep-based; not proof of semantic contact)"},
+      {"surface": "manifest schemas and validators (run_manifest.py)",
+       "tier": "SYMBOL_INDIRECT", "target": "wire_contract_for",
+       "detail": "'wire_contract_for' referenced in
+                  src/deepreason/run_manifest.py
+                  (grep-based; not proof of semantic contact)"}
+    ]
+
+**Run 2 — the same list with `wire_contract_for` NOT declared:**
+
+    "frozen_surface_verdict": "CLEAR",
+    "frozen_surface_contacts": [], "frozen_adjacent_contacts": [],
+    "disclosure_summary": "This change touches none of the five frozen
+      surfaces. 9 test file(s) and 14 map document(s) assert on the touched
+      targets today."
+
+**Disposal, one row at a time, and NEITHER is a comment mention.** The gate
+labels its own method "grep-based; not proof of semantic contact", so both
+rows were opened and read rather than dismissed. Both are REAL call sites:
+
+- `invariants.py:1233` calls `wire_contract_for("conjecturer", output_model,
+  transport_profile, AliasTable())` and takes `.contract_id` from the result
+  to build the AUTHORIZED CONTRACT ID SET a replay validates a conjecturer
+  call against. If that function returned a different id for an unchanged
+  input, committed roots would change replay verdict. **That is frozen
+  surface 3, and it is a genuine dependency, not a grep artefact.**
+- `run_manifest.py:2074` calls it for the defender, judge and variator seats
+  and folds each `.contract_id` into the manifest's behavioral assignments,
+  which `production_contract_pairs` projects into the qualification subject.
+  **That is frozen surfaces 4 and 5, and it is also genuine.**
+
+**The binding constraint this produces — new, and stronger than the spec's
+forecast.** `wire_contract_for`'s existing mapping is FROZEN BY THESE TWO
+CALLERS: for every `(role, output_model, profile, aliases, expected_target)`
+tuple that resolves today, it must keep returning the same `contract_id`
+after this tranche.
+
+Form selection is therefore implemented at the DISPATCH SITE — the seat
+shell names a `form_id`, and `rules/conj.py` / `rules/crit.py` choose which
+already-registered contract to ask for — and NEVER by changing what
+`wire_contract_for` returns for an input it already handles. That keeps the
+build on run 2's CLEAR verdict, and it is the same shape as §13 decision 1
+(selection by argument/env rather than by moving a value that is folded into
+a digest).
+
+Checkable, not promised: a new step pins the whole
+`(role, output_model, profile) -> contract_id` table against the base
+commit's values, and steps 19 and 26 already assert that
+`src/deepreason/invariants.py`, `src/deepreason/verification/report.py`,
+`src/deepreason/run_manifest.py`, `src/deepreason/qualification.py` and
+`src/deepreason/cli/doctor.py` appear nowhere in this tranche's diff.
+
+**If a build step finds it cannot hold that constraint, that is a STOP** —
+the grant is requested in that step's own document, before code, with run 1's
+rows pasted and disposed one by one (§13's own rule, applied to itself).

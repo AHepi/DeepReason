@@ -10,6 +10,12 @@ Branch: `claude/conjecturer-pluggable-interface-bnyrhx`
 **This window is DESIGN PHASE ONLY.** It ends at FEASIBILITY.md + SPEC.md +
 CHECKLIST.md, approved by the operator. No production code is written here.
 
+**BUILD WINDOW OPENED 2026-09-03** (appended, not a rewrite: the paragraph
+above describes the window that wrote this file). The operator approved
+SPEC.md and amended it the same day — both quotations at §1b. The build runs
+on base `main` at `e91f4fcc3`, branch
+`claude/conjecturer-pluggable-interface-7v3es6`.
+
 ---
 
 ## 1. The operator's words, VERBATIM (2026-09-03)
@@ -56,11 +62,48 @@ evidence — never as authority over the record. Per CLAUDE.md's evidence
 discipline, model prose is never evidence; the census in FEASIBILITY.md is the
 record-side instrument that answers the same question.
 
+## 1b. AMENDMENT 2 — the operator's words, VERBATIM (2026-09-03)
+
+Received during the BUILD window, appended before it was acted on, per the
+ledger rule (`dr-change-orchestrator`, "The ledger rule"). The monitor's
+window instruction calls this "Amendment 1" because it is the build window's
+first; it is numbered 2 here because §1a already holds an Amendment 1 from
+the design window, and §1a states that section is never edited. Both namings
+resolve to this section.
+
+Approving the build:
+
+> "Given what read from the other windows, the plugin one. Since all three
+>  other windows have completed."
+
+Then, minutes later:
+
+> "oh one amendment. Is prefer if the conjecturer seat could be used to
+>  replace the critic seat. That means an artifact truely is determined by
+>  input and output, the artifact is just a shell. I'm thinking in the future
+>  that conjecturers will need to be split in two and criticism will need two
+>  different types."
+
+And, stating the purpose (quoted from the same day's ledgering of the law
+into CLAUDE.md, commit `e91f4fcc3`):
+
+> "this should work to slowly separate the authority layer to make it truely
+>  modular."
+
+**Ledgered as standing law the same day.** CLAUDE.md's Operator design laws
+gained "A seat is a shell: its input and its output define it" (commits
+`8dc11da15`, `e91f4fcc3`), naming this tranche's build as its first bound
+implementation. The law's own SCOPE BOUNDARY is binding here: the shell is
+about how content is GENERATED; the parse half of every form, admission,
+rank, immunity, refutation and the record do not vary with it.
+
+---
+
 ---
 
 ## 2. Requirements, numbered
 
-Derived by splitting §1 and §1a into separately-checkable obligations. Each
+Derived by splitting §1, §1a and §1b into separately-checkable obligations. Each
 carries the clause it comes from. No requirement is ever deleted — only marked
 `superseded-by:<n>` or `deferred (operator approved <where>)`.
 
@@ -162,6 +205,39 @@ is not itself admitted as record evidence.
 Source: "after perfecting history injections, change the artifact, then
 measure how it's behaviour changes with respect to the epistemology."
 Three ordered steps, each of which must be separable.
+
+### From §1b (Amendment 2)
+
+**R20 — the conjecturer seat's brief+form pairing can be bound where the
+critic's is.**
+Source: "Is prefer if the conjecturer seat could be used to replace the
+critic seat." A CHECKABLE obligation on the deliverable: the swap must be
+demonstrable, not merely permitted by the shape.
+
+**R21 — an artifact/seat is determined by its input and its output; the seat
+is a shell.**
+Source: "That means an artifact truely is determined by input and output, the
+artifact is just a shell." Read as the design premise R20 is the test of:
+what makes a seat a conjecturer or a critic is the brief it is shown and the
+form it fills, both registered, versioned configuration — never a code path
+carrying the seat's name.
+
+**R22 — conjecturers may later be split into two kinds.**
+Source: "conjecturers will need to be split in two". A statement of FUTURE
+intent. It is the reason the registry exists; it is not work for this
+tranche.
+
+**R23 — criticism may later have two different kinds.**
+Source: "criticism will need two different types." As R22: future intent,
+motivating the registry, not built here.
+
+**R24 — the purpose is to separate the authority layer.**
+Source: "this should work to slowly separate the authority layer to make it
+truely modular." A statement of the programme's DIRECTION, binding on this
+tranche only in that nothing it ships may make that separation harder — no
+new place where the generation side reads the authority side, or the reverse.
+
+---
 
 ---
 

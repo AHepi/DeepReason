@@ -1,0 +1,64 @@
+## problem-context
+PROBLEM CONTEXT (p-golden-crit) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night?
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- k-exec: program:exec_oracle
+- k-surface: predicate:names_a_surface
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## frame-crisis
+FRAME CRISIS: two accepted artifacts disagree about whether advection is in scope.
+
+## frame-slice
+FRAME SLICE: the run is arguing inside a surface-energy-balance frame.
+
+## reference-menu-candidates-evidence-refs-block
+REFERENCE MENU -- /candidates/*/evidence_refs/*/block
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  [0] OMIT -- leave "evidence_refs" out of this candidate entirely. This is a legal, complete answer; prefer it to a guess.
+  [1] EV-001
+  [2] EV-002
+You may answer with the handle itself or with its [index].
+
+## target
+TARGET 1786320234dcb204bb3562530b384caf9af25eac76c14ff8121eb18044bfc6a6
+TARGET CLAIM: the nocturnal urban-rural gap is set by the sky view factor, which fixes how much longwave radiation escapes to the cold sky; stored heat release is a second-order term.
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- 0c205a02bc37bab1482baed6618c5bb76f80495cbfcd9397e6ebffca82ebee40 [dependence]
+- 7dad7a26d7d2d219da54c782ca4c6039bf4d959b499b93f77937eb7635984b5b [mention]
+
+## standing-attacks
+STANDING ATTACKS (do not repeat these):
+- 477b7916d6192b6f14e1b3c212b71c3e8b16722522291e43238cfdc75905e5aa [accepted]: critic: the claim ignores regional advection on the calm nights it is measured over.
+
+## citable-evidence-blocks
+CITABLE BLOCKS:
+- EV-001
+- EV-002
+
+## counterexample-recourse
+EXECUTION-BACKED TARGETS: a target whose commitments include an execution oracle is judged by RUNNING it — if it currently passes, a purely argumentative case CANNOT refute it. To refute such a target, also return "counterexample": a JSON list of positional args for its entry point; the harness will run the target on it and check the declared property. An input the problem's gate rejects, or one the target handles correctly, grounds nothing.
+
+## premise-invitation
+PREMISE INVITATION (optional): every candidate offered for problem p-golden-crit so far has been refuted. If the PROBLEM ITSELF presupposes something that FORBIDS NOTHING — a presupposition no observation and no execution could ever tell against, so that the question is malformed rather than merely hard — state that presupposition in "premise". Leave it null otherwise; declining costs you nothing, and this never replaces your case against the target. If admitted evidence bears on that presupposition, cite it in "premise_evidence" as a block id from the CITABLE EVIDENCE BLOCKS list together with an EXACT quote from that block. The quote is byte-checked against the recorded bytes; an unquoted citation cannot be made here, and a citation of a block this call was not shown does not verify.
+
+## target-support-content
+SUPPORT CONTENT:
+- 0c205a02bc37bab1482baed6618c5bb76f80495cbfcd9397e6ebffca82ebee40: SUPPORT A: nocturnal boundary layers over masonry decouple from the regional flow below about two metres per second.
+- 7dad7a26d7d2d219da54c782ca4c6039bf4d959b499b93f77937eb7635984b5b: SUPPORT B: measured sky view factors in the study canyons range from 0.34 to 0.58.
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM CONTEXT (p-golden-crit) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night?
+
+DIRECTIVE: mount the strongest NEW specific case against TARGET 1786320234dcb204bb3562530b384caf9af25eac76c14ff8121eb18044bfc6a6, or attack=false if you find no genuine fault.
