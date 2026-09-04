@@ -579,7 +579,6 @@ def test_both_rules_put_the_frame_in_the_pack_they_dispatch(harness, monkeypatch
     import pathlib
 
     for module, callee in (
-        ("src/deepreason/rules/conj.py", "render_conj_pack"),
         ("src/deepreason/rules/crit.py", "render_crit_pack"),
     ):
         tree = ast.parse(pathlib.Path(module).read_text())
@@ -593,6 +592,26 @@ def test_both_rules_put_the_frame_in_the_pack_they_dispatch(harness, monkeypatch
             passed = {kw.arg for kw in call.keywords}
             assert "frame_slice_context" in passed, (module, sorted(passed))
             assert "frame_crisis_context" in passed, (module, sorted(passed))
+
+    # The conjecturer stopped naming its contexts at the call site when the
+    # nine caller-computed sections went behind the seat interface
+    # (2026-09-04): they arrive as the assembled output of the seat's
+    # registered SOURCE bundle. The claim is the same one -- the frame is in
+    # the pack this rule dispatches -- asserted where it is now decided, and
+    # it still fails if either source is dropped from the bundle.
+    from deepreason.llm.seat_sources import (
+        STAGE_RENDER,
+        resolve_seat_source_bundle,
+        resolve_section_source,
+    )
+
+    bundle = resolve_seat_source_bundle("conjecturer")
+    supplies = {
+        resolve_section_source(entry.source_id, entry.source_version).supplies
+        for entry in bundle.entries_for_stage(STAGE_RENDER)
+    }
+    assert "frame_slice_context" in supplies, sorted(supplies)
+    assert "frame_crisis_context" in supplies, sorted(supplies)
 
 
 def test_the_frame_reaches_a_conjecture_pack_end_to_end(harness):

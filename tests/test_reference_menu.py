@@ -1118,30 +1118,37 @@ def test_a_pre_v6_conjecture_pack_carries_no_v6_menu():
     import ast
     import pathlib
 
-    from deepreason.rules import conj
+    from deepreason.llm import seat_source_plugins
 
-    source = pathlib.Path(conj.__file__).read_text()
+    # The two menu builds moved out of `rules/conj.py` into the seat's
+    # registered section sources (2026-09-04) and the guard moved with them.
+    # The claim is unchanged and so is its bite: every menu build in the tree
+    # is reached only on the v6 path, whichever module holds it.
+    source = pathlib.Path(seat_source_plugins.__file__).read_text()
     tree = ast.parse(source)
-    calls = [
+    functions = [
         node
         for node in ast.walk(tree)
-        if isinstance(node, ast.Call)
-        and isinstance(node.func, ast.Attribute)
-        and node.func.attr == "menu_renders_for"
-    ]
-    assert calls, "conj.py no longer builds reference menus at all"
-    for call in calls:
-        parent_conditions = [
-            node
-            for node in ast.walk(tree)
-            if isinstance(node, ast.IfExp)
-            and any(child is call for child in ast.walk(node.body))
-        ]
-        assert parent_conditions, (
-            "a menu_renders_for call in conj.py is unguarded; the v6 turn "
-            "contract's fields must not be offered to a pre-v6 form"
+        if isinstance(node, ast.FunctionDef)
+        and any(
+            isinstance(call, ast.Call)
+            and isinstance(call.func, ast.Attribute)
+            and call.func.attr == "menu_renders_for"
+            for call in ast.walk(node)
         )
-        guard = parent_conditions[0].test
-        assert isinstance(guard, ast.Name) and guard.id == "active_v6", (
-            f"menu build is guarded by {ast.dump(guard)[:80]}, not active_v6"
+    ]
+    assert functions, "no section source builds reference menus at all"
+    for function in functions:
+        guards = [
+            node
+            for node in ast.walk(function)
+            if isinstance(node, ast.Call)
+            and getattr(node.func, "attr", "") == "lookup"
+            and node.args
+            and isinstance(node.args[0], ast.Constant)
+            and node.args[0].value == "active_v6"
+        ]
+        assert guards, (
+            f"{function.name} builds a menu without consulting active_v6; the "
+            "v6 turn contract's fields must not be offered to a pre-v6 form"
         )

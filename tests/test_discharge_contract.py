@@ -120,10 +120,17 @@ def test_no_consumer_reaches_past_the_interface():
     # test also demands that the interface is actually being consumed. The list
     # is pinned with `==` and the files named, because it IS the claim (rule 6,
     # "counts are claims"): the channel reaches the rest of the tree through
-    # exactly TWO files, and each is there for a reason the design states.
+    # exactly THREE files, and each is there for a reason the design states.
     #
-    #   rules/conj.py     renders the criticisms into the pack and screens the
-    #                     submission -- the behavioural consumer.
+    #   rules/conj.py     screens the submission and records the discharges --
+    #                     the behavioural consumer on the record side.
+    #   llm/seat_source_  computes the open-criticism SECTION the conjecturer
+    #     plugins.py      is shown, through the seat's registered source
+    #                     bundle. It moved here from `rules/conj.py` when the
+    #                     nine caller-computed sections went behind the seat
+    #                     interface; it is a pure read, and it consumes the
+    #                     public interface (`render_open_criticism_context`,
+    #                     `resolve_policy`) exactly as `conj` did.
     #   llm/contracts.py  derives `DischargeWireV1.kind`'s schema enum from the
     #                     declaration registry. This one is REQUIRED by R12
     #                     rather than incidental: a literal enum here would
@@ -142,6 +149,7 @@ def test_no_consumer_reaches_past_the_interface():
     ]
     assert consumers == [
         "src/deepreason/llm/contracts.py",
+        "src/deepreason/llm/seat_source_plugins.py",
         "src/deepreason/rules/conj.py",
     ], consumers
 

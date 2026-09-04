@@ -13,8 +13,10 @@ content, directives), so provider prefix caches bill the repeated head at
 the cached rate. Ordering is presentation only — zero epistemic content.
 """
 
+from collections.abc import Mapping
 import hashlib
 import json
+from typing import Any
 
 from deepreason.ontology.commitment import Commitment
 from deepreason.ontology.problem import Problem
@@ -739,6 +741,7 @@ def render_conj_pack(
     layout: RenderLayoutPolicyV1 | None = None,
     seat_pack_layout: str | None = None,
     section_receipts: list | None = None,
+    supplied: Mapping[str, Any] | None = None,
 ) -> str:
     """school = {"id", "stance_text", "weight"} — lineage inheritance (§11.1):
     the neighbourhood prefers the school's own accepted descendants; the
@@ -756,7 +759,15 @@ def render_conj_pack(
     assembled from, in what order, under what budget. Resolved the same way
     and for the same reason: argument, then DEEPREASON_SEAT_PACK_LAYOUT, then
     the seat's default. Never a Config field and never a manifest field, which
-    would move every qualification subject digest in the tree."""
+    would move every qualification subject digest in the tree.
+
+    supplied is the assembled output of the seat's registered SOURCE bundle
+    (`llm/seat_sources.py`), and it OVERRIDES the individual context keyword
+    arguments where both are given. The keyword arguments remain because two
+    dozen call sites -- the golden fixtures among them -- pass them one by
+    one; a caller that has run the sources passes the mapping instead and
+    names no section at all, which is what keeps `rules/` out of the
+    business of deciding what a seat is shown."""
     layout = layout or resolve_layout_policy()
     # The neighbourhood set is computed ONCE here rather than inside a plugin:
     # it depends on the school's lineage ordering and on `neighbourhood_n`,
@@ -779,6 +790,32 @@ def render_conj_pack(
     else:
         accepted = accepted[-neighbourhood_n:] if neighbourhood_n else []
 
+    supplied_values: dict[str, Any] = {
+        "accepted": tuple(accepted),
+        "suppressed_exemplars": tuple(suppressed_exemplars),
+        "school": school,
+        "complement": complement,
+        "specs": specs,
+        "vs_k": vs_k,
+        "allow_no_candidate_outcome": allow_no_candidate_outcome,
+        "generation_context": generation_context,
+        "scratch_context": scratch_context,
+        "frozen_evidence_context": frozen_evidence_context,
+        "citable_evidence_context": citable_evidence_context,
+        "capability_result_context": capability_result_context,
+        "frame_slice_context": frame_slice_context,
+        "frame_crisis_context": frame_crisis_context,
+        "open_criticism_context": open_criticism_context,
+    }
+    if supplied:
+        supplied_values.update(supplied)
+    # The menus are the one assembled value that is NOT a section plugin's to
+    # format: the walk renders them itself, because a plugin may render
+    # evidence however it likes but may not also suppress the legal-handle
+    # menu. So it leaves the supplied mapping rather than travelling through
+    # it (`DR-INV-reference-menu`, FROZEN clause (b)).
+    reference_menus = reference_menus or supplied_values.pop("reference_menus", ()) or ()
+    supplied_values.pop("reference_menus", None)
     sections, _ = _walk_seat_layout(
         _CONJECTURER_SEAT,
         seat_pack_layout,
@@ -788,23 +825,7 @@ def render_conj_pack(
             commitments=commitments,
             blobs=blobs,
             layout=layout,
-            supplied={
-                "accepted": tuple(accepted),
-                "suppressed_exemplars": tuple(suppressed_exemplars),
-                "school": school,
-                "complement": complement,
-                "specs": specs,
-                "vs_k": vs_k,
-                "allow_no_candidate_outcome": allow_no_candidate_outcome,
-                "generation_context": generation_context,
-                "scratch_context": scratch_context,
-                "frozen_evidence_context": frozen_evidence_context,
-                "citable_evidence_context": citable_evidence_context,
-                "capability_result_context": capability_result_context,
-                "frame_slice_context": frame_slice_context,
-                "frame_crisis_context": frame_crisis_context,
-                "open_criticism_context": open_criticism_context,
-            },
+            supplied=supplied_values,
         ),
         receipts=section_receipts,
     )
