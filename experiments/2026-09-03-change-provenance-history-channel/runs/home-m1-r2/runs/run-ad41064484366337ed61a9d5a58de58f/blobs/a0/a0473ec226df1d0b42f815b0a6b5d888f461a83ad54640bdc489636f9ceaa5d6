@@ -1,0 +1,51 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"const": "SRC_001", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+{"attack":false,"target_alias":"SRC_001"}
+
+INPUT:
+## problem-context
+PROBLEM CONTEXT (conn:0d64405bfceb) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0d64405bfceb to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@ae37caa98daa: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 532738f1d777b92103dad568cc693283fe92abd4a8494054a5c2262db399c0ac
+A speculative SHARED MECHANISM: Connection 0d64405bfceb posits that both the 'Decisionist Leap' (SRC_002) and the 'Risk Minimization' strategy (SRC_003) are fueled by a single underlying evolutionary drive to minimize 'surprise entropy' rather than maximize truth. The leap (SRC_002) and the strategic choice (SRC_003) are just different cognitive framings of the same entropy-reduction behavior. REFUTED If neurocognitive studies reveal distinct neural pathways for 'existential leaps' versus 'strategic error elimination,' proving they are mechanistically disjoint processes.
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- 0d64405bfceb076ee37a421ff1dfdfe9d3e4e1e835b9e69f16ad32f777023422 [dependence]
+- 11dcfafffd03651fd56a823bd820b88ce33aeb923bddd85bb054c246c9d1f553 [dependence]
+- 3336fd63efd5e88279afbf3ed6d4dc17c2c54e6ee1978fdda1fdca73059af785 [dependence]
+- 4edfbb6793cea99b673f8d720307322d73df27a4710cec6908bb615ec71e3a53 [dependence]
+- 8ac8014c3870f80f440c13607aab7132171a0e4831c3bab4fd8f574602de81c7 [dependence]
+
+## target-support-content
+SUPPORT CONTENT:
+- 0d64405bfceb076ee37a421ff1dfdfe9d3e4e1e835b9e69f16ad32f777023422: {"analogy":null,"claim":"The preference is defensible if we interpret 'corroboration' as a measure of 'informational density' rather than survival. A better-cor
+- 11dcfafffd03651fd56a823bd820b88ce33aeb923bddd85bb054c246c9d1f553: {"analogy":null,"claim":"The dilemma dissolves if we view corroboration not as a measure of truth or probability, but as a measure of informational content and 
+- 3336fd63efd5e88279afbf3ed6d4dc17c2c54e6ee1978fdda1fdca73059af785: {"analogy":null,"claim":"The preference is defensible only if we accept a 'decisionist' interpretation: the choice of which theory to act on is a non-rational, 
+- 4edfbb6793cea99b673f8d720307322d73df27a4710cec6908bb615ec71e3a53: {"analogy":null,"claim":"The preference for better-corroborated theories in action is defensible on Popper's terms as a methodological rule of 'risk minimizatio
+- 8ac8014c3870f80f440c13607aab7132171a0e4831c3bab4fd8f574602de81c7: {"analogy":null,"claim":"Popper's preference is defensible only if we accept a 'principle of transference' that is distinct from induction: the principle that a
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM CONTEXT (conn:0d64405bfceb) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0d64405bfceb to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+DIRECTIVE: mount the strongest NEW specific case against TARGET 532738f1d777b92103dad568cc693283fe92abd4a8494054a5c2262db399c0ac, or attack=false if you find no genuine fault.

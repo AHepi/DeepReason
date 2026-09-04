@@ -1,0 +1,30 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@df32ccc31d341d192df02173: program:reasoning_observation_pending
+- reason-counter@40f01e28d2daf2e38703d7e0: program:reasoning_observation_pending
+- reason-counter@ee72b70526303954fb0e684e: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Popper's preference for the better-corroborated theory is defensible on his own terms as a methodological rule for maximizing 'verisimilitude' (truth-likeness) and information content, not probability; however, accepting this defense costs the agent any guarantee that the preferred theory is practically reliable for high-stakes action, forcing a leap from 'best tested' to 'best bet' that remains logically unbridged.","counterconditions":[{"case":"If corroboration implies no increase in reliability for future prediction, then preferring it for practical action (like building a bridge) is indistinguishable from irrational gambling.","checker_spec":null,"eval":"observation"},{"case":"If the preference is purely methodological and not pragmatic, then Popper cannot explain why scientists should act on corroborated theories rather than untested ones in life-or-death scenarios.","checker_spec":null,"eval":"observation"},{"case":"If 'verisimilitude' cannot be measured independently of probability, then the defense collapses back into the induction Popper rejected.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The argument reconstructs Popper's distinction between 'probability' (logical likelihood) and 'corroboration' (historical performance under severe tests). It posits that preferring the better-corroborated theory is rational because such theories have higher empirical content and have survived attempts to falsify them, making them the best available approximations of truth (verisimilitude). The mechanism identifies the 'cost' as the inability to translate this methodological superiority into an inductive assurance of future success, leaving the acting scientist in a state of critical rationalism where they must act on the 'least bad' option without knowing it will work.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@df32ccc31d341d192df02173, reason-counter@40f01e28d2daf2e38703d7e0, reason-counter@ee72b70526303954fb0e684e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

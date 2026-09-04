@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target commits a category error by treating 'preference' as purely psychological/volitional, ignoring that Popper explicitly grounds the preference for well-corroborated theories in the logical aim of science (seeking truth-like content). Popper's system does not require an extra 'bridge principle' because the definition of scientific activity itself entails acting on the theory that has best withstood falsification; thus, the preference is defensible on Popper's own terms without smuggling in induction.",
+      "counterexample": null,
+      "premise": "Popper defines the aim of science as the search for truth (verisimilitude), making the preference for better-corroborated theories a logical requirement of the scientific method, not an arbitrary volitional commitment.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for well-corroborated theories is intrinsic to the definition of scientific action in Popper's framework, does labeling it 'arbitrary' misrepresent his distinction between the context of discovery and the context of justification?"
+    }
+  ]
+}

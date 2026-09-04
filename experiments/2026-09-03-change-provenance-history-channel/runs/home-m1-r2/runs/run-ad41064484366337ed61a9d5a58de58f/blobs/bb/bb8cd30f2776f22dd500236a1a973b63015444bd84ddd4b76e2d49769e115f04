@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation as required by the problem context. The problem explicitly demands naming a specific kind of relation (e.g., dependence, reduction, shared mechanism) between the isolated node and its neighbourhood. Instead, the target provides a conditional refutation criterion ('REFUTED IF...') describing a hypothetical scenario where the trade-off is axiomatic. It does not assert that the trade-off *is* axiomatic, nor does it establish any of the required relational kinds (dependence, compatibility, etc.) between the node and the neighbourhood. The content describes a meta-framework for evaluating a hypothesis rather than defining the structural or logical connection requested.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

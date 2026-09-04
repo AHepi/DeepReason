@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates the logical justification for a preference with the psychological motive for taking a risk. The problem asks if the preference for better-corroborated theories is defensible on Popper's terms given that scientists 'prefer' them for action. Popper's own explanation for this preference is that highly corroborated theories have withstood severe tests, making them the best candidates for truth-likeness (verisimilitude) until falsified. The target argues we prefer them *because* they are vulnerable and offer a chance for 'surprising victory' or 'profound lessons.' This inverts the practical rationale: scientists do not act on a theory hoping it will fail quickly to teach a lesson; they act on it expecting it to succeed reliably enough to bridge engineering gaps. By framing the preference as a desire for vulnerability, the target misrepresents the 'working scientist's' intent described in the prompt, rendering the defense incompatible with the actual phenomenon it seeks to explain.",
+      "counterexample": null,
+      "premise": "Working scientists prefer better-corroborated theories to guide successful action, not to maximize the speed of future falsification.",
+      "premise_evidence": null,
+      "successor_question": "If the target's 'Precision-Vulnerability' mechanism were the true driver, would scientists still prefer highly corroborated theories for critical safety systems where failure is catastrophic rather than educational?"
+    }
+  ]
+}

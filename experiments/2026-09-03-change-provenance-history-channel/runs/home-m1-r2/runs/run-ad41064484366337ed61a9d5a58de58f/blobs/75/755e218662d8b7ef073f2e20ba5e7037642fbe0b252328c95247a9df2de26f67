@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms not as an inductive inference to truth, but as a methodological rule for maximizing the growth of knowledge through severe testing; however, accepting this defense costs the agent any rational assurance that the preferred theory will succeed in future practical applications, forcing a leap of faith distinct from scientific rationality.",
+    "mechanism": "The mechanism distinguishes between 'corroboration' (a report on past performance regarding test severity) and 'probability' (a prediction of future success). The preference is justified pragmatically: choosing the theory that has survived the severest tests provides the best opportunity to learn something new if it fails next, whereas choosing a vague or untested theory yields little information regardless of the outcome. This aligns with Popper's goal of verisimilitude (truth-likeness) rather than certainty.",
+    "counterconditions": [
+      "If the agent requires a guarantee of practical success (e.g., building a safe bridge), Popper's framework offers none, rendering the preference irrational for engineering contexts.",
+      "If 'preference' implicitly assumes a higher likelihood of future validity, then the agent is smuggling induction back in despite Popper's prohibitions.",
+      "If the cost of error is catastrophic and irreversible, the 'growth of knowledge' argument becomes ethically insufficient to justify action."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'rational preference' with 'probabilistic confidence.' The rebuttal clarifies that the normative bridge is methodological efficiency (maximizing learning potential), not risk minimization based on probability. The preference is rational relative to the goal of knowledge growth, not safety."
+      },
+      {
+        "handle": "0e3388d0b26b9656cd5202a6029fd622b946c2e80cd1735c8124f29d5a06117a",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly separate 'minimizing risk of acting on falsehood' (which Popper cannot do) from 'maximizing informational yield.' The candidate now admits that for pure risk management, Popper offers no solution, only a strategy for scientific progress."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "departure_declared",
+        "note": "Departing from the assumption that Popper intended to solve the problem of practical action (like bridge building) solely through scientific methodology. The candidate asserts that Popper's system addresses scientific choice, and applying it to engineering requires an extra-scientific decision rule."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "The criticism correctly identifies that Popper rejects increased subjective confidence. The rebuttal argues this is a feature, not a bug: the preference is objective (based on test severity) rather than subjective (based on feeling sure), thus avoiding the induction trap entirely."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "revised",
+        "note": "Explicitly incorporated the 'cost' of radical instrumentalism: the agent must accept that the preferred theory might still be false and fail catastrophically, with no rational recourse within the system to prevent this other than further testing."
+      },
+      {
+        "handle": "31fcf803cc4730175c70f64fdd5a0c1f1980b0e0ac5f6e9007f9cbe8826f4837",
+        "kind": "rebutted",
+        "note": "The target does not sidestep the cost; it identifies the cost as the abandonment of 'justified true belief' for action. The rational justification for preference is redefined as 'optimal strategy for falsification,' which survives the criticism by changing the definition of rational action in this context."
+      },
+      {
+        "handle": "3242ff8180a68616d13678e7eee9deda5089f5e62375a48ac7ae4517ccaf5f78",
+        "kind": "rebutted",
+        "note": "Agreed that surviving tests does not make a theory more likely to be true. The rebuttal stands on the distinction that 'practical utility' in Popper's sense is about testability, not predictive reliability. The criticism fails because it demands a predictive guarantee Popper never promised."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "revised",
+        "note": "Clarified that the preference is not arbitrary but bound by the methodological rule of severity. However, the revision acknowledges that while the rule is non-inductive, its application to 'action' outside of testing scenarios remains the unresolved tension."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_of_traits",
+        "stress_testing_engineering_prototypes"
+      ],
+      "shared_structure": [
+        "Selection based on survival of severe conditions rather than prediction of future permanence.",
+        "Preference for the entity that has proven most robust so far, without assuming it will last forever.",
+        "Goal is adaptation/discovery rather than final certainty."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious agent making a 'choice' to act, whereas scientists must actively choose a theory for application.",
+        "Engineering stress tests often aim to certify safety (inductive leap), whereas Popperian tests aim to break the theory."
+      ],
+      "transfer_claims": [
+        "Just as we trust a bridge design that survived wind tunnel tests not because it guarantees no future collapse, but because it is the best known option, scientists prefer corroborated theories as the best current basis for further inquiry."
+      ],
+      "overturn_conditions": [
+        "If a less corroborated theory consistently outperforms the corroborated one in practical application, the methodological rule loses its pragmatic justification.",
+        "If 'survival' of tests is shown to be purely luck-based rather than indicative of structural robustness."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

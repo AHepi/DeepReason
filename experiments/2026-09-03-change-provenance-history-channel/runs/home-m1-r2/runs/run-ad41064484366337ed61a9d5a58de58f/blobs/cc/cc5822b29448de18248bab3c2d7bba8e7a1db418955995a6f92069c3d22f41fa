@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a conflation of 'selecting for critique' with 'selecting for action,' which fails to address the problem's specific challenge regarding Popper's own behavior. While an agent can rationally choose the most falsifiable theory to test, the problem notes that scientists (and Popper) prefer better-corroborated theories to *act on* (e.g., building a bridge), implying a reliance on the theory's reliability or truth-likeness for successful outcomes. The target asserts this is merely 'conjectural responsibility,' but offers no mechanism explaining why acting on a highly corroborated theory is pragmatically superior to acting on a less corroborated one if both are equally false and neither is probable. Without bridging the gap between 'best target for error' and 'best guide for successful action,' the preference remains indistinguishable from the inductive expectation that past survival predicts future performance, thus smuggling induction back in despite the terminological shield of 'critical rationality.'",
+      "premise": "Popper explicitly rejected the idea that corroboration implies probability or reliability for future performance, yet the target claims preferring such theories for action is defensible without relying on those very implications.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "If corroboration does not increase the likelihood of a theory being true or reliable, what non-inductive rationale explains why a rational agent should prefer a well-tested bridge design over an untested one when the goal is safe passage rather than further testing?"
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule for error avoidance, not an inductive inference of truth probability.",
+      "mechanism": "Popper distinguishes between the logical status of a theory (which remains conjectural) and the pragmatic rationality of action. Choosing the best-tested theory minimizes the risk of acting on a known falsehood, which is a deductive consequence of surviving severe tests, not an inductive leap to probable truth.",
+      "counterconditions": [
+        "If 'rational preference' implicitly requires assigning higher subjective probability, then the defense fails.",
+        "If the cost of acting on a falsified theory is symmetric with the cost of missing a true but untested theory, the asymmetry of error avoidance collapses."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The normative bridge is the principle of critical rationalism: act on the theory that has withstood the most severe attempts at falsification to minimize known error, not to maximize probable success."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Popper does not claim reliability for future prediction in an inductive sense; he claims it is the only rational bet against known errors."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "The dilemma of action is resolved by treating corroboration as a report of past performance, making the choice non-inductive."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Preference is explicitly decoupled from subjective confidence; it is a procedural obligation."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost of radical instrumentalism is accepted: we act without certainty, but not arbitrarily."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "Rational justification is redefined as adherence to the method of criticism, not probabilistic warrant."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Practical utility is derived from the elimination of error, not the accumulation of positive instances."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The preference is non-arbitrary because it follows the methodological rule of preferring the most severely tested option."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_012"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories smuggles induction back into Popper's system because any decision to act presupposes a belief in the uniformity of nature or the stability of laws.",
+      "mechanism": "To prefer Theory A over Theory B for action implies an expectation that A will continue to perform well in the future. This expectation is an inductive inference that past success predicts future success, which contradicts Popper's rejection of induction.",
+      "counterconditions": [
+        "If one can act purely on the basis of current status without any expectation of future continuity, the charge of induction holds less weight.",
+        "If 'preference' is interpreted solely as a logical selection criterion devoid of psychological expectation."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "revised", "note": "Revised to emphasize that the 'normative bridge' itself relies on an implicit inductive assumption about the value of past testing for future outcomes."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Minimizing risk of acting on a known falsehood still assumes that unknown falsehoods are less likely in well-tested theories, which is inductive."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "Acting on a theory inherently involves predicting its future behavior, reintroducing induction."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Even if confidence is not increased, the *action* implies a bet on future performance, which is inductive."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost is the inconsistency of claiming to reject induction while relying on it for all practical purposes."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "Redefining rational action does not erase the underlying inductive structure of expecting the future to resemble the past."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Maximizing falsifiability potential is useless for action unless one assumes successful tests indicate future stability."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The methodological rule itself may be an inductive habit disguised as a logical imperative."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_005"]
+    },
+    {
+      "claim": "The preference is defensible only if we accept a 'decisionist' interpretation where the choice of method is itself an irrational (or arational) leap, making the preference consistent but groundless.",
+      "mechanism": "Popper's system rests on a fundamental decision to adopt critical rationalism. Within this framework, preferring corroborated theories is consistent. However, the framework itself cannot be justified without circularity or infinite regress, meaning the preference is defensible internally but lacks external foundational support.",
+      "counterconditions": [
+        "If a non-decisionist foundation for critical rationalism can be found.",
+        "If the preference can be shown to be logically necessary rather than conventionally adopted."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "departure_declared", "note": "Departing from the search for a purely logical bridge; accepting the decisionist nature of the starting point."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Risk management is valid relative to the adopted decision, even if the decision itself is not provable."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "The dilemma is resolved by acknowledging the arbitrary (but necessary) starting point of the methodology."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Preference is a consequence of the initial decision to play the game of science critically."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost is the admission that science rests on an unprovable faith in critical discussion."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "Rational justification is limited to internal consistency within the chosen framework."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Utility is defined by the goals set within the decisionist framework."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The rule is non-arbitrary only relative to the goal of error elimination, which is itself a decision."}
+      ],
+      "optional_refs": ["SRC_011", "SRC_013"]
+    },
+    {
+      "claim": "Corroboration functions as a measure of 'verisimilitude' (truth-likeness), allowing preference without assigning probability, thus escaping induction while justifying action.",
+      "mechanism": "Popper later introduced verisimilitude to explain scientific progress. A better-corroborated theory is closer to the truth (higher verisimilitude), even if its probability is zero. Preference is thus rational because it aims at truth-likeness, not probable truth.",
+      "counterconditions": [
+        "If verisimilitude cannot be formally defined without collapsing into probability.",
+        "If the link between corroboration and verisimilitude is itself inductive."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "revised", "note": "Clarified that the normative bridge is the pursuit of verisimilitude, not risk minimization alone."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Reliability for action is grounded in the hypothesis that the theory is closer to the truth."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "Action is justified by the aim of approximating truth, not just avoiding known errors."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Preference is based on objective content and truth-likeness, not subjective confidence."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost is the complexity of defining verisimilitude rigorously, which proved problematic for Popper."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "Rational action is justified by the objective goal of increasing verisimilitude."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Falsifiability potential correlates with potential verisimilitude."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The methodological rule is driven by the desire for theories with higher verisimilitude."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_004"]
+    },
+    {
+      "claim": "The preference is a pragmatic heuristic that works in practice but remains theoretically unjustified within strict Popperian logic, representing a gap between philosophy and practice.",
+      "mechanism": "Scientists prefer corroborated theories because it 'works', but Popper's strict logic offers no non-inductive justification for why it should work. The preference is a psychological or sociological fact, not a logical necessity derived from his premises.",
+      "counterconditions": [
+        "If a strictly logical derivation of the preference can be constructed.",
+        "If the distinction between 'working' and 'being justified' is dissolved."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "departure_declared", "note": "Declaring that no satisfactory normative bridge exists within the strict logic; accepting the gap."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "The conflation is real; Popper's theory fails to fully separate risk management from inductive hope."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "The mechanism of information growth does not logically compel action in specific cases."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "The defense is a rhetorical move that does not hold up under logical scrutiny."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost is admitting that Popper's philosophy cannot fully account for scientific practice."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "Rational justification is absent; only pragmatic success remains."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Practical utility outstrips theoretical justification."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The rule is followed descriptively, not prescriptively justified."}
+      ],
+      "optional_refs": ["SRC_015", "SRC_008"]
+    },
+    {
+      "claim": "The preference is defensible via an evolutionary epistemology where theories compete like species, and corroboration signals fitness for survival in the environment of problems, not truth probability.",
+      "mechanism": "Drawing on Campbell and Popper's later thoughts, science is an evolutionary process. Preferring corroborated theories is akin to preferring traits that have survived environmental selection. This is a non-inductive, structural analogy: survival indicates fit with the problem situation, not future certainty.",
+      "counterconditions": [
+        "If the analogy between biological evolution and knowledge growth breaks down regarding future prediction.",
+        "If 'fitness'

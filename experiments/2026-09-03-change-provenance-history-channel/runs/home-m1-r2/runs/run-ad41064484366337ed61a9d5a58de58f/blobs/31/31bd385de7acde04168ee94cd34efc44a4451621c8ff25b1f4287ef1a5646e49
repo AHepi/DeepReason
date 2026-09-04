@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes an 'abstraction' relation but fails the 'REFUTED IF' condition by asserting a causal mechanism (subconscious heuristic based on informational density) that is directly contradicted by established sociological and psychological evidence showing theory preference is driven by social status and confirmation bias. Since the refutation condition is met, the proposed relation is invalid.",
+      "premise": "Psychological evidence shows scientists' preference for bold theories is driven by social status or confirmation bias rather than an internalized metric of informational density.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Can the connection be re-defined as a 'contradiction' between the Decisionist Leap and sociological drivers instead of an abstraction?"
+    }
+  ]
+}

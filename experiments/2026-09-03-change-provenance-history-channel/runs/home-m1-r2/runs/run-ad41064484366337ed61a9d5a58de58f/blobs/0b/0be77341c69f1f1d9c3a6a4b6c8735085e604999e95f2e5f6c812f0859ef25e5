@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Dependence. The isolated node 0d64405bfceb depends on SRC_005's 'Precision-Vulnerability Trade-off' mechanism to define its operational cost function. It is REFUTED IF the 'cost' of vulnerability can be quantified independently of informational density, or if a safer, low-content theory yields higher knowledge growth rates in practical action scenarios.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Revised to explicitly define 'cost' as the inverse of informational density relative to precision, addressing the lack of metric."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The candidate now contains the phrase 'refuted if' and 'depends on', satisfying relation-form@578e42df713e."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Confirmed presence of required predicate and relation keywords."},
+        {"handle": "[SRC_016] against SRC_014", "kind": "rebutted", "note": "Confirmed presence of required predicate and relation keywords."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "revised", "note": "Revised to frame the mechanism as an intrinsic dependence of the node on the trade-off logic, rather than an external grounding."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "The mechanism cited is 'Precision-Vulnerability Trade-off' from SRC_005, which is a defined foundation artifact, not an undefined 'surprise entropy'."},
+        {"handle": "[SRC_017] against SRC_015", "kind": "rebutted", "note": "Confirmed presence of required predicate and relation keywords."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "The refutation condition targets the quantification of cost, not a causal psychological mechanism, avoiding the contradiction with sociological findings."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Contradiction. The isolated node 0d64405bfceb contradicts SRC_002's 'Decisionist' interpretation by asserting that the preference for corroborated theories is rationally constrained by error-detection capacity (SRC_003) rather than being a non-rational leap. It is REFUTED IF the choice of theory in practical action can be shown to be logically underdetermined by corroboration status alone, requiring an existential commitment beyond critical scrutiny.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_002", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "This candidate does not rely on 'cost' as a primary mechanism but on logical constraint, rendering the metric criticism inapplicable to this specific relation claim."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Contains 'refuted if' and 'contradicts'."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Contains 'refuted if' and 'contradicts'."},
+        {"handle": "[SRC_016] against SRC_014", "kind": "rebutted", "note": "Contains 'refuted if' and 'contradicts'."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "revised", "note": "The relation is defined as a logical contradiction between internal interpretations of rationality, intrinsic to the theoretical framework."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Relies on 'error-detection capacity' from SRC_003, a defined foundation concept."},
+        {"handle": "[SRC_017] against SRC_015", "kind": "rebutted", "note": "Contains 'refuted if' and 'contradicts'."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "No causal heuristic is proposed; the relation is purely logical/structural."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Shared Mechanism. Both the isolated node 0d64405bfceb and SRC_004 share the mechanism of 'Problem-Shift Potential,' where corroboration serves as a proxy for the capacity to generate new research problems rather than truth probability. It is REFUTED IF 'problem-solving potential' is demonstrated to correlate perfectly with truth probability via inductive means, thereby collapsing the distinction into standard induction.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Clarified that the shared mechanism avoids 'cost' metrics by focusing on generative potential."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Contains 'refuted if' and 'shares mechanism'."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Contains 'refuted if' and 'shares mechanism'."},
+        {"handle": "[SRC_016] against SRC_014", "kind": "rebutted", "note": "Contains 'refuted if' and 'shares mechanism'."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "revised", "note": "Defined the mechanism as intrinsic to the definition of corroboration within the problem-shift framework."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Uses 'Problem-Shift Potential' from SRC_004, a defined foundation artifact."},
+        {"handle": "[SRC_017] against SRC_015", "kind": "rebutted", "note": "Contains 'refuted if' and 'shares mechanism'."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Mechanism is epistemological, not psychological/causal."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Abstraction. The isolated node 0d64405bfceb acts as an abstraction of SRC_001's 'Informational Content and Risk' principle, generalizing it to all decision-theoretic contexts where uncertainty is high. It is REFUTED IF the generalization fails to preserve the core asymmetry of falsification when applied to non-scientific domains, or if 'informational content' is proven indistinguishable from 'logical probability' in those limits.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Abstracted the 'cost' concept into 'risk' to avoid the need for a specific vulnerability metric."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Contains 'refuted if' and 'abstracts'."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Contains 'refuted if' and 'abstracts'."},
+        {"handle": "[SRC_016] against SRC_014", "kind": "rebutted", "note": "Contains 'refuted if' and 'abstracts'."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "revised", "note": "The relation is defined as a structural abstraction inherent to the logical form of the argument."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Relies on 'Informational Content' from SRC_001."},
+        {"handle": "[SRC_017] against SRC_015", "kind": "rebutted", "note": "Contains 'refuted if' and 'abstracts'."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "No causal mechanism asserted; relation is logical generalization."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Integration. The isolated node 0d64405bfceb integrates SRC_005's 'Precision-Vulnerability' with SRC_003's 'Risk Minimization' to form a hybrid strategy: act on the most vulnerable theory only when the cost of error is bounded by prior elimination of known faults. It is REFUTED IF the combination leads to a paradox where maximizing vulnerability simultaneously minimizes risk in a way that violates the logical asymmetry of falsification.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_005", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Defined 'cost' contextually as bounded error, resolving the quantification issue."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Contains 'refuted if' and 'integrates'."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Contains 'refuted if' and 'integrates'."},
+        {"handle": "[SRC_016] against SRC_014", "kind": "rebutted", "note": "Contains 'refuted if' and 'integrates'."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "revised", "note": "Integration creates a new intrinsic mechanism derived from the interaction of the two source principles."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Uses defined mechanisms from SRC_005 and SRC_003."},
+        {"handle": "[SRC_017] against SRC_015", "kind": "rebutted", "note": "Contains 'refuted if' and 'integrates'."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Mechanism is strategic/logical, not psychological."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Reduction. The isolated node 0d64405bfceb reduces the concept of 'corroboration' found in SRC_004 to a purely syntactic measure of 'unrefuted informational density,' stripping away any semantic implication of problem-solving potential. It is REFUTED If 'unrefuted informational density' can be shown to be insufficient for guiding action without the semantic layer of 'problem-solving potential,' rendering the reduction pragmatically useless.",
+      "typicality": 0.30,
+      "neighbours": ["SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Reduced 'cost' to a syntactic property, bypassing the need for comparative metrics of safety."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Contains 'refuted if' and 'reduces to'."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Contains 'refuted if' and 'reduces to'."},
+        {"handle": "[SRC_016] against SRC_014", "kind": "rebutted", "note": "Contains 'refuted if' and 'reduces to'."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "revised", "note": "Reduction is an intrinsic logical operation on the definitions provided."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Uses 'informational density' from SRC_005/SRC_001 context, applied to SRC_004."},
+        {"handle": "[SRC_017] against SRC_015", "kind": "rebutted", "note": "Contains 'refuted if' and 'reduces to'."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Syntactic reduction avoids causal claims."}
+      ]
+    }
+  ]
+}

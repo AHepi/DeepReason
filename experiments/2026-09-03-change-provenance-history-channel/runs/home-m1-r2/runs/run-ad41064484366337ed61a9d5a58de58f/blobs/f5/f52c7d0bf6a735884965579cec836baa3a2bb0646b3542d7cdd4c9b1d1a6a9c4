@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies that Popper's framework faces a genuine tension: while corroboration is logically distinct from probability, the pragmatic necessity of acting on corroborated theories in high-stakes scenarios (like engineering or medicine) functionally relies on an inductive assumption about future performance. The target's claim that this 'smuggles in induction' is a defensible interpretation of the problem's second horn, and its mechanism accurately describes why the preference is difficult to justify on purely non-inductive Popperian terms without appealing to pragmatic rationality rather than logical certainty. The counterconditions listed are appropriate tests for this claim but do not currently refute it.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": "Can a Popperian defend the preference for corroborated theories solely as a methodological rule for error elimination without implicitly accepting any premise about the future reliability of these theories?"
+    }
+  ]
+}

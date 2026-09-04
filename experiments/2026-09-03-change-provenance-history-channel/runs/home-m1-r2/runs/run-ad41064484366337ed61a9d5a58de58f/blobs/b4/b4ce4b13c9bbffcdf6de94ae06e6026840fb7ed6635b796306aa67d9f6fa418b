@@ -1,0 +1,79 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule for error avoidance, not an inductive inference of truth probability.",
+      "mechanism": "Popper replaces the goal of 'finding true theories' with 'eliminating false ones.' Preferring the theory that has survived severe tests is rational because it is the one currently known *not* to be false, whereas rivals may have been falsified or not yet tested. This is a decision based on the logical status of surviving tests (non-falsification), not a probabilistic prediction of future success.",
+      "counterconditions": [
+        "If the agent requires a positive guarantee of future success rather than just the absence of known failure.",
+        "If 'rational preference' is defined strictly as maximizing expected utility based on probability assignments."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The normative bridge is Popper's critical rationalism: rationality consists in criticism and error elimination. Preferring the unrefuted over the refuted is the only non-arbitrary rule consistent with fallibilism; it minimizes the risk of acting on a known error without claiming the unrefuted is probable."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Popper does not claim survival makes a theory 'reliable' in an inductive sense. He claims it is the most 'testable' and currently 'unrefuted.' The preference is for the theory that offers the best chance of learning something new if it fails, and the safest bet if it doesn't, relative to known falsehoods."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "For action (e.g., building a bridge), Popper argues we should act on the best-tested theory not because it will hold, but because it is the only one that hasn't failed yet. To act on a falsified theory is irrational; to act on an untested one is reckless. The 'best-tested' is the least bad option."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Agreed. The mechanism explicitly distinguishes 'preference for action' (methodological rule) from 'subjective confidence' (psychological state). The defense relies on the logical asymmetry between verification and falsification."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost of 'radical instrumentalism' is accepted: we admit we don't know if the bridge will stand. But this is the honest cost of fallibilism. The alternative is dogmatism (claiming certainty) or skepticism (acting randomly)."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "Accepting this costs the comfort of probabilistic assurance. Rational justification for preference is redefined as 'having withstood the most serious attempts at refutation,' which is a historical fact about the theory, not a prediction."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Practical utility is derived from the fact that the theory has not yet failed in relevant conditions. It is not 'likely' to work, but it is the only candidate not known to fail. This is a negative justification."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The preference is not arbitrary; it is dictated by the logic of falsification. If Theory A is falsified and Theory B is not, preferring B is the only move consistent with the aim of avoiding error. Arbitrary would be preferring A or ignoring the test results."}
+      ],
+      "optional_refs": ["SRC_009"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories smuggles induction back into Popper's system because 'survival of tests' functions pragmatically as a proxy for probability, despite verbal denials.",
+      "mechanism": "Scientists prefer corroborated theories because they implicitly believe past performance predicts future results. If corroboration had no bearing on expected future success, the preference would be indistinguishable from random choice. The very act of 'preferring' implies an expectation of utility, which is an inductive leap from 'has survived' to 'will survive'.",
+      "counterconditions": [
+        "If one can demonstrate a non-inductive basis for expecting future success from past survival.",
+        "If the preference is shown to be purely aesthetic or conventional with no expectation of practical outcome."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "revised", "note": "Revised to emphasize that the 'normative bridge' Popper attempts to build collapses under the weight of practical action. When lives are at stake, 'error avoidance' effectively becomes 'probability maximization' in disguise."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "While Popper rejects the label 'reliable,' the behavior of choosing the tested theory for a bridge implies treating it as reliable. The distinction is semantic; the functional role of corroboration is inductive."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "The dilemma of action forces the issue. One cannot build a bridge on a theory one expects to fail. Therefore, preferring the corroborated theory entails an expectation of success, which is inductive."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Popper's distinction between 'confidence' and 'preference' is unsustainable in high-stakes scenarios. Preference without confidence is irrational; therefore, the preference implies hidden confidence (induction)."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost of accepting this view is admitting Popper failed to escape Hume. The 'fitness' metaphor inevitably slides into 'likelihood of survival' in the user's mind."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "Accepting this costs the coherence of Popper's entire system. It admits that 'critical rationalism' rests on an unacknowledged inductive principle: nature is uniform enough that passing tests matters."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Maximizing falsifiability potential is a theoretical virtue, but 'practical utility' requires predictive power. Using a theory for utility assumes it will continue to work, which is inductive."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The methodological rule 'ought to prefer' only makes sense if the preferred option is deemed better in some forward-looking way. If not, the rule is empty. Thus, the rule smuggles in the value judgment that past success indicates future worth."}
+      ],
+      "optional_refs": ["SRC_014"]
+    },
+    {
+      "claim": "The preference is defensible only if reinterpreted as a commitment to 'verisimilitude' (truth-likeness), where corroboration indicates a theory is closer to the truth, even if not probable.",
+      "mechanism": "Popper introduced verisimilitude to explain scientific progress without induction. A highly corroborated theory has withstood attempts to show it is false, suggesting it captures more of the truth structure than its predecessors. Preference is rational because we aim for truth, and corroboration is our best (fallible) indicator of increased verisimilitude.",
+      "counterconditions": [
+        "If verisimilitude itself cannot be defined or measured without circular reliance on induction.",
+        "If the history of science shows highly corroborated theories being replaced by radically different ones with no increase in 'truth-likeness'."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "revised", "note": "Revised to anchor the normative bridge in the metaphysical goal of verisimilitude rather than just error avoidance. We prefer the theory that seems closer to the truth."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Surviving tests does not make a theory 'reliable' in a statistical sense, but it increases our rational conjecture that it has higher verisimilitude. This is a qualitative, not quantitative, shift."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "In action, we choose the theory that appears closest to the truth (highest verisimilitude) because it is the most realistic map we have, even if we know the map is imperfect."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "This avoids conflating preference with probability. Verisimilitude is a logical relation of content, not a frequency or degree of belief."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost is accepting that verisimilitude is an elusive, perhaps undefinable concept (as critics like Miller argued). We pay with conceptual precision for the sake of explanatory power."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "Accepting this costs the hope of a formal calculus of confirmation. We are left with intuitive judgments of 'closeness to truth' which are hard to formalize."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Practical utility flows from approximating the truth. A theory with higher verisimilitude should, ceteris paribus, yield better practical results, justifying the preference."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The rule is non-arbitrary because it aligns with the realist goal of science: getting closer to the truth. Corroboration is the signal of that progress."}
+      ],
+      "optional_refs": ["SRC_003"]
+    },
+    {
+      "claim": "The preference is ultimately arbitrary within Popper's strict logic, representing a 'leap of faith' or a pragmatic convention that his philosophy cannot fully justify.",
+      "mechanism": "Strictly logically, from 'Theory T has not been falsified' nothing follows about 'Theory T will not be falsified tomorrow.' Any preference for T over an untested or equally unfalsified rival T' lacks a logical warrant in a universe without induction. The preference is a psychological habit or a pragmatic gamble, not a rational deduction.",
+      "counterconditions": [
+        "If a non-inductive logical link between past survival and future preference can be rigorously formulated.",
+        "If 'rationality' is redefined to include pragmatic gambling strategies as valid deductive moves."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "departure_declared", "note": "Departure: I reject the premise that a satisfactory 'normative bridge' exists. The gap is real and unbridgeable by logic alone; the preference is extra-logical."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Exactly. Popper tries to distinguish these, but in the moment of action, the distinction vanishes. The agent is simply gambling, and calling it 'risk management' disguises the lack of justification."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "The dilemma proves the point: when forced to act, the Popperian must abandon pure logic and make an unjustified choice. The 'information growth' argument doesn't help when you need the bridge to stand *now*."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Even if Popper denies it's 'confidence,' the act of preferring is functionally identical to having confidence. Denying the label doesn't solve the logical void."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost of accepting this is radical skepticism or fideism. We admit our scientific practices rest on an unjustifiable instinct, not a rational system."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "Accepting this costs the claim that Critical Rationalism is a complete guide to rational action. It leaves a residue of irrationality at the core of decision making."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "There is no logical connection between 'falsifiability potential' and 'utility.' Connecting them requires the very inductive assumption Popper bans."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The rule 'ought to

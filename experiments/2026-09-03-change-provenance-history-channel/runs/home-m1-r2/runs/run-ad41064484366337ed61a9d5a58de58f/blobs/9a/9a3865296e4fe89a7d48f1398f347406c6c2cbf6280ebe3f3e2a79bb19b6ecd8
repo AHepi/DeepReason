@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-inductive proxy for preference, but this smuggles in induction because selecting the theory 'closer to the truth' based on past survival implicitly assumes that past performance is a reliable guide to future truth-content. Popper explicitly rejected the idea that surviving tests makes a theory more likely to be true or closer to the truth in any predictive sense; by framing the preference as a rational choice based on demonstrated robustness indicating 'fit,' the target reintroduces the very inductive principle (the uniformity of nature/theory behavior) that Popper sought to eliminate, failing to distinguish between a purely negative elimination of error and a positive heuristic for truth-approximation.",
+      "counterexample": null,
+      "premise": "Popper rejected the notion that corroboration implies increased probability or truth-likeness, yet the target argues scientists prefer theories because they are 'closer to the truth' based on past survival.",
+      "premise_evidence": null,
+      "successor_question": "Can a preference rule based on 'survivability' be formulated without implicitly assuming that the mechanisms which allowed a theory to survive in the past will continue to operate in the future?"
+    }
+  ]
+}

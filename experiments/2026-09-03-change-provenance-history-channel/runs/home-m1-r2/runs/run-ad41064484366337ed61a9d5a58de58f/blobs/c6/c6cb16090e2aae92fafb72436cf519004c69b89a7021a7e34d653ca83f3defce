@@ -1,0 +1,77 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory in practical action is defensible on his own terms as a methodological rule of 'rational risk-management' rather than an inductive probability claim; it survives by accepting the cost that rational action is defined solely by the severity of tests passed, not by any expectation of future success or truth-likeness.",
+    "mechanism": "The mechanism distinguishes between 'logical probability' (which Popper rejects as inductive) and 'methodological preference' (which is a rule for choosing which theory to subject to further falsification or to bet upon in a critical situation). By treating the choice of the better-corroborated theory as the choice of the theory that has survived the severest attempts at destruction, the agent minimizes the risk of acting on a theory known to be false, without claiming the theory is likely true. This transforms 'preference' from a judgment of likelihood into a strategic commitment to the most robustly tested available option.",
+    "counterconditions": [
+      "If corroboration implies any degree of future reliability, it smuggles in induction.",
+      "If the preference cannot guide practical action (like building a bridge) without assuming stability, the defense fails.",
+      "If Popper's own advice to act on corroborated theories contradicts his prohibition on probability, the system is inconsistent."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The normative bridge is the methodological rule of minimizing the risk of acting on a known falsehood. It does not require probability; it requires only that a theory surviving severe tests is logically less likely to have been falsified *so far* than one that has not, making it the rational choice for temporary reliance."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "rebutted",
+        "note": "Acting on a theory (e.g., building a bridge) is not a claim of its truth, but a decision to proceed with the option that has withstood the most rigorous attempts to show it will fail. The 'risk' addressed is the risk of using a theory already demonstrated to be inadequate, not the probabilistic risk of future failure."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "revised",
+        "note": "Clarified that 'preference' is strictly a methodological stance for action-under-uncertainty, explicitly decoupling it from 'subjective confidence' or 'feeling safer,' which are psychological states Popper indeed rejects as grounds for rationality."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "rebutted",
+        "note": "The cost of 'radical instrumentalism' is accepted: we act on the best-tested theory knowing it may still fail tomorrow. This is not a flaw but the core of Popper's fallibilism; the defense holds precisely because it admits no guarantee of success, only the absence of known failure."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The preference is not arbitrary; it is dictated by the logical asymmetry of falsification. A theory that has survived severe tests provides more information about what is *not* the case, making it the non-arbitrary choice for action compared to untested or refuted alternatives."
+      },
+      {
+        "handle": "3b0d40d883d0e30306823e981ef8120189315ec71fd5977614e2001ece75ca4",
+        "kind": "rebutted",
+        "note": "Practical success is not guaranteed, but the method maximizes the chance of avoiding immediate catastrophe by avoiding theories known to be false. Building a bridge on a corroborated theory is rational because it avoids theories known to collapse, not because it ensures the bridge will stand forever."
+      },
+      {
+        "handle": "4951b3c5926010b4aad50c8aa8956fa9603a00d8a967623ab2680133a5da1f53",
+        "kind": "rebutted",
+        "note": "No category error occurs because the claim strictly adheres to Popper's distinction: corroboration is a report of past test performance, and preference is a rule for future conduct based on that report, devoid of psychological confidence or logical probability."
+      },
+      {
+        "handle": "4e6f07bb67dad839cd9e5f769442347fe76f9ad934ef5c1fa948f1e1de4d44be",
+        "kind": "rebutted",
+        "note": "Selecting for testing and selecting for action are unified under the principle of 'critical preference.' In both cases, the better-corroborated theory is chosen because it offers the most informative platform for further criticism or the safest known basis for tentative action."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_003"],
+      "shared_structure": [
+        "Selection based on survival of severe filtering rather than prediction of future quality.",
+        "Distinction between 'proven safe so far' and 'guaranteed safe forever'.",
+        "Rationality defined by adherence to a critical process rather than outcome certainty."
+      ],
+      "disanalogies": [
+        "Evolutionary survival does not involve conscious methodological rules, whereas Popperian science does.",
+        "Biological fitness is retrospective and causal, while corroboration is logical and report-based."
+      ],
+      "transfer_claims": [
+        "Just as an organism surviving a harsh environment is the rational bet for continuation without assuming invincibility, a corroborated theory is the rational bet for action without assuming truth."
+      ],
+      "overturn_conditions": [
+        "If survival in nature implies a probabilistic expectation of future survival, the analogy collapses into induction.",
+        "If the biological analogy relies on teleology, it fails to map to Popper's non-teleological science."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

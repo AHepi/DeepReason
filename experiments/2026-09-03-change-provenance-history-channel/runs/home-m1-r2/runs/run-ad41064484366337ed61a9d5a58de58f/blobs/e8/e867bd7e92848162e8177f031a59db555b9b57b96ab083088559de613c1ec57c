@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory in practical action is defensible on his own terms as a methodological rule of 'critical rationality' rather than an inductive inference; it costs the agent the abandonment of 'practical certainty' in favor of 'conjectural responsibility,' where acting on a theory means accepting it as the best available target for future falsification, not as a probable truth.",
+    "mechanism": "The mechanism distinguishes between 'logical probability' (which corroboration cannot increase) and 'verisimilitude-likeness' or 'fitness for criticism.' When acting (e.g., building a bridge), the rational agent selects the theory that has withstood the severest tests because it offers the most specific, bold, and informative basis for potential error detection. Preference is not a bet on success (induction) but a commitment to the most rigorous standard of failure available. The 'normative bridge' criticized in prior attempts is built on the axiom that rational action requires maximizing the opportunity to learn from mistakes, not minimizing the risk of being wrong via probabilistic smoothing.",
+    "counterconditions": [
+      "If the agent requires a guarantee of safety (zero risk of collapse) rather than a commitment to the most tested design, Popper's framework offers no defense, forcing a retreat to dogmatism or irrational faith.",
+      "If 'preference' is interpreted psychologically as 'feeling confident' rather than methodologically as 'selecting for critique,' the defense collapses into the very induction Popper rejected.",
+      "If the context demands a calculation of expected utility based on likelihoods of outcomes, Popper's non-probabilistic corroboration provides insufficient input for the decision matrix."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The rebuttal asserts that the 'normative bridge' is not a conflation of risk minimization and preference, but a redefinition of rational preference itself: to prefer X is to choose X as the best vehicle for critical testing, not the safest bet. The criticism assumes 'rational preference' must equate to 'maximizing probability of success,' which is the inductive assumption Popper rejects."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "rebutted",
+        "note": "The mechanism addresses 'acting on' by reframing action not as 'trusting the theory will hold' but as 'staking one's resources on the theory that allows for the most severe test.' Building a bridge on a well-corroborated theory is an act of exposing that theory to the ultimate test (structural integrity), not a claim that it probably won't fail."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "This candidate explicitly avoids conflating preference with subjective confidence. It argues that Popper's defense rests on the objective status of the theory (its severity of test) as a criterion for selection, independent of the agent's psychological state. The criticism misreads the target's reliance on 'confidence' where the target relies on 'methodological obligation'."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge the cost: the agent loses 'radical instrumental security.' The defense now admits that if the goal is guaranteed success, Popper fails. The defense only holds if the goal is 'rational consistency with fallibilism.' This clarifies the trade-off previously dismissed."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The claim that preference is 'arbitrary' is rebutted by showing it is determined by the logical history of tests (severity). It is not arbitrary because it follows the methodological rule: 'Choose the theory that forbids the most and has survived.' This is a non-inductive, logical constraint on choice, not a whim."
+      },
+      {
+        "handle": "3b0d40d883d8e30306823e981ef82120189315ec71fd5977614e2001ece75ca4",
+        "kind": "rebutted",
+        "note": "The mechanism addresses 'practical success' by arguing that in a fallibilist universe, 'success' is not the absence of failure but the speed of error correction. Acting on the best-corroborated theory maximizes the chance that if we are wrong, we find out quickly and dramatically (e.g., the bridge collapses in a way that teaches us something new), rather than failing subtly due to a weakly tested theory."
+      },
+      {
+        "handle": "4951b3c5926010b4aad50c8aa8956fa9603a00d8a967623ab2680133a5da1f53",
+        "kind": "rebutted",
+        "note": "The candidate strictly maintains the category distinction: corroboration is a logical report of past tests; preference is a methodological rule for future action. The criticism alleges a conflation with 'feeling safer,' but this candidate grounds preference in 'maximizing informational yield upon failure,' a logical metric, not a psychological feeling."
+      },
+      {
+        "handle": "4e6f07bb67dad839cd9e5f769442347fe76f9ad934ef5c1fa948f1e1de4d44be",
+        "kind": "rebutted",
+        "note": "The defense unifies 'testing' and 'action' by positing that all action is a form of testing when viewed through critical rationalism. To 'choose a theory to act on' IS to 'select a theory for further testing' in the real world. The dichotomy imposed by the criticism is false within Popper's system where life itself is problem-solving."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

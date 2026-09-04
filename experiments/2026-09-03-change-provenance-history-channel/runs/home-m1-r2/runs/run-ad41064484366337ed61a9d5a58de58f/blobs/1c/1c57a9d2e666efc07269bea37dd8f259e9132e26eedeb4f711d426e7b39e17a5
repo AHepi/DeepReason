@@ -1,0 +1,85 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a methodological rule for 'verisimilitude-seeking' rather than an inductive probability assignment; it survives by redefining rational action as the strategic selection of the theory with the highest known content and least known error, costing us the comfort of believing our actions are likely to succeed in a probabilistic sense.",
+    "mechanism": "The mechanism distinguishes between 'justification of belief' (which requires induction/probability) and 'justification of action' (which requires selecting the best-tested instrument). By treating theories as tools where 'corroboration' reports past performance without predicting future success rates, we avoid induction. The preference is rational because choosing a theory that has not yet failed severe tests is logically superior to choosing one that has failed, even if neither is 'probable'.",
+    "counterconditions": [
+      "If corroboration implicitly assigns any degree of future reliability, it smuggles in induction.",
+      "If the preference cannot guide action in high-stakes scenarios (like bridge building) without assuming stability of nature, the defense fails.",
+      "If 'verisimilitude' cannot be assessed without inductive assumptions about which tests are severe."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The normative bridge is not 'minimizing risk of error' via probability, but the logical imperative to avoid known falsehoods. Preferring the unrefuted over the refuted is a deductive requirement of rationality, not an inductive gamble."
+      },
+      {
+        "handle": "0e3388d0b26b9656cd5202a6029fd622b946c2e80cd1735c8124f29d5a06117a",
+        "kind": "rebutted",
+        "note": "Popper does not claim survival makes a theory 'reliable' in a frequency sense. He claims it makes the theory the 'best available guess' for action because all alternatives have been eliminated or are less tested. This is risk management by elimination, not by probability."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "revised",
+        "note": "Revised to explicitly address 'acting on' theories: The mechanism now frames action as 'betting on the theory with the most surviving critical attempts,' acknowledging that this offers no guarantee of success (the cost) but is the only non-arbitrary choice available."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "The criticism misreads the target; the target explicitly rejects 'increased subjective confidence.' The preference is purely objective/methodological: we prefer the theory that has survived more severe tests, regardless of our psychological confidence."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "rebutted",
+        "note": "The cost of 'radical instrumentalism' is accepted: we act without knowing the theory is true or probable. The defense holds because the alternative (induction) is logically invalid. We pay the cost of uncertainty to maintain logical consistency."
+      },
+      {
+        "handle": "31fcf803cc4730175c70f64fdd5a0c1f1980b0e0ac5f6e9007f9cbe8826f4837",
+        "kind": "rebutted",
+        "note": "Rational justification for preference is satisfied by the logical asymmetry between verification and falsification. We are justified in preferring the unfalsified because we are logically forbidden from acting on the falsified. No positive probability is needed."
+      },
+      {
+        "handle": "3242ff8180a68616d13678e7eee9deda5089f5e62375a48ac7ae4517ccaf5f78",
+        "kind": "rebutted",
+        "note": "Practical utility is derived from the fact that unrefuted theories contain more empirical content and have survived attempts to destroy them. This is not a prediction of future utility based on past frequency, but a selection of the most robust tool currently in hand."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The preference is not arbitrary; it is dictated by the methodological rule to seek truth by eliminating error. Choosing the less corroborated theory would be arbitrary because it ignores the available evidence of falsification or lesser testing."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "MEM_NAV_001",
+        "MEM_MED_004"
+      ],
+      "shared_structure": [
+        "Selection of an option based on the absence of negative markers rather than the presence of positive probability.",
+        "Distinction between 'safe to use' and 'likely to be true'.",
+        "Reliance on elimination of competitors rather than confirmation of the winner."
+      ],
+      "disanalogies": [
+        "Navigation maps are often treated as probabilistically reliable, whereas Popperian theories are explicitly not.",
+        "Medical triage often uses base-rate probabilities, which Popper forbids for theory choice."
+      ],
+      "transfer_claims": [
+        "Just as a navigator chooses the chart with no known errors over one with marked reefs, scientists choose the theory with no known falsifications.",
+        "The rationality of the choice lies in the avoidance of known disaster, not the expectation of safe arrival."
+      ],
+      "overturn_conditions": [
+        "If avoiding known errors proves insufficient to prevent disaster in a way that implies hidden probabilistic assumptions.",
+        "If the 'absence of negative markers' is shown to be irrelevant to future performance without an inductive leap."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_007"
+      ]
+    }
+  }
+}

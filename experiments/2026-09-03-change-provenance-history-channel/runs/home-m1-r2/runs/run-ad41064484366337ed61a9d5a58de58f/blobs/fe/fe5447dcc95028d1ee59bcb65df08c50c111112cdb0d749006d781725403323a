@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's mechanism claims scientists prefer risky theories to maximize 'information growth' via eventual falsification. However, this fails to address the specific dilemma of 'acting on' a theory (e.g., building a bridge or administering a drug). In practical application, one does not choose the 'boldest, most risky' conjecture precisely because it is 'likely false in detail'; one chooses the theory that has survived severe tests *as if* it were reliable. The target asserts this preference is not induction, but by recommending action based on past survival to avoid future error, it functionally reinstates an inductive principle (that past performance predicts future reliability) while merely denying the label. The 'cost' described (abandoning certainty) does not explain why the risky theory is preferred over a less informative but equally unfalsified tautology for the purpose of successful action.",
+      "counterexample": null,
+      "premise": "Popper himself acknowledged that when choosing which theory to act on, scientists prefer the better-corroborated one.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration implies no probability of future success, what non-inductive rationale can strictly justify acting on the corroborated theory rather than any other unfalsified theory when human safety is at stake?"
+    }
+  ]
+}

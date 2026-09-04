@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a methodological rule for maximizing falsifiability potential, not as an inductive inference of truth probability; accepting this costs the agent any rational assurance that the chosen theory will succeed in future practical applications, reducing scientific action to a high-stakes gamble on error-avoidance rather than success-maximization.",
+    "mechanism": "The mechanism distinguishes between 'corroboration' (a historical report of severe testing survival) and 'probability' (a logical measure of likelihood). It argues that preferring the better-corroborated theory is rational because it is the most informative and thus the most easily falsifiable if false, aligning with the goal of rapid error elimination. However, this preference does not bridge the gap to 'practical reliability' for acting on the theory (e.g., building a bridge), meaning the agent acts without inductive support for the theory's future performance.",
+    "counterconditions": [
+      "If corroboration implied even a slight increase in subjective probability, the distinction would collapse into induction.",
+      "If Popper offered a non-inductive normative bridge from 'error avoidance' to 'practical success', the cost of radical instrumental skepticism would be waived.",
+      "If the preference were based solely on aesthetic simplicity rather than test severity, it would fail Popper's own demarcation criteria."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The candidate explicitly rejects the conflation by defining the normative bridge as 'maximizing falsifiability potential' rather than 'minimizing risk of error' in a probabilistic sense. The preference is for the theory that offers the best chance of being proven wrong quickly, not the one least likely to be wrong."
+      },
+      {
+        "handle": "0e3388d0b26b9656cd5202a6029fd622b946c2e80cd1735c8124f29d5a06117a",
+        "kind": "rebutted",
+        "note": "The candidate accepts Popper's rejection of reliability for future action. It argues the defense holds precisely because it does not claim the theory is more reliable, only that it is the most critical target available, which is the only rational stance consistent with fallibilism."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly acknowledge the 'dilemma of acting on a theory' as the primary cost. The mechanism now clarifies that while the preference is methodologically sound for science (finding errors), it leaves the engineer/actor without a logical foundation for expecting success, only for expecting efficient failure detection."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "The candidate supports the criticism's view that Popper defends preference without increased confidence. It rebuts the implication that this is a failure, arguing instead that this is the specific feature that preserves the anti-inductive stance: one prefers the bold conjecture precisely because one remains fully confident it might be false."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "rebutted",
+        "note": "The candidate directly addresses the tension by framing the 'cost' as the acceptance of 'radical instrumental skepticism.' It argues that dismissing this cost would indeed invalidate the defense, so the defense survives only by embracing the lack of practical justification."
+      },
+      {
+        "handle": "31fcf803cc4730175c70f64fdd5a0c1f1980b0e0ac5f6e9007f9cbe8826f4837",
+        "kind": "rebutted",
+        "note": "The candidate identifies the cost explicitly: the loss of rational justification for *preference* in the pragmatic sense of 'likely to work.' It argues that redefining rational action as 'error-avoidance' is not sidestepping the problem but solving it by lowering the bar for what counts as rational scientific conduct."
+      },
+      {
+        "handle": "3242ff8180a68616d13678e7eee9deda5089f5e62375a48ac7ae4517ccaf5f78",
+        "kind": "rebutted",
+        "note": "The candidate agrees that surviving tests does not make a theory more useful for prediction in a probabilistic sense. It rebuts the idea that this makes the defense fail; rather, the defense posits that 'utility' in science is defined by testability, not predictive security."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The candidate clarifies that the preference is not arbitrary but bound by the methodological rule of severity. It agrees with the criticism that Popper offers a non-inductive justification, and argues this justification is sufficient for scientific choice but insufficient for pragmatic certainty, which is the core trade-off."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_003"],
+      "shared_structure": [
+        "Selection based on past performance without assuming future consistency.",
+        "Distinction between 'survival' and 'fitness for purpose'.",
+        "Rationality defined by process rigor rather than outcome probability."
+      ],
+      "disanalogies": [
+        "Biological evolution has no agent making a conscious choice to act on a trait; scientists must consciously choose a theory for construction.",
+        "Natural selection optimizes for reproduction, not necessarily for truth or structural integrity in a specific engineering context.",
+        "Evolutionary 'tests' are environmental and continuous; scientific tests are artificial, severe, and discrete."
+      ],
+      "transfer_claims": [
+        "Just as a species surviving a plague isn't 'probable' to survive the next, a theory surviving tests isn't probable to hold.",
+        "We prefer the survivor not because it is guaranteed, but because it is the only data point we have of resilience.",
+        "The cost in both cases is the inability to predict specific future failures despite past success."
+      ],
+      "overturn_conditions": [
+        "If biological survival could be shown to mathematically imply future survival probability.",
+        "If scientific testing could be shown to exhaust all possible modes of failure.",
+        "If the analogy fails to account for the normative 'ought' present in scientific methodology but absent in natural selection."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": ["SRC_003"]
+    }
+  }
+}

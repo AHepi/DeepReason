@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a methodological rule for 'verisimilitude-seeking' rather than an inductive probability assignment; it survives by redefining rational action as 'choosing the theory with the highest tested content that has not yet failed,' but this costs the agent any guarantee of predictive reliability or safety, forcing a leap of faith that the future will resemble the past in terms of error-structure.",
+    "mechanism": "The mechanism distinguishes between 'logical probability' (which Popper rejects as increasing with corroboration) and 'methodological preference' (which increases with severity of tests passed). By treating corroboration as a report of past performance without implying future success, the preference becomes a rule for maximizing the potential for learning (falsification) rather than minimizing the risk of being wrong. The surviving theory is preferred not because it is 'more likely true' but because it is the most informative survivor, offering the best target for the next critical test.",
+    "counterconditions": [
+      "If the agent requires a guarantee of safety (e.g., building a bridge), Popper's framework cannot provide it without smuggling in induction.",
+      "If 'preference' implies an expectation of future success, then the preference is inductive by definition.",
+      "If the universe changes its laws tomorrow, the better-corroborated theory offers no logical advantage over a random guess."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The candidate explicitly bridges the gap by defining the normative basis as 'maximizing verisimilitude potential' rather than 'minimizing risk of error.' The preference is rational not because it reduces error probability, but because it aligns with the goal of science: finding truth through error elimination."
+      },
+      {
+        "handle": "0e3388d0b26b9656cd5202a6029fd622b946c2e80cd1735c8124f29d5a06117a",
+        "kind": "rebutted",
+        "note": "Rebutted by clarifying that Popper's 'rational risk-management' is about managing the risk of stagnation (dogmatism), not the risk of factual falsehood. The candidate accepts that the theory might be false but argues it is the most rational bet for progress."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma: when acting (e.g., building a bridge), the Popperian must admit they are acting on a conjecture known to be possibly false, preferring it only because it is the best-tested conjecture available, not because it is safe."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "The candidate agrees that preference is not increased subjective confidence. It rebutts the criticism by stating the preference is purely objective-based on test history-and does not require any internal psychological state of confidence."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "rebutted",
+        "note": "The cost of 'radical instrumentalism' is explicitly accepted in the claim as the loss of guaranteed predictive reliability. The defense holds because it admits this cost rather than dismissing it."
+      },
+      {
+        "handle": "31fcf803cc4730175c70f64fdd5a0c1f1980b0e0ac5f6e9007f9cbe8826f4837",
+        "kind": "rebutted",
+        "note": "The candidate addresses the cost directly: accepting this view costs the agent the ability to claim their action is 'safe' or 'probable.' Rational justification is preserved only by shifting the goal from 'success' to 'critical progress'."
+      },
+      {
+        "handle": "3242ff8180a68616d13678e7eee9deda5089f5e62375a48ac7ae4517ccaf5f78",
+        "kind": "rebutted",
+        "note": "Clarified that 'practical utility' in Popper's sense is the utility of being easily falsifiable if wrong, not the utility of being right. The preference is for the theory that gives nature the best chance to prove us wrong quickly."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The candidate affirms the methodological rule but denies it is non-arbitrary in the sense of guaranteeing truth. It is non-arbitrary only relative to the goal of error elimination, which is a chosen value, not a logical necessity."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

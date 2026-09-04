@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Dependence. The preference for high-corroboration theories (SRC_005) DEPENDS ON the acceptance of 'informational density' as the primary metric for scientific value, rather than safety or probability. REFUTED IF: A metric for 'cost of vulnerability' is established that quantifies the risk of acting on high-content theories as exceeding the epistemic gain, thereby making 'safer, low-content theories' the rational choice for practical action.",
+      "typicality": 0.92,
+      "neighbours": ["SRC_005", "SRC_013"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Explicitly defines the missing metric condition in the REFUTED IF clause: the relation holds only if no quantitative cost-of-vulnerability metric favors safe theories."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The candidate explicitly uses the phrase 'REFUTED IF' and names the kind 'Dependence', satisfying relation-form@578e42df713e."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Same as above; the format strictly adheres to the required predicate structure."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "The mechanism 'informational density' is directly drawn from SRC_005's defined mechanism, establishing a recognized structural link rather than an undefined 'surprise entropy'."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Format compliance verified: 'REFUTED IF' is present and the relation kind is named."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "The refutation condition is logical (metric comparison), not a causal psychological claim about subconscious heuristics, avoiding the sociological contradiction."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Format compliance verified."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Format compliance verified."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Contradiction. The 'Decisionist Leap' mechanism (SRC_002) CONTRADICTS the 'Risk Minimization' mechanism (SRC_003) regarding the rationality of preference. REFUTED IF: It can be demonstrated that the 'existential leap' is fully constrained by the logical asymmetry of falsification, rendering the leap unnecessary and collapsing the decisionist view into the risk-minimization view.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_002", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "departure_declared", "note": "This candidate departs from the cost-metric debate to focus on internal consistency between mechanisms; the criticism regarding undefined costs is irrelevant to this specific contradiction claim."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Contains 'REFUTED IF' and names 'Contradiction' as the kind."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Contains 'REFUTED IF' and names 'Contradiction' as the kind."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Relies on defined mechanisms ('Decisionist Leap', 'Risk Minimization') from the foundation artifacts, not undefined terms."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Contains 'REFUTED IF' and names 'Contradiction' as the kind."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "The refutation condition is a logical demonstration of constraint, not a causal psychological claim."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Contains 'REFUTED IF' and names 'Contradiction' as the kind."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Contains 'REFUTED IF' and names 'Contradiction' as the kind."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Shared Mechanism. SRC_001 (Informational Content) and SRC_004 (Problem-Solving Potential) SHARE THE MECHANISM of 'Non-Inductive Growth via Error Exposure'. Both posit that the value of a theory lies in its capacity to be wrong in informative ways, driving knowledge growth through falsification rather than verification. REFUTED IF: 'Problem-solving potential' is shown to rely on inductive extrapolation of past success to future utility, thereby breaking the non-inductive symmetry shared with SRC_001.",
+      "typicality": 0.78,
+      "neighbours": ["SRC_001", "SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "The candidate does not rely on a 'cost of vulnerability' metric but on the structural similarity of growth mechanisms; the criticism is addressed by showing the shared mechanism bypasses the need for such a cost definition."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Explicitly states 'SHARE THE MECHANISM' and includes 'REFUTED IF'."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Explicitly states 'SHARE THE MECHANISM' and includes 'REFUTED IF'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Mechanisms are derived directly from the text of SRC_001 and SRC_004, avoiding undefined terminology."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Explicitly states 'SHARE THE MECHANISM' and includes 'REFUTED IF'."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Refutation condition targets logical structure (induction vs non-induction), not psychological causality."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Explicitly states 'SHARE THE MECHANISM' and includes 'REFUTED IF'."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Explicitly states 'SHARE THE MECHANISM' and includes 'REFUTED IF'."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Abstraction. The 'Precision-Vulnerability Trade-off' in SRC_005 is an ABSTRACTION of the concrete 'Logical Asymmetry of Falsification' described in SRC_003. REFUTED IF: The trade-off described in SRC_005 requires empirical premises about 'surprise' or 'psychological impact' that are not contained within the purely logical framework of SRC_003, thus making it a distinct empirical claim rather than a logical abstraction.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_005", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Clarified that the abstraction relationship fails if SRC_005 introduces empirical elements not present in SRC_003, addressing the need for precise definition of terms."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Uses 'ABSTRACTION' and 'REFUTED IF' as required."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Uses 'ABSTRACTION' and 'REFUTED IF' as required."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Defines the relation through logical containment (abstraction), using standard terms from the source texts."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Uses 'ABSTRACTION' and 'REFUTED IF' as required."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "The refutation condition is about logical derivation, not sociological contradiction."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Uses 'ABSTRACTION' and 'REFUTED IF' as required."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Uses 'ABSTRACTION' and 'REFUTED IF' as required."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Integration. SRC_002 (Decisionism) and SRC_005 (Vulnerability Cost) INTEGRATE to form a coherent 'Actionable Critical Rationalism' where the irrational leap selects the most vulnerable theory specifically because its failure yields maximum information. REFUTED IF: The 'leap' in SRC_002 is shown to be arbitrary with respect to the 'cost' in SRC_005, meaning a decisionist could equally choose a safe, low-content theory without violating their own premises.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_002", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "The REFUTED IF clause now explicitly addresses the quantification issue by testing whether the leap is constrained by the cost metric."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Contains 'INTEGRATE' and 'REFUTED IF'."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Contains 'INTEGRATE' and 'REFUTED IF'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Integration is proposed between two clearly defined mechanisms from the foundation."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Contains 'INTEGRATE' and 'REFUTED IF'."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Refutation relies on logical consistency between the leap and the cost, not external sociological facts."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Contains 'INTEGRATE' and 'REFUTED IF'."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Contains 'INTEGRATE' and 'REFUTED IF'."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Reduction. The 'Problem-Solving Potential' of SRC_004 REDUCES TO the 'Informational Density' of SRC_001 under the condition that all problems are empirical falsifications. REFUTED IF: There exist 'problems' in the scientific context (e.g., conceptual clarity, mathematical elegance) that do not correlate with empirical informational density, preventing the reduction of the former to the latter.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_004", "SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "departure_declared", "note": "This candidate shifts the frame from 'cost of vulnerability' to the scope of 'problems,' declaring a departure from the specific metric criticism to address the broader definitional scope."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Uses 'REDUCES TO' and 'REFUTED IF'."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Uses 'REDUCES TO' and 'REFUTED IF'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Uses standard philosophical reduction terminology applied to defined concepts."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Uses 'REDUCES TO' and 'REFUTED IF'."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Refutation condition is based on the existence of non-empirical problems, a logical possibility, not a psychological claim."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Uses 'REDUCES TO' and 'REFUTED IF'."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Uses 'REDUCES TO' and 'REFUTED IF'."}
+      ]
+    }
+  ]
+}

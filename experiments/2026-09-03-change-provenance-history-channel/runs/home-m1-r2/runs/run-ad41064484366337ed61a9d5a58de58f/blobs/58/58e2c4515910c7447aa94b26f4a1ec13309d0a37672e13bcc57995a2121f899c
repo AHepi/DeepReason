@@ -1,0 +1,143 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule for risk minimization, not an inductive inference of truth probability. It costs the agent the comfort of believing the chosen theory is 'likely' true, accepting instead that it is merely the 'least bad' known option for action until falsified.",
+      "mechanism": "Reframes 'preference' from epistemic confidence (probability) to pragmatic survival strategy. Action based on the best-tested theory is a bet against immediate error, not a prediction of future success. The 'smuggling' charge fails because the agent explicitly denies that past survival guarantees future performance, only that unrefuted theories are currently the only viable tools.",
+      "counterconditions": [
+        "If the agent acts as if the theory will definitely succeed, they have smuggled induction.",
+        "If the preference is based on aesthetic simplicity rather than test severity, it is not Popperian.",
+        "If the agent claims the theory is 'probably true,' the defense collapses."
+      ],
+      "typicality": 0.92,
+      "discharges": [
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "The target addresses 'preference for action' by defining it as risk mitigation. The cost of 'radical instrumentalism' is accepted: we act on the best map we have, knowing it may be wrong, which is not a failure but the core of critical rationalism."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The claim that preference is 'arbitrary' is rebutted by showing it is constrained by the logical history of severe tests. It is not arbitrary; it is the only non-inductive selection criterion available."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "No category error occurs. The distinction between logical status and psychological confidence is maintained. The preference is a voluntary methodological commitment, not a psychological feeling of safety."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "revised", "note": "Clarified that 'practical action' (building a bridge) uses the same logic as 'selecting for testing': both rely on the absence of known errors. The mechanism now explicitly bridges the gap between theoretical selection and practical application via the concept of 'uncriticized premises'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Action is not redefined as critique. Action is defined as utilizing the current best-uncriticized theory. The mechanism distinguishes between the act of building (using the theory) and the act of testing (trying to break it)."},
+        {"handle": "[SRC_015] against SRC_001", "kind": "rebutted", "note": "Verisimilitude is not used as a proxy for probability. The preference is based on the *content* of the tests survived, not an assumption that survival implies closeness to truth. We prefer the theory that has told us more about where error lies."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "Action under risk is accounted for by acknowledging that all action is risky. Choosing the best-tested theory minimizes the risk of *known* error, which is the only rational move without induction."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "The defense does not rely on verisimilitude as an inductive proxy. It relies on the logical asymmetry: falsification is decisive, verification is not. Preference is for the theory that has withstood the most decisive attempts at falsification."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_003", "SRC_010"]
+    },
+    {
+      "claim": "The preference inevitably smuggles in induction because any decision to act on a theory entails an implicit expectation that the future will resemble the past (i.e., the theory will continue to hold). Popper's attempt to separate 'corroboration' from 'probability' is semantically unstable when applied to real-world stakes.",
+      "mechanism": "Argues that 'acting on' a theory logically requires assuming its reliability for future cases. If one truly believed corroboration implied no probability of future success, one would be paralyzed or choose randomly. The fact that Popper and scientists choose the corroborated theory proves they implicitly assign it higher subjective probability.",
+      "counterconditions": [
+        "If the agent can demonstrate a way to act without expecting future consistency, this claim fails.",
+        "If 'preference' is shown to be purely aesthetic or ritualistic without practical expectation, the smuggling charge weakens.",
+        "If the definition of 'induction' is narrowed to exclude pragmatic expectations, the argument shifts."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "The tension regarding 'preference for action' is resolved by admitting that action *requires* induction. The target argues that Popper's denial of this is self-deceptive."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The methodological rule is exposed as a disguised inductive principle. The claim that it is 'non-inductive' is rejected as verbal sophistry."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "The distinction between logical status and psychological claim is dismissed as irrelevant to the actor. To act *is* to have a psychological expectation, which constitutes the smuggled induction."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "The conflation of 'testing' and 'action' is argued to be necessary. You cannot test a theory for action without assuming it works for action, thus smuggling induction into the testing phase itself."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Redefining action fails. Building a bridge requires the belief that gravity will behave tomorrow as it did yesterday. This belief is inductive."},
+        {"handle": "[SRC_015] against SRC_001", "kind": "revised", "note": "Refined the argument to show that even 'verisimilitude' relies on an inductive leap: assuming that passing past tests makes a theory 'closer' to truth in a way that predicts future test success."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "The dilemma is resolved by accepting that induction is unavoidable. The 'cost' is abandoning Popper's strict anti-inductivism."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Agrees that verisimilitude smuggles induction. The claim extends this to *all* forms of preference, arguing no non-inductive basis for action exists."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_001", "SRC_004"]
+    },
+    {
+      "claim": "The preference is defensible only if we accept a 'decisionist' interpretation: the choice of which theory to act on is ultimately an irrational (non-rational) leap of faith, guided by but not determined by corroboration. Corroboration informs the jump but does not justify it logically.",
+      "mechanism": "Posits that Popper's system leaves a gap between 'is not falsified' and 'should be used.' Bridging this gap requires a volitional act (decisionism) that is outside the scope of logical justification. This avoids smuggling induction by admitting the lack of logical necessity.",
+      "counterconditions": [
+        "If Popper explicitly provides a logical bridge (which he claims to), this decisionist view contradicts his intent.",
+        "If the 'leap' can be shown to follow logically from the goal of truth-seeking, it is not purely decisionist.",
+        "If 'irrational' is confused with 'arbitrary,' the nuance is lost."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {"handle": "[SRC_006] against SRC_003", "kind": "departure_declared", "note": "Departing from the idea that the preference must be logically 'defensible' in a strict sense. Instead, it is a necessary existential commitment."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The methodological rule is reinterpreted as a heuristic for the decisionist leap, not a logical proof. It guides the faith but does not replace it."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Clarified that the 'psychological claim' is actually a 'volitional claim.' It is not about feeling safer, but about making a choice in the absence of certainty."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "The distinction between testing and action is maintained by locating the decisionist leap specifically at the point of action, whereas testing remains purely logical/critical."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Action involves a leap. The mechanism accepts that building a bridge is an act of faith in the unrefuted theory, not a logical deduction."},
+        {"handle": "[SRC_015] against SRC_001", "kind": "rebutted", "note": "Verisimilitude is treated as a motivator for the leap, not a logical warrant. Thus, no induction is smuggled, only hope."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "Action under risk is the natural domain of decisionism. The inability to account for it logically is the feature, not the bug."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Agrees that verisimilitude cannot logically justify preference. Concludes that nothing can; hence, the decisionist stance."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_007", "SRC_009"]
+    },
+    {
+      "claim": "The preference is defensible via an evolutionary analogy: theories compete in an ecosystem of criticism. Preferring the survivor is not an inductive prediction of its future fitness, but a recognition of its current adaptive value in the specific environment of problems solved so far.",
+      "mechanism": "Uses biological evolution as an analogy. Survival of the fittest does not guarantee future survival, yet organisms (and scientists) act on the traits that survived. This is a structural parallel, not an inductive inference. The 'cost' is accepting that our best theories are merely 'fit for now,' not 'true.'",
+      "counterconditions": [
+        "If the analogy breaks down because theories do not reproduce biologically, the mechanism weakens.",
+        "If 'adaptive value' is interpreted as 'probability of truth,' the induction returns.",
+        "If the environment of problems changes radically, the preference may become maladaptive."
+      ],
+      "typicality": 0.78,
+      "discharges": [
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "Addresses 'preference for action' by framing it as an evolutionary imperative. Organisms act on successful traits; scientists act on successful theories. No induction, just adaptation."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The methodological rule is an evolutionary strategy. It is not arbitrary; it is the result of selective pressure in the scientific community."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "Avoids the category error by sticking to structural homology between biological and epistemic selection, avoiding psychological claims."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "revised", "note": "Extended the analogy to cover 'practical action.' Just as an animal uses its successful claws to hunt, a scientist uses a successful theory to build. Both are applications of surviving traits."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Action is the expression of adaptive traits. Building a bridge is the scientific equivalent of a bird building a nest with a proven technique."},
+        {"handle": "[SRC_015] against SRC_001", "kind": "rebutted", "note": "Verisimilitude is replaced by 'fitness.' We don't assume the theory is truer, only that it is more fit for the current problem space."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "Risk is inherent in evolution. Acting on the fittest theory is the optimal strategy in a risky environment, without needing induction."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Rejects verisimilitude as the basis. The basis is survival/fitness, which is observable and non-inductive in the Popperian sense (it describes history, not the future)."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_002", "SRC_005"],
+      "analogy": {
+        "source_memory_refs": ["biological_evolution_survival_of_fittest"],
+        "shared_structure": ["selection_pressure", "survival_as_filter", "adaptation_without_guarantee", "preference_for_survivors"],
+        "disanalogies": ["theories_do_not_reproduce_biologically", "scientists_have_agency_while_genes_do_not", "problem_spaces_change_faster_than_environments"],
+        "transfer_claims": ["preference_is_recognition_of_fitness_not_prediction", "action_is_expression_of_adaptive_trait", "corroboration_is_equivalent_to_survival"],
+        "overturn_conditions": ["if_theories_are_shown_to_evolve_via_induction", "if_fitness_implies_future_probability_in_this_context", "if_the_analogy_fails_to_explain_conscious_choice"]
+      }
+    },
+    {
+      "claim": "The dilemma dissolves if we recognize that 'probability' in Popper's rejection refers to logical probability (confirmation), while 'preference' operates in the domain of verisimilitude (truth-content). One can prefer a theory with higher verisimilitude without assigning it higher logical probability.",
+      "mechanism": "Distinguishes between two metrics: Logical Probability (which Popper rejects as increasing) and Verisimilitude (which Popper accepts as a goal). We prefer the corroborated theory because it has higher *potential* verisimilitude (more content, less error), not because it is more probable. This avoids induction by changing the metric of preference.",
+      "counterconditions": [
+        "If verisimilitude cannot be assessed without inductive assumptions about the future, the distinction fails.",
+        "If 'potential verisimilitude' is just 'probability' renamed, the smuggling persists.",
+        "If Popper himself abandoned verisimilitude due to similar criticisms, the defense is historically weak."
+      ],
+      "typicality": 0.88,
+      "discharges": [
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "The tension is resolved by shifting the ground from probability to verisimilitude. Action is based on truth-content potential, not likelihood."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The methodological rule is defended as a rule for maximizing truth-content, not probability. It is non-inductive because it relies on the logical measure of content."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "Maintains the logical distinction. Preference is a judgment of content, not a psychological state of confidence."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "revised", "note": "Clarified that 'practical action' seeks truth (verisimilitude), not safety (probability). We build bridges with the theory that says more about the world, even if it's riskier, because it's closer to the truth."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Action is aligned with the pursuit of truth. Using the theory with higher verisimilitude is the rational way to interact with reality."},
+        {"handle": "[SRC_015] against SRC_001", "kind": "rebutted", "note": "Explicitly embraces verisimilitude but denies it smuggles induction. It is a comparative logical measure, not a probabilistic forecast."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "Risk is managed by choosing the theory with the most content (highest verisimilitude), which offers the best chance of contacting reality, even if falsification looms."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Defends verisimilitude as the correct non-inductive basis. The criticism assumes verisimilitude implies probability, which this candidate denies."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_001", "SRC_015"]
+    },
+    {
+      "claim": "The preference is a pragmatic contradiction in Popper's system: he demands we act on the best-tested theory while denying it gives us any reason to expect it to work. The only consistent position is total skepticism, rendering science impossible as a guide to action.",
+      "mechanism": "Argues that Popper's system is internally inconsistent when moved from the abstract logic of science to the concrete realm of action. The 'preference' is a rhetorical patch over a fatal flaw. Accepting this costs us the ability to claim science is rational in practice, reducing it to a game of falsification with no payoff.",
+      "counterconditions": [
+        "If a coherent non-inductive bridge to action is found (see other candidates), this skepticism is premature.",
+        "If 'rationality' is redefined to exclude successful action, the contradiction vanishes but becomes trivial.",
+        "If Popper's 'critical rationalism' allows for provisional acceptance without expectation, the contradiction is resolved."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "The tension is not just unresolved; it is fatal. The target argues that the defense fails because the gap is unbridgeable."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The methodological rule is exposed as contradictory. One cannot 'ought' to prefer X if X gives no reason for preference."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "The category error is on Popper's part, trying to separate logical status from the necessity of action."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "The conflation is inevitable because action requires expectation, which Popper forbids. Thus, the system breaks."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Action cannot be sustained on pure negation. Building a bridge requires positive expectation, which Popper's system denies."},
+        {"handle": "[SRC_015] against SRC_001", "kind": "rebutted", "note": "Verisimilitude fails to save the system because assessing it still requires an inductive leap about the relevance of past tests."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "Action under risk is impossible without induction. Therefore, Popper's system cannot account for it."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Agrees that verisimilitude fails. Concludes that the entire project of non-inductive science is flawed when applied to action."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_006", "SRC_011"]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms not as an inductive inference to truth or probability, but as a methodological rule for maximizing the rate of error elimination (verisimilitude) and ensuring critical rationality; accepting this costs us the comfort of knowing our actions are 'likely' to succeed, replacing it with the sober commitment that we are acting on the theory currently least likely to be known-false among competitors.",
+    "mechanism": "The mechanism distinguishes between 'justification of belief' (which requires induction/probability and is rejected) and 'justification of action-preference' (which relies on the logical asymmetry of falsification). By preferring the theory that has survived the severest tests, the agent selects the hypothesis with the highest content that has not yet been refuted. This does not increase the probability of the theory being true (which remains zero or undefined for universal laws), but it maximizes the potential for future learning and minimizes the risk of acting on a theory already known to be false. The preference is a decision-theoretic move within a falsificationist framework: if one must act, one acts on the conjecture that has best withstood attempts to destroy it, because any other choice would be irrational (ignoring available critical evidence).",
+    "counterconditions": [
+      "If corroboration is shown to implicitly rely on the uniformity of nature (an inductive principle) to project past test survival into future performance.",
+      "If the preference for action cannot be distinguished from a subjective assignment of higher probability, thereby smuggling induction back in via pragmatic backdoors.",
+      "If the cost of 'not knowing likelihood' renders the preference useless for high-stakes decisions where expected utility calculations (requiring probabilities) are mandatory."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The normative bridge is 'critical rationality': it is irrational to ignore negative evidence (falsifications) when choosing between theories. The preference minimizes the risk of acting on a *known* falsehood, which is a deductive constraint, not a probabilistic optimization."
+      },
+      {
+        "handle": "0e3388d0b26b9656cd5202a6029fd622b946c2e80cd1735c8124f29d5a06117a",
+        "kind": "rebutted",
+        "note": "Popper does not claim surviving tests makes a theory more reliable in a probabilistic sense; he claims it makes it the 'best bet' in terms of information content and resistance to error. Reliability here is defined negatively (not yet failed) rather than positively (likely to hold)."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "revised",
+        "note": "Revised to explicitly address 'acting on' by framing the preference as a duty to use the most severely tested instrument available, analogous to using a bridge that has held heavy loads over one that hasn't been tested, without claiming the untested bridge will definitely collapse."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "Agrees that it is not increased subjective confidence; the rebuttal clarifies that the preference is objective based on the logical history of tests, not a psychological state of confidence."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "rebutted",
+        "note": "The cost of 'radical instrumentalism' is accepted: we do not know the theory is true, only that it is the best available tool. This is not a failure of the defense but the core Popperian insight."
+      },
+      {
+        "handle": "31fcf803cc4730175c70f64fdd5a0c1f1980b0e0ac5f6e9007f9cbe8826f4837",
+        "kind": "rebutted",
+        "note": "Rational action is redefined as 'acting in accordance with the results of critical discussion.' The cost is the loss of certainty, but the gain is adherence to reason without falling into the trap of induction."
+      },
+      {
+        "handle": "3242ff8180a68616d13678e7eee9deda5089f5e62375a48ac7ae4517ccaf5f78",
+        "kind": "rebutted",
+        "note": "Practical utility is derived from the fact that unfalsified theories are the only ones left standing as candidates for truth; maximizing falsifiability potential ensures we are not clinging to dogmas that hinder progress."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The preference is not arbitrary; it is mandated by the logic of the situation. To prefer a falsified theory or an untested one over a well-corroborated one is to act irrationally against available critical evidence."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

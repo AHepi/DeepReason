@@ -1,0 +1,322 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories in action is defensible on Popper's terms as a methodological rule of 'risk minimization' rather than an inductive inference of truth probability. By choosing the theory that has withstood the severest tests, the agent selects the one with the highest known error-detection capacity, not the highest likelihood of being true. This avoids induction because it relies on the logical asymmetry of falsification (past failure implies future vulnerability) without assuming past success implies future success.",
+      "mechanism": "Logical Asymmetry of Falsification applied to Practical Rationality: The agent treats corroboration as a measure of 'testability survived' rather than 'truth likelihood.' Action is guided by the elimination of known errors; the best-corroborated theory is simply the one where known errors have been most thoroughly eliminated, making it the safest bet for action despite no guarantee of future performance.",
+      "counterconditions": [
+        "If the agent believes the future will resemble the past in terms of physical laws, they are smuggling in induction.",
+        "If the preference is based on a feeling of 'confidence' rather than a strategic choice of the least-refuted option.",
+        "If the agent claims the theory is 'probably true' rather than 'currently the best available for critical scrutiny.'"
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "The mechanism addresses action by reframing 'preference' not as a prediction of success but as a strategic selection of the option with the highest demonstrated resistance to falsification. Building a bridge on this basis is not assuming it won't collapse, but choosing the design where collapse mechanisms have been most rigorously tested and failed to manifest."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The tension is resolved by distinguishing between 'radical instrumentalism' (which might reject all theory) and 'critical rationalism' (which accepts the best-tested theory as the only rational basis for action). The cost is accepting that action is always risky, but some risks are logically more manageable than others."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The preference is not arbitrary; it is dictated by the logical imperative to minimize known error. Popper's rule is non-inductive because it prescribes acting on the theory that has survived the most severe attempts to destroy it, which is a factual status, not a probabilistic forecast."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "This candidate strictly separates the logical status (corroboration report) from psychological confidence. The 'preference' is a cold calculation of which theory has the fewest known fatal flaws, not a warm feeling of safety."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Selecting for action and selecting for testing converge here: both involve choosing the theory that offers the best platform for further critical engagement. Acting on a refuted theory is irrational because it ignores known errors; acting on a corroborated one is rational because it acknowledges the current state of critical debate."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Action is redefined as 'committing to a course of events while remaining open to critique.' Choosing the best-corroborated theory for building a bridge is committing to the design that has best survived structural criticism, not claiming it is immune to future failure."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "Verisimilitude is not used as a proxy for probability. Instead, the preference is based on the logical fact that a theory surviving severe tests has more content that has not yet been falsified. This is a statement about the current logical landscape, not an inductive leap about the future."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Action under risk is accounted for by acknowledging that all action is conjectural. The preference for the better-corroborated theory is the only non-arbitrary way to navigate this risk without invoking induction, as it relies solely on the history of attempted falsifications."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction, rendering Popper's position inconsistent when applied to practical action. While Popper denies that corroboration increases probability, the very act of preferring one theory over another for decision-making implicitly assumes that past performance is a reliable guide to future utility, which is the definition of inductive reasoning he sought to eliminate.",
+      "mechanism": "The Pragmatic Contradiction of Critical Rationalism: The gap between 'logical corroboration' (a historical report) and 'practical preference' (a future-oriented choice) can only be bridged by an implicit inductive principle (the uniformity of nature or the reliability of past tests). Without this hidden premise, the preference is logically groundless.",
+      "counterconditions": [
+        "If Popper can define a non-inductive principle of rational choice that links past survival to future utility.",
+        "If 'preference' is shown to be purely aesthetic or arbitrary rather than truth-tracking.",
+        "If the agent acts randomly or chooses the least-corroborated theory without self-defeat."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "revised",
+          "note": "Revised to explicitly state that the failure to address the 'acting on' dilemma stems from the unavoidable inductive leap required to move from historical data to future action. The mechanism now highlights that any non-random preference implies an inductive assumption."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The defense fails because dismissing 'radical instrumentalism' leaves only two options: induction or arbitrariness. Popper rejects arbitrariness, so he must accept induction, contradicting his core thesis."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The claim that the preference is non-inductive is challenged by showing that 'withstanding severer tests' is only relevant for future action if one assumes tests are predictive, which is an inductive assumption."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Even if distinguished from psychological confidence, the *logical* justification for preferring theory A over B for action requires the premise that A's past success makes it a better guide for the future, which is inductive."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Conflating selection for testing and action is the error. Testing seeks falsification (negative), while action seeks success (positive). Preferring a theory for positive outcomes based on negative history requires induction."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Redefining action as 'critique' evades the real-world stakes. When building a bridge, the goal is stability, not critique. Choosing the stable design based on past stability is inductive."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "Using verisimilitude as a guide for action assumes that theories closer to the truth (based on past tests) will perform better in the future, which is an inductive inference about the relationship between truth-likeness and practical success."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "The dilemma stands: you cannot account for rational action under risk without assuming the future resembles the past. Popper's attempt to do so fails, leaving his system unable to justify practical preference without contradiction."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The resolution lies in recognizing that Popper's 'preference' is not epistemic (about truth) but evolutionary (about survival). Scientists prefer better-corroborated theories because such preferences have historically led to the survival of the scientific community, not because the theories are likely true. This shifts the justification from individual rationality to group selection, bypassing the need for induction at the level of the individual agent.",
+      "mechanism": "Evolutionary Epistemology of Scientific Practice: Preference is a behavioral trait selected for its survival value. The 'defensibility' is retrospective and biological/sociological, not logical or probabilistic. The agent acts on the best-corroborated theory because that is the behavior pattern that has allowed science to persist, not because of a reasoned belief in the theory's future accuracy.",
+      "counterconditions": [
+        "If the evolutionary explanation cannot account for individual rational deliberation.",
+        "If the survival of the community is shown to depend on inductive practices anyway.",
+        "If Popper explicitly rejected evolutionary explanations for methodological rules."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "The dilemma of 'acting on' is resolved by removing the requirement for logical justification at the individual level. The scientist acts on the best-corroborated theory because they are evolved/trained to do so, and this behavior works."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The tension regarding 'preference for action' is dissolved; the preference is a habit of survival, not a philosophical stance on truth. The cost of 'radical instrumentalism' is avoided because the habit is grounded in real-world success."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The rule is not arbitrary; it is selected by evolution. It is non-inductive in the logical sense because it doesn't claim the future *will* resemble the past, only that organisms acting *as if* it does have survived."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "This avoids the category error by framing the preference as a biological/sociological phenomenon, not a logical deduction or a psychological feeling."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Selection for testing and action are unified as survival behaviors. Both are expressions of the same evolutionary adaptation to seek robustness."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Action is not redefined; rather, the motivation for action is re-interpreted as an evolutionary imperative rather than a logical conclusion."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "Verisimilitude is irrelevant here. The mechanism relies on survival fitness, not truth-likeness, thus avoiding the inductive trap of linking past survival to future truth."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Action under risk is explained as an inherent part of the evolutionary process. The preference for the better-corroborated theory is the strategy that has minimized extinction risks so far."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "Popper's preference is defensible only if we accept a 'principle of transference' that is distinct from induction: the principle that a theory which has explained more and survived more is logically 'richer' and thus provides a better target for future problem-solving, regardless of its truth probability. The preference is for the theory with the greatest 'problem-solving potential,' not the highest chance of being right.",
+      "mechanism": "Problem-Shift Potential: Corroboration indicates a theory's capacity to generate new problems and solutions. The preference is for the theory that opens the most fruitful research program. Action is taken on this theory because it offers the best framework for identifying and solving subsequent errors, maximizing knowledge growth even if the theory itself is eventually false.",
+      "counterconditions": [
+        "If 'problem-solving potential' is shown to correlate with truth probability via induction.",
+        "If the richest theory is not always the best for immediate practical action (e.g., simple heuristics).",
+        "If Popper explicitly tied preference to truth approximation rather than problem-solving."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Addresses the 'acting on' dilemma by framing action as participation in a problem-solving process. Building a bridge on a rich theory allows for better diagnosis if it fails, compared to a simpler, less-tested one."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The tension is resolved by valuing the 'fitness' of the theory for generating future knowledge over its immediate instrumental reliability. The cost is accepting that action might fail, but the failure will be more informative."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The preference is non-arbitrary because it follows the methodological rule of maximizing content and testability. It is not inductive because it doesn't predict success, only informational yield."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Avoids the category error by focusing on the logical property of 'content' and 'testability' rather than psychological confidence. The preference is for the theory that says more."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Distinguishes selection for action (as problem-solving engagement) from selection for blind reliance. The scientist acts on the theory to learn from the action."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Action is indeed 'committing to a line of critique.' Choosing the best-corroborated theory commits the agent to the most sophisticated line of critique available."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "Does not rely on verisimilitude as a truth-proxy. It relies on 'content' as a measure of how much the theory risks, which is a logical, not inductive, property."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Accounts for action under risk by embracing the risk as the source of information. The preference is for the riskiest successful theory, not the safest probable one."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict terms and represents a pragmatic inconsistency he never fully resolved. The only coherent Popperian stance for action is 'pan-critical rationalism' extended to practice: act on any theory while explicitly acknowledging its likely falsity, but systematically prefer the one that allows for the quickest and cheapest falsification in the practical domain. This reduces 'preference' to a heuristic for error detection speed.",
+      "mechanism": "Error-Detection Velocity Heuristic: Preference is determined solely by how quickly a theory can be proven wrong in the specific context of action. The 'better-corroborated' theory is preferred only insofar as its corroboration implies it has been subjected to conditions similar to the current action, meaning any new error will be detected rapidly. This is a tactical choice for minimizing the duration of error, not a belief in correctness.",
+      "counterconditions": [
+        "If speed of falsification is not the primary concern in practical action (e.g., safety is).",
+        "If corroboration does not correlate with similarity to current conditions.",
+        "If this heuristic leads to choosing obviously inferior theories that are easy to falsify."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "revised",
+          "note": "Revised to focus on 'error detection speed' as the sole criterion for action. This directly addresses the 'acting on' dilemma by making the goal of action the rapid identification of failure, not the achievement of success."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The tension is resolved by accepting the 'radical instrumentalism' of treating theories as disposable tools for error finding. The cost is high, but it is the only consistent Popperian path."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The preference is not arbitrary; it is optimized for the rate of learning. It is non-inductive because it makes no claim about the theory's validity beyond the next test."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Strictly logical: prefers the theory that maximizes the flux of critical feedback. No psychological 'safety' is implied."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Merges selection for testing and action completely. Action *is* the test. The preference is for the test that yields results fastest."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Fully embraces the redefinition of action as 'committing to a line of critique.' The bridge is built to see if it falls, and we choose the design that tells us soonest if it will."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "Avoids verisimilitude entirely. The metric is temporal (speed of falsification), not ontological (closeness to truth)."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Resolves the dilemma by accepting that induction is impossible, so the only rational strategy is to maximize the rate of error correction. This is a consistent, albeit harsh, application of Popper's logic."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is defensible if we interpret 'corroboration' as a measure of 'informational density' rather than survival. A better-corroborated theory contains more empirical content that has not been refuted. Preferring it for action is preferring the hypothesis that makes the most precise predictions, thereby offering the best opportunity for the universe to correct us. The 'cost' is accepting that we act on the most vulnerable theories, not the safest ones.",
+      "mechanism": "Precision-Vulnerability Trade-off: High corroboration implies high precision and high vulnerability. Scientists prefer these theories for action because they constrain the future most tightly. If the action succeeds, it is a surprising victory against high odds; if it fails, the lesson is profound. This preference is non-inductive because it values the *potential for surprise* (falsification) over the *expectation of success*.",
+      "counterconditions": [
+        "If practical action requires safety/reliability over precision/vulnerability.",
+        "If 'informational density' is shown to be a proxy for probability.",
+        "If Popper advocated for safe, low-content theories in practical matters."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Addresses 'acting on' by arguing that we act on the most precise theory to maximize the clarity of the feedback loop. Building a bridge on a high-precision theory ensures that if it fails, we know exactly why."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The tension is resolved by flipping the script: we don't prefer the theory because it's 'safe,' but because it's 'risky' in a controlled way. The cost of radical instrumentalism is paid by embracing the risk."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The preference is non-arbitrary because it follows the rule of maximizing empirical content. It is non-inductive because it anticipates failure, not success."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Distinguishes logical 'precision' from psychological 'confidence.' We prefer the precise theory precisely because it leaves no room for vague excuses if it fails."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Selection for action is selection for the sharpest knife. We use the best-corroborated theory because it cuts deepest into reality, revealing errors most clearly."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Action is 'committing to a line of critique' in the strongest sense: committing to a theory that will either stand majestically or shatter completely."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "Does not use verisimilitude. Uses 'empirical content' as the metric. High content means high risk, which is the opposite of inductive safety-seeking."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Accounts for action under risk by asserting that the only rational way to handle risk is to increase the stakes (precision) to gain more information. Induction seeks to lower stakes; Popper seeks to raise them intelligently."
+        }
+      ],
+      "optional_refs": []
+    }
+  ]
+}

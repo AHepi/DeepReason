@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory in practical action is defensible without smuggling in induction, provided one accepts that 'rational action' means 'acting on the theory that has best withstood attempts to falsify it,' rather than 'acting on the theory most likely to be true.' The defense survives by redefining the goal of action from 'success via truth-probability' to 'error-avoidance via severe testing,' but this costs the agent any guarantee of positive success or safety, reducing rationality to a procedural commitment to the least-refuted option.",
+    "mechanism": "The mechanism distinguishes between the logical status of corroboration (non-probabilistic report of past tests) and the methodological rule for action (prefer the theory that has survived the severest tests). It argues that preferring the better-corroborated theory is not an inductive inference that it will hold in the future, but a critical choice to rely on the hypothesis that has currently resisted elimination. This treats action as an extension of the critical method: just as we tentatively accept a theory for further testing because it is the best current target for criticism, we tentatively rely on it for action because it is the best current candidate for reliability, knowing full well it may fail tomorrow.",
+    "counterconditions": [
+      "If the agent requires a probability greater than 0.5 to act, Popper's framework cannot provide it, rendering the preference indefensible for high-stakes decisions like bridge-building.",
+      "If 'preference' inherently implies an expectation of future performance based on past results, then Popper's distinction collapses into hidden induction.",
+      "If the cost of error is catastrophic (e.g., death), the lack of a probabilistic safety margin makes the Popperian preference irrational compared to a Bayesian approach."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The normative bridge is not 'minimizing risk of error' in a probabilistic sense, but 'maximizing critical scrutiny.' The bridge is the methodological rule: since we cannot know truth, the only rational basis for preference is the extent to which a theory has resisted our best efforts to refute it. This is a normative commitment to critical rationalism, not a calculation of risk."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address 'acting on' theories for practical success. The revision clarifies that 'information growth' is not the sole goal; rather, the goal in action is to utilize the 'best tested' instrument available, acknowledging that 'best tested' does not mean 'most probable to succeed' but 'least likely to have been shown false so far.'"
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "The criticism correctly identifies Popper's stance but fails to see that the candidate's argument relies precisely on this distinction. The candidate does not conflate preference with confidence; it argues that preference is a *decision* to use the best-tested tool, devoid of increased subjective confidence in its truth. The defense holds because it rejects the premise that preference requires confidence."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "departure_declared",
+        "note": "Departing from the expectation that a rational preference must offer a 'cost-free' assurance of success. The candidate explicitly accepts the cost: radical instrumental uncertainty. The defense survives *only* if one accepts that rationality is compatible with acting without assurance of success."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The candidate does not claim the preference is arbitrary. It claims the preference is grounded in the *history of criticism*, which is non-arbitrary. The methodological rule 'prefer the better-corroborated' is a normative directive derived from the logic of falsification, not an arbitrary whim. The criticism mistakes 'non-probabilistic' for 'arbitrary'."
+      },
+      {
+        "handle": "3b0d40d883d0e30306823e981ef82120189315ec71fd5977614e2001ece75ca4",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly confront the 'bridge-building' scenario. The revision states that for Popper, building a bridge on the best-corroborated theory is rational not because the bridge won't collapse, but because using a less-corroborated theory would be *more* critically irresponsible. The definition of 'practical success' is shifted from 'guaranteed outcome' to 'responsibly chosen attempt'."
+      },
+      {
+        "handle": "4951b3c5926010b4aad50c8aa8956fa9603a00d8a967623ab2680133a5da1f53",
+        "kind": "rebutted",
+        "note": "The candidate strictly maintains the category distinction. It argues that the 'feeling safer' is a psychological side-effect, not the logical justification. The justification is purely methodological: we have no better option. The criticism assumes that a rational agent must feel confident, whereas Popper argues a rational agent acts despite lacking confidence."
+      },
+      {
+        "handle": "4e6f07bb67dad839cd9e5f769442347fe76f9ad934ef5c1fa948f1e1de4d44be",
+        "kind": "rebutted",
+        "note": "The candidate addresses this by arguing that 'selecting for testing' and 'preferring for action' are the same critical stance applied to different domains. In both cases, we choose the theory that has best survived criticism. The difference is only in the stakes, not in the logic of selection. To demand a different logic for action is to demand induction."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

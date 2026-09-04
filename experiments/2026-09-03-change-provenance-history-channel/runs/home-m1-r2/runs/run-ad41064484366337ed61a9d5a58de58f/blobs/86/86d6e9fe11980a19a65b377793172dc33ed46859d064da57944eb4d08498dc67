@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to answer the specific prompt requirement to 'Make the strongest case for each answer' before concluding. The prompt explicitly demands a dialectical structure presenting both the defense (preference is defensible) and the critique (preference smuggles in induction) with equal strength. The target provides only the defensive argument and its associated costs, completely omitting the strongest case for the opposing view that the preference is indefensible and constitutes cryptic induction. By failing to generate the required counter-argument, the target does not fulfill the problem's instruction to evaluate which side survives based on a full comparison.",
+      "counterexample": null,
+      "premise": "The problem statement requires: 'Make the strongest case for each answer, then say which one survives...'",
+      "premise_evidence": null,
+      "successor_question": "Can you provide the strongest possible argument that preferring better-corroborated theories *does* smuggle in induction, as required by the prompt's instruction to argue both sides?"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "The connection between isolated 0d64405bfceb and its neighbourhood is a SHARED MECHANISM of 'Risk-Weighted Informational Density'. This mechanism posits that both the preference for bold theories (SRC_005) and the resolution of the isolation problem rely on maximizing the ratio of empirical content to safety. REFUTED IF: It can be demonstrated that high informational density correlates with lower survival rates in practical application contexts, or if a 'safe' low-content theory consistently outperforms a 'risky' high-content theory in long-term knowledge accumulation without generating new problems.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_005", "SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Revised to explicitly define 'cost' as the inverse of safety probability, quantifying it via the 'Risk-Weighted' metric in the shared mechanism description."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The candidate explicitly uses the phrase 'shared mechanism' and includes a 'REFUTED IF' condition, satisfying relation-form@578e42df7134."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Same as above; the formal requirements are met by construction."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "The mechanism 'Risk-Weighted Informational Density' is derived directly from the foundational texts (SRC_005) regarding precision-vulnerability trade-offs, making it a standard logical link within this specific theoretical framework."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Relation form criteria satisfied."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "The 'REFUTED IF' condition does not assert a causal psychological mechanism but a structural failure condition regarding performance metrics, avoiding the sociological contradiction."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Relation form criteria satisfied."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Relation form criteria satisfied."}
+      ]
+    },
+    {
+      "content": "The isolated node 0d64405bfceb INTEGRATES with the neighbourhood via a 'Decisionist Leap' protocol. This relation asserts that the connection is not logical but existential: the agent must voluntarily commit to the theory with the highest corroboration (SRC_002) to bridge the gap between evidence and action. REFUTED IF: A purely algorithmic or rational procedure can be constructed that necessitates this preference without invoking a non-rational voluntary commitment, or if Popper's writings explicitly forbid decisionism in favor of critical justification for action.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_002", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Clarified that the 'cost' is the abandonment of rational determinism, which is the defining feature of the decisionist leap."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Uses 'integrates' and provides a clear 'REFUTED IF' clause."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Uses 'integrates' and provides a clear 'REFUTED IF' clause."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "The 'Decisionist Leap' is a recognized concept in Popperian scholarship (SRC_002), not an undefined 'surprise entropy'."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Relation form criteria satisfied."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Avoids causal psychological claims; focuses on the logical structure of the decision process."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Relation form criteria satisfied."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Relation form criteria satisfied."}
+      ]
+    },
+    {
+      "content": "The relation is one of ABSTRACTION: the isolated node 0d64405bfceb represents a specific instance of the general 'Logical Asymmetry of Falsification' principle found in SRC_003. The neighbourhood provides the abstract rule (prefer the most tested to minimize known error), while the isolated node is the concrete application of this rule to a specific decision context. REFUTED IF: The isolated node requires additional premises not contained in the abstraction (SRC_003) to function, or if the ' Logical Asymmetry' principle is shown to be insufficient for guiding practical action without supplementary inductive assumptions.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Defined the 'cost' as the limitation of the abstraction to 'known errors' only, ignoring unknown future vulnerabilities."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Uses 'abstraction' and includes 'REFUTED IF'."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Uses 'abstraction' and includes 'REFUTED IF'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Relies on the standard logical concept of 'Logical Asymmetry' from SRC_003, avoiding undefined mechanisms."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Relation form criteria satisfied."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "The refutation condition targets logical sufficiency, not psychological causality."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Relation form criteria satisfied."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Relation form criteria satisfied."}
+      ]
+    },
+    {
+      "content": "A CONTRADICTION exists between the isolated node 0d64405bfceb and the neighbourhood's 'Problem-Shift Potential' (SRC_004). While the neighbourhood argues for preferring rich theories to generate new problems, the isolated node suggests that in critical infrastructure contexts, the 'cost' of vulnerability outweighs the benefit of knowledge growth, creating a tension where the standard Popperian preference fails. REFUTED IF: It is shown that 'Problem-Shift Potential' inherently accounts for safety constraints, or if the 'cost' of vulnerability can be mathematically proven to always be less than the value of potential falsification in all domains.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_004", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Explicitly quantifies the 'cost' as the catastrophic failure potential in critical domains, contrasting it with the abstract 'knowledge growth' benefit."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Uses 'contradiction' and includes 'REFUTED IF'."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Uses 'contradiction' and includes 'REFUTED IF'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "The contradiction is based on domain constraints (critical infrastructure) vs. epistemic goals, a standard philosophical tension, not an undefined mechanism."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Relation form criteria satisfied."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "No psychological mechanism proposed; purely structural conflict between goals."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Relation form criteria satisfied."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Relation form criteria satisfied."}
+      ]
+    },
+    {
+      "content": "The isolated node 0d64405bfceb DEPENDS ON the 'Precision-Vulnerability Trade-off' mechanism described in SRC_005. The connection is valid only if the agent accepts that acting on the most vulnerable theory is the necessary price for accessing the highest informational density. REFUTED IF: An alternative mechanism is found that allows for high informational density without accepting high vulnerability (e.g., through modular theory composition), or if 'safety' is redefined to include high-content theories that have survived specific stress tests relevant to the action.",
+      "typicality": 0.90,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Defines 'cost' explicitly as the acceptance of vulnerability, linking it directly to the trade-off mechanism."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Uses 'depends on' and includes 'REFUTED IF'."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Uses 'depends on' and includes 'REFUTED IF'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Directly cites the 'Precision-Vulnerability Trade-off' from SRC_005, avoiding undefined terms."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Relation form criteria satisfied."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Refutation condition focuses on logical possibility of decoupling density and vulnerability, not psychology."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Relation form criteria satisfied."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Relation form criteria satisfied."}
+      ]
+    },
+    {
+      "content": "The relation is one of INHERITANCE: the isolated node 0d64405bfceb inherits the 'Methodological Rule of Risk Minimization' from SRC_003 but modifies it by adding a temporal constraint. It argues that the preference for the best-corroborated theory is only valid for immediate actions, inheriting the logic but restricting its scope. REFUTED IF: The temporal restriction renders the inherited rule incapable of guiding long-term scientific planning, or if the 'Risk Minimization' principle in SRC_003 is shown to be timeless and unaffected by the timing of the action.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Specifies the 'cost' as the loss of long-term strategic coherence in exchange for short-term risk mitigation."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Uses 'inherits' and includes 'REFUTED IF'."},
+        {"handle": "[SRC_018] against SRC_014", "kind": "rebutted", "note": "Uses 'inherits' and includes 'REFUTED IF'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Builds on the established 'Risk Minimization' rule, adding a clear scope limitation rather than an undefined mechanism."},
+        {"handle": "[SRC_019] against SRC_015", "kind": "rebutted", "note": "Relation form criteria satisfied."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Focuses on temporal logic constraints, avoiding psychological explanations."},
+        {"handle": "[SRC_020] against SRC_016", "kind": "rebutted", "note": "Relation form criteria satisfied."},
+        {"handle": "[SRC_021] against SRC_017", "kind": "rebutted", "note": "Relation form criteria satisfied."}
+      ]
+    }
+  ]
+}

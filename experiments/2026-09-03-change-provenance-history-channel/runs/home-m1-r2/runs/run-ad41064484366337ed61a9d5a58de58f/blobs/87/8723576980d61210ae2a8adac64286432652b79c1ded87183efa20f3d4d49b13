@@ -1,0 +1,9 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim of 'internal inconsistency' relies on a conflation of logical justification with pragmatic decision-making that Popper explicitly distinguishes. Popper does not 'smuggle in' induction because his preference for the better-corroborated theory is not based on the inductive premise that 'the future will resemble the past,' but on the non-inductive methodological rule that the most severely tested theory is currently the best candidate for criticism and potential falsification. The target fails to address Popper's specific argument that acting on the best-tested theory is rational not because it is likely true (probability), but because it has withstood the strongest attempts to show it is false, making it the most informative basis for action until it is refuted. Therefore, the alleged 'crypto-induction' is actually a consistent application of critical rationalism where 'preference' denotes a status of survivability rather than an expectation of future success derived from past frequency."
+    }
+  ]
+}

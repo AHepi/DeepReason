@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'selecting a theory for further testing' with 'preferring a theory for practical action.' The problem explicitly notes that scientists (and Popper) prefer better-corroborated theories when 'choosing which theory to act on.' Acting on a theory (e.g., building a bridge based on it) inherently relies on the expectation of its future reliability/success, not merely its utility as a target for falsification. By re-framing preference solely as a methodological rule for selecting falsification targets, the target ignores the 'action' component of the prompt, thereby failing to address whether the preference for action smuggles in induction.",
+      "counterexample": null,
+      "premise": "The problem distinguishes between surviving tests and 'choosing which theory to act on,' implying that action requires an expectation of future success.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration offers no reason to believe a theory will succeed in future applications, on what non-inductive basis does Popper justify acting on the better-corroborated theory rather than the less-corroborated one?"
+    }
+  ]
+}

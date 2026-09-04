@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms not as an inductive inference of truth, but as a methodological rule for maximizing the potential for future error detection (verisimilitude), accepting the cost that this preference offers no guarantee of practical success or safety in immediate application.",
+    "mechanism": "The mechanism distinguishes between 'rational belief' (which Popper rejects as probabilistic) and 'rational action-guidance' defined as choosing the theory that has survived the most severe tests because it contains the most content and thus offers the best opportunity for future falsification. By preferring the theory with higher verisimilitude (closeness to truth) rather than probability, scientists adhere to the goal of science (truth) without invoking induction. The preference is a bet on the theory's structural robustness, not its likelihood.",
+    "counterconditions": [
+      "If corroboration implies any increase in the subjective probability of the theory being true, the defense collapses into induction.",
+      "If the preference cannot distinguish between a theory that is useful for action (e.g., bridge building) and one that is merely informative, it fails the pragmatic test.",
+      "If Popper's own advice to act on the best-tested theory implicitly relies on the assumption that past performance predicts future reliability, the circle is vicious."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates 'minimizing risk of error' (choosing the theory least likely to be falsified next) from 'rational preference' based on probability. The normative bridge is the meta-scientific commitment to truth-seeking via falsification, not risk-aversion in a probabilistic sense."
+      },
+      {
+        "handle": "0e3388d0b26b9656cd5202a6029fd622b946c2e80cd1735c8124f29d5a06117a",
+        "kind": "rebutted",
+        "note": "Rebutted by clarifying that 'reliable for future action' in Popper's sense means 'most open to further testing,' not 'most likely to succeed.' The candidate argues the preference is for the theory that allows the fastest progress, even if it fails tomorrow."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma: the candidate now admits that for high-stakes immediate action (bridges), Popper's view may require a non-rational leap or a pragmatic convention outside strict logic, which is the 'cost' accepted."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "The candidate aligns with this criticism by confirming that preference is NOT increased subjective confidence, but a strategic choice for information growth."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "rebutted",
+        "note": "The cost of 'radical instrumentalism' is explicitly accepted in the claim: the preference offers no guarantee of practical success, only the best chance for learning."
+      },
+      {
+        "handle": "31fcf803cc4730175c70f64fdd5a0c1f1980b0e0ac5f6e9007f9cbe8826f4837",
+        "kind": "rebutted",
+        "note": "The candidate defines rational action strictly as error-avoidance in the long run (scientific progress), acknowledging this sidesteps immediate justification costs."
+      },
+      {
+        "handle": "3242ff8180a68616d13678e7eee9deda5089f5e62375a48ac7ae4517ccaf5f78",
+        "kind": "rebutted",
+        "note": "Clarified that 'practical utility' is not the metric; 'falsifiability potential' is. The conflation is avoided by rejecting utility as the primary scientific goal."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The candidate agrees the preference is not arbitrary but grounded in the methodological rule of severity, which is non-inductive."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_004"],
+      "shared_structure": [
+        "Selection based on survival of stress tests rather than prediction of future success.",
+        "Distinction between operational reliability and probabilistic truth.",
+        "Preference driven by information density rather than safety."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of truth, whereas Popperian science does.",
+        "Natural selection acts on reproduction, not on the content of genetic information in the same way scientists select theories."
+      ],
+      "transfer_claims": [
+        "Just as we trust a bridge material that survived extreme stress tests not because it is 'probable' to hold, but because it has demonstrated capacity to withstand force, we trust corroborated theories for their tested limits.",
+        "The preference is a heuristic for navigating uncertainty, not a calculation of odds."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that surviving past tests logically entails a higher probability of surviving future tests.",
+        "If the distinction between 'content' and 'probability' collapses under formal analysis."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

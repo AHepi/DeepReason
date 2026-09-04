@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the central tension in Popper's philosophy but fails to execute the full prompt requirement of making the 'strongest case for each answer' before concluding. The prompt explicitly demands a dialectical presentation: first, the argument that the preference is defensible on Popper's terms (e.g., via verisimilitude or pragmatic rationality without induction), and second, the argument that it smuggles in induction. The target jumps immediately to the conclusion that it is inconsistent ('inevitably smuggles in induction'), thereby neglecting the charitable reconstruction of Popper's potential defense which the prompt requires as a prerequisite for the final evaluation. Consequently, it does not fulfill the structural constraints of the problem context.",
+      "counterexample": null,
+      "premise": "The prompt requires making the strongest case for BOTH answers (defensible vs. smuggling induction) before stating which survives.",
+      "premise_evidence": null,
+      "successor_question": "How would Popper defend the preference for better-corroborated theories using only deductive logic and the concept of verisimilitude, without relying on any inductive principle?"
+    }
+  ]
+}

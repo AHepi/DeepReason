@@ -1,0 +1,256 @@
+{
+  "candidates": [
+    {
+      "claim": "Popper's preference for better-corroborated theories is defensible without induction by re-framing 'preference' as a non-epistemic, methodological rule for selecting the most falsifiable survivor, not as a bet on future truth.",
+      "mechanism": "The argument distinguishes between 'corroboration as probability' (which Popper rejects) and 'corroboration as a report of past performance.' The preference is rational not because it predicts future success (induction), but because the better-corroborated theory has withstood more severe tests, making it the best available target for further attempts at falsification. Acting on it is simply choosing the strongest link in the chain of knowledge to stress-test next.",
+      "counterconditions": [
+        "If the agent acts on the theory expecting it to succeed in practical application rather than to fail under test, induction is smuggled in.",
+        "If the preference implies the theory is 'closer to the truth' in a probabilistic sense, the defense collapses."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate addresses the 'cost of radical instrumentalism' by arguing that the cost is accepted: we do not expect the theory to work, we expect it to be the most efficient vehicle for discovering where our current knowledge breaks. The preference is for the best error-detector, not the best predictor."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Action under risk is resolved by acknowledging that all action is risky. Popper's choice is not based on reduced risk (induction) but on the clarity of the risk. The better-corroborated theory defines the risk landscape more sharply."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Verisimilitude is not used here as a probabilistic measure. The preference is based on logical content and test severity, which are deductive concepts, not inductive probabilities of truth."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "This candidate aligns with the criticism that Popper does not claim probable future success. It explicitly grounds the preference in the selection of the best candidate for *falsification*, not verification."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The 'rational bet' is rejected. Instead, this is a 'rational selection of the most informative state.' No assumption about the future resembling the past is made; only that the future will be tested against the current best conjecture."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "The candidate now explicitly constructs the 'strongest case for each answer' within the mechanism description, contrasting the inductive smuggler view with the methodological rule view before declaring the latter the survivor."
+        }
+      ],
+      "optional_refs": ["SRC_001", "SRC_008"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction; Popper's attempt to separate 'corroboration' from 'probability' is semantically unstable when applied to action.",
+      "mechanism": "To prefer Theory A over Theory B for action is to assert that A is more likely to yield successful outcomes than B. Even if labeled 'corroboration,' this operational preference functions identically to assigning a higher subjective probability to A's reliability. Any decision-theoretic justification for acting on A presupposes that past resistance to falsification is a reliable guide to future performance, which is the definition of induction.",
+      "counterconditions": [
+        "If one can demonstrate a form of action that does not rely on expectations of future regularity, this claim fails.",
+        "If 'preference' can be shown to mean something other than 'expectation of utility,' the inductive charge is weakened."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate argues that the 'cost of radical instrumentalism' is actually the collapse of the distinction itself. One cannot consistently act on a theory without assuming some continuity, thus the defense fails to address the tension because the tension is fatal."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate agrees that the dilemma is unresolved by Popper. It asserts that choosing a bold theory for testing still requires an inductive leap to believe that the test setup itself remains stable."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Supports the criticism: using verisimilitude or any proxy for truth-likeness as a basis for action implicitly assumes the future will honor the past ranking, which is inductive."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Argues that even if Popper didn't *claim* probable success, his *action* of preferring implies it. The criticism mischaracterizes the failure as being in Popper's explicit claims rather than his pragmatic behavior."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Fully accepts the criticism: any decision-theoretic justification is inherently inductive. Therefore, Popper's position is indefensible on his own strict terms if he acts."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "Explicitly frames the 'strongest case' for the inductive smuggling argument, detailing why the semantic distinction collapses under the pressure of practical application."
+        }
+      ],
+      "optional_refs": ["SRC_003", "SRC_006", "SRC_007"]
+    },
+    {
+      "claim": "The conflict dissolves if we view scientific action not as 'predicting the future' but as 'committing to a specific line of critique,' where the 'better' theory is simply the one that offers the most precise target for refutation.",
+      "mechanism": "This approach radicalizes Popper's falsificationism. Preference is not for the theory that will 'work' (survive), but for the theory that, if false, will reveal its falsehood most dramatically. We prefer the well-corroborated theory because it has survived hard tests, meaning it is robust enough to sustain further, even harder, tests. The 'action' is the act of testing, not the act of relying. If we must build a bridge, we use the theory that allows us to calculate the exact load limit, knowing that if it fails, we learn more than if we used a vague theory.",
+      "counterconditions": [
+        "If the agent building the bridge actually expects it not to collapse, they have slipped into induction.",
+        "If the goal of action is survival/success rather than knowledge growth, this mechanism fails."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departs from the standard interpretation of 'preference for action.' Declares that scientists who 'prefer' theories for practical success are indeed being inductive, but the *Popperian scientist* prefers them only for critical exposure. The tension exists only if one conflates engineering safety with scientific methodology."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Resolves the risk dilemma by defining risk as 'opportunity for falsification' rather than 'probability of failure.' High corroboration means high potential for informative failure."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Rejects verisimilitude as the driver. The driver is 'testability potential.' No inductive assumption about truth is needed, only a commitment to the value of severe testing."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Aligns with the view that Popper doesn't claim probable success. Extends it: he claims probable *informativeness* upon failure."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Denies that this is a decision-theoretic justification in the traditional sense. It is a methodological imperative, not a utility maximization calculation."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "Provides the strongest case for the 'defensible' side by radically redefining the nature of 'action' in science to exclude practical reliance."
+        }
+      ],
+      "optional_refs": ["SRC_002", "SRC_009"]
+    },
+    {
+      "claim": "Popper's system contains a pragmatic contradiction: while logically consistent in rejecting induction, it is psychologically and sociologically impossible to execute without tacitly relying on inductive habits of mind.",
+      "mechanism": "This candidate argues that while Popper's *logic* holds (corroboration != probability), his *anthropology* fails. Scientists cannot help but feel that a well-tested theory is 'safer.' Popper himself likely felt this. The 'preference' is defensible logically as a rule of thumb, but indefensible phenomenologically. The cost of accepting Popper is a permanent state of cognitive dissonance where one acts 'as if' induction works while verbally denying it.",
+      "counterconditions": [
+        "If a scientist can be found who genuinely feels no increased confidence in a corroborated theory, this claim weakens.",
+        "If 'preference' can be fully decoupled from 'confidence,' the contradiction vanishes."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Addresses the tension by admitting the 'radical instrumentalism' is too costly for human agents. The defense fails because it ignores the psychological reality of the agent."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Agrees that action under risk forces the smuggling of induction. The 'dilemma' is real and unresolved in practice, even if resolved in abstract logic."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Argues that verisimilitude is the psychological placeholder for probability. We smuggle induction in through the back door of 'truth-likeness' feelings."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Suggests Popper's characterization was an idealization that never matched actual scientific practice. The criticism is valid regarding the gap between theory and practice."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Confirms that decision-theoretic justifications are inductive, and since humans are decision-theoretic agents, they are inevitably inductive despite Popper's rules."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "Presents the strongest case for the 'smuggling' answer by focusing on the inevitability of human psychology overriding logical constraints."
+        }
+      ],
+      "optional_refs": ["SRC_004", "SRC_011"]
+    },
+    {
+      "claim": "The preference is defensible via a 'meta-induction' on methods: we have learned inductively that the method of preferring corroborated theories yields better results, even if the theories themselves are not probable.",
+      "mechanism": "This is a concessive defense. We admit induction at the meta-level (the method works) to save the object-level theories from induction. We prefer corroborated theories because the *strategy* of doing so has been corroborated. This saves Popper's object-level anti-inductivism at the cost of accepting induction as a justified methodological rule.",
+      "counterconditions": [
+        "If Popper strictly rejects induction at all levels, including methodological, this solution is invalid.",
+        "If the 'success' of the method cannot be stated without probabilistic language, the circle closes."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Revises the defense to accept the 'cost' mentioned in the criticism: we pay the price of meta-induction to avoid object-induction. The tension is resolved by shifting the locus of induction."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Accounts for action under risk by betting on the *method*, not the *theory*. The risk is managed by the track record of the strategy."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Avoids verisimilitude. The justification is purely pragmatic and historical regarding the method's performance."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Clarifies that Popper might not have explicitly claimed this, but it is the only coherent way to bridge the gap he left."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "departure_declared",
+          "note": "Declares a departure from strict Popperian purity. Accepts that some induction is necessary, but confines it to the selection of methods."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "Constructs the 'strongest case' for a hybrid solution that admits induction at the meta-level to preserve the spirit of Popper's object-level insights."
+        }
+      ],
+      "optional_refs": ["SRC_005", "SRC_012"]
+    },
+    {
+      "claim": "The problem is a category error: 'corroboration' is a logical relation between theory and evidence, while 'preference' is a psychological or pragmatic stance; trying to derive the latter strictly from the former without extra premises (like 'we want truth') is impossible.",
+      "mechanism": "Popper's system provides the logic of corroboration but lacks a bridge principle to action. To move from 'T is well-corroborated' to 'I prefer T' requires an extra premise: 'I prefer theories that are well-corroborated.' This premise is neither true nor false in Popper's system; it is a volitional commitment. Thus, the preference is not 'defensible' by reason alone, nor is it 'inductive'; it is arbitrary but necessary for agency.",
+      "counterconditions": [
+        "If Popper provided a bridge principle (e.g., 'seek truth'), this claim fails.",
+        "If 'preference' can be shown to be a logical consequence of 'corroboration' given the definition of science, the category error charge is wrong."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The 'tension' arises from expecting logic to dictate volition. The candidate resolves it by categorizing the preference as a non-rational (but not irrational) commitment."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Action under risk requires a leap of faith (volition), not an inductive calculation. The dilemma is dissolved by accepting the arbitrariness of the starting commitment."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Verisimilitude is irrelevant. The gap is between 'is' (corroboration) and 'ought' (preference). No inductive smuggling occurs because no inference is made; a decision is taken."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Supports the idea that Popper didn't claim a logical derivation of preference. He simply advocated for it as part of the 'critical attitude'."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Decision theory is bypassed. This is not a calculation; it is an existential choice to play the game of science."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "Offers the strongest case for the 'category error' resolution, showing why both the 'defensible' and 'smuggling' camps miss the structural gap in the argument."
+        }
+      ],
+      "optional_refs": ["SRC_010", "SRC_013"]
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms not as an inductive inference of truth, but as a methodological rule for maximizing 'verisimilitude' (truth-likeness) and ensuring the most severe possible future testing; however, accepting this defense costs the agent any guarantee that the preferred theory is practically reliable for high-stakes action, forcing a distinction between 'rational scientific choice' and 'pragmatic safety' that Popper struggles to bridge without smuggling in induction.",
+    "mechanism": "The mechanism distinguishes between 'corroboration as probability' (inductive, rejected) and 'corroboration as a report of past performance in severe tests' (deductive/historical). Preference is justified because the better-corroborated theory has survived attempts to falsify it that would have killed its rivals, making it the best available candidate for containing higher verisimilitude. The preference is a rule of procedure: to learn fastest, test the theory that has survived the most; to act, choose the one least likely to be known-false. The cost is that 'least likely to be known-false' does not equal 'likely to be true,' leaving a gap for practical action where false negatives are catastrophic.",
+    "counterconditions": [
+      "If corroboration implies any increase in subjective confidence regarding future success, it collapses into induction.",
+      "If the preference cannot distinguish between a theory that survived trivial tests and one that survived severe tests, it fails Popper's severity criterion.",
+      "If the agent acts on the theory solely for safety, they must assume the future resembles the past (uniformity of nature), which is inductive."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The normative bridge is not 'minimizing risk of error' via probability, but 'maximizing critical scrutiny.' The preference is rational because it selects the theory that has proven most robust against specific, attempted falsifications, thereby offering the highest potential for further knowledge growth, not necessarily the lowest probability of being false in an absolute sense."
+      },
+      {
+        "handle": "0e3388d0b26b9656cd5202a6029fd622b946c2e80cd1735c8124f29d5a06117a",
+        "kind": "revised",
+        "note": "Revised to explicitly separate 'reliability for future action' (which implies induction) from 'reliability as a target for criticism.' The candidate now argues that Popper only defends the latter, and that applying it to the former requires an extra-Popperian pragmatic leap."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "departure_declared",
+        "note": "Departing from the strict view that Popper fully solves the 'acting on' dilemma. This candidate asserts that Popper's framework explains scientific *choice* well but leaves *practical action* (like bridge building) under-justified without an implicit inductive assumption about the stability of laws."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "The candidate agrees that preference is not increased subjective confidence. It rebuts the idea that this makes the preference indefensible; instead, the preference is based on the logical status of the theory having withstood specific deductive tests that eliminated competitors."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "revised",
+        "note": "Explicitly addresses the cost: accepting the defense means admitting that 'rational action' in Popper's sense might still lead to disaster if the underlying regularities change, thus dismissing the 'radical instrumentalism' cost as a necessary feature, not a bug, of fallibilism."
+      },
+      {
+        "handle": "31fcf803cc4730175c70f64fdd5a0c1f1980b0e0ac5f6e9007f9cbe8826f4837",
+        "kind": "rebutted",
+        "note": "The cost of accepting the defense is precisely the lack of a traditional 'rational justification for preference' based on likelihood. The candidate argues this *is* the justification: a shift from justifying belief to justifying the method of selection."
+      },
+      {
+        "handle": "3242ff8180a68616d13678e7eee9deda5089f5e62375a48ac7ae4517ccaf5f78",
+        "kind": "revised",
+        "note": "Clarified that 'practical utility' is not derived from surviving tests directly, but from the heuristic that theories surviving severe tests are our best current guesses at truth-like structures, even if their predictive reliability isn't guaranteed by probability."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The claim is not that preference is arbitrary, but that it is 'non-inductively grounded.' The methodological rule provides the non-arbitrary basis: prefer the theory that has been tested more severely, regardless of whether this makes it 'true'."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_survival_of_species",
+        "legal_presumption_of_innocence_after_acquittal"
+      ],
+      "shared_structure": [
+        "Survival of a test (predation/trial) does not prove inherent superiority/innocence in an absolute sense.",
+        "Preference for the survivor is rational because alternatives were eliminated by specific failures.",
+        "Future success is not guaranteed by past survival, yet betting on the survivor is the only non-arbitrary strategy."
+      ],
+      "disanalogies": [
+        "Biological evolution has no goal of truth, whereas science aims at verisimilitude.",
+        "Legal acquittal is a binary status change, while corroboration is a matter of degree and severity."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the species that survived the ice age to thrive in the next, we bet on the theory that survived falsification.",
+        "The rationality lies in the elimination of the unfit/false, not the confirmation of the fit/true."
+      ],
+      "overturn_conditions": [
+        "If the environment (nature's laws) changes fundamentally, the survivor of the old tests may be the first to fail new ones.",
+        "If the tests applied were not actually severe or relevant to the domain of action."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Dependence. The isolated node 0d64405bfceb depends on SRC_005's 'Precision-Vulnerability Trade-off' mechanism to define its operational cost. It is REFUTED IF the 'cost' of vulnerability can be quantified independently of the theory's empirical content, or if a 'safer' low-content theory yields higher knowledge growth rates in practice. This relation posits that rapid growth is not just correlated with vulnerability but causally dependent on the specific metric of informational density defined in SRC_005.",
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "revised",
+          "note": "Revised to explicitly define 'cost' as the inverse of informational density (1/Content) relative to survival, directly addressing the lack of a metric by tying it to the precision-vulnerability trade-off in SRC_005."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The criticism claimed relation-form failure; this candidate explicitly names the kind ('Dependence') and includes the required 'REFUTED IF' clause, satisfying the predicate check."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The mechanism 'Precision-Vulnerability Trade-off' is not undefined 'surprise entropy' but a structural link derived from Popperian corroboration logic as detailed in SRC_005, establishing a recognized logical dependency."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "This candidate does not propose a subconscious heuristic; it proposes a methodological dependence on informational density, which is compatible with sociological observations of risk-taking in science rather than contradicted by them."
+        }
+      ],
+      "neighbours": [
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "Relation Kind: Contradiction. The isolated node 0d64405bfceb contradicts SRC_002's 'Decisionist Leap' interpretation. It is REFUTED IF the choice of theory for action can be shown to be entirely non-rational or arbitrary. This relation asserts that the connection between corroboration and action is rationally constrained by the 'Logical Asymmetry of Falsification' (SRC_003), making the 'leap' unnecessary and contradicting the view that preference is merely existential.",
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "departure_declared",
+          "note": "Departing from the assumption that 'cost' must be quantified numerically; here the cost is qualitative (loss of rational constraint), rendering the metric critique inapplicable."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "revised",
+          "note": "Explicitly stated 'Contradiction' as the relation kind and provided a clear 'REFUTED IF' condition regarding rational arbitrariness."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The link is a standard logical contradiction based on the definitions of rational constraint vs. decisionism, not an undefined mechanism."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "The refutation condition targets the 'non-rational' claim, not a psychological heuristic, avoiding the sociological contradiction cited."
+        }
+      ],
+      "neighbours": [
+        "SRC_002",
+        "SRC_003"
+      ]
+    },
+    {
+      "content": "Relation Kind: Shared Mechanism. Both the isolated node 0d64405bfceb and SRC_004 share the 'Problem-Shift Potential' mechanism. It is REFUTED IF 'problem-solving potential' is demonstrated to correlate perfectly with truth probability via induction, thereby collapsing the distinction into a standard inductive inference. This relation claims that the drive for action in both nodes stems from the desire to maximize the framework for identifying future errors, not from confidence in truth.",
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "revised",
+          "note": "Defined the shared cost as the 'opportunity cost of not opening new problem spaces,' providing a comparative metric against 'safe' theories which stagnate problem shifts."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Candidate strictly adheres to relation-form by naming 'Shared Mechanism' and stating the refutation condition clearly."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "'Problem-Shift Potential' is a defined concept in SRC_004, not an undefined 'surprise entropy', establishing a valid structural link."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "The mechanism is epistemological (maximizing error detection), not psychological (subconscious heuristic), thus avoiding the cited contradiction."
+        }
+      ],
+      "neighbours": [
+        "SRC_004"
+      ]
+    },
+    {
+      "content": "Relation Kind: Abstraction. The isolated node 0d64405bfceb is an abstraction of the 'Risk Minimization' strategy found in SRC_003. It is REFUTED IF the agent's preference is shown to rely on an inductive belief that the future will resemble the past regarding physical laws. This relation posits that the specific actions in the neighbourhood are instances of a broader abstract rule: selecting the option with the highest known error-detection capacity, regardless of outcome probability.",
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The 'cost' in this abstraction is the acceptance of uncertainty; the comparison to 'safer' theories is inherent in the definition of 'risk minimization' where safety is equated with low testability."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "revised",
+          "note": "Clarified the relation kind as 'Abstraction' and ensured the 'REFUTED IF' clause targets the smuggling of induction."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The link is a formal abstraction of a logical strategy (falsification asymmetry), not a reliance on undefined entropy."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "The refutation condition focuses on the logical premise of induction, bypassing any claims about subconscious heuristics or informational density psychology."
+        }
+      ],
+      "neighbours": [
+        "SRC_003"
+      ]
+    },
+    {
+      "content": "Relation Kind: Integration. The isolated node 0d64405bfceb integrates SRC_001's 'Informational Content' view with SRC_005's 'Vulnerability' metric to form a unified 'Growth-Vulnerability Index'. It is REFUTED IF 'informational content' is proven to be indistinguishable from 'logical probability' in the limit, or if high vulnerability consistently leads to theory death rather than growth. This relation suggests that the neighbourhood's disparate views on cost and safety are components of a single integrated system where growth requires managed vulnerability.",
+      "typicality": 0.40,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "revised",
+          "note": "Proposes the 'Growth-Vulnerability Index' as the explicit metric comparing cost of vulnerability against the stagnation of safe theories."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Fully satisfies relation-form with 'Integration' as the kind and a compound 'REFUTED IF' statement."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The integration relies on established definitions from SRC_001 and SRC_005, avoiding undefined mechanisms."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "The proposal is a theoretical integration of epistemological principles, not a psychological model, thus immune to the sociological contradiction."
+        }
+      ],
+      "neighbours": [
+        "SRC_001",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "Relation Kind: Reduction. The isolated node 0d64405bfceb reduces to the 'Decisionist' framework of SRC_002 under conditions of extreme uncertainty. It is REFUTED IF a rational constraint can be identified that operates even when empirical content is maximal and test results are ambiguous. This relation argues that despite the appearance of logical derivation from SRC_003 or SRC_005, the final act of connecting the node to action is fundamentally a reduction to the voluntary commitment described in SRC_002.",
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "departure_declared",
+          "note": "Declares departure from the need to quantify 'cost' in this specific reductionist view; the cost is the abandonment of rational justification itself."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Explicitly names 'Reduction' and provides the necessary refutation condition regarding rational constraints."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The reduction is to a known philosophical stance (Decisionism), not an undefined mechanism."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Addresses the 'leap' as a philosophical necessity rather than a psychological heuristic, sidestepping the sociological contradiction."
+        }
+      ],
+      "neighbours": [
+        "SRC_002"
+      ]
+    }
+  ]
+}
