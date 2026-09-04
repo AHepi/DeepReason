@@ -2400,3 +2400,46 @@ carries both branches of the identical-retry lesson and the measured wall.
 `experiments/2026-08-26-pc2-rematch/PREREG.md` is an EXPERIMENT artifact — a
 dated record of what that tranche believed — and is not rewritten in place; this
 entry is the pointer that stops a later reader trusting its arithmetic.
+
+## E74 — `AUDIT_BASELINES.md`'s shallow-clone delta is FOUR git-availability rows, not three; the fourth is unlisted
+
+**What the document says.** `docs/AUDIT_BASELINES.md` gives docs_verify as
+"On this container's SHALLOW clone the total is 5 OR 6 failed; on a full
+clone, 2 or 3", states that "the failure LIST below is what a delta is
+measured against", and derives the full-clone figures as "the shallow ones
+minus the three git-history rows below — arithmetic, not a measurement".
+Three rows, named: `CON-run-identity.md` at 211, 213 and 215.
+
+**What the record shows.** On a clean worktree at `0f6bf2c854`, on this
+shallow-clone container, `python tools/docs_verify.py` reports **6 failed**,
+and the list accounts for five of them. The sixth is
+`docs/map/INV-frozen-surfaces.md:736`, and it fails for exactly the reason
+the three listed rows do — a git object the shallow clone does not have:
+
+    subprocess.CalledProcessError: Command '['git', 'show',
+    'origin/claude/deepreason-p-s1-commitments-wowcib:experiments/
+    2026-08-31-p-s1-commitments/run-config.yaml']'
+    returned non-zero exit status 128
+
+So the CLAIM the check guards is untested here rather than false, and the
+arithmetic that derives the full-clone figure subtracts three rows where
+four are clone-conditional. The total, 6, is inside the stated range; the
+LIST is what is wrong, and the list is the part the file says a delta is
+measured against — the same half of the same file E72 corrected, for the
+same reason: a row with the identical pathology sitting outside the class
+it belongs to.
+
+**Why it matters more than a count.** This tranche's own validation
+depended on it. Two checks really did regress on this branch
+(`SUB-application.md:300`, `SUB-llm.md:336`), and the only way to see that
+they were the delta — rather than two more entries in an under-specified
+baseline — was to run the same command on a clean worktree at the base
+commit and diff the lists. An audit that compared against the written list
+would have rowed three findings where there were two.
+
+**Where corrected.** UNCORRECTED here, deliberately: `AUDIT_BASELINES.md`
+may only move in a tranche that moves the value, and this is an experiment
+tranche that changed no behaviour. Evidence:
+`experiments/2026-09-04-experiment-blind-critic/VALIDATION.md`, "The one
+acceptance criterion that had to be corrected", and its CHECKLIST step 15,
+which records both runs and their empty set difference.

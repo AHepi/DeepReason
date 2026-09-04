@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=17 blockers=none
+State: COMPLETE blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -326,7 +326,7 @@ as an omission.
           4956 passed, 6 skipped in 1187.25s (0:19:47)
       0 failed.
 
-- [ ] 17. (all) [COMMIT] Push and confirm a clean tree.
+- [x] 17. (all) [COMMIT] Push and confirm a clean tree.
       done-when: `git status --porcelain` is empty AND the branch head
       is on origin AND `git diff --stat 0f6bf2c854 -- src/ | wc -l` is
       `0`.
