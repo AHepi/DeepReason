@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=12 blockers=none
+State: next=13 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -254,11 +254,20 @@ as an omission.
           standard PARKED P7 CORRECTED set. M5 does not enter either
           verdict, which PREREG section 8 already fixed in advance.
 
-- [ ] 12. (S14, S17, S21) [COMMIT] Write `RESULTS.md`: one verdict per
+- [x] 12. (S14, S17, S21) [COMMIT] Write `RESULTS.md`: one verdict per
       factor, the numbers beside it, and the residue.
       done-when: `RESULTS.md` contains exactly two verdict lines, each
       one of BLIND BETTER / INFORMED BETTER / INCONCLUSIVE, and a
       `## Residue` section.
+      DONE:
+          ### F1 -- provenance labels: **INCONCLUSIVE**
+          ### F2 -- prior-objection history: **INCONCLUSIVE**
+          ## Residue   (1 section)
+          F1: 0.508 vs 0.500, d1 +0.0083, p 0.897, McNemar 9/8 p 1.0
+          F2: 0.542 vs 0.467, d1 +0.0750, p 0.245, McNemar 14/5 p 0.066
+          Both miss the pre-registered 20-point threshold; F2 misses
+          significance as well. Neither bar was moved after the numbers
+          were visible.
 
 - [ ] 13. (all) Write `PARKED.md` for everything noticed and not fixed
       (at minimum: the provider's rejection of `"reasoning":"none"`,
