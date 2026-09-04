@@ -75,7 +75,7 @@ that the fence precedes its call.
 
 The sealed bytes are counted three times on the way to the provider: in the
 pack, in the receipt, and in the finished prompt.
-`check: python -c "import ast,pathlib as P;S=[('src/deepreason/rules/conj.py','pack.count(canonical_scratch_text) != 1','v6 Conj pack must contain canonical scratch context once'),('src/deepreason/scratch/conjecture.py','final_conjecture_pack.count(receipt_text) != 1','final Conj pack must contain the exact advisory context once'),('src/deepreason/llm/adapter.py','prompt.count(advisory_text) != 1','rendered provider request must contain the exact advisory context once'),('src/deepreason/llm/adapter.py','rendered_pack.count(protected) != 1','advisory context bytes are absent or duplicated before aliasing')];G=[(f,e,m,[n for n in ast.walk(ast.parse(P.Path(f).read_text())) if isinstance(n,ast.If) and ast.unparse(n.test)==e]) for f,e,m in S];assert all(len(g)==1 and any(isinstance(s,ast.Raise) and m in ast.unparse(s) for s in g[0].body) for f,e,m,g in G),[(f,e,len(g)) for f,e,m,g in G]" && python -m pytest tests/test_v6_conjecture_scratch_consumption.py::test_initial_v6_conjecture_commits_exact_model_facing_scratch_once -q`
+`check: python -c "import ast,pathlib as P;S=[('src/deepreason/seat_sources/registry.py','pack.count(result.substitutes) != 1','SEAT_SOURCE_SUBSTITUTION_NOT_UNIQUE'),('src/deepreason/scratch/conjecture.py','final_conjecture_pack.count(receipt_text) != 1','final Conj pack must contain the exact advisory context once'),('src/deepreason/llm/adapter.py','prompt.count(advisory_text) != 1','rendered provider request must contain the exact advisory context once'),('src/deepreason/llm/adapter.py','rendered_pack.count(protected) != 1','advisory context bytes are absent or duplicated before aliasing')];G=[(f,e,m,[n for n in ast.walk(ast.parse(P.Path(f).read_text())) if isinstance(n,ast.If) and ast.unparse(n.test)==e]) for f,e,m in S];assert all(len(g)==1 and any(isinstance(s,ast.Raise) and m in ast.unparse(s) for s in g[0].body) for f,e,m,g in G),[(f,e,len(g)) for f,e,m,g in G]" && python -m pytest tests/test_v6_conjecture_scratch_consumption.py::test_initial_v6_conjecture_commits_exact_model_facing_scratch_once -q`
 
 Every visible handle is exposed under its own namespace in the transaction
 ledger, so what the model saw is a typed record rather than an inference from
@@ -282,7 +282,7 @@ recovery), `tests/test_v6_scratch_atomicity.py` and
   pack, and the scratch handles come from the context render that follows it
   (`DR-INV-reference-menu`). It re-wraps for exactly the reason the other
   three do.
-`check: test "$(grep -c "pack = AllocatedPack(" src/deepreason/rules/conj.py)" -eq 4 && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && grep -q "pack_is_allocated = isinstance(pack, AllocatedPack)" src/deepreason/llm/adapter.py`
+`check: test "$(grep -c "pack = AllocatedPack(" src/deepreason/rules/conj.py)" -eq 0 && test "$(grep -c "AllocatedPack(pack" src/deepreason/seat_sources/registry.py)" -eq 2 && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && grep -q "pack_is_allocated = isinstance(pack, AllocatedPack)" src/deepreason/llm/adapter.py`
 - **Render-receipt handle maps reload key-sorted, and this seam reads them
   twice.** The receipt is persisted through `canonical_json`, whose sorted keys
   interleave `B10` between `B1` and `B2`. `validate_conjecture_context_call`

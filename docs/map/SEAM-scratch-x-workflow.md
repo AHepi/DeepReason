@@ -35,7 +35,9 @@ scratch module at all.
 FORTY-NINE files under `src/deepreason` mention both sides. This sentence read
 "Forty-seven" while its own check asserted 48 — a pre-existing disagreement of
 one, corrected here rather than left, and NOT caused by this tranche. The 48
-became 49 on 2026-08-30 when `aftercycle.py` joined by naming `workflow` in a
+became 50 on 2026-09-04 when `seat_sources/shipped.py` joined: it names the
+v6 scratch workshop prompt and the transaction work order it reads a fence
+from. It became 49 on 2026-08-30 when `aftercycle.py` joined by naming `workflow` in a
 docstring while importing nothing from either side; the census counts WORD
 MENTIONS, and the import-graph clause after it is what counts edges. Nine carry
 the agreement — the ones named in the table below — and the two this document owns
@@ -46,7 +48,7 @@ fails the check instead of slipping past a grep, and it is read from the IMPORT
 GRAPH rather than from the source text: a relative `from ..scratch import` in a
 control-plane module resolves to the same edge as an absolute one, which a
 substring test missed.
-`check: test "$(for f in $(grep -rl scratch src/deepreason --include=*.py); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 49 && python -c "import ast,pathlib;B=lambda pkg,l:('deepreason.'+pkg) if l==1 else ('deepreason' if l==2 else 'deepreason.UNRESOLVED');T=lambda n,pkg:[a.name for a in n.names] if isinstance(n,ast.Import) else ([(B(pkg,n.level)+'.'+(n.module or '')).rstrip('.')] if n.level else [n.module or '']);D=lambda pkg,other:sorted(p.stem for p in pathlib.Path('src/deepreason/'+pkg).glob('*.py') if any(m==other or m.startswith(other+'.') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,(ast.Import,ast.ImportFrom)) for m in T(n,pkg)) or other in p.read_text());assert D('scratch','deepreason.workflow')==['authoring'],D('scratch','deepreason.workflow');assert D('workflow','deepreason.scratch')==['conjecture_recovery','models','nonconjecture_recovery','profiles'],D('workflow','deepreason.scratch')"`
+`check: test "$(for f in $(grep -rl scratch src/deepreason --include=*.py); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 50 && python -c "import ast,pathlib;B=lambda pkg,l:('deepreason.'+pkg) if l==1 else ('deepreason' if l==2 else 'deepreason.UNRESOLVED');T=lambda n,pkg:[a.name for a in n.names] if isinstance(n,ast.Import) else ([(B(pkg,n.level)+'.'+(n.module or '')).rstrip('.')] if n.level else [n.module or '']);D=lambda pkg,other:sorted(p.stem for p in pathlib.Path('src/deepreason/'+pkg).glob('*.py') if any(m==other or m.startswith(other+'.') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,(ast.Import,ast.ImportFrom)) for m in T(n,pkg)) or other in p.read_text());assert D('scratch','deepreason.workflow')==['authoring'],D('scratch','deepreason.workflow');assert D('workflow','deepreason.scratch')==['conjecture_recovery','models','nonconjecture_recovery','profiles'],D('workflow','deepreason.scratch')"`
 
 Four workflow records carry `scratch_fence_seq`, every one of them refuses a
 value that differs from its formal fence, and the refusal is a validator rather

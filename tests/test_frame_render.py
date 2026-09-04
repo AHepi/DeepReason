@@ -599,7 +599,7 @@ def test_both_rules_put_the_frame_in_the_pack_they_dispatch(harness, monkeypatch
     # registered SOURCE bundle. The claim is the same one -- the frame is in
     # the pack this rule dispatches -- asserted where it is now decided, and
     # it still fails if either source is dropped from the bundle.
-    from deepreason.llm.seat_sources import (
+    from deepreason.seat_sources import (
         STAGE_RENDER,
         resolve_seat_source_bundle,
         resolve_section_source,

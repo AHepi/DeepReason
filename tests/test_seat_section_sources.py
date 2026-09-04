@@ -24,12 +24,12 @@ import pytest
 from pydantic import BaseModel, ConfigDict
 
 from deepreason.config import Config
-from deepreason.llm.seat_source_plugins import (
+from deepreason.seat_sources import (
     CONJECTURER_SEAT,
     CONJECTURER_SOURCE_BUNDLE,
     ensure_sources_seeded,
 )
-from deepreason.llm.seat_sources import (
+from deepreason.seat_sources import (
     SECTION_SOURCE_REGISTRY,
     SEAT_SOURCE_BUNDLE_ENV,
     STAGE_POST_ALLOCATION,
@@ -440,8 +440,8 @@ RECORD_WRITING_CALLS = {
 
 def _source_modules():
     return [
-        pathlib.Path("src/deepreason/llm/seat_source_plugins.py"),
-        pathlib.Path("src/deepreason/llm/seat_sources.py"),
+        pathlib.Path("src/deepreason/seat_sources/shipped.py"),
+        pathlib.Path("src/deepreason/seat_sources/registry.py"),
     ]
 
 
@@ -480,7 +480,7 @@ def test_no_source_module_reaches_a_record_writing_api():
 @pytest.mark.parametrize("planted", sorted(RECORD_WRITING_CALLS))
 def test_the_static_never_appends_check_goes_red_on_a_planted_write(planted):
     planted_source = (
-        pathlib.Path("src/deepreason/llm/seat_source_plugins.py").read_text()
+        pathlib.Path("src/deepreason/seat_sources/shipped.py").read_text()
         + f"\n\ndef _planted(harness, value):\n    return harness.{planted}(value)\n"
     )
     with pytest.raises(AssertionError):

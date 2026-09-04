@@ -19,7 +19,7 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict
 
-from deepreason.llm.seat_sources import (
+from deepreason.seat_sources.registry import (
     STAGE_POST_ALLOCATION,
     STAGE_POST_ALLOCATION_AFTER_ALIASES,
     STAGE_POST_ALLOCATION_CONTEXT,

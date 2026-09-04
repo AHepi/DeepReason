@@ -453,7 +453,7 @@ def resolve_seat_source_bundle(
     layout and arrangement registries already rely on.
     """
 
-    from deepreason.llm.seat_source_plugins import ensure_sources_seeded
+    from deepreason.seat_sources.shipped import ensure_sources_seeded
 
     ensure_sources_seeded()
     requested = bundle_id

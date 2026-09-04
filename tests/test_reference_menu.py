@@ -1118,7 +1118,7 @@ def test_a_pre_v6_conjecture_pack_carries_no_v6_menu():
     import ast
     import pathlib
 
-    from deepreason.llm import seat_source_plugins
+    from deepreason.seat_sources import shipped as seat_source_plugins
 
     # The two menu builds moved out of `rules/conj.py` into the seat's
     # registered section sources (2026-09-04) and the guard moved with them.

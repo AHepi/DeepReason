@@ -124,8 +124,8 @@ def test_no_consumer_reaches_past_the_interface():
     #
     #   rules/conj.py     screens the submission and records the discharges --
     #                     the behavioural consumer on the record side.
-    #   llm/seat_source_  computes the open-criticism SECTION the conjecturer
-    #     plugins.py      is shown, through the seat's registered source
+    #   seat_sources/     computes the open-criticism SECTION the conjecturer
+    #     shipped.py      is shown, through the seat's registered source
     #                     bundle. It moved here from `rules/conj.py` when the
     #                     nine caller-computed sections went behind the seat
     #                     interface; it is a pure read, and it consumes the
@@ -149,8 +149,8 @@ def test_no_consumer_reaches_past_the_interface():
     ]
     assert consumers == [
         "src/deepreason/llm/contracts.py",
-        "src/deepreason/llm/seat_source_plugins.py",
         "src/deepreason/rules/conj.py",
+        "src/deepreason/seat_sources/shipped.py",
     ], consumers
 
 

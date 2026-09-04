@@ -243,7 +243,7 @@ def test_limb3_the_shell_carries_nothing_that_could_buy_standing():
         SeatShellV1,
         SectionReceiptV1,
     )
-    from deepreason.llm.seat_sources import (
+    from deepreason.seat_sources import (
         SectionSourceReceiptV1,
         SectionSourceResultV1,
         SeatSourceBundleEntryV1,

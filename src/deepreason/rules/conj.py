@@ -36,8 +36,8 @@ from deepreason.llm.contracts import CandidateRef, ConjectureCandidate, Conjectu
 from deepreason.llm.endpoints import EndpointError
 from deepreason.llm.firewall import EndpointLease, RouteFirewallError
 from deepreason.llm.packs import aliases_for_pack, render_conj_pack
-from deepreason.llm.seat_source_plugins import CONJECTURER_SEAT
-from deepreason.llm.seat_sources import (
+from deepreason.seat_sources import (
+    CONJECTURER_SEAT,
     STAGE_POST_ALLOCATION,
     STAGE_POST_ALLOCATION_AFTER_ALIASES,
     STAGE_POST_ALLOCATION_CONTEXT,
