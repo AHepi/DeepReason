@@ -201,6 +201,64 @@ class WorkPreparationV1(IdentifiedWorkflowRecord):
         return self.id
 
 
+class SectionRowV1(WorkflowRecord):
+    """One section of one rendered brief, as the record sees it.
+
+    Deliberately carries NO seat name and no score, rank or weight. The
+    seat-is-a-shell law's scope boundary is that the shell governs how content
+    is GENERATED and may never reach what counts as EVIDENCE, so a row that
+    named its seat, or carried anything a consumer could rank on, would hand
+    the evidence side a generation-side fact to read
+    (`DR-INV-seat-section-plugins`).
+    """
+
+    section_id: str = Field(min_length=1, max_length=128)
+    plugin_id: str = Field(min_length=1, max_length=128)
+    plugin_version: str = Field(min_length=1, max_length=32)
+    parameters_digest: str = Field(min_length=1, max_length=128)
+    source_bytes: int = Field(ge=0, le=64 * 1024 * 1024)
+    rendered_bytes: int = Field(ge=0, le=64 * 1024 * 1024)
+    disposition: Literal["rendered", "compressed", "dropped", "absent"]
+
+
+class SectionPlanV1(IdentifiedWorkflowRecord):
+    """Which parts of a brief were composed, from which plugins, and what
+    became of each.
+
+    A SIBLING of `ContextPackPlanV1`, not a variant of it. That family's four
+    `plan_kind` values all mean "an evidence channel exposed these bytes", and
+    its `items[]` are aliased objects with a channel namespace. A section row
+    is a different thing: a plugin, a version, a parameter digest and an
+    allocation outcome. Overloading the older family would have meant widening
+    an alias pattern and a four-value enum that thousands of committed rows
+    already use, which changes what an existing record MEANS. A new kind is
+    additive and invisible to every reader that does not ask for it.
+
+    Added under an explicit operator grant, 2026-09-04 (`REQUEST.md` §1c): the
+    registration touches frozen surface 2.
+    """
+
+    _identity_domain = "workflow.context-section-plan.v1"
+
+    schema_: Literal["workflow.context-section-plan.v1"] = Field(
+        "workflow.context-section-plan.v1", alias="schema"
+    )
+    work_id: str = Field(pattern=_ID)
+    attempt_index: int = Field(ge=0, le=64)
+    layout_id: str = Field(min_length=1, max_length=96)
+    layout_version: str = Field(min_length=1, max_length=32)
+    shell_id: str = Field(default="", max_length=96)
+    sections: tuple[SectionRowV1, ...] = ()
+
+    @field_validator("sections")
+    @classmethod
+    def _one_row_per_plugin(cls, value):
+        seen = [row.plugin_id for row in value]
+        if len(seen) != len(set(seen)):
+            raise ValueError("a section plan holds one row per plugin")
+        return tuple(value)
+
+
 class ContextPackPlanV1(IdentifiedWorkflowRecord):
     """Pure packing plan; it is not evidence that context was exposed."""
 
@@ -705,6 +763,8 @@ __all__ = [
     "ContextExposureReceiptV2",
     "ContextNamespace",
     "ContextPackPlanV1",
+    "SectionPlanV1",
+    "SectionRowV1",
     "DispatchAuthorizationBundleV1",
     "ProviderAttemptV1",
     "ModelClassificationBindingV1",

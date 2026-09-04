@@ -27,6 +27,8 @@ from deepreason.workflow.transaction import (
     CompactRecoveryTransitionV1,
     ContextExposureReceiptV2,
     ContextPackPlanV1,
+    SectionPlanV1,
+    SectionRowV1,
     DispatchAuthorizationBundleV1,
     ProviderAttemptV1,
     RouteSeatInsufficientCapabilityV1,
@@ -341,6 +343,42 @@ class InquiryTransactionService:
             rendered_bytes=rendered_bytes,
         )
 
+    @staticmethod
+    def section_plan(
+        preparation: WorkPreparationV1,
+        *,
+        layout_id: str,
+        layout_version: str,
+        shell_id: str = "",
+        receipts: Iterable[object] = (),
+    ) -> SectionPlanV1:
+        """One plan per rendered brief: which sections were composed, from
+        which plugins, and what the allocator did with each.
+
+        Takes the renderer's own `SectionReceiptV1` values rather than
+        rebuilding them, so the record cannot disagree with the pack.
+        """
+
+        return SectionPlanV1.create(
+            work_id=preparation.id,
+            attempt_index=preparation.attempt_index,
+            layout_id=layout_id,
+            layout_version=layout_version,
+            shell_id=shell_id,
+            sections=tuple(
+                SectionRowV1(
+                    section_id=receipt.section_id,
+                    plugin_id=receipt.plugin_id,
+                    plugin_version=receipt.plugin_version,
+                    parameters_digest=receipt.parameters_digest,
+                    source_bytes=receipt.source_bytes,
+                    rendered_bytes=receipt.rendered_bytes,
+                    disposition=receipt.disposition,
+                )
+                for receipt in receipts
+            ),
+        )
+
     def issue(
         self,
         preparation: WorkPreparationV1,
@@ -348,6 +386,7 @@ class InquiryTransactionService:
         plans: Iterable[ContextPackPlanV1],
         prompt: str,
         max_tokens: int,
+        section_plans: Iterable[SectionPlanV1] = (),
     ) -> AuthorizedDispatch:
         """Reserve and atomically expose one request, or durably deny it."""
 
@@ -360,6 +399,7 @@ class InquiryTransactionService:
             reserved,
             plans=plans,
             prompt=prompt,
+            section_plans=section_plans,
         )
 
     def reserve_dispatch(
@@ -426,6 +466,7 @@ class InquiryTransactionService:
         *,
         plans: Iterable[ContextPackPlanV1],
         prompt: str,
+        section_plans: Iterable[SectionPlanV1] = (),
     ) -> AuthorizedDispatch:
         """Append the ordinary exposure and authorization for one reservation."""
 
@@ -437,9 +478,10 @@ class InquiryTransactionService:
             reserved.release()
             raise
         plans = tuple(plans)
+        section_plans = tuple(section_plans)
         if any(
             plan.work_id != preparation.id or plan.attempt_index != preparation.attempt_index
-            for plan in plans
+            for plan in (*plans, *section_plans)
         ):
             reserved.release()
             raise ValueError("context plans belong to another work attempt")
@@ -476,7 +518,13 @@ class InquiryTransactionService:
             )
             self.harness.record_transaction_transition(
                 transition,
-                records=(*plans, reservation_record, exposure, bundle),
+                records=(
+                    *plans,
+                    *section_plans,
+                    reservation_record,
+                    exposure,
+                    bundle,
+                ),
             )
         except BaseException:
             # The reservation exists only in memory until the issue append.

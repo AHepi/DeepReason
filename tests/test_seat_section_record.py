@@ -146,3 +146,93 @@ def test_no_receipt_field_names_a_seat():
     """The seat-is-a-shell law's scope boundary, on the record side: a receipt
     that named its seat would hand the evidence side a generation-side fact."""
     assert not [f for f in SectionReceiptV1.model_fields if "seat" in f.lower()]
+
+
+# --------------------------------------------------------- R25, the write
+# Operator grant, 2026-09-04 (REQUEST.md §1c): the receipts above may now be
+# written to a run's record as `workflow.context-section-plan.v1`.
+
+
+def test_the_section_plan_is_a_sibling_of_the_pack_plan_not_a_variant():
+    """A new KIND, not a new `plan_kind`. The older family's four values all
+    mean "an evidence channel exposed these bytes" and its rows are aliased
+    objects; a section row is a plugin, a version and an allocation outcome.
+    Overloading the old one would change what thousands of committed rows
+    mean."""
+    from deepreason.workflow.transaction import ContextPackPlanV1, SectionPlanV1
+
+    assert SectionPlanV1 is not ContextPackPlanV1
+    assert set(SectionPlanV1.model_fields) & {"plan_kind", "items"} == set()
+    assert "sections" in SectionPlanV1.model_fields
+
+
+def test_a_section_plan_carries_no_seat_name_and_nothing_rankable():
+    """The law's scope boundary, on the record side."""
+    from deepreason.workflow.transaction import SectionPlanV1, SectionRowV1
+
+    forbidden = {"seat", "seat_id", "score", "rank", "weight", "confidence",
+                 "priority", "authority", "status", "immunity"}
+    for model in (SectionPlanV1, SectionRowV1):
+        assert not (forbidden & set(model.model_fields)), model.__name__
+
+
+def test_the_new_kind_is_registered_everywhere_a_reader_looks():
+    """A kind the harness accepts but no reader can load back would be a row
+    that exists and cannot be read — worse than not writing it."""
+    from deepreason.storage.objects import SCHEMAS
+    from deepreason.workflow.replay import _SCHEMA_MODELS as REPLAY
+    from deepreason.workflow.transaction import SectionPlanV1
+
+    for registry in (SCHEMAS, REPLAY):
+        assert registry.get("workflow-context-section-plan-v1") is SectionPlanV1
+
+
+def test_the_plan_is_built_from_the_renderers_own_receipts(tmp_path):
+    """Built from the receipts rather than rebuilt, so the record cannot
+    disagree with the pack it describes."""
+    from deepreason.workflow.transaction_service import InquiryTransactionService
+
+    _pack, receipts = _conj(tmp_path)
+    rendered = [r for r in receipts if r.disposition == "rendered"]
+    assert rendered
+
+    class _Preparation:
+        id = "sha256:" + "a" * 64
+        attempt_index = 0
+
+    plan = InquiryTransactionService.section_plan(
+        _Preparation(),
+        layout_id="seat-pack.conjecturer.legacy-v0",
+        layout_version="1.0.0",
+        shell_id="seat.conjecturer.legacy-v0",
+        receipts=receipts,
+    )
+    assert plan.schema_ == "workflow.context-section-plan.v1"
+    assert len(plan.sections) == len(receipts)
+    by_plugin = {row.plugin_id: row for row in plan.sections}
+    for receipt in receipts:
+        row = by_plugin[receipt.plugin_id]
+        assert row.section_id == receipt.section_id
+        assert row.disposition == receipt.disposition
+        assert row.rendered_bytes == receipt.rendered_bytes
+        assert row.parameters_digest == receipt.parameters_digest
+
+
+def test_the_conjecturer_dispatch_hands_its_receipts_to_the_transaction():
+    """The wiring, pinned structurally: `conj` collects receipts from the
+    renderer and passes a section plan to BOTH dispatch paths — the direct
+    issue and the reserved/finalize pair the scratch channel uses. A path that
+    quietly dropped them would still render correctly and record nothing."""
+    import ast
+    import pathlib
+
+    source = pathlib.Path("src/deepreason/rules/conj.py").read_text()
+    fn = next(
+        n
+        for n in ast.walk(ast.parse(source))
+        if isinstance(n, ast.FunctionDef) and n.name == "conj"
+    )
+    body = ast.get_source_segment(source, fn)
+    assert "section_receipts=section_receipts" in body
+    assert "_section_plans(" in body
+    assert body.count("section_plans=section_plans") == 2

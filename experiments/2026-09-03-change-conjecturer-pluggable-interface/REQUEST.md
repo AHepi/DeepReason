@@ -99,11 +99,44 @@ rank, immunity, refutation and the record do not vary with it.
 
 ---
 
+## 1c. AMENDMENT 3 — the frozen-surface grant, VERBATIM (2026-09-04)
+
+`CHECKLIST.md` step 24 stopped and asked for one thing: permission to add a
+new record object kind, `workflow.context-section-plan.v1`, so the section
+receipts the walk already builds can be WRITTEN to a run's record. That is a
+DIRECT contact with FROZEN SURFACE 2 (`harness.py` event application and
+well-formedness) — one line in `record_transaction_transition`'s schema map
+plus the same kind in the `work_issued` allowed set — and CLAUDE.md says never
+without explicit operator approval.
+
+The request, with `tools/blast_radius.py`'s own rows and the disposal of the
+cheaper road, is at `CHECKLIST.md` step 24 and `VALIDATION.md` §3.
+
+The operator's reply, in full:
+
+> "granted"
+
+**Scope of what this grants, stated so it is not over-read.** The grant is for
+the new object kind and the registrations that make it writable and readable:
+`workflow/transaction.py`, `harness.py`'s schema map and its `work_issued`
+allowed set, `storage/objects.py`, `workflow/replay.py`, and the two rules that
+build the plan. It is NOT a grant to change how any EXISTING record is applied,
+nor to add a `verify_root` check — SPEC §13 decision 3 stands, and step 25
+remains the proof that surface 3 is untouched.
+
+**R25 — the section plan is written to the run's record.**
+Source: the grant above, answering step 24's request. Read as: one
+`workflow.context-section-plan.v1` per rendered pack, carrying the layout, the
+shell that actually ran, and one row per section with its plugin, version,
+parameter digest, byte counts and disposition.
+
+---
+
 ---
 
 ## 2. Requirements, numbered
 
-Derived by splitting §1, §1a and §1b into separately-checkable obligations. Each
+Derived by splitting §1, §1a, §1b and §1c into separately-checkable obligations. Each
 carries the clause it comes from. No requirement is ever deleted — only marked
 `superseded-by:<n>` or `deferred (operator approved <where>)`.
 

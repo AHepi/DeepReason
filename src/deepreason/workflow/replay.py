@@ -49,6 +49,7 @@ from deepreason.workflow.transaction import (
     ContractDecompositionTransitionV1,
     ContextExposureReceiptV2,
     ContextPackPlanV1,
+    SectionPlanV1,
     DispatchAuthorizationBundleV1,
     ModelClassificationBindingV1,
     ProviderAttemptV1,
@@ -82,6 +83,7 @@ _SCHEMA_MODELS = {
     "workflow-run-terminal-result-draft-v1": RunTerminalResultDraftV1,
     "workflow-work-preparation-v1": WorkPreparationV1,
     "workflow-context-pack-plan-v1": ContextPackPlanV1,
+    "workflow-context-section-plan-v1": SectionPlanV1,
     "workflow-token-reservation-v2": TokenReservationV2,
     "workflow-context-exposure-v2": ContextExposureReceiptV2,
     "workflow-dispatch-authorization-v1": DispatchAuthorizationBundleV1,
@@ -2429,9 +2431,24 @@ class WorkflowReplayState:
                 for schema, record in phase_records
                 if schema == "workflow-dispatch-authorization-v1"
             ]
+            # Section plans sit AFTER the pack plans and BEFORE the
+            # reservation, which is the order `finalize_dispatch` appends
+            # them in. The position is part of the canonical shape rather
+            # than a detail: replay compares the whole schema sequence, so a
+            # record that could appear anywhere would make two orderings of
+            # the same attempt both valid.
+            section_plans = [
+                record
+                for schema, record in phase_records
+                if schema == "workflow-context-section-plan-v1"
+            ]
             actual_schemas = [schema for schema, _record in phase_records]
             expected_schemas = [
                 *("workflow-context-pack-plan-v1" for _plan in plans),
+                *(
+                    "workflow-context-section-plan-v1"
+                    for _plan in section_plans
+                ),
                 "workflow-token-reservation-v2",
                 "workflow-context-exposure-v2",
                 "workflow-dispatch-authorization-v1",

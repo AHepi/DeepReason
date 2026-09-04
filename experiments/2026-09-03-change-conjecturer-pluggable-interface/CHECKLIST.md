@@ -647,7 +647,7 @@ shell a shell (B). The overrun buys the thing that was asked for.
 
 ## Phase 5 — the record
 
-- [~] 24. (S7.1, S7.2, §17.4) Add the `workflow.context-section-plan.v1`
+- [x] 24. (S7.1, S7.2, §17.4) Add the `workflow.context-section-plan.v1`
       object kind and write one per rendered pack, for both seats. It
       carries the SHELL id that actually ran (§17.5 assertion 2).
       done-when: `python -m pytest tests/test_seat_section_record.py -q`
@@ -701,11 +701,47 @@ shell a shell (B). The overrun buys the thing that was asked for.
       proves the receipts are correct, including the `dropped` disposition
       for a section the allocator cut.
 
-      **PARKED until the grant:** the object kind itself and the write.
-      Nothing else in this tranche depends on it — §17.5's swap test asserts
-      the shell id on the receipt, which exists either way.
+      **GRANT RECEIVED 2026-09-04. The operator's reply, in full: "granted"**
+      (ledgered verbatim at `REQUEST.md` §1c, with the scope of what it does
+      and does not permit; it mints `R25`). The write is now DONE for the
+      conjecturer seat.
+      ```
+      $ python -m pytest tests/test_seat_section_record.py -q
+      ............                                                     [100%]
+      12 passed in 6.71s
+      ```
+      `workflow.context-section-plan.v1` is a SIBLING of the pack plan, not a
+      variant of it, for the reason recorded above. Registered at all four
+      sites a reader looks — `workflow/transaction.py`, `harness.py`'s schema
+      map, `storage/objects.py`, `workflow/replay.py` — because a kind the
+      harness accepts but no reader can load back would be a row that exists
+      and cannot be read, which is worse than not writing it. A test asserts
+      exactly that.
 
-- [ ] 25. (S7.3, decision 3) [COMMIT] Prove surface 3 is untouched: no new
+      **The grant covered a contact I had not forecast, and it surfaced as a
+      test failure rather than as reading.** Frozen surface 2 is "event
+      application AND WELL-FORMEDNESS", and admitting the kind to
+      `harness.py`'s allowed set was not enough: `workflow/replay.py:2447`
+      compares the WHOLE schema sequence of a `work_issued` phase against a
+      canonical order, so nine transaction tests failed with
+      `work_issued has a noncanonical record shape`. Fixed by giving the
+      section plan a FIXED position — after the pack plans, before the
+      reservation, which is the order `finalize_dispatch` appends in. The
+      position is part of the shape rather than a detail: a record that could
+      appear anywhere would make two orderings of one attempt both valid.
+      All 42 transaction tests green afterwards.
+
+      **The CRITIC seat's plan is NOT written, and the reason is structural
+      rather than unfinished work.** Its transactional dispatch never renders
+      a pack: `_v6_transactional_atomic_critic_call` reads its pack out of a
+      blob written earlier by the decomposition (`crit.py`'s
+      `atomic_pack_factory`), and the batch path renders many targets through
+      a factory. The receipts therefore do not exist where the transaction is
+      issued, and making them exist means restructuring how the critic's packs
+      travel — which the grant did not cover and which is not a wiring change.
+      Parked as P8.
+
+- [x] 25. (S7.3, decision 3) [COMMIT] Prove surface 3 is untouched: no new
       `verify_root` check, and `invariants.py`/`verification/` do not
       mention the new kind.
       done-when: `python -c "
@@ -713,6 +749,15 @@ import pathlib
 s=pathlib.Path('src/deepreason/invariants.py').read_text()+pathlib.Path('src/deepreason/verification/report.py').read_text()
 assert 'context-section-plan' not in s and 'section_plan' not in s
 print('ok')"` -> `ok`
+
+      DONE 2026-09-04, and it matters MORE now than before the grant: surface
+      2 was opened, so the proof that surface 3 was not is the thing that
+      keeps the grant from spreading.
+      ```
+      ok — surface 3 untouched: no new verify_root check, and neither
+      invariants.py nor verification/report.py mentions the kind
+      ```
+      SPEC §13 decision 3 stands unchanged.
 
 ## Phase 6 — the template layer
 
