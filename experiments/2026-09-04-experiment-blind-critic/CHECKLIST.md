@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=16 blockers=none
+State: next=17 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -318,8 +318,13 @@ as an omission.
       fragility is untouched and parked as P6. No assertion was
       weakened; the claim those tests guard was never falsified.
 
-- [ ] 16. (all) Full gate: `python -m pytest tests/ -q -n 4`
+- [x] 16. (all) Full gate: `python -m pytest tests/ -q -n 4`
       done-when: output ends `N passed, 0 failed` (paste it).
+      DONE (run on an otherwise idle box, after docs_verify finished --
+      never concurrently with it):
+          .................................................  [100%]
+          4956 passed, 6 skipped in 1187.25s (0:19:47)
+      0 failed.
 
 - [ ] 17. (all) [COMMIT] Push and confirm a clean tree.
       done-when: `git status --porcelain` is empty AND the branch head
