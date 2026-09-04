@@ -1,0 +1,212 @@
+{
+ "detector": "primary-blind-panel",
+ "per_cell": {
+  "C00": {
+   "named": 33,
+   "graded": 60,
+   "per_class": {
+    "causal-non-sequitur": {
+     "named": 9,
+     "n": 10,
+     "rate": 0.9
+    },
+    "circular-mechanism": {
+     "named": 7,
+     "n": 10,
+     "rate": 0.7
+    },
+    "evidence-misquotation": {
+     "named": 10,
+     "n": 10,
+     "rate": 1.0
+    },
+    "scope-contradiction": {
+     "named": 2,
+     "n": 10,
+     "rate": 0.2
+    },
+    "unsupported-comparison": {
+     "named": 5,
+     "n": 10,
+     "rate": 0.5
+    },
+    "vacuous-forbidden-case": {
+     "named": 0,
+     "n": 10,
+     "rate": 0.0
+    }
+   },
+   "planted": 60,
+   "rate": 0.55
+  },
+  "C10": {
+   "named": 32,
+   "graded": 60,
+   "per_class": {
+    "causal-non-sequitur": {
+     "named": 9,
+     "n": 10,
+     "rate": 0.9
+    },
+    "circular-mechanism": {
+     "named": 6,
+     "n": 10,
+     "rate": 0.6
+    },
+    "evidence-misquotation": {
+     "named": 10,
+     "n": 10,
+     "rate": 1.0
+    },
+    "scope-contradiction": {
+     "named": 1,
+     "n": 10,
+     "rate": 0.1
+    },
+    "unsupported-comparison": {
+     "named": 6,
+     "n": 10,
+     "rate": 0.6
+    },
+    "vacuous-forbidden-case": {
+     "named": 0,
+     "n": 10,
+     "rate": 0.0
+    }
+   },
+   "planted": 60,
+   "rate": 0.5333333333333333
+  },
+  "C01": {
+   "named": 28,
+   "graded": 60,
+   "per_class": {
+    "causal-non-sequitur": {
+     "named": 6,
+     "n": 10,
+     "rate": 0.6
+    },
+    "circular-mechanism": {
+     "named": 6,
+     "n": 10,
+     "rate": 0.6
+    },
+    "evidence-misquotation": {
+     "named": 10,
+     "n": 10,
+     "rate": 1.0
+    },
+    "scope-contradiction": {
+     "named": 1,
+     "n": 10,
+     "rate": 0.1
+    },
+    "unsupported-comparison": {
+     "named": 5,
+     "n": 10,
+     "rate": 0.5
+    },
+    "vacuous-forbidden-case": {
+     "named": 0,
+     "n": 10,
+     "rate": 0.0
+    }
+   },
+   "planted": 60,
+   "rate": 0.4666666666666667
+  },
+  "C11": {
+   "named": 28,
+   "graded": 60,
+   "per_class": {
+    "causal-non-sequitur": {
+     "named": 7,
+     "n": 10,
+     "rate": 0.7
+    },
+    "circular-mechanism": {
+     "named": 4,
+     "n": 10,
+     "rate": 0.4
+    },
+    "evidence-misquotation": {
+     "named": 10,
+     "n": 10,
+     "rate": 1.0
+    },
+    "scope-contradiction": {
+     "named": 0,
+     "n": 10,
+     "rate": 0.0
+    },
+    "unsupported-comparison": {
+     "named": 7,
+     "n": 10,
+     "rate": 0.7
+    },
+    "vacuous-forbidden-case": {
+     "named": 0,
+     "n": 10,
+     "rate": 0.0
+    }
+   },
+   "planted": 60,
+   "rate": 0.4666666666666667
+  }
+ },
+ "factors": {
+  "F1_provenance": {
+   "m1_omitted": {
+    "named": 61,
+    "n": 120,
+    "rate": 0.5083
+   },
+   "m1_present": {
+    "named": 60,
+    "n": 120,
+    "rate": 0.5
+   },
+   "d1": 0.0083,
+   "z": 0.1291,
+   "p": 0.89728,
+   "mcnemar": {
+    "b": 9,
+    "c": 8,
+    "chi2": 0.0,
+    "p": 1.0
+   },
+   "m2_omitted_rate": 1.0,
+   "m2_present_rate": 1.0,
+   "d2": 0.0
+  },
+  "F2_history": {
+   "m1_omitted": {
+    "named": 65,
+    "n": 120,
+    "rate": 0.5417
+   },
+   "m1_present": {
+    "named": 56,
+    "n": 120,
+    "rate": 0.4667
+   },
+   "d1": 0.075,
+   "z": 1.1619,
+   "p": 0.24526,
+   "mcnemar": {
+    "b": 14,
+    "c": 5,
+    "chi2": 3.3684,
+    "p": 0.06646
+   },
+   "m2_omitted_rate": 1.0,
+   "m2_present_rate": 1.0,
+   "d2": 0.0
+  }
+ },
+ "agreement_with_secondary": {
+  "agree": 213,
+  "disagree": 27,
+  "rate": 0.8875
+ }
+}

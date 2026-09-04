@@ -1,0 +1,3355 @@
+{
+ "8da17ab3-2105-4ecb-830a-0c0a34ceb694": {
+  "cell": "C00",
+  "target_id": "T003",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "18c9c2b4-d88a-4c18-b124-0680cdd99d3d": {
+  "cell": "C00",
+  "target_id": "T002",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "causal-non-sequitur"
+ },
+ "52f3e469-f173-4ee3-b431-b1ea0f5a69d9": {
+  "cell": "C00",
+  "target_id": "T001",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "unsupported-comparison"
+ },
+ "7c08f7a8-3169-4c97-a917-f322dc0f3ea3": {
+  "cell": "C00",
+  "target_id": "T004",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "circular-mechanism"
+ },
+ "da916f68-0f96-46a9-84a8-fc36ac54ad58": {
+  "cell": "C00",
+  "target_id": "T006",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "ab97eddb-ccc2-4b5b-b0cf-c73e16aec796": {
+  "cell": "C00",
+  "target_id": "T005",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "scope-contradiction"
+ },
+ "067b4a44-77f6-43dc-ab74-b0086c0c1f2a": {
+  "cell": "C00",
+  "target_id": "T008",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "c18cdaa6-b024-4aad-a537-5afd0a09e2b8": {
+  "cell": "C00",
+  "target_id": "T007",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "unsupported-comparison"
+ },
+ "56fb19dd-811d-47b2-8a72-fe8a1883f69b": {
+  "cell": "C00",
+  "target_id": "T009",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "evidence-misquotation"
+ },
+ "65ceb005-3a2e-4a71-8d6a-2ba2202c29d1": {
+  "cell": "C00",
+  "target_id": "T010",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "circular-mechanism"
+ },
+ "0b7c1618-fec1-4c84-916c-00e9b04582df": {
+  "cell": "C00",
+  "target_id": "T012",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "9735ce0f-804d-403a-b8bb-9f328e0cba66": {
+  "cell": "C00",
+  "target_id": "T011",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "scope-contradiction"
+ },
+ "155bd9b3-b335-4f0e-99a8-90ef2d83f1b9": {
+  "cell": "C00",
+  "target_id": "T014",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "causal-non-sequitur"
+ },
+ "e57ce987-4fa8-4e5c-b3ff-7a10c1ee374e": {
+  "cell": "C00",
+  "target_id": "T015",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "evidence-misquotation"
+ },
+ "13103358-f474-4081-badc-9d7b59c9a503": {
+  "cell": "C00",
+  "target_id": "T013",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "unsupported-comparison"
+ },
+ "1200702e-545f-4238-afb9-0ad1c5dd5a83": {
+  "cell": "C00",
+  "target_id": "T017",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "d3005210-fdc5-4283-bb79-b3f84e1b5701": {
+  "cell": "C00",
+  "target_id": "T018",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "384407d8-1107-43e0-9be5-45c4fa1d422f": {
+  "cell": "C00",
+  "target_id": "T016",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "circular-mechanism"
+ },
+ "a5ce92b2-3f9a-4723-ab4a-5c500ce5a3ce": {
+  "cell": "C00",
+  "target_id": "T019",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "unsupported-comparison"
+ },
+ "e1accb22-2681-4f5d-89bc-09fbf19bf19b": {
+  "cell": "C00",
+  "target_id": "T021",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "2bbf9e11-4c13-4217-8b9f-b3f00af20d6d": {
+  "cell": "C00",
+  "target_id": "T020",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "2a8edb08-2e65-4a77-8170-ab1b3e04890c": {
+  "cell": "C00",
+  "target_id": "T022",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "circular-mechanism"
+ },
+ "58854996-9448-47df-8a83-e5db74242900": {
+  "cell": "C00",
+  "target_id": "T024",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "f39efefc-81ef-47df-9760-8e69c65c9540": {
+  "cell": "C00",
+  "target_id": "T026",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "causal-non-sequitur"
+ },
+ "e2119af9-86aa-4efe-a97a-6279fc45b7b0": {
+  "cell": "C00",
+  "target_id": "T023",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "scope-contradiction"
+ },
+ "41e929fb-ebcf-4120-90b7-b30a090ec755": {
+  "cell": "C00",
+  "target_id": "T025",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "unsupported-comparison"
+ },
+ "f1b2b0b2-2cb5-4109-9e4e-15b9f45bad56": {
+  "cell": "C00",
+  "target_id": "T027",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "d43accaa-992e-4b07-88c2-c163b8cd4819": {
+  "cell": "C00",
+  "target_id": "T029",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "scope-contradiction"
+ },
+ "11209fda-84eb-4d55-8ff2-ba83ee313e01": {
+  "cell": "C00",
+  "target_id": "T028",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "circular-mechanism"
+ },
+ "b029e764-27a8-49aa-aaca-c7b2a8ae1049": {
+  "cell": "C00",
+  "target_id": "T032",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "7c00de87-d475-4bb5-a7d4-ff128983ed61": {
+  "cell": "C00",
+  "target_id": "T030",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "04b1e512-8b54-4250-af01-d2c5049df731": {
+  "cell": "C00",
+  "target_id": "T033",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "39b6047d-7e51-4670-a2dc-2fba0699b87c": {
+  "cell": "C00",
+  "target_id": "T031",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "unsupported-comparison"
+ },
+ "36ebd5f2-614e-4ba9-ab73-c8e2890966f5": {
+  "cell": "C00",
+  "target_id": "T034",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "circular-mechanism"
+ },
+ "0112e624-12e4-48dc-be22-5dfa3917bacd": {
+  "cell": "C00",
+  "target_id": "T035",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "598ccef4-72c0-44c7-b78d-15e45b2d2baa": {
+  "cell": "C00",
+  "target_id": "T036",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "a8ec8d18-93b0-4add-af66-e2eff984b8bc": {
+  "cell": "C00",
+  "target_id": "T039",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "evidence-misquotation"
+ },
+ "d508d827-41a1-4989-a9c4-40814293905c": {
+  "cell": "C00",
+  "target_id": "T038",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "causal-non-sequitur"
+ },
+ "b3e37ac6-1935-445a-bf87-7e290f30cbee": {
+  "cell": "C00",
+  "target_id": "T037",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "unsupported-comparison"
+ },
+ "3b02ade7-7192-43a4-bab0-31e141e75a9a": {
+  "cell": "C00",
+  "target_id": "T040",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "circular-mechanism"
+ },
+ "d5c8769d-9d60-4928-854f-97499a4f88fb": {
+  "cell": "C00",
+  "target_id": "T041",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "f486397d-d0c0-4a7b-94d3-952bda25f379": {
+  "cell": "C00",
+  "target_id": "T042",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "f1cff72f-c85f-4212-a48b-08e15ea2b212": {
+  "cell": "C00",
+  "target_id": "T045",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "evidence-misquotation"
+ },
+ "bc70ad58-3caf-4810-bc32-a7df63e0517c": {
+  "cell": "C00",
+  "target_id": "T044",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "causal-non-sequitur"
+ },
+ "d16bc9f1-5be2-45cf-b5f7-20c8c3500a94": {
+  "cell": "C00",
+  "target_id": "T046",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "circular-mechanism"
+ },
+ "bc1e5d45-e9ab-4c77-b12b-493615c9aeff": {
+  "cell": "C00",
+  "target_id": "T047",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "76c4828b-8949-42d8-855a-7481f5501f53": {
+  "cell": "C00",
+  "target_id": "T048",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "00edfe9a-0919-46fc-9b24-698eacf3d38e": {
+  "cell": "C00",
+  "target_id": "T049",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "unsupported-comparison"
+ },
+ "3405f7ff-c460-449f-8343-bd9f3cd3858e": {
+  "cell": "C00",
+  "target_id": "T051",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "evidence-misquotation"
+ },
+ "9670e1a4-ffa1-4588-ab60-9f11dfa9844b": {
+  "cell": "C00",
+  "target_id": "T050",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "causal-non-sequitur"
+ },
+ "4ba286bb-b478-4b29-b547-282f33b0bf1d": {
+  "cell": "C00",
+  "target_id": "T052",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "circular-mechanism"
+ },
+ "5c4d2b47-fe86-406a-bec5-5842c6047554": {
+  "cell": "C00",
+  "target_id": "T053",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "scope-contradiction"
+ },
+ "674e4ff9-409e-4470-b59b-5598323e93dc": {
+  "cell": "C00",
+  "target_id": "T043",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "unsupported-comparison"
+ },
+ "384f6e2a-e182-41ac-bb33-7fa0508df7f0": {
+  "cell": "C00",
+  "target_id": "T055",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "unsupported-comparison"
+ },
+ "95039a75-9825-4990-8528-b3b849d8d15d": {
+  "cell": "C00",
+  "target_id": "T056",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "a7ef773e-07e2-4074-a05f-0fc52a985d1f": {
+  "cell": "C00",
+  "target_id": "T057",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "evidence-misquotation"
+ },
+ "fbb30f60-b702-4edb-b98c-f3336b61bf51": {
+  "cell": "C00",
+  "target_id": "T054",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "40f5690e-cd44-42e7-907a-89ddade885a6": {
+  "cell": "C00",
+  "target_id": "T058",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "circular-mechanism"
+ },
+ "4613ef8c-a35d-4e3d-8488-7f39d8bdf85b": {
+  "cell": "C00",
+  "target_id": "T060",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "23d93aee-4237-4579-b5a8-732614236211": {
+  "cell": "C00",
+  "target_id": "T061",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "650f644d-a278-497b-807f-095210fab55d": {
+  "cell": "C00",
+  "target_id": "T059",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "scope-contradiction"
+ },
+ "7daedfc2-11d0-4b9d-b4e0-e9f812845ef3": {
+  "cell": "C00",
+  "target_id": "T062",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "3d21709b-37b4-407d-892c-25dd5bbd3687": {
+  "cell": "C00",
+  "target_id": "T064",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "320dc456-09a1-4f9b-941e-dbe7291cf6ee": {
+  "cell": "C00",
+  "target_id": "T065",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "15d5b937-106c-4e62-9856-d639bbe662ae": {
+  "cell": "C00",
+  "target_id": "T063",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "3650c9bb-e6d9-4ab4-9724-638325fb18b1": {
+  "cell": "C00",
+  "target_id": "T066",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "19bd5e67-366d-4d2c-8d17-fc6a33872c0f": {
+  "cell": "C00",
+  "target_id": "T067",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "bfd3752d-2f44-46ba-b82a-19432e088d2e": {
+  "cell": "C00",
+  "target_id": "T068",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "c9b8ec6b-ef81-44ac-84d6-f21f7ecafc53": {
+  "cell": "C00",
+  "target_id": "T070",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "c6615f5a-9606-4d29-a3a9-ca6e661e828f": {
+  "cell": "C00",
+  "target_id": "T071",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "d0f3db1a-9ee6-4c2c-b1a4-1f0eaa7d86fc": {
+  "cell": "C00",
+  "target_id": "T069",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "e00920dd-caca-4c65-8ca7-d9bc793fce25": {
+  "cell": "C00",
+  "target_id": "T072",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "5aaa79e8-0429-493c-8341-3444d3243f6f": {
+  "cell": "C00",
+  "target_id": "T073",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "9b3ddfb9-9a3c-4ba5-8fc1-0eac87eda143": {
+  "cell": "C00",
+  "target_id": "T074",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "f1a83a61-ff99-4528-9a6f-6af9a2c4d177": {
+  "cell": "C00",
+  "target_id": "T075",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "56446569-3a04-41ab-b549-99800f6063d1": {
+  "cell": "C00",
+  "target_id": "T076",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "a8566c76-2a80-45dc-b607-7a4cc8e8b66d": {
+  "cell": "C00",
+  "target_id": "T077",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "8dae840d-05be-4f6d-a3c9-476e23a56dd6": {
+  "cell": "C00",
+  "target_id": "T078",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "75da98d4-20f4-4f2d-8ebd-e178b474d2c4": {
+  "cell": "C00",
+  "target_id": "T079",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "2bebc451-4fa8-4a9d-a4aa-bacbd25d0245": {
+  "cell": "C00",
+  "target_id": "T080",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "c6da343f-62b7-427f-a454-37685d27440c": {
+  "cell": "C00",
+  "target_id": "T082",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "87c45e49-6ab0-42ed-abc5-d1f366c6a2e9": {
+  "cell": "C00",
+  "target_id": "T083",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "a82c5eca-d5e5-43d4-ba80-0793134ae449": {
+  "cell": "C00",
+  "target_id": "T081",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "8b71cefd-dda3-4bd6-b662-54523c96bc5c": {
+  "cell": "C00",
+  "target_id": "T084",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "1745b120-45ad-43a5-b671-f60019e2ebae": {
+  "cell": "C00",
+  "target_id": "T086",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "c5b7660f-b215-406a-921c-2fe81acd126d": {
+  "cell": "C00",
+  "target_id": "T085",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "4632df6e-08e8-430e-b6d5-7589bf3b4ff2": {
+  "cell": "C00",
+  "target_id": "T087",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "0cda3677-cfdd-462a-90dc-2f42ce88b376": {
+  "cell": "C00",
+  "target_id": "T089",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "1e967579-7aeb-4598-8760-40c591ad13d2": {
+  "cell": "C00",
+  "target_id": "T090",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "0cecb335-4310-4a33-8c66-5a275394d695": {
+  "cell": "C00",
+  "target_id": "T088",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "c3e1b250-22b6-4298-9209-ee77bc9ceb95": {
+  "cell": "C00",
+  "target_id": "T091",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "77cf1203-a37e-46fb-8dd2-dab38ea5dcd4": {
+  "cell": "C00",
+  "target_id": "T092",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "d44de6e8-14ad-447c-a1ca-b1bac1fb55da": {
+  "cell": "C00",
+  "target_id": "T093",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "55e65a45-5995-4bc9-b4bc-072f7549861b": {
+  "cell": "C00",
+  "target_id": "T094",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "f0ffbac6-88d4-4c93-855a-6a96450a1bec": {
+  "cell": "C00",
+  "target_id": "T095",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "1e3d3ee6-069c-4180-b430-95a1c0b067a9": {
+  "cell": "C00",
+  "target_id": "T097",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "679919ff-4531-4e05-9714-12819653af70": {
+  "cell": "C00",
+  "target_id": "T096",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "66129fc1-fc37-4872-aa64-65b36465ab8b": {
+  "cell": "C00",
+  "target_id": "T098",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "89d52ef1-21e6-4012-bfad-6b05787e9a5d": {
+  "cell": "C00",
+  "target_id": "T099",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "fc8a6e60-3637-4801-9329-18c786d7ba16": {
+  "cell": "C00",
+  "target_id": "T100",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "6d358519-3eaf-4ff3-bb60-3e596a763dba": {
+  "cell": "C00",
+  "target_id": "T102",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "794a8326-913f-4ec6-a395-008ef498d31e": {
+  "cell": "C00",
+  "target_id": "T103",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "d5e0cba5-5b05-4866-a295-d8fd293e9e8b": {
+  "cell": "C00",
+  "target_id": "T104",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "2893623a-a281-4b6b-a5c3-bb55deb06c04": {
+  "cell": "C00",
+  "target_id": "T105",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "833baaac-1d92-4a9b-989f-27c7cd32d76f": {
+  "cell": "C00",
+  "target_id": "T106",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "89062f8b-3638-4389-bc8d-ef983302cb2c": {
+  "cell": "C00",
+  "target_id": "T107",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "8b20530e-477f-45b6-b136-eeea0e576498": {
+  "cell": "C00",
+  "target_id": "T108",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "1bdf6887-dd7e-450b-be1f-2f0e5267f42c": {
+  "cell": "C00",
+  "target_id": "T101",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "1e11f360-542d-4a20-9489-1ae36c3bcf7e": {
+  "cell": "C00",
+  "target_id": "T111",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "2e255867-3d80-4f1d-903a-99648cb6bab8": {
+  "cell": "C00",
+  "target_id": "T109",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "0c4d9311-bb4d-4bf4-a271-f3a24ab620c8": {
+  "cell": "C00",
+  "target_id": "T110",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "48af18ae-9890-45b7-a582-4a28e93fcff1": {
+  "cell": "C00",
+  "target_id": "T114",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "cb50adc9-3902-433d-9f67-dcc6c1245035": {
+  "cell": "C00",
+  "target_id": "T113",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "b9ec6278-c2d7-4273-82de-672e19ae8435": {
+  "cell": "C00",
+  "target_id": "T112",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "a3221335-d3f4-43f1-bbec-76f05ba08ebd": {
+  "cell": "C00",
+  "target_id": "T115",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "51aa2d87-980d-4089-9d4a-6844759066f4": {
+  "cell": "C00",
+  "target_id": "T116",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "f64e7eeb-8a4a-476a-9c14-f40aa80f7dc8": {
+  "cell": "C00",
+  "target_id": "T117",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "5f607295-7eca-4244-b7b3-4b403facd7ff": {
+  "cell": "C00",
+  "target_id": "T119",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "97b7da8b-151f-4b74-9b22-d28e14ae6d37": {
+  "cell": "C00",
+  "target_id": "T118",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "e33bf525-04ea-41e9-97b1-bda7a1ec1b4a": {
+  "cell": "C00",
+  "target_id": "T120",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "a84261f2-fab6-43c1-9d9f-d340b3c7b9dc": {
+  "cell": "C10",
+  "target_id": "T003",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "af6f8e64-cdb6-40a2-aa17-002e97983398": {
+  "cell": "C10",
+  "target_id": "T002",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "causal-non-sequitur"
+ },
+ "a50dbdb7-d7bd-482b-ae02-d7edad1ab597": {
+  "cell": "C10",
+  "target_id": "T001",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "unsupported-comparison"
+ },
+ "2189adeb-56c2-4282-96e4-33532065f609": {
+  "cell": "C10",
+  "target_id": "T004",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "circular-mechanism"
+ },
+ "88ad7bfa-fa16-48da-9528-ef7a76dfc620": {
+  "cell": "C10",
+  "target_id": "T006",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "3fe26bab-8102-4f02-b323-c9701d07d0bf": {
+  "cell": "C10",
+  "target_id": "T007",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "unsupported-comparison"
+ },
+ "f7b5ac1f-a4dd-412b-8d4b-97a6f8acf114": {
+  "cell": "C10",
+  "target_id": "T005",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "scope-contradiction"
+ },
+ "13023e04-3e4a-4381-962c-d0f3cc0cfce8": {
+  "cell": "C10",
+  "target_id": "T008",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "07bd4335-217f-47cd-8fe7-23543be7a2a1": {
+  "cell": "C10",
+  "target_id": "T009",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "evidence-misquotation"
+ },
+ "793f4c62-dbb5-461d-bcf5-9d962901b58e": {
+  "cell": "C10",
+  "target_id": "T012",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "5cb20c64-bc57-4aeb-b1d5-ef82a1522e73": {
+  "cell": "C10",
+  "target_id": "T011",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "scope-contradiction"
+ },
+ "2af1a2df-54be-462c-847e-1b4a909ff810": {
+  "cell": "C10",
+  "target_id": "T010",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "circular-mechanism"
+ },
+ "95627292-24ab-424c-b4fa-40572d8bd58f": {
+  "cell": "C10",
+  "target_id": "T015",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "evidence-misquotation"
+ },
+ "9ffa2d6b-10f6-40b7-99e9-87c0b3b02648": {
+  "cell": "C10",
+  "target_id": "T013",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "unsupported-comparison"
+ },
+ "14c89f56-689f-40ab-8c0c-6047d9c5b5d2": {
+  "cell": "C10",
+  "target_id": "T014",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "causal-non-sequitur"
+ },
+ "a8caf24a-5b4c-4030-a4a2-99d6794ba94f": {
+  "cell": "C10",
+  "target_id": "T018",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "ae9e1196-4eee-4a98-ae86-3b6646ac795e": {
+  "cell": "C10",
+  "target_id": "T016",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "circular-mechanism"
+ },
+ "6fbb48b0-e20e-400a-9955-f92fba3f80c3": {
+  "cell": "C10",
+  "target_id": "T020",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "34a182c8-a78b-46d6-9ec2-ba3601e9555a": {
+  "cell": "C10",
+  "target_id": "T019",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "unsupported-comparison"
+ },
+ "72d52306-3270-4578-9aae-1dc70ea834fc": {
+  "cell": "C10",
+  "target_id": "T021",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "8052ace2-6c38-42cf-8b49-72192a0d5aeb": {
+  "cell": "C10",
+  "target_id": "T022",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "circular-mechanism"
+ },
+ "6016893e-f1a2-4304-9cb0-51840df13c9c": {
+  "cell": "C10",
+  "target_id": "T017",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "12eadbc7-5da4-4d79-a524-c0f229631a2b": {
+  "cell": "C10",
+  "target_id": "T023",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "scope-contradiction"
+ },
+ "ae9cdb75-6009-4354-bedb-bb6ea19a6104": {
+  "cell": "C10",
+  "target_id": "T024",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "dab9b490-8b01-4bfa-b9e8-ba71a20d37db": {
+  "cell": "C10",
+  "target_id": "T025",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "unsupported-comparison"
+ },
+ "baa684ac-b0eb-4157-91ec-5a1e7a58da8e": {
+  "cell": "C10",
+  "target_id": "T026",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "causal-non-sequitur"
+ },
+ "3845c301-caca-4d4b-a1fa-c622eb6d47bb": {
+  "cell": "C10",
+  "target_id": "T027",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "35919d4a-514b-40ef-9970-56cc12ef36cf": {
+  "cell": "C10",
+  "target_id": "T029",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "scope-contradiction"
+ },
+ "5e0dc7d5-5150-4227-bc0f-97f0425d0e6c": {
+  "cell": "C10",
+  "target_id": "T030",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "f3534944-776d-43e7-8a75-4a1867a7d81c": {
+  "cell": "C10",
+  "target_id": "T031",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "unsupported-comparison"
+ },
+ "0bb1769c-d8d2-477f-87ff-bc0e942cb577": {
+  "cell": "C10",
+  "target_id": "T028",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "circular-mechanism"
+ },
+ "8d6cdeec-6c77-456a-9776-b6bf8c2e7174": {
+  "cell": "C10",
+  "target_id": "T033",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "764c6c2d-8f7a-496e-82be-c36f94dba9a3": {
+  "cell": "C10",
+  "target_id": "T032",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "93efbc9b-bdda-4bc9-8484-a0392af6043f": {
+  "cell": "C10",
+  "target_id": "T034",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "circular-mechanism"
+ },
+ "eddd535d-9602-4c53-a465-53a799117c8c": {
+  "cell": "C10",
+  "target_id": "T035",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "296b6682-d839-4caa-ad5c-2e805c7edde1": {
+  "cell": "C10",
+  "target_id": "T036",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "e8968c60-2c63-46be-b028-73cdfa382b1b": {
+  "cell": "C10",
+  "target_id": "T037",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "unsupported-comparison"
+ },
+ "9b6222c3-0253-4622-9f54-ce37a7b01b4e": {
+  "cell": "C10",
+  "target_id": "T038",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "causal-non-sequitur"
+ },
+ "e2db307b-53fa-440d-83e1-5876dd9fd3a1": {
+  "cell": "C10",
+  "target_id": "T039",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "evidence-misquotation"
+ },
+ "25be61c0-da08-48cc-b49f-e027ffad9f93": {
+  "cell": "C10",
+  "target_id": "T040",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "circular-mechanism"
+ },
+ "aaa42b42-6ddd-4420-947d-8b217736b1af": {
+  "cell": "C10",
+  "target_id": "T042",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "31d7c5e2-fa8e-4034-807c-4ec07e2f4c98": {
+  "cell": "C10",
+  "target_id": "T041",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "231430ac-0f89-4ccf-94c4-2b925833f0d5": {
+  "cell": "C10",
+  "target_id": "T045",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "evidence-misquotation"
+ },
+ "010cb614-f7b9-4dc5-9cb4-7b9eb659c046": {
+  "cell": "C10",
+  "target_id": "T043",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "unsupported-comparison"
+ },
+ "ca99ff3a-8674-48f6-9a97-ed87db6514e5": {
+  "cell": "C10",
+  "target_id": "T044",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "causal-non-sequitur"
+ },
+ "43223787-2d0e-4fd3-869e-7c68be338522": {
+  "cell": "C10",
+  "target_id": "T047",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "a8dc72aa-138d-41e1-b59a-2075b29a37b5": {
+  "cell": "C10",
+  "target_id": "T048",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "853aa753-3df8-41ce-bad9-8fbb304e96a5": {
+  "cell": "C10",
+  "target_id": "T049",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "unsupported-comparison"
+ },
+ "9dd6fb73-4d46-4f77-87c5-556242514cdd": {
+  "cell": "C10",
+  "target_id": "T046",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "circular-mechanism"
+ },
+ "5d1a5867-8bff-4311-96aa-06334f9530d3": {
+  "cell": "C10",
+  "target_id": "T051",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "evidence-misquotation"
+ },
+ "a11b07bd-89ca-4f46-b318-23b9566ccdf2": {
+  "cell": "C10",
+  "target_id": "T050",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "causal-non-sequitur"
+ },
+ "6be5451b-217a-4aea-83cf-411115fda763": {
+  "cell": "C10",
+  "target_id": "T052",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "circular-mechanism"
+ },
+ "74920651-83e9-4247-9fa5-43a0834542c2": {
+  "cell": "C10",
+  "target_id": "T053",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "scope-contradiction"
+ },
+ "5b271f6a-140b-47ee-aaae-c0b9e86f358f": {
+  "cell": "C10",
+  "target_id": "T055",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "unsupported-comparison"
+ },
+ "6b1aaf44-362d-4775-a999-4e1a6cc5fa50": {
+  "cell": "C10",
+  "target_id": "T054",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "59eef964-0a05-4ba8-b80b-267dfb8880a9": {
+  "cell": "C10",
+  "target_id": "T057",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "evidence-misquotation"
+ },
+ "c3fc5f78-5875-4a8a-8a5e-61296f9fc40a": {
+  "cell": "C10",
+  "target_id": "T056",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "4837ba6e-b656-4f50-b2b9-9d31fe30ba91": {
+  "cell": "C10",
+  "target_id": "T058",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "circular-mechanism"
+ },
+ "d0e5bf38-9296-43a6-a033-54cf105180b2": {
+  "cell": "C10",
+  "target_id": "T059",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "scope-contradiction"
+ },
+ "5cb81f43-44a1-4e14-9aa0-28b0b8fe55de": {
+  "cell": "C10",
+  "target_id": "T061",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "ccbdc55c-8de6-4618-bb55-73fe2166d614": {
+  "cell": "C10",
+  "target_id": "T060",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "889cdbe2-0776-42e9-8e6e-3738b2174f31": {
+  "cell": "C10",
+  "target_id": "T064",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "c7a65323-67f0-428c-9535-58c4cfd67edc": {
+  "cell": "C10",
+  "target_id": "T062",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "937e14af-1ae9-41ca-bf38-4669c766ac92": {
+  "cell": "C10",
+  "target_id": "T063",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "80f1b401-f9ed-457f-b245-f7b27636220a": {
+  "cell": "C10",
+  "target_id": "T065",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "1b75f909-9101-4e33-a9e5-b711b41f7de1": {
+  "cell": "C10",
+  "target_id": "T067",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "bae43870-0904-4cbd-8eb9-273df92b55ed": {
+  "cell": "C10",
+  "target_id": "T066",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "916df46a-4fb9-47b2-a7b4-7000be0f2de7": {
+  "cell": "C10",
+  "target_id": "T068",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "29f6c42d-167f-4b27-9eec-36cf5277fc3a": {
+  "cell": "C10",
+  "target_id": "T071",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "4c52a99a-556e-4895-9544-76425ec4838b": {
+  "cell": "C10",
+  "target_id": "T069",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "0261b7b0-2809-43dc-b5b4-1e1c09572d3b": {
+  "cell": "C10",
+  "target_id": "T070",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "35e6f2a9-e619-4028-a2fd-abf12563e1dd": {
+  "cell": "C10",
+  "target_id": "T072",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "e97db58a-cc46-4bf3-a9d4-a5c0c9706254": {
+  "cell": "C10",
+  "target_id": "T074",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "948854ea-70db-4d46-a1f6-3f4046a7c73b": {
+  "cell": "C10",
+  "target_id": "T076",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "f99d1b6b-3994-4783-a932-79139aba7c2f": {
+  "cell": "C10",
+  "target_id": "T073",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "fe197e7e-b579-4dc6-b9a4-3b0ac02025cb": {
+  "cell": "C10",
+  "target_id": "T075",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "977f2324-e1b4-46cb-a53e-9b4030ab4ad5": {
+  "cell": "C10",
+  "target_id": "T077",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "ea6fb347-99f0-4f4b-a7ef-d42003c9beba": {
+  "cell": "C10",
+  "target_id": "T079",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "905886a3-069a-47c6-99f3-3b6e09be620e": {
+  "cell": "C10",
+  "target_id": "T080",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "6b082634-7cb0-4aa9-8adb-0eb9654e918a": {
+  "cell": "C10",
+  "target_id": "T078",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "24f2172e-118c-42fb-adbf-c9bfaf8e8b88": {
+  "cell": "C10",
+  "target_id": "T082",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "628b15d5-d0b0-445a-ba74-19c4b32ada69": {
+  "cell": "C10",
+  "target_id": "T083",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "1ce142fc-d570-4d8e-b9cc-6aa58af0feaa": {
+  "cell": "C10",
+  "target_id": "T081",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "c41704b2-56ad-4bd0-b233-60bdb1c17677": {
+  "cell": "C10",
+  "target_id": "T084",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "c33426c3-35f2-47a9-9079-653abdf88d2f": {
+  "cell": "C10",
+  "target_id": "T085",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "42cb1375-08f2-4d32-bb45-9c7a6fe06006": {
+  "cell": "C10",
+  "target_id": "T086",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "aa576d04-3c77-4427-b4cd-2a7d0c7b9c95": {
+  "cell": "C10",
+  "target_id": "T089",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "70055bf1-f887-44fe-9594-d7ebaf89cf63": {
+  "cell": "C10",
+  "target_id": "T088",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "f29fb63a-808d-4475-9040-07f38187a245": {
+  "cell": "C10",
+  "target_id": "T087",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "082e7957-18e5-401b-afa1-db43f58b7d31": {
+  "cell": "C10",
+  "target_id": "T091",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "312d61d8-cd4c-40d9-982a-2900a57bec9e": {
+  "cell": "C10",
+  "target_id": "T090",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "9b9f0c2c-d736-4b52-8e82-e7693fba4eaf": {
+  "cell": "C10",
+  "target_id": "T093",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "dbda38ef-e6f9-40de-aa59-362ffe279f7f": {
+  "cell": "C10",
+  "target_id": "T094",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "3b6fad66-1e96-45d6-abfe-fd21f0d5c429": {
+  "cell": "C10",
+  "target_id": "T095",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "09f0a6f5-c06f-4d35-8521-022e246772c8": {
+  "cell": "C10",
+  "target_id": "T092",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "22cf82ed-78c4-49f0-993c-8b03f5fe520f": {
+  "cell": "C10",
+  "target_id": "T096",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "ddd9a19a-2653-442c-b967-71cc0b2e83dd": {
+  "cell": "C10",
+  "target_id": "T097",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "13754383-0833-47d2-8857-c7ba0118da7e": {
+  "cell": "C10",
+  "target_id": "T098",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "af327ad8-104f-40bc-a63a-a9bd2b044801": {
+  "cell": "C10",
+  "target_id": "T100",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "aebc8ea4-a283-4188-ace5-a62980c944fd": {
+  "cell": "C10",
+  "target_id": "T099",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "f6f1d10b-6984-4685-8035-5feac5fbd4d7": {
+  "cell": "C10",
+  "target_id": "T102",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "a047f998-aff4-4cae-8005-3e812bacb1f3": {
+  "cell": "C10",
+  "target_id": "T101",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "1603de4f-20ca-4215-b521-9e7020cbcba5": {
+  "cell": "C10",
+  "target_id": "T104",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "dbf006e1-463a-4f11-839a-67ca9b096faa": {
+  "cell": "C10",
+  "target_id": "T105",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "b3f65dae-2230-4863-bd59-1767813c16cd": {
+  "cell": "C10",
+  "target_id": "T103",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "a48c2f73-dc65-4db9-b39c-a8a3c59463f3": {
+  "cell": "C10",
+  "target_id": "T107",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "12c20dc3-b566-4a9b-8bf8-c451a696cbf1": {
+  "cell": "C10",
+  "target_id": "T106",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "9ddb2b36-a034-497f-b2d5-749540570033": {
+  "cell": "C10",
+  "target_id": "T108",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "fd03e24d-e8cb-4c8d-9531-34e3a26c9d06": {
+  "cell": "C10",
+  "target_id": "T110",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "83e2cbc4-ac76-474c-b6ba-9954bb5cbea5": {
+  "cell": "C10",
+  "target_id": "T111",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "a5a8f86a-2a23-49eb-bc4e-19c1f1675399": {
+  "cell": "C10",
+  "target_id": "T113",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "17baaf76-1c74-4ba7-b07c-f19a845aeb71": {
+  "cell": "C10",
+  "target_id": "T109",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "17f7d8d3-3ed1-4314-8536-0ced746db386": {
+  "cell": "C10",
+  "target_id": "T112",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "86d71d50-7622-4460-810a-1c6a9f5634bf": {
+  "cell": "C10",
+  "target_id": "T115",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "6ff78e73-d662-4254-9803-39582631525b": {
+  "cell": "C10",
+  "target_id": "T114",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "5d80f309-e7ce-4c70-a30b-bfd17af8bc82": {
+  "cell": "C10",
+  "target_id": "T116",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "16bc4207-7d66-44e2-a03b-bcb0313af10c": {
+  "cell": "C10",
+  "target_id": "T117",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "8c5fd80c-6851-4e7d-ad08-30eec4ed35b3": {
+  "cell": "C10",
+  "target_id": "T119",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "bf886646-ce9b-4bf9-9073-6be41c68f492": {
+  "cell": "C10",
+  "target_id": "T120",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "653d7c71-17e0-499d-8193-fcf5b7a6297e": {
+  "cell": "C10",
+  "target_id": "T118",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "f727aa35-41bd-48e3-a6df-983857596e4a": {
+  "cell": "C01",
+  "target_id": "T003",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "a8ef8c8e-9b7d-4c68-9caa-13a4f7c1114a": {
+  "cell": "C01",
+  "target_id": "T002",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "causal-non-sequitur"
+ },
+ "0a888f91-360d-4146-ad15-6adaa0fbe937": {
+  "cell": "C01",
+  "target_id": "T001",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "unsupported-comparison"
+ },
+ "4b0b60da-0241-400f-b34f-912e6d5f594f": {
+  "cell": "C01",
+  "target_id": "T005",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "scope-contradiction"
+ },
+ "c519273a-97f3-4962-a12e-7f1a5e6a51d5": {
+  "cell": "C01",
+  "target_id": "T004",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "circular-mechanism"
+ },
+ "457ae16b-3e80-4bc0-8663-93d3126b0028": {
+  "cell": "C01",
+  "target_id": "T006",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "3e918325-89b7-4253-ad50-95f34dd4c0d7": {
+  "cell": "C01",
+  "target_id": "T007",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "unsupported-comparison"
+ },
+ "111e073b-2b7b-4f20-97ec-446b9f81f38f": {
+  "cell": "C01",
+  "target_id": "T008",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "decdf3e5-9be1-44d9-820c-901f9813600b": {
+  "cell": "C01",
+  "target_id": "T009",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "evidence-misquotation"
+ },
+ "33e1d6a1-0903-4ceb-acbf-c68118ab27f5": {
+  "cell": "C01",
+  "target_id": "T010",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "circular-mechanism"
+ },
+ "78b25bbe-4e78-42f2-9b9c-a73cbc870b7c": {
+  "cell": "C01",
+  "target_id": "T011",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "scope-contradiction"
+ },
+ "b8aaf6a2-e615-4145-87c4-9581008209ab": {
+  "cell": "C01",
+  "target_id": "T012",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "0af6bff0-e588-4556-8bee-eb944c88ab44": {
+  "cell": "C01",
+  "target_id": "T013",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "unsupported-comparison"
+ },
+ "1f7a936e-411f-4805-910d-8ece20595dc0": {
+  "cell": "C01",
+  "target_id": "T014",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "causal-non-sequitur"
+ },
+ "34d7078e-fd0a-4622-ac14-f26cac0bae0e": {
+  "cell": "C01",
+  "target_id": "T015",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "evidence-misquotation"
+ },
+ "70efface-c516-49c6-bba0-d22ca3e668ab": {
+  "cell": "C01",
+  "target_id": "T018",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "fa18b85a-c43f-4911-bc2e-0a17aa2e42e7": {
+  "cell": "C01",
+  "target_id": "T016",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "circular-mechanism"
+ },
+ "9158c3e7-8af6-4938-92fa-789c90c449e1": {
+  "cell": "C01",
+  "target_id": "T017",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "f99d4403-45ea-4a27-88b0-c06f0f6eb30c": {
+  "cell": "C01",
+  "target_id": "T020",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "4fd4fd16-69e9-4ef7-acbe-f790e78e90c8": {
+  "cell": "C01",
+  "target_id": "T021",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "5155bab6-672b-434f-976e-d6064ebee6de": {
+  "cell": "C01",
+  "target_id": "T019",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "unsupported-comparison"
+ },
+ "845d1b32-2c0d-4623-94f7-0dd987b4d9a4": {
+  "cell": "C01",
+  "target_id": "T022",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "circular-mechanism"
+ },
+ "af51a350-a248-4cad-bcea-fea9ff4e1820": {
+  "cell": "C01",
+  "target_id": "T023",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "scope-contradiction"
+ },
+ "003fa0f3-8b2a-42e1-bf73-e3920c54c549": {
+  "cell": "C01",
+  "target_id": "T025",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "unsupported-comparison"
+ },
+ "6494bf28-9cb9-4b57-bdbd-ed1a6efa4f40": {
+  "cell": "C01",
+  "target_id": "T026",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "causal-non-sequitur"
+ },
+ "8ca2afd7-e5ce-4caf-aa13-0b213e03c21f": {
+  "cell": "C01",
+  "target_id": "T024",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "ed10e2d4-f3c1-4c3f-8a74-bf068261edd7": {
+  "cell": "C01",
+  "target_id": "T027",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "9ed67cc0-ede5-4519-b2a8-4912935e0055": {
+  "cell": "C01",
+  "target_id": "T028",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "circular-mechanism"
+ },
+ "406f3fc8-38a1-49bf-bc85-bfb0e81c4820": {
+  "cell": "C01",
+  "target_id": "T029",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "scope-contradiction"
+ },
+ "5b163187-ab81-497b-846d-546bf57debbc": {
+  "cell": "C01",
+  "target_id": "T031",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "unsupported-comparison"
+ },
+ "380ea3dd-fc89-4492-a515-09f77c186c41": {
+  "cell": "C01",
+  "target_id": "T030",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "36f48707-eef2-4bce-8850-032366718239": {
+  "cell": "C01",
+  "target_id": "T032",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "2dea174b-769e-49b4-807f-cf5f892f1ade": {
+  "cell": "C01",
+  "target_id": "T033",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "799e183f-98c4-46a9-93d6-20e3f4451b11": {
+  "cell": "C01",
+  "target_id": "T034",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "circular-mechanism"
+ },
+ "a8620de3-e025-4d25-bf85-26bf25651846": {
+  "cell": "C01",
+  "target_id": "T036",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "08b1547a-452f-4906-b75a-50a9b4a888bc": {
+  "cell": "C01",
+  "target_id": "T035",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "dfed54cc-253f-4187-9f66-96599acbb261": {
+  "cell": "C01",
+  "target_id": "T039",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "evidence-misquotation"
+ },
+ "2e9e6fd1-7db3-4a9c-a783-be00342d31ae": {
+  "cell": "C01",
+  "target_id": "T038",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "causal-non-sequitur"
+ },
+ "de04f4b7-a718-4110-aa5b-e19ebb5b0ebd": {
+  "cell": "C01",
+  "target_id": "T037",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "unsupported-comparison"
+ },
+ "52fd2315-0114-40f0-8701-dbe89008bfbd": {
+  "cell": "C01",
+  "target_id": "T041",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "5e1a117c-f612-4e3d-a6b9-ae6138607224": {
+  "cell": "C01",
+  "target_id": "T040",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "circular-mechanism"
+ },
+ "b0d62e1c-7242-42e3-af3b-672100e2d7a2": {
+  "cell": "C01",
+  "target_id": "T042",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "11fa1128-06f6-4e5b-b0f0-cfae8f308b0a": {
+  "cell": "C01",
+  "target_id": "T043",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "unsupported-comparison"
+ },
+ "2f0f3a53-efd5-4e88-8832-e8a224a3b94c": {
+  "cell": "C01",
+  "target_id": "T045",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "evidence-misquotation"
+ },
+ "3d6e571f-a9a9-43aa-b3a1-5f213d25ece1": {
+  "cell": "C01",
+  "target_id": "T046",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "circular-mechanism"
+ },
+ "77058327-722b-4ad0-b15c-03b196be5bdf": {
+  "cell": "C01",
+  "target_id": "T047",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "c3fb4629-cd3e-4e84-90ea-9ca36349b9d7": {
+  "cell": "C01",
+  "target_id": "T049",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "unsupported-comparison"
+ },
+ "b2ae3247-d4e2-4ae0-aaba-7a156753cc9b": {
+  "cell": "C01",
+  "target_id": "T050",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "causal-non-sequitur"
+ },
+ "ba939497-cf79-46b4-8261-cf47bd8ecd97": {
+  "cell": "C01",
+  "target_id": "T051",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "evidence-misquotation"
+ },
+ "96c9c90c-545c-49f5-a328-b855d115cf9d": {
+  "cell": "C01",
+  "target_id": "T048",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "a29fff79-da24-4652-991b-0c6479ad410c": {
+  "cell": "C01",
+  "target_id": "T052",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "circular-mechanism"
+ },
+ "b8318303-7e81-415d-89fa-e130290a5283": {
+  "cell": "C01",
+  "target_id": "T053",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "scope-contradiction"
+ },
+ "ad28f875-7d66-48e5-8844-78854f5a625f": {
+  "cell": "C01",
+  "target_id": "T054",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "399b1196-aa31-4af1-92d5-ca2937e4280a": {
+  "cell": "C01",
+  "target_id": "T055",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "unsupported-comparison"
+ },
+ "1b5de598-727c-45d8-9e63-d6620ecb1faf": {
+  "cell": "C01",
+  "target_id": "T057",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "evidence-misquotation"
+ },
+ "b821667c-d93a-4c7c-a297-187a7b03f053": {
+  "cell": "C01",
+  "target_id": "T056",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "fa844bf3-476e-4393-9d50-be2b5299fa6a": {
+  "cell": "C01",
+  "target_id": "T058",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "circular-mechanism"
+ },
+ "d60779ed-4cf6-4cc5-8d83-44d6096bd729": {
+  "cell": "C01",
+  "target_id": "T060",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "80677bc8-dde2-4b12-ae62-167ab79a28a3": {
+  "cell": "C01",
+  "target_id": "T059",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "scope-contradiction"
+ },
+ "784429cd-f7ad-47a1-88b1-7a5aed841f53": {
+  "cell": "C01",
+  "target_id": "T061",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "e6e7e7ed-531e-422e-a8e3-41a39270c7a1": {
+  "cell": "C01",
+  "target_id": "T062",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "b9bf5e78-c99e-4e08-9aaa-1916c29ccf14": {
+  "cell": "C01",
+  "target_id": "T064",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "7047aa92-7fa6-408a-8242-ab444f5bed8f": {
+  "cell": "C01",
+  "target_id": "T065",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "db9f5358-6053-445a-bcd6-058d517afdd7": {
+  "cell": "C01",
+  "target_id": "T063",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "d53dd668-4dd4-4c23-857f-94a22ca16f18": {
+  "cell": "C01",
+  "target_id": "T066",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "7b15e5e3-c7f2-4e63-ac6c-8df751b13937": {
+  "cell": "C01",
+  "target_id": "T067",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "7ea544bb-3d76-4018-a134-39b2e17adb6e": {
+  "cell": "C01",
+  "target_id": "T069",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "bfc3ad74-f8ac-4c20-8e3e-6b39a937b53c": {
+  "cell": "C01",
+  "target_id": "T068",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "c3e8ffea-668d-472c-848c-6c86cf35c771": {
+  "cell": "C01",
+  "target_id": "T070",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "915db8f7-5d51-42ec-9554-bd300af5077e": {
+  "cell": "C01",
+  "target_id": "T072",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "fc99f4d1-fd8f-49dc-9eaf-df3f8b94f38e": {
+  "cell": "C01",
+  "target_id": "T071",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "323f4d95-04b0-4cce-aae4-da650497baa7": {
+  "cell": "C01",
+  "target_id": "T073",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "bf4db3b0-ee69-4342-9f26-a817318a8142": {
+  "cell": "C01",
+  "target_id": "T074",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "fae5256f-ce71-45a9-8e28-44bdc360f8b1": {
+  "cell": "C01",
+  "target_id": "T075",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "bdc60076-60c3-46b0-8308-4cf17e3e2b85": {
+  "cell": "C01",
+  "target_id": "T076",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "21cfcece-424c-49cf-a3c7-3efdf213215f": {
+  "cell": "C01",
+  "target_id": "T078",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "7562e63a-f2f1-4008-86bc-9c461ece4d14": {
+  "cell": "C01",
+  "target_id": "T079",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "73029881-8783-4096-b55b-534290e6b5d5": {
+  "cell": "C01",
+  "target_id": "T077",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "c5e682c8-d3e6-4ce0-9f15-7a94af07b99b": {
+  "cell": "C01",
+  "target_id": "T080",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "5ce14e60-b074-44f6-af55-cc7e8a4e5f90": {
+  "cell": "C01",
+  "target_id": "T082",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "30b2172d-8cfa-4c56-a884-eea64d046aa3": {
+  "cell": "C01",
+  "target_id": "T081",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "c16ae156-bc64-4317-a510-99be59b3907c": {
+  "cell": "C01",
+  "target_id": "T083",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "1f4aaa80-a2ec-4998-a229-1f2b52d7cfc7": {
+  "cell": "C01",
+  "target_id": "T084",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "57a28175-eaf0-4ea8-9d1b-e2a94bddaa35": {
+  "cell": "C01",
+  "target_id": "T086",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "974fac81-0fc1-4f69-8220-8ec883954ee0": {
+  "cell": "C01",
+  "target_id": "T085",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "3a2df143-7ee6-4899-9077-84fed21f8fda": {
+  "cell": "C01",
+  "target_id": "T087",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "facec9f7-6794-472c-9890-6fffafdec5ae": {
+  "cell": "C01",
+  "target_id": "T088",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "729ea753-0e4b-4aac-a135-ddd2a802b470": {
+  "cell": "C01",
+  "target_id": "T089",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "dd6fc11b-162a-4d6c-a758-8fbf6e21c499": {
+  "cell": "C01",
+  "target_id": "T091",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "3909e9d9-e22a-4deb-8aaf-064f6a3dcf4e": {
+  "cell": "C01",
+  "target_id": "T090",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "9ba920f7-1026-4b83-8753-57cb40299404": {
+  "cell": "C01",
+  "target_id": "T093",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "1842db46-a6fc-41ff-8cf4-7f3ec7d80e8e": {
+  "cell": "C01",
+  "target_id": "T092",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "68bb7d9b-875a-4eef-83fb-f576ba184d1e": {
+  "cell": "C01",
+  "target_id": "T094",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "c48cf83f-8bb1-48a3-9d38-4bbb6a1aa3a3": {
+  "cell": "C01",
+  "target_id": "T096",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "33a67e1d-9144-435f-81c2-20a89fc3c266": {
+  "cell": "C01",
+  "target_id": "T095",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "19f3dc9c-a33c-4293-b8ca-8c56c85df8ff": {
+  "cell": "C01",
+  "target_id": "T097",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "ea84dee3-1514-493e-8b72-7327dac3b682": {
+  "cell": "C01",
+  "target_id": "T099",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "f4dbd358-6d0e-49cd-987e-be1a547d2f24": {
+  "cell": "C01",
+  "target_id": "T100",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "92640752-d69b-4f67-9cff-77fb2e776f5b": {
+  "cell": "C01",
+  "target_id": "T098",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "f5ea658d-5cb4-464f-b0e3-afb1c33b8a3e": {
+  "cell": "C01",
+  "target_id": "T102",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "5ddc5dfe-f598-4c9d-bd8e-6cb45e541250": {
+  "cell": "C01",
+  "target_id": "T101",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "846124fa-81c1-4b4b-9bbd-212776cc300f": {
+  "cell": "C01",
+  "target_id": "T103",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "5eacff98-7a7d-4e47-8c53-755b6f84ea14": {
+  "cell": "C01",
+  "target_id": "T104",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "260b9a63-60eb-4ad9-bc8d-e53ad8f83539": {
+  "cell": "C01",
+  "target_id": "T105",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "4542e31a-a6a9-4a4f-9cf2-cf98a5986fef": {
+  "cell": "C01",
+  "target_id": "T106",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "5fcda75a-5be2-4509-9808-c0f08daefbd0": {
+  "cell": "C01",
+  "target_id": "T107",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "d2c11e5a-bb72-4b95-8644-151a62d537f1": {
+  "cell": "C01",
+  "target_id": "T108",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "180fd450-49ed-4fa6-83ae-c33191ea17c2": {
+  "cell": "C01",
+  "target_id": "T110",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "41eb4114-e5af-4b43-9be7-cb13fe64b307": {
+  "cell": "C01",
+  "target_id": "T109",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "e106ea3e-716f-45a2-824c-9732b62ee69e": {
+  "cell": "C01",
+  "target_id": "T112",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "33d89898-1901-45b3-b177-cd804c2de7b4": {
+  "cell": "C01",
+  "target_id": "T113",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "2f84a22f-7c08-44cb-bc21-a0d3e2c4c705": {
+  "cell": "C01",
+  "target_id": "T111",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "e8d41114-7e79-40b9-ac5f-2be11d499fd9": {
+  "cell": "C01",
+  "target_id": "T115",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "67a88b61-28b8-4aae-a7dd-01d978671f10": {
+  "cell": "C01",
+  "target_id": "T116",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "e4de6602-7337-49da-9123-be09113e8ea0": {
+  "cell": "C01",
+  "target_id": "T114",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "299e3a48-1c08-4fbe-a659-00465d43e9a5": {
+  "cell": "C01",
+  "target_id": "T119",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "54a3284f-f46a-4419-ba98-37a410b8e2c6": {
+  "cell": "C01",
+  "target_id": "T117",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "a178e42c-5c88-4811-b9c2-18945516e04e": {
+  "cell": "C01",
+  "target_id": "T118",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "c58c2a9b-8107-40e7-b197-60087b74f3de": {
+  "cell": "C01",
+  "target_id": "T120",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "b76d38ea-dd80-4667-9bbb-0e0d3f114a62": {
+  "cell": "C11",
+  "target_id": "T003",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "5ca8e4fa-0917-489f-af18-a6abb3bc3670": {
+  "cell": "C11",
+  "target_id": "T002",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "causal-non-sequitur"
+ },
+ "6eb05611-de6f-4e6c-89cf-e93d4deb613d": {
+  "cell": "C11",
+  "target_id": "T001",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "unsupported-comparison"
+ },
+ "6bfaba2d-69e3-4759-bdcf-30823d3aa607": {
+  "cell": "C11",
+  "target_id": "T004",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "circular-mechanism"
+ },
+ "4e05e817-f807-44e5-ba95-4db91e9974cd": {
+  "cell": "C11",
+  "target_id": "T005",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "scope-contradiction"
+ },
+ "6060726e-3b3e-4562-bc3a-e19fd0ce16e7": {
+  "cell": "C11",
+  "target_id": "T006",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "6410bb68-2722-4524-bbd3-e6ecf203d0b4": {
+  "cell": "C11",
+  "target_id": "T009",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "evidence-misquotation"
+ },
+ "53963b9a-b2ae-443d-be84-61fca94ab17d": {
+  "cell": "C11",
+  "target_id": "T007",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "unsupported-comparison"
+ },
+ "26bd8fe3-0c19-4da8-b297-1969287caf16": {
+  "cell": "C11",
+  "target_id": "T008",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "853cd2cb-61a0-4414-9655-6a54294e6cb6": {
+  "cell": "C11",
+  "target_id": "T010",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "circular-mechanism"
+ },
+ "0aa17a90-fd41-48f8-8472-637c48c45fca": {
+  "cell": "C11",
+  "target_id": "T011",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "scope-contradiction"
+ },
+ "bbccad54-96e9-40c2-9dcb-cff9caf04261": {
+  "cell": "C11",
+  "target_id": "T012",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "9bce2e84-a484-4834-a8ca-9dbb206529a2": {
+  "cell": "C11",
+  "target_id": "T014",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "causal-non-sequitur"
+ },
+ "711ab7e3-395a-4e59-94cb-1e1c221ee8f2": {
+  "cell": "C11",
+  "target_id": "T015",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "evidence-misquotation"
+ },
+ "2395c3a6-ddfa-4180-801e-d2e72369b429": {
+  "cell": "C11",
+  "target_id": "T013",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "unsupported-comparison"
+ },
+ "47cc963b-62ba-4c3b-a035-e4be9efafcc6": {
+  "cell": "C11",
+  "target_id": "T016",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "circular-mechanism"
+ },
+ "afb5fac5-8293-46c6-91ac-7c718f8b0543": {
+  "cell": "C11",
+  "target_id": "T018",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "9f20cc27-0f4e-49a9-a340-12afbc87dd2b": {
+  "cell": "C11",
+  "target_id": "T017",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "e0f17e9b-36ca-4f9c-ad9f-9b3d9e40d888": {
+  "cell": "C11",
+  "target_id": "T019",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "unsupported-comparison"
+ },
+ "6d097eb4-4520-4979-8914-4c7378d07760": {
+  "cell": "C11",
+  "target_id": "T020",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "adb1568a-c0ae-4160-9f1c-37c7040279b0": {
+  "cell": "C11",
+  "target_id": "T021",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "83b2ee05-2be2-497d-9cdb-837098db7c8b": {
+  "cell": "C11",
+  "target_id": "T022",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "circular-mechanism"
+ },
+ "2b9d6bbe-8624-4ca4-a89c-28b3cc7aa9c6": {
+  "cell": "C11",
+  "target_id": "T023",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "scope-contradiction"
+ },
+ "903d2778-a997-4f1b-82f9-816768717665": {
+  "cell": "C11",
+  "target_id": "T024",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "90aef4c2-d8c9-4357-9a89-4b8350ac0013": {
+  "cell": "C11",
+  "target_id": "T025",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "unsupported-comparison"
+ },
+ "fa17d310-174e-4df8-93d6-8e7b0511dd44": {
+  "cell": "C11",
+  "target_id": "T026",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "causal-non-sequitur"
+ },
+ "fd6e10d1-4d4a-420f-a8d8-0ebeb7934ae6": {
+  "cell": "C11",
+  "target_id": "T027",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "53100d93-da34-42ed-ac5f-86a657c99f97": {
+  "cell": "C11",
+  "target_id": "T028",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "circular-mechanism"
+ },
+ "f8dae05b-5b4e-4444-b566-252fc5c615ad": {
+  "cell": "C11",
+  "target_id": "T030",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "c80f8261-dc85-4bb3-8351-17f4e9cb50f1": {
+  "cell": "C11",
+  "target_id": "T029",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "scope-contradiction"
+ },
+ "6d069ce9-15a1-4db0-b085-ef2f975bb8be": {
+  "cell": "C11",
+  "target_id": "T031",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "unsupported-comparison"
+ },
+ "46b76f70-cb23-426f-900d-adb8c6fef471": {
+  "cell": "C11",
+  "target_id": "T033",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "evidence-misquotation"
+ },
+ "49467332-c815-41ef-ac26-4fd6b700060b": {
+  "cell": "C11",
+  "target_id": "T032",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "6bfdbe60-3a6d-425c-b1ad-92f87e2bd5c4": {
+  "cell": "C11",
+  "target_id": "T034",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "circular-mechanism"
+ },
+ "c8c81e9c-7d71-40b8-8494-de4cb25ed9d0": {
+  "cell": "C11",
+  "target_id": "T035",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "6cc93b07-9c91-45ce-8acf-115e174ab6a7": {
+  "cell": "C11",
+  "target_id": "T036",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "b89dea79-13b8-4dce-8268-73f760b97121": {
+  "cell": "C11",
+  "target_id": "T037",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "unsupported-comparison"
+ },
+ "a799b2f4-8841-4630-9bfb-2146f638d967": {
+  "cell": "C11",
+  "target_id": "T039",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "evidence-misquotation"
+ },
+ "85672645-b366-4c98-a3bb-743d9a6a8442": {
+  "cell": "C11",
+  "target_id": "T040",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "circular-mechanism"
+ },
+ "fbeed106-c60a-494a-900d-da7351101a9a": {
+  "cell": "C11",
+  "target_id": "T038",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "causal-non-sequitur"
+ },
+ "21f01025-6b09-4cb2-b3f7-f0b6b76a7eb7": {
+  "cell": "C11",
+  "target_id": "T042",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "e47c521c-1f26-4261-ab97-1fae43d0c90c": {
+  "cell": "C11",
+  "target_id": "T043",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "unsupported-comparison"
+ },
+ "e1e476a2-b93f-414a-8498-314f20f7c98b": {
+  "cell": "C11",
+  "target_id": "T041",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "a17cf1e6-2377-4237-a5cc-471f5519873c": {
+  "cell": "C11",
+  "target_id": "T045",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "evidence-misquotation"
+ },
+ "104200d0-cf9f-40e2-a312-eabd73693544": {
+  "cell": "C11",
+  "target_id": "T044",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "causal-non-sequitur"
+ },
+ "1473fded-7cd9-4b26-b8e2-0127ea4b99f3": {
+  "cell": "C11",
+  "target_id": "T047",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "scope-contradiction"
+ },
+ "76e4a77b-326e-457a-8365-5ce7edc50430": {
+  "cell": "C11",
+  "target_id": "T046",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "circular-mechanism"
+ },
+ "f1eb1432-1697-4d6b-b271-5dd10836f633": {
+  "cell": "C11",
+  "target_id": "T049",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "unsupported-comparison"
+ },
+ "7aa17646-bfa0-4156-aca6-b4412bfaa56f": {
+  "cell": "C11",
+  "target_id": "T048",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "15e34db5-65ef-4f97-a085-d94a34ccf4f6": {
+  "cell": "C11",
+  "target_id": "T051",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "evidence-misquotation"
+ },
+ "712be55a-93a4-40ec-bdec-c7d89343dc3c": {
+  "cell": "C11",
+  "target_id": "T050",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "causal-non-sequitur"
+ },
+ "35e342d4-e938-43ee-8fe8-fd909392a059": {
+  "cell": "C11",
+  "target_id": "T052",
+  "arm": "planted",
+  "school": "school-0",
+  "defect_class": "circular-mechanism"
+ },
+ "26147c51-5d9d-4518-9205-11e0633f1394": {
+  "cell": "C11",
+  "target_id": "T053",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "scope-contradiction"
+ },
+ "2a999461-480e-4573-a902-69788d07bc55": {
+  "cell": "C11",
+  "target_id": "T056",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "causal-non-sequitur"
+ },
+ "e6f0435a-1055-4231-9c52-318f79c06499": {
+  "cell": "C11",
+  "target_id": "T054",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "44e4a35b-3652-4108-a306-a6eca6f5f6ad": {
+  "cell": "C11",
+  "target_id": "T055",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "unsupported-comparison"
+ },
+ "0004d937-f02e-4f8b-a184-919f272b3f7b": {
+  "cell": "C11",
+  "target_id": "T057",
+  "arm": "planted",
+  "school": "school-3",
+  "defect_class": "evidence-misquotation"
+ },
+ "b2a4956f-88e9-4760-a5c8-d1c85eed0a52": {
+  "cell": "C11",
+  "target_id": "T058",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "circular-mechanism"
+ },
+ "bc3f7ac9-550d-43e1-93af-4be6d76379de": {
+  "cell": "C11",
+  "target_id": "T059",
+  "arm": "planted",
+  "school": "school-2",
+  "defect_class": "scope-contradiction"
+ },
+ "6bb9a8a4-de11-4d14-94ae-3bfadd31bc3d": {
+  "cell": "C11",
+  "target_id": "T060",
+  "arm": "planted",
+  "school": "school-1",
+  "defect_class": "vacuous-forbidden-case"
+ },
+ "85c8f0a3-dc04-4ca2-b69b-5b9df8fed3bd": {
+  "cell": "C11",
+  "target_id": "T061",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "286507e5-df1b-444a-a22e-e0f7adc6994c": {
+  "cell": "C11",
+  "target_id": "T062",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "051591c7-1c47-4550-9063-8ad46a4ef54d": {
+  "cell": "C11",
+  "target_id": "T063",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "30ca07a8-f029-4667-b4e3-814d13de1c44": {
+  "cell": "C11",
+  "target_id": "T064",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "c03112c3-a6dd-47b6-8678-b731db3c8b99": {
+  "cell": "C11",
+  "target_id": "T065",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "82eb2ffd-66a9-4ded-bcf1-1006f305ad1c": {
+  "cell": "C11",
+  "target_id": "T066",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "28b306d2-c001-4313-9f10-6fb49686dd2d": {
+  "cell": "C11",
+  "target_id": "T067",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "7873b97c-b7cb-48e1-95de-b8cdfcd112cc": {
+  "cell": "C11",
+  "target_id": "T068",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "45a02465-6de2-4247-8e44-52944e585a8f": {
+  "cell": "C11",
+  "target_id": "T071",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "c3aac008-75cb-43fb-9343-168871d5498a": {
+  "cell": "C11",
+  "target_id": "T069",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "f5e32cb1-b843-48fa-9fd8-ebbffc41698f": {
+  "cell": "C11",
+  "target_id": "T070",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "7f51dcba-8ae7-4afe-8daa-15c89c2a4a61": {
+  "cell": "C11",
+  "target_id": "T073",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "0bf06824-72a9-43c0-8c3d-307782a281fe": {
+  "cell": "C11",
+  "target_id": "T072",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "65fdd259-a6a0-4319-983c-98d251f0ed2f": {
+  "cell": "C11",
+  "target_id": "T076",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "9eb677a5-b072-4582-8cf7-4d19ae3e4a9a": {
+  "cell": "C11",
+  "target_id": "T075",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "2798170f-6159-49ca-84e7-7fd7ff9ae014": {
+  "cell": "C11",
+  "target_id": "T074",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "d210b5c2-f0a6-4b3e-a991-e34d3a92cec3": {
+  "cell": "C11",
+  "target_id": "T078",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "9099ffd3-8610-4d37-8c2d-6a6a6babb2ff": {
+  "cell": "C11",
+  "target_id": "T077",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "66a34ef7-adfc-4d69-a6ee-940589895eea": {
+  "cell": "C11",
+  "target_id": "T080",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "1fd43733-30e1-4ce9-b15a-3a5871dd62af": {
+  "cell": "C11",
+  "target_id": "T079",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "b9d41cb6-23a4-45b1-9a05-b8ca47fe2405": {
+  "cell": "C11",
+  "target_id": "T083",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "347bf349-cbdb-4aa3-914f-03184170f3a6": {
+  "cell": "C11",
+  "target_id": "T082",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "af405231-5f86-46c5-9b13-e849e14e8b2f": {
+  "cell": "C11",
+  "target_id": "T081",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "d7e4b294-5d91-4fbd-9a8f-3f40923a5835": {
+  "cell": "C11",
+  "target_id": "T085",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "b159ac42-e581-4bbc-9c94-ffb1b9599bb7": {
+  "cell": "C11",
+  "target_id": "T084",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "44fedc99-4dde-4711-9624-ed54267082cf": {
+  "cell": "C11",
+  "target_id": "T087",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "d7bc632b-6812-44c7-b180-5baaae1754a0": {
+  "cell": "C11",
+  "target_id": "T088",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "a192cfed-0a80-407f-9804-d031f64c079b": {
+  "cell": "C11",
+  "target_id": "T086",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "a17e6ca8-0af0-4849-897a-0ae1812ad078": {
+  "cell": "C11",
+  "target_id": "T089",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "0a7a8983-5e9f-42a7-9973-2843759dfaf7": {
+  "cell": "C11",
+  "target_id": "T090",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "17c9df7e-0d78-4e8a-b133-8922af3dd128": {
+  "cell": "C11",
+  "target_id": "T092",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "6d405ef2-a24e-4737-8841-abfcda6cd3a4": {
+  "cell": "C11",
+  "target_id": "T091",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "2f0ce0f4-ccd2-454a-a42f-c1d5c59baf1d": {
+  "cell": "C11",
+  "target_id": "T093",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "b85dc098-9ff2-4b5f-9149-f365e1f18620": {
+  "cell": "C11",
+  "target_id": "T094",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "fa400571-cfcb-4d63-a9a9-eae271eb11b7": {
+  "cell": "C11",
+  "target_id": "T096",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "bc6fcdf4-3e1d-4cce-9824-087d10318c8f": {
+  "cell": "C11",
+  "target_id": "T095",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "9a3eada5-1e8f-47d9-aa14-7e87549aef57": {
+  "cell": "C11",
+  "target_id": "T097",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "4943fec1-6a86-4ef7-8140-40762927d3f6": {
+  "cell": "C11",
+  "target_id": "T098",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "8c17dd6b-efb7-4114-a1e4-12319f6bfd18": {
+  "cell": "C11",
+  "target_id": "T099",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "a6647493-d2e5-4d03-b4b8-a98e27bfd479": {
+  "cell": "C11",
+  "target_id": "T100",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "b70ed9af-6378-4322-be80-06b2da47fcf0": {
+  "cell": "C11",
+  "target_id": "T103",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "261215c5-efd8-47d0-af48-950ec487109f": {
+  "cell": "C11",
+  "target_id": "T101",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "0aab5497-1286-486d-b176-fc567d7d8f8e": {
+  "cell": "C11",
+  "target_id": "T104",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "4193874a-2236-418c-ab83-21a3fb49efd1": {
+  "cell": "C11",
+  "target_id": "T102",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "4e62fc7f-244b-4919-ac65-82fd908d6ade": {
+  "cell": "C11",
+  "target_id": "T105",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "5bf2a228-23fa-4b59-8e8b-b38ecc891de8": {
+  "cell": "C11",
+  "target_id": "T106",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "2d6f0502-1bb9-44f3-8127-5da0ff2728d5": {
+  "cell": "C11",
+  "target_id": "T107",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "d554c74b-0d99-4b9b-8512-5f1a7369ecab": {
+  "cell": "C11",
+  "target_id": "T108",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "0d975b86-9d3c-4561-bce8-c894215a1fb8": {
+  "cell": "C11",
+  "target_id": "T109",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "01deb682-8465-4e2f-861b-4c992e36b761": {
+  "cell": "C11",
+  "target_id": "T111",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "45420079-854e-444b-9165-46fd78a6b4ce": {
+  "cell": "C11",
+  "target_id": "T110",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "7955b700-5890-4e59-bd91-61985c20e6b7": {
+  "cell": "C11",
+  "target_id": "T112",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "3acdd53b-91a3-4440-bf43-a88325f8137a": {
+  "cell": "C11",
+  "target_id": "T113",
+  "arm": "clean",
+  "school": "school-2",
+  "defect_class": null
+ },
+ "55e8c8e6-5bdb-4f07-bbcf-b3cfc9b891fa": {
+  "cell": "C11",
+  "target_id": "T114",
+  "arm": "clean",
+  "school": "school-3",
+  "defect_class": null
+ },
+ "e9b0732e-3e44-4489-bbc6-e714711c80c7": {
+  "cell": "C11",
+  "target_id": "T115",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "63c57101-70f2-42e0-bfe0-bcfc55726f48": {
+  "cell": "C11",
+  "target_id": "T116",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "20c72fbe-db21-4c6d-9da9-0c9980fc6dd5": {
+  "cell": "C11",
+  "target_id": "T117",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "66b1bdfb-e1de-4838-b8fb-5b9ddad21efc": {
+  "cell": "C11",
+  "target_id": "T119",
+  "arm": "clean",
+  "school": "school-1",
+  "defect_class": null
+ },
+ "14afef6b-3c66-48f1-a148-8f9cb2cf0496": {
+  "cell": "C11",
+  "target_id": "T118",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ },
+ "6b018fe4-3f95-4ffd-a221-d904e7ea4cc8": {
+  "cell": "C11",
+  "target_id": "T120",
+  "arm": "clean",
+  "school": "school-0",
+  "defect_class": null
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "per_cell": {
+  "C00": {
+   "attacked": 60,
+   "clean": 60,
+   "rate": 1.0
+  },
+  "C10": {
+   "attacked": 60,
+   "clean": 60,
+   "rate": 1.0
+  },
+  "C01": {
+   "attacked": 60,
+   "clean": 60,
+   "rate": 1.0
+  },
+  "C11": {
+   "attacked": 60,
+   "clean": 60,
+   "rate": 1.0
+  }
+ },
+ "saturated": true,
+ "rule": "PREREG s6: min>=0.95 or max<=0.05 -> NON-DISCRIMINATING"
+}
