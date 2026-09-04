@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=10 blockers=none
+State: next=11 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -201,11 +201,27 @@ as an omission.
             F2 history:    omitted 0.683 present 0.550 d1 +0.1333
                            p 0.03365  McNemar b/c 25/9  p 0.0101
 
-- [ ] 10. (S9) [COMMIT] Run the blind three-grader naming panel for
+- [x] 10. (S9) [COMMIT] Run the blind three-grader naming panel for
       M1-primary. Grader rows carry no cell field.
       done-when: `M1.json` exists with per-cell numerator/denominator
       for both detectors and their agreement; the assertion on grader
       row key sets passes.
+      DONE:
+          blind rows: 240  keys: ['bid','clean','criticism','note','planted']
+            (the blinding assertion is on the KEY SET; cell, school, arm
+             and layout are ABSENT from the row, not blanked)
+          720 grader calls; graded bids 240 of 240; unanimous 239
+
+          M1 PRIMARY (blind three-grader panel), 60 planted per cell
+            C00 33/60 = 0.550   C10 32/60 = 0.533
+            C01 28/60 = 0.467   C11 28/60 = 0.467
+            F1 provenance: omitted 0.508 present 0.500 d1 +0.0083
+                           p 0.897   McNemar b/c 9/8  p 1.0
+            F2 history:    omitted 0.542 present 0.467 d1 +0.0750
+                           p 0.245   McNemar b/c 14/5 p 0.0665
+
+          detector agreement 213/240 = 0.887 (disagreement 0.113;
+            PREREG's falsifier fires above 0.25 -- it does not fire)
 
 - [ ] 11. (S13) [COMMIT] Run the blind three-judge sharpness panel.
       `blind/keymap.json` lands in the SAME commit as

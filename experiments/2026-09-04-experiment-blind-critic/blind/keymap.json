@@ -1,0 +1,1442 @@
+{
+ "f6c1bae1-6a88-4659-ab51-bde7fa635f52": {
+  "cell": "C00",
+  "target_id": "T003",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "dd4baa35-196a-40ee-9501-bec69e7937d6": {
+  "cell": "C00",
+  "target_id": "T002",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-0"
+ },
+ "f8d23ae1-3192-474a-8cc2-be2aec88a4a2": {
+  "cell": "C00",
+  "target_id": "T001",
+  "defect_class": "unsupported-comparison",
+  "school": "school-2"
+ },
+ "1f0f456f-8922-4019-a34f-650e39de49c2": {
+  "cell": "C00",
+  "target_id": "T004",
+  "defect_class": "circular-mechanism",
+  "school": "school-3"
+ },
+ "98375fce-c967-4479-8f59-333d4354a73c": {
+  "cell": "C00",
+  "target_id": "T006",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-3"
+ },
+ "1af4b834-20ba-46c7-8d14-30737c51c1ba": {
+  "cell": "C00",
+  "target_id": "T005",
+  "defect_class": "scope-contradiction",
+  "school": "school-2"
+ },
+ "d0ee5004-5627-4565-87aa-6d3214a599e9": {
+  "cell": "C00",
+  "target_id": "T008",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "0ec9c825-fe8e-425f-80d5-032b00a5600c": {
+  "cell": "C00",
+  "target_id": "T007",
+  "defect_class": "unsupported-comparison",
+  "school": "school-3"
+ },
+ "77c1163a-1662-44a3-8c37-02e27eaff2b6": {
+  "cell": "C00",
+  "target_id": "T009",
+  "defect_class": "evidence-misquotation",
+  "school": "school-2"
+ },
+ "914dfe19-e520-44aa-814e-a40e16df2016": {
+  "cell": "C00",
+  "target_id": "T010",
+  "defect_class": "circular-mechanism",
+  "school": "school-1"
+ },
+ "b3ff7119-f923-4668-ab14-bf4a2aba2c8d": {
+  "cell": "C00",
+  "target_id": "T012",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-2"
+ },
+ "8e1f9d72-e405-4c0e-9434-b02546896e5e": {
+  "cell": "C00",
+  "target_id": "T011",
+  "defect_class": "scope-contradiction",
+  "school": "school-1"
+ },
+ "f8c480fe-eaf3-454b-be4f-b3ca75920aa6": {
+  "cell": "C00",
+  "target_id": "T014",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-0"
+ },
+ "be39185a-30b2-49ae-881b-f0fdecc60923": {
+  "cell": "C00",
+  "target_id": "T015",
+  "defect_class": "evidence-misquotation",
+  "school": "school-3"
+ },
+ "39c46a5f-cf5e-4bc3-a12b-53016d0b5298": {
+  "cell": "C00",
+  "target_id": "T013",
+  "defect_class": "unsupported-comparison",
+  "school": "school-2"
+ },
+ "6a345282-197e-4b1a-a92d-103756202d22": {
+  "cell": "C00",
+  "target_id": "T017",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "d2a141f6-3350-4a43-a523-9367223c0e9a": {
+  "cell": "C00",
+  "target_id": "T018",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-1"
+ },
+ "79506dfc-9fe0-4751-9daa-83f6f580021d": {
+  "cell": "C00",
+  "target_id": "T016",
+  "defect_class": "circular-mechanism",
+  "school": "school-0"
+ },
+ "839b9fa0-7689-4521-b3b0-47bda56ae433": {
+  "cell": "C00",
+  "target_id": "T019",
+  "defect_class": "unsupported-comparison",
+  "school": "school-0"
+ },
+ "39d728aa-83c8-41fd-8814-03f1b8ae9359": {
+  "cell": "C00",
+  "target_id": "T021",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "10ddb946-6fee-4333-9001-68731a14ec06": {
+  "cell": "C00",
+  "target_id": "T020",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "5b17b925-3e43-4f21-b5e6-f14169b177bc": {
+  "cell": "C00",
+  "target_id": "T022",
+  "defect_class": "circular-mechanism",
+  "school": "school-1"
+ },
+ "1f86b756-2c46-4fca-9b72-dd4ca6f61bb4": {
+  "cell": "C00",
+  "target_id": "T024",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-1"
+ },
+ "fc447a73-8b0b-4a08-8a79-d065c4b90082": {
+  "cell": "C00",
+  "target_id": "T026",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-1"
+ },
+ "e6557fda-b4e4-4784-aa37-4aeab5056384": {
+  "cell": "C00",
+  "target_id": "T023",
+  "defect_class": "scope-contradiction",
+  "school": "school-3"
+ },
+ "2961595f-36ca-4036-afa6-0cdea73fd345": {
+  "cell": "C00",
+  "target_id": "T025",
+  "defect_class": "unsupported-comparison",
+  "school": "school-3"
+ },
+ "ff7f5263-a46a-4321-8a57-83c339c4d121": {
+  "cell": "C00",
+  "target_id": "T027",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "47ec832f-6406-4b11-806b-a509afe31cdf": {
+  "cell": "C00",
+  "target_id": "T029",
+  "defect_class": "scope-contradiction",
+  "school": "school-3"
+ },
+ "9a1d1b5c-3bf9-46bc-b0fa-1f2a7ea55151": {
+  "cell": "C00",
+  "target_id": "T028",
+  "defect_class": "circular-mechanism",
+  "school": "school-3"
+ },
+ "610a0ef9-2d81-49c5-9b20-c155db4c960e": {
+  "cell": "C00",
+  "target_id": "T032",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "c2359c7c-2cf8-4f6c-903b-fa2614856b6e": {
+  "cell": "C00",
+  "target_id": "T030",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-3"
+ },
+ "127eebce-e0ec-4c48-b6dc-59d92805eeb1": {
+  "cell": "C00",
+  "target_id": "T033",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "5b7d800a-1d0d-4818-bd33-ff651343c941": {
+  "cell": "C00",
+  "target_id": "T031",
+  "defect_class": "unsupported-comparison",
+  "school": "school-0"
+ },
+ "201f33af-daa9-4783-94c7-ee1915150597": {
+  "cell": "C00",
+  "target_id": "T034",
+  "defect_class": "circular-mechanism",
+  "school": "school-0"
+ },
+ "da45aea0-7d52-4963-99cf-364f1e21046f": {
+  "cell": "C00",
+  "target_id": "T035",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "71587ec7-312e-41f2-927f-926865427b4f": {
+  "cell": "C00",
+  "target_id": "T036",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-3"
+ },
+ "bb925578-3d3b-45a6-8eca-55c6286a856a": {
+  "cell": "C00",
+  "target_id": "T039",
+  "defect_class": "evidence-misquotation",
+  "school": "school-2"
+ },
+ "2da9c945-c700-410a-b795-53d7adf49249": {
+  "cell": "C00",
+  "target_id": "T038",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-0"
+ },
+ "4540ecb6-9fd7-49f6-8014-34f00c68fd50": {
+  "cell": "C00",
+  "target_id": "T037",
+  "defect_class": "unsupported-comparison",
+  "school": "school-3"
+ },
+ "b532cfea-3347-423c-a7ff-ac9fd0edb530": {
+  "cell": "C00",
+  "target_id": "T040",
+  "defect_class": "circular-mechanism",
+  "school": "school-3"
+ },
+ "fefceab1-34e3-48e3-b395-c6059cd61f6e": {
+  "cell": "C00",
+  "target_id": "T041",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "b8399a88-55d3-4ced-8733-c7225bd76292": {
+  "cell": "C00",
+  "target_id": "T042",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-0"
+ },
+ "ee39dabe-9428-46c7-8ecc-df181ee5e6e8": {
+  "cell": "C00",
+  "target_id": "T045",
+  "defect_class": "evidence-misquotation",
+  "school": "school-2"
+ },
+ "470a0801-0184-46da-b085-3ff9818aa640": {
+  "cell": "C00",
+  "target_id": "T044",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-1"
+ },
+ "fd7a3c5b-d5d4-4ad1-b843-86ae89b324a3": {
+  "cell": "C00",
+  "target_id": "T046",
+  "defect_class": "circular-mechanism",
+  "school": "school-2"
+ },
+ "0d6e07df-2e1d-46a3-b018-0625dec560b5": {
+  "cell": "C00",
+  "target_id": "T047",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "3fa800e8-1982-4567-a555-dfd2ec256581": {
+  "cell": "C00",
+  "target_id": "T048",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-2"
+ },
+ "cd239fce-cb58-417e-b0a5-030902e9bc96": {
+  "cell": "C00",
+  "target_id": "T049",
+  "defect_class": "unsupported-comparison",
+  "school": "school-0"
+ },
+ "90c71429-50ea-47e4-a31c-db0e621ca41b": {
+  "cell": "C00",
+  "target_id": "T051",
+  "defect_class": "evidence-misquotation",
+  "school": "school-1"
+ },
+ "5e355d58-41be-43ac-9cf9-1d51199649c8": {
+  "cell": "C00",
+  "target_id": "T050",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-1"
+ },
+ "ad3d91a0-f71f-4d26-abb5-4e4826820ea8": {
+  "cell": "C00",
+  "target_id": "T052",
+  "defect_class": "circular-mechanism",
+  "school": "school-0"
+ },
+ "a7b2fd51-2e38-4d9b-993d-12c9068150e6": {
+  "cell": "C00",
+  "target_id": "T053",
+  "defect_class": "scope-contradiction",
+  "school": "school-3"
+ },
+ "2a99965c-0d40-4214-9d51-10c50253e3b2": {
+  "cell": "C00",
+  "target_id": "T043",
+  "defect_class": "unsupported-comparison",
+  "school": "school-1"
+ },
+ "2a2b9676-1f4c-4058-a1f7-fdf64f1af565": {
+  "cell": "C00",
+  "target_id": "T055",
+  "defect_class": "unsupported-comparison",
+  "school": "school-2"
+ },
+ "1648bbe4-be7e-491f-b670-88c56cc171e1": {
+  "cell": "C00",
+  "target_id": "T056",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "326ff97c-7bf3-4570-9b1a-0e97eb9a24a1": {
+  "cell": "C00",
+  "target_id": "T057",
+  "defect_class": "evidence-misquotation",
+  "school": "school-3"
+ },
+ "7a497a3c-a963-4fa5-aa64-ce4d82774c2c": {
+  "cell": "C00",
+  "target_id": "T054",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-2"
+ },
+ "725de363-dcfa-479e-8391-0a14178583b0": {
+  "cell": "C00",
+  "target_id": "T058",
+  "defect_class": "circular-mechanism",
+  "school": "school-1"
+ },
+ "a98ffe3c-5f86-4729-ad8a-efcb98353d50": {
+  "cell": "C00",
+  "target_id": "T060",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-1"
+ },
+ "22e118d5-5cb0-4b2c-a085-28ca1d994068": {
+  "cell": "C00",
+  "target_id": "T059",
+  "defect_class": "scope-contradiction",
+  "school": "school-2"
+ },
+ "b84ff76f-be91-4333-a269-33e4fa1cd4a1": {
+  "cell": "C10",
+  "target_id": "T003",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "56915ab4-7f54-4fe9-9a19-edd7392b5a07": {
+  "cell": "C10",
+  "target_id": "T002",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-0"
+ },
+ "1b50a9cf-ecad-4c34-90d0-40c50298a9d5": {
+  "cell": "C10",
+  "target_id": "T001",
+  "defect_class": "unsupported-comparison",
+  "school": "school-2"
+ },
+ "1e4a4185-740e-4c27-a760-8ac540ddd58c": {
+  "cell": "C10",
+  "target_id": "T004",
+  "defect_class": "circular-mechanism",
+  "school": "school-3"
+ },
+ "954c14bb-f33d-4c4c-ab58-e625e777fe6f": {
+  "cell": "C10",
+  "target_id": "T006",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-3"
+ },
+ "c7120778-ef99-4c18-aac5-3196e7dbaf39": {
+  "cell": "C10",
+  "target_id": "T007",
+  "defect_class": "unsupported-comparison",
+  "school": "school-3"
+ },
+ "798eaf99-0081-49ea-92a3-a3d27b375c37": {
+  "cell": "C10",
+  "target_id": "T005",
+  "defect_class": "scope-contradiction",
+  "school": "school-2"
+ },
+ "abfa7fbf-5158-41f1-b974-cceabbf7c5e8": {
+  "cell": "C10",
+  "target_id": "T008",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "ca3e2806-8a0e-456c-b710-cebdbe534aa2": {
+  "cell": "C10",
+  "target_id": "T009",
+  "defect_class": "evidence-misquotation",
+  "school": "school-2"
+ },
+ "779e8d06-7e6d-4fc3-8f8e-29a8f2c7bfc8": {
+  "cell": "C10",
+  "target_id": "T012",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-2"
+ },
+ "453ffd8e-fc5c-4476-a2e6-39300c66122c": {
+  "cell": "C10",
+  "target_id": "T011",
+  "defect_class": "scope-contradiction",
+  "school": "school-1"
+ },
+ "42d95343-da56-4ebc-8dc5-6199f77cd238": {
+  "cell": "C10",
+  "target_id": "T010",
+  "defect_class": "circular-mechanism",
+  "school": "school-1"
+ },
+ "cf917ccf-c59d-431d-b07d-e3ab460ca9be": {
+  "cell": "C10",
+  "target_id": "T015",
+  "defect_class": "evidence-misquotation",
+  "school": "school-3"
+ },
+ "268953d0-13dc-482e-8f8f-71d4aed4b0e3": {
+  "cell": "C10",
+  "target_id": "T013",
+  "defect_class": "unsupported-comparison",
+  "school": "school-2"
+ },
+ "d0dd8e6a-3e8f-4f6a-b744-047a8583d51c": {
+  "cell": "C10",
+  "target_id": "T014",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-0"
+ },
+ "bbd381c3-9447-44ba-a161-1d139b572b0e": {
+  "cell": "C10",
+  "target_id": "T018",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-1"
+ },
+ "0570e026-ae72-43ff-8535-7094723ec65f": {
+  "cell": "C10",
+  "target_id": "T016",
+  "defect_class": "circular-mechanism",
+  "school": "school-0"
+ },
+ "fa1b785c-8b36-4b12-a2e9-b31d41be9873": {
+  "cell": "C10",
+  "target_id": "T020",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "5fc1caca-02f0-4579-9d62-fc7917c52275": {
+  "cell": "C10",
+  "target_id": "T019",
+  "defect_class": "unsupported-comparison",
+  "school": "school-0"
+ },
+ "c18dd1bc-2a44-40d0-ae9b-913c437bda5a": {
+  "cell": "C10",
+  "target_id": "T021",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "10825ead-47ad-4512-af6d-92617c35bfc3": {
+  "cell": "C10",
+  "target_id": "T022",
+  "defect_class": "circular-mechanism",
+  "school": "school-1"
+ },
+ "67b74824-745a-461c-942d-8df754052c84": {
+  "cell": "C10",
+  "target_id": "T017",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "317ca08d-d121-4dc1-8b6a-14f4bdc9b212": {
+  "cell": "C10",
+  "target_id": "T023",
+  "defect_class": "scope-contradiction",
+  "school": "school-3"
+ },
+ "bb20b8f9-b03a-424a-a35e-d1f90b0cfa12": {
+  "cell": "C10",
+  "target_id": "T024",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-1"
+ },
+ "630cc2c2-5644-48ce-b7b6-9d8a550b62ad": {
+  "cell": "C10",
+  "target_id": "T025",
+  "defect_class": "unsupported-comparison",
+  "school": "school-3"
+ },
+ "cc9f5b23-971f-4903-9d2e-92964873866f": {
+  "cell": "C10",
+  "target_id": "T026",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-1"
+ },
+ "e6a5c800-4776-4e15-8407-d25fcd4f6b38": {
+  "cell": "C10",
+  "target_id": "T027",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "973dca78-6b2c-44e2-83bb-e1ec6f9a6c91": {
+  "cell": "C10",
+  "target_id": "T029",
+  "defect_class": "scope-contradiction",
+  "school": "school-3"
+ },
+ "0d0ce001-d663-4f29-8ed3-77083a9011e6": {
+  "cell": "C10",
+  "target_id": "T030",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-3"
+ },
+ "5354c8a2-669c-447b-b255-18742fa74182": {
+  "cell": "C10",
+  "target_id": "T031",
+  "defect_class": "unsupported-comparison",
+  "school": "school-0"
+ },
+ "7000d372-bbf1-445e-b778-4079562f74f9": {
+  "cell": "C10",
+  "target_id": "T028",
+  "defect_class": "circular-mechanism",
+  "school": "school-3"
+ },
+ "eb48675e-a7ac-493a-98ed-c0adc11f43f1": {
+  "cell": "C10",
+  "target_id": "T033",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "2515d79b-21b5-46f5-ba74-f87fdef30cc5": {
+  "cell": "C10",
+  "target_id": "T032",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "4698aa25-ca1e-42e3-9d5c-7f95025333b7": {
+  "cell": "C10",
+  "target_id": "T034",
+  "defect_class": "circular-mechanism",
+  "school": "school-0"
+ },
+ "14d99cd7-af3e-41a4-a83a-661c4357304d": {
+  "cell": "C10",
+  "target_id": "T035",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "0f0e64af-5e1d-4f0d-a520-3bd9696db375": {
+  "cell": "C10",
+  "target_id": "T036",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-3"
+ },
+ "54054255-4827-475f-8e13-9cea5d5b5d8e": {
+  "cell": "C10",
+  "target_id": "T037",
+  "defect_class": "unsupported-comparison",
+  "school": "school-3"
+ },
+ "263c3c2b-e53c-4f7c-9023-ece5e6557479": {
+  "cell": "C10",
+  "target_id": "T038",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-0"
+ },
+ "0f8bcf68-0d87-43be-a340-8ccaaefc699d": {
+  "cell": "C10",
+  "target_id": "T039",
+  "defect_class": "evidence-misquotation",
+  "school": "school-2"
+ },
+ "01f128ae-5e0a-46fe-9f28-dc5fb03f6779": {
+  "cell": "C10",
+  "target_id": "T040",
+  "defect_class": "circular-mechanism",
+  "school": "school-3"
+ },
+ "1a94a5ad-3a95-4463-90b7-4a0314b70e66": {
+  "cell": "C10",
+  "target_id": "T042",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-0"
+ },
+ "211a820a-6207-49c0-bdd5-eb3d015c0170": {
+  "cell": "C10",
+  "target_id": "T041",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "a2b068c7-3469-4035-99d2-2336366c55d9": {
+  "cell": "C10",
+  "target_id": "T045",
+  "defect_class": "evidence-misquotation",
+  "school": "school-2"
+ },
+ "0fed4a9e-58a2-4fe2-bb97-632c158dd1fc": {
+  "cell": "C10",
+  "target_id": "T043",
+  "defect_class": "unsupported-comparison",
+  "school": "school-1"
+ },
+ "1fbdd864-6584-4bbe-9312-9642e0ebb6dc": {
+  "cell": "C10",
+  "target_id": "T044",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-1"
+ },
+ "4434147d-2f68-4d37-b0ed-5a24b32369db": {
+  "cell": "C10",
+  "target_id": "T047",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "ab26a621-3b77-43d0-85a8-f8a0c8360180": {
+  "cell": "C10",
+  "target_id": "T048",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-2"
+ },
+ "e17687c5-d6a7-4ea6-a011-3430a565bb1a": {
+  "cell": "C10",
+  "target_id": "T049",
+  "defect_class": "unsupported-comparison",
+  "school": "school-0"
+ },
+ "8d466667-02a8-48fb-b077-9ca149eb5048": {
+  "cell": "C10",
+  "target_id": "T046",
+  "defect_class": "circular-mechanism",
+  "school": "school-2"
+ },
+ "1b52657d-0472-47f8-a8d6-4c76eb5da4ca": {
+  "cell": "C10",
+  "target_id": "T051",
+  "defect_class": "evidence-misquotation",
+  "school": "school-1"
+ },
+ "b476d8c5-3a61-43eb-9a4a-9fd58fae4c97": {
+  "cell": "C10",
+  "target_id": "T050",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-1"
+ },
+ "2564c91a-bfec-4128-8237-5db21427370b": {
+  "cell": "C10",
+  "target_id": "T052",
+  "defect_class": "circular-mechanism",
+  "school": "school-0"
+ },
+ "1fb91d88-9675-49b9-aa28-81d2b7c5125c": {
+  "cell": "C10",
+  "target_id": "T053",
+  "defect_class": "scope-contradiction",
+  "school": "school-3"
+ },
+ "81c33de4-4006-4d16-b240-f9fa63b9f594": {
+  "cell": "C10",
+  "target_id": "T055",
+  "defect_class": "unsupported-comparison",
+  "school": "school-2"
+ },
+ "6ae2929f-ac90-421c-bfa6-27bec3981826": {
+  "cell": "C10",
+  "target_id": "T054",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-2"
+ },
+ "f738773a-7caf-43aa-b55e-e2f4f31e57b8": {
+  "cell": "C10",
+  "target_id": "T057",
+  "defect_class": "evidence-misquotation",
+  "school": "school-3"
+ },
+ "49cb96ab-df16-46b4-ad00-66317eb5527b": {
+  "cell": "C10",
+  "target_id": "T056",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "8118b16b-c64f-474b-86bb-522e6e457c9e": {
+  "cell": "C10",
+  "target_id": "T058",
+  "defect_class": "circular-mechanism",
+  "school": "school-1"
+ },
+ "efcd20ee-20ec-423b-8fec-24c2bd1493de": {
+  "cell": "C10",
+  "target_id": "T059",
+  "defect_class": "scope-contradiction",
+  "school": "school-2"
+ },
+ "03da1639-eca2-4cd7-9504-b7af77049a27": {
+  "cell": "C10",
+  "target_id": "T060",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-1"
+ },
+ "cf264ee5-bba9-435e-9166-4f1bf54e7acf": {
+  "cell": "C01",
+  "target_id": "T003",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "7a616860-e996-4b41-99f6-78112ee3b974": {
+  "cell": "C01",
+  "target_id": "T002",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-0"
+ },
+ "78b6d2e0-bdee-4d5a-b845-7b638bdf4744": {
+  "cell": "C01",
+  "target_id": "T001",
+  "defect_class": "unsupported-comparison",
+  "school": "school-2"
+ },
+ "2dc94aaa-b2be-4ac1-af8c-c0673d195ab8": {
+  "cell": "C01",
+  "target_id": "T005",
+  "defect_class": "scope-contradiction",
+  "school": "school-2"
+ },
+ "9614471d-fa9e-4454-a3c8-9f89626b535c": {
+  "cell": "C01",
+  "target_id": "T004",
+  "defect_class": "circular-mechanism",
+  "school": "school-3"
+ },
+ "e57ea123-062e-43de-ac35-2c79e792d593": {
+  "cell": "C01",
+  "target_id": "T006",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-3"
+ },
+ "f7e4a38e-7a0c-444f-921a-2360257b7897": {
+  "cell": "C01",
+  "target_id": "T007",
+  "defect_class": "unsupported-comparison",
+  "school": "school-3"
+ },
+ "bb5359fc-9b33-47bc-867d-80b5dc40e713": {
+  "cell": "C01",
+  "target_id": "T008",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "7976b252-ad8e-49bb-a1d0-196bca70e8f6": {
+  "cell": "C01",
+  "target_id": "T009",
+  "defect_class": "evidence-misquotation",
+  "school": "school-2"
+ },
+ "100b11ee-d8f5-403b-8abe-41dca8130413": {
+  "cell": "C01",
+  "target_id": "T010",
+  "defect_class": "circular-mechanism",
+  "school": "school-1"
+ },
+ "c46f344f-11ab-499a-b03a-9f239c283571": {
+  "cell": "C01",
+  "target_id": "T011",
+  "defect_class": "scope-contradiction",
+  "school": "school-1"
+ },
+ "babe9449-70e5-4158-9999-e5ce5fb3a5d9": {
+  "cell": "C01",
+  "target_id": "T012",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-2"
+ },
+ "77397bec-c528-4542-86ef-dbcc343911e8": {
+  "cell": "C01",
+  "target_id": "T013",
+  "defect_class": "unsupported-comparison",
+  "school": "school-2"
+ },
+ "4491a33a-1489-419c-898f-54b5cf2ad730": {
+  "cell": "C01",
+  "target_id": "T014",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-0"
+ },
+ "5d7b0160-f90b-411d-a702-fd1f8862d5e4": {
+  "cell": "C01",
+  "target_id": "T015",
+  "defect_class": "evidence-misquotation",
+  "school": "school-3"
+ },
+ "fbaa2397-b530-48e1-bbec-91addc5b3bfd": {
+  "cell": "C01",
+  "target_id": "T018",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-1"
+ },
+ "d7a236fd-61d8-4b39-a3f7-ccc6bb498e62": {
+  "cell": "C01",
+  "target_id": "T016",
+  "defect_class": "circular-mechanism",
+  "school": "school-0"
+ },
+ "2603c6a6-9bf2-461d-8407-2b019993e52d": {
+  "cell": "C01",
+  "target_id": "T017",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "477df8a0-582c-4c3f-a3f5-70501e1d44b9": {
+  "cell": "C01",
+  "target_id": "T020",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "ef5bca0d-f75c-43f1-938f-7e286a709723": {
+  "cell": "C01",
+  "target_id": "T021",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "ce3ae757-4420-4a05-a26d-14797ccff486": {
+  "cell": "C01",
+  "target_id": "T019",
+  "defect_class": "unsupported-comparison",
+  "school": "school-0"
+ },
+ "92cb28da-9e48-4ea4-b9bb-39c32d89a0f4": {
+  "cell": "C01",
+  "target_id": "T022",
+  "defect_class": "circular-mechanism",
+  "school": "school-1"
+ },
+ "d34402b9-b990-4e12-be0f-5b7b6db30b70": {
+  "cell": "C01",
+  "target_id": "T023",
+  "defect_class": "scope-contradiction",
+  "school": "school-3"
+ },
+ "899b642f-9067-4844-9208-17c5c6f73b4e": {
+  "cell": "C01",
+  "target_id": "T025",
+  "defect_class": "unsupported-comparison",
+  "school": "school-3"
+ },
+ "7475b703-47c8-4286-abe1-acb50b95bc4b": {
+  "cell": "C01",
+  "target_id": "T026",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-1"
+ },
+ "4d666631-556e-43b3-af9c-27572a27c8ce": {
+  "cell": "C01",
+  "target_id": "T024",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-1"
+ },
+ "4c219619-c25d-4835-b0a9-f2eda5c6a906": {
+  "cell": "C01",
+  "target_id": "T027",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "72713bec-52d6-4cb5-a8ae-6189e961d167": {
+  "cell": "C01",
+  "target_id": "T028",
+  "defect_class": "circular-mechanism",
+  "school": "school-3"
+ },
+ "bd2b03cf-b374-4bcc-a274-a38726a63b98": {
+  "cell": "C01",
+  "target_id": "T029",
+  "defect_class": "scope-contradiction",
+  "school": "school-3"
+ },
+ "21d50b81-454a-4fea-a210-59fdd8f20db9": {
+  "cell": "C01",
+  "target_id": "T031",
+  "defect_class": "unsupported-comparison",
+  "school": "school-0"
+ },
+ "5343ce54-3e89-4c4f-ae7d-6f0feb0a50b4": {
+  "cell": "C01",
+  "target_id": "T030",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-3"
+ },
+ "bae73040-8041-47ab-b9f0-ae5fcadf64f3": {
+  "cell": "C01",
+  "target_id": "T032",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "bf6ef1ca-5a98-4d2b-9b34-277ab2a077dc": {
+  "cell": "C01",
+  "target_id": "T033",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "82ac487e-f78d-4a13-9f33-5cbe7ee8639d": {
+  "cell": "C01",
+  "target_id": "T034",
+  "defect_class": "circular-mechanism",
+  "school": "school-0"
+ },
+ "1ef05fb6-3329-4e80-b25a-becfc32c2da5": {
+  "cell": "C01",
+  "target_id": "T036",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-3"
+ },
+ "25d53822-a5dd-4565-9b62-73cc7b958878": {
+  "cell": "C01",
+  "target_id": "T035",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "73f33685-4586-4885-860e-24e2aa9d7e46": {
+  "cell": "C01",
+  "target_id": "T039",
+  "defect_class": "evidence-misquotation",
+  "school": "school-2"
+ },
+ "8c5548d3-ab75-4dae-8ed7-28f70e62560b": {
+  "cell": "C01",
+  "target_id": "T038",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-0"
+ },
+ "e50e6c52-81e6-4709-83d8-6bafcf3db6c7": {
+  "cell": "C01",
+  "target_id": "T037",
+  "defect_class": "unsupported-comparison",
+  "school": "school-3"
+ },
+ "c16c3ff5-4cef-48a3-8209-7f73572ededb": {
+  "cell": "C01",
+  "target_id": "T041",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "cb5a883b-1a4e-4ea0-85dc-f02199e0535c": {
+  "cell": "C01",
+  "target_id": "T040",
+  "defect_class": "circular-mechanism",
+  "school": "school-3"
+ },
+ "97b18420-b308-409d-b97e-d7b2ac21606d": {
+  "cell": "C01",
+  "target_id": "T042",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-0"
+ },
+ "15268245-8aef-44ca-9973-be2b2393ad4c": {
+  "cell": "C01",
+  "target_id": "T043",
+  "defect_class": "unsupported-comparison",
+  "school": "school-1"
+ },
+ "e3ec8ab6-2d38-4001-9637-b7eb0a871006": {
+  "cell": "C01",
+  "target_id": "T045",
+  "defect_class": "evidence-misquotation",
+  "school": "school-2"
+ },
+ "8a8defde-8ccf-45c6-b0e2-7423ff439775": {
+  "cell": "C01",
+  "target_id": "T046",
+  "defect_class": "circular-mechanism",
+  "school": "school-2"
+ },
+ "d874834e-2214-43ec-963b-55e1d54de63c": {
+  "cell": "C01",
+  "target_id": "T044",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-1"
+ },
+ "c2271da2-6de4-40a0-92f1-e7df5742c491": {
+  "cell": "C01",
+  "target_id": "T047",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "460c14c3-c3b1-477a-9bcb-8ed9d4b328fc": {
+  "cell": "C01",
+  "target_id": "T049",
+  "defect_class": "unsupported-comparison",
+  "school": "school-0"
+ },
+ "fdba953f-d24a-435f-b620-79081ade9f59": {
+  "cell": "C01",
+  "target_id": "T050",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-1"
+ },
+ "73e6f0d2-5bc4-481a-810e-2b4105d82bce": {
+  "cell": "C01",
+  "target_id": "T051",
+  "defect_class": "evidence-misquotation",
+  "school": "school-1"
+ },
+ "11d89a6f-fa95-47c5-b253-e5a2837c56d0": {
+  "cell": "C01",
+  "target_id": "T048",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-2"
+ },
+ "dea08b61-4d57-42b8-988c-c038432fe3da": {
+  "cell": "C01",
+  "target_id": "T052",
+  "defect_class": "circular-mechanism",
+  "school": "school-0"
+ },
+ "72e6b9d3-2c97-4667-ae96-bdd3160a9157": {
+  "cell": "C01",
+  "target_id": "T053",
+  "defect_class": "scope-contradiction",
+  "school": "school-3"
+ },
+ "98e32b50-6afb-4469-9ce6-b95b15b1ca71": {
+  "cell": "C01",
+  "target_id": "T054",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-2"
+ },
+ "eff243b7-e7b0-474e-bde3-a6cdbb157c9b": {
+  "cell": "C01",
+  "target_id": "T055",
+  "defect_class": "unsupported-comparison",
+  "school": "school-2"
+ },
+ "0b2b5cdb-1d17-4eb3-bdb8-69f07579481a": {
+  "cell": "C01",
+  "target_id": "T057",
+  "defect_class": "evidence-misquotation",
+  "school": "school-3"
+ },
+ "e820a113-ceda-49b7-8567-9883fc3b6ca0": {
+  "cell": "C01",
+  "target_id": "T056",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "f980e91d-4bc6-4b24-8979-72a7824141f4": {
+  "cell": "C01",
+  "target_id": "T058",
+  "defect_class": "circular-mechanism",
+  "school": "school-1"
+ },
+ "24954d46-0a9e-4729-9905-881a8ff3d86e": {
+  "cell": "C01",
+  "target_id": "T060",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-1"
+ },
+ "73176763-9378-4884-b652-6882126c248d": {
+  "cell": "C01",
+  "target_id": "T059",
+  "defect_class": "scope-contradiction",
+  "school": "school-2"
+ },
+ "743d1c59-ebf8-4e92-9b72-2b9b36086644": {
+  "cell": "C11",
+  "target_id": "T003",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "8fce48c3-775e-447f-a784-6894c74ae951": {
+  "cell": "C11",
+  "target_id": "T002",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-0"
+ },
+ "e5d2d371-6806-41e3-964b-fac165063f42": {
+  "cell": "C11",
+  "target_id": "T001",
+  "defect_class": "unsupported-comparison",
+  "school": "school-2"
+ },
+ "779d9cb0-c25c-4e08-9e63-f0c18572d387": {
+  "cell": "C11",
+  "target_id": "T004",
+  "defect_class": "circular-mechanism",
+  "school": "school-3"
+ },
+ "27dd6a51-b7a6-4844-ab0e-aa6837e081c6": {
+  "cell": "C11",
+  "target_id": "T005",
+  "defect_class": "scope-contradiction",
+  "school": "school-2"
+ },
+ "cc771519-e0fa-49a1-8184-013cd087b503": {
+  "cell": "C11",
+  "target_id": "T006",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-3"
+ },
+ "2b33a27e-f3fa-44bf-b70f-ef9feb58924b": {
+  "cell": "C11",
+  "target_id": "T009",
+  "defect_class": "evidence-misquotation",
+  "school": "school-2"
+ },
+ "b191a23f-a422-4669-88c3-d7e592ccd6da": {
+  "cell": "C11",
+  "target_id": "T007",
+  "defect_class": "unsupported-comparison",
+  "school": "school-3"
+ },
+ "e06f10f4-c503-4ec0-a143-ae19fb08a734": {
+  "cell": "C11",
+  "target_id": "T008",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "4d53f5a5-7ced-4796-a156-1533d031b10d": {
+  "cell": "C11",
+  "target_id": "T010",
+  "defect_class": "circular-mechanism",
+  "school": "school-1"
+ },
+ "71b614af-4d3c-47d2-b642-8e6ee33e03c6": {
+  "cell": "C11",
+  "target_id": "T011",
+  "defect_class": "scope-contradiction",
+  "school": "school-1"
+ },
+ "a8f17f55-4232-43f1-b9f4-2dece1b1e69a": {
+  "cell": "C11",
+  "target_id": "T012",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-2"
+ },
+ "63582909-ce8d-4cea-b991-86ab75efdcbd": {
+  "cell": "C11",
+  "target_id": "T014",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-0"
+ },
+ "5322374c-14ed-4b74-a47c-906ff11f3c2c": {
+  "cell": "C11",
+  "target_id": "T015",
+  "defect_class": "evidence-misquotation",
+  "school": "school-3"
+ },
+ "cb19130b-fc93-49e7-80e7-27a553d0c2f2": {
+  "cell": "C11",
+  "target_id": "T013",
+  "defect_class": "unsupported-comparison",
+  "school": "school-2"
+ },
+ "b155bd7a-c96f-49b8-a01d-178d4e312462": {
+  "cell": "C11",
+  "target_id": "T016",
+  "defect_class": "circular-mechanism",
+  "school": "school-0"
+ },
+ "4dd196eb-6b6a-4331-903e-93ea7b1675ee": {
+  "cell": "C11",
+  "target_id": "T018",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-1"
+ },
+ "f23fa510-1d17-4f67-8b92-f615b152c1d9": {
+  "cell": "C11",
+  "target_id": "T017",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "a4781ac0-c1ca-4611-965e-2b63234aee2d": {
+  "cell": "C11",
+  "target_id": "T019",
+  "defect_class": "unsupported-comparison",
+  "school": "school-0"
+ },
+ "1fea2e63-2677-4e18-a503-3f5bf79fd953": {
+  "cell": "C11",
+  "target_id": "T020",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "2f312ca4-55d7-4e30-a566-b63e1712fed5": {
+  "cell": "C11",
+  "target_id": "T021",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "40973e0b-516a-49b8-981c-bddda64b709e": {
+  "cell": "C11",
+  "target_id": "T022",
+  "defect_class": "circular-mechanism",
+  "school": "school-1"
+ },
+ "3c687461-d66d-4f08-9bfd-479ccbd65810": {
+  "cell": "C11",
+  "target_id": "T023",
+  "defect_class": "scope-contradiction",
+  "school": "school-3"
+ },
+ "fc31c56f-6a3c-4350-a465-dcd9adc058f4": {
+  "cell": "C11",
+  "target_id": "T024",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-1"
+ },
+ "85ea0c5c-46d7-4a93-b1df-96d9df5dd682": {
+  "cell": "C11",
+  "target_id": "T025",
+  "defect_class": "unsupported-comparison",
+  "school": "school-3"
+ },
+ "b4cb0010-12d7-44ca-9ff8-0e2aef9e6557": {
+  "cell": "C11",
+  "target_id": "T026",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-1"
+ },
+ "b3747cff-2233-44d4-b382-3b748fc937a9": {
+  "cell": "C11",
+  "target_id": "T027",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "45d9377e-6274-4e10-a7ba-a35f4e790fe4": {
+  "cell": "C11",
+  "target_id": "T028",
+  "defect_class": "circular-mechanism",
+  "school": "school-3"
+ },
+ "ce72df81-9a11-45ae-9d75-ebfda42732f3": {
+  "cell": "C11",
+  "target_id": "T030",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-3"
+ },
+ "16967428-a21d-4e96-90c1-9227cf639cac": {
+  "cell": "C11",
+  "target_id": "T029",
+  "defect_class": "scope-contradiction",
+  "school": "school-3"
+ },
+ "1df19e6a-0003-4fe2-82cd-017209755e70": {
+  "cell": "C11",
+  "target_id": "T031",
+  "defect_class": "unsupported-comparison",
+  "school": "school-0"
+ },
+ "c5fbbe57-a95b-42c3-bb54-cf5cb501111e": {
+  "cell": "C11",
+  "target_id": "T033",
+  "defect_class": "evidence-misquotation",
+  "school": "school-0"
+ },
+ "0ebdfa39-04b5-4162-9805-494624bc887b": {
+  "cell": "C11",
+  "target_id": "T032",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "d95c6e0a-c4ae-4232-81e0-89681e1c1399": {
+  "cell": "C11",
+  "target_id": "T034",
+  "defect_class": "circular-mechanism",
+  "school": "school-0"
+ },
+ "ebe614af-0afe-4ea1-8e54-4c1eb7d2fdb5": {
+  "cell": "C11",
+  "target_id": "T035",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "456a0860-c31a-4c71-9966-5b735911f8e4": {
+  "cell": "C11",
+  "target_id": "T036",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-3"
+ },
+ "74ece6b1-37cf-439c-acad-e0002b53ddc2": {
+  "cell": "C11",
+  "target_id": "T037",
+  "defect_class": "unsupported-comparison",
+  "school": "school-3"
+ },
+ "16a8110a-5185-410c-9a7e-33b1c811589a": {
+  "cell": "C11",
+  "target_id": "T039",
+  "defect_class": "evidence-misquotation",
+  "school": "school-2"
+ },
+ "2abb8d8c-121f-4eb2-88c2-57b1cbc67c06": {
+  "cell": "C11",
+  "target_id": "T040",
+  "defect_class": "circular-mechanism",
+  "school": "school-3"
+ },
+ "9caaf538-70e0-4a33-acd2-24fcbdb700a7": {
+  "cell": "C11",
+  "target_id": "T038",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-0"
+ },
+ "4dcae143-755d-4fd6-b5f2-a10d067eca79": {
+  "cell": "C11",
+  "target_id": "T042",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-0"
+ },
+ "bc720cf2-c192-4f57-be7f-28f451b874d6": {
+  "cell": "C11",
+  "target_id": "T043",
+  "defect_class": "unsupported-comparison",
+  "school": "school-1"
+ },
+ "9ff7432a-3a90-42a4-89af-889dd888f52f": {
+  "cell": "C11",
+  "target_id": "T041",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "2d435064-cc25-4ada-abef-4f7ab0d64e58": {
+  "cell": "C11",
+  "target_id": "T045",
+  "defect_class": "evidence-misquotation",
+  "school": "school-2"
+ },
+ "cfba10b4-f2ed-43e5-ab4f-179ed5cb17c9": {
+  "cell": "C11",
+  "target_id": "T044",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-1"
+ },
+ "aa96c8c2-90e6-4ca9-8797-99c9d467136c": {
+  "cell": "C11",
+  "target_id": "T047",
+  "defect_class": "scope-contradiction",
+  "school": "school-0"
+ },
+ "7c7b0995-2a4c-4e93-99ba-121f564a8a74": {
+  "cell": "C11",
+  "target_id": "T046",
+  "defect_class": "circular-mechanism",
+  "school": "school-2"
+ },
+ "b2cfe376-14d8-437e-a387-5c4686363987": {
+  "cell": "C11",
+  "target_id": "T049",
+  "defect_class": "unsupported-comparison",
+  "school": "school-0"
+ },
+ "6dfe3aae-a7ae-4c1f-afed-c93f63618c8a": {
+  "cell": "C11",
+  "target_id": "T048",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-2"
+ },
+ "0a5562c9-8c41-4280-994b-e9e395984358": {
+  "cell": "C11",
+  "target_id": "T051",
+  "defect_class": "evidence-misquotation",
+  "school": "school-1"
+ },
+ "cdafd9ab-ed21-4ff5-a187-fa7a382454a4": {
+  "cell": "C11",
+  "target_id": "T050",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-1"
+ },
+ "6898071d-7d14-4b6c-a20e-dacde06a68c6": {
+  "cell": "C11",
+  "target_id": "T052",
+  "defect_class": "circular-mechanism",
+  "school": "school-0"
+ },
+ "77ef329e-a1fe-4174-9506-cd4147100f33": {
+  "cell": "C11",
+  "target_id": "T053",
+  "defect_class": "scope-contradiction",
+  "school": "school-3"
+ },
+ "be9df65b-efb6-4c58-89c9-b1be21f332e0": {
+  "cell": "C11",
+  "target_id": "T056",
+  "defect_class": "causal-non-sequitur",
+  "school": "school-2"
+ },
+ "21a5df16-a215-4524-9e23-e8197788ff33": {
+  "cell": "C11",
+  "target_id": "T054",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-2"
+ },
+ "94f7bdc8-0e90-4e42-a6a9-eb43e56a3856": {
+  "cell": "C11",
+  "target_id": "T055",
+  "defect_class": "unsupported-comparison",
+  "school": "school-2"
+ },
+ "252b3c33-7f19-42aa-870a-f32ae5bb17a9": {
+  "cell": "C11",
+  "target_id": "T057",
+  "defect_class": "evidence-misquotation",
+  "school": "school-3"
+ },
+ "052d9eea-99f2-484c-aea4-d2e6bdb22822": {
+  "cell": "C11",
+  "target_id": "T058",
+  "defect_class": "circular-mechanism",
+  "school": "school-1"
+ },
+ "35a93714-50b4-4b19-96de-f87f89429b4d": {
+  "cell": "C11",
+  "target_id": "T059",
+  "defect_class": "scope-contradiction",
+  "school": "school-2"
+ },
+ "5863fa16-5dc4-486c-aded-fa2f3852efc6": {
+  "cell": "C11",
+  "target_id": "T060",
+  "defect_class": "vacuous-forbidden-case",
+  "school": "school-1"
+ }
+}
