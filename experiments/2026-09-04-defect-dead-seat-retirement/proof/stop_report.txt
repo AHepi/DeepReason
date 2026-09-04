@@ -1,0 +1,145 @@
+# Stop report
+
+- source: `experiments/2026-09-01-live-all-modules-p-a1/run` (root)
+- run id: 4565139800f5ca020e2b74acff45355c1277a9d510068a8e8b4ed65813f1a49c
+
+This report is derived from the record alone. It ranks four boxes by evidence and never asserts a defect.
+
+## 1. WHAT ACTUALLY RAN
+
+| seat | model | profile | reasoning | max_tokens | timeout_s | split |
+|---|---|---|---|---|---|---|
+| argumentative_critic#0 | deepseek-v4-pro:0813 (ollama-deepseek-v4-pro-0813) | standard | omitted → provider default | 49152 | 1800 | armed |
+| conjecturer#0 | deepseek-v4-pro:0813 (ollama-deepseek-v4-pro-0813) | standard | omitted → provider default | 49152 | 1800 | armed |
+| conjecturer#1 | glm-5.3 (ollama-glm-5.3) | standard | omitted → provider default | 49152 | 1800 | armed |
+| defender#0 | glm-5.3 (ollama-glm-5.3) | standard | omitted → provider default | 49152 | 1800 | armed |
+| grounding_reviewer#0 | glm-5.3 (ollama-glm-5.3) | standard | omitted → provider default | 49152 | 1800 | not observed in this run |
+| judge#0 | qwen3.5:397b (ollama-qwen3.5-397b) | standard | omitted → provider default | 32768 | 1200 | armed |
+| judge#1 | gpt-oss:120b (ollama-gpt-oss-120b) | standard | omitted → provider default | 32768 | 1200 | armed |
+| property_designer#0 | deepseek-v4-pro:0813 (ollama-deepseek-v4-pro-0813) | standard | omitted → provider default | 49152 | 1800 | not observed in this run |
+| summarizer#0 | glm-5.3 (ollama-glm-5.3) | standard | omitted → provider default | 49152 | 1800 | not observed in this run |
+| synthesizer#0 | glm-5.3 (ollama-glm-5.3) | standard | omitted → provider default | 49152 | 1800 | not observed in this run |
+| thesis#0 | deepseek-v4-pro:0813 (ollama-deepseek-v4-pro-0813) | standard | omitted → provider default | 49152 | 1800 | not observed in this run |
+| variator#0 | deepseek-v4-pro:0813 (ollama-deepseek-v4-pro-0813) | standard | omitted → provider default | 49152 | 1800 | not observed in this run |
+| vision_critic#0 | glm-5.3 (ollama-glm-5.3) | standard | omitted → provider default | 49152 | 1800 | not observed in this run |
+
+- embedder as compiled: **nomic-ai/nomic-embed-text-v1.5**
+
+Gates NOT carried by the compiled manifest (restored at run time from notice):
+
+- `/engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED` = true — restored at run time from notice
+- `/engine_config/ENGAGED_CRITICISM_AUTHORITY` = "defended_trial" — restored at run time from notice; resolution `/criticism_policy/authority`
+- `/engine_config/JUDGE_SEATS_ENABLED` = true — restored at run time from notice
+- `/engine_config/JUDGE_SUMMONS_PER_CYCLE` = 2 — restored at run time from notice
+- `/engine_config/LEGACY_CRITICISM_ENABLED` = false — restored at run time from notice; resolution `/criticism_policy`
+- `/engine_config/SCHOOL_SEATS_ENABLED` = true — restored at run time from notice; resolution `/control_plane_policy/school_execution`
+
+Every compile notice, verbatim:
+
+- `ENGINE_CONFIG_FIELD_NOT_CARRIED` ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+- `ENGINE_CONFIG_FIELD_NOT_CARRIED` ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config and is restored at run time from this notice
+- `ENGINE_CONFIG_FIELD_NOT_CARRIED` JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+- `ENGINE_CONFIG_FIELD_NOT_CARRIED` JUDGE_SUMMONS_PER_CYCLE=2 is not carried by this manifest's engine config and is restored at run time from this notice
+- `ENGINE_CONFIG_FIELD_NOT_CARRIED` LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)
+- `ENGINE_CONFIG_FIELD_NOT_CARRIED` SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+
+## 2. PRE-RUN CHECK
+
+| seat | form | first-pass | eventual | repairs | qualified |
+|---|---|---|---|---|---|
+| argumentative_critic#0 | batch-critic.v2 | 20/20 | 20 | 0 | True |
+| argumentative_critic#0 | config-referee.v1 | 20/20 | 20 | 0 | True |
+| argumentative_critic#0 | critic.atomic-target.v1 | 20/20 | 20 | 0 | True |
+| conjecturer#0 | conjecturer.atomic-candidate.v1 | 20/20 | 20 | 0 | True |
+| conjecturer#0 | conjecturer.turn.v6 | 20/20 | 20 | 0 | True |
+| conjecturer#0 | scratch.block.compact.v1 | 20/20 | 20 | 0 | True |
+| conjecturer#0 | scratch.block.minimal.v1 | 20/20 | 20 | 0 | True |
+| conjecturer#1 | conjecturer.atomic-candidate.v1 | 20/20 | 20 | 0 | True |
+| conjecturer#1 | conjecturer.turn.v6 | 20/20 | 20 | 0 | True |
+| defender#0 | defender.direct.v1 | 20/20 | 20 | 0 | True |
+| grounding_reviewer#0 | groundingrepairwirev1.direct.v1 | 20/20 | 20 | 0 | True |
+| grounding_reviewer#0 | groundingverdictwirev1.direct.v1 | 20/20 | 20 | 0 | True |
+| judge#0 | judgeruling.direct.v1 | 20/20 | 20 | 0 | True |
+| judge#1 | judgeruling.direct.v1 | 20/20 | 20 | 0 | True |
+| summarizer#0 | bridge.ledger-batch.v1 | 20/20 | 20 | 0 | True |
+| summarizer#0 | bridge.ledger.v3 | 20/20 | 20 | 0 | True |
+| summarizer#0 | scratch.cluster-guide.compact.v1 | 15/20 | 20 | 5 | True |
+| summarizer#0 | scratch.cluster-guide.minimal.v1 | 20/20 | 20 | 0 | True |
+| synthesizer#0 | scratch.link.compact.v1 | 19/20 | 20 | 1 | True |
+| synthesizer#0 | scratch.link.minimal.v1 | 20/20 | 20 | 0 | True |
+| thesis#0 | bridge.composition-batch.v1 | 20/20 | 20 | 0 | True |
+| thesis#0 | bridge.composition.v2 | 20/20 | 20 | 0 | True |
+| variator#0 | variator.direct.v1 | 20/20 | 20 | 0 | True |
+
+
+## 3. PROVIDER HEALTH
+
+| seat | endpoint | attempts | invalid | zero-token | faults |
+|---|---|---|---|---|---|
+| argumentative_critic#0 | ollama-deepseek-v4-pro-0813 | 12 | 1 | 0 | none |
+| conjecturer#0 | ollama-deepseek-v4-pro-0813 | 30 | 14 | 0 | none |
+| conjecturer#1 | ollama-glm-5.3 | 17 | 12 | 6 | HTTPError ×1, RemoteDisconnected ×23 |
+| defender#0 | ollama-glm-5.3 | 8 | 6 | 4 | RemoteDisconnected ×18 |
+| judge#0 | ollama-qwen3.5-397b | 2 | 0 | 0 | none |
+| judge#1 | ollama-gpt-oss-120b | 2 | 0 | 0 | none |
+
+- conjecturer#1 last fault: `RemoteDisconnected:Remote end closed connection without response`
+- defender#0 last fault: `RemoteDisconnected:Remote end closed connection without response`
+
+## 4. THE STOP, CLASSIFIED
+
+Stop message: `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at /workflow/insufficient_capability_by_route_seat: route seat has terminally exhausted its smallest authorized contract`
+
+Boxes ranked by evidence:
+
+### 1. ENVIRONMENT — SUPPORTED
+
+- evidence FOR: transport wall: 41 RemoteDisconnected on endpoint ollama-glm-5.3
+
+### 2. HARNESS — NO EVIDENCE EITHER WAY
+
+- note: not claimable: ENVIRONMENT, MODEL still holds evidence. A harness verdict requires the other three to be ruled out.
+
+### 3. CONFIGURATION — RULED OUT
+
+- evidence RULING IT OUT: 6 field(s) were restored at run time from notices (listed below), but the stop names none of them; no run-config was supplied to diff against the manifest, so a mismatch there cannot be ruled out — re-run with --config to close that gap
+- note: ADJUDICATION_STATUS_AUTHORITY_ENABLED = true was NOT carried by the compiled manifest; restored at run time from notice (/engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED)
+- note: ENGAGED_CRITICISM_AUTHORITY = "defended_trial" was NOT carried by the compiled manifest; restored at run time from notice (/engine_config/ENGAGED_CRITICISM_AUTHORITY)
+- note: JUDGE_SEATS_ENABLED = true was NOT carried by the compiled manifest; restored at run time from notice (/engine_config/JUDGE_SEATS_ENABLED)
+- note: JUDGE_SUMMONS_PER_CYCLE = 2 was NOT carried by the compiled manifest; restored at run time from notice (/engine_config/JUDGE_SUMMONS_PER_CYCLE)
+- note: LEGACY_CRITICISM_ENABLED = false was NOT carried by the compiled manifest; restored at run time from notice (/engine_config/LEGACY_CRITICISM_ENABLED)
+- note: SCHOOL_SEATS_ENABLED = true was NOT carried by the compiled manifest; restored at run time from notice (/engine_config/SCHOOL_SEATS_ENABLED)
+- note: reasoning omitted → provider default on: argumentative_critic#0 (deepseek-v4-pro:0813), conjecturer#0 (deepseek-v4-pro:0813), conjecturer#1 (glm-5.3), defender#0 (glm-5.3), grounding_reviewer#0 (glm-5.3), judge#0 (qwen3.5:397b), judge#1 (gpt-oss:120b), property_designer#0 (deepseek-v4-pro:0813), summarizer#0 (glm-5.3), synthesizer#0 (glm-5.3), thesis#0 (deepseek-v4-pro:0813), variator#0 (deepseek-v4-pro:0813), vision_critic#0 (glm-5.3) — an omitted knob is the provider's DEFAULT, not 'off'. NO PROFILE ENTRY consulted: whether these models need an explicit value is a model-profile question
+- note: split protocol armed on: argumentative_critic#0, conjecturer#0, conjecturer#1, defender#0, judge#0, judge#1 — the split arms on an omitted knob
+
+### 4. MODEL — SUPPORTED
+
+- evidence FOR: the stop names seat exhaustion: "V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at /workflow/insufficient_capability_by_route_seat: route seat has terminally exhausted its smallest authorized contract"
+- evidence FOR: argumentative_critic#0: 1 rejected completion(s) truncated at the cap
+- evidence FOR: conjecturer#0: 1 attempt(s) rejected at /candidates/0/discharges/1/kind
+- evidence FOR: conjecturer#0: 1 attempt(s) rejected at /candidates/2/counterconditions
+- evidence FOR: conjecturer#0: 12 rejected completion(s) truncated at the cap
+- evidence FOR: conjecturer#1: 3 rejected completion(s) truncated at the cap
+- evidence FOR: defender#0: 2 rejected completion(s) truncated at the cap
+- note: argumentative_critic#0 passed qualification 20/20 first-pass on batch-critic.v2 with 0 repairs
+- note: argumentative_critic#0 passed qualification 20/20 first-pass on config-referee.v1 with 0 repairs
+- note: argumentative_critic#0 passed qualification 20/20 first-pass on critic.atomic-target.v1 with 0 repairs
+- note: conjecturer#0 passed qualification 20/20 first-pass on conjecturer.atomic-candidate.v1 with 0 repairs
+- note: conjecturer#0 passed qualification 20/20 first-pass on conjecturer.turn.v6 with 0 repairs
+- note: conjecturer#0 passed qualification 20/20 first-pass on scratch.block.compact.v1 with 0 repairs
+- note: conjecturer#0 passed qualification 20/20 first-pass on scratch.block.minimal.v1 with 0 repairs
+- note: conjecturer#1 passed qualification 20/20 first-pass on conjecturer.atomic-candidate.v1 with 0 repairs
+- note: conjecturer#1 passed qualification 20/20 first-pass on conjecturer.turn.v6 with 0 repairs
+- note: defender#0 passed qualification 20/20 first-pass on defender.direct.v1 with 0 repairs
+- note: judge#0 passed qualification 20/20 first-pass on judgeruling.direct.v1 with 0 repairs
+- note: judge#1 passed qualification 20/20 first-pass on judgeruling.direct.v1 with 0 repairs
+- note: a seat that passed its form at full marks did not lose the ability between qualification and the run — look to CONFIGURATION or ENVIRONMENT first
+
+## 5. CONTINUABILITY
+
+- state: failed
+- stop_reason: operational_failure
+- terminal_lifecycle_refusal: TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL
+- verify_root: {"checks": [], "source": "stored", "violations": 0}
+- continue: **REFUSED** — the record carries TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL
+- amend: **REFUSED** — the record carries TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL
