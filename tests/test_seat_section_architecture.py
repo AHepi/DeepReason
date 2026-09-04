@@ -175,6 +175,15 @@ _GENERATION_SIDE_NAMES = (
     "SeatPackLayout",
     "resolve_seat_shell",
     "resolve_seat_pack_layout",
+    # The SOURCE layer, added 2026-09-04 when the caller-computed sections
+    # moved behind the interface. A source decides what a seat is SHOWN, so
+    # its names belong on this list for the same reason a plugin's do.
+    "bundle_id",
+    "source_version",
+    "SectionSourceReceiptV1",
+    "SeatSourceBundle",
+    "resolve_seat_source_bundle",
+    "resolve_section_source",
 )
 
 _EVIDENCE_SIDE = ("src/deepreason/scheduler", "src/deepreason/adjudication")
@@ -234,6 +243,11 @@ def test_limb3_the_shell_carries_nothing_that_could_buy_standing():
         SeatShellV1,
         SectionReceiptV1,
     )
+    from deepreason.llm.seat_sources import (
+        SectionSourceReceiptV1,
+        SectionSourceResultV1,
+        SeatSourceBundleEntryV1,
+    )
 
     forbidden = {
         "score",
@@ -245,7 +259,17 @@ def test_limb3_the_shell_carries_nothing_that_could_buy_standing():
         "status",
         "immunity",
     }
-    for model in (SeatShellV1, SectionReceiptV1):
+    # The SOURCE layer is held to the same standard as the plugin layer, and
+    # for the same reason: a source decides what a seat is SHOWN, so a field
+    # it could stamp with a rank would be a generation-side name arriving on
+    # the evidence side by the back door.
+    for model in (
+        SeatShellV1,
+        SectionReceiptV1,
+        SectionSourceReceiptV1,
+        SectionSourceResultV1,
+        SeatSourceBundleEntryV1,
+    ):
         overlap = forbidden & set(model.model_fields)
         assert not overlap, (model.__name__, overlap)
     # `SeatPackLayoutEntryV1.priority` is the ALLOCATOR's priority — which
