@@ -1,0 +1,631 @@
+=== embedder warmup 2026-09-04T17:26:59Z ===
+embedder-warmup: initializing nomic-ai/nomic-embed-text-v1.5 (~523 MB of ONNX weights on first use, cached at /tmp/fastembed_cache); this is a one-time cost per cache, not per run ...
+embedder-warmup: ready in 1.5s — nomic-ai/nomic-embed-text-v1.5 (fastembed-0.8.0+onnxruntime-1.29.0)
+{
+  "model": "nomic-ai/nomic-embed-text-v1.5",
+  "sentinel": "d6e3599ce0377000",
+  "version": "fastembed-0.8.0+onnxruntime-1.29.0"
+}
+rc=0
+=== setup 2026-09-04T17:27:02Z ===
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/2026-09-04-fix-provider-reasoning-contract/relaunch-home/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+rc=0
+=== qualify 2026-09-04T17:27:03Z ===
+MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so nothing here can say whether reasoning='none' leaves hidden reasoning on. The run proceeds and sends exactly what you configured. To have this answered, write $DEEPREASON_HOME/model-profiles/<model-id>/agent.md.
+Qualification will test ollama/qwen3.5:397b; maximum expected provider calls: 1140. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+qualification cases: 1/300qualification cases: 2/300qualification cases: 3/300qualification cases: 4/300qualification cases: 5/300qualification cases: 6/300qualification cases: 7/300qualification cases: 8/300qualification cases: 9/300qualification cases: 10/300qualification cases: 11/300qualification cases: 12/300qualification cases: 13/300qualification cases: 14/300qualification cases: 15/300qualification cases: 16/300qualification cases: 17/300qualification cases: 18/300qualification cases: 19/300qualification cases: 20/300qualification cases: 21/300qualification cases: 22/300qualification cases: 23/300qualification cases: 24/300qualification cases: 25/300qualification cases: 26/300qualification cases: 27/300qualification cases: 28/300qualification cases: 29/300qualification cases: 30/300qualification cases: 31/300qualification cases: 32/300qualification cases: 33/300qualification cases: 34/300qualification cases: 35/300qualification cases: 36/300qualification cases: 37/300qualification cases: 38/300qualification cases: 39/300qualification cases: 40/300qualification cases: 41/300qualification cases: 42/300qualification cases: 43/300qualification cases: 44/300qualification cases: 45/300qualification cases: 46/300qualification cases: 47/300qualification cases: 48/300qualification cases: 49/300qualification cases: 50/300qualification cases: 51/300qualification cases: 52/300qualification cases: 53/300qualification cases: 54/300qualification cases: 55/300qualification cases: 56/300qualification cases: 57/300qualification cases: 58/300qualification cases: 59/300qualification cases: 60/300qualification cases: 61/300qualification cases: 62/300qualification cases: 63/300qualification cases: 64/300qualification cases: 65/300qualification cases: 66/300qualification cases: 67/300qualification cases: 68/300qualification cases: 69/300qualification cases: 70/300qualification cases: 71/300qualification cases: 72/300qualification cases: 73/300qualification cases: 74/300qualification cases: 75/300qualification cases: 76/300qualification cases: 77/300qualification cases: 78/300qualification cases: 79/300qualification cases: 80/300qualification cases: 81/300qualification cases: 82/300qualification cases: 83/300qualification cases: 84/300qualification cases: 85/300qualification cases: 86/300qualification cases: 87/300qualification cases: 88/300qualification cases: 89/300qualification cases: 90/300qualification cases: 91/300qualification cases: 92/300qualification cases: 93/300qualification cases: 94/300qualification cases: 95/300qualification cases: 96/300qualification cases: 97/300qualification cases: 98/300qualification cases: 99/300qualification cases: 100/300qualification cases: 101/300qualification cases: 102/300qualification cases: 103/300qualification cases: 104/300qualification cases: 105/300qualification cases: 106/300qualification cases: 107/300qualification cases: 108/300qualification cases: 109/300qualification cases: 110/300qualification cases: 111/300qualification cases: 112/300qualification cases: 113/300qualification cases: 114/300qualification cases: 115/300qualification cases: 116/300qualification cases: 117/300qualification cases: 118/300qualification cases: 119/300qualification cases: 120/300qualification cases: 121/300qualification cases: 122/300qualification cases: 123/300qualification cases: 124/300qualification cases: 125/300qualification cases: 126/300qualification cases: 127/300qualification cases: 128/300qualification cases: 129/300qualification cases: 130/300qualification cases: 131/300qualification cases: 132/300qualification cases: 133/300qualification cases: 134/300qualification cases: 135/300qualification cases: 136/300qualification cases: 137/300qualification cases: 138/300qualification cases: 139/300qualification cases: 140/300qualification cases: 141/300qualification cases: 142/300qualification cases: 143/300qualification cases: 144/300qualification cases: 145/300qualification cases: 146/300qualification cases: 147/300qualification cases: 148/300qualification cases: 149/300qualification cases: 150/300qualification cases: 151/300qualification cases: 152/300qualification cases: 153/300qualification cases: 154/300qualification cases: 155/300qualification cases: 156/300qualification cases: 157/300qualification cases: 158/300qualification cases: 159/300qualification cases: 160/300qualification cases: 161/300qualification cases: 162/300qualification cases: 163/300qualification cases: 164/300qualification cases: 165/300qualification cases: 166/300qualification cases: 167/300qualification cases: 168/300qualification cases: 169/300qualification cases: 170/300qualification cases: 171/300qualification cases: 172/300qualification cases: 173/300qualification cases: 174/300qualification cases: 175/300qualification cases: 176/300qualification cases: 177/300qualification cases: 178/300qualification cases: 179/300qualification cases: 180/300qualification cases: 181/300qualification cases: 182/300qualification cases: 183/300qualification cases: 184/300qualification cases: 185/300qualification cases: 186/300qualification cases: 187/300qualification cases: 188/300qualification cases: 189/300qualification cases: 190/300qualification cases: 191/300qualification cases: 192/300qualification cases: 193/300qualification cases: 194/300qualification cases: 195/300qualification cases: 196/300qualification cases: 197/300qualification cases: 198/300qualification cases: 199/300qualification cases: 200/300qualification cases: 201/300qualification cases: 202/300qualification cases: 203/300qualification cases: 204/300qualification cases: 205/300qualification cases: 206/300qualification cases: 207/300qualification cases: 208/300qualification cases: 209/300qualification cases: 210/300qualification cases: 211/300qualification cases: 212/300qualification cases: 213/300qualification cases: 214/300qualification cases: 215/300qualification cases: 216/300qualification cases: 217/300qualification cases: 218/300qualification cases: 219/300qualification cases: 220/300qualification cases: 221/300qualification cases: 222/300qualification cases: 223/300qualification cases: 224/300qualification cases: 225/300qualification cases: 226/300qualification cases: 227/300qualification cases: 228/300qualification cases: 229/300qualification cases: 230/300qualification cases: 231/300qualification cases: 232/300qualification cases: 233/300qualification cases: 234/300qualification cases: 235/300qualification cases: 236/300qualification cases: 237/300qualification cases: 238/300qualification cases: 239/300qualification cases: 240/300qualification cases: 241/300qualification cases: 242/300qualification cases: 243/300qualification cases: 244/300qualification cases: 245/300qualification cases: 246/300qualification cases: 247/300qualification cases: 248/300qualification cases: 249/300qualification cases: 250/300qualification cases: 251/300qualification cases: 252/300qualification cases: 253/300qualification cases: 254/300qualification cases: 255/300qualification cases: 256/300qualification cases: 257/300qualification cases: 258/300qualification cases: 259/300qualification cases: 260/300qualification cases: 261/300qualification cases: 262/300qualification cases: 263/300qualification cases: 264/300qualification cases: 265/300qualification cases: 266/300qualification cases: 267/300qualification cases: 268/300qualification cases: 269/300qualification cases: 270/300qualification cases: 271/300qualification cases: 272/300qualification cases: 273/300qualification cases: 274/300qualification cases: 275/300qualification cases: 276/300qualification cases: 277/300qualification cases: 278/300qualification cases: 279/300qualification cases: 280/300qualification cases: 281/300qualification cases: 282/300qualification cases: 283/300qualification cases: 284/300qualification cases: 285/300qualification cases: 286/300qualification cases: 287/300qualification cases: 288/300qualification cases: 289/300qualification cases: 290/300qualification cases: 291/300qualification cases: 292/300qualification cases: 293/300qualification cases: 294/300qualification cases: 295/300qualification cases: 296/300qualification cases: 297/300qualification cases: 298/300qualification cases: 299/300qualification cases: 300/300
+Qualified: ollama/qwen3.5:397b
+Qualification tier: full
+Qualification state: ready
+Next action: deepreason reason "YOUR QUESTION"
+rc=0
+=== status 2026-09-04T17:30:48Z ===
+{"schema":"deepreason-readiness.v1","package_version":"0.1.0","product_mode":"v6-only","ready":true,"profile_source":"setup","route_identity":{"provider":"ollama","model_id":"qwen3.5:397b","model_revision":null,"route_id":"provider-profile-2d98e2449d89c77c7993b59f"},"credential_present":true,"qualification_state":"ready","next_action":"deepreason reason \"YOUR QUESTION\""}
+=== reason 2026-09-04T17:30:49Z ===
+MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so nothing here can say whether reasoning='none' leaves hidden reasoning on. The run proceeds and sends exactly what you configured. To have this answered, write $DEEPREASON_HOME/model-profiles/<model-id>/agent.md.
+{
+  "canonical_bridge_eligible": false,
+  "completion_status": "incomplete",
+  "error": "token budget denied transactional work sha256:c01bc9d1d564e4dad8f1ea0ebbc7d02d10928cac14d0446d7726e9d3d5317260",
+  "error_type": "WorkBudgetDenied",
+  "model_execution": {
+    "base_profile": "standard",
+    "contract_decompositions": [
+      {
+        "admitted_effect_refs": [],
+        "atomic_contract_id": "critic.atomic-target.v1",
+        "atomic_work_attempts": [
+          {
+            "child_index": 0,
+            "child_key": "26ab16603da1bccc644f69d319ea4f74aa0b7de7ab27363373bb4195f4755430",
+            "contract_id": "critic.atomic-target.v1",
+            "provider_attempt_count": 1,
+            "repair_index": 0,
+            "schema": "atomic-work-attempt-projection.v1",
+            "semantic_admission_ref": "sha256:f58ba2982b87c72d5273736fe40a3346a7fed22353c67a10799c7af24f59b3b8",
+            "terminal_status": "completed",
+            "work_id": "sha256:e36e9712b638914846eed8402785a537f2efb990ca33967ba1cb9ecc1819047f",
+            "work_kind": "atomic_child"
+          }
+        ],
+        "child_keys": [
+          "26ab16603da1bccc644f69d319ea4f74aa0b7de7ab27363373bb4195f4755430"
+        ],
+        "child_partition": "critic_target",
+        "child_semantic_admission_refs": [
+          "sha256:f58ba2982b87c72d5273736fe40a3346a7fed22353c67a10799c7af24f59b3b8"
+        ],
+        "child_work_ids": [
+          "sha256:e36e9712b638914846eed8402785a537f2efb990ca33967ba1cb9ecc1819047f"
+        ],
+        "completion_ref": "sha256:884a33b18a6cbaaa883de0a799d3fd6a902ba0a9f00b15447640a5c0b36a98e0",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "argumentative_critic",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "contract-decomposition-projection.v1",
+        "seat": 0,
+        "source_contract_id": "batch-critic.v2",
+        "source_failure_preserved": true,
+        "source_semantic_admission_ref": "sha256:967dc39beb7f476c4e3ca9a36c57eb835d65bb694b2872cc71d525e6087c7b62",
+        "source_status": "schema_exhausted",
+        "source_terminal_ref": "sha256:6c3763f4337779a3191dfa7ed81565641f5805ce9717578390142e87b5ddfd91",
+        "source_work_id": "sha256:4d709f0db29a504bd0067b2e4c633613d37a39d4c465e7eb31ddcd37b85d1fd9",
+        "transition_ref": "sha256:72daeda3d5ff7d423da2b3959194abc36c2dd4ee11476bcb1e7c028f7bc4b4c4",
+        "trigger": "schema_exhausted"
+      }
+    ],
+    "event_horizon_seq": 357,
+    "mode": "route_seat_compact_recovery",
+    "recovery_routes": [
+      {
+        "actual_contract_ids": [
+          "batch-critic.v2",
+          "critic.atomic-target.v1"
+        ],
+        "applies_to": "all_subsequent_model_calls",
+        "completed_compact_work_ids": [
+          "sha256:0d2049a0903539bb9abf59f2870c45de2a7c2d74ce8b00aa8753f9dd58265069",
+          "sha256:197dd383240a88af2e1a75754f9cfed4e10b7a61a347d0b81e6c9607bfa4f6f5",
+          "sha256:315febafc6dc3da2a18e97c297c1d5e7619dbeca08aac1582c24c0b9e28b2080",
+          "sha256:3b6d7f3d36155a0248243bc94d3f4ac70d943eb5c731f6b2076049a53217b138",
+          "sha256:554997348ca8d89ca100c15fe4ca3c052bd08f5ea128b07fd692ab8ce543018c",
+          "sha256:602e5fb1f719be9bb2aca942013612a79980d6f9adfa9d4e33033586f529050c",
+          "sha256:6aecd34d8d24ff663c49ac99d0672ed43a51f8884be4050ae1f1ffd182f25726",
+          "sha256:7b2f146cc42d81c233493513ed0e977a8d940d7c797f2a672b0bda1bfe492db3",
+          "sha256:8e7bbaf80ab4b159f0e706cc38cca86c59cbc5a03ac27c84eaa9554a4a8700b7",
+          "sha256:9521228f3016f83fda435cbceff6a221f2c2bdfbdc3dd7a339aa5a1a04929f1e",
+          "sha256:a27b1bdcc0e66bde8572a9a8502590673e3a97f9f3ad129fcc4dc32805d0f17f",
+          "sha256:c247fe834af1f5f98ef2909e6d66689e99f5e4f0b3f30ea9b6af5409f2ef5fdb",
+          "sha256:c9c7026bcb9e72e1a14d83244d7312c49612f26688b1f26d049db3891efda830",
+          "sha256:d0bf177f93f24f7f8f0a72ba316d74bb898c90bbfeac81085ffef62d906804e5",
+          "sha256:d1f2dd70a37be6a28e2a6e52a10dabcb6600d827329142304d40c3090304e8a8",
+          "sha256:e36e9712b638914846eed8402785a537f2efb990ca33967ba1cb9ecc1819047f",
+          "sha256:ed3878bbed121dbf0c125494294312284af2029e21fbd15b2f668e19f14976b0"
+        ],
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "language": {
+          "activation": "route-seat compact recovery activated",
+          "subsequent_call": "subsequent compact-path call",
+          "subsequent_completion": "subsequent compact-path completion",
+          "triggering_work": "schema-exhausted triggering work"
+        },
+        "retry_failed_work": false,
+        "role": "argumentative_critic",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "compact-recovery-route-projection.v1",
+        "seat": 0,
+        "source_profile": "standard",
+        "sticky": true,
+        "subsequent_compact_call_count": 17,
+        "subsequent_compact_work_ids": [
+          "sha256:0d2049a0903539bb9abf59f2870c45de2a7c2d74ce8b00aa8753f9dd58265069",
+          "sha256:197dd383240a88af2e1a75754f9cfed4e10b7a61a347d0b81e6c9607bfa4f6f5",
+          "sha256:315febafc6dc3da2a18e97c297c1d5e7619dbeca08aac1582c24c0b9e28b2080",
+          "sha256:3b6d7f3d36155a0248243bc94d3f4ac70d943eb5c731f6b2076049a53217b138",
+          "sha256:554997348ca8d89ca100c15fe4ca3c052bd08f5ea128b07fd692ab8ce543018c",
+          "sha256:602e5fb1f719be9bb2aca942013612a79980d6f9adfa9d4e33033586f529050c",
+          "sha256:6aecd34d8d24ff663c49ac99d0672ed43a51f8884be4050ae1f1ffd182f25726",
+          "sha256:7b2f146cc42d81c233493513ed0e977a8d940d7c797f2a672b0bda1bfe492db3",
+          "sha256:8e7bbaf80ab4b159f0e706cc38cca86c59cbc5a03ac27c84eaa9554a4a8700b7",
+          "sha256:9521228f3016f83fda435cbceff6a221f2c2bdfbdc3dd7a339aa5a1a04929f1e",
+          "sha256:a27b1bdcc0e66bde8572a9a8502590673e3a97f9f3ad129fcc4dc32805d0f17f",
+          "sha256:c247fe834af1f5f98ef2909e6d66689e99f5e4f0b3f30ea9b6af5409f2ef5fdb",
+          "sha256:c9c7026bcb9e72e1a14d83244d7312c49612f26688b1f26d049db3891efda830",
+          "sha256:d0bf177f93f24f7f8f0a72ba316d74bb898c90bbfeac81085ffef62d906804e5",
+          "sha256:d1f2dd70a37be6a28e2a6e52a10dabcb6600d827329142304d40c3090304e8a8",
+          "sha256:e36e9712b638914846eed8402785a537f2efb990ca33967ba1cb9ecc1819047f",
+          "sha256:ed3878bbed121dbf0c125494294312284af2029e21fbd15b2f668e19f14976b0"
+        ],
+        "target_profile": "compact",
+        "transition_ref": "sha256:2d25d390e9343c99a3b178b0f398e97789c579d4e5b400de579f3b2db7fd8895",
+        "trigger": "schema_exhausted",
+        "triggering_semantic_admission_ref": "sha256:967dc39beb7f476c4e3ca9a36c57eb835d65bb694b2872cc71d525e6087c7b62",
+        "triggering_status": "schema_exhausted",
+        "triggering_terminal_ref": "sha256:6c3763f4337779a3191dfa7ed81565641f5805ce9717578390142e87b5ddfd91",
+        "triggering_work_id": "sha256:4d709f0db29a504bd0067b2e4c633613d37a39d4c465e7eb31ddcd37b85d1fd9"
+      }
+    ],
+    "route_seat_bases": [
+      {
+        "base_profile": "standard",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "argumentative_critic",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-base-projection.v1",
+        "seat": 0,
+        "selection_basis": "explicit_endpoint"
+      },
+      {
+        "base_profile": "standard",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "conjecturer",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-base-projection.v1",
+        "seat": 0,
+        "selection_basis": "explicit_endpoint"
+      },
+      {
+        "base_profile": "standard",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "defender",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-base-projection.v1",
+        "seat": 0,
+        "selection_basis": "explicit_endpoint"
+      },
+      {
+        "base_profile": "standard",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "grounding_reviewer",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-base-projection.v1",
+        "seat": 0,
+        "selection_basis": "explicit_endpoint"
+      },
+      {
+        "base_profile": "standard",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "judge",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-base-projection.v1",
+        "seat": 0,
+        "selection_basis": "explicit_endpoint"
+      },
+      {
+        "base_profile": "standard",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "property_designer",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-base-projection.v1",
+        "seat": 0,
+        "selection_basis": "explicit_endpoint"
+      },
+      {
+        "base_profile": "standard",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "summarizer",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-base-projection.v1",
+        "seat": 0,
+        "selection_basis": "explicit_endpoint"
+      },
+      {
+        "base_profile": "standard",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "synthesizer",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-base-projection.v1",
+        "seat": 0,
+        "selection_basis": "explicit_endpoint"
+      },
+      {
+        "base_profile": "standard",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "thesis",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-base-projection.v1",
+        "seat": 0,
+        "selection_basis": "explicit_endpoint"
+      },
+      {
+        "base_profile": "standard",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "variator",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-base-projection.v1",
+        "seat": 0,
+        "selection_basis": "explicit_endpoint"
+      },
+      {
+        "base_profile": "standard",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "vision_critic",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-base-projection.v1",
+        "seat": 0,
+        "selection_basis": "explicit_endpoint"
+      }
+    ],
+    "route_seat_model_classifications": [
+      {
+        "authorized_contract_ids": [
+          "batch-critic.v2",
+          "critic.atomic-target.v1"
+        ],
+        "behavioral_grant_sha256": "a9647f6d15a37741a3b0e9ca23f4e28cbe05e1ab035f918b70c42712c4f0117a",
+        "classification_binding_ref": "sha256:e3637b2e2aaf659207afe49ad4badcdfd45865d6af216b301708a102937c6694",
+        "classification_plan_ref": "sha256:9213b45cd243d4edb86bcb1b76528289cd324f6e0433a1ec40c8ea539a64e310",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "evidence_pair_ids": [
+          "sha256:a4db6d5838fa3837e9aa0a8da425962452f9353ec6fac8ae4fea829d6db567a4",
+          "sha256:fb7529520782da3c961f4eb8e0f3474522a63f929054ad1b60e0db4d71945b00"
+        ],
+        "qualification_evidence_sha256": "768aef39b26cabaa5b536b86a4efb29931a3a49c4d0a2149d4d4c00f7448d44c",
+        "role": "argumentative_critic",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-model-classification-projection.v1",
+        "seat": 0,
+        "selected_class": "qualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [
+          "conjecturer.atomic-candidate.v1",
+          "conjecturer.turn.v6",
+          "scratch.block.compact.v1",
+          "scratch.block.minimal.v1"
+        ],
+        "behavioral_grant_sha256": "1fc755d7bbb8aacd2f68015c9d7a3d12325484315e8bcabfd33250a540eaf93e",
+        "classification_binding_ref": "sha256:e3637b2e2aaf659207afe49ad4badcdfd45865d6af216b301708a102937c6694",
+        "classification_plan_ref": "sha256:9213b45cd243d4edb86bcb1b76528289cd324f6e0433a1ec40c8ea539a64e310",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "evidence_pair_ids": [
+          "sha256:20108332281f2bd6caed5c99b1758eb926da307f66f3de4b26b5a963003c867c",
+          "sha256:4a18851c0bbf30b6bac95ce5d62a4bdc065e1c3a43619db6c9b89047a30d67db",
+          "sha256:edd001b75c4b074bf8672e09c3fa829fad72d6ae18bbe2567ba23192c7b01b72",
+          "sha256:fa6eabedafe33d7457e792faf8e9e81443b1696f7e75185c1fc3c263d3dbaec2"
+        ],
+        "qualification_evidence_sha256": "768aef39b26cabaa5b536b86a4efb29931a3a49c4d0a2149d4d4c00f7448d44c",
+        "role": "conjecturer",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-model-classification-projection.v1",
+        "seat": 0,
+        "selected_class": "qualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [],
+        "behavioral_grant_sha256": "01828800464940bd03f5b2bc0c4e4a49987863e85990a72771f135e17380c489",
+        "classification_binding_ref": "sha256:e3637b2e2aaf659207afe49ad4badcdfd45865d6af216b301708a102937c6694",
+        "classification_plan_ref": "sha256:9213b45cd243d4edb86bcb1b76528289cd324f6e0433a1ec40c8ea539a64e310",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "evidence_pair_ids": [],
+        "qualification_evidence_sha256": "768aef39b26cabaa5b536b86a4efb29931a3a49c4d0a2149d4d4c00f7448d44c",
+        "role": "defender",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-model-classification-projection.v1",
+        "seat": 0,
+        "selected_class": "inactive_no_authorized_contract"
+      },
+      {
+        "authorized_contract_ids": [],
+        "behavioral_grant_sha256": "70421fa93b4db6940031f7c499a467100669fa223707d08a346d557d7c9ef08e",
+        "classification_binding_ref": "sha256:e3637b2e2aaf659207afe49ad4badcdfd45865d6af216b301708a102937c6694",
+        "classification_plan_ref": "sha256:9213b45cd243d4edb86bcb1b76528289cd324f6e0433a1ec40c8ea539a64e310",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "evidence_pair_ids": [],
+        "qualification_evidence_sha256": "768aef39b26cabaa5b536b86a4efb29931a3a49c4d0a2149d4d4c00f7448d44c",
+        "role": "grounding_reviewer",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-model-classification-projection.v1",
+        "seat": 0,
+        "selected_class": "inactive_no_authorized_contract"
+      },
+      {
+        "authorized_contract_ids": [
+          "groundingverdictwirev1.direct.v1"
+        ],
+        "behavioral_grant_sha256": "76554f7f0a10fabad8b1df722fe19380b2e9e9f806b46de4ad341f1f87b65b6d",
+        "classification_binding_ref": "sha256:e3637b2e2aaf659207afe49ad4badcdfd45865d6af216b301708a102937c6694",
+        "classification_plan_ref": "sha256:9213b45cd243d4edb86bcb1b76528289cd324f6e0433a1ec40c8ea539a64e310",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "evidence_pair_ids": [
+          "sha256:7d9dee39e09d23b4f694f35db1c6fc9c2be71f989b1d071abf36c1996b473df0"
+        ],
+        "qualification_evidence_sha256": "768aef39b26cabaa5b536b86a4efb29931a3a49c4d0a2149d4d4c00f7448d44c",
+        "role": "judge",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-model-classification-projection.v1",
+        "seat": 0,
+        "selected_class": "qualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [],
+        "behavioral_grant_sha256": "8ac11822c1a39faf00e3ad890b385f309f67dd8876133824b08a0f82f63f34a9",
+        "classification_binding_ref": "sha256:e3637b2e2aaf659207afe49ad4badcdfd45865d6af216b301708a102937c6694",
+        "classification_plan_ref": "sha256:9213b45cd243d4edb86bcb1b76528289cd324f6e0433a1ec40c8ea539a64e310",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "evidence_pair_ids": [],
+        "qualification_evidence_sha256": "768aef39b26cabaa5b536b86a4efb29931a3a49c4d0a2149d4d4c00f7448d44c",
+        "role": "property_designer",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-model-classification-projection.v1",
+        "seat": 0,
+        "selected_class": "inactive_no_authorized_contract"
+      },
+      {
+        "authorized_contract_ids": [
+          "bridge.ledger-batch.v1",
+          "bridge.ledger.v3",
+          "scratch.cluster-guide.compact.v1",
+          "scratch.cluster-guide.minimal.v1"
+        ],
+        "behavioral_grant_sha256": "9c608906d6aa382d41cb3b3d993fac43d87d08a23127388730f33899ea6ab7b4",
+        "classification_binding_ref": "sha256:e3637b2e2aaf659207afe49ad4badcdfd45865d6af216b301708a102937c6694",
+        "classification_plan_ref": "sha256:9213b45cd243d4edb86bcb1b76528289cd324f6e0433a1ec40c8ea539a64e310",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "evidence_pair_ids": [
+          "sha256:2a932277defd4a6a8fd13d8f3e7b9b704e80db09c98deb56892dd9dddd6c82be",
+          "sha256:a338b75827a6c5c0a502ba8426dbc6a2c273d304b7d1bb010bd67931b062aaf4",
+          "sha256:c0eaf4d593dfad113c9ee432b0a5a470ab4d80cd62130f7086130668c67e1ca9",
+          "sha256:e16a84111f81beae0ea100b2a17522b3eedf963bf767c7c9fa2d700e61ae21c3"
+        ],
+        "qualification_evidence_sha256": "768aef39b26cabaa5b536b86a4efb29931a3a49c4d0a2149d4d4c00f7448d44c",
+        "role": "summarizer",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-model-classification-projection.v1",
+        "seat": 0,
+        "selected_class": "qualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [
+          "scratch.link.compact.v1",
+          "scratch.link.minimal.v1"
+        ],
+        "behavioral_grant_sha256": "3ee0afcf572496e80c0051983f3c6e18e93c34fac21c1c7da4e9a75d63714766",
+        "classification_binding_ref": "sha256:e3637b2e2aaf659207afe49ad4badcdfd45865d6af216b301708a102937c6694",
+        "classification_plan_ref": "sha256:9213b45cd243d4edb86bcb1b76528289cd324f6e0433a1ec40c8ea539a64e310",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "evidence_pair_ids": [
+          "sha256:1479677fbce2c946d5dfc60d62cda8baa94967632081bbbd2ea20e6e101c3472",
+          "sha256:ab8da430e2157162fcbe418c6d52a2fd27138206dfc7ce62ed6da7a8bb035c2c"
+        ],
+        "qualification_evidence_sha256": "768aef39b26cabaa5b536b86a4efb29931a3a49c4d0a2149d4d4c00f7448d44c",
+        "role": "synthesizer",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-model-classification-projection.v1",
+        "seat": 0,
+        "selected_class": "qualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [
+          "bridge.composition-batch.v1",
+          "bridge.composition.v2"
+        ],
+        "behavioral_grant_sha256": "52d8454ac942e5807db381458cab77b23ac639fa450deeb99fb43ca657f26a7a",
+        "classification_binding_ref": "sha256:e3637b2e2aaf659207afe49ad4badcdfd45865d6af216b301708a102937c6694",
+        "classification_plan_ref": "sha256:9213b45cd243d4edb86bcb1b76528289cd324f6e0433a1ec40c8ea539a64e310",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "evidence_pair_ids": [
+          "sha256:9b0808e8fe71e63a116cc421b6f74724ea5715132ff12a68d75959de8848d59d",
+          "sha256:f9c131e801c3cc8d6a1cf03ff013977f121fed8c4b9aec89162ca6087898b0f8"
+        ],
+        "qualification_evidence_sha256": "768aef39b26cabaa5b536b86a4efb29931a3a49c4d0a2149d4d4c00f7448d44c",
+        "role": "thesis",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-model-classification-projection.v1",
+        "seat": 0,
+        "selected_class": "qualified_exact_behavior"
+      },
+      {
+        "authorized_contract_ids": [],
+        "behavioral_grant_sha256": "20515ea630ff71fd453b08d2174413f32d1ab0da958b28a82b8395731433e1a9",
+        "classification_binding_ref": "sha256:e3637b2e2aaf659207afe49ad4badcdfd45865d6af216b301708a102937c6694",
+        "classification_plan_ref": "sha256:9213b45cd243d4edb86bcb1b76528289cd324f6e0433a1ec40c8ea539a64e310",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "evidence_pair_ids": [],
+        "qualification_evidence_sha256": "768aef39b26cabaa5b536b86a4efb29931a3a49c4d0a2149d4d4c00f7448d44c",
+        "role": "variator",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-model-classification-projection.v1",
+        "seat": 0,
+        "selected_class": "inactive_no_authorized_contract"
+      },
+      {
+        "authorized_contract_ids": [],
+        "behavioral_grant_sha256": "92c5b76f561b6138a478de98eab36f49ce3d62352fa1f1793ef278fd077af4bc",
+        "classification_binding_ref": "sha256:e3637b2e2aaf659207afe49ad4badcdfd45865d6af216b301708a102937c6694",
+        "classification_plan_ref": "sha256:9213b45cd243d4edb86bcb1b76528289cd324f6e0433a1ec40c8ea539a64e310",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "evidence_pair_ids": [],
+        "qualification_evidence_sha256": "768aef39b26cabaa5b536b86a4efb29931a3a49c4d0a2149d4d4c00f7448d44c",
+        "role": "vision_critic",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "route-seat-model-classification-projection.v1",
+        "seat": 0,
+        "selected_class": "inactive_no_authorized_contract"
+      }
+    ],
+    "schema": "model-execution-summary.v1"
+  },
+  "run_id": "run-ecd1a8d2461eff1eddd9756b51336ce5",
+  "schema": "deepreason-run-result-v2",
+  "state": "failed",
+  "stop": {
+    "digest": "11377bdab37edbfeef2a0caa50dac1272946c428ec9846795e6ba29672348d2c",
+    "event_seq": 357,
+    "metrics": {
+      "criticism_debt": 0.0,
+      "cycle": 0,
+      "frontier_delta": 0,
+      "gate_orbit": false,
+      "new_admissions": 0,
+      "new_problems": 0,
+      "open_research": 0,
+      "pending_deterministic_checks": 0,
+      "repair_exhausted": false,
+      "status_churn": 0,
+      "stuck_signal": false,
+      "workload_complete": false
+    },
+    "policy_digest": "76a98a16373c7575acfc41e8877c17b2f3476622cb06f8cbcefc8d388101b147",
+    "reason": "operational_failure",
+    "schema": "deepreason-run-stop-v1"
+  },
+  "terminal_commitment_ref": "sha256:148d46cb92dc9d2bea407c397335e01fe8ce1bb27ab7bf6f9b0271cb0f39de75",
+  "verification": {
+    "completion_satisfied": false,
+    "epistemic_checks_passed": false,
+    "finding_counts": {
+      "completion": 1,
+      "epistemic": 1,
+      "integrity": 0,
+      "operational": 7,
+      "security": 0
+    },
+    "integrity_valid": true,
+    "operational_checks_passed": false,
+    "schema": "verification.summary.v2",
+    "security_valid": true,
+    "valid": true
+  },
+  "workload": "text"
+}
+embedder: hashing (hashing-128)
+rc=4
+=== results 2026-09-04T17:40:24Z ===
+{
+  "absences": [
+    "NO_FRONTIER_RECORD",
+    "NO_LIFECYCLE_REFUSAL_RECORD",
+    "NO_SEAT_RETIREMENT",
+    "NO_SURVIVOR_RECORD",
+    "SECURITY_CHANNEL_NOT_REDERIVED"
+  ],
+  "adjudication": {
+    "judge_calls": 0,
+    "ran": false,
+    "trial_blocked": {},
+    "trial_declined": {},
+    "trial_observations": {}
+  },
+  "amendment": {
+    "epoch_seqs": [],
+    "epochs": 0
+  },
+  "artifacts": {
+    "accepted": 37,
+    "frontier": {
+      "artifact_ids": {
+        "absent": true,
+        "reason": "NO_FRONTIER_RECORD"
+      },
+      "count": {
+        "absent": true,
+        "reason": "NO_FRONTIER_RECORD"
+      },
+      "problem_id": null
+    },
+    "refuted": 0,
+    "survivor_count": {
+      "absent": true,
+      "reason": "NO_SURVIVOR_RECORD"
+    },
+    "suspended": 0
+  },
+  "embedder": {
+    "backend": "hashing",
+    "configured_model": null,
+    "fallback": false,
+    "fallback_reason": null,
+    "fingerprint": "4226e035204776db",
+    "model": "hashing-128",
+    "version": "1"
+  },
+  "identity": {
+    "manifest_present": true,
+    "manifest_schema_version": 6,
+    "run_id": "c44a5bcc3c2c7c858cb5ffbc4fb7e39297f6abcc418e3e0de2aba33140d05894"
+  },
+  "provider_health": {
+    "fault_minutes": 0.0,
+    "seats": {
+      "argumentative_critic": {
+        "attempts": 22,
+        "calls": 22,
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "fault_ms": 0,
+        "faults": 0,
+        "last_fault_kind": null,
+        "max_zero_byte_streak": 0,
+        "model": "qwen3.5:397b",
+        "zero_byte_returns": 0
+      },
+      "conjecturer": {
+        "attempts": 7,
+        "calls": 7,
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "fault_ms": 0,
+        "faults": 0,
+        "last_fault_kind": null,
+        "max_zero_byte_streak": 0,
+        "model": "qwen3.5:397b",
+        "zero_byte_returns": 0
+      }
+    },
+    "total_attempts": 29,
+    "total_calls": 29,
+    "total_faults": 0,
+    "total_zero_byte_returns": 0,
+    "worst_zero_byte_streak": 0
+  },
+  "question": "Does a bounded harness produce better surviving conjectures than one model call?",
+  "resolved_from": "home",
+  "root": "/home/user/DeepReason/experiments/2026-09-04-fix-provider-reasoning-contract/relaunch-home/runs/run-ecd1a8d2461eff1eddd9756b51336ce5",
+  "run": {
+    "cycles_completed": 0,
+    "message": "token budget denied transactional work sha256:c01bc9d1d564e4dad8f1ea0ebbc7d02d10928cac14d0446d7726e9d3d5317260",
+    "state": "failed",
+    "stop_reason": "operational_failure",
+    "token_limit": 120000,
+    "token_spend": 114226
+  },
+  "schema": "deepreason-results.v1",
+  "seat_retirement": {
+    "absent": true,
+    "reason": "NO_SEAT_RETIREMENT"
+  },
+  "terminal": {
+    "amend_ready": true,
+    "continuation_authority": true,
+    "lifecycle_refusal": {
+      "absent": true,
+      "reason": "NO_LIFECYCLE_REFUSAL_RECORD"
+    },
+    "record_security_violations": {
+      "absent": true,
+      "reason": "SECURITY_CHANNEL_NOT_REDERIVED"
+    },
+    "stop_reason_resumable": true,
+    "terminal_epoch": 0,
+    "valid_typed_terminal": true
+  },
+  "verification": {
+    "families": {
+      "completion": 1,
+      "epistemic": 1,
+      "integrity": 0,
+      "operational": 7,
+      "security": 0
+    },
+    "source": "stored",
+    "valid": true,
+    "violations": 0
+  }
+}
+=== finished 2026-09-04T17:40:28Z ===

@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims a bounded harness produces better surviving conjectures by enforcing selection pressure that filters out high-variance, low-coherence outputs.",
+      "premise_evidence": [
+        {
+          "block": "f400f9c649401a1fd1188ac39e8dbddd",
+          "quote": "A bounded harness produces better surviving conjectures because it enforces a selection pressure analogous to natural selection, filtering out high-variance, low-coherence outputs that a single model call would accept as final."
+        }
+      ],
+      "case": "The argument assumes that 'high-variance' is synonymous with 'low-quality' or 'false,' yet in non-deterministic problem spaces (such as creative hypothesis generation or exploring novel mathematical proofs), high variance is often the primary source of valid, non-obvious solutions. By systematically filtering for 'coherence'—which often correlates with training data frequency and conventional wisdom—the harness may prematurely converge on local optima (plausible but incorrect answers) while rejecting the very divergent thoughts required to find the global optimum. A single model call, retaining its full entropy, has a non-zero probability of sampling these rare, high-value outliers which the harness's structural constraints would deterministically reject as 'noise.'",
+      "counterexample": [
+        "Consider a scenario where the correct solution to a physics problem requires abandoning a standard assumption (a high-variance thought). The harness, trained to prefer structurally 'coherent' arguments that align with standard textbook derivations, rejects this outlier immediately. The single model call, while mostly producing noise, retains a small probability mass for this radical but correct path, thereby outperforming the harness which has zero probability of selecting the rejected truth."
+      ],
+      "successor_question": "How can the harness distinguish between productive high-variance exploration and unproductive noise without prior knowledge of the truth distribution?"
+    }
+  ]
+}

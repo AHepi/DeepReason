@@ -1,0 +1,67 @@
+{
+  "candidates": [
+    {
+      "claim": "A bounded harness produces better surviving conjectures primarily through 'Structural Scaffolding,' where the constraints act as a cognitive guide that prevents the model from abandoning complex reasoning paths prematurely, rather than through selection or statistical sampling.",
+      "mechanism": "Constraint-Guided Reasoning: The harness's bounds (e.g., requiring specific fields like 'mechanism' or 'evidence') force the model to allocate attention to structural completeness during generation. This reduces the probability of generating syntactically valid but semantically hollow outputs (hallucinations) that often occur in single, unconstrained calls. The 'survival' is a byproduct of higher initial quality, not post-hoc filtering.",
+      "counterconditions": [
+        "If the structural constraints are misaligned with the problem domain (e.g., demanding a causal mechanism for a purely correlational problem), the harness will systematically produce confident but incorrect conjectures.",
+        "If the model lacks the inherent capability to follow multi-step structural instructions, the harness may induce 'constraint collapse,' where the model fills fields with nonsense just to satisfy the format.",
+        "If the problem requires lateral thinking that violates standard structural norms, the harness will suppress the optimal solution."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The criticism assumes the harness operates like gradient descent on a loss landscape. This candidate rebuts that by positing a 'scaffolding' mechanism where constraints guide generation token-by-token, not via discrete rejection steps. No differentiable landscape is required; only instruction-following capability."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "revised", "note": "Revised to explicitly define the 'structural constraints' as 'cognitive guides' that enforce attention allocation during generation, rather than vague filters. The filter function H(C) is redefined as the model's internal adherence to the prompt schema."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "This candidate directly answers the comparative question with a specific mechanism ('Structural Scaffolding') and a clear affirmation that the harness is better under conditions of high complexity, refuting the claim of vagueness."},
+        {"handle": "[SRC_016] against SRC_011", "kind": "rebutted", "note": "The mechanism does not rely on the model's ability to 'self-diagnose' errors in intermediate steps. Instead, it relies on the model's ability to follow formatting instructions which implicitly structures the thought process, bypassing the need for explicit self-correction."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "The false dichotomy of predictability vs. survival is resolved by showing that predictability (via structure) *causes* survival. The metric of 'better surviving conjectures' is met because the generated conjectures are more robust to semantic evaluation, not just syntactic filtering."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "rebutted", "note": "The contradiction regarding 'formal trappings' is dissolved. A single call lacks formal trappings *because* it is unstructured. The harness provides the trappings which enable the conjecture to be evaluated and thus 'survive' in a rigorous context. Survival implies meeting criteria, which requires form."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "revised", "note": "Revised to acknowledge that survival is indeed determined by filtering, but argues the *primary* advantage is the pre-filtering quality boost from scaffolding. The selection logic is secondary to the generation guidance."},
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "The temperature contradiction is addressed by clarifying that the harness prevents drift regardless of temperature by anchoring the output to a schema. High temperature increases diversity within the schema, while the schema prevents total nonsense."}
+      ],
+      "optional_refs": ["SRC_005", "SRC_006"]
+    },
+    {
+      "claim": "The bounded harness does not inherently produce better conjectures; it produces *more compliant* conjectures. In domains where 'truth' correlates poorly with 'compliance' (e.g., paradigm-shifting discoveries), a single model call yields superior surviving conjectures because it avoids the 'Compliance Trap'.",
+      "mechanism": "The Compliance Trap: Bounded harnesses optimize for adherence to the school stance and schema requirements. This creates a local optimum where conjectures look correct (have all fields, use right jargon) but lack novel insight. Single calls, being unbounded, retain the entropy necessary to jump out of this local optimum, occasionally producing weird but true insights that a harness would reject as 'non-compliant'.",
+      "counterconditions": [
+        "If the definition of 'better' is strictly operational (i.e., passes the harness filter), then the harness always wins by tautology.",
+        "If the domain is mature and well-mapped, the 'Compliance Trap' aligns with truth, making the harness superior.",
+        "If the single call is prompted with strong heuristics mimicking the harness, the entropy advantage diminishes."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "departure_declared", "note": "Departing from the assumption that the harness improves quality. This candidate argues the harness degrades quality in novel domains by enforcing conformity, rendering the gradient descent analogy irrelevant to the core failure mode."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "rebutted", "note": "The 'structural constraints' are defined here as the source of bias. The filter function H(C) is precisely the compliance checker that rejects non-conforming but potentially true ideas. The vagueness criticized is actually the hidden cost of over-structuring."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "Provides a direct negation: 'No, the harness produces more compliant, not necessarily better, conjectures.' Supports this with the 'Compliance Trap' mechanism."},
+        {"handle": "[SRC_016] against SRC_011", "kind": "rebutted", "note": "Agrees that self-diagnosis is flawed but argues the harness replaces self-diagnosis with external validation of form, which is equally flawed for truth-seeking. The error is shifted, not corrected."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "revised", "note": "Revised to clarify that 'predictability' in the harness leads to predictable mediocrity in novel domains. The core metric of 'surviving' is challenged: surviving the harness filter is not the same as surviving empirical scrutiny."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "rebutted", "note": "The 'lack of formal trappings' in single calls is reframed as a feature (freedom) rather than a bug. The contradiction vanishes if 'surviving' means 'holding up to reality' rather than 'passing the schema check'."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Argues that the selection logic is the *problem*. The statistical advantage of N samples is nullified if the selection function H(C) has a high false-negative rate for novel truths."},
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "The temperature argument is moot if the structural constraints themselves are the bottleneck. Even at low temperature, the harness enforces a specific shape of thought that may be wrong."}
+      ],
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "The superiority of the bounded harness is conditional on the 'Alignment of Constraints': it outperforms single calls only when the schema's implicit ontology matches the problem's actual ontology. When they mismatch, the harness fails catastrophically compared to the robustness of a single call.",
+      "mechanism": "Ontological Resonance: The harness acts as a resonant cavity. If the problem's structure matches the harness's constraints (resonance), the signal (correct conjecture) is amplified. If they mismatch (dissonance), the harness suppresses the signal. Single calls are broadband receivers; they capture the signal regardless of ontological fit, albeit with more noise.",
+      "counterconditions": [
+        "If the problem ontology is unknown (which is typical), the probability of resonance is low, favoring single calls.",
+        "If the harness allows dynamic schema adjustment, the resonance condition can be met iteratively.",
+        "If the noise in single calls overwhelms the signal even in broadband mode, the harness's narrowband amplification is still superior despite potential mismatch."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "revised", "note": "Refines the 'chain-of-thought' analogy to 'resonant cavity'. The steps are not directed toward a minimum but toward a resonant frequency. Discrete steps are acceptable if they align with the standing wave of the problem."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "revised", "note": "Defines 'structural constraints' as the 'ontology of the harness'. The filter H(C) is the degree of overlap between the problem's ontology and the harness's ontology."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "Answers the question conditionally: 'Yes, but only under ontological resonance.' This is a precise, supported affirmation/negation hybrid that addresses the nuance missing in previous targets."},
+        {"handle": "[SRC_016] against SRC_011", "kind": "rebutted", "note": "Self-diagnosis is replaced by 'ontological matching'. The model doesn't need to diagnose errors; it just needs to generate within the schema. If the schema is wrong, the model succeeds at the task (filling the schema) but fails the goal (truth)."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "Addresses the dichotomy by introducing a third variable: Ontological Fit. Predictability is good if the ontology fits, bad if it doesn't. Survival depends on this fit."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "rebutted", "note": "The 'formal trappings' are the ontology. If the ontology is wrong, the trappings are a cage. If right, they are a scaffold. The single call's lack of trappings makes it ontology-agnostic."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "revised", "note": "Clarifies that the statistical advantage (N samples) is modulated by the resonance factor. N * Resonance > 1 only if Resonance is sufficiently high."},
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "Temperature controls the width of the resonance peak. High temperature allows exploring near-resonant states; low temperature locks into the exact schema. The harness prevents drift away from the schema, which is useful only if the schema is the target."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_004"]
+    }
+  ]
+}

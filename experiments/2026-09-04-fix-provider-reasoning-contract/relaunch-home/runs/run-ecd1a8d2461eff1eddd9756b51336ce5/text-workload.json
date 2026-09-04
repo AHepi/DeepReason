@@ -1,0 +1,1 @@
+{"allow_formalization":true,"allow_rubric":true,"allow_simulation":true,"brain":{"enabled":false,"query":null},"criteria":[],"problem":{"description":"Does a bounded harness produce better surviving conjectures than one model call?","id":"question-f400f9c649401a1fd1188ac39e8dbddd"},"schema":"deepreason-text-workload-v1","sources":[]}

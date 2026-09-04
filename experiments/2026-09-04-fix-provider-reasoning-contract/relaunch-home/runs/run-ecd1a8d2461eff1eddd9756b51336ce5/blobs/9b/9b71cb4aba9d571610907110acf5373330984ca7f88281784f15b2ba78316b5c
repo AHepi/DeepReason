@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's core mechanism relies on the model performing 'gradient descent in semantic space' via in-context learning from rejected outputs. However, standard LLMs do not update their weights or internal probability distributions based on context window content; they only condition generation on tokens. The claim that the model 'shifts its probability distribution toward regions... that satisfy constraints' conflates static inference-time conditioning with dynamic optimization (learning), rendering the proposed mechanism scientifically invalid for non-training models.",
+      "premise": "Standard Large Language Models operate via fixed-weight inference where context influences attention but does not alter the model's underlying probability distribution function or perform gradient descent.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Can you provide empirical evidence distinguishing between simple filtering of failed attempts versus an actual shift in the model's generative distribution caused by the harness feedback loop?"
+    }
+  ]
+}

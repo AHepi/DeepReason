@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims the harness improves conjectures by preventing premature abandonment of complex paths via 'Structural Scaffolding,' but fails to address that rigid structural constraints can actively suppress valid non-linear or emergent reasoning patterns that do not fit the predefined schema, thereby reducing the diversity and potential optimality of surviving conjectures compared to an unconstrained model call.",
+      "counterexample": null,
+      "premise": "If a problem requires lateral thinking that violates standard structural norms, the harness will suppress the optimal solution.",
+      "premise_evidence": null,
+      "successor_question": "Can you provide a specific instance where a bounded harness rejected a correct conjecture solely because it did not conform to the required structural fields?"
+    }
+  ]
+}

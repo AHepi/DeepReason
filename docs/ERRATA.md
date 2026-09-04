@@ -2489,3 +2489,55 @@ tranche that changed no behaviour. Evidence:
 `experiments/2026-09-04-experiment-blind-critic/VALIDATION.md`, "The one
 acceptance criterion that had to be corrected", and its CHECKLIST step 15,
 which records both runs and their empty set difference.
+
+---
+
+## E76 — PARKED P2 says the newest committed launch config "binds exactly that value" on a field the harness has never sent; the value matches, the field does not
+
+**What the document said.**
+`experiments/2026-09-04-experiment-blind-critic/PARKED.md` P2, and the same
+finding in that tranche's `SPEC.md` M5: "the provider now REJECTS
+`"reasoning":"none"` as a bare string ... which is what the last committed
+launch config sends", and, in the ready-to-send prompt, "any run relaunched
+from the newest committed launch config would fail typed at the first seat
+call."
+
+**What the record shows.** The refusal is real and reproduces exactly. What
+does not follow is the attribution to the launch config.
+
+- The config binds the neutral VALUE. Every one of the eleven roles in
+  `experiments/2026-09-03-change-provenance-history-channel/runs/home-m3/runs/
+  run-5565bd1ef7011e3d25fef3197bdf1cdb/run-manifest.json` carries
+  `reasoning: "none"`, and the seat rows of `deepreason stop-report` on that
+  root read `reasoning | none`.
+- `llm/providers.py::_ollama_reasoning` spells that value `reasoning_effort`.
+  `OpenAICompatEndpoint.build_body`, driven with that route's own fields,
+  produces `{"max_tokens": 8192, "model": "qwen3.5:397b", "reasoning_effort":
+  "none", "response_format": {"type": "json_object"}}`. No provider adapter
+  emits a key named `reasoning` at any value in the neutral vocabulary.
+- That root's own 99 `workflow-provider-attempt-v1` objects are all
+  `outcome: "provider_result"`, 99 193 completion tokens, zero faults —
+  committed 2026-09-03, one day before the probe.
+- A 45-call probe on 2026-09-04 accepted 42 of 42 harness-built bodies across
+  six models and the whole neutral vocabulary, and refused only the
+  hand-built control carrying a bare `reasoning` string (HTTP 400, the same
+  Go unmarshal error). Transcript:
+  `experiments/2026-09-04-fix-provider-reasoning-contract/PROBE.json`.
+
+So the prompt's predicted failure does not occur: a run relaunched from that
+config reaches its seat calls, because the field it sends is accepted.
+
+**Why the error was easy to make, recorded because it will recur.** The
+configuration value and the wire field are the same word. P2 was written from
+a hand-built probe body rather than from a body the harness built, and no
+committed artifact then showed the difference — the run record stores a
+prompt digest, not a request pack.
+
+**Where corrected.** `docs/OLLAMA_CLOUD_OPERATIONS.md` §9 (the measured
+contract, with the transcript); `docs/map/SUB-llm.md` Traps (the value/field
+entry); `tests/test_provider_reasoning_wire_contract.py` (the pin, four
+mutations proven red). P2's own file is UNEDITED, per this ledger's rule that
+committed documents are corrected by appending here rather than by rewriting
+them. Evidence:
+`experiments/2026-09-04-fix-provider-reasoning-contract/` (GOAL, DIAGNOSIS,
+REPRO, FIX, PROBE.json).

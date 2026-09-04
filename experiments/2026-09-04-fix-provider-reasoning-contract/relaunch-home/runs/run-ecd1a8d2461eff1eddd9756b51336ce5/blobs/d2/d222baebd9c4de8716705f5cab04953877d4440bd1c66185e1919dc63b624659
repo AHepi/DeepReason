@@ -1,0 +1,130 @@
+{
+  "candidates": [
+    {
+      "claim": "A bounded harness produces better surviving conjectures primarily through a 'diversity-preserving filter' mechanism, where structural constraints act not to prune novelty but to force the model to articulate novel ideas in a verifiable format, thereby converting latent high-entropy thoughts into surviving candidates that a single call would leave as incoherent fragments.",
+      "mechanism": "Articulation-forcing via constraint: The harness does not select for 'known patterns' (refuting SRC_007) but selects for 'expressible patterns'. A single call may generate a brilliant but unintelligible insight; the harness forces iterative refinement until the insight survives the structural filter, effectively acting as a translator from intuition to formal conjecture.",
+      "counterconditions": [
+        "If the structural constraints are so rigid that they exclude the very language required to express the novel insight (e.g., requiring linear causality for a quantum phenomenon), the harness will filter out the best conjectures.",
+        "If the model lacks the capability to iteratively refine its output based on rejection feedback, the harness degrades to simple repetition without improvement.",
+        "If the definition of 'better' prioritizes raw creative spark over verifiable structure, the single call wins by preserving unpolished gems."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The criticism assumes 'gradient descent' requires differentiability. Here, the 'loss landscape' is discrete (pass/fail structural checks), and the 'steps' are model regenerations guided by error messages, analogous to zeroth-order optimization or evolutionary strategies, not continuous gradient descent."},
+        {"handle": "[SRC_018] against SRC_005", "kind": "revised", "note": "Revised to explicitly define the filter function H(C) as 'syntactic and semantic coherence with the school stance schema' rather than a vague 'causal mechanism'. The constraint is the schema itself."},
+        {"handle": "[SRC_016] against SRC_012", "kind": "rebutted", "note": "The claim directly answers the comparative question: Yes, because the harness converts incoherent high-quality intuitions into surviving formal conjectures, whereas the single call leaves them as non-surviving noise."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The mechanism does not rely on perfect self-diagnosis. It relies on the harness providing external structural feedback (rejection reasons). The model only needs to respond to 'missing field X' or 'invalid relation Y', not diagnose deep logical flaws internally."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "departure_declared", "note": "Departing from the 'narrowband vs broadband' dichotomy. The argument is that the harness is a 'formatting lens' that makes broadband signals visible to the evaluation metric, not a narrowband filter."},
+        {"handle": "[SRC_017] against SRC_013", "kind": "rebutted", "note": "Predictability is not the metric; 'survival' is. The harness increases survival by ensuring outputs meet the minimum viability threshold (coherence), which is a prerequisite for being judged 'better'."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "No contradiction. A single call produces high-entropy output that 'lacks formal trappings' and thus fails to 'survive' a structural evaluation. The harness adds the trappings necessary for survival without necessarily reducing the core idea's quality."},
+        {"handle": "[SRC_021] against SRC_007", "kind": "revised", "note": "Revised to clarify that the harness does not impose 'rigid requirements that prune unconventional paths' but rather 'rigid requirements for expressing unconventional paths'. If an idea cannot be expressed within the bounds, it is not a 'conjecture' in this context but a 'hunch'."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_005"]
+    },
+    {
+      "claim": "The bounded harness outperforms a single call due to 'error-correcting code' dynamics: the structural constraints act as parity bits that allow the system to detect and correct drift or hallucination during generation, ensuring the final surviving conjecture remains faithful to the initial prompt intent, whereas a single long-form generation accumulates unrecoverable entropy.",
+      "mechanism": "Information-theoretic error correction: Long single-call generations suffer from context drift. The bounded harness breaks generation into small, validated chunks (blocks). Each block is checked against constraints before proceeding, preventing the propagation of early errors that would invalidate the whole conjecture in a single-shot approach.",
+      "counterconditions": [
+        "If the problem requires a holistic, non-decomposable insight (e.g., a gestalt pattern recognition), breaking it into bounded blocks destroys the solution.",
+        "If the overhead of validation and re-generation exceeds the probability of drift in a single call, the single call is more efficient and equally accurate.",
+        "If the 'constraints' themselves are flawed or biased, the error correction mechanism systematically reinforces those biases, leading to confidently wrong survivors."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "This is not gradient descent; it is a discrete error-detection protocol similar to TCP/IP checksums. The 'steps' are regeneration attempts triggered by checksum failures (constraint violations)."},
+        {"handle": "[SRC_018] against SRC_005", "kind": "revised", "note": "Clarified H(C) as 'consistency with preceding validated blocks and global schema constraints'. The structural constraint is the dependency graph integrity."},
+        {"handle": "[SRC_016] against SRC_012", "kind": "rebutted", "note": "Direct affirmation: Yes, because the harness prevents the 'collapse' of long-context reasoning which plagues single calls, leading to higher fidelity survivors."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "Self-diagnosis is not required. The harness acts as the external diagnostician. The model simply retries upon rejection, akin to a compiler rejecting syntax errors."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "rebutted", "note": "Rejects the false dichotomy. The harness is 'broadband' in content but 'narrowband' in transmission protocol, ensuring signal integrity over long distances (complex problems)."},
+        {"handle": "[SRC_017] against SRC_013", "kind": "rebutted", "note": "Survival here is defined as 'completion without logical collapse'. The harness guarantees this by enforcing local consistency, which single calls cannot do."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "The 'formal trappings' are the error-correcting codes. Without them, the message (conjecture) is corrupted. Thus, the single call's lack of trappings leads to lower quality survivors."},
+        {"handle": "[SRC_021] against SRC_007", "kind": "rebutted", "note": "The constraints do not prune paths; they pave the road. They prevent the model from falling off the cliff of hallucination, allowing it to travel further into novel territory safely."}
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"]
+    },
+    {
+      "claim": "In domains with high ambiguity, a single model call produces better surviving conjectures because the bounded harness's 'selection pressure' prematurely converges on locally optimal but globally suboptimal schemas, whereas a single call preserves the 'superposition' of conflicting interpretations necessary for breakthrough insights.",
+      "mechanism": "Quantum-annealing analog: The harness acts as a low-temperature bath, freezing the system into the first plausible structure it finds (local minimum). A single call operates at 'high temperature', maintaining a superposition of contradictory possibilities that, while seemingly incoherent, contains the seed of a paradigm shift that the harness would reject as 'invalid'.",
+      "counterconditions": [
+        "If the evaluation metric strictly penalizes incoherence, the 'superposition' of the single call will never survive, rendering its potential irrelevant.",
+        "If the problem domain is well-defined (low ambiguity), the risk of premature convergence is low, and the harness's structure accelerates finding the global optimum.",
+        "If the 'single call' output is too entropic to be parsed by any observer, it effectively does not exist as a conjecture."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "Agrees the analogy to gradient descent is flawed for the harness, but argues the single call behaves more like simulated annealing, which is superior for rugged landscapes."},
+        {"handle": "[SRC_018] against SRC_005", "kind": "departure_declared", "note": "Departing from the premise that 'structural constraints' are always beneficial. Here, the lack of defined constraints in the single call is the feature, not the bug."},
+        {"handle": "[SRC_016] against SRC_012", "kind": "rebutted", "note": "Direct negation: No, the bounded harness produces *worse* surviving conjectures in novel domains because 'survival' filters out the very anomalies that constitute discovery."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The criticism assumes the harness corrects errors. This candidate argues the harness *creates* errors by forcing square pegs into round holes, misinterpreting novelty as inconsistency."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "rebutted", "note": "Supports the dichotomy: Narrowband (harness) kills novelty; Broadband (single call) preserves it. The 'better' survivor depends on whether we value conformity or discovery."},
+        {"handle": "[SRC_017] against SRC_013", "kind": "rebutted", "note": "Challenges the definition of 'surviving'. If survival means 'fitting the mold', the harness wins. If survival means 'retaining truth', the single call may win by avoiding mold-induced distortion."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "Argues that 'lacking formal trappings' is a sign of depth in early-stage discovery. The harness forces premature formalization, killing the conjecture's potential."},
+        {"handle": "[SRC_021] against SRC_007", "kind": "revised", "note": "Refined the claim: The harness imposes rigid requirements that *do* prune unconventional paths, specifically those that violate current ontological categories but represent future ones."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_002"]
+    },
+    {
+      "claim": "The superiority of the bounded harness is an artifact of the evaluation metric itself: 'surviving conjectures' are defined by their adherence to the harness's schema. Therefore, the harness produces better survivors tautologically, as it is the instrument that defines what 'survival' means in this context.",
+      "mechanism": "Observer-effect bias: The question asks if the harness produces better survivors *under the criteria of the harness*. Since the single call is not optimized for these specific structural criteria (e.g., specific JSON fields, causal chains), it naturally fails the 'survival' test more often. The harness doesn't improve the *idea*, it improves the *packaging* to match the filter.",
+      "counterconditions": [
+        "If the 'survival' criteria are externally validated against ground truth (not just schema compliance), the tautology breaks, and the harness must prove actual epistemic superiority.",
+        "If the single call is post-processed by a separate parser to extract structured data, it might achieve similar survival rates without the iterative overhead.",
+        "If the schema constraints are misaligned with reality, the harness produces perfectly formed but factually wrong survivors, while the single call might contain unstructured truths."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The mechanism isn't gradient descent; it's 'target shooting'. The harness defines the target; the model shoots until it hits. The single call shoots blindly."},
+        {"handle": "[SRC_018] against SRC_005", "kind": "revised", "note": "Defined H(C) explicitly as 'schema validation function'. The structural constraint is the JSON schema and required field presence."},
+        {"handle": "[SRC_016] against SRC_012", "kind": "rebutted", "note": "Answers the question by reframing it: 'Better' is relative to the filter. The harness wins because it is coupled to the filter."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "Self-diagnosis is irrelevant. The harness provides the diagnosis ('Invalid JSON', 'Missing Key'). The model just complies."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "rebutted", "note": "Denies the false dichotomy. It's not narrow vs broad; it's 'aligned' vs 'unaligned' with the specific survival definition."},
+        {"handle": "[SRC_017] against SRC_013", "kind": "rebutted", "note": "Predictability is high because the target is static. The single call is unpredictable relative to the specific schema requirements."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "The 'formal trappings' ARE the survival condition. Lacking them means death in this ecosystem. The harness ensures life by providing trappings."},
+        {"handle": "[SRC_021] against SRC_007", "kind": "rebutted", "note": "The harness does not prune unconventional paths; it prunes unformatted paths. An unconventional idea formatted correctly survives."}
+      ],
+      "optional_refs": ["SRC_005", "SRC_008"]
+    },
+    {
+      "claim": "A hybrid approach suggests that a bounded harness produces better surviving conjectures only when the 'bounds' are dynamic (simulated annealing), starting loose to encourage exploration and tightening to enforce rigor, whereas static bounds (typical harness) underperform single calls in novelty and static single calls underperform in rigor.",
+      "mechanism": "Dynamic constraint scheduling: Mimics biological development or learning rate decay. Early iterations in the harness allow high variance (loose bounds) to explore the space; later iterations enforce strict structural compliance (tight bounds) to solidify the conjecture. A single call cannot modulate its own temperature.",
+      "counterconditions": [
+        "If the schedule for tightening bounds is poorly tuned (too fast or too slow), the system performs worse than either extreme.",
+        "If the problem requires immediate strict adherence (e.g., safety-critical code generation), the initial loose phase introduces unacceptable risks.",
+        "If the model cannot retain context across the changing bound regimes, the transition causes discontinuities in the reasoning."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "revised", "note": "Proposes a 'variable-metric optimization' instead of fixed gradient descent. The landscape changes shape over time."},
+        {"handle": "[SRC_018] against SRC_005", "kind": "revised", "note": "Defines H(C, t) as a time-dependent filter function. Structural constraints evolve from 'semantic relevance' to 'strict causal formalism'."},
+        {"handle": "[SRC_016] against SRC_012", "kind": "rebutted", "note": "Answers: 'It depends on the harness design.' A static harness may not; a dynamic one likely does. Nuanced affirmation."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "Dynamic bounds reduce the need for perfect self-diagnosis by relaxing standards when the model struggles, then tightening when it succeeds."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "departure_declared", "note": "Declares departure from the binary view. Proposes a spectrum of 'boundedness' as the key variable."},
+        {"handle": "[SRC_017] against SRC_013", "kind": "rebutted", "note": "Survival is maximized by adapting the definition of 'valid' to the current stage of reasoning maturity."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "The single call has fixed 'temperature'. The dynamic harness offers the best of both: early entropy, late structure."},
+        {"handle": "[SRC_021] against SRC_007", "kind": "rebutted", "note": "Dynamic bounds prevent the pruning of unconventional paths early on, only pruning them if they fail to mature into structured forms later."}
+      ],
+      "optional_refs": ["SRC_006", "SRC_007"]
+    },
+    {
+      "claim": "The bounded harness fails to produce better surviving conjectures in 'wicked problems' where the problem definition itself evolves during solving, because the harness's fixed structural constraints lock the solver into an obsolete problem frame, while a single call can pivot instantly to a new framing.",
+      "mechanism": "Frame-locking vs. Frame-fluidity: The harness enforces a specific ontology (e.g., 'cause-effect'). If the solution requires shifting to a different ontology (e.g., 'correlation-network'), the harness rejects the transition as 'structurally invalid'. A single call has no such memory of prior commitments and can switch frames mid-stream.",
+      "counterconditions": [
+        "If the problem domain is stable and the ontology is agreed upon, frame-locking provides necessary focus and depth.",
+        "If the harness allows 'ontology-switch' as a valid structural move, this disadvantage is mitigated.",
+        "If the single call's pivoting results in a disjointed, incoherent narrative, it fails to produce a usable conjecture regardless of frame flexibility."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The failure mode is not about step size but about 'local minima in problem space'. The harness traps the solver in one valley."},
+        {"handle": "[SRC_018] against SRC_005", "kind": "revised", "note": "Identifies the structural constraint as 'ontological consistency'. H(C) checks if C adheres to the initial problem frame."},
+        {"handle": "[SRC_016] against SRC_012", "kind": "rebutted", "note": "Direct negation for wicked problems: No, the harness produces worse survivors because they are solutions to the wrong (initial) problem."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "rebutted", "note": "The model's inability to self-diagnose 'frame obsolescence' is exacerbated by the harness, which rewards sticking to the old frame."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "rebutted", "note": "The dichotomy is real here: Narrowband (fixed frame) vs Broadband (fluid frame). Fluidity wins in wicked contexts."},
+        {"handle": "[SRC_017] against SRC_013", "kind": "rebutted", "note": "Predictability of the harness is its downfall; it predictably solves the initial problem, missing the evolved one."},
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "The 'formal trappings' of the harness bind the conjecture to a potentially outdated logic."},
+        {"handle": "[SRC_021] against SRC_007", "kind": "revised", "note": "Refined: The harness imposes rigid ontological requirements that actively prune path-switching, which is essential for wicked problems."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_002"]
+    }
+  ]
+}

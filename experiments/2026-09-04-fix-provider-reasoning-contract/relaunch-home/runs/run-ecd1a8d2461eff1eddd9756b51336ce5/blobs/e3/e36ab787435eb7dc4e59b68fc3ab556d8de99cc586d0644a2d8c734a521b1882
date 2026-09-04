@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims the bounded harness produces 'better' conjectures by extending reasoning depth, but fails to address the problem's comparative constraint regarding 'surviving' conjectures. If the serialization overhead or state corruption (acknowledged in counterconditions) causes valid intermediate steps to be discarded or misinterpreted during reconstruction, the harness may yield fewer *surviving* conjectures than a single, coherent model call, directly contradicting the claim of superior performance without providing evidence that survival rates improve despite these failure modes.",
+      "counterexample": null,
+      "premise": "A mechanism that extends reasoning horizon does not inherently increase the rate of surviving conjectures if the introduction of external state management introduces new points of failure (serialization error, linkage loss) that prune valid paths more aggressively than the native context window limits of a single call.",
+      "premise_evidence": null,
+      "successor_question": "Does the target provide empirical data showing that the net survival rate of conjectures in the bounded harness exceeds that of a single model call after accounting for errors introduced by state serialization and reconstruction?"
+    }
+  ]
+}

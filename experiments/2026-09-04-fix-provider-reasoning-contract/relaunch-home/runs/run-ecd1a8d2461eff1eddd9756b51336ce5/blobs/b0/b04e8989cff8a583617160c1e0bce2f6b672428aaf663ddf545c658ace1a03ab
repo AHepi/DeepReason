@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's core mechanism relies on the false dichotomy that a 'bounded harness' necessarily imposes rigid structural requirements that prune unconventional paths. In practice, a bounded harness (e.g., one enforcing causal mechanisms) acts as a filter for *surviving* conjectures by discarding hallucinations and logical inconsistencies, whereas a single high-entropy call often produces novel but incoherent or physically impossible trajectories that do not constitute 'better surviving conjectures.' The target fails to demonstrate that the entropy preserved in a single call leads to valid discovery rather than just increased noise, contradicting the problem's focus on 'surviving' (valid/robust) conjectures.",
+      "premise": "A bounded harness improves the signal-to-noise ratio of surviving conjectures by enforcing consistency constraints, whereas a single model call maximizes raw diversity at the cost of coherence.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Can you provide a specific example where a high-entropy single call produced a 'surviving' conjecture that a bounded harness would have incorrectly discarded, yet was later proven valid?"
+    }
+  ]
+}

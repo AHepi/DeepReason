@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target's central mechanism relies on the assumption that a 'single model call' samples from a 'full prior distribution' with higher entropy than a bounded harness.",
+      "premise_evidence": [
+        {
+          "block": "reasoning-envelope-wf",
+          "quote": "A single call samples from the full prior distribution, preserving low-probability, high-reward trajectories that the harness would prematurely discard as 'non-compliant'."
+        }
+      ],
+      "case": "The argument fundamentally mischaracterizes the nature of a 'single model call' in Large Language Models. A single call does not sample from a 'full prior distribution' of all possible logical trajectories; rather, it performs a single autoregressive traversal down one specific path determined by greedy decoding or a single stochastic sample. This single path is often *more* prone to mode collapse and local optima (common reasoning errors) than a bounded harness that explicitly enforces structural constraints (like requiring a causal mechanism) to filter out incoherent but high-probability nonsense. The 'entropy' retained in a single unconstrained call is just as likely to be random hallucination as 'genuine discovery,' whereas the harness's 'bias' serves as a necessary heuristic filter for validity, not just an overfitting to school stances. Therefore, the claim that the single call preserves 'high-reward trajectories' while the harness discards them is unsupported; the harness likely discards invalid trajectories that the single call mistakenly follows.",
+      "counterexample": null,
+      "successor_question": "If a single model call is merely one stochastic trajectory rather than a broad sampling of the prior, what empirical evidence suggests this specific trajectory is more likely to find valid novel solutions than a constrained search that filters for mechanistic consistency?"
+    }
+  ]
+}
