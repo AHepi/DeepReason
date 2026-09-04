@@ -23,12 +23,13 @@ editing any source file, which is measured rather than asserted.
 
 | instrument | result |
 |---|---|
-| `python -m pytest tests/ -q -n 4` | **4956 passed, 6 skipped, 0 failed** |
+| `python -m pytest tests/ -q -n 4` | **4961 passed, 6 skipped, 0 failed** |
 | both goldens | 15 passed, no fixture touched |
-| `tools/blast_radius.py` over the actual diff | `CLEAR`, no contacts, no drift |
-| `INV-frozen-surfaces.md:364` branch tripwire | GREEN |
-| `tools/diff_budget.py --ceiling 2400` | 2385, `WITHIN` |
-| `python tools/docs_verify.py` | 6 failed, every one a classified baseline |
+| `tools/blast_radius.py` over the actual diff | `CONTACT`, surface 2, exactly as granted |
+| `INV-frozen-surfaces.md:364` branch tripwire | RED, by design — see §4.5 |
+| surface 3 (`invariants.py`, `verification/`) | untouched, proven at step 25 |
+| `tools/diff_budget.py --ceiling 2400` | **2575, `EXCEEDED`** — see §4.6 |
+| `python tools/docs_verify.py` | 6 failed pre-grant; post-grant reconciled, see §4.5 |
 | `--links` | 0 dangling, 78 documents |
 
 ## §3 Requirement-by-requirement reconciliation
@@ -58,6 +59,7 @@ Authority is `REQUEST.md` §1, §1a and §1b — the operator's verbatim words.
 | R17 | "adapting the accepted outputs so they compile" | N1-N5 | **DONE, NARROWED** — see §4 |
 | R18 | "they respond differently ... in a consistent way" | premise | **STILL OPEN** — the study was never supplied (Q5) |
 | R19 | "history first, then the artifact, then measure" | recipe committed; experiment is its own tranche | **DONE** |
+| R25 | "granted" | `workflow.context-section-plan.v1`, written per conjecturer dispatch | **DONE** for the conjecturer; the critic's is parked as P8, structurally |
 
 ### From the amendment
 
@@ -88,9 +90,24 @@ into a fourth binding decision and `tests/test_wire_contract_id_map.py`. The
 table in that file was hand-written first and six rows were WRONG; it was
 regenerated from the tree rather than the code bent to the guess.
 
-**3. Writing the receipts to the record needs a frozen-surface grant.** A new
-object kind edits `harness.py`. PARKED, not taken. The receipts themselves are
-built and proven.
+**3. Writing the receipts to the record needed a frozen-surface grant, and the
+operator gave it.** Their reply, in full: "granted" (`REQUEST.md` §1c).
+
+**3a. The grant covered a contact the forecast had not named, and it surfaced
+as nine red tests rather than as reading.** Frozen surface 2 is "event
+application AND WELL-FORMEDNESS". Admitting the kind to `harness.py`'s allowed
+set was not enough: `workflow/replay.py` compares the WHOLE schema sequence of
+a `work_issued` phase against a canonical order. The section plan now has a
+FIXED position — after the pack plans, before the reservation, the order
+`finalize_dispatch` appends in. The position is part of the shape rather than a
+detail: a record that could appear anywhere would make two orderings of one
+attempt both valid.
+
+**3b. The critic's plan is not written, and that is structural.** Its
+transactional dispatch reads its pack out of a blob written earlier by the
+decomposition, so the receipts do not exist where the transaction is issued.
+Parked as P8, with a prompt that names the canonical-shape rule so the next
+runner does not rediscover it as nine red tests.
 
 **4. N4 was narrowed from what the spec proposed.** `SPEC.md` §8.4 said an
 optional field supplied as `null` OR `""` may be dropped. The empty-string
@@ -98,6 +115,21 @@ half turned a refusal into an acceptance — the repair protocol's own fixture
 is a blank message a contract rejects deliberately. Three doctor tests said
 so. A3 makes a verdict change a stop, so the rule was narrowed to `null` only
 and the tests were left alone.
+
+**5. The branch tripwire is RED and was left that way.**
+`INV-frozen-surfaces.md:364` fires on any branch touching a frozen path. This
+one does, under the grant. It was green through steps 1-45 and turned red only
+at the granted commit. It is not weakened to silence it: a tripwire that
+exempts the case it was built for is not a tripwire. Five other map checks went
+red on the granted write — four counts that moved by exactly one (updated in
+both the check and the prose stating the number) and one that pinned the
+literal text of a records tuple (re-aimed to compare its shape through the AST,
+which is stronger and no longer brittle to formatting).
+
+**6. The diff budget is EXCEEDED a second time: 2575 of 2400.** The whole
+190-line overrun is the granted work — the record model, its four
+registrations, the service builder, the canonical-shape position and the
+conjecturer's write path. Disclosed rather than absorbed; nothing else grew.
 
 ## §5 Defects: none new, and one environment finding
 
@@ -123,7 +155,7 @@ family, so it is not edited here.
 | P5 | the judge, defender, variator and synthesizer seats |
 | P6 | the second conjecturer kind and the second criticism kind |
 | P7 | a model profile naming a SHELL, not a form |
-| — | the frozen-surface-2 grant for the record write (`CHECKLIST.md` step 24) |
+| P8 | the critic seat's section plan — its pack is rendered before its transaction opens |
 
 ## §7 What this tranche does NOT claim
 
