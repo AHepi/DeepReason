@@ -129,11 +129,21 @@ def test_the_two_frozen_callers_still_call_this_function():
 
 def test_this_tranche_opens_neither_frozen_caller():
     """§17.9's disposal, as a check rather than a promise: form selection goes
-    through the dispatch site, so neither file is edited."""
+    through the dispatch site, so neither file is edited.
+
+    Both ends are pinned. Against the WORKING TREE this asserted its claim only
+    until the seat-shell tranche merged, after which it read every later
+    tranche's diff as that tranche's and turned red on the first granted
+    contact anywhere in the five files -- which is a claim it has no way to
+    evaluate. `643dd8ea1` is that tranche's last commit, so the range is the
+    diff the docstring is actually about, and the check now re-derives it
+    forever instead of decaying into a permanent bar on five files that grants
+    exist to open (re-aimed 2026-09-04,
+    experiments/2026-09-04-defect-dead-seat-retirement/)."""
     import subprocess
 
     changed = subprocess.run(
-        ["git", "diff", "--name-only", "e91f4fcc3", "--", "src/"],
+        ["git", "diff", "--name-only", "e91f4fcc3", "643dd8ea1", "--", "src/"],
         capture_output=True,
         text=True,
         check=False,

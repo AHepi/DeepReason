@@ -756,6 +756,11 @@ class Config(BaseModel):
     # today.
     TRANSPORT_STREAMING: Literal["auto", "on", "off"] = "auto"
     TRANSPORT_DEAD_SEAT_STREAK: int = Field(default=3, ge=1)
+    # Standing a dead seat down is a GATE, so it is switchable per run and
+    # its "off" value emits a typed warning (the ungated-seats law,
+    # 2026-08-28). It reuses TRANSPORT_DEAD_SEAT_STREAK above rather than
+    # carrying a threshold of its own: one fact, one spelling.
+    SEAT_RETIREMENT_POLICY: str = "retire-dead-seats.v1"
     roles: dict[
         str,
         dict[str, Any] | list[dict[str, Any]] | None,

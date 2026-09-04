@@ -40,6 +40,7 @@ ABSENCE_REASONS = frozenset(
         "NO_RUN_MANIFEST",
         "NO_RUN_RESULT_JSON",
         "NO_RUN_STATUS_JSON",
+        "NO_SEAT_RETIREMENT",
         "NO_STOP_RECORD",
         "NO_SURVIVOR_RECORD",
         "NO_TERMINAL_BINDING",
@@ -428,6 +429,73 @@ def provider_health_line(health: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def seat_retirement_summary(harness) -> dict[str, Any]:
+    """Which seats this run actually stood down, and on what evidence.
+
+    Read from the run's own `seat.retired.v1` receipts rather than recomputed
+    from a policy, because the policy is a per-run setting this surface does not
+    have and re-deriving it would report what a DEFAULT run would have done. The
+    receipts say what THIS run did. A run that retired nothing says so as a
+    typed absence rather than an omitted key.
+    """
+
+    from deepreason.runtime.seat_retirement import (
+        RETIRED_SIGNAL,
+        RETIREMENT_DISABLED_SIGNAL,
+    )
+
+    seats: dict[str, dict[str, Any]] = {}
+    disabled = False
+    for event in harness.log.read():
+        inputs = [str(value) for value in (event.inputs or ())]
+        if inputs[:1] == [RETIREMENT_DISABLED_SIGNAL]:
+            disabled = True
+        elif inputs[:1] == [RETIRED_SIGNAL] and len(inputs) >= 5:
+            seats[inputs[1]] = {
+                "endpoint_id": inputs[2],
+                "trigger": inputs[3],
+                "evidence": inputs[4],
+            }
+    if not seats and not disabled:
+        return _absent("NO_SEAT_RETIREMENT")
+    return {
+        "retirement_disabled": disabled,
+        "seats": seats,
+        "retired": len(seats),
+    }
+
+
+def seat_retirement_line(retirement: dict[str, Any]) -> str:
+    """One line per stood-down seat."""
+
+    if _is_absent(retirement):
+        return _show(retirement)
+    reason = {
+        "contract_exhausted": "it stopped being able to fill the form it was "
+                              "asked for",
+        "provider_dead": "the far end stopped answering it",
+    }
+    return "\n".join(
+        f"    {instance} ({row['endpoint_id']}): stood down because "
+        f"{reason.get(row['trigger'], row['trigger'])}"
+        for instance, row in retirement["seats"].items()
+    )
+
+
+def _seat_retirement_headline(retirement: Any) -> str:
+    if _is_absent(retirement):
+        return _show(retirement)
+    if retirement["retirement_disabled"]:
+        return (
+            "standing a seat down was switched OFF for this run, so one seat "
+            "that stops working ends the whole run"
+        )
+    return (
+        f"{retirement['retired']} seat(s) stood down; the run carried on with "
+        f"the seats that remained"
+    )
+
+
 def embedder_summary_for_root(root: Path | str) -> dict[str, Any]:
     """`embedder_summary` for a root PATH, opened read-only here.
 
@@ -724,6 +792,16 @@ def render_results(summary: dict[str, Any]) -> str:
             else []
         ),
         "",
+        "## Seat retirement",
+        f"  seats stood down (a seat that stopped working is taken out of the "
+        f"rotation so the run can carry on with the ones that still answer): "
+        f"{_seat_retirement_headline(summary['seat_retirement'])}",
+        *(
+            [seat_retirement_line(summary["seat_retirement"])]
+            if not _is_absent(summary["seat_retirement"])
+            else []
+        ),
+        "",
         "## Verification",
         f"  verify_root verdict (the replay check that re-derives the whole run "
         f"from its log and confirms nothing in the record is corrupt or "
@@ -827,6 +905,7 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
         "adjudication": _adjudication(harness),
         "embedder": embedder_summary(harness),
         "provider_health": provider_health_summary(harness),
+        "seat_retirement": seat_retirement_summary(harness),
         "verification": _verification(
             root, replay, result, verify=verify, report=report
         ),

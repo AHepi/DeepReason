@@ -486,6 +486,7 @@ def test_scheduler_absorbs_budget_denied_referee(monkeypatch):
         run_manifest=manifest,
         adapter=SimpleNamespace(has_role=lambda role: True),
         harness=object(),
+        _role_available=lambda role: True,
         _cycles=4,
         _drop=lambda error: None,
     )
@@ -507,6 +508,7 @@ def test_scheduler_fires_referee_only_on_the_frozen_cadence(monkeypatch):
         run_manifest=manifest,
         adapter=SimpleNamespace(has_role=lambda role: True),
         harness=object(),
+        _role_available=lambda role: True,
         _cycles=8,
         _drop=lambda error: None,
     )
@@ -519,6 +521,7 @@ def test_scheduler_fires_referee_only_on_the_frozen_cadence(monkeypatch):
     Scheduler._maybe_config_referee(fake)
     assert calls == ["config-referee-cycle:8"]  # cycle zero never fires
     fake.adapter = SimpleNamespace(has_role=lambda role: False)
+    fake._role_available = lambda role: False
     fake._cycles = 12
     Scheduler._maybe_config_referee(fake)
     assert calls == ["config-referee-cycle:8"]  # no critic role, no dispatch

@@ -235,6 +235,36 @@ role's endpoint (`property_designer`/`judge`) rather than adding a new
 one — no new manifest role, no change to the degrees-of-freedom count.
 `check: test "$(grep -rn '\.call(' src/deepreason --include='*.py' | wc -l)" = "45"`
 
+
+## A seat can be stood down, and the seat COUNT never moves when it is
+
+A seat that the record shows is finished — its contract ladder exhausted, or
+its provider dead for the run's configured streak — is RETIRED: the scheduler
+stops choosing it and the seats that remain keep working.
+`runtime/seat_retirement.py` is the one derivation, and it decides nothing the
+record does not already hold. The exhaustion trigger reads the seat's own
+`RouteSeatInsufficientCapabilityV1`; the transport trigger reads
+`provider_health.dead_seats`, the shipped streak derivation. Each stood-down
+seat gets one `seat.retired.v1` receipt, deduped against the record so a
+resumed run neither re-discloses nor falls silent. The switch is
+`Config.SEAT_RETIREMENT_POLICY`, ON by default, and turning it off emits
+`seat.retirement-disabled.v1` — a gate is switchable per run and switching one
+off is never silent (the ungated-seats law, 2026-08-28).
+
+**Retirement does not change `seats_bound`, and that is the whole reason
+`live_seats` takes a CONFIGURED count rather than returning a list.**
+`allocation.seat_instance` spells a one-seat role as the bare role name and a
+two-seat role as `role#n`. If retiring `conjecturer#1` made the role
+one-seated, every signal name, every `cap:` knob and every recorded Measure
+input would change spelling MID-RUN, and the run's later rows would stop
+matching the rows it had already written.
+
+`check: python -m pytest tests/test_dead_seat_retirement.py::test_retirement_never_changes_a_seat_instance_spelling tests/test_dead_seat_retirement.py::test_the_switch_is_per_run_and_off_reproduces_todays_death_with_a_warning -q`
+`check: grep -q "def live_seats(retired, role: str, configured: int)" src/deepreason/runtime/seat_retirement.py && grep -q "SEAT_RETIREMENT_POLICY" src/deepreason/config.py && python -c "
+from deepreason.signals import is_known
+assert is_known('seat.retired.v1') and is_known('seat.retirement-disabled.v1')
+"`
+
 ## Traps
 
 - **A flag gated a seat-configuration path, and no configuration could turn

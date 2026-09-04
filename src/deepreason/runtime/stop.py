@@ -20,6 +20,11 @@ StopReason = Literal[
     "budget_exhausted",
     "operator_cancelled",
     "operational_failure",
+    # Every seat a run can generate from has been stood down. A CLEAN stop, not
+    # a failure: the operator's law of 2026-08-29 states an exhausted budget
+    # terminates as `budget_exhausted` (clean), never `operational_failure`,
+    # and a provider that stopped answering is the same shape of fact.
+    "provider_unavailable",
     "workload_terminal",
 ]
 

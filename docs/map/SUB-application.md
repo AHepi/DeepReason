@@ -260,6 +260,21 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
 | `deepreason qualify`'s per-profile loop, or `deepreason status`'s per-seat section (Rung S4 of role-seat separation) | `_qualify_one_profile` (the extracted single-profile body, called once for the unchanged combination and additionally per distinct bound profile) and `_print_qualify_headline`/`_print_qualify_failure` in `cli/main.py`; `get_seat_readiness` is called from `_cmd_status`, defined in `readiness.py` (see `DR-CON-seats`, which owns that file) | `tests/test_qualification_per_seat.py::test_two_profile_home_qualifies_each_seat_plus_the_combination` |
 `check: python -m pytest tests/test_v6_only_cli_admission.py::test_public_parser_omits_make_and_unqualified_advanced_commands tests/test_v6_only_cli_admission.py::test_every_shared_root_command_rejects_a_historical_manifest tests/test_v6_only_cli_admission.py::test_run_requires_qualification_before_operator_lock tests/test_v6_only_application_admission.py::test_v6_rejects_mismatched_question tests/test_v6_only_application_admission.py::test_require_v6_launch_allowed_fails_closed_for_non_v6 tests/test_application_text_runs_d0.py::test_start_intent_is_strict_and_has_no_client_authority_fields tests/test_r0_terminal_verification.py::test_run_result_exit_contract tests/test_stop_policy.py::test_corroborated_stuck_exhausts_fixed_escape_ladder_before_stop tests/test_progress.py::test_progress_is_monotonic_append_only_and_latest_is_atomic tests/test_continuation.py::test_continue_rejects_tampered_stop_digest tests/test_cli_production_doctor_v6.py::test_report_computes_19_of_20_gate_and_all_metrics tests/test_easy.py::test_setup_wizard_writes_config_without_the_key tests/test_website_state_machine.py::test_retry_is_local_and_cannot_choose_a_transition tests/test_website_state_machine.py::test_manifest_failure_selects_component_contract_repair tests/test_qualification_per_seat.py::test_two_profile_home_qualifies_each_seat_plus_the_combination tests/test_qualification_per_seat.py::test_status_two_seat_home_names_both_seats tests/test_qualification_per_seat.py::test_single_profile_home_qualify_output_is_byte_identical_to_pre_s4 -q && grep -q "^PRODUCTION_CASES_PER_PAIR = 20" src/deepreason/cli/doctor.py && grep -q "^PRODUCTION_EVENTUAL_VALID_MINIMUM = 19" src/deepreason/cli/doctor.py && grep -q "^ESCAPE_LADDER = (" src/deepreason/runtime/stop.py && grep -q "^_NEXT_STAGE = {" src/deepreason/workflows/website.py && grep -q "^PROVIDERS = {" src/deepreason/easy.py && grep -q "^MAKE_OVERRIDES = {" src/deepreason/easy.py && grep -q "^def _read_policy(" src/deepreason/runtime/launch_policy.py && grep -q "^class WebsiteStateMachine" src/deepreason/workflows/website.py && grep -q "    def compile(" src/deepreason/workflows/manifest_compiler.py && grep -q "^def _v6_run_result(" src/deepreason/application/text_runs.py && grep -q "^def _qualify_one_profile(" src/deepreason/cli/main.py && grep -q "^def _print_qualify_headline(" src/deepreason/cli/main.py && grep -q "^def _print_qualify_failure(" src/deepreason/cli/main.py && grep -q "get_seat_readiness()" src/deepreason/cli/main.py`
 
+## Seat retirement reaches the one retrieval surface
+
+`deepreason results` carries a `## Seat retirement` block beside
+`## Provider health`, and `results_summary` a `seat_retirement` key. It reads
+the run's own `seat.retired.v1` receipts rather than recomputing a policy,
+because the policy is a per-run setting this surface does not have and
+re-deriving it would report what a DEFAULT run would have done. A run that
+retired nothing prints the typed absence `NO_SEAT_RETIREMENT`, never an omitted
+key.
+
+`check: python -m pytest tests/test_dead_seat_retirement.py::test_deepreason_results_reports_the_retirement_and_a_typed_absence -q && python -c "
+from deepreason.application.results import ABSENCE_REASONS, seat_retirement_summary
+assert 'NO_SEAT_RETIREMENT' in ABSENCE_REASONS
+" && grep -q '## Seat retirement' src/deepreason/application/results.py`
+
 ## Traps
 
 - **A failure terminal declined its lifecycle receipt by declaration, and every

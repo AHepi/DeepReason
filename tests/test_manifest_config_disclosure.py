@@ -273,6 +273,7 @@ def test_every_dropped_field_the_managed_path_can_set_round_trips():
         # coverage rather than accommodate a weakness.
         "TRANSPORT_RETRY_POLICY": "identical-v0",
         "TRANSPORT_STREAMING": "off",
+        "SEAT_RETIREMENT_POLICY": "off",
     }
     carried = 0
     for field in dropped:
@@ -299,9 +300,11 @@ def test_every_dropped_field_the_managed_path_can_set_round_trips():
     # CHANNELS_DISABLED. Was 24 (of 25) until the successor channel's two
     # switches landed under the 2026-08-30 frozen-surface-4 grant, then 26 (of
     # 27), then 29 (of 30) with the transport policy's three knobs under the
-    # 2026-09-03 grant. The literal is kept beside the derived value on purpose:
-    # `len(dropped) - 1` alone would stay true if the drop set silently SHRANK.
-    assert carried == len(dropped) - 1 == 29
+    # 2026-09-03 grant, then 30 (of 31) with the seat-retirement switch under
+    # the 2026-09-04 grant. The literal is kept beside the derived value on
+    # purpose: `len(dropped) - 1` alone would stay true if the drop set
+    # silently SHRANK.
+    assert carried == len(dropped) - 1 == 30
 
 
 def test_carriage_moves_no_qualification_subject_digest_it_did_not_already_move():

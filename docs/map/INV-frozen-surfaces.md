@@ -320,6 +320,75 @@ for field, want in zip(KNOBS, ('identical-v0', 'off', 7)):
     assert getattr(config_from_run_manifest(manifest), field) == want, field
 " && python -m pytest tests/ -q -k test_the_shipped_qualification_subject_digest_does_not_move`
 
+**Granted contact, 2026-09-04 — the seat-retirement switch's Config echo line.**
+The tranche instruction forecast a surface-2 contact (a new typed event kind)
+and asked that the existing notice channel be preferred if it could carry
+retirement without one. It could, so the forecast contact never happened:
+`tools/blast_radius.py` reports `harness.py` in neither contact list, because
+the exhaustion trigger reuses `RouteSeatInsufficientCapabilityV1` — the record
+that already states the fact per seat — and the standdown decision rides
+`record_measure`, the channel `provider.dead-seat-streak.v1` already uses. What
+DID contact is this surface, and the grant was requested at
+`experiments/2026-09-04-defect-dead-seat-retirement/FIX.md` §2b before a line
+of code existed, with `blast_radius`'s own `frozen_surface_verdict: CONTACT`
+and its single row pasted. The operator granted it the same day: "Grant it
+(recommended)".
+
+What moved: ONE `data.pop("SEAT_RETIREMENT_POLICY", None)` statement at four
+spaces in `_versioned_source_config_data`, unconditional, joining the thirty
+knobs already there, with the comment block each of its neighbours carries.
+**Insertions only — 8 and 0.** No schema, no validator, no field, no digest
+input.
+
+ONE flat scalar rather than a model, and that is the 2026-09-03 grant's own
+measured lesson rather than a preference: `_strict_carried_value` refuses to
+coerce a carriage notice's dict back into a model, so a model-valued dropped
+field compiles and then refuses to rebuild. ONE knob rather than two: the
+streak threshold is `TRANSPORT_DEAD_SEAT_STREAK`, which already exists, is
+already popped under that grant, and already means exactly "consecutive
+zero-byte returns on one seat". A second threshold would be a second spelling
+of one fact.
+
+The safety argument is the one every knob above it carries, and it runs the
+OTHER way from the usual reading of this surface: the pop is what PREVENTS the
+change. Without it the new `Config.SEAT_RETIREMENT_POLICY` field enters
+`engine_config_json`, moving `source_config_hash`, every manifest digest and
+every qualification subject digest — the `ENGAGED_CRITICISM_AUTHORITY` incident
+(`docs/ERRATA.md` E44) exactly. With it, nothing moves, and that is measured:
+`test_the_shipped_qualification_subject_digest_does_not_move` passes on the
+changed tree, and the drop-set round-trip test rose from 29 of 30 dropped
+fields to 30 of 31.
+
+Zero contact anywhere else, and `frozen_adjacent_contacts` is EMPTY:
+`route_fingerprint` is not touched, no `Route` field moves, `route_sha256` is
+byte-identical, and `capabilities/state.py`, `harness.py`, `invariants.py`,
+`verification/` and `qualification.py` take no contact at all.
+
+`check: python -c "
+from deepreason.config import Config
+from deepreason.run_manifest import _versioned_source_config_data, config_from_run_manifest
+for version in (1, 2, 3, 4, 5, 6):
+    echoed = _versioned_source_config_data(Config(), version)
+    assert 'SEAT_RETIREMENT_POLICY' not in echoed, version
+# Dropped is only half of it: a knob the echo drops must still round trip
+# through its carriage notice, or setting it breaks the run that set it.
+import sys; sys.path.insert(0, '.')
+from tests.test_reusable_qualification import _manifest, _profile
+manifest = _manifest(_profile(), config_updates={'SEAT_RETIREMENT_POLICY': 'off'})
+assert config_from_run_manifest(manifest).SEAT_RETIREMENT_POLICY == 'off'
+" && test "$(grep -c 'data.pop("SEAT_RETIREMENT_POLICY"' src/deepreason/run_manifest.py)" -eq 1`
+`check: python -c "
+import json, subprocess
+out = subprocess.run(
+    ['python', 'tools/blast_radius.py', '--files',
+     'src/deepreason/scheduler/scheduler.py', 'src/deepreason/config.py',
+     'src/deepreason/run_manifest.py', 'src/deepreason/runtime/seat_retirement.py'],
+    capture_output=True, text=True, check=True).stdout
+rows = json.loads(out)['frozen_surface_contacts']
+assert [row['target'] for row in rows] == ['src/deepreason/run_manifest.py'], rows
+assert json.loads(out)['frozen_adjacent_contacts'] == []
+"`
+
 **Granted contact, 2026-08-27 — the sandbox attribute boundary (the escape fix).**
 The operator granted this contact IN CHAT, conditionally, after being shown the
 verdict it unblocks: "can you fix please. Frozen surface changes are permitted

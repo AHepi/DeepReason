@@ -422,3 +422,151 @@ decides it. Recorded here so the reasoning is reviewable rather than assumed.
    still had work to do.
 
 Implementation proceeds under `dr-implement-fix` on this disposition.
+
+---
+
+## Amendment 1 — 2026-09-04, during implementation: the census's own change sites
+
+`dr-implement-fix` rule 1 requires a missed change site to amend this document
+before the work continues rather than after. §4's census rows 4 and 6 state
+obligations — a retired judge seat skips summons, a retired single-seat role
+skips its phase — but §3 named neither the mechanism nor the sites, and both
+obligations are real crashes rather than tidiness: a retired seat's lease is
+unchanged, so every preflight still passes and the dispatch reaches the
+insufficient-capability guard and raises.
+
+**The mechanism, two methods on `Scheduler`:**
+
+- `_role_available(role)` — `adapter.has_role(role)` AND at least one live
+  seat. Falls back to `has_role` alone where there is no lease table, so a
+  pre-v6 or mock topology is unchanged. Emits the seat's retirement receipt on
+  the way past.
+- `_judge_ensemble_available()` — `_role_available("judge")` AND, where the
+  ensemble is two or more seats, no judge seat retired. **The cross-family
+  predicate is NOT relaxed** (§4 row 4): with a seat gone the ensemble is
+  unobtainable, so the phase is skipped rather than run one-judge.
+
+**The sites, exhaustive** (`scheduler.py`, line numbers before this change):
+
+| site | role | becomes |
+|---|---|---|
+| 825 | argumentative_critic (config referee) | `_role_available` |
+| 1530 | argumentative_critic (criticism circuit) | `_role_available` — a retired critic takes the existing "the impossibility must surface" branch, which is already a typed disclosure |
+| 2685 | variator (premise rent) | `_role_available` |
+| 2786 | conjecturer (property program) | `_role_available` |
+| 2909 | vision_critic | `_role_available` |
+| 3033 | variator (lazy HV) | `_role_available` |
+| 1441 | judge (rubric trial) | `_judge_ensemble_available` |
+| 2234 | judge (pairwise discrimination) | `_judge_ensemble_available` |
+| 2707 | judge + variator (audit step) | both |
+| 2827 | property_designer + judge | both |
+
+**Two sites deliberately NOT changed, and why**: `2321` and `2410` read
+`has_role("synthesizer")` inside a condition guarded by
+`schema_version == 6` being FALSE. Operations parity (2026-08-13) makes v6 the
+only path a current run takes, so both are unreachable today; changing an
+unreachable condition would be churn this workflow forbids. Recorded rather
+than silently skipped.
+
+Cost: ~35 lines, inside §9's ceiling.
+
+---
+
+## Amendment 2 — 2026-09-04, during implementation: four sites the gate found
+
+`dr-implement-fix` rule 5 says an unpredicted gate failure means the fix is
+wrong. Four failures were unpredicted and none of them says that; each is
+recorded here with what it actually was, because "unpredicted" is exactly the
+category a tranche is tempted to absorb silently.
+
+1. **A test double lacking a method the real object grew.**
+   `tests/test_config_referee.py` binds `Scheduler._maybe_config_referee` to a
+   `SimpleNamespace` stand-in, and that gate now asks the SCHEDULER whether a
+   role has a dispatchable seat rather than asking the ADAPTER whether the role
+   exists. Two stand-ins gain `_role_available`; one negative case gains its
+   `False`. A double that stops matching the object it doubles is a fixture
+   update, not a weakened assertion — the assertions are untouched.
+
+2. **An adapter without a lease table.**
+   `tests/test_v6_scheduler_model_phase_deferral.py`'s `_Adapter` double has no
+   `leases`, and `_role_available` read it directly. The fix is in PRODUCTION
+   and is the honest expression of what §3.1 already documented: an adapter
+   with no lease table cannot have a retired seat, because retirement is keyed
+   by the frozen route identity a lease carries. `getattr(self.adapter,
+   "leases", None) or {}` at the three sites that read it.
+
+3. **A stale tranche tripwire that had outlived its tranche.**
+   `tests/test_wire_contract_id_map.py::test_this_tranche_opens_neither_frozen_caller`
+   diffed the WORKING TREE against `e91f4fcc3` — the seat-shell tranche's base
+   — and asserted five files were unchanged. It was GREEN at this tranche's
+   base (measured: `git diff --name-only e91f4fcc3 643dd8ea1 -- run_manifest.py
+   invariants.py` is empty), and the operator's granted line turned it red.
+   Once its own tranche merged, that check could no longer tell that tranche's
+   diff from every later tranche's, so it had become a permanent bar on five
+   files that GRANTS EXIST TO OPEN. **Re-aimed, not relaxed**: the range is now
+   `e91f4fcc3 643dd8ea1`, which is the diff its docstring is about, so it
+   re-derives its own claim forever. The `forbidden` set is untouched and the
+   check can still fail.
+
+4. **Two map census counts that a new file legitimately moved.**
+   `SEAM-harness-x-workflow.md:48` and `CON-successor-questions.md:305` pin
+   "files naming both `harness` and `workflow`" at 60. `runtime/
+   seat_retirement.py` reads `harness.workflow_state` to find the exhausted
+   seats, so the count is 61. Both bumped, and the seam document now says WHY
+   the number moved and that it is a coincidence census rather than a coupling
+   measure — a bare number that moves without a reason is how the next reader
+   learns to distrust it.
+
+**Pre-existing red, NOT touched** (each fails at the tranche base for reasons
+this tranche did not create, and "do not fix it while you are there" is a
+prohibition): `SEAM-llm-x-rules.md:54` (an unparseable check opener),
+`CON-run-identity.md:211/213/215` (git-history checks against revisions this
+container's clone does not carry), `INV-frozen-surfaces.md:206` (the
+transport-failure census, a recorded baseline), `INV-frozen-surfaces.md:830`
+(a check that reads a branch this container has not fetched).
+
+---
+
+## Amendment 3 — 2026-09-04: the size gate, and a claim I had to correct
+
+`tools/diff_budget.py` against §9's ceiling:
+
+```
+python tools/diff_budget.py 643dd8ea1 --ceiling 270 --paths <the eight production paths>
+"total_insertions": 492, "ceiling": 270, "verdict": "EXCEEDED"
+  scheduler.py 194 | seat_retirement.py 162 | results.py 79 | signals.py 31
+  lifecycle.py 9 | stop.py 5 | config.py 5 | run_manifest.py 7
+```
+
+492 against 270: 296 executable lines, 31 lines of signal semantics that
+`REC-add-signal.md` step 2 requires, and 165 lines of comments and docstrings.
+
+**A correction I owe this document.** The first time I put this to the operator
+I priced all 209 non-executable lines as "conventions the repo requires". That
+was wrong and they caught it. CLAUDE.md:362 — "Comments state constraints the
+code cannot show — never narration of the change or its history" — is a
+RESTRICTION on what a comment may say, not a requirement to write one, and no
+rule anywhere mandates a production docstring (CLAUDE.md:233 and
+`dr-implement-fix` govern TEST docstrings only). Only the 31 lines of signal
+semantics were actually mandated. Recorded here because pricing a choice as an
+obligation is exactly how an over-budget diff gets waved through, and this
+document is where the next reader would look for whether that happened.
+
+**Operator disposition: LAND IT AS IS.** Their words: "Keep the prose. I
+misunderstood you. That's just good practice".
+
+The overrun itself is not prose: the code alone is 296 against a 270 estimate,
+and the excess is Amendment 1's ten call sites where §4's census had costed
+two. Every line traces to a clause of GOAL.md; no scope was added.
+
+## Verification at the boundary
+
+- `python -m pytest tests/ -q -n 4` → **4976 passed, 6 skipped, 0 failed**
+  (21m25s).
+- `python tools/docs_verify.py` → **6 failed**, down from 14 before this
+  tranche's map work. All six are the pre-existing set named in Amendment 2;
+  the eight this change touched are green.
+- `proof/mutation_proofs.txt` — three mutations, each turning the suite red:
+  retirement never firing (11 of 15 red), the all-dead stop reporting
+  `operational_failure` (3 red), the school loop not skipping a retired seat
+  (7 red). Restored tree: 15 passed.

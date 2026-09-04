@@ -461,6 +461,37 @@ _DECLARED: tuple[SignalDeclaration, ...] = (
                   "again resets the streak",
         staleness="cycle",
     ),
+    # Seat retirement, and the warning for turning it off (2026-09-04).
+    SignalDeclaration(
+        name="seat.retired.v1",
+        unit="event",
+        semantics="one route seat was stood down and will not be dispatched "
+                  "again in this run (inputs: [signal, seat instance, endpoint "
+                  "id, trigger, evidence ref]). The trigger is either "
+                  "`contract_exhausted` -- the seat's own "
+                  "RouteSeatInsufficientCapabilityV1 record, whose id the "
+                  "evidence names -- or `provider_dead`, the transport streak "
+                  "that reached the run's threshold, whose length the evidence "
+                  "names. It says that seat is out and NOTHING else: not that "
+                  "its model is wrong, not that the work it already completed "
+                  "is suspect, and never an input to any status. Emitted once "
+                  "per seat per run, deduped against the record, so a resumed "
+                  "run neither re-discloses nor falls silent",
+        staleness="permanent",
+    ),
+    SignalDeclaration(
+        name="seat.retirement-disabled.v1",
+        unit="event",
+        semantics="the run turned seat retirement OFF, so one seat that "
+                  "exhausts its contract ladder or goes dead ends the whole "
+                  "run (inputs: [signal, policy id, warning]). Emitted once per "
+                  "run at the first cycle. The ungated-seats law (2026-08-28) "
+                  "requires switching a gate off to produce a typed warning "
+                  "rather than a refusal and rather than silence; this is that "
+                  "warning and it is evidence of a configuration choice, never "
+                  "of anything about the run's content",
+        staleness="permanent",
+    ),
     # The successor-question channel's mint receipt (operator law, 2026-08-29).
     SignalDeclaration(
         name="successor-problem-minted",
