@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims scientists prefer better-corroborated theories solely to maximize information growth and exposure to falsification, explicitly denying that this preference relies on any expectation of truth or probability.",
+      "case": "The target fails to resolve the dilemma because it cannot account for action under risk without smuggling in induction. While choosing a bold theory for further testing aligns with Popper's goal of knowledge growth, the problem context specifies that scientists (and Popper) choose theories 'to act on.' Action implies a reliance on the theory's predictions holding true in the immediate future (e.g., building a bridge based on structural mechanics). If the agent truly believes the chosen theory is 'likely false in detail' and holds no higher probability of success than a tautology, rational action dictates avoiding the risky theory for critical applications. By asserting that we prefer the risky theory for action *without* assigning it higher verisimilitude or predictive reliability, the target describes an irrational agent who courts disaster. To make the preference defensible for action, one must assume the past survival of tests indicates something about future performance (induction) or closeness to truth (verisimilitude), both of which the target explicitly disavows in its mechanism.",
+      "counterexample": [
+        "An engineer choosing between a well-tested Newtonian model (highly corroborated) and a known-false but 'bold' speculative model for a life-support system. Under the target's logic, if the goal is purely 'information growth' via inevitable failure, the engineer should arguably pick the riskier option to learn faster. Yet, in reality, the engineer picks the corroborated one because they expect it to *work* (i.e., be reliable/probable), contradicting the target's claim that the preference is independent of reliability expectations."
+      ],
+      "successor_question": "If corroboration provides no basis for expecting a theory to work in practice, how does Popper justify acting on it rather than flipping a coin, without implicitly relying on the uniformity of nature?"
+    }
+  ]
+}

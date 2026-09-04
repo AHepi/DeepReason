@@ -1,0 +1,76 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, pragmatic decision rule based on verisimilitude (truth-likeness) rather than probability. Surviving severe tests does not make a theory probable, but it indicates the theory has withstood attempts to falsify it, suggesting it may be closer to the truth than a falsified or untested rival. The 'cost' is accepting that we can never know we have reached the truth, only that we have eliminated error, rendering scientific progress a negative, evolutionary process of conjecture and refutation.",
+      "mechanism": "Corroboration functions as a comparative metric of survivability in a selection environment. Just as an organism surviving a harsh winter is not 'probabilistically guaranteed' to survive the next, its survival indicates a fit with current conditions that makes it the rational choice for reproduction over an organism that died. Similarly, the scientist chooses the theory that has demonstrated robustness against severe tests because it is the best available approximation of reality, without assigning it a higher logical probability of being true.",
+      "counterconditions": [
+        "If corroboration is treated as increasing the logical probability of a theory's truth, the argument collapses into the induction Popper rejected.",
+        "If no alternative unrefuted theory exists, the preference rule becomes vacuous.",
+        "If 'severity' of a test cannot be objectively defined independent of the theory being tested."
+      ],
+      "typicality": 0.92,
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "The preference smuggles induction back in because any justification for acting on the better-corroborated theory implicitly assumes the future will resemble the past (the Principle of Uniformity). To say 'Theory A worked before, so I will use it now' is an inductive leap. Even if labeled 'pragmatic,' the expectation that a theory which survived severe tests will continue to yield successful predictions or technological applications relies on the very inductive habit Popper sought to excise from the logic of science.",
+      "mechanism": "The psychological and practical act of 'preference' creates a bridge between past performance and future utility. This bridge is structurally identical to induction: P(Theories surviving tests T have been useful) -> P(This theory surviving T will be useful). Popper's distinction between 'logical probability' and 'pragmatic preference' is a semantic shield that fails to block the underlying epistemic commitment to the stability of natural laws required to make the preference rational.",
+      "counterconditions": [
+        "If one accepts Hume's skepticism fully and abandons the expectation of future success, the preference becomes irrational.",
+        "If 'pragmatic success' is redefined strictly as 'current non-falsification' without reference to future application.",
+        "If the agent explicitly disavows any expectation of future predictive success."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves if we view corroboration not as a measure of truth or probability, but as a measure of informational content and risk. We prefer the better-corroborated theory because it is the most informative theory that has not yet been shown false. The 'cost' is abandoning the goal of certainty or high probability entirely; we choose the boldest, most risky conjecture that survives, knowing it is likely false in detail but offers the highest potential for learning through its eventual falsification.",
+      "mechanism": "Preference is driven by the desire to maximize information growth. A highly corroborated theory has high empirical content (it forbids much). Choosing it maximizes the exposure to potential falsification in the next round of testing. We do not choose it because we think it is 'true' (induction) or 'probable' (Bayesianism), but because it is the most fertile ground for generating new knowledge via its inevitable failure.",
+      "counterconditions": [
+        "If the goal of science is practical application rather than knowledge growth, this mechanism fails to justify preference for risky theories over safe, tautological ones.",
+        "If 'informational content' cannot be distinguished from 'logical probability' in the limit."
+      ],
+      "typicality": 0.78,
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Popper's position is internally inconsistent: he rejects induction logically but reinstates it methodologically. While he argues that corroboration reports only past performance, his insistence that scientists *must* prefer the better-corroborated theory for action implies a normative rule that only makes sense if past performance is a guide to future reliability. This creates a 'crypto-induction' where the logic denies what the methodology requires.",
+      "mechanism": "The inconsistency arises from the dual role of the scientist as both a logician (analyzing the structure of theories) and an agent (acting in the world). As a logician, Popper successfully severs the link between survival and truth. As an agent, he cannot help but rely on the heuristic that 'what worked won't fail immediately,' which is the definition of inductive reasoning. The system holds only by compartmentalizing these roles, a separation that breaks down in actual scientific practice.",
+      "counterconditions": [
+        "If the 'normative rule' is reinterpreted purely as a convention for stopping inquiry temporarily rather than a guide to action.",
+        "If 'action' is limited to 'further testing' rather than 'technological application'."
+      ],
+      "typicality": 0.65,
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "The preference is defensible as a Darwinian selection mechanism where 'fitness' is distinct from 'truth'. Corroboration measures the fitness of a theory in the ecosystem of problems, not its correspondence to reality. We prefer the fitter theory because it allows the research program to survive and expand, not because we believe it mirrors nature. The cost is a radical instrumentalism: science becomes a tool for problem-solving efficiency, devoid of any claim to describing the world as it really is.",
+      "mechanism": "Evolutionary epistemology maps biological survival to theoretical survival. Just as a species is not 'more probable' to exist because it survived, but simply *does* exist due to selection pressures, a corroborated theory is selected for its utility in the current problem context. The preference is a survival instinct of the scientific community, not a logical inference about the world's structure.",
+      "counterconditions": [
+        "If one demands that science must aim at truth (realism) rather than just problem-solving.",
+        "If 'fitness' correlates perfectly with 'truth', collapsing the distinction."
+      ],
+      "typicality": 0.55,
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The strongest case is that the preference is a 'rational bet' without inductive backing, analogous to Pascal's Wager. Given we must act, and given we have no access to probabilities, betting on the theory that has survived the toughest challenges is the only rational move, even if the odds are unknown. It is a decision under ignorance, not risk. The cost is admitting that science rests on a foundational act of faith in the intelligibility of the universe, which Popper tried but failed to eliminate.",
+      "mechanism": "Decision theory under total ignorance (Laplace's principle of insufficient reason applied to a binary choice: act on T or don't). Since we cannot assign probabilities, we maximize the minimum gain (Maximin). The 'gain' of acting on a well-tested theory is potentially infinite (survival/progress), while the loss of acting on an untested one is high (catastrophic failure). This justifies preference without claiming the theory is probable.",
+      "counterconditions": [
+        "If the 'payoff' structure of scientific action cannot be modeled as a game.",
+        "If 'faith in intelligibility' is admitted as a metaphysical premise, violating Popper's anti-metaphysical stance."
+      ],
+      "typicality": 0.40,
+      "optional_refs": []
+    }
+  ]
+}
