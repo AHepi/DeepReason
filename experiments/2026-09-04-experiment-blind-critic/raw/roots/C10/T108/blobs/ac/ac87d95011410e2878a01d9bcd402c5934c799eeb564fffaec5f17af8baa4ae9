@@ -1,0 +1,18 @@
+{
+  "attack": true,
+  "case": "The mechanism rests on the premise that 'corroboration adds no weight,' concluding that a theory tested 1000 times is 'epistemically identical' to one tested once. This misrepresents Popper. Popper explicitly developed 'degrees of corroboration' (The Logic of Scientific Discovery, esp. Appendix IX) to provide rational grounds for *preferring* among unfalsified theories — not inductively confirming them or assigning probability, but yielding a comparative, action-guiding ranking. Popper repeatedly states that we rationally act on the best-tested, best-corroborated theory available. The target conflates two distinct claims Popper separates: (a) corroboration is not inductive confirmation or positive probability (true), and (b) corroboration adds no rational weight whatsoever (false, and not Popper's view). From the false (b), the claim derives 'no theory is ever truly preferred for action' — but Popper's actual position is that the more severely tested theory IS rationally preferred for action, precisely because it has survived more severe tests. The claim's conclusion that long-term engineering is epistemologically unstable therefore rests on a strawman: Popper's tentativeness concerns *certainty* (we cannot know any theory is true), not *preference* (we can and should prefer better-corroborated theories). The target's own countercondition ('degrees of corroboration to influence the urgency of further testing') half-concedes this but still misnarrows corroboration's role to 'urgency of testing' rather than its actual function as a direct basis for practical preference.",
+  "premise": "Popper's system does provide rational, action-guiding preference among unfalsified theories via degrees of corroboration, so the claim that 'no theory is ever truly preferred for action' and that theories are 'epistemically identical' regardless of test count misrepresents Popper's position.",
+  "premise_evidence": [
+    {
+      "block": "0fae76dd426375fa2a19c3874d0929f44b6d238343946ba0faacd60405366b89",
+      "quote": "Radical Fallibilism Extension: Pushing Popper's logic to its limit reveals that if corroboration adds no weight, then a theory tested 1000 times is epistemically identical to one tested once, provided neither is falsified."
+    },
+    {
+      "block": "0fae76dd426375fa2a19c3874d0929f44b6d238343946ba0faacd60405366b89",
+      "quote": "Popper's system incurs a cost of 'permanent tentativeness' where no theory is ever truly preferred for action, only provisionally tolerated until the next test, rendering long-term engineering projects epistemologically unstable."
+    }
+  ],
+  "counterexample": [
+    "A bridge engineer choosing between structural-theory A (survived 1000 severe load tests) and theory B (untested but unfalsified) acts on A. Under Popper, this is not mere 'toleration' but rational corroboration-based preference. The engineer is epistemically justified in preferring A not because A is rendered probable, but because A has survived severe tests B has not. This is exactly the 'preference for action' the claim denies Popper can provide."
+  ]
+}

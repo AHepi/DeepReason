@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target's defense is internally inconsistent: it claims the preference 'costs the agent any claim to probabilistic security' (surrendering all probabilistic expectations about future performance), yet the mechanism justifies the choice by calling the selected theory 'the most reliable guide for action.' 'Reliability' is a fundamentally probabilistic concept — it denotes an expectation that something will perform correctly going forward, typically grounded in its track record. If the agent has genuinely surrendered all probabilistic security, it cannot simultaneously invoke 'reliability' as a distinguishing virtue without smuggling back in the very inductive expectation it explicitly disavows. Conversely, if 'reliable' is stripped of its probabilistic force, it collapses into a mere restatement of 'has survived severe tests so far,' which provides no non-circular reason to prefer that theory over any other unrefuted one. The target thus faces a dilemma: either 'reliable' carries probabilistic weight (contradicting the claim's stated cost) or it carries none (failing to justify preference). This is a genuine fault distinct from the prior Tichý-Miller objection.",
+  "counterexample": null,
+  "premise": "A theory cannot be simultaneously described as 'the most reliable guide for action' (implying an expectation of future performance) and as chosen under a preference that 'costs the agent any claim to probabilistic security' (denying any such expectation) without internal contradiction.",
+  "premise_evidence": [
+    {
+      "block": "f3cdfce812cbd2d12a408344a3300412bb23fb12e38a579d5ac4232ee462f349",
+      "quote": "costs the agent any claim to probabilistic security."
+    },
+    {
+      "block": "f3cdfce812cbd2d12a408344a3300412bb23fb12e38a579d5ac4232ee462f349",
+      "quote": "the most reliable guide for action given the current state of knowledge, explicitly rejecting the induction that past success ensures future success."
+    }
+  ],
+  "successor_question": "If 'reliability' is purged of all probabilistic meaning, what non-circular criterion distinguishes preferring a well-corroborated theory from arbitrarily selecting any unrefuted theory?"
+}
+```

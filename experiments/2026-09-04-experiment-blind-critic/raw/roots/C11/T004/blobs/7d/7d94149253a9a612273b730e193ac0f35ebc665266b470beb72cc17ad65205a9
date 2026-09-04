@@ -1,0 +1,21 @@
+```json
+{
+  "attack": true,
+  "case": "The target equivocates between two distinct senses of 'informational content.' (1) Logical content — the a priori amount a theory rules out — is indeed a non-inductive, syntactic property: a theory with more content excludes more possible worlds by construction, and preferring it on that basis alone requires no induction. (2) Corroborated content — content that has 'survived testing' — is an empirical property: 'survival' means the theory's risky predictions were not falsified by observation, so selecting a theory because its content survived is selecting on the basis of past agreement between prediction and observation. That is the canonical structure of induction. The target's mechanism explicitly defines corroboration as content that has 'survived' ('Corroboration reports how much risky content has survived'), yet labels the resulting preference 'non-inductive' by attributing the non-inductive character of sense (1) to what is actually sense (2). The 'regardless of its truth probability' clause cannot rescue this: even if the preference is not for probability of truth, preferring a theory because its content survived empirical testing is using past observational agreement as a selection criterion, which is inductive by form. The target's countercondition 'If informational content cannot be separated from probability of truth in decision contexts' misses the actual conflation: it is not truth-probability that is inseparable from content, but the empirical fact of survival-that-is-corroboration that is inseparable from induction.",
+  "counterexample": [
+    "Two theories T1 and T2, both with identical logical informational content (both exclude the same set of possible worlds). T1 is tested and its predictions are falsified; T2 is tested and its predictions are not. On the target's own criterion — prefer the theory whose content 'survived' — one must prefer T2 over T1. But T1 and T2 have the same content; the only difference is past empirical performance. Selecting T2 therefore cannot be justified by content alone; it requires the inductive step that past non-falsification is relevant to present preference."
+  ],
+  "premise": "A preference that selects theories on the basis of whether their content 'survived' empirical testing is selecting on past observational agreement, which is inductive in form — regardless of whether the preference is framed as being about 'richness' rather than 'truth probability.'",
+  "premise_evidence": [
+    {
+      "block": "6d0bdfcf4965877409d5aef45bee162963f718893a55b54e10dffec2d0ff24ad",
+      "quote": "Corroboration reports how much risky content has survived. We prefer the theory that risks more and survives, as it provides more information."
+    },
+    {
+      "block": "6d0bdfcf4965877409d5aef45bee162963f718893a55b54e10dffec2d0ff24ad",
+      "quote": "we prefer the theory with more content because it says more about the world, regardless of its truth probability, making the preference non-inductive."
+    }
+  ],
+  "successor_question": "Can the target identify a selection criterion that uses only the a priori logical content of theories (independent of any empirical test outcome) yet still yields a non-trivial preference among equally untested rivals — and if so, does that criterion still deserve the label 'corroboration,' which on the target's own definition requires survival of testing?"
+}
+```

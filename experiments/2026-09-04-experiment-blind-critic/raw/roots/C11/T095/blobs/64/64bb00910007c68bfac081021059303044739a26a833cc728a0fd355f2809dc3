@@ -1,0 +1,34 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"QuotedEvidenceRefV1": {"additionalProperties": false, "description": "A citation that cannot be made without reproducing the bytes.\n\nA SUBTYPE, not a stricter `EvidenceRefClaimV1`: the old contract's optional\nquote is load-bearing for the conjecturer channel that already ships, and\ntightening it globally would retroactively refuse citations that were legal\nwhen they were recorded. The calculus claim channel is new and can be born\nwith the stronger rule (R62), so the requirement lives in the type rather\nthan in a prompt asking nicely.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceRefV1", "type": "object"}}, "additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceRefV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+
+## target-provenance
+TARGET PROVENANCE (who produced this target, and under what stance):
+- author seat: conjecturer
+- school: school-1
+- origin: harness-minted (a conjecturer seat proposed it)
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 6b403926ebe9a3929dc93dcc46ef85c1f6e5e02d75db8d0087b262316dac20d6
+{"analogy": null, "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic, non-inductive rule of action: we prefer the theory that has withstood the most severe tests not because it is more likely true, but because it has proven itself the most robust instrument for survival and problem-solving so far.", "counterconditions": [{"case": "If the preference implies any increase in subjective probability or rational expectation of future success, it collapses into induction.", "checker_spec": null, "eval": "observation"}, {"case": "If Popper cannot distinguish between 'acting on' and 'believing in' without invoking probability, the defense fails.", "checker_spec": null, "eval": "observation"}], "definitions": [], "derivation": [], "formalization_refs": [], "mechanism": "Evolutionary Epistemology applied to theory choice: Just as organisms are selected for fitness without implying they will remain fit, theories are selected for corroboration without implying future truth. The 'preference' is a bet on the currently fittest survivor, acknowledging the risk of future refutation.", "premises": [], "schema": "deepreason-reasoning-envelope-v1", "scope": {"covers": [], "excludes": []}, "simulation_refs": [], "uncertainties": []}
+
+## target-criticism-history
+CRITICISM HISTORY OF THIS TARGET (what has already been objected to, and what became of it):
+- objection 1: The target argues that preferring a theory because it has 'withstood the most severe tests so far' is a pragmatic bet on the 'currently fittest survivor,' analogous to biological selection. However, this defense fails on Popper's own terms because the utility of such a 'bet' presupposes that past fitness (corroboration) is a reliable indicator of future performance (problem-solving capacity). In biological evolution, we assume the environment remains sufficiently stable for past adaptations to confer present advantage; similarly, in science, acting on a corroborated theory only makes pragmatic sense if one assumes the future will resemble the past regarding the theory's domain. By asserting that the theory is the 'most robust instrument... so far' and therefore the rational choice for action, the target implicitly assigns a higher subjective probability to its future success compared to a falsified or less-tested theory. This reinstates the inductive principle—that the unobserved future will resemble the observed past—which Popper explicitly rejected. The distinction between 'acting on' and 'believing in' collapses here: if there is no rational basis to expect the 'fittest' theory to continue working better than an arbitrary alternative, the preference is not defensible as rational pragmatism but is merely an irrational habit, which contradicts the target's claim of a 'defensible... rule of action.'
+  outcome: raised and not answered; the target's status did not move
+- objection 2: The target's defense relies on 'Evolutionary Epistemology' to justify preferring better-corroborated theories as the 'fittest survivors,' but this analogy smuggles in the very induction Popper rejected. By arguing that past survival (corroboration) makes a theory a robust instrument for *future* problem-solving, the target implicitly assumes the uniformity of nature—that the conditions which allowed a theory to survive past tests will persist or recur. Popper explicitly rejected any inference from past success to future reliability as inductive; therefore, framing the preference as a bet on the 'currently fittest' for *future* utility fails to remain within Popper's non-inductive terms and collapses into the pragmatic induction the prompt asks to avoid.
+  outcome: raised and not answered; the target's status did not move
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+DIRECTIVE: mount the strongest NEW specific case against TARGET 6b403926ebe9a3929dc93dcc46ef85c1f6e5e02d75db8d0087b262316dac20d6, or attack=false if you find no genuine fault.

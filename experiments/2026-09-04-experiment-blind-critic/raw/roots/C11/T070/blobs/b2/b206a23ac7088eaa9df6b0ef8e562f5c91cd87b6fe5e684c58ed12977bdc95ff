@@ -1,0 +1,22 @@
+```json
+{
+  "attack": true,
+  "premise": "The target's defense hinges on equating 'better-corroborated' theories with theories of 'highest empirical content,' but corroboration and empirical content are distinct Popperian categories: corroboration is a historical measure (degree of past severe testing survived), while content is a logical property of the theory's assertions independent of any testing history. A theory can have maximal content yet zero corroboration (untested), or high corroboration yet low content (a vague claim surviving trivial tests). By conflating these, the target's mechanism commits a category error that collapses the very distinction Popper needs to keep intact.",
+  "premise_evidence": [
+    {
+      "block": "3cc505d4422a10e3129c235999eea3a50d57daa1dfbc86d697bf285702aca4a7",
+      "quote": "a methodological rule to select the theory with the highest empirical content and thus the greatest capacity for future falsification"
+    },
+    {
+      "block": "3cc505d4422a10e3129c235999eea3a50d57daa1dfbc86d697bf285702aca4a7",
+      "quote": "choosing the best-corroborated theory is equivalent to choosing the most severely tested survivor, which logically implies it has withstood the strongest attempts at refutation. This avoids induction because it makes no claim about the future performance of the theory based on past success, but rather selects the theory that currently offers the most precise targets for potential error."
+    }
+  ],
+  "case": "The target's claim asserts that Popper's preference for 'better-corroborated theories' is defensible as a rule selecting 'the theory with the highest empirical content.' The mechanism then operationalizes this as choosing 'the most severely tested survivor.' But these are not equivalent. Corroboration, in Popper's framework, is a function of the theory's testing record—a theory that has never been tested has no corroboration regardless of how much content it has, and a theory with low content that happens to survive a weak test can have higher corroboration than an untested high-content rival. The claim's phrase 'and thus' (highest empirical content 'and thus' the greatest capacity for future falsification) smuggles content in as a consequence of corroboration, but content is a prerequisite for severe testing, not an outcome of it. If the methodological rule selects for corroboration (past survival), it does not automatically select for maximal content; if it selects for content, it does not need corroboration as a guide. The target's defense therefore rests on a conflation: it presents the rule as optimizing one quantity when it actually optimizes another. Since the entire argument is that the preference is defensible 'on Popper's own terms,' this category error means the defense does not establish what it claims—it defends a content-maximization rule while invoking corroboration as the selection criterion, leaving unexplained why a scientist should prefer a well-tested low-content theory over an untested high-content one, or vice versa, given that Popper's own framework treats these as independent dimensions.",
+  "counterexample": [
+    "Theory A: 'All physical quantities are invariant under all conceivable transformations.' This has maximal empirical content (it makes the most precise, wide-ranging claims) but has never been tested, so its corroboration is zero.",
+    "Theory B: 'At least one coin toss somewhere will land heads.' This has minimal empirical content but, once a single heads is observed, has high corroboration (it survived a test, though a trivial one). On the target's rule, B is better corroborated than A, yet A has far higher content and capacity for future falsification. The target's equivalence of 'best-corroborated' with 'highest empirical content' thus fails."
+  ],
+  "successor_question": "If corroboration (past testing survival) and empirical content (logical strength) are independent dimensions in Popper's framework, what non-circular rule adjudicates the trade-off when they conflict—i.e., when a well-corroborated low-content theory competes against an untested high-content one—and does that adjudication itself require an inductive assumption?"
+}
+```

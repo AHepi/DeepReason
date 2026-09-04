@@ -1,0 +1,10 @@
+```json
+{
+  "attack": true,
+  "case": "The target's claim concludes that accepting the verisimilitude heuristic 'leaving us with only boldness as a guide' does not follow from its own mechanism. The mechanism describes an evolutionary error-elimination process: 'we select theories that have survived severe filters.' This is a selection criterion based on survival under testing. But 'boldness' in Popper's framework is a distinct property—the degree of empirical risk or content a theory exposes itself to before testing. The mechanism nowhere derives or connects to boldness; it describes retention of surviving theories, not a preference for riskier ones. The claim thus substitutes one Popperian concept (error-elimination/survival) for another (boldness/riskiness) in its conclusion without any logical bridge, making the central claim an internal non sequitur.",
+  "counterexample": [{"mechanism_describes": "selecting theories that survived severe filters", "claim_concludes_with": "only boldness as a guide", "logical_gap": "Survival of severe tests and boldness of content are distinct criteria; the mechanism does not derive the latter from the former"}],
+  "premise": "A claim's conclusion must be derivable from its own stated mechanism; if the mechanism describes error-elimination (survival of severe tests) but the conclusion names 'boldness' (a distinct property of theory content/risk), the conclusion is unsupported by the mechanism.",
+  "premise_evidence": [{"block": "c930f92e3b3366be38770d5a70d17a4a676c4fa8c4e24811f6c32353b8b29fd7", "quote": "The mechanism is evolutionary: we select theories that have survived severe filters."}, {"block": "c930f92e3b3366be38770d5a70d17a4a676c4fa8c4e24811f6c32353b8b29fd7", "quote": "accepting it costs the certainty that science converges on truth, leaving us with only 'boldness' as a guide."}],
+  "successor_question": "How does a selection mechanism based on survival of severe tests logically yield 'boldness' (empirical riskiness of content) as the sole remaining guide, given that these are distinct Popperian criteria?"
+}
+```

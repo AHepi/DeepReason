@@ -1,0 +1,15 @@
+```json
+{
+  "attack": true,
+  "case": "The target's claim is self-defeating: it purports to show that Popper's preference for better-corroborated theories is 'defensible on his own terms' as a rational selection mechanism, yet the same claim concedes that accepting this defense 'reduces rational action to a bold guess with no inductive safety net.' A defense that concludes the defended position amounts to an undefended guess has not established defensibility — it has merely redescribed the position in terms that concede its rational indefensibility. The target thus fails to distinguish between (a) showing a preference rule is internally consistent with Popper's anti-inductive framework and (b) showing it is rationally defensible. It achieves (a) only by sacrificing (b), which is the very thing the claim promises to deliver. This is distinct from the already-raised Tichý/Miller objection: it attacks the target's own stated cost-benefit structure, not the formal definability of verisimilitude.",
+  "premise": "The target's claim asserts that the defense is 'defensible on his own terms' while simultaneously conceding that it 'reduces rational action to a bold guess with no inductive safety net,' which is a performative contradiction: a defense that collapses the defended practice into a guess without rational assurance has not defended it.",
+  "premise_evidence": [
+    {
+      "block": "8720273db06d576b428aa431f399bf48fc857526606413bd32d3f10bd4cef78b",
+      "quote": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, critical selection mechanism based on 'verisimilitude' (truth-likeness) and informational content, rather than probability; however, accepting this defense costs the scientist the assurance that their chosen theory is likely true or will succeed in the future, reducing rational action to a bold guess with no inductive safety net."
+    }
+  ],
+  "counterexample": null,
+  "successor_question": "Can a preference rule be called 'rationally defensible' if the only available defense concedes that acting on it reduces to a guess with no assurance of future success, or does 'defensible on his own terms' merely mean 'consistent with Popper's terminology' rather than 'rationally justified'?"
+}
+```

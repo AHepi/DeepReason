@@ -1,0 +1,21 @@
+```json
+{
+  "attack": true,
+  "case": "The claim's 'defensible only if' imposes a false dilemma. It asserts that abandoning inductive 'optimization for truth' necessarily leaves rationality as mere 'fidelity to the critical method' — a 'game with arbitrary rules' in a 'closed loop of criticism' with 'no connection to the world.' But this conflates two distinct truth-relations: truth-optimization (a process claiming monotonic increase in truthlikeness, which does require induction) and truth-directedness (truth as a regulative ideal that governs which criticisms matter, which does not). Popper's critical rationalism occupies exactly the excluded middle: critical method is neither an inductive truth-optimizer NOR an arbitrary self-consistent game — it is a truth-aimed procedure where observational falsification provides a non-inductive world-connection. The mechanism's assertion that the procedure 'does not connect to the world (no induction)' is a non sequitur: deductive falsification connects theories to the world via observation without requiring induction. The listed countercondition ('converge on truth without induction') gestures at one escape route (guaranteed convergence) but misses the more basic one (regulative truth-direction without convergence guarantees), which already breaks the 'only if.' Because the claim excludes a viable position that is neither inductive optimization nor arbitrary game-playing, the necessary condition is too strong and the argument fails.",
+  "premise": "A claim asserting 'defensible only if rationality is redefined as procedural fidelity rather than truth-optimization' is false if there exists a coherent position where rationality is truth-directed (not truth-optimizing) and world-connected (not inductively, but via falsificational observation) — yet the target's mechanism explicitly denies any world-connection and any verisimilitude, forcing a binary that excludes this middle position.",
+  "premise_evidence": [
+    {
+      "block": "a043a83c864ad1e5cf6f8873fe1cc0607f6d3db7d7027e9423c58fc9ef5a6223",
+      "quote": "The preference is defensible only if we redefine 'rationality' as 'fidelity to the critical method' rather than 'optimization for truth'; the cost is that science becomes a game with arbitrary rules"
+    },
+    {
+      "block": "a043a83c864ad1e5cf6f8873fe1cc0607f6d3db7d7027e9423c58fc9ef5a6223",
+      "quote": "It does not connect to the world (no induction), nor does it approximate truth (no verisimilitude). It is a closed loop of criticism."
+    }
+  ],
+  "counterexample": [
+    "Critical rationalism as articulated by Popper: science aims at truth (truth is a regulative ideal), critical method selects among theories by severity of surviving tests, and observational falsification provides a non-inductive world-connection. This position is neither inductive truth-optimization (it claims no monotonic increase in truthlikeness) nor an arbitrary self-consistent game (the rules are truth-directed, not arbitrary). It satisfies the defense of the preference without redefining rationality as mere procedural fidelity, refuting the 'only if.'"
+  ],
+  "successor_question": "If critical method is truth-directed (truth as regulative ideal) without being truth-optimizing, does the preference for severely-tested theories require redefining rationality as procedural fidelity, or does it inherit a non-inductive truth-relation that the target's binary excludes?"
+}
+```

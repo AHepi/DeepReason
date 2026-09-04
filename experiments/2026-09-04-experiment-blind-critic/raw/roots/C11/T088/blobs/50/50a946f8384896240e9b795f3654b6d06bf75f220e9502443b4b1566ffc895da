@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target's mechanism justifies the preference for corroborated theories by saying it 'maximizes the opportunity for future falsification (severe testing), thereby accelerating error elimination,' using progressive, directional language ('accelerating,' 'maximizes opportunity'). Yet the target's own claim concludes that the resulting framework 'cannot guarantee progress toward truth, only the avoidance of known falsities.' These are in tension: if error elimination is merely the avoidance of known falsities with no truth-direction, then 'accelerating' it is vacuous as a rational justification — it describes the speed of a non-progressive procedure, not a reason one *ought* to prefer corroborated theories. The mechanism presupposes a cumulative, directional process that the claim's own conclusion explicitly disavows, making the defense self-undermining. Either error elimination is genuinely directional (contradicting the claim's denial of progress toward truth), or 'accelerating' it adds no substantive rational force to the preference.",
+  "counterexample": null,
+  "premise": "A defense that grounds theory-preference in 'accelerating error elimination' presupposes a cumulative or directional process; but if the same defense simultaneously disavows progress toward truth and reduces the process to 'avoidance of known falsities,' the language of acceleration is vacuous and the defense is self-undermining.",
+  "premise_evidence": [
+    {
+      "block": "0f5bfba3f8c52d3c79f1a33eb02a21186183c709c54c08d42727d36d1467ebb2",
+      "quote": "maximizes the opportunity for future falsification (severe testing), thereby accelerating error elimination"
+    },
+    {
+      "block": "0f5bfba3f8c52d3c79f1a33eb02a21186183c709c54c08d42727d36d1467ebb2",
+      "quote": "cannot guarantee progress toward truth, only the avoidance of known falsities"
+    }
+  ],
+  "successor_question": "Can 'accelerating error elimination' serve as a rational ground for preferring corroborated theories if the process is conceded to have no truth-direction, or does the defense implicitly rely on an unacknowledged progressive assumption that contradicts its own conclusion?"
+}
+```

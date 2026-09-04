@@ -1,0 +1,15 @@
+```json
+{
+  "attack": true,
+  "case": "The target's mechanism field is circular: it purports to explain why the preference for corroborated theories holds, but its stated reason is a verbatim restatement of the claim itself, truncated mid-sentence ('to select th'). The sentence 'The reason this holds is that [restatement of the claim], which is what the mechanism above establishes' provides no independent grounding — it asserts the conclusion as the justification for the conclusion. A mechanism that invokes its own claim as its own reason fails to establish anything, making the target's explanatory content empty.",
+  "premise": "A reasoning artifact's mechanism must supply an independent explanatory basis for its claim; substituting a restatement of the claim as the reason the claim holds is circular and establishes nothing.",
+  "premise_evidence": [
+    {
+      "block": "623839e7afe93f5e6dc0769b8caa25d50bb2dfa31d27356bddf470c4e0307a88",
+      "quote": "The reason this holds is that The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference that the theory is more probable, but as a non-inductive, methodological rule to select th, which is what the mechanism above establishes."
+    }
+  ],
+  "counterexample": null,
+  "successor_question": "Can the preference for better-corroborated theories be given a non-circular mechanism — one that derives the rationality of the methodological rule from premises that are not themselves just restatements of the claim being defended?"
+}
+```

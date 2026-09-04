@@ -1,0 +1,32 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"QuotedEvidenceRefV1": {"additionalProperties": false, "description": "A citation that cannot be made without reproducing the bytes.\n\nA SUBTYPE, not a stricter `EvidenceRefClaimV1`: the old contract's optional\nquote is load-bearing for the conjecturer channel that already ships, and\ntightening it globally would retroactively refuse citations that were legal\nwhen they were recorded. The calculus claim channel is new and can be born\nwith the stronger rule (R62), so the requirement lives in the type rather\nthan in a prompt asking nicely.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceRefV1", "type": "object"}}, "additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceRefV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+
+## target-provenance
+TARGET PROVENANCE (who produced this target, and under what stance):
+- author seat: conjecturer
+- school: school-2
+- origin: harness-minted (a conjecturer seat proposed it)
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 2444c2ef5738598f1ee183dbc7a5363509a84025cf64bd92d5514265ab31ad72
+{"analogy": null, "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction if reinterpreted as a non-epistemic, methodological rule of 'critical selection' rather than an expectation of future success; however, accepting this defense costs the scientist any rational assurance that the chosen theory will work in practice, reducing scientific action to a blind evolutionary gamble.", "counterconditions": [{"case": "If the Tichý/Miller proof holds that verisimilitude cannot be estimated, then the 'better' in 'better-corroborated' loses its normative force for truth-likeness.", "checker_spec": null, "eval": "observation"}, {"case": "If acting on a theory (e.g., building a bridge) inherently requires an assumption of its reliability, then merely labeling the preference 'methodological' is a semantic evasion of the pragmatic need for induction.", "checker_spec": null, "eval": "observation"}, {"case": "If Popper's own advice to 'act on the best tested theory' implies an expectation of success, then his practice contradicts his strict prohibition against inductive inference.", "checker_spec": null, "eval": "observation"}], "definitions": [], "derivation": [], "formalization_refs": [], "mechanism": "The mechanism distinguishes between 'corroboration' (a logical report of past performance) and 'prediction' (an inductive leap). Popper's preference is framed not as believing Theory A is more likely true than Theory B, but as a procedural commitment to test the most vulnerable (high content) theory that has so far survived. The preference is a rule of the game of science, akin to a chess player preferring a gambit that has worked before, not because it guarantees a win, but because it offers the fastest route to checkmate or refutation. This avoids induction by refusing to assign higher probability to the future success of the gambit.", "premises": [], "schema": "deepreason-reasoning-envelope-v1", "scope": {"covers": [], "excludes": []}, "simulation_refs": [], "uncertainties": []}
+
+## target-criticism-history
+CRITICISM HISTORY OF THIS TARGET (what has already been objected to, and what became of it):
+- objection 1: The target's defense fails because it conflates 'methodological preference' with 'rational action' in a way that contradicts Popper's own requirement for critical rationality. While the target argues that preferring a better-corroborated theory is merely a rule of the game (like a chess gambit) without implying future success, this renders the scientist's choice to 'act' on that theory (e.g., build a bridge) irrational. If the preference offers no rational assurance of practical utility—as the target admits by calling it a 'blind evolutionary gamble'—then acting on it violates the principle of critical rationality which demands we act on the best available critical arguments. Therefore, the target's distinction collapses: either the preference implies an expectation of reliability (smuggling in induction) or it makes scientific action arbitrary and indefensible, failing to answer how the preference is 'defensible' as requested.
+  outcome: raised and not answered; the target's status did not move
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+DIRECTIVE: mount the strongest NEW specific case against TARGET 2444c2ef5738598f1ee183dbc7a5363509a84025cf64bd92d5514265ab31ad72, or attack=false if you find no genuine fault.

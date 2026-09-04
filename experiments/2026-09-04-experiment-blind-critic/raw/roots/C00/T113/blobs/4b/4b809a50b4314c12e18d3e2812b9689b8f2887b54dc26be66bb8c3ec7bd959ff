@@ -1,0 +1,14 @@
+```json
+{
+  "attack": true,
+  "case": "The claim asserts the preference for better-corroborated theories is 'non-inductive' and 'based on verisimilitude (truth-likeness),' while the mechanism frames it as 'maximizing our proximity to truth (verisimilitude) without claiming probability.' These two commitments are in direct tension. If the justification for preferring corroborated theories is that doing so 'maximizes our proximity to truth,' then the preference requires the assumption that a theory's past performance under severe tests is positively correlated with its truth-likeness — an inductive inference from past survival to a current truth-property. Popper himself was careful to deny that corroboration provides any positive reason to regard a theory as truth-like; corroboration appraises past performance only, not a theory's current epistemic status. By grounding the defense in verisimilitude ('maximizing proximity to truth'), the claim smuggles in exactly the inductive bridge it purports to avoid, rendering the 'non-inductive' label internally inconsistent with its own stated basis.",
+  "premise": "The target's mechanism states the preference functions by 'maximizing our proximity to truth (verisimilitude),' which is a claim that past corroboration tracks a current truth-property — an inductive move the target simultaneously denies making.",
+  "premise_evidence": [
+    {
+      "block": "30fea509ce8409931bd010ad2684786e4dd903639053738009a3b6ab9f9b4e3a",
+      "quote": "thereby maximizing our proximity to truth (verisimilitude) without claiming probability"
+    }
+  ],
+  "successor_question": "Can a selection rule be coherently described as 'non-inductive' if its explicit rationale is that it maximizes proximity to truth, given that such a rationale requires inferring a current truth-property from past test performance?"
+}
+```

@@ -1,0 +1,27 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"QuotedEvidenceRefV1": {"additionalProperties": false, "description": "A citation that cannot be made without reproducing the bytes.\n\nA SUBTYPE, not a stricter `EvidenceRefClaimV1`: the old contract's optional\nquote is load-bearing for the conjecturer channel that already ships, and\ntightening it globally would retroactively refuse citations that were legal\nwhen they were recorded. The calculus claim channel is new and can be born\nwith the stronger rule (R62), so the requirement lives in the type rather\nthan in a prompt asking nicely.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceRefV1", "type": "object"}}, "additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceRefV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+
+## target-provenance
+TARGET PROVENANCE (who produced this target, and under what stance):
+- author seat: conjecturer
+- school: school-0
+- origin: harness-minted (a conjecturer seat proposed it)
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 2650be204412ca66016f0b7babe92cd06b819f24694f454d8345f6a015551187
+{"analogy": null, "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule of 'critical rationalism' rather than an inductive inference; it costs the agent any claim to probable truth, accepting instead that the choice is a wager on the theory with the highest surviving verisimilitude.", "counterconditions": [{"case": "If the preference relies on the assumption that past success predicts future success, it smuggles in induction.", "checker_spec": null, "eval": "observation"}, {"case": "If 'verisimilitude' cannot be defined without probabilistic assumptions, the defense collapses.", "checker_spec": null, "eval": "observation"}, {"case": "If scientists act on corroborated theories expecting them to work (probability of success), they are acting inductively despite Popper's labels.", "checker_spec": null, "eval": "observation"}], "definitions": [], "derivation": [], "formalization_refs": [], "mechanism": "Popper distinguishes between the logical probability of a theory (which remains zero or undefined regardless of tests) and the pragmatic decision to accept the theory that has withstood the most severe attempts at falsification. The mechanism is a non-inductive selection rule: we prefer the theory that has proven itself most robust against error, not because it is likely true, but because it is the best available target for future criticism and the most informative if false.", "premises": [], "schema": "deepreason-reasoning-envelope-v1", "scope": {"covers": [], "excludes": []}, "simulation_refs": [], "uncertainties": []}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+DIRECTIVE: mount the strongest NEW specific case against TARGET 2650be204412ca66016f0b7babe92cd06b819f24694f454d8345f6a015551187, or attack=false if you find no genuine fault.

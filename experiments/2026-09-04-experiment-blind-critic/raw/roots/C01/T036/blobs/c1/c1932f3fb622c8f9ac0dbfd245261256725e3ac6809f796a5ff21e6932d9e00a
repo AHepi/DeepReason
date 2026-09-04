@@ -1,0 +1,10 @@
+```json
+{
+  "attack": true,
+  "case": "The target claims that grounding the preference for corroboration in ethics 'cost[s] Popper the claim that his system is purely logical.' But Popper never made the claim this purportedly costs him. In 'The Logic of Scientific Discovery,' Popper explicitly frames methodological rules as conventions or 'rules of the game of science'—neither logical deductions from evidence nor ethical imperatives, but instrumental rules adopted for their effectiveness in pursuing truth. By constructing a dichotomy (logical deduction vs. ethical stance) and then declaring Popper falls on the wrong side of it, the target both mischaracterizes Popper's actual position as one of 'pure logic' he never held and ignores the conventionalist/pragmatic third category that is the core of Popper's actual methodology. The 'cost' the target identifies is vacuous because it is assessed against an attribution Popper did not make; the target is attacking a straw man, not Popper's system.",
+  "counterexample": ["Popper, Logic of Scientific Discovery, §11 on methodology as 'rules of the game' that are conventional, not deductive—placing methodology in neither the 'purely logical' nor the 'ethical' bucket the target's dichotomy allows."],
+  "premise": "Popper never claimed his system was 'purely logical' in the sense of consisting solely of logical deductions; he explicitly characterized methodological rules as conventions.",
+  "premise_evidence": null,
+  "successor_question": "If Popper's methodology is conventionalist rather than either purely logical or purely ethical, what genuine Popperian claim does the target's argument actually undermine?"
+}
+```

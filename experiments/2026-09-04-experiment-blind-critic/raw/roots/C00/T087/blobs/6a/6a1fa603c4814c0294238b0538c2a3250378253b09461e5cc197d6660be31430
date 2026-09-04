@@ -1,0 +1,21 @@
+```json
+{
+  "attack": true,
+  "case": "The target's analogical argument is self-defeating: it borrows normative force from two source domains while explicitly acknowledging a disanalogy that severs exactly the inferential link it needs. The transfer claim asserts that 'preferring the best-corroborated theory is rational only as an adherence to the rule of testing,' importing justification from biological natural selection and legal due process. But the listed disanalogy states: 'Biological survival is non-normative and retrospective; scientific preference is prospective and normative.' The target's own shared-structure list confirms the source is purely descriptive ('Selection based on elimination of failures,' 'Preference for the current survivor does not guarantee future survival'), while the conclusion is normative ('it is rational to prefer...'). A non-normative, retrospective source cannot, by the target's own admission, ground a prospective, normative rule without an additional bridge principle that maps 'has survived' to 'ought to be preferred.' The target provides no such bridge, and supplying one would itself require inductive or evaluative assumptions—precisely the kind the target claims to avoid. Thus the analogy, as specified, does not support the transfer claim; it undercuts it.",
+  "counterexample": [
+    "A theory that has survived all tests so far (descriptive survival, like a biological survivor) while being known to be false in its predictive scope (e.g., Newtonian mechanics after general relativity). On the target's own framework, survival of tests is retrospective and non-normative, so there is no licensed inference from 'survived' to 'rationally preferable now,' leaving the normative preference unjustified by the very analogies invoked."
+  ],
+  "premise": "The analogical transfer from a non-normative, retrospective source (biological survival) to a normative, prospective target (scientific preference) is invalid without a bridge principle the target does not supply.",
+  "premise_evidence": [
+    {
+      "block": "adbff8f6410a3283e1a19240e1b8b8503a4f55c93481ff1edd6eab40e3f06ec5",
+      "quote": "Biological survival is non-normative and retrospective; scientific preference is prospective and normative."
+    },
+    {
+      "block": "adbff8f6410a3283e1a19240e1b8b8503a4f55c93481ff1edd6eab40e3f06ec5",
+      "quote": "preferring the best-corroborated theory is rational only as a adherence to the rule of testing"
+    }
+  ],
+  "successor_question": "What bridge principle could license an inference from purely descriptive survival-of-tests to a normative rule of preference, without itself relying on inductive assumptions that the Popperian framework rejects?"
+}
+```

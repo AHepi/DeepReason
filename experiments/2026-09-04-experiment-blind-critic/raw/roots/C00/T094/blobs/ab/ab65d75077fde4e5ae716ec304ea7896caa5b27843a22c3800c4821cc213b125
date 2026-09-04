@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target claims the preference for better-corroborated theories is defensible as 'procedural rationality' for 'pursuing truth,' yet its own mechanism explicitly strips corroboration of any predictive connection to truth, calling it 'a report card of past critical efforts rather than a predictor of future success' and conceding it 'costs us the ability to claim that the preferred theory is likely true.' Instrumental or procedural rationality requires that a chosen means bear some evidential or logical connection to its stated end. If the end is 'pursuing truth' and the means is 'preferring the best-tested theory,' that connection can only run through the assumption that surviving severe tests is linked to being true—which is precisely the inductive bridge the target disclaims. Having removed the only basis on which the preference could be instrumentally rational relative to the goal of truth, the target cannot coherently call the preference 'the only rational way to pursue truth.' It becomes an arbitrary rule, not a rationally defensible one: an agent preferring the *least*-corroborated theory would be equally unconnected to truth under the target's own non-inductive framework, so the ascription of rationality to one preference over the other is unjustified.",
+  "counterexample": ["An agent who, following a purely methodological rule with no inductive content, prefers the LEAST-corroborated theory as 'the only rational way to pursue truth.' Under the target's own framework—where corroboration is explicitly not a predictor of future success or truth—this agent's preference has the same instrumental connection to truth (namely, none) as the target's preferred agent's preference. If neither preference is inductively connected to truth, then neither is more or less 'rational' as a means to pursue truth, demonstrating that the target's ascription of procedural rationality specifically to the well-corroborated preference is unsupported without smuggling in the very inductive assumption it rejects."],
+  "premise": "Instrumental or procedural rationality in choosing means to an end requires that the means bear some evidential or logical connection to achieving that end; a preference that is explicitly disconnected from the end (neither predicting nor indicating success toward it) is not rationally defensible as a means to that end, but is merely arbitrary.",
+  "premise_evidence": [
+    {
+      "block": "92cd3443ce054c750efcac898570bffa5e2d000878c3d3dd12933b2a5bd0a99c",
+      "quote": "it costs us the ability to claim that the preferred theory is likely true, restricting the justification to the procedural rationality of having subjected the theory to the severest possible tests."
+    },
+    {
+      "block": "92cd3443ce054c750efcac898570bffa5e2d000878c3d3dd12933b2a5bd0a99c",
+      "quote": "The mechanism posits that acting on the best-tested theory is the only rational way to pursue truth without assuming the future resembles the past, effectively treating corroboration as a report card of past critical efforts rather than a predictor of future success."
+    }
+  ],
+  "successor_question": "If corroboration has no predictive or evidential connection to truth, what non-arbitrary criterion distinguishes the rationality of preferring well-corroborated theories from preferring poorly-corroborated ones as a means to pursuing truth?"
+}
+```

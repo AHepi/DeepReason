@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target asserts that corroboration functions as a 'causal mechanism' analogous to natural selection and concludes that the induction debate is 'category-mistaken.' Yet the target's own counterconditions identify the two disanalogies that destroy this conclusion — that biological fitness is retrospective while scientific preference is prospective, and that scientific selection requires a normative element evolution lacks — but provides zero argument, premise, or derivation addressing why these disanalogies do not defeat the analogy. Without resolving these, the claim that the induction debate is 'category-mistaken' is unsupported: if the analogy breaks (as the counterconditions concede it may), then the entire basis for calling the induction debate a category mistake collapses. The target is asserting a strong conclusion while acknowledging its own refutation conditions without meeting them.",
+  "premise": "A claim that declares a debate 'category-mistaken' must establish that its proposed analogy is not merely superficial but survives the disanalogies its own counterconditions flag; if the target lists counterconditions that, if true, defeat the claim, and provides no argument against their obtaining, the conclusion is unsupported.",
+  "premise_evidence": [
+    {
+      "block": "bc2d1f52dbec53789d27fdd448546ebe97e851c80ce647a48ab79e35591f38c7",
+      "quote": "If the analogy breaks down because biological fitness is retrospective while scientific preference is prospective."
+    },
+    {
+      "block": "bc2d1f52dbec53789d27fdd448546ebe97e851c80ce647a48ab79e35591f38c7",
+      "quote": "If the 'causal mechanism' of science requires a normative element that evolution lacks."
+    }
+  ],
+  "counterexample": null,
+  "successor_question": "Can the target demonstrate that the prospective, norm-governed character of scientific theory-choice is compatible with a strictly causal, non-normative analogy to natural selection — or does acknowledging those disanalogies as live counterconditions already concede that the 'category-mistaken' verdict is unjustified?"
+}
+```

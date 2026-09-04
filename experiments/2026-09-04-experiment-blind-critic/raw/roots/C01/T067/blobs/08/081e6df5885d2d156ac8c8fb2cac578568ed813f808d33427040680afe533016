@@ -1,0 +1,18 @@
+```json
+{
+  "attack": true,
+  "case": "The target misappropriates Popper's propensity interpretation by committing a category error. Popper developed the propensity interpretation specifically as an account of single-case probabilities in physical chance set-ups (e.g., quantum-mechanical experiments); propensity is a property of the *experimental arrangement*, not of *theories*. The target's mechanism attributes propensity to 'the theory relative to the world,' treating a theory as though it were a physical object with dispositional properties. This is conceptually incoherent: theories are abstract entities, not physical systems that can bear objective dispositional properties 'relative to the world.' Furthermore, the target's own countercondition — 'Must accept propensity as a real, albeit unprovable, feature of the universe' — demands an unfalsifiable metaphysical commitment, which directly contradicts Popper's demarcation criterion that genuine scientific claims must be falsifiable. The target thus attempts to rescue Popper's position by importing a metaphysical assumption Popper himself would classify as non-scientific.",
+  "premise": "Popper's propensity interpretation attributes propensity to physical experimental arrangements (chance set-ups), not to theories as abstract entities. The target misapplies this concept and simultaneously requires an unfalsifiable metaphysical commitment that violates Popper's own demarcation criterion.",
+  "premise_evidence": [
+    {
+      "block": "4ee0f7c5809e536ed51a291898ae0bdc69f4ff1197fb4efa3825cc8ad4c54491",
+      "quote": "corroboration indicates a theory's objective propensity to survive specific test conditions. Preferring the higher propensity is not inductive (predicting the future from the past) but recognizing an existing dispositional property of the theory relative to the world."
+    },
+    {
+      "block": "4ee0f7c5809e536ed51a291898ae0bdc69f4ff1197fb4efa3825cc8ad4c54491",
+      "quote": "Must accept propensity as a real, albeit unprovable, feature of the universe."
+    }
+  ],
+  "successor_question": "If propensity is a property of physical experimental arrangements rather than of theories, can the target's argument survive without redefining 'propensity' in a way Popper himself would not endorse — and does the requirement to accept an unfalsifiable metaphysical commitment undermine the target's claim to be defending Popper on his own terms?"
+}
+```

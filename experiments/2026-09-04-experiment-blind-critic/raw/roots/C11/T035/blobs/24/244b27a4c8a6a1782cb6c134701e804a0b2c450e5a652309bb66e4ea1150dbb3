@@ -1,0 +1,34 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"QuotedEvidenceRefV1": {"additionalProperties": false, "description": "A citation that cannot be made without reproducing the bytes.\n\nA SUBTYPE, not a stricter `EvidenceRefClaimV1`: the old contract's optional\nquote is load-bearing for the conjecturer channel that already ships, and\ntightening it globally would retroactively refuse citations that were legal\nwhen they were recorded. The calculus claim channel is new and can be born\nwith the stronger rule (R62), so the requirement lives in the type rather\nthan in a prompt asking nicely.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceRefV1", "type": "object"}}, "additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceRefV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+
+## target-provenance
+TARGET PROVENANCE (who produced this target, and under what stance):
+- author seat: conjecturer
+- school: school-0
+- origin: harness-minted (a conjecturer seat proposed it)
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 06f585064965759228010369a55b969676120791d95a8a1fa8fce398087bddf3
+{"analogy": null, "claim": "The dilemma dissolves if we accept that 'acting on a theory' requires a temporary, methodological acceptance of induction as a regulative ideal, distinct from ontological belief.", "counterconditions": [{"case": "If Popper strictly forbade any form of inductive reasoning, even methodologically.", "checker_spec": null, "eval": "observation"}, {"case": "If the distinction between 'ontological belief' and 'methodological assumption' cannot be maintained in practice.", "checker_spec": null, "eval": "observation"}, {"case": "If this concession grants too much to the Humean skeptic, undermining the falsificationist project.", "checker_spec": null, "eval": "observation"}], "definitions": [], "derivation": [], "formalization_refs": [], "mechanism": "The mechanism is 'methodological fictionalism'. Popper rejects induction as a logical proof of truth (ontological), but accepts it as a necessary heuristic for navigation (methodological). We act *as if* the future resembles the past because we have no other option, while maintaining the critical stance that this assumption might fail at any moment. The 'cost' is admitting that pure falsificationism is insufficient for guiding action without a supplementary, albeit provisional, inductive principle.", "premises": [], "schema": "deepreason-reasoning-envelope-v1", "scope": {"covers": [], "excludes": ["The dilemma dissolves if we accept that 'acting on a theory' requires a temporary, methodological acceptance of induction as a regulative ideal, distinct from ontological belief"]}, "simulation_refs": [], "uncertainties": []}
+
+## target-criticism-history
+CRITICISM HISTORY OF THIS TARGET (what has already been objected to, and what became of it):
+- objection 1: The target's central claim—that the dilemma dissolves by accepting induction as a 'methodological assumption' or 'regulative ideal'—directly contradicts Popper's own explicit refutation of this exact strategy. In 'The Logic of Scientific Discovery' and later works, Popper argued that shifting induction from a logical principle to a methodological rule (a 'convention') does not solve the problem; it merely disguises the irrationality of the inference. He maintained that if an inference is logically invalid, no amount of methodological labeling can justify acting upon it without smuggling in the very inductive belief he sought to eliminate. By proposing 'methodological fictionalism' as the solution, the target attributes to Popper a concession he rigorously denied, thereby failing to answer whether the preference is defensible *on Popper's own terms*. On Popper's own terms, this 'solution' is precisely the surrender of falsificationism to conventionalism that he warned against.
+  outcome: raised and not answered; the target's status did not move
+- objection 2: The target's solution smuggles induction back in by conflating 'methodological acceptance' with the very probabilistic weighting Popper rejected; if acting on a theory requires assuming it will continue to succeed (a regulative ideal), this constitutes an inductive inference about the future reliability of the method, which Popper explicitly forbade as irrational.
+  outcome: raised and not answered; the target's status did not move
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+DIRECTIVE: mount the strongest NEW specific case against TARGET 06f585064965759228010369a55b969676120791d95a8a1fa8fce398087bddf3, or attack=false if you find no genuine fault.

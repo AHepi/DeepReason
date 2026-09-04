@@ -1,0 +1,16 @@
+```json
+{
+  "attack": true,
+  "case": "The target commits an is-ought fallacy: it explicitly reduces the preference to 'a description of survival' (a purely descriptive relation) yet concludes that the preference is 'defensible' and 'rational' (normative claims). With both the premises and derivation arrays empty, no bridging premise is supplied to license the move from 'this theory survived' to 'therefore preferring it is rational.' The mechanism's assertion that preference is 'rational because it is the only one left standing' merely relabels the descriptive fact of survival as rationality without any justificatory premise. This is exposed by the countercondition the target itself lists — 'the extinction of all current theories leaves no basis for preference' — which concedes that survival alone can fail to ground preference, undermining the generality of the normative conclusion.",
+  "counterexample": [
+    {"scenario": "Two theories, T1 and T2, both survive every available test equally well. Both are 'left standing,' so the target's stated rationale ('rational because it is the only one left standing') cannot select between them. Survival alone fails to yield a rational preference, showing the normative conclusion does not follow from the descriptive premise when the single-survivor assumption is relaxed."},
+    {"scenario": "A theory T_old survived all tests for a decade but was later refuted by a novel test. At the moment before the novel test, T_old was 'the only one left standing,' yet preferring it was not retrospectively rational. The target's insistence that preference is 'not a prediction of future dominance' blocks any appeal to future performance, leaving the 'rationality' of the preference unexplained once survival proves ephemeral."}
+  ],
+  "premise": "A claim that a preference is 'defensible' or 'rational' must supply a normative bridge from descriptive facts to prescriptive conclusions; a purely descriptive account ('a description of survival') cannot by itself establish defensibility or rationality.",
+  "premise_evidence": [
+    {"block": "4abb9c7b7f85c691e311b6567a16f6219f82b4b6700746685044bea1adbfd264", "quote": "making the preference a description of survival rather than a prediction of future dominance."},
+    {"block": "4abb9c7b7f85c691e311b6567a16f6219f82b4b6700746685044bea1adbfd264", "quote": "Preferring the survivor is rational because it is the only one left standing, not because we expect it to survive tomorrow."}
+  ],
+  "successor_question": "What normative premise connects 'this theory survived testing' to 'therefore it is rational to prefer it,' such that the conclusion holds both when multiple theories survive and when survival proves temporary?"
+}
+```

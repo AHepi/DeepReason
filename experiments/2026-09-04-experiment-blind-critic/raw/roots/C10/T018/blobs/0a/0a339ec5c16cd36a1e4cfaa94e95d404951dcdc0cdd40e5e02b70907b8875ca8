@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target's 'Evolutionary Epistemology Transfer' claims to dissolve the dilemma by redefining rationality as 'fitness within a knowledge-generating system.' But this is circular: biological fitness has an independent, observable metric (reproductive success), whereas 'fitness' of a theory presupposes criteria for what counts as 'knowledge-generating' and 'adaptive fit' — criteria that are themselves epistemic and thus either inductive or logical in character, exactly the standards the account claims to transcend. The target itself concedes this vulnerability in its countercondition ('If the definition of fitness in theories secretly relies on inductive probability') but offers no mechanism, derivation, or premise that resolves it. The 'transfer' therefore does not escape the original dilemma; it relocates it from the level of theory-choice to the level of defining fitness, leaving the normative core unexplained. Redefining rationality as fitness without an independent fitness metric is a verbal dissolution, not a substantive resolution.",
+  "premise": "If 'fitness within a knowledge-generating system' is to be a genuine replacement for inductive or logical standards of rationality, it must supply a metric for fitness that does not itself presuppose inductive or logical norms.",
+  "premise_evidence": [
+    {
+      "block": "b5b90419f7454c59ffdc94aad9117f9e2e5f52c880c29eebe7c50fbeae0e7c5e",
+      "quote": "The dilemma is false; the preference is defensible not as induction nor as pure logic, but as an evolutionary epistemology where 'rationality' is redefined as fitness within a knowledge-generating system."
+    },
+    {
+      "block": "b5b90419f7454c59ffdc94aad9117f9e2e5f52c880c29eebe7c50fbeae0e7c5e",
+      "quote": "If the definition of 'fitness' in theories secretly relies on inductive probability."
+    }
+  ],
+  "counterexample": null,
+  "successor_question": "What independent, non-question-begging metric determines the 'fitness' of a theory within a knowledge-generating system, and how does that metric avoid reintroducing the inductive or logical norms the account claims to replace?"
+}
+```

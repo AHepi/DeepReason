@@ -1,0 +1,27 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"QuotedEvidenceRefV1": {"additionalProperties": false, "description": "A citation that cannot be made without reproducing the bytes.\n\nA SUBTYPE, not a stricter `EvidenceRefClaimV1`: the old contract's optional\nquote is load-bearing for the conjecturer channel that already ships, and\ntightening it globally would retroactively refuse citations that were legal\nwhen they were recorded. The calculus claim channel is new and can be born\nwith the stronger rule (R62), so the requirement lives in the type rather\nthan in a prompt asking nicely.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceRefV1", "type": "object"}}, "additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceRefV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+
+## target-provenance
+TARGET PROVENANCE (who produced this target, and under what stance):
+- author seat: conjecturer
+- school: school-1
+- origin: harness-minted (a conjecturer seat proposed it)
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET feb16caec9d21850adcc448ff37baee93a74ce6e0f6d5de1ef79dc64e282eb78
+{"analogy": null, "claim": "The preference is defensible as a 'critical choice' where the cost of error is minimized by choosing the theory with the highest empirical content, regardless of its truth probability.", "counterconditions": [{"case": "Evidence emerges that contradicts the central claim of this account.", "checker_spec": null, "eval": "observation"}, {"case": "If 'empirical content' is correlated with truth probability.", "checker_spec": null, "eval": "observation"}, {"case": "If the minimax strategy itself requires inductive validation.", "checker_spec": null, "eval": "observation"}], "definitions": [], "derivation": [], "formalization_refs": [], "mechanism": "In decision-theoretic terms, choosing the highly corroborated theory minimizes the risk of adopting a easily falsifiable (low content) theory that might fail immediately. It is a minimax strategy: the best-corroborated theory has proven it can withstand high-content attacks. This is a strategic choice based on the logical structure of the theories (content), not an inductive inference about their truth.", "premises": [], "schema": "deepreason-reasoning-envelope-v1", "scope": {"covers": [], "excludes": []}, "simulation_refs": [], "uncertainties": []}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+DIRECTIVE: mount the strongest NEW specific case against TARGET feb16caec9d21850adcc448ff37baee93a74ce6e0f6d5de1ef79dc64e282eb78, or attack=false if you find no genuine fault.

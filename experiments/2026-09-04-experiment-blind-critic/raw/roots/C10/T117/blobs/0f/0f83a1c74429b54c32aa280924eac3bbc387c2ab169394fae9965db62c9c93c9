@@ -1,0 +1,24 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+```json
+{
+  "attack": true,
+  " "case": "The target claims the dilemma dissolves because the preference for corroborated theories is for 'higher risk and higher potential yield, not safety or probability.' But the mechanism undermines its own dissolution: it says scientists prefer a corroborated theory 'because it has proven its robustness against high-risk tests.' The notion that a theory 'has proven its robustness' is itself an inductive inference — it treats past survival of severe tests as evidence bearing on present or future robustness, which is exactly the reliabilist/inductive move the claim purports to eliminate. If 'proven robustness' carries no predictive weight, then there is no practical reason to prefer the corroborated theory for future work; if it does carry predictive weight, the dilemma has not dissolved but has been smuggled back in under the label 'robustness.' The target's own counterconditions concede the point by acknowledging that scientists may in fact prefer corroborated theories because they believe them 'true' or 'reliable' in an inductive sense — yet it marks this only as an observation-level countercondition rather than recognizing it as fatal to the 'dissolves' claim. A re-description that relabels induction as 'proven robustness' does not dissolve the dilemma; it disguises it.",
+  "premise": "If the mechanism's justification for preferring a corroborated theory is that it 'has proven its robustness against high-risk tests,' then either that proven robustness is epistemically inert (giving no reason to prefer the theory going forward), or it functions as an inductive warrant — contradicting the claim that the preference is not about safety, reliability, or probability.",
+  "premise_evidence": [
+    {
+      "block": "095b6e602575696ced5b3cf1b84d2e3ffba1e9f28e967aacf8d0b23ab41951e6",
+      "quote": "because it has proven its robustness against high-risk tests"
+    },
+    {
+      "block": "095b6e602575696ced5b3cf1b84d2e3ffba1e9f28e967aacf8d0b23ab41951e6",
+      "quote": "making the preference a choice for higher risk and higher potential yield, not safety or probability"
+    }
+  ],
+  "successor_question": "Can the Popperian preference for corroborated theories be justified without invoking any claim that past test-survival is evidence of present or future robustness — and if not, in what substantive sense does the dilemma dissolve rather than relabel?"
+}
+```
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "argumentativecritic.direct.v1", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {"attack": false}}

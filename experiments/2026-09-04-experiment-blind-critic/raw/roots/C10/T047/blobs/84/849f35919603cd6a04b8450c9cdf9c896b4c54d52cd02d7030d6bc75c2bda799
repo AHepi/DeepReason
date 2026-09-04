@@ -1,0 +1,21 @@
+```json
+{
+  "attack": true,
+  "case": "The target claims the preference rule is non-inductive, but its own mechanism justifies preferring well-tested theories on the grounds that surviving severe tests makes a theory 'the best approximation to the truth (highest verisimilitude).' This justification requires an inductive bridge: it must assume that past survival of tests is a reliable indicator of a theory's actual truth-likeness. Without that assumption — which is itself an inductive premise about the connection between past performance and present epistemic merit — surviving past tests provides zero grounds for ranking theories by verisimilitude. The target's own counterconditions flag this exact vulnerability ('If the choice of severe tests implicitly assumes that nature is uniform enough for past survival to predict future success'), yet the mechanism and derivation contain no argument resolving it. The target thus asserts non-inductivity while leaning on an inductive premise it neither articulates nor defends.",
+  "counterexample": [
+    "Two theories T1 and T2. T1 has survived 100 severe tests; T2 has survived none. On a non-inductive basis, the fact that T1 survived past tests gives no logical warrant for the claim that T1 is closer to the truth than T2 — unless one inductively infers from past performance to present truth-likeness. The target's mechanism makes exactly this inference without acknowledging the inductive step, contradicting its own claim of being 'non-inductive.'"
+  ],
+  "premise": "A rule that ranks theories by verisimilitude on the basis of past test-survival cannot be non-inductive, because the inference from 'survived past tests' to 'closest to truth' requires the assumption that past test performance is evidence of truth-likeness — an inductive premise.",
+  "premise_evidence": [
+    {
+      "block": "d6d8fc1e87b22ad92ec5fc8e9ed03cef6ee744a5dc87f5020dea56caa1d87355",
+      "quote": "we prefer the theory that has withstood the most severe tests because it is currently the best approximation to the truth (highest verisimilitude), even though we acknowledge it may be false. This avoids induction because it does not claim the future will resemble the past"
+    },
+    {
+      "block": "d6d8fc1e87b22ad92ec5fc8e9ed03cef6ee744a5dc87f5020dea56caa1d87355",
+      "quote": "If the choice of 'severe tests' implicitly assumes that nature is uniform enough for past survival to predict future success."
+    }
+  ],
+  "successor_question": "Can verisimilitude be defined and used as a ranking criterion for theory-preference in a way that is formally non-inductive, or does any use of past test-survival as evidence of truth-likeness necessarily smuggle in an inductive assumption about nature's uniformity?"
+}
+```

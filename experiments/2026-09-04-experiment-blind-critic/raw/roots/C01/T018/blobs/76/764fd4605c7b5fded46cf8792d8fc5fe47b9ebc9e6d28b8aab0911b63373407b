@@ -1,0 +1,21 @@
+```json
+{
+  "attack": true,
+  "case": "The target is self-undermining via its own countercondition #2, which concedes the entire account collapses if 'the definition of fitness in theories secretly relies on inductive probability.' Yet the target provides zero premises, derivation, or definitional work to establish that its notion of fitness does NOT rely on inductive probability. The mechanism merely 'maps biological natural selection onto theory choice' and asserts preference is 'a systemic selection mechanism' rather than a logical judgment. But the biological analogy itself is inductive: in evolution, fitness is retrospective (organisms survived because of past adaptations), and projecting that fitness forward—expecting well-adapted organisms to continue thriving—requires assuming environmental stability, which is an inductive assumption. Symmetrically, a theory's 'fitness' IS its past survival through severe testing; preferring it for future use requires assuming that past corroboration predicts future reliability. The target's countercondition #2 thus names the exact flaw it never rebuts: the 'fitness' of a theory is constituted by its past testing performance, and any preference based on that fitness is inductive by construction. The target cannot both claim the dilemma is false and leave its own stated falsification condition entirely unaddressed.",
+  "counterexample": [
+    "Consider two theories A and B that have passed equally severe tests up to time t, but A has been tested in 100 distinct contexts and B in 10. Under 'evolutionary epistemology,' A has higher fitness and should be preferred. But 'higher fitness' just means A survived more past tests. Preferring A for future action assumes that surviving more past tests correlates with better future performance—exactly the inductive inference the target claims to avoid. If no such projection is made, there is no reason to prefer A over B for future use, and 'fitness' becomes a mere historical label with no prescriptive force."
+  ],
+  "premise": "The target's own countercondition #2 states the account fails if fitness secretly relies on inductive probability, but the target provides no argument, mechanism, or definition showing fitness avoids this reliance. The biological fitness analogy is inherently retrospective, and its prescriptive use for future theory choice is inductive by construction.",
+  "premise_evidence": [
+    {
+      "block": "b5b90419f7454c59ffdc94aad9117f9e2e5f52c880c29eebe7c50fbeae0e7c5e",
+      "quote": "If the definition of 'fitness' in theories secretly relies on inductive probability."
+    },
+    {
+      "block": "b5b90419f7454c59ffdc94aad9117f9e2e5f52c880c29eebe7c50fbeae0e7c5e",
+      "quote": "Maps biological natural selection onto theory choice. 'Preference' is not a logical judgment of truth but a systemic selection mechanism."
+    }
+  ],
+  "successor_question": "Can the target articulate a notion of theoretical 'fitness' that (a) is prescriptive for future theory choice, (b) is constituted by something other than past testing performance, and (c) does not assume past performance predicts future reliability—without reintroducing induction?"
+}
+```

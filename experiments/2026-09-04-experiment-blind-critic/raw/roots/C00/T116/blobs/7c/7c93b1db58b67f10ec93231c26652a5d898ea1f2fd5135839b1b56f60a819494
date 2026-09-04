@@ -1,0 +1,17 @@
+```json
+{
+  "attack": true,
+  "case": "The target claims to 'bypass induction by shifting the framework from justification to selection,' but this is self-undermining. The mechanism states we prefer the best-corroborated theory because 'it is the only one currently known to be adapted to the problem environment.' Yet 'currently known to be adapted' is a description of past performance (it survived tests up to now). If this description carries no implication about the future, then it cannot ground a preference (a normative, forward-looking directive about which theory to adopt going forward). If it DOES carry an implication about future performance — that a theory adapted to past tests will remain adapted — that is precisely induction, the very thing the target claims to bypass. The target's own countercondition flags this ('If biological fitness implies future survival via induction') but never resolves it; the mechanism simply asserts the bypass without discharging the obligation. The analogy thus either collapses into a vacuous report of present status (no preference follows) or smuggles in the induction it purports to avoid.",
+  "counterexample": [
+    "A theory that has perfectly survived all past tests (is 'currently known to be adapted') but is about to be refuted by the next test. Under the target's non-inductive framework, we have no basis to prefer this theory over any other for future use, since 'currently adapted' tells us nothing about tomorrow without an inductive bridge."
+  ],
+  "premise": "A normative 'preference' for one theory over another is forward-looking: it guides which theory to rely on in future applications. If the grounds for the preference (past survival / current adaptedness) are explicitly stripped of any inductive link to future performance, then the preference has no normative force for future action, contradicting the claim that it is a defensible preference.",
+  "premise_evidence": [
+    {
+      "block": "633287e1b06f5afc8a00c1e12b92fa0f55a9dbf8a0ab5c8c6c6fa3023b5f4036",
+      "quote": "We prefer the 'fittest' (best-corroborated) theory not because we induce it will survive tomorrow, but because it is the only one currently known to be adapted to the problem environment. This bypasses induction by shifting the framework from justification to selection."
+    }
+  ],
+  "successor_question": "Can the target articulate a notion of 'preference' that is (a) normatively forward-looking, (b) grounded solely in past/current survival without any inductive bridge to the future, and (c) non-vacuous — or does dropping induction necessarily collapse the preference into a mere description of present state?"
+}
+```

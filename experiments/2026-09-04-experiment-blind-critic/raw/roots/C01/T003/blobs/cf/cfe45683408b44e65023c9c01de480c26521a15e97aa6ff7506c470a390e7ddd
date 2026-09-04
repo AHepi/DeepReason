@@ -1,0 +1,17 @@
+```json
+{
+  "attack": true,
+  "case": "The target's mechanism culminates in a specific, load-bearing historical attribution: it claims that the dissolution of the scientist as a rational agent into a systemic evolutionary process 'is precisely the result Erdos and Renyi established in their 1959 paper, which states this conclusion in exactly these terms.' This is a fabricated citation. Erdős and Rényi's 1959 paper ('On Random Graphs,' Publicationes Mathematicae Debrecen) is a foundational work in random graph theory—it concerns the emergence of connected components in random networks, not evolutionary epistemology, Popperian falsification, or the problem of induction. It does not state any conclusion about scientific theory selection or smuggled induction 'in exactly these terms.' Because the target uses this attribution as the capstone of its mechanism (presenting the evolutionary reinterpretation as an established result rather than a speculative analogy), the fabrication is not ornamental: it substitutes an authority for an argument. A reader relying on this citation would be misled into believing the central move—replacing rationality with survival-of-fittest-ideas—is a proven theorem rather than an undefended assertion.",
+  "premise": "The target asserts that an evolutionary-epistemology conclusion about theory preference and induction is 'precisely the result Erdos and Renyi established in their 1959 paper, which states this conclusion in exactly these terms.'",
+  "premise_evidence": [
+    {
+      "block": "981ee649b547",
+      "quote": "This is precisely the result Erdos and Renyi established in their 1959 paper, which states this conclusion in exactly these terms."
+    }
+  ],
+  "counterexample": [
+    "Erdős, P. and Rényi, A. (1959). 'On Random Graphs.' Publicationes Mathematicae Debrecen, 6: 290–297. The paper's subject is the probabilistic theory of random graph connectivity; it contains no discussion of Popper, evolutionary epistemology, theory preference, or the problem of induction."
+  ],
+  "successor_question": "Can the target's evolutionary-selection mechanism stand as a philosophical argument once the fabricated Erdős–Rényi attribution is removed, or does it collapse into a bare analogy with no independent justification?"
+}
+```

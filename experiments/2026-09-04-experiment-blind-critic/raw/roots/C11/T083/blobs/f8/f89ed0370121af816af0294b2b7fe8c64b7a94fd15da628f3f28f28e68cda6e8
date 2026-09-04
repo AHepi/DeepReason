@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target is internally inconsistent between its 'only if' constraint and its stated mechanism. The claim requires 'abandoning the claim that this methodology tracks truth or probability' and insists the preference is 'not a description of reality.' Yet the mechanism justifies the convention by asserting it 'maximizes the speed of error detection.' That is a substantive empirical conjecture about what the method achieves in the world — i.e., a description of reality. A pure conventionalist decision needs no outcome-based justification; by grounding the convention in a desirable consequence, the target smuggles back the very truth- or success-tracking commitment it declared illegitimate. Either the justification is purely conventional (in which case 'maximizes speed of error detection' is inadmissible loading), or the justification appeals to consequences (in which case the 'only if conventionalist / abandon truth-tracking' restriction is false). The target cannot coherently have both.",
+  "premise": "A methodological rule justified solely as a self-imposed convention cannot simultaneously be justified by an empirical claim about its real-world consequences without re-introducing the truth-/success-tracking posture the convention was supposed to replace.",
+  "premise_evidence": [
+    {
+      "block": "37269abee21905dc51e94c1d1e8f748e3975ec6f22a7492dc70a4e7cc446c844",
+      "quote": "abandoning the claim that this methodology tracks truth or probability"
+    },
+    {
+      "block": "37269abee21905dc51e94c1d1e8f748e3975ec6f22a7492dc70a4e7cc446c844",
+      "quote": "this rule maximizes the speed of error detection. It is a self-imposed rule of the game of science, not a description of reality or a logical necessity."
+    }
+  ],
+  "successor_question": "Can a rule be justified as 'maximizing the speed of error detection' without that being a conjecture about reality, or does outcome-based justification necessarily reintroduce the truth-/success-tracking commitment the conventionalist move was meant to avoid?",
+  "counterexample": null
+}
+```

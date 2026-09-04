@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The mechanism explicitly frames the preference as a choice 'of which theory to adopt for action' and claims it 'avoids induction because it does not claim the future will resemble the past.' But preferring a theory for FUTURE action because it survived PAST severe tests requires the assumption that past test performance is informative about future reliability — that is an inductive inference. The target concedes that its own countercondition 'If acting on a theory logically entails believing it is more likely to be true, collapsing the distinction between preference and probability' would defeat the claim, yet the mechanism itself states we prefer a theory because 'it is currently the best approximation to the truth (highest verisimilitude).' Assessing current verisimilitude from past evidence and then choosing that theory for future action is precisely the collapse: it treats past survival as evidence of present truth-likeness, which is an inductive projection the Popperian framework cannot license without abandoning its anti-inductive stance.",
+  "premise": "Using a theory's past survival of severe tests as the basis for choosing it for future action requires an inductive assumption that past test performance is relevant to future reliability.",
+  "premise_evidence": [
+    {
+      "block": "d6d8fc1e87b22ad92ec5fc8e9ed03cef6ee744a5dc87f5020dea56caa1d87355",
+      "quote": "The mechanism is 'critical preference': we prefer the theory that has withstood the most severe tests because it is currently the best approximation to the truth (highest verisimilitude), even though we acknowledge it may be false. This avoids induction because it does not claim the future will resemble the past"
+    },
+    {
+      "block": "d6d8fc1e87b22ad92ec5fc8e9ed03cef6ee744a5dc87f5020dea56caa1d87355",
+      "quote": "the rational choice of which theory to adopt for action"
+    }
+  ],
+  "counterexample": null,
+  "successor_question": "Can Popper justify preferring a well-tested theory for FUTURE action without invoking any inductive link between past survival and future reliability, or does 'critical preference for action' smuggle in precisely the induction it disclaims?"
+}
+```

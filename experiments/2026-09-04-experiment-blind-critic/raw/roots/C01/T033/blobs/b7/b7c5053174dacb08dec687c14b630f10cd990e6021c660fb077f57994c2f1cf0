@@ -1,0 +1,21 @@
+```json
+{
+  "attack": true,
+  "case": "The target's mechanism culminates by attributing its central conclusion to Erdős and Rényi's 1959 paper, claiming it 'states this conclusion in exactly these terms.' This is a fabricated citation. Erdős and Rényi's 1959 paper 'On Random Graphs' (Publicationes Mathematicae Debrecen, Vol. 6) is a foundational work in probabilistic graph theory — it concerns the evolution of random graphs, the Poisson distribution of vertex degrees, and the threshold phenomenon for graph connectivity. It makes no reference to Popper, corroboration, verisimilitude, falsificationism, or any philosophy-of-science methodology. The target invokes this paper as load-bearing evidentiary support ('precisely the result … established') for a conclusion about methodological preference among scientific theories, which is a subject the paper does not and cannot address. This fabrication inflates the argument's apparent authority by anchoring its conclusion to a celebrated mathematical result that has zero connection to the topic. If the citation were genuine it would provide independent corroboration of the target's reconstruction; since it is false, the argument's mechanism rests on invented support and the reader is misled about the provenance of the reasoning.",
+  "counterexample": [
+    {
+      "paper": "Erdős, P. and Rényi, A. (1959). 'On Random Graphs I.' Publicationes Mathematicae Debrecen, 6: 290–297.",
+      "actual_subject": "The paper defines the Erdős–Rényi random graph model G(n, m) / G(n, p) and studies the probability of graph connectivity, the distribution of component sizes, and threshold functions. It contains no discussion of Popperian philosophy, theory choice, verisimilitude, or corroboration.",
+      "consequence": "The target's claim that this paper 'states this conclusion in exactly these terms' is false; the paper cannot state a conclusion about Popper's methodology that falls entirely outside its mathematical domain."
+    }
+  ],
+  "premise": "A target that cites a specific historical paper as having 'established' and 'stated in exactly these terms' the conclusion of its argument is making a factual claim about that paper's content. If the cited paper does not address the topic at all, the citation is fabricated and the argument's evidentiary basis is undermined.",
+  "premise_evidence": [
+    {
+      "block": "2d8f87d122f49736c0489a28eef4151e811790ee4a438e69e97a1ee122e00dda",
+      "quote": "This is precisely the result Erdos and Renyi established in their 1959 paper, which states this conclusion in exactly these terms."
+    }
+  ],
+  "successor_question": "If the fabricated Erdős–Rényi citation is removed from the mechanism, what independent evidence remains that the target's reconstruction of Popper's methodological rule is 'precisely' established by any external result, and does the argument survive on its own terms without this false anchor?"
+}
+```

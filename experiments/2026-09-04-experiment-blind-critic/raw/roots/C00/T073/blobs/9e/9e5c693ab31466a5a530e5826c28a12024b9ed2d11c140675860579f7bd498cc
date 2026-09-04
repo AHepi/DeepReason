@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target claims the preference for better-corroborated theories is 'defensible on Popper's terms' as a 'non-inductive methodological rule,' yet its own mechanism and transfer claims reveal a structurally inductive wager: 'we bet on the best-corroborated theory' just as 'we bet on the fittest organism surviving tomorrow.' A bet that past performance (corroboration, fitness) is a reliable guide to future performance (truth-likeness, survival) is precisely the form of reasoning Popper calls induction. The target lists countercondition #3 — 'If the metaphysical faith required is indistinguishable from the principle of uniformity of nature, the distinction from induction is merely verbal' — but never argues the faith IS distinguishable. It merely labels the bet a 'convention of the game of science,' which is a relabeling, not a justification. Without an argument that the 'critical rationalist faith' differs substantively from the uniformity principle, the claim that the preference is non-inductive is unsupported by the artifact's own content.",
+  "counterexample": null,
+  "premise": "A pragmatic bet that past corroboration is a reliable guide to future truth-likeness is structurally inductive, and merely relabeling it a 'methodological rule' or 'faith' does not render it non-inductive unless the faith is shown to differ from the principle of uniformity of nature.",
+  "premise_evidence": [
+    {
+      "block": "c20324c2a57c58",
+      "quote": "Just as we bet on the fittest organism surviving tomorrow without knowing the future environment, we bet on the best-corroborated theory."
+    },
+    {
+      "block": "c20324c2a57c58",
+      "quote": "If the 'metaphysical faith' required is indistinguishable from the principle of uniformity of nature, the distinction from induction is merely verbal."
+    }
+  ],
+  "successor_question": "What argument shows that the 'critical rationalist faith' in the value of past corroboration differs substantively from the principle of the uniformity of nature, rather than being a relabeling of it?"
+}
+```

@@ -1,0 +1,18 @@
+```json
+{
+  "attack": true,
+  "case": "The target's mechanism smuggles in an inductive inference by equating corroboration (a report on past performance) with verisimilitude (truth-likeness). The mechanism states the preference is 'not an inductive inference that it will hold in the future, but a critical decision to act on the theory that has withstood the severest tests, thereby possessing the highest degree of verisimilitude among competitors.' But verisimilitude is defined as proximity to the truth — a property of how the world actually is. If a scientist selects the theory with the highest verisimilitude, they are by definition selecting the theory closest to truth, which necessarily carries implications for future performance. The move from 'this theory survived severe tests' to 'this theory has the highest degree of verisimilitude' is precisely the inductive bridge the account claims to avoid: it uses past performance (corroboration) to infer a present dispositional property (verisimilitude) that bears on future outcomes. The target's own countercondition 2 identifies this vulnerability — 'If corroboration does not imply higher probability of future success, acting on it for practical ends appears irrational or secretly inductive' — yet the resolution offered does not eliminate the problem; it merely renames it. Invoking verisimilitude as the justificatory intermediary between past tests and present preference does not escape induction, because attributing greater truth-likeness on the basis of past test performance is structurally identical to inductive reasoning about future success.",
+  "premise": "If verisimilitude (truth-likeness) is a property describing how close a theory is to the truth, then preferring the theory with the highest verisimilitude constitutes a claim about which theory is more likely to accurately describe reality, and any inference from past corroboration to present verisimilitude is an inductive inference from past performance to a truth-tracking property.",
+  "premise_evidence": [
+    {
+      "block": "e61290990a86497908eb6183b4ec633658ec38f003c398bd17ab0c97acbd1769",
+      "quote": "The preference for the better-corroborated theory is not an inductive inference that it will hold in the future, but a critical decision to act on the theory that has withstood the severest tests, thereby possessing the highest degree of verisimilitude among competitors."
+    },
+    {
+      "block": "e61290990a86497908eb6183b4ec633658ec38f003c398bd17ab0c97acbd1769",
+      "quote": "If corroboration does not imply higher probability of future success, acting on it for practical ends (like bridge building) appears irrational or secretly inductive."
+    }
+  ],
+  "successor_question": "Can a non-inductive account of verisimilitude be given that establishes a logical (rather than empirical or probabilistic) connection between surviving severe tests and possessing greater truth-likeness, without any appeal to the past-performance-to-future-success pattern?"
+}
+```

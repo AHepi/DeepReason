@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target's defense against induction is self-defeating because it justifies preference not only via verisimilitude (already challenged) but via the forward-looking claim that the better-corroborated theory 'offers the best chance for learning through falsification' and that the methodological rule is chosen 'to maximize potential knowledge growth.' These are projections from a theory's past test-performance to its future epistemic productivity. Claiming that a theory which has withstood severe tests so far will provide the best future learning opportunities requires assuming that past severity is relevant to future learning conditions—an inductive assumption about continuity. The target cannot simultaneously reject inductive inference as illegitimate for truth/survival projections while invoking it for learning/growth projections. The 'methodological rule vs. inductive principle' distinction thus collapses for the pragmatic branch of the target's own argument, satisfying countercondition 3 from a novel angle: the learning-justification is functionally an inductive principle dressed as a rule.",
+  "premise": "The target explicitly justifies preferring better-corroborated theories by claiming they offer the best future chance for learning and knowledge growth, which is a forward-looking projection from past performance that requires inductive assumptions about the continuity of testing conditions.",
+  "premise_evidence": [
+    {
+      "block": "1252bd6fa24e5e25116ce4579b7cfc5218a41f71421dbcdeef07817141cb1d26",
+      "quote": "offers the best chance for learning through falsification, even if we cannot assign it a higher probability of being true or surviving future tests"
+    },
+    {
+      "block": "1252bd6fa24e5e25116ce4579b7cfc5218a41f71421dbcdeef07817141cb1d26",
+      "quote": "The preference is a rational choice within the game of science to maximize potential knowledge growth, acknowledging that the chosen theory may still be false tomorrow."
+    }
+  ],
+  "counterexample": null,
+  "successor_question": "If 'best chance for learning through falsification' is itself an inductive projection from past test-severity to future epistemic productivity, can Popper's methodological preference survive if stripped of ALL forward-looking justifications—both truth-probability AND learning-utility—leaving only a purely retrospective description with no normative force?"
+}
+```

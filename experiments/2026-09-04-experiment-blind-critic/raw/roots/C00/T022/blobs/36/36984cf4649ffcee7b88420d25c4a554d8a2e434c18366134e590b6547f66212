@@ -1,0 +1,15 @@
+```json
+{
+  "attack": true,
+  "case": "The target's own countercondition concedes that the performative contradiction dissolves if Popper treats his anti-induction stance as a conjecture open to refutation. But Popper's critical rationalism does exactly this: all claims, including methodological and meta-level claims, are conjectures held tentatively and open to criticism/refutation. Popper never claims to have *verified* that induction is invalid; he conjectures that there is no logical justification for induction (accepting Hume's deductive argument that finite observations cannot entail a universal law). Thus the 'universal claim requiring inductive corroboration' is a strawman of Popper's actual position, and by the target's own countercondition the circle is broken—meaning the core claim of performative contradiction does not hold against the position it purports to criticize.",
+  "counterexample": ["Popper, 'The Logic of Scientific Discovery' and 'Conjectures and Refutations': Popper's anti-induction thesis is presented as a conjecture, not a verified universal truth; he explicitly holds that there is no positive justification or verification of any theory, including his own methodological proposals. His argument against induction is deductive (Hume's logical gap between singular and universal statements), not an inductive generalization from past failures of induction."],
+  "premise": "Popper treats his own anti-induction stance as a conjecture open to refutation, which is the very condition the target's countercondition says would break the circle.",
+  "premise_evidence": [
+    {
+      "block": "99603e5273408e509d482faacc60635759ac4c3912c55e1edef18042bf1c24b1",
+      "quote": "If Popper treats his own anti-induction stance as a conjecture open to refutation, the circle might be broken."
+    }
+  ],
+  "successor_question": "If Popper's entire epistemology frames all claims—including the rejection of induction—as conjectures open to refutation, does the target's central claim of 'performative contradiction' collapse by its own countercondition?"
+}
+```

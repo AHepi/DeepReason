@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target's own framing as a 'wager on the theory with the highest surviving verisimilitude' smuggles in the very induction it disclaims. A wager is an expected-value commitment; it is rational only if the agent believes the wagered-on property (surviving verisimilitude) is correlated with the desired outcome (truth or practical reliability). The mechanism concedes this when it says 'we prefer the theory that has proven itself most robust against error' — the word 'proven' treats past robustness as evidence bearing on verisimilitude. But the inference 'this theory survived severe tests, therefore it has higher verisimilitude' is precisely an inductive step: it moves from past performance to a present judgment about the theory's truth-likeness. The target tries to neutralize this by casting the theory as merely 'the best available target for future criticism and the most informative if false,' but being 'most informative if false' is near-symmetric across competing false theories and does not single out the better-corroborated one; the actual selection criterion reduces to 'survived more tests,' which only warrants preference if survival is taken as positively correlated with verisimilitude. Thus the 'non-inductive selection rule' is not non-inductive; it relocates the induction from 'probability of truth' to 'degree of verisimilitude inferred from corroboration,' and the claim that the agent forfeits 'any claim to probable truth' does not remove the inductive commitment, since wagering on verisimilitude presupposes the same kind of past-to-future projection.",
+  "premise": "A decision procedure that selects among theories by preferring the one with the highest surviving verisimilitude is inductive if and only if it treats past survival of severe tests as evidence that the theory now has greater verisimilitude, since that moves from observed performance to an unobserved property of the theory.",
+  "premise_evidence": [
+    {
+      "block": "2650be204412ca66016f0b7babe92cd06b819f24694f454d8345f6a015551187",
+      "quote": "we prefer the theory that has proven itself most robust against error, not because it is likely true, but because it is the best available target for future criticism and the most informative if false."
+    },
+    {
+      "block": "2650be204412ca66016f0b7babe92cd06b819f24694f454d8345f6a015551187",
+      "quote": "accepting instead that the choice is a wager on the theory with the highest surviving verisimilitude."
+    }
+  ],
+  "counterexample": null,
+  "successor_question": "Can a 'wager on verisimilitude' be rational without assuming that corroboration (past survival of tests) is positively correlated with verisimilitude — and if not, how does that correlation differ from the inductive inference the rule claims to avoid?"
+}
+```

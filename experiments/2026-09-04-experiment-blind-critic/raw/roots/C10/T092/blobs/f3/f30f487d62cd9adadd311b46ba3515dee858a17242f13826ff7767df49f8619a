@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The claim labels Popper's preference 'non-inductive' and insists it does not bet on the future resembling the past. But the claim's own stated rationale for the preference is forward-looking: selecting the theory with the highest verisimilitude and informational content 'thereby maximizing the severity of potential future falsification,' and the mechanism explicitly justifies the preference by saying 'If it survives, we learn more; if it falls, we eliminate a stronger candidate.' This rationale presupposes that severe testing has epistemic value going forward — which only holds if nature exhibits enough regularity for falsification outcomes to carry information across time. If nature were wholly irregular, the severity of a future falsification would have no discriminative value. The methodological rule is therefore normatively inductive in structure even if it disclaims inductive belief in any particular theory. The claim thus contradicts itself: it cannot simultaneously be 'non-inductive' and grounded in maximizing the epistemic yield of future testing, since the latter embeds a commitment to nature's continuity. This is distinct from countercondition 2, which targets 'acting on a theory' as pragmatic induction; the fault here is in the rule's own epistemic justification, not its downstream use.",
+  "counterexample": null,
+  "premise": "A methodological rule justified by the forward-looking goal of maximizing the severity of potential future falsification presupposes natural regularity, because without regularity the severity of a falsification carries no epistemic information across time. A rule that presupposes regularity is inductive in structure, even if it disclaims inductive belief about any particular theory.",
+  "premise_evidence": [
+    {
+      "block": "6e0426843702f542b9ef40acd7ee848c8c43b7a09912fb9884964a0d2a2d259f",
+      "quote": "as a non-inductive methodological rule to select the theory with the highest 'verisimilitude' (truth-likeness) and informational content, thereby maximizing the severity of potential future falsification"
+    },
+    {
+      "block": "6e0426843702f542b9ef40acd7ee848c8c43b7a09912fb9884964a0d2a2d259f",
+      "quote": "choosing the most informative target for the next attempt at refutation. If it survives, we learn more; if it falls, we eliminate a stronger candidate."
+    }
+  ],
+  "successor_question": "Can a methodological rule be genuinely 'non-inductive' if its sole justification is the epistemic value of future falsification attempts, given that such value presupposes natural regularity?"
+}
+```

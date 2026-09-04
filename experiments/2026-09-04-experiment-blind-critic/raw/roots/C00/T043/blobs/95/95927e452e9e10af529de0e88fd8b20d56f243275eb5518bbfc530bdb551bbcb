@@ -1,0 +1,26 @@
+{
+  "attack": true,
+  "premise": "A defense of preferring better-corroborated theories cannot be established by substituting a different criterion (maximizing truth-content/information) unless the artifact supplies a bridge showing corroboration tracks that criterion.",
+  "premise_evidence": [
+    {
+      "block": "e9e2c6c7e516dfbd08a693aaa6f60d24a4c2766f9f05faff1ef0822c907d580f",
+      "quote": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, methodological rule for maximizing 'verisimilitude' (truth-likeness) and informational content"
+    },
+    {
+      "block": "e9e2c6c7e516dfbd08a693aaa6f60d24a4c2766f9f05faff1ef0822c907d580f",
+      "quote": "It posits that preferring high corroboration is not an inductive inference that the theory will hold tomorrow, but a rational choice to select the theory with the highest potential truth-content (verisimilitude) for further testing."
+    }
+  ],
+  "case": "The target claims to defend preference for *better-corroborated* theories, but its mechanism justifies preference for *highest-potential-truth-content* theories. It explicitly separates corroboration ('reports past test performance') from content (probability decreases with content), yet it never shows that the better-corroborated theory is the higher-content or more informative error-detector. These can diverge: a low-content theory may accumulate strong past performance, while a bolder, less-tested theory has greater informational content and is a stronger candidate for refutation. Without a rule connecting corroboration to truth-content, the offered non-inductive defense supports a different methodological preference and leaves the original Popperian claim unsupported.",
+  "counterexample": [
+    {
+      "theory": "L",
+      "description": "low-content survivor of many easy tests: highly corroborated but weak as an error-detector"
+    },
+    {
+      "theory": "H",
+      "description": "high-content bold theory with fewer tests survived: less corroborated but greater potential truth-content and more worthy of attempted refutation"
+    }
+  ],
+  "successor_question": "What Popperian criterion independently ties degree of corroboration to truth-content so that the better-corroborated theory is defeasibly the higher-content, more informative error-detector?"
+}

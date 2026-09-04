@@ -1,0 +1,10 @@
+```json
+{
+  "attack": true,
+  "case": "The target's mechanism undercuts its own non-inductive claim. It describes the preference as 'a bet on the currently fittest survivor, acknowledging the risk of future refutation.' A bet is an action predicated on expected payoff: to bet on the fittest survivor rather than a random theory, one must expect that past corroboration is relevant to future performance. That expectation is precisely an inductive inference from past survival to future robustness. The target's own countercondition concedes this: 'If the preference implies any increase in subjective probability or rational expectation of future success, it collapses into induction.' The betting framing satisfies that antecedent. If no such expectation is licensed, then the 'bet' language is empty — there is no reason to prefer the corroborated theory over any other, and the pragmatic defense collapses into an arbitrary coin flip rather than a defensible rule. Either the mechanism smuggles in induction, or it fails to justify preference at all.",
+  "counterexample": ["A gambler who bets on a horse because it has won the most races so far, while insisting this involves no expectation that past wins predict future performance — such a bet is either covertly inductive or irrational."],
+  "premise": "Any action describable as a 'bet on' a survivor presupposes some expectation that the survivor's past track record is relevant to its future performance; absent that expectation, the action is not a bet but an arbitrary choice.",
+  "premise_evidence": [{"block": "6b403926ebe9a3929dc93dcc46ef85c1f6e5e02d75db8d0087b262316dac20d6", "quote": "The 'preference' is a bet on the currently fittest survivor, acknowledging the risk of future refutation."}],
+  "successor_question": "Can a 'bet' on a theory be rationally distinguished from an arbitrary choice without invoking any expectation that past corroboration tracks future performance?"
+}
+```

@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target's mechanism conflates two distinct selection criteria and presents them as equivalent: (1) choosing 'the theory with highest empirical content that has not yet been falsified'—an intrinsic, a priori property of the theory (what it logically excludes), independent of testing history—and (2) preferring theories based on 'the severity of tests passed, which indicates high informational content'—an historical property derived from past outcomes. If criterion (1) is genuinely operative, then severity of tests passed is irrelevant to selection: two unfalsified theories with equal empirical content should be equally preferred regardless of how severely each was tested. If criterion (2) is operative, then using past test outcomes as a positive selection factor (beyond mere falsification-elimination) is functionally inductive: it treats the historical record of survived tests as evidence about the theory's present epistemic value. The load-bearing phrase 'severity of tests passed, which indicates high informational content' is the exact point of collapse: informational content is not 'indicated' by test outcomes in Popper's framework—it is determined by the theory's logical content prior to any testing. By treating an historical property as evidence of an intrinsic property, the mechanism performs precisely the inductive inference the claim purports to avoid. The claim cannot have it both ways: either severity of past tests matters for selection (smuggling in induction) or it does not (making 'better-corroborated' a meaningless preference criterion among surviving theories).",
+  "counterexample": null,
+  "premise": "In Popper's framework, a theory's empirical content (what it forbids/excludes) is an intrinsic logical property determined prior to and independently of any testing, while 'severity of tests passed' is a historical property acquired through testing. Using the latter as a positive selection criterion that 'indicates' the former constitutes an inductive inference from past outcomes to present epistemic value—the very move the target claims to avoid.",
+  "premise_evidence": [
+    {
+      "block": "5c99022a249cda440f49269f0b65d4c27b272947aa964bd9df8deb723d45b724",
+      "quote": "The preference is not based on the probability of truth (which Popper rejects) but on the severity of tests passed, which indicates high informational content."
+    },
+    {
+      "block": "5c99022a249cda440f49269f0b65d4c27b272947aa964bd9df8deb723d45b724",
+      "quote": "choosing the theory with highest empirical content that has not yet been falsified, to maximize learning potential"
+    }
+  ],
+  "successor_question": "Can the target specify a selection procedure where 'severity of tests passed' changes the preference ranking between two unfalsified theories with identical empirical content, without that change constituting an inductive inference from past performance?"
+}
+```

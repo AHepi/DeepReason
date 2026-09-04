@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target claims Popper's preference is 'pragmatic (about problem-solving efficiency)' and 'not epistemic (about truth),' asserting we prefer better-corroborated theories 'regardless of its truth probability.' This misrepresents Popper's actual position by conflating two distinct epistemic concepts: *probability of truth* and *verisimilitude* (truth-likeness). Popper explicitly rejected probable truth as a goal of science, but he did NOT reject truth as a regulative ideal. His notion of verisimilitude — introduced precisely to capture that a false theory can be 'closer to the truth' than another — is an epistemic concept, not a merely pragmatic one. Popper stated that we prefer better-corroborated theories because we have *reasons to conjecture* they possess greater verisimilitude, not merely because they are better 'tools.' By collapsing verisimilitude into 'truth probability' and then dismissing both, the target creates a false pragmatic/epistemic dichotomy that Popper himself would reject. This undermines the claim that the dilemma is 'false': the target's resolution only works by misattributing to Popper a position he did not hold (purely pragmatic preference divorced from any truth-directed aim), thereby attacking a strawman rather than resolving the actual dilemma Popper posed.",
+  "counterexample": [
+    {
+      "description": "Popper's verisimilitude concept: A theory T1 with higher content and corroboration is preferred not merely for 'problem-solving efficiency' but because it is conjectured to be closer to the truth (higher verisimilitude) than a rival T2, even if neither is probably true. This is an epistemic justification — oriented toward truth as a regulative ideal — not a purely pragmatic one. The target's claim that preference is 'regardless of its truth probability' ignores that Popper distinguished truth-probability (which he rejected) from truth-likeness (which he endorsed as science's aim)."
+    }
+  ],
+  "premise": "Popper's concept of verisimilitude is an epistemic notion oriented toward truth as a regulative ideal, distinct from both 'truth probability' (which Popper rejected) and 'pragmatic problem-solving efficiency' (which the target substitutes). By ignoring verisimilitude, the target mischaracterizes Popper's position as purely pragmatic and thus resolves a strawman dilemma rather than the actual one.",
+  "premise_evidence": [
+    {
+      "block": "814be2980922c095f665559c5fa5bbe9668a839bb7a82c1c93addf6b2abff7e1",
+      "quote": "The dilemma is false because Popper's 'preference' is not epistemic (about truth) but pragmatic (about problem-solving efficiency); we prefer the better-corroborated theory because it has higher content and has survived more attempts to refute it, making it a richer tool for generating new problems, regardless of its truth probability."
+    }
+  ],
+  "successor_question": "Does Popper's concept of verisimilitude constitute an epistemic (truth-directed) justification for preferring better-corroborated theories, and if so, does the target's framing of preference as purely pragmatic and 'regardless of truth probability' fail to engage with this concept, thereby misrepresenting Popper's actual position?"
+}
+```

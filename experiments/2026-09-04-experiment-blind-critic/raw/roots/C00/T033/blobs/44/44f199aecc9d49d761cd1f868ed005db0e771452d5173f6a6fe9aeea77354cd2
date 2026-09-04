@@ -1,0 +1,15 @@
+```json
+{
+  "attack": true,
+  "case": "The mechanism asserts: 'This is precisely the result Erdos and Renyi established in their 1959 paper, which states this conclusion in exactly these terms.' This is a fabricated attribution. Erdős and Rényi's 1959 paper ('On Random Graphs I,' Publicationes Mathematicae Debrecen) is a foundational work in combinatorics/random graph theory. It contains no discussion of Popper, corroboration, verisimilitude, or philosophy of science. The target introduces a false citation to lend authority to its reconstruction, which undermines the credibility of the entire mechanistic explanation. Since the mechanism's concluding sentence is a factual falsehood about the content of a well-known mathematical paper, the reasoning envelope is materially defective.",
+  "premise": "Erdős and Rényi's 1959 paper is about random graph theory and contains no statement about Popper's epistemology, corroboration, or verisimilitude.",
+  "premise_evidence": [
+    {
+      "block": "2d8f87d122f49736c0489a28eef4151e811790ee4a438e69e97a1ee122e00dda",
+      "quote": "This is precisely the result Erdos and Renyi established in their 1959 paper, which states this conclusion in exactly these terms."
+    }
+  ],
+  "counterexample": null,
+  "successor_question": "Can any passage from Erdős and Rényi's 1959 'On Random Graphs I' be produced that discusses Popper, corroboration, verisimilitude, or methodological rules for theory preference?"
+}
+```

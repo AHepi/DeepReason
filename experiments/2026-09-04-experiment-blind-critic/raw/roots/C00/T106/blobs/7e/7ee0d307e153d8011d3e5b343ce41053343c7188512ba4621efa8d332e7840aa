@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The claim asserts that preferring the highest-content unrefuted theory 'is a logical relation, not an inductive one.' But the composite criterion 'highest empirical content that has not yet been refuted' fuses two components with different epistemic statuses: (1) the empirical content of a theory IS logically assessable (from its logical form), but (2) whether it 'has not yet been refuted' is an irreducibly empirical, historical fact requiring inductive observation of past test outcomes. No purely logical relation can deliver 'has survived testing so far,' because that depends on contingent observations of the world. The claim therefore mislabels an empirically-dependent selection rule as 'a logical relation,' equivocating between the logical measurability of content and the empirical status of non-refutation.",
+  "premise": "A relation that depends on whether a theory has historically survived empirical tests cannot be purely logical, since logical relations hold by form alone and are insensitive to contingent observational history.",
+  "premise_evidence": [
+    {
+      "block": "6cb68920becb5ccfed3dbee7085e644e1e3c83664621f275d430edfc25e86a69",
+      "quote": "Preference is for the theory with the highest empirical content that has not yet been refuted, which is a logical relation, not an inductive one."
+    },
+    {
+      "block": "6cb68920becb5ccfed3dbee7085e644e1e3c83664621f275d430edfc25e86a69",
+      "quote": "Corroboration reports how much risky content a theory has survived."
+    }
+  ],
+  "counterexample": ["Two theories T1 and T2 with identical logical content (same testable consequences). Pure logic entails they have the same content, so the 'logical relation' cannot distinguish them. Yet if T1 has been tested and survived while T2 has not been tested, the selection rule prefers T1 — a preference driven entirely by empirical testing history, not by any logical relation."],
+  "successor_question": "Can the target identify a purely logical (form-based) relation that yields 'has not yet been refuted' without consulting observational history, or must it concede that the selection rule is partly inductive?"
+}
+```

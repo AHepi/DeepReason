@@ -1,0 +1,15 @@
+```json
+{
+  "attack": true,
+  "case": "The target's mechanism is internally contradictory. It defines verisimilitude as 'content of truth minus content of falsity' — a fixed logical property of a theory that is independent of testing history. A theory's truth-content does not change because it survived a test. Yet the mechanism asserts that 'surviving severe tests increases our rational expectation of verisimilitude.' For test-survival to raise rational expectation of a fixed, unobservable logical property, one must make an ampliative inference from past observations (tests passed) to the theory's intrinsic truth-likeness. That is induction by any standard definition. The qualifier 'without invoking inductive inference about future success' is a misdirection: the problem is not inference about the future but inference from observed data to a present, fixed, unobservable property. The claim declares the move non-inductive but provides no non-inductive bridge connecting corroboration history to verisimilitude expectation, so its own countercondition ('If rational expectation implicitly relies on the uniformity of nature (induction), the distinction fails') is triggered rather than discharged.",
+  "premise": "If verisimilitude is a fixed logical property of a theory (content of truth minus content of falsity), then increasing one's rational expectation that a theory possesses greater verisimilitude based on its history of surviving tests requires an ampliative inference from observed evidence to an unobservable property — i.e., induction.",
+  "premise_evidence": [
+    {
+      "block": "9b36b0954abeefe443e6ed3d049ec207c0b0f827afa35e5b1e9041fb5c427c33",
+      "quote": "verisimilitude (content of truth minus content of falsity). Surviving severe tests increases our rational expectation of verisimilitude without invoking inductive inference about future success."
+    }
+  ],
+  "successor_question": "Can a non-inductive argument be given for why surviving severe tests should raise our expectation that a theory has a fixed logical property (verisimilitude), or must such a preference rely on at least a minimal inductive principle?",
+  "counterexample": null
+}
+```

@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The mechanism undermines the claim's own defense by using corroboration as 'a non-probabilistic indicator of a theory's resilience.' 'Resilience' is inherently forward-looking — it denotes a theory's capacity to withstand future criticism. Using past corroboration as an indicator of future resilience is precisely using past success to form an expectation about future performance. The target's own first countercondition states that if the preference 'implies an expectation that the theory will continue to succeed based solely on past success, it smuggles in induction.' The mechanism's 'indicator of resilience' language satisfies that countercondition, collapsing the very distinction the claim tries to maintain. Additionally, the mechanism's final sentence — 'It follows that the underlying structure was never relevant to the outcome at all' — is a non sequitur: nothing in the preceding argument entails this, and it contradicts the mechanism's own emphasis on a theory's logical content being tested under severe tests.",
+  "counterexample": null,
+  "premise": "An indicator of resilience is a forward-looking claim about a theory's capacity to withstand future criticism, so using past corroboration as such an indicator constitutes using past success to form an expectation about future performance — the inductive move the claim explicitly rejects.",
+  "premise_evidence": [
+    {
+      "block": "f3cdfce812cbd2d12a408344a3300412bb23fb12e38a579d5ac4232ee462f349",
+      "quote": "which serves as a non-probabilistic indicator of a theory's resilience"
+    },
+    {
+      "block": "f3cdfce812cbd2d12a408344a3300412bb23fb12e38a579d5ac4232ee462f349",
+      "quote": "If the preference implies an expectation that the theory will continue to succeed based solely on past success, it smuggles in induction."
+    }
+  ],
+  "successor_question": "Can the target define 'indicator of resilience' in a way that is not forward-looking, or must any notion of resilience as a guide to action necessarily invoke an inductive expectation?"
+}
+```

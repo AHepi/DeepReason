@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target's mechanism creates an internal contradiction by simultaneously (a) justifying the preference as rational *because* it 'maximizes the opportunity for future falsification' — a consequentialist claim that requires projecting that past testability will yield future testability — and (b) claiming to 'avoid induction by refusing to project past success into future probability.' If the rule's rationality depends on its expected future consequences (maximizing falsification opportunities, accelerating error elimination), that expectation is inductive: it assumes the structural properties that enabled severe testing in the past will continue to do so. The target cannot have it both ways. If the 'maximizing future falsification' justification is dropped to preserve anti-induction, the preference loses its rational grounding and becomes an arbitrary convention — contradicting the claim that the defense is 'defensible.' If the justification is kept, the argument smuggles in precisely the inductive inference Popper rejects, falsifying the target's claim to have avoided induction.",
+  "premise": "A methodological rule is rational 'because' it maximizes future outcomes only if one projects that the rule's past-conducive structural features will remain conducive in the future; such projection is inductive. The target's mechanism asserts both that the preference is rational because it maximizes future falsification and that it avoids induction by refusing to project past success into future probability.",
+  "premise_evidence": [
+    {
+      "block": "0f5bfba3f8c52d3c",
+      "quote": "It posits that this preference is rational because it maximizes the opportunity for future falsification (severe testing), thereby accelerating error elimination."
+    },
+    {
+      "block": "0f5bfba3f8c52d3c",
+      "quote": "This avoids induction by refusing to project past success into future probability, treating the preference as a bet on higher testability rather than higher truth-content."
+    }
+  ],
+  "counterexample": null,
+  "successor_question": "Can a methodological rule be called rational *because* of its expected future consequences without invoking inductive projection, or does consequentialist justification of conventions necessarily require some form of induction about future utility?"
+}
+```

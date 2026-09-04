@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target's mechanism asserts that the preference 'smuggles nothing in because it makes no logical claim about the future.' This conflates two distinct categories: a logical claim about what the future will be like (which the target rightly disclaims) and a logical claim about what one should prefer for future action (which the target cannot disclaim). Preferring theory A over theory B for future use is itself a normative-logical proposition: it asserts that corroboration status is a reason relevant to action-worthiness. The target admits corroboration is 'a report of past performance' and that the preference responds to it, yet labels the preference 'non-rational.' A preference that systematically tracks corroboration reports is making a logical claim — that past performance bears on future preference — even if it makes no claim about future outcomes. The target's own countercondition concedes failure if the psychological commitment 'cannot be distinguished from implicit probabilistic belief,' but its mechanism provides no distinguishing criterion: it merely relabels a corroboration-responsive preference as 'non-rational' and 'voluntary,' which does not establish that the preference operates by different logic than implicit probabilistic belief. Relabeling is not distinguishing.",
+  "counterexample": null,
+  "premise": "Preferring one theory over another for future action is a normative-logical claim about what is preferable going forward, not merely a psychological event; if the preference systematically tracks corroboration reports, it entails the logical proposition that past test performance is relevant to future action-worthiness.",
+  "premise_evidence": [
+    {
+      "block": "91929fd7ebe6c9",
+      "quote": "It smuggles nothing in because it makes no logical claim about the future; it is a voluntary leap of faith consistent with fallibilism."
+    },
+    {
+      "block": "91929fd7ebe6c9",
+      "quote": "The dilemma dissolves if we view corroboration as a report of past performance only, and 'preference' as a non-rational, psychological commitment required for action"
+    }
+  ],
+  "successor_question": "What criterion distinguishes a preference that systematically tracks corroboration reports from implicit probabilistic belief, given that both connect past test performance to future action-worthiness?"
+}
+```

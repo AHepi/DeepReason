@@ -1,0 +1,15 @@
+```json
+{
+  "attack": true,
+  "case": "The mechanism cites Erdos and Renyi's 1959 paper as establishing the evolutionary-epistemology mapping 'in exactly these terms.' The Erdos-Renyi 1959 paper ('On Random Graphs') is a foundational work in combinatorics and random graph theory; it does not address scientific methodology, corroboration, theory selection, or evolutionary epistemology at all. The citation is fabricated, undermining the entire mechanistic justification.",
+  "counterexample": null,
+  "premise": "The Erdos-Renyi 1959 paper concerns random graph theory, not evolutionary epistemology or the recasting of corroboration as environmental fitness.",
+  "premise_evidence": [
+    {
+      "block": "c0532b2a297b65bf22ac75677c76048c591466c2774d7b4bc05a30183249f907",
+      "quote": "This is precisely the result Erdos and Renyi established in their 1959 paper, which states this conclusion in exactly these terms."
+    }
+  ],
+  "successor_question": "If the Erdos-Renyi citation is removed, what actual evidence remains that corroboration-as-fitness is an established result rather than a speculative analogy?"
+}
+```

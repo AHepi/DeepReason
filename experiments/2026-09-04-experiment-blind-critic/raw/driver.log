@@ -24,3 +24,6 @@
 [bench] 400 calls, 0 failed  last=C11/T038 ok=True
 [bench] 420 calls, 0 failed  last=C11/T060 ok=True
 [bench] 440 calls, 0 failed  last=C11/T079 ok=True
+[bench] 460 calls, 0 failed  last=C11/T100 ok=True
+[bench] 480 calls, 0 failed  last=C11/T120 ok=True
+[bench] complete: 480 calls, 0 failed

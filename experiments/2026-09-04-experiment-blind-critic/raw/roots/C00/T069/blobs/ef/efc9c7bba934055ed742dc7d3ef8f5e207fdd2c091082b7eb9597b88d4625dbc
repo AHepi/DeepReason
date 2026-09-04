@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "premise": "The claim's concluding phrase 'best-uncorroborated-falsity' directly contradicts the mechanism, which describes preference for theories that have withstood tests (corroborated, non-falsified theories). 'Uncorroborated' means lacking evidential support from tests, and 'falsity' means demonstrated false — the exact opposite of what both the mechanism and Popper's methodology prescribe.",
+  "premise_evidence": [
+    {
+      "block": "328f45f7d844b8930a3b2f68d0600a734ca6544fa339840aa867c620e81e9d22",
+      "quote": "it requires embracing a fallibilist stance where action is guided by the best-uncorroborated-falsity rather than probable truth"
+    },
+    {
+      "block": "328f45f7d844b8930a3b2f68d0600a734ca6544fa339840aa867c620e81e9d22",
+      "quote": "Scientists prefer Theory A over Theory B not because A is more likely to be true, but because B has been falsified or A has withstood tests that B has not, making A the 'better candidate for truth' (higher verisimilitude) despite both remaining logically improbable."
+    }
+  ],
+  "case": "The claim's load-bearing conclusion is internally incoherent with its own mechanism. The mechanism describes preference for theories that have 'withstood tests' — i.e., corroborated, non-falsified theories — which is consistent with Popper's methodology of elimination-based selection. But the claim's final clause asserts that action is guided by 'the best-uncorroborated-falsity,' which inverts every key term: 'uncorroborated' negates the corroboration that the mechanism makes load-bearing, and 'falsity' denotes a theory that has been falsified — the very outcome Popper's method says should trigger rejection, not preference. A reader cannot reconstruct what the claim actually asserts, because its two central components point in opposite directions. If the intended phrase was 'best-corroborated non-falsified theory,' the claim should say so; as written, the conclusion undermines rather than summarizes the mechanism, making the overall argument defective in substance.",
+  "counterexample": null,
+  "successor_question": "What phrase did the claim intend in place of 'best-uncorroborated-falsity,' and does the corrected phrasing still support the claim's stated cost (loss of rational certainty) without collapsing the distinction between 'acting on' and 'believing probable' that the target needs to preserve?"
+}
+```

@@ -1,0 +1,14 @@
+```json
+{
+  "attack": true,
+  "case": "The target's mechanism fabricates a citation. It asserts: 'This is precisely the result Erdos and Renyi established in their 1959 paper, which states this conclusion in exactly these terms.' The 1959 Erdős–Rényi paper ('On Random Graphs,' Publicationes Mathematicae Debrecen 6) is a foundational work in random graph theory — it has nothing to do with Popper's propensity interpretation of probability, corroboration, or theory choice. No such result connecting propensity to corroboration appears in that paper, let alone 'in exactly these terms.' This is a hallucinated authority citation: the target invokes a real and famous paper to lend credibility to a philosophical claim the paper does not contain, making the derivation unsound and the claim undefended.",
+  "premise": "The 1959 Erdős–Rényi paper is about random graph theory and contains no statement about Popper's propensity interpretation of probability, corroboration, or theory survival.",
+  "premise_evidence": [
+    {
+      "block": "7680de491c7a1536",
+      "quote": "This is precisely the result Erdos and Renyi established in their 1959 paper, which states this conclusion in exactly these terms."
+    }
+  ],
+  "successor_question": "If the Erdős–Rényi 1959 citation is removed as spurious, what actual source (if any) supports the claim that corroboration measures a theory's objective propensity to survive falsification attempts?"
+}
+```

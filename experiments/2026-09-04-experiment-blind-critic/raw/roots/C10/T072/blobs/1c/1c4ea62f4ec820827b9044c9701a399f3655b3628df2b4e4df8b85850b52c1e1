@@ -1,0 +1,10 @@
+```json
+{
+  "attack": true,
+  "case": "The claim attributes to Popper a purely pragmatic (non-truth-oriented) preference for better-corroborated theories, stating it is 'not epistemic (about truth) but pragmatic (about problem-solving efficiency).' This misrepresents Popper's actual position. Popper explicitly maintained truth and verisimilitude as the regulative ideal of science — the aim of science, in his framework, is to find true (or truthlike) theories, even though we can never verify them. The claim's own countercondition concedes that 'If the goal of science is defined as truth rather than knowledge growth, rendering pragmatic utility insufficient' — but for Popper this is not a hypothetical; it is his stated position. By severing corroboration from any truth-connection, the claim constructs a strawman of Popper and then 'resolves' a dilemma that Popper himself would not have posed in those terms. The pragmatic re-description does not dissolve the original epistemic dilemma; it simply changes the subject to a different question Popper did not endorse.",
+  "counterexample": null,
+  "premise": "Popper explicitly held truth/verisimilitude as the regulative aim of science, so the claim's attribution of a purely pragmatic, truth-indifferent preference to him is a mischaracterization.",
+  "premise_evidence": null,
+  "successor_question": "Can the claim's pragmatic re-description of Popper's preference be reconciled with Popper's explicit commitment to verisimilitude as the aim of science, or does it inherently misrepresent his position?"
+}
+```

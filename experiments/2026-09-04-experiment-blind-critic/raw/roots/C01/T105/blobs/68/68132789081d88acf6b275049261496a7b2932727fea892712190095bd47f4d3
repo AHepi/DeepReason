@@ -1,0 +1,26 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"QuotedEvidenceRefV1": {"additionalProperties": false, "description": "A citation that cannot be made without reproducing the bytes.\n\nA SUBTYPE, not a stricter `EvidenceRefClaimV1`: the old contract's optional\nquote is load-bearing for the conjecturer channel that already ships, and\ntightening it globally would retroactively refuse citations that were legal\nwhen they were recorded. The calculus claim channel is new and can be born\nwith the stronger rule (R62), so the requirement lives in the type rather\nthan in a prompt asking nicely.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceRefV1", "type": "object"}}, "additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceRefV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 5ba7a0652869a36673791dc2f6fff77a7a20626eb0d4d0034c8ffe46ddd9754b
+{"analogy": null, "claim": "The preference is defensible as a 'critical rationalist' wager: we choose the best-tested theory not because it is likely true, but because it has survived attempts to falsify it, making it the most informative error-eliminated option available.", "counterconditions": [{"case": "If the 'survivor' status provides no pragmatic advantage over a random guess in a chaotic universe.", "checker_spec": null, "eval": "observation"}, {"case": "If the definition of 'severe test' secretly relies on inductive assumptions about test validity.", "checker_spec": null, "eval": "observation"}], "definitions": [], "derivation": [], "formalization_refs": [], "mechanism": "This approach treats science as an evolutionary process of conjecture and refutation. Preference is not a judgment of truth probability but a strategic move in a game of error elimination. We act on the survivor because it is the only one not yet shown to be wrong in specific domains, maximizing our exposure to potential new errors (learning).", "premises": [], "schema": "deepreason-reasoning-envelope-v1", "scope": {"covers": [], "excludes": []}, "simulation_refs": [], "uncertainties": []}
+
+## target-criticism-history
+CRITICISM HISTORY OF THIS TARGET (what has already been objected to, and what became of it):
+- objection 1: The target's defense fails to address the 'smuggling induction' charge because its reliance on 'survival' as a marker for being the 'most informative error-eliminated option' implicitly assumes that past survival is a reliable indicator of future robustness or utility. Popper explicitly rejected the idea that surviving tests makes a theory more probable or reliable for the future; by arguing we should prefer the survivor *because* it has survived, the target reinstates an inductive principle (that the future will resemble the past regarding test outcomes) which Popper deemed irrational. The target claims this is merely a 'strategic move,' but without an inductive bridge, there is no Popperian justification for why the 'error-eliminated' status of the past theory should guide action in the present any more than a random guess would, rendering the preference indefensible on strictly non-inductive terms.
+  outcome: raised and not answered; the target's status did not move
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+DIRECTIVE: mount the strongest NEW specific case against TARGET 5ba7a0652869a36673791dc2f6fff77a7a20626eb0d4d0034c8ffe46ddd9754b, or attack=false if you find no genuine fault.

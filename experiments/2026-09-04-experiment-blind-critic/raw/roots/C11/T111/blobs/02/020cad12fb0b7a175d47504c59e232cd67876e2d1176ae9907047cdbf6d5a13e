@@ -1,0 +1,14 @@
+```json
+{
+  "attack": true,
+  "case": "The target's mechanism conflates two distinct Popperian concepts — verisimilitude (a synchronic, structural property of a theory's content) and corroboration (a diachronic report on past testing) — and uses the latter as evidence for the former. The claim that a theory 'has demonstrated a higher capacity to withstand falsification, suggesting it captures more structural reality' is an inference from past test-survival to present truth-content. That inference is inductive: it assumes our past tests were representative probes of the theory's actual relation to reality, which is precisely the assumption Popper proscribed. Popper explicitly denied that degree of corroboration is any guide to future performance or to a theory's actual truth-content; he insisted corroboration is merely a report on how severely a theory has been tested so far, not a warrant for preferring it going forward. The target's framing of corroboration as a 'rational bet on truth-content' therefore misrepresents Popper's own position: Popper did not defend the preference for better-corroborated theories as a non-inductive rule of action justified by verisimilitude. He defended it as a methodological convention (we choose to work with the best-tested theory as a matter of policy), while insisting this convention carries no epistemic warrant about the theory's future reliability or its truth-content. By smuggling the inference from corroboration to verisimilitude into the mechanism, the target reintroduces exactly the inductive move it claims to avoid — not because verisimilitude is formally incoherent (the prior objection), but because the evidential bridge from corroboration to truth-content is itself an inductive step Popper refused to cross.",
+  "premise": "Popper explicitly held that degree of corroboration is a report on past testing only and is not a guide to future performance or to a theory's truth-content; the inference from 'survived severe tests' to 'captures more structural reality' is inductive and was one Popper himself denied making.",
+  "premise_evidence": [
+    {
+      "block": "12f82078ebdfc02d4da60d0ef229e7e5a86a938a053b3037a9d9a1f668b839da",
+      "quote": "A theory that survives severe tests has demonstrated a higher capacity to withstand falsification, suggesting it captures more structural reality (verisimilitude). Choosing it is a rational bet on truth-content, not an inductive inference that the future will resemble the past."
+    }
+  ],
+  "successor_question": "Can the target identify a place where Popper himself endorses the inference from corroboration (past test-survival) to verisimilitude (structural truth-content) as an epistemic warrant for future action — given that Popper repeatedly insisted corroboration reports only past performance and provides no guide to the future?"
+}
+```

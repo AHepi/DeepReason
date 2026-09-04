@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target is self-defeating: its own countercondition #3 concedes that if the expectation of failure is a logical deduction from the theory's content rather than an empirical generalization, the mechanism holds — yet this is precisely the Popperian position. Popper's severity is defined by the logical content of the theory (what it forbids given background knowledge), not by an inductive generalization about nature. The target's countercondition #3 thus describes Popper's actual account, under which the target's own 'smuggling' mechanism is inert. The target simultaneously asserts in its mechanism that the judgment 'would likely fail' is 'inherently probabilistic and inductive' while conceding via countercondition #3 that the same judgment could be a logical deduction — yet provides no argument for why the Popperian reading must be the inductive one rather than the deductive one its own countercondition acknowledges. This is an internal contradiction: the claim is presented as unconditional ('The strongest case for smuggling is...') while the target's own enumerated counterconditions admit the standard reading under which the claim collapses.",
+  "premise": "The target's countercondition #3 states that if the 'expectation' of failure is a logical deduction from the theory's content rather than an empirical generalization, the mechanism holds — i.e., the smuggling argument fails. Popper's account of severity is exactly this: severity measures the logical improbability of the prediction relative to background knowledge (what the theory forbids), a deductive relation between statements, not an inductive inference about regularities.",
+  "premise_evidence": [
+    {
+      "block": "70d705fc33a58628ef4e7c077cd99e5ef7b3c067f168930acd044fd7ef950b79",
+      "quote": "If the 'expectation' of failure is a logical deduction from the theory's content rather than an empirical generalization, the mechanism holds."
+    },
+    {
+      "block": "70d705fc33a58628ef4e7c077cd99e5ef7b3c067f168930acd044fd7ef950b79",
+      "quote": "This judgment of likelihood ('would likely fail') is inherently probabilistic and inductive. Therefore, the core metric of Popperian corroboration (severity) rests on an inductive foundation."
+    }
+  ],
+  "counterexample": null,
+  "successor_question": "If Popper's severity is a measure of logical content (what the theory forbids given background knowledge), what argument shows that this logical notion must be reduced to an inductive probability rather than standing as a deductive relation between statements?"
+}
+```

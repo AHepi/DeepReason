@@ -1,0 +1,21 @@
+```json
+{
+  "attack": true,
+  "case": "The target's defense commits an equivocation between two distinct selection criteria. The claim purports to defend Popper's preference for *better-corroborated* theories (a measure of past survival of severe tests), but the mechanism and analogy justify selecting theories by *highest leverage for learning* or *most informative* (a measure of future falsification potential). These are not the same property: a highly corroborated theory may have exhausted most of its testable consequences and thus offer low remaining learning leverage, while a less-corroborated but higher-content theory may offer greater falsification potential. The target's own shared_structure states 'Selecting the most complex/central component to test next does not imply it is the most likely to fail, but that testing it yields the most information' — selection by information yield, not by past corroboration. The mechanism says 'the best theory is simply the one currently offering the highest leverage for learning, regardless of its probability of being true' — again, leverage, not corroboration. Nowhere does the target establish that corroboration tracks remaining learning leverage. Thus the defense does not actually defend the preference Popper held (for better-corroborated theories) but substitutes a different criterion (informational leverage) and silently labels it 'preference for better-corroborated theories.'",
+  "counterexample": [
+    "Theory A has survived 1000 severe tests but its remaining untested consequences are trivial (e.g., it is a low-content, highly corroborated universal statement whose novel predictions are exhausted). Theory B has survived only 10 tests but has vast, precise, untested consequences (high content, high remaining falsification potential). On the target's own mechanism (select by 'highest leverage for learning'), the scientist should prefer B. But B is the *less*-corroborated theory, so the target's defense of 'preference for better-corroborated theories' fails — it would mandate preferring the *less*-corroborated theory."
+  ],
+  "premise": "Popper's corroboration is a measure of a theory's past performance under severe tests, while a theory's 'leverage for learning' or 'falsification potential' is a measure of its remaining testable content; the target's mechanism explicitly selects by the latter but claims to defend preference for the former without showing they coincide.",
+  "premise_evidence": [
+    {
+      "block": "222c14644413f24f",
+      "quote": "the 'best' theory is simply the one currently offering the highest leverage for learning, regardless of its probability of being true."
+    },
+    {
+      "block": "222c14644413f24f",
+      "quote": "Selecting the most complex/central component to test next does not imply it is the most likely to fail, but that testing it yields the most information."
+    }
+  ],
+  "successor_question": "On what grounds does higher past corroboration entail higher remaining falsification potential or learning leverage, given that a theory's testable content can be largely exhausted by the very tests that corroborate it?"
+}
+```

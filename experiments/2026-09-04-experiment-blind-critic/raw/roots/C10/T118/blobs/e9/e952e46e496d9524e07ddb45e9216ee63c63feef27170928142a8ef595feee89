@@ -1,0 +1,21 @@
+```json
+{
+  "attack": true,
+  "premise": "The target's claim conflates the loss of a *logical guarantee* of truth-approximation with the loss of *progressive convergence* itself. Its own mechanism acknowledges 'we have eliminated more errors,' which is a directional, monotonic improvement in a finite conjecture space — the surviving theory set is strictly smaller and, by elimination, closer to the truth. The claim therefore erects a false dichotomy between 'positive accumulation of truth' and 'lucky guesses that haven't yet been caught,' ignoring that error-elimination is itself a weak but genuine form of convergence.",
+  "premise_evidence": [
+    {
+      "block": "7ecf8137496d7cf9c495edf7f8e9bc4eff2b21ecb31b8e6f80dd07defe5fcabf",
+      "quote": "Science becomes a process of elimination without a positive accumulation of truth."
+    },
+    {
+      "block": "7ecf8137496d7cf9c495edf7f8e9bc4eff2b21ecb31b8e6f80dd07defe5fcabf",
+      "quote": "reducing scientific progress to a series of lucky guesses that haven't yet been caught"
+    }
+  ],
+  "case": "The target asserts that accepting the methodological wager 'costs science its claim to progressive convergence toward truth,' but this conclusion does not follow from its own mechanism. The mechanism grants that science 'has eliminated more errors' — an admission that the surviving theory set is strictly improved by falsification. In any finite or well-ordered conjecture space, successive elimination of falsified theories is a convergent process: the remaining candidates occupy a strictly smaller neighborhood of the truth. The target provides no argument that convergence *requires* 'positive accumulation of truth' rather than successive approximation *via* elimination; it merely stipulates this by labeling the remaining theories 'lucky guesses that haven't yet been caught.' This is a straw man: a theory that has survived severe, novel testing is not a guess that was merely lucky — it has been actively selected against error, which is precisely what distinguishes corroboration from chance survival. The claim's first countercondition ('If verisimilitude can be rigorously defined and measured, the cost of losing convergence is paid back') further reveals the gap: it treats verisimilitude as an all-or-nothing bailout, yet the mechanism already describes a *partial* verisimilitude (fewer errors) without recognizing it as such. By conflating 'no logical guarantee we are at the truth' with 'no convergence toward the truth,' the target overstates its conclusion and begs the question against elimination-based accounts of progress.",
+  "counterexample": [
+    "Consider a search space of N mutually exclusive candidate theories, exactly one of which is true. After k rounds of severe falsification, k false theories have been eliminated. The remaining set has size N−k, and the true theory is guaranteed to be among them (falsification never eliminates the true theory, ex hypothesi). The probability that a randomly chosen surviving theory is true rises monotonically from 1/N to 1/(N−k). This is progressive convergence toward truth *by elimination alone*, with no 'positive accumulation of truth' and no logical guarantee at any finite stage that a *particular* surviving theory is the true one. This satisfies the mechanism's own description ('eliminated more errors') yet contradicts the claim's conclusion ('costs science its claim to progressive convergence')."
+  ],
+  "successor_question": "Can progressive convergence toward truth be defined purely in terms of monotonic reduction of the surviving theory set, without requiring positive accumulation of truth-content — and if so, does the 'methodological wager' view actually preserve such convergence?"
+}
+```

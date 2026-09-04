@@ -1,0 +1,17 @@
+{
+  "attack": true,
+  "case": "The target's biological analogy is self-defeating because its own overturn condition is inherently satisfied by the nature of evolution. The analogy asserts a shared structure of 'Preference based on past performance without assuming continuity' and transfers this to Popper's methodological rule. However, the target explicitly lists as an overturn condition: 'If it can be shown that biological selection implicitly relies on environmental stability (a form of induction), the analogy fails to exonerate Popper.' Biological evolution necessarily relies on environmental stability (continuity); if the environment fluctuated entirely at random, inherited adaptations would provide no survival advantage. Because biological selection implicitly relies on this stability (a form of induction), the overturn condition is met by default. Consequently, the analogy fails to support the claim that Popper's preference is 'non-inductive', and instead suggests that both evolution and scientific preference rely on an implicit inductive assumption of continuity.",
+  "counterexample": null,
+  "premise": "Biological evolution relies on environmental stability to confer survival advantages, meaning biological selection assumes a form of continuity (induction).",
+  "premise_evidence": [
+    {
+      "block": "6e0426843702f542b9ef40acd7ee848c8c43b7a09912fb9884964a0d2a2d259f",
+      "quote": "If it can be shown that biological selection implicitly relies on environmental stability (a form of induction), the analogy fails to exonerate Popper."
+    },
+    {
+      "block": "6e0426843702f542b9ef40acd7ee848c8c43b7a09912fb9884964a0d2a2d259f",
+      "quote": "Preference based on past performance without assuming continuity"
+    }
+  ],
+  "successor_question": "If biological selection necessarily relies on environmental continuity, can any analogy to biological evolution successfully defend a non-inductive epistemological rule?"
+}

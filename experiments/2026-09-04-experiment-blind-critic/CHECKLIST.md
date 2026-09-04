@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=8 blockers=none
+State: next=9 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -144,10 +144,29 @@ as an omission.
       rather than a hand-rolled one, so it cannot read a different object
       than the run acted on.
 
-- [ ] 8. (S8, S16) [COMMIT] Launch the full bench detached, snapshot
+- [x] 8. (S8, S16) [COMMIT] Launch the full bench detached, snapshot
       loop armed: 120 targets x 4 cells = 480 calls, <=3 concurrent.
       done-when: `raw/driver.log` shows `launched`, the monitor shows
       progress, and on completion `raw/calls.jsonl` holds 480 rows.
+      DONE:
+          [bench] complete: 480 calls, 0 failed
+          rows 480  failed 0  unparseable forms 0
+          per cell  C00 120  C10 120  C01 120  C11 120
+          attack=true  C00 120  C10 120  C01 120  C11 120
+          att edges    (none in any cell)
+          raw/ 29M
+      TWO PRE-REGISTERED RULES FIRE ON THESE COUNTS, before any measure
+      is computed:
+        * M2 is SATURATED. The critic attacked 120 of 120 targets in
+          every cell, sound and planted alike, so the false-attack rate
+          is 1.000 everywhere. PREREG section 6's saturation rule fires:
+          M2 is NON-DISCRIMINATING, and the verdict's M2 clause is
+          carried explicitly rather than dropped.
+        * M3 is on its FLOOR. Zero attack edges in any cell, exactly as
+          PREREG section 6 predicted under observe_only authority. M3 is
+          reported and decides nothing.
+      Both were written down before the first call. Neither is a
+      surprise, and neither is read as a result.
 
 - [ ] 9. (S8, S10, S11, S12) [COMMIT] Write `measure.py` and compute
       M1-secondary, M2, M3, M4 from the record alone.

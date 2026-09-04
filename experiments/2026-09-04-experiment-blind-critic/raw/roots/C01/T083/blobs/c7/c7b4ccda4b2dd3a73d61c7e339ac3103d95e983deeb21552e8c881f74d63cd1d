@@ -1,0 +1,26 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"QuotedEvidenceRefV1": {"additionalProperties": false, "description": "A citation that cannot be made without reproducing the bytes.\n\nA SUBTYPE, not a stricter `EvidenceRefClaimV1`: the old contract's optional\nquote is load-bearing for the conjecturer channel that already ships, and\ntightening it globally would retroactively refuse citations that were legal\nwhen they were recorded. The calculus claim channel is new and can be born\nwith the stronger rule (R62), so the requirement lives in the type rather\nthan in a prompt asking nicely.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceRefV1", "type": "object"}}, "additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceRefV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 37269abee21905dc51e94c1d1e8f748e3975ec6f22a7492dc70a4e7cc446c844
+{"analogy": null, "claim": "The preference is defensible only if accepted as a 'conventionalist' decision to adopt a specific methodology (falsificationism) for the sake of scientific growth, abandoning the claim that this methodology tracks truth or probability.", "counterconditions": [{"case": "If Popper explicitly claims the methodology leads to truth (verisimilitude) rather than just faster falsification.", "checker_spec": null, "eval": "observation"}, {"case": "If the preference cannot be separated from the hope of predictive success.", "checker_spec": null, "eval": "observation"}, {"case": "If 'growth' itself relies on an inductive assumption that new theories will be better.", "checker_spec": null, "eval": "observation"}], "definitions": [], "derivation": [], "formalization_refs": [], "mechanism": "Methodological Conventionalism: Scientists prefer corroborated theories not because they are likely true or will succeed, but because this rule maximizes the speed of error detection. It is a self-imposed rule of the game of science, not a description of reality or a logical necessity.", "premises": [], "schema": "deepreason-reasoning-envelope-v1", "scope": {"covers": [], "excludes": []}, "simulation_refs": [], "uncertainties": []}
+
+## target-criticism-history
+CRITICISM HISTORY OF THIS TARGET (what has already been objected to, and what became of it):
+- objection 1: The target's claim that the preference is defensible 'only if' accepted as a conventionalist decision creating a false dilemma. It ignores Popper's concept of 'verisimilitude' (truth-likeness), where preferring a better-corroborated theory is a rational conjecture that it is closer to the truth than its falsified rivals, even without inductive probability. By reducing the justification solely to 'speed of error detection' and explicitly 'abandoning the claim that this methodology tracks truth,' the target misrepresents Popper's later work and fails to make the 'strongest case' for defensibility as required by the problem context.
+  outcome: raised and not answered; the target's status did not move
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+DIRECTIVE: mount the strongest NEW specific case against TARGET 37269abee21905dc51e94c1d1e8f748e3975ec6f22a7492dc70a4e7cc446c844, or attack=false if you find no genuine fault.

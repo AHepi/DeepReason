@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target claims this preference is 'defensible on Popper's terms as a non-inductive, pragmatic decision to act,' but this conflates two distinct things Popper kept separate. Popper described corroboration as a purely historical, backward-looking report — a record of how severely a theory has been tested so far. He was explicit that corroboration does NOT provide a rational basis for *preferring* one theory over another for practical action; in 'The Logic of Scientific Discovery' (Appendix *ix) and 'Realism and the Aim of Science,' he states that while we may adopt the convention of acting on the best-tested theory, this convention is not rationally 'defensible' in the sense of being justified or warranted — it is a choice, not a conclusion. The target's mechanism confirms the purely descriptive character ('a report on current survival status'), yet the claim smuggles a normative conclusion ('defensible... decision to act') out of that description. This is an is-ought gap: no Popperian principle bridges 'theory T has survived severe tests to date' to 'it is defensible to act on T going forward.' The target thus misattributes to Popper a pragmatic justification he deliberately declined to endorse, while simultaneously failing to supply its own bridge principle. The previous objections correctly identified the induction smuggling; the deeper structural fault is that the target commits an is-ought fallacy while claiming Popper's own framework licenses the move.",
+  "premise": "Popper explicitly held that corroboration is a historical report and does not justify a rational preference for future action; he called acting on the best-tested theory a 'convention' or 'methodological rule,' not a defensible conclusion. The target's mechanism concedes the report is merely descriptive ('a report on current survival status'), yet the claim derives a normative prescription ('defensible... decision to act') from it without any bridging principle.",
+  "premise_evidence": [
+    {
+      "block": "833a9dce23eab828e115cbaac87f3ae2bf49216d45498817ea9bf0dbe50042e9",
+      "quote": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, pragmatic decision to act on the theory that has withstood the most severe tests, acknowledging it may still be false but is currently the 'fittest' survivor."
+    },
+    {
+      "block": "833a9dce23eab828e115cbaac87f3ae2bf49216d45498817ea9bf0dbe50042e9",
+      "quote": "Preference is not a prediction of future success (induction) but a report on current survival status."
+    }
+  ],
+  "counterexample": null,
+  "successor_question": "If Popper himself characterized acting on the best-tested theory as a convention rather than a rationally defensible conclusion, what specific Popperian principle licenses the target's normative leap from 'report on current survival status' to 'defensible decision to act'?"
+}
+```

@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target is internally self-contradictory in a way not previously raised. Its claim declares that the preference is 'defensible but at the cost of abandoning justification entirely.' Yet its own mechanism immediately redeploys justification: 'Acting on a corroborated theory is a gamble... justified only by the fact that alternative untested theories are known to be even more risky.' The mechanism uses the word 'justified' to ground the very action the claim says can no longer be justified. If justification is abandoned 'entirely,' no justification — not even a comparative, risk-based, conditional one — can be offered; the mechanism's 'justified only by...' is a justification by the target's own admission. The artifact thus asserts a position (justification is abandoned) and simultaneously violates it (here is the justification). This is a performative contradiction in the target's own text, distinct from the prior objections about inductive smuggling and circularity: those attacked whether the mechanism's substance works, while this attacks the artifact's claim and mechanism as mutually exclusive statements.",
+  "premise": "A claim that explicitly abandons justification 'entirely' cannot, within the same artifact, provide a justification — even a conditional or comparative one — without contradicting itself.",
+  "premise_evidence": [
+    {
+      "block": "fa19438cd8b54fc50fdd5b5d82542d0311111086746a125930f0eab41654478b",
+      "quote": "The surviving answer is that the preference is defensible but at the cost of abandoning 'justification' entirely in favor of 'conjectural risk management.'"
+    },
+    {
+      "block": "fa19438cd8b54fc50fdd5b5d82542d0311111086746a125930f0eab41654478b",
+      "quote": "Acting on a corroborated theory is a gamble that accepts high risk, justified only by the fact that alternative untested theories are known to be even more risky (untested)."
+    }
+  ],
+  "counterexample": null,
+  "successor_question": "Can a position be 'defensible' while simultaneously abandoning the framework (justification) that makes defensibility meaningful, or does 'defensible' itself presuppose the possibility of justification?"
+}
+```

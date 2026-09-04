@@ -1,0 +1,19 @@
+```json
+{
+  "attack": true,
+  "case": "The target's mechanism is circular: it offers the claim itself as the reason the claim holds. The mechanism states, 'The reason this holds is that The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic, non-inductive rule of action based on verisimilitude (truth-likeness), where scientists choose the theor, which is what the mechanism above establishes.' The 'reason' provided is a near-verbatim restatement of the claim, followed by an assertion that 'the mechanism above establishes' it—where the mechanism above IS the restatement. No independent justification connects survival of severe tests to non-inductive preference; the target merely asserts its own conclusion as its own premise. This circularity is a structural defect independent of the Tichý/Miller objections already raised and unanswered. Furthermore, the target's own second countercondition concedes that 'if acting on a theory necessarily implies a belief in its future success, which is an inductive leap,' the claim fails—yet the target provides zero argument for why this condition does not obtain. Preferring a theory for action because it survived past severe tests presupposes that past survival is relevant to future reliability, which is precisely the inductive inference the target claims to avoid. The target acknowledges this as a defeater but never discharges it.",
+  "counterexample": null,
+  "premise": "The mechanism justifies the claim by restating the claim, and it lists a countercondition that directly identifies the inductive problem without showing that countercondition is avoided.",
+  "premise_evidence": [
+    {
+      "block": "efad52fb8c66499490a1fe2055637f3c763967f6c7daeae9b4b41bba2d69ae57",
+      "quote": "The reason this holds is that The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic, non-inductive rule of action based on verisimilitude (truth-likeness), where scientists choose the theor, which is what the mechanism above establishes."
+    },
+    {
+      "block": "efad52fb8c66499490a1fe2055637f3c763967f6c7daeae9b4b41bba2d69ae57",
+      "quote": "If acting on a theory necessarily implies a belief in its future success, which is an inductive leap."
+    }
+  ],
+  "successor_question": "Can a rule of action that selects theories based on their past test-survival be genuinely non-inductive if it provides no independent reason that preferring such a theory for future action does not presuppose past performance predicts future reliability?"
+}
+```
