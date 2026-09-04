@@ -455,7 +455,53 @@ from deepreason.verification import simulation
 assert 'forbidden_attribute(node.attr)' in inspect.getsource(simulation._guard)
 "`
 `check: python -m pytest tests/test_sandbox_guard.py -q`
-`check: ! git diff --name-only origin/main...HEAD | grep -qE "capabilities/state\.py|/harness\.py|/invariants\.py|/run_manifest\.py|/qualification\.py|llm/firewall\.py"`
+The third check below is the branch-wide tripwire. It used to read
+`! git diff --name-only origin/main...HEAD | grep -qE <the six surface paths>`,
+which asserted the 2026-08-27 tranche touched none of them. That form stopped
+being able to say what it meant the moment that tranche merged: on any later
+branch the same command reads THAT branch's diff, so the check turned red on
+the first granted contact anywhere in the six files — barring exactly what this
+document exists to permit, and it did, on the 2026-09-04 grant below. It now
+asserts the claim that is actually invariant: **every frozen-surface file this
+branch touches must be LEDGERED here as a granted contact.** An ungranted
+contact still turns it red, which is the whole job; a granted one does not.
+Re-aimed 2026-09-04 (`experiments/2026-09-04-defect-dead-seat-retirement/`,
+`docs/ERRATA.md` E74).
+
+**Its residue, stated rather than hidden: it is COARSE.** A file that carries
+any ledgered grant is not re-checked by this tripwire at all, so today it can
+only fire on `capabilities/state.py` and `qualification.py` — the two of the six
+with no grant yet (measured:
+`experiments/2026-09-04-defect-dead-seat-retirement/proof/tripwire_can_fail.txt`).
+That is strictly more than the old form, which could not pass at all and was
+therefore ignored, but it is less than a per-tranche check. What actually
+guards a NEW contact on an already-granted file is `tools/blast_radius.py`,
+which reports `CONTACT` whatever this document ledgers, and the workflow rule
+that every row it prints is disposed in FIX.md before code is written.
+
+`check: python -c "
+import pathlib, re, subprocess
+SURFACES = {
+    'src/deepreason/capabilities/state.py',
+    'src/deepreason/harness.py',
+    'src/deepreason/invariants.py',
+    'src/deepreason/run_manifest.py',
+    'src/deepreason/qualification.py',
+    'src/deepreason/llm/firewall.py',
+}
+changed = set(subprocess.run(
+    ['git', 'diff', '--name-only', 'origin/main...HEAD', '--', 'src/'],
+    capture_output=True, text=True).stdout.split())
+doc = pathlib.Path('docs/map/INV-frozen-surfaces.md').read_text()
+ledgered = set()
+for block in doc.split('**Granted contact')[1:]:
+    head = block[:block.index(chr(10) + chr(10))] if chr(10) + chr(10) in block else block
+    for path in SURFACES:
+        if path.rsplit('/', 1)[1] in head or path in block[:3000]:
+            ledgered.add(path)
+ungranted = sorted((changed & SURFACES) - ledgered)
+assert not ungranted, ungranted
+"`
 
 ### 4. Manifest schemas AND their validators — `run_manifest.py`
 

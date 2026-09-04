@@ -2400,3 +2400,49 @@ carries both branches of the identical-retry lesson and the measured wall.
 `experiments/2026-08-26-pc2-rematch/PREREG.md` is an EXPERIMENT artifact — a
 dated record of what that tranche believed — and is not rewritten in place; this
 entry is the pointer that stops a later reader trusting its arithmetic.
+
+---
+
+## 2026-09-04
+
+**E74 — two committed tripwires asserted "this tranche" against a moving end, so
+each turned red on the first granted contact after its own tranche merged.**
+
+**What the artifacts say.**
+`docs/map/INV-frozen-surfaces.md` (the 2026-08-27 sandbox grant's third check,
+as committed):
+
+> `check: ! git diff --name-only origin/main...HEAD | grep -qE
+> "capabilities/state\.py|/harness\.py|/invariants\.py|/run_manifest\.py|
+> /qualification\.py|llm/firewall\.py"`
+
+`tests/test_wire_contract_id_map.py::test_this_tranche_opens_neither_frozen_caller`
+(the seat-shell tranche's, as committed) — docstring: *"§17.9's disposal, as a
+check rather than a promise: form selection goes through the dispatch site, so
+neither file is edited"* — diffing the WORKING TREE against `e91f4fcc3` and
+asserting five files unchanged.
+
+**What the record shows.** Both were true while their own tranche was the
+working branch and became unevaluable the moment it merged: `origin/main...HEAD`
+and `git diff <that tranche's base>` then read the NEXT tranche's diff, which is
+a claim neither check's sentence makes. Measured here: the test was GREEN at this
+tranche's base (`git diff --name-only e91f4fcc3 643dd8ea1 -- run_manifest.py
+invariants.py` is empty) and both went RED on one operator-granted
+`data.pop("SEAT_RETIREMENT_POLICY", None)` line — **barring exactly what
+`INV-frozen-surfaces.md` exists to permit.** A frozen-surface tripwire that
+cannot pass after a grant the same document ledgers is not a strict check; it is
+a check every future tranche learns to step over, which is worse than none.
+
+**Where corrected.** Both re-aimed in
+`experiments/2026-09-04-defect-dead-seat-retirement/`, neither relaxed. The test
+now pins both ends of its range (`e91f4fcc3 643dd8ea1`), so it re-derives the
+diff its docstring is about, forever. The map check now asserts the claim that
+is actually invariant — every frozen-surface file the branch touches is
+LEDGERED here as a granted contact — so an ungranted contact still turns it red.
+The map check's residue is stated in the document beside it: it is coarse, and
+can only fire on the two surfaces with no grant yet.
+
+**The generalisation worth keeping.** A check whose subject is "this tranche"
+needs BOTH ends of its range pinned at the moment it is written. One end pinned
+and one end floating is a check with an expiry date and no way to notice it has
+passed.
