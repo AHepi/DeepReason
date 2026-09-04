@@ -89,6 +89,13 @@ class SectionRequestV1(BaseModel):
     supplied: Mapping[str, Any] = Field(default_factory=dict)
 
 
+class _TemplateParams(BaseModel):
+    """A template kind takes no parameters of its own: its knobs ARE its
+    text, which is the point of having it."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+
 class SectionRenderV1(BaseModel):
     """One section's free text, plus the allocation facts it may override.
 
@@ -505,3 +512,154 @@ def resolve_seat_pack_layout(
             + ", ".join(seat_pack_layout_ids()),
         )
     return layout
+
+
+# ---------------------------------------------------------------------------
+# Operator-authored plugins, loaded from the operator's own directory.
+#
+# TRUST BOUNDARY, stated because it is one and not a courtesy. A `.py` plugin
+# here EXECUTES inside the harness. It is trusted for exactly the reason a
+# treadle task is (CLAUDE.md, "Who may author a task"): the operator put the
+# file there themselves. **Nothing model-authored is ever a plugin.** No run,
+# no model reply, no fetched document and no tool result may write into this
+# directory or name a plugin PATH; a plugin id that does not resolve in the
+# registry is a typed refusal at resolution, never a load-by-path. That is
+# what `resolve_section_plugin` already enforces, and this loader is the only
+# other door.
+# ---------------------------------------------------------------------------
+
+# The template module imports this one for its typed refusal, so its name is
+# taken lazily rather than at import.
+SEAT_PLUGINS_DIRNAME = "seat_plugins"
+TEMPLATE_SUFFIX = ".tmpl"
+
+
+def seat_plugins_root(*, home=None, environ=None):
+    """The one directory the harness looks in, resolved the way
+    `model_profiles/registry.py::profiles_root` resolves its own."""
+
+    from deepreason.provider_profile import provider_state_dir
+
+    return provider_state_dir(home=home, environ=environ) / SEAT_PLUGINS_DIRNAME
+
+
+def load_operator_plugins(*, home=None, environ=None):
+    """Register every plugin the operator has put in their own directory.
+
+    Returns `(loaded, notices)`. NOTHING HERE RAISES on a bad file: a
+    directory holding one unloadable plugin yields a typed notice naming the
+    file and the error, and the run continues with the plugins that did load.
+    That is the all-configurations law's "disclose, never die" shape applied
+    here -- a broken formatting experiment three directories away must not
+    take a run down, and a SILENT skip would be worse than either, because the
+    operator would see a brief missing a section with no reason given.
+
+    A harness with no plugin directory gets exactly the seeded set, and says
+    so by returning an empty list rather than guessing.
+    """
+
+    loaded: list[str] = []
+    notices: list[dict[str, str]] = []
+    root = seat_plugins_root(home=home, environ=environ)
+    try:
+        candidates = sorted(root.glob("*.py")) + sorted(root.glob(f"*{TEMPLATE_SUFFIX}"))
+    except OSError as error:
+        return loaded, [
+            {
+                "code": "SEAT_PLUGIN_ROOT_UNREADABLE",
+                "path": str(root),
+                "detail": str(error),
+            }
+        ]
+    if not root.is_dir():
+        return loaded, notices
+
+    for path in candidates:
+        try:
+            if path.suffix == TEMPLATE_SUFFIX:
+                plugin = _template_plugin(path)
+            else:
+                plugin = _python_plugin(path)
+            register_section_plugin(plugin)
+        except Exception as error:  # noqa: BLE001 - disclosed, never raised
+            notices.append(
+                {
+                    "code": "SEAT_PLUGIN_UNLOADABLE",
+                    "path": str(path),
+                    "detail": f"{type(error).__name__}: {error}",
+                }
+            )
+            continue
+        loaded.append(plugin.plugin_id)
+    return loaded, notices
+
+
+def _python_plugin(path):
+    """Import one operator plugin file and take the plugin it declares.
+
+    Loaded by PATH here and only here, from the operator's own directory.
+    Every other route to a plugin goes through `resolve_section_plugin`, which
+    refuses an unknown id rather than looking on disk.
+    """
+
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        f"deepreason_operator_plugin_{path.stem}", path
+    )
+    if spec is None or spec.loader is None:
+        raise SeatSectionError(
+            "SEAT_PLUGIN_UNLOADABLE", f"{path.name} is not importable"
+        )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    plugin = getattr(module, "PLUGIN", None)
+    if plugin is None:
+        raise SeatSectionError(
+            "SEAT_PLUGIN_UNLOADABLE",
+            f"{path.name} declares no PLUGIN; an operator plugin file names "
+            "the instance it provides as a module-level PLUGIN",
+        )
+    return plugin
+
+
+def _template_plugin(path):
+    """A `.tmpl` file becomes an ordinary plugin whose render expands it.
+
+    Its plugin id and section id come from the FILENAME
+    (`<plugin-id>@<section-id>.tmpl`, or `<section-id>.tmpl` for both), so an
+    operator naming a template names what it replaces -- no metadata block, no
+    second syntax to learn.
+    """
+
+    from deepreason.llm.seat_templates import render_template
+
+    stem = path.stem
+    plugin_id, _, section_id = stem.partition("@")
+    section_id = section_id or plugin_id
+    source = path.read_text(encoding="utf-8")
+
+    class _Template:
+        parameters_model = _TemplateParams
+        declared_handle_kinds: tuple[str, ...] = ()
+
+        def __init__(self):
+            self.plugin_id = plugin_id
+            self.plugin_version = "1.0.0"
+            self.section_id = section_id
+
+        def render(self, request, params):
+            context = {
+                "supplied": dict(request.supplied),
+                **{
+                    key: value
+                    for key, value in request.supplied.items()
+                    if isinstance(value, (str, int, float, bool, list, tuple, dict))
+                },
+            }
+            text = render_template(source, context)
+            if not text.strip():
+                return None
+            return SectionRenderV1(section_id=self.section_id, text=text)
+
+    return _Template()

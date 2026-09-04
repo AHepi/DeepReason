@@ -1,6 +1,6 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=28 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
+State: next=31 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
 verbatim: "Given what read from the other windows, the plugin one. Since all
 three other windows have completed." Build window open; branch
 `claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
@@ -755,24 +755,52 @@ print('ok')"` -> `ok`
 
 ## Phase 7 — operator-authored plugins from the home directory
 
-- [ ] 28. (S3.1) Add home-directory loading from
+- [x] 28. (S3.1) Add home-directory loading from
       `<provider_state_dir>/seat_plugins/`, mirroring
       `model_profiles/registry.py::profiles_root`.
       done-when: `python -m pytest tests/test_seat_section_home.py -q`
       -> `0 failed`, including "a harness with no plugin directory has
       exactly the seeded set"
+      ```
+      $ python -m pytest tests/test_seat_section_home.py -q
+      .........                                                        [100%]
+      9 passed in 0.10s
+      ```
+      `seat_plugins_root` mirrors `model_profiles/registry.py::profiles_root`
+      exactly: `<provider_state_dir>/seat_plugins/`. Two authoring kinds — a
+      `.py` file naming its instance as a module-level `PLUGIN`, and a
+      `.tmpl` file whose id and section come from its FILENAME
+      (`<plugin-id>@<section-id>.tmpl`), so an operator naming a template
+      names what it replaces and learns no second syntax.
 
-- [ ] 29. (S3.2) Add the trust-boundary tests: a plugin loads ONLY from that
+- [x] 29. (S3.2) Add the trust-boundary tests: a plugin loads ONLY from that
       directory; no configuration value, model reply or record field may
       name a plugin PATH; an unresolvable id is a typed refusal.
       done-when: `python -m pytest tests/test_seat_section_home.py -k trust -q`
-      -> `0 failed`
+      -> `0 failed` (3 cases, part of the 9 above)
 
-- [ ] 30. (S3.4) [COMMIT] Add the disclosure path: an unloadable plugin file
+      A plugin file OUTSIDE the directory is not a plugin and naming its path
+      does not make it one: the case plants an executable `evil.py` elsewhere
+      and asserts the bare name, the relative path, the absolute path and a
+      `dr.`-prefixed id are each refused with `SEAT_SECTION_PLUGIN_UNKNOWN`.
+      No `Config` field may name a plugin path (a manifest-carried path would
+      be a second door a model reply could reach). And structurally: exactly
+      ONE file under `src/deepreason/llm/` contains
+      `spec_from_file_location`, and it is the operator loader.
+
+- [x] 30. (S3.4) [COMMIT] Add the disclosure path: an unloadable plugin file
       yields a typed notice naming file and error, and the run continues
       with what loaded (disclose, never die).
       done-when: `python -m pytest tests/test_seat_section_home.py -k disclos -q`
-      -> `0 failed`
+      -> `0 failed` (3 cases, part of the 9 above)
+
+      Disclose, never die, and never SILENTLY SKIP — which would be worse than
+      either, because the operator would see a brief missing a section with no
+      reason given. A directory with one good and one broken file loads the
+      good one and returns exactly one `SEAT_PLUGIN_UNLOADABLE` notice naming
+      the file and the error; a file declaring no `PLUGIN` is named the same
+      way; and a template that cannot expand is refused when it runs, with its
+      own typed code.
 
 ## Phase 8 — the form (C1 only), both seats
 
