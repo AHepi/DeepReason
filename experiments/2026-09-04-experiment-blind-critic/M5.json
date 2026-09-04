@@ -1,0 +1,29 @@
+{
+ "protocol": "JUDGING_PREREG_COPIED.md machinery, PREREG s6 criteria",
+ "rows": 479,
+ "scored_bids": 479,
+ "contested": 0,
+ "self_identifying_rows": 0,
+ "per_cell": {
+  "C00": {
+   "n": 120,
+   "median_of_medians": 14.0,
+   "mean_of_medians": 14.4
+  },
+  "C01": {
+   "n": 119,
+   "median_of_medians": 14,
+   "mean_of_medians": 14.37
+  },
+  "C10": {
+   "n": 120,
+   "median_of_medians": 14.0,
+   "mean_of_medians": 14.358
+  },
+  "C11": {
+   "n": 120,
+   "median_of_medians": 14.0,
+   "mean_of_medians": 14.35
+  }
+ }
+}

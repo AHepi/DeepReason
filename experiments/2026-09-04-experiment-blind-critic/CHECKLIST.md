@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=11 blockers=none
+State: next=12 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -223,12 +223,36 @@ as an omission.
           detector agreement 213/240 = 0.887 (disagreement 0.113;
             PREREG's falsifier fires above 0.25 -- it does not fire)
 
-- [ ] 11. (S13) [COMMIT] Run the blind three-judge sharpness panel.
+- [x] 11. (S13) [COMMIT] Run the blind three-judge sharpness panel.
       `blind/keymap.json` lands in the SAME commit as
       `blind/scores.json`, never before.
       done-when: `M5.json` exists with median-of-three totals per bid
       and the contested flag; `blind/criticisms.jsonl` rows carry
-      exactly `{bid, target_text, criticism_text}`.
+      exactly `{bid, target, criticism}`.
+      DONE:
+          blind rows: 479  keys: ['bid','criticism','target']
+          1437 judge calls; scored bids 479 of 479
+          contested 0; self-identifying rows 0
+
+          M5 median-of-three totals, out of 15
+            C00 n=120 median 14.0 mean 14.400
+            C10 n=120 median 14.0 mean 14.358
+            C01 n=119 median 14.0 mean 14.370
+            C11 n=120 median 14.0 mean 14.350
+
+          M5 IS A FAILED INSTRUMENT, not a null result. The totals span
+          10 to 15 with 1404 of 1436 at 14 or 15, and the reason is a
+          hard ceiling in the rubric itself:
+            c1 specific       3/3 on ALL 1436 judgements
+            c5 non-evasion    3/3 on ALL 1436 judgements
+            c2 fault is real  3/3 on 1427 of 1436
+            c3 case is made   3/3 on 1430 of 1436
+            c4 answerable     the ONLY criterion that moves (2 or 3)
+          Four of five criteria cannot fail against this model's
+          criticism, so M5 cannot separate the cells and reports its own
+          definition back. Recorded as an instrument failure by the same
+          standard PARKED P7 CORRECTED set. M5 does not enter either
+          verdict, which PREREG section 8 already fixed in advance.
 
 - [ ] 12. (S14, S17, S21) [COMMIT] Write `RESULTS.md`: one verdict per
       factor, the numbers beside it, and the residue.
