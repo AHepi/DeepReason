@@ -71,6 +71,8 @@ than you need.
 | `CON-run-identity.md` | deterministic run ids, roots on disk, retiring and amending |
 | `CON-capability-lifecycle.md` | typed proposal → admission → work order → result |
 | `CON-packs-and-token-economy.md` | prompt construction, section allocation, budgets |
+| `INV-seat-section-plugins.md` | what a seat is shown and asked for, as configuration |
+| `REC-add-a-section-plugin.md` | add a section to a seat's brief without a source edit |
 | `CON-conjecture-source.md` | the socket that proposes candidate artifacts (`rules/conj.py`) |
 | `CON-criticism-source.md` | the socket that attacks or scrutinises a target (`rules/crit.py`) |
 | `CON-scheduler-ranking.md` | which problem a cycle works on (`Scheduler._select_problem`) |

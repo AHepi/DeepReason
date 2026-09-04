@@ -1,6 +1,6 @@
 # Checklist for: the conjecturer's brief and form as a pluggable, configurable interface
 
-State: next=41 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
+State: next=45 blockers=step 24's RECORD WRITE needs a frozen-surface-2 grant (see step 24); its receipts half is done and nothing else depends on the write. Step 25 folds into that grant — the step-22 budget stop was RESOLVED by the operator 2026-09-03: road A, raise the ceiling to ~2400 src/ insertions and finish §17 as planned (SPEC §17.8) — steps 1-6 done; the amendment pass (step 6) ran out of order under the ledger rule — SPEC.md APPROVED by the operator 2026-09-03,
 verbatim: "Given what read from the other windows, the plugin one. Since all
 three other windows have completed." Build window open; branch
 `claude/conjecturer-pluggable-interface-7v3es6` (substituted for the design
@@ -1056,7 +1056,7 @@ print('ok')"` -> `ok`
       in its own docstring, along with what it does NOT claim: that a
       conjecturer in a critic's seat produces useful criticism.
 
-- [ ] 41. (S11, §17) [COMMIT] Create `docs/map/INV-seat-section-plugins.md`
+- [x] 41. (S11, §17) [COMMIT] Create `docs/map/INV-seat-section-plugins.md`
       (SPEC §9's three layers, the seat-is-a-shell law's scope boundary, and
       these four checks) and `docs/map/REC-add-a-section-plugin.md`, and add
       both to `INDEX.md`. Every claim carries a column-0 `check:` that can
@@ -1064,26 +1064,59 @@ print('ok')"` -> `ok`
       done-when: `python tools/docs_verify.py --audit` -> no finding NAMING
       either new document (the `SEAM-llm-x-rules.md:54` baseline row stands)
 
+      DONE 2026-09-04. `INV-seat-section-plugins.md` carries the three layers,
+      the six invariants and the two Traps the build actually paid for; EIGHT
+      checks, all exit 0. `REC-add-a-section-plugin.md` is the four-step
+      recipe, and its own closing check asserts the no-source-edit claim is
+      MEASURED (by mtime) rather than asserted. Both added to `INDEX.md`;
+      `--links` -> 0 dangling, 78 documents.
+
 ## Phase 10 — the experiment recipe, committed as an instrument
 
-- [ ] 42. (S12.0, S12.1) Write `PREREG.md` for STEP 1 (hold the form, vary
+- [x] 42. (S12.0, S12.1) Write `PREREG.md` for STEP 1 (hold the form, vary
       ONE brief parameter), on the shape of
       `experiments/2026-08-28-diversity-generation/PREREG.md`.
       done-when: file exists containing `## §6 — Outcome measures (frozen
       before any call)` and the four measures of SPEC S12.3
 
-- [ ] 43. (S12.3) Add `analyse_form_arms.py` computing admission rate
+      DONE 2026-09-04. Five arms: the shipped default, three one-parameter
+      variations (history including refuted lineage, a wider property claim, a
+      neighbourhood rendered by an operator template), and a NO-HARNESS
+      baseline — required by the operator's success law, since success is
+      progress over what the model produces without the harness, not
+      correctness. §5 states what would FALSIFY the premise, so a negative
+      result is a result. §8 says, in the document, that nothing has run.
+
+- [x] 43. (S12.3) Add `analyse_form_arms.py` computing admission rate
       (re-running `census_conjecturer_failures.py` over the new roots) and
       M1/M2/M3 by CALLING the committed diversity instrument — not a
       reimplementation of it.
       done-when: `python .../analyse_form_arms.py --self-test` -> `ok`
+      ```
+      $ python analyse_form_arms.py --self-test
+      ok
+      ```
+      It CALLS `census_conjecturer_failures.py` and the committed diversity
+      instrument rather than reimplementing either: a second implementation of
+      a measure is a second answer to the same question, and the record would
+      hold two numbers with no way to choose. Asked for an analysis with no
+      roots it REFUSES rather than printing zeroes.
 
-- [ ] 44. (S12.4, S12.5) [COMMIT] Add the two binding rules as CHECKS, not
+- [x] 44. (S12.4, S12.5) [COMMIT] Add the two binding rules as CHECKS, not
       prose: provenance fields (`layout_id`, `form_id`, `shell_id`) are
       OMITTED ENTIRELY from any judged render — not blanked; and no model
       self-reported number enters any metric, rank, filter or ordering.
       done-when: `python -m pytest tests/test_form_experiment_binding.py -q`
       -> `0 failed`, both rules pasted RED against a violating mutation
+      ```
+      $ python -m pytest tests/test_form_experiment_binding.py -q
+      ......                                                           [100%]
+      6 passed in 0.10s
+      ```
+      The blinding mutation is PERMANENT rather than performed once: the test
+      carries a blanking implementation beside the real one and asserts they
+      differ, so a future change to blanking-instead-of-omitting fails without
+      anyone remembering to re-run a mutation by hand.
 
 ## Phase 11 — the gate and delivery
 
