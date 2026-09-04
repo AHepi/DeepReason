@@ -416,3 +416,124 @@ against.
 
 **Unchanged:** the measures, the thresholds, the decision rules and the
 registered predictions of §1. M3 is untouched and remains queued behind M1.
+
+---
+
+## Amendment 5 — M1 replicated, two more pairs, 2026-09-04
+
+Written BEFORE the replicate runs are launched, and committed before the first
+one starts. Authority: the operator's instruction on 2026-09-04, verbatim —
+"ok do it" — approving the closing recommendation of `RESULTS_M1_QUALITY.md`
+§6.6 and of the final report to them: *two more runs per arm on the same
+question, judged by the same sealed protocol.*
+
+### Why more runs rather than another measure
+
+M1 produced three results, and every one of them rests on **a single paired
+observation**:
+
+| result | first pair | the fork it left open |
+|---|---|---|
+| cost: treatment 21.6% cheaper per admitted conjecture | falsified the registered prediction | W: history shortens the work / R: run-to-run variance |
+| quality: treatment judged 1.56 of 15 lower | measured 2026-09-04 | same fork, and p = 0.082 |
+| candidate length: treatment 8.2% shorter | measured 2026-09-04 | same fork, and it partly drives the quality gap |
+
+`RESULTS_M1.md` and `RESULTS_M1_QUALITY.md` both close on the same sentence:
+nothing in a single run per arm separates a real effect from ordinary variance.
+Three paired observations cannot prove one either, but they can kill it: an
+effect that reverses between pairs is variance, and no amount of analysis on
+the first pair could have told us that.
+
+### What is run
+
+Two additional replicate PAIRS of M1, labelled R2 and R3. Each pair is the
+control and the treatment, in that order, with **everything held at the values
+`m1_attach.sh` already uses**: same seed question, same model and profile
+(`qwen3.5:397b`, `reasoning: none`, 131072/8192), same 4 cycles, same 600000
+token budget, same two attachment files byte-for-byte, same `--attached-evidence`
+qualification opt-in, same concurrency 2, control first.
+
+**Each pair runs in its own home** (`runs/home-m1-r2`, `runs/home-m1-r3`).
+This is forced by the harness, not chosen: run identity is deterministic, so a
+replicate in `home-m1` would carry the id of the root already committed there
+and be refused. A fresh home has no leftover root, and the pair's two arms
+still separate from each other by dossier digest exactly as the first pair's
+did. **The replicate roots will therefore carry the SAME run ids as the
+originals**, in different homes — a consequence of determinism, not a
+collision, and the analysis keys on root path.
+
+**The qualification cache is copied from `home-m1` into each new home**, so all
+three pairs share one battery, as §0 requires and as the first pair already
+did. If the copy does not hit, the battery reruns; that is a cost, not a
+confound, and the log will say which happened.
+
+**The embedder needs no action.** The managed path owns `EMBEDDER_MODEL=None`
+(`preparation.py`), so every arm runs the deterministic hashing geometry. The
+first pair's record confirms it: `backend: hashing`, `fallback: false`. The
+neural weights present in this container cannot reach these runs.
+
+### Predictions, registered here, before launch
+
+M1 registered NO direction for quality because nobody knew. That reason has
+expired: one pair has now been measured, so a direction exists to be tested,
+and registering it is what makes the replication capable of failing.
+
+- **COST, directional: the treatment spends FEWER tokens per admitted
+  conjecture than its paired control, in each new pair.** This is the result
+  that already falsified a registered prediction once, so it is the one most
+  worth attacking.
+- **QUALITY, directional: the treatment's blind-judged mean is LOWER than its
+  paired control's, in each new pair.**
+- **LENGTH, directional: the treatment's admitted conjectures are SHORTER on
+  average than its paired control's, in each new pair.** Registered separately
+  from quality because the 2026-09-04 analysis found the judges pay heavily for
+  length; if length replicates and quality does not, the quality gap was the
+  length shift wearing a merit label.
+- **NO DIRECTION registered for the near-duplicate rate** (both arms sat on the
+  floor at one pair of 903 — a measure that cannot discriminate here) **or for
+  D5**, which moved in the treatment's favour while quality moved against it,
+  and which this tranche has already recorded it cannot interpret.
+
+### Decision rule, fixed now so the numbers do not choose it
+
+Applied to each directional prediction independently, across the two NEW pairs:
+
+| new pairs agreeing with the first | verdict recorded |
+|---|---|
+| both | **REPLICATED** — the direction survived two fresh attempts to break it |
+| one of two | **UNRESOLVED** — consistent with variance; say so plainly |
+| neither | **REFUTED** — the first pair's result was noise, and the documents built on it are corrected |
+
+**No significance test will be quoted on three pairs, and none is implied by
+the word replicated.** Three paired runs of one question on one model is not a
+sample; it is three observations. What the table above buys is the ability to
+be WRONG in a way one pair could not be, which is the only reason to spend the
+tokens.
+
+### Judging the new candidates
+
+The same instrument, the same criteria, the same three-judge median, the same
+keymap-stays-shut rule — with a SEPARATE blind set and a SEPARATE keymap for
+the replicate candidates, scored and digest-sealed before that keymap is
+opened, exactly as the first set was.
+
+**The first keymap is now open, and that does not contaminate this.** Blinding
+in this protocol protects the JUDGE, which is an API model shown one candidate's
+text and nothing else; what the monitor knows cannot reach it. The monitor's own
+knowledge is kept out by the same mechanism as before: the aggregation is
+computed by a committed script from a sealed score file, not read off by hand.
+
+### Cost, stated in advance
+
+Roughly 2 million provider tokens (the first pair spent 956,202 across its two
+arms) and about three hours of wall clock, serial. Under the operator's
+standing law that tokens are cheap and the agent is not, and on their explicit
+instruction, this is the intended trade: buy the second and third observation
+rather than reason further about the first.
+
+### What this still cannot do
+
+One question. One model. One judge family. Three pairs of runs answer whether
+the M1 effects are stable across repetitions of THIS arm on THIS question, and
+nothing else. Generalising past that needs a second question, which is not in
+this amendment and is not being run.
