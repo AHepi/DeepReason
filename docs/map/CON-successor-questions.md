@@ -1,5 +1,5 @@
 <!-- DR-CON-successor-questions -->
-Verified-at: bc3175394
+Verified-at: 6f9b5614e
 Verify: python -m pytest tests/test_successor_law_line.py tests/test_successor_registry.py tests/test_successor_questions.py tests/test_successor_minting.py tests/test_successor_rank_tie.py -q
 Owns: src/deepreason/successor/__init__.py, src/deepreason/successor/registry.py, src/deepreason/successor/route.py, src/deepreason/successor/mint.py
 Seams-undocumented: successor-questions x scratch, successor-questions x rules, successor-questions x scheduler

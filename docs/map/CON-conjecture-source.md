@@ -1,5 +1,5 @@
 <!-- DR-CON-conjecture-source -->
-Verified-at: a5a435e3e
+Verified-at: 6f9b5614e
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py
 Seams: DR-SEAM-rules-x-scratch
