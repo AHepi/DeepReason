@@ -414,3 +414,39 @@ the first report is written before the run's actual configuration has been
 read; the window then corrects itself, but the wrong cause is what the
 operator saw. The remedy tranche (stop report + refusal to diagnose without
 it) is `experiments/2026-09-03-change-stop-report/` once opened.
+
+## Queued 2026-09-04 — adoptions from the operator's CR-2.0 revB document
+
+The operator uploaded "CR-2.0 proposal — Creative Revision Event Semantics,
+Revision B" (a theory of creative processes; not a harness design) and asked
+whether it adds anything worth adopting. Monitor's assessment, accepted by the
+operator ("keep a note. Those will be next"): most of it is already how the
+harness works (append-only facts with re-derived statuses; a stop that never
+bears on content; hv relative to a declared variation family; equivalence
+levels; conjecture-before-criticism; deletion/mutation tests). Three items
+are queued, in this order:
+
+1. **Four evidence states, with a completeness declaration.** OPEN /
+   SUPPORTED / REFUTED / CONTESTED as a DERIVED reading over the record, so an
+   admitted conjecture nobody criticised is not read as a survivor; absence of
+   criticism counts against a conjecture only when the cycle declares
+   criticism ran in full (not budget-cut). Feeds the progress-over-baseline
+   measure directly. Price: a reader (no frozen contact) plus one typed
+   per-cycle declaration from the scheduler (may need a record entry —
+   surface-2 grant like 2026-09-04's).
+2. **Reason-use test on the RESPONSE side.** Mirror of the blind-critic
+   experiment: paraphrased criticism → same response; different planted
+   defect → redirected response; irrelevant complaint → no repair; invalid
+   criticism → reasoned rejection. The bench exists
+   (`experiments/2026-09-04-experiment-blind-critic/` plant.py, targets,
+   sealed key). Strengthened by that experiment's finding that the critic
+   attacks everything, so only what a criticism SAYS — and what a response
+   DOES with it — carries information. Price: one live experiment tranche.
+3. **Disclosed loss on revision.** A revision answering a criticism states
+   which earlier commitments were kept and which given up. Check first whether
+   the commitment battery already makes this derivable (then a reader); else an
+   OPTIONAL form field (formalism-optional law). Lowest priority.
+
+NOT adopted: the proof-assistant kernel, the four-layer rewrite, authorship /
+physical-realisation certificates, re-encoding the record in the document's
+event vocabulary (cross-version work the operator retired).
