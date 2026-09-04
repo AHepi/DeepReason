@@ -236,6 +236,27 @@ Recorded 2026-08-12 at main 074ef1549.
   tranche. While the map is empty `_verdict` cannot return 3, so the
   "empty map plus exit 3" finding above is unreachable rather than latent.
 
+  **The CASE INVENTORY is baselined, not one case — re-baselined 2026-09-04**
+  (`experiments/2026-09-04-defect-rotted-soak-cases/`). Pinning only `--case
+  epoch3` is how five of the nine committed cases (`pr1`, `pc1`, `pc2`,
+  `pc2b`, `split-legs`) rotted for two months without moving any recorded
+  number: their builders pinned the LOCAL simulation toolchain while the
+  default runner became the CONTAINED one, so every one of them refused
+  `V6_SIMULATION_TOOLCHAIN_REQUIRED` before a single assertion ran. Worse,
+  `pc2` and `pc2b` are the whole of `IN_RUN_EVALUATION_CASES`, so assertions
+  **A5** and **A6** were emitted by no runnable case at all while exit 0 went
+  on reading as the whole instrument passing — the `docs_verify` fault above,
+  one instrument over. The expected value is now: **all nine cases compile**,
+  enforced by `tests/test_cycle_soak_runs_everything.py` in the gate, so this
+  cannot rot silently again.
+  Two consequences for reading a report. **A7-record-fully-read** is a
+  universal assertion: a record the instrument's own readers cannot parse is a
+  FAILURE, never a silent skip, because dropping it moves every other count in
+  the passing direction. And a case that does not carry A5/A6 now EMITS them
+  marked `[N/A ]` with a census line naming how many of the seven declared
+  assertions actually ran — a green exit describes the ones evaluated, never
+  the ones declared.
+
 ## Census anchors (move with the tree; verify before trusting)
 
 - Committed-root census and per-root verdicts: the newest committed

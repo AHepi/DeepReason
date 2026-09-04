@@ -1,0 +1,1 @@
+wheel smoke passed: isolated V6-only contents, clean imports, exact entry points, module parity, MCP registration, and exact MCP schemas

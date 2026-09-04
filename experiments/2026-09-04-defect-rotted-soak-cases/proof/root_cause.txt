@@ -1,0 +1,11 @@
+=== D-A: toolchain identity mismatch ===
+policy.python_toolchain_identity: python@deepreason-public-contained.v1
+what the 5 BROKEN builders pin  : python@deepreason-public-local.v1
+what the 4 WORKING builders pin : python@deepreason-public-contained.v1
+MATCH (broken) : False
+MATCH (working): True
+
+=== D-C: three bare 'question' modules, different bytes ===
+  64b724c411832098  2026-08-25-change-constructive-frontier
+  933313a5d9ca6dd8  2026-09-01-live-all-modules-p-a1
+  933313a5d9ca6dd8  2026-09-02-live-p-a2-corrected

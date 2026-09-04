@@ -422,11 +422,40 @@ def _case_symbols(case: SoakCase):
     )
 
 
-def _case_module(case: SoakCase):
-    """Import the committed builder that owns this case's shape."""
+_EXPERIMENTS_ROOT = (Path(__file__).resolve().parents[1] / "experiments").resolve()
 
+
+def _case_module(case: SoakCase):
+    """Import the committed builder that owns this case's shape.
+
+    Builders import BARE sibling names -- ``from question import QUESTION``,
+    ``from criteria import CRITERIA`` -- and three experiment directories
+    define a ``question.py`` whose bytes differ. A plain ``__import__`` leaves
+    the first one in ``sys.modules``, so a second case built in the SAME
+    process silently receives another experiment's question and compiles a
+    manifest for a shape nobody asked for. ``pc2``/``pc2b`` carry a frozen
+    question digest and fail loudly on it; the cases that carry no such guard
+    would drift in silence, which is the failure this whole instrument exists
+    to refuse.
+
+    So each builder is loaded with its own directory FIRST on the path, and
+    every sibling module it pulled in from under ``experiments/`` is evicted
+    afterwards. Modules from ``src/`` are left alone -- they are the same
+    objects for every case, and re-importing them per case would be slow and
+    would not make anything truer.
+    """
+
+    saved_path = list(sys.path)
+    before = set(sys.modules)
     sys.path.insert(0, str(case.builder_dir))
-    return __import__(case.builder)
+    try:
+        return __import__(case.builder)
+    finally:
+        sys.path[:] = saved_path
+        for name in set(sys.modules) - before:
+            origin = getattr(sys.modules.get(name), "__file__", None)
+            if origin and Path(origin).resolve().is_relative_to(_EXPERIMENTS_ROOT):
+                del sys.modules[name]
 
 
 def build_root(case: SoakCase, root: Path, *, port: int) -> dict:
@@ -735,6 +764,13 @@ def _attempt_facts(root: Path) -> dict:
     attempts = 0
     repairs = 0
     leaseless = 0
+    # A record this reader cannot parse is NOT a record that says nothing.
+    # Dropping it silently moves every count below in the PASSING direction --
+    # an unreadable attempt can never raise `leaseless` -- so the drops are
+    # counted and A7 fails on them.  This is the docs_verify lesson (an opener
+    # the grammar could not read was discarded with no output, so a green total
+    # described a population the instrument had never examined).
+    unreadable = 0
     contracts: set[str] = set()
     roles: set[str] = set()
     if directory.is_dir():
@@ -742,6 +778,7 @@ def _attempt_facts(root: Path) -> dict:
             try:
                 data = json.loads(path.read_text())["data"]
             except (OSError, KeyError, json.JSONDecodeError):
+                unreadable += 1
                 continue
             attempts += 1
             if int(data.get("attempt_index", 0) or 0) > 0:
@@ -764,7 +801,12 @@ def _attempt_facts(root: Path) -> dict:
         for path in sorted(preparations.glob("*.json")):
             try:
                 payload = json.loads(path.read_text())["data"]["task_payload_value"]
-            except (OSError, KeyError, TypeError, json.JSONDecodeError):
+            except (OSError, json.JSONDecodeError):
+                unreadable += 1
+                continue
+            except (KeyError, TypeError):
+                # A preparation with no task payload is a well-formed record of
+                # a different kind, not an unreadable one.
                 continue
             if (
                 isinstance(payload, dict)
@@ -779,6 +821,7 @@ def _attempt_facts(root: Path) -> dict:
         "attempts_without_complete_lease": leaseless,
         "distinct_contracts": sorted(contracts),
         "distinct_roles": sorted(roles),
+        "unreadable_records": unreadable,
     }
 
 
@@ -872,12 +915,15 @@ def assess_run(
     root: Path, driven: dict, *, cycles: int, case: SoakCase | None = None,
     criteria: list[str] | None = None,
 ) -> list[dict]:
-    """S1's four terminal assertions, plus any the case itself requires.
+    """S1's terminal assertions, plus any the case itself requires.
 
-    A1-A4 are universal.  A5/A6 are added only for a case that declares an
-    IN-RUN EVALUATION, because for such a case "the run reached cycle N" is
-    not the whole question: a battery that never fired, or that fired and
-    reached nobody, produces a green soak and a dead experiment.
+    A1-A4 and A7 are universal.  A5/A6 are EVALUATED only for a case that
+    declares an IN-RUN EVALUATION, because for such a case "the run reached
+    cycle N" is not the whole question: a battery that never fired, or that
+    fired and reached nobody, produces a green soak and a dead experiment.
+    Every other case still EMITS them, marked not-applicable: an assertion
+    that is silently absent cannot be distinguished from one that passed, and
+    the caller must be able to count what actually ran.
     """
 
     status = _status(root)
@@ -939,6 +985,18 @@ def assess_run(
         },
     ]
 
+    facts = _attempt_facts(root)
+    checks.append(
+        {
+            "id": "A7-record-fully-read",
+            "ok": int(facts.get("unreadable_records") or 0) == 0,
+            "detail": (
+                f"{facts.get('unreadable_records')} record(s) under objects/ "
+                "could not be parsed by this instrument's own readers"
+            ),
+        }
+    )
+
     if case is not None and case.id in IN_RUN_EVALUATION_CASES:
         facts = _channel_facts(root, criteria or [])
         checks.append(
@@ -963,6 +1021,27 @@ def assess_run(
                 ),
             }
         )
+    else:
+        # NEVER omit a declared assertion.  A5/A6 are carried only by the cases
+        # whose configs arm the in-run checker, and for two months both of those
+        # cases failed to compile -- so these two rows silently vanished from
+        # every run while exit 0 still read as the whole instrument passing.
+        # An assertion that does not apply says so, out loud, in its own row.
+        carriers = ", ".join(sorted(IN_RUN_EVALUATION_CASES))
+        for identifier in ("A5-in-run-checker-fired",
+                           "A6-discharge-channel-carried-them"):
+            checks.append(
+                {
+                    "id": identifier,
+                    "ok": True,
+                    "applicable": False,
+                    "detail": (
+                        f"not carried by case "
+                        f"{case.id if case is not None else '(none)'} -- only "
+                        f"{carriers} arm the in-run checker"
+                    ),
+                }
+            )
 
     return checks
 
@@ -1051,8 +1130,17 @@ def _render(report: dict) -> None:
     print()
     print("-- S1 run assertions " + "-" * 51)
     for check in report["checks"]:
-        print(f"  [{'PASS' if check['ok'] else 'FAIL'}] {check['id']:<28} "
-              f"{check['detail']}")
+        if not check.get("applicable", True):
+            mark = "N/A "
+        else:
+            mark = "PASS" if check["ok"] else "FAIL"
+        print(f"  [{mark}] {check['id']:<28} {check['detail']}")
+    declared = len(report["checks"])
+    evaluated = sum(1 for c in report["checks"] if c.get("applicable", True))
+    if evaluated != declared:
+        print(f"  ** {declared} assertions declared, {evaluated} EVALUATED, "
+              f"{declared - evaluated} not applicable to this case -- a green "
+              f"exit describes the {evaluated} that ran, never the {declared}")
 
     print()
     print("-- S2/S4 seam coverage " + "-" * 49)
@@ -1091,7 +1179,10 @@ _TERMINAL_DOWNSTREAM_CHECKS = frozenset({"A2-no-operational-failure",
 
 def _verdict(report: dict) -> int:
     failed_seams = [r for r in report["seams"] if r["disposition"] == "failed"]
-    failed_checks = [c for c in report["checks"] if not c["ok"]]
+    failed_checks = [
+        c for c in report["checks"]
+        if c.get("applicable", True) and not c["ok"]
+    ]
     only_expected_red = bool(failed_seams) and all(
         r["expected_red_until"] for r in failed_seams
     )

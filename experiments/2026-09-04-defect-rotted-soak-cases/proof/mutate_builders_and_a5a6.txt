@@ -1,0 +1,13 @@
+### MUTATION A: revert ONE builder to the pinned local toolchain
+tests/test_cycle_soak_runs_everything.py:89: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_cycle_soak_runs_everything.py::test_every_committed_soak_case_compiles[pc2b]
+FAILED tests/test_cycle_soak_runs_everything.py::test_every_builder_binds_the_toolchain_the_policy_asks_for
+2 failed, 17 passed in 0.80s
+
+### MUTATION B: revert the A5/A6 always-emit else-branch
+
+tests/test_cycle_soak_runs_everything.py:108: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_cycle_soak_runs_everything.py::test_a5_a6_are_emitted_even_when_the_case_does_not_carry_them
+1 failed, 18 passed in 0.85s

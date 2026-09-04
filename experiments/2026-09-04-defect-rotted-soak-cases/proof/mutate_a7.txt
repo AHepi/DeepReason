@@ -1,0 +1,4 @@
+  clean root      -> ok=True  0 record(s) under objects/ could not be parsed by this instrument's own readers
+  one byte broken -> ok=False  1 record(s) under objects/ could not be parsed by this instrument's own readers
+
+  MUTATION PROOF: PASS (silent on a clean record, fires on a broken one)

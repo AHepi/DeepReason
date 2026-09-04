@@ -58,7 +58,7 @@ from deepreason.storage.blobs import BlobStore  # noqa: E402
 from deepreason.v6_policy import (  # noqa: E402
     engaged_control_plane_policy_v3,
     engaged_inquiry_capability_policy,
-    engaged_local_simulation_toolchain,
+    engaged_simulation_toolchain,
 )
 
 CONFIG_PATH = TRANCHE / "run-config.yaml"
@@ -226,9 +226,13 @@ def build(root: Path, *, config_path: Path | str | None = None) -> dict:
         compiled_at=COMPILED_AT,
         control_plane_policy=engaged_control_plane_policy_v3(),
         # Simulation is ON under "everything on", and an enabled simulation
-        # policy must bind exactly one frozen toolchain or the manifest
-        # refuses V6_SIMULATION_TOOLCHAIN_REQUIRED.
-        toolchains=(engaged_local_simulation_toolchain(),),
+        # policy must bind exactly one frozen toolchain whose id equals the
+        # policy's own python_toolchain_identity, or the manifest refuses
+        # V6_SIMULATION_TOOLCHAIN_REQUIRED. That identity follows the runner
+        # choice (contained by default), so it is ASKED FOR here, never pinned
+        # to one runner -- a pinned runner silently stops matching the day the
+        # default moves.
+        toolchains=(engaged_simulation_toolchain(),),
         inquiry_capability_policy=engaged_inquiry_capability_policy(
             attached_evidence=True
         ),

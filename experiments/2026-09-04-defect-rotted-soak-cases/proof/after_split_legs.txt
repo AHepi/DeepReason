@@ -1,0 +1,26 @@
+### split-legs — the case that caught the P-C2b replay-invalid death
+EXIT=0
+-- S1 run assertions ---------------------------------------------------
+  [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+  [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+  [PASS] A3-verify-root-clean         0 violation(s)
+  [PASS] A4-cycles-reached            reached cycle 24 of 24 requested; the deepest recorded death was cycle 2
+  [PASS] A7-record-fully-read         0 record(s) under objects/ could not be parsed by this instrument's own readers
+  [N/A ] A5-in-run-checker-fired      not carried by case split-legs -- only pc2, pc2b arm the in-run checker
+  [N/A ] A6-discharge-channel-carried-them not carried by case split-legs -- only pc2, pc2b arm the in-run checker
+  ** 7 assertions declared, 5 EVALUATED, 2 not applicable to this case -- a green exit describes the 5 that ran, never the 7
+
+-- S2/S4 seam coverage -------------------------------------------------
+  [PART] D1-seat-contract         seat contracts with repairs
+         reason: seat contracts exercised, but zero repair tasks recorded: an un-induced stub always returns a schema-valid response, so no repair is ever requested. Re-run with --induce-repairs N (and --induce-repair-kind unparseable, or alternate, to reach whole_object_syntax as well as patch)
+         reached: {'workflow-contract-decomposition-transition-v1': 0, 'workflow-provider-attempt-v1': 191}
+  [PASS] D2-route-lease           lease-checked routes with tuning
+         reached: {'workflow-provider-attempt-v1': 191}
+  [PASS] D3-budget-auth           budget authorization
+         reached: {'workflow-dispatch-authorization-v1': 191}
+  [PASS] D4-reservation-bound     reservation/dispatch bounds
+         reached: {'workflow-token-reservation-v2': 191}
+
+-- record census -------------------------------------------------------
+
+[exited with code 0]
