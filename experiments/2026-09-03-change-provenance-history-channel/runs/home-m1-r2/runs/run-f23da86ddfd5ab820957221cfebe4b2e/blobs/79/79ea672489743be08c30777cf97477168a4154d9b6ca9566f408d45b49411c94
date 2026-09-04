@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "Popper explicitly distinguishes between the logical problem of induction (which he rejects) and the pragmatic rationality of preferring better-corroborated theories for action.",
+      "premise_evidence": null,
+      "case": "The target's central claim that Popper's preference constitutes a 'performative contradiction' fails because it conflates logical justification with pragmatic decision-making. Popper does not deny that scientists prefer better-corroborated theories; he denies that this preference implies the theory is *probable* or *true*. The target argues that acting on corroboration 'smuggles in' induction because it relies on an 'expectation' that the future will resemble the past. However, Popper's defense is that the preference is rational not because it predicts success (induction), but because it is the only critical method available: if a theory has survived severe tests, it is the best candidate for truth *so far*, even if we have no logical guarantee it will remain so. The target dismisses the 'context of discovery vs. justification' distinction as a mere re-description, but this distinction is precisely Popper's solution: the psychological habit (discovery) is irrelevant to the logical status (justification). By insisting that the *act* of choosing requires an inductive *belief* in future success, the target attributes to Popper a requirement for probabilistic certainty that he explicitly disavows. The preference is defensible on Popper's terms as a non-inductive, critical choice to test the most resilient theory, not as a hidden inductive inference.",
+      "counterexample": [
+        "A scientist chooses Theory A over Theory B because A has survived a severe test that B failed. The scientist acts on A not because they believe A is probably true or will definitely work tomorrow (induction), but because A is currently the least falsified option. If A fails tomorrow, the choice was still rational at the time based on available critical scrutiny, without violating the ban on induction."
+      ],
+      "successor_question": "If the preference for corroborated theories is purely pragmatic and devoid of inductive expectation, does Popper's system ultimately reduce scientific action to a form of blind gambling, or is there a third category of rationality beyond induction and randomness?"
+    }
+  ]
+}

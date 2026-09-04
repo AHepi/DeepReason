@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future truth, but as a critical selection mechanism that maximizes 'verisimilitude' (truth-likeness) relative to current problems, provided one accepts the cost of abandoning any guarantee that this method converges on absolute truth.",
+    "mechanism": "The argument proceeds by distinguishing between 'justification' (which Popper rejects) and 'critical preference' (which he accepts). It posits that choosing the best-tested theory is analogous to a engineer choosing the bridge design that has survived the most severe stress tests: the choice is rational not because survival guarantees the bridge won't collapse tomorrow (induction), but because it is the only design where known errors have been eliminated. The mechanism relies on the asymmetry of falsification: while corroboration adds no probability, it does add informational content about which theories are definitely false, thereby narrowing the field of viable candidates for action.",
+    "counterconditions": [
+      "If the concept of 'verisimilitude' is logically incoherent (as argued by Miller and Tichý), then the preference lacks a formal target.",
+      "If the preference implicitly assumes that nature is uniform enough that past survival predicts future survival, it smuggles in induction.",
+      "If the scientist acts on the theory believing it is 'more likely true' rather than 'least likely false given current knowledge', they violate Popper's epistemic constraints."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "047ea7b165ebb2b40db2a478a3bf3225602d7b76e333676f368d64b2e8813c3f",
+        "kind": "rebutted",
+        "note": "The candidate explicitly addresses the 'smuggling induction' charge by reframing preference as error-elimination rather than probability accumulation. It does not redefine the goal of science away from truth, but redefines the rational basis for acting toward truth as 'critical selection' rather than 'inductive support'."
+      },
+      {
+        "handle": "08218abe2d908092f9126b50809338bd6c6cddb0d43384c3b193e668a34006c6",
+        "kind": "rebutted",
+        "note": "Rebutted by clarifying that Popper's defense rests precisely on the distinction between logical entailment and pragmatic rationality. The candidate argues that preferring X does not entail believing X is probable, but rather that X is the most rigorously vetted option available."
+      },
+      {
+        "handle": "10d9f60e1c1c5582faa984b8051452e4c8ce369fe468d94cbb5f5b0aa2411016",
+        "kind": "rebutted",
+        "note": "The candidate avoids the false dilemma by accepting the logical problem of induction remains unsolved, while asserting that the pragmatic problem of action can be solved via critical preference without solving the logical one."
+      },
+      {
+        "handle": "2acf3052a09e0e9e5d4ff6ca2ddc87f61e54bf19b61e446a135950857653716",
+        "kind": "revised",
+        "note": "Revised to explicitly state that the 'preference' is a normative rule for critical rationalists, not merely a systemic outcome. The text now clarifies that the scientist must consciously adopt the stance of 'acting on the least falsified' to remain within Popper's terms."
+      },
+      {
+        "handle": "3637cea364444177831be4afb7ba5959e53607caea3edb8855e811c565e4ca6",
+        "kind": "rebutted",
+        "note": "The candidate rejects 'meta-induction'. It argues that relying on the method of conjecture and refutation is not an inductive bet that the method works, but a logical necessity: since we cannot justify any theory positively, we are logically compelled to use the only method that yields negative knowledge (falsification)."
+      },
+      {
+        "handle": "469214066cd0fe367482ab1dbf622f3c2ad7e94d48942d7e905fb1fd4b3ff862",
+        "kind": "rebutted",
+        "note": "Agrees that it is not a performative contradiction. The candidate reinforces that Popper allows pragmatic decision-making based on the best available critical discussion, distinct from claiming logical justification."
+      },
+      {
+        "handle": "48c4058b65566c1916052587394c85e201b43ffc6160053f0587893fb9cd43a7",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate proceeds on the assumption that a revised, qualitative notion of verisimilitude (content-based rather than probabilistic) is salvageable for practical science, acknowledging that the strict logical definition failed. The cost is accepting a less formalized metric for 'closeness to truth'."
+      },
+      {
+        "handle": "57caaebff03718fcfae1eb65e146728a7ccfcdbb9a565c5c07eec876a7171e21",
+        "kind": "rebutted",
+        "note": "Rejects the category error charge by arguing that in critical rationalism, the 'descriptive' history of severe testing constitutes the 'normative' warrant for action. There is no separate normative realm; the severity of the test *is* the justification for the preference."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["bridge_engineering_safety_factors", "evolutionary_survival_of_fit phenotypes"],
+      "shared_structure": [
+        "Selection based on elimination of failures rather than proof of success.",
+        "Preference for the survivor is pragmatic, not predictive of infinite future stability.",
+        "System improves by removing the worst options, not by confirming the best."
+      ],
+      "disanalogies": [
+        "Engineering aims for safety margins based on statistical loads (inductive), whereas Popperian science explicitly rejects statistical confirmation.",
+        "Evolution has no agent making a 'choice'; the scientist actively chooses, introducing a normative dimension absent in natural selection."
+      ],
+      "transfer_claims": [
+        "Just as an engineer crosses the bridge that survived stress tests without believing it will never fall, the scientist acts on the corroborated theory without believing it is probably true.",
+        "The rationality of the action derives from the rigor of the attempted destruction, not the duration of survival."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that acting on a theory necessarily implies assigning it a probability > 0.5.",
+        "If 'verisimilitude' is proven to be undefinable even in qualitative terms without circularity."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

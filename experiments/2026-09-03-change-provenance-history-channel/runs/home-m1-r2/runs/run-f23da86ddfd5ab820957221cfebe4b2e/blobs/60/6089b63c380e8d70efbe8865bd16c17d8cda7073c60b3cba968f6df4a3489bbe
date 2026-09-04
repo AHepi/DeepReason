@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target's defense relies on a 'meta-induction' that Popper explicitly and repeatedly rejected as a misunderstanding of his methodology, rendering the proposed defense incompatible with 'Popper's own terms' as required by the problem.",
+      "case": "The target argues that the preference for corroborated theories is defensible only by accepting a 'meta-induction' regarding the reliability of the method of conjecture and refutation. However, this directly contradicts the constraint to argue on 'Popper's own terms.' Popper did not 'smuggle in' induction at the meta-level; he offered a non-inductive justification for preferring better-corroborated theories based on verisimilitude (truth-likeness) and the logical asymmetry between verification and falsification. He argued that we prefer the better-tested theory not because we induce it will succeed in the future, but because it has withstood attempts to falsify it, and if there is truth to be found, it is more likely to reside in the theory that has survived severe criticism than in one that has not. By framing the only defense as a concession to 'meta-induction,' the target constructs a straw man that ignores Popper's actual solution (verisimilitude and the rationality of critical preference without probabilistic inference), thereby failing to provide a defense that is actually defensible on Popper's own terms.",
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "If meta-induction is rejected as Popper did, how does the concept of verisimilitude specifically allow a scientist to prefer one unfalsified theory over another without invoking any form of inductive expectation about future performance?"
+    }
+  ]
+}

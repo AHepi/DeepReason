@@ -1,0 +1,284 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a rational choice based on 'verisimilitude' (truth-likeness) rather than probability, avoiding induction by treating corroboration as a report of past performance that informs the selection of the theory with the highest content and closeness to truth.",
+      "mechanism": "Popper distinguishes between the logical probability of a theory (which remains zero or low for high-content theories) and its verisimilitude. Corroboration does not increase probability but indicates that a theory has withstood severe tests, making it the best candidate for being closer to the truth than its rivals. The scientist's preference is thus a non-inductive bet on the theory with the highest surviving informational content.",
+      "counterconditions": [
+        "If verisimilitude cannot be formally defined without collapsing into probability or induction (as argued by Miller and Tichý).",
+        "If the preference implies an expectation of future success based solely on past performance.",
+        "If 'rational choice' inherently requires a probabilistic justification."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate explicitly addresses the preference question by grounding it in verisimilitude and content, not by redefining the goal of science away from truth. It argues the preference is for the 'truth-like', which is consistent with Popper's aim of truth."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "The rebuttal clarifies that preferring a theory for action does not entail believing it has a higher *probability* of success, but rather that it is the most 'truth-like' among available options, a distinct logical category in Popper's framework."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "The candidate maintains that the preference is a normative recommendation for the agent (the scientist) based on the logical state of the theories (their test history), not merely a descriptive systemic outcome."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "No meta-induction is assumed. The argument relies on the logical relation of corroboration to verisimilitude at a specific time t, not on an inductive principle that the future will resemble the past."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "rebutted",
+          "note": "The distinction between logical justification and pragmatic decision-making is preserved; the 'justification' offered is the logical status of the theory regarding truth-content, which pragmatically guides the decision without invoking induction."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "revised",
+          "note": "Acknowledges the Miller-Tichý result as a severe countercondition. The claim is revised to state that while the *formal* definition of verisimilitude faced issues, Popper's *intent* and the qualitative preference for high-content, well-tested theories remain the only non-inductive basis for choice he offered."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "The analogy to biological survival is used illustratively, but the core argument rests on the logical concept of verisimilitude and severity of tests, providing a normative justification for the agent's choice."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "revised",
+          "note": "Revises the reliance on verisimilitude to acknowledge its historical problems, framing the defense as Popper's 'best available non-inductive account' despite its formal imperfections, rather than a logically watertight proof."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_009"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories unavoidably smuggles in induction because any rationale for expecting a well-tested theory to perform better in the future (or to be a better guide for action) implicitly assumes the uniformity of nature or the reliability of past tests as predictors of future outcomes.",
+      "mechanism": "Even if labeled 'verisimilitude' or 'corroboration', the act of preferring Theory A over Theory B for future action implies a belief that A is more likely to yield successful predictions or interventions. This leap from 'has survived' to 'will succeed' is the definition of inductive inference, regardless of Popper's semantic attempts to block it.",
+      "counterconditions": [
+        "If one can conceive of a non-inductive rationale for action (e.g., purely aesthetic or arbitrary choice).",
+        "If 'preference' is interpreted strictly as a report of current status without future-oriented implications.",
+        "If the 'problem of induction' is dissolved rather than solved."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate directly answers the problem by asserting the preference *does* smuggle in induction, rejecting the idea that redefining terms avoids the underlying inductive leap required for action."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Argues that Popper's defense fails because the very act of 'preferring for action' logically entails an expectation of future efficacy, which is probabilistic/inductive in nature, regardless of the label used."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Contends that even if preference is a systemic outcome, the *rationality* of adopting that outcome for one's own actions requires an inductive assumption, making the defense on Popper's terms impossible."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "Accepts that this view implies a form of meta-induction but argues this is unavoidable for any working scientist, thus showing Popper's terms are insufficient for actual practice."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "rebutted",
+          "note": "Rejects the separation of logical justification and pragmatic decision; argues that pragmatic decisions *require* logical justifications that, in this case, inevitably turn out to be inductive."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "Uses the failure of verisimilitude (Miller/Tichý) as support for the claim that no non-inductive bridge exists, reinforcing the conclusion that induction is smuggled in."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "Agrees that biological survival is descriptive, but insists that scientific *preference* is normative and thus demands a justification that inevitably collapses into induction."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Leverages the obsolescence of verisimilitude to argue that without it, Popper has no remaining non-inductive mechanism to justify preference, confirming the smuggling charge."
+        }
+      ],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The preference is defensible not as an epistemic judgment of truth or probability, but as a methodological rule of 'risk minimization': choosing the most severely tested theory minimizes the risk of error in the short term, without claiming it reduces the risk in the long term or makes the theory probable.",
+      "mechanism": "Popper's methodology is akin to a gambler choosing the horse with the best track record not because it will win (induction), but because it is the only rational move available given the lack of other information. It is a 'conjectural' preference that accepts the possibility of immediate falsification, thereby remaining consistent with fallibilism.",
+      "counterconditions": [
+        "If 'minimizing risk' implicitly assumes past performance predicts future risk profiles.",
+        "If the distinction between short-term and long-term risk is untenable.",
+        "If methodological rules themselves require inductive justification to be adopted."
+      ],
+      "typicality": 0.6,
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "Addresses the preference directly by framing it as a methodological heuristic for risk management, not a shift in the goal of science."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Clarifies that 'preferring' here means 'selecting for testing/action' based on current robustness, not believing in a higher probability of future success."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Defends the normative force of the methodological rule as inherent to the critical rationalist stance, independent of systemic outcomes."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "Denies meta-induction; the rule is adopted as a convention of critical inquiry, not because it is believed to work inductively."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "rebutted",
+          "note": "Emphasizes that this is precisely a pragmatic decision-making strategy that aligns with Popper's logical constraints."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "Bypasses the verisimilitude issue entirely by grounding the preference in risk management rather than truth-likeness."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "Distinguishes the normative methodological rule from descriptive biological mechanisms."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Offers an alternative to verisimilitude (risk minimization) that remains viable even if verisimilitude failed."
+        }
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_011"
+      ]
+    },
+    {
+      "claim": "The dilemma is false: Popper's 'preference' is purely negative—we prefer the theory that has *not yet been refuted* among those with high content. This is not a positive endorsement (induction) but a temporary retention of the last standing conjecture.",
+      "mechanism": "Science proceeds by elimination. The 'better-corroborated' theory is simply the one that survives while others die. Preferring it is merely acknowledging it is the only option left. No inductive leap is made; we do not expect it to survive tomorrow, we only note it survived today.",
+      "counterconditions": [
+        "If 'retention' for action implies an expectation of continued survival.",
+        "If the choice among multiple unfalsified theories requires a positive criterion.",
+        "If 'survival' itself is treated as a positive property."
+      ],
+      "typicality": 0.5,
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "Answers the preference question by defining it as a negative selection process (survival of the unfalsified), staying true to Popper's negative methodology."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Argues that preferring the 'last standing' theory does not entail believing it has a higher probability of success, only that it is currently unfalsified."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Frames the preference as a logical necessity of the elimination process, not a systemic outcome or redefinition."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "Strictly avoids meta-induction; the preference is based on the current logical status (unfalsified), not a prediction of future status."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "rebutted",
+          "note": "Aligns pragmatic decision (using the only unfalsified tool) with logical justification (it is unfalsified)."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "Does not rely on verisimilitude, but on the binary status of falsified/unfalsified."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "Provides a normative justification: one ought to use the tool that hasn't broken yet, without assuming it won't break next."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Circumvents the verisimilitude critique by relying solely on falsification status."
+        }
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Accepting that the preference smuggles in induction costs Popper his central demarcation criterion, forcing a reconciliation where science is seen as a 'mitigated skepticism' that accepts weak induction as a pragmatic necessity while maintaining rigorous falsification as its ideal.",
+      "mechanism": "This synthesis admits that pure non-inductive science is impossible for acting agents. The cost is abandoning the purity of Popper's logic in favor of a hybrid model: we act *as if* induction works (smuggling it in) while critically testing *as if* it doesn't. This saves the practice of science but sacrifices the strict logical consistency of Popper's original system.",
+      "counterconditions": [
+        "If such a hybrid model is internally contradictory.",
+        "If 'mitigated skepticism' collapses into standard Bayesianism.",
+        "If the cost of abandoning demarcation is too high for the philosophy to retain its identity."
+      ],
+      "typicality": 0.3,
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "departure_declared",
+          "note": "Departes from strict Popperian orthodoxy to propose a hybrid solution that acknowledges the inevitability of induction in practice."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "departure_declared",
+          "note": "Declares that Popper's defense is insufficient and that the preference *does* entail a form of probabilistic belief, requiring a modification of his terms."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "departure_declared",
+          "note": "Breaks with the idea that the preference can be fully defended on Popper's original terms, accepting that those terms are inadequate for real-world action."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "Accepts the 'meta-induction' charge but reframes it as a necessary pragmatic axiom rather than a logical flaw."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "rebutted",
+          "note": "Argues that the conflation of logical and pragmatic is actually the correct resolution, not a failure."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "Uses the failure of verisimilitude as evidence that a new, inductive-tolerant framework is needed."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "Integrates the descriptive biological mechanism with the normative agent choice via the acceptance of weak induction."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Agrees verisimilitude failed and proposes this hybrid stance as the successor theory."
+        }
+      ],
+      "optional_refs": [
+        "SRC_010",
+        "SRC_015"
+      ]
+    }
+  ]
+}

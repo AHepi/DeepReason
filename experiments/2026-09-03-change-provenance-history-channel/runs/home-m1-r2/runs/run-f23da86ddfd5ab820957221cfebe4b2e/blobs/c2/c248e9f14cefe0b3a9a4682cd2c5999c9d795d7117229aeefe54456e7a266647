@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction if 'preference' is redefined as a critical selection mechanism for maximizing testability (verisimilitude) rather than an inductive inference of future truth; however, this defense survives only by accepting the cost that scientific action becomes a non-rational 'leap of faith' regarding practical success, grounded solely in the logical asymmetry of falsification.",
+    "mechanism": "Reframe the scientist's choice not as predicting 'Theory T will work' (inductive probability) but as selecting 'Theory T is the most severely tested and thus currently closest to truth available' (critical rationalism). The preference is a procedural rule to expose error faster, not a guarantee of utility. The survival of the theory indicates it has withstood attempts to kill it, making it the best target for further criticism, not the most probable predictor.",
+    "counterconditions": [
+      "If the agent requires a guarantee of practical success for action, Popper's framework fails, forcing a retreat to irrationalism or hidden induction.",
+      "If verisimilitude cannot be formally defined without probabilistic assumptions (as per Miller/Tichý), the logical basis for preferring one false theory over another collapses.",
+      "If 'acting on' a theory inherently implies believing it is more likely to succeed than alternatives, the distinction between logical corroboration and psychological expectation dissolves."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "047ea7b165ebb2b40db2a478a3bf3225602d7b76e333676f368d64b2e8813c3f",
+        "kind": "rebutted",
+        "note": "The candidate explicitly addresses the 'smuggling induction' charge by distinguishing between 'preference for truth-likeness' (logical status) and 'preference for success' (inductive expectation), arguing the former is valid while the latter is rejected."
+      },
+      {
+        "handle": "08218abe2d908092f9126b50809338bd6c6cddb0d43384c3b193e668a34006c6",
+        "kind": "revised",
+        "note": "Revised to clarify that Popper's defense does not assume preference entails higher probability of success; instead, it posits preference as a methodological imperative to choose the theory with the highest content and severest testing history, regardless of its probability of working."
+      },
+      {
+        "handle": "10d9f60e1c1c5582faa984b8051452e4c8ce369fe468d94cbb5f5b0aa2411016",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dilemma by maintaining the demarcation: the logical problem (no induction) is kept separate from the pragmatic problem (choice), solving the latter via critical selection rather than logical justification of success."
+      },
+      {
+        "handle": "2acf3052a09e0e9e5d4ff6ca2ddc87f61e54bf19b61e446a135950857653716",
+        "kind": "rebutted",
+        "note": "The argument directly answers whether the preference is defensible on Popper's terms: yes, if defensible means 'consistent with anti-induction,' but no if defensible means 'rationally guaranteed to yield practical results.'"
+      },
+      {
+        "handle": "3637cea364444177831be4afb7ba959e53607caea3edb8855e811c565e4ca6",
+        "kind": "departure_declared",
+        "note": "Departing from the requirement to find a 'meta-induction'; the candidate asserts that any reliance on meta-induction violates Popper's core constraint, so the defense must rest entirely on the asymmetry of falsification and the concept of verisimilitude, even if it leaves a gap in practical justification."
+      },
+      {
+        "handle": "469214066cd0fe367482ab1dbf622f3c2ad7e94d48942d7e905fb1fd4b3ff862",
+        "kind": "rebutted",
+        "note": "Agrees that conflating logical justification with pragmatic decision-making is the error; the candidate maintains the separation by defining the preference as a critical act (choosing the best target for refutation) rather than a predictive bet."
+      },
+      {
+        "handle": "48c4058b65566c1916052587394c85e201b43ffc6160053f0587893fb9cd43a7",
+        "kind": "revised",
+        "note": "Acknowledges the Miller/Tichý critique of verisimilitude as a fatal cost; the candidate now frames the survival of the argument as contingent on accepting a qualitative, non-formal notion of 'closeness to truth' or admitting that the logical foundation for preference is weaker than Popper hoped."
+      },
+      {
+        "handle": "57caaebff03718fcfae1eb65e146728a7ccfcdbb9a565c5c07eec876a7171e21",
+        "kind": "rebutted",
+        "note": "Rejects the category error claim by asserting that in Popper's view, the 'normative justification' for action is precisely the absence of a better alternative that has survived severe tests; the mechanism of survival *is* the justification for critical preference, distinct from biological existence."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_004"],
+      "shared_structure": [
+        "Selection based on survival of stress tests rather than prediction of future performance.",
+        "Distinction between the logic of the filter and the utility of the filtered item.",
+        "Acceptance of a 'best available' option without claiming it is 'good' or 'true' in an absolute sense."
+      ],
+      "disanalogies": [
+        "Biological evolution has no goal of truth, whereas Popperian science explicitly aims at verisimilitude.",
+        "Natural selection operates blindly over eons, while scientific preference is a conscious, rapid, critical act.",
+        "Survival in nature implies reproductive fitness, while survival of a theory implies only that it hasn't been falsified yet."
+      ],
+      "transfer_claims": [
+        "Just as we trust a bridge that survived stress tests not because it's 'probable' to hold but because it's the only one not known to break, we prefer corroborated theories.",
+        "The 'rationality' of the choice lies in the rigor of the testing process, not in the outcome's guarantee."
+      ],
+      "overturn_conditions": [
+        "If a less-tested theory consistently outperforms a highly corroborated one in practice, the link between corroboration and practical preference breaks.",
+        "If verisimilitude is proven logically incoherent, the normative force of choosing the 'most tested' theory vanishes."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

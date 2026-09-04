@@ -1,0 +1,83 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms without smuggling in induction, provided the preference is interpreted as a methodological rule for selecting the most severe test-object rather than an inductive bet on future truth. The cost of this defense is the abandonment of any claim that acting on the best-corroborated theory is 'rational' in the sense of maximizing expected utility or probability of success; it is rational only in the sense of being the most critical stance available.",
+    "mechanism": "Reframe the scientist's 'preference' not as a prediction of future performance (which would require induction) but as a commitment to subject the boldiest, most informative conjecture to the next round of falsification. Since corroboration reports past severity of testing, preferring the highly corroborated theory means preferring the theory that has survived the hardest attempts to kill it, thereby offering the best chance for future learning (falsification), not the best chance for future confirmation.",
+    "counterconditions": [
+      "If 'acting on a theory' logically entails assuming its future reliability proportional to past success, then the preference smuggles in induction.",
+      "If the scientist cannot distinguish between 'choosing the best test candidate' and 'choosing the most likely true guide for action,' the defense collapses.",
+      "If Popper's own practical advice implies a hidden probabilistic assumption about the uniformity of nature, the distinction is merely verbal."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "Popper_Conjectures_Refutations_Ch10",
+        "Popper_Logical_Scientific_Discovery_Sec79"
+      ],
+      "shared_structure": [
+        "Selection based on past survival rather than predicted future frequency",
+        "Goal is error elimination rather than truth accumulation",
+        "Status is provisional and non-probabilistic"
+      ],
+      "disanalogies": [
+        "Biological natural selection has no conscious agent making a 'preference,' whereas scientists do",
+        "Survival in nature often correlates with future reproductive success (inductive link), whereas Popper denies this correlation for theories",
+        "Evolutionary fitness is defined by actual future reproduction, while corroboration is strictly historical"
+      ],
+      "transfer_claims": [
+        "Just as we study the fittest organism to understand adaptation limits, not to guarantee its offspring's survival, we adopt the best-corroborated theory to probe its limits, not to guarantee its predictive success.",
+        "The 'rationality' of the choice lies in the severity of the test it enables, not in the likelihood of the test being passed."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that 'severity' of a test implicitly relies on an inductive assumption that nature behaves uniformly.",
+        "If acting on a theory for practical purposes (e.g., building a bridge) necessarily implies believing it will hold, which equates to assigning it high probability."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "003404da77c855d1fdb70c1968786685a63756f606bb4916c19071415883d022",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'action-guiding reliability' with 'probability of truth.' My mechanism defines reliability strictly as 'capacity to facilitate error detection,' which does not require the theory to be probable or reliable in a predictive sense, only informative."
+      },
+      {
+        "handle": "047ea7b165ebb2b40db2a478a3bf3225602d7b76e333676f368d64b2e8813c3f",
+        "kind": "rebutted",
+        "note": "The claim asserts I redefine the goal of science. I do not; I clarify that 'preference' in Popper's system is a tool for the existing goal (truth via error elimination), not a shift to 'progress' as a substitute for truth. The preference serves the original goal by maximizing test severity."
+      },
+      {
+        "handle": "08218abe2d908092f9126b50809338bd6c6cddb0d43384c3b193e668a34006c6",
+        "kind": "rebutted",
+        "note": "The criticism assumes preference entails belief in higher probability. The rebuttal is that preference entails a commitment to the 'most risky' option. One can prefer the riskiest theory for action precisely because it offers the most to learn, without believing it is more likely to be true."
+      },
+      {
+        "handle": "10d9f60e1c1c5582faa984b8051452e4c8ce369fe468d94cbb5f5b0aa2411016",
+        "kind": "rebutted",
+        "note": "I am not constructing a false dilemma. I am accepting the distinction between logical induction and pragmatic preference, but arguing that the latter, when properly understood as a methodological rule for test selection, does not violate the former. The cost is admitting this preference is not 'inductively rational'."
+      },
+      {
+        "handle": "2acf3052a09e0e9e5d4ff6ca2ddc687f61e54bf19b61e446a135950857653716",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly state that the preference is a 'methodological rule for selecting the most severe test-object' to directly address the concern that I was redefining preference as a systemic outcome rather than an agent's choice."
+      },
+      {
+        "handle": "34ad0d33cac00dc9c4d4b87c266edb3c765de3244ddcf992f0423b84911b04bd",
+        "kind": "rebutted",
+        "note": "The criticism claims Popper cannot justify acting, only testing. My counter-claim is that for Popper, 'acting on a theory' IS treating it as a test object in the real world. Building a bridge is a test of the theory of statics. If the bridge falls, the theory is falsified. Thus, action is the ultimate form of testing."
+      },
+      {
+        "handle": "3637cea364444177831be4afb7ba5959e53607caea36edb8855e811c565e4ca6",
+        "kind": "rebutted",
+        "note": "I explicitly reject 'meta-induction' in the counterconditions. The defense relies on the logical asymmetry between verification and falsification, not on an inductive belief that the method will work. The 'cost' section admits we cannot know the method will yield truth, only that it is the only non-dogmatic path."
+      },
+      {
+        "handle": "40cb62ec8ec9df37aa35b0403869df79b1c96cc2a7da417475cc9cc6267ae17e",
+        "kind": "rebutted",
+        "note": "The normative question is answered: the preference is defensible IF one accepts the norm of 'critical rationality' (seeking error) over 'instrumental rationality' (maximizing success probability). The defense holds on Popper's terms because his terms prioritize critical rationality."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

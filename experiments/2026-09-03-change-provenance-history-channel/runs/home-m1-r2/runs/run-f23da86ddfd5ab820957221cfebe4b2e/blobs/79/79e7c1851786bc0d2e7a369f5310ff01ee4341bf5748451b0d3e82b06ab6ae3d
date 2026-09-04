@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms without smuggling in induction, provided the preference is interpreted as a pragmatic decision to test the most vulnerable (and thus most informative) surviving conjecture, rather than an epistemic judgment of its future truth probability. This stance survives by accepting the cost that 'rational action' in science is decoupled from 'expected utility' based on likelihood, relying instead on the methodological rule that severe testing drives verisimilitude even if we cannot calculate it.",
+    "mechanism": "Reframes 'preference' not as an inductive inference that 'past success predicts future success' (which Popper rejects), but as a strategic selection criterion: the best-corroborated theory is the one that has withstood the most severe attempts at falsification, making it the richest source of potential new errors. Acting on it maximizes the rate of learning (information growth) regardless of its truth probability. The defense leans on Popper's distinction between the logical context of justification (where induction is banned) and the pragmatic context of discovery/action (where methodological rules apply).",
+    "counterconditions": [
+      "If the agent acts on the theory believing it is *more likely* to be true or successful in the future, induction is smuggled in.",
+      "If the concept of 'verisimilitude' (truth-likeness) cannot be coherently defined without probabilistic assumptions (per Miller/Tichý criticisms), the link between corroboration and progress breaks.",
+      "If 'pragmatic preference' implicitly assumes a uniformity of nature (that the future will resemble the past regarding test outcomes), it collapses into hidden induction."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "047ea7b165ebb2b40db2a478a3bf3225602d7b76e333676f368d64b2e8813c3f",
+        "kind": "rebutted",
+        "note": "The candidate does not redefine the goal of science away from truth; it maintains truth as the regulative ideal but argues that 'preference' is a methodological tool for approaching truth (via error elimination), not a claim about having reached it or increased its probability."
+      },
+      {
+        "handle": "08218abe2d908092f9126b50809338bd6c6cddb0d43384c3b193e668a34006c6",
+        "kind": "rebutted",
+        "note": "Explicitly accepts the criticism's premise that preference must not entail higher probability. The rebuttal lies in demonstrating that Popper's 'preference' is purely for the purpose of subjecting the theory to further severe tests, not for betting on its outcome."
+      },
+      {
+        "handle": "10d9f60e1c1c5582faa984b8051452e4c8ce369fe468d94cbb5f5b0aa2411016",
+        "kind": "rebutted",
+        "note": "Agrees that it is not a false dilemma; the candidate sharpens this by specifying that the 'logical problem' remains unsolved (induction is invalid) while the 'pragmatic problem' is solved by changing the definition of rational choice from probability-maximization to error-elimination-maximization."
+      },
+      {
+        "handle": "2acf3052a09e0e9e5d4ff6ca2ddc87f61e54bf19b61e446a135950857653716",
+        "kind": "revised",
+        "note": "Clarified that 'preference' is not merely a systemic outcome but a conscious methodological rule adopted by the scientist to maximize the severity of the next test, directly answering the 'defensibility' question."
+      },
+      {
+        "handle": "3637cea364444177831be4afb7ba959e53607caea3edb8855e811c565e4ca6",
+        "kind": "rebutted",
+        "note": "Denies reliance on 'meta-induction.' The argument relies on the logical asymmetry between verification and falsification: one failed test destroys a theory, but many passed tests only show it hasn't been destroyed yet. Preferring the latter is a rule of efficiency, not an inductive belief in reliability."
+      },
+      {
+        "handle": "469214066cd0fe367482ab1dbf622f3c2ad7e94d48942d7e905fb1fd4b3ff862",
+        "kind": "rebutted",
+        "note": "Aligns with the criticism that it is pragmatic, not logical justification. The candidate argues this *is* the only defensible position on Popper's terms: logical justification for action is impossible without induction, so we must settle for methodological rationality."
+      },
+      {
+        "handle": "48c4058b65566c1916052587394c85e201b43ffc6160053f0587893fb9cd43a7",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate acknowledges the Miller/Tichý critique of verisimilitude as a fatal flaw for Popper's *quantitative* claims but argues that a *qualitative* notion of 'depth of testing' suffices for the pragmatic preference argument, abandoning the formal calculus of verisimilitude."
+      },
+      {
+        "handle": "57caaebff03718fcfae1eb65e146728a7ccfcdbb9a565c5c07eec876a7171e21",
+        "kind": "rebutted",
+        "note": "Rejects the category error charge by asserting that in Popper's framework, the 'normative justification' for action *is* the adherence to the method that has historically yielded the most informative errors (survival of the fittest theory), which is a normative rule of the game of science, not a biological description."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_004"],
+      "shared_structure": [
+        "Selection based on survival of severe trials rather than prediction of future success.",
+        "Distinction between the status of the survivor (unfalsified) and the reason for choosing it (informative potential).",
+        "Rejection of probabilistic weighting in favor of binary falsification status."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of truth, whereas Popperian scientists explicitly aim for truth.",
+        "Natural selection operates on reproduction rates, while scientific selection operates on logical consistency and empirical refutation."
+      ],
+      "transfer_claims": [
+        "Just as we study the surviving species to understand adaptation without assuming they are 'perfect', we use corroborated theories to probe nature without assuming they are 'probable'."
+      ],
+      "overturn_conditions": [
+        "If biological survival is shown to be purely random with respect to fitness, the analogy fails.",
+        "If scientific test results are shown to be independent of theory content (pure noise), the selection mechanism collapses."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_004"
+      ]
+    }
+  }
+}

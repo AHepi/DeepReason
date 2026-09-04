@@ -1,0 +1,93 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future truth, but as a rational selection mechanism for maximizing 'verisimilitude' (truth-likeness) and informational content, provided one accepts the critical cost that this preference remains conjectural and offers no guarantee of success, thereby avoiding the smuggling of induction while admitting a pragmatic gap between corroboration and action.",
+    "mechanism": "The argument reconstructs Popper's distinction between the logical status of a theory (which cannot be probabilified) and the methodological rule for choosing which theory to test or act upon. It posits that preferring the most severely tested theory is a rational heuristic for approaching truth (verisimilitude) because severe tests eliminate error, increasing the remaining theory's likeness to truth without assigning it a probability > 0. This avoids induction by treating the preference as a non-justificatory, evolutionary selection rule rather than a predictive warrant.",
+    "counterconditions": [
+      "If the concept of verisimilitude is logically incoherent (as argued by Miller and Tichý), the defense collapses into an arbitrary preference.",
+      "If acting on a theory necessarily implies an expectation of its future success equivalent to believing it probable, the distinction between pragmatic choice and inductive belief dissolves.",
+      "If the 'evolutionary' analogy for theory selection requires a meta-inductive assumption that the process of elimination converges on truth, the circle of induction is re-entered."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_pressure",
+        "sieve_filtering_mechanism",
+        "navigational_dead_reckoning"
+      ],
+      "shared_structure": [
+        "Selection operates on survival of the fittest/most tested without guaranteeing future survival.",
+        "Elimination of errors increases the quality of the remainder without quantifying its absolute truth.",
+        "Action is taken based on the best available option despite the lack of certainty regarding outcomes."
+      ],
+      "disanalogies": [
+        "Biological evolution has no teleological goal of 'truth', whereas scientific conjecture explicitly aims at verisimilitude.",
+        "A sieve passively filters; scientists actively construct severe tests to break theories, introducing an agency element absent in natural selection.",
+        "Dead reckoning accumulates error over time, whereas Popperian corroboration aims to reduce error content through refutation."
+      ],
+      "transfer_claims": [
+        "Just as an organism survives due to past fitness without a guarantee of future survival, a theory is preferred due to past corroboration without a guarantee of future validity.",
+        "The rationality of using a map known to have errors (dead reckoning) parallels using a corroborated theory known to be potentially false but currently the least erroneous."
+      ],
+      "overturn_conditions": [
+        "Demonstration that 'fitness' in evolution logically entails a probability of future survival.",
+        "Proof that navigating by dead reckoning inherently assumes the stability of the environment (an inductive premise)."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "047ea7b165ebb2b40db2a478a3bf3225602d7b76e333676f368d64b2e8813c3f",
+        "kind": "rebutted",
+        "note": "The candidate does not redefine the goal of science from 'truth' to 'progress' to evade the problem. Instead, it argues that 'preference' is a methodological tool for pursuing truth (via verisimilitude) without claiming that the preferred theory *is* true or probable. The specific question of whether preference smuggles induction is answered by distinguishing the logical status (no probability) from the pragmatic rule (select for high content/survival), maintaining the goal of truth while rejecting inductive justification for the selection."
+      },
+      {
+        "handle": "08218abe2d908092f9126b50809338bd6c6cddb0d43384c3b193e668a34006c6",
+        "kind": "revised",
+        "note": "Revised to explicitly address the link between 'preferring' and 'believing in higher probability of future success.' The claim now clarifies that Popper's defense rests on the idea that preference is a decision to expose the theory to further risk (action) because it has survived the highest risk so far, not because it is deemed likely to succeed. The revision strengthens the argument that 'preference' in this context is a commitment to testing/using the best current guess, distinct from an epistemic belief in its probable truth."
+      },
+      {
+        "handle": "10d9f60e1c1c5582faa984b8051452e4c8ce369fe468d94cbb5f5b0aa2411016",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dilemma charge by affirming that acknowledging a pragmatic preference does not destroy demarcation. The demarcation criterion (falsifiability) applies to the logical structure of the theory, while the preference rule applies to the scientist's conduct. The argument maintains that one can strictly adhere to demarcation (no verification) while employing a rational rule for action (prefer the most tested) without conflating the two domains."
+      },
+      {
+        "handle": "2acf3052a09e0e9e5d4ff6ca2ddc687f61e54bf19b61e446a135950857653716",
+        "kind": "rebutted",
+        "note": "The candidate directly answers whether the preference is defensible on Popper's terms by constructing the defense around 'verisimilitude' and 'methodological rules' rather than redefining preference as a systemic outcome. It argues that the preference is defensible precisely because it is a conscious, rational choice to act on the theory with the highest informative content and strongest survival record, which is consistent with Popper's view of science as a bold conjectural enterprise."
+      },
+      {
+        "handle": "3637cea364444177831be4afb7ba7959e53607caea36edb8855e811c565e4ca6",
+        "kind": "rebutted",
+        "note": "The argument explicitly avoids accepting a 'meta-induction' regarding the reliability of the method. Instead, it frames the preference as a non-justificatory, conventional rule of the game of science. The defense costs the agent any guarantee that the method works; it merely states that *if* one wants to find truth, this is the only rational strategy available, without claiming inductive proof that the strategy will yield truth."
+      },
+      {
+        "handle": "469214066cd0fe367482ab1dbf622f3c2ad7e94d48942d7e905fb1fd4b3ff862",
+        "kind": "rebutted",
+        "note": "The candidate agrees that the criticism of 'performative contradiction' fails if one accepts the distinction between logical justification and pragmatic decision-making. The rebuttal reinforces that Popper's framework allows for rational action without logical certainty, and thus preferring a corroborated theory for action is not a contradiction but a necessary feature of fallibilist rationality."
+      },
+      {
+        "handle": "48c4058b65566c1916052587394c85e201b43ffc6160053f0587893fb9cd43a7",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate proceeds by assuming a rehabilitated or qualitative notion of verisimilitude that escapes the Miller-Tichý trivialization proofs (e.g., by restricting the comparison to theories in a specific domain or using a content-based measure that avoids their specific counterexamples). While acknowledging the severity of the Miller-Tichý critique, the candidate explores the defensibility of Popper's preference *assuming* a coherent concept of 'likeness to truth' is recoverable, as the problem asks for the strongest case *for* the preference."
+      },
+      {
+        "handle": "57caaebff03718fcfae1eb65e146728a7ccfcdbb9a565c5c07eec876a7171e21",
+        "kind": "rebutted",
+        "note": "The candidate addresses the category error by arguing that in Popper's epistemology, the 'normative justification for action' is derived precisely from the 'descriptive mechanism of survival' under severe testing. Unlike biological organisms, scientists are rational agents who *choose* to follow the survival mechanism as a norm. The justification is not that 'survival implies truth,' but that 'rational agents ought to prefer the hypothesis that has best withstood attempts to kill it,' making the descriptive fact of survival the basis for the normative rule of preference."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_009"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_009"
+      ],
+      "search_signal": "productive"
+    },
+    "checker_specs": []
+  }
+}

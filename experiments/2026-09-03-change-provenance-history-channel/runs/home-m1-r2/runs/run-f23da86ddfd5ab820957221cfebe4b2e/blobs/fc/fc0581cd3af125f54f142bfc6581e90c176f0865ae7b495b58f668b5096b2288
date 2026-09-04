@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target fails to make the 'strongest case' for the opposing view as required by the problem. The prompt explicitly demands a balanced analysis: 'Make the strongest case for each answer, then say which one survives.' The target exclusively argues that induction is smuggled in, completely omitting the non-inductive defense (e.g., preferring the most severely tested theory because it has withstood attempts to falsify it, not because it is predicted to succeed). By failing to articulate the counter-argument before dismissing it, the target does not fulfill the core structural requirement of the prompt.",
+      "counterexample": null,
+      "premise": "The problem asks to 'Make the strongest case for each answer', implying a requirement to present both the affirmative (induction is smuggled) and negative (preference is defensible without induction) arguments before concluding.",
+      "premise_evidence": null,
+      "successor_question": "How would Popper defend the rationality of choosing a better-corroborated theory without relying on the assumption that past success predicts future performance?"
+    }
+  ]
+}

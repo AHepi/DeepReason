@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a critical-rational decision rule that maximizes testability (potential falsifiability) rather than probability, but accepting this defense costs the scientist any guarantee of future success or truth-likeness, reducing the preference to a methodological commitment to keep the game of science going rather than a predictive wager.",
+    "mechanism": "The argument reconstructs Popper's distinction between the logical status of a theory (which remains unproven) and the pragmatic choice of which theory to subject to further severe tests. It posits that choosing the better-corroborated theory is equivalent to choosing the theory that has survived the most rigorous attempts at falsification, thereby offering the highest 'content' and the greatest opportunity for future learning. The mechanism relies on the concept of 'verisimilitude' (truth-likeness) as a regulative ideal, while acknowledging the Miller-Tichý impossibility results as a limiting condition that forces the preference to be purely procedural.",
+    "counterconditions": [
+      "If the Miller-Tichý proof demonstrates that no coherent definition of verisimilitude exists within Popper's framework, then the preference lacks even a regulative ideal to guide it.",
+      "If acting on a theory logically entails an expectation of its future success (induction), then the distinction between 'critical preference' and 'inductive belief' collapses.",
+      "If the preference is merely arbitrary or based on psychological habit, it fails to be defensible on rational grounds."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "047ea7b165ebb2b40db2a478a3bf3225602d7b76e333676f368d64b2e8813c3f",
+        "kind": "rebutted",
+        "note": "The candidate explicitly addresses the 'smuggling induction' charge by defining the preference as a choice for higher testability (future risk) rather than higher probability of success (past reliability). It does not redefine the goal of science to 'progress' in a vague sense but strictly as 'maximizing exposure to falsification'."
+      },
+      {
+        "handle": "08218abe2d908092f9126b50809338bd6c6cddb0d43384c3b193e668a34006c6",
+        "kind": "revised",
+        "note": "Revised to clarify that 'preferring' does not entail believing in higher probability. The revision emphasizes that the preference is a decision to bet on the theory with the most informational content, acknowledging that this bet might fail without violating logic."
+      },
+      {
+        "handle": "10d9f60e1c1c5582faa984b8051452e4c8ce369fe468d94cbb5f5b0aa2411016",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dilemma by showing that one can acknowledge a pragmatic preference without destroying demarcation, provided the preference is framed as a rule for selecting the next experiment, not as a confirmation of the theory's truth."
+      },
+      {
+        "handle": "2acf3052a09e0e9e5d4ff6ca2ddc87f61e54bf19b61e446a135950857653716",
+        "kind": "rebutted",
+        "note": "The response directly answers whether the preference is defensible: yes, but only as a procedural rule for error elimination, not as an outcome-based justification. It avoids redefining preference as a systemic outcome."
+      },
+      {
+        "handle": "3637cea364444177831be4afb7ba9596e53607caea36edb8855e811c565e4ca6",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate accepts that avoiding *all* forms of meta-induction may be impossible for a working scientist, but argues that Popper's specific formal requirement is satisfied if the justification rests solely on the logical asymmetry of falsification, even if a psychological meta-induction persists in the agent's mind."
+      },
+      {
+        "handle": "469214066cd0fe367482ab1dbf622f3c2ad7e94d48942d7e905fb1fd4b3ff862",
+        "kind": "rebutted",
+        "note": "The candidate agrees that conflating logical justification with pragmatic decision-making is the error critics make, but argues Popper's solution is precisely to offer a *pragmatic* rule (choose the best tested) that requires no *logical* justification of probability."
+      },
+      {
+        "handle": "48c4058b65566c1916052587394c85e201b43ffc6160053f0587893fb9cd43a7",
+        "kind": "revised",
+        "note": "Revised to explicitly incorporate the Miller-Tichý objection as a fatal blow to 'verisimilitude' as a formal metric, forcing the defense to rely solely on 'testability' and 'content' as the grounds for preference, admitting the loss of a truth-likeness guarantee."
+      },
+      {
+        "handle": "57caaebff03718fcfae1eb65e146728a7ccfcdbb9a565c5c07eec876a7171e21",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes the normative justification (we *should* choose the most testable theory to learn faster) from the descriptive mechanism (survival), arguing that the norm derives from the goal of error elimination, not from the fact of survival itself."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_pressure",
+        "championship_boxing_matchmaking"
+      ],
+      "shared_structure": [
+        "Selection of an entity based on past performance against strong opponents.",
+        "The selected entity is not guaranteed to win the next match/survive the next environment.",
+        "The preference is justified by the desire to see the highest level of competition/testing, not by certainty of the winner's inherent superiority."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of 'learning', whereas Popperian science explicitly aims at error elimination.",
+        "A boxing champion is chosen to defend a title (status), whereas a scientific theory is chosen to be attacked (risk)."
+      ],
+      "transfer_claims": [
+        "Just as we watch the heavyweight champion to see the limits of human strength, we adopt the best-corroborated theory to see the limits of current knowledge.",
+        "Preferring the champion does not mean believing they are invincible, only that they represent the current peak of tested ability."
+      ],
+      "overturn_conditions": [
+        "If the boxing match is rigged (theory is dogmatically protected), the analogy fails.",
+        "If the goal of the sport changes from competition to entertainment (science changes from truth-seeking to utility), the analogy breaks."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'critical preference' rooted in verisimilitude (truth-likeness), not probability. It does not smuggle in induction because it relies on the logical content of surviving severe tests, not an extrapolation of past success to future truth.",
+      "mechanism": "Critical Rationalism distinguishes between 'justification' (which requires induction) and 'preference' (which relies on comparative logical content). A theory that survives severe tests has demonstrated higher empirical content and thus greater potential verisimilitude. The preference is a methodological rule to choose the theory with the highest known information content, avoiding the claim that it is 'more probable'.",
+      "counterconditions": [
+        "If verisimilitude cannot be defined without invoking probability or induction (as Miller and Tichý argued), the defense collapses.",
+        "If the preference implicitly assumes the uniformity of nature to expect the better-tested theory to work tomorrow, it smuggles in induction."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate explicitly addresses the 'smuggling induction' charge by distinguishing 'critical preference' (methodological) from 'probabilistic justification' (epistemic). It does not redefine the goal of science but clarifies the mechanism of choice within the existing goal of truth-seeking via verisimilitude."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "This candidate agrees that conflating logical justification with pragmatic decision-making is an error, but argues Popper's 'critical preference' is precisely the bridge: it is a rational, non-inductive basis for action derived from the logical status of the theories (one is falsified, the other not yet)."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "revised",
+          "note": "Revised to acknowledge the Miller-Tichý proof against formal verisimilitude definitions. The mechanism now rests on 'potential verisimilitude' or 'comparative corroboration' as a proxy for truth-content without claiming a formal metric, accepting the cost that the defense is heuristic rather than strictly logical."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The analogy to biological selection is illustrative, not the justificatory base. The justification is logical: preferring the unfalsified over the falsified is a deductive consequence of the aim to avoid error, not a descriptive claim about survival."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate rigorously maintains the distinction: 'induction' claims increased probability; 'critical preference' claims increased rationality of choice based on current critical status. No category error is committed if the agent acts on the latter without believing the former."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate rejects the false dichotomy. It offers Popper's third way: 'critical preference' based on severity of tests passed, which is neither arbitrary decisionism nor inductive probabilism."
+        }
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_008",
+        "SRC_010"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction. Despite Popper's protests, acting on corroboration logically presupposes that past performance is a reliable guide to future success, which is the definition of induction.",
+      "mechanism": "Pragmatic Inconsistency Analysis. While Popper defines corroboration as a historical report, the *act* of preferring theory A over B for future application assigns a predictive weight to that history. This assignment functions identically to inductive probability in practice, rendering the semantic distinction between 'corroboration' and 'probability' a verbal shield for an inductive practice.",
+      "counterconditions": [
+        "If a non-inductive rationale for action (e.g., purely aesthetic or arbitrary choice) can be shown to be equally rational, the necessity of induction is weakened.",
+        "If 'preference' can be grounded solely in the logical asymmetry of falsification without reference to future success, the induction charge fails."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate argues that redefining goals (to 'progress') does not solve the problem if the *means* chosen (preferring the tested) still rely on an inductive leap. The criticism that the target fails to answer the specific problem is met by directly attacking the coherence of 'non-inductive preference'."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate contends that the distinction between 'logical justification' and 'pragmatic decision' is artificial here. A pragmatic decision *requires* a logic of action; if that logic uses past data to predict future utility, it is inductive by function regardless of Popper's label."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The Miller-Tichý refutation of verisimilitude strengthens this candidate's case: if the formal logical bridge (verisimilitude) is broken, the only remaining bridge between past tests and future preference is inductive habit."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate accepts the category error warning regarding biology but pivots to epistemology: the normative justification for an agent *must* involve a belief in the reliability of the method, which is an inductive belief."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate argues that 'critical preference' is merely a renamed form of induction. If the rule says 'act as if the tested theory will work,' it is an inductive rule, regardless of whether one calls it 'probability' or 'preference'."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate asserts that avoiding induction *does* force one into arbitrary decisionism unless one admits that 'severity of test' is a proxy for 'likelihood of truth,' which is an inductive claim."
+        }
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_001",
+        "SRC_007",
+        "SRC_009"
+      ]
+    },
+    {
+      "claim": "The dilemma is dissolved by viewing scientific preference as an evolutionary adaptation rather than a logical inference. The preference is defensible not because it guarantees truth or avoids induction logically, but because it is the survival strategy of the scientific ecosystem.",
+      "mechanism": "Evolutionary Epistemology. Just as organisms do not 'infer' that food is nutritious but evolve a preference for it, scientists evolve a methodological preference for corroborated theories. This preference is 'defensible' in the sense of being functional for the growth of knowledge, bypassing the need for logical justification (inductive or deductive).",
+      "counterconditions": [
+        "If the question demands a *logical* defense (justification) rather than a *functional* one (explanation), this approach fails to answer the prompt.",
+        "If evolutionary success itself presupposes an inductive structure of the universe, the regress remains."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departure: This candidate rejects the framing that the preference must be defended on 'Popper's own terms' of strict logical demarcation. It shifts the ground to evolutionary functionality, arguing that the 'smuggling' charge is irrelevant if the mechanism is biological/methodological evolution rather than logical inference."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate agrees that conflating logic and pragmatics is a risk but argues that in an evolutionary framework, 'pragmatics' (survival) is the primary logic. The 'performative contradiction' vanishes if the agent is viewed as an evolving system, not a pure logician."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The failure of formal verisimilitude supports the evolutionary view: since we cannot logically calculate truth-likeness, we must rely on the evolved heuristic of preferring what has worked, acknowledging it as a biological imperative rather than a logical proof."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "revised",
+          "note": "Revised to clarify that the biological analogy is not just an illustration but the *constitutive mechanism*. The justification for action is that the agent is constituted to act this way to survive intellectually; the 'category error' is avoided by making the descriptive mechanism the normative basis (naturalized epistemology)."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate argues that 'induction' is a misnomer for 'evolved heuristic'. The preference is not a claim about the future's probability but a behavioral trait selected for its past utility, dissolving the epistemic claim."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "It rejects the dichotomy by offering a third option: 'evolved rationality'. It is not arbitrary (it's selected) and not inductive (it makes no universal claim), but adaptive."
+        }
+      ],
+      "typicality": 0.45,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_009"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if we accept a 'meta-induction': we induce that the method of conjecture and refutation is the best way to learn, even if individual theories are not probable. This smuggles in induction at the meta-level but saves the object-level purity.",
+      "mechanism": "Meta-Inductive Defense. Popper rejects induction for theories (object level) but implicitly relies on induction for the method itself (meta level). We prefer corroborated theories because we have induced that 'severe testing' is a reliable filter. This concedes the charge of smuggling induction but relocates it to a single, necessary foundational assumption.",
+      "counterconditions": [
+        "If Popper explicitly rejected meta-induction, this defense contradicts his own terms.",
+        "If the meta-induction itself requires justification, an infinite regress ensues."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate answers the specific problem by admitting the smuggling but arguing it is localized and unavoidable. It does not redefine the goal of science but exposes the hidden cost of the methodology."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "It challenges the idea that Popper successfully separated logic and pragmatics. The 'pragmatic decision' to use the method rests on a meta-inductive belief in the method's efficacy."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The collapse of verisimilitude forces this meta-inductive turn. Without a logical guarantee of truth-content, we must inductively trust the process that generated the theory."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate distinguishes between the descriptive survival of the method and the normative justification for using it, bridging them with a conscious meta-inductive commitment."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "revised",
+          "note": "Revised to admit that 'critical preference' at the object level is sustained by 'inductive confidence' at the meta-level. The category error is resolved by stratifying the levels of analysis."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "It argues that 'critical rationalism' itself rests on an inductive faith in criticism. Thus, the dichotomy is false: one can be a critical rationalist *because* one has induced that criticism works."
+        }
+      ],
+      "typicality": 0.60,
+      "optional_refs": [
+        "SRC_004",
+        "SRC_010"
+      ]
+    }
+  ]
+}

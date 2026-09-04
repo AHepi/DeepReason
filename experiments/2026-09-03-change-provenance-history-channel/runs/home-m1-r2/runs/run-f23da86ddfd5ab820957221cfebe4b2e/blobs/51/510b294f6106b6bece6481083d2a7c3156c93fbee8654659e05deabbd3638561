@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target dissolves the dilemma by shifting the ground from Popper's epistemological terms to an evolutionary functionalist framework, thereby failing to answer whether the preference is defensible *on Popper's own terms*. Popper explicitly rejected evolutionary epistemology as a solution to the problem of induction because it merely pushes the inductive assumption back to the stability of the environment (i.e., that the future will resemble the past). By claiming the preference is defensible only as a 'survival strategy' rather than a rational choice based on corroboration's relation to truth-likeness (verisimilitude), the target concedes that there is no logical defense within Popper's system. This directly contradicts the prompt's requirement to determine if the preference is defensible *on Popper's own terms* without smuggling in induction; the target's answer implies it is not defensible logically, but evades this conclusion by changing the definition of 'defensible' to mean 'biologically adaptive,' which Popper would argue still relies on the unproven inductive premise that adaptation leads to better theories in the future.",
+      "premise": "Popper rejected evolutionary solutions to induction because they presuppose the uniformity of nature.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "If the preference for corroborated theories is merely an evolutionary adaptation and not a rational indicator of verisimilitude, how can Popper maintain his claim that science progresses toward the truth?"
+    }
+  ]
+}

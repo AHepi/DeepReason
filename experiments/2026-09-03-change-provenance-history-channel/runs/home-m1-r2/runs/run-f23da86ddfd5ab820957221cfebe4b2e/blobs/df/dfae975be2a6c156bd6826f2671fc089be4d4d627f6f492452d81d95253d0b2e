@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference for better-corroborated theories requires an 'arbitrary' commitment or an 'irrational leap of faith' misrepresents Popper's specific solution to this problem. Popper explicitly defends the preference not via a decisionist leap, but through a non-inductive, instrumental argument: if we seek truth (verisimilitude), the theory that has withstood more severe tests is rationally preferred because it has survived attempts to falsify it, whereas the other has not. This preference is conditional on the aim of finding truth, not an arbitrary meta-rule. By framing the justification solely as 'decisionism' involving an 'irrational leap,' the target ignores Popper's actual argument that the preference is rational relative to the goal of truth-seeking, thereby failing to address whether the preference is defensible on Popper's own terms without smuggling in induction.",
+      "premise": "Popper argues that preferring a well-corroborated theory is rational if our aim is to find true theories, because corroboration reports on past performance in severe tests, which is relevant to verisimilitude without implying future probability.",
+      "counterexample": null,
+      "successor_question": "Does the target's characterization of Popper's stance as purely 'decisionist' overlook his distinction between the logical status of corroboration (non-inductive) and the pragmatic rationality of preferring it when seeking truth?",
+      "premise_evidence": null
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) to justify preferring better-corroborated theories without induction. However, the target fails to address the seminal objection by David Miller and Pavel Tichý (1974), who proved that Popper's formal definition of verisimilitude collapses: if a theory is false, adding true consequences (which corroboration tracks) does not necessarily make it closer to the truth than another false theory. Since the problem explicitly asks for the 'strongest case' against the preference and what 'accepting it costs,' omitting this fatal formal flaw renders the argument incomplete and the conclusion unsupported within Popper's own logical framework.",
+      "counterexample": null,
+      "premise": "Miller and Tichý demonstrated that Popper's quantitative definition of verisimilitude is logically incoherent for false theories, meaning 'better corroboration' cannot formally guarantee 'higher verisimilitude' as the target claims.",
+      "premise_evidence": null,
+      "successor_question": "Given the collapse of the formal definition of verisimilitude, can Popper's preference for better-corroborated theories be defended solely as a psychological or pragmatic habit without reintroducing the inductive assumption that past success predicts future reliability?"
+    }
+  ]
+}

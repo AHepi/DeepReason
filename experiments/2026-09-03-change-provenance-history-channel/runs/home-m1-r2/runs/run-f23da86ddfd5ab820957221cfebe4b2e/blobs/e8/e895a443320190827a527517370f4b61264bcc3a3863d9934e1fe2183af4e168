@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic, non-inductive decision rule based on verisimilitude (truth-likeness) rather than probability.",
+      "mechanism": "Popper distinguishes between the logical status of a theory (which remains unproven) and the rational basis for action. We prefer the theory that has withstood the severest tests not because we believe it is more likely to be true (induction), but because it is the best candidate for approximating truth (verisimilitude) among available options. This is a critical preference, not a probabilistic one.",
+      "counterconditions": [
+        "If verisimilitude cannot be defined without relying on inductive assumptions about the future resembling the past.",
+        "If the act of 'preferring' for action logically entails an expectation of future success equivalent to assigning higher probability."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "The argument does not redefine the goal of science away from truth; it argues that preferring the most tested theory is the only rational way to pursue truth without induction, aligning with Popper's specific problem of preference."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "It explicitly rejects the entailment that preference equals belief in higher probability. The defense rests on the distinction between 'corroboration report' (past performance) and 'probability' (future prediction)."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "No false dilemma is constructed; the response accepts the distinction between logical induction and pragmatic preference, which is central to Popper's demarcation."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "The answer addresses the *preference* directly as a critical choice, not merely a systemic outcome, grounding it in the agent's rational pursuit of verisimilitude."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "It avoids meta-induction by framing the preference as a critical selection of the best-tested hypothesis, not an inference that the method will continue to work."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "It agrees that Popper allows pragmatic decision-making but clarifies that this is not a contradiction; it is the intended solution to the problem of action without induction."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "revised", "note": "Acknowledges Miller/Tichý refutation of formal verisimilitude definitions; revises mechanism to rely on 'potential verisimilitude' or 'critical preference' as a regulative ideal rather than a formally calculable metric."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "Distinguishes normative justification (rational choice based on critical discussion) from descriptive biological survival, avoiding the category error."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_009"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction, rendering Popper's position internally inconsistent when applied to practical scientific action.",
+      "mechanism": "To prefer Theory A over Theory B for action implies an expectation that A will perform better in the future. Since past performance (corroboration) cannot logically guarantee future performance without the principle of uniformity of nature (induction), any such preference is implicitly inductive. Popper's attempt to separate 'corroboration' from 'probability' fails at the point of decision.",
+      "counterconditions": [
+        "If a non-inductive basis for future expectation can be rigorously formulated (e.g., via propensity interpretations that avoid uniformity).",
+        "If 'preference' can be shown to be purely aesthetic or arbitrary without impacting the claim of rationality."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "Argues that shifting goals to 'progress' doesn't solve the logical gap; the act of choosing still relies on an inductive leap regarding the value of past tests for future utility."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Contends that even if Popper denies the logical entailment, the *practical necessity* of acting as if the future resembles the past makes the induction unavoidable and thus 'smuggled in'."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Asserts that the distinction between logical and pragmatic problems collapses when the pragmatic choice claims rationality; if it's rational, it needs justification, which leads back to induction."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Maintains that redefining preference as 'outcome' evades the core question of whether the *agent's* choice is defensible without induction."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Accepts that this view implies a form of meta-induction but argues this is the cost of consistency, exposing Popper's inability to fully escape Hume."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Argues that conflating logical justification with pragmatic decision is exactly what Popper tries to avoid, but fails because the pragmatic decision *requires* a logical bridge to the future."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "Uses the failure of verisimilitude to strengthen the claim that no non-inductive metric exists to justify preference."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "Insists that scientific action is normative, not just descriptive, and therefore requires a justification that biological analogy cannot provide without induction."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_005"]
+    },
+    {
+      "claim": "The preference is defensible not as an inference to truth or probability, but as a methodological commitment to error elimination, where 'better-corroborated' simply means 'has survived more attempts to falsify it so far'.",
+      "mechanism": "This approach reframes preference as a procedural rule: always test the bold conjecture that has survived the most severe criticism. It makes no claim about the future success of the theory, only that it is the current best target for further testing. Action based on it is a gamble, not a prediction.",
+      "counterconditions": [
+        "If scientists actually require predictive reliability for action, not just a target for falsification.",
+        "If the concept of 'severe test' itself relies on inductive background knowledge."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "Clarifies that the goal remains truth via error elimination, but the *preference* is strictly for the theory that offers the most informative potential for falsification."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Denies that preferring a target for falsification entails believing it will succeed; it is a preference for efficiency in learning."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Supports the distinction: this is a methodological rule, not a logical proof of future validity."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Directly answers the preference question by defining preference as 'selection for further testing' rather than 'selection for belief'."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Avoids meta-induction by treating the method as a convention for growth of knowledge, not a reliable producer of true predictions."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Aligns with Popper's pragmatic allowance but grounds it in the logic of falsifiability rather than decision theory."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "Bypasses the verisimilitude problem by focusing on informational content and falsification potential instead of truth approximation metrics."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "Frames the mechanism as a normative rule of critical rationalism, distinct from biological survival."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_006"]
+    },
+    {
+      "claim": "The dilemma is false; Popper's system allows for a 'rational faith' or 'decisionist' element where the preference is an existential choice unsupported by logic, thus neither inductive nor deductive.",
+      "mechanism": "Popper's philosophy contains a decisionist strand where the choice to accept corroboration as a guide is a non-rational (but not irrational) commitment to the game of science. It admits that logic alone cannot bridge the gap, so the scientist makes a voluntary choice to act *as if* corroboration matters.",
+      "counterconditions": [
+        "If Popper explicitly rejected decisionism in favor of critical rationalism.",
+        "If this admission undermines the claim that science is purely rational/critical."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_007] against SRC_003", "kind": "departure_declared", "note": "Departs from the assumption that the preference must be logically defensible; posits it as a pre-logical commitment to the scientific attitude."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Agrees that it doesn't entail probability, but adds that it also doesn't entail logical defensibility; it is a volitional act."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Argues that acknowledging this decisionist element preserves demarcation by separating the logical structure of theories from the psychological/volitional act of the scientist."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Answers the preference question by categorizing it as a 'decision' rather than a 'conclusion'."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Avoids meta-induction by placing the basis of preference outside the realm of inference entirely."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Reframes the 'performative contradiction' as a necessary tension between the limits of logic and the demands of action."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "Suggests that the failure of formal verisimilitude supports the need for a decisionist fallback."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "Positions the 'choice' as a unique human rational capacity, distinct from blind biological selection."}
+      ],
+      "optional_refs": ["SRC_004", "SRC_008"]
+    }
+  ]
+}

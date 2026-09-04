@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a rational choice of the 'best tested' option for critical discussion, without implying any inductive belief in its future truth or probability.",
+      "mechanism": "Pragmatic Rationality without Inductive Commitment: The agent selects the theory with the highest informational content that has withstood the most severe tests, not because it is likely true, but because it is the most worthy target for further falsification attempts and the only one not yet known to be false.",
+      "counterconditions": [
+        "If the agent acts on the theory expecting it to succeed based on past performance, they have smuggled in induction.",
+        "If the preference relies on a meta-belief that the method of conjecture and refutation yields reliable results over time."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "The candidate distinguishes 'action-guiding reliability' (predictive success) from 'critical preferability' (worthiness of testing). Popper's preference is for the latter; acting on it is a gamble, not a reliance on reliability."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The candidate addresses the specific question of preference by defining it as a choice for critical engagement rather than a shift in the goal of science from truth to progress."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "It explicitly denies that preferring a theory for action entails believing it has a higher probability of success; the preference is based on current non-falsification, not future expectation."},
+        {"handle": "[SRC_010] against SRC_009", "kind": "rebutted", "note": "No false dilemma is constructed; the candidate maintains the distinction between the logical problem of induction and the pragmatic necessity of choosing a theory to act upon."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "The candidate defines 'preference' strictly as the scientist's rational selection of the best available conjecture for immediate application and testing, directly answering the normative question."},
+        {"handle": "[SRC_012] against SRC_011", "kind": "rebutted", "note": "The defense applies equally to acting and testing: in both cases, the chosen theory is simply the one that has not yet failed, making it the only rational option among known errors."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "rebutted", "note": "The argument rejects 'meta-induction' entirely, grounding the preference solely in the logical status of the theories (falsified vs. unfalsified) at the moment of choice."},
+        {"handle": "[SRC_015] against SRC_007", "kind": "rebutted", "note": "The resolution is explicitly normative: a scientist *ought* to prefer the better-corroborated theory because it is the most informative surviving conjecture, consistent with Popper's epistemology."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_005"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction because any decision to act on a theory presupposes an expectation of its future validity, which Popper's logic cannot justify without circularity.",
+      "mechanism": "The Inescapability of Practical Induction: To 'prefer' a theory for action is to bet on its future performance. Since Popper denies that past survival increases future probability, the only basis for such a bet is an implicit inductive assumption that nature is uniform or that the method works.",
+      "counterconditions": [
+        "If the agent can act on a theory without any expectation of its success.",
+        "If 'preference' can be defined purely retrospectively without prospective implications."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_014] against SRC_013", "kind": "revised", "note": "Revised to clarify that 'action-guiding reliability' is inherent in the concept of acting; one cannot act without relying on some expectation of outcome, thus conflating the two is unavoidable in practice."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The candidate argues that redefining the goal does not solve the problem; the act of preference itself reintroduces the inductive element regardless of the stated goal."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "It challenges the idea that one can prefer a theory for action without logically entailing a belief in its higher probability of success; the act implies the belief."},
+        {"handle": "[SRC_010] against SRC_009", "kind": "rebutted", "note": "The candidate asserts that the dilemma is real: either accept induction or admit that scientific action is irrational/arbitrary, a horn Popper tries to avoid but fails."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "By focusing on the *act* of preference, the candidate shows that the systemic outcome is irrelevant; the individual scientist's decision process necessarily involves inductive leaps."},
+        {"handle": "[SRC_012] against SRC_011", "kind": "revised", "note": "Clarified that the conflation of testing and acting is precise: both require a forward-looking commitment that Popper's backward-looking logic cannot support."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "rebutted", "note": "The candidate accepts that a 'meta-induction' is required and argues that Popper implicitly accepts it, contradicting his explicit rejection, thus exposing the inconsistency."},
+        {"handle": "[SRC_015] against SRC_007", "kind": "rebutted", "note": "The resolution is that the preference is *not* defensible on Popper's strict terms; accepting this costs Popper the claim that his system is purely deductive."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_012"]
+    },
+    {
+      "claim": "The preference is defensible if viewed through an evolutionary analogy where 'corroboration' signals 'fitness' in a specific environment, but this defense costs Popper the universality of his logic, restricting it to local ecological contexts.",
+      "mechanism": "Evolutionary Epistemology as Local Justification: Theories are like species; corroboration indicates adaptation to the current problem environment. Preference is rational as a heuristic for local survival, not as a guide to universal truth.",
+      "counterconditions": [
+        "If the environment changes radically, rendering past fitness irrelevant.",
+        "If the analogy implies a progressive trend toward truth rather than mere adaptation."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_014] against SRC_013", "kind": "departure_declared", "note": "Departing from strict Popperian text to introduce an evolutionary framework where 'reliability' is contextual (fitness) rather than absolute (probability)."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The goal is redefined as 'local adaptation' rather than 'truth,' which answers the charge of smuggling induction by changing the metric of success to environmental fit."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "Preferring a 'fit' theory does not entail believing it is probable in a universal sense, only that it is suited to the current niche, avoiding the inductive trap."},
+        {"handle": "[SRC_010] against SRC_009", "kind": "rebutted", "note": "The dilemma is dissolved by accepting that demarcation holds for universal claims, while preference operates in the domain of local ecological pragmatism."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "The preference is defended as a biological imperative for cognitive agents, making it defensible on naturalized terms even if not on pure logical ones."},
+        {"handle": "[SRC_012] against SRC_011", "kind": "rebutted", "note": "Testing and acting are unified under the principle of 'survival value'; a theory that survives tests is 'fit' for action in that specific context."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "revised", "note": "Admits a form of 'local induction' (expecting the niche to remain stable) but argues this is a necessary cost of any actionable epistemology, not a flaw unique to Popper."},
+        {"handle": "[SRC_015] against SRC_007", "kind": "rebutted", "note": "The normative force comes from the necessity of survival; scientists *must* prefer fit theories to continue their inquiry, making the preference defensible pragmatically."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_006"]
+    },
+    {
+      "claim": "The preference is a psychological inevitability but logically indefensible on Popper's terms; the 'cost' is accepting that scientific rationality contains an ineradicable irrational core regarding action.",
+      "mechanism": "The Dual-Aspect Theory of Scientific Rationality: Logic governs justification (deductive), while psychology governs action (inductive habit). Popper's system describes the former but cannot normatively ground the latter.",
+      "counterconditions": [
+        "If a purely deductive basis for action can be formulated.",
+        "If the psychological habit can be shown to be rationally constrained."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Agrees that Popper rejects reliability but argues this leaves a gap between logic and action that cannot be bridged, confirming the criticism that the defense fails."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Concedes that the problem is not solved by redefinition; the gap remains because the human agent cannot suspend inductive habits."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "revised", "note": "Clarifies that while Popper *says* we don't believe in probability, our actions prove we do, making his defense descriptively false even if logically consistent."},
+        {"handle": "[SRC_010] against SRC_009", "kind": "rebutted", "note": "Asserts the dilemma is genuine: one must choose between logical purity (no action) or practical efficacy (smuggled induction)."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "The candidate answers the question by stating the preference is *not* defensible on Popper's terms, only explainable as a psychological artifact."},
+        {"handle": "[SRC_012] against SRC_011", "kind": "rebutted", "note": "Distinguishes testing (logical) from acting (psychological), arguing Popper's error was trying to apply logical constraints to psychological necessities."},
+        {"handle": "[SRC_006] against SRC_004", "kind": "rebutted", "note": "Accepts that 'meta-induction' is the hidden engine of action and that Popper's denial of it is a rhetorical stance incompatible with scientific practice."},
+        {"handle": "[SRC_015] against SRC_007", "kind": "rebutted", "note": "The resolution is negative: the preference is not defensible normatively within the system, forcing a resignation to the limits of deductive epistemology."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_014"]
+    }
+  ]
+}

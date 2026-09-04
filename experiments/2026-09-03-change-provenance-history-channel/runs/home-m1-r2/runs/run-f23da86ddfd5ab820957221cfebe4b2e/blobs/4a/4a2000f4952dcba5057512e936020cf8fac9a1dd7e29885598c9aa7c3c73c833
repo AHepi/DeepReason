@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target dissolves the dilemma by shifting from logical justification to functional explanation (evolutionary adaptation), but this fails to answer the prompt's specific demand for a defense 'on Popper's own terms.' Popper explicitly rejected evolutionary epistemology as a substitute for the logical problem of induction, arguing that while evolution explains why we have preferences, it does not provide the rational warrant for acting on them that the prompt asks for. By redefining 'defensible' as 'functional for survival' rather than 'rationally justified without induction,' the target changes the subject rather than solving the stated paradox of preferring a theory one admits is not more probable.",
+      "counterexample": null,
+      "premise": "Popper distinguished between the psychological/evolutionary origin of beliefs and their logical justification, maintaining that the latter was the core philosophical problem.",
+      "premise_evidence": null,
+      "successor_question": "If evolutionary success is the only defense, does Popper's framework allow any distinction between a rational preference for a well-tested theory and an irrational superstition that happens to be currently adaptive?"
+    }
+  ]
+}

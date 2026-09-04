@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim that preference 'inevitably smuggles in induction' is too strong because it ignores Popper's specific distinction between theoretical probability and pragmatic rationality. Popper defends the preference for better-corroborated theories not as an inductive inference that they are more likely to be true (which would contradict his rejection of induction), but as a critical-rational decision rule: since we cannot know the truth, we rationally choose the theory that has withstood the most severe tests as the best candidate for action, without assigning it higher logical probability. The target fails to engage with this non-inductive justification for action, treating any forward-looking preference as implicitly inductive by definition, thereby missing the nuance of Popper's 'critical preference' which survives on his own terms.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

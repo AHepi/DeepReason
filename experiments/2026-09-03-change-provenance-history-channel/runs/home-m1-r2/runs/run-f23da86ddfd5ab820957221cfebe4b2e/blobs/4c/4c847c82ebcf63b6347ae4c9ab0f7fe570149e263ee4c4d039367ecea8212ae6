@@ -1,0 +1,160 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a rational choice based on 'verisimilitude' (truth-likeness) rather than probability, accepting the cost that verisimilitude remains an unprovable metaphysical hope.",
+      "mechanism": "Popper distinguishes between the logical status of a theory (which cannot be probabilified by past success) and the pragmatic decision to act on the theory that has withstood the severest tests, arguing this theory is arguably closer to the truth (higher verisimilitude) even if we cannot know it.",
+      "counterconditions": [
+        "If acting on a theory logically entails an expectation of future success identical to inductive probability.",
+        "If verisimilitude cannot be defined without relying on inductive assumptions about the uniformity of nature."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate does not redefine the goal of science to 'progress' to evade the problem; it explicitly accepts Popper's goal of truth but argues that preferring the best-tested theory is the only rational strategy to approach that goal without invoking induction."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "The rebuttal clarifies that 'preferring' in this context is a decision rule based on current content (verisimilitude), not a belief in higher statistical probability of future recurrence."
+        },
+        {
+          "handle": "[SRC_012] against SRC_011",
+          "kind": "rebutted",
+          "note": "This candidate maintains the demarcation criterion by insisting the preference is a meta-scientific decision, not a logical proof within the scientific system itself."
+        },
+        {
+          "handle": "[SRC_010] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate addresses the specific question of 'preference' by framing it as a non-inductive rational choice, avoiding the redefinition of preference as a systemic outcome."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "rebutted",
+          "note": "The argument extends Popper's justification from testing to acting by positing that action requires selecting the hypothesis with the highest informative content that has survived criticism, which is the definition of corroboration."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate rejects 'meta-induction' regarding the method; instead, it relies on the logical asymmetry between falsification (possible) and verification (impossible), making the surviving theory the only viable option for action."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "While admitting the cost that verisimilitude is unprovable, the candidate argues this does not smuggle in induction because it does not claim the future *will* resemble the past, only that the best-tested theory is our best *guess* at truth."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate agrees that pragmatic decision-making is distinct from logical justification, arguing that Popper's defense is precisely that the preference is pragmatic/rational, not logically compelled by induction."
+        }
+      ],
+      "optional_refs": ["SRC_015"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories unavoidably smuggles in induction, rendering Popper's position internally inconsistent when moving from logic to action.",
+      "mechanism": "Any decision to act on a theory presupposes that the future will resemble the past (that the conditions under which the theory was tested will hold during action). This presupposition is the principle of induction, which Popper explicitly rejected as logically invalid.",
+      "counterconditions": [
+        "If one can act on a theory without any expectation of its future validity.",
+        "If 'corroboration' can be shown to have normative force for future action without assuming temporal uniformity."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "This candidate directly answers the problem by asserting the preference *does* smuggle in induction, rejecting any attempt to redefine the goal of science to avoid this conclusion."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate argues that Popper's distinction between 'preferring for action' and 'believing probable' is semantic sleight-of-hand; acting *is* betting on probability, regardless of the label."
+        },
+        {
+          "handle": "[SRC_012] against SRC_011",
+          "kind": "rebutted",
+          "note": "It contends that the 'pragmatic preference' destroys the demarcation criterion in practice because scientists effectively treat corroborated theories as probable, blurring the line Popper tried to draw."
+        },
+        {
+          "handle": "[SRC_010] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate insists that the scientist's preference is inherently prospective, and denying this ignores the reality of how scientific action functions."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "rebutted",
+          "note": "It argues that the jump from 'survived testing' to 'safe to act on' is exactly where induction enters, making the distinction between testing and acting irrelevant to the logical flaw."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate accepts that this implies a 'meta-induction' on the method, arguing that Popper cannot escape this without abandoning the idea that science guides action."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "It asserts that appealing to verisimilitude fails because claiming a theory is 'closer to truth' based on past tests still assumes the past is a guide to the truth-status of the theory."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate rejects the separation of logical justification and pragmatic decision-making, arguing that a pragmatic decision without logical justification is arbitrary, and if it's not arbitrary, it relies on induction."
+        }
+      ],
+      "optional_refs": ["SRC_004"]
+    },
+    {
+      "claim": "The preference is defensible not as induction nor as verisimilitude, but as a methodological rule of 'error elimination' where acting on the best-tested theory is the only way to expose potential errors quickly.",
+      "mechanism": "We prefer the better-corroborated theory not because it is likely true or will succeed, but because it is the most informative and thus the most vulnerable to future falsification. Acting on it maximizes the speed of learning, aligning with Popper's evolutionary epistemology.",
+      "counterconditions": [
+        "If the goal of action is success/survival rather than rapid error detection.",
+        "If acting on a highly falsifiable theory leads to catastrophic failure before error can be detected."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "revised",
+          "note": "Revised to clarify that the goal is not redefined away from truth, but the *strategy* for reaching truth prioritizes error elimination over safety, answering the specific charge of smuggling induction by changing the motive for preference."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "Argues that preferring a theory for its high falsifiability (content) does not entail believing it has a higher probability of success; indeed, it might be more likely to fail, but that failure is valuable."
+        },
+        {
+          "handle": "[SRC_012] against SRC_011",
+          "kind": "rebutted",
+          "note": "Maintains demarcation by framing the preference as a rule of method (how to do science) rather than a logical inference about the world."
+        },
+        {
+          "handle": "[SRC_010] against SRC_009",
+          "kind": "rebutted",
+          "note": "Addresses the 'preference' question by defining it as a preference for boldness, not safety, directly countering the induction charge."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "rebutted",
+          "note": "Justifies acting on the theory because action itself is a form of test; we act to see if the theory breaks, which is consistent with Popper's view of testing."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "Explicitly denies meta-induction; the rule is 'choose the boldest survivor,' not 'the survivor will continue to survive.'"
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "Avoids verisimilitude entirely, grounding the preference in the logical property of informativeness rather than a metaphysical claim about truth-likeness."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Embraces the pragmatic nature of the decision but grounds it in the specific pragmatic goal of error elimination, distinguishing it from generic pragmatic decision-making."
+        }
+      ],
+      "optional_refs": ["SRC_003"]
+    }
+  ]
+}
