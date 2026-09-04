@@ -1,0 +1,67 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+___ test_the_p_a1_shape_runs_on_the_healthy_seat_after_the_dead_one_exhausts ___
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_the_p_a1_shape_runs_on_th0')
+
+    def test_the_p_a1_shape_runs_on_the_healthy_seat_after_the_dead_one_exhausts(
+        tmp_path,
+    ):
+        """The exact P-A1 road: the dead seat's next dispatch carries a new payload.
+    
+        RED before the fix with
+        ``RunManifestError: V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY`` at step 1,
+        while seat 0 had already completed work and the token budget was untouched.
+        """
+    
+        config, manifest, harness = _build_run(tmp_path / "pa1-shape", problems=2)
+        error = _drive(harness, _adapter(harness, manifest), config, manifest, cycles=6)
+    
+        assert _dead_seat_retired(harness), (
+            "the fixture never exhausted the dead seat, so it is not the P-A1 shape"
+        )
+        assert _completed_on_healthy_seat(harness) >= 1, (
+            "the fixture never completed work on the healthy seat"
+        )
+>       assert error is None, (
+            "one dead seat ended the whole run while a healthy seat was answering: "
+            f"{type(error).__name__}: {error}"
+        )
+E       AssertionError: one dead seat ended the whole run while a healthy seat was answering: RunManifestError: V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at /workflow/insufficient_capability_by_route_seat: route seat has terminally exhausted its smallest authorized contract
+E       assert RunManifestError('V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at /workflow/insufficient_capability_by_route_seat: route seat has terminally exhausted its smallest authorized contract') is None
+
+tests/test_dead_seat_retirement.py:308: AssertionError
+___ test_a_dead_seat_does_not_kill_the_run_through_the_atomic_recovery_road ____
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_a_dead_seat_does_not_kill0')
+
+    def test_a_dead_seat_does_not_kill_the_run_through_the_atomic_recovery_road(
+        tmp_path,
+    ):
+        """The second road, found by this fixture and not by the live record.
+    
+        With ONE problem the dead seat's next dispatch carries the same task
+        payload, so ``conj`` enters the atomic-decomposition recovery branch that
+        the exhaustion left incomplete and raises
+        ``ValueError("atomic child is terminally failed")`` from
+        ``workflow/atomic_recovery.py`` — before the insufficient-capability guard
+        is consulted at all. A fix wired only into the guard leaves this road open.
+        """
+    
+        config, manifest, harness = _build_run(tmp_path / "atomic-road", problems=1)
+        error = _drive(harness, _adapter(harness, manifest), config, manifest, cycles=6)
+    
+        assert _dead_seat_retired(harness)
+        assert _completed_on_healthy_seat(harness) >= 1
+>       assert error is None, (
+            "the atomic-recovery road ended the run on a dead seat: "
+            f"{type(error).__name__}: {error}"
+        )
+E       AssertionError: the atomic-recovery road ended the run on a dead seat: ValueError: atomic child is terminally failed
+E       assert ValueError('atomic child is terminally failed') is None
+
+tests/test_dead_seat_retirement.py:332: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_dead_seat_retirement.py::test_the_p_a1_shape_runs_on_the_healthy_seat_after_the_dead_one_exhausts
+FAILED tests/test_dead_seat_retirement.py::test_a_dead_seat_does_not_kill_the_run_through_the_atomic_recovery_road
+2 failed in 4.34s
