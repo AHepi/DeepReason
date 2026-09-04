@@ -79,7 +79,15 @@ Mechanism NOT established, and two readings survive:
 Nothing here separates them. Distinguishing W from R needs repeated runs per
 arm, which this tranche did not buy.
 
-**QUALITY — no direction was predicted, and none is reported: NOT MEASURED.**
+**QUALITY — no direction was predicted. MEASURED 2026-09-04; see
+`RESULTS_M1_QUALITY.md`.** The paragraph below is left as written because it
+was true when written and its reasoning still holds; the row it declares open
+is now closed, and closed the other way from hope: the treatment's conjectures
+were judged LOWER (mean 5.02 vs 6.58 of 15), suggestively rather than
+demonstrably, on a panel that pays heavily for candidate length. What follows
+is the original text.
+
+**NOT MEASURED (as written 2026-09-03).**
 The blind three-judge protocol (`JUDGING_PREREG_COPIED.md`) has not been run.
 Its criteria, blinding and aggregation are committed and unchanged, so it can
 be run later against predictions made before any candidate was read. Until it
