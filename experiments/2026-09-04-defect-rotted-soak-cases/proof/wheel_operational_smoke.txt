@@ -1,0 +1,1 @@
+wheel operational smoke passed: installed setup, explicit qualification (80 qualification calls; 406 total calls), readiness, question-only reasoning, replay-verified terminal retrieval, cache reuse, opaque MCP restart, budget ceiling, and pre-V6 fail-closed admission

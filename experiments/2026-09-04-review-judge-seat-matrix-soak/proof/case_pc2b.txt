@@ -1,0 +1,24 @@
+[soak] stub provider on 127.0.0.1:37055 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/cycle-soak-cdy8toko
+Traceback (most recent call last):
+  File "/home/user/DeepReason/scripts/cycle_soak.py", line 1266, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/user/DeepReason/scripts/cycle_soak.py", line 1206, in main
+    report["case"] = build_root(case, root, port=port)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/DeepReason/scripts/cycle_soak.py", line 459, in build_root
+    summary = _case_module(case).build(root, config_path=config_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/DeepReason/experiments/2026-08-27-pc2b-symmetric-reasoning/build_manifest_pc2b.py", line 151, in build
+    manifest = compile_run_manifest(
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/DeepReason/src/deepreason/run_manifest.py", line 4058, in compile_run_manifest
+    manifest = RunManifest(
+               ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pydantic/main.py", line 263, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for RunManifest
+  Value error, V6_SIMULATION_TOOLCHAIN_REQUIRED: policy must bind one frozen toolchain [type=value_error]
+    For further information visit https://errors.pydantic.dev/2.13/v/value_error

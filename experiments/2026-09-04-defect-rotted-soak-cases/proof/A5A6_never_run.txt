@@ -1,0 +1,12 @@
+### A5/A6 are gated on IN_RUN_EVALUATION_CASES
+405:IN_RUN_EVALUATION_CASES = frozenset({"pc2", "pc2b"})
+
+### which of those two cases compile TODAY?
+  pc2    -> V6_SIMULATION_TOOLCHAIN_REQUIRED
+  pc2b   -> V6_SIMULATION_TOOLCHAIN_REQUIRED
+
+### therefore: A5/A6 appear on NO runnable case. Proof, across all four that run:
+  epoch3      assertions emitted: A1-typed-terminal A2-no-operational-failure A3-verify-root-clean A4-cycles-reached 
+  reach-rich  assertions emitted: A1-typed-terminal A2-no-operational-failure A3-verify-root-clean A4-cycles-reached 
+  hv-grant    assertions emitted: A1-typed-terminal A2-no-operational-failure A3-verify-root-clean A4-cycles-reached 
+  pa1         assertions emitted: A1-typed-terminal A2-no-operational-failure A3-verify-root-clean A4-cycles-reached 

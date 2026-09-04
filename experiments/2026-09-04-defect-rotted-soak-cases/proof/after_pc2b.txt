@@ -1,0 +1,66 @@
+[soak] stub provider on 127.0.0.1:44675 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/cycle-soak-_cxh2cel
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice; NOTE this manifest's /control_plane_policy/school_execution holds False, which this setting did not change -- another switch gated it, so the two disagree
+NOTICE V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED: defended_trial requires two frozen judge seats from distinct families
+[soak] built root: manifest a44c876a70fbd75d…  criteria ['frontier-wellformed@v1', 'frontier-claim-honest@v1', 'frontier-above-floor@v1']
+[soak] qualified in 3.3s
+[soak] driving 24 cycles …
+
+========================================================================
+CYCLE SOAK -- case pc2b
+========================================================================
+  manifest sha256        a44c876a70fbd75d0ffb0db4232b90650a5871c718507b4ec3aa05cb65ef2d2f
+  criteria               frontier-wellformed@v1, frontier-claim-honest@v1, frontier-above-floor@v1
+  attached evidence      False
+  cycles requested       24
+  qualification          rc=0 (3.3s)
+  drive                  209.9s, 27 progress events
+
+-- S1 run assertions ---------------------------------------------------
+  [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+  [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+  [PASS] A3-verify-root-clean         0 violation(s)
+  [PASS] A4-cycles-reached            reached cycle 24 of 24 requested; the deepest recorded death was cycle 2
+  [PASS] A7-record-fully-read         0 record(s) under objects/ could not be parsed by this instrument's own readers
+  [PASS] A5-in-run-checker-fired      3 demonstrative fail warrant(s) naming ['frontier-above-floor@v1', 'frontier-claim-honest@v1', 'frontier-wellformed@v1']
+  [PASS] A6-discharge-channel-carried-them REBUILD F1 channel Measures on the record: {'discharge-reask': 16}
+
+-- S2/S4 seam coverage -------------------------------------------------
+  [PART] D1-seat-contract         seat contracts with repairs
+         reason: seat contracts exercised, but zero repair tasks recorded: an un-induced stub always returns a schema-valid response, so no repair is ever requested. Re-run with --induce-repairs N (and --induce-repair-kind unparseable, or alternate, to reach whole_object_syntax as well as patch)
+         reached: {'workflow-contract-decomposition-transition-v1': 0, 'workflow-provider-attempt-v1': 30}
+  [PASS] D2-route-lease           lease-checked routes with tuning
+         reached: {'workflow-provider-attempt-v1': 30}
+  [PASS] D3-budget-auth           budget authorization
+         reached: {'workflow-dispatch-authorization-v1': 30}
+  [PASS] D4-reservation-bound     reservation/dispatch bounds
+         reached: {'workflow-token-reservation-v2': 30}
+
+-- record census -------------------------------------------------------
+      20  artifact
+       5  commitment
+       1  problem
+       3  warrant
+      30  workflow-context-exposure-v2
+      30  workflow-context-pack-plan-v1
+      30  workflow-context-section-plan-v1
+      30  workflow-dispatch-authorization-v1
+       1  workflow-lifecycle-decision
+       1  workflow-lifecycle-snapshot
+       1  workflow-model-classification-binding-v1
+      30  workflow-provider-attempt-v1
+       1  workflow-route-seat-model-classification-plan-v1
+       1  workflow-run-terminal-commitment-v1
+       1  workflow-run-terminal-result-draft-v1
+      14  workflow-semantic-admission-v1
+       1  workflow-stop-metrics-observation
+      30  workflow-token-reservation-v2
+     282  workflow-work-lifecycle-transition-v1
+     112  workflow-work-preparation-v1
+      96  workflow-work-terminal-v1
+
+[soak] report /tmp/cycle-soak-_cxh2cel/soak-report.json
+[soak] exit 0 (clean)

@@ -1,0 +1,64 @@
+[soak] stub provider on 127.0.0.1:37583 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/cycle-soak-hiwk0mjb
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: JUDGE_SUMMONS_PER_CYCLE=2 is not carried by this manifest's engine config and is restored at run time from this notice
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config and is restored at run time from this notice; carrying this value engages the criticism policy, which changes the qualification subject; this home requalifies once (~14 minutes)
+NOTICE ENGINE_CONFIG_FIELD_NOT_CARRIED: SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config and is restored at run time from this notice
+[soak] built root: manifest a39cb605af897c24…  criteria ['pa1-limit-verdict@v1', 'pa1-obstruction-structure@v1', 'pa1-scaling-law@v1']
+[soak] qualified in 10.3s
+[soak] driving 1 cycles …
+
+========================================================================
+CYCLE SOAK -- case pa1
+========================================================================
+  manifest sha256        a39cb605af897c24f234591ed74dc4a059ed256dbba4ab99883a815f4999b43e
+  criteria               pa1-limit-verdict@v1, pa1-obstruction-structure@v1, pa1-scaling-law@v1
+  attached evidence      True
+  cycles requested       1
+  qualification          rc=0 (10.3s)
+  drive                  39.7s, 4 progress events
+
+-- S1 run assertions ---------------------------------------------------
+  [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+  [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+  [PASS] A3-verify-root-clean         0 violation(s)
+  [FAIL] A4-cycles-reached            reached cycle 1 of 1 requested; the deepest recorded death was cycle 2
+
+-- S2/S4 seam coverage -------------------------------------------------
+  [PART] D1-seat-contract         seat contracts with repairs
+         reason: seat contracts exercised, but zero repair tasks recorded: an un-induced stub always returns a schema-valid response, so no repair is ever requested. Re-run with --induce-repairs N (and --induce-repair-kind unparseable, or alternate, to reach whole_object_syntax as well as patch)
+         reached: {'workflow-contract-decomposition-transition-v1': 0, 'workflow-provider-attempt-v1': 7}
+  [PASS] D2-route-lease           lease-checked routes with tuning
+         reached: {'workflow-provider-attempt-v1': 7}
+  [PASS] D3-budget-auth           budget authorization
+         reached: {'workflow-dispatch-authorization-v1': 7}
+  [PASS] D4-reservation-bound     reservation/dispatch bounds
+         reached: {'workflow-token-reservation-v2': 7}
+
+-- record census -------------------------------------------------------
+      11  artifact
+       5  commitment
+       1  problem
+       3  warrant
+       7  workflow-context-exposure-v2
+       7  workflow-context-pack-plan-v1
+       7  workflow-context-section-plan-v1
+       7  workflow-dispatch-authorization-v1
+       1  workflow-lifecycle-decision
+       1  workflow-lifecycle-snapshot
+       1  workflow-model-classification-binding-v1
+       7  workflow-provider-attempt-v1
+       1  workflow-route-seat-model-classification-plan-v1
+       1  workflow-run-terminal-commitment-v1
+       1  workflow-run-terminal-result-draft-v1
+       4  workflow-semantic-admission-v1
+       1  workflow-stop-metrics-observation
+       7  workflow-token-reservation-v2
+      29  workflow-work-lifecycle-transition-v1
+       7  workflow-work-preparation-v1
+       4  workflow-work-terminal-v1
+
+[soak] report /tmp/cycle-soak-hiwk0mjb/soak-report.json
+[soak] exit 1 (FAILED)

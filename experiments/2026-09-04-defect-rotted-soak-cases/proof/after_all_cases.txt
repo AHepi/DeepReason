@@ -1,0 +1,9 @@
+epoch3       exit=1   compiled+ran                     assertions: A1-typed-terminal A2-no-operational-failure A3-verify-root-clean A4-cycles-reached 
+pr1          exit=1   compiled+ran                     assertions: A1-typed-terminal A2-no-operational-failure A3-verify-root-clean A4-cycles-reached 
+pc1          exit=1   compiled+ran                     assertions: A1-typed-terminal A2-no-operational-failure A3-verify-root-clean A4-cycles-reached 
+pc2          exit=1   compiled+ran                     assertions: A1-typed-terminal A2-no-operational-failure A3-verify-root-clean A4-cycles-reached A5-in-run-checker-fired A6-discharge-channel-carried-them 
+pc2b         exit=1   compiled+ran                     assertions: A1-typed-terminal A2-no-operational-failure A3-verify-root-clean A4-cycles-reached A5-in-run-checker-fired A6-discharge-channel-carried-them 
+split-legs   exit=1   compiled+ran                     assertions: A1-typed-terminal A2-no-operational-failure A3-verify-root-clean A4-cycles-reached 
+hv-grant     exit=1   compiled+ran                     assertions: A1-typed-terminal A2-no-operational-failure A3-verify-root-clean A4-cycles-reached 
+reach-rich   exit=1   compiled+ran                     assertions: A1-typed-terminal A2-no-operational-failure A3-verify-root-clean A4-cycles-reached 
+pa1          exit=1   compiled+ran                     assertions: A1-typed-terminal A2-no-operational-failure A3-verify-root-clean A4-cycles-reached 

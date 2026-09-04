@@ -82,7 +82,7 @@ from deepreason.run_manifest import bind_run_manifest, compile_run_manifest  # n
 from deepreason.v6_policy import (  # noqa: E402
     engaged_control_plane_policy_v3,
     engaged_inquiry_capability_policy,
-    engaged_local_simulation_toolchain,
+    engaged_simulation_toolchain,
 )
 
 # ARM H3 (PREREG Appendix A) selects the thinking-ON config by ENV rather
@@ -161,7 +161,7 @@ def build(root: Path, *, config_path: Path | str | None = None) -> dict:
         concurrency=2,
         compiled_at=COMPILED_AT,
         control_plane_policy=engaged_control_plane_policy_v3(),
-        toolchains=(engaged_local_simulation_toolchain(),),
+        toolchains=(engaged_simulation_toolchain(),),
         inquiry_capability_policy=engaged_inquiry_capability_policy(
             attached_evidence=False
         ),
