@@ -152,14 +152,14 @@ times in `workflow/replay.py`, so coverage debt is durable evidence that is
 invisible to `WorkflowReplayState` and to its digest.
 `check: ! grep -rqE "objects\.put\(|log\.append\(" --include=*.py src/deepreason/workflow/ && grep -rq "harness\.blobs\.put(" --include=*.py src/deepreason/workflow/ && grep -q "self.harness.record_control_transition(" src/deepreason/workflow/trace.py && python -c "import inspect;from deepreason.harness import Harness;s=inspect.getsource(Harness.record_criticism_obligation);assert 'Rule.MEASURE' in s and 'Rule.CONTROL' not in s and 'control=' not in s" && grep -q "class WorkflowReplayState" src/deepreason/workflow/replay.py && ! grep -q "criticism" src/deepreason/workflow/replay.py`
 
-**There is no schema the harness does not name.** All 29 registered
+**There is no schema the harness does not name.** All 30 registered
 `workflow-*`/`criticism-*` schemas appear as literals in `harness.py`, because
 the seam that mints an event is the same place the schema string is chosen; the
 object store is the registry, not the authority. The consequence for a reader is
 the inverse: a `workflow-` literal in `harness.py` is *not* necessarily a schema.
 Exactly one is not — `"workflow-conjecture-call"`, an event-input marker written
 by `rules/conj.py` and read by the semantic clock and by `invariants.py`.
-`check: python -c "import re,pathlib;from deepreason.storage.objects import SCHEMAS;t=pathlib.Path('src/deepreason/harness.py').read_text();named=set(re.findall(r'\"((?:workflow|criticism)-[a-z0-9-]+)\"',t));reg={k for k in SCHEMAS if k.startswith(('workflow-','criticism-'))};assert len(reg)==29,len(reg);assert reg<=named,sorted(reg-named);assert named-reg=={'workflow-conjecture-call'},sorted(named-reg)"`
+`check: python -c "import re,pathlib;from deepreason.storage.objects import SCHEMAS;t=pathlib.Path('src/deepreason/harness.py').read_text();named=set(re.findall(r'\"((?:workflow|criticism)-[a-z0-9-]+)\"',t));reg={k for k in SCHEMAS if k.startswith(('workflow-','criticism-'))};assert len(reg)==30,len(reg);assert reg<=named,sorted(reg-named);assert named-reg=={'workflow-conjecture-call'},sorted(named-reg)"`
 
 **`replay_workflow` has no blob store, so the checkpoint verifies authority and
 not evidence.** Its parameters are `(events, objects, manifest)` and its body

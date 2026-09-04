@@ -131,7 +131,7 @@ references only — the records themselves are resolved from the store on replay
 The event and the payload must appear together, the decision reference must be
 the event's final output, and exactly one control action, v3 `provider_result`,
 may carry an `LLMCall`; every other control action carrying one is a load error.
-`check: test "$(grep -c '"workflow-[a-z0-9-]*":' src/deepreason/storage/objects.py)" -eq 26 && test "$(grep -c '"criticism-[a-z0-9-]*":' src/deepreason/storage/objects.py)" -eq 3 && grep -q "self.workflow_state = WorkflowReplayState()" src/deepreason/harness.py && grep -q 'if (self.rule == Rule.CONTROL) != (self.control is not None):' src/deepreason/ontology/event.py && grep -q "control decision_ref must be the final event output" src/deepreason/control_events.py && grep -q 'and self.control.action == "provider_result"' src/deepreason/ontology/event.py && grep -q "control decisions cannot contain an LLM call" src/deepreason/ontology/event.py`
+`check: test "$(grep -c '"workflow-[a-z0-9-]*":' src/deepreason/storage/objects.py)" -eq 27 && test "$(grep -c '"criticism-[a-z0-9-]*":' src/deepreason/storage/objects.py)" -eq 3 && grep -q "self.workflow_state = WorkflowReplayState()" src/deepreason/harness.py && grep -q 'if (self.rule == Rule.CONTROL) != (self.control is not None):' src/deepreason/ontology/event.py && grep -q "control decision_ref must be the final event output" src/deepreason/control_events.py && grep -q 'and self.control.action == "provider_result"' src/deepreason/ontology/event.py && grep -q "control decisions cannot contain an LLM call" src/deepreason/ontology/event.py`
 
 The in-memory materialization is `WorkflowReplayState`, held as
 `harness.workflow_state`: per-branch process state, work orders, proposal and

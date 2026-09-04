@@ -40,7 +40,7 @@ recovers into a different graph than it wrote.
 A naive grep over-reports this seam and under-reports it at once. 37 files match
 `deepreason.workflow`; three of them match only `deepreason.workflows`, a
 different package (workload definitions, not the control plane). Two of the
-fourteen modules below `deepreason.rules` name the control plane — `conj.py` and
+fifteen modules below `deepreason.rules` name the control plane — `conj.py` and
 `crit.py`; the other twelve never do — including D2 rev 2's own
 `relatedness.py`/`encoding.py`, both v6-runtime-agnostic by construction (they
 take a bare `harness`/`adapter`, never a `RunManifest`). And
@@ -54,7 +54,7 @@ every module under `rules/` loads no `deepreason.workflow.*` at all, and the
 rules stay testable against a fake harness with no v6 runtime present. The
 reverse arrow is three imports in two files, one of them at module scope
 (`anti_relapse`), because recovery cannot defer the gate it re-runs.
-`check: python -c "import importlib, pkgutil, sys, deepreason.rules as R; loaded=[importlib.import_module(m.name) for m in pkgutil.walk_packages(R.__path__, 'deepreason.rules.')]; assert len(loaded)==14, len(loaded); assert not [m for m in sys.modules if m.startswith('deepreason.workflow.')]" && test "$(grep -rhcE '^ +from deepreason\.workflow\b' src/deepreason/rules/conj.py src/deepreason/rules/crit.py | paste -sd+ | bc)" -eq 34 && ! grep -rqE '^from deepreason\.workflow\b' --include=*.py src/deepreason/rules && grep -q "^from deepreason.rules.guards import anti_relapse$" src/deepreason/workflow/conjecture_recovery.py && test "$(grep -rlE '^\s*from deepreason\.rules' --include=*.py src/deepreason/workflow | sort | paste -sd,)" = "src/deepreason/workflow/conjecture_recovery.py,src/deepreason/workflow/nonconjecture_recovery.py" && test "$(grep -rhcE '^\s*from deepreason\.rules' --include=*.py src/deepreason/workflow | paste -sd+ | bc)" -eq 3`
+`check: python -c "import importlib, pkgutil, sys, deepreason.rules as R; loaded=[importlib.import_module(m.name) for m in pkgutil.walk_packages(R.__path__, 'deepreason.rules.')]; assert len(loaded)==15, len(loaded); assert not [m for m in sys.modules if m.startswith('deepreason.workflow.')]" && test "$(grep -rhcE '^ +from deepreason\.workflow\b' src/deepreason/rules/conj.py src/deepreason/rules/crit.py | paste -sd+ | bc)" -eq 34 && ! grep -rqE '^from deepreason\.workflow\b' --include=*.py src/deepreason/rules && grep -q "^from deepreason.rules.guards import anti_relapse$" src/deepreason/workflow/conjecture_recovery.py && test "$(grep -rlE '^\s*from deepreason\.rules' --include=*.py src/deepreason/workflow | sort | paste -sd,)" = "src/deepreason/workflow/conjecture_recovery.py,src/deepreason/workflow/nonconjecture_recovery.py" && test "$(grep -rhcE '^\s*from deepreason\.rules' --include=*.py src/deepreason/workflow | paste -sd+ | bc)" -eq 3`
 
 ## Where it is expressed
 
@@ -210,7 +210,22 @@ on the stored raw blob, so the rule supplies the semantics, the workflow module
 supplies the authority checks, and no adapter is present in either. That is how
 the module can sit in `workflow/` while being called only from `rules/` — it
 never names a rule symbol, it receives one.
-`check: python -c "import inspect; from deepreason.workflow.transaction_service import InquiryTransactionService as I; from deepreason.workflow.atomic_recovery import recover_atomic_child_output as f; assert isinstance(inspect.getattr_static(I, 'context_plan'), staticmethod); src=inspect.getsource(I.context_plan); assert 'record_transaction_transition' not in src and 'return ContextPackPlanV1.create(' in src; p=inspect.signature(f).parameters; assert 'adapter' not in p and 'contract' in p; assert 'contract.compile(contract.validate_value(candidate))' in inspect.getsource(f)" && grep -q "Pure packing plan; it is not evidence that context was exposed." src/deepreason/workflow/transaction.py && grep -q "records=(\*plans, reservation_record, exposure, bundle)," src/deepreason/workflow/transaction_service.py && ! grep -q "deepreason\.rules" src/deepreason/workflow/atomic_recovery.py && grep -q "^def _materialize_formal(" src/deepreason/workflow/conjecture_recovery.py && grep -q "^def _recover_criticism_effect(" src/deepreason/workflow/nonconjecture_recovery.py && ! grep -rqE "LLMAdapter|build_adapter|\.complete\(" --include=*.py src/deepreason/workflow/atomic_recovery.py src/deepreason/workflow/conjecture_recovery.py src/deepreason/workflow/nonconjecture_recovery.py`
+`check: python -c "import inspect; from deepreason.workflow.transaction_service import InquiryTransactionService as I; from deepreason.workflow.atomic_recovery import recover_atomic_child_output as f; assert isinstance(inspect.getattr_static(I, 'context_plan'), staticmethod); src=inspect.getsource(I.context_plan); assert 'record_transaction_transition' not in src and 'return ContextPackPlanV1.create(' in src; p=inspect.signature(f).parameters; assert 'adapter' not in p and 'contract' in p; assert 'contract.compile(contract.validate_value(candidate))' in inspect.getsource(f)" && grep -q "Pure packing plan; it is not evidence that context was exposed." src/deepreason/workflow/transaction.py && python -c "
+import ast, inspect
+from deepreason.workflow.transaction_service import InquiryTransactionService as I
+fn = ast.parse(inspect.getsource(I.finalize_dispatch).lstrip())
+call = next(
+    n for n in ast.walk(fn)
+    if isinstance(n, ast.Call)
+    and getattr(n.func, 'attr', '') == 'record_transaction_transition'
+)
+records = next(k.value for k in call.keywords if k.arg == 'records')
+shape = [
+    ast.unparse(e.value) if isinstance(e, ast.Starred) else ast.unparse(e)
+    for e in records.elts
+]
+assert shape == ['plans', 'section_plans', 'reservation_record', 'exposure', 'bundle'], shape
+" && ! grep -q "deepreason\.rules" src/deepreason/workflow/atomic_recovery.py && grep -q "^def _materialize_formal(" src/deepreason/workflow/conjecture_recovery.py && grep -q "^def _recover_criticism_effect(" src/deepreason/workflow/nonconjecture_recovery.py && ! grep -rqE "LLMAdapter|build_adapter|\.complete\(" --include=*.py src/deepreason/workflow/atomic_recovery.py src/deepreason/workflow/conjecture_recovery.py src/deepreason/workflow/nonconjecture_recovery.py`
 
 ## How to change it
 
