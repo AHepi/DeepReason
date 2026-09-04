@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=5 blockers=none
+State: next=6 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -95,12 +95,19 @@ as an omission.
           INCONCLUSIVE       3
           98.11              1
 
-- [ ] 5. (S7) [COMMIT] SEAL. Write `PREREG.sha256` and
+- [x] 5. (S7) [COMMIT] SEAL. Write `PREREG.sha256` and
       `DEFECT_KEY.sha256`; commit and push BOTH before any experimental
       provider call.
       done-when: `sha256sum -c PREREG.sha256 DEFECT_KEY.sha256` prints
       two `OK` lines, and `git log --oneline -1` shows this commit
       pushed. THIS COMMIT IS THE FREEZE LINE.
+      DONE:
+          PREREG.md: OK
+          DEFECT_KEY.json: OK
+          3fbf7731ff93fa491fe9f6176a8a2b0cfe2349eeba0dd31df18a8a3399a2a7df  PREREG.md
+          b1813c10848092fe849a53a611146bf86a6c609e1eccbdbd6671af82d95b4b74  DEFECT_KEY.json
+          b07661e35069277c476a994420af14a5eec629e29e9be9f2a0978a7e60ce4e53  SELECTION.json
+          ls raw -> No such file or directory   (nothing measured yet)
 
 - [ ] 6. (S16, R19) Green soak on the launch config.
       done-when: `python -u scripts/cycle_soak.py --case <case>` exits 0
