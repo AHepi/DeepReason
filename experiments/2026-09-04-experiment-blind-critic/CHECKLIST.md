@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=4 blockers=none
+State: next=5 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -79,7 +79,7 @@ as an omission.
       `ensure_seeded()` must run before a cell layout can copy the
       shipped entries. Fixed in `cells.py`; nothing under `src/` moved.
 
-- [ ] 4. (S1, S9, S13, S14, S15, S19) [COMMIT] Write `PREREG.md`: the
+- [x] 4. (S1, S9, S13, S14, S15, S19) [COMMIT] Write `PREREG.md`: the
       census, the four cells, the six defect classes, M1-M5 with their
       exact definitions and detectors, the five re-fixed sharpness
       criteria, the sample-size arithmetic, the verdict rule, the
@@ -87,6 +87,13 @@ as an omission.
       done-when: `PREREG.md` exists and contains the strings
       `M1 sensitivity`, `M5 sharpness`, `BLIND BETTER`,
       `INFORMED BETTER`, `INCONCLUSIVE`, `98.11`.
+      DONE (occurrences):
+          M1 sensitivity     1
+          M5 sharpness       1
+          BLIND BETTER       1
+          INFORMED BETTER    1
+          INCONCLUSIVE       3
+          98.11              1
 
 - [ ] 5. (S7) [COMMIT] SEAL. Write `PREREG.sha256` and
       `DEFECT_KEY.sha256`; commit and push BOTH before any experimental
