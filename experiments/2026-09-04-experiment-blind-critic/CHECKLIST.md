@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=9 blockers=none
+State: next=10 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -168,11 +168,38 @@ as an omission.
       Both were written down before the first call. Neither is a
       surprise, and neither is read as a result.
 
-- [ ] 9. (S8, S10, S11, S12) [COMMIT] Write `measure.py` and compute
+- [x] 9. (S8, S10, S11, S12) [COMMIT] Write `measure.py` and compute
       M1-secondary, M2, M3, M4 from the record alone.
       done-when: `M2.json`, `M3.json`, `M4.json` exist; `M3.json`
       satisfies `attack_true >= att_edges` in every cell; `measure.py`
       contains no read of a self-reported score field.
+      DONE:
+          no self-reported field is read: OK
+          (the criterion is checked on FIELD READS, by AST, not on the
+           word anywhere in the file -- the rule stated in the docstring
+           was breaking its own grep. Corrected inside the step.)
+
+          M2 false attack (clean targets)
+            C00  60/60 = 1.000   C10  60/60 = 1.000
+            C01  60/60 = 1.000   C11  60/60 = 1.000   SATURATED: True
+
+          M3 warrant rate (denominator = every criticism attempt)
+            every cell: 120 calls, attack=true 120, att edges 0, rate 0.000
+            attack_true >= att_edges holds in all four cells
+
+          M4 spend per criticism (mean tokens)
+            C00 prompt 1187.5 completion 1504.7 total 2692.1
+            C10 prompt 1230.5 completion 1397.8 total 2628.3
+            C01 prompt 1478.3 completion 1588.0 total 3066.3
+            C11 prompt 1526.7 completion 1620.1 total 3146.7
+
+          M1 SECONDARY (lexical) sensitivity, 60 planted per cell
+            C00 39/60 = 0.650   C10 43/60 = 0.717
+            C01 35/60 = 0.583   C11 31/60 = 0.517
+            F1 provenance: omitted 0.617 present 0.617 d1 +0.0000
+                           p 1.0      McNemar b/c 13/13 p 0.845
+            F2 history:    omitted 0.683 present 0.550 d1 +0.1333
+                           p 0.03365  McNemar b/c 25/9  p 0.0101
 
 - [ ] 10. (S9) [COMMIT] Run the blind three-grader naming panel for
       M1-primary. Grader rows carry no cell field.

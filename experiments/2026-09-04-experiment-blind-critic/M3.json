@@ -1,0 +1,30 @@
+{
+ "C00": {
+  "calls": 120,
+  "attack_true": 120,
+  "att_edges": 0,
+  "scrutiny_events": 120,
+  "warrant_rate": 0.0
+ },
+ "C10": {
+  "calls": 120,
+  "attack_true": 120,
+  "att_edges": 0,
+  "scrutiny_events": 120,
+  "warrant_rate": 0.0
+ },
+ "C01": {
+  "calls": 120,
+  "attack_true": 120,
+  "att_edges": 0,
+  "scrutiny_events": 119,
+  "warrant_rate": 0.0
+ },
+ "C11": {
+  "calls": 120,
+  "attack_true": 120,
+  "att_edges": 0,
+  "scrutiny_events": 120,
+  "warrant_rate": 0.0
+ }
+}

@@ -1,0 +1,280 @@
+{
+ "detector": "secondary-lexical",
+ "per_cell": {
+  "C00": {
+   "named": 39,
+   "planted": 60,
+   "rate": 0.65,
+   "per_class": {
+    "causal-non-sequitur": {
+     "named": 9,
+     "n": 10,
+     "rate": 0.9
+    },
+    "circular-mechanism": {
+     "named": 7,
+     "n": 10,
+     "rate": 0.7
+    },
+    "evidence-misquotation": {
+     "named": 10,
+     "n": 10,
+     "rate": 1.0
+    },
+    "scope-contradiction": {
+     "named": 2,
+     "n": 10,
+     "rate": 0.2
+    },
+    "unsupported-comparison": {
+     "named": 5,
+     "n": 10,
+     "rate": 0.5
+    },
+    "vacuous-forbidden-case": {
+     "named": 6,
+     "n": 10,
+     "rate": 0.6
+    }
+   }
+  },
+  "C10": {
+   "named": 43,
+   "planted": 60,
+   "rate": 0.7166666666666667,
+   "per_class": {
+    "causal-non-sequitur": {
+     "named": 9,
+     "n": 10,
+     "rate": 0.9
+    },
+    "circular-mechanism": {
+     "named": 6,
+     "n": 10,
+     "rate": 0.6
+    },
+    "evidence-misquotation": {
+     "named": 10,
+     "n": 10,
+     "rate": 1.0
+    },
+    "scope-contradiction": {
+     "named": 4,
+     "n": 10,
+     "rate": 0.4
+    },
+    "unsupported-comparison": {
+     "named": 6,
+     "n": 10,
+     "rate": 0.6
+    },
+    "vacuous-forbidden-case": {
+     "named": 8,
+     "n": 10,
+     "rate": 0.8
+    }
+   }
+  },
+  "C01": {
+   "named": 35,
+   "planted": 60,
+   "rate": 0.5833333333333334,
+   "per_class": {
+    "causal-non-sequitur": {
+     "named": 6,
+     "n": 10,
+     "rate": 0.6
+    },
+    "circular-mechanism": {
+     "named": 6,
+     "n": 10,
+     "rate": 0.6
+    },
+    "evidence-misquotation": {
+     "named": 10,
+     "n": 10,
+     "rate": 1.0
+    },
+    "scope-contradiction": {
+     "named": 2,
+     "n": 10,
+     "rate": 0.2
+    },
+    "unsupported-comparison": {
+     "named": 5,
+     "n": 10,
+     "rate": 0.5
+    },
+    "vacuous-forbidden-case": {
+     "named": 6,
+     "n": 10,
+     "rate": 0.6
+    }
+   }
+  },
+  "C11": {
+   "named": 31,
+   "planted": 60,
+   "rate": 0.5166666666666667,
+   "per_class": {
+    "causal-non-sequitur": {
+     "named": 7,
+     "n": 10,
+     "rate": 0.7
+    },
+    "circular-mechanism": {
+     "named": 5,
+     "n": 10,
+     "rate": 0.5
+    },
+    "evidence-misquotation": {
+     "named": 10,
+     "n": 10,
+     "rate": 1.0
+    },
+    "scope-contradiction": {
+     "named": 0,
+     "n": 10,
+     "rate": 0.0
+    },
+    "unsupported-comparison": {
+     "named": 7,
+     "n": 10,
+     "rate": 0.7
+    },
+    "vacuous-forbidden-case": {
+     "named": 2,
+     "n": 10,
+     "rate": 0.2
+    }
+   }
+  }
+ },
+ "factors": {
+  "F1_provenance": {
+   "m1_omitted": {
+    "named": 74,
+    "n": 120,
+    "rate": 0.6166666666666667
+   },
+   "m1_present": {
+    "named": 74,
+    "n": 120,
+    "rate": 0.6166666666666667
+   },
+   "d1": 0.0,
+   "z": 0.0,
+   "p": 1.0,
+   "mcnemar": {
+    "b": 13,
+    "c": 13,
+    "chi2": 0.0385,
+    "p": 0.84452
+   },
+   "m2_omitted_rate": 1.0,
+   "m2_present_rate": 1.0,
+   "d2": 0.0
+  },
+  "F2_history": {
+   "m1_omitted": {
+    "named": 82,
+    "n": 120,
+    "rate": 0.6833333333333333
+   },
+   "m1_present": {
+    "named": 66,
+    "n": 120,
+    "rate": 0.55
+   },
+   "d1": 0.1333,
+   "z": 2.1242,
+   "p": 0.03365,
+   "mcnemar": {
+    "b": 25,
+    "c": 9,
+    "chi2": 6.6176,
+    "p": 0.0101
+   },
+   "m2_omitted_rate": 1.0,
+   "m2_present_rate": 1.0,
+   "d2": 0.0
+  }
+ },
+ "markers": {
+  "unsupported-comparison": [
+   "previously studied",
+   "reference class",
+   "unsupported comparison",
+   "unsupported universal",
+   "universal negative",
+   "comparison class",
+   "none of this behaviour",
+   "none of this behavior",
+   "unlike every",
+   "sweeping comparison",
+   "unsupported claim about other systems"
+  ],
+  "causal-non-sequitur": [
+   "non sequitur",
+   "non-sequitur",
+   "does not follow",
+   "doesn't follow",
+   "never relevant",
+   "underlying structure was never",
+   "unwarranted conclusion",
+   "conclusion does not follow",
+   "it follows that",
+   "irrelevant conclusion"
+  ],
+  "evidence-misquotation": [
+   "erdos",
+   "erd\u0151s",
+   "renyi",
+   "r\u00e9nyi",
+   "1959",
+   "misattribut",
+   "fabricated citation",
+   "false attribution",
+   "misquot",
+   "no such paper",
+   "citation is wrong",
+   "attribution"
+  ],
+  "circular-mechanism": [
+   "circular",
+   "circularity",
+   "begs the question",
+   "begging the question",
+   "assumes what",
+   "presupposes the conclusion",
+   "petitio",
+   "the reason this holds",
+   "restates the claim",
+   "restatement of the claim",
+   "reason for the claim is the claim"
+  ],
+  "scope-contradiction": [
+   "excludes",
+   "exclusion",
+   "scope",
+   "contradicts its own scope",
+   "excluded from its own",
+   "in both",
+   "self-contradict",
+   "contradiction between the claim and",
+   "scope.excludes"
+  ],
+  "vacuous-forbidden-case": [
+   "vacuous",
+   "forbids nothing",
+   "circular countercondition",
+   "countercondition",
+   "counter-condition",
+   "forbidden case",
+   "empty condition",
+   "contradicts the central claim",
+   "unfalsifiable condition",
+   "not a real condition"
+  ]
+ }
+}
