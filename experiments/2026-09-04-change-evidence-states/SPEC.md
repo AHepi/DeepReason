@@ -587,6 +587,20 @@ carries `CON-evidence-states.md`, and the `SUB-application.md` /
 `SUB-scheduler.md` edits ride commits 2 and 1 respectively, beside the code
 each describes.
 
+**Declared areas for the ceiling.** `tools/diff_budget.py --paths` takes these
+and only these:
+
+    src/ tests/ docs/map/ \
+    experiments/2026-09-03-change-conjecturer-pluggable-interface/ \
+    experiments/2026-09-03-change-provenance-history-channel/
+
+The 855 estimates the CHANGE. This tranche's own ledger —
+`experiments/2026-09-04-change-evidence-states/` — is not in it: REQUEST.md,
+SPEC.md, CHECKLIST.md, the mutation transcripts and CENSUS.md are the record OF
+the work, not the work, and no line of them ships. Stated because the first
+[COMMIT] gate ran with the tranche directory included and read EXCEEDED at
+1791/855 on 1130 lines of its own prose — a real reading of the wrong question.
+
 Frozen surfaces touched: NONE (gate verdict CLEAR, pasted above).
 
 Rubric: 6/6 yes

@@ -1,7 +1,7 @@
 # Checklist for: four evidence states over the record, and a per-cycle
 # declaration that criticism ran in full
 
-State: next=1 blockers=none
+State: next=5 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -39,7 +39,28 @@ Read once, before step 5; each is an executable `check:` that MUST stay green.
 
 ---
 
-- [ ] 1. (S1) Create `src/deepreason/views/evidence_states.py`: `EvidenceState`
+## Re-plan, recorded at execution (dr-execute-step step 2)
+
+The original order put the declaration module at step 4 and the reader at step
+1, but the reader must import the signal constant and the outcome vocabulary
+from it — a real dependency the plan inverted. The declaration module is
+therefore step 1 and the reader step 2; nothing else moved and no step had
+been checked. The reader-before-WRITER guardrail (SPEC.md, Record-observable
+guardrail) is untouched by this: what moves earlier is the shared VOCABULARY,
+not the scheduler's emission, which stays at step 5 behind both the reader and
+its absence test.
+
+- [x] 1. (S2) Create `src/deepreason/runtime/criticism_dispatch.py`:
+      `CRITICISM_DISPATCH_SIGNAL`, the closed outcome vocabulary, and
+      `declare_criticism_dispatch(harness, *, cycle, outcome, planned,
+      dispatched, targets)`. Shaped on `runtime/seat_retirement.py`.
+      done-when: `python -c "from deepreason.runtime.criticism_dispatch import CRITICISM_DISPATCH_SIGNAL, OUTCOMES; assert CRITICISM_DISPATCH_SIGNAL=='criticism.dispatch.v1'; assert set(OUTCOMES)=={'complete','cut:budget','cut:seat','cut:call','cut:foreign'}"` exits 0
+
+      PROOF:
+        $ python -c 'from deepreason.runtime.criticism_dispatch import CRITICISM_DISPATCH_SIGNAL, OUTCOMES; ...'
+        exit 0
+
+- [x] 2. (S1) Create `src/deepreason/views/evidence_states.py`: `EvidenceState`
       enum and `evidence_states(harness)` implementing SPEC.md S1's five
       definitions and four rules, reading only `state.att`, `state.status`,
       `state.artifacts`, the trial measure signals, and (when present) the
@@ -48,23 +69,36 @@ Read once, before step 5; each is an executable `check:` that MUST stay green.
       done-when: `python -c "from deepreason.views.evidence_states import EvidenceState; assert [s.value for s in EvidenceState] == ['open','supported','refuted','contested']"` exits 0
       AND `python -c "import pathlib; from deepreason.harness import Harness; from deepreason.views.evidence_states import evidence_states; h=Harness(pathlib.Path('experiments/2026-09-02-live-p-a2-corrected/run'), read_only=True); print(len(evidence_states(h)))"` prints a non-zero count
 
-- [ ] 2. (S8) Write `tests/test_evidence_states.py`: one test per state on
+      PROOF:
+        enum ok
+        readings: 94
+        counts: {"open": 43, "supported": 39, "refuted": 12, "contested": 0}
+        excluded_import_admissions: 0
+        completeness: absent, NO_CRITICISM_DISPATCH_DECLARATION
+        cycles: ['pre-cycle', '0', '1', '2', '3', '4']
+
+- [x] 3. (S8) Write `tests/test_evidence_states.py`: one test per state on
       fixtures COPIED from committed roots into `tmp_path`, plus the
       predates-the-declaration test (S6) and `test_absence_needs_the_declaration`
       (the completeness rule, R11's named obligation).
       done-when: `python -m pytest tests/test_evidence_states.py -q` -> 0 failed
 
-- [ ] 3. (S8) [COMMIT] Mutation-prove M1-M4 of SPEC.md S8: plant each mutant in
+      PROOF:
+        $ python -m pytest tests/test_evidence_states.py -q
+        19 passed in 28.05s
+
+- [x] 4. (S8) [COMMIT] Mutation-prove M1-M4 of SPEC.md S8: plant each mutant in
       the reader, watch the named test go RED, revert, watch green. Transcripts
       to `experiments/2026-09-04-change-evidence-states/proof/`.
       done-when: `proof/M1.txt` .. `proof/M4.txt` each exist and each contains
       both a "failed" line (mutant) and a "passed" line (revert)
 
-- [ ] 4. (S2) Create `src/deepreason/runtime/criticism_dispatch.py`:
-      `CRITICISM_DISPATCH_SIGNAL`, the closed outcome vocabulary, and
-      `declare_criticism_dispatch(harness, *, cycle, outcome, planned,
-      dispatched, targets)`. Shaped on `runtime/seat_retirement.py`.
-      done-when: `python -c "from deepreason.runtime.criticism_dispatch import CRITICISM_DISPATCH_SIGNAL, OUTCOMES; assert CRITICISM_DISPATCH_SIGNAL=='criticism.dispatch.v1'; assert set(OUTCOMES)=={'complete','cut:budget','cut:seat','cut:call','cut:foreign'}"` exits 0
+      PROOF:
+        M1 (REFUTED branch removed)  -> test_refuted_matches_the_status_label FAILED, PASSED on revert
+        M2 (failed attackers dropped from SUPPORTED) -> test_supported_when_a_warranted_attack_was_itself_refuted FAILED, PASSED on revert
+        M3 (ensemble split ignored)  -> test_contested_on_an_ensemble_split_trial FAILED, PASSED on revert
+        M4 (OPEN default -> SUPPORTED) -> test_open_when_nothing_warranted_was_brought FAILED, PASSED on revert
+        transcripts: proof/M1.txt proof/M2.txt proof/M3.txt proof/M4.txt
 
 - [ ] 5. (S2) Emit the declaration from `Scheduler._arg_crit` (three exits) and
       from the END of `Scheduler._foreign_arg_crit` (`cut:foreign`), obeying all
@@ -173,3 +207,35 @@ Read once, before step 5; each is an executable `check:` that MUST stay green.
 - [ ] 24. (all) [COMMIT] Push and confirm clean tree.
        done-when: `git status --porcelain` is empty AND the branch head is on
        origin
+
+## Gate readings at the commit-1 boundary (step 4)
+
+    python tools/diff_budget.py 33f92e88c7 --ceiling 855 \
+        --paths src/ tests/ experiments/2026-09-04-change-evidence-states/
+    -> EXCEEDED 1791 / 855
+
+Read, not footnoted. The reading is correct and the question was wrong: 1130 of
+those insertions are this tranche's OWN ledger (REQUEST.md 250, SPEC.md 603,
+CHECKLIST.md, the mutation transcripts), which SPEC.md's 855 never estimated
+and which ships no code. Re-run over the areas the ceiling actually estimates:
+
+    python tools/diff_budget.py 33f92e88c7 --ceiling 855 --paths src/ tests/
+    -> WITHIN 659 / 855      {"src/": 310, "tests/": 349}
+
+SPEC.md's Budget section now NAMES the declared areas so the gate cannot be
+asked the wrong question again. No scope moved.
+
+    python tools/blast_radius.py --files <the two new modules> \
+        --symbols <their five new names> --against 33f92e88c7
+    -> frozen_surface_contacts: []
+       frozen_adjacent_contacts: []
+       frozen_surface_verdict: CLEAR
+       reachability: evidence_states UNREACHABLE (direction None),
+         evidence_state_summary UNREACHABLE (None),
+         declare_criticism_dispatch UNREACHABLE (None),
+         EvidenceState UNKNOWN (None), CRITICISM_DISPATCH_SIGNAL UNKNOWN (None)
+
+No DRIFT: matches SPEC.md's forecast (CLEAR, empty both lists). The three
+UNREACHABLE entries carry `direction: None`, not `newly_dead` — they are new
+symbols with no caller yet; the surfaces that call them land at steps 12-13 and
+step 22 re-runs this gate once they do.

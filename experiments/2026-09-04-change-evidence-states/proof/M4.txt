@@ -1,0 +1,18 @@
+=== M4 ===
+mutant: in src/deepreason/views/evidence_states.py
+          else:
+            readings[artifact_id] = EvidenceState.OPEN
+  ->
+          else:
+            readings[artifact_id] = EvidenceState.SUPPORTED
+
+--- with the mutant applied ---
+
+tests/test_evidence_states.py:74: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_evidence_states.py::test_open_when_nothing_warranted_was_brought
+1 failed in 0.09s
+
+--- reverted ---
+.                                                                        [100%]
+1 passed in 0.07s
