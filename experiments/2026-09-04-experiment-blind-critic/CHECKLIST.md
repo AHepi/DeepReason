@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=7 blockers=none
+State: next=8 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -122,11 +122,27 @@ as an omission.
       manifest-compile failure this tranche did not cause and does not
       fix; they go to PARKED.md at step 13.
 
-- [ ] 7. (S16, A6) Write `bench.py` and prove it end-to-end on FOUR
+- [x] 7. (S16, A6) Write `bench.py` and prove it end-to-end on FOUR
       calls (one target, four cells) before the full launch.
       done-when: `python bench.py --smoke` writes four run roots, each
       with a parsed `ArgumentativeCriticOutput`, and prints
       `smoke: 4/4 parsed`.
+      DONE:
+          [bench] complete: 4 calls, 0 failed
+          smoke: 4/4 parsed
+          C00 attempts 1 attack True caselen  856 tok 2628 att 0
+          C10 attempts 1 attack True caselen  856 tok 2024 att 0
+          C01 attempts 1 attack True caselen 1705 tok 2763 att 0
+          C11 attempts 1 attack True caselen 1225 tok 2425 att 0
+          distinct packs: 4   distinct cases: 4
+          root footprint 52K -> ~25MB for the full 480
+      Two corrections inside the step, both in how the reply is READ, not
+      in what the harness does: the filled form lives in the `raw_ref`
+      blob each `attempt_trace` entry names, not inline in the event; and
+      the reply arrives fenced in a markdown code block often enough that
+      the measurement now parses it with the adapter's OWN normaliser
+      rather than a hand-rolled one, so it cannot read a different object
+      than the run acted on.
 
 - [ ] 8. (S8, S16) [COMMIT] Launch the full bench detached, snapshot
       loop armed: 120 targets x 4 cells = 480 calls, <=3 concurrent.
