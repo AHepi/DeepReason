@@ -378,3 +378,47 @@ single `data.pop` line is ordinary defect work needing no grant.
 `_versioned_source_config_data` — insertions only, 1 and 0, whose effect is to
 keep every manifest and qualification digest byte-identical — so the retirement
 switch can be a per-run configuration value rather than a code edit?
+
+---
+
+## Operator disposition, 2026-09-04
+
+Asked as ONE question, per `dr-ask-the-right-question` §4: the frozen-surface
+grant was the only fork that survived the dominance test, and the question
+embedded `tools/blast_radius.py`'s own `BLAST_RADIUS_RESULT_V1` rows as that
+section requires.
+
+- **§2b frozen-surface grant: GRANTED.** "Grant it (recommended)" — the one
+  unconditional four-space `data.pop("SEAT_RETIREMENT_POLICY", None)` line in
+  `_versioned_source_config_data`, insertions only, 1 and 0. The grant covers
+  that line and nothing else; every other frozen surface stays untouched and
+  `frozen_adjacent_contacts` remains empty. Ledgered in
+  `INV-frozen-surfaces.md` by this tranche, in the same form as the nine before
+  it.
+
+### Decided without asking (dominant under the operator's recorded values) — override any time
+
+Three forks were derived rather than escalated, each with the ruling that
+decides it. Recorded here so the reasoning is reviewable rather than assumed.
+
+1. **The all-seats-dead terminal is a NEW clean stop reason,
+   `provider_unavailable`, not a reuse of `operational_failure`.** The
+   2026-08-29 law's own wording decides it: an exhausted budget "terminates as
+   `budget_exhausted` (clean), never `operational_failure`". A provider that
+   stopped answering is the same shape of fact, and `operational_failure` —
+   though already continuable — is a FAILURE terminal. `blast_radius` reports
+   no frozen contact on `runtime/stop.py` or `workflow/lifecycle.py`, and the
+   widening is one value no committed root can carry.
+2. **A retired judge seat skips judge summons rather than stopping the run,
+   and the cross-family predicate is NOT relaxed.** The all-configurations law
+   (disclose, never die) gives the first half; the amended judge law
+   (2026-08-28) gives the second — the measured 0-2.5% false-conviction regime
+   is the cross-family one, and every looser configuration measured over-
+   convicts at 47-60%, so quietly running a one-judge ensemble would trade the
+   good regime for the bad one to avoid a skip.
+3. **A retired single-seat role skips its phase rather than stopping the run.**
+   Same law, and P-A1 is the case in point: `defender#0` sat on the dead
+   endpoint while the conjecture and criticism circuit on the healthy endpoint
+   still had work to do.
+
+Implementation proceeds under `dr-implement-fix` on this disposition.
