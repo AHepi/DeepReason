@@ -1,5 +1,5 @@
 <!-- DR-CON-successor-questions -->
-Verified-at: bc3175394
+Verified-at: 770ea1344
 Verify: python -m pytest tests/test_successor_law_line.py tests/test_successor_registry.py tests/test_successor_questions.py tests/test_successor_minting.py tests/test_successor_rank_tie.py -q
 Owns: src/deepreason/successor/__init__.py, src/deepreason/successor/registry.py, src/deepreason/successor/route.py, src/deepreason/successor/mint.py
 Seams-undocumented: successor-questions x scratch, successor-questions x rules, successor-questions x scheduler
@@ -302,7 +302,7 @@ makes — and appears in the rendered pack's ordered block refs.
   where a manifest-launched run has it reconstructed anyway, so there is one
   answer rather than two that can disagree. Found and fixed 2026-08-30 in this
   tranche's own `docs_verify` run, before the branch was handed on.
-`check: test "$(for f in $(grep -rl harness --include=*.py src/deepreason); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 60 && test "$(for f in $(grep -rl scratch src/deepreason --include=*.py); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 49 && ! grep -q "_workflow_manifest" src/deepreason/successor/route.py && grep -q "getattr(config, \"scratchpad\", None)" src/deepreason/successor/route.py`
+`check: test "$(for f in $(grep -rl harness --include=*.py src/deepreason); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 61 && test "$(for f in $(grep -rl scratch src/deepreason --include=*.py); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 50 && ! grep -q "_workflow_manifest" src/deepreason/successor/route.py && grep -q "getattr(config, \"scratchpad\", None)" src/deepreason/successor/route.py`
 
 - **`ScratchAuthoringService.author_block` is the wrong door.** Its
   `block_role` is a closed `Literal["conjecturer","synthesizer"]` that enters

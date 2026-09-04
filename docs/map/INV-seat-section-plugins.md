@@ -1,5 +1,5 @@
 <!-- DR-INV-seat-section-plugins -->
-Verified-at: d3466ffb3
+Verified-at: 770ea1344
 Verify: python -m pytest tests/test_seat_section_architecture.py tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py -q
 Owns: src/deepreason/llm/seat_sections.py, src/deepreason/llm/seat_plugins.py, src/deepreason/llm/seat_layouts.py, src/deepreason/llm/seat_templates.py, src/deepreason/llm/role_prompts.py
 Seams: DR-SEAM-packs-and-token-economy-x-rules
@@ -15,6 +15,11 @@ configuration rather than a code path carrying the seat's name (CLAUDE.md,
 document owns the input half: the protocol a brief section renders through,
 the registry it resolves from, the layout that composes one seat's brief, and
 the shell that pairs a layout with a form and a wording.
+
+It owns how a section is FORMATTED. Where its CONTENT comes from is
+`DR-INV-seat-section-sources`, and the split is forced rather than tidy: a
+plugin may not call the harness, and nine of the conjecturer's sections need
+the record to exist at all.
 
 Both renderers walk a layout. Neither builds a section itself.
 `check: python -c "
@@ -115,6 +120,7 @@ harness; an id that does not resolve is a typed refusal, never a load-by-path.
 | To do this | Edit | Test |
 |---|---|---|
 | change what a section SAYS | its plugin in `llm/seat_plugins.py`, or an operator `.tmpl` | the goldens |
+| change what one of the nine record-backed sections CONTAINS | its SOURCE — `DR-INV-seat-section-sources` | `tests/test_seat_section_sources.py`, then the goldens |
 | add a section to a brief | register a plugin, add a layout entry — no source edit | `tests/test_seat_section_architecture.py` |
 | change where a section sits, or its budget | the layout entry | the goldens |
 | add a seat kind | register a `SeatShellV1` | `tests/test_seat_shell_swap.py` |
@@ -139,3 +145,9 @@ The recipe for the common case is `DR-REC-add-a-section-plugin`.
   `null` only, 2026-09-04, with three doctor tests as the evidence.
 - **A `str` operation demotes the `AllocatedPack` marker** — see
   `DR-SEAM-packs-and-token-economy-x-rules`, whose Traps section owns it.
+- **A plugin that needs the record is asking for a SOURCE.** The prohibition
+  on calling the harness is not a limitation to route around: if a section's
+  content cannot be computed from `SectionRequestV1`, the missing piece belongs
+  in a source that supplies it, not in a plugin that reaches for it. Nine
+  sections were on the wrong side of this line until 2026-09-04 and were being
+  computed in the admission code as a result.

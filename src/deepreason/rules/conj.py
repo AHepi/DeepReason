@@ -35,9 +35,19 @@ from deepreason.llm.adapter import RequestEnvelopeExceeded, WorkflowAuthorizatio
 from deepreason.llm.contracts import CandidateRef, ConjectureCandidate, ConjecturerOutput
 from deepreason.llm.endpoints import EndpointError
 from deepreason.llm.firewall import EndpointLease, RouteFirewallError
-from deepreason.llm.packs import AllocatedPack, aliases_for_pack, render_conj_pack
+from deepreason.llm.packs import aliases_for_pack, render_conj_pack
+from deepreason.seat_sources import (
+    CONJECTURER_SEAT,
+    STAGE_POST_ALLOCATION,
+    STAGE_POST_ALLOCATION_AFTER_ALIASES,
+    STAGE_POST_ALLOCATION_CONTEXT,
+    STAGE_PRE_CONTRACT,
+    STAGE_RENDER,
+    SectionSourceRequestV1,
+    apply_post_allocation,
+    assemble_sources,
+)
 from deepreason.rules._section_plan import section_plans as _section_plans
-from deepreason.llm import reference_menu
 from deepreason.llm.repair import SchemaRepairError
 from deepreason.llm.wire import (
     AliasTable,
@@ -49,7 +59,6 @@ from deepreason.llm.wire import (
 from deepreason.ontology import Artifact, Provenance, Rule, Warrant
 from deepreason.rules.guards import anti_relapse
 from deepreason.workloads.models import MandatoryInterface, compile_interface_draft
-from deepreason.scratch.proposals import V6_SCRATCH_WORKSHOP_PROMPT
 from deepreason.workloads.text import (
     ReasoningConjecturerOutput,
     draft_countercondition_commitments,
@@ -60,7 +69,6 @@ from deepreason.workloads.text import (
 
 from deepreason.discharge import (
     record_discharges,
-    render_open_criticism_context,
     resolve_policy as resolve_discharge_policy,
     screen_submission,
 )
@@ -74,20 +82,6 @@ def _resolve_ref(target: str, artifacts: dict) -> str | None:
         return target
     matches = [artifact_id for artifact_id in artifacts if artifact_id.startswith(target)]
     return matches[0] if len(matches) == 1 else None
-
-
-def _union_blocks(dossiers) -> tuple:
-    """Every admitted block across the run's bound dossiers, epoch order."""
-
-    blocks: list = []
-    known: set[str] = set()
-    for dossier in dossiers:
-        for block in getattr(dossier, "blocks", ()) or ():
-            if block.id in known:
-                continue
-            known.add(block.id)
-            blocks.append(block)
-    return tuple(blocks)
 
 
 def _exposed_block_ids(authorization) -> frozenset[str] | None:
@@ -739,20 +733,26 @@ def conj(
     if workflow_work_order_id is not None and workflow_control_trace is not None:
         raise ValueError("Conj accepts only one workflow binding seam")
 
-    # The open criticisms on this problem, rendered into the BINDING block
-    # (REBUILD F1). The whole channel reaches the tree through this module and
-    # `deepreason.discharge`'s public interface -- `llm/packs.py` is handed a
-    # plain string and never learns that criticism is what it is rendering.
-    #
-    # Computed HERE rather than beside the pack because the atomic-decomposition
-    # recovery path builds its own contract long before the pack render, and a
-    # contract that pruned `discharges` while the pack it is answering listed
-    # open handles would ask the model for something it cannot express. It is a
-    # pure read -- no event, no label (`test_rendering_writes_nothing_to_the_log`).
+    # The open criticisms on this problem reach the brief through the seat's
+    # registered SOURCE bundle, at the stage that ends here. It is resolved
+    # this early, rather than beside the pack, because the
+    # atomic-decomposition recovery path builds its own contract long before
+    # the pack render, and a contract that pruned `discharges` while the pack
+    # it is answering listed open handles would ask the model for something it
+    # cannot express. It is a pure read -- no event, no label
+    # (`test_rendering_writes_nothing_to_the_log`).
     discharge_policy = resolve_discharge_policy(config)
-    open_criticism_context = render_open_criticism_context(
-        harness, problem_id, discharge_policy
+    source_assembly = assemble_sources(
+        CONJECTURER_SEAT,
+        stage=STAGE_PRE_CONTRACT,
+        request=SectionSourceRequestV1(
+            harness=harness,
+            config=config,
+            problem=problem,
+            inputs={"problem_id": problem_id},
+        ),
     )
+    open_criticism_context = source_assembly.value("open_criticism_context")
 
     active_v4 = False
     active_v5 = False
@@ -1311,130 +1311,56 @@ def conj(
                 endpoint_lease
             ):
                 raise ValueError("active Conj endpoint lease differs from workflow work order")
-    frozen_evidence_context = None
-    dossier_receipt = None
-    dossier_maximum_bytes = 0
-    bound_dossier = None
-    bound_dossiers: tuple = ()
-    if active_v5 or active_v6:
-        from deepreason.amendment.state import dossier_union, epoch_problem_ids
-        from deepreason.evidence import (
-            commit_dossier_pack_receipt,
-            dossier_exposure_counts,
-            load_evidence_dossier,
-            load_run_input,
-            pack_dossier,
-            render_dossier_pack,
-        )
-
-        evidence_policy = run_manifest.inquiry_capability_policy.attached_evidence
-        if evidence_policy.enabled:
-            bound_input = load_run_input(harness.root)
-            dossier = load_evidence_dossier(harness.root)
-            if bound_input.run_input_digest != run_manifest.run_input_digest:
-                raise ValueError("conjecture evidence belongs to another run input")
-            # Amendment epochs make evidence cumulative: any epoch's question
-            # may be selected, and every one of them reasons against every
-            # dossier bound so far.
-            bound_dossiers = dossier_union(harness.root)
-            addressed = bool(bound_dossiers) and problem.id in epoch_problem_ids(
-                harness.root
-            )
-            seen_source_ids = {source.id for source in dossier.sources}
-            supplemental: list = []
-            for item in bound_dossiers:
-                if item.dossier_digest == dossier.dossier_digest:
-                    continue
-                for source in item.sources:
-                    if source.id in seen_source_ids:
-                        continue
-                    seen_source_ids.add(source.id)
-                    supplemental.append(source)
-            supplemental_sources = tuple(supplemental)
-            if addressed:
-                bound_dossier = dossier
-                dossier_maximum_bytes = min(
-                    evidence_policy.maximum_total_bytes,
-                    evidence_policy.maximum_sources_per_pack
-                    * evidence_policy.maximum_excerpt_bytes_per_source,
-                    4 * 1024 * 1024,
-                )
-                dossier_receipt = pack_dossier(
-                    root=harness.root,
-                    run_input=bound_input,
-                    dossier=dossier,
-                    work_order_ref=(
-                        transaction_preparation.id
-                        if active_v6
-                        else workflow_control_trace.ticket.work_order.id
-                    ),
-                    query=problem.description,
-                    state_fence=(
-                        "formal:"
-                        f"{harness._next_seq - 1 if active_v6 else workflow_control_trace.ticket.work_order.formal_fence_seq};"
-                        "scratch:"
-                        f"{harness._next_seq - 1 if active_v6 else workflow_control_trace.ticket.work_order.scratch_fence_seq};"
-                        f"workflow:{harness.workflow_state.digest}"
-                    ),
-                    maximum_sources=evidence_policy.maximum_sources_per_pack,
-                    maximum_excerpt_bytes_per_source=(
-                        evidence_policy.maximum_excerpt_bytes_per_source
-                    ),
-                    maximum_total_excerpt_bytes=dossier_maximum_bytes,
-                    exposure_counts=dossier_exposure_counts(harness),
-                    additional_sources=supplemental_sources,
-                )
-                if active_v5:
-                    commit_dossier_pack_receipt(harness, dossier_receipt)
-                frozen_evidence_context = render_dossier_pack(
-                    blobs=harness.blobs,
-                    dossier=dossier,
-                    receipt=dossier_receipt,
-                    dossiers=bound_dossiers,
-                )
-    citable_evidence_context = None
-    citable_blocks_shown: tuple = ()
-    if active_v5 or active_v6:
-        from deepreason.capabilities.research import consumed_research_blocks
-        from deepreason.evidence import citable_legend
-
-        # The dossier is bound to the RUN, not to the seed problem. Gating this
-        # on `bound_dossier` — which is set only for an epoch problem — left
-        # every DERIVED problem reasoning about the run's evidence while unable
-        # to name a single block the §4 checker resolves (P4, R62).
-        legend = citable_legend(
-            _union_blocks(bound_dossiers) + consumed_research_blocks(harness),
-            harness.blobs,
-        )
-        if legend is not None:
-            citable_evidence_context = legend.text
-            citable_blocks_shown = legend.shown
-    # The frame slice: for every consulted assertion whose sigma admits this
-    # problem, its articulation digest and its standing attackers (§9.5). Two
-    # values because the wounds are rendered EXACT while the digest is
-    # compressible -- see DR-CON-packs-and-token-economy's own negative rule.
-    from deepreason.calculus.render import (
-        render_frame_crisis_context,
-        render_frame_slice_context,
+    # Every one of the nine contexts this brief carries is computed by the
+    # seat's registered SOURCE bundle, not here. `conj` hands over the state
+    # a source may read and takes back the values; what it keeps is the one
+    # act a source may not perform -- committing the dossier pack receipt.
+    source_request = SectionSourceRequestV1(
+        harness=harness,
+        run_manifest=run_manifest,
+        config=config,
+        problem=problem,
+        inputs={
+            "problem_id": problem_id,
+            "active_v5": active_v5,
+            "active_v6": active_v6,
+            "work_order": (
+                workflow_control_trace.ticket.work_order
+                if workflow_control_trace is not None
+                else None
+            ),
+            "transaction_preparation_id": (
+                transaction_preparation.id
+                if transaction_preparation is not None
+                else None
+            ),
+            "conjecture_context_plan": conjecture_context_plan,
+            "generation_context": generation_context,
+            "capability_result_context": v6_capability_result_context,
+            "transaction_simulation_aliases": transaction_simulation_aliases,
+        },
     )
+    source_assembly = assemble_sources(
+        CONJECTURER_SEAT,
+        stage=STAGE_RENDER,
+        request=source_request,
+        prior=source_assembly,
+    )
+    dossier_receipt = source_assembly.value("dossier_receipt")
+    bound_dossier = source_assembly.value("bound_dossier")
+    bound_dossiers = source_assembly.value("bound_dossiers") or ()
+    dossier_maximum_bytes = source_assembly.value("dossier_maximum_bytes") or 0
+    frozen_evidence_context = source_assembly.value("frozen_evidence_context")
+    citable_evidence_context = source_assembly.value("citable_evidence_context")
+    citable_blocks_shown = source_assembly.value("citable_blocks_shown") or ()
+    if active_v5 and dossier_receipt is not None:
+        # A source reads the record and never appends to it, so the receipt it
+        # built is committed here, on exactly the path that committed it
+        # before: the generation side does not write, and the record side does
+        # not format.
+        from deepreason.evidence import commit_dossier_pack_receipt
 
-    frame_slice_context = render_frame_slice_context(harness, problem_id)
-    frame_crisis_context = render_frame_crisis_context(harness, problem_id)
-    # The legal set moves to the FIRST ask. Only the two kinds whose handles
-    # exist BEFORE allocation are rendered here; the artifact-alias menu is
-    # appended after `aliases` is derived from the rendered pack.
-    pre_allocation_binding = reference_menu.MenuBinding(
-        citable_block_ids=tuple(block.id for block in citable_blocks_shown),
-    )
-    pre_allocation_menus = (
-        reference_menu.menu_renders_for(
-            "conjecturer.turn.v6",
-            pre_allocation_binding,
-            handle_kinds=("citable_block",),
-        )
-        if active_v6
-        else ()
-    )
+        commit_dossier_pack_receipt(harness, dossier_receipt)
     # The renderer fills this as it walks the layout; it becomes the run's
     # section plan below (R25, operator grant 2026-09-04).
     section_receipts: list = []
@@ -1449,71 +1375,36 @@ def conj(
         complement=complement or bool(config.COMPLEMENT_ALWAYS),
         specs=specs,
         neighbourhood_n=config.NEIGHBOURHOOD_N,
-        generation_context=generation_context,
         suppressed_exemplars=suppressed_exemplars,
-        scratch_context=(
-            conjecture_context_plan.rendered_context
-            if conjecture_context_plan is not None
-            else None
-        ),
-        frozen_evidence_context=frozen_evidence_context,
-        citable_evidence_context=citable_evidence_context,
-        capability_result_context=v6_capability_result_context,
-        frame_slice_context=frame_slice_context,
-        frame_crisis_context=frame_crisis_context,
-        open_criticism_context=open_criticism_context,
         allow_no_candidate_outcome=active_v4 or active_v6,
-        reference_menus=pre_allocation_menus,
+        supplied=source_assembly.supplied,
         section_receipts=section_receipts,
     )
-    scratch_aliases = {}
-    v6_scratch_rendered_text = None
-    v6_simulation_rendered_text = ""
     if active_v6 and conjecture_context_plan is not None:
-        from deepreason.scratch.conjecture import render_v6_conjecture_context
-
         try:
-            v6_scratch_rendered_text, scratch_aliases = render_v6_conjecture_context(
-                conjecture_context_plan
-            )
-            canonical_scratch_text = conjecture_context_plan.rendered_context.text
-            if pack.count(canonical_scratch_text) != 1:
-                raise ValueError(
-                    "v6 Conj pack must contain canonical scratch context once"
-                )
-            # str operations demote the AllocatedPack marker; without it the
-            # adapter re-applies the profile's aggregate prefix clip to a pack
-            # PackIR already budgeted section-by-section, silently cutting the
-            # sealed advisory context mid-JSON out of the dispatched prompt.
-            # Every post-allocation insertion below is deliberate, separately
-            # byte-accounted in its transaction context plan, and bounded by
-            # the request envelope, so the allocation marker must survive.
-            pack = AllocatedPack(
-                pack.replace(canonical_scratch_text, v6_scratch_rendered_text, 1)
+            pack, source_assembly = apply_post_allocation(
+                CONJECTURER_SEAT,
+                stage=STAGE_POST_ALLOCATION_CONTEXT,
+                pack=pack,
+                request=source_request,
+                prior=source_assembly,
             )
         except Exception:
             abandon_v6_context_preissue()
             raise
-
+    scratch_aliases = source_assembly.value("scratch_aliases") or {}
+    v6_scratch_rendered_text = source_assembly.value("v6_scratch_rendered_text")
+    pack, source_assembly = apply_post_allocation(
+        CONJECTURER_SEAT,
+        stage=STAGE_POST_ALLOCATION,
+        pack=pack,
+        request=source_request,
+        prior=source_assembly,
+    )
+    v6_simulation_rendered_text = (
+        source_assembly.value("v6_simulation_rendered_text") or ""
+    )
     if active_v6:
-        simulation_policy = run_manifest.inquiry_capability_policy.simulation
-        if simulation_policy.enabled and simulation_policy.input_catalog:
-            sealed_lines = [
-                "",
-                "SEALED SIMULATION INPUTS (data only; use only the listed SIM handles):",
-            ]
-            for alias, item in zip(
-                transaction_simulation_aliases,
-                simulation_policy.input_catalog,
-                strict=True,
-            ):
-                sealed_lines.append(
-                    f"{alias}: {item.description}\n" + canonical_json(item.value).decode("utf-8")
-                )
-            v6_simulation_rendered_text = "\n".join(sealed_lines)
-            pack = AllocatedPack(pack + v6_simulation_rendered_text)
-        if control.scratch_authoring.enabled:
-            pack = AllocatedPack(pack + "\n\n" + V6_SCRATCH_WORKSHOP_PROMPT)
         source_values = list(harness.state.artifacts)
         if dossier_receipt is not None:
             source_values.extend(dossier_receipt.selected_source_ids)
@@ -1523,33 +1414,20 @@ def conj(
         )
     else:
         aliases = aliases_for_pack(pack, harness.state.artifacts, prefix="A")
-    # The remaining menus can only be built now: the alias table is DERIVED
-    # from the rendered pack, and the scratch handles come from the context
-    # render that happens after allocation. Appending re-wraps in
-    # AllocatedPack -- without the marker the adapter re-applies the
-    # profile's aggregate prefix clip to a pack already budgeted
-    # section-by-section (DR-SEAM-llm-x-rules).
-    #
-    # Gated on the v6 path because the fields these menus describe belong to
-    # the v6 turn contract. An earlier version was not, and a pre-v6 run got
-    # a menu for `optional_refs` on a form that has no such field -- a menu
-    # naming a field the seat cannot fill is worse than no menu at all.
-    post_allocation_menus = (
-        reference_menu.menu_renders_for(
-            "conjecturer.turn.v6",
-            reference_menu.MenuBinding(
-                scratch_handles=tuple(scratch_aliases),
-                aliases=tuple(aliases.aliases),
-            ),
-            handle_kinds=("artifact_alias", "scratch_local", "scratch_existing"),
-        )
-        if active_v6
-        else ()
+    # The alias table is bound HERE and never by a source. It decides what a
+    # citation RESOLVES TO, which is the evidence side; a registered,
+    # swappable binder would let a brief configuration change what the harness
+    # ACCEPTS. That exclusion is the whole reason the last stage exists: the
+    # menus after it describe handles this table has just created.
+    pack, source_assembly = apply_post_allocation(
+        CONJECTURER_SEAT,
+        stage=STAGE_POST_ALLOCATION_AFTER_ALIASES,
+        pack=pack,
+        request=source_request.model_copy(
+            update={"inputs": {**dict(source_request.inputs), "aliases": aliases}}
+        ),
+        prior=source_assembly,
     )
-    if post_allocation_menus:
-        pack = AllocatedPack(
-            pack + "\n\n" + "\n\n".join(menu.text for menu in post_allocation_menus)
-        )
     reasoning = any(
         harness.commitments[commitment_id].eval == "program:reasoning-envelope-wf"
         for commitment_id in problem.criteria

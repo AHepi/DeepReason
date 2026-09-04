@@ -1,5 +1,5 @@
 <!-- DR-CON-conjecture-source -->
-Verified-at: a5a435e3e
+Verified-at: 770ea1344
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py
 Seams: DR-SEAM-rules-x-scratch
@@ -80,14 +80,21 @@ alone, and `conj.py` does not call it.
 
 ## What the conjecturer is now shown about criticism
 
-`conj` renders the problem's OPEN CRITICISMS into the pack's binding block,
-beside `criteria` (`DR-CON-discharge-channel`). The socket reaches the channel
-through one public interface and hands `llm/packs.py` a plain string, so the
-pack layer never learns that criticism is what it is rendering, and the channel
-never learns what a pack is. This is the whole of the channel's contact with
-`rules/`: exactly one file imports it.
+The problem's OPEN CRITICISMS reach the pack's binding block beside `criteria`
+(`DR-CON-discharge-channel`). The socket reaches the channel through one public
+interface and hands `llm/packs.py` a plain string, so the pack layer never
+learns that criticism is what it is rendering, and the channel never learns what
+a pack is.
+
+Since 2026-09-04 the string is computed by a registered section SOURCE
+(`DR-INV-seat-section-sources`) rather than by `conj` itself, and `conj` reads
+back only whether the channel is open -- which it needs before it builds the
+turn contract, because a contract that pruned `discharges` while the pack listed
+open handles would ask for something the reply cannot express. The channel's
+contact with the rest of the tree is still exactly this: `rules/conj.py` screens
+the submission and records the discharges, and the source renders the view.
 `check: python -m pytest tests/test_discharge_contract.py::test_no_consumer_reaches_past_the_interface -q`
-`check: grep -q "from deepreason.discharge import" src/deepreason/rules/conj.py && grep -q "open_criticism_context=open_criticism_context" src/deepreason/rules/conj.py`
+`check: grep -q "from deepreason.discharge import" src/deepreason/rules/conj.py && grep -q "render_open_criticism_context" src/deepreason/seat_sources/shipped.py && grep -q 'source_assembly.value("open_criticism_context")' src/deepreason/rules/conj.py && ! grep -q "render_open_criticism_context" src/deepreason/rules/conj.py`
 
 ## The submission precondition
 

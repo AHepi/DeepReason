@@ -1,5 +1,5 @@
 <!-- DR-SEAM-llm-x-rules -->
-Verified-at: 7e1ab8a54
+Verified-at: 770ea1344
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/adapter.py, src/deepreason/llm/firewall.py, src/deepreason/llm/packs.py, src/deepreason/llm/wire.py, src/deepreason/llm/contracts.py, src/deepreason/rules/conj.py, src/deepreason/rules/crit.py
 Sides: DR-SUB-llm, DR-SUB-rules
@@ -108,20 +108,33 @@ that keeps `frozen_evidence_context` and `citable_evidence_context` strings.
 
 "Wounds render in-frame, IN EVERY PACK IN SCOPE" (§9.5) is therefore a census
 over call sites rather than a property of one function, and the census is
-checked: all THREE `render_conj_pack`/`render_crit_pack` call sites in `rules/`
-pass both halves, including the atomic-decomposition path in `crit.py` that
-only exists after a batch critic exhausts its schema. That third site was
-missed by the first implementation and caught by the check below, which is why
-the check counts call sites instead of asserting the two obvious ones.
+checked. The critic's TWO call sites in `crit.py` pass both halves, including
+the atomic-decomposition path that only exists after a batch critic exhausts
+its schema; that site was missed by the first implementation and caught by this
+check, which is why it counts call sites instead of asserting the obvious one.
+
+The conjecturer's site is checked differently since 2026-09-04, and the
+difference is the finding rather than an exemption: `rules/conj.py` no longer
+NAMES any context at its call site, because the frame halves -- like the other
+seven -- arrive as the assembled output of the seat's registered SOURCE bundle
+(`DR-INV-seat-section-sources`). The claim is unchanged and so is its bite; it
+is asserted over the bundle, where the decision now lives, and fails if either
+source is dropped from it.
 `check: python -c "import ast,pathlib;n=0
-for m,c in (('src/deepreason/rules/conj.py','render_conj_pack'),('src/deepreason/rules/crit.py','render_crit_pack')):
-    T=ast.parse(pathlib.Path(m).read_text())
-    for k in ast.walk(T):
-        if isinstance(k,ast.Call) and getattr(k.func,'id','')==c:
-            n+=1
-            p={x.arg for x in k.keywords}
-            assert {'frame_slice_context','frame_crisis_context'}<=p,(m,k.lineno,sorted(p))
-assert n==3,n"`
+T=ast.parse(pathlib.Path('src/deepreason/rules/crit.py').read_text())
+for k in ast.walk(T):
+    if isinstance(k,ast.Call) and getattr(k.func,'id','')=='render_crit_pack':
+        n+=1
+        p={x.arg for x in k.keywords}
+        assert {'frame_slice_context','frame_crisis_context'}<=p,(k.lineno,sorted(p))
+assert n==2,n
+from deepreason.seat_sources import STAGE_RENDER, resolve_seat_source_bundle, resolve_section_source
+b=resolve_seat_source_bundle('conjecturer')
+s={resolve_section_source(e.source_id,e.source_version).supplies for e in b.entries_for_stage(STAGE_RENDER)}
+assert {'frame_slice_context','frame_crisis_context'}<=s,sorted(s)
+c=ast.parse(pathlib.Path('src/deepreason/rules/conj.py').read_text())
+calls=[k for k in ast.walk(c) if isinstance(k,ast.Call) and getattr(k.func,'id','')=='render_conj_pack']
+assert len(calls)==1 and not {'frame_slice_context','frame_crisis_context'} & {x.arg for x in calls[0].keywords}"`
 `check: python -m pytest tests/test_frame_render.py::test_both_rules_put_the_frame_in_the_pack_they_dispatch tests/test_frame_render.py::test_the_frame_reaches_a_conjecture_pack_end_to_end -q`
 
 The lease travels one way: a rule never resolves its own — it either carries
@@ -166,7 +179,7 @@ cross-family independence is the path that calls the asserting reader.
 
 A pack that survives allocation must survive the rule's own edits too, and bytes
 a rule adds must be paid for before the pack is built, not after.
-`check: test "$(grep -c "AllocatedPack(" src/deepreason/rules/conj.py)" -eq 4 && grep -q "if profile is not None and not pack_is_allocated:" src/deepreason/llm/adapter.py && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && grep -q "def _conditioned_budget(" src/deepreason/rules/crit.py && test "$(grep -c "token_budget=" src/deepreason/rules/crit.py)" -eq "$(grep -c "token_budget=_conditioned_budget(" src/deepreason/rules/crit.py)" && test "$(grep -c "token_budget=_conditioned_budget(" src/deepreason/rules/crit.py)" -ge 5 && python -m pytest tests/test_v6_context_continuation.py::test_wide_allocated_pack_dispatches_advisory_context_intact -q`
+`check: test "$(grep -c "AllocatedPack(" src/deepreason/rules/conj.py)" -eq 0 && test "$(grep -c "AllocatedPack(" src/deepreason/seat_sources/registry.py)" -eq 2 && grep -q "if profile is not None and not pack_is_allocated:" src/deepreason/llm/adapter.py && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && grep -q "def _conditioned_budget(" src/deepreason/rules/crit.py && test "$(grep -c "token_budget=" src/deepreason/rules/crit.py)" -eq "$(grep -c "token_budget=_conditioned_budget(" src/deepreason/rules/crit.py)" && test "$(grep -c "token_budget=_conditioned_budget(" src/deepreason/rules/crit.py)" -ge 5 && python -m pytest tests/test_v6_context_continuation.py::test_wide_allocated_pack_dispatches_advisory_context_intact -q`
 
 ## What is deliberately absent
 

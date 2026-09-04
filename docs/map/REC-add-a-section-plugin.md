@@ -1,5 +1,5 @@
 <!-- DR-REC-add-a-section-plugin -->
-Verified-at: d3466ffb3
+Verified-at: 770ea1344
 Verify: python -m pytest tests/test_seat_section_architecture.py -q
 Owns:
 Seams: DR-SEAM-packs-and-token-economy-x-rules
@@ -22,12 +22,16 @@ rather than routing around.
 
 **1. Decide whether the content already reaches the renderer.** A brief's
 sections divide in two. Most are computed inside their plugin from the run's
-state. Thirteen are computed by `rules/` and passed in, because they need a
-dossier receipt, a fence sequence or a work order that a renderer does not
-hold — `DR-SEAM-packs-and-token-economy-x-rules` has the table. If your
-content is of the second kind and is not already in `SectionRequestV1.supplied`,
-this recipe does not cover you: that is a seam change, and
-`docs/map/REC-change-a-seam.md` is the one to follow.
+state. The rest need a dossier receipt, a fence sequence, a work order or the
+open-criticism view — things a renderer does not hold — and reach the plugin
+through `SectionRequestV1.supplied`.
+
+For the CONJECTURER those are computed by registered SOURCES, so this recipe
+covers them too: register a source and add its bundle entry, still with no
+source edit (`DR-INV-seat-section-sources`, step 2b below). For the CRITIC's
+four they are still computed in `rules/crit.py` and passed in one by one; if
+your content is one of those, this recipe does not cover you yet — that is a
+seam change, and `docs/map/REC-change-a-seam.md` is the one to follow.
 
 **2. Write the plugin.** A `.py` file in
 `<provider_state_dir>/seat_plugins/` declaring a module-level `PLUGIN`, or a
@@ -35,6 +39,13 @@ this recipe does not cover you: that is a seam change, and
 different FORMAT and no code. Declare `requires` for anything your render
 cannot do without, so your plugin declines rather than raises in a seat whose
 request does not carry it.
+
+**2b. If it needs the record, write a SOURCE too.** A source reads the state
+and the record, computes one value, and appends NOTHING — one write is
+permitted and must be declared (`writes_blobs`), and it is content-addressed
+blob materialisation only. Register it, add a bundle entry naming its stage,
+and your plugin formats what it produced. The stage matters: see
+`DR-INV-seat-section-sources` for what the caller does at each boundary.
 
 **3. Register a layout that includes it.** Copy a shipped layout's entries and
 add yours; the entry carries the priority and the drop/compress flags, not the

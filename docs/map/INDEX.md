@@ -34,6 +34,7 @@ contract: ID grammar, the check rule, and how a document is updated.
 | know what a pack shows about the frame it is posed in | `SEAM-calculus-x-rules.md`, then `CON-packs-and-token-economy.md` |
 | know what a pack shows about the criticism already made of a problem | `CON-discharge-channel.md` |
 | change WHERE a rendered prompt puts something, or how much of a prior round it carries | `INV-render-layout.md`, then `CON-packs-and-token-economy.md` |
+| change what a seat is SHOWN in one section, or feed a section from somewhere else | `INV-seat-section-sources.md`, then `REC-add-a-section-plugin.md` |
 | write or update a map document | `SCHEMA.md` |
 
 **The one ordering rule:** read the SEAM before the subsystems it joins. A seam
@@ -72,6 +73,7 @@ than you need.
 | `CON-capability-lifecycle.md` | typed proposal → admission → work order → result |
 | `CON-packs-and-token-economy.md` | prompt construction, section allocation, budgets |
 | `INV-seat-section-plugins.md` | what a seat is shown and asked for, as configuration |
+| `INV-seat-section-sources.md` | where a brief section's CONTENT comes from: read the record, append nothing |
 | `REC-add-a-section-plugin.md` | add a section to a seat's brief without a source edit |
 | `CON-conjecture-source.md` | the socket that proposes candidate artifacts (`rules/conj.py`) |
 | `CON-criticism-source.md` | the socket that attacks or scrutinises a target (`rules/crit.py`) |
