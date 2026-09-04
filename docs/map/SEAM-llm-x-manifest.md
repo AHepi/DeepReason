@@ -1,5 +1,5 @@
 <!-- DR-SEAM-llm-x-manifest -->
-Verified-at: 6f9b5614e
+Verified-at: 770ea1344
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/run_manifest.py
 Sides: DR-SUB-llm, DR-SUB-manifest

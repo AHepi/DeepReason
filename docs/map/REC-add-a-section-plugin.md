@@ -1,5 +1,5 @@
 <!-- DR-REC-add-a-section-plugin -->
-Verified-at: 6f9b5614e
+Verified-at: 770ea1344
 Verify: python -m pytest tests/test_seat_section_architecture.py -q
 Owns:
 Seams: DR-SEAM-packs-and-token-economy-x-rules

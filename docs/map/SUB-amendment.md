@@ -1,5 +1,5 @@
 <!-- DR-SUB-amendment -->
-Verified-at: 6f9b5614e
+Verified-at: 770ea1344
 Verify: python -m pytest tests/test_amendment_epochs.py tests/test_amendment_chain_integrity.py -q
 Owns: src/deepreason/amendment/
 Seams: 

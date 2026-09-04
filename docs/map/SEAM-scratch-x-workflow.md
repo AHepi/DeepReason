@@ -1,5 +1,5 @@
 <!-- DR-SEAM-scratch-x-workflow -->
-Verified-at: 6f9b5614e
+Verified-at: 770ea1344
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/scratch/authoring.py, src/deepreason/workflow/nonconjecture_recovery.py
 Sides: DR-SUB-scratch, DR-SUB-workflow

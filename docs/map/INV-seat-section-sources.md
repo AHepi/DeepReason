@@ -1,5 +1,5 @@
 <!-- DR-INV-seat-section-sources -->
-Verified-at: 6f9b5614e
+Verified-at: 770ea1344
 Verify: python -m pytest tests/test_seat_section_sources.py tests/test_conj_pack_legacy_golden.py -q
 Owns: src/deepreason/seat_sources/registry.py, src/deepreason/seat_sources/shipped.py
 Seams: DR-SEAM-packs-and-token-economy-x-rules

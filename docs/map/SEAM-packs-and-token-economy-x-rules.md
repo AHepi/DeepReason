@@ -1,5 +1,5 @@
 <!-- DR-SEAM-packs-and-token-economy-x-rules -->
-Verified-at: 6f9b5614e
+Verified-at: 770ea1344
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/packs.py, src/deepreason/rules/conj.py
 Sides: DR-CON-packs-and-token-economy, DR-SUB-rules
