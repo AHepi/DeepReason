@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=13 blockers=none
+State: next=14 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -269,11 +269,18 @@ as an omission.
           significance as well. Neither bar was moved after the numbers
           were visible.
 
-- [ ] 13. (all) Write `PARKED.md` for everything noticed and not fixed
+- [x] 13. (all) Write `PARKED.md` for everything noticed and not fixed
       (at minimum: the provider's rejection of `"reasoning":"none"`,
       M5's finding; and the missing no-harness baseline arm).
       done-when: `PARKED.md` exists and every entry carries a
       ready-to-send prompt.
+      DONE: 5 entries, 5 fenced prompts (grep -c '^```$' -> 10).
+          P1 two soak cases cannot compile a manifest
+          P2 the provider rejects the reasoning value the newest
+             committed launch config sends
+          P3 nothing checks that an experiment's own measure can fail
+          P4 the critic may never read the target's structured fields
+          P5 no run in this tree has ever discharged a criticism
 
 - [ ] 14. (S18) Targeted gate ring: the tests that pin the shipped
       critic brief and the seat-section interface.
