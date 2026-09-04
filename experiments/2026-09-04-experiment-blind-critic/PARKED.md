@@ -156,3 +156,53 @@ SPEC Amendment A10; docs/map/CON-discharge-channel.md for what should happen.
 End state: either a defect with a fix, or a recorded finding that the behaviour
 is correct and the channel's value is disclosure rather than discharge.
 ```
+
+---
+
+## P6 — a committed test picks a run root by SIZE and assumes a property of it
+
+**What.** `tests/test_provider_transport_faults.py::_a_root_without_provider_attempts`
+takes every committed root under `experiments/`, sorts them by
+`log.jsonl` size, and returns the SMALLEST — then two tests assert that
+root recorded no provider attempts. Nothing makes the smallest committed
+root a root without provider calls. This tranche committed 480 four-event
+bench roots, each of which recorded exactly one provider call, and the
+fixture immediately selected one: two map checks
+(`SUB-application.md:300` and `SUB-llm.md:336`, which both run that test
+file) went red on a branch that changed zero bytes under `src/`.
+
+Measured: base `0f6bf2c854` = 6 failed; this branch with the roots
+committed = 8 failed; the delta is exactly those two, and both recover
+when the roots are not listed by `git ls-files experiments`.
+
+The claim the tests guard — that `results_summary` carries
+`provider_health` and TYPES its absence rather than omitting it — is
+true and was never falsified. What failed is the fixture's assumption
+about which root it would get. That is precisely the failure mode
+`dr-execute-step`'s "durable tests" rule names: anchor to meaning, not
+to a selector that any later tranche can move.
+
+**Disposition here:** this tranche did not touch the test. It preserved
+its 480 roots as `raw/roots.tar.gz` instead of 480 loose directories,
+which is a change to how this tranche stores its OWN evidence and is
+inside its own declared area. The fragility is untouched and is parked.
+
+**Ready to send:**
+
+```
+Route: deepreason-orchestrator (defect).
+Goal: `tests/test_provider_transport_faults.py::_a_root_without_provider_attempts`
+selects the smallest committed root under experiments/ by log.jsonl size and two
+tests then assert that root recorded no provider attempts. Nothing guarantees
+that property of the smallest root, so any tranche that commits small roots
+carrying a provider call turns two map checks red without touching src/ at all.
+Reproduce: commit any run root with one Crit event and an llm block, then run
+`python -m pytest tests/test_provider_transport_faults.py -q -k "progress or results"`.
+Evidence: experiments/2026-09-04-experiment-blind-critic/PARKED.md P6 records the
+measured delta (base 0f6bf2c854 = 6 docs_verify failures, the same tree plus 480
+small roots = 8, the delta being SUB-application.md:300 and SUB-llm.md:336).
+End state: the fixture SELECTS FOR the property it needs -- a root whose log
+carries no llm block -- and skips typed if none exists, rather than sorting by
+size and hoping. The claim under test (results_summary types provider-health
+absence) is correct and must not be weakened to get there.
+```

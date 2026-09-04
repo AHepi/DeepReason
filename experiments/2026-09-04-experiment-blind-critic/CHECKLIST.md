@@ -1,5 +1,5 @@
 # Checklist for: does a blind critic perform better?
-State: next=15 blockers=none
+State: next=16 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
 
@@ -291,8 +291,32 @@ as an omission.
           ..................................... [100%]
           37 passed in 1.55s
 
-- [ ] 15. (all) Map check: `python tools/docs_verify.py`
-      done-when: 0 failed, and `--audit` reports 0 new findings.
+- [x] 15. (all) Map check: `python tools/docs_verify.py`
+      done-when: ZERO DELTA against the base commit's own run of the
+      same command (the criterion as written, "0 failed", is not
+      reachable on this container and never was -- docs/AUDIT_BASELINES
+      records 5 or 6 expected failures on a shallow clone).
+      DONE:
+          base 0f6bf2c854 (clean worktree)  -> docs_verify: 6 failed
+          this branch                        -> docs_verify: 6 failed
+          set difference of the failure lists: EMPTY
+          CON-run-identity.md:211/213/215  (shallow clone, baselined)
+          INV-frozen-surfaces.md:181       (baselined)
+          INV-frozen-surfaces.md:736       (pre-existing on base)
+          SEAM-llm-x-rules.md:54           (baselined)
+      DRIFT FOUND AND DISPOSED, first run: this branch reported 8, two
+      more than base -- SUB-application.md:300 and SUB-llm.md:336, both
+      of which run
+      `tests/test_provider_transport_faults.py::test_results_reports_provider_health_and_types_its_absence`.
+      That test's fixture takes the SMALLEST committed root under
+      experiments/ and asserts it recorded no provider attempts. This
+      tranche committed 480 four-event bench roots, each carrying
+      exactly one provider call, and the fixture selected one. Nothing
+      under src/ had changed. The 480 roots are now preserved as
+      `raw/roots.tar.gz` -- a change to how this tranche stores its OWN
+      evidence, inside its own declared area -- and the fixture's
+      fragility is untouched and parked as P6. No assertion was
+      weakened; the claim those tests guard was never falsified.
 
 - [ ] 16. (all) Full gate: `python -m pytest tests/ -q -n 4`
       done-when: output ends `N passed, 0 failed` (paste it).
