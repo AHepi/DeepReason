@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=21 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=22 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -699,8 +699,36 @@ tranche".
       that matters -- mini owns which channels it COMPILES, never what a commitment
       MEANS.
       ```
-- [ ] 21. (T2) Gate + mini ring + docs.
+- [x] 21. (T2) Gate + mini ring + docs.
       done-when: all three green (paste)
+
+      ```
+      $ python -m pytest tests/ -q -n 4
+      5084 passed, 6 skipped in 1320.70s (0:22:00)     -> 0 failed
+      (unchanged from T1: T2 touched no file under src/ at all --
+       git diff --stat 577365da4..HEAD -- src/  is EMPTY)
+      
+      $ python -m pytest mini/tests/ -q
+      116 passed, 1 skipped, 0 failed
+      (101 at T1; the fifteen new ones are nine form tests and six policy tests)
+      
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py \
+            tests/test_crit_pack_legacy_golden.py -q
+      15 passed  -- C4: the full harness two briefs stay byte-identical
+      
+      $ git diff --stat 577365da4..HEAD -- <all five frozen surfaces>
+      (no output)  -- the mechanical tripwire, empty
+      
+      $ python tools/docs_verify.py         -> 6 failed, the same pre-existing rows
+      $ python tools/docs_verify.py --audit -> 1 finding, the same known row
+      $ python tools/docs_verify.py --links -> 0 dangling, 81 documents
+      $ python tools/docs_verify.py --stale -> 23, none of them this tranche
+         (SUB-minireason.md was listed until its Verified-at advanced to 08692aab4,
+          the commit whose tree its checks were actually run against)
+      
+      All three green in the sense that matters: nothing this tranche wrote fails,
+      and no assertion was weakened.
+      ```
 - [ ] 22. (T2) [COMMIT] Deliver T2.
       done-when: `git status --porcelain` empty AND branch head on origin
 
