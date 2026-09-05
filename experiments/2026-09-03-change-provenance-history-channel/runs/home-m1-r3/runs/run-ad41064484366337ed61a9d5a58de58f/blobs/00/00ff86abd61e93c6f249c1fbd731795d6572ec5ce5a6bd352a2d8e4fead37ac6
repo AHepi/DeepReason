@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target's proposed mechanism ('maximization of learning potential') fails to justify action in scenarios where the cost of failure is catastrophic and irreversible, which contradicts the actual behavior of scientists and agents who prefer corroborated theories specifically to avoid such failures.",
+      "case": "The target argues that we prefer better-corroborated theories because they offer 'more opportunities for learning' and acts as a 'fertile ground for further criticism.' This defense collapses when applied to high-stakes practical action (e.g., building a bridge or administering a vaccine). In these contexts, the agent does not choose the well-tested theory to 'learn' if it fails; they choose it precisely because they want to minimize the probability of failure. If the Popperian preference were truly based only on learning potential, an agent might rationally choose a bold, uncorroborated theory with higher informational content to maximize the chance of a surprising refutation. The fact that agents consistently choose the 'safer' (well-corroborated) option in life-or-death situations demonstrates that the preference is driven by an implicit assumption of reliability (inductive expectation of future success), not a desire for experimental learning. Thus, the target's explanation smuggles induction back in by disguising a demand for safety as a demand for information.",
+      "counterexample": [
+        "An engineer choosing a steel alloy for a bridge support.",
+        "A doctor choosing a treatment protocol for a terminal patient."
+      ],
+      "successor_question": "If the goal is purely learning potential, why does the preference for corroborated theories intensify rather than diminish as the cost of being wrong increases?"
+    }
+  ]
+}

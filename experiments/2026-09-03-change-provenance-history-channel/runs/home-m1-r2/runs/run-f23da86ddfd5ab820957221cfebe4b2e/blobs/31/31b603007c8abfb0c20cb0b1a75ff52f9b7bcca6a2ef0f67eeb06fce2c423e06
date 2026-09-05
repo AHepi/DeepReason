@@ -1,0 +1,89 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms without smuggling in induction, provided the preference is interpreted as a rational choice of the 'best tested' critical target rather than a probabilistic prediction of future success. The cost of this defense is the abandonment of any claim that science converges toward truth or that acting on a theory implies an expectation of its practical reliability; it merely implies an expectation of its high informational content and susceptibility to further refutation.",
+    "mechanism": "Reframe 'preference for action' not as an inductive inference (Past Success -> Future Reliability) but as a deductive selection rule: Given the goal of maximizing error-elimination (verisimilitude), rational agents must select the theory with the highest empirical content (most severely tested and surviving) as the basis for action, because only such a theory offers the possibility of learning something new if it fails. Acting on a less corroborated theory is irrational not because it is likely false, but because it is less informative and thus less useful for the growth of knowledge, even in practical contexts where 'knowledge growth' is the proxy for 'problem solving'.",
+    "counterconditions": [
+      "If the agent's goal is explicitly short-term survival or practical utility defined independently of truth-content (e.g., building a bridge that won't collapse tomorrow), Popper's logic fails to provide a non-inductive bridge to preferring the tested theory over an untested one with equal logical probability.",
+      "If 'acting on a theory' logically entails an implicit belief in its future reliability (as critics like Wesley Salmon argue), then Popper's distinction between corroboration and probability collapses into pragmatic induction.",
+      "If the definition of 'rationality' requires a positive reason to believe a theory will work (rather than just a negative reason that it hasn't failed yet), the Popperian preference is irrational."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": ["SRC_003", "SRC_007"],
+      "shared_structure": [
+        "Selection based on severity of past trials rather than frequency of success.",
+        "Distinction between 'fitness for purpose' (testing) and 'probability of recurrence'.",
+        "Rationality defined as adherence to a methodological rule rather than optimization of expected utility."
+      ],
+      "disanalogies": [
+        "Biological natural selection has no 'goal' of truth, whereas Popperian science explicitly aims at verisimilitude.",
+        "In engineering, past performance is statistically correlated with future performance (induction works), whereas Popper denies this logical link in fundamental physics.",
+        "A survivor of a trial in biology is 'fit' for reproduction; a survivor of a test in Popper is merely 'not yet falsified', which is a weaker state."
+      ],
+      "transfer_claims": [
+        "Just as we choose the most stress-tested bridge design not because it is guaranteed to hold, but because it has revealed the most about structural limits, scientists choose corroborated theories to reveal the most about nature's limits.",
+        "The 'preference' is a procedural mandate for critical engagement, not an epistemic endorsement of truth."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that acting on a theory necessarily involves a bet on its future truth, the analogy to pure critical selection breaks.",
+        "If the 'goal' of action is proven to be distinct from the 'goal' of science (truth), the transfer of the selection rule is invalid."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "003404da77c855d1fdb70c1968786685a63756f606bb4916c19071415883d022",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'reliability for prediction' with 'reliability for testing.' The proposal explicitly rejects action-guiding reliability in the probabilistic sense. The preference is for the theory that offers the best chance of detecting error (high informational content), not the one most likely to succeed. Thus, no conflation occurs; the distinction is the core of the mechanism."
+      },
+      {
+        "handle": "047ea7b165ebb2b40db2a478a3bf3225602d7b76e333676f368d64b2e8813c3f",
+        "kind": "rebutted",
+        "note": "The proposal does not redefine the goal of science from truth to progress; it argues that preferring the best-tested theory is the *only* rational path toward truth (verisimilitude) available without induction. The preference is defended *on Popper's terms* precisely because it aligns with the goal of error elimination, which is constitutive of Popper's view of truth-seeking."
+      },
+      {
+        "handle": "08218abe2d908092f9126b50809338bd6c6cddb0d43384c3b193e668a34006c6",
+        "kind": "revised",
+        "note": "Clarified in the 'mechanism' and 'counterconditions' that 'preferring' does not entail believing in higher probability. The revision explicitly states that the preference is a 'deductive selection rule' based on informational content, removing any ambiguity that might suggest a hidden belief in future success probabilities."
+      },
+      {
+        "handle": "10d9f60e1c1c5582faa984b8051452e4c8ce369fe468d94cbb5f5b0aa2411016",
+        "kind": "rebutted",
+        "note": "The proposal accepts the distinction between the logical problem of induction and the pragmatic problem of action but argues that Popper's solution to the latter (choose the best tested) does not require solving the former via induction. It avoids the false dilemma by showing a third option: pragmatic preference based on critical potential, not probabilistic expectation."
+      },
+      {
+        "handle": "2acf3052a09e0e9e5d4ff6ca2ddc87f61e54bf19b61e446a135950857653716",
+        "kind": "rebutted",
+        "note": "The proposal directly addresses the normative question of 'preference' by defining it as a rational requirement of the methodology of conjecture and refutation. It does not redefine preference as a systemic outcome but as an individual agent's rational choice given the goal of error elimination."
+      },
+      {
+        "handle": "34ad0d33cac00dc9c4d4b87c266edb3c765de3244ddcf992f0423b84911b04bd",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate rejects the premise that 'acting on a theory' must be distinguished from 'testing a theory' in the way the criticism suggests. In Popper's framework, all action is a test, and all tests are actions. The declaration costs the candidate the ability to appeal to common-sense distinctions between 'pure science' and 'applied engineering' but gains consistency with Popper's universal fallibilism."
+      },
+      {
+        "handle": "3637cea364444177831be4afb7ba5959e53607caea36edb8855e811c565e4ca6",
+        "kind": "rebutted",
+        "note": "The proposal explicitly denies accepting a 'meta-induction.' The preference is derived deductively from the definition of rationality within the critical method (maximize information gain/error detection), not from an inductive assumption that the method itself is reliable. The reliability of the method is a hope, not a premise."
+      },
+      {
+        "handle": "40cb62ec8ec9df37aa35b0403869df79b1c96cc2a7da417475cc9cc6267ae17e",
+        "kind": "rebutted",
+        "note": "The candidate provides a direct normative answer: the preference is defensible because it is the only course of action consistent with the aim of science (truth via error elimination) that does not violate the prohibition on induction. To prefer anything else would be irrational on Popper's own terms."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_003",
+      "SRC_007"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "search_signal": "productive"
+    },
+    "checker_specs": []
+  }
+}

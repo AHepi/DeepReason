@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses into the very induction Popper rejected by conflating 'logical elimination' with 'practical reliability.' The argument claims we choose corroborated theories merely because falsified ones are eliminated ('absence of alternatives'), yet explicitly justifies this choice by asserting the corroborated theory allows us to 'gain time and knowledge' while avoiding 'immediate disaster.' This assertion presupposes that past survival (corroboration) is a reliable indicator of future performance (avoiding disaster). If corroboration offers no inductive weight regarding future success, as Popper insists, then there is no rational basis within the system to expect the 'game-theoretic move' to minimize risk; the untested or less-tested theory might equally avoid disaster. By relying on the pragmatic expectation that 'what worked before will likely work again' to justify the minimax strategy, the target smuggles in the principle of uniformity of nature, rendering the distinction between 'decision-theoretic reinterpretation' and 'inductive inference' illusory.",
+      "counterexample": null,
+      "premise": "Popper strictly denies that corroboration implies any increase in probability or reliability for future predictions.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories relies on an expectation of future success derived from past tests, how does this differ substantively from the inductive principle Popper sought to eliminate?"
+    }
+  ]
+}

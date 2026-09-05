@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the only consistent Popperian stance is 'radical skepticism or quietism regarding action' because bridging corroboration and action requires forbidden induction.",
+      "premise_evidence": [
+        {
+          "block": "src_001_body",
+          "quote": "Therefore, the preference is indefensible on Popper's terms, and the only consistent Popperian stance is radical skepticism or quietism regarding action."
+        }
+      ],
+      "case": "The target constructs a false dilemma by ignoring Popper's explicit solution to this exact problem: the methodological rule of preferring the best-tested theory as a basis for action. Popper distinguishes between the logical question (does corroboration increase probability? No) and the pragmatic/methodological question (which theory should we choose to act upon? The best-corroborated one). By asserting that 'quietism' is the *only* consistent stance, the target falsely attributes a paralysis to Popper that he explicitly rejected. Popper argued that while we cannot logically justify the belief that the future will resemble the past, we are rationally compelled by critical reason to act on the theory that has withstood the most severe criticism, as it is the only non-arbitrary choice available. The target's claim that this 'smuggles in induction' mischaracterizes Popper's view that this preference is a rational decision based on the current state of criticism, not an inductive inference about future truth.",
+      "counterexample": [
+        "Popper's own practice of advising scientists to use the best-corroborated theory for technological applications while maintaining its logical falsifiability.",
+        "The distinction between 'justifying belief' (which Popper rejects) and 'justifying a choice of action' (which Popper accepts via methodological rules)."
+      ],
+      "successor_question": "If Popper explicitly endorsed acting on the best-corroborated theory as a methodological rule rather than an inductive inference, does the target's assertion that 'quietism' is the only consistent stance fundamentally misrepresent the core of Popper's practical philosophy?"
+    }
+  ]
+}

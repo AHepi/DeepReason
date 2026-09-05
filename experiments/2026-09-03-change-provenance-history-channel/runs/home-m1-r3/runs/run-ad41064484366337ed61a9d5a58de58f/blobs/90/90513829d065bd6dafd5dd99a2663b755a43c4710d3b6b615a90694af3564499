@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-inductive metric, but this concept collapses under Popper's own strictures because assessing which theory is 'closer to truth' after surviving tests implicitly assumes that past survival correlates with future reliability—a hidden inductive premise. If the preference for the survivor is not based on the expectation that it will continue to survive (which is induction), then the preference is arbitrary; if it is based on that expectation, the target contradicts its claim that the mechanism is non-inductive.",
+      "premise": "Popper explicitly rejected the idea that surviving tests makes a theory more probable or closer to truth in a way that justifies inductive inference about the future.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Can you specify a criterion for 'verisimilitude' that allows scientists to prefer one theory over another without implicitly assuming that the features which helped it survive past tests will remain relevant in future tests?"
+    }
+  ]
+}

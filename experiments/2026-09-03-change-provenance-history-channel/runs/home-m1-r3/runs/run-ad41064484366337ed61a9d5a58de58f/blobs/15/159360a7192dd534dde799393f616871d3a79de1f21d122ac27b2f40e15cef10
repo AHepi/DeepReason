@@ -1,0 +1,36 @@
+## problem-context
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@21459b2383e01792a4b64788: program:reasoning_observation_pending
+- reason-counter@1826672006d2c49754cc7dea: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 86e27e02f0bd1ba425a653a9ee8f32bc2612619c0fec5aaae0283f684910efd1
+{"analogy":null,"claim":"The preference is a category error: 'corroboration' describes the history of a theory, while 'action' requires a prediction. Bridging them requires a principle (induction) that Popper forbids. Therefore, the preference is indefensible on Popper's terms, and the only consistent Popperian stance is radical skepticism or quietism regarding action.","counterconditions":[{"case":"If one accepts pragmatic or evolutionary justifications that bypass strict deduction.","checker_spec":null,"eval":"observation"},{"case":"If 'action' is redefined as 'experimentation' rather than 'commitment'.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Logical Gap: There is no valid deductive argument from 'Theory T has passed tests' to 'We should act on T'. Without the inductive bridge, the conclusion does not follow. Popper's system creates a paralysis where one can criticize but never justify acting.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- 5aa9433863aae700b9ade842372e5bc15b4eb8b7feb5e65463c9e76da440223d [mention]
+- 755b65ad0df563f9c280e19d2d14bbabb50a42d29282885e32b5ab121de2e092 [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- 5aa9433863aae700b9ade842372e5bc15b4eb8b7feb5e65463c9e76da440223d: The target's central mechanism relies on the claim that surviving severe tests demonstrates a 'higher degree of verisimilitude,' making the preference defensibl
+- 755b65ad0df563f9c280e19d2d14bbabb50a42d29282885e32b5ab121de2e092: The target argues that we prefer better-corroborated theories because they offer 'more opportunities for learning' and acts as a 'fertile ground for further cri
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+DIRECTIVE: mount the strongest NEW specific case against TARGET 86e27e02f0bd1ba425a653a9ee8f32bc2612619c0fec5aaae0283f684910efd1, or attack=false if you find no genuine fault.

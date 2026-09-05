@@ -1,0 +1,78 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic, non-inductive rule of action based on verisimilitude (truth-likeness), not probability.",
+      "mechanism": "Popper distinguishes between the logical status of a theory (which remains unproven and improbable) and its epistemic standing after severe testing. A theory that survives severe tests has demonstrated a higher degree of 'verisimilitude'—it has withstood attempts to falsify it where others failed. Choosing it is not an inductive inference that it will hold in the future, but a rational decision to act on the hypothesis that has currently best approximated truth by surviving the most rigorous criticism. The mechanism is 'survival of the fittest' applied to ideas: we prefer the survivor not because we predict its future survival (induction), but because it is the only one currently standing.",
+      "counterconditions": [
+        "If 'verisimilitude' itself implicitly relies on an inductive assumption that past resistance to falsification correlates with future resistance.",
+        "If the definition of 'severe test' secretly embeds probabilistic expectations about the world.",
+        "If acting on a theory necessarily implies believing it is more likely to be true, collapsing the distinction between action and belief."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "The preference smuggles induction back in because any rational basis for preferring one theory over another for future action inherently assumes the uniformity of nature or the reliability of past performance as a guide to the future.",
+      "mechanism": "Even if Popper labels the preference 'pragmatic,' the moment a scientist chooses Theory A over Theory B for practical application (e.g., building a bridge), they are effectively betting that Theory A will continue to hold. This bet is an inductive leap: it assumes that the structural features that allowed A to survive past tests will persist in future, untested instances. Without this assumption, the choice is arbitrary. Therefore, the 'preference' is functionally identical to assigning a higher subjective probability, violating Popper's core prohibition against induction.",
+      "counterconditions": [
+        "If one can formulate a notion of 'rational preference' that is entirely disconnected from expectations of future success.",
+        "If the choice is framed purely as a methodological rule for generating new tests rather than a guide for practical action.",
+        "If the 'bet' is acknowledged as a blind guess, rendering the preference irrational but psychologically inevitable."
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The conflict dissolves if we view corroboration not as a measure of the theory's truth, but as a measure of the theory's informational content and testability; we prefer high-corroboration theories because they offer more opportunities for learning, not because they are safer bets.",
+      "mechanism": "Popper values bold conjectures with high empirical content. A highly corroborated theory is one that made risky predictions and survived. We prefer it not because we think it's 'true' or 'probable,' but because it has proven itself to be a fertile ground for further criticism and refinement. The mechanism is 'maximization of learning potential.' Acting on the best-corroborated theory is simply choosing the most informative framework currently available to drive the next cycle of conjecture and refutation. The cost is accepting that our 'best' theory might be falsified tomorrow, and our action based on it might fail, but that failure is the engine of progress.",
+      "counterconditions": [
+        "If practical action (like engineering) requires reliability/safety rather than just learning potential.",
+        "If 'informational content' cannot be separated from 'likelihood of truth' in real-world decision making.",
+        "If the urgency of a problem precludes the luxury of treating actions as mere experiments."
+      ],
+      "typicality": 0.65,
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Popper's position is inconsistent: he rejects induction logically but reinstates it biologically/psychologically as an unavoidable instinct for survival, making his system a descriptive account of scientific practice rather than a purely normative logic.",
+      "mechanism": "Humans and scientists possess an innate tendency to expect regularities (induction) which evolution has hardwired for survival. Popper's 'preference' is an acknowledgment of this biological reality. While his logic forbids justifying induction, his philosophy of science describes how humans *actually* operate: we cannot help but act as if the future will resemble the past. The mechanism is 'evolutionary epistemology': we prefer corroborated theories because organisms that didn't would have died out. The cost is admitting that pure rationality (without inductive instinct) would lead to paralysis, and thus science rests on a non-rational, biological foundation.",
+      "counterconditions": [
+        "If Popper can successfully separate the 'context of discovery' (psychological/biological) from the 'context of justification' (logical).",
+        "If the 'preference' can be fully reconstructed as a logical imperative without appealing to biological instincts.",
+        "If the biological explanation undermines the normative force of his own critical method."
+      ],
+      "typicality": 0.55,
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if we accept a 'decision-theoretic' reinterpretation where the cost of error is asymmetric, making the choice of the corroborated theory a minimax strategy rather than an inductive inference.",
+      "mechanism": "In a landscape of uncertainty, choosing the theory with the highest corroboration is a game-theoretic move. If we choose a falsified theory, the cost is immediate disaster. If we choose a corroborated theory that is later falsified, we at least gained time and knowledge. The mechanism is 'risk minimization under ignorance.' We don't assume the corroborated theory is true (induction); we assume the falsified ones are definitely false (logic). Thus, the set of viable candidates shrinks to the corroborated ones by elimination, not by positive confirmation. The preference is simply the absence of alternatives.",
+      "counterconditions": [
+        "If multiple unfalsified theories exist with conflicting predictions, forcing a choice that elimination alone cannot resolve.",
+        "If the 'cost' of acting on a false but corroborated theory is deemed too high to justify the gamble.",
+        "If the definition of 'falsified' is not as binary or clear-cut as the mechanism requires."
+      ],
+      "typicality": 0.45,
+      "optional_refs": []
+    },
+    {
+      "claim": "The dilemma is a category error: 'probability' in Popper's sense refers to logical frequency or propensity, while 'preference' refers to methodological utility; conflating them creates a pseudo-problem.",
+      "mechanism": "Popper defines probability objectively (propensity). Corroboration is a historical report of a theory's performance. Preference is a forward-looking methodological stance. The mechanism is 'semantic compartmentalization.' When Popper says corroboration isn't probability, he means it doesn't change the logical propensity of the theory being true. When he says we should prefer it, he means it is the most useful tool for the current state of inquiry. The 'smuggling' charge fails because it tries to map a methodological rule onto a logical calculus where it was never intended to reside. The cost is accepting a fragmented view of rationality where logic and action operate under different rules.",
+      "counterconditions": [
+        "If 'methodological utility' inevitably collapses into 'subjective probability' in the mind of the agent.",
+        "If the separation between logical status and practical action is unsustainable in complex, real-time decision environments.",
+        "If the concept of 'propensity' itself is shown to be incoherent or dependent on inductive assumptions."
+      ],
+      "typicality": 0.35,
+      "optional_refs": []
+    }
+  ]
+}

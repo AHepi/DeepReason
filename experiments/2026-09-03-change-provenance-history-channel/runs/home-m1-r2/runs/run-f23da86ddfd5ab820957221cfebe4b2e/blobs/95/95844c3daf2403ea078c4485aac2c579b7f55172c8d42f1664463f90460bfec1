@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to resolve the problem's specific challenge regarding 'pragmatic decision-making' (acting on a theory). By admitting that Popper's framework offers 'no rational guarantee for practical action,' the target concedes that the preference for better-corroborated theories is *not* defensible on Popper's own terms when it comes to acting, which is explicitly part of the problem statement ('Popper himself when choosing which theory to act on'). The target attempts to solve this by positing a 'sharp discontinuity' between scientific rationality and pragmatic decision-making, but this merely highlights the failure of Popper's terms to cover the full scope of the problem (science + action) rather than demonstrating how the preference is defensible within those terms. If the preference is only defensible for 'selecting targets for falsification' but indefensible for 'acting,' then the answer to 'Is that preference defensible?' regarding action is 'No,' contradicting the target's primary claim that it *is* defensible provided it is interpreted narrowly. The target smuggles in a restriction of scope that the problem explicitly forbids by including 'acting on' in the premise.",
+      "counterexample": null,
+      "premise": "The problem asks if the preference for better-corroborated theories is defensible on Popper's own terms when scientists (and Popper) choose which theory to *act on*.",
+      "premise_evidence": null,
+      "successor_question": "If Popper's terms cannot rationally justify acting on a theory without inductive assumptions, does the 'preference' described in the problem actually exist as a single coherent principle, or is it two distinct principles (one for testing, one for acting) where the latter violates Popper's anti-induction stance?"
+    }
+  ]
+}
