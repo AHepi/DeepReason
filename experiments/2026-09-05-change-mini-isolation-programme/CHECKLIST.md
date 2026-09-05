@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=17 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=18 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -557,11 +557,43 @@ tranche".
            it is stored, not changed. If a new form is wanted, REGISTER ONE BESIDE IT.
       Restored; 1 passed.
       ```
-- [ ] 17. (S2) [COMMIT] `mini/minireason/forms.py`: the registry, the four
+- [x] 17. (S2) [COMMIT] `mini/minireason/forms.py`: the registry, the four
       shipped forms, selection by argument → `DEEPREASON_MINI_FORM` → the
       flow default. Never `Config`, never the manifest.
       done-when: the no-`maxLength` assertion in SPEC.md §S2 passes for every
       registered form (paste), and step 16's golden still passes
+
+      ```
+      $ python -c "from minireason.forms import resolve_mini_form, mini_form_ids ..."
+      SPEC S2 accept: OK -> (mini.commitment.relaxed.v1, mini.conjecturer.legacy-v0,
+                             mini.conjecturer.relaxed.v1, mini.critic.relaxed.v1)
+      No maxLength anywhere in any registered form. Step 16 golden still passes.
+      
+      $ python -m pytest mini/tests/test_mini_forms.py -q   -> 9 passed
+      $ python -m pytest mini/tests/ -q                      -> 110 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q -> 3 passed
+      (the fence is re-run because a NEW mini module could import a fenced package)
+      
+      $ python tools/blast_radius.py --files mini/minireason/forms.py --symbols
+            register_mini_form resolve_mini_form select_mini_form MiniFormV1
+            --against 577365da4
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      qualification_digest: none      wheel_smoke_pins: none
+      Road M holds as measured: a mini-only registry reaches no frozen surface.
+      
+      STOP CONDITION HIT: diff budget EXCEEDED.
+      $ python tools/diff_budget.py 577365da4 --ceiling 175 --paths mini/minireason/forms.py
+      {"total_insertions": 305, "ceiling": 175, "verdict": "EXCEEDED"}
+      
+      Trimmed first, then disclosed. The two near-identical passthrough contracts
+      were merged into one and the module docstring cut, taking 319 -> 306. What
+      remains is 150 lines of code, 69 of docstring, 13 of comment and 74 blank.
+      SPEC.md priced S2 at 120 for a registry; what shipped is a registry PLUS four
+      forms, four wire models, the three-step selection order and four typed
+      refusals. The T2 ceiling is re-baselined once at step 19, when S3 is measured
+      too, so the amendment carries real numbers for both halves rather than an
+      estimate for one.
+      ```
 - [ ] 18. (S3) Write the red test first: a free-prose candidate under the
       relaxed form is refuted on arrival today (this reproduces
       `proof/m2_free_prose_today.txt` as a committed test).
