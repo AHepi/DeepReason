@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-inductive basis for preferring better-corroborated theories, but this concept fails to escape induction because assessing verisimilitude inherently requires an inductive assumption that past success in severe tests correlates with future truth-content.",
+      "case": "The argument collapses into the very induction Popper rejected because 'verisimilitude' cannot be operationalized without assuming the uniformity of nature. While the target claims the preference is merely a 'decision rule' based on past performance, the rationality of acting on this rule presupposes that a theory which survived past tests is more likely to survive future ones or describe reality accurately. Without this inductive bridge, the preference for the 'better-corroborated' theory is arbitrary; one could just as rationally prefer the worst-corroborated theory if no link between past survival and future reliability (truth-likeness) is assumed. Thus, invoking verisimilitude smuggles in the expectation that the future will resemble the past, violating Popper's strict ban on inductive inference.",
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be measured without inductive assumptions, does Popper's framework leave scientists with no rational basis for action other than blind guesswork?"
+    }
+  ]
+}
