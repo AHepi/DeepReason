@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'preferring a theory for action' with 'selecting a target for falsification.' The problem context explicitly notes that scientists (and Popper) prefer better-corroborated theories when 'choosing which theory to act on.' Acting on a theory (e.g., building a bridge based on it) inherently relies on an expectation of its future reliability. The target argues we prefer it only as a 'target for attempted falsification,' which describes the logic of testing, not the logic of practical application. By redefining the preference as merely methodological selection for further testing, the target sidesteps the actual problem: justifying why we trust the corroborated theory to work in the future. This evasion means the target has not defended the preference 'on Popper's own terms' regarding action, but rather changed the subject to testing strategy, leaving the charge of smuggled induction in practical reasoning unanswered.",
+      "counterexample": null,
+      "premise": "The problem context distinguishes between surviving tests and 'choosing which theory to act on,' implying that action requires an expectation of future success that pure falsificationism cannot provide without induction.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration licenses no expectation of future reliability, on what non-inductive basis does Popper justify acting on a corroborated theory rather than a refuted one when lives are at stake?"
+    }
+  ]
+}

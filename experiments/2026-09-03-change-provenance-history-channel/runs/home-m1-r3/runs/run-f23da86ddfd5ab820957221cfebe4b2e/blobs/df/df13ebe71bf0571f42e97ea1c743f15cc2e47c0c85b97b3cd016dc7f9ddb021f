@@ -1,0 +1,64 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, strategic imperative to maximize the rate of error elimination, not as an inference to probable truth.",
+      "mechanism": "Reframing scientific action as a game of 'maximal risk exposure': choosing the theory that has survived the most severe tests is equivalent to choosing the weapon with the highest known durability in battle, not because it is 'magically immune' to future damage (induction), but because it is the only rational bet for surviving the next immediate engagement given the goal of eliminating error. The 'cost' is accepting that this preference offers no guarantee of future success or proximity to truth, only the best available method for exposing falsity.",
+      "counterconditions": [
+        "If the goal of science shifts from error elimination to predictive reliability for engineering safety, this strategic defense collapses without an inductive bridge.",
+        "If 'severity' of tests cannot be defined independently of the theory being tested, the metric for 'better-corroborated' becomes circular."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "The candidate explicitly constructs the case for defensibility first (strategic imperative) before addressing the counter-case and concluding, satisfying the dialectical requirement."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "The argument distinguishes 'availability' (unfalsified status) from 'preferability' (survival of severe tests), grounding preference in the degree of risk undertaken, not mere existence."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "It avoids the false dichotomy by defining rationality strictly as 'consistency with the aim of error elimination,' a third option distinct from justification via probability or abandonment of rationality."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The rebuttal clarifies that 'rational preference' here is procedural (following the rules of the critical game) rather than epistemic (entailment of truth), solving the relabeling charge by anchoring in the agent's declared goal."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "The mechanism rejects fictionalism; it argues the preference is genuinely rational relative to the specific aim of bold conjecture, not a pragmatic 'as-if' stance on probability."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "The structure presents the strongest defense (strategic imperative) followed by the strongest critique (hidden induction in severity metrics) before rendering a verdict."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The candidate explicitly utilizes Popper's verisimilitude/error-elimination solution, arguing that alignment with the goal of truth-seeking justifies the preference without invoking induction."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "The countercondition addresses the charge that past severity implies future testability, framing it as a necessary assumption of the 'game' rather than an inductive law of nature."}
+      ],
+      "optional_refs": ["SRC_006"]
+    },
+    {
+      "claim": "The preference smuggles induction back in because the concept of 'severe testing' implicitly relies on the uniformity of nature: assuming that conditions which falsified rivals in the past will remain relevant or similar in the future.",
+      "mechanism": "Deconstructing 'Severity': A test is only 'severe' if the outcome was improbable given the background knowledge. This background knowledge itself rests on the assumption that natural regularities observed previously hold now. Therefore, preferring a theory based on past severe tests assumes the future will resemble the past regarding the relevance of those tests, which is the very principle of induction Popper rejected. The 'cost' of accepting this is admitting Popper's system is not purely deductive and requires a minimal, perhaps tacit, inductive postulate to function in practice.",
+      "counterconditions": [
+        "If 'severity' can be defined purely logically (e.g., logical content) without reference to empirical regularities, the inductive smuggling charge fails.",
+        "If the preference is viewed solely as a psychological habit of scientists rather than a normative rule, the logical contradiction dissolves."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "The candidate fully develops the 'smuggling induction' argument as the primary focus before contrasting it with the defense."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "It addresses preferability by arguing the *reason* for preference (past severity) is inductively loaded, not just the act of choosing."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "It challenges the 'third option' by asserting that any redefinition of rationality that relies on past performance to guide future action is inherently inductive."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The argument claims the distinction between preference and entailment is insufficient because the *grounds* for the preference are inductive."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "It argues that even non-fictional accounts of Popper fail if the underlying metric of 'corroboration' depends on uniformity assumptions."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "The response structures the argument by presenting the induction critique as the 'strongest case' for the negative answer before weighing it against the defense."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "It directly attacks the 'non-inductive grounds' claim by demonstrating how 'error elimination' presupposes the stability of error conditions."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "revised", "note": "Refined to explicitly state that the 'cost' is the collapse of Popper's demarcation criterion if tacit induction is admitted."}
+      ],
+      "optional_refs": ["SRC_014"]
+    },
+    {
+      "claim": "The dilemma is a category error: Popper's 'preference' is not an epistemic judgment about the world, but an aesthetic or methodological commitment to 'boldness,' making the question of defensibility irrelevant to truth-tracking.",
+      "mechanism": "Recasting Corroboration as Aesthetic: Just as a critic prefers a complex symphony over a simple tune not because it is 'truer' but because it offers more opportunities for failure (and thus greater achievement if it succeeds), scientists prefer bold theories for their informational content. The preference is defensible as a commitment to high-content inquiry, not as a strategy for finding true descriptions of reality. The 'cost' is abandoning the idea that science progressively approaches truth (verisimilitude) in any meaningful sense, reducing it to an endless generation of complex falsehoods.",
+      "counterconditions": [
+        "If Popper explicitly linked corroboration to verisimilitude (closeness to truth), this aesthetic reduction contradicts his later writings.",
+        "If acting on a theory (e.g., building a bridge) requires a belief in its reliability, an aesthetic preference is insufficient for practical application."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "Presents the aesthetic defense strongly before critiquing its inability to support practical action."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "Argues that 'preferability' in this context is defined by content-richness, distinguishing it from mere availability."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "Proposes a fourth option: rationality as adherence to an aesthetic of boldness, bypassing the induction/irrationality dichotomy."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Claims the 'link' is not to truth but to informational value, solving the relabeling issue by changing the telos of science."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "Distinguishes this view from fictionalism by asserting the preference is real and grounded in the value of content, not a pretense."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "Follows the required dialectical structure: Aesthetic Defense -> Practical Critique -> Conclusion on costs."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "Challenges the 'error elimination' goal by suggesting the real goal is 'content maximization,' rendering the induction charge moot."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Argues that assuming past boldness predicts future boldness is not induction but a definition of the theoretical lineage."}
+      ],
+      "optional_refs": ["SRC_003"]
+    }
+  ]
+}

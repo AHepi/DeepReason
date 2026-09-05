@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies that Popper's system faces a genuine tension between rejecting induction and preferring corroborated theories for action. However, it fails to make the 'strongest case' for the opposing view as explicitly required by the problem prompt (which asks to 'Make the strongest case for each answer'). Specifically, it omits the non-inductive rationale where preference is based solely on the logical status of having withstood severe tests (critical rationalism) rather than a probabilistic expectation of future success. By not fully articulating and then refuting this counter-position, the target does not satisfy the problem's structural requirement to evaluate both sides before concluding.",
+      "counterexample": null,
+      "premise": "The problem prompt explicitly demands: 'Make the strongest case for each answer, then say which one survives.'",
+      "premise_evidence": null,
+      "successor_question": "Can you reconstruct the strongest non-inductive argument for preferring corroborated theories (e.g., based on verisimilitude or critical testing status) and then explain why your preferred conclusion still holds despite that argument?"
+    }
+  ]
+}
