@@ -1,7 +1,7 @@
 # Checklist for: four evidence states over the record, and a per-cycle
 # declaration that criticism ran in full
 
-State: next=16 blockers=none
+State: next=20 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -300,16 +300,41 @@ its absence test.
         Diff budget EXCEEDED 1797/855: read as a stop, disposed in SPEC.md Amendment 1.
         blast_radius CLEAR, no reachability drift.
 
-- [ ] 16. (S7) Capture each instrument's DEFAULT output BEFORE the change
+- [x] 16. (S7) Capture each instrument's DEFAULT output BEFORE the change
        (`proof/instruments_before.txt`), then add `--survivors-only` to both
        `analyse_form_arms.py` and `measure_diversity_per_problem.py`.
        done-when: `proof/instruments_before.txt` exists AND
        `python experiments/2026-09-03-change-conjecturer-pluggable-interface/analyse_form_arms.py --self-test` prints `ok`
 
-- [ ] 17. (S7, S8) Write `tests/test_survivors_only_switch.py`: default output
+      PROOF:
+        $ python experiments/2026-09-03-change-conjecturer-pluggable-interface/analyse_form_arms.py --self-test
+        ok
+        
+        Default output captured BEFORE the switch existed, committed at
+        proof/instruments_before.txt (four blocks: --self-test, --roots, the no-roots
+        refusal, and the diversity report on the P-A2 root).
+        
+        Both instruments now take --survivors-only, default OFF:
+          form-arms   : "survivors-only: 8 artifacts came through an attack or a trial that ruled"
+          diversity   : "[--survivors-only] 8 of 34 conjectures came through ..." and the
+                        seed block falls from n=34 to n=8, D4 0.783 -> 0.833, D5 0.150 -> 0.178
+
+- [x] 17. (S7, S8) Write `tests/test_survivors_only_switch.py`: default output
        byte-identical to the before-capture (R8), and the switch restricts to
        SUPPORTED artifacts.
        done-when: `python -m pytest tests/test_survivors_only_switch.py -q` -> 0 failed
+
+      PROOF:
+        $ python -m pytest tests/test_survivors_only_switch.py -q
+        9 passed in 76.13s
+        
+        R8 is pinned against the committed BEFORE-capture, not against the instrument's
+        current self: both default paths are byte-identical to what they printed before
+        the switch existed, and the no-roots refusal and --self-test paths are pinned
+        too. R7 is pinned behaviourally as well as textually -- the rows the diversity
+        filter keeps ARE the reader's SUPPORTED set, so a filter that drifted to some
+        other criterion reddens rather than silently reporting the wrong number under
+        the right name.
 
 - [x] 18. (S10) Create `docs/map/CON-evidence-states.md` per `SCHEMA.md`, with
        four checks each first RUN AGAINST THE PRE-CHANGE TREE to confirm it
@@ -324,11 +349,30 @@ its absence test.
         (proof/map_checks_can_fail.txt). INDEX.md carries both a routing row and a
         concept-table row.
 
-- [ ] 19. (S9) Write `census.py` (runs the SHIPPED reader over every committed
+- [x] 19. (S9) Write `census.py` (runs the SHIPPED reader over every committed
        root, tables OPEN vs SUPPORTED on the frontier) and paste its output into
        `CENSUS.md`.
        done-when: `python experiments/2026-09-04-change-evidence-states/census.py`
        exits 0 and `CENSUS.md` contains its pasted table
+
+      PROOF:
+        $ python experiments/2026-09-04-change-evidence-states/census.py
+        # Evidence-state census over 77 committed run roots
+        ...
+        - admitted artifacts read: 8683
+          - open: 7713 (88.8%)   - supported: 47 (0.5%)
+          - refuted: 844 (9.7%)  - contested: 79 (0.9%)
+        - frontier artifacts read: 941
+          - open: 939 (99.8%)    - supported: 1 (0.1%)
+          - refuted: 0 (0.0%)    - contested: 1 (0.1%)
+        - roots carrying a criticism-dispatch declaration: 0 of 77
+        rc=0
+        
+        CENSUS.md carries the pasted table and says what the number does and does not
+        mean. Eight roots the replay reader cannot rebuild are listed rather than
+        dropped: seven carry RunManifest schema versions 1-3 against a tree that
+        accepts only 6, which is the 2026-08-14 law working as intended (old roots owe
+        the future nothing), and one is a duplicate path.
 
 - [ ] 20. (S7, S9, S10) [COMMIT] Commit 3 of the split: the baseline hook, the
        census, the map document.

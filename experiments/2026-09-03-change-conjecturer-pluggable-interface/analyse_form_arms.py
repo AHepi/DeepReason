@@ -49,6 +49,28 @@ def blind(record: dict) -> dict:
     return {k: v for k, v in record.items() if k not in PROVENANCE_FIELDS}
 
 
+def survivors_only(roots: list[str]) -> dict[str, list[str]]:
+    """Per root, the artifacts the record says came through something.
+
+    `PREREG.md` §7 blinds provenance; this filter reads no provenance at all —
+    only `DR-CON-evidence-states`, which is derived from attack edges, warrants
+    and trial outcomes. It refuses rather than guesses if a root's reading
+    cannot be built, because measuring the unfiltered pool under a
+    survivors-only flag would report the wrong number under the right name.
+    """
+    from deepreason.harness import Harness
+    from deepreason.views.evidence_states import EvidenceState, evidence_states
+
+    kept: dict[str, list[str]] = {}
+    for raw in roots:
+        readings = evidence_states(Harness(pathlib.Path(raw), read_only=True))
+        kept[raw] = sorted(
+            aid for aid, reading in readings.items()
+            if reading is EvidenceState.SUPPORTED
+        )
+    return kept
+
+
 def self_test() -> int:
     assert CENSUS.exists(), CENSUS
     assert DIVERSITY.exists(), DIVERSITY
@@ -67,6 +89,14 @@ def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--self-test", action="store_true")
     parser.add_argument("--roots", nargs="*", default=[])
+    parser.add_argument(
+        "--survivors-only", action="store_true",
+        help="restrict to artifacts the record says came through an attack or "
+             "a trial that ruled (DR-CON-evidence-states SUPPORTED), so the "
+             "progress law's 'survivors' can be compared against B0 on "
+             "survivors alone. Default OFF: without it this instrument behaves "
+             "exactly as before",
+    )
     args = parser.parse_args(argv[1:])
     if args.self_test:
         return self_test()
@@ -79,6 +109,13 @@ def main(argv: list[str]) -> int:
     diversity = _load(DIVERSITY, "diversity")
     print(f"census: {census.__name__}, diversity: {diversity.__name__}")
     print(f"roots: {len(args.roots)}")
+    if args.survivors_only:
+        kept = survivors_only(args.roots)
+        total = sum(len(ids) for ids in kept.values())
+        print(f"survivors-only: {total} artifacts came through an attack or a "
+              f"trial that ruled")
+        for raw in args.roots:
+            print(f"  {raw}: {len(kept[raw])}")
     return 0
 
 

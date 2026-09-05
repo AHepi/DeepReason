@@ -1,0 +1,29 @@
+=== instruments' DEFAULT output, captured BEFORE --survivors-only existed ===
+captured at c5b1ced3f on 2026-09-04
+
+--- analyse_form_arms.py --self-test ---
+ok
+rc=0
+
+--- analyse_form_arms.py --roots <p-a2> ---
+census: census, diversity: diversity
+roots: 1
+rc=0
+
+--- analyse_form_arms.py (no roots) ---
+no roots. STEP 1 has not run: PREREG.md §8 says so, and this instrument does not invent numbers for arms that do not exist.
+rc=1
+
+--- measure_diversity_per_problem.py <p-a2> ---
+
+=== experiments/2026-09-02-live-p-a2-corrected/run ===
+seed problem: question-933313a5d9ca6dd86f3052aec6e1f05f
+  --- SEED PROBLEM question-933313a5d9ca6dd86f3052aec6e1f05f  [the M1/M3 comparison unit]  (n=34) ---
+  D1 count               : 34
+  D2 stance spread       : 4 distinct ['school-0', 'school-1', 'school-2', 'school-3']
+     largest school share: 9/34 = 26%
+  D3 subject spread      : 0 distinct covers over 0 slots
+  D4 lexical distinctness: 0.783
+  D5 semantic distinctness: 0.150
+  ND near-duplicate rate : 0.000  (pairs below 0.20 Jaccard distance)
+rc=0
