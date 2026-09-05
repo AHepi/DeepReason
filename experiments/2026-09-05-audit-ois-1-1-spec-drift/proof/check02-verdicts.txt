@@ -1,0 +1,135 @@
+$ grep -n "PASS, FAIL, OVERRUN" src/deepreason/programs.py
+33:PASS, FAIL, OVERRUN = "pass", "fail", "overrun"
+
+--- what each verdict does at the mint sites (OVERRUN = the UNKNOWN analogue) ---
+$ grep -rn "OVERRUN" src/
+src/deepreason/skills/adoption.py:136:        if verdict not in {programs.PASS, programs.FAIL, programs.OVERRUN}:
+src/deepreason/measures/hv.py:312:        return programs.OVERRUN  # no kernel available within budget
+src/deepreason/measures/hv.py:327:        return programs.OVERRUN
+src/deepreason/llm/packs.py:498:                "SEAT_SECTION_RENDER_OVERRUN",
+src/deepreason/oracle.py:45:PASS, FAIL, OVERRUN = "pass", "fail", "overrun"
+src/deepreason/oracle.py:150:    return OVERRUN, {
+src/deepreason/oracle.py:208:        return OVERRUN, {"error": "exec-oracle spec missing entry/tests"}
+src/deepreason/oracle.py:219:        return OVERRUN, {"error": "candidate-checker spec missing source/entry/tests"}
+src/deepreason/oracle.py:294:            return OVERRUN, {"error": f"property checker unusable: {cerr}"}
+src/deepreason/oracle.py:362:        return OVERRUN, {"error": "property-oracle spec missing entry/inputs/checker"}
+src/deepreason/oracle.py:529:        if verdict == OVERRUN:
+src/deepreason/oracle.py:637:            return OVERRUN, {"error": f"admission gate unusable: {verr}"}
+src/deepreason/oracle.py:702:        return OVERRUN, {"error": "generator-wf spec missing inputs"}
+src/deepreason/oracle.py:811:        return OVERRUN, {"error": "checker-wf spec missing inputs"}
+src/deepreason/oracle.py:974:        return OVERRUN, {"error": "dataset exceeds the oracle payload bound"}
+src/deepreason/oracle.py:1009:        return OVERRUN, {"error": "dataset-oracle spec missing sidecar identity"}
+src/deepreason/oracle.py:1013:        return OVERRUN, {"error": "admitted dataset sidecar is unavailable"}
+src/deepreason/oracle.py:1015:        return OVERRUN, {"error": "dataset sidecar bytes do not match their digest"}
+src/deepreason/oracle.py:1019:        return OVERRUN, {"error": f"dataset sidecar unparseable: {e}"}
+src/deepreason/browser.py:40:PASS, FAIL, OVERRUN = "pass", "fail", "overrun"
+src/deepreason/browser.py:147:            return BrowserResult(OVERRUN, {"error": "malformed interaction script"})
+src/deepreason/scheduler/scheduler.py:228:    The same rule governs the DENOMINATOR, which is why OVERRUN leaves it: a
+src/deepreason/scheduler/scheduler.py:229:    verdict of OVERRUN is the harness saying it obtained no verdict, and every
+src/deepreason/scheduler/scheduler.py:259:        if verdict != programs.OVERRUN:
+src/deepreason/programs.py:33:PASS, FAIL, OVERRUN = "pass", "fail", "overrun"
+src/deepreason/programs.py:316:    return OVERRUN, {"reason": "observation requires registered evidence"}
+src/deepreason/programs.py:328:    return OVERRUN, {
+src/deepreason/programs.py:364:    return OVERRUN, {"reason": "promotion-criterion-requires-blobs"}
+src/deepreason/rules/act.py:16:browser-pass Measure. OVERRUN (malformed spec) is a spec defect, not the
+src/deepreason/rules/crit.py:893:        if verdict == programs.OVERRUN:
+src/deepreason/rules/crit.py:1145:            if verdict == programs.OVERRUN:
+src/deepreason/calculus/promotion.py:30:PASS, FAIL, OVERRUN = "pass", "fail", "overrun"
+src/deepreason/calculus/promotion.py:151:        return None, None, (OVERRUN, {"reason": "budget-exhausted"})
+src/deepreason/calculus/promotion.py:154:        return None, None, (OVERRUN, why)
+src/deepreason/calculus/promotion.py:162:        return None, None, (OVERRUN, {"reason": "not-a-frame-claim"})
+src/deepreason/calculus/promotion.py:213:        return OVERRUN, {"reason": "subject-not-in-environment",
+src/deepreason/calculus/promotion.py:222:        return OVERRUN, {"reason": "scope-does-not-compile"}
+src/deepreason/calculus/promotion.py:246:        return OVERRUN, {"reason": "demarcation-undecided-no-variator",
+src/deepreason/calculus/promotion.py:330:            return OVERRUN, {"reason": "scope-exceeds-its-bound",
+src/deepreason/calculus/promotion.py:334:        return OVERRUN, {"reason": "budget-exhausted"}
+src/deepreason/calculus/promotion.py:375:        return OVERRUN, {"reason": "scope-does-not-compile"}
+src/deepreason/calculus/promotion.py:418:        return OVERRUN, {"reason": "subject-not-in-environment",
+src/deepreason/calculus/promotion.py:423:            return OVERRUN, {"reason": "incumbent-not-in-environment",
+src/deepreason/calculus/promotion.py:452:        return OVERRUN, {"reason": "rigidity-unmeasured",
+src/deepreason/calculus/promotion.py:469:            return OVERRUN, {"reason": "accounting-not-in-environment",
+src/deepreason/calculus/promotion.py:547:        return OVERRUN, {"reason": "subject-not-in-environment",
+src/deepreason/calculus/promotion.py:561:            return OVERRUN, {"reason": "assumption-id-truncated", "assumption": cid}
+src/deepreason/ontology/commitment.py:20:    OVERRUN = "overrun"
+--- rules/crit.py 880-935 ---
+            continue
+        saw_property_oracle = True
+        cx, reason = admit_counterexample(base, args)
+        if cx is None:
+            reasons.append(reason)
+            continue  # inadmissible against this commitment's input gate
+        verdict, trace = programs.evaluate(cx, target, harness.blobs)
+        if trace.get("sandbox_abort"):
+            reasons.append(
+                "the execution sandbox aborted before producing a verdict — "
+                "the proposed input grounds nothing and may be retried"
+            )
+            continue
+        if verdict == programs.OVERRUN:
+            reasons.append(
+                "the property oracle was unusable on this input and produced "
+                "no verdict — the proposed input grounds nothing"
+            )
+            continue
+        if verdict != programs.FAIL:
+            reasons.append(
+                "the target RAN your input and the property HELD — this "
+                "counterexample does not discriminate; construct an input where "
+                "the target's OUTPUT violates the checker"
+            )
+            continue
+        harness.register_commitment(cx)
+        if verdict_on_record(harness, cx.id, target_id):
+            if restart_safe and effect_source_call_seq is not None:
+                matches = []
+                for event in harness.log.read():
+                    if event.seq <= effect_source_call_seq:
+                        continue
+                    for artifact_id in event.outputs:
+                        artifact = harness.state.artifacts.get(artifact_id)
+                        if artifact is None:
+                            continue
+                        if any(
+                            (warrant := harness.warrants.get(warrant_id)) is not None
+                            and warrant.commitment == cx.id
+                            and warrant.target == target_id
+                            for warrant_id in artifact.warrants
+                        ):
+                            matches.append(artifact)
+                if len(matches) > 1:
+                    raise RuntimeError("grounded criticism effect is duplicated")
+                if matches:
+                    return matches[0], ""
+            return None, "this exact counterexample already refutes the target"
+        return register_fail_warrant(
+            harness,
+            commitment_id=cx.id,
+            target_id=target_id,
+            nu_content=(
+                f"nu: counterexample verdict of {cx.id} on {target_id} is sound "
+                f"(input admitted by {base.id}'s gate, property checker inherited)"
+
+--- rules/crit.py 1138,1160 ---
+    spec = _load_spec(base.budget)
+    entry, frozen = spec.get("entry"), spec.get("inputs", [])
+    promoted = promoted_properties(harness, base.id, config)
+    for prop_id, claim, prop_source in active_properties(harness, base.id):
+        violation = None
+        if entry and frozen:
+            verdict, d = run_property(source, entry, frozen, prop_source)
+            if verdict == programs.OVERRUN:
+                QUARANTINE_TICK[0] += 1
+                continue
+            if verdict == programs.FAIL and "case" in d:
+                if checker_crashed(d):
+                    # The CHECKER threw, not the candidate (intervals/boot
+                    # postmortem: a conjectured checker's own bug executed
+                    # seven correct candidates). A crash is not a verdict —
+                    # it grounds nothing against the target and is instead a
+                    # demonstrative counterexample to the CHECKER's
+                    # well-formedness, with the crash as trace.
+                    _refute_crashing_property(harness, prop_id, d)
+                    continue
+                violation = frozen[d["case"]]
+        if violation is None:
+            for _, gen_source in probes:

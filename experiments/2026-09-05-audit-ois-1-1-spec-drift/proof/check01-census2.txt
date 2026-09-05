@@ -1,0 +1,24 @@
+$ grep -rn "nu_interface\|manifest_ref=" src/ | grep -v "rules/warrants.py"
+grep: src/deepreason/rules/__pycache__/warrants.cpython-311.pyc: binary file matches
+src/deepreason/mcp_server.py:590:                run_manifest_ref=prepared.run_manifest_ref,
+src/deepreason/premises.py:569:            manifest_ref=manifest_ref,
+src/deepreason/preparation.py:1035:            run_manifest_ref=str(root / MANIFEST_NAME),
+src/deepreason/informal/trial.py:822:        nu_interface=Interface(refs=[Ref(target=standard.id, role="mention")]),
+src/deepreason/rules/act.py:178:            nu_interface=Interface(refs=[Ref(target=evidence.id, role=RefRole.EVIDENCE)]),
+src/deepreason/rules/crit.py:1033:            nu_interface = None
+src/deepreason/rules/crit.py:1041:                nu_interface = Interface(refs=[Ref(target=gen_id, role=RefRole.MENTION)])
+src/deepreason/rules/crit.py:1058:                nu_interface=nu_interface,
+src/deepreason/rules/crit.py:1224:            nu_interface=Interface(refs=[Ref(target=prop_id, role=RefRole.MENTION)]),
+src/deepreason/cli/main.py:2553:                run_manifest_ref=prepared.run_manifest_ref,
+src/deepreason/cli/bridge.py:206:            run_manifest_ref=args.run_manifest,
+src/deepreason/application/text_runs.py:920:                run_manifest_ref=str(root / MANIFEST_NAME if held else manifest),
+src/deepreason/application/intents.py:35:        run_manifest_ref=str(run_manifest_ref),
+src/deepreason/mcp_scratch_bridge.py:372:        run_manifest_ref=str(root / MANIFEST_NAME),
+
+$ grep -rn "RefRole.EVIDENCE" src/
+src/deepreason/rules/act.py:178:            nu_interface=Interface(refs=[Ref(target=evidence.id, role=RefRole.EVIDENCE)]),
+src/deepreason/rules/warrants.py:164:                + [Ref(target=manifest_ref, role=RefRole.EVIDENCE)]
+src/deepreason/rules/vision.py:101:        interface=Interface(refs=[Ref(target=s, role=RefRole.EVIDENCE) for s in shot_ids]),
+src/deepreason/bridge/evidence_pack.py:402:            if ref.role == RefRole.EVIDENCE:
+src/deepreason/imports.py:845:    refs = [Ref(target=aid, role=RefRole.EVIDENCE) for aid in error.evidence_ids]
+src/deepreason/adjudication/edges.py:164:                    if ref.role == RefRole.EVIDENCE:

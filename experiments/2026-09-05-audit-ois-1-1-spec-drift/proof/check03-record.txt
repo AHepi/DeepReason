@@ -1,0 +1,12 @@
+$ python proof/check03_record.py experiments/2026-09-02-live-p-a2-corrected/run
+root            : experiments/2026-09-02-live-p-a2-corrected/run
+artifacts       : 94
+attack edges    : 12
+target chosen   : 61e8fb27e67697a5d0ccb1e8bde257a21109975528254617bb5a864edd9a8318  (1 standing attackers)
+attacker labels : 045499e53e23=accepted
+
+--- verbatim slice of the pack the shipped default critic layout renders ---
+standing attacks (do not repeat these):
+- 045499e53e23206fa66ba030ed2fa50488e702772c4cff8984d05f9831821060 [accepted]: critic: pa1-scaling-law@v1 failed on 61e8fb27e676
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

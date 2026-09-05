@@ -1,0 +1,33 @@
+$ git status --porcelain -- experiments/ | grep -v 2026-09-05-audit-ois-1-1-spec-drift
+(exit 1)
+
+$ git diff --stat
+(exit 0)
+
+$ ls proof/
+check00-baseline.txt
+check01-census.txt
+check01-census2.txt
+check01-mintsites.txt
+check01-repro.txt
+check01_repro.py
+check02-failwarrant.txt
+check02-verdicts.txt
+check03-record.txt
+check03-status-leak.txt
+check03_record.py
+check04-critic-contract.txt
+check05-discharge.txt
+check05_record.py
+check06-merge.txt
+check07-maxima.txt
+check08-crossings.txt
+check09-stops.txt
+check10-rivals.txt
+check10_record.py
+check11-da1.txt
+check11_da1_vs_harness.py
+check12-hardening.txt
+check12_hardening.py
+close-gates.txt
+rings.txt

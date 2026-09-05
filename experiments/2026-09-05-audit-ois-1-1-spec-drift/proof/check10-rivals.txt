@@ -1,0 +1,26 @@
+$ python proof/check10_record.py experiments/2026-09-02-live-p-a2-corrected/run
+root                       : experiments/2026-09-02-live-p-a2-corrected/run
+artifacts                  : 94
+problems with >1 artifact  : 3
+problem                                         n  accepted  refuted  attacked
+question-933313a5d9ca6dd86f3052aec6e1f05f      34        24       10        10
+conn:1191498e4fe5                              22        21        1         1
+conn:05a4074c795b                               6         5        1         1
+
+Exclusivity test: is any artifact attacked WITHOUT a registered warrant naming it (i.e. does mere co-presence on a problem create an edge)?
+  attack edges           : 12
+  warrant targets        : 12
+  attacked-but-unwarranted targets: 0
+
+$ python proof/check10_record.py experiments/2026-08-26-pc2-rematch/run
+root                       : experiments/2026-08-26-pc2-rematch/run
+artifacts                  : 1067
+problems with >1 artifact  : 1
+problem                                         n  accepted  refuted  attacked
+question-64b724c4118320989925d111501a8e41     220         0      220       220
+
+Exclusivity test: is any artifact attacked WITHOUT a registered warrant naming it (i.e. does mere co-presence on a problem create an edge)?
+  attack edges           : 418
+  warrant targets        : 220
+  attacked-but-unwarranted targets: 0
+

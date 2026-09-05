@@ -1,0 +1,24 @@
+$ grep -rn "Warrant(" src/ | grep -v "def \|class \|import"
+src/deepreason/informal/trial.py:1070:    warrant = Warrant(
+src/deepreason/informal/trial.py:1405:    warrant = Warrant(
+src/deepreason/rules/warrants.py:172:    warrant = Warrant(
+src/deepreason/rules/relatedness.py:153:            warrants=[Warrant(
+src/deepreason/rules/experiment.py:391:            warrants=[Warrant(
+src/deepreason/rules/vision.py:104:    warrant = Warrant(
+
+$ grep -rn "register_fail_warrant(" src/
+src/deepreason/skills/adoption.py:160:            register_fail_warrant(
+src/deepreason/premises.py:565:        critic = register_fail_warrant(
+src/deepreason/measures/hv.py:333:    register_fail_warrant(
+src/deepreason/workloads/formal.py:246:            criticism = register_fail_warrant(
+src/deepreason/informal/audits.py:48:    critic = register_fail_warrant(
+src/deepreason/informal/trial.py:817:    critic = register_fail_warrant(
+src/deepreason/rules/act.py:162:        return register_fail_warrant(
+src/deepreason/rules/warrants.py:119:def register_fail_warrant(
+src/deepreason/rules/experiment.py:507:            register_fail_warrant(
+src/deepreason/rules/crit.py:929:        return register_fail_warrant(
+src/deepreason/rules/crit.py:969:            register_fail_warrant(
+src/deepreason/rules/crit.py:1042:            return register_fail_warrant(
+src/deepreason/rules/crit.py:1094:    register_fail_warrant(
+src/deepreason/rules/crit.py:1207:        return register_fail_warrant(
+src/deepreason/calculus/promotion.py:640:                critic = register_fail_warrant(

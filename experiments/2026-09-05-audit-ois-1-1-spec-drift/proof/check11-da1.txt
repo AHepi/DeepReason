@@ -1,0 +1,25 @@
+$ python proof/check11_da1_vs_harness.py
+fixture                            node  DA-1 (§11.3)  DeepReason               verdict
+--------------------------------------------------------------------------------------------------------
+F1 refuted essential premise       A     in            refuted                  DIFFERS IN OUTCOME
+F1 refuted essential premise       C     out           suspended_unsupported    DIFFERS IN OUTCOME
+F1 refuted essential premise       D     in            accepted                 same
+F1 refuted essential premise       K     out           refuted                  same
+
+F2 undecided essential premise     A     undecided     refuted                  DIFFERS IN OUTCOME
+F2 undecided essential premise     C     undecided     suspended_unsupported    differs in name
+F2 undecided essential premise     K     undecided     suspended                same
+F2 undecided essential premise     M     undecided     suspended                same
+
+F3 reinstatement                   A     in            accepted                 same
+F3 reinstatement                   C     out           refuted                  same
+F3 reinstatement                   D     in            accepted                 same
+
+F4 unknown readiness, unattacked   A     undecided     accepted                 DIFFERS IN OUTCOME
+F4 unknown readiness, unattacked   U     undecided     accepted                 DIFFERS IN OUTCOME
+
+clauses under test:
+  F1 refuted essential premise       §11.3 — an out essential premise makes that dependent out
+  F2 undecided essential premise     §11.3 — an undecided essential premise prevents its dependent from becoming in
+  F3 reinstatement                   §11.3 — grounded reinstatement, the shared case
+  F4 unknown readiness, unattacked   §11.3 — an UNKNOWN check does not become PASS because its application is unattacked

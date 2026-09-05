@@ -1,0 +1,71 @@
+$ grep -rn "max(\|sorted(" src/deepreason/views/ src/deepreason/report.py
+src/deepreason/views/why.py:61:        for x, target in sorted(state.att):
+src/deepreason/views/evidence_states.py:203:        "outcomes": dict(sorted(outcomes.items())),
+src/deepreason/views/evidence_states.py:233:        "per_cycle": {key: per_cycle[key] for key in sorted(per_cycle, key=_cycle_key)},
+src/deepreason/views/knowledge.py:45:    for aid in sorted(harness.state.artifacts):
+src/deepreason/views/knowledge.py:65:                "commitments": sorted(artifact.interface.commitments),
+src/deepreason/views/theory.py:49:            for x, t in sorted(state.att)
+src/deepreason/views/thesis.py:58:    return sorted(set(unresolved))
+src/deepreason/views/thesis.py:99:    citations = sorted({
+src/deepreason/views/basin.py:39:    return sorted(arts, key=lambda a: a.provenance.event_seq)
+src/deepreason/views/basin.py:94:            "stance_weight": max(0.0, 1.0 - lineage_count.get(school, 0) / stance_decay),
+src/deepreason/views/basin.py:124:        ids = sorted(cents)
+src/deepreason/views/basin.py:127:        share = max(len(v) for v in by_school.values()) / len(chunk)
+src/deepreason/views/basin.py:176:    pids = sorted(by_problem)
+src/deepreason/views/basin.py:187:        xs = sorted(xs)
+src/deepreason/views/basin.py:244:    xs = sorted(xs)
+src/deepreason/views/jolt_signals.py:278:    return {key: str(actual[key]) for key in sorted(required)}
+src/deepreason/views/jolt_signals.py:353:                tokens=max(0, event.llm.tokens),
+src/deepreason/views/jolt_signals.py:448:    last_indices = range(max(0, len(all_calls) - len(calls)), len(all_calls))
+src/deepreason/views/jolt_signals.py:460:    concentration = max(target_share, lineage_share, family_share)
+src/deepreason/views/jolt_signals.py:468:    source_seqs = sorted(
+src/deepreason/views/jolt_signals.py:588:    objective_delta = max(
+src/deepreason/views/jolt_signals.py:626:    source_seqs = sorted(
+src/deepreason/views/jolt_signals.py:681:            sorted(set(hard.source_event_seqs) | set(soft.source_event_seqs))
+src/deepreason/report.py:32:        "max": max(values),
+src/deepreason/report.py:177:            "attempts": sum(max(0, call.attempts) for call in selected_calls),
+src/deepreason/report.py:179:                max(0, call.attempts - 1) for call in selected_calls
+src/deepreason/report.py:186:            "attempt_distribution": dict(sorted(attempt_distribution.items())),
+src/deepreason/report.py:227:        for key, value in sorted(calls_by_profile.items())
+src/deepreason/report.py:247:            "profiles": dict(sorted(transport_profiles.items())),
+src/deepreason/report.py:248:            "contracts": dict(sorted(contract_counts.items())),
+src/deepreason/report.py:340:        row["transport_profiles"] = dict(sorted(row["transport_profiles"].items()))
+src/deepreason/report.py:341:        row["contract_counts"] = dict(sorted(row["contract_counts"].items()))
+src/deepreason/report.py:411:        for sid, policy in sorted(roster.items())
+src/deepreason/report.py:479:        "signals": dict(sorted(signal_counts.items())),
+--- is a per-artifact status single-valued, and is an appraiser ever identified? ---
+$ grep -n "status" src/deepreason/ontology/state.py | head -20
+3:S = (A, Pi, carry, att, dep, addr, status, hv, reach, conn). Status is computed by
+35:    status: dict[str, Status] = Field(default_factory=dict)  # computed, §4
+66:    re-adjudicate a status that moved after the set was written.
+69:    return state.status.get(artifact_id) == Status.ACCEPTED and not is_import_admission(
+
+$ grep -rn "class Status" -A 10 src/deepreason/ontology/state.py
+16:class Status(str, Enum):
+17-    ACCEPTED = "accepted"
+18-    REFUTED = "refuted"
+19-    SUSPENDED = "suspended"
+20-    # Pass 2: accepted in attack semantics but a dependence is not accepted.
+21-    # Orphaned != false.
+22-    SUSPENDED_UNSUPPORTED = "suspended_unsupported"
+23-
+24-
+25-class EpistemicState(BaseModel):
+26-    artifacts: dict[str, Artifact] = Field(default_factory=dict)  # A
+
+$ grep -rn "appraise\|appraisal\|Appraise" src/ --include=*.py | head
+src/deepreason/calculus/render.py:106:    appraisal may not read origin (Ax 4.1).
+src/deepreason/calculus/succession.py:157:    provenance entering appraisal (Ax 4.1), and a "(incumbent)" marker would be
+(no hits above = the Appraise kind of spec §9/§12.4 has no counterpart in src/)
+
+$ grep -rn "supersede" src/ --include=*.py | head
+src/deepreason/views/knowledge.py:18:`active` is read as §12.2's `demarcated` (`crit and load`), which SUPERSEDES §6's
+src/deepreason/measures/demarcation.py:1:"""Demarcation — the Formalization §12.2, which supersedes §6's `active`.
+src/deepreason/measures/demarcation.py:90:    Supersedes `active(a) = crit(a) and mod(a)` from the Computable Calculus §6
+src/deepreason/measures/demarcation.py:91:    (operator, 2026-08-15: the Formalization supersedes previous decisions). The
+src/deepreason/mcp_help.py:202:                "Supersedes the central question; the old one keeps its "
+src/deepreason/llm/seat_plugins.py:348:    change, not a layout one; today's `layout.superseded_summary_n` is 0 and
+src/deepreason/llm/seat_plugins.py:368:    section_id = "superseded-conjectures"
+src/deepreason/llm/seat_plugins.py:376:        # The layout policy still decides by default: `superseded_summary_n`
+src/deepreason/llm/seat_plugins.py:380:        count = layout.superseded_summary_n
+src/deepreason/llm/seat_plugins.py:386:        superseded = [

@@ -1,0 +1,63 @@
+$ grep -rn "register_fail_warrant" src/ | wc -l
+grep: src/deepreason/workloads/__pycache__/formal.cpython-311.pyc: binary file matches
+grep: src/deepreason/rules/__pycache__/warrants.cpython-311.pyc: binary file matches
+27
+
+$ grep -rn "register_fail_warrant" src/
+src/deepreason/skills/adoption.py:158:            from deepreason.rules.warrants import register_fail_warrant
+src/deepreason/skills/adoption.py:160:            register_fail_warrant(
+src/deepreason/premises.py:501:    from deepreason.rules.warrants import register_fail_warrant
+src/deepreason/premises.py:565:        critic = register_fail_warrant(
+src/deepreason/measures/hv.py:27:from deepreason.rules.warrants import register_fail_warrant, verdict_on_record
+src/deepreason/measures/hv.py:333:    register_fail_warrant(
+src/deepreason/workloads/formal.py:20:from deepreason.rules.warrants import register_fail_warrant
+src/deepreason/workloads/formal.py:246:            criticism = register_fail_warrant(
+grep: src/deepreason/workloads/__pycache__/formal.cpython-311.pyc: binary file matches
+src/deepreason/informal/audits.py:19:from deepreason.rules.warrants import register_fail_warrant, verdict_on_record
+src/deepreason/informal/audits.py:48:    critic = register_fail_warrant(
+src/deepreason/informal/trial.py:43:    register_fail_warrant,
+src/deepreason/informal/trial.py:817:    critic = register_fail_warrant(
+src/deepreason/rules/act.py:38:from deepreason.rules.warrants import register_fail_warrant, verdict_on_record
+src/deepreason/rules/act.py:162:        return register_fail_warrant(
+src/deepreason/rules/warrants.py:119:def register_fail_warrant(
+src/deepreason/rules/relatedness.py:7:`register_fail_warrant`'s own `nu` validity-node artifact already is
+src/deepreason/rules/experiment.py:505:            from deepreason.rules.warrants import register_fail_warrant
+src/deepreason/rules/experiment.py:507:            register_fail_warrant(
+grep: src/deepreason/rules/__pycache__/warrants.cpython-311.pyc: binary file matches
+src/deepreason/rules/crit.py:46:    register_fail_warrant,
+src/deepreason/rules/crit.py:929:        return register_fail_warrant(
+src/deepreason/rules/crit.py:969:            register_fail_warrant(
+src/deepreason/rules/crit.py:1042:            return register_fail_warrant(
+src/deepreason/rules/crit.py:1094:    register_fail_warrant(
+src/deepreason/rules/crit.py:1207:        return register_fail_warrant(
+src/deepreason/calculus/promotion.py:595:    demonstrative warrant through `rules/warrants.register_fail_warrant` -- the
+src/deepreason/calculus/promotion.py:614:    from deepreason.rules.warrants import register_fail_warrant
+src/deepreason/calculus/promotion.py:640:                critic = register_fail_warrant(
+
+--- informal/trial.py _decline / _block ---
+323:def _block(harness, reason: str, target_id: str, diagnostics) -> None:
+324-    harness.record_measure(inputs=[f"trial-blocked:{reason}", target_id])
+325-    if diagnostics is not None:
+326-        diagnostics.append({"trial": target_id[:12], "blocked": reason})
+327-    return None
+328-
+329-
+330:def _decline(harness, target_id: str, reason: str, diagnostics) -> None:
+331-    """Non-sustained argument-trial outcome: a logged Measure, never a
+332-    warrant (phase C trial_required contract)."""
+333-    harness.record_measure(inputs=["trial-declined", target_id, reason])
+334-    if diagnostics is not None:
+335-        diagnostics.append({"trial": target_id[:12], "declined": reason})
+336-    return None
+337-
+338-
+339-def _coerce_trial_authority(authority: TrialAuthority | str) -> TrialAuthority:
+340-    return authority if isinstance(authority, TrialAuthority) else TrialAuthority(authority)
+341-
+342-
+343-def _record_trial_observation(
+344-    harness,
+345-    *,
+346-    target_id: str,
+347-    commitment_id: str,
+348-    standard_id: str,

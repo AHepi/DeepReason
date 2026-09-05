@@ -1,0 +1,43 @@
+$ grep -rniE "accepted|refuted|suspended" src/deepreason/packs/ src/deepreason/llm/seat_sections.py src/deepreason/llm/seat_templates.py
+src/deepreason/llm/seat_sections.py:22:evidence: no plugin may change what is admitted, ranked, immune or refuted.
+(exit 0)
+
+--- WIDENED: the same census over every pack/section renderer actually in the seat path ---
+$ grep -rniE "\brefuted\b|\baccepted\b|\bsuspended\b" src/deepreason/llm/packs.py src/deepreason/llm/seat_plugins.py src/deepreason/llm/layout.py
+src/deepreason/llm/packs.py:94:    "— every target shown here currently PASSES them (failures were refuted "
+src/deepreason/llm/packs.py:113:        f"{problem_id} so far has been refuted. If the PROBLEM ITSELF "
+src/deepreason/llm/packs.py:138:    """Docstring claims of ACCEPTED proposed properties (code:python-prop
+src/deepreason/llm/packs.py:151:        if state.status.get(aid) != Status.ACCEPTED:
+src/deepreason/llm/packs.py:200:          "are refuted mechanically."
+src/deepreason/llm/packs.py:747:    the neighbourhood prefers the school's own accepted descendants; the
+src/deepreason/llm/packs.py:778:    accepted = [
+src/deepreason/llm/packs.py:781:        if status == Status.ACCEPTED and aid not in suppressed
+src/deepreason/llm/packs.py:785:            aid for aid in accepted
+src/deepreason/llm/packs.py:788:        others = [aid for aid in accepted if aid not in set(lineage)]
+src/deepreason/llm/packs.py:789:        accepted = (lineage + others)[:neighbourhood_n]
+src/deepreason/llm/packs.py:791:        accepted = accepted[-neighbourhood_n:] if neighbourhood_n else []
+src/deepreason/llm/packs.py:794:        "accepted": tuple(accepted),
+src/deepreason/llm/packs.py:957:    accepted generators so new designs cover DIFFERENT ground, plus the CODE
+src/deepreason/llm/packs.py:995:        lines += ["", "ALREADY-ACCEPTED GENERATORS (cover DIFFERENT ground — do "
+src/deepreason/llm/seat_plugins.py:185:            "validated — candidates violating them are refuted by "
+src/deepreason/llm/seat_plugins.py:293:        accepted = list(_supplied(request, "accepted", ()))
+src/deepreason/llm/seat_plugins.py:294:        live = list(accepted[-layout.live_verbatim_n:]) if layout.live_verbatim_n else []
+src/deepreason/llm/seat_plugins.py:295:        distilled_ids = [aid for aid in accepted if aid not in set(live)]
+src/deepreason/llm/seat_plugins.py:299:            "NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural)"
+src/deepreason/llm/seat_plugins.py:323:        accepted = list(_supplied(request, "accepted", ()))
+src/deepreason/llm/seat_plugins.py:324:        live = list(accepted[-layout.live_verbatim_n:]) if layout.live_verbatim_n else []
+src/deepreason/llm/seat_plugins.py:328:            "LIVE NEIGHBOURHOOD (accepted and still standing — shown whole "
+src/deepreason/llm/seat_plugins.py:346:    """OFF by default, and the default is the point. Rendering refuted
+src/deepreason/llm/seat_plugins.py:353:    """How many refuted artifacts render, when `include_refuted` is on. Left
+src/deepreason/llm/seat_plugins.py:389:            if status == Status.REFUTED and aid not in suppressed
+src/deepreason/llm/seat_plugins.py:394:            "SUPERSEDED (refuted — do not re-propose these; they are here "
+src/deepreason/llm/seat_plugins.py:492:                "them is returned to you once with the open list, and then accepted "
+src/deepreason/llm/layout.py:106:    omit"). Raising it puts refuted lines back in front of the seat whose job
+src/deepreason/llm/layout.py:207:    r"required|require|forbidden|invalid|rejected|refuted|ensure|avoid)\b",
+
+$ grep -rn "state.status" src/deepreason/llm/
+src/deepreason/llm/packs.py:151:        if state.status.get(aid) != Status.ACCEPTED:
+src/deepreason/llm/packs.py:780:        for aid, status in state.status.items()
+src/deepreason/llm/packs.py:900:                status = state.status.get(x)
+src/deepreason/llm/seat_plugins.py:388:            for aid, status in request.state.status.items()
+src/deepreason/llm/seat_plugins.py:619:            status = request.state.status.get(x)

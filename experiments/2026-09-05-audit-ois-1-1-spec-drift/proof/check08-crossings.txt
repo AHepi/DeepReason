@@ -1,0 +1,180 @@
+$ grep -rn "workflow-context-section-plan-v1" src/ --include=*.py | head
+src/deepreason/harness.py:1077:            SectionPlanV1: "workflow-context-section-plan-v1",
+src/deepreason/storage/objects.py:167:    "workflow-context-section-plan-v1": SectionPlanV1,
+src/deepreason/workflow/replay.py:86:    "workflow-context-section-plan-v1": SectionPlanV1,
+src/deepreason/workflow/replay.py:2443:                if schema == "workflow-context-section-plan-v1"
+src/deepreason/workflow/replay.py:2449:                    "workflow-context-section-plan-v1"
+
+$ grep -rn "SEAT_SECTION" src/deepreason/llm/packs.py src/deepreason/llm/seat_sections.py | head -20
+src/deepreason/llm/packs.py:498:                "SEAT_SECTION_RENDER_OVERRUN",
+src/deepreason/llm/seat_sections.py:157:                "SEAT_SECTION_DISPOSITION_UNKNOWN",
+src/deepreason/llm/seat_sections.py:221:            "SEAT_SECTION_PLUGIN_MALFORMED",
+src/deepreason/llm/seat_sections.py:229:            "SEAT_SECTION_PLUGIN_CONFLICT",
+src/deepreason/llm/seat_sections.py:258:                "SEAT_SECTION_PLUGIN_UNKNOWN",
+src/deepreason/llm/seat_sections.py:267:            "SEAT_SECTION_PLUGIN_UNKNOWN",
+
+--- INV-seat-section-sources.md ---
+<!-- DR-INV-seat-section-sources -->
+Verified-at: 770ea1344
+Verify: python -m pytest tests/test_seat_section_sources.py tests/test_conj_pack_legacy_golden.py -q
+Owns: src/deepreason/seat_sources/registry.py, src/deepreason/seat_sources/shipped.py
+Seams: DR-SEAM-packs-and-token-economy-x-rules
+
+# Seat section sources — where a section's content comes from
+
+## What it is
+
+`DR-INV-seat-section-plugins` owns how a brief section is FORMATTED. This
+document owns where its content comes from.
+
+The two are separate because a plugin may not call the harness. Nine of the
+conjecturer's twenty section slots need the record to exist at all — a dossier
+receipt, a fence sequence, a work order, the open-criticism view — so until
+2026-09-04 those nine were computed inside `rules/conj.py` and handed to the
+renderer as strings. That left the generation side reaching into the admission
+code for exactly the sections that carry evidence, which is the boundary the
+seat-is-a-shell law's stated purpose — "slowly separate the authority layer" —
+is aimed at.
+
+A SOURCE closes it. A source reads the state and the record, computes one
+value, appends nothing, and hands the value to the plugin that formats it. It
+is registered and versioned exactly as a plugin is, and a seat's SOURCE BUNDLE
+is selected by id exactly as its layout is.
+
+## Not in `llm/`, and the reason is a law that predates this layer
+
+`DR-SUB-llm` forbids `llm/` from importing the harness, the scheduler, the
+rules, the adjudicator or the amendment machinery, so that a transport bug
+cannot become an adjudication bug. A source READS the record, so a source
+inside `llm/` would invert that arrow on its first line. The package therefore
+sits beside `llm/` rather than inside it: `seat_sources` imports `llm` for the
+allocated-pack marker and the menu renderer, and nothing in `llm/` imports
+`seat_sources`.
+`check: python -c "
+import ast, pathlib
+for path in pathlib.Path('src/deepreason/llm').rglob('*.py'):
+    for node in ast.walk(ast.parse(path.read_text())):
+        if isinstance(node, ast.ImportFrom):
+            assert not (node.module or '').startswith('deepreason.seat_sources'), path
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                assert not alias.name.startswith('deepreason.seat_sources'), path
+found = [p.name for p in pathlib.Path('src/deepreason/seat_sources').rglob('*.py')
+         for n in ast.walk(ast.parse(p.read_text()))
+         if isinstance(n, ast.ImportFrom) and (n.module or '').startswith('deepreason.llm')]
+assert found, 'the arrow points nowhere; this check would pass over an empty package'
+"`
+--- do sources read files or tools without a receipt? ---
+$ grep -rn "open(\|Path(\|requests\|subprocess\|urllib" src/deepreason/seat_sources/
+(none — no source reads a file or a tool)
+
+$ python -m pytest tests/test_seat_section_sources.py -q
+..........................                                               [100%]
+26 passed in 0.67s
+--- record arm: section-plan receipts across committed roots ---
+roots carrying section-plan receipt objects: 5
+     20  experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r3/runs/run-f23da86ddfd5ab820957221cfebe4b2e
+     20  experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r2/runs/run-ad41064484366337ed61a9d5a58de58f
+     16  experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r2/runs/run-f23da86ddfd5ab820957221cfebe4b2e
+     15  experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r3/runs/run-ad41064484366337ed61a9d5a58de58f
+      7  experiments/2026-09-04-fix-provider-reasoning-contract/relaunch-home/runs/run-ecd1a8d2461eff1eddd9756b51336ce5
+
+sample receipt: experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r3/runs/run-f23da86ddfd5ab820957221cfebe4b2e/objects/workflow-context-section-plan-v1
+Traceback (most recent call last):
+  File "<stdin>", line 15, in <module>
+IsADirectoryError: [Errno 21] Is a directory: 'experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r3/runs/run-f23da86ddfd5ab820957221cfebe4b2e/objects/workflow-context-section-plan-v1'
+
+$ ls experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r3/runs/run-f23da86ddfd5ab820957221cfebe4b2e/objects/workflow-context-section-plan-v1 | head -3
+0b07444292884699f21327e2f3cc613eb1b37a0ccea2645358a993d75769e069.json
+1f9bbde2e1dc0fcc9e75b3e04ed584eb01ffab496bd4279abeaa0956e0524ff5.json
+2b1ffd3658e4b93b7355c8f49edf457849184deb52dfea31e2714e330ec0a24b.json
+
+--- one receipt, verbatim ---
+experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r3/runs/run-f23da86ddfd5ab820957221cfebe4b2e/objects/workflow-context-section-plan-v1/0b07444292884699f21327e2f3cc613eb1b37a0ccea2645358a993d75769e069.json
+{
+    "data": {
+        "attempt_index": 0,
+        "id": "sha256:efcbf7a432ea4605ed3d4e9757347d1c52dd426249d7cfc5c3afe0383023ca5d",
+        "layout_id": "seat-pack.conjecturer.legacy-v0",
+        "layout_version": "1.0.0",
+        "schema": "workflow.context-section-plan.v1",
+        "sections": [
+            {
+                "disposition": "rendered",
+                "parameters_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "plugin_id": "dr.problem",
+                "plugin_version": "1.0.0",
+                "rendered_bytes": 500,
+                "section_id": "problem",
+                "source_bytes": 500
+            },
+            {
+                "disposition": "rendered",
+                "parameters_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "plugin_id": "dr.criteria",
+                "plugin_version": "1.0.0",
+                "rendered_bytes": 114,
+                "section_id": "criteria",
+                "source_bytes": 114
+            },
+            {
+                "disposition": "rendered",
+                "parameters_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "plugin_id": "dr.open-criticisms",
+                "plugin_version": "1.0.0",
+                "rendered_bytes": 3922,
+                "section_id": "open-criticisms",
+                "source_bytes": 3922
+            },
+            {
+                "disposition": "absent",
+                "parameters_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "plugin_id": "dr.mandatory-interface",
+                "plugin_version": "1.0.0",
+                "rendered_bytes": 0,
+                "section_id": "mandatory-interface",
+                "source_bytes": 0
+            },
+            {
+
+--- where a section-plan receipt is emitted ---
+$ grep -rn "SectionPlanV1(" src/ --include=*.py
+src/deepreason/workflow/transaction.py:224:class SectionPlanV1(IdentifiedWorkflowRecord):
+
+--- and which pack builders bypass it (no receipt) ---
+$ grep -rn "def render_.*_pack" src/deepreason/llm/packs.py
+719:def render_conj_pack(
+854:def render_batch_crit_pack(
+947:def render_experiment_pack(
+1009:def render_property_pack(
+1054:def render_cx_retry_pack(
+1124:def render_crit_pack(
+$ grep -rn "section_plan\|SectionPlan" src/ --include=*.py | grep -v "transaction.py\|replay.py\|objects.py\|harness.py:1077"
+src/deepreason/harness.py:1055:            SectionPlanV1,
+src/deepreason/harness.py:1077:            SectionPlanV1: "workflow-context-section-plan-v1",
+src/deepreason/harness.py:1124:                        SectionPlanV1,
+src/deepreason/rules/conj.py:50:from deepreason.rules._section_plan import section_plans as _section_plans
+src/deepreason/rules/conj.py:1777:        section_plans = _section_plans(
+src/deepreason/rules/conj.py:1793:                    section_plans=section_plans,
+src/deepreason/rules/conj.py:1818:                    section_plans=section_plans,
+src/deepreason/rules/_section_plan.py:11:def section_plans(transaction_service, preparation, receipts) -> tuple:
+src/deepreason/rules/_section_plan.py:31:        transaction_service.section_plan(
+src/deepreason/storage/objects.py:86:    SectionPlanV1,
+src/deepreason/storage/objects.py:167:    "workflow-context-section-plan-v1": SectionPlanV1,
+src/deepreason/workflow/replay.py:52:    SectionPlanV1,
+src/deepreason/workflow/replay.py:86:    "workflow-context-section-plan-v1": SectionPlanV1,
+src/deepreason/workflow/replay.py:2440:            section_plans = [
+src/deepreason/workflow/replay.py:2450:                    for _plan in section_plans
+src/deepreason/workflow/__init__.py:79:    SectionPlanV1,
+src/deepreason/workflow/__init__.py:142:    "SectionPlanV1",
+src/deepreason/workflow/transaction.py:766:    "SectionPlanV1",
+src/deepreason/workflow/transaction_service.py:30:    SectionPlanV1,
+src/deepreason/workflow/transaction_service.py:347:    def section_plan(
+src/deepreason/workflow/transaction_service.py:354:    ) -> SectionPlanV1:
+src/deepreason/workflow/transaction_service.py:362:        return SectionPlanV1.create(
+src/deepreason/workflow/transaction_service.py:389:        section_plans: Iterable[SectionPlanV1] = (),
+src/deepreason/workflow/transaction_service.py:402:            section_plans=section_plans,
+src/deepreason/workflow/transaction_service.py:469:        section_plans: Iterable[SectionPlanV1] = (),
+src/deepreason/workflow/transaction_service.py:481:        section_plans = tuple(section_plans)
+src/deepreason/workflow/transaction_service.py:484:            for plan in (*plans, *section_plans)
+src/deepreason/workflow/transaction_service.py:523:                    *section_plans,
