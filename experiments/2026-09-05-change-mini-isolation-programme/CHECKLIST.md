@@ -1,7 +1,12 @@
 # Checklist for: the mini isolation programme
-State: next=1 blockers=**AWAITING OPERATOR APPROVAL of SPEC.md and an answer
-to Q-A** — this window is a DESIGN-AND-STOP and no step below may run until
-both arrive.
+State: next=1 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+approved as written, and Q-A is answered E1 ONLY in the operator's own words
+— "within mini, criticism can't overturn anything. The point is content
+generation for now. Then testing on the full harness." E2 is NOT built (not
+behind a switch, not at all); E3 is NOT built here (T4's commitment artifact
+proposes commitments and eliminates nothing). Recorded as REQUEST.md
+Amendment 1 (R13, R14) and in SPEC.md §Q-A. THIS WINDOW EXECUTES T0, T1 and
+T2 ONLY (steps 1-22); T3-T7 go to later windows.
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per `dr-execute-step` invocation.

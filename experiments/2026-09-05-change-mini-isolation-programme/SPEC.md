@@ -542,47 +542,57 @@ removable by configuration.** Both mini flows ship; the default is
 full harness changes default behaviour, and the two existing seats' goldens
 are pinned byte-identical (C4, S10.3).
 
+**A9 (Q-A) — NOT an assumption: an operator ruling.** "Within mini,
+criticism overturns nothing" is the operator's own answer of 2026-09-05,
+ledgered in CLAUDE.md the same day and recorded in REQUEST.md as Amendment
+1. It sits here only as a pointer, so a reader of the assumption list is not
+left thinking the question is still open.
+
 ---
 
 ## Questions for operator (STOP if non-empty)
 
-**ONE question. It survives the dominance test because it is a conflict
-WITHIN the operator's own recorded words, not a gap in them.**
+**NONE OPEN.** The one question this document asked (Q-A) was answered by
+the operator on 2026-09-05, before any step ran. It is recorded below as
+answered, not deleted, so the reasoning that produced it stays readable.
 
-### Q-A — with commitments off, may a critic eliminate?
+### Q-A — with commitments off, may a critic eliminate? — ANSWERED: E1 ONLY
 
-**The decision in one sentence:** in the isolation run, does a critic's
-free-prose objection get the authority to change a conjecture's status, or
-does criticism get recorded while elimination waits for the commitment
-artifact?
+**The operator's words, verbatim (2026-09-05):** "within mini, criticism
+can't overturn anything. The point is content generation for now. Then
+testing on the full harness."
 
-**Why it cannot be derived.** Two of your standing rulings point opposite
-ways here, and both are load-bearing.
+**The ruling, as it binds this programme.** ROAD E1, and only E1. In the
+mini flow a criticism is written to the record and shown to whichever seats
+the layouts allow, and it CHANGES NO STATUS. No elimination road is built
+for mini — not behind a switch, not off by default, not at all.
 
-- The progress law (2026-09-03) makes "more error eliminated" the measure of
-  success. A run in which nothing can be eliminated cannot show error
-  elimination, so D8 would compare a generation-and-commentary run against a
-  single call — a much weaker test than the one you asked for.
-- The warrant chain (`DR-CON-warrants-and-attacks`, and the seats-generate-
-  never-evidence law) says no warrant, no attack edge, no REFUTED. With both
-  commitment channels off (R3), mini has no warrant road at all, so a critic
-  that eliminates would be prose changing status directly.
+- **E2 is NOT built.** The recommendation this document previously made
+  ("E2 built and switched OFF") is SUPERSEDED by the operator's answer. No
+  per-run switch, no fail-warrant road from a free-prose objection, no
+  ~40 lines in `mini/minireason/seats.py`.
+- **E3 is NOT built here either.** The commitment artifact at S4 PROPOSES
+  commitments and eliminates nothing; a proposal is RECORDED, never
+  registered as a canonical `Commitment`. S4 already said this; the ruling
+  makes it binding rather than provisional, and removes "the flow that
+  follows" from this programme's scope.
+- **What mini's content is worth is decided later**, by running it through
+  the full harness, whose authority layer is unchanged by this programme.
+  That is the operator's own "then testing on the full harness".
 
-**The roads, priced.**
+**Consequence for D8/S12.** The measure compares better-criticised
+conjectures against a single call, not eliminated ones. That is the weaker
+but honest first result E1's row priced, and the operator has chosen it
+knowingly. S12 reports it as such; an inconclusive result stays recorded as
+inconclusive (C6, CLAUDE.md Conventions).
 
-| | what it does | cost | risk |
-|---|---|---|---|
-| **E1 — record only** *(recommended)* | criticism is written to the record and shown to nobody it should not be; status never changes in the R3 flow | ~0 extra lines; it is the flow's default | D8 measures better-criticised conjectures, not eliminated ones — a weaker but honest first result |
-| **E2 — critic may eliminate, behind a per-run switch, default OFF, typed warning on enablement** | a free-prose objection can mint a fail warrant | ~40 lines in `mini/minireason/seats.py` | prose changes status; the guardrail against exactly that is one of the older rulings here |
-| **E3 — elimination arrives with the commitment artifact** | the commitment seat's proposals, where they are mechanically evaluable, become the warrant road; critics still never see them (R5) | ~60 lines, one more registered stage | this is what R4 is FOR, but it is the R4 configuration, not the R3 one |
+**The roads as they were priced, kept for the record.**
 
-**Recommendation: E1 as the isolation flow's default, with E2 built and
-switched OFF, and E3 as the flow that follows.** The reason is that this is
-the shape every comparable ruling of yours has taken — successor-question
-minting is built and off by default with your own warning text; the history
-channel is built, off, and not removed. It also keeps R3 and R4 as the
-sequence you wrote them in: run the cycles with commitments disabled first,
-then add the artifact that generates them. You can answer with one word.
+| | what it does | cost | risk | disposition |
+|---|---|---|---|---|
+| **E1 — record only** | criticism is written to the record and shown to nobody it should not be; status never changes in the R3 flow | ~0 extra lines; it is the flow's default | D8 measures better-criticised conjectures, not eliminated ones | **CHOSEN by the operator, 2026-09-05** |
+| **E2 — critic may eliminate, behind a per-run switch, default OFF** | a free-prose objection can mint a fail warrant | ~40 lines in `mini/minireason/seats.py` | prose changes status | **NOT BUILT** — "criticism can't overturn anything" |
+| **E3 — elimination arrives with the commitment artifact** | the commitment seat's proposals become the warrant road | ~60 lines, one more registered stage | this is the R4 configuration, not the R3 one | **NOT BUILT HERE** — S4 proposes; it eliminates nothing |
 
 ---
 
@@ -600,6 +610,9 @@ then add the artifact that generates them. You can answer with one word.
   unnecessary (§Options). Not requested.
 - **Making the full harness use any of this.** Every default is unchanged.
   Not requested.
+- **Any elimination road inside mini** (Q-A roads E2 and E3) — the operator
+  ruled E1 only on 2026-09-05: "within mini, criticism can't overturn
+  anything." Not requested, and now forbidden.
 
 ---
 
