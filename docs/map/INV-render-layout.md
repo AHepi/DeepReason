@@ -1,5 +1,5 @@
 <!-- DR-INV-render-layout -->
-Verified-at: 0d399f748
+Verified-at: 9d87325c3
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/layout.py
 Seams: 

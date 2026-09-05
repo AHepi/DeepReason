@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=37 blockers=none (T4 diff budget re-baselined at step 34, SPEC.md §Budget). T3 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=38 blockers=none (T4 diff budget re-baselined at step 34, SPEC.md §Budget). T3 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1376,8 +1376,43 @@ tranche".
         AssertionError: {'keep_last', 'budget_chars', 'exclude_kinds'}
       Restored; tree clean but for the map edits.
       ```
-- [ ] 37. (T4) Gate + mini ring + docs.
+- [x] 37. (T4) Gate + mini ring + docs.
       done-when: all three green (paste)
+
+      ```
+      $ python -m pytest tests/ -q -n 4          (idle box; docs_verify NOT concurrent)
+      5084 passed, 6 skipped in 1381.85s (0:23:01)     -> 0 failed
+      (the same 5084 as T2 and T3: T4 changed nothing under src/ at all --
+       git diff --stat e83df7dfd -- src/ is EMPTY)
+
+      $ python -m pytest mini/tests/ -q
+      150 passed, 1 skipped in 11.75s                   -> 0 failed
+      (136 at T3; the fourteen new ones are 5 seat tests, 3 shape-buys-nothing
+       tests and 6 hook tests)
+
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py \
+            tests/test_crit_pack_legacy_golden.py -q
+      15 passed  -- C4: the full harness's two briefs stay byte-identical
+
+      $ git diff --stat e83df7dfd -- <all five frozen surfaces + llm/firewall.py>
+      (no output)  -- the mechanical tripwire, empty
+      $ git diff --stat e83df7dfd -- src/
+      (no output)  -- T4 is entirely under mini/ and docs/map/
+
+      $ python tools/docs_verify.py           (FULL: 82 documents, 1413 checks)
+      docs_verify: 6 failed -- the same six known rows
+      $ python tools/docs_verify.py --audit    -> 1 finding, the known SEAM-llm-x-rules.md:54
+      $ python tools/docs_verify.py --links    -> 0 dangling, 82 documents
+      $ python tools/docs_verify.py --coverage -> 2 findings, the same two pre-existing
+        (periphery x verification; schools x scratch), on seams T4 did not touch
+      $ python tools/docs_verify.py --stale    -> 23 before, 22 after: SUB-minireason,
+        CON-packs-and-token-economy and INV-render-layout -- the three documents
+        this sub-tranche edited, whose checks the full run re-derived at head
+        9d87325c3 -- carry that stamp now. Nothing else's stamp was touched.
+
+      All three green in the sense that matters: nothing this sub-tranche wrote
+      fails, and no assertion was weakened.
+      ```
 - [ ] 38. (T4) [COMMIT] Deliver T4.
       done-when: `git status --porcelain` empty AND branch head on origin
 

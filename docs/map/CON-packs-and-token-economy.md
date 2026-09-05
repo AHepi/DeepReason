@@ -1,5 +1,5 @@
 <!-- DR-CON-packs-and-token-economy -->
-Verified-at: f8100b9b0
+Verified-at: 9d87325c3
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/packs.py, src/deepreason/packs/allocate.py, src/deepreason/packs/ir.py, src/deepreason/llm/budget.py, src/deepreason/llm/profiles.py, src/deepreason/llm/adapter.py, src/deepreason/rules/crit.py
 Seams: DR-SEAM-packs-and-token-economy-x-rules
