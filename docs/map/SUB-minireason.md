@@ -2,8 +2,8 @@
 Verified-at: 08692aab4
 Verify: python -m pytest mini/tests/ -q
 Owns: mini/minireason/
-Seams:
-Seams-undocumented: llm x minireason, minireason x application, minireason x harness, minireason x manifest, minireason x verification
+Seams: DR-SEAM-llm-x-minireason
+Seams-undocumented: minireason x application, minireason x harness, minireason x manifest, minireason x verification
 
 # MiniReason — the reduced engine, and what it deliberately does not have
 

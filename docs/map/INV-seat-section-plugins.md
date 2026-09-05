@@ -2,7 +2,7 @@
 Verified-at: 770ea1344
 Verify: python -m pytest tests/test_seat_section_architecture.py tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py -q
 Owns: src/deepreason/llm/seat_sections.py, src/deepreason/llm/seat_plugins.py, src/deepreason/llm/seat_layouts.py, src/deepreason/llm/seat_templates.py, src/deepreason/llm/role_prompts.py
-Seams: DR-SEAM-packs-and-token-economy-x-rules
+Seams: DR-SEAM-packs-and-token-economy-x-rules, DR-SEAM-llm-x-minireason
 
 # Seat section plugins — a seat is a shell
 
@@ -127,6 +127,25 @@ arrangement when someone selects one.
 into a qualification subject, so form selection happens at the dispatch site
 and never by changing that function's answer.
 `check: python -m pytest tests/test_wire_contract_id_map.py -q`
+
+**`SeatShellV1.form_id` has a consumer.** Until 2026-09-05 the field was
+registered and read by nothing: the shell paired a layout with a form on
+paper while every dispatch site chose its form inline. The reduced engine's
+`minireason.seats.form_for_seat` now takes the shell's `form_id` as its
+declared default, so for mini's three seats the pairing IS the seat. The full
+harness's two dispatch sites still choose inline — that road reaches
+`wire_contract_for`, frozen by two callers (above), and is parked as P3 of the
+mini isolation programme.
+`check: python -c "
+import ast, pathlib, sys
+sys.path.insert(0, 'mini')
+src = pathlib.Path('mini/minireason/seats.py').read_text()
+fn = next(n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef) and n.name == 'form_for_seat')
+assert any(isinstance(n, ast.Attribute) and n.attr == 'form_id' for n in ast.walk(fn))
+from deepreason.llm.seat_sections import resolve_seat_shell
+from minireason.seats import form_for_seat
+assert form_for_seat('mini.critic').form_id == resolve_seat_shell('mini.critic').form_id
+"`
 
 **Only the operator authors a plugin.** A `.py` plugin executes inside the
 harness; an id that does not resolve is a typed refusal, never a load-by-path.

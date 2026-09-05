@@ -279,3 +279,64 @@ T1/VALIDATION.md and T2/VALIDATION.md carry the diff_budget output.
 End state: either the later windows' overruns are disclosed the same way, or
 dr-spec-change learns to price the obligations alongside the mechanism.
 ```
+
+---
+
+## P8 — mini's call layer clips every prompt silently, a third length limit
+##      R2 did not name
+
+**What.** `mini/minireason/call.py::call` runs `rendered = clip_pack(prompt,
+profile)` on every prompt before dispatch, and `clip_pack` is
+`pack[: spec.pack_budget() * 4]` — a prefix cut with no notice in the brief,
+no receipt, and no marker in the record. Measured: compact 4 800 characters,
+standard 10 000, frontier 12 000. SPEC.md §S2(c) named the two silent cuts in
+the loop's own prompt builder (`[-k:]`, `content[:300]`) and T3 removed both
+from the shell-rendered road; this one sits one layer down, in the call the
+shell-rendered brief will pass through when T5 wires the loop to the seats.
+Found while T3 was designed (2026-09-05); recorded in
+`docs/map/SEAM-llm-x-minireason.md`'s Traps.
+
+**Why it is not fixed here.** T3's items are the adapter, the plugins, the
+layouts and the shells (S5, S6); the call layer is none of them, and a fix is a
+design choice — disclose the cut as a typed notice in the brief, raise the
+mini profile's pack budget, or make the retention rule's `budget_chars`
+default sit inside the clip — that should be priced, not typed in. A brief
+rendered under the retention rule's declared budget can be kept inside the
+clip by configuration today, so the road is not blocked; it is undisclosed.
+
+**Binding on T5.** Before the isolation flow dispatches a shell-rendered brief
+through `call`, T5 must either set the everything section's `budget_chars`
+inside the profile's clip for the shipped flow, or dispose of the clip with a
+notice — and say which in its DELIVERY. A silent cut on the one road built to
+show everything is exactly the failure R2 forbids.
+
+```
+EXECUTOR WINDOW — CHANGE TRANCHE: no silent length limit on the mini call road
+
+Read CLAUDE.md in full (the all-configurations law: disclose, never die; the
+no-silent-caps rule of DR-CON-packs-and-token-economy). Load
+dr-change-orchestrator, dr-drive-harness, dr-ask-the-right-question and
+pinker-write-for-readers. Start at dr-capture-request. Base on main after the
+mini isolation programme's T3 merge.
+
+REPRODUCE FIRST: render a mini conjecturer brief over a root with more than
+~5 000 characters of standing conjectures (mini/tests/test_mini_sources.py's
+prose_session fixture is one), dispatch it through minireason.call.call with
+the compact profile against MockEndpoint, and diff the prompt blob the record
+holds against the brief: the tail is gone and nothing says so.
+
+THE FORK for SPEC.md: (a) clip_pack becomes a typed disclosure -- the cut is
+kept but the brief ends with a notice naming the bytes withheld, and the
+record's Measure event carries a marker; (b) the mini profile's pack budget
+is raised or made configurable per run so a shell-rendered brief fits; (c)
+the everything section's budget_chars defaults to sit inside the clip for
+the shipped isolation flow, so the retention rule's own notice is the
+disclosure. Price all three; (c) is configuration only and may be the right
+first step, but it leaves the clip silent for any other layout.
+
+FROZEN SURFACES: forecast NONE (llm/profiles.py and mini/minireason/call.py).
+Paste tools/blast_radius.py's rows into SPEC.md regardless.
+END STATE: no road from a mini seat's brief to the provider cuts bytes
+without a notice in the brief and a marker in the record; a test renders an
+over-budget brief and asserts the notice.
+```

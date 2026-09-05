@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=29 blockers=none (T3 diff budget re-baselined at step 27, SPEC.md §Budget). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=30 blockers=none (T3 diff budget re-baselined at step 27, SPEC.md §Budget). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1065,12 +1065,61 @@ tranche".
       and the label test caught its own bait. Reworded to "fails if any
       measurement shows"; the test was right, the fixture was not.
       ```
-- [ ] 29. (S6) [COMMIT] Map: create `docs/map/SEAM-llm-x-minireason.md`, and
+- [x] 29. (S6) [COMMIT] Map: create `docs/map/SEAM-llm-x-minireason.md`, and
       update `INV-seat-section-plugins.md` (the `form_id` consumer row, the
       `render_seat_brief` entry point) and `INDEX.md`'s seam matrix — SAME
       COMMIT as the code.
       done-when: `python tools/docs_verify.py --links` -> every DR- reference
       resolves; `docs_verify.py` 0 failed; `--audit` 0 findings
+
+      ```
+      $ python tools/docs_verify.py --links
+      docs_verify --links: 0 dangling reference(s), 82 document(s)   (81 -> 82)
+      $ python tools/docs_verify.py --audit
+      docs_verify --audit: 1 finding(s) -- the known SEAM-llm-x-rules.md:54; none
+      of the new seam's four checks, nor INV-seat-section-plugins' new one, is
+      flagged vacuous
+      $ python tools/docs_verify.py --fast
+      docs_verify: 6 failed -- the same six known rows; the new document's four
+      checks and every edited document's checks pass
+
+      "0 failed" is read as it has been read at every T0-T2 boundary: no failure
+      this tranche caused. The six are the window's known-not-mine list.
+
+      SEAM-llm-x-minireason.md, the map's 82nd document: the traffic is
+      one-directional and large (50 symbol crossings across 11 llm modules,
+      measured; llm imports minireason nowhere), and the agreement is four
+      sentences each with a check -- mini renders through the one public road
+      and builds no section; its seats are shells in llm's own registries and
+      the shell's form_id is READ; its forms are WireContracts outside the V6
+      Literals; the route lease and the profile clip are llm's and mini obeys
+      both. Which fraction of each side; where to change what; why no Sweep:
+      header (no compared field carries the agreement); three Traps, one of
+      them the silent clip.
+
+      Also in this commit: INDEX.md's seam matrix gains the row and one
+      paragraph on why the pair carries no count (one side is outside
+      src/deepreason/); SUB-llm.md and SUB-minireason.md move the pair from
+      Seams-undocumented to Seams; INV-seat-section-plugins.md gains the
+      `form_id`-has-a-consumer invariant with its check and names the seam.
+
+      Mutation proofs, one per new check that could be gutted:
+        A  seats.py imports _walk_seat_layout -> public-road test RED
+           (E AssertionError: ['seats.py:32: _walk_seat_layout'])
+        B  form_for_seat ignores the shell     -> INV form_id check RED
+           (AssertionError at its AST line; 3 shell tests red too)
+        C  llm/budget.py imports minireason    -> seam direction check RED
+           (FAIL SEAM-llm-x-minireason.md:23)
+      Each restored, __pycache__ cleared, tree clean, 6 failed / 6 passed again.
+      Note on B: docs_verify --fast served that check from cache under the
+      mutation, so the proof is the check's own command run directly.
+
+      MID-STEP DISCOVERY, PARKED not fixed (dr-execute-step §3): mini's call
+      layer clips every prompt silently at the profile's pack budget (compact
+      4 800 chars) -- a third length limit S2(c) did not name. PARKED.md P8, with
+      its ready-to-send prompt and a binding note for T5; the seam's Traps
+      record it.
+      ```
 - [ ] 30. (T3) Gate + mini ring + docs.
       done-when: all three green (paste)
 - [ ] 31. (T3) [COMMIT] Deliver T3.
