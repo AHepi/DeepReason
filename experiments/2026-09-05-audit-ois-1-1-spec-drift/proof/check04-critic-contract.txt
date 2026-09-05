@@ -1,0 +1,35 @@
+$ grep -n "class ArgumentativeCriticOutput" -A 30 src/deepreason/llm/contracts.py
+112:class ArgumentativeCriticOutput(BaseModel):
+113-    attack: bool
+114-    case: str = ""  # the argument; becomes the critic artifact's content
+115-    # Grounded recourse against an execution-backed target: a JSON list of
+116-    # positional args for the target's entry point. The harness RUNS the
+117-    # target on it and checks the declared property (oracle.py) — a violated
+118-    # property becomes a DEMONSTRATIVE refutation; an invalid or passing
+119-    # counterexample grounds nothing.
+120-    counterexample: list | None = None
+121-    # A presupposition of the PROBLEM that forbids nothing — filed only when
+122-    # the pack carried the invitation, and never a substitute for the case
+123-    # against the target. It becomes an ordinary premise artifact plus an
+124-    # ordinary attribution artifact (premises.py), both attackable; the
+125-    # harness reads the artifact's attack surface, so a presupposition with
+126-    # nothing to forbid is what this field can honestly report.
+127-    premise: str | None = None
+128-    # Citations grounding that presupposition, each one quoted (R62). Optional
+129-    # and absent-legal, exactly like `premise` and `counterexample` beside it: a
+130-    # solo run with no dossier bound has nothing to quote, and the
+131-    # all-configurations law forbids refusing it. What is impossible is an
+132-    # UNQUOTED entry. None rather than [] so an uncited case canonicalises to
+133-    # the same bytes it always did under `exclude_none`.
+134-    premise_evidence: list[QuotedEvidenceRefV1] | None = Field(
+135-        default=None, max_length=2
+136-    )
+137-    # A question the critic proposes should be asked NEXT, in its own words.
+138-    # Optional and absent-legal like `premise` beside it, and additionally
+139-    # UNREADABLE by anything that decides: no rank, admission or acceptance
+140-    # path may consult it, so filling it earns nothing and leaving it empty
+141-    # costs nothing (operator law, 2026-08-29; the absence is pinned by
+142-    # tests/test_successor_law_line.py). None rather than "" so an unfilled
+
+$ grep -rn "premises_essential\|essential_premise\|essential_uses" src/
+(no hits above = no such field anywhere in src/)

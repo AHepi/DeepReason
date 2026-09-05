@@ -1,0 +1,94 @@
+$ grep -rn "lineage" docs/map/CON-schools.md | head -20
+8:# Schools — a stance, a lineage, and sometimes a route
+13:drawn from a fixed library, plus the lineage of artifacts whose provenance
+71:| Identity migrating seed → lineage | `capture/schools.py` | `lineage_size`, `stance_weight` |
+128:remove-arbitrariness problems are owned by the lineage that spawned them, with
+130:`check: python -m pytest tests/test_schools.py -q -k "init_and_allocation or successor_owned_by_spawning_lineage"`
+215:| The anti-starvation cross-examination floor | `capture/schools.py` `_with_cross_examiner`, `config.XEXAM_SHARE` | `tests/test_schools.py::test_successor_owned_by_spawning_lineage` |
+216:| How fast stance identity yields to lineage | `capture/schools.py` `stance_weight`, `config.STANCE_DECAY` | `tests/test_schools.py::test_schools_diverge_measurably` |
+255:  in `_with_cross_examiner` records a live 64:1 lineage where the rival stance
+257:  and deliberately does not fire on tiny early lineages.
+261:  distant lineage's exemplars.
+
+$ grep -n "def merge\|def import_\|def absorb" src/deepreason/imports.py
+37:class OperationalImportError(RuntimeError):
+46:class ImportPlanError(ValueError):
+57:class BundleResult:
+66:class ResolvedImportSet:
+87:def _exact_ref(value: str) -> tuple[str, str]:
+94:def _artifact_bytes(harness, artifact_id: str) -> bytes:
+101:def _integrity_matches(data: bytes, expected: str) -> bool:
+109:def shared_lifecycle_source(manifest: Manifest) -> str:
+144:def _archive_manifest(data: bytes) -> tuple[dict[str, Any], str, bool]:
+170:def _safe_extract(data: bytes, destination: Path) -> None:
+200:class ImportService:
+822:def register_epistemic_import_failure(
+865:def resolve_for_design(harness, design_id: str, manifest: Manifest, config) -> ResolvedImportSet | None:
+$ grep -rn "import-role\|IMPORT_ROLE\|role=\"import\"\|admission record" src/deepreason/imports.py | head -20
+36:373:            content, codec=codec, provenance=Provenance(role="import")
+43:449:                codec="json", provenance=Provenance(role="import"),
+44:534:                    data, codec="application/gzip", provenance=Provenance(role="import")
+45:550:                canonical_json(lock), codec="json", provenance=Provenance(role="import")
+46:565:                provenance=Provenance(role="import"),
+47:575:                    provenance=Provenance(role="import"),
+48:585:                provenance=Provenance(role="import"),
+50:630:                provenance=Provenance(role="import"),
+
+$ grep -rn "create_artifact" src/deepreason/imports.py
+372:        return self.harness.create_artifact(
+444:            catalog_artifact = self.harness.create_artifact(
+533:                archive = self.harness.create_artifact(
+549:            lock_artifact = self.harness.create_artifact(
+554:            toolchain = self.harness.create_artifact(
+572:                capsule = self.harness.create_artifact(
+578:            alias_artifact = self.harness.create_artifact(
+628:            record = self.harness.create_artifact(
+837:        critic = harness.create_artifact(
+846:    nu = harness.create_artifact(
+854:    harness.create_artifact(
+--- how an artifact id is derived (harness.create_artifact) ---
+391:    def create_artifact(
+392-        self,
+393-        content: bytes | str,
+394-        *,
+395-        codec: str = "utf8",
+396-        interface: Interface | None = None,
+397-        provenance: Provenance | None = None,
+398-        warrants: Iterable[Warrant] = (),
+399-        problem_id: str | None = None,
+400-        rule: Rule = Rule.REGISTER,
+401-        llm: LLMCall | None = None,
+402-    ) -> Artifact:
+403-        """Store content, compute the canonical id, and register."""
+404-        self._ensure_writable()
+405-        interface = interface or Interface()
+406-        if isinstance(content, bytes):
+407-            content_ref = self.blobs.put(content)
+408-        else:
+409-            content_ref = f"inline:{content}"
+410-        warrants = list(warrants)
+411-        artifact = Artifact(
+412-            id=Artifact.compute_id(content_ref, codec, interface),
+413-            content_ref=content_ref,
+414-            codec=codec,
+415-            interface=interface,
+416-            warrants=[w.id for w in warrants],
+417-            provenance=provenance or Provenance(role="user"),
+418-        )
+419-        return self.register_artifact(
+420-            artifact, warrants=warrants, problem_id=problem_id, rule=rule, llm=llm
+421-        )
+422-
+423-    def register_artifact(
+424-        self,
+425-        artifact: Artifact,
+426-        *,
+427-        warrants: Iterable[Warrant] = (),
+428-        problem_id: str | None = None,
+429-        rule: Rule = Rule.REGISTER,
+430-        llm: LLMCall | None = None,
+431-    ) -> Artifact:
+
+--- record arm: import-role artifacts across committed roots ---
+roots whose log carries import-role provenance: 0
+  (none — no committed root has exercised the import/merge path)

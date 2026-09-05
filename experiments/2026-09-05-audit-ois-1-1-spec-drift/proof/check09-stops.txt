@@ -1,0 +1,144 @@
+$ grep -rn "class StopReason" -A 30 src/deepreason/*.py | head -40
+$ grep -rn "stop_reason" src/deepreason/ --include=*.py -l | head
+src/deepreason/runtime/terminal_authority.py
+src/deepreason/runtime/progress.py
+src/deepreason/ui/terminal.py
+src/deepreason/scheduler/scheduler.py
+src/deepreason/findings.py
+src/deepreason/application/text_runs.py
+src/deepreason/application/results.py
+src/deepreason/application/stop_report.py
+src/deepreason/workflow/replay.py
+src/deepreason/workflow/models.py
+
+$ grep -rn "StopReason\|STOP_REASONS" src/deepreason/ --include=*.py | head -15
+src/deepreason/runtime/stop.py:16:StopReason = Literal[
+src/deepreason/runtime/stop.py:81:    reason: StopReason | None = None
+src/deepreason/runtime/stop.py:221:    reason: StopReason,
+src/deepreason/runtime/stop.py:237:    reason: StopReason,
+src/deepreason/runtime/stop.py:299:    if reason not in StopReason.__args__:
+src/deepreason/application/results.py:667:    from deepreason.workflow.lifecycle import RESUMABLE_STOP_REASONS
+src/deepreason/application/results.py:674:        resumable: Any = stop["reason"] in RESUMABLE_STOP_REASONS
+src/deepreason/application/stop_report.py:62:_CLEAN_STOP_REASONS = ("budget_exhausted", "cycles_exhausted", "goal_reached")
+src/deepreason/application/stop_report.py:404:        state != "failed" and stop_reason in _CLEAN_STOP_REASONS)
+src/deepreason/application/models.py:25:from deepreason.runtime.stop import StopMetrics, StopReason
+src/deepreason/application/models.py:809:    reason: StopReason
+src/deepreason/workflow/replay.py:1121:        from deepreason.workflow.lifecycle import COMPOSABLE_STOP_REASONS
+src/deepreason/workflow/replay.py:1123:        # Deliberately NOT RESUMABLE_STOP_REASONS: composing from a frozen
+src/deepreason/workflow/replay.py:1126:        if reason not in COMPOSABLE_STOP_REASONS:
+src/deepreason/workflow/replay.py:2206:            RESUMABLE_STOP_REASONS,
+
+$ sed -n "16,60p" src/deepreason/runtime/stop.py
+StopReason = Literal[
+    "completed",
+    "converged",
+    "stuck",
+    "budget_exhausted",
+    "operator_cancelled",
+    "operational_failure",
+    # Every seat a run can generate from has been stood down. A CLEAN stop, not
+    # a failure: the operator's law of 2026-08-29 states an exhausted budget
+    # terminates as `budget_exhausted` (clean), never `operational_failure`,
+    # and a provider that stopped answering is the same shape of fact.
+    "provider_unavailable",
+    "workload_terminal",
+]
+
+
+class StopPolicy(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    enabled: bool = True
+    min_cycles: int = Field(default=6, ge=0)
+    window: int = Field(default=8, gt=0)
+    stable_windows: int = Field(default=2, gt=0)
+    frontier_delta_max: int = Field(default=0, ge=0)
+    status_churn_max: int = Field(default=0, ge=0)
+    new_problem_max: int = Field(default=0, ge=0)
+    new_admission_max: int = Field(default=0, ge=0)
+    pending_deterministic_checks_must_be_zero: bool = True
+    criticism_debt_max: float = Field(default=0.1, ge=0.0)
+    open_research_blocks_completion: bool = True
+    stuck_signal_window: int = Field(default=3, gt=0)
+    escape_attempts: int = Field(default=3, ge=0)
+
+    @property
+    def digest(self) -> str:
+        return hashlib.sha256(
+            json.dumps(
+                self.model_dump(mode="json"),
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode()
+        ).hexdigest()
+
+
+class StopMetrics(BaseModel):
+
+$ sed -n "75,110p" src/deepreason/runtime/stop.py
+
+
+class StopDecision(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    stop: bool
+    reason: StopReason | None = None
+    escape_action: str | None = None
+
+
+class StopControllerStateV1(BaseModel):
+    """Replayable internal state of the existing deterministic controller.
+
+    This is a serialization boundary, not a second stopping policy.  It lets a
+    v4 lifecycle receipt prove the exact window/counters that were supplied to
+    :class:`StopController` and lets continuation rehydrate those counters
+    without inferring them from model prose or rebuilding them from formal
+    ontology events.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    schema_: Literal["stop-controller-state.v1"] = Field(
+        "stop-controller-state.v1", alias="schema"
+    )
+    policy_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    window: tuple[StopMetrics, ...] = Field(default=(), max_length=4_096)
+    stable_windows: int = Field(default=0, ge=0)
+    escapes: int = Field(default=0, ge=0)
+
+    @property
+    def last_cycle(self) -> int | None:
+        return self.window[-1].cycle if self.window else None
+
+
+ESCAPE_LADDER = (
+
+$ sed -n "290,310p" src/deepreason/runtime/stop.py
+        "reason",
+        "policy_digest",
+        "metrics",
+        "event_seq",
+        "digest",
+    }
+    if set(record) != required or record.get("schema") != "deepreason-run-stop-v1":
+        raise ValueError("stop record has an invalid schema")
+    reason = record.get("reason")
+    if reason not in StopReason.__args__:
+        raise ValueError("stop record has an invalid reason")
+    policy_digest = record.get("policy_digest")
+    if (
+        not isinstance(policy_digest, str)
+        or len(policy_digest) != 64
+        or any(character not in "0123456789abcdef" for character in policy_digest)
+    ):
+        raise ValueError("stop record has an invalid policy digest")
+    normalized_metrics = StopMetrics.model_validate(record.get("metrics"))
+    if normalized_metrics.model_dump(mode="json") != record.get("metrics"):
+        raise ValueError("stop record metrics are not in canonical typed form")
+
+--- record arm: every stop reason written by every committed root ---
+stop records read: 137
+    94  budget_exhausted
+    41  operational_failure
+     2  converged
+stop reasons OUTSIDE the closed vocabulary (i.e. free text / model prose): 0

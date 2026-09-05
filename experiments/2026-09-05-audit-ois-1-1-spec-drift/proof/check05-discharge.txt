@@ -1,0 +1,62 @@
+$ grep -rn "DischargeWireV1" src/ --include=*.py
+src/deepreason/llm/contracts.py:33:class DischargeWireV1(BaseModel):
+src/deepreason/llm/wire.py:51:    DischargeWireV1,
+src/deepreason/llm/wire.py:915:        definitions.pop("DischargeWireV1", None)
+src/deepreason/llm/wire.py:1177:    discharges: list[DischargeWireV1] = Field(default_factory=list, max_length=32)
+src/deepreason/workloads/text.py:12:from deepreason.llm.contracts import DischargeWireV1, EvidenceRefClaimV1
+src/deepreason/workloads/text.py:172:    discharges: tuple[DischargeWireV1, ...] = ()
+
+$ ls tests/test_discharge_*
+tests/test_discharge_channel.py
+tests/test_discharge_contract.py
+tests/test_discharge_law_line.py
+tests/test_discharge_submission.py
+tests/test_discharge_wire.py
+
+$ grep -rn "class DischargeWireV1" -A 25 src/deepreason/llm/contracts.py
+33:class DischargeWireV1(BaseModel):
+34-    """One criticism, answered (REBUILD F1).
+35-
+36-    `handle` is the criticism's handle exactly as the pack listed it, and it is
+37-    left a PLAIN STRING on purpose: its legal set has one authority --
+38-    `deepreason.discharge.open_criticisms` -- and leaving the field open is what
+39-    lets a menu renderer key on it by registering, without either side learning
+40-    the other's subsystem. A private enum here would close that seam.
+41-
+42-    NOTHING here is evidence. A discharge is a precondition on SUBMISSION; no
+43-    field, kind or count may feed a label, a warrant, a rank or an admission
+44-    decision (`DR-CON-discharge-channel`, the law line).
+45-    """
+46-
+47-    model_config = ConfigDict(extra="forbid", frozen=True)
+48-
+49-    handle: str = Field(min_length=1, max_length=256)
+50-    kind: str = Field(min_length=1, json_schema_extra=lambda s: s.update(enum=discharge_kind_enum()))
+51-    note: str = ""
+52-    where: str | None = None
+53-
+54-
+55-class EvidenceRefClaimV1(BaseModel):
+56-    """One claimed grounding in an admitted dossier block (admission §4).
+57-
+58-    ``block`` names a dossier block by id or by a unique hex prefix of at
+$ python -m pytest tests/test_discharge_law_line.py tests/test_discharge_channel.py -q
+.....................                                                    [100%]
+21 passed in 0.60s
+$ python proof/check05_record.py experiments/2026-08-26-pc2-rematch/run
+root                     : experiments/2026-08-26-pc2-rematch/run
+log events               : 3751
+discharge records         : 0
+discharge kinds recorded  : {}
+events carrying BOTH a discharge payload and the word 'warrant': 0 []
+$ python proof/check05_record.py experiments/2026-08-26-pc2-rematch/run
+  File "/home/user/DeepReason/experiments/2026-09-05-audit-ois-1-1-spec-drift/proof/check05_record.py", line 21
+    f"{sorted({json.loads(l)['rule'] for l in open(root/'log.jsonl') if '\"discharge' in l})}")
+                                                                                              ^
+SyntaxError: f-string expression part cannot include a backslash
+$ python proof/check05_record.py experiments/2026-08-26-pc2-rematch/run
+root                                  : experiments/2026-08-26-pc2-rematch/run
+discharge-tagged record events        : 1612
+tags                                  : {'discharge-reask': 44, 'discharge-undischarged': 1568}
+rule of every event mentioning discharge : ['Measure']
+discharge events that minted an artifact, an att/dep edge, or an LLM call: 0

@@ -1,0 +1,6 @@
+$ git rev-parse HEAD
+c26c66de7266968157c61e269fb927c5e368d2c3
+
+$ python experiments/2026-09-05-audit-ois-1-1-spec-drift/proof/check01_repro.py
+DEPENDENCE ('refuted', 'suspended_unsupported')
+EVIDENCE   ('accepted', 'refuted')

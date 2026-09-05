@@ -1,0 +1,46 @@
+$ python proof/check12_hardening.py
+==============================================================================
+S05 — does an artifact whose OWN declared check FAILS still label accepted?
+==============================================================================
+  declared check              : predicate:'impossible-token' in content
+  its verdict on this artifact: fail
+  registered attacks on it    : []
+  adjudicated status          : accepted
+  S05 pre-hardening behaviour EXHIBITED: True
+  (the label reads the attack graph; nothing consults the declared check
+   until a criticism rule runs and mints a warrant)
+
+==============================================================================
+S17 — does import keep the artifact's identity, and its location?
+==============================================================================
+  source   id 81f29b00799c334398d6a5d4  log seq 0  role conjecturer
+  imported id 81f29b00799c334398d6a5d4  log seq 2  role import
+  identity kept      : True   (ids are content-addressed)
+  original log location kept : False
+  original role kept : False
+  S17 pre-hardening behaviour EXHIBITED (the imported contribution is relocated to the merge rather than keeping its own place): True
+  Identity survives because an id is a hash of content, codec and interface.
+  Location does not: the import is a NEW event in the importing run's own
+  sequence, and the originating role is overwritten with `import`.
+
+==============================================================================
+S18 — is a unique maximum assumed where several could be maximal?
+==============================================================================
+  status container type      : dict of artifact-id -> one Status
+  values per artifact         : 1 (by construction)
+  any 'Appraise' record kind  : False
+  S18 pre-hardening behaviour EXHIBITED: no — but only because there are
+  no situated appraisals at all to be concurrent.  The single label is
+  COMPUTED by one policy, never SELECTED from competing records by log
+  order, which is the specific defect S18 names.
+
+==============================================================================
+S22 — can two rival contents be recorded compatibly in one cut?
+==============================================================================
+  rival one status : accepted
+  rival two status : accepted
+  attack edges     : []
+  S22 pre-hardening behaviour EXHIBITED (a rival pair cannot share a cut): False
+  There is no branch, cut or exclusivity relation over rivals: incompatible
+  CONTENT never makes the two RECORDS incompatible, which is the
+  hardened reading.

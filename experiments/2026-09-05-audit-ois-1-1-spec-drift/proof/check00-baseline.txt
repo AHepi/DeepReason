@@ -1,0 +1,12 @@
+$ git rev-parse HEAD
+c26c66de7266968157c61e269fb927c5e368d2c3
+
+$ cd docs/proposals/ois-1.1/verification && python -m unittest
+..................................................................
+----------------------------------------------------------------------
+Ran 66 tests in 0.073s
+
+OK
+
+$ cd docs/proposals/ois-1.1/verification && python run_mutations.py
+Detected 9/9 selected mutations
