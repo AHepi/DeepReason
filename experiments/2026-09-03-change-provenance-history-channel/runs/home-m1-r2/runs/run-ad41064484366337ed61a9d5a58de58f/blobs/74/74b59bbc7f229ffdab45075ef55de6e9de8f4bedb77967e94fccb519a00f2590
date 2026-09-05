@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's argument fails to answer the specific question of whether the preference is defensible 'on Popper's own terms' because it explicitly relies on a 'foundational act of faith,' which Popper rigorously rejected as dogmatic. By concluding that the cost is admitting science rests on faith, the target concedes that the preference is NOT defensible within Popper's anti-foundationalist framework, yet it frames this as the 'strongest case' for the preference rather than a refutation of its Popperian validity. Furthermore, the mechanism cited (Maximin/Laplace) implicitly assigns a decision-theoretic probability or weight to outcomes based on past survival, which smuggles in the very inductive logic (expecting future success from past tests) that the prompt asks to scrutinize, contradicting the claim that this is merely a 'bet without inductive backing.'",
+      "counterexample": null,
+      "premise": "Popper's philosophy strictly forbids foundational acts of faith and rejects any logic that derives future expectations solely from past test survival without inductive justification.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for better-corroborated theories cannot be justified without appealing to faith or hidden inductive principles, does Popper's system ultimately leave scientific action irrational or arbitrary?"
+    }
+  ]
+}

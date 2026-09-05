@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) to justify preference without induction, but it fails to address the definitive collapse of Popper's original quantitative definition of verisimilitude by Miller and Tichý. Since Popper never successfully restored a non-probabilistic, non-inductive definition of verisimilitude that satisfies his own logical constraints, the mechanism cited ('critical preference rooted in verisimilitude') lacks the necessary logical foundation to be defensible strictly on Popper's own terms, thereby leaving the charge of smuggling in induction unresolved.",
+      "counterexample": null,
+      "premise": "Miller and Tichý proved that Popper's definition of verisimilitude entails that a false theory with more content is always closer to the truth than a true theory with less content, rendering the concept incoherent within Popper's framework.",
+      "premise_evidence": null,
+      "successor_question": "Can a defensible preference for better-corroborated theories be constructed on Popperian terms without relying on the failed concept of verisimilitude or implicitly reintroducing probabilistic assumptions?"
+    }
+  ]
+}

@@ -2578,3 +2578,53 @@ producer-agnostic semantics, so this one signal cannot rot even though the
 shared gate cannot see it. Evidence:
 `experiments/2026-09-04-change-evidence-states/` (PARKED.md P1, VALIDATION.md
 Map section).
+
+## 2026-09-05
+
+**E78 (renumbered at merge from E75; that number was taken) — M1's cost result did not replicate, and two committed documents
+assert it as a finding.**
+`experiments/2026-09-03-change-provenance-history-channel/RESULTS_M1.md` states
+"**COST — 'H1 spends MORE tokens per admitted artifact': FALSIFIED, and this is
+the most interesting result**", on 9,870 against 12,597 tokens per admitted
+conjecture. `SPEC.md` S10 then sets the shipped conjecturer default to ON
+citing it: "the cost objection was the one concrete argument, and it failed."
+
+What the record shows: two further paired runs, pre-registered in `PREREG.md`
+Amendment 5 with a decision rule fixed before launch. The treatment was cheaper
+per conjecture in P1 (−21.6%) and P2 (−20.5%) and **more expensive in P3
+(+23.4%)** — one of two new pairs agreeing, which the registered table scores
+UNRESOLVED. Evidence: `RESULTS_M1_REPLICATION.md` §3.1; reproduce with
+`python analyse_replication.py`.
+
+The same three pairs show the control arm alone ranging 314,220 to 541,666
+tokens and 4.71 to 6.70 judged of 15, with every input identical — a
+run-to-run spread comparable to every between-arm difference the experiment has
+reported.
+
+**Where corrected.** `RESULTS_M1.md` and `RESULTS_M1_QUALITY.md` carry dated
+superseding notes pointing at `RESULTS_M1_REPLICATION.md`; the originals are
+left standing, since both were true on the evidence they had and both said in
+their own text that one pair could not settle it. `SPEC.md` S10 is
+UNCORRECTED: it is an approval-gated specification section, its default is the
+operator's decision, and this is an experiment tranche that changed no
+behaviour. The evidence it cites has moved and the operator has been told so.
+
+**E79 (renumbered at merge from E76; that number was taken) — "history-ON conjectures are judged worse" was a length effect.**
+`RESULTS_M1_QUALITY.md` §4 states "**They were judged worse, and the margin is
+real in this sample but not separable from chance**" (−1.56 of 15 raw,
+p = 0.082).
+
+What the record shows: pooled over three paired runs and 243 candidates the raw
+gap is −1.44 of 15 (p = 0.003), and the history arm's conjectures are 16.3%
+shorter (p = 0.0005). Holding candidate length constant, the arm term is
+**+0.04 of 15 (p = 0.885)** — the quality difference disappears. Rank
+correlation between candidate length and judged total across all 243 is +0.759.
+Evidence: `RESULTS_M1_REPLICATION.md` §3.2; reproduce with
+`python analyse_replication_length.py`.
+
+Not a defect in the original reading: that document measured the same length
+coupling on its own 167 candidates (ρ = +0.797), reported the length-adjusted
+gap beside the raw one, and named the possibility that the gap "was the length
+shift wearing a merit label". The replication cashed the caveat. The error to
+avoid repeating is quoting the raw arm-level mean from this judge panel without
+its length-adjusted twin.

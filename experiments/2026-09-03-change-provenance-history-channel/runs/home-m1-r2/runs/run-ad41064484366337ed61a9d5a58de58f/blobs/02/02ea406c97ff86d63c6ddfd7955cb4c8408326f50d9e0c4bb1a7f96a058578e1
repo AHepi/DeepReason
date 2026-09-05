@@ -1,0 +1,281 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'rational bet' grounded in the logic of testing, not probability. The cost is accepting that this preference offers no guarantee of future success, only that the theory has withstood the most severe attempts at falsification so far.",
+      "mechanism": "Corroboration reports the outcome of past critical tests (severity), not the likelihood of future outcomes. Preferring the best-tested theory is rational because it is the one that has survived the most rigorous attempts to kill it, making it the best available target for further criticism and the most informative if it eventually fails. This avoids induction by refusing to claim the future will resemble the past; it merely states that among current options, the unrefuted bold theory is the most useful for knowledge growth.",
+      "counterconditions": [
+        "If the preference implies any increase in the subjective or objective probability of the theory being true.",
+        "If the preference relies on the assumption that nature is uniform.",
+        "If the preference cannot distinguish between a theory that survived easy tests and one that survived severe tests."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate explicitly addresses the 'preference for action' by framing it as a choice of the best target for future falsification (knowledge growth) rather than a safe bet for practical success. The cost of 'radical instrumentalism' is accepted: we act on the best-tested theory knowing it might fail tomorrow, but acting on a refuted or less-tested one is irrational because it stops the learning process."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate resolves the dilemma by denying that action under risk requires induction. Risk is managed by choosing the theory that has been most severely tested (highest information content surviving), not the one deemed 'probable'. The smuggling of induction is avoided because the justification is backward-looking (test history) and forward-looking only in terms of testability, not truth-preservation."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The argument does not rely on verisimilitude as a measurable quantity or an inductive bridge. It relies on the logical asymmetry of falsification. We prefer the corroborated theory because it is the only one left standing after severe attacks, not because we assume it is 'closer to the truth' in a way that guarantees future performance."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "This candidate aligns with the correction: Popper prefers the theory because it is *improbable* yet survived, not because it is probable to succeed. The preference is for the theory with the highest empirical content that has not yet been falsified."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The 'rational bet' here is not decision-theoretic in the Bayesian sense (maximizing expected utility based on probabilities). It is methodological: betting on the theory that allows for the fastest error detection. This does not assume the future resembles the past; it assumes that if the theory is false, severe testing is the best way to find out."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "While this specific candidate focuses on the 'defensible' side, the mechanism includes the strongest counter-argument implicitly: the critic claims this *is* induction. The rebuttal clarifies that the 'cost' is the lack of guarantee, which is the core of the anti-inductive stance. A separate candidate will fully flesh out the 'smuggles induction' case."
+        }
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction, rendering Popper's position inconsistent. Any reason to prefer a theory that survived past tests for future action presupposes that the future will resemble the past, which is the very principle of induction Popper sought to eliminate.",
+      "mechanism": "To act on a theory is to expect it to hold in the future. If corroboration is purely historical (past survival), then using it to guide future action (preference) introduces a hidden premise: 'theories that survived past severe tests will continue to survive (or be reliable) in the future.' This premise is inductive. Without it, the fact that a theory survived yesterday gives zero logical weight to its utility today. Thus, Popper's practical advice contradicts his theoretical prohibition on induction.",
+      "counterconditions": [
+        "If a non-inductive justification for preferring past-success for future-action can be formulated.",
+        "If 'preference' can be decoupled from 'expectation of future reliability'.",
+        "If the preference is shown to be purely aesthetic or arbitrary rather than rational."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate argues that the 'defense' of fitness fails precisely because 'fitness for what?' implies fitness for *future* use. If the tension regarding action is not addressed by admitting induction, then the defense collapses. The candidate asserts the tension is fatal."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate supports the critic's view: choosing a bold theory for testing is fine, but choosing it for *action* (reliance) without induction is impossible. The problem context specifies action, and this candidate argues that action necessitates the smuggled inductive step."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "This candidate agrees that verisimilitude or any similar metric used to justify preference acts as a proxy for probability, thereby smuggling in the inductive assumption that 'more verisimilar' means 'more likely to work next time'."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate challenges the mischaracterization defense by arguing that even if Popper doesn't claim 'probability of success', the *act of preferring* functionally treats the theory as having a higher chance of success, which is an inductive move regardless of the label."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "This candidate strongly supports the critic: any decision-theoretic justification (even a 'rational bet') inherently weighs future outcomes against past data. Doing so without assuming the relevance of past data to the future is logically incoherent. Therefore, the bet *is* inductive."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "This candidate is dedicated entirely to the 'smuggles induction' argument, fulfilling the directive to make the strongest case for this answer. It explicitly frames the inconsistency as the central conclusion."
+        }
+      ],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_007",
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "The conflict dissolves if we distinguish between 'justification of belief' (which Popper rejects) and 'selection of problems' (which he accepts). Preference is not for the theory's truth, but for its capacity to generate new errors. The surviving view is that we prefer corroborated theories because they are the sharpest knives, not because they are the truest maps.",
+      "mechanism": "Popper's epistemology is evolutionary. We prefer the best-corroborated theory not because we believe it will work forever, but because it is the most precise instrument currently available. If it breaks, we learn more than if a vague theory breaks. The 'induction' charge fails because the goal isn't successful prediction per se, but rapid error elimination. The cost is a radical shift in the definition of scientific progress: it is not accumulation of probable truths, but the survival of the most testable conjectures.",
+      "counterconditions": [
+        "If scientists actually care about truth rather than just testability.",
+        "If 'acting on' a theory requires believing it will work, not just testing it.",
+        "If the distinction between 'belief' and 'selection' is psychologically untenable for agents."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The 'cost of radical instrumentalism' is embraced here. The defense addresses the tension by redefining 'preference for action' as 'preference for the object of action (testing)', sidestepping the need for the theory to actually succeed in the long term."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "This approach accounts for action under risk by framing risk as the possibility of falsification, which is desirable. The 'smuggling' is avoided because the agent does not expect the theory to hold, only expects to learn quickly if it doesn't."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Verisimilitude is replaced by 'testability' or 'empirical content'. The preference is for high content, not high truth-likeness, avoiding the inductive trap of assuming high content correlates with truth."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Clarifies that the preference is indeed not about probability of success, but about the magnitude of potential learning. This aligns with the critic's correction of the mischaracterization."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The 'rational bet' is recast as a bet on information gain, not utility maximization in the traditional sense. This avoids the inductive assumption about future regularity."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "This candidate synthesizes the two sides by proposing a third way: the preference is defensible only if we accept the cost of redefining scientific aims away from truth-approximation toward error-detection efficiency."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_009"
+      ]
+    },
+    {
+      "claim": "Popper's position survives only by accepting a dual-standard: theoretically, induction is dead; practically, we must act 'as if' induction holds. This pragmatic inconsistency is the necessary cost of doing science without a foundation. The preference is indefensible logically but unavoidable psychologically.",
+      "mechanism": "The strongest case for the 'smuggles induction' view is that human action requires predictive confidence. The strongest case for the 'defensible' view is that methodology requires strict falsificationism. The synthesis is that Popper offers a methodology that works only if scientists secretly ignore its philosophical constraints when leaving the lab. The surviving answer is that the preference is a necessary fiction. The cost is the admission that Popper's system cannot fully account for the rationality of scientific practice without borrowing the very tool it bans.",
+      "counterconditions": [
+        "If a purely non-inductive psychology of action is possible.",
+        "If 'acting as if' constitutes a valid philosophical defense.",
+        "If the dual-standard can be formalized without contradiction."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Addresses the tension by admitting the defense fails logically but succeeds pragmatically. The 'radical instrumentalism' is the 'as if' stance itself."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Confirms the dilemma: action under risk *does* require induction, so Popper smuggles it in via the back door of pragmatic necessity. The candidate makes this explicit as the 'cost'."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Agrees that verisimilitude or any other stand-in is just a placeholder for the inductive habit we can't shake. The defense relies on this smuggled concept."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Accepts the critic's point that Popper's justification is often mischaracterized, but argues that even the correct characterization leads to this pragmatic deadlock."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Concedes that the 'rational bet' is indeed inductive in disguise, but argues this is the only way the bet can be made. The contradiction is the feature, not the bug."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "This candidate explicitly constructs the strongest case for both sides (logical failure vs. pragmatic necessity) and concludes that the 'surviving' view is the acknowledgment of this irreconcilable tension."
+        }
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_010"
+      ]
+    },
+    {
+      "claim": "The preference is defensible via a propensity interpretation of probability, which Popper later developed, allowing corroboration to reflect a real, physical tendency of the theory to withstand tests without implying logical induction.",
+      "mechanism": "By shifting from logical probability to propensities (objective chances in the world), corroboration becomes evidence of a theory's alignment with real structural tendencies. We prefer the corroborated theory because it likely captures a real propensity of nature. This avoids Humean induction (inference from past to future based on habit) by grounding the inference in the ontology of the world (propensities exist now). The cost is adopting a controversial metaphysical stance on probability that many critics reject as obscure.",
+      "counterconditions": [
+        "If propensities are themselves unobservable and thus metaphysically suspect.",
+        "If the link between past corroboration and present propensity still requires an inductive leap.",
+        "If Popper's own later writings on propensities fail to resolve the original logical problem."
+      ],
+      "typicality": 0.40,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Attempts to resolve the action tension by grounding preference in real-world tendencies, making action rational based on current ontological status, not just past history."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Argues that accounting for action under risk is possible if risk is understood as the manifestation of competing propensities, not just unknown frequencies."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Posits that verisimilitude is supported by propensities, making the assumption non-inductive but ontological. Whether this successfully avoids the critic's charge is the core contention."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Refines the justification: preference is based on the estimated strength of the propensity, not logical probability."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Claims the decision-theoretic justification is valid if the utilities are weighted by propensities, which are objective features, not subjective inductive guesses."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "Presents the propensity argument as the 'defensible' case, acknowledging its metaphysical cost as the counter-weight to the 'smuggled induction' critique."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_011"
+      ]
+    },
+    {
+      "claim": "The entire debate rests on a category mistake: corroboration is a report card, not a crystal ball. The preference is defensible simply because there is no alternative. To prefer a refuted theory is irrational; to prefer an untested one is arbitrary. Corroborated theories are the only non-arbitrary, non-refuted options left.",
+      "mechanism": "This is a 'last man standing' argument. Induction is not smuggled in because no positive claim about the future is made. We simply eliminate the dead (refuted) and ignore the unborn (untested). The survivor wins by default. The cost is a very thin notion of rationality: it tells us what *not* to do, but gives no positive reason to think the survivor will work. It survives because it makes the weakest possible claim, which is hardest to refute.",
+      "counterconditions": [
+        "If 'arbitrary' choice of an untested theory could yield better results (luck).",
+        "If the 'no alternative' claim ignores the possibility of suspending judgment entirely.",
+        "If rational preference requires a positive reason, not just the absence of negatives."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Addresses the action tension by saying action is forced; we must choose. Choosing the only non-refuted option is the only defensible move, even if it feels like radical instrumentalism."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Resolves the dilemma by denying that 'accounting for action' requires a positive theory of success. It only requires a negative theory of failure avoidance."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Denies that verisimilitude is needed. Mere survival is enough. No inductive assumption about truth-likeness is required, only the logical fact of non-falsification."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Supports the view that preference is not about probability of success, but about the logical status of being 'not yet killed'."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Rejects the decision-theoretic framing entirely. It's not a bet; it's a default setting. No inductive assumption about the future is made, only a recognition of the present state of the candidates."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "revised",
+          "note": "Offers a minimalist defense as the 'defensible' case, contrasting it with the heavy metaphysical costs of the induction charge."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_012"
+      ]
+    }
+  ]
+}

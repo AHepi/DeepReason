@@ -1,0 +1,189 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule of 'critical preference' that explicitly rejects inductive probability. It smuggles in no induction because it does not claim the preferred theory is more likely to be true, only that it has withstood more severe attempts at falsification, making it the most rational basis for action in the absence of certainty.",
+      "mechanism": "Distinction between logical justification (probability/truth) and pragmatic decision-making (action/critical preference). The mechanism relies on the asymmetry of falsification: while survival doesn't prove truth, elimination of rivals leaves the survivor as the best available option for critical discussion and application.",
+      "counterconditions": [
+        "If the agent acts on the theory believing it is probably true, induction is smuggled in.",
+        "If the definition of 'severe test' implicitly relies on the uniformity of nature (an inductive assumption), the defense fails.",
+        "If 'preference' functionally equates to 'expectation of future success' based on past performance, it collapses into induction."
+      ],
+      "typicality": 0.92,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate does not redefine the goal of science from truth to progress; it maintains truth as the regulative ideal but argues that 'preference' is a procedural stance toward the current best conjecture, not a redefinition of the ontological goal."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "This candidate explicitly leans on the distinction criticized here: it argues Popper's defense *depends* on conflating neither, but strictly separating logical justification (which is impossible for preference) from pragmatic decision rules (which is where preference lives)."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The argument does not rely on verisimilitude (truth-likeness) as a measurable quantity proven by Miller/Tichý to be untenable. It relies solely on the count of survived falsification attempts, which remains logically valid even if verisimilitude cannot be formally defined."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate avoids the biological category error by framing the justification as normative critical rationalism ('we ought to test the hardest'), not as a descriptive evolutionary survival mechanism."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate accepts this distinction as its core premise: it defines 'critical preference' precisely to avoid the epistemic claim of induction, treating it purely as a methodological rule."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate rejects the false dichotomy by offering the third way Popper proposed: critical rationalism. It is neither arbitrary decisionism nor induction; it is a reasoned choice based on the severity of tests passed."
+        }
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_008",
+        "SRC_010"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction because any rational basis for expecting a well-tested theory to perform better in the future than an untested one presupposes the principle of the uniformity of nature. Without this inductive leap, preferring Theory A over Theory B is psychologically explicable but logically arbitrary.",
+      "mechanism": "Reductio ad absurdum of non-inductive preference. If corroboration reports only past performance and implies nothing about the future, then choosing the corroborated theory for future action is indistinguishable from crystal-ball gazing or arbitrary whim, unless one tacitly assumes the future will resemble the past.",
+      "counterconditions": [
+        "If Popper can demonstrate a non-inductive logical link between past falsification and future reliability, this claim fails.",
+        "If 'preference' is redefined as merely 'current status in debate' with no implication for future action, the charge of smuggling induction dissolves but renders the preference useless for science.",
+        "If the 'uniformity of nature' is rejected as a metaphysical assumption rather than a logical premise, the argument shifts ground."
+      ],
+      "typicality": 0.88,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to clarify that the 'smuggling' occurs in the *application* of the preference to future cases, not necessarily in the definition of the goal of science itself."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate argues that the distinction between logical justification and pragmatic decision-making is illusory in this context; a pragmatic decision *requires* a logical warrant to be rational, and that warrant is inductive."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "departure_declared",
+          "note": "Departing from reliance on verisimilitude; this argument rests on the Humean problem of induction itself, which precedes and undercuts specific Popperian metrics like verisimilitude."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate agrees that biological survival is descriptive, but argues that scientific *preference* claims normativity, and that normativity cannot be sustained without an inductive bridge."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate contends that 'critical preference' is a label that masks an underlying inductive inference; calling it a 'methodological rule' does not exempt it from the logical requirement of justifying why that rule works."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate asserts that without induction, the choice *is* arbitrary decisionism. Popper's 'critical rationalism' is argued to be a semantic shield for this arbitrariness."
+        }
+      ],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "The preference is defensible but only at the cost of abandoning the idea that science aims at 'truth' in a correspondence sense, shifting instead to 'problem-solving effectiveness' or 'informational content'. This saves Popper from induction but transforms his philosophy into a form of instrumentalism he explicitly rejected.",
+      "mechanism": "Conceptual shift from ontological truth to epistemic utility. The mechanism posits that corroboration measures informational content (how much a theory forbids) rather than truth probability. Preference is for higher content, not higher truth likelihood.",
+      "counterconditions": [
+        "If Popper can show that high content and truth are linked without induction, the cost is not incurred.",
+        "If instrumentalism is shown to be compatible with Popper's realism, the 'cost' is illusory.",
+        "If the preference for action requires truth-aptness rather than just utility, this defense fails for practical science."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Refined to specify that the 'redefinition' is the specific cost identified: shifting from truth to utility/content to avoid induction."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Argues that the pragmatic decision *is* the whole point, and the logical justification is secondary, effectively accepting the critic's distinction but drawing the opposite conclusion about its defensibility."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "This approach sidesteps the verisimilitude problem by focusing on 'content' rather than 'truth-likeness', rendering the Miller/Tichý critique less directly damaging."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Frames the preference as a normative rule for maximizing information growth, avoiding the biological/descriptive trap."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Accepts the distinction but argues that the 'methodological rule' implicitly carries an instrumentalist ontology, which is the hidden cost."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "Argues that this is not arbitrary decisionism, but a structured pursuit of information, though it admits this differs from Popper's stated realist goals."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_011"
+      ]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict terms because 'severity' of a test cannot be defined without reference to background knowledge, which itself rests on unproven (and potentially inductive) assumptions. Thus, the entire edifice of corroboration secretly depends on the very inductive framework it seeks to replace.",
+      "mechanism": "Regression argument on background knowledge. To judge a test as 'severe', one must assume the background theories used to design the test are reliable. This reliability is either dogmatically assumed or inductively inferred, breaking the non-inductive chain.",
+      "counterconditions": [
+        "If background knowledge is treated as provisional and open to falsification itself, the regress stops being vicious.",
+        "If 'severity' is defined purely logically (e.g., low prior probability) without empirical assumptions, the argument fails.",
+        "If the dependence on background knowledge is admitted but classified as 'conventional' rather than 'inductive', the critique loses force."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The argument targets the internal consistency of Popper's logic regarding 'severity', not the external goal of science."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Claims that the pragmatic decision is undermined if the criteria for making that decision (severity) are themselves logically flawed due to hidden induction."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Distinct from verisimilitude; this attacks the foundational concept of 'testing' itself."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Focuses on the logical structure of test design, not biological analogies."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Argues that the 'methodological rule' is empty if the metric it relies on (severity) is contaminated by induction."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "Suggests that acknowledging this dependency reveals the 'critical rationalism' to be a thin veneer over conventionalism, which some might call a form of decisionism."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_009"
+      ]
+    }
+  ]
+}

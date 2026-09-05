@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as the rational basis for preferring better-corroborated theories, but this smuggles induction back in because assessing verisimilitude requires an inductive inference that a theory which has survived past tests is likely to be closer to the truth in the future. Popper explicitly rejected the idea that past performance indicates future reliability or truth content; by claiming the best-tested theory offers the 'best chance' of being close to the truth, the target implicitly assigns a higher probability to its truth-content based on past success, which is precisely the inductive move Popper sought to avoid. The distinction between 'logical probability' and 'pragmatic preferability' collapses when the pragmatic choice is justified by an expected outcome (closeness to truth) derived from historical data.",
+      "premise": "Popper rejected any inference from past success to future truth-likeness as inductive.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "If verisimilitude cannot be assessed without assuming nature's uniformity, does Popper's framework leave scientists with no rational basis for action other than arbitrary guesswork?"
+    }
+  ]
+}

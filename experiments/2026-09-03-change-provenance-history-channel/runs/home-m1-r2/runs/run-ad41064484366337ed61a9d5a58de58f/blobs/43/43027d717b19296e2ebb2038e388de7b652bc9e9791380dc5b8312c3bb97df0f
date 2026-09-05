@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a performative contradiction: it claims the preference is 'defensible' because it maximizes 'potential for learning,' yet simultaneously admits this offers 'no logical advantage' over random guessing if laws change. If there is no logical advantage to the better-corroborated theory regarding future performance (as the target concedes in its counterconditions), then the methodological rule cannot be rationally defended as superior to any other rule (including random selection) for the purpose of action. The target attempts to have it both ways: asserting the preference is rational/defensible while stripping it of the very predictive rationality that makes a preference defensible in an action-context.",
+      "counterexample": null,
+      "premise": "A methodological rule for action is only defensible if it provides a reasoned basis for expecting better outcomes than alternative rules; admitting 'no logical advantage' over random guessing negates the claim of defensibility.",
+      "premise_evidence": null,
+      "successor_question": "If the better-corroborated theory offers no logical advantage over a random guess regarding future success, on what specific rational ground can Popper (or any agent) claim the preference is 'defensible' rather than merely arbitrary?"
+    }
+  ]
+}

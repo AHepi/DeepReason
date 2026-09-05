@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a false dichotomy between 'probabilistic truth-tracking' and 'strategic error elimination,' failing to address that Popper himself accepted 'verisimilitude' (truth-likeness) as the rationale for preferring corroborated theories. By asserting the only cost is abandoning likelihood of truth, the target ignores the actual fatal flaw: Popper's formal definition of verisimilitude was proven logically inconsistent by Tichý and Miller. Therefore, the 'strategic' preference lacks the very 'truth-approximation' goal it claims to serve, rendering the preference arbitrary rather than defensible on Popper's own terms.",
+      "premise": "Popper's preference for better-corroborated theories requires a metric of progress (like verisimilitude) to be non-arbitrary, but his specific definition of this metric is logically untenable.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "If verisimilitude cannot be formally defined to support the preference for corroborated theories, does Popper's system collapse into conventionalism where theory choice is merely aesthetic?"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's proposed 'Error-Detection Velocity Heuristic' fails to resolve the specific tension in the prompt regarding acting on 'better-corroborated' theories. Popper explicitly prefers theories with higher corroboration (more severe tests survived) for action, even if they are not more probable. The target's mechanism suggests preferring theories that are 'quickest and cheapest to falsify,' which often implies choosing weaker, less informative, or already heavily tested theories where new errors are easy to find, rather than the bold, highly corroborated theories Popper advocates. This creates a divergence: Popper acts on the theory that has survived the most severe tests (high corroboration), while the target suggests acting on the theory most amenable to rapid refutation (high falsifiability velocity). These are not identical; a theory can be highly corroborated precisely because it is hard to falsify in current conditions, yet the target's heuristic might deprioritize it in favor of a fragile theory, thereby failing to defend the actual scientific practice of preferring robust, well-tested models.",
+      "counterexample": null,
+      "premise": "Popper argues that we should prefer the better-corroborated theory for action because it has withstood severe tests, not because it is likely true or easy to falsify next.",
+      "premise_evidence": null,
+      "successor_question": "Does prioritizing 'speed of falsification' inadvertently select for weak theories that offer little predictive power, contradicting the scientific preference for bold, well-corroborated explanations?"
+    }
+  ]
+}

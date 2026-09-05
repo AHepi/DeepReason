@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that Popper reinstates induction 'biologically/psychologically' as an 'unavoidable instinct' misrepresents Popper's solution to the problem of action. Popper does not appeal to a blind biological instinct to justify preferring better-corroborated theories; rather, he argues that preference is a rational decision based on the goal of finding truth (verisimilitude). In 'Conjectures and Refutations', Popper explicitly states that we prefer the better-tested theory not because it is more probable, but because it has withstood more severe attempts at falsification, making it the best candidate for truth available. The target falsely equates 'acting on the best available evidence' with 'inductive instinct,' ignoring Popper's distinction between the logical status of a theory (which remains unproven) and the critical rationale for choosing it (which is purely deductive/critical: it is the one that has not yet failed). By reducing Popper's critical preference to a mere survival mechanism, the target fails to engage with Popper's actual argument that science progresses through critical selection, not biological determinism.",
+      "premise": "Popper distinguishes between the logical impossibility of justifying induction and the rational necessity of preferring theories that have survived severe tests based on the aim of verisimilitude.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "If Popper's preference for corroborated theories is merely a biological instinct for survival, how does he account for the scientist's ability to critically reject a well-corroborated theory in favor of a bold, untested conjecture that offers greater explanatory power?"
+    }
+  ]
+}

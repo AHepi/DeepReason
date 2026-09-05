@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to address the specific tension in the prompt regarding 'preference for action.' While the target successfully frames corroboration as 'fitness' rather than 'probability,' it dismisses the cost of 'radical instrumentalism' too easily. Popper explicitly rejected the idea that science is merely a tool for prediction without ontological commitment; he maintained a critical realist stance where theories aim at truth (verisimilitude), even if probability cannot measure it. By reducing the preference for better-corroborated theories solely to 'research program survival,' the target smuggles in a pragmatic circularity: we prefer theory A over B not because A is closer to the truth (which would justify action in a realist framework), but simply because A has survived so far. This does not defensibly answer why a scientist should *act* on A (e.g., build a bridge) unless one assumes past survival guarantees future success—which is the very induction Popper rejected. The target's 'Darwinian' analogy explains the history of science but fails to justify the normative force of current scientific preference without covertly relying on the uniformity of nature.",
+      "counterexample": null,
+      "premise": "Popper distinguished between the historical fact of survival (corroboration) and the logical justification for expecting future success (induction), maintaining that acting on the best-tested theory is rational only if one seeks truth (verisimilitude), not just problem-solving efficiency.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is merely an evolutionary survival instinct of the research community, how does Popper distinguish his view from pure pragmatism, and what specific argument prevents this 'survival instinct' from being just another form of inductive expectation?"
+    }
+  ]
+}

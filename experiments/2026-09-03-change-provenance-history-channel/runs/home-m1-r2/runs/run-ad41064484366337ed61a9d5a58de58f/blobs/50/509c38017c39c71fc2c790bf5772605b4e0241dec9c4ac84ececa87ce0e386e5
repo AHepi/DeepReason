@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses because it conflates 'logical superiority' with 'rational action' without bridging the gap via induction. The claim that choosing a non-falsified theory is 'logically superior' to a falsified one only holds for the specific past tests administered; it provides no logical basis for preferring the non-falsified theory for *future* applications (e.g., building a bridge). To assert that the non-falsified theory is the 'best-tested instrument' for future use implicitly assumes that the future will resemble the past (the uniformity of nature), which is the very inductive principle Popper rejected. By defining rational action as selecting the theory with 'least known error' to avoid 'future performance' disaster, the target smuggles in an inductive leap: it treats the absence of past negative markers as a positive indicator of future safety, contradicting its own premise that corroboration implies no probability of future success.",
+      "counterexample": null,
+      "premise": "Popper explicitly denies that surviving severe tests makes a theory more probable or reliable for future predictions, yet the target argues we should prefer such theories for future action based on their past survival.",
+      "premise_evidence": null,
+      "successor_question": "If the absence of past falsification provides no inductive reason to expect future success, on what non-inductive grounds can a scientist rationally prefer Theory A (uncorroborated) over Theory B (falsified) for a life-critical future application?"
+    }
+  ]
+}

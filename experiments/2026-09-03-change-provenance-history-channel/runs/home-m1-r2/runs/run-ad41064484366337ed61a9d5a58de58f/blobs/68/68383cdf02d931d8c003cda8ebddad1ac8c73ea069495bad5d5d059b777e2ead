@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory in practical action is defensible without smuggling in induction, provided one accepts that rational action aims not at 'truth-probability' but at 'error-avoidance relative to current critical knowledge.' The preference is a methodological rule derived from the logical asymmetry of falsification: since we cannot verify truth but can detect error, acting on the theory that has best withstood our most severe attempts to find error is the only non-arbitrary strategy for minimizing the risk of known falsehood. This does not imply the theory is probably true (induction), only that it is the least likely to be false *given what we currently know*. The cost of accepting this is 'radical instrumentalism': we must abandon the hope that science brings us closer to probable truth and accept that our best theories are merely the most robust survivors of a selection process, offering no guarantee against future falsification even in immediate practical application.",
+    "mechanism": "Reframes the normative bridge between corroboration and action as a decision-theoretic rule of 'minimizing known error risk' rather than 'maximizing truth probability.' It leverages Popper's distinction between the logical status of a theory (unprovable) and the pragmatic rationality of choosing the hypothesis that has survived the most stringent tests as the safest bet against immediate refutation. The mechanism explicitly rejects the inference that survival implies future success (induction) and instead posits that survival implies the absence of *current* disproof, making it the uniquely rational choice for an agent who wishes to avoid acting on a known falsehood.",
+    "counterconditions": [
+      "If one demands that rational action requires a positive reason to believe a theory will succeed (rather than just a lack of reasons to believe it will fail), this defense collapses into irrationalism.",
+      "If the definition of 'acting on a theory' inherently requires an expectation of future reliability based on past performance, then Popper's separation of corroboration from probability is incompatible with the act itself.",
+      "If there exists an alternative non-inductive principle that selects a *less* corroborated theory as safer for action, the claim that corroboration is the unique guide fails."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The rebuttal clarifies that the 'normative bridge' is not a conflation of risk-minimization and rational preference, but an identity: for a fallibilist, rational preference *just is* the minimization of known error risk. Since we cannot know probabilities, the only available metric for 'safety' is the absence of falsification. The criticism assumes a probabilistic framework for rationality which Popper explicitly rejects; within Popper's framework, the bridge is tautological."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "rebutted",
+        "note": "The mechanism addresses 'acting on' by redefining the goal of action in a Popperian context. When building a bridge, the engineer does not act because they believe the theory is 'probably true,' but because it is the only theory for which no calculation has yet demonstrated failure. To choose a less corroborated theory would be to knowingly ignore a potential error signal. The 'information growth' argument is secondary; the primary driver for action is the negative heuristic of avoiding known pitfalls."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "This candidate agrees that the target conflates preference with confidence, but argues the criticism misses the point of the proposed solution. The defense here does not rely on 'subjective confidence' at all. It relies on an objective logical relation: Theory A has been tested and not falsified; Theory B has been tested and falsified (or less rigorously tested). Preferring A is not a psychological state of confidence; it is a logical acknowledgment of B's defective status relative to A."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'cost' mentioned in the criticism. The previous iteration dismissed the tension; this version acknowledges that accepting this defense costs us 'realist comfort.' We must accept that acting on the best theory is still a leap into the dark, merely a leap from a higher platform. The defense survives, but the cost is the admission that 'practical success' is not guaranteed by corroboration, only that failure is less foreseeable."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The claim that preference is 'arbitrary' is rebutted by showing it is determined by the logical history of testing. It is not arbitrary because it is constrained by the severity of tests passed. Popper's rule is not a blind command but a derivation from the definition of rationality as error-elimination. If one theory has survived a test that another failed, preferring the latter is logically inconsistent with the goal of avoiding error."
+      },
+      {
+        "handle": "3b0d40d883d0e30306823e981ef8120189315ec71fd5977614e2001ece75ca4",
+        "kind": "rebutted",
+        "note": "The criticism claims the mechanism fails to address 'practical success.' The rebuttal is that Popperian action does not promise success; it promises the most rigorous attempt to avoid failure. Building a bridge using the best-corroborated physics is not a guarantee it won't collapse, but it is the only rational way to ensure we haven't ignored a known flaw. The 'core constraint' of practical success is an inductive expectation that Popper denies is rationally justifiable; the candidate replaces it with 'rational error avoidance.'"
+      },
+      {
+        "handle": "4951b3c5926010b4aad50c8aa8956fa9603a00d8a967623ab2680133a5da1f53",
+        "kind": "rebutted",
+        "note": "Agreed that conflating methodological rules with psychological confidence is a category error. This candidate strictly adheres to the methodological interpretation. The 'preference' is a rule of procedure for the scientist/engineer, not a description of their internal feeling of safety. The defense holds precisely because it refuses to make any psychological claims about confidence."
+      },
+      {
+        "handle": "4e6f07bb67dad839cd9e5f769442347fe76f9ad934ef5c1fa948f1e1de4d44be",
+        "kind": "rebutted",
+        "note": "The distinction between 'testing' and 'acting' is dissolved in this view. Action *is* the ultimate test. Choosing a theory for action is simply committing to a line of critique where the stakes are high. If we prefer the better-corroborated theory for testing, consistency demands we prefer it for action, because action is just testing with consequences. There is no separate logical domain for 'practical action' that requires induction; it is the same domain of conjecture and refutation."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["evolutionary_survival_of_fittest"],
+      "shared_structure": [
+        "Selection based on negative elimination (death/falsification) rather than positive verification.",
+        "Current survivor status indicates absence of fatal flaws so far, not inherent superiority or future guarantee.",
+        "Preference for the survivor is rational for betting on immediate outcomes, despite no inductive promise of continued survival."
+      ],
+      "disanalogies": [
+        "Biological fitness is retrospective and reproductive; scientific corroboration is prospective and critical.",
+        "Evolution has no 'agent' making a choice; scientists actively choose theories based on logical criteria.",
+        "A biological species cannot 'learn' from its near-misses in the same way a scientist updates a theory."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the fittest organism to survive the next season without assuming it is 'probable' to do so, we bet on the best-corroborated theory to work without assuming it is probably true.",
+        "The rationality of the bet rests entirely on the elimination of competitors, not on the intrinsic properties of the winner."
+      ],
+      "overturn_conditions": [
+        "If biological survival were shown to be purely random with no correlation to traits, the analogy would fail.",
+        "If scientific testing were shown to have no correlation with error detection, the transfer claim would collapse."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

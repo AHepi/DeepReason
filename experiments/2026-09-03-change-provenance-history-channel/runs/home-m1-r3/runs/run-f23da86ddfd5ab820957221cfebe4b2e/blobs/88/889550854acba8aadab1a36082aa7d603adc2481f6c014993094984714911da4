@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "claim": "Popper's preference for better-corroborated theories is defensible without induction by framing it as a strategic rule for error elimination rather than a truth-indicator; the cost is accepting that 'rational action' no longer implies 'probable success' but only 'maximized exposure to falsification'.",
+      "mechanism": "Reinterpretation of rational preference as a methodological heuristic for speeding up the convergence to truth via severe testing, decoupled from any inductive inference about future performance.",
+      "counterconditions": [
+        "If the goal of science shifts from truth-seeking to practical prediction, this defense collapses.",
+        "If past severity cannot be logically linked to future testability without an inductive bridge.",
+        "If scientists implicitly rely on probability when acting on corroborated theories."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "The candidate explicitly constructs the strongest case for the 'defensible' answer first, then contrasts it with the 'smuggled induction' critique before concluding, satisfying the dialectical requirement."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "The argument distinguishes 'availability' (unfalsified status) from 'preferability' (degree of corroboration/severity survived), directly addressing why one unfalsified theory is preferred over another."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "Avoids the false dichotomy by proposing a third definition of rationality: rationality as adherence to a critical method that maximizes error elimination, not as justification of belief."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Clarifies that the link is not to 'probable truth' but to 'efficiency in finding errors,' solving the relabeling charge by changing the telos of the action."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "Explicitly rejects fictionalism; argues the preference is genuinely rational under Popper's specific definition of rational action, not a pragmatic 'as if' stance."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "Structure follows the prompt: Case A (Defensible), Case B (Induction Smuggled), Conclusion (Case A survives with costs)."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "Aligns with Popper's verisimilitude goal but clarifies that corroboration reports past performance, while the *preference* is a forward-looking strategy to test the bold claim further."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Concedes that assuming past severity indicates future testability is a metaphysical faith, but argues Popper accepts this as a necessary precondition for the game of science, not an inductive proof."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_006"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back in because selecting a theory for action based on past tests logically requires the assumption that the future will resemble the past; the cost of admitting this is abandoning Popper's claim to have solved the problem of induction.",
+      "mechanism": "Logical reconstruction of the act of 'preferring for action' to show it entails a predictive premise that cannot be derived from deductive logic or falsification alone.",
+      "counterconditions": [
+        "If 'action' can be defined purely as 'setting up the next test' without expectation of success.",
+        "If Popper's notion of 'verisimilitude' provides a non-probabilistic metric for choice.",
+        "If the decision is arbitrary and merely psychological rather than logical."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "Presents the strongest case for the 'induction smuggled' view first, then the counter-case, before concluding that the smuggling is unavoidable."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "Focuses specifically on the transition from 'survived tests' to 'choice for action,' arguing this transition is the exact point where induction enters."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "Argues that redefining rationality does not escape the logical gap; if the redefinition relies on a hope for future success, it remains inductive in spirit."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Contends that distinguishing 'preference' from 'entailment' fails because the preference itself is irrational without the inductive bridge."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "Rejects the idea that Popper's solution is non-fictional; argues that acting without inductive support is effectively acting on a fiction of reliability."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "Follows the required dialectical structure: Strong Case for Induction, Strong Case against, Conclusion favoring Induction."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "Challenges the 'alignment with truth' argument by stating that alignment cannot be known without induction."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "revised", "note": "Refined the argument to explicitly target the 'future testability' assumption as the hidden inductive premise."}
+      ],
+      "optional_refs": ["SRC_005", "SRC_012"]
+    },
+    {
+      "claim": "Popper's position is consistent only if we accept a 'critical rationalism' where preference is a commitment to keep the debate alive, not a guide to practical success; the cost is that science becomes a purely theoretical exercise with no normative force for engineering or policy.",
+      "mechanism": "Radical separation of 'scientific rationality' (criticism) from 'practical rationality' (decision theory), confining Popper's corroboration to the former.",
+      "counterconditions": [
+        "If science must inform policy, this separation is untenable.",
+        "If Popper himself claimed his method guided practical action.",
+        "If 'keeping the debate alive' implicitly values truth-conduciveness."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "Develops both sides: the defense (consistency via separation) and the critique (loss of practical utility), then concludes on the high cost."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "Argues that 'preferability' in this context means 'most interesting to attack,' not 'best to bet on.'"},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "Proposes a fourth option: Rationality is domain-specific; what is rational in science (criticism) differs from rationality in action (prediction)."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Accepts the relabeling but argues it is a necessary conceptual surgery to save Popper from contradiction."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "Clarifies that this is not fictionalism but a strict limitation of scope."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "Adheres to the dialectical format required by the prompt."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "Denies that the goal of science includes practical application in Popper's strict epistemological sense."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Argues that no assumption about the future is made; the preference is entirely retrospective (which theory has the best track record of surviving)."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_014"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view corroboration as a report on the 'information content' of a theory rather than its truth; preferring high-content theories is rational because they offer more opportunities for learning, regardless of their truth value.",
+      "mechanism": "Shift from truth-centric to information-centric valuation, where 'better' means 'more informative/risky' rather than 'more likely true'.",
+      "counterconditions": [
+        "If scientists prefer theories they believe are true, not just informative.",
+        "If low-content theories are sometimes practically superior.",
+        "If 'information content' cannot be measured independently of truth."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "Constructs the case for 'information content' vs the case for 'inductive smuggling' before resolving."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "Defines preferability strictly in terms of potential learning yield (severity), not availability."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "Offers a distinct third path: Rationality = Maximization of Information Growth."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The link is to 'learning potential,' not 'truth probability.'"},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "This is a substantive claim about the nature of scientific progress, not a fiction."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "Follows the required two-sided argument structure."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "Reframes 'truth' as a regulative ideal, while 'information' is the operational metric."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "High content theories are preferred because they are easier to kill, not because they are expected to survive."}
+      ],
+      "optional_refs": ["SRC_004", "SRC_010"]
+    }
+  ]
+}

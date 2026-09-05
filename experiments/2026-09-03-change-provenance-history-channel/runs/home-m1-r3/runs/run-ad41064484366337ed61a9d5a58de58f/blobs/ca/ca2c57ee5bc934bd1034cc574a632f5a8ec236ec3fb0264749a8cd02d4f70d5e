@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule of 'rational choice' distinct from inductive probability; it costs the acceptance that rationality in science is procedural and non-justificatory regarding truth.",
+      "mechanism": "Methodological Rationalism: Distinguishing between the logical status of a theory (unchanged by tests) and the pragmatic rationality of choosing the most severely tested theory as the best current basis for action, without inferring future success.",
+      "counterconditions": [
+        "If 'rational choice' implicitly relies on the expectation that the future will resemble the past, it collapses into induction.",
+        "If Popper cannot define 'verisimilitude' formally, the preference lacks a truth-directed anchor."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_007", "kind": "rebutted", "note": "The candidate explicitly addresses 'what accepting it costs' by defining the cost as the abandonment of justificatory rationality in favor of procedural rationality."},
+        {"handle": "[SRC_008] against SRC_005", "kind": "rebutted", "note": "It provides a normative account: one *should* choose the severely tested theory because it has withstood the strongest attempts at falsification, making it the most informative, not the most probable."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "The argument remains normative (methodological duty) rather than shifting to descriptive survival value."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "The defense does not rely on formal verisimilitude comparisons but on the informational content and severity of tests passed."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "It rejects pragmatic induction; the preference is based on the logical asymmetry of falsification, not an inductive habit."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "It clarifies that Popper affirms the rationality of the *methodological choice*, not a non-rational faith."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "The justification is not hollow; it is grounded in the maximization of informational content and test severity."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "It does not appeal to biological instinct but to a conscious methodological decision rule."}
+      ],
+      "optional_refs": ["SRC_005", "SRC_008"]
+    },
+    {
+      "claim": "The preference smuggles induction back in; Popper's distinction between 'corroboration' and 'probability' is verbally robust but practically empty when acting on theories requires an implicit belief in the uniformity of nature.",
+      "mechanism": "Cryptic Induction: Arguing that any action based on past test results necessarily presupposes that the future will resemble the past, rendering Popper's 'non-inductive' preference a semantic disguise for Humean skepticism.",
+      "counterconditions": [
+        "If action can be justified purely by the logical history of falsifications without assuming future regularity.",
+        "If 'preference' is redefined as a purely aesthetic or psychological state with no cognitive claim."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_007", "kind": "rebutted", "note": "Explicitly states the cost: admitting that Popper's system fails to solve the problem of induction in practice."},
+        {"handle": "[SRC_008] against SRC_005", "kind": "rebutted", "note": "Argues that no normative account exists on Popper's terms that avoids induction; thus the preference is indefensible on those specific terms."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "Maintains that the shift to 'survival' is inevitable if one admits the preference is actionable, thereby confirming the induction charge."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Agrees that verisimilitude fails, using this failure as evidence that the whole project of non-inductive preference collapses."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "Concedes the 'pragmatic induction' point as the fatal flaw in Popper's defense."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "Contends that distinguishing methodological choice from truth justification is impossible when the choice aims at truth-like outcomes."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "Asserts the justification is indeed hollow because 'methodological utility' secretly relies on inductive expectations."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "Clarifies that the critique is not about biological instinct but about the logical necessity of inductive assumptions for action."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_012"]
+    },
+    {
+      "claim": "The preference is defensible only if reconceived as an evolutionary epistemology where 'rationality' is replaced by 'adaptive fit'; this costs the abandonment of the traditional normative framework entirely.",
+      "mechanism": "Evolutionary Selection: Treating scientific theories as mutations and severe tests as environmental selectors; preference is merely the recognition of current fitness, devoid of logical justification or inductive inference.",
+      "counterconditions": [
+        "If evolutionary success implies future success (which is itself an inductive leap).",
+        "If scientists require a normative 'ought' that evolution cannot provide."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_007", "kind": "revised", "note": "Revises the cost to be the total rejection of normative defensibility in favor of descriptive evolutionary adequacy."},
+        {"handle": "[SRC_008] against SRC_005", "kind": "departure_declared", "note": "Departures from the requirement for a normative account, asserting that evolution provides only a causal explanation."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "Argues that 'survival value' is the only coherent basis left once induction and probability are removed."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Bypasses verisimilitude by focusing on structural fit rather than truth approximation."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "Accepts 'pragmatic induction' but re-labels it as 'evolutionary continuity,' denying it is a logical fallacy."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "Reframes the 'faith' as an evolved cognitive heuristic."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "Claims the justification is robust within an evolutionary framework, even if empty logically."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "revised", "note": "Refines the 'instinct' argument to be a formal evolutionary mechanism rather than a blind urge."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_010"]
+    },
+    {
+      "claim": "The preference is a 'conventionalist' decision rule akin to choosing axioms; it is defensible as a constitutive norm of the scientific game, costing the claim that science tracks reality independently of our rules.",
+      "mechanism": "Constitutive Conventionalism: Defining the preference for corroboration as a rule internal to the practice of science, similar to rules in chess, which need no external inductive justification to be valid within the game.",
+      "counterconditions": [
+        "If the goal of science is truth, internal rules must connect to truth via induction.",
+        "If the convention itself was chosen inductively."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_007", "kind": "rebutted", "note": "Identifies the cost as the relativization of scientific rationality to a specific conventional framework."},
+        {"handle": "[SRC_008] against SRC_005", "kind": "rebutted", "note": "Provides a normative account based on adherence to the constitutive rules of the scientific community."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "Maintains that defensibility is internal to the system, avoiding the need for external inductive support."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Avoids verisimilitude by grounding preference in rule-following rather than truth-likeness."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "Denies that following a convention is 'pragmatic induction'."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "Distinguishes between rational rule-following and non-rational faith."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "Argues the justification is substantive within the context of the scientific enterprise."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "Clarifies that the rule is a social/conceptual construct, not a biological instinct."}
+      ],
+      "optional_refs": ["SRC_006", "SRC_013"]
+    }
+  ]
+}

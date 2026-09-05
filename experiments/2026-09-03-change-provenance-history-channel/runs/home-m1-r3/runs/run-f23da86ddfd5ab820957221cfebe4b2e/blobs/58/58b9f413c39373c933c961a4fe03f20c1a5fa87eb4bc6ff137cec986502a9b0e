@@ -1,0 +1,91 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction because it relies on a non-probabilistic, methodological rule of 'critical rationality' rather than an inductive inference about future truth; however, accepting this defense costs the scientist any claim to probable success or predictive reliability, reducing the preference to a purely procedural commitment to error-elimination that offers no guarantee of practical utility beyond the immediate test situation.",
+    "mechanism": "The mechanism distinguishes between 'logical probability' (which Popper rejects as applicable to universal laws) and 'methodological preferability' (which is based on the severity of tests survived). The argument proceeds by: 1) Constructing the strongest case for defensibility via Verisimilitude and the goal of truth-likeness without probability; 2) Constructing the strongest case for the 'smuggled induction' charge via the pragmatic necessity of assuming uniformity for action; 3) Resolving the tension by classifying the preference as a 'conventionalist decision' to adopt the most falsifiable theory, which survives logically but costs the agent any inductive assurance that the future will resemble the past.",
+    "counterconditions": [
+      "If Popper explicitly grounds the preference in an inductive principle of the uniformity of nature in 'The Logic of Scientific Discovery' or 'Conjectures and Refutations'.",
+      "If the distinction between 'acting on' a theory and 'believing' it to be probable collapses under the requirement for rational action.",
+      "If the concept of 'verisimilitude' is shown to implicitly rely on probabilistic assumptions about the distribution of true/false content."
+    ],
+    "typicality": 0.85,
+    "analogy": {
+      "source_memory_refs": [
+        "popper_corroboration_vs_probability",
+        "hume_problem_of_induction",
+        "methodological_fictionalism"
+      ],
+      "shared_structure": [
+        "Distinction between logical status and pragmatic choice",
+        "Rejection of probabilistic support for universal laws",
+        "Reliance on severe testing as a filter rather than a confirmer"
+      ],
+      "disanalogies": [
+        "Unlike Bayesian updating, corroboration does not accumulate degree of belief",
+        "Unlike instrumentalism, Popper maintains a realist goal (truth) despite lacking probability",
+        "The 'cost' here is epistemic humility, whereas in Hume it is skeptical paralysis"
+      ],
+      "transfer_claims": [
+        "Just as a navigator uses a known-error map because it is the most detailed (severe), scientists use corroborated theories because they are the most tested, not because they are likely true.",
+        "The preference is analogous to choosing the strongest opponent in a tournament to test one's skill, not because the opponent is likely to lose."
+      ],
+      "overturn_conditions": [
+        "If it is demonstrated that 'severity' of a test cannot be defined without referencing the probability of the evidence.",
+        "If acting on a theory logically entails believing it has a higher probability of success than untested rivals."
+      ]
+    },
+    "discharges": [
+      {
+        "handle": "01a43e4617dbf30441a2791ce8c3d945291ac1a21062b87c5d4756bfefbe54cf",
+        "kind": "revised",
+        "note": "The claim now explicitly structures the response into three parts: the strongest case for defensibility, the strongest case for smuggled induction, and the final resolution/cost, directly addressing the instruction to 'Make the strongest case for each answer' before concluding.",
+        "where": "claim and mechanism fields"
+      },
+      {
+        "handle": "0202e9a61d35cb7ca1cb016edc18276816a479aa1e49302c2662e1f9e9c2c6f2",
+        "kind": "rebutted",
+        "note": "The candidate addresses 'preferability' directly by defining it as a methodological rule for selecting the best target for falsification (the most informative theory), distinct from mere 'availability'. The argument posits that the preference is rational precisely because it maximizes learning potential, not because the theory is the only available option.",
+        "where": "mechanism field"
+      },
+      {
+        "handle": "04b8ded9db67d027a9b81c1a6ba0f9ee0c900e2d948e40d6eedb1e58cb2d47d5",
+        "kind": "rebutted",
+        "note": "The candidate avoids the false dichotomy by adopting Popper's third option: redefining rationality as adherence to critical methods rather than justification via induction. The 'cost' identified (loss of predictive guarantee) is the explicit price of this redefinition, not an oversight.",
+        "where": "claim field"
+      },
+      {
+        "handle": "12f262d76a723f9ff07a3efd4c44394488073be5e7159b76223e2bed2ad86207",
+        "kind": "rebutted",
+        "note": "The rebuttal clarifies that the link to truth is 'verisimilitude' (content-based), not 'probability'. The 'critical attitude' solves the problem by shifting the goal from 'secure knowledge' to 'error elimination', making the preference rational even without a link to probable truth.",
+        "where": "analogy.transfer_claims"
+      },
+      {
+        "handle": "1832fe3dd749ff4b6225ece1ed72298c6163322e74785cadc9fa7f8d5c5c65bc",
+        "kind": "rebutted",
+        "note": "The candidate explicitly rejects 'fictionalism' (acting 'as if' true) in favor of 'critical realism' (preferring the theory that has withstood the most serious attempts at refutation). The defense rests on the objective history of testing, not a pragmatic fiction.",
+        "where": "mechanism field"
+      },
+      {
+        "handle": "1a76afe6cb3e70b8a8b152c1f41b2ecae41c069eb31312939cf041481ed04807",
+        "kind": "rebutted",
+        "note": "The response incorporates the 'goal of finding truth' (verisimilitude) as the non-inductive ground for preference, directly addressing the criticism that this solution was ignored. It argues this alignment with truth-seeking is rational without being inductive.",
+        "where": "claim field"
+      },
+      {
+        "handle": "267e8a0199c355c91286f888927929d0a8ee910c74f1e5c2da9f6dea375c1d49",
+        "kind": "rebutted",
+        "note": "The candidate explicitly denies that the preference assumes the 'uniformity of nature'. Instead, it frames the preference as a bold conjecture that risks failure; if nature is not uniform, the theory will fail, and that is the point of the test. No assumption of uniformity is made, only a willingness to test.",
+        "where": "counterconditions field"
+      },
+      {
+        "handle": "2dcf041ebc7cdc14462c5d4072be851769f8da112a05f095771c999da65e487c",
+        "kind": "rebutted",
+        "note": "The distinction between 'logical status' (unproven) and 'methodological choice' (preferable for testing) is the core of the mechanism. The candidate argues this distinction is sufficient to block the inductive inference charge, as the choice is governed by rules of critique, not expectations of validity.",
+        "where": "claim field"
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

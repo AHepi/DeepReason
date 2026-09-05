@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'critical preference' grounded in verisimilitude: we prefer the theory that has withstood more severe tests because it is logically closer to the truth, not because it is more probable.",
+      "mechanism": "Verisimilitude-based selection: The scientist acts on the hypothesis that the theory with higher content and surviving severe tests has greater truth-likeness, avoiding probabilistic induction entirely.",
+      "counterconditions": [
+        "If verisimilitude cannot be formally defined without invoking probability.",
+        "If the preference relies on the assumption that future tests will resemble past tests."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "This candidate explicitly constructs the strongest case for the 'defensible' answer first, then addresses the critique, fulfilling the dialectical requirement."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "The mechanism distinguishes 'preferability' (rational choice based on verisimilitude) from mere 'availability', directly addressing the collapse objection."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "It avoids the false dichotomy by utilizing Popper's specific concept of verisimilitude as the third option between induction and irrationality."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "It provides a substantive link (truth-likeness) rather than a mere relabeling of the critical attitude."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "It clarifies that the preference is rational due to logical content relations, not a pragmatic fiction."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "The structure presents the defense, then the critique, then the resolution, adhering to the prompt's dialectical instruction."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "It explicitly leverages the alignment with the goal of finding truth (verisimilitude) as the non-inductive ground."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "It argues that severity indicates logical content, not retrospective fitness predicting future testability."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_006"]
+    },
+    {
+      "claim": "The preference smuggles induction back in because any decision to act on a corroborated theory implicitly assumes the uniformity of nature—that the future will resemble the past regarding the theory's performance.",
+      "mechanism": "Hidden Premise Detection: The act of preference contains an unstated major premise ('Nature is uniform') which transforms the argument into a syllogism reliant on induction.",
+      "counterconditions": [
+        "If Popper can define rational action without assuming nature's uniformity.",
+        "If the preference is purely psychological and not claimed to be rational."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "This candidate leads with the strongest case for the 'smuggles induction' answer before evaluating its survival."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "It argues that the *reason* for preference among available options is the inductive leap, distinguishing the two concepts while linking them causally."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "It challenges the existence of a viable 'third option' by asserting that all practical rationality inherently requires inductive assumptions."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "It claims the distinction between preference and entailment is insufficient if the preference itself is epistemically unjustified without induction."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "It rejects the 'non-inductive rationality' claim as a disguise for the unavoidable inductive step in action."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "It follows the required dialectical format by presenting this strong case first."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "It disputes that aligning with truth-finding is possible without assuming the reliability of past tests for future outcomes."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "It agrees that strategic selection assumes past severity predicts future relevance, confirming the inductive smuggling."}
+      ],
+      "optional_refs": ["SRC_005", "SRC_012"]
+    },
+    {
+      "claim": "The preference is defensible not as a claim about truth or probability, but as a methodological rule for maximizing the rate of error elimination; it is a 'game rule' of science, not an epistemic assertion.",
+      "mechanism": "Methodological Conventionalism: Scientists prefer corroborated theories because the rules of the scientific game dictate playing the move that offers the highest risk of falsification, regardless of truth likelihood.",
+      "counterconditions": [
+        "If scientists actually believe the preferred theory is more likely to be true.",
+        "If the 'game' itself cannot be justified without appealing to successful outcomes (induction)."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "revised", "note": "Revised to explicitly frame the 'strongest case' as a reconstruction of Popper's methodological stipulations rather than an ontological claim."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "Preferability here is defined strictly by adherence to methodological rules, distinct from availability."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "It offers a third way: rationality as rule-following within a critical framework, bypassing the induction/truth dichotomy."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The link is normative (rules of the game), not logical entailment or probability."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "It clarifies this is not fictionalism but a strict definition of scientific rationality as procedural."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "Structure maintained to show the strength of the conventionalist defense before critiquing it."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "Argues that error elimination is a procedural goal, not a truth-tracking mechanism requiring induction."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Denies that rule-following assumes predictive success; it only assumes the desire to test boldly."}
+      ],
+      "optional_refs": ["SRC_004", "SRC_010"]
+    },
+    {
+      "claim": "The dilemma dissolves when recognizing that 'rational preference' in Popper's system is purely negative: we prefer the less-refuted theory only because the others have been eliminated, not because the survivor has positive merit.",
+      "mechanism": "Negative Selection Logic: Preference is a residual state resulting from the destruction of alternatives, requiring no positive inductive bridge to the future.",
+      "counterconditions": [
+        "If multiple unfalsified theories remain, leaving no unique survivor.",
+        "If acting on a survivor implies a positive expectation of its utility."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "Presents the negative selection argument as the primary defense before subjecting it to the 'smuggling' critique."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "Distinguishes preferability (being the last one standing) from availability (merely existing)."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "Proposes a fourth option: rationality as the absence of refutation, avoiding both induction and truth claims."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The link is historical (what survived), not prospective (what will happen)."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "Clarifies this is not a fiction but a logical consequence of falsification."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "Follows the dialectical structure required."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "Contends that error elimination is sufficient grounds without needing a 'goal of truth' assumption."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Asserts that negative selection makes no assumptions about future testability, only past failure of rivals."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_002"]
+    }
+  ]
+}

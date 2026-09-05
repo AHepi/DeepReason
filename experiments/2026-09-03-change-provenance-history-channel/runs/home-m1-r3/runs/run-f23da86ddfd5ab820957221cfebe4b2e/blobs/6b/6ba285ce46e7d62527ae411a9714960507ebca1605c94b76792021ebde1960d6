@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'critical attitude' that maximizes verisimilitude (truth-likeness) without asserting probability, accepting the cost that this preference offers no guarantee of practical success or future reliability.",
+      "mechanism": "Distinction between logical probability (which remains zero for universal laws) and verisimilitude (content minus falsity). Severe testing eliminates false content, increasing verisimilitude. Preference is rational because it aligns with the goal of truth, not prediction.",
+      "counterconditions": [
+        "If verisimilitude cannot be formally defined without probabilistic assumptions.",
+        "If the 'goal of truth' implicitly requires an inductive belief that nature is uniform.",
+        "If acting on a theory logically entails a belief in its future performance."
+      ],
+      "typicality": 0.92,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "The distinction is not mere relabeling; it shifts the metric from frequency/probability to informational content and error elimination, which are logically distinct categories in Popper's system."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "revised", "note": "Clarified that the alignment with truth is a regulative ideal, not a proven fact, addressing the claim that this solves the problem explicitly."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Popper's solution does not assume uniformity; it assumes only that errors can be detected, which is a logical possibility, not an inductive premise."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The link to verisimilitude is maintained by defining corroboration as a report on past severity, which correlates with higher verisimilitude if the theory has not yet been falsified."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "revised", "note": "Addressed the action dilemma: preferring the best-tested theory is the most rational *critical* move, even if the theory is likely false, because it contains the most information subject to scrutiny."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "The 'betting strategy' is not based on stable risk profiles (induction) but on the asymmetry of falsification: we know what has failed, so we avoid it."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Acting on the theory does not entail the premise that the future resembles the past; it entails only that the theory has withstood attempts to show it does not."},
+        {"handle": "[SRC_011] against SRC_001", "kind": "rebutted", "note": "Reiterated that the logical status of corroboration is purely historical; the preference is a decision rule, not a logical derivation of future success."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_008", "SRC_012"]
+    },
+    {
+      "claim": "The preference inevitably smuggles induction back in because any rational basis for *action* (praxis) requires a bridge principle that the future will resemble the past, which Popper's purely negative logic cannot provide without contradiction.",
+      "mechanism": "Pragmatic necessity of induction. To act is to predict. To prefer Theory A over B for action implies believing A is more likely to succeed. This belief is inductive. Popper's denial of this creates a gap between his epistemology and his praxis.",
+      "counterconditions": [
+        "If action can be justified solely by the absence of known errors rather than expectation of success.",
+        "If 'preference' can be interpreted as a temporary heuristic rather than a rational belief.",
+        "If the 'bridge principle' is a biological instinct rather than a logical premise."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "The criticism that it's just relabeling is correct; without a link to probable truth, the 'critical attitude' is empty for action."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Popper's explicit solution fails because 'aligning with the goal of truth' provides no actionable criterion for choosing between two unfalsified theories in a specific context."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "revised", "note": "Acknowledged Popper's specific arguments but maintained that they fail to address the pragmatic necessity of assuming stability for action."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Agreed that severing the link to verisimilitude makes the preference irrational; thus, the preference must rely on hidden inductive assumptions about truth-likeness."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "This is the core of the argument: if theories are likely false, preferring one for action without inductive confidence is arbitrary."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "The betting strategy *does* assume stable risk profiles; claiming otherwise is self-deception about the nature of risk assessment."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Argued that acting *logically entails* the inductive premise, regardless of Popper's distinction."},
+        {"handle": "[SRC_011] against SRC_001", "kind": "rebutted", "note": "The distinction between logical status and preference collapses when the preference drives resource allocation and life-and-death decisions."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_003", "SRC_013"]
+    },
+    {
+      "claim": "The preference is defensible as an evolutionary analogy: science selects theories via error elimination similar to natural selection selecting traits, where 'fitness' is survival of tests, not probability of truth, costing us the comfort of certainty.",
+      "mechanism": "Evolutionary Epistemology. Theories compete; severe tests are the environment. Survival indicates robustness (error elimination), not probabilistic truth. Preference is the organism's (scientist's) adaptive response to the current environment of knowledge.",
+      "counterconditions": [
+        "If biological fitness requires an inductive assumption about the stability of the environment.",
+        "If the analogy breaks down because theories do not reproduce like genes.",
+        "If 'robustness' is indistinguishable from 'probability of success' in practice."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "The analogy provides a mechanistic explanation for preference without invoking logical probability, grounding it in structural fitness."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "revised", "note": "Integrated the evolutionary view as the 'non-inductive ground' Popper alluded to but didn't fully formalize."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Evolution does not assume uniformity; it reacts to current pressures. Similarly, science reacts to current tests."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Verisimilitude is reinterpreted as 'adaptive fit' within the current problem space, maintaining the link without induction."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "Action is justified as an evolutionary imperative: organisms must act on the best available map, even if the map is known to be imperfect."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "Risk profiles are not assumed stable; they are constantly updated by new falsifications, mirroring changing environmental pressures."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "The evolutionary mechanism bypasses the need for a logical entailment of future resemblance."},
+        {"handle": "[SRC_011] against SRC_001", "kind": "rebutted", "note": "Preference is a behavioral output of the selection algorithm, not a logical conclusion about the future."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_006"]
+    },
+    {
+      "claim": "The dilemma dissolves if we accept that 'preference' in Popper's system is purely methodological and provisional, carrying no ontological weight, which costs the scientist the ability to claim their actions are 'rational' in a traditional sense.",
+      "mechanism": "Methodological Fictionalism. Scientists act 'as if' the best-tested theory is true to facilitate further testing. This is a rule of the game, not a statement about reality. It avoids induction by refusing to make truth claims altogether.",
+      "counterconditions": [
+        "If methodological rules themselves require inductive justification to be adopted.",
+        "If scientists cannot psychologically maintain the 'as if' stance during high-stakes action.",
+        "If the 'game' of science implicitly aims at truth, reintroducing the need for verisimilitude."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_005] against SRC_002", "kind": "revised", "note": "Accepted that this looks like relabeling, but argued it is a necessary pragmatic shift to keep the system coherent."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Popper's solution is not about finding truth directly but about keeping the search open; fictionalism supports this."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "This approach sidesteps the uniformity of nature debate entirely by making no claims about nature's behavior."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "departure_declared", "note": "Departing from the requirement that preference must link to verisimilitude; here it links only to methodological utility."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "Action is justified as participation in the methodological process, not as a bet on outcomes."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "No risk profile is assumed; the 'bet' is on the productivity of the inquiry, not the stability of the world."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Acting on a methodological rule does not entail inductive premises about the world."},
+        {"handle": "[SRC_011] against SRC_001", "kind": "rebutted", "note": "The distinction is preserved by limiting the scope of 'preference' to the internal logic of scientific procedure."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_009"]
+    }
+  ]
+}

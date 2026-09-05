@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim of 'performative contradiction' fails because it conflates Popper's rejection of inductive *logic* (probability) with a rejection of inductive *methodology* (rules of thumb). Popper explicitly defends the preference for better-corroborated theories as a rational methodological rule for decision-making under uncertainty, not as a logical proof of truth or probability. Therefore, preferring such theories is consistent with his system and does not constitute an irrational 'leap of faith' or a smuggling of induction, rendering the accusation of contradiction unsubstantiated.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

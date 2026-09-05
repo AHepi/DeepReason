@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to answer the specific question asked: whether the preference is defensible on Popper's own terms. Instead of engaging with Popper's actual solution (verisimilitude/truth-likeness) or his explicit rejection of evolutionary justifications for rational choice, the target substitutes an external framework (Evolutionary Epistemology) that Popper did not endorse as a substitute for rational preference. This constitutes a failure to address the prompt's constraint to argue 'on Popper's own terms,' effectively dodging the dilemma rather than resolving it within the requested philosophical scope.",
+      "counterexample": null,
+      "premise": "The prompt explicitly asks if the preference is defensible 'on Popper's own terms' and requests the cost of accepting the surviving answer.",
+      "premise_evidence": null,
+      "successor_question": "How would Popper specifically respond to the claim that evolutionary survival cannot justify the conscious, real-time preference of one theory over another without invoking inductive expectations about future success?"
+    }
+  ]
+}

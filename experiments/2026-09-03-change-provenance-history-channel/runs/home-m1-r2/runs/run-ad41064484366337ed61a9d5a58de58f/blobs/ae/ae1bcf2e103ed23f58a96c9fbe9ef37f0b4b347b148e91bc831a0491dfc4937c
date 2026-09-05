@@ -1,0 +1,86 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a methodological rule for maximizing falsifiability potential, not as an inductive inference of truth; however, accepting this costs the agent any rational assurance that the preferred theory will succeed in practical application, reducing the preference to a wager on error-detection speed rather than predictive reliability.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'corroboration' (a report of past test severity) and 'probability' (a measure of future likelihood). It posits that the 'preference' is purely strategic: choosing the theory with the highest empirical content (most falsifiable) ensures that if it is false, we find out sooner. The defense relies on the normative bridge that 'rationality' in science is defined by the growth of knowledge (error elimination), not by the minimization of practical risk. The counter-case argues that when 'acting on' a theory (e.g., engineering), the goal shifts from knowledge growth to successful prediction, at which point Popper's prohibition on induction leaves the agent with no non-arbitrary basis for preference, effectively smuggling in a pragmatic induction that Popper formally rejects.",
+    "counterconditions": [
+      "If Popper explicitly endorsed the better-corroborated theory as more likely to be true in practical contexts, the claim that he avoids induction would fail.",
+      "If the preference for corroborated theories can be shown to maximize expected utility without assuming uniformity of nature, the 'cost' of radical instrumental skepticism would be negated.",
+      "If the distinction between 'context of discovery' and 'context of application' collapses under the weight of life-or-death decisions, the methodological defense becomes ethically untenable."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The candidate explicitly addresses the normative bridge by defining it as 'methodological rationality' (maximizing error detection) rather than 'pragmatic rationality' (minimizing risk of error). The rebuttal asserts that conflating these two distinct norms is the critic's error, not the target's."
+      },
+      {
+        "handle": "0e3388d0b26b9656cd5202a6029fd622b946c2e80cd1735c8124f29d5a06117a",
+        "kind": "revised",
+        "note": "Revised the mechanism to clarify that Popper rejects 'reliability for future action' specifically when reliability implies probabilistic truth. The candidate now distinguishes between 'reliability as truth-tracking' (rejected) and 'reliability as rapid-falsification-potential' (accepted)."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "rebutted",
+        "note": "The candidate concedes the dilemma for 'acting on' theories but argues this is precisely the 'cost' identified in the claim. The mechanism does not fail to address it; rather, it concludes that Popper's framework offers no solution for practical action other than a non-rational wager, which validates the critic's concern while maintaining internal consistency."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "Rebutted by clarifying that the candidate does not conflate preference with subjective confidence. The claim explicitly states the preference is for 'falsifiability potential,' denying any increase in subjective confidence or probability, aligning exactly with Popper's stated solution."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "revised",
+        "note": "Revised the 'cost' section to explicitly name the 'radical instrumental skepticism' dismissed by previous targets. The candidate now admits that accepting Popper's view costs the agent any claim to rational safety in application, directly addressing the tension regarding 'preference for action'."
+      },
+      {
+        "handle": "31fcf803cc4730175c70f64fdd5a0c1f1980b0e0ac5f6e9007f9cbe8826f4837",
+        "kind": "rebutted",
+        "note": "The candidate argues that redefining 'rational action' as 'error-avoidance via severe testing' is not sidestepping the problem but is the only consistent definition within Popper's system. The cost identified (lack of predictive assurance) is the direct answer to what accepting this definition costs."
+      },
+      {
+        "handle": "3242ff8180a68616d13678e7eee9deda5089f5e62375a48ac7ae4517ccaf5f78",
+        "kind": "rebutted",
+        "note": "Rebutted by asserting that the candidate does not claim surviving tests makes a theory more useful for prediction in a probabilistic sense. Instead, it claims the preference is useful for *learning*, and explicitly accepts the cost that this may not translate to *practical utility*, thereby avoiding the conflation the critic alleges."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "revised",
+        "note": "Revised the claim to acknowledge Popper's methodological rule that scientists 'ought' to prefer corroborated theories, clarifying that this 'ought' is conditional on the goal of knowledge growth, not on the theory being non-arbitrary for practical survival. This nuance resolves the contradiction between 'arbitrary' and 'methodological rule'."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "MEM_NAV_004",
+        "MEM_MED_009"
+      ],
+      "shared_structure": [
+        "Selection based on past survival rather than predicted future success.",
+        "Distinction between fitness for a specific environment vs. intrinsic superiority.",
+        "Acceptance of high risk of failure in individual instances for long-term system adaptation."
+      ],
+      "disanalogies": [
+        "Biological evolution lacks conscious intent, whereas scientific preference is a deliberate methodological choice.",
+        "Natural selection operates over millennia, while scientific decision-making often requires immediate actionable conclusions.",
+        "In biology, 'fitness' is defined solely by survival; in science, 'corroboration' includes logical severity which has no biological equivalent."
+      ],
+      "transfer_claims": [
+        "Just as an organism adapted to a past environment is not guaranteed to survive a new one, a corroborated theory is not guaranteed to predict correctly in a new domain.",
+        "Preferring the 'fittest' theory is rational only if the goal is the continuation of the evolutionary process (knowledge growth), not the survival of the individual agent (practical success)."
+      ],
+      "overturn_conditions": [
+        "If biological fitness could be shown to correlate perfectly with future survival probability across environmental shifts, the analogy would undermine Popper's anti-induction stance.",
+        "If scientists act solely to preserve their careers rather than grow knowledge, the methodological rule becomes indistinguishable from pragmatic induction."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_009"
+      ]
+    }
+  }
+}

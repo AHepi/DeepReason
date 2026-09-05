@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's mechanism claims the preference is defensible because 'falsified ones are definitely false,' reducing the choice to an elimination of alternatives. This fails Popper's own terms because it ignores the problem's specific constraint of 'conflicting predictions' among multiple *unfalsified* (corroborated) theories. If Theory A and Theory B are both corroborated but predict opposite outcomes for a crucial experiment, elimination logic cannot select between them since neither is falsified. The target's assertion that 'the set of viable candidates shrinks to the corroborated ones by elimination' explains how to discard bad theories, but provides no non-inductive basis for preferring one good theory over another when action is required. By treating the choice as merely 'absence of alternatives,' the target smuggles in an implicit assumption that all corroborated theories are equally preferable or that only one exists, failing to address the core dilemma of choosing between competing unfalsified options without resorting to induction.",
+      "premise": "Popper's framework allows for multiple unfalsified theories with conflicting predictions to exist simultaneously.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "If two corroborated theories make mutually exclusive predictions for a life-or-death decision, what specific non-inductive rule does Popper offer to choose between them if elimination alone leaves both standing?"
+    }
+  ]
+}

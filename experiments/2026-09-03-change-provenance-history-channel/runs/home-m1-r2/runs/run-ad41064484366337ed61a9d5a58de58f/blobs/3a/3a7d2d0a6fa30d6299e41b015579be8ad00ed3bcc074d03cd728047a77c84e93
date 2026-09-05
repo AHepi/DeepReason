@@ -1,0 +1,91 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule of 'risk minimization' rather than an inductive inference of truth probability; it costs the agent the comfort of believing the chosen theory is likely true, accepting instead that it is merely the least error-prone option currently available.",
+      "mechanism": "Popper distinguishes between the logical status of a theory (which remains falsifiable and unproven) and the pragmatic decision to act. The mechanism is a decision-theoretic heuristic: since all theories are equally improbable (probability zero), the rational agent selects the one that has survived the severest tests because it has exposed itself to the highest risk of falsification and failed to be eliminated. This is not an induction that the future will resemble the past, but a commitment to the theory that offers the most informative potential for future falsification should it be wrong.",
+      "counterconditions": [
+        "If the agent requires a guarantee of practical success (e.g., the bridge must not fall), this mechanism fails as it offers no probability of safety.",
+        "If 'severe testing' is defined circularly to ensure survival, the preference becomes vacuous.",
+        "If the agent conflates 'best tested' with 'most probable,' the anti-inductive stance collapses."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "The normative bridge is not probability but the methodological imperative to minimize the risk of acting on a known falsehood. We prefer the tested theory not because it is 'true' but because the alternative has already been shown false or is less informative."},
+        {"handle": "[SRC_012] against SRC_001", "kind": "rebutted", "note": "The dilemma of action is resolved by acknowledging that action requires a choice among imperfect options. Popper's preference is for the option with the highest 'verisimilitude' potential, not certainty. Building a bridge on a well-tested theory is rational because the alternative is building on a less-tested (and thus potentially more easily falsified) foundation."},
+        {"handle": "[SRC_014] against SRC_006", "kind": "rebutted", "note": "The candidate explicitly rejects 'increased subjective confidence.' The preference is purely procedural: we choose the theory that allows for the most rigorous future critique, aligning with Popper's goal of error elimination, not confidence building."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost of 'radical instrumentalism' is accepted: we admit we do not know the bridge will hold. However, the preference is not arbitrary; it is grounded in the asymmetry of falsification. The well-tested theory has survived where others might not have."},
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The preference is not arbitrary; it is dictated by the logical asymmetry between verification and falsification. We *ought* to prefer the severely tested theory because it carries more empirical content and has withstood attempts to destroy it, making it the best vehicle for further knowledge growth."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "rebutted", "note": "Action is redefined not as 'committing to critique' but as 'committing to the hypothesis most liable to reveal its own error soonest.' If the bridge falls, the well-tested theory (if it predicted safety) provides a more significant falsification event than a vague one would."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "No psychological claim is made. The 'preference' is a logical requirement of the critical method: to test effectively, one must tentatively accept the current best survivor as the baseline for the next attack."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "The distinction between testing and action is dissolved by the realization that all action is a test. Choosing a theory for action *is* selecting it for further severe testing in the real world."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_014"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system; the only way to remain consistent is to admit that such preference is biologically or psychologically inevitable but logically indefensible, costing us the claim that science is a purely rational enterprise distinct from animal expectation.",
+      "mechanism": "Hume's problem of induction cannot be bypassed by semantic shifts. When an agent prefers Theory A over Theory B for action because A survived past tests, they are implicitly assuming that the future will resemble the past (i.e., that the regularities holding A up will continue). Without this inductive assumption, the survival of A in the past is irrelevant to its performance in the future. Thus, the 'preference' is a disguised inductive inference.",
+      "counterconditions": [
+        "If one can demonstrate a non-inductive principle of rationality that mandates preferring the past-survivor, this claim fails.",
+        "If 'preference' is shown to be purely aesthetic or random, the charge of smuggling induction loses force.",
+        "If the agent acts without any expectation of future success, the action is unintelligible."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_011", "kind": "revised", "note": "Revised to clarify that the 'normative bridge' claimed by Popperians is actually a hidden inductive premise. The rebuttal is that no non-inductive bridge exists."},
+        {"handle": "[SRC_012] against SRC_001", "kind": "rebutted", "note": "This candidate agrees that the dilemma of action exposes the flaw. Scientists act on corroboration precisely because they *do* make inductive leaps, despite Popper's protests."},
+        {"handle": "[SRC_014] against SRC_006", "kind": "rebutted", "note": "Popper's defense is argued to be verbal sleight of hand. Distinguishing 'confidence' from 'preference' does not remove the underlying assumption that past performance predicts future utility."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The tension is not dismissed; it is confirmed. The cost is admitting that Popper's system cannot fully account for scientific practice without borrowing from the enemy (induction)."},
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The methodological rule 'prefer the tested' is itself an inductive rule disguised as a procedural mandate. It assumes tested theories are better guides, which is an inductive claim."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "rebutted", "note": "Practical success (bridge building) relies entirely on the uniformity of nature. To prefer a theory for this end without assuming uniformity is impossible."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "Even if Popper distinguishes logical status from psychology, the *act* of preferring implies a belief in relevance, which is inductive."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Selecting for action *requires* an inductive leap that selecting for testing theoretically avoids. The conflation is in Popper's attempt to merge them."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_015"]
+    },
+    {
+      "claim": "The preference is defensible not as induction nor as risk-minimization, but as an evolutionary selection mechanism for ideas: we prefer better-corroborated theories because they have demonstrated higher 'fitness' in the ecology of criticism, costing us the notion of the scientist as a sovereign rational judge in favor of the scientist as a curator of surviving memes.",
+      "mechanism": "Shift the frame from epistemology to evolutionary epistemology. Theories compete; tests are the environmental pressure. Corroboration is a record of survival, not a predictor of truth. Preferring the survivor is akin to a biologist studying the fittest organism: not because it will definitely survive tomorrow, but because it is the only extant specimen worthy of study. The 'preference' is a recognition of current fitness status.",
+      "counterconditions": [
+        "If the environment (nature) changes radically, past fitness guarantees nothing, rendering the preference useless for action.",
+        "If 'fitness' is defined solely by survival, the definition is tautological.",
+        "If the goal is truth rather than mere survival, this mechanism may select for adaptable falsehoods."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_011", "kind": "departure_declared", "note": "Departure: Rejects the need for a 'normative bridge' based on rationality. The bridge is causal/evolutionary: we prefer what survives because that is how the system works."},
+        {"handle": "[SRC_012] against SRC_001", "kind": "rebutted", "note": "Action is viewed as participating in the evolutionary process. We build the bridge with the 'fittest' theory to see if it survives the ultimate test (gravity/use)."},
+        {"handle": "[SRC_014] against SRC_006", "kind": "rebutted", "note": "Agrees that it is not subjective confidence. It is an objective assessment of the theory's track record in the game of science."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost of radical instrumentalism is embraced: we are just keeping the game going. Truth is a regulative ideal, not a guaranteed outcome."},
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The rule is not arbitrary; it is the core algorithm of evolutionary epistemology. Survivors get to reproduce (be used/extended)."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "rebutted", "note": "Practical success is a byproduct of fitness, not the definition. We act on the fittest theory because it is the best bet in an uncertain universe."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "It is not a category error; it is a shift to a biological metaphor for knowledge growth."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Selection for action and testing are the same process: exposure to the environment."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_012"]
+    },
+    {
+      "claim": "The preference is a pragmatic fiction necessary for the psychology of the scientist; logically it is indefensible on Popper's terms, but human agents cannot operate without a 'working truth,' costing Popper the purity of his system by forcing a dual-track model where logic forbids induction but psychology demands it.",
+      "mechanism": "Propose a dual-track model: Logically, Popper is right (no induction). Psychologically, humans are Humean (we expect the future to resemble the past). Science functions because scientists toggle between these modes: using strict falsification for theory construction and naive induction for daily action. The 'preference' is the psychological track overriding the logical one.",
+      "counterconditions": [
+        "If Popper can show that rational action does not require psychological expectation, this splits fails.",
+        "If the 'fiction' leads to systematic errors that falsification cannot catch, the model is dangerous.",
+        "If the two tracks contradict in real-time decision making, the agent faces paralysis."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_011", "kind": "rebutted", "note": "The normative bridge is psychological necessity, not logical validity. We *must* pretend the tested theory is reliable to function."},
+        {"handle": "[SRC_012] against SRC_001", "kind": "rebutted", "note": "This directly addresses the dilemma: the 'acting on' phase is where the logical system hands over to the psychological system."},
+        {"handle": "[SRC_014] against SRC_006", "kind": "rebutted", "note": "Agrees Popper defends it methodologically, but argues he fails to explain the *agent's* internal state, which is inevitably inductive."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The tension is the feature, not the bug. The cost is accepting that science is a human activity, not a pure logic machine."},
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The methodological rule is a mask for the psychological reality. We say 'prefer' but we mean 'trust'."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "rebutted", "note": "Practical success demands the inductive leap. The 'critique' mode is suspended during the 'action' mode."},
+        {"handle": "[SRC_009] against SRC_0
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

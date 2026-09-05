@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the dilemma dissolves because acting on a theory is solely to expose it to risk for knowledge growth, not because one expects it to succeed.",
+      "case": "The target fails to address the specific constraint in the problem regarding 'choosing which theory to act on' in contexts where failure is catastrophic (e.g., engineering a bridge or administering medicine). In these scenarios, scientists and agents prefer the better-corroborated theory precisely because they assign it a higher practical probability of success/safety, not merely to 'expose it to new risks.' If the preference were purely methodological (to test the frontier), one might arguably act on the *less* corroborated theory to subject it to severe tests faster. By ignoring the pragmatic necessity of relying on corroboration as a proxy for reliability in high-stakes action, the target's claim that the preference is 'not an object-level prediction' collapses. It smuggles induction back in by implicitly assuming that past survival (corroboration) indicates future safety, which is exactly the inductive leap Popper rejected.",
+      "counterexample": [
+        "An engineer choosing between a well-tested steel alloy (highly corroborated) and a novel untested composite (low corroboration) for a bridge support. The engineer chooses the steel not to 'drive knowledge growth' by risking the bridge, but because they believe the steel is *more likely* to hold. This belief relies on the inductive assumption that past performance predicts future results."
+      ],
+      "successor_question": "If the preference for the better-corroborated theory is not based on an expectation of its future success, how does Popper justify avoiding the less-corroborated theory in life-critical applications without implicitly assigning it a lower probability of truth?"
+    }
+  ]
+}

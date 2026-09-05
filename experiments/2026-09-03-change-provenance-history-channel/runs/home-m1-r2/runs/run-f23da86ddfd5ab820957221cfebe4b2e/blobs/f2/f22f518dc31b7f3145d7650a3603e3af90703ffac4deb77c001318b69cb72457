@@ -1,0 +1,27 @@
+## problem-context
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@dadbdee87204116f2c3f377b: program:reasoning_observation_pending
+- reason-counter@73f7adb94da43aeb701aa745: program:reasoning_observation_pending
+- reason-counter@e7a97574b9b9b6227dcece26: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 5d848ac46e0509ec2b1adfe65e52e96fdfe97e2315ce500bba4be1bfb57964df
+{"analogy":null,"claim":"Popper's preference is a performative contradiction: his methodology requires the very inductive habit he philosophically bans to function in practice.","counterconditions":[{"case":"If a scientist could genuinely act without any inductive expectation.","checker_spec":null,"eval":"observation"},{"case":"If the 'habit' is re-described as a critical attitude rather than an expectation.","checker_spec":null,"eval":"observation"},{"case":"If the contradiction is resolved by separating the context of discovery (psychological) from the context of justification (logical).","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The mechanism is 'performative inconsistency'. While Popper's logic forbids induction, his methodology (the 'logic of scientific discovery') prescribes actions that only make sense if agents possess an inductive habit. Scientists *cannot* help but expect the future to resemble the past; this is a psychological fact. Popper's system works only by piggybacking on this natural human induction while denying its validity. The preference is defensible psychologically but indefensible philosophically within his own strictures.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+DIRECTIVE: mount the strongest NEW specific case against TARGET 5d848ac46e0509ec2b1adfe65e52e96fdfe97e2315ce500bba4be1bfb57964df, or attack=false if you find no genuine fault.

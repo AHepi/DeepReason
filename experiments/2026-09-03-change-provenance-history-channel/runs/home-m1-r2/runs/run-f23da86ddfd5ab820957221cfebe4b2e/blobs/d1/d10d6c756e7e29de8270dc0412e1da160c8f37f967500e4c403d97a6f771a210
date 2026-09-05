@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target's defense relies on 'verisimilitude' (truth-likeness) to justify preferring better-corroborated theories without induction, but this concept was formally demolished within Popper's own logical framework, rendering the mechanism non-functional.",
+      "case": "The target asserts that the preference for better-corroborated theories is defensible via 'verisimilitude,' claiming a theory can be closer to truth even if its probability is zero. However, this defense collapses because Tichý and Miller proved in 1974 that Popper's formal definition of verisimilitude is logically incoherent: under Popper's own criteria, no false theory can be said to be closer to the truth than any other false theory. Since all universal scientific laws are strictly false (having zero probability and being falsified by at least one potential observation), Popper's system cannot rank them by truth-likeness. Consequently, the 'critical preference' the target describes lacks the logical machinery it claims to possess; without a valid measure of verisimilitude, preferring one falsified theory over another based on past tests inevitably smuggles in the inductive assumption that past success predicts future reliability, which is exactly what the target attempts to deny.",
+      "counterexample": [
+        "Consider two false theories: T1 (Newtonian Physics) and T2 (an arbitrary conjunction of Newtonian Physics plus a false clause about tea leaves). Both are false. Under Popper's original definition refined by Tichý, one cannot formally demonstrate T1 is 'closer' to the truth than T2 solely based on logical content and truth values without invoking probabilistic or inductive assumptions about the structure of the world, thereby invalidating the target's claim of a purely non-inductive justification."
+      ],
+      "successor_question": "If verisimilitude cannot formally rank false theories, does Popper's methodology reduce to an irrationalist leap of faith when choosing between two equally falsified but differently corroborated frameworks?"
+    }
+  ]
+}

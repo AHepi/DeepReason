@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a rational choice based on 'verisimilitude' (truth-likeness) rather than probability. We prefer the theory that has withstood severe tests not because it is more likely to be true, but because it has demonstrated greater content and resilience, making it the best available approximation of truth for practical action.",
+      "mechanism": "Critical Rationalism selects theories with higher empirical content and surviving falsification attempts. This selection maximizes verisimilitude without assigning inductive probabilities. The 'preference' is an epistemic judgment of comparative fitness, not a probabilistic prediction of future success.",
+      "counterconditions": [
+        "If verisimilitude cannot be formally defined without collapsing into probability (as Miller/Tichý argued).",
+        "If the act of preferring implies an expectation of future performance that logically requires induction."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "The solution does not redefine the goal from truth to progress; it argues that seeking truth (via verisimilitude) inherently involves preferring theories with higher content and test survival, directly answering the preference question without smuggling induction."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "The argument clarifies that preference is based on current logical status (survival of severe tests) and content, not on an assumed probability of future success, thus avoiding the inductive leap."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "It maintains the distinction between the logical problem of induction (unsolvable) and the pragmatic methodological rule (prefer the best tested), showing no contradiction in Popper's demarcation."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "The candidate explicitly addresses the scientist's *preference* as a rational decision rule derived from critical scrutiny, not merely a systemic outcome, staying within the problem's scope."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "No meta-induction is accepted; the reliability of the method is a conjecture that itself survives criticism, not an inductive assumption about the future."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "The claim distinguishes logical justification (impossible for universal laws) from pragmatic rational choice (possible via corroboration reports), resolving the alleged conflation."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "revised", "note": "Acknowledges Miller/Tichý's critique of naive verisimilitude but proposes a refined qualitative notion of 'potential truth-likeness' based on test severity, which remains defensible as a guide for action even if quantitative measures fail."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "Clarifies that while biological survival is descriptive, the scientific preference is a normative rule of method ('choose the best tested') justified by the aim of truth, not by the fact of survival alone."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_005"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction. Any rational basis for acting on past success to predict future utility constitutes an inductive inference, regardless of Popper's semantic disclaimers about 'probability'.",
+      "mechanism": "Pragmatic inconsistency: To act on a theory is to expect it to work. This expectation relies on the uniformity of nature (the future will resemble the past regarding the theory's domain). Since Popper rejects the logical validity of this uniformity principle, his own practice contradicts his philosophy.",
+      "counterconditions": [
+        "If a non-inductive justification for expectation can be formulated (e.g., purely conventional or psychological).",
+        "If 'acting on' a theory does not imply expecting its predictions to hold."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "Argues that shifting goals to 'progress' doesn't solve the core issue: the *act* of preference still assumes the future relevance of past tests, which is inductive."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Contends that any preference for action *logically entails* a belief in higher probability of success, making Popper's denial semantically empty."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Asserts that the distinction between logical and pragmatic problems collapses when the pragmatic choice relies on a logically invalid inference."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Maintains that redefining preference as 'outcome' evades the normative question of whether that outcome is rationally justifiable without induction."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Insists that relying on the method's past success to justify its future use is the very definition of meta-induction, which Popper forbids."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Argues that conflating logical justification with pragmatic decision is exactly what allows the smuggling of induction; they cannot be separated if the decision claims rationality."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "Uses the failure of verisimilitude to strengthen the claim that no non-probabilistic metric exists to justify preference, leaving induction as the only option."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "Agrees that biological selection is descriptive but argues scientific preference claims normative force, which requires a justification that turns out to be inductive."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_004"]
+    },
+    {
+      "claim": "The preference is defensible as a 'conventionalist' decision rule: we *decide* to treat the best-corroborated theory as true for now, not because of induction, but as a constitutive rule of the game of science, similar to accepting axioms in mathematics.",
+      "mechanism": "Methodological Conventionalism: The scientific community adopts a rule ('prefer the most severely tested') by convention. This rule is not justified by experience (induction) but by its utility in organizing inquiry and eliminating error. It is a pragmatic postulate, not an empirical inference.",
+      "counterconditions": [
+        "If the convention itself requires an inductive justification for its adoption.",
+        "If scientists actually believe the theory is probable rather than just following a rule."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "Reframes the goal as 'adherence to methodological rules' rather than truth or progress, directly addressing the preference as a rule-following behavior."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Denies that preferring a theory for action entails believing it has higher probability; it only entails following the agreed-upon rule of the game."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Shows that distinguishing logical truth from methodological rules preserves demarcation while allowing pragmatic preference."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Defines preference explicitly as the application of a methodological rule, answering the specific question of defensibility on Popper's conventionalist terms."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Argues the rule is adopted for its critical power, not because of a meta-induction on its reliability."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Embraces the separation of logical justification (none) and pragmatic rule-following (total), denying any conflation."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "Sidesteps the verisimilitude problem by grounding preference in procedural rules rather than truth-content metrics."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "Distinguishes the normative rule of science from biological description, grounding the former in human agreement/convention."}
+      ],
+      "optional_refs": ["SRC_010", "SRC_013"]
+    },
+    {
+      "claim": "The preference is an evolutionary adaptation of the scientific organism. Just as organisms survive by adapting to niches, theories survive by fitting facts. Scientists prefer them not due to logic or induction, but because the cognitive apparatus of scientists has evolved to trust patterns that have persisted.",
+      "mechanism": "Evolutionary Epistemology: The preference mechanism is a biological/cultural heuristic selected for survival value. It is not 'defensible' in a foundational logical sense but is 'explained' as a successful trait. The question of 'smuggling induction' is a category error; it's just how we are built.",
+      "counterconditions": [
+        "If the evolutionary explanation fails to account for the normative force scientists feel.",
+        "If the evolution of this trait itself relied on inductive successes."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_007] against SRC_003", "kind": "departure_declared", "note": "Departs from the requirement to justify the preference logically; instead offers a naturalistic explanation of its origin, rendering the 'smuggling' charge moot."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Argues that 'preferring' is a behavioral output of an evolved system, not a logical entailment of probability beliefs."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Suggests the dilemma is false because the preference is neither logical nor illogical, but biological."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Interprets 'preference' as an emergent property of the scientific ecosystem, answering the question by changing the level of analysis."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Claims the method's reliability is a result of variation and selection, not an inductive premise."},
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Posits that the 'pragmatic decision' is hardwired, blurring the line between logic and biology intentionally."},
+        {"handle": "[SRC_005] against SRC_001", "kind": "rebutted", "note": "Notes that evolutionary fitness does not require logical perfection (verisimilitude), only survival, bypassing the Miller/Tichý objection."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "Accepts the category error charge but argues it is productive: the normative justification *is* the descriptive mechanism of survival."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_006"]
+    }
+  ]
+}

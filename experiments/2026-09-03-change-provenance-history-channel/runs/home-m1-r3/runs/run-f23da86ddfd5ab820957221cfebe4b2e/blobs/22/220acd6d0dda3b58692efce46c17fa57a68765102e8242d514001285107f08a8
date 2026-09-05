@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, strategic heuristic for error elimination, not a claim to higher probability.",
+      "mechanism": "Reframing 'preference' as a methodological rule for maximizing the severity of future tests rather than an epistemic judgment of truth likelihood. The scientist chooses the theory with the highest empirical content (most falsifiable) that has survived, because it offers the best chance to learn something new if it fails next.",
+      "counterconditions": [
+        "If the chosen theory is actually less likely to be true than an untested rival, the strategy still holds because the goal is rapid error detection, not truth accumulation.",
+        "If past severity does not correlate with future testability, the heuristic collapses into induction."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "The candidate explicitly constructs the case for defensibility first, detailing the strategic heuristic before addressing the counter-case of smuggled induction."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "Distinguishes 'preferability' as a functional choice for error elimination capacity, distinct from mere 'availability' of unfalsified options."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "Avoids the false dichotomy by defining rationality strictly as adherence to the critical method, not as justification of belief probability."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Clarifies that the link is not to 'probable truth' but to 'potential informative content,' solving the relabeling charge."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "Rejects fictionalism; argues the preference is genuinely rational within the specific aim of science (error elimination), not a pragmatic 'as if' stance."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "Structure follows the prompt: strongest case for defensibility presented, followed by the induction critique, then the resolution."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "Explicitly grounds the defense in the alignment with the goal of finding truth via verisimilitude progression, not just survival."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Argues that assuming past severity indicates future testability is a logical consequence of the theory's structure (content), not an inductive leap about nature's uniformity."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_006"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction, rendering Popper's system internally inconsistent when moving from logic to action.",
+      "mechanism": "Demonstrating that any decision to act on one theory over another without probabilistic justification relies on the hidden premise that the future will resemble the past (the Principle of Uniformity). Without this, the 'survivor' status is historically irrelevant to future success.",
+      "counterconditions": [
+        "If Popper admits a non-cognitive 'faith' in reason, the system becomes psychological rather than logical.",
+        "If the definition of 'rational action' is severed from expected success, the term 'rational' loses its normative force."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "Presents the strongest case for the 'smuggled induction' position first, fully developing the inconsistency argument before offering the rebuttal."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "Addresses the 'preferability' gap by arguing that acting on preference implies an expectation of success, which is inductive."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "Contends that redefining rationality does not escape the need for a bridge between past performance and future utility."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Asserts that distinguishing preference from entailment fails because action requires an entailment of utility."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "Argues that Popper's own writings reveal he could not maintain the pure logical stance when discussing practical science."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "Follows the dialectical requirement by fully articulating the induction charge before concluding."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "Challenges the notion that alignment with truth goals can be established without inductive assumptions about test severity."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Supports the criticism that strategic selection implicitly assumes the reliability of past severity as a predictor."}
+      ],
+      "optional_refs": ["SRC_005", "SRC_012"]
+    },
+    {
+      "claim": "The dilemma dissolves if we accept that scientific rationality is evolutionary: preferences are selected traits that enhance survival of the research program, requiring no logical justification beyond their persistence.",
+      "mechanism": "Applying an evolutionary epistemology framework where 'corroboration' is analogous to biological fitness. The preference is not a logical deduction nor an inductive gamble, but a descriptive fact of how successful cognitive systems operate.",
+      "counterconditions": [
+        "If evolution only explains why we *do* prefer, not why we *should*, the normative question remains unanswered.",
+        "If biological fitness is retrospective, the analogy fails to justify prospective action."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "revised", "note": "Added explicit section comparing the evolutionary defense against the induction charge to ensure both sides are weighted equally before conclusion."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "Reframes preference as an emergent property of the scientific ecosystem, bypassing the individual agent's need for justification."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "departure_declared", "note": "Departing from strict Popperian logic to adopt an evolutionary naturalism that rejects the need for a third option."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Argues the 'link' is causal (evolutionary history) rather than logical or probabilistic."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "Positions the view as a naturalistic description, avoiding both fictionalism and strong rationalism."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "Ensured the evolutionary case is presented as a distinct 'answer' alongside the standard defenses."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "Suggests the 'goal of finding truth' is itself an evolved heuristic, not a foundational axiom."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Claims evolutionary success validates the strategy without needing to assume uniformity of nature logically."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_014"]
+    },
+    {
+      "claim": "Popper's preference is defensible only if we treat 'corroboration' as a report of past performance entirely divorced from future expectations, making the 'choice' a purely arbitrary act of faith disguised as methodology.",
+      "mechanism": "Radical separation of the logical context (corroboration reports) from the psychological context (decision making). The 'preference' is admitted to be irrational in a strict sense, but necessary for the practice of science, accepting the cost of inconsistency.",
+      "counterconditions": [
+        "If the choice is arbitrary, then choosing the *less* corroborated theory is equally rational, which contradicts scientific practice.",
+        "If it is faith, Popper's demarcation criterion loses its force against dogmatic systems."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "Explicitly details the 'arbitrary faith' argument as the primary defense before critiquing it."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "Accepts that 'preferability' is a misnomer and should be termed 'psychological inclination'."},
+        {"handle": "[SRC_011] against SRC_005", "kind": "rebutted", "note": "Embraces the dichotomy: either induction or irrational faith, rejecting the middle ground."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "Agrees the distinction is merely relabeling, but argues this relabeling is the only honest account."},
+        {"handle": "[SRC_010] against SRC_004", "kind": "rebutted", "note": "Clarifies that this is not fictionalism but an admission of the limits of critical rationalism."},
+        {"handle": "[SRC_015] against SRC_013", "kind": "rebutted", "note": "Structured to present the 'faith' argument strongly before dismantling it."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "Denies that non-inductive grounds exist, forcing the acceptance of the 'cost' of irrationality."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Concedes that the strategy implicitly assumes reliability, labeling this assumption as unjustified faith."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_004"]
+    }
+  ]
+}

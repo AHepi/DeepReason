@@ -1,0 +1,172 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule for maximizing testability, not an inductive inference of truth. We prefer the theory that has survived severe tests because it has higher informational content and thus offers more opportunities for future falsification, accelerating the growth of knowledge.",
+      "mechanism": "Methodological utility: Preference is based on the logical status of the theory (high empirical content/severity of tests passed) rather than a probabilistic expectation of future success. The 'cost' is accepting that we act without rational assurance of practical success, relying solely on the hope that eliminating error brings us closer to truth (verisimilitude) without guaranteeing it.",
+      "counterconditions": [
+        "If the preferred theory fails immediately in a new application despite past corroboration, the methodological justification holds (we learned faster), but the practical cost is high.",
+        "If 'severity' cannot be defined independently of the theory's survival, the distinction collapses into circularity."
+      ],
+      "typicality": 0.95,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The justification is not hollow; 'methodological utility' is defined by the logical aim of science (finding truth via error elimination). Preferring the most testable surviving theory is the only rational move if one rejects induction, even if it doesn't guarantee practical success. The 'because' is the acceleration of learning, not a hidden probability claim."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "Popper does not rely on a 'blind biological instinct.' He posits a rational choice based on the logical situation: Theory A has been tested and not refuted; Theory B has been refuted (or less tested). Choosing A is a critical preference, not an instinctual leap."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "revised",
+          "note": "Revised to avoid claiming corroboration proves 'higher verisimilitude' as a measurable degree. Instead, corroboration indicates the theory is a better candidate for discussion because it has withstood attempts to eliminate it. We prefer it as the best available guess, acknowledging verisimilitude is a regulative ideal, not a proven metric."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "The argument does not assume expectation of future truth. It assumes the rationality of choosing the theory that has undergone the most rigorous critical scrutiny. Rationality here is defined by adherence to the critical method, not by predictive reliability."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "In high-stakes action, the 'fertile ground' argument may seem weak, but Popper would argue that acting on a falsified theory is irrational. Acting on the best-tested theory is the only non-arbitrary choice available, even if the stakes are life-and-death. The alternative is guessing or dogmatism."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Choosing the non-eliminated theory is not conflating logical elimination with practical reliability. It is simply acknowledging that while elimination doesn't prove the survivor is true, it removes competitors that are known to be false. The preference is for the 'least bad' option, not a 'reliable' one in the inductive sense."
+        }
+      ],
+      "optional_refs": ["SRC_001", "SRC_003"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories smuggles induction back in. Despite Popper's denials, the act of preferring a theory for action implicitly assumes that the future will resemble the past (that the laws governing the test conditions will hold), which is the very principle of uniformity Hume identified and Popper sought to reject.",
+      "mechanism": "Hidden Induction: Any decision to act on a corroborated theory presupposes that the structural regularities observed during testing will persist into the moment of action. Without this assumption, corroboration is historically interesting but practically irrelevant. Thus, Popper's 'rational preference' is indistinguishable from inductive confidence in practice.",
+      "counterconditions": [
+        "If Popper can define 'rationality' purely as consistency with past criticism without any forward-looking expectation, the charge fails.",
+        "If the 'pragmatic' justification (we have no better choice) is accepted as distinct from an epistemic claim about the future."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "This candidate argues the justification IS hollow because it tries to separate methodological utility from practical expectation, which is impossible in action. The 'hollowness' is the feature, not the bug, of the critique."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "Even if Popper denies appealing to instinct, the functional role of his 'preference' in guiding action performs the exact same function as inductive belief. Denying the label 'instinct' doesn't remove the inductive structure of the reasoning."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "This candidate agrees that verisimilitude is problematic. The reliance on 'survival' as a proxy for 'betterness' implicitly assumes survival correlates with truth/reliability, which is an inductive hypothesis."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Popper claims the basis is not expectation of truth, but this candidate argues that 'expectation of truth' is logically required for the preference to be rational in an action context. If there's no expectation, the preference is arbitrary."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "In high-stakes scenarios, the 'learning opportunity' defense collapses because the agent needs reliability, not just potential falsification. This confirms the inductive smuggling: we need the theory to work, not just to be testable."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The argument explicitly claims that 'logical elimination' is being treated as 'practical reliability' by the agent making the choice. The conflation is the mechanism of the smuggling."
+        }
+      ],
+      "optional_refs": ["SRC_002", "SRC_005"]
+    },
+    {
+      "claim": "The preference is defensible via an evolutionary epistemology: humans possess an innate 'inductive instinct' or biological propensity to expect regularities, which Popper acknowledges as unavoidable for survival. While this instinct is not logically justified, it is biologically rational. Popper's system accommodates this by treating the *logic* of science as non-inductive, while admitting the *psychology* of action relies on these ingrained expectations.",
+      "mechanism": "Evolutionary Pragmatism: We prefer corroborated theories because our cognitive apparatus evolved to detect patterns. This is not a logical proof but a biological fact. Popper separates the normative logic of science (no induction) from the descriptive psychology of scientists (inductive habits). The preference is defensible as a biological necessity, not a logical derivation.",
+      "counterconditions": [
+        "If Popper strictly forbids any appeal to biological facts in justifying scientific rationality.",
+        "If the 'instinct' explanation renders the concept of 'critical preference' redundant."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "departure_declared",
+          "note": "Departure: This candidate accepts that the justification is partly 'hollow' logically but fills the gap with evolutionary biology, which the critic calls a misrepresentation. I declare this a valid synthesis: logic limits justification, biology explains action."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The critic claims Popper doesn't appeal to blind instinct. However, Popper frequently discusses 'expectations' as innate. This candidate argues that acknowledging this instinct is not a 'misrepresentation' but a necessary completion of his pragmatic account of action."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Verisimilitude issues are sidestepped; the preference is based on biological fit, not logical proximity to truth."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "The basis for action IS an expectation (biological), which Popper admits we cannot live without. The 'rationality' is pragmatic survival, not logical certainty."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "High-stakes action relies on deep-seated biological expectations, not just abstract 'learning opportunities.' This aligns with the evolutionary view."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The conflation of elimination and reliability is a feature of our biological cognition, not a logical error in Popper's formal system. The system describes the ideal; biology describes the agent."
+        }
+      ],
+      "optional_refs": ["SRC_004", "SRC_010"]
+    },
+    {
+      "claim": "The dilemma is false: Popper's 'preference' is a decision theoretic move under radical uncertainty, akin to Pascal's Wager. Since we cannot know probabilities, we must choose the hypothesis that maximizes potential information gain (corroboration) while minimizing the risk of clinging to a known falsehood. This is not induction, nor biology, but a normative rule of rational choice under ignorance.",
+      "mechanism": "Decision-Theoretic Rule: In the absence of positive justification (probability), the only rational constraint is negative (avoid falsified theories). Among non-falsified theories, preferring the most severely tested one is a heuristic for maximizing the efficiency of the error-elimination process. It costs us the comfort of believing our choice is 'likely' true.",
+      "counterconditions": [
+        "If 'maximizing information gain' implicitly assumes the future resembles the past.",
+        "If decision theory itself relies on probabilistic assumptions Popper rejects."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The justification is not hollow; it is a robust decision rule for uncertainty. 'Methodological utility' is precisely defined as efficiency in error elimination."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "No instinct is invoked; this is a calculated normative stance on how to behave when knowledge is impossible."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Does not claim higher verisimilitude is proven, only that it is the best target for inquiry given current constraints."
+        },
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Explicitly denies expectation of truth. The rationality lies in the procedure, not the outcome prediction."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Even in high stakes, maximizing the chance of detecting error quickly is the only rational strategy when truth is unknowable."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Distinguishes clearly: logical elimination restricts the set; the preference rule selects from the remainder based on test severity, not assumed reliability."
+        }
+      ],
+      "optional_refs": ["SRC_008"]
+    }
+  ]
+}

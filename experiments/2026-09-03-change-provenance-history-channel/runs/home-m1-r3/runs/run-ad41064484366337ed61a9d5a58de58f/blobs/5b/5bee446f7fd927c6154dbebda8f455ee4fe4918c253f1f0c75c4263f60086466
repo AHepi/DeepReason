@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of truth, but as a non-inductive methodological rule grounded in the aim of science to increase verisimilitude (truth-likeness); accepting this costs the scientist any guarantee that the preferred theory is actually true or even probable, requiring a 'rational faith' in the method rather than the outcome.",
+    "mechanism": "The mechanism distinguishes between 'justification of belief' (which Popper rejects as inductive) and 'justification of action' (which he accepts as critical). By defining the goal of science as maximizing verisimilitude rather than probability, Popper argues that severe testing eliminates error, thereby increasing content without increasing logical probability. The preference is thus a rational choice to adopt the theory that has withstood the most rigorous attempts at falsification, as it is the best candidate for being closer to the truth, even if we can never know it is so.",
+    "counterconditions": [
+      "If 'verisimilitude' is admitted to be unquantifiable and formally undefined (as Popper later conceded regarding his own definition), the mechanism loses its objective metric for preference.",
+      "If the choice to act on the best-tested theory implicitly assumes the future will resemble the past (uniformity of nature), the distinction from Humean induction collapses.",
+      "If 'rational faith' in the method is indistinguishable in practice from pragmatic induction, the semantic separation is merely verbal."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0c5559bf68dab8f37bb2d97d9b152c1f917d31d129c29ee977958e29038b8b1a",
+        "kind": "rebutted",
+        "note": "The candidate provides a normative account of rational action by framing the preference as a methodological imperative derived from the defined aim of science (verisimilitude), rather than a descriptive survival trait."
+      },
+      {
+        "handle": "1b3213c40b466a0c5bf3630aeec007e4b6a04141815e3b6ece47a1a39a0f6ef5",
+        "kind": "rebutted",
+        "note": "The response explicitly addresses defensibility on Popper's terms by reconstructing the 'critical preference' argument, avoiding the shift to mere descriptive survival value."
+      },
+      {
+        "handle": "2e729cc31e977b130ff550d906b931245e1cc4e07642794b9fec6df2c751e11c",
+        "kind": "rebutted",
+        "note": "The candidate argues that the preference is not pragmatic induction but a logical consequence of the decision to pursue truth via error elimination, maintaining the semantic compartmentalization Popper insisted upon."
+      },
+      {
+        "handle": "34672ac128865b97ee5627e9b0f4e74f0d6c62175eef858870243141",
+        "kind": "revised",
+        "note": "Clarified that Popper's solution is not 'non-rational faith' in a mystical sense, but a 'rational commitment' to a specific methodological rule; the revision specifies that the faith is in the process of criticism, not the theory itself."
+      },
+      {
+        "handle": "360c0dd9f93dab16adcbf2f9dfc4a04a9485ff63a3bb401aa8dd405afc729d42",
+        "kind": "rebutted",
+        "note": "The hollowness charge is met by asserting that the justification lies in the alignment with the goal of science (truth), not in a prediction of success; the preference is rational because it is the only strategy consistent with fallibilism."
+      },
+      {
+        "handle": "50dace1344ba1b6bb88be3609294a6df690a63968e9311ed0e1e8a0c180385dd",
+        "kind": "rebutted",
+        "note": "Corrected the misrepresentation: the candidate does not appeal to biological instinct but to a conscious, critical decision to follow the method that has historically yielded progress, without claiming this guarantees future results."
+      },
+      {
+        "handle": "54e7c04e240915b4b0b41befca2686f178c29a6ba280cbcff070230249da6d21",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' clause to the claim and mechanism: the cost is the abandonment of certainty and the acceptance that the preferred theory may still be false, distinguishing the view from dogmatism."
+      },
+      {
+        "handle": "5aa9433863aae700b9ade842372e5bc15b4eb8b7feb5e65463c9e76da440223d",
+        "kind": "departure_declared",
+        "note": "Departing from the strict reliance on Popper's formal definition of verisimilitude (which failed); instead, the candidate relies on the intuitive and methodological concept of 'error elimination' as the proxy for approaching truth."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

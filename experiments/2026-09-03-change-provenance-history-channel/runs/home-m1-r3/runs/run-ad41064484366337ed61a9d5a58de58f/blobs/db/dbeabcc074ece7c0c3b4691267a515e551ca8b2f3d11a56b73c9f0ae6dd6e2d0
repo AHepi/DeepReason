@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a 'semantic compartmentalization' that Popper explicitly rejected; by admitting scientists must 'prefer' theories for future action based on past tests, the target concedes a pragmatic induction that functions identically to the probabilistic inference Popper banned, rendering the distinction between 'logical status' and 'methodological utility' an unstable verbal fix rather than a substantive solution.",
+      "counterexample": null,
+      "premise": "Popper argued that any rule guiding future expectation based on past success constitutes the very inductive principle he sought to eliminate.",
+      "premise_evidence": null,
+      "successor_question": "If methodological utility dictates future preference based on past performance, what specific logical mechanism prevents this from being a functional equivalent of the inductive probability Popper rejected?"
+    }
+  ]
+}

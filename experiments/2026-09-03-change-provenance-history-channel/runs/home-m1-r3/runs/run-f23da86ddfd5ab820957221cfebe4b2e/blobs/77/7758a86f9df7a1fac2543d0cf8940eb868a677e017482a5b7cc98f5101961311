@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'critical preference' grounded in verisimilitude (truth-likeness), not probability. We prefer the theory that has withstood severe tests because it is the one currently closest to the truth, having eliminated more error, not because it is statistically more likely to be true in the future.",
+      "mechanism": "Distinction between logical probability (induction) and critical preference (verisimilitude). The act of preference is a decision to adopt the best available approximation of truth for the purpose of further testing and action, acknowledging it may still be false.",
+      "counterconditions": [
+        "If verisimilitude cannot be defined without assuming the uniformity of nature.",
+        "If the preference for action implicitly assumes future success based on past performance."
+      ],
+      "typicality": 0.92,
+      "discharges": [
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "The distinction is not mere relabeling; it shifts the ground from probabilistic prediction (which requires induction) to ontological proximity to truth (which relies on the logic of falsification and content)."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "This candidate explicitly adopts the solution cited: preference aligns with the goal of finding truth via verisimilitude, not inductive probability."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "The link is not severed; verisimilitude provides the rational bridge. The preference is not fictionalist but realist regarding the elimination of error."},
+        {"handle": "[SRC_009] against SRC_005", "kind": "rebutted", "note": "Action is justified by the need to use the best available map, even if imperfect. Preferring a known falsehood over a less-tested one is irrational; preferring the best-tested (most verisimilar) is the only rational choice for progress."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "No assumption about the future resembling the past is made. The assumption is only that the theory which has survived severe tests contains more truth-content than one that has not."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "Reiterates that corroboration reports on past severity, but the *preference* is based on the resulting estimate of verisimilitude, not an inductive leap."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "Verisimilitude is operationalized through the logic of content and falsifiability, not the uniformity of nature. A theory with higher content that survives tests is logically closer to truth regardless of nature's uniformity."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "The analogy is not conflating survival with reliability; it is using survival as a filter for truth-content. Normative rationality dictates choosing the filter that has removed the most error."}
+      ],
+      "optional_refs": ["SRC_011", "SRC_013"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories smuggles induction back into Popper's system. Any justification for acting on a corroborated theory rather than an untested or refuted one inevitably relies on the pragmatic assumption that the future will resemble the past, which is the very principle of induction Popper sought to eliminate.",
+      "mechanism": "Pragmatic Induction. While Popper denies logical entailment, the *act* of preference functions identically to inductive inference in practice. Without an inductive bridge, the preference is arbitrary.",
+      "counterconditions": [
+        "If a non-inductive basis for action (like verisimilitude) can be rigorously defined.",
+        "If the 'critical attitude' can be shown to generate normative force without probabilistic assumptions."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "Agrees that relabeling fails; argues that the 'critical attitude' itself collapses into induction when applied to action."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "Contests that Popper's solution works; argues that 'aligning with the goal of truth' requires believing the method works, which is inductive."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "revised", "note": "Refines the attack: if verisimilitude is unknowable (as Popper admits), then preferring based on it is functionally equivalent to guessing, unless one inductions that past survival indicates truth-likeness."},
+        {"handle": "[SRC_009] against SRC_005", "kind": "rebutted", "note": "Exactly; if the theory is likely false, acting on it requires the hope (induction) that it is 'true enough' or that the method yields truth."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "Argues that distinguishing logical status from practical preference is a sleight of hand; the practical preference *is* the inductive step."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "Maintains that the logical distinction does not save the practical application from inductive contamination."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "Supports the claim that operationalizing verisimilitude for action requires assuming the uniformity of nature."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "Confirms that descriptive survival cannot yield normative rationality without the inductive premise that survival indicates quality."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_014"]
+    },
+    {
+      "claim": "The dilemma dissolves when recognizing Popper's preference as a 'methodological rule' rather than an epistemic claim. Scientists prefer corroborated theories not because they are true or probable, but because they are the most informative and thus offer the greatest opportunity for future falsification and growth of knowledge.",
+      "mechanism": "Methodological Instrumentalism. The value of a theory lies in its testability (content). Corroborated high-content theories are preferred because they allow science to proceed fastest, regardless of their truth value.",
+      "counterconditions": [
+        "If the goal of science is solely truth rather than growth of knowledge.",
+        "If acting on a known falsehood is deemed irrational regardless of its informational content."
+      ],
+      "typicality": 0.78,
+      "discharges": [
+        {"handle": "[SRC_008] against SRC_004", "kind": "rebutted", "note": "It is not a relabeling of the problem but a redefinition of the goal: from 'finding truth' to 'maximizing learning rate'."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "departure_declared", "note": "Departs from the view that the goal is strictly truth; posits that the goal is the growth of knowledge via severe testing."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Verisimilitude is secondary; the primary driver is content. We prefer the bold conjecture that survived because it teaches us more if it fails next."},
+        {"handle": "[SRC_009] against SRC_005", "kind": "rebutted", "note": "Action is defensible as an experiment. We act on the theory to see if it breaks under real-world pressure, not because we believe it will hold."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "No induction needed; the rule is purely procedural: 'Always test the strongest available hypothesis.'"},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "The preference is for the object of highest potential information gain, not the object of highest predicted success."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "Uniformity of nature is irrelevant to the strategy of maximizing information extraction."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "Survival indicates the theory has high content and has not yet been eliminated; this is a factual status, not a normative leap."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_006"]
+    },
+    {
+      "claim": "Popper's system contains an unavoidable tension: while logically consistent in rejecting induction, it pragmatically relies on a 'rational faith' in the critical method that functions indistinguishably from induction for the acting agent. The preference is defensible only if one accepts this faith as a non-rational (or meta-rational) commitment.",
+      "mechanism": "Meta-Rational Commitment. The defense rests on a voluntary adoption of the critical method as a form of life, acknowledging that the ultimate justification for preferring corroboration is circular or faith-based, yet necessary for rational discourse.",
+      "counterconditions": [
+        "If a fully non-circular, non-inductive justification can be found.",
+        "If 'faith' is admitted to be outside the scope of rational defense."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {"handle": "[SRC_008] against SRC_004", "kind": "revised", "note": "Clarifies that the 'relabeling' is actually an admission of a foundational commitment that cannot be further reduced logically."},
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "Argues that Popper's 'solution' is effectively a plea for this specific type of rational faith."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "The link to verisimilitude is maintained by faith in the method, not by logical proof."},
+        {"handle": "[SRC_009] against SRC_005", "kind": "rebutted", "note": "Action is defensible as an expression of commitment to the critical tradition, even if the theoretical grounding is incomplete."},
+        {"handle": "[SRC_006] against SRC_002", "kind": "rebutted", "note": "Accepts that the logical distinction exists but argues the pragmatic gap is filled by commitment, not logic."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "The assumption about the future is replaced by a commitment to the method."},
+        {"handle": "[SRC_014] against SRC_001", "kind": "rebutted", "note": "Uniformity is replaced by the 'Principle of Criticism' as the foundational axiom."},
+        {"handle": "[SRC_007] against SRC_003", "kind": "rebutted", "note": "Normative rationality is derived from the internal consistency of the critical community, not external survival statistics."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_007"]
+    }
+  ]
+}

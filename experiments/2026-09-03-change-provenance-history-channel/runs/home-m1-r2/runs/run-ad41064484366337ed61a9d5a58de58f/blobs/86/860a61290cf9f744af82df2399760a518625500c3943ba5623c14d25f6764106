@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the central tension in Popper's philosophy regarding action versus theory, but it fails to 'make the strongest case for each answer' as explicitly required by the problem context. The prompt demands a dialectical exploration of both the defense (preference based on verisimilitude or critical preference without induction) and the critique (smuggling induction), followed by a resolution. The target provides only the critique, omitting the defensive argument entirely, thus failing to satisfy the structural requirements of the prompt.",
+      "counterexample": null,
+      "premise": "The problem context explicitly instructs: 'Make the strongest case for each answer, then say which one survives...'",
+      "premise_evidence": null,
+      "successor_question": "How would a Popperian defend the preference for better-corroborated theories without relying on inductive expectations of future regularity?"
+    }
+  ]
+}

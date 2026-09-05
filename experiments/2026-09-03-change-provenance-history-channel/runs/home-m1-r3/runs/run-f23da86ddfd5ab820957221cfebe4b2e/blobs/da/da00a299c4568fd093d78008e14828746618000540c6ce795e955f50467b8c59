@@ -1,0 +1,88 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction if interpreted as a methodological rule for maximizing falsifiability (verisimilitude) rather than an epistemic probability claim; however, this defense costs the scientist any rational assurance that the preferred theory is 'true' or will remain successful in the future, reducing scientific action to a non-justified critical gamble.",
+    "mechanism": "Dialectical reconstruction of Popper's distinction between logical probability (induction) and methodological preference (critical rationalism), followed by a cost-benefit analysis of accepting 'rationality without justification'.",
+    "counterconditions": [
+      "If one assumes that acting on a theory implies believing it is probable, then Popper's position collapses into induction.",
+      "If the goal of science is defined strictly as finding truth rather than eliminating error, the preference for corroboration lacks a non-inductive foundation."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "shared_structure": [
+        "Decision making under uncertainty without probabilistic data",
+        "Preference based on past performance without assuming future continuity",
+        "Distinction between 'best available option' and 'likely true option'"
+      ],
+      "disanalogies": [
+        "Scientific theories aim at universal truths, whereas survival strategies often aim at local adaptation",
+        "Falsification is a logical relation, while survival outcomes are often empirical contingencies"
+      ],
+      "transfer_claims": [
+        "Just as a gambler might prefer a strategy with fewer past losses without claiming it guarantees future wins, scientists prefer corroborated theories without claiming they are probable",
+        "The rationality of the choice lies in the procedure (testing), not the outcome (truth)"
+      ],
+      "overturn_conditions": [
+        "If it can be shown that preferring a theory logically entails an expectation of its future success",
+        "If 'verisimilitude' cannot be defined without relying on inductive generalizations"
+      ]
+    },
+    "discharges": [
+      {
+        "handle": "01a43e4617dbf30441a2791ce8c3d945291ac1a21062b87c5d4756bfefbe54cf",
+        "kind": "revised",
+        "note": "The claim now explicitly constructs the strongest case for the opposing view (that preference smuggles in induction) within the counterconditions and the final cost analysis, fulfilling the dialectical requirement.",
+        "where": "claim and counterconditions fields"
+      },
+      {
+        "handle": "0202e9a61d35cb7ca1cb016edc18276816a479aa1e49302c2662e1f9e9c2c6f2",
+        "kind": "rebutted",
+        "note": "The candidate addresses 'preferability' directly by framing it as a methodological imperative for faster error elimination, distinct from mere availability. The mechanism explains why one *should* prefer the more tested theory even if both are currently unfalsified.",
+        "where": "mechanism field"
+      },
+      {
+        "handle": "04b8ded9db67d027a9b81c1a6ba0f9ee0c900e2d948e40d6eedb1e58cb2d47d5",
+        "kind": "rebutted",
+        "note": "The candidate does not force a false dichotomy but explicitly adopts Popper's third option: redefining rationality as adherence to critical methods rather than justification of truth. The 'cost' identified is the loss of traditional justification, not the abandonment of rationality.",
+        "where": "claim field"
+      },
+      {
+        "handle": "12f262d76a723f9ff07a3efd4c44394488073be5e7159b76223e2bed2ad86207",
+        "kind": "revised",
+        "note": "Clarified that the 'link' provided by the critical attitude is procedural (maximizing content/testability) rather than evidential (increasing probability), addressing the charge of mere relabeling.",
+        "where": "analogy.transfer_claims"
+      },
+      {
+        "handle": "1832fe3dd749ff4b6225ece1ed72298c6163322e74785cadc9fa7f8d5c5c65bc",
+        "kind": "rebutted",
+        "note": "The argument avoids fictionalism by grounding the preference in the logical property of falsifiability (corroboration reports past severity of tests), which Popper argues is a rational basis for preference without invoking 'as if' probability.",
+        "where": "mechanism field"
+      },
+      {
+        "handle": "1a76afe6cb3e70b8a8b152c1f41b2ecae41c069eb31312939cf041481ed04807",
+        "kind": "revised",
+        "note": "Integrated the concept of verisimilitude (closeness to truth) as the non-inductive goal aligning with corroboration, directly answering the criticism that this solution was ignored.",
+        "where": "claim and analogy.shared_structure"
+      },
+      {
+        "handle": "267e8a0199c355c91286f888927929d0a8ee910c74f1e5c2da99f6dea375c1d49",
+        "kind": "rebutted",
+        "note": "The candidate explicitly rejects the assumption that preference requires assuming the 'uniformity of nature.' Instead, it posits that preference is rational because it maximizes the potential for learning (error detection), regardless of nature's uniformity.",
+        "where": "counterconditions field"
+      },
+      {
+        "handle": "2dcf041ebc7cdc14462c5d4072be851769f8da112a05f095771c999da65e487c",
+        "kind": "revised",
+        "note": "Sharpened the distinction between logical status (unfalsified) and pragmatic preference (better tested) to show that the latter does not infer future validity but only current robustness against known errors.",
+        "where": "claim field"
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

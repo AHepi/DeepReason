@@ -1,0 +1,100 @@
+{
+  "candidates": [
+    {
+      "content": "The relation between SRC_002 (smuggling induction) and SRC_003 (critical rationality decision rule) is one of COMPATIBILITY under a specific scope: they are compatible IF the 'decision rule' in SRC_003 is interpreted strictly as a methodological filter for error elimination rather than a predictive guide for action. This relation is REFUTED IF any instance of acting on a 'better-corroborated' theory logically necessitates an expectation of future success, thereby collapsing the distinction between methodological preference and inductive prediction.",
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_011]", "kind": "revised", "note": "Explicitly named the relation kind 'COMPATIBILITY' and defined the refutation condition regarding future expectations."},
+        {"handle": "[SRC_012]", "kind": "revised", "note": "Clarified the scope of compatibility to prevent broad mechanism claims."},
+        {"handle": "[SRC_014]", "kind": "rebutted", "note": "The mechanism is not broadly 'pragmatic decision' but specifically 'methodological filtering'; the refutation condition targets the collapse of this filter into prediction."},
+        {"handle": "[SRC_021]", "kind": "revised", "note": "Ensured 'refuted if' phrasing is present and substantive."},
+        {"handle": "[SRC_013]", "kind": "rebutted", "note": "The refutation condition is a single logical dependency (necessity of future expectation), not a complex multi-variable game scenario."},
+        {"handle": "[SRC_015]", "kind": "rebutted", "note": "Compatibility does not require logical identity; it requires non-contradiction under a specific interpretation of 'preference'."},
+        {"handle": "[SRC_019]", "kind": "revised", "note": "Added explicit relation kind and refutation summary."},
+        {"handle": "[SRC_020]", "kind": "revised", "note": "Corrected format to ensure 'refuted if' is clearly stated."}
+      ],
+      "neighbours": ["SRC_002", "SRC_003"],
+      "evidence_refs": []
+    },
+    {
+      "content": "SRC_001 (assumption of uniformity) CONTRADICTS SRC_004 (non-inductive critical attitude) directly. This relation is REFUTED IF Popper can demonstrate a coherent model of 'rational action' where the agent prefers Theory A over Theory B solely based on past error elimination without assigning any non-zero probability or reliability to Theory A's future performance. The contradiction holds because SRC_001 asserts such an assumption is necessary, while SRC_004 asserts it is not.",
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_011]", "kind": "revised", "note": "Defined relation as 'CONTRADICTION' with clear endpoints."},
+        {"handle": "[SRC_012]", "kind": "revised", "note": "Specified the exact logical conflict regarding probability assignment."},
+        {"handle": "[SRC_014]", "kind": "rebutted", "note": "The mechanism is the necessity of probability assignment for action, which is specific, not broad."},
+        {"handle": "[SRC_021]", "kind": "revised", "note": "Included explicit 'REFUTED IF' clause."},
+        {"handle": "[SRC_013]", "kind": "rebutted", "note": "The refutation condition isolates a single variable: the possibility of action without future reliability expectation."},
+        {"handle": "[SRC_015]", "kind": "rebutted", "note": "If SRC_001 is true (assumption necessary), then SRC_004 (no assumption needed) is false; they are logically incompatible."},
+        {"handle": "[SRC_019]", "kind": "revised", "note": "Formatted to meet relation-form criteria."},
+        {"handle": "[SRC_020]", "kind": "revised", "note": "Ensured substantive relation statement."}
+      ],
+      "neighbours": ["SRC_001", "SRC_004"],
+      "evidence_refs": []
+    },
+    {
+      "content": "SRC_005 (inevitable smuggling) REDUCES TO SRC_002 (pragmatic inconsistency) in the domain of practical application. The claim that induction is 'smuggled back in' (SRC_005) is merely the generalized conclusion of the specific mechanism described in SRC_002: that acting on corroboration functionally requires assigning higher subjective probability. This reduction is REFUTED IF there exists a form of 'preference' or 'action' that utilizes past test results without implicitly assigning any degree of confidence or reliability to future outcomes.",
+      "typicality": 0.65,
+      "discharges": [
+        {"handle": "[SRC_011]", "kind": "revised", "note": "Identified relation as 'REDUCES TO'."},
+        {"handle": "[SRC_012]", "kind": "revised", "note": "Clarified the reduction from general claim to specific mechanism."},
+        {"handle": "[SRC_014]", "kind": "rebutted", "note": "The mechanism is precisely defined as 'assigning subjective probability', avoiding breadth."},
+        {"handle": "[SRC_021]", "kind": "revised", "note": "Stated refutation condition clearly."},
+        {"handle": "[SRC_013]", "kind": "rebutted", "note": "The reduction hinges on the definition of 'action', a single conceptual variable."},
+        {"handle": "[SRC_015]", "kind": "rebutted", "note": "Reduction implies logical dependence, not mere compatibility; if SRC_002 is true, SRC_005 follows."},
+        {"handle": "[SRC_019]", "kind": "revised", "note": "Met all formatting requirements."},
+        {"handle": "[SRC_020]", "kind": "revised", "note": "Ensured relation is substantive."}
+      ],
+      "neighbours": ["SRC_005", "SRC_002"],
+      "evidence_refs": []
+    },
+    {
+      "content": "SRC_003 (decision rule) and SRC_005 (smuggling induction) share a SHARED MECHANISM of 'pragmatic bridging': both attempt to resolve the gap between past corroboration and future action, but via opposite valuations of that bridge. SRC_003 views the bridge as a valid methodological choice; SRC_005 views it as an illicit inductive leap. This shared mechanism relation is REFUTED IF the two artifacts are addressing fundamentally different problems (e.g., one addressing logic, the other addressing psychology) such that no common 'bridge' concept applies to both.",
+      "typicality": 0.55,
+      "discharges": [
+        {"handle": "[SRC_011]", "kind": "revised", "note": "Defined relation as 'SHARED MECHANISM'."},
+        {"handle": "[SRC_012]", "kind": "revised", "note": "Specified the mechanism as 'pragmatic bridging'."},
+        {"handle": "[SRC_014]", "kind": "rebutted", "note": "The mechanism is narrowly defined as the resolution of the past-future action gap."},
+        {"handle": "[SRC_021]", "kind": "revised", "note": "Included 'REFUTED IF' condition."},
+        {"handle": "[SRC_013]", "kind": "rebutted", "note": "The refutation condition tests the unity of the problem space, a single structural variable."},
+        {"handle": "[SRC_015]", "kind": "rebutted", "note": "Shared mechanism does not imply agreement, only that they operate on the same conceptual structure."},
+        {"handle": "[SRC_019]", "kind": "revised", "note": "Formatted correctly."},
+        {"handle": "[SRC_020]", "kind": "revised", "note": "Substantive relation proposed."}
+      ],
+      "neighbours": ["SRC_003", "SRC_005"],
+      "evidence_refs": []
+    },
+    {
+      "content": "SRC_004 (non-inductive attitude) ABSTRACTS the core epistemic stance found in SRC_001 (assumption of uniformity) by removing the temporal component. SRC_004 proposes a timeless 'critical attitude' towards truth-likeness, whereas SRC_001 insists on a temporal assumption (future resembles past). This abstraction relation is REFUTED IF the 'critical attitude' in SRC_004 cannot be formulated or sustained without implicitly invoking the temporal uniformity principle rejected in SRC_001.",
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_011]", "kind": "revised", "note": "Relation identified as 'ABSTRACTS'."},
+        {"handle": "[SRC_012]", "kind": "revised", "note": "Defined the abstraction as removal of the temporal component."},
+        {"handle": "[SRC_014]", "kind": "rebutted", "note": "Mechanism is specific: the removal of temporal uniformity from the epistemic stance."},
+        {"handle": "[SRC_021]", "kind": "revised", "note": "Refutation condition stated."},
+        {"handle": "[SRC_013]", "kind": "rebutted", "note": "Refutation depends on the definitional dependency of 'attitude' on 'time', a single conceptual link."},
+        {"handle": "[SRC_015]", "kind": "rebutted", "note": "Abstraction implies a derivative relationship; if the base (SRC_001) is necessary, the abstraction (SRC_004) fails."},
+        {"handle": "[SRC_019]", "kind": "revised", "note": "Compliant with schema."},
+        {"handle": "[SRC_020]", "kind": "revised", "note": "Substantive relation established."}
+      ],
+      "neighbours": ["SRC_004", "SRC_001"],
+      "evidence_refs": []
+    },
+    {
+      "content": "SRC_002 (pragmatic inconsistency) INTEGRATES with SRC_003 (decision rule) to form a complete description of the 'Popperian Agent': SRC_003 provides the formal rule, while SRC_002 describes the inevitable psychological or functional cost of executing that rule in a real-world context. This integration is REFUTED IF the 'decision rule' can be executed in practice without generating the 'pragmatic inconsistency' described, implying the two describe mutually exclusive realities rather than complementary aspects of one reality.",
+      "typicality": 0.35,
+      "discharges": [
+        {"handle": "[SRC_011]", "kind": "revised", "note": "Relation defined as 'INTEGRATES'."},
+        {"handle": "[SRC_012]", "kind": "revised", "note": "Integration defined as forming a complete agent description."},
+        {"handle": "[SRC_014]", "kind": "rebutted", "note": "Mechanism is the complementarity of formal rule and functional cost."},
+        {"handle": "[SRC_021]", "kind": "revised", "note": "Refutation condition included."},
+        {"handle": "[SRC_013]", "kind": "rebutted", "note": "Refutation tests the mutual exclusivity vs complementarity, a binary structural question."},
+        {"handle": "[SRC_015]", "kind": "rebutted", "note": "Integration allows for tension between components; it does not require them to be logically identical."},
+        {"handle": "[SRC_019]", "kind": "revised", "note": "Schema compliant."},
+        {"handle": "[SRC_020]", "kind": "revised", "note": "Substantive relation provided."}
+      ],
+      "neighbours": ["SRC_002", "SRC_003"],
+      "evidence_refs": []
+    }
+  ]
+}

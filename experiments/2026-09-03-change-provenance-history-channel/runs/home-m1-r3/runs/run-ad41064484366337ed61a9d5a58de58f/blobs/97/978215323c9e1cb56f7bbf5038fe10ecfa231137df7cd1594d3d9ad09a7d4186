@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's distinction between 'rational action' and 'inductive inference' collapses because Popper's own criterion for a 'severe test' relies on the theory being improbable given background knowledge; preferring a theory specifically because it survived such a test implicitly assigns it higher verisimilitude (truth-likeness), which functions as a proxy for probability and thus smuggles in the inductive assumption that past survival indicates future reliability.",
+      "counterexample": null,
+      "premise": "Popper defines a severe test as one where the evidence would be improbable if the theory were false, implying that surviving such a test makes the theory more likely to be true (verisimilitude), contradicting the claim that corroboration implies no increase in probability or future expectation.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration does not imply any expectation of future success, on what grounds does Popper justify acting on the better-corroborated theory rather than flipping a coin?"
+    }
+  ]
+}

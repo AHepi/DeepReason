@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule of 'rational faith' that explicitly rejects inductive justification, accepting the cost that this preference remains logically unjustifiable regarding future truth.",
+      "mechanism": "Methodological Decisionism: Distinguishing between the logical status of a theory (which cannot be probabilified) and the pragmatic rationality of the scientist's choice to act on the theory that has withstood the most severe tests, treating this choice as a non-inductive convention.",
+      "counterconditions": [
+        "If the agent believes the past success of the theory increases its objective probability of future success, the defense collapses into induction.",
+        "If the 'methodological rule' is claimed to be truth-conducive rather than merely expedient, it smuggles in induction."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "The candidate provides a normative account of rational action based on Popper's concept of 'rational faith' and methodological conventions, distinguishing it from descriptive survival value."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "The claim explicitly addresses 'defensibility' via methodological rules, not merely describing survival value."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "rebutted", "note": "The argument relies on 'methodological decisionism' and 'rational faith,' not on verisimilitude comparisons which Popper admitted were problematic."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "The candidate admits the preference is pragmatic but argues Popper defines this specific type of pragmatic choice as distinct from 'induction' by denying it any logical weight regarding truth probability."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "The candidate clarifies that Popper affirms the rationality of the *choice* (methodology) while denying justification for the *theory's truth*, avoiding the conflation criticized."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "revised", "note": "Revised to explicitly acknowledge the 'hollowness' cost: the justification is purely conventional and offers no guarantee of utility, which is the price of avoiding induction."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "The defense uses 'rational faith' as a philosophical stance, not a biological instinct."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "revised", "note": "Explicitly added the cost: accepting that the preference is logically unjustifiable regarding future truth and rests solely on a non-rational (though perhaps psychologically inevitable) decision."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_009"]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's own terms and constitutes a covert re-introduction of induction, as any reason to prefer a corroborated theory for future action implicitly assumes the uniformity of nature or the reliability of past tests for future outcomes.",
+      "mechanism": "The Inductive Smuggle Argument: Asserting that the very act of 'preferring' X over Y for future action entails a belief that X is more likely to succeed, which is an inductive inference regardless of whether the agent labels it 'probability' or 'corroboration'.",
+      "counterconditions": [
+        "If Popper can define a form of 'preference' that guides action without implying any expectation of future success, the criticism fails.",
+        "If the preference is shown to be entirely arbitrary (e.g., preferring the worst-corroborated theory), the charge of induction might be avoided, but the preference becomes irrational."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "The candidate argues that no normative account exists on Popper's terms that avoids induction; the 'smuggle' is the failure of his own system."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "The claim directly answers the defensibility question with a negative, arguing the shift to survival value is exactly the inductive smuggling."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "departure_declared", "note": "Departing from attempts to save Popper via verisimilitude; this candidate argues the entire project of non-inductive preference fails."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "Agrees that semantic compartmentalization fails; the candidate asserts that pragmatic induction is unavoidable and Popper's rejection of it is inconsistent with his advice to scientists."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Argues that distinguishing methodological choice from truth justification is insufficient because the *motive* for the choice is inherently inductive."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "Accepts the 'hollow justification' critique and pushes it further: the hollowness proves the presence of hidden induction, not a valid alternative."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "Clarifies that the 'instinct' to prefer is indeed inductive, and Popper's attempt to rationalize it without induction is the error."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "revised", "note": "Added cost: Accepting this view means admitting Popper's central distinction between corroboration and probability collapses in the realm of action, rendering his solution to the problem of induction incomplete."}
+      ],
+      "optional_refs": ["SRC_004", "SRC_012"]
+    },
+    {
+      "claim": "The preference is defensible only if reinterpreted through an evolutionary epistemology where 'corroboration' signals fitness for survival in a specific environment, costing the universal applicability of scientific rationality and reducing it to local adaptation.",
+      "mechanism": "Evolutionary Selection of Theories: Treating theories as organisms and corroboration as survival fitness. Preference is not inductive logic but a heuristic for selecting traits (theories) that have survived environmental pressures (tests).",
+      "counterconditions": [
+        "If the environment (nature) changes radically, the heuristic fails, acknowledging the lack of inductive guarantee.",
+        "If 'fitness' is interpreted as 'likelihood of truth,' the argument reverts to induction."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Provides a normative account based on evolutionary fitness rather than logical probability, framing action as adaptive behavior."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "Shifts ground from 'defensibility' in a logical sense to 'viability' in an evolutionary sense, addressing the prompt's tension by redefining the terms."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "rebutted", "note": "Avoids verisimilitude entirely; relies on survival/fitness analogies instead."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "departure_declared", "note": "Declares departure from strict Popperian semantics; adopts an evolutionary framework that accepts pragmatic induction as biological reality."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Distinguishes between logical justification (denied) and evolutionary rationality (affirmed)."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "Argues the justification is not hollow but grounded in biological/evolved heuristics, even if not logically certain."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "revised", "note": "Explicitly embraces the 'biological instinct' aspect as the core mechanism, reframing it as evolutionary epistemology rather than a misrepresentation."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "revised", "note": "Cost identified: Science loses its claim to universal rationality and becomes a localized, species-specific adaptation strategy with no guarantee beyond current conditions."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_016"]
+    },
+    {
+      "claim": "The preference is a performative contradiction in Popper's system: it is defensible only as an irrational 'leap of faith' that Popper rhetorically disguises as rational methodology, costing the coherence of his critical rationalism.",
+      "mechanism": "Performative Contradiction Analysis: Arguing that the injunction to 'prefer the best tested' functions as a dogma within a system designed to eliminate dogmas, revealing a foundational gap filled by rhetoric rather than logic.",
+      "counterconditions": [
+        "If Popper admits the 'leap of faith' openly without calling it 'rational,' the contradiction dissolves into honest existentialism.",
+        "If the 'methodological rule' is accepted as a definition of rationality itself (stipulative), the contradiction vanishes but the term 'rational' loses its normative force."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "Claims no consistent normative account exists; the 'account' is a rhetorical cover for an irrational leap."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "Argues the shift to survival value is the symptom of the underlying contradiction, not an answer."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "rebutted", "note": "Posits that the failure of verisimilitude is just one instance of the broader failure to ground preference non-inductively."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "Asserts that the 'semantic compartmentalization' is the mechanism of the contradiction, not a valid defense."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "revised", "note": "Refines the critique: Popper does rely on a 'non-rational faith' but falsely labels it 'methodological rationality,' creating the contradiction."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "Agrees the justification is hollow and identifies this hollowness as the site of the performative contradiction."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "Argues that appealing to instinct is an admission of the failure of rational justification, supporting the contradiction thesis."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "revised", "note": "Cost specified: Accepting this means acknowledging that Critical Rationalism is internally inconsistent at the point of action, requiring a revision of what 'critical' means."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_011"]
+    }
+  ]
+}

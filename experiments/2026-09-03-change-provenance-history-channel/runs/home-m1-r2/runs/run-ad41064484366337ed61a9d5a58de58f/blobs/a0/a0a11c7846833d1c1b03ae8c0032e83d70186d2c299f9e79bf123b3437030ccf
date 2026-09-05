@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'maximizing falsifiability potential' with 'practical utility for action.' Popper explicitly rejects the idea that surviving tests makes a theory more likely to be true or useful for prediction; he only says it has not yet been falsified. By advising scientists to 'act on' the better-corroborated theory as a 'strategic bet on where truth is most likely to be found,' the target smuggles in an inductive assumption: that a theory which has survived severe tests in the past is a better guide for future action (or more likely to yield truth) than one that has not. This violates Popper's strict separation between logical status (corroboration is not probability) and pragmatic choice, effectively reintroducing the very inductive inference Popper sought to eliminate by assuming past survival predicts future reliability.",
+      "counterexample": null,
+      "premise": "Popper held that corroboration is not probability and that preferring a theory for action based on past survival risks smuggling in induction.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration provides no basis for expecting future success, on what non-inductive grounds can Popper justify acting on the better-corroborated theory rather than flipping a coin?"
+    }
+  ]
+}

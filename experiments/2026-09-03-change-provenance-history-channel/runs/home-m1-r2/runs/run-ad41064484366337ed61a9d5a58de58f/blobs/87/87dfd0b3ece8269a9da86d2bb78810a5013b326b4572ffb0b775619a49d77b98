@@ -1,0 +1,175 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories in action is defensible on Popper's terms as a methodological rule of 'critical rationalism' rather than an inductive inference; it costs the agent the assurance of safety, accepting instead the status of the 'least refuted' option in a landscape of universal uncertainty.",
+      "mechanism": "Reframes 'preference' not as a belief in higher probability of truth (induction) but as a strategic selection of the theory with the highest 'verisimilitude' (truth-likeness) based on its survival of severe tests. The mechanism is non-inductive because it does not project past success into future probability, but rather acknowledges that among competing conjectures, the one that has withstood the most rigorous attempts at falsification is the most informative and currently least erroneous guide for action.",
+      "counterconditions": [
+        "If the agent requires a guarantee of safety or a probabilistic calculation of success, this defense fails.",
+        "If 'preference' is interpreted psychologically as 'confidence' rather than methodologically as 'selection for testing/application', the distinction collapses.",
+        "If the theory chosen for action is subsequently falsified immediately, the defense holds only if the action was taken before the falsification, acknowledging the risk."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "The criticism claims the mechanism fails to address 'acting on' a theory. The rebuttal is that Popper's methodology explicitly extends to practical action: we act on the best-tested theory not because we believe it will work (induction), but because it is the most rational choice given our current ignorance. To do otherwise (act on a falsified or untested theory) would be irrational, not because of probability, but because it ignores available critical knowledge."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The criticism cites the 'cost of radical instrumentalism.' The rebuttal is that the cost is accepted: we act without certainty. The defense does not dismiss the cost; it argues that induction offers a false promise of eliminating this cost, whereas Popper's approach honestly accepts the risk while maximizing the quality of the conjecture used."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The criticism claims calling the preference 'arbitrary' contradicts Popper's rule. The candidate does not call it arbitrary; it calls it 'rationally compelled' by the state of criticism. The preference is non-arbitrary because it is determined by the logical history of tests, even if it lacks a probabilistic foundation."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The criticism alleges a category error between methodological rule and psychological confidence. The candidate strictly adheres to the methodological interpretation: 'preference' is a decision procedure, not a feeling of safety. The mechanism explicitly divorces the act of choosing from any claim of increased probability."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "The criticism conflates selecting for testing vs. action. The rebuttal is that for Popper, 'action' is simply the application of a theory in a new context, which constitutes a new test. Therefore, the logic for selection is identical: choose the theory that offers the most severe potential test (highest content) and has survived so far."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "The criticism argues the target redefines action. The candidate clarifies that 'building a bridge' is an instantiation of a physical theory. Choosing the best-tested theory for the bridge is consistent with choosing the best-tested theory for further critique; both rely on the same non-inductive metric of corroboration."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "The criticism claims verisimilitude smuggles in induction. The rebuttal is that verisimilitude is a comparative logical measure of content and truth, not a probabilistic projection. We prefer the theory with higher verisimilitude because it is logically closer to the truth (if it is), not because the past predicts the future."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "The criticism states action under risk requires induction. The candidate denies this premise: rational action under risk is possible via maximization of critical scrutiny (choosing the least refuted), which is a deductive assessment of current status, not an inductive leap."
+        }
+      ],
+      "evidence_refs": [],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_014"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system; the only way to remain consistent is to admit that 'corroboration' functions as a pragmatic proxy for probability, costing Popper the purity of his anti-inductivist stance.",
+      "mechanism": "Argues that the linguistic and practical gap between 'having survived tests' and 'being preferred for action' cannot be bridged without an implicit premise that 'the future will resemble the past' (the principle of induction). If corroboration reports only past performance, preferring it for future action logically entails assuming past performance predicts future reliability. Thus, scientists (and Popper) are covert inductivists.",
+      "counterconditions": [
+        "If Popper can define a non-probabilistic concept of 'rationality' that mandates this preference without assuming uniformity of nature, this claim fails.",
+        "If 'preference' is shown to be purely aesthetic or conventional rather than truth-directed, the charge of smuggling induction weakens.",
+        "If the 'cost' of abandoning the preference is shown to be paralysis (inability to act), the pragmatic necessity might override the logical inconsistency, but the inconsistency remains."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "revised",
+          "note": "Revised to explicitly state that the failure to address 'acting on' a theory is precisely the point: the candidate argues that Popper *cannot* address it without induction. The mechanism now posits that the silence on a non-inductive justification for action proves the smuggling."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The criticism mentions dismissing the cost of radical instrumentalism. This candidate embraces that cost: it argues that without induction, radical instrumentalism is the only honest position, and any attempt to justify preference is a disguise for induction."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The criticism cites Popper's rule that scientists *ought* to prefer. This candidate argues that this 'ought' is the smoking gun of hidden induction; an 'ought' based solely on past data regarding future action is inductive by definition."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "The criticism distinguishes logical status from psychological confidence. This candidate argues that the 'logical status' of corroboration is empty for action unless it carries inductive weight. The distinction is merely verbal if the practical outcome is identical to inductive reasoning."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to concede the conflation of testing and action is intentional in the critique: the argument is that the logic required for action (prediction of success) is fundamentally different from the logic of testing (attempted falsification), and bridging them requires induction."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "The criticism says the mechanism redefines action. This candidate asserts that 'choosing which theory to act on' inherently involves a prediction of outcome, which is the domain of induction. Redefining it as 'critique' avoids the problem but fails to answer the prompt about actual action."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "revised",
+          "note": "Revised to strengthen the claim that verisimilitude is the specific vehicle for smuggling induction. Selecting the 'closer to truth' theory based on past tests assumes the metric of 'closeness' derived from the past applies to the future."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "The criticism says the target cannot account for action without induction. This candidate agrees entirely: that is the core of the argument. The 'dilemma' is resolved by admitting the smuggling."
+        }
+      ],
+      "evidence_refs": [],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_010"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves if we view scientific action not as 'prediction-based betting' but as 'error-elimination engineering'; the preference is defensible without induction because it minimizes known errors rather than maximizing unknown probabilities, costing us the hope of positive justification.",
+      "mechanism": "Proposes a shift in the ontology of action: acting on a theory is not betting it will work, but deploying the tool that has the fewest known defects. Just as one chooses a bridge design with no known structural flaws over one with known flaws, not because the flawless one is 'probable' to stand, but because the other is 'known' to be risky. This relies on the asymmetry of falsification (we know what is wrong) vs. verification (we never know what is right).",
+      "counterconditions": [
+        "If the 'unknown defects' in the corroborated theory turn out to be fatal, the mechanism must explain why the choice was still rational (answer: it was rational ex-ante based on available criticism).",
+        "If the uncorroborated theory happens to work better, the mechanism must hold that the choice of the corroborated one was still correct (answer: yes, because it minimized known risk).",
+        "If 'minimizing known errors' is argued to be an inductive strategy (assuming known errors persist), the defense must clarify that recognizing a logical contradiction or empirical refutation is a timeless fact, not a temporal generalization."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Addresses the 'acting on' dilemma by redefining action as error-minimization. We build the bridge with the design that hasn't failed yet, not because we think it won't fail, but because we know the others have."
+        },
+        {
+          "handle": "[SRC_005] against SRC_003",
+          "kind": "rebutted",
+          "note": "The 'cost of radical instrumentalism' is reframed as the 'benefit of negative knowledge.' We don't need positive assurance to act; we only need the absence of negative proof."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The preference is not arbitrary; it is dictated by the logical asymmetry between verification and falsification. We *must* prefer the non-refuted over the refuted to avoid known falsehoods."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "This avoids the category error by grounding the preference in logical consistency (avoiding contradiction) rather than psychological confidence."
+        },
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Selecting for action and selecting for testing converge here: both seek to expose or utilize the current limits of knowledge. Acting on the best theory is the ultimate test."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Does not redefine action as critique, but as 'application of negative knowledge.' Building a bridge is applying the knowledge of what designs do not collapse."
+        },
+        {
+          "handle": "[SRC_014] against SRC_001",
+          "kind": "rebutted",
+          "note": "Verisimilitude is replaced by 'falsity-content.' We prefer the theory with less known falsity-content. This is a deductive comparison of sets of refutations, not an inductive projection."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Action under risk is managed by eliminating known risks, not by calculating probabilities. This is fully compatible with Popper's rejection of induction."
+        }
+      ],
+      "evidence_refs": [],
+      "optional_refs": [
+        "SRC_008",
+        "SRC_012"
+      ]
+    }
+  ]
+}

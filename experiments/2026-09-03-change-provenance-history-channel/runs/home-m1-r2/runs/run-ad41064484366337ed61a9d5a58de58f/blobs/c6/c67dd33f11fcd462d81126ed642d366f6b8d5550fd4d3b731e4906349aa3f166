@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims Popper's preference for better-corroborated theories implies a normative rule that relies on the heuristic 'what worked won't fail immediately,' which it defines as inductive reasoning.",
+      "premise_evidence": [
+        {
+          "block": "reasoning-envelope-wf",
+          "quote": "his insistence that scientists *must* prefer the better-corroborated theory for action implies a normative rule that only makes sense if past performance is a guide to future reliability."
+        },
+        {
+          "block": "reasoning-envelope-wf",
+          "quote": "As an agent, he cannot help but rely on the heuristic that 'what worked won't fail immediately,' which is the definition of inductive reasoning."
+        }
+      ],
+      "case": "The target commits a category error by conflating 'pragmatic necessity' with 'inductive logic.' Popper explicitly defends the preference for better-corroborated theories not because they are more likely to be true (which would be induction), but because they have withstood the most severe attempts at falsification, making them the best available candidates for critical discussion and further testing. The target asserts that acting on this preference 'only makes sense' if one assumes future reliability, ignoring Popper's argument that it is the *only rational* choice in the absence of positive justification: we prefer the theory that has survived severe tests because it is the one we know the least about its flaws, not because we predict its success. By defining the pragmatic act of choosing the 'least refuted' option as 'crypto-induction,' the target begs the question against Popper's specific distinction between logical probability (which corroboration does not affect) and methodological preference (which is based on severity of testing, not frequency of success).",
+      "counterexample": null,
+      "successor_question": "If preferring the theory with the highest survival rate against falsification is not an inductive inference about future truth, but rather a strategic selection of the most informative surviving hypothesis, does the charge of 'internal inconsistency' collapse into a mere disagreement over the definition of rational action?"
+    }
+  ]
+}

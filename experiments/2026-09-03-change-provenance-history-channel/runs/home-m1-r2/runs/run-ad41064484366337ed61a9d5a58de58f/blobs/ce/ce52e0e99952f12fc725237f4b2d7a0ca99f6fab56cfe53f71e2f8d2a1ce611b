@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes a 'Calibrated Risk' mechanism that integrates node 0d64405bfceb with SRC_005, asserting the relation holds only when the system can absorb falsification. However, the target fails to define the substantive nature of the integration itself (e.g., data flow, control dependency, or shared state) beyond the conditional logic of the refutation. The prompt requires naming the kind of relation and stating what it is; the target provides a condition for failure ('REFUTED IF') but does not explicitly articulate the positive mechanism of integration that exists when the condition is not met, effectively defining the relation solely by its breaking point rather than its operational substance.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to address the core dilemma of 'action-guidance' because it redefines 'risk minimization' in a way that secretly relies on an inductive assumption about the stability of error conditions. Popper's logical asymmetry only establishes that a falsified theory is false; it does not establish that a non-falsified theory is 'safer' for future action unless one assumes that the conditions which allowed the theory to survive past tests will persist into the future. By claiming the best-corroborated theory is the 'safest bet,' the target implicitly assumes that the future environment will resemble the past environment regarding the specific errors tested. Without this inductive bridge, the fact that a theory survived yesterday provides no logical basis for preferring it today over an equally unrefuted but less-tested rival, as the untested areas of the well-corroborated theory might be precisely where tomorrow's falsification lies. Thus, the preference smuggles in induction by assuming the uniformity of nature required to make 'past survival' relevant to 'future safety.'",
+      "counterexample": null,
+      "premise": "Popper's falsification logic is strictly backward-looking (identifying past errors) and contains no internal mechanism to project 'safety' forward without assuming the future resembles the past.",
+      "premise_evidence": null,
+      "successor_question": "If the agent cannot assume the future resembles the past, on what non-inductive grounds can they claim that a theory surviving 100 tests is 'safer' for the 101st action than a theory surviving only 1 test?"
+    }
+  ]
+}

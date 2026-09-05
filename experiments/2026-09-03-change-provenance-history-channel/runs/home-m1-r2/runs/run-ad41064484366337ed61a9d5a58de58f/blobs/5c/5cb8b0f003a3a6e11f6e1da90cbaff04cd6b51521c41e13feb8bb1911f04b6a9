@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule for error avoidance, not an inductive inference of truth; accepting this costs the agent any claim to 'rational certainty' or probabilistic safety, forcing action under permanent risk.",
+      "mechanism": "Reframing 'preference' as 'selection for severe testing potential' rather than 'expectation of success'. The agent chooses the theory that has survived the most dangerous tests because it offers the most opportunities for future falsification (growth of knowledge), even if acting on it risks immediate failure. The 'cost' is the abandonment of the intuitive link between past success and future reliability.",
+      "counterconditions": [
+        "If the agent acts solely to avoid immediate catastrophe (e.g., bridge building) rather than to grow knowledge, this mechanism fails to justify preferring the corroborated theory over a simpler, untested one that might work by luck.",
+        "If 'severe testing' is defined circularly to ensure survival, the preference becomes tautological and loses its normative force."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The rebuttal clarifies that the 'normative bridge' is the imperative to maximize knowledge growth via falsifiability, not to minimize error probability. The preference is for the *best target*, not the *safest bet*."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Distinguishes 'risk-management for future action' (inductive) from 'risk-taking for future learning' (Popperian). The preference is for the theory that risks more, not the one that promises less risk."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "revised", "note": "Revised to acknowledge that in life-or-death scenarios (bridge building), Popper's strict criterion may indeed fail to provide comfort, admitting the cost is that rationality does not guarantee safety."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Agrees that preference is not increased confidence, but argues this does not make the preference arbitrary; it is dictated by the goal of science (truth-seeking via error elimination), not pragmatic success."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost of 'radical instrumentalism' is accepted: we act on the best guess knowing it is likely false, but it is the *most informative* false guess."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Redefining rational action as 'error-avoidance in the long run of inquiry' rather than 'success in the immediate instance' addresses the justification gap."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The preference is not arbitrary because it follows the methodological rule: 'Choose the theory with the highest empirical content that has not yet been falsified.'"},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Popper's own behavior is explained as consistent with choosing the most falsifiable theory for action, precisely because if it fails, we learn the most. The conflation charge is rejected."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_013"]
+    },
+    {
+      "claim": "The preference smuggles induction back in; Popper's defense is verbally consistent but pragmatically empty, as any agent acting on a corroborated theory implicitly assumes the future will resemble the past (uniformity of nature), which is the very principle Popper rejected.",
+      "mechanism": "Demonstrating that 'acting on' a theory entails a belief in its reliability for the specific context of action. If one truly believed corroboration implied no probability of future success, one would be indifferent between a well-tested theory and a random guess when the stakes are high. Since Popper is not indifferent, he relies on an implicit inductive habit.",
+      "counterconditions": [
+        "If 'acting on' is interpreted purely as 'using as a premise for further deduction' without expectation of material success, the inductive charge weakens.",
+        "If the agent adopts a 'demon-like' perspective where the goal is only to be wrong quickly, the need for induction vanishes."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The critique stands: the 'normative bridge' Popper builds is linguistic, not logical. The move from 'survived tests' to 'prefer for action' requires an inductive leap he denies."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "The distinction between 'minimizing risk of error' and 'rational risk-management' collapses when the agent actually builds the bridge; the action presupposes reliability."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "The dilemma of acting is fatal to Popper here; information growth is irrelevant to the engineer who needs the bridge to stand *now*."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Claiming preference is not 'confidence' is a semantic dodge; behavioral preference *is* the operational definition of confidence."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost of accepting this view is admitting Popper's system cannot guide practical action without contradicting its own core tenet."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Redefining rational action doesn't help if the redefinition makes rationality incompatible with survival in the real world."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The methodological rule 'ought to prefer' is itself an inductive norm disguised as a procedural directive."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Selecting for action *is* selecting for expected success; denying this is self-deception."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_004"]
+    },
+    {
+      "claim": "The preference is defensible only if we accept a 'decision-theoretic' patch to Popper: we prefer corroborated theories not because they are probable, but because they have higher 'verisimilitude' (truth-likeness), and acting on them maximizes the expected value of truth-content despite unknown probabilities.",
+      "mechanism": "Introducing verisimilitude as the missing link. Corroboration indicates proximity to truth (without quantifying probability). Rational agents maximize expected truth-content. The 'cost' is adopting a controversial metaphysical notion (verisimilitude) that Popper struggled to formalize rigorously.",
+      "counterconditions": [
+        "If verisimilitude cannot be assessed independently of probability (as critics argue), this solution collapses into standard induction.",
+        "If two theories have equal corroboration but different complexities, this mechanism lacks a tie-breaker for action."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "revised", "note": "Added verisimilitude as the explicit normative bridge, moving beyond simple risk minimization."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Verisimilitude allows for 'rational risk-management' based on truth-content rather than frequency-based reliability."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "Acting on high verisimilitude addresses the bridge dilemma by appealing to the *quality* of the guess, not just its survival."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Preference is based on estimated truth-likeness, which is distinct from subjective confidence or probability."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost is the metaphysical burden of verisimilitude, which is steep but necessary to save the preference."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Rational justification is found in the maximization of truth-content, satisfying the requirement for a non-arbitrary basis."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The rule to prefer higher verisimilitude is non-inductive if verisimilitude is defined logically rather than statistically."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Selection for action is justified by the hope of capturing more truth, distinguishing it from mere selection for critique."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_011"]
+    },
+    {
+      "claim": "The entire debate rests on a category error: Popper's 'corroboration' is a historical report, while 'preference for action' is a future-oriented gamble. No logical derivation connects them; the 'preference' is therefore a non-rational, biological instinct that Popper mistakenly tried to rationalize.",
+      "mechanism": "Evolutionary epistemology shift. Humans prefer corroborated theories because evolution selected for organisms that assume regularities (induction). Popper's attempt to justify this logically is doomed because the justification is biological, not logical. The 'cost' is admitting that scientific rationality rests on an irrational (biological) foundation.",
+      "counterconditions": [
+        "If one accepts evolutionary goals as 'rational' within a naturalized epistemology, the dichotomy between rational and biological dissolves.",
+        "If 'logical derivation' is not required for 'defensibility' (pragmatic defensibility suffices), the critique misses the mark."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "departure_declared", "note": "Departing from the assumption that a 'normative bridge' must be logical; proposing it is biological instead."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "The conflation is real, but it reveals that 'rational risk-management' is an evolutionary heuristic, not a logical derivation."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "The dilemma of acting is solved by acknowledging that we act on instinct/heuristic, not pure logic."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Popper's defense fails because he tries to logicalize a biological drive."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost is the loss of 'pure reason' as the sole guide for science."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Rational justification is replaced by evolutionary explanation."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The 'ought' is a biological imperative, not a methodological rule derived from logic."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Popper's behavior is explained as consistent with his biology, not his logic."}
+      ],
+      "optional_refs": ["SRC_005", "SRC_012"]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target conflates 'logical probability' (which Popper rejects as a measure of corroboration) with 'pragmatic rationality' (which Popper explicitly defends via the methodological rule of preferring the most severely tested theory), thereby constructing a false performative contradiction.",
+      "case": "The argument fails because it assumes that any preference for a better-corroborated theory must rely on an inductive inference about future validity. However, Popper's solution to this exact problem is to distinguish between the logical status of a theory (which remains unchanged by testing) and the methodological decision to prefer the theory that has withstood the most severe tests. This preference is not an inductive smuggle but a critical choice: we prefer the theory that is currently more informative and has survived attempts to falsify it, not because we believe it is 'more probable' to be true in the future, but because it is the most rationally criticizable option available. By labeling this pragmatic, non-inductive methodological rule as an 'inductive supplement,' the target misrepresents Popper's actual position, which explicitly allows for non-logical criteria in decision-making without abandoning falsificationism. The 'performative contradiction' vanishes once one accepts Popper's distinction between the context of justification (logic) and the context of action (methodology).",
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "If the preference for better-corroborated theories is a methodological rule rather than an inductive inference, does the target's claim of 'arbitrariness' hold any weight against Popper's explicit defense of critical preference?"
+    }
+  ]
+}

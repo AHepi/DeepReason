@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies that Popper's distinction between corroboration and probability collapses under the pressure of practical action, as any rational preference for a well-tested theory in engineering or daily life functionally operates as an inductive bet on the uniformity of nature, which Popper explicitly rejected.",
+      "counterexample": null,
+      "premise": "Popper held that corroboration is not probability and rejected induction, yet scientists prefer better-corroborated theories for action.",
+      "premise_evidence": null,
+      "successor_question": "Can Popper's 'critical preference' be reframed purely as a methodological rule for selecting which theory to subject to further falsification attempts, rather than a guide for practical reliance, thereby escaping the charge of smuggling in induction?"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies that preferring a better-corroborated theory for future action implicitly relies on the Principle of Uniformity (induction), which contradicts Popper's explicit rejection of induction. However, the target fails to construct the 'strongest case' for the opposing view as required by the problem prompt: specifically, the Popperian argument that such preference is a non-inductive, critical-rational decision to act on the theory that has withstood the most severe falsification attempts so far, without assuming it will succeed in the future. By omitting this necessary dialectical step, the response does not fully satisfy the prompt's instruction to 'Make the strongest case for each answer.'",
+      "counterexample": null,
+      "premise": "The problem prompt explicitly requires making the strongest case for both answers before deciding which survives.",
+      "premise_evidence": null,
+      "successor_question": "How would a strict Popperian justify acting on a corroborated theory without invoking any expectation of future success?"
+    }
+  ]
+}

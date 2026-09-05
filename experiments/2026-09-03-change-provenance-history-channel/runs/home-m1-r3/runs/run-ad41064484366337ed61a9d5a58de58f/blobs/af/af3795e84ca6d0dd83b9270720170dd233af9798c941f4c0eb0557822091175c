@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target conflates Popper's concept of 'rational preference' with 'inductive expectation of success,' ignoring Popper's explicit distinction that one can prefer a theory because it is more testable (has higher empirical content) without assuming it is more likely to be true.",
+      "case": "The argument fails on Popper's own terms because it assumes the only rational basis for action is an expectation of future truth (induction). Popper explicitly argues that preferring the better-corroborated theory is rational not because it predicts future success (which would be induction), but because it has withstood the severest tests and thus offers the best opportunity for further falsification. The target claims the choice is a 'bet' on continuity; however, for Popper, the 'bet' is purely on the logical status of the theory (its degree of corroboration based on past severity), not on the uniformity of nature. By defining any preference for future action as inherently inductive, the target begs the question against Popper's specific definition of corroboration as a report on past performance, not a predictor of future probability. The target ignores the countercondition where the choice is a methodological rule: Popper advocates choosing the bold, well-tested theory precisely to risk refutation sooner, a goal compatible with fallibilism and distinct from inductive reliability.",
+      "counterexample": [
+        "A scientist chooses Einstein's theory over Newton's not because they believe Einstein's theory is 'more probable' to hold in the future (induction), but because it has survived more severe tests and makes riskier predictions, thereby allowing science to progress faster if it is eventually falsified."
+      ],
+      "successor_question": "If the preference is solely based on past severity of tests and not future reliability, how does Popper justify acting on the theory in high-stakes scenarios (like bridge building) where the goal is specifically future reliability rather than just facilitating falsification?"
+    }
+  ]
+}

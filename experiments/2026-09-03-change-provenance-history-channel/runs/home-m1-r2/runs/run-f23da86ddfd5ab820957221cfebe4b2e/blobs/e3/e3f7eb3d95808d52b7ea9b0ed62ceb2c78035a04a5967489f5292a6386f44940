@@ -1,0 +1,216 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a rational choice based on 'verisimilitude' (truth-likeness) rather than probability. We prefer the theory that has withstood severe tests not because it is likely true, but because it is the best candidate for containing more truth content and less falsity content among available options. This avoids induction by shifting the metric from likelihood of future success to current logical status relative to truth.",
+      "mechanism": "Logical comparison of truth-content: Theory A is preferred to Theory B if A implies all the successful predictions of B plus additional risky predictions that have also survived, without A having been falsified where B survived. This is a synchronic logical relation, not a diachronic inductive inference.",
+      "counterconditions": [
+        "If verisimilitude cannot be formally defined without collapsing into probability (as Miller and Tichý argued), this defense fails.",
+        "If the preference implicitly assumes that past survival predicts future survival, it smuggles in induction.",
+        "If scientists actually act on the belief that corroborated theories are 'more probable,' the logical defense is irrelevant to practice."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate does not redefine the goal of science; it maintains 'truth' as the goal but argues that 'preference' is a selection of the best current approximation (verisimilitude) rather than a prediction of future utility. It answers the specific problem by distinguishing the logic of choice from the logic of justification."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "The rebuttal clarifies that preferring a theory for action does not entail believing it has a higher *probability* of success. It entails believing it has higher *verisimilitude*. The agent acts on the best available map, knowing it may be wrong, without assigning odds to its correctness."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Preference is treated here as a deliberate rational act of the scientist, not merely a systemic outcome. The scientist chooses Theory A over B because A survives tests B failed or A makes more precise predictions. This is a normative claim about rational choice under uncertainty, compatible with Popper's critical rationalism."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "No meta-induction is invoked. The argument relies solely on the logical content of the theories at time t. It does not claim the method will work tomorrow, only that given two theories today, one is logically closer to the truth based on test results so far."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "rebutted",
+          "note": "The distinction between logical justification and pragmatic decision-making is preserved. The 'performative contradiction' charge is rejected because the pragmatic choice is grounded in the logical state of corroboration (survival of severe tests), not in an inductive expectation."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "revised",
+          "note": "Acknowledging the Miller-Tichý collapse of naive verisimilitude, this candidate adopts a refined notion of 'qualitative verisimilitude' or 'potential falsifiability' where the preferred theory is simply the one that is more testable and has survived those specific tests, without claiming a quantitative measure of truth-likeness."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "The argument is explicitly normative: a rational agent *should* prefer the theory with higher content that has survived severe tests. It does not rely on a descriptive biological analogy of survival but on the logical imperative to choose the most informative unfalsified hypothesis."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "revised",
+          "note": "While Popper struggled with formalizing verisimilitude, the conceptual distinction remains vital. The candidate shifts focus from 'verisimilitude' as a solved technical problem to 'corroboration' as a report of past performance which licenses preference without implying future probability, accepting the cost that we cannot quantify 'how close' we are."
+        }
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_009", "SRC_012"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction. Any attempt to justify acting on past success without assuming the uniformity of nature (or the reliability of the method) is a performative contradiction. Popper's system cannot account for the rationality of action without borrowing from the inductive framework he sought to destroy.",
+      "mechanism": "Pragmatic inconsistency analysis: To act on a theory is to bet on its future performance. Betting on past survivors implies a belief that the properties leading to survival are projectible into the future. This projectibility is the definition of induction. Denying it while acting on it renders the position irrational or hypocritical.",
+      "counterconditions": [
+        "If one can define rational action without reference to future expectations (e.g., as duty to test the boldest conjecture), the charge fails.",
+        "If 'preference' is redefined as 'selection for further testing' rather than 'selection for application,' the inductive leap is avoided.",
+        "If the cost of error is symmetric, random choice would be as rational as choosing the corroborated theory, which contradicts scientific practice."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate argues that redefining goals (to progress/information) is exactly the evasion tactic that fails to answer the core issue: action requires expectation. If you build a bridge, you expect it to stand. That expectation is inductive."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "The claim rejects the idea that one can prefer a theory for action without believing it has a higher chance of success. Acting on Theory A over B logically entails judging A as a safer bet, which is a probabilistic/inductive judgment."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Whether preference is a systemic outcome or a conscious choice, if the system selects based on past survival, it is functioning inductively. The description of the mechanism reveals the hidden induction."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate accepts that a 'meta-induction' is required and argues that Popper's refusal to admit it leaves his philosophy unable to guide action. The criticism that this violates constraints is met by asserting the constraint (no induction) makes the system broken."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "rebutted",
+          "note": "The conflation charge is reversed: Popper conflates 'surviving tests' with 'being a good basis for action.' The pragmatic need to predict forces the inductive step, regardless of logical niceties."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "The failure of verisimilitude strengthens this case. Without a logical bridge like verisimilitude, the gap between 'survived tests' and 'prefer for action' can only be bridged by induction."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "The category error is on Popper's side. Describing survival (descriptive) does not justify action (normative) unless one adds the inductive premise that survival indicates fitness for future purpose."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Since verisimilitude is untenable, the defense collapses entirely, leaving induction as the only remaining explanation for why scientists prefer corroborated theories."
+        }
+      ],
+      "typicality": 0.75,
+      "optional_refs": ["SRC_005", "SRC_014"]
+    },
+    {
+      "claim": "The preference is defensible not as an inference to truth or probability, but as a methodological rule to maximize the growth of knowledge. We prefer the better-corroborated theory because it offers the most stringent platform for future refutation. Acting on it exposes our errors most quickly if they exist, thus accelerating the elimination of falsehoods.",
+      "mechanism": "Error-elimination optimization: Preference is instrumental for testing, not for prediction. By acting on the most severely tested theory, we stake the most on its potential falsity. If it fails, we learn more than if a weakly tested theory fails. This turns 'action' into 'severe testing'.",
+      "counterconditions": [
+        "If acting on a theory risks catastrophic irreversible harm (e.g., bridge collapse), the 'learning opportunity' justification is ethically insufficient.",
+        "If the theory is used for prediction in domains where falsification is slow or impossible, the methodological benefit vanishes.",
+        "If scientists genuinely believe the theory is true when acting, the methodological reinterpretation is a post-hoc rationalization."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "This does not redefine the ultimate goal (truth) but redefines the function of 'preference' as a tool for error elimination. It directly addresses the preference question by changing the utility function of the agent from 'success' to 'fast learning'."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "One can prefer a theory for the specific purpose of rigorous testing without believing it is probable. The 'belief' is in the utility of the test, not the truth of the theory."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Preference is a strategic move in the game of science. It is defensible on Popper's terms because it serves the core Popperian value: bold conjecture and rigorous refutation."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "No meta-induction is needed. The rule is: 'Choose the hypothesis that allows the severest test.' This is a logical rule of procedure, not an empirical generalization about the world."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "rebutted",
+          "note": "This resolves the pragmatic/logical tension by subsuming pragmatism under methodology. The 'pragmatic decision' is to test harder, which is logically consistent with falsificationism."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "This approach bypasses the need for verisimilitude. It doesn't matter if the theory is 'closer to truth'; it matters that it is 'richer in testable content'."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "The justification is normative and procedural: Scientists *ought* to prefer the theory that maximizes potential learning. This is a rule of conduct, not a biological description."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "By abandoning verisimilitude as the criterion for preference and adopting 'testability potential' instead, this candidate sidesteps the historical objections to Popper's truth-likeness metrics."
+        }
+      ],
+      "typicality": 0.65,
+      "optional_refs": ["SRC_003", "SRC_006"]
+    },
+    {
+      "claim": "The dilemma is false because 'preference' in science is not a binary choice between induction and nothingness, but a commitment to a specific tradition of criticism. We prefer the better-corroborated theory because it belongs to the lineage of problems and solutions that constitute our current rational tradition. Justification is local to the tradition, not universal via induction.",
+      "mechanism": "Tradition-constituted rationality: Rationality is not a transcendent algorithm but a set of practices inherited and modified. Preferring the corroborated theory is adherence to the standards of the critical tradition. Induction is rejected not by finding a new foundation, but by recognizing that 'foundations' are unnecessary for immanent critique.",
+      "counterconditions": [
+        "If the tradition itself is arbitrary or no better than superstition, this reduces to relativism, which Popper rejected.",
+        "If the tradition cannot explain why it works better than alternatives without circularity, it fails to satisfy the demand for rationality.",
+        "If 'preference' involves real-world stakes outside the tradition (e.g., life safety), internal coherence is insufficient."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "departure_declared",
+          "note": "Departing from the requirement to solve the problem using only Popper's explicit epistemology, this candidate imports a sociological/historical view of rationality (MacIntyre-style) to resolve the impasse, arguing Popper's own terms are too narrow to capture scientific practice."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Preference is not about probability but about fidelity to the rules of the critical game. One plays by the rules because that is what makes one a scientist, not because one calculates odds."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "The preference is defensible as a constitutive rule of the scientific form of life. To ask for a justification outside the tradition is to misunderstand the nature of rational inquiry."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "No meta-induction is used. The validity of the method is sustained by the ongoing success of the critical dialogue within the tradition, not by an inductive projection."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'performative contradiction' dissolves when action is seen as participation in a tradition. The logic is internal to the practice."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "Verisimilitude is replaced by 'tradition-constituted progress.' We know we are progressing because the problems we solve are deeper, not because we are closer to a static Truth."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "The justification is normative within the context of the scientific community. It explains why an agent *within* the tradition acts as they do."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "This moves beyond the verisimilitude debate entirely, rendering the objection moot by changing the metaphysical ground of the discussion."
+        }
+      ],
+      "typicality": 0.45,
+      "optional_refs": ["SRC_017"]
+    }
+  ]
+}

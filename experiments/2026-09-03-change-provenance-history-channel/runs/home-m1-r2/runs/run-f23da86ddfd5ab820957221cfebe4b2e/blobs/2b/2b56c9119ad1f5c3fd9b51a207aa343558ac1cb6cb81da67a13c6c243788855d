@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target's proposed mechanism of 'informational maximization' fails to justify the specific preference for *better-corroborated* theories over equally high-content but untested or falsified theories, thereby smuggling in induction under the guise of 'structure'.",
+      "case": "The target argues that scientists prefer highly corroborated theories because they offer more 'structure' and 'potential for error elimination' than trivially true ones. However, this reasoning does not distinguish between a *corroborated* high-content theory and an *untested* high-content theory (or even a recently falsified one that still retains high content). A bold, untested conjecture has maximum empirical content and risk, yet Popperian scientists do not prefer it over a survived rival; they prefer the one that has *withstood* tests. If the justification is merely 'informational content,' the untested bold guess should be preferred as it is arguably more informative (less probable) than the tested one. By relying on the history of survival ('corroboration') to grant this preferential status, the target implicitly relies on the assumption that past survival indicates future utility or stability. This is precisely the inductive principle Popper rejected. The target claims to avoid induction by focusing on 'progress' rather than 'truth,' but without an inductive bridge, there is no non-arbitrary reason to believe a theory that survived yesterday's tests will be a better tool for tomorrow's problems than a fresh, equally bold conjecture. Thus, the 'dissolution' of the conflict is illusory; it simply renames the inductive habit as 'informational utility' without providing a deductive basis for why corroboration matters for that utility.",
+      "counterexample": [
+        "Consider Theory A (bold, untested, high content) and Theory B (bold, survived 100 severe tests, high content). Under the target's 'informational maximization' rule, both offer 'structure' and 'risk.' Yet, working scientists (and Popper) strictly prefer B. If the preference were truly based only on content/tools for error elimination, A should be equally or more attractive as it is less 'tamed.' The exclusive preference for B implies a belief that surviving tests makes B a *reliably* better tool, which is an inductive inference about the future performance of B based on its past."
+      ],
+      "successor_question": "If corroboration adds no probability and the goal is only informational content, what deductive principle prevents a scientist from preferring a brand-new, wildly speculative high-content theory over a well-corroborated one, given that the new theory represents an even greater opportunity for 'error elimination'?"
+    }
+  ]
+}

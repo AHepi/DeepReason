@@ -1,0 +1,64 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule of 'critical rationalism' that maximizes testability (verisimilitude) without asserting inductive probability; the cost is accepting that this preference offers no guarantee of practical success or truth, only the best available target for falsification.",
+      "mechanism": "Popper distinguishes between the logical status of a theory (which cannot be made probable by past tests) and the methodological decision of which theory to subject to further severe testing. Preferring the highly corroborated theory is rational because it has withstood the most stringent attempts at refutation, meaning it contains more empirical content and offers the highest potential for future learning if it is eventually falsified. This is a non-inductive choice based on the current state of critical discussion, not a prediction of future reliability.",
+      "counterconditions": [
+        "If the agent requires a guarantee of safety or success for high-stakes action (e.g., building a bridge), this defense fails because corroboration implies no probability of future performance.",
+        "If 'preference' is interpreted as a belief in higher truth-likeness rather than a decision to test, the argument collapses into the induction Popper rejected."
+      ],
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "The normative account is methodological: one *should* choose the theory with the highest empirical content to advance knowledge, not because it is 'safer' in a probabilistic sense, but because it is the most informative conjecture currently standing."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Agrees that the target conflates justification of truth with rationality of method; this candidate strictly adheres to the latter, avoiding 'non-rational faith' by grounding the choice in the logic of situational analysis."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "The justification is not hollow; it is robustly negative. We prefer it not because it will work, but because it is the least likely to be shown wrong immediately compared to rivals, maximizing the efficiency of the error-elimination process."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "No biological instinct is invoked; the preference is a conscious adherence to the rules of the game of science defined by critical rationalism."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "revised", "note": "Revised to avoid claiming 'higher degree of verisimilitude' as a proven fact (which Popper retracted); instead, the claim is that the highly corroborated theory is the *best candidate* for having high verisimilitude, acknowledging we can never know this for sure."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Explicitly rejects the assumption that rational action requires an expectation of future truth; rationality here is defined as consistency with the goal of error elimination."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "For high-stakes action, Popper admits one must act on the best-tested theory, but the defense remains that this is the most responsible *methodological* stance, even if it lacks inductive security. The 'cost' is the acknowledged lack of certainty."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Avoids the false dichotomy by proposing a third category: rational action based on critical preference rather than inductive belief or blind faith."}
+      ],
+      "typicality": 0.92,
+      "optional_refs": ["SRC_007", "SRC_016"]
+    },
+    {
+      "claim": "The preference inevitably smuggles induction back in; Popper's attempt to separate 'corroboration' from 'probability' is semantically unstable when applied to action, as any reason to prefer X over Y for future conduct logically entails an inductive belief that X is more reliable than Y.",
+      "mechanism": "Action is inherently future-oriented. To prefer Theory A over Theory B for the purpose of building a bridge or administering medicine is to assert that A is more likely to yield successful outcomes than B. Since Popper denies that past tests increase the probability of future success, any preference based on those tests relies on the hidden premise that 'the future will resemble the past' (the principle of induction). Without this premise, the choice between a well-tested theory and a wild guess is rationally arbitrary.",
+      "counterconditions": [
+        "If Popper can define a form of rationality that does not depend on expectations of future regularity, the charge of smuggling induction fails.",
+        "If 'preference' is restricted solely to the context of designing new experiments (not practical application), the inductive leap might be avoided."
+      ],
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "The normative account fails because any norm guiding action towards a specific outcome implicitly relies on an inductive link between past performance and future results."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "The distinction between 'justification of truth' and 'rationality of choice' is illusory in the domain of action; choosing a method for its utility is functionally identical to assigning it higher probability of success."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "The justification is indeed hollow if it claims to be non-inductive while guiding future action; the 'utility' cited is itself an inductive construct."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Even if Popper didn't explicitly appeal to biology, the functional role of his 'preference' fills the gap left by the rejection of induction, effectively acting as the instinctual bridge he denied needing."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "The reliance on 'verisimilitude' (even as a hope) is an inductive bet that the methods which found errors in the past will continue to track truth-likeness in the future."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Argues that Popper's definition of rational action is incoherent without an underlying inductive expectation; one cannot act 'rationally' towards a goal without believing the means are probabilistically linked to the end."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "In high-stakes scenarios, the 'learning opportunity' defense is ethically insufficient; agents act on the belief of safety, which is an inductive belief, regardless of Popper's semantic distinctions."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Maintains that the dichotomy is real: either you believe the future resembles the past (induction) or you have no rational basis for preference. Popper tries to have both."}
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_010", "SRC_014"]
+    },
+    {
+      "claim": "The preference is defensible only if reconceived as an evolutionary analogy where 'rationality' is replaced by 'survival value'; scientists prefer corroborated theories not because they are 'true' or 'probable', but because the scientific community that ignores them goes extinct (fails to solve problems), making the preference a post-hoc description of survival rather than a normative rule.",
+      "mechanism": "This approach abandons the search for a logical justification of induction entirely. Instead, it treats the preference for corroborated theories as a behavioral trait selected for in the evolution of scientific practice. Theories that survive severe tests allow the research program to persist. The 'preference' is not a conscious logical deduction but an institutional habit that correlates with survival. This aligns with Popper's evolutionary epistemology but costs the claim that science is a uniquely 'rational' enterprise distinct from biological adaptation.",
+      "counterconditions": [
+        "If one insists that science must be grounded in logical norms rather than descriptive evolutionary facts, this candidate fails.",
+        "If the 'preference' must be actionable by an individual scientist in isolation (not just a community trend), the evolutionary explanation is insufficient."
+      ],
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_012", "kind": "departure_declared", "note": "Departs from the requirement for a 'normative account of rational action' by replacing normativity with descriptivist evolutionary functionalism."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Reframes 'rationality of methodological choice' as 'adaptive success of the method,' sidestepping the need for logical justification."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "The justification is not hollow; it is robustly naturalistic. The 'utility' is survival of the research tradition."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Accepts the 'instinct' charge but reinterprets it as evolved cognitive heuristics rather than a philosophical flaw."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Verisimilitude is treated as a metaphor for 'fitness' in the ecosystem of ideas, avoiding the logical pitfalls of Popper's formal definition."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Rejects the premise that rational action requires logical expectation; action is driven by adaptive pressure."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "High-stakes action is justified by the same mechanism: societies that ignore tested engineering principles collapse, hence the 'preference' is enforced by reality."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Dissolves the dichotomy by suggesting the preference is neither inductive belief nor blind faith, but a structural necessity of complex adaptive systems."}
+      ],
+      "typicality": 0.45,
+      "optional_refs": ["SRC_009", "SRC_006"]
+    }
+  ]
+}

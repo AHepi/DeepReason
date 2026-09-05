@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'fictionalism' defense fails because it mischaracterizes Popper's actual solution. Popper did not advocate acting 'as if' theories are probable (a pragmatic fiction); he argued that preferring better-corroborated theories is rational because corroboration reports on a theory's testability and severity of tests passed, which are objective logical relations, not subjective probabilities or methodological fictions. By reducing the preference to a 'necessary rule of the game' or 'fiction,' the target ignores Popper's specific distinction between probability (inductive) and verisimilitude/testability (deductive/logical), thereby failing to defend the preference on 'Popper's own terms' as required by the problem.",
+      "counterexample": null,
+      "premise": "Popper explicitly rejected instrumentalism/fictionalism in favor of realism and defined corroboration as a logical report on past performance relative to testability, distinct from both probability and pragmatic utility.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration is merely a fictional rule rather than a report on objective testability, how does Popper's system avoid collapsing into the very conventionalism he criticized in 'The Logic of Scientific Discovery'?"
+    }
+  ]
+}

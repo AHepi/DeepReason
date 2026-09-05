@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims Popper's preference for the better-corroborated theory is purely negative (retention of the last standing conjecture) and involves no inductive leap or positive endorsement.",
+      "case": "The target fails to address the specific scenario where multiple unfalsified theories coexist. Popper explicitly prefers theories with higher 'content' (boldness) among those that have survived severe tests. If two theories are both unfalsified, preferring the one with higher content is a positive selection criterion based on past performance (survival of severe tests), not merely the elimination of others. The target's reduction of this to 'the only option left' is factually incorrect when multiple options remain; choosing the 'better-corroborated' one among survivors requires a rule that correlates past survival with future reliability or verisimilitude, which smuggles in the very inductive principle (that past success indicates something preferable about the theory) that Popper sought to reject. The target ignores the 'choice among multiple unfalsified theories' countercondition listed in its own structure.",
+      "counterexample": [
+        "Theory A (low content, survived test T) and Theory B (high content, survived test T) are both unfalsified. According to the target, we simply retain 'the last standing,' implying no distinction if both stand. Yet Popper insists we prefer B. This preference cannot be explained by mere elimination (since neither was eliminated) but relies on the positive attribute of having survived *despite* higher risk, which functions as an inductive proxy for truth-likeness."
+      ],
+      "successor_question": "If the preference is purely negative, how does Popper justify acting on the high-content theory over the low-content one when both are currently unfalsified, without implicitly assuming the high-content theory is more likely to be true or useful in the future?"
+    }
+  ]
+}

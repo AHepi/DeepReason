@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'minimizing the risk of acting on a known falsehood' with 'rational risk-management for future action.' Popper explicitly rejects the idea that surviving tests makes a theory more reliable for the future; however, the target admits the preference is for 'action' (e.g., building a bridge). If the choice of the better-corroborated theory is not based on an expectation that it will continue to hold (a probabilistic or inductive assumption about future stability), then the preference is arbitrary. The target claims the cost is accepting 'no expectation of future success,' but if there is no such expectation, there is no rational basis to prefer Theory A over Theory B for *future* action, rendering the 'preference' defensible only as a ritual, not a rational guide for practice as the problem demands.",
+      "counterexample": null,
+      "premise": "Rational preference for future action requires some assumption about the future reliability of the chosen option.",
+      "premise_evidence": null,
+      "successor_question": "If Popper forbids assuming future reliability, how can he distinguish between preferring the best-tested theory and flipping a coin when the stakes involve future consequences?"
+    }
+  ]
+}

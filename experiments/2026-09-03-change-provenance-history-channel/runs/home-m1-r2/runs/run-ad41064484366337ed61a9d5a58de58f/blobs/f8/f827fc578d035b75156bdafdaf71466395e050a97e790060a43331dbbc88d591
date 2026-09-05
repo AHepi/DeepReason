@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'meta-induction' defense fails because it mischaracterizes Popper's specific rejection of induction. Popper did not reject the *use* of past success as a heuristic (which he admitted scientists do); he rejected the *justification* of that use via inductive logic (the claim that past success makes future success more probable or rational). By arguing that the method is preferred because it 'yields better results,' the target implicitly relies on the very inductive principle Popper forbade: that the future will resemble the past. If the method has worked before, induction says it will work again; Popper says this inference is logically invalid. Therefore, appealing to the method's track record to *defend* the preference smuggles induction back in as a justificatory premise, not merely a psychological habit, failing to answer whether the preference is defensible on Popper's own strictly anti-inductivist terms.",
+      "premise": "Popper rejects induction as a logical justification for belief or action, maintaining that no number of successful instances can logically validate a general rule or a prediction about the future.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "If the 'meta-induction' defense is invalid because it relies on the uniformity of nature, what non-inductive reason could Popper possibly give for preferring one falsifiable theory over another when both have survived tests?"
+    }
+  ]
+}

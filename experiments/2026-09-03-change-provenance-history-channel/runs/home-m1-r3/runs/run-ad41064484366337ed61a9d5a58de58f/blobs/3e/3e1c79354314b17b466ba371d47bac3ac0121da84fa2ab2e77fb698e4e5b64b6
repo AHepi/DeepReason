@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a rational methodological choice based on verisimilitude (truth-likeness), not inductive probability. We prefer the theory that has withstood severe tests because it is the best candidate for being closer to the truth, even if we cannot assign it a higher probability of being true.",
+      "mechanism": "Differentiation between 'probability' (logical likelihood) and 'verisimilitude' (closeness to truth). Corroboration reports past performance which serves as a marker for potential verisimilitude, guiding action without claiming future certainty.",
+      "counterconditions": [
+        "If Popper's later admission that verisimilitude cannot be formally defined undermines the metric.",
+        "If the preference relies on an implicit assumption that the future will resemble the past."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "The normative account is provided by the principle of rational action: one ought to act on the best available hypothesis (highest verisimilitude) rather than a refuted or untested one. This is a rule of method, not a claim about nature."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "The argument does not shift to survival value; it remains normative by invoking the rational obligation to use the most rigorously tested knowledge available for critical decision-making."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Clarifies that the justification is explicitly methodological rationality, distinct from truth justification, aligning with Popper's distinction between ontology and epistemology."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "The justification is not hollow; 'methodological utility' is grounded in the logical asymmetry of falsification. A non-refuted theory is logically superior to a refuted one for action, regardless of probability."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Rejects the biological instinct interpretation; the preference is derived from critical rationalism, not psychology."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "revised", "note": "Acknowledges Popper's formal difficulties with defining verisimilitude but argues the intuitive concept remains the operative mechanism for his defense of scientific progress and action."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Agrees that the basis is not expectation of future truth (induction) but the current logical status of the theory as the best surviving conjecture."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "Argues that even in high-stakes action, choosing the most severely tested theory minimizes the risk of known error, which is the only rational standard available without induction."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_006"]
+    },
+    {
+      "claim": "The preference smuggles induction back in. Despite Popper's denials, acting on a corroborated theory necessarily assumes that its past success is a reliable guide to its future performance, which is the definition of inductive inference he sought to eliminate.",
+      "mechanism": "Pragmatic inconsistency analysis. The act of 'preferring' implies an expectation of utility or truth in the future, which logically entails an inductive bridge from past tests to future outcomes.",
+      "counterconditions": [
+        "If Popper can define 'preference' purely as a static comparison of logical content without temporal projection.",
+        "If the cost of action is irrelevant to the logical justification of the preference."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "The critique argues that any normative account of 'acting on' a theory inherently requires an inductive leap, making the 'defensibility' on non-inductive terms impossible."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Maintains that shifting to 'survival value' is the only way Popper attempts to escape the charge, but this fails to answer the normative question of why we *should* prefer the survivor for future action."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Contends that separating methodological choice from truth expectation is a verbal trick; in practice, choosing X over Y for action implies believing X is more likely to succeed."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Argues that 'methodological utility' is empty unless it cashes out in successful predictions, which requires induction."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Suggests that if not biology, then it is hidden logic (induction) that drives the preference."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Uses the failure of verisimilitude to bolster the claim that no non-inductive metric exists to justify preference."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Challenges the idea that there is a rational basis for action other than expected success (induction)."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "Emphasizes that in high-stakes scenarios, 'learning opportunities' are insufficient; we need reliability, which implies induction."}
+      ],
+      "optional_refs": ["SRC_005", "SRC_010"]
+    },
+    {
+      "claim": "The preference is defensible not as induction nor as verisimilitude, but as a decision-theoretic imperative to minimize known error. We prefer the corroborated theory simply because the alternative has been proven false (or is untested), and acting on a known falsehood is irrational.",
+      "mechanism": "Negative Justification / Error Elimination. Rational action is defined negatively: do not act on what you know to be wrong. Corroboration merely indicates 'not yet known to be wrong' despite severe attempts.",
+      "counterconditions": [
+        "If multiple non-refuted theories exist with no basis for choosing between them.",
+        "If the 'known error' of the rival theory is not relevant to the specific context of action."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_011", "kind": "rebutted", "note": "Provides a normative account: the duty of rationality is to avoid known errors. This is a logical constraint, not an inductive hope."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Stays strictly on defensibility: it is defensible to avoid the refuted. It does not claim the survivor is 'good', only that the other is 'bad'."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Clarifies this is not about truth justification but error avoidance, a core Popperian theme."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "The utility is not hollow; it is the concrete utility of avoiding demonstrated failure."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Purely logical, not biological."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Does not rely on verisimilitude, thus bypassing the criticism regarding its definition."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Explicitly rejects expectation of future truth; relies only on the logical status of the rival."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "In high stakes, avoiding a known disaster (refuted theory) is the paramount rational move."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_014"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view the preference as an evolutionary selection mechanism within the ecosystem of ideas. Scientists prefer corroborated theories because those theories (and the scientists who hold them) survive institutional and practical selection pressures, rendering the 'justification' question a category error.",
+      "mechanism": "Evolutionary Epistemology. Shifts the frame from individual rational justification to systemic survival. The 'preference' is the output of a selection algorithm, not a conscious inductive inference.",
+      "counterconditions": [
+        "If the question demands an individual agent's normative reason, not a systemic explanation.",
+        "If evolutionary success is itself taken as a proxy for truth (smuggling induction via evolution)."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_011", "kind": "departure_declared", "note": "Departing from the requirement for a traditional normative account; proposing that the 'rationality' is emergent from the selection process itself."},
+        {"handle": "[SRC_016] against SRC_015", "kind": "rebutted", "note": "Argues that 'survival value' IS the answer to 'defensibility' in an evolutionary framework; to survive is to be justified by the environment."},
+        {"handle": "[SRC_014] against SRC_012", "kind": "rebutted", "note": "Reframes 'non-rational faith' as 'adaptive heuristic'."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Utility is defined by survival, not abstract probability."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Embraces the biological/evolutionary angle as the correct interpretation of Popper's later work."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Verisimilitude is replaced by fitness."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Rationality is redefined as alignment with selection pressures."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "High-stakes action is the ultimate selection pressure, validating the preference."}
+      ],
+      "optional_refs": ["SRC_009", "SRC_004"]
+    }
+  ]
+}

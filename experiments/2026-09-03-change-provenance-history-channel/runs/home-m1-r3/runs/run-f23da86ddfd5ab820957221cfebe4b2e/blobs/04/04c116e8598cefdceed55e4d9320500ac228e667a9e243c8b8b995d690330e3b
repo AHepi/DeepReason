@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the preference for better-corroborated theories is defensible without induction by redefining corroboration as 'informational content' and arguing we select them for their 'capacity to be tested' rather than reliability.",
+      "case": "The target fails to address the core dilemma of *action*. The problem asks why scientists *prefer* (i.e., act upon) one theory over another. If, as the target admits, these high-content theories are likely 'false ones,' then preferring them for action (e.g., building a bridge or administering medicine) based solely on their 'boldness' or 'structural richness' is irrational unless one assumes that boldness correlates with practical reliability in the future. This correlation is an inductive assumption. By reducing the justification to 'driving knowledge growth,' the target sidesteps the specific challenge of justifying *practical preference* in the present moment, effectively smuggling in induction under the guise of 'selecting for testability' while ignoring that selection implies an expectation of utility.",
+      "counterexample": [
+        "A scientist choosing between a highly falsifiable but untested 'bold' theory and a well-corroborated, less bold theory for a life-critical application would not choose the former simply because it has higher 'informational content.' They would choose the latter based on an inductive inference that past corroboration predicts future safety.",
+        "If corroboration is strictly non-probabilistic and merely a report of past tests, there is no logical bridge in Popper's system to explain why Theory A (survived 100 tests) is preferred for *action* over Theory B (survived 1 test) other than an implicit inductive bet that the future will resemble the past."
+      ],
+      "successor_question": "If we cannot assume that a theory's survival of severe tests makes it more reliable for future prediction, on what non-inductive basis can a scientist justify acting on the better-corroborated theory rather than flipping a coin?"
+    }
+  ]
+}

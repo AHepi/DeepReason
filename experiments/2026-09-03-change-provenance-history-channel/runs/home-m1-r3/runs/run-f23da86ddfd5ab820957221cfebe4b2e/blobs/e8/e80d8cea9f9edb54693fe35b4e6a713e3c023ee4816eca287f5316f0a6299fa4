@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "Popper's defense of preferring better-corroborated theories relies on the claim that such preference is a methodological rule necessary for the growth of knowledge, not an inductive inference about truth.",
+      "premise_evidence": null,
+      "case": "The target's 'fictionalism' defense fails because it severs the link between corroboration and verisimilitude (truth-likeness), which Popper explicitly required to make the preference rational. If the preference is merely a 'regulative ideal' or 'fiction' that guarantees nothing logically and implies no greater likelihood of truth or verisimilitude, then acting on it becomes indistinguishable from irrational dogmatism or blind habit. Popper argued we prefer better-corroborated theories *because* they have withstood severe tests that would have falsified false theories, suggesting they are closer to the truth; reducing this to a 'necessary rule of the game' without ontological or epistemic weight contradicts Popper's own assertion that corroboration reports on the theory's success in revealing truth, not just a procedural convenience. If it is truly a fiction with no indicative power, the 'critical process' loses its driving force, as there is no reason to critique Theory A in favor of Theory B other than arbitrary convention.",
+      "counterexample": null,
+      "successor_question": "If corroboration provides no indication of verisimilitude and is merely a fictional rule, what non-inductive criterion prevents the scientific community from arbitrarily preferring a falsified theory over a corroborated one?"
+    }
+  ]
+}

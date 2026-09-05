@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the preference for better-corroborated theories is defensible ONLY by accepting an arbitrary 'decisionist' cost where the meta-rule valuing severity cannot be rationally justified.",
+      "case": "The target presents a false dichotomy by asserting that avoiding induction forces one into arbitrary decisionism. It ignores Popper's own substantive argument that the preference is defensible via critical rationalism: we prefer severe tests not because of an arbitrary leap or inductive hope, but because severe tests have greater 'testability' (logical content) and thus offer a higher potential for falsification. Choosing the theory that has withstood the most severe test is the only rational choice IF our goal is to find error, a goal that does not require justifying the truth of the theory (induction) nor an arbitrary value judgment (decisionism), but follows logically from the aim of science as conjecture and refutation. By reducing the justification to an 'irrational leap,' the target misrepresents the internal coherence of Popper's solution, which relies on the logical asymmetry between verification and falsification rather than a pragmatic or decisionist gap.",
+      "counterexample": [
+        "Popper argues that we prefer the better-corroborated theory because it has survived tests that would have killed a weaker theory; this preference is tied to the logical content and testability of the theory, not an arbitrary decision to value severity."
+      ],
+      "successor_question": "If the preference for severe tests is derived from the logical aim of maximizing falsifiability rather than an arbitrary decision, does the 'decisionist' cost actually exist?",
+      "premise_evidence": null
+    }
+  ]
+}

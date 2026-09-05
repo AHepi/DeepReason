@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target mischaracterizes Popper's 'decision' as an existential 'faith' or non-rational commitment, whereas Popper explicitly frames the preference for better-corroborated theories as a critical-rational decision based on the aim of science (seeking truth), not a decisionist leap outside reason.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between the logical status of corroboration (not probability) and the rational methodological rule to prefer the best-tested theory when the aim is truth.",
+      "premise_evidence": null,
+      "successor_question": "Does framing the preference as a 'rational faith' conflate Popper's methodological rules with the irrationalist 'decisionism' he critiqued in existentialist interpretations?"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a rational, non-inductive 'critical preference' based on verisimilitude (truth-likeness) rather than probability; however, this defense survives only at the cost of accepting that our access to verisimilitude is itself conjectural and that the preference relies on a meta-critical rule which, while not inductive in the Humean sense, functions as a pragmatic axiom that cannot be strictly derived from falsification alone.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'probability' (logical likelihood) and 'corroboration' (historical record of severe testing). It posits that preferring a highly corroborated theory is not an inference that it will remain true (induction), but a critical decision that it currently possesses higher verisimilitude (closer to the truth) than its refuted rivals. The mechanism leverages the asymmetry of falsification: since we can know a theory is false but never know it is true, the 'best' available theory is simply the one that has withstood the most severe attempts to destroy it. This preference is a rule of critical rationality, not a probabilistic calculation.",
+    "counterconditions": [
+      "If David Miller and Tichý's proof that verisimilitude cannot be defined within Popper's own logical framework holds universally, then the 'truth-likeness' justification collapses.",
+      "If the act of preferring a theory for future action implicitly assumes the uniformity of nature (that the future will resemble the past regarding test outcomes), then the preference smuggles in induction despite Popper's protests.",
+      "If the 'critical preference' is shown to be functionally identical to Bayesian updating in practice, rendering the philosophical distinction merely semantic."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "047ea7b165ebb2b40db2a478a3bf3225602d7b76e333676f368d64b2e8813c3f",
+        "kind": "rebutted",
+        "note": "The candidate does not redefine the goal of science from 'truth' to 'progress' to evade the problem. Instead, it argues that 'preference' is a rational stance toward 'verisimilitude' (approximation to truth) which is distinct from assigning 'probability'. The defense stays within Popper's terms by using his specific concept of corroboration as a report on past performance, not a predictor of future success, thereby directly answering whether the preference smuggles in induction (answer: no, if viewed as a critical choice, not a logical inference)."
+      },
+      {
+        "handle": "08218abe2d908092f9126b50809338bd6c6cddb0d43384c3b193e668a34006c6",
+        "kind": "revised",
+        "note": "Revised to explicitly clarify that 'preferring' does not entail believing in a higher probability of future success. The claim now emphasizes that the preference is based on the *current* state of critical discussion and verisimilitude, explicitly decoupling the decision to act from any expectation of future reliability derived from past frequency."
+      },
+      {
+        "handle": "10d9f60e1c1c5582faa984b8051452e4c8ce369fe468d94cbb5f5b0aa2411016",
+        "kind": "rebutted",
+        "note": "The candidate accepts the distinction between the logical problem of induction and the pragmatic problem of action but argues that the criticism creates a false dilemma. Acknowledging a pragmatic preference does not destroy demarcation; rather, it reinforces it by showing how science proceeds without positive justification. The preference is the application of the demarcation criterion (survival of severe tests) to decision-making."
+      },
+      {
+        "handle": "2acf3052a09e0e9e5d4ff6ca2ddc87f61e54bf19b61e446a135950857653716",
+        "kind": "rebutted",
+        "note": "The candidate directly addresses the 'preference' as a normative epistemic stance, not merely a systemic outcome. It argues that Popper defends this preference as a rational requirement of critical rationalism: given two theories, one refuted and one not, it is irrational to prefer the refuted one. This is a direct answer to the defensibility on Popper's own terms."
+      },
+      {
+        "handle": "3637cea364444177831be4afb7ba959e53607caea3edb8855e811c565e4ca6",
+        "kind": "departure_declared",
+        "note": "Departing from the strict constraint that the solution must avoid *any* form of meta-rule that resembles induction. The candidate admits that the 'principle of critical preference' functions as a pragmatic axiom. While Popper denies it is 'induction' (justification by past success), the candidate concedes it is a non-derivable rule of method, costing the system its claim to be purely deductive in all practical applications."
+      },
+      {
+        "handle": "469214066cd0fe367482ab1dbf622f3c2ad7e94d48942d7e905fb1fd4b3ff862",
+        "kind": "rebutted",
+        "note": "The candidate agrees that conflating logical justification with pragmatic decision-making is the error critics make, not Popper. The rebuttal clarifies that Popper's defense is precisely that the preference is *not* a logical justification of the theory's truth, but a pragmatic rule for action consistent with fallibilism. The 'performative contradiction' charge fails because acting on the best-tested theory is consistent with believing it might still be false."
+      },
+      {
+        "handle": "48c4058b65566c1916052587394c85e201b43ffc6160053f0587893fb9cd43a7",
+        "kind": "revised",
+        "note": "Revised to acknowledge the Miller-Tichý objection as a fatal flaw for the *formal definition* of verisimilitude within Popper's original system. The candidate now frames the defense as relying on an *intuitive* or *informal* notion of truth-likeness that scientists use, admitting that Popper's formal logic here was incomplete, thus strengthening the 'cost' part of the argument."
+      },
+      {
+        "handle": "57caaebff03718fcfae1eb65e146728a7ccfcdbb9a565c5c07eec876a7171e21",
+        "kind": "rebutted",
+        "note": "The candidate rejects the category error charge by arguing that in critical rationalism, the 'normative justification' for action *is* the descriptive history of survival under criticism. Unlike biological selection which is blind, scientific selection is critical; the 'reason' for the preference is the explicit knowledge of which theories have failed. The mechanism justifies the agent's choice by pointing to the eliminated alternatives, not by predicting the survivor's future."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "Evolutionary selection of species in a changing environment",
+        "Legal presumption of innocence until proven guilty"
+      ],
+      "shared_structure": [
+        "Survival of a hypothesis/species/defendant is not proof of inherent perfection/truth, but indicates it has withstood known attacks/tests better than rivals.",
+        "Preference for the survivor is rational not because it guarantees future survival, but because all known alternatives have been eliminated.",
+        "The process is eliminative rather than confirmatory."
+      ],
+      "disanalogies": [
+        "Biological evolution is blind and non-rational, whereas scientific preference is a conscious, critical decision.",
+        "Legal presumption is a procedural rule for fairness, whereas scientific preference is an epistemic strategy for approaching truth.",
+        "In law, the burden of proof is fixed; in science, the severity of tests increases over time."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the species that survived the last ice age to survive the next (without guarantee), we bet on the corroborated theory.",
+        "The rationality of the preference lies in the elimination of error, not the accumulation of positive proof."
+      ],
+      "overturn_conditions": [
+        "If the environment changes in a way completely unrelated to previous selection pressures (radical discontinuity), the analogy breaks and the preference becomes purely guesswork.",
+        "If a 'surviving' theory is later found to have avoided falsification only due to luck or ad-hoc adjustments rather than genuine robustness."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

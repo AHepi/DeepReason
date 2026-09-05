@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies that Popper's preference for better-corroborated theories is not a logical derivation (which would be inductive) but a pragmatic, voluntarist decision. This aligns with Popper's own view that while logic cannot justify induction, the scientist must make a non-rational choice to value truth-seeking, thereby avoiding internal inconsistency by separating the logical status of theories from the psychological/pragmatic rules of scientific practice.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

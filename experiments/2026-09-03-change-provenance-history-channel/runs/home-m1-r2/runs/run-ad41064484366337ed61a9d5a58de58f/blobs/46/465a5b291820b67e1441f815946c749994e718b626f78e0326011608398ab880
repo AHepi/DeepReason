@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories in practical action is defensible without smuggling in induction, provided one accepts a 'critical rationalist' normative bridge: acting on the best-tested theory is not a prediction of success (which would require induction) but the only rational way to expose error if the theory is false. The cost of this defense is the abandonment of 'practical security'; the agent must admit that the bridge built on the best-tested theory might still collapse tomorrow, and that choosing it offers no probabilistic guarantee of safety, only the satisfaction of having subjected the decision to the severest possible critique.",
+    "mechanism": "The mechanism distinguishes between 'justification of belief' (which Popper rejects as requiring induction) and 'justification of action' (which relies on methodological rules). By framing action as an extension of the testing process—where choosing Theory A over Theory B is a bet that allows us to learn faster if A is wrong—the preference becomes a procedural imperative rather than an inductive inference. This resolves the tension by redefining 'preference' from 'expectation of truth' to 'commitment to the most rigorous available standard of criticism.'",
+    "counterconditions": [
+      "If the agent requires a guarantee of practical success (e.g., the bridge must not fall) rather than just a guarantee of rational procedure, the Popperian defense fails.",
+      "If 'acting on' a theory logically entails believing it is probably true, then Popper's distinction collapses and induction is smuggled back in.",
+      "If the cost of error is infinite (e.g., human extinction), the lack of probabilistic assurance in Popper's framework may render the preference irrational despite its methodological purity."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The normative bridge is not 'minimizing risk of error' in a probabilistic sense, but 'maximizing the severity of the test applied to our actions.' The rebuttal clarifies that rational preference in Popper's system is defined by adherence to the method of conjecture and refutation, not by an expected utility calculation based on hidden probabilities."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address 'acting on' theories for practical ends (like building bridges). The revision specifies that practical action is treated as a 'severe test' itself; building the bridge is the ultimate attempt to falsify the engineering theory. If it stands, it is corroborated; if it falls, we learned. This addresses the dilemma by making action part of the scientific method, not a separate domain requiring induction."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "The claim explicitly avoids conflating preference with 'subjective confidence.' It argues that the preference is purely methodological: we choose the theory that has survived the hardest attempts to kill it, not because we feel safer, but because any other choice would be ignoring available evidence of potential falsity."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "rebutted",
+        "note": "The defense does not dismiss the cost of 'radical instrumentalism'; rather, it embraces it as the necessary price of consistency. The rebuttal states that accepting Popper's terms means accepting that we act without certainty. The 'cost' mentioned in the claim (abandonment of practical security) directly answers this criticism."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The claim aligns with Popper's rule that scientists *ought* to prefer better-corroborated theories. It argues this 'ought' is a rule of critical rationality (don't ignore severe tests), not an inductive leap. Therefore, the preference is not arbitrary but mandated by the logic of situation analysis."
+      },
+      {
+        "handle": "3b0d40d883d0e30306823e981ef82120189315ec71fd5977614e2001ece75ca4",
+        "kind": "revised",
+        "note": "Revised to clarify that 'acting on' a theory for practical success does not mean expecting success. It means engaging in the most informative course of action. If the bridge collapses, the action was still 'rational' in Popperian terms because it was based on the best available critique, even if the outcome was disastrous. This separates rationality of process from success of outcome."
+      },
+      {
+        "handle": "4951b3c5926010b4aad50c8aa8956fa9603a00d8a967623ab2680133a5da1f53",
+        "kind": "rebutted",
+        "note": "The claim strictly maintains the category distinction: it proposes a 'methodological rule for action,' not a 'psychological claim about confidence.' The preference is logical (based on the history of tests), not emotional."
+      },
+      {
+        "handle": "4e6f07bb67dad839cd9e5f769442347fe76f9ad934ef5c1fa948f1e1de4d44be",
+        "kind": "rebutted",
+        "note": "The defense argues that 'selecting for testing' and 'preferring for action' are identical in structure for a critical rationalist: both are commitments to a hypothesis that one hopes to refute. Practical action is simply the most severe form of testing available."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "medical_triage_protocol",
+        "chess_opening_preparation"
+      ],
+      "shared_structure": [
+        "Decision made under uncertainty without probabilistic guarantees",
+        "Preference based on past performance/resistance to failure rather than predicted future success",
+        "Goal is to maximize learning/error detection rather than ensure immediate safety"
+      ],
+      "disanalogies": [
+        "In medical triage, survival is the direct goal, whereas in Popperian science, truth approximation is the goal and survival of the theory is secondary to falsification",
+        "Chess openings rely on statistical databases of opponent errors (inductive), whereas Popper explicitly rejects using past frequency to predict future moves"
+      ],
+      "transfer_claims": [
+        "Just as a doctor chooses the treatment with the best track record not because it guarantees cure but because it is the most robust known option, a scientist chooses the best-corroborated theory as the most robust basis for action",
+        "Both domains accept that the chosen path may fail catastrophically, but deviating from the best-tested path would be irrational negligence"
+      ],
+      "overturn_conditions": [
+        "If it can be shown that medical triage implicitly relies on Bayesian probability updates rather than simple track-record heuristics",
+        "If chess masters are proven to act solely on intuition devoid of pattern recognition from past games"
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

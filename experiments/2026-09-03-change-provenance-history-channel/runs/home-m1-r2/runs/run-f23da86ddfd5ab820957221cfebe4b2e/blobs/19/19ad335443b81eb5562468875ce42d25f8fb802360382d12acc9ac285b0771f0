@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's evolutionary analogy fails to address the specific normative cost Popper identifies: acting on a theory implies an expectation of future success which constitutes 'practical induction.' While an organism survives by instinct without needing justification, a scientist choosing to build a bridge on a corroborated theory is making a rational claim that the theory is reliable for this new application. The target reduces this rational preference to a mere biological heuristic ('survival'), thereby sidestepping the core philosophical problem of whether such action is *defensible* on Popper's anti-inductivist terms or if it secretly relies on the principle that the future will resemble the past. By redefining rational action as non-rational biological processing, the target dissolves the problem by changing the subject rather than solving the tension between anti-induction and practical preference.",
+      "counterexample": null,
+      "premise": "Popper explicitly distinguished between the biological act of survival and the logical/rational justification for expecting a theory to hold in novel situations, arguing that preferring a corroborated theory for action involves a decision that cannot be fully accounted for by corroboration alone without slipping into pragmatic induction.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is merely a biological heuristic akin to an organism's trait usage, how does one distinguish scientific rationality from blind instinct within Popper's framework?"
+    }
+  ]
+}

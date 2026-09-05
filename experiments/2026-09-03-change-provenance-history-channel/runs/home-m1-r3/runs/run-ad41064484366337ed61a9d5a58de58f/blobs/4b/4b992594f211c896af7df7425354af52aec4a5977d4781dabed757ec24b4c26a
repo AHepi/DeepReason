@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to answer the specific question asked ('Is that preference defensible on Popper's own terms?') by substituting a third-party framework (Evolutionary Epistemology) that Popper did not endorse as a solution to this specific dilemma. The prompt explicitly requires making the strongest case for answers derived from 'Popper's own terms'; by shifting the justification to 'institutional and practical selection pressures' and labeling the question a 'category error,' the target avoids the core philosophical tension regarding induction within Popper's system rather than resolving it using his actual concepts (such as verisimilitude or the pragmatic argument that corroboration indicates a theory has withstood tests which might otherwise have falsified it). This constitutes a failure of scope and relevance to the constraint 'on Popper's own terms'.",
+      "premise": "The problem asks if the preference for corroborated theories is defensible specifically 'on Popper's own terms'.",
+      "premise_evidence": [
+        {
+          "block": "question-ba75796c3facc7a3d0d448d6eaa09a2e",
+          "quote": "Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected?"
+        }
+      ],
+      "counterexample": null,
+      "successor_question": "How would Popper himself justify preferring a better-corroborated theory without relying on external evolutionary analogies or admitting inductive probability?"
+    }
+  ]
+}

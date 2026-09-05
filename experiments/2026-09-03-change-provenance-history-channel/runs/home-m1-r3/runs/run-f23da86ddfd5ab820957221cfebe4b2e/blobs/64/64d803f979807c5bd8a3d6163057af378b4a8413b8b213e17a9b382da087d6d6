@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms without smuggling in induction, provided one accepts that rational action requires choosing the theory with the highest 'verisimilitude' (truth-likeness) among unfalsified contenders, even though corroboration reports only past performance and guarantees nothing about the future. The cost of this solution is the abandonment of any claim that science converges toward truth with increasing probability; instead, science becomes a game of eliminating error where the 'best' theory is merely the one currently surviving the severest tests, not the one most likely to be true.",
+    "mechanism": "The argument distinguishes between 'logical probability' (which Popper rejects as applicable to universal laws) and 'rational preferability' based on critical scrutiny. It posits that while we cannot infer the future from the past (induction), we can rationally prefer the theory that has withstood more severe attempts at falsification because it contains more empirical content and has survived closer attempts to destroy it. This preference is a methodological rule for error elimination, not an inductive prediction of success.",
+    "counterconditions": [
+      "If it can be shown that preferring a theory solely on past survival implicitly assumes the uniformity of nature (that the future will resemble the past), then the preference is inductive after all.",
+      "If 'verisimilitude' cannot be defined or assessed without relying on inductive generalizations from observed truths to unobserved ones, then the defense collapses.",
+      "If scientists actually act on the belief that better-corroborated theories are *more probable* to be true (rather than just less easily falsified), then Popper's description of scientific practice contradicts his own philosophy."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "01a43e4617dbf30441a2791ce8c3d945291ac1a21062b87c5d4756bfefbe54cf",
+        "kind": "revised",
+        "note": "The candidate now explicitly constructs the strongest case for the opposing view (that the preference smuggles in induction) within the 'counterconditions' and the initial setup of the dilemma, before arguing why the non-inductive defense survives. The structure now forces a dialectical engagement rather than a one-sided defense."
+      },
+      {
+        "handle": "0202e9a61d35cb7ca1cb016edc18276816a479aa1e49302c2662e1f9e9c2c6f2",
+        "kind": "rebutted",
+        "note": "The candidate addresses 'preferability' directly by grounding it in 'verisimilitude' and 'empirical content' rather than mere 'availability.' The argument is that among available unfalsified theories, the one with higher corroboration is preferred *because* it has risked more and survived, making it a better target for further criticism, not just a convenient option."
+      },
+      {
+        "handle": "04b8ded9db67d027a9b81c1a6ba0f9ee0c900e2d948e40d6eedb1e58cb2d47d5",
+        "kind": "rebutted",
+        "note": "The candidate avoids the false dichotomy of 'accepting induction' vs 'abandoning rationality' by introducing Popper's specific redefinition of rationality as 'critical preference' rather than 'justified belief.' Rationality is framed as the commitment to error elimination, which allows for a third path where preference is rational without being inductive."
+      },
+      {
+        "handle": "12f262d76a723f9ff07a3efd4c44394488073be5e7159b76223e2bed2ad86207",
+        "kind": "rebutted",
+        "note": "The rebuttal clarifies that the link to truth is not via probability but via 'content.' A highly corroborated theory has high informational content and has survived tests that would have falsified it if it were false. This provides a logical, non-inductive reason to prefer it as a basis for action, distinct from claiming it is 'probably true.'"
+      },
+      {
+        "handle": "1832fe3dd749ff4b6225ece1ed72298c6163322e74785cadc9fa7f8d5c5c65bc",
+        "kind": "revised",
+        "note": "The mechanism section has been revised to explicitly reject 'fictionalism' (acting 'as if') and instead adopt Popper's actual stance: that the preference is objectively grounded in the logical relation of corroboration to empirical content and severity of tests, making it a rational choice independent of pragmatic fiction."
+      },
+      {
+        "handle": "1a76afe6cb3e70b8a8b152c1f41b2ecae41c069eb31312939cf041481ed04807",
+        "kind": "rebutted",
+        "note": "The candidate incorporates the 'goal of finding truth' (verisimilitude) as the core justification. It argues that preferring the better-corroborated theory is the only rational strategy for maximizing verisimilitude, even if we can never know we have achieved it, thus answering the criticism that the solution was ignored."
+      },
+      {
+        "handle": "267e8a0199c355c91286f888927929d0a8ee910c74f1e5c2da99f6dea375c1d49",
+        "kind": "rebutted",
+        "note": "The argument explicitly denies assuming the 'uniformity of nature.' Instead, it relies on the asymmetry of falsification: while we cannot prove a theory true via induction, we can logically prefer a theory that has not been falsified over one that has, or one that has survived harder tests over one that has not, without assuming nature is uniform."
+      },
+      {
+        "handle": "2dcf041ebc7cdc14462c5d4072be851769f8da112a05f095771c999da65e487c",
+        "kind": "rebutted",
+        "note": "The candidate reinforces the distinction between 'logical status' (unfalsified) and 'preferability' (degree of corroboration). It argues that the preference is based on the history of critical testing (a logical fact about the theory's interaction with evidence), not an inductive inference about its future validity."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

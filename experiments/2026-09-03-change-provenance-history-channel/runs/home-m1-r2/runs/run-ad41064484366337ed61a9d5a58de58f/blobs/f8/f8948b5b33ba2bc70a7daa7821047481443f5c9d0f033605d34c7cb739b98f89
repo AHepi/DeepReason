@@ -1,0 +1,84 @@
+{
+  "candidates": [
+    {
+      "claim": "Popper's preference for the better-corroborated theory is defensible without induction by reframing 'preference' as a methodological rule for maximizing falsifiability potential, not as an epistemic probability judgment.",
+      "mechanism": "The agent selects the theory with the highest empirical content (most severe tests survived) because it offers the greatest opportunity for future error detection. Acting on it is a strategic bet on where truth is most likely to be found via falsification, not a belief in its truth probability.",
+      "counterconditions": [
+        "If the agent acts with subjective confidence exceeding the logical status of the theory, induction is smuggled in.",
+        "If the preference relies on the assumption that nature is uniform enough for past success to predict future utility, the defense fails."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The normative bridge is methodological efficiency: preferring high-content theories maximizes the rate of learning, which is a rational goal independent of probabilistic reliability."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Distinction maintained: minimizing risk of acting on a known falsehood is different from assuming reliability; we choose the best-tested simply because it is the only non-arbitrary choice available for critical testing."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "revised", "note": "Clarified that 'acting on' means 'using as the basis for further critical tests' rather than 'trusting for practical engineering safety' without additional pragmatic premises."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Agreed that preference is not increased confidence; the mechanism explicitly rejects subjective confidence as the driver."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost of radical instrumentalism is accepted: we act without assurance, but with the best available critical target."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Rational action is defined here strictly as adherence to the method that maximizes error-avoidance potential, satisfying the justification requirement without induction."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The preference is not arbitrary; it is determined by the objective logical property of empirical content and test severity."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Selecting for action in Popper's sense IS selecting for critique; the 'action' is the commitment to use the theory as the primary vehicle for future falsification attempts."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_013"]
+    },
+    {
+      "claim": "The preference for the better-corroborated theory inevitably smuggles in induction because any decision to act based on past test results presupposes a principle of the uniformity of nature or the reliability of corroboration as a guide to future performance.",
+      "mechanism": "Pragmatic necessity forces the agent to assume that a theory that worked before will work again (or is less likely to fail) when building bridges or administering medicine. This assumption is inductive in structure, even if labeled 'corroboration'.",
+      "counterconditions": [
+        "If the agent can demonstrate a purely logical link between surviving tests and future utility without assuming nature's uniformity, the claim fails.",
+        "If 'acting on' is redefined strictly as 'subjecting to further tests' and not 'relying on for practical outcomes', the inductive leap is avoided."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The criticism holds: there is no non-inductive normative bridge. The 'risk minimization' claimed by Popperians implicitly assumes past performance predicts future risk profiles."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Conceded that distinguishing 'risk of known falsehood' from 'future reliability' is semantic hair-splitting when the practical outcome (building a bridge) requires reliance on future stability."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "The dilemma of acting on a theory for practical ends cannot be solved by 'information growth' alone; practical action requires a belief in utility, which is inductive."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "revised", "note": "While Popper denies 'subjective confidence', the behavioral output of preferring Theory A over B for action functionally equates to higher confidence, regardless of internal labeling."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost of accepting this view is admitting Popper failed to fully escape Hume; the 'fitness' metaphor collapses into probabilistic expectation under pressure of action."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Redefining rational action as mere error avoidance does not solve the problem of why we choose the *better-corroborated* one for *success-oriented* tasks unless we expect it to succeed."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The methodological rule itself ('ought to prefer') contains the inductive premise that such preference yields better outcomes, otherwise the rule is groundless."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Popper's own behavior in choosing theories for application demonstrates an implicit inductive faith that contradicts his explicit philosophy."}
+      ],
+      "optional_refs": ["SRC_005", "SRC_012"]
+    },
+    {
+      "claim": "The preference is defensible only as a 'conventionalist decision' or 'psychological inevitability' rather than a logical derivation, costing Popper the claim that his system provides a purely rational solution to the problem of induction.",
+      "mechanism": "Agents must choose something to act on; choosing the best-tested theory is a convention adopted to facilitate communication and coordinated action, not a logically compelled inference. It survives as a pragmatic postulate, not an epistemic proof.",
+      "counterconditions": [
+        "If the convention can be shown to be uniquely rational without inductive premises, the 'arbitrary' label fails.",
+        "If the psychological inevitability implies a hidden logical compulsion, the distinction collapses."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "departure_declared", "note": "Departing from the search for a logical 'normative bridge'; the bridge is declared to be a voluntary convention, not a logical necessity."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "By framing it as a convention, the conflation of risk types is dissolved; we agree to treat corroboration as a proxy for reliability by social contract, not logic."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "The dilemma is resolved by acknowledging that 'acting on' involves a non-rational (but necessary) leap of faith, formalized as a convention."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "This aligns with Popper's admission that some decisions are extra-logical; the 'preference' is the decision, not the inference."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost is explicitly the abandonment of pure rationalism in favor of critical conventionalism."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Rational justification is replaced by pragmatic justification; the 'cost' is the scope of rationality."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The rule is not arbitrary in the sense of random, but 'underived'; it is a foundational axiom of the scientific game."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Popper's behavior reflects the adoption of this convention, not a secret induction."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_011"]
+    },
+    {
+      "claim": "Corroboration functions as a 'survival signal' in an evolutionary epistemology, making the preference defensible as a biological/evolutionary heuristic rather than a logical inference, thereby bypassing the induction charge entirely.",
+      "mechanism": "Theories are replicators; those that survive severe tests are 'fit'. Scientists prefer them because the cognitive apparatus evolved to track fitness. The 'preference' is an adaptive trait, not a logical conclusion about probability.",
+      "counterconditions": [
+        "If the evolutionary heuristic itself relies on the assumption that past fitness predicts future fitness in a changing environment, induction returns at the meta-level.",
+        "If 'rational defense' requires logical validity rather than causal explanation, this mechanism fails to answer the prompt."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_007", "kind": "rebutted", "note": "The normative bridge is natural selection: we prefer fit theories because organisms that don't die out. Normativity is derived from survival imperatives."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Risk management is reinterpreted as evolutionary risk avoidance; the conflation is a feature of the biological substrate, not a logical error."},
+        {"handle": "[SRC_008] against SRC_001", "kind": "rebutted", "note": "Acting on the theory is an expression of the survival instinct encoded in the heuristic; 'information growth' is secondary to survival."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Subjective confidence is the phenomenological feel of the evolutionary heuristic; Popper's denial applies to logic, not psychology."},
+        {"handle": "[SRC_003] against SRC_002", "kind": "rebutted", "note": "The cost is reducing rationality to biology, which Popper might resist, but it solves the induction problem by changing the domain."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Rational action is redefined as adaptive action; the justification is teleological (survival), not logical."},
+        {"handle": "[SRC_006] against SRC_005", "kind": "rebutted", "note": "The methodological rule is a codification of an evolutionary imperative, making it non-arbitrary in a biological sense."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Selection for critique and action are unified under the single drive of evolutionary fitness."}
+      ],
+      "optional_refs": ["SRC_006", "SRC_015"]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-probabilistic metric to justify preferring better-corroborated theories. However, Popper's own formal attempt to define verisimilitude logically failed because, without probabilistic assumptions or inductive principles, one cannot rationally assert that a theory with more surviving tests is 'closer to the truth' than a rival; the preference therefore implicitly smuggles in the very inductive assumption (that past survival indicates future reliability or proximity to truth) that the target claims to avoid.",
+      "counterexample": null,
+      "premise": "Popper abandoned his quantitative definition of verisimilitude after it was shown by Tichý and Miller that, under his logic, false theories could not be compared in terms of closeness to truth without inducing contradictions or relying on inductive probability.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be formally defined without induction, does Popper's 'critical attitude' reduce to an irrational faith rather than a rational preference?"
+    }
+  ]
+}

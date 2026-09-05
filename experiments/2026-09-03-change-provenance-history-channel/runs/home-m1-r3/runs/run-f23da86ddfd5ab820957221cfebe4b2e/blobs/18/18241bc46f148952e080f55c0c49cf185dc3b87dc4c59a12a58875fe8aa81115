@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims Popper's preference for better-corroborated theories forces a choice between accepting induction or abandoning the claim that science is purely rational, asserting this preference is 'logically unsupported' and rests on 'irrational faith'.",
+      "case": "The target constructs a false dichotomy by ignoring Popper's explicit solution to this exact problem: the preference for better-corroborated theories is defensible on non-inductive grounds because it aligns with the goal of finding truth (verisimilitude) and surviving severe tests, not because it increases probability. Popper argues that while corroboration does not make a theory more probable, it is the only rational guide we have for selecting theories that have withstood our best efforts at falsification. By labeling this preference as 'logically unsupported' and reducing it to 'irrational faith,' the target misrepresents Popper's critical rationalism, which explicitly rejects the need for 'foundational justification' (induction) to deem an action rational. Rationality for Popper is procedural (critical testing), not justificatory; thus, the gap the target identifies is imaginary, created by imposing an inductivist standard of rationality that Popper specifically discarded.",
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "If Popper defines rationality as adherence to critical methods rather than probabilistic justification, how does the target's claim that science rests on 'irrational faith' fail to beg the question against Popper's own definition of rational action?"
+    }
+  ]
+}

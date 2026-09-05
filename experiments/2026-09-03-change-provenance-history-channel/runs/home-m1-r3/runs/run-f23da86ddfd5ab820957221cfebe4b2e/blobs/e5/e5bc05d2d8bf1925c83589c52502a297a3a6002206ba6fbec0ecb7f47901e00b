@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it concedes that the preferred theory offers no basis for 'practical reliability,' which directly contradicts the problem's requirement to justify why scientists (and Popper) prefer these theories when choosing 'which theory to act on.' By defining the preference as merely a 'strategic selection... to maximize error elimination' while explicitly denying it implies the theory is 'more likely to be true or practically reliable,' the target renders the preference useless for the very practical action the prompt asks to defend. If the preference cannot distinguish between a theory that will work tomorrow and one that will fail (since both are equally unreliable under the target's view), it does not solve the pragmatic problem of action; it only describes a research heuristic, leaving the induction smuggled back in whenever a scientist actually acts on the theory expecting success.",
+      "counterexample": null,
+      "premise": "The prompt asks to defend the preference for acting on better-corroborated theories; the target admits this preference implies no practical reliability.",
+      "premise_evidence": null,
+      "successor_question": "If the preference provides no expectation of future success, on what grounds does Popper advise a scientist to build a bridge using the better-corroborated theory rather than flipping a coin?"
+    }
+  ]
+}

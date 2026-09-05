@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a methodological rule for 'verisimilitude-tracking' rather than probability-assigning; it avoids smuggling in induction by treating corroboration as a report of past performance (severe testing) that licenses the theory as the best current guess for truth-content, provided one accepts the cost of abandoning any guarantee that this guess will succeed in future practical applications.",
+    "mechanism": "The mechanism distinguishes between 'logical probability' (which Popper rejects as increasing with evidence) and 'corroboration' (a logical relation describing how well a theory has withstood attempts to falsify it). The preference is justified not by an inductive leap that the future will resemble the past, but by the rational aim of science to find theories with high verisimilitude (closeness to truth). Since a severely tested theory has survived where others failed, it is the only candidate remaining that has not been shown to be false; preferring it is the only non-arbitrary choice consistent with the goal of truth, even if this offers no inductive assurance of safety for action.",
+    "counterconditions": [
+      "If corroboration is interpreted as implying a higher likelihood of future success, the defense collapses into the very induction Popper rejected.",
+      "If the agent requires a normative bridge ensuring safety for critical actions (e.g., bridge building), Popper's framework cannot provide it without illicitly importing probabilistic assumptions.",
+      "If 'rational preference' is defined strictly as maximizing expected utility based on probability, then Popper's solution is irrational by definition."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The criticism assumes the normative bridge must be probabilistic. The rebuttal is that the bridge is 'aim-oriented': if the aim is truth (verisimilitude), and Theory A has survived severe tests while Theory B has not (or failed), then preferring A is the only move consistent with the aim. No probability assignment is needed, only the logical fact of survival."
+      },
+      {
+        "handle": "0e3388d0b26b9656cd5202a6029fd622b946c2e80cd1735c8124f29d5a06117a",
+        "kind": "rebutted",
+        "note": "Popper does not claim surviving tests makes a theory 'reliable' in the sense of probable truth. He claims it makes the theory the 'best bet' for truth-content relative to untested or falsified rivals. The distinction between 'risk of error' and 'risk management' is dissolved by acknowledging that all action involves risk; Popper's advice is simply to act on the theory that has least been shown to be wrong."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma. The mechanism now clarifies that for practical action, Popper's view forces a 'radical instrumentalism': we use the best-tested theory not because we believe it will work, but because it is the only one not yet proven broken. The cost is the admission that we act without inductive security."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "The criticism correctly identifies that Popper conflates neither preference nor confidence. The rebuttal reinforces that the preference is purely methodological: it is a rule for selecting which theory to subject to further testing or to use tentatively, not a statement of subjective confidence levels."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate accepts the cost of 'radical instrumentalism' which the previous target dismissed. We explicitly embrace the lack of guaranteed practical utility as the necessary price of avoiding induction."
+      },
+      {
+        "handle": "31fcf803cc4730175c70f64fdd5a0c1f1980b0e0ac5f6e9007f9cbe8826f4837",
+        "kind": "rebutted",
+        "note": "The target does not sidestep the cost; it identifies the cost as the loss of 'justified true belief' regarding future outcomes. The rational justification for preference is retained as 'consistency with the aim of truth,' which is a valid normative ground even if it doesn't yield probabilistic safety."
+      },
+      {
+        "handle": "3242ff8180a68616d13678e7eee9deda5089f5e62375a48ac7ae4517ccaf5f78",
+        "kind": "rebutted",
+        "note": "Popper rejects that surviving tests makes a theory 'likely' true, but he does not reject that it makes the theory 'preferable' for the purpose of approximating truth. The criticism conflates 'likelihood' (probability) with 'preferability' (methodological selection)."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The claim that the preference is 'arbitrary' is rebutted by showing it is determined by the severity of tests passed. It is not arbitrary because it is constrained by the logical history of falsification attempts; it is the only non-capricious selection rule available once induction is banned."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "mem_survivor_bias_selection",
+        "mem_darwinian_fitness_vs_truth"
+      ],
+      "shared_structure": [
+        "Selection based on elimination of failures rather than confirmation of success.",
+        "Preference for the 'last man standing' without assuming future invincibility.",
+        "Distinction between 'having survived so far' and 'being safe forever'."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious aim of truth, whereas Popperian science explicitly aims at verisimilitude.",
+        "Survivors in nature do not offer themselves as guides for action in the same way scientific theories do for engineers."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the species that survived a plague being more resistant (not immune), we bet on the theory that survived tests being closer to truth (not certain).",
+        "The rationality of the bet lies in the filtering process, not in a prophecy of future performance."
+      ],
+      "overturn_conditions": [
+        "If the filtering process (testing) is shown to be systematically biased against true theories.",
+        "If the aim of science is redefined as 'successful prediction' rather than 'truth approximation'."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

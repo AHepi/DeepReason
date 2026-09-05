@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a non-sequitur between 'maximizing error detection' and the rationality of 'preference for action.' Popper explicitly rejects acting on the 'best-tested' theory if that preference implies it is more likely to be true or reliable in the future. The target claims the preference is a 'bet on structural robustness' to avoid induction, but fails to explain why a scientist should prefer a robust theory for *action* (e.g., building a bridge) unless they assume past robustness correlates with future success. If the preference is merely to expose errors, one should arguably test the *least* corroborated theory or the most risky new conjecture, not rely on the old one for practical application. By asserting the preference is defensible as 'action-guidance' without bridging the gap to future reliability, the target smuggles in the very inductive assumption (that past survival predicts future utility) it claims to reject.",
+      "counterexample": null,
+      "premise": "Popper states that preferring a well-corroborated theory for action is rational only if it does not imply an inductive inference that the theory is more probable or will remain successful.",
+      "premise_evidence": null,
+      "successor_question": "If the goal is purely to maximize future falsification opportunities, does Popper's framework actually mandate preferring the *most* corroborated theory for action, or does it mandate testing the *most novel* and risky conjecture instead?"
+    }
+  ]
+}

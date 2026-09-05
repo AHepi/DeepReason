@@ -1,0 +1,123 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, pragmatic choice based on verisimilitude (truth-likeness), not probability.",
+      "mechanism": "Popper distinguishes between logical probability (which remains zero or undefined for universal laws) and corroboration (a report of past performance). The rational agent prefers the theory that has withstood the most severe tests because it is the best candidate for having higher verisimilitude, even if its probability is not increased. This is a decision rule for action, not an inductive inference about the future.",
+      "counterconditions": [
+        "If 'verisimilitude' cannot be defined without relying on inductive assumptions about the structure of truth.",
+        "If the preference implies an expectation that the future will resemble the past (the uniformity of nature).",
+        "If the definition of 'severe test' secretly relies on probabilistic background knowledge."
+      ],
+      "typicality": 0.92,
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference smuggles induction back in because acting on corroboration necessarily assumes the future will resemble the past, violating Popper's core prohibition.",
+      "mechanism": "To prefer Theory A over Theory B because A survived tests yesterday is to assume that A's success is a reliable guide to its success tomorrow. This assumption—that the course of nature is uniform—is the very principle of induction Popper sought to eliminate. Without this bridge, corroboration is merely a historical record with no normative force for future action.",
+      "counterconditions": [
+        "If one can justify action based solely on the elimination of error without predicting success.",
+        "If the 'assumption' is merely a psychological habit rather than a logical premise.",
+        "If Popper's notion of 'rationality' allows for non-justificational decision rules."
+      ],
+      "typicality": 0.88,
+      "optional_refs": [
+        "SRC_005"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is an evolutionary heuristic where corroboration functions as a fitness signal, bypassing the need for logical justification entirely.",
+      "mechanism": "Drawing on evolutionary epistemology, the preference for corroborated theories is analogous to natural selection favoring fit organisms. We do not 'know' the fit organism will survive tomorrow, nor do we assign it a higher probability of survival in a logical sense; we simply bet on it because it is the current survivor of a rigorous selection process. The 'smuggling' charge fails because evolution is descriptive, not justificatory.",
+      "counterconditions": [
+        "If the analogy between biological survival and theoretical truth breaks down regarding the goal of truth.",
+        "If the evolutionary mechanism itself requires an inductive assumption to get started.",
+        "If scientists require more than a blind heuristic to justify high-stakes decisions."
+      ],
+      "typicality": 0.65,
+      "analogy": {
+        "source_memory_refs": [
+          "SRC_003"
+        ],
+        "shared_structure": [
+          "Selection pressure filters variants",
+          "Survival indicates robustness not probability",
+          "Future performance is uncertain despite past success"
+        ],
+        "disanalogies": [
+          "Biological fitness is reproductive success, theoretical fitness is truth-likeness",
+          "Evolution has no teleological goal, science aims at truth",
+          "Conjectures are intentional, mutations are blind"
+        ],
+        "transfer_claims": [
+          "Preference is a bet on the current survivor, not a prediction",
+          "Corroboration reports history, does not guarantee future"
+        ],
+        "overturn_conditions": [
+          "If the goal of science is proven to be something other than truth approximation",
+          "If the selection mechanism in science is shown to be biased against truth"
+        ]
+      },
+      "optional_refs": [
+        "SRC_006"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The dilemma dissolves if we accept that 'rational preference' is distinct from 'logical entailment,' allowing Popper to act without contradicting his logic.",
+      "mechanism": "Popper redefines rationality not as the possession of justified true beliefs (induction) but as the critical attitude of preferring the theory that has best resisted falsification. The 'cost' of accepting this is abandoning the traditional philosophical demand for positive justification. We act on the best-tested theory not because it is probable, but because it is the only one left standing after severe attempts to kill it.",
+      "counterconditions": [
+        "If 'rationality' inherently requires a link to probable truth.",
+        "If the 'critical attitude' cannot motivate action without an implicit belief in success.",
+        "If the distinction between logical status and pragmatic choice is unsustainable in practice."
+      ],
+      "typicality": 0.78,
+      "optional_refs": [
+        "SRC_007"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is indefensible on strict Popperian terms and represents a performative contradiction where Popper the methodologist fails to live up to Popper the logician.",
+      "mechanism": "Strictly speaking, if corroboration adds nothing to the logical status of a theory, then choosing Theory A over Theory B is arbitrary from a logical standpoint. Any preference implies a valuation of 'survival' as a proxy for 'future validity,' which is inductive. Popper saves face only by shifting ground from logic to pragmatics, effectively admitting that pure falsificationism cannot guide action without an extra-logical (inductive) supplement.",
+      "counterconditions": [
+        "If Popper explicitly allows for non-logical criteria in decision making.",
+        "If the accusation of 'arbitrariness' ignores the asymmetry between falsified and unfalsified theories.",
+        "If the 'supplement' is categorized as methodological rule rather than inductive principle."
+      ],
+      "typicality": 0.45,
+      "optional_refs": [
+        "SRC_005"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is defensible only if we interpret 'corroboration' as a measure of informational content and testability rather than a track record, avoiding induction by focusing on structural richness.",
+      "mechanism": "Better corroborated theories are often those with higher empirical content and greater falsifiability. Preferring them is preferring boldness and precision. This avoids induction because we are not betting on their truth based on past success, but selecting them for their superior capacity to be tested and potentially refute themselves, driving knowledge growth. The cost is accepting that we may never hold a 'true' theory, only the most informative false ones.",
+      "counterconditions": [
+        "If high content theories are not always the ones preferred in practice.",
+        "If the link between 'informational content' and 'practical reliability' requires induction.",
+        "If scientists prefer safe, low-content theories in critical applications."
+      ],
+      "typicality": 0.55,
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ]
+}

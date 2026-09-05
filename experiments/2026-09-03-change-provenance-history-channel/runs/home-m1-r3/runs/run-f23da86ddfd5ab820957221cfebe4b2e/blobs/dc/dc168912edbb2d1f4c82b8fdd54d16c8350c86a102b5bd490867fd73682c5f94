@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates the logical justification for a 'preference' with the pragmatic utility of a 'strategy.' The problem asks if the preference is defensible on Popper's terms, which requires showing that choosing Theory A over Theory B is *rational* in a way that does not rely on the expectation that A will perform better than B in the future. The target admits the cost is that rationality 'no longer guarantees... practical success,' but this admission renders the preference indefensible for the very agents Popper seeks to guide (working scientists). If the preference offers no reason to believe the chosen theory is more likely to be true or practically successful than an untested one, then the 'preference' is merely an arbitrary ritual of error-seeking, not a defensible guide for action. By reducing the preference to a methodological rule that explicitly disavows any link to future reliability, the target smuggles in a form of skepticism that makes the scientists' actual reliance on corroboration irrational, thus failing to answer how the preference is defensible rather than just describable.",
+      "counterexample": null,
+      "premise": "A defensible preference for action must provide a reason to expect the preferred option to yield better outcomes (truth or utility) than the alternative; otherwise, the preference is arbitrary.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories provides no expectation of future success or truth proximity, on what grounds can a scientist rationally reject an untested theory that is equally falsifiable but less corroborated?"
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'critical attitude' that maximizes verisimilitude (truth-likeness) without assigning probability, accepting the cost that this preference offers no guarantee of practical success or future reliability.",
+      "mechanism": "Popper distinguishes between the logical status of corroboration (a report of past performance) and the pragmatic decision to prefer the theory that has withstood the most severe tests. This preference is rational not because it predicts future success (which would be induction), but because the highly corroborated theory is currently the best candidate for having high verisimilitude. The 'cost' is acknowledging that this preference is a regulative ideal rather than a justification for action in the sense of ensuring safety or utility.",
+      "counterconditions": [
+        "If the preference implies an expectation that the future will resemble the past.",
+        "If 'verisimilitude' cannot be defined without probabilistic assumptions.",
+        "If the 'critical attitude' itself relies on an inductive habit of mind."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "The distinction is not mere relabeling; it shifts the ground from logical entailment (probability) to methodological rule (preference for the best-tested). The link to truth is via verisimilitude, not probability, solving the 'no link' charge by changing the definition of the link."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "This candidate explicitly adopts the 'non-inductive grounds' argument cited in the criticism, confirming that the preference aligns with the goal of finding truth (verisimilitude) rather than predicting success."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate does not assume uniformity of nature; it assumes only that surviving severe tests is the best available indicator of closeness to truth at the present moment, a purely logical relation between evidence and theory content."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "The preference is not fictionalist; it is grounded in the objective history of testing. Verisimilitude is the bridge: we prefer the theory that has survived because it is logically less likely to be false than its refuted rivals, even if we cannot say it is probable."
+        },
+        {
+          "handle": "[SRC_006] against SRC_003",
+          "kind": "rebutted",
+          "note": "The dilemma of action is resolved by redefining 'rational action' as acting on the best current conjecture, not the most probable one. We act on the best-corroborated theory because it is the most informative and least easily refuted, not because it is 'safe'."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "The 'betting' metaphor is rejected here. The preference is not a bet on stability but a commitment to the theory with the highest empirical content that has not yet been falsified. No assumption of stable risk profiles is required."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate strictly adheres to Popper's distinction: acting on the best-corroborated theory is a decision rule, not a logical entailment of future resemblance. The premise is 'choose the best tested,' not 'the future will match the past.'"
+        },
+        {
+          "handle": "[SRC_011] against SRC_001",
+          "kind": "rebutted",
+          "note": "Agreed. The candidate reinforces that corroboration is a historical report, and the preference is a forward-looking methodological choice that does not logically entail induction."
+        }
+      ],
+      "optional_refs": ["SRC_008", "SRC_010"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because any decision to act on past test results presupposes the principle that the future will resemble the past, rendering the 'non-inductive' defense a semantic evasion.",
+      "mechanism": "While Popper formally denies that corroboration implies probability, the *act* of preferring one theory over another for practical application (e.g., building a bridge) functionally requires an inductive leap. If corroboration tells us nothing about the future, then preferring the corroborated theory is irrational unless one implicitly assumes nature's uniformity. The 'cost' of this view is admitting that Popper's epistemology fails to provide a complete foundation for scientific practice without borrowing from the very tradition he sought to overthrow.",
+      "counterconditions": [
+        "If 'preference' can be decoupled entirely from expectations of future performance.",
+        "If there exists a non-inductive rationale for action that does not rely on uniformity.",
+        "If the 'critical attitude' is sufficient to guide action without predictive power."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "revised",
+          "note": "Revised to argue that the 'relabeling' is indeed a failure: calling it a 'critical attitude' does not remove the inductive core of acting on past data. The criticism holds that the solution is verbal, not substantive."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The claim that Popper has an explicit solution is challenged here; the 'solution' works only if one ignores the pragmatic necessity of induction in action. The goal of truth does not explain why we pick the *tested* theory unless we think testing matters for the future."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Popper's specific solution in 'Logic of Scientific Discovery' is argued to be insufficient for the problem of *action*. While it solves the logical problem of justification, it fails the pragmatic problem of selection without induction."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "The 'fictionalism' defense is actually strengthened: if the link to verisimilitude doesn't help with action, then the preference *must* be smuggling in induction, making the 'regulative idea' insufficient."
+        },
+        {
+          "handle": "[SRC_006] against SRC_003",
+          "kind": "revised",
+          "note": "This candidate directly addresses the core dilemma of action by conceding that preferring 'false ones' (or unproven ones) requires an inductive assumption that the tested one is *more likely* to work, which is exactly what Popper forbids."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "revised",
+          "note": "The 'betting strategy' critique is accepted and expanded: any strategy that favors past winners assumes stable risk profiles, which is an inductive premise. The rebuttal attempt fails because the assumption is implicit in the act of preference."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "The distinction between logical status and action is precisely where the smuggling occurs. Logically, corroboration is past; pragmatically, preference is future-oriented. Bridging them requires induction."
+        },
+        {
+          "handle": "[SRC_011] against SRC_001",
+          "kind": "rebutted",
+          "note": "While the logical status is distinct, the *preference* entails the assumption. One cannot consistently hold Popper's logic and act on corroboration without an extra-logical (inductive) commitment."
+        }
+      ],
+      "optional_refs": ["SRC_001", "SRC_012"]
+    },
+    {
+      "claim": "The preference is defensible as a form of 'evolutionary epistemology' where theories compete and survive, making the preference for survivors a tautological result of the selection process rather than an inductive inference about the future.",
+      "mechanism": "Drawing on analogies with natural selection, the preference for corroborated theories is akin to preferring organisms that have survived environmental pressures. This is not an induction that they will survive tomorrow, but a recognition that they are the only ones left to choose. The 'cost' is accepting that science is a process of elimination without positive confirmation, and that 'preference' is merely the absence of a reason to reject.",
+      "counterconditions": [
+        "If biological survival implies future fitness (which is inductive).",
+        "If the analogy between biological and epistemic selection breaks down regarding 'truth'.",
+        "If scientists require more than 'last man standing' to justify high-stakes action."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "The evolutionary analogy provides a concrete mechanism (selection) that links past survival to current status without invoking probability. It solves the 'relabeling' charge by offering a causal history."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "This aligns with the 'goal of finding truth' by viewing truth as the limit of an evolutionary process. The preference is non-inductive because it describes the state of the population, not a prediction."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Evolutionary epistemology does not assume uniformity; it assumes variation and selection. The preference is for the adapted, not the 'uniform'."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Verisimilitude is interpreted here as 'adaptive fit'. The link is maintained through the survival metric, avoiding fictionalism."
+        },
+        {
+          "handle": "[SRC_006] against SRC_003",
+          "kind": "rebutted",
+          "note": "The dilemma of action is solved by noting that in evolution, acting on the survivor is the only rational move because alternatives are extinct/refuted. It is not about likelihood of future success, but lack of alternatives."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "No 'betting' or 'stable risk' is assumed. The preference is deterministic based on current survival status. Risk profiles are irrelevant to the fact of survival."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "The preference does not entail future resemblance; it entails current superiority in the contest of falsification. The future is open, but the present choice is constrained by the past elimination."
+        },
+        {
+          "handle": "[SRC_011] against SRC_001",
+          "kind": "rebutted",
+          "note": "Confirms the distinction: corroboration is the record of survival; preference is the act of choosing the survivor. No induction needed."
+        }
+      ],
+      "optional_refs": ["SRC_003"],
+      "analogy": {
+        "source_memory_refs": ["SRC_003"],
+        "shared_structure": [
+          "Selection pressure eliminates unfit variants.",
+          "Survival is a negative criterion (not refuted/not eaten).",
+          "Preference for survivors is based on elimination of others."
+        ],
+        "disanalogies": [
+          "Biological survival does not aim at 'truth' in the propositional sense.",
+          "Evolution has no conscious 'preference' mechanism.",
+          "Environmental pressures change unpredictably, unlike controlled experiments."
+        ],
+        "transfer_claims": [
+          "Scientific progress is a selection process, not an accumulation of probabilities.",
+          "Corroboration is equivalent to reproductive fitness in theory space."
+        ],
+        "overturn_conditions": [
+          "If biological fitness is shown to rely on inductive expectations of the environment.",
+          "If the analogy fails to account for the normative aspect of scientific preference."
+        ]
+      }
+    },
+    {
+      "claim": "The preference is a 'methodological fiction' necessary for the practice of science, which Popper accepts as a pragmatic compromise while maintaining his logical rejection of induction; the cost is a dual-system epistemology where logic and practice diverge.",
+      "mechanism": "Popper allows scientists to act 'as if' the best-corroborated theory is reliable, treating this as a regulative ideal or a useful fiction required for life and engineering. Logically, induction remains invalid; pragmatically, we must make decisions. The 'cost' is the fragmentation of rationality into a pure logical sphere (no induction) and a messy pragmatic sphere (acting inductively), leaving the philosopher with a paradox the scientist simply ignores.",
+      "counterconditions": [
+        "If Popper explicitly rejects such a dual-system view.",
+        "If the 'fiction' undermines the objectivity of scientific knowledge.",
+        "If the divergence makes the philosophy irrelevant to actual science."
+      ],
+      "typicality": 0.35,
+      "discharges": [
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "revised",
+          "note": "Admits the criticism: the distinction *is* a relabeling that serves to hide the pragmatic contradiction. The 'solution' is to acknowledge the split between logic and life."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that Popper's 'explicit solution' is precisely this pragmatic allowance. The goal of truth is pursued via fictions when necessary."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Popper's solution involves accepting that while we cannot *know* the future, we must *act*. The 'uniformity' is a working hypothesis, not a logical truth."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "revised",
+          "note": "Accepts that the link to verisimilitude is severed in practice; the preference is a fiction. The criticism that it becomes merely regulative is correct and is the point of this candidate."
+        },
+        {
+          "handle": "[SRC_006] against SRC_003",
+          "kind": "rebutted",
+          "note": "The dilemma of action is solved by embracing the fiction. We act on the 'false' theory because we have no choice, acknowledging the risk."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "The 'betting strategy' is admitted to be inductive, but framed as a necessary pragmatic departure from strict logic. The cost is paid openly."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "The argument concedes that acting entails an inductive premise, but argues Popper tolerates this as a pragmatic necessity distinct from his logical thesis."
+        },
+        {
+          "handle": "[SRC_011] against SRC_001",
+          "kind": "rebutted",
+          "note": "Distinguishes the logical status (pure) from the practical entailment (impure), accepting the criticism that the latter smuggles induction but defending it as unavoidable."
+        }
+      ],
+      "optional_refs": ["SRC_007", "SRC_009"]
+    }
+  ]
+}

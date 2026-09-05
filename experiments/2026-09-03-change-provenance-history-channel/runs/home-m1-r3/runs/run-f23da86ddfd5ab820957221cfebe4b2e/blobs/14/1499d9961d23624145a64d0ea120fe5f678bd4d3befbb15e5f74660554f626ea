@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates the descriptive fact of survival with the normative justification for action. While Popper accepts that we prefer surviving theories (descriptive), the problem asks if this preference is *defensible* for guiding high-stakes action without smuggling in induction. The target argues preference is 'tautological' because survivors are 'the only ones left,' but this ignores the temporal gap: acting on a theory requires an expectation that it will continue to work (future fitness). By admitting the analogy breaks if 'biological survival implies future fitness,' the target concedes that without an inductive bridge (which Popper rejects), the preference for the survivor over a refuted theory for *future* action is arbitrary. The 'cost' described (accepting science as mere elimination) does not answer how one rationally chooses the eliminee-survivor for critical applications (like building a bridge) without implicitly assuming the future resembles the past.",
+      "counterexample": null,
+      "premise": "Popper explicitly rejected the idea that survival of tests provides any positive reason to believe a theory will hold in the future; he viewed preference as a psychological or pragmatic necessity, not a logical defense against induction.",
+      "premise_evidence": null,
+      "successor_question": "If the preference is merely the 'absence of a reason to reject,' how does Popper distinguish between acting on a corroborated theory versus acting on a new, untested conjecture that has not yet been refuted, given both lack positive probability?"
+    }
+  ]
+}

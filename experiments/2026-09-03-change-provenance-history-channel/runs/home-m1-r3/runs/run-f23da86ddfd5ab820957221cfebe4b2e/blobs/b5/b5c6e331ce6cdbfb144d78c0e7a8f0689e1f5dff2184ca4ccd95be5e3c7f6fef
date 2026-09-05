@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target falsely equates 'normative justification' with 'logical proof of increased probability,' ignoring Popper's specific non-inductive normative argument: that preferring better-corroborated theories is rational because they have withstood more severe tests, making them the best available candidates for truth even without assigned probabilities. By defining the lack of inductive validation as a failure of normative logic, the target constructs a straw man that misses Popper's actual solution to the problem posed.",
+      "counterexample": null,
+      "premise": "Popper explicitly argues that while corroboration does not increase probability, it provides a rational basis for preference based on the severity of tests survived, which constitutes a valid non-inductive normative stance.",
+      "premise_evidence": null,
+      "successor_question": "Can you formulate the specific non-inductive normative justification Popper offers for preferring corroborated theories without relying on probability?"
+    }
+  ]
+}

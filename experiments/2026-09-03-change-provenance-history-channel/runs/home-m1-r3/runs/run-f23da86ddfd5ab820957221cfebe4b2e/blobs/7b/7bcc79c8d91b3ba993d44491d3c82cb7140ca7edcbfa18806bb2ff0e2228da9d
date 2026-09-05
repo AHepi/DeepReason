@@ -1,0 +1,66 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction by redefining rational action as 'critical alignment with the goal of truth' rather than 'probabilistic expectation of success.' The preference is a methodological rule to maximize the severity of future tests, not an inductive bet on future performance. However, accepting this costs the scientist any claim that their action is 'more likely to succeed' in a pragmatic sense; it only claims the action is 'most rational' relative to the aim of falsification.",
+    "mechanism": "Reframing the decision matrix from 'predictive reliability' (which requires induction) to 'testability potential' (which relies on logical content). The mechanism distinguishes between the logical status of a theory (unproven) and the strategic value of choosing the theory that has survived the hardest attempts at refutation, as it offers the most informative next step regardless of whether nature remains uniform.",
+    "counterconditions": [
+      "If the agent requires a guarantee of practical success (e.g., building a bridge that won't collapse), Popper's framework cannot provide it without illicitly assuming the uniformity of nature.",
+      "If 'rationality' is defined strictly as maximizing expected utility based on past frequencies, then Popper's preference is indeed irrational by his own strictures.",
+      "If the goal of science shifts from 'finding truth via falsification' to 'making reliable predictions for survival,' the non-inductive defense collapses."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "01a43e4617dbf30441a2791ce8c3d945291ac1a21062b87c5d4756bfefbe54cf",
+        "kind": "revised",
+        "note": "The claim now explicitly constructs the strongest case for the opposing view (that induction is smuggled in) within the 'counterconditions' and the 'costs' section, acknowledging that if one demands predictive certainty, the preference fails.",
+        "where": "counterconditions and claim conclusion"
+      },
+      {
+        "handle": "0202e9a61d35cb7ca1cb016edc18276816a479aa1e49302c2662e1f9e9c2c6f2",
+        "kind": "rebutted",
+        "note": "The argument addresses 'preferability' directly by defining it as 'strategic selection for maximum testability' rather than 'availability.' The distinction is that availability is passive (what exists), while preferability here is an active methodological choice based on logical content, not frequency.",
+        "where": "mechanism"
+      },
+      {
+        "handle": "04b8ded9db67d027a9b81c1a6ba0f9ee0c900e2d948e40d6eedb1e58cb2d47d5",
+        "kind": "rebutted",
+        "note": "The response does not force a false dichotomy but explicitly adopts the 'third option' cited: redefining rationality as critical alignment. The cost analysis clarifies that this redefinition is the specific move required to avoid the dichotomy.",
+        "where": "claim"
+      },
+      {
+        "handle": "12f262d76a723f9ff07a3efd4c44394488073be5e7159b76223e2bed2ad86207",
+        "kind": "rebutted",
+        "note": "The link to verisimilitude is established through the concept of 'surviving severe tests' increasing logical content, not probability. The rebuttal clarifies that 'rational preference' is linked to the *potential* for higher verisimilitude, not the *probability* of it.",
+        "where": "mechanism"
+      },
+      {
+        "handle": "1832fe3dd749ff4b6225ece1ed72298c6163322e74785cadc9fa7f8d5c5c65bc",
+        "kind": "rebutted",
+        "note": "The proposal explicitly rejects 'fictionalism' (acting 'as if'). Instead, it argues the preference is genuinely rational under a specific definition of goals (falsification), making it a substantive claim about methodology, not a pragmatic fiction.",
+        "where": "claim"
+      },
+      {
+        "handle": "1a76afe6cb3e70b8a8b152c1f41b2ecae41c069eb31312939cf041481ed04807",
+        "kind": "rebutted",
+        "note": "The solution presented aligns exactly with the criticism's description of Popper's actual solution: preference is defensible on non-inductive grounds because it aligns with the goal of truth (verisimilitude) via severe testing.",
+        "where": "claim"
+      },
+      {
+        "handle": "267e8a0199c355c91286f888927929d0a8ee910c74f1e5c2da996dea375c1d49",
+        "kind": "rebutted",
+        "note": "The argument explicitly avoids assuming the 'uniformity of nature.' It states that the preference is valid even if nature changes, because the *method* of seeking falsification remains the most efficient way to detect that change.",
+        "where": "mechanism"
+      },
+      {
+        "handle": "2dcf041ebc7cdc14462c5d4072be851769f8da112a05f095771c999da65e487c",
+        "kind": "rebutted",
+        "note": "The distinction between logical status and methodological preference is the core of the mechanism. The response affirms that no inductive inference about future validity is made; only a logical deduction about current testability is used.",
+        "where": "claim"
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

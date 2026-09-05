@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a methodological rule for maximizing 'verisimilitude' (truth-likeness) and information content, not probability; however, accepting this defense costs the agent any guarantee that the preferred theory is practically reliable for high-stakes action, forcing a leap from 'best tested' to 'best bet' that remains logically unbridged.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'probability' (logical likelihood) and 'corroboration' (historical performance under severe tests). It posits that preferring the better-corroborated theory is rational because such theories have higher empirical content and have survived attempts to falsify them, making them the best available approximations of truth (verisimilitude). The mechanism identifies the 'cost' as the inability to translate this methodological superiority into an inductive assurance of future success, leaving the acting scientist in a state of critical rationalism where they must act on the 'least bad' option without knowing it will work.",
+    "counterconditions": [
+      "If corroboration implies no increase in reliability for future prediction, then preferring it for practical action (like building a bridge) is indistinguishable from irrational gambling.",
+      "If the preference is purely methodological and not pragmatic, then Popper cannot explain why scientists should act on corroborated theories rather than untested ones in life-or-death scenarios.",
+      "If 'verisimilitude' cannot be measured independently of probability, then the defense collapses back into the induction Popper rejected."
+    ],
+    "typicality": 0.72,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The candidate explicitly distinguishes 'minimizing risk of error' (a probabilistic claim) from 'rational preference' (a methodological choice based on past severity of tests), arguing the bridge is the goal of verisimilitude, not safety."
+      },
+      {
+        "handle": "0e3388d0b26b9656cd5202a6029fd622b946c2e80cd1735c8124f29d5a06117a",
+        "kind": "rebutted",
+        "note": "Rebuttals clarify that Popper does not claim surviving tests makes a theory 'reliable' in an inductive sense, but rather that it is the most 'worthy of criticism' and thus the best current candidate for truth, which is the only rational basis for action in his framework."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly address the 'acting on' dilemma by framing the cost: the agent accepts they have no proof of utility, only the absence of falsification, which is a weaker ground for action than the criticism assumes is required."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "The candidate agrees that preference is not 'increased subjective confidence' but rebuts the idea that this misrepresents Popper; it accurately reflects his view that we act on the best-tested theory precisely because we lack confidence in its truth."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "rebutted",
+        "note": "The cost of 'radical instrumentalism' is explicitly identified in the claim as the loss of guaranteed practical reliability, directly addressing the tension regarding preference for action."
+      },
+      {
+        "handle": "31fcf803cc4730175c70f64fdd5a0c1f1980b0e0ac5f6e9007f9cbe8826f4837",
+        "kind": "rebutted",
+        "note": "The candidate defines the cost of accepting the defense as the surrender of traditional rational justification for preference, replacing it with a critical justification that admits the possibility of failure."
+      },
+      {
+        "handle": "3242ff8180a68616d13678e7eee9deda5089f5e62375a48ac7ae4517ccaf5f78",
+        "kind": "rebutted",
+        "note": "Clarifies that Popper rejects 'practical utility' derived from induction, but accepts 'practical utility' derived from the elimination of error-prone theories, distinguishing the two concepts."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The candidate aligns with Popper's methodological rule that scientists *ought* to prefer the better-corroborated theory, arguing this is non-arbitrary because it follows the logic of error elimination, not induction."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

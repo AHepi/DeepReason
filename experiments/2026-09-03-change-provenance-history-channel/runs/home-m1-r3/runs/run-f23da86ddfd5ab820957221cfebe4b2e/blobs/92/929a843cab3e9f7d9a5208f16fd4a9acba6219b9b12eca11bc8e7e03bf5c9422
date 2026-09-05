@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target conflates Popper's descriptive account of human psychology with his normative logic of science, falsely deriving an 'internal inconsistency' from a distinction Popper explicitly maintains.",
+      "case": "The target argues that Popper is inconsistent because he relies on 'psychological induction' to explain why scientists prefer corroborated theories while rejecting induction logically. This is a category error. Popper's rejection of induction applies strictly to the logical justification of theories (the context of justification), not to the psychological processes of discovery or preference formation (the context of discovery). By framing the biological/psychological inevitability of expecting regularities as a contradiction to his logical stance, the target attacks a straw man. Popper consistently holds that while we cannot logically prove a theory via induction, and while our minds may be wired to expect patterns, the rational choice to act on the best-tested theory is based on its superior survivability in critical tests, not on an inductive inference that it will remain true. The target fails to engage with Popper's specific argument that preferring the better-corroborated theory is a rational decision rule distinct from assigning it higher probability, thereby missing the core of his solution to the problem of action.",
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is merely a 'biological imperative' as the target claims, how does the target account for Popper's explicit normative advice to scientists to actively seek falsification, which often runs counter to natural psychological habits of confirmation?"
+    }
+  ]
+}

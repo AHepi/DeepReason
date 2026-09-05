@@ -1,0 +1,178 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Shared Mechanism. The isolated node 0d64405bfceb and SRC_005 share the mechanism of 'Precision-Vulnerability Trade-off,' where high informational density necessitates high risk of falsification. This relation is REFUTED IF a theory can be constructed that possesses maximum empirical content (forbids the most states) while simultaneously maintaining zero vulnerability to refutation (is logically immune to counter-evidence), thereby decoupling precision from risk.",
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The criticism demands a metric for 'cost.' This candidate defines the cost explicitly as 'risk of falsification' (vulnerability), which is quantifiable by the logical measure of empirical content (the size of the set of potential falsifiers). The comparison to 'safer, low-content theories' is inherent: safety is the inverse of content."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "revised",
+          "note": "Revised to explicitly include the phrase 'REFUTED IF' and name the relation kind 'Shared Mechanism' in the opening sentence to satisfy predicate checks strictly."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The mechanism 'Precision-Vulnerability Trade-off' is a standard Popperian structural link derived from the logical asymmetry of falsification, not an undefined 'surprise entropy.' It relies on the established definition of empirical content."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate avoids causal psychological mechanisms (heuristics) entirely. It posits a logical relation between content and vulnerability, which cannot be contradicted by sociological data regarding subconscious processing."
+        }
+      ],
+      "neighbours": [
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "Relation Kind: Contradiction. The isolated node 0d64405bfceb stands in direct contradiction to any interpretation of scientific preference based on 'safety maximization' or 'probability accumulation.' This relation is REFUTED IF it can be demonstrated that acting on the safest, lowest-content tautology yields greater long-term knowledge growth than acting on the most vulnerable, high-content conjecture, effectively proving that risk-aversion is the optimal strategy for epistemic expansion.",
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The 'cost' here is defined negatively as the forfeiture of knowledge growth potential. The metric is the rate of error elimination; safer theories eliminate fewer errors per unit time."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "revised",
+          "note": "Explicitly added 'REFUTED IF' condition and named 'Contradiction' as the relation kind to ensure schema compliance."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The link is a logical contradiction based on the definitions of 'knowledge growth' and 'safety,' requiring no non-standard mechanisms like entropy."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "No psychological or causal claims are made; the relation is purely methodological and logical."
+        }
+      ],
+      "neighbours": [
+        "SRC_001"
+      ]
+    },
+    {
+      "content": "Relation Kind: Abstraction. The isolated node 0d64405bfceb represents a specific instance of the abstract principle found in SRC_003: 'Logical Asymmetry of Falsification applied to Practical Rationality.' The specific preference for action is an abstraction of the general rule that one must choose the option with the highest known error-detection capacity. This relation is REFUTED IF an agent can rationally prefer a theory with *lower* error-detection capacity (less tested/more vague) for practical action while still claiming to follow a strategy of 'risk minimization' or 'error elimination.'",
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "revised",
+          "note": "Clarified that the 'cost' is the acceptance of higher immediate failure probability in exchange for higher diagnostic value, quantified by the severity of tests passed."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "revised",
+          "note": "Ensured the text contains 'REFUTED IF' and identifies 'Abstraction' as the relation type."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Relies on the standard logical concept of asymmetry, not 'surprise entropy.' The link is structural: specific case to general rule."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Avoids all references to subconscious heuristics or informational density as a psychological trigger; focuses on rational strategic choice."
+        }
+      ],
+      "neighbours": [
+        "SRC_003"
+      ]
+    },
+    {
+      "content": "Relation Kind: Dependence. The validity of the isolated node 0d64405bfceb is strictly dependent on the 'Decisionist' framework outlined in SRC_002, wherein the move from corroboration to action is a non-rational leap. Without this existential commitment, the preference collapses into induction. This relation is REFUTED IF the act of preferring a corroborated theory for practical action can be fully justified by pure logic alone, without invoking any voluntary, non-cognitive commitment or 'leap' of faith by the agent.",
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "In this decisionist view, the 'cost' is the surrender of rational superiority in practical matters. The metric is the degree to which logic fails to dictate the action."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "revised",
+          "note": "Added explicit 'REFUTED IF' clause and labeled relation as 'Dependence'."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The mechanism is the 'Decisionist Leap,' a recognized philosophical concept in Popper scholarship, not an invented entropy metric."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "The claim is about the limits of logic, not psychological causality or sociological contradictions."
+        }
+      ],
+      "neighbours": [
+        "SRC_002"
+      ]
+    },
+    {
+      "content": "Relation Kind: Integration. The isolated node 0d64405bfceb integrates the 'Problem-Shift Potential' of SRC_004 with the 'Precision-Vulnerability' trade-off, proposing that action is taken not just to test, but to force the next problem shift. This relation is REFUTED IF a theory with high problem-solving potential (richness) is shown to be inferior for immediate practical action compared to a simpler, stagnant heuristic that solves no new problems but works reliably in the short term.",
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "revised",
+          "note": "Defines 'cost' as the instability introduced by forcing rapid problem shifts, measured by the frequency of required theoretical revisions."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "revised",
+          "note": "Included 'REFUTED IF' and named 'Integration' as the relation kind."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Uses the standard Lakatosian/Popperian concept of 'problem-shift,' avoiding non-standard entropy terms."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Focuses on the structural utility of theories for research programs, not psychological mechanisms."
+        }
+      ],
+      "neighbours": [
+        "SRC_004"
+      ]
+    },
+    {
+      "content": "Relation Kind: Reduction. The preference described in the isolated node 0d64405bfceb reduces entirely to a betting strategy under conditions of radical uncertainty, where 'corroboration' is merely a label for 'past survival' and implies nothing about future performance other than the fact that the game continues. This relation is REFUTED IF corroboration can be shown to confer any positive probability of future truth or reliability, thereby transforming the preference from a gamble on survival into a rational calculation of expected utility based on likelihood.",
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The 'cost' is the admission that science is a gamble with no guarantee of progress. The metric is the absence of any probabilistic justification."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "revised",
+          "note": "Explicitly stated 'REFUTED IF' and identified 'Reduction' as the relation."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Reduces the mechanism to 'betting strategy,' a standard concept in decision theory, rejecting any mystical 'entropy' links."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Makes no claims about psychological heuristics; treats the agent as a gambler in a logical void."
+        }
+      ],
+      "neighbours": [
+        "SRC_001"
+      ]
+    }
+  ]
+}

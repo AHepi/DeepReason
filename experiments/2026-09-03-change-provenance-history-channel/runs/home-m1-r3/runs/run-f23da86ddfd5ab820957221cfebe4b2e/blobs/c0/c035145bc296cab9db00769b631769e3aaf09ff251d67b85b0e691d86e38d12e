@@ -1,0 +1,232 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "Popper's preference for better-corroborated theories is defensible without induction by framing it as a strategic rule for error elimination rather than a truth-indicator; the cost is accepting that science offers no positive reason to believe the preferred theory is true, only that it is the best available target for falsification.",
+      "mechanism": "Reinterpret 'preference' as 'selection for testing' within a critical rationalist framework where acting on the most falsifiable survivor maximizes the rate of error elimination, decoupling action from probabilistic belief.",
+      "counterconditions": [
+        "If the goal of science shifts from error elimination to predictive reliability, this defense collapses into inductive pragmatism.",
+        "If 'acting on' a theory implies believing it will work in the future, the distinction between selection and belief dissolves."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate explicitly constructs the strongest case for the 'defensible' answer first, then contrasts it with the 'smuggled induction' critique before concluding, satisfying the dialectical requirement."
+        },
+        {
+          "handle": "[SRC_008] against SRC_007",
+          "kind": "rebutted",
+          "note": "The mechanism distinguishes 'preferability' (strategic value for testing) from mere 'availability' by tying preference to the specific goal of maximizing falsifiability, not just choosing from a set."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Clarified that the third option is not redefining rationality broadly, but specifically restricting rational action to critical selection rather than justificatory belief."
+        },
+        {
+          "handle": "[SRC_002] against SRC_001",
+          "kind": "rebutted",
+          "note": "Argues that the link to verisimilitude is not logical entailment but a methodological postulate: we act as if the most tested theory is closest to truth because it has survived the hardest attempts to disprove it."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "Defends the 'as if' stance not as fictionalism but as a necessary operational posture for critical rationalism, distinct from claiming actual probability."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "The structure presents the defense, then the critique (smuggled induction), then the resolution, fulfilling the prompt's demand for both cases."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "rebutted",
+          "note": "Explicitly invokes Popper's alignment with truth-seeking via error elimination as the non-inductive ground for preference, avoiding the false dichotomy."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Counters that assuming past severity indicates future testability is a methodological rule, not an inductive inference about nature's uniformity."
+        }
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction because any decision to act on a theory presupposes an expectation of its future success, which relies on the unproven assumption that the future will resemble the past.",
+      "mechanism": "Demonstrate that 'acting on' a theory entails a predictive commitment that cannot be justified by past survival alone without implicitly assuming the uniformity of nature, thereby violating Popper's ban on induction.",
+      "counterconditions": [
+        "If one can act on a theory purely as a conjecture without any expectation of success, the charge of smuggling induction fails.",
+        "If the definition of 'rational action' excludes predictive expectation, the inductive leap is avoided."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Presents the strongest case for the 'smuggled induction' view first, detailing why the preference is indefensible on strict Popperian terms, before addressing the counter-argument."
+        },
+        {
+          "handle": "[SRC_008] against SRC_007",
+          "kind": "rebutted",
+          "note": "Argues that 'preferability' in the context of action inherently involves a judgment of likely success, collapsing the distinction with availability when the goal is practical application."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Contends that redefining rationality to exclude predictive expectation renders 'rational action' vacuous for scientists who must rely on theories working."
+        },
+        {
+          "handle": "[SRC_002] against SRC_001",
+          "kind": "revised",
+          "note": "Refines the argument to show that even a 'critical attitude' requires a baseline trust in the stability of test conditions, which is an inductive assumption."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "Rejects the 'fictionalism' defense by asserting that acting 'as if' a theory is reliable is functionally identical to believing it is probable in a pragmatic sense."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "Structures the response to fully articulate the induction charge before evaluating the defense, meeting the dialectical requirement."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "rebutted",
+          "note": "Challenges the notion that aligning with truth-seeking avoids induction, arguing that the alignment itself assumes a correlation between past testing and future truth."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Insists that strategic selection based on past severity logically depends on the assumption that severity remains a valid metric in the future."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_014"
+      ]
+    },
+    {
+      "claim": "Popper's solution survives by shifting the normative basis of science from 'justified belief' to 'critical responsibility'; the cost is the abandonment of the idea that science progressively approaches truth in a measurable way, leaving only a negative history of errors.",
+      "mechanism": "Propose that the preference is defensible as an ethical imperative to test the boldest conjectures, where 'better-corroborated' means 'most rigorously attempted to be falsified,' decoupling preference from truth-likeness entirely.",
+      "counterconditions": [
+        "If the scientific community demands positive progress metrics, this negative-only account becomes untenable.",
+        "If 'critical responsibility' implicitly values truth, the shift is merely semantic."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Develops the 'critical responsibility' case thoroughly before contrasting it with the induction critique."
+        },
+        {
+          "handle": "[SRC_008] against SRC_007",
+          "kind": "rebutted",
+          "note": "Defines preferability strictly in terms of the duty to subject bold ideas to severe tests, distinct from their availability or likelihood of success."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Clarifies that this is not a redefinition of rationality but a restriction of its domain to critical procedure rather than outcome justification."
+        },
+        {
+          "handle": "[SRC_002] against SRC_001",
+          "kind": "rebutted",
+          "note": "Argues that the link to verisimilitude is severed; the preference is for the process of elimination, not the proximity to truth."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "Positions the approach as a procedural norm rather than a fictional belief state."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "Ensures both the defense (critical responsibility) and the critique (loss of progress) are fully articulated."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "rebutted",
+          "note": "Denies that the goal is finding truth in a positive sense, but rather avoiding error, thus sidestepping the inductive requirement for truth-tracking."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Claims that past severity is relevant only as a record of attempted falsification, not as a predictor of future performance."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_010"
+      ]
+    },
+    {
+      "claim": "The dilemma is dissolved by recognizing that 'corroboration' reports a historical fact of testing, while 'preference' is a volitional act unrelated to epistemic justification; the cost is admitting that scientific choice is ultimately irrational (non-logical) though not arbitrary.",
+      "mechanism": "Separate the descriptive report of corroboration from the normative act of preference, locating the latter in the realm of decision theory or psychology rather than logic, thus bypassing the need for inductive support.",
+      "counterconditions": [
+        "If scientific preference claims to be rational, this separation renders science partially irrational.",
+        "If the volitional act requires reasons, those reasons reintroduce the inductive problem."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Presents the dissolution argument (historical fact vs. volitional act) as the primary defense before addressing the induction counter."
+        },
+        {
+          "handle": "[SRC_008] against SRC_007",
+          "kind": "rebutted",
+          "note": "Distinguishes preferability as a voluntary commitment to a course of action, independent of the logical status of the available theories."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Accepts that this makes scientific choice 'non-logical' but argues this is not a defect, rejecting the false dichotomy that it must be either inductive or irrational in a pejorative sense."
+        },
+        {
+          "handle": "[SRC_002] against SRC_001",
+          "kind": "rebutted",
+          "note": "Concedes that there is no logical link to truth, arguing that the 'critical attitude' is a psychological stance, not a logical derivation."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "Frames the 'as if' behavior as a genuine volitional leap, not a fiction."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "Details the separation of fact and will before critiquing the implications."
+        },
+        {
+          "handle": "[SRC_006] against SRC_005",
+          "kind": "rebutted",
+          "note": "Argues that aligning with truth-seeking is a personal goal, not a logical necessity derived from corroboration."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "States that the reliance on past severity is a heuristic for the agent, not a logical guarantee."
+        }
+      ],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "Popper's framework fails because it cannot account for the continuity of scientific practice; the preference for corroborated theories is only defensible if one accepts a weakened form of induction ('abduction' or 'inference to the best explanation') that Popper explicitly rejected.",
+      "mechanism": "Argue that the 'best explanation' for a theory's survival is its approximate truth, and preferring it is an abductive inference, which functions as induction by another name, thus showing Popper's system is incomplete without it.",
+      "
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

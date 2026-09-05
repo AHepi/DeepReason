@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's evolutionary defense fails to address the prompt's core challenge regarding 'rational defensibility' because it commits a category error: explaining the causal origin of a preference (why scientists *do* prefer corroborated theories) does not constitute a normative justification for that preference (why they *ought* to). Popper's problem concerns whether acting on corroboration is rational without assuming induction; answering that it is merely an adaptive biological heuristic concedes that the preference is arational (caused by evolution, not reason), thereby failing to defend the preference 'on Popper's own terms' which demand critical rationality, not just biological utility.",
+      "counterexample": null,
+      "premise": "The prompt asks if the preference for better-corroborated theories is 'defensible on Popper's own terms,' implying a need for normative rational justification rather than mere causal explanation.",
+      "premise_evidence": null,
+      "successor_question": "If the preference is merely an evolutionary heuristic and not a rational inference, does accepting this view force us to admit that scientific theory choice is ultimately irrational in the strict Popperian sense?"
+    }
+  ]
+}

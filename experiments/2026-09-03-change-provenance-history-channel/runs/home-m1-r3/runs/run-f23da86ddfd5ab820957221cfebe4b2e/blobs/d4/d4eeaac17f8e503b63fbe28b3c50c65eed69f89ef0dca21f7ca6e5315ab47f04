@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction if rationality is redefined as 'strategic error elimination' rather than 'probabilistic truth-tracking,' but this defense costs science any claim to increasing likelihood of truth, reducing scientific progress to a non-teleological game of survival where the 'best' theory is merely the one currently best-suited to be falsified next.",
+    "mechanism": "The argument reconstructs Popper's 'critical preference' as a methodological rule akin to choosing the sharpest knife for surgery: the choice is not based on the probability that the knife will cut (induction), but on the fact that its sharpness (corroboration/severity) makes it the most efficient tool for the specific goal of cutting (falsification/truth-seeking). The mechanism distinguishes between 'logical justification' (which requires induction) and 'methodological utility' (which relies on the structural property of severity). It posits that acting on the best-corroborated theory is the only rational strategy *if* the aim is to learn from mistakes quickly, even if that action provides no warrant for expecting the theory to hold tomorrow.",
+    "counterconditions": [
+      "If the goal of science includes making reliable predictions for practical application (not just testing), then the non-inductive stance collapses because practical action inherently assumes the future resembles the past.",
+      "If 'severity' of a test is defined by its ability to detect falsehoods, relying on past severity to choose a theory for future action implicitly assumes the uniformity of nature regarding the theory's stability.",
+      "If the 'verisimilitude' (truth-likeness) argument is invoked to save the preference, it fails because Popper's own formal definition of verisimilitude was proven logically untenable by Tichý and Miller, leaving the 'closer to truth' claim unsupported."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "01a43e4617dbf30441a2791ce8c3d945291ac1a21062b87c5d4756bfefbe54cf",
+        "kind": "revised",
+        "note": "The claim now explicitly structures the response to first present the strongest case for defensibility (strategic error elimination) and the strongest case against it (smuggled induction via prediction/verisimilitude failure) before rendering the final verdict on the cost of acceptance."
+      },
+      {
+        "handle": "0202e9a61d35cb7ca1cb016edc18276816a479aa1e49302c2662e1f9e9c2c6f2",
+        "kind": "rebutted",
+        "note": "The distinction is maintained: the argument addresses 'preferability' specifically as a function of 'availability' of a critical target. We prefer the corroborated theory not because it is available, but because its corroboration marks it as the most vulnerable (and thus valuable) target for the next attempt at falsification, which is the core of Popperian rationality."
+      },
+      {
+        "handle": "04b8ded9db67d027a9b81c1a6ba0f9ee0c900e2d948e40d6eedb1e58cb2d47d5",
+        "kind": "rebutted",
+        "note": "The candidate does not force a false dichotomy; it explicitly adopts Popper's third option of redefining rationality as 'critical attitude' rather than justification. The criticism claims this ignores the solution, but the candidate's entire mechanism *is* that solution, analyzed for its coherence and costs."
+      },
+      {
+        "handle": "12f262d76a723f9ff07a3efd4c44394488073be5e7159b76223e2bed2ad86207",
+        "kind": "rebutted",
+        "note": "The rebuttal argues that relabeling is insufficient only if the label lacks operational content. Here, 'rational preference' is given content via the 'sharp knife' analogy: the link to truth is not probabilistic entailment but strategic efficiency in error detection. The cost admitted (loss of truth-tracking) confirms the distinction is substantive, not merely verbal."
+      },
+      {
+        "handle": "1832fe3dd749ff4b6225ece1ed72298c6163322e74785cadc9fa7f8d5c5c65bc",
+        "kind": "revised",
+        "note": "Clarified that the defense is not 'fictionalism' (acting as if probable) but 'methodological instrumentalism' (acting to maximize falsification potential). The text now explicitly rejects the 'as if probable' framing to align with Popper's actual anti-inductive stance."
+      },
+      {
+        "handle": "19ffa30ca7486869cc04740432c7514aac980a81f25b4f8c067bc85bb2d6a227",
+        "kind": "revised",
+        "note": "Structure updated to ensure the 'strongest case for each answer' is dialectically presented: Section 1 defends the preference via strategic rationality; Section 2 attacks it via the necessity of induction for prediction and the failure of verisimilitude; Section 3 concludes on the surviving view and its heavy cost."
+      },
+      {
+        "handle": "1a76afe6cb3e70b8a8b152c1f41b2ecae41c069eb31312939cf041481ed04807",
+        "kind": "rebutted",
+        "note": "The candidate engages directly with the 'verisimilitude' solution mentioned in the criticism but argues that while Popper proposed it, it is logically flawed (per Tichý/Miller). Therefore, relying on it makes the defense vulnerable. The candidate survives by accepting the preference is defensible *only* on methodological grounds, abandoning the claim that it tracks verisimilitude."
+      },
+      {
+        "handle": "227f1deae23bf083d99c6563c1f5e5196631d4667ea52aa00cf995e64cee49fd",
+        "kind": "revised",
+        "note": "Explicitly added the countercondition that assuming past severity indicates future testability may itself be an inductive leap. The conclusion now admits that if this assumption is necessary, the preference does smuggle in induction, forcing the Popperian to accept a purely conventionalist or pragmatic basis for science."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

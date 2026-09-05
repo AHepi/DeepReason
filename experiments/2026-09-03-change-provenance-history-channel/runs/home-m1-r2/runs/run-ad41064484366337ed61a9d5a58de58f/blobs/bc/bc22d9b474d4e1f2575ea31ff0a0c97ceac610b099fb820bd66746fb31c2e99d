@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a false dichotomy between 'precision/vulnerability' and 'safety/reliability,' misrepresenting the practical stakes of scientific action. Popper's problem highlights that scientists prefer better-corroborated theories because they expect them to *work* (i.e., be reliable/safe), not because they seek the 'best opportunity for the universe to correct us.' By redefining the preference as a desire for high-risk falsification opportunities, the target sidesteps the core tension: acting on a theory implies an expectation of its future success (an inductive leap), whereas the target's 'vulnerability' framing suggests acting on a theory precisely because it is likely to fail. This renders the explanation incompatible with the actual behavior of scientists who choose theories to achieve goals, not to generate errors.",
+      "counterexample": null,
+      "premise": "Scientists prefer better-corroborated theories to successfully navigate reality, implying an expectation of reliability rather than a strategic choice of vulnerability.",
+      "premise_evidence": null,
+      "successor_question": "If the preference is for vulnerability, why do scientists abandon well-corroborated theories when they fail, rather than celebrating the 'profound lesson' and continuing to use them?"
+    }
+  ]
+}

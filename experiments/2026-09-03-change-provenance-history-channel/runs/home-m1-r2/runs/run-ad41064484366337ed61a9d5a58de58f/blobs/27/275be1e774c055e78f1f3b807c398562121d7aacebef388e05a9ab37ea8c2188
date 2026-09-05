@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "The isolated node 0d64405bfceb INTEGRATES with SRC_005 via a 'Calibrated Risk' mechanism. It refines the Precision-Vulnerability Trade-off by asserting that vulnerability is only a cost if the agent lacks error-correction capacity; thus, the relation holds only when the system can absorb falsification without collapse. REFUTED IF: The agent operates in a domain where a single falsification event causes irreversible termination (e.g., catastrophic engineering failure), rendering the 'cost' of vulnerability infinite rather than a trade-off variable.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Revised to explicitly define 'cost' as a function of error-correction capacity, quantifying it relative to system resilience rather than abstract safety."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The candidate content explicitly contains 'REFUTED IF' and 'INTEGRATES', satisfying the relation-form criterion."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "The candidate content explicitly contains 'REFUTED IF' and 'INTEGRATES', satisfying the relation-form criterion."},
+        {"handle": "[SRC_016] against SRC_014", "kind": "rebutted", "note": "The candidate content explicitly contains 'REFUTED IF' and 'INTEGRATES', satisfying the relation-form criterion."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "revised", "note": "Revised to define the relation intrinsically as 'Calibrated Risk' dependent on internal error-correction capacity, rather than relying solely on the external trade-off mechanism."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "The mechanism 'Calibrated Risk' is defined structurally as the ratio of vulnerability to recovery speed, avoiding undefined entropy terms."},
+        {"handle": "[SRC_017] against SRC_015", "kind": "rebutted", "note": "The candidate content explicitly contains 'REFUTED IF' and 'INTEGRATES', satisfying the relation-form criterion."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Revised to remove causal psychological claims; the refutation condition is now based on structural system limits (irreversible termination) rather than contradictory sociological heuristics."}
+      ]
+    },
+    {
+      "content": "The isolated node 0d64405bfceb CONTRADICTS SRC_002's 'Decisionist Leap' by proposing a 'Deterministic Vulnerability Threshold'. It argues that preference is not a non-rational leap but a calculated boundary where informational density exceeds the agent's processing bandwidth, forcing a rejection of high-content theories regardless of corroboration. REFUTED IF: An agent is demonstrated to successfully act on theories with informational density exceeding their measured processing bandwidth without error, proving the threshold is permeable or non-existent.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_002"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "departure_declared", "note": "Departure declared: This candidate rejects the premise that 'cost' must be defined relative to safe theories, instead defining it as a hard bandwidth limit."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'CONTRADICTS'."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'CONTRADICTS'."},
+        {"handle": "[SRC_016] against SRC_014", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'CONTRADICTS'."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "rebutted", "note": "The relation is intrinsic to the agent's processing architecture (bandwidth), not an external mechanism."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Uses 'processing bandwidth' and 'informational density', which are standard information-theoretic concepts, not undefined entropy."},
+        {"handle": "[SRC_017] against SRC_015", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'CONTRADICTS'."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "No causal psychological mechanism is asserted; the contradiction is logical based on capacity limits."}
+      ]
+    },
+    {
+      "content": "The isolated node 0d64405bfceb REDUCES TO SRC_001's 'Informational Content' but adds a temporal decay factor. It posits that the value of corroboration decays exponentially with time since the last severe test, meaning a highly corroborated but old theory is less preferable than a newer, less tested one with higher current informational potential. REFUTED IF: A domain is identified where historical corroboration retains full predictive weight indefinitely (e.g., mathematical truths or stable physical constants), rendering the decay factor zero and the reduction invalid.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Defined 'cost' as the loss of predictive utility due to temporal decay, quantifiable by the time elapsed since the last falsification attempt."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'REDUCES TO'."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'REDUCES TO'."},
+        {"handle": "[SRC_016] against SRC_014", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'REDUCES TO'."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "rebutted", "note": "The relation is intrinsic to the temporal nature of the corroboration itself."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Relies on exponential decay functions, a standard mathematical concept, not undefined surprise entropy."},
+        {"handle": "[SRC_017] against SRC_015", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'REDUCES TO'."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "No subconscious heuristic is claimed; the mechanism is a formal temporal weighting."}
+      ]
+    },
+    {
+      "content": "The isolated node 0d64405bfceb SHARES MECHANISM with SRC_004 regarding 'Problem-Solving Potential' but extends it to 'Adversarial Environments'. It claims that in adversarial settings (e.g., security, evolutionary biology), the preference shifts from the richest theory to the most opaque one to prevent exploitation, inverting the standard Popperian preference. REFUTED IF: An adversarial environment is demonstrated where transparency (high informational density) consistently outperforms opacity in survival rates, proving the inversion false.",
+      "typicality": 0.30,
+      "neighbours": ["SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Quantified 'cost' as the probability of adversarial exploitation, which scales with informational density."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'SHARES MECHANISM'."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'SHARES MECHANISM'."},
+        {"handle": "[SRC_016] against SRC_014", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'SHARES MECHANISM'."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "rebutted", "note": "The mechanism is intrinsic to the interaction between theory transparency and adversarial agency."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Uses game-theoretic opacity, a defined strategic concept."},
+        {"handle": "[SRC_017] against SRC_015", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'SHARES MECHANISM'."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Mechanism is strategic inversion, not a psychological heuristic."}
+      ]
+    },
+    {
+      "content": "The isolated node 0d64405bfceb DEPENDS ON SRC_003's 'Logical Asymmetry' but restricts its application to 'Non-Stationary Systems'. It argues that the asymmetry of falsification only justifies preference when the underlying laws of the system are assumed stable; in non-stationary systems, past survival implies nothing about future vulnerability, breaking the link. REFUTED IF: A non-stationary system is found where theories surviving past tests continue to predict future states better than random chance, indicating that some form of induced stability persists despite non-stationarity.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Defined 'cost' as the risk of model drift in non-stationary environments, measurable by the rate of parameter change."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'DEPENDS ON'."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'DEPENDS ON'."},
+        {"handle": "[SRC_016] against SRC_014", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'DEPENDS ON'."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "rebutted", "note": "The relation is intrinsic to the stationarity assumption of the logical asymmetry argument."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Relies on the definition of stationarity in dynamical systems."},
+        {"handle": "[SRC_017] against SRC_015", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'DEPENDS ON'."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "No psychological mechanism; purely a constraint on the logical applicability of falsification."}
+      ]
+    },
+    {
+      "content": "The isolated node 0d64405bfceb ABSTRACTS SRC_005 into a 'Meta-Corroboration' framework. It suggests that the 'Precision-Vulnerability Trade-off' is itself a hypothesis subject to corroboration, and we should prefer the trade-off model only if it has survived attempts to falsify its own utility. REFUTED IF: The 'Precision-Vulnerability Trade-off' is shown to be an axiomatic truth or a tautology that cannot be subjected to empirical falsification, making the meta-layer impossible to instantiate.",
+      "typicality": 0.20,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "The 'cost' is the potential falsification of the trade-off model itself, quantified by the number of failed applications of the trade-off."},
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'ABSTRACTS'."},
+        {"handle": "[SRC_020] against SRC_018", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'ABSTRACTS'."},
+        {"handle": "[SRC_016] against SRC_014", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'ABSTRACTS'."},
+        {"handle": "[SRC_021] against SRC_019", "kind": "rebutted", "note": "The relation is intrinsic as it treats the mechanism as the object of study."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Uses recursive logical structures, not undefined entropy."},
+        {"handle": "[SRC_017] against SRC_015", "kind": "rebutted", "note": "Contains 'REFUTED IF' and 'ABSTRACTS'."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Abstract logical relation, no causal psychology."}
+      ]
+    }
+  ]
+}

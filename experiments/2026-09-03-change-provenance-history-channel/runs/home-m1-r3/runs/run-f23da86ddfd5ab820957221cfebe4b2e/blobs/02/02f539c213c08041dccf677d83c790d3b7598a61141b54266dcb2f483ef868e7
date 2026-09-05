@@ -1,0 +1,226 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, pragmatic rule of 'critical rationality' that maximizes exposure to falsification, not probability of truth.",
+      "mechanism": "Methodological selection based on informational content and testability rather than inductive inference. Scientists prefer the theory with higher empirical content because it offers more opportunities for error elimination, aligning with the goal of truth-likeness (verisimilitude) without claiming probabilistic certainty.",
+      "counterconditions": [
+        "If the preferred theory is immediately falsified while a less corroborated one survives, the preference rule must be shown to still serve the long-term goal of error elimination.",
+        "If 'critical rationality' cannot distinguish between two equally testable but contradictory theories where one has slightly more corroboration, the rule fails to guide action."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The distinction is not mere relabeling; it shifts the normative ground from 'justified belief in truth' (induction) to 'justified choice for testing' (critical rationality). The link to verisimilitude is regulative, not constitutive."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Action is guided by the hope that the most severely tested theory is closest to the truth, not the belief that it is probable. Acting on false theories is acceptable if they are the best available approximations, provided we remain ready to discard them."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The premise is not that the future resembles the past, but that the logical structure of the theory (its content) remains constant. We act on the theory that has withstood the strongest attempts to refute its logical structure."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Survival is not the basis for reliability; severity of the test is. The preference is for the theory that has survived the *most severe* tests, which correlates with high content, not mere historical success."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "Verisimilitude is operationalized comparatively through logical content and falsifiability, not as a measurable quantity. We can judge A > B in truth-likeness if A entails B's true consequences plus more, without needing a precise metric."
+        }
+      ],
+      "optional_refs": ["SRC_006", "SRC_007"]
+    },
+    {
+      "claim": "The preference smuggles induction back in because any decision to act on a theory necessarily assumes its predictive reliability, which is an inductive leap from past survival to future performance.",
+      "mechanism": "Pragmatic inconsistency: While Popper denies the logical validity of induction, the *act* of preferring one theory for practical application (e.g., building a bridge) implicitly assigns it a higher subjective probability or reliability than untested alternatives.",
+      "counterconditions": [
+        "If Popper can demonstrate a form of 'rational action' that requires zero expectation of future success, the charge of smuggling induction fails.",
+        "If the preference is purely aesthetic or heuristic with no bearing on life-and-death decisions, the pragmatic contradiction dissolves."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to acknowledge that while Popper distinguishes the terms, the *psychological* or *pragmatic* necessity of acting 'as if' the theory is reliable functions identically to induction in practice, making the distinction semantically hollow for the acting agent."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "This candidate argues that admitting theories are 'likely false' is insufficient for action. Action requires a bet on specific outcomes, which is inherently inductive. Popper's 'hope' is indistinguishable from inductive confidence in high-stakes scenarios."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Distinguishing logical status from pragmatic choice does not solve the problem of action. The moment one chooses Theory A over B for a practical end, one asserts A is a better guide to the future, which is the definition of an inductive premise."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The analogy of survival holds only if survival implies fitness for the future. If Popper rejects this implication logically but relies on it pragmatically, he is indeed conflating descriptive survival with normative rationality."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "Even if verisimilitude is comparative, acting on the 'more verisimilar' theory assumes that 'more verisimilar' correlates with 'more successful in future applications,' which is an inductive assumption about the relationship between truth-likeness and empirical success."
+        }
+      ],
+      "optional_refs": ["SRC_004", "SRC_005"]
+    },
+    {
+      "claim": "The dilemma is dissolved by reframing scientific preference as an evolutionary selection mechanism where 'corroboration' acts as a filter for error elimination, rendering the concept of 'induction' category-mistaken in this context.",
+      "mechanism": "Evolutionary Epistemology: Theories are conjectures; tests are selection pressures. Preference is not a judgment of truth probability but a description of which variants have survived the current environment. No induction is needed because the process is blind variation and selective retention.",
+      "counterconditions": [
+        "If the 'environment' (nature) changes its rules such that past survival traits become liabilities, the evolutionary analogy fails to justify continued preference without an inductive assumption of environmental stability.",
+        "If scientists actively modify theories based on test results (learning) rather than just selecting pre-existing variants, the blind variation model is inaccurate."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "departure_declared",
+          "note": "Departing from the frame that 'rational preference' needs a logical link to truth. In an evolutionary framework, preference is simply the state of being the current survivor; no further justification linking it to 'truth' is required or possible."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Acting on the 'fittest' theory is not a gamble on its truth but a utilization of the only tool that hasn't broken yet. The 'cost' is accepting that we are navigating by a compass that points only to where we haven't died, not where we are going."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Evolutionary processes do not assume the future resembles the past; they simply react to the present. If the future differs, the theory dies. The preference is valid only until the next test, requiring no inductive bridge."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Survival in evolution is not 'descriptive' in a passive sense; it is the sole criterion of 'fitness.' Conflating survival with rationality is only an error if one seeks absolute justification. In a fallibilist system, survival *is* rationality."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "Verisimilitude in this view is not a property to be measured but a trajectory. We prefer the theory that has eliminated more errors, assuming (non-inductively) that error elimination moves us away from falsehood, even if not toward a knowable truth."
+        }
+      ],
+      "optional_refs": ["SRC_003"]
+    },
+    {
+      "claim": "Popper's position is internally inconsistent: he rejects induction logically but relies on a 'psychological induction' or 'habit' to explain why scientists (and he himself) prefer corroborated theories, effectively admitting induction is unavoidable for agents.",
+      "mechanism": "Psychological Naturalism: Humans are hardwired to expect regularities. Popper's 'critical attitude' is a superstructure built on an inductive foundation. The preference is defensible only as a biological imperative, not a logical one, contradicting his claim that science transcends psychology.",
+      "counterconditions": [
+        "If Popper can show that the 'critical attitude' actively suppresses natural inductive habits rather than riding on top of them, the inconsistency charge weakens.",
+        "If the preference can be modeled as a purely logical algorithm devoid of psychological expectation, the naturalist explanation is unnecessary."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to specify that the 'relabeling' is actually a masking of the underlying psychological induction. The 'link to verisimilitude' is a post-hoc rationalization for a pre-logical habit of expecting the sun to rise."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "The core dilemma of action is solved only by admitting we act on instinct (induction). Popper's attempt to provide a logical defense for action is the smokescreen; the real defense is biological necessity."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The distinction between logical status and pragmatic choice collapses when the agent making the choice is a biological entity driven by inductive expectations. The 'premise' is implicit in the agent's nature, not their logic."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The analogy fails because it tries to separate the observer from the observed. In reality, the scientist's 'preference' is an inductive behavior pattern. Popper's rejection of induction is a logical stance that his own behavior contradicts."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "Verisimilitude cannot be operationalized because our drive to seek it is itself an inductive projection. We assume there is a 'truth' to approximate based on past successes, which is the very induction Popper rejects."
+        }
+      ],
+      "optional_refs": ["SRC_001"]
+    },
+    {
+      "claim": "The preference is defensible solely as a 'regulative ideal' or methodological fiction: we must act *as if* corroboration indicates reliability to maintain the critical process, even though we know logically it guarantees nothing.",
+      "mechanism": "Fictionalism/Instrumentalism: The preference is a necessary rule of the game of science. It is not a claim about the world (induction) nor a logical deduction, but a constitutive rule that makes the activity of 'testing' possible. Without this fiction, inquiry stalls.",
+      "counterconditions": [
+        "If the 'fiction' leads to catastrophic failures that could have been avoided by random choice, the instrumental value of the rule is questioned.",
+        "If scientists cease to believe in the utility of the rule once its fictional status is exposed, the method collapses."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "It is not a relabeling but a shift to a different category of discourse: constitutive rules vs. descriptive claims. The 'link' is not to truth but to the continuity of the scientific practice itself."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "We act on the 'false' theory because the alternative is inaction. The 'preference' is a commitment to keep playing the game of science. The cost is acknowledging that our deepest methodological rules are fictions necessary for progress."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The rule does not entail an inductive premise; it entails a commitment to a specific form of life (science). The 'future resembling the past' is irrelevant; the rule is 'keep testing the strongest contender' regardless of outcome."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The conflation is intentional and functional. Descriptive survival is elevated to normative rationality by fiat of the methodological rule. This is not a logical error but a pragmatic necessity."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "Verisimilitude is the 'useful fiction.' We cannot measure it, but pretending we can approximate it drives the engine of discovery. Operationalization is unnecessary; motivation is sufficient."
+        }
+      ],
+      "optional_refs": ["SRC_002"]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict terms, revealing a fundamental gap between his logic of discovery and the reality of scientific practice, forcing a choice: either accept induction or abandon the claim that science is purely rational.",
+      "mechanism": "Radical Fallibilism: Popper's system creates a paradox where the only rational action (preferring the tested) is logically unsupported. The 'surviving' answer is that science is not fully rational in the foundational sense; it rests on an irrational (or arational) faith in the intelligibility of the universe.",
+      "counterconditions": [
+        "If a third way exists (e.g., Bayesian updating without prior probabilities, or a new logic of confirmation), the dichotomy is false.",
+        "If 'rationality' is redefined to exclude foundational justification entirely, the gap disappears but the term 'rational' loses its traditional meaning."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to assert that the distinction doesn't just relabel; it highlights the failure. The 'critical attitude' provides NO link, and admitting this exposes the irrational core of scientific preference."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "The target fails because it tries to solve the dilemma. This candidate asserts the dilemma is unsolvable on Popper's terms. We prefer the theory because we must, not because it is rational. The 'cost' is the loss of science's claim to pure rationality."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Popper's distinction is a defensive maneuver that doesn't hold up under the pressure of actual decision-making. The logical status is irrelevant when lives depend on the outcome; the inductive premise is smuggled in by the urgency of action."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The analogy fails because it pretends the normativity can be derived from the description. It cannot. The move from 'survived' to 'should use' is a leap of faith, i.e., induction in disguise or outright irrationalism."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "Verisimilitude is a metaphysical comfort, not a methodological tool. Relying on it is an act of faith. Accepting this means admitting science is a belief system, not a purely logical enterprise."
+        }
+      ],
+      "optional_refs": ["SRC_011", "SRC_012"]
+    }
+  ]
+}

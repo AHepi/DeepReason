@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is 'arbitrary' contradicts Popper's explicit methodological rule that scientists *ought* to prefer the better-corroborated theory because it has withstood severer tests, thereby offering a non-inductive, critical justification for preference that the target ignores.",
+      "counterexample": null,
+      "premise": "Popper argues in 'The Logic of Scientific Discovery' that while corroboration does not increase probability, the preference for well-corroborated theories is justified by the methodological decision to subject theories to severe tests, not by an arbitrary volitional commitment.",
+      "premise_evidence": null,
+      "successor_question": "If the preference is based on a methodological rule to seek truth through severe testing rather than arbitrary will, how does this distinguish Popper's view from the induction he rejected?"
+    }
+  ]
+}

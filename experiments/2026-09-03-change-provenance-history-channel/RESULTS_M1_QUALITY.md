@@ -1,5 +1,13 @@
 # M1 quality — the blind judging, resumed and finished
 
+> **SUPERSEDED IN PART, 2026-09-05, by `RESULTS_M1_REPLICATION.md`.** Two more
+> paired runs were pre-registered and run. §4's verdict — that history-ON
+> conjectures were judged worse, suggestively rather than demonstrably — does
+> NOT survive them: pooled over three pairs and 243 candidates, the gap
+> disappears once candidate length is held constant (+0.04 of 15, p = 0.885).
+> The caveat this document raised against its own headline, in §3.4 and §4.3,
+> is the half that held. Everything below is left as written.
+
 `RESULTS_M1.md` closes its quality row with **"NOT MEASURED"**. This document
 fills exactly that row and nothing else. It reports the blind three-judge
 scores over the harvested candidates, per arm, and says whether the arm shown

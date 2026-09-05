@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's proposed resolution fails to answer the specific normative question posed in the problem context. The prompt asks if the scientist's *preference* for a better-corroborated theory is 'defensible on Popper's own terms.' The target answers by redefining 'preference' as an impersonal 'evolutionary selection mechanism' and stating that 'rationality is replaced.' This is a category error: it explains the systemic outcome (survival of the fittest) but explicitly abandons the justification for the individual agent's action (the 'ought'). By asserting that rationality is replaced rather than defended, the target concedes that the preference is *not* defensible on Popper's terms of rational agency, thereby failing to provide the requested defense and instead offering a dissolution of the agent. Furthermore, this stance smuggles in induction implicitly: for the 'selection environment' to be a valid proxy for truth-likeness (verisimilitude) rather than just random survival, one must assume the future environment will resemble the past testing environment—an inductive assumption the target claims to bypass.",
+      "counterexample": null,
+      "premise": "The problem context explicitly asks: 'Is that preference defensible on Popper's own terms... Make the strongest case for each answer.'",
+      "premise_evidence": null,
+      "successor_question": "If the target asserts that 'rationality is replaced' by evolutionary selection, how can it claim to have 'resolved the dilemma' regarding the defensibility of scientific preference, rather than simply declaring the concept of defensibility obsolete?"
+    }
+  ]
+}

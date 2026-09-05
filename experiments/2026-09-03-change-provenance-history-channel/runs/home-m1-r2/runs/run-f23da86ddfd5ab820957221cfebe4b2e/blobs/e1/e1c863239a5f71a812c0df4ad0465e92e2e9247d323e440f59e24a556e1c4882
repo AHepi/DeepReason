@@ -1,0 +1,212 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a purely pragmatic decision rule that does not imply inductive belief in future success, but rather selects the theory with the highest informational content and severest testing history.",
+      "mechanism": "Pragmatic Selection without Inductive Inference: The agent chooses the best-tested theory not because it predicts future success (induction), but because it is the most informative conjecture available. Acting on it is a 'critical preference' akin to choosing the strongest tool, not the truest map.",
+      "counterconditions": [
+        "If acting on a theory logically entails an expectation of its future reliability, then the preference smuggles in induction.",
+        "If the agent cannot distinguish between 'preferring for action' and 'believing probable', the defense fails."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate explicitly addresses the 'preference' aspect by defining it as a pragmatic selection of informational content, not a redefinition of science's goal away from truth."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "Rebuttals that preference does not entail belief in higher probability; it entails belief in higher content/severity of test."
+        },
+        {
+          "handle": "[SRC_012] against SRC_011",
+          "kind": "rebutted",
+          "note": "Affirms the distinction between logical induction and pragmatic preference, avoiding the false dilemma."
+        },
+        {
+          "handle": "[SRC_010] against SRC_009",
+          "kind": "rebutted",
+          "note": "Directly answers the specific question of preference by grounding it in critical rationalism rather than systemic outcomes."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "rebutted",
+          "note": "Argues that the justification for acting is identical to testing: both rely on the theory being the best current conjecture, not on predicted success."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "Denies reliance on meta-induction; the method is deductive (conjecture/refutation), the preference is non-cognitive/pragmatic."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "Clarifies that acting does not require an expectation of success, only the absence of a better alternative."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Distinguishes logical justification (impossible for induction) from pragmatic decision-making (valid under critical rationalism)."
+        }
+      ],
+      "optional_refs": ["SRC_007", "SRC_012"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles in induction because any rational basis for acting on a past-successful theory in anticipation of future results constitutes an inductive leap, violating Popper's core prohibition.",
+      "mechanism": "The Inductive Smuggle Argument: Rational action requires an expectation of future efficacy. Since corroboration is retrospective, bridging the gap to future action requires an inductive principle (nature is uniform/past success predicts future success) which Popper explicitly rejected.",
+      "counterconditions": [
+        "If one can act rationally without any expectation of future success, the argument fails.",
+        "If 'preference' can be decoupled from 'expectation of efficacy', the smuggling charge is void."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate argues that the preference itself is the site of the smuggling, regardless of how the goal of science is defined."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "Contends that preferring X for action *logically entails* believing X has a higher chance of working, thus restoring probability/induction."
+        },
+        {
+          "handle": "[SRC_012] against SRC_011",
+          "kind": "rebutted",
+          "note": "Asserts that the distinction between logical and pragmatic problems collapses when the pragmatic choice relies on retrospective data."
+        },
+        {
+          "handle": "[SRC_010] against SRC_009",
+          "kind": "rebutted",
+          "note": "Directly addresses the preference as an inductive inference disguised as pragmatism."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "rebutted",
+          "note": "Argues that acting on a theory for practical purposes demands a stronger commitment (belief in success) than merely testing it."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "Accepts that this implies a meta-induction, arguing that Popper cannot escape it if he wants to justify action."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "Maintains that verisimilitude cannot bridge the gap to action without assuming future correspondence to truth."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Claims that pragmatic decision-making *is* a form of justification that fails without inductive support."
+        }
+      ],
+      "optional_refs": ["SRC_015", "SRC_008"]
+    },
+    {
+      "claim": "Popper's position survives only by accepting a 'rational faith' or non-justified commitment to the method of conjecture and refutation, which functions as a pseudo-induction that is psychologically necessary but logically unjustifiable.",
+      "mechanism": "Rational Faith / Critical Attitude: The preference is not based on logic or induction, but on a voluntary adoption of the critical attitude. We prefer the corroborated theory because we have decided to play the game of science, not because the theory is 'probable'.",
+      "counterconditions": [
+        "If 'rational faith' is indistinguishable from irrationality, the defense collapses.",
+        "If the cost of this stance is the abandonment of rationality in action, the solution is unacceptable."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "revised",
+          "note": "Revises the defense to admit that the 'goal' is indeed shifted to maintaining the critical tradition rather than finding truth directly."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "Argues that the preference is based on adherence to a methodology, not a belief in probability."
+        },
+        {
+          "handle": "[SRC_012] against SRC_011",
+          "kind": "rebutted",
+          "note": "Posits that the dilemma is resolved by stepping outside the justification framework entirely."
+        },
+        {
+          "handle": "[SRC_010] against SRC_009",
+          "kind": "rebutted",
+          "note": "Defines preference as a commitment to the process, answering the specific question of defensibility via methodological fidelity."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "departure_declared",
+          "note": "Declares departure from the requirement that action must be logically justified by the theory's properties; action is justified by the agent's commitment to the method."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "Frames the 'meta-induction' as a 'critical tradition' which is a sociological/historical fact, not a logical premise."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "Suggests that expecting future success is part of the 'faith' in the critical method, not a logical derivation."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Accepts the conflation of logic and pragmatics at the level of the agent's existential choice."
+        }
+      ],
+      "optional_refs": ["SRC_004", "SRC_016"]
+    },
+    {
+      "claim": "The problem dissolves if we view scientific preference as an evolutionary selection mechanism where 'acting on a theory' is analogous to an organism utilizing a trait; no induction is needed, only variation and elimination.",
+      "mechanism": "Evolutionary Epistemology Analogy: Just as an organism uses a trait that hasn't killed it yet without 'believing' it will work forever, scientists use corroborated theories. The preference is a survival heuristic, not an inductive inference.",
+      "counterconditions": [
+        "If human rational action requires more than biological heuristic processing, the analogy fails.",
+        "If the 'elimination' process cannot account for the specific choice of *which* theory to act on among survivors."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "Uses the evolutionary analogy to explain preference without redefining the goal of science, but by naturalizing the agent."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "Denies that evolutionary utilization entails belief in probability; it entails only temporary utility."
+        },
+        {
+          "handle": "[SRC_012] against SRC_011",
+          "kind": "rebutted",
+          "note": "Shows the dilemma is false because evolutionary processes operate without logical justification."
+        },
+        {
+          "handle": "[SRC_010] against SRC_009",
+          "kind": "rebutted",
+          "note": "Answers the preference question by framing it as a biological imperative of error elimination."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "rebutted",
+          "note": "Equates testing and acting as forms of environmental interaction subject to the same selection pressures."
+        },
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "Rejects meta-induction in favor of meta-evolution (the evolution of the method itself)."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "Argues that 'expectation of success' is a phenomenological illusion; the reality is trial and error."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Dissolves the contradiction by removing the requirement for logical justification of pragmatic acts."
+        }
+      ],
+      "optional_refs": ["SRC_003", "SRC_002"]
+    }
+  ]
+}

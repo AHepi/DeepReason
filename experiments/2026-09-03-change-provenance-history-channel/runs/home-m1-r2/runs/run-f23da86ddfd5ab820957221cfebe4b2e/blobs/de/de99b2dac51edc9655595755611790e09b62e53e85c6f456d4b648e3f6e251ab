@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'informational content' with 'action-guiding reliability.' Popper explicitly rejects the idea that surviving tests makes a theory more probable or reliable for future prediction. However, the problem states that scientists (and Popper) prefer better-corroborated theories specifically when 'choosing which theory to act on.' Action inherently relies on an expectation of future performance (e.g., building a bridge based on a theory implies expecting it not to collapse). By advising action based on corroboration while denying that corroboration implies any increased expectation of future success, the target creates a pragmatic contradiction: it recommends acting *as if* the theory is reliable while simultaneously asserting there is no rational basis within Popper's system to expect it to be reliable. This smuggles in induction because the only coherent reason to prefer Theory A over Theory B for action is the inductive belief that past success indicates future success; without this, the preference is arbitrary, not a 'defensible decision rule.'",
+      "counterexample": null,
+      "premise": "Action based on a theory logically entails an expectation of its future reliability, and preferring one theory over another for action without such an expectation is irrational/arbitrary.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration provides no inductive weight regarding future success, what non-arbitrary criterion allows Popper to distinguish between acting on a well-tested theory versus a randomly selected untested one?"
+    }
+  ]
+}

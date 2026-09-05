@@ -1,0 +1,94 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule of 'critical rationality,' not an inductive inference. It costs the acceptance that rational action requires a non-justified 'faith' in the continuity of nature's behavior, which Popper admits is psychologically unavoidable but logically unjustifiable.",
+      "mechanism": "Distinguish between 'justification of truth' (inductive, rejected) and 'rationality of choice' (methodological, accepted). The mechanism is the 'principle of transference': we choose the theory that has withstood the severest tests because it offers the best opportunity for further error elimination, not because it is likely true. This shifts the goal from 'probability of truth' to 'verisimilitude potential'.",
+      "counterconditions": [
+        "If the universe changes its laws tomorrow such that past regularities no longer hold, the preference becomes irrational.",
+        "If 'severe testing' is defined circularly to guarantee success, the corroboration report is empty.",
+        "If the agent requires a probabilistic guarantee for action rather than a methodological hope, Popper's solution fails."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The normative account is provided by the principle of critical rationality: one *should* prefer the theory that allows for the most rigorous future testing, as this maximizes the growth of knowledge, regardless of truth probability."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "Survival value is not the justification; the justification is the logical status of the theory as the best candidate for falsification. The descriptive fact that scientists do this supports the methodological rule, but does not constitute the rule itself."},
+        {"handle": "[SRC_014] against SRC_003", "kind": "rebutted", "note": "Popper explicitly rejects 'pragmatic induction.' The preference is not based on the expectation that the future will resemble the past (induction), but on the decision to treat the unrefuted theory as the current best guess for the sake of argument and test."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "revised", "note": "Clarified that Popper's solution is not 'non-rational faith' in a mystical sense, but a rational commitment to the method of conjecture and refutation. The 'faith' is in the method, not the specific outcome."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "The justification is not hollow; it is procedural. We prefer the theory not because it 'works' (instrumentalism) but because it has survived attempts to show it doesn't, making it the most informative starting point."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "Popper does not rely on blind biological instinct for *justification*, though he acknowledges it as the psychological source of our expectations. The logical defense rests on the asymmetry of verification and falsification."},
+        {"handle": "[SRC_015] against SRC_007", "kind": "revised", "note": "Explicitly added the cost: accepting that rational action ultimately rests on an unjustifiable metaphysical belief in the uniformity of nature, which we adopt as a regulatory ideal."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "The claim does not rely on 'verisimilitude' as a proven metric (which Popper later problematized) but on 'corroboration' as a report of past performance. The preference is for the theory with the highest corroboration report, not necessarily the highest verisimilitude, though the two are hoped to correlate."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_003", "SRC_009"]
+    },
+    {
+      "claim": "The preference smuggles induction back in. Popper's distinction between 'corroboration' and 'probability' is semantically unstable when applied to action; acting on a corroborated theory implicitly assigns it a higher subjective probability of success, violating his own ban on inductive logic.",
+      "mechanism": "The 'Action-Probability Link': Any rational agent choosing between Theory A (corroborated) and Theory B (falsified) acts as if P(A succeeds) > P(B succeeds). Since Popper denies objective probability increases, this subjective assignment is either irrational (contradicting the 'rational' preference) or implicitly inductive (assigning weight to past instances).",
+      "counterconditions": [
+        "If 'rational action' can be defined without any reference to expected outcomes or probabilities.",
+        "If the agent is purely altruistic regarding truth-seeking and indifferent to practical success.",
+        "If the concept of 'preference' is redefined as a random selection mechanism weighted only by information content, not survival."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The normative account fails because any norm guiding action towards success implies a probabilistic assessment of that success, which is inductive."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The shift to 'survival value' is inevitable because 'defensibility' in the context of action requires a link to future performance, which is exactly what induction provides and Popper lacks."},
+        {"handle": "[SRC_014] against SRC_003", "kind": "rebutted", "note": "The 'semantic compartmentalization' is the very smoke screen hiding the induction. You cannot separate the 'methodological' choice from the 'pragmatic' expectation of success."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Conflating justification of truth with rationality of choice is necessary because the rationality of the choice depends entirely on the anticipated truth-like behavior of the theory."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "The justification is hollow precisely because it refuses to admit the inductive step that makes the preference meaningful. 'Methodological utility' without expected success is useless."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "revised", "note": "While Popper may not cite biology, the structure of his argument forces a reliance on an instinctual or habitual leap that functions identically to induction, even if labeled otherwise."},
+        {"handle": "[SRC_015] against SRC_007", "kind": "revised", "note": "The cost of accepting this view is the collapse of Popper's entire demarcation criterion, admitting that science inevitably relies on the very inductive logic he sought to replace."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Even without verisimilitude, the act of preferring the corroborated theory assumes it is 'better' in a way that tracks reality, which is an inductive assumption."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_006", "SRC_014"]
+    },
+    {
+      "claim": "The preference is defensible only if recast as an evolutionary selection mechanism where 'rationality' is replaced by 'adaptive fitness.' The cost is abandoning the notion of the scientist as a logical agent in favor of the scientist as an evolving organism.",
+      "mechanism": "Evolutionary Epistemology Transfer: Treat theories as mutations and severe tests as environmental selection pressures. Preference for corroborated theories is not a logical deduction but an adaptive trait of the scientific community. Induction is not 'smuggled in'; it is bypassed entirely by replacing logic with biology.",
+      "counterconditions": [
+        "If the goal of science is truth rather than survival/fitness.",
+        "If individual scientists must be able to justify their choices logically rather than just exhibiting adaptive behavior.",
+        "If the 'environment' (nature) is not stable enough for selection to yield cumulative progress."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_008", "kind": "departure_declared", "note": "Departing from the requirement for a 'normative account of rational action.' The proposal replaces normativity with descriptivism of evolutionary success."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "The question of 'defensibility' is answered by showing the preference is an inevitable result of evolutionary pressure, making the normative question moot."},
+        {"handle": "[SRC_014] against SRC_003", "kind": "rebutted", "note": "This is not 'pragmatic induction' but 'natural selection.' The mechanism is causal, not logical."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Popper himself leaned towards evolutionary epistemology. This aligns with his later views, distinguishing between the logic of discovery (evolutionary) and the logic of justification (falsification)."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "The justification is not hollow; it is robustly causal. We prefer what works because those who didn't were eliminated."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "revised", "note": "Refined to acknowledge that while Popper didn't reduce everything to biology, he saw the growth of knowledge as analogous to natural selection, which validates the 'instinct' critique as a feature, not a bug."},
+        {"handle": "[SRC_015] against SRC_007", "kind": "revised", "note": "The cost is high: we lose the ability to claim science is 'rationally' superior to other forms of inquiry, only that it is currently more 'fit'."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Verisimilitude is irrelevant here; fitness is the only metric. Corroboration is simply a sign of fitness."}
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_005", "SRC_011"]
+    },
+    {
+      "claim": "The dilemma is a false dichotomy arising from a category error: 'probability' in Popper's sense (logical frequency) is distinct from 'credibility' (degree of belief for action). The preference is defensible as a update of credibility without updating logical probability.",
+      "mechanism": "Bayesian-Popperian Hybrid: Use a dual-aspect model. Logical probability (Popper's target) remains zero or undefined for universal laws. However, 'subjective credibility' (a psychological state necessary for action) updates via a non-inductive rule: 'Increase credibility proportional to severity of tests passed.' This avoids induction by treating credibility as a pragmatic tool, not a truth-tracking metric.",
+      "counterconditions": [
+        "If 'credibility' cannot be formally distinguished from 'probability' in its operational effects.",
+        "If the 'severity' of a test cannot be measured independently of the theory being tested.",
+        "If agents are incapable of maintaining two distinct mental models for the same theory."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_010] against SRC_008", "kind": "rebutted", "note": "The normative account is: one *should* update credibility to maximize decision efficiency, even if logical probability is unchanged."},
+        {"handle": "[SRC_013] against SRC_012", "kind": "rebutted", "note": "This answers the defensibility question by changing the domain of evaluation from logic to psychology/pragmatics."},
+        {"handle": "[SRC_014] against SRC_003", "kind": "rebutted", "note": "It is not induction because the update rule is not 'past success predicts future success' but 'past resistance to falsification warrants higher confidence for the next bet.'"},
+        {"handle": "[SRC_011] against SRC_009", "kind": "revised", "note": "Clarifies that Popper's 'rationality' might implicitly rely on this psychological duality, even if he didn't formalize it as Bayesian credibility."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "The justification is functional: it allows action without committing the logical sin of induction."},
+        {"handle": "[SRC_005] against SRC_002", "kind": "rebutted", "note": "This is not biological instinct but a rational heuristic for managing uncertainty in the absence of logical proof."},
+        {"handle": "[SRC_015] against SRC_007", "kind": "revised", "note": "The cost is the complexity of maintaining a split mind: knowing a theory is logically unproven while acting as if it is highly credible."},
+        {"handle": "[SRC_004] against SRC_001", "kind": "rebutted", "note": "Avoids the verisimilitude trap by focusing on 'credibility' as a distinct ontological category."}
+      ],
+
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

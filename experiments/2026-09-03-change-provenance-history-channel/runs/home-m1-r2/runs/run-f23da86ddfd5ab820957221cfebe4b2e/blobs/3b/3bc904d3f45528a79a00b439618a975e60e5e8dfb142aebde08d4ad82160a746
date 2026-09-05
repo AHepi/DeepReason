@@ -1,0 +1,49 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+PROBLEM CONTEXT (conn:11f6f168415a) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 11f6f168415a to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@e2d68e2ccd04: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The connection 11f6f168415a functions as an ABSTRACTION relation, where SRC_005 abstracts the underlying logical structure of SRC_001's argument to reveal a hidden dependency on the uniformity of nature. This relation is REFUTED IF the concept of 'rational choice' can be rigorously defined in a way that permits action based on past data without any assumption whatsoever about the future resembling the past.
+commitments: hv-floor@2a45b7988522, lineage-ref@e2d68e2ccd04, relation-form@578e42df713e
+
+PREMISE INVITATION (optional): every candidate offered for problem conn:11f6f168415a so far has been refuted. If the PROBLEM ITSELF presupposes something that FORBIDS NOTHING — a presupposition no observation and no execution could ever tell against, so that the question is malformed rather than merely hard — state that presupposition in "premise". Leave it null otherwise; declining costs you nothing, and this never replaces your case against the target. If admitted evidence bears on that presupposition, cite it in "premise_evidence" as a block id from the CITABLE EVIDENCE BLOCKS list together with an EXACT quote from that block. The quote is byte-checked against the recorded bytes; an unquoted citation cannot be made here, and a citation of a block this call was not shown does not verify.
+
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[426c91fb917ad6f1] WHAT HAS ALREADY BEEN REFUTED ON THIS PROBLEM These claims were proposed and did NOT survive criticism. They are shown so they are not proposed again in another
+[4c85452bc9bcff8e] ATTACKS THAT WERE TRIED AND DID NOT LAND These objections were raised and failed to change the target's status. Raising them again is unlikely to be productive.
+[cbaf926b4cc17c2d] === PRIOR HISTORY ON THIS PROBLEM (advisory, non-grounding) === scope: the whole run (every problem it has opened) This is a record of what has already been tri
+
+REFERENCE MENU -- /cases/*/premise_evidence/*/block
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  [0] OMIT -- leave "premise_evidence" out of this case entirely. Declining costs you nothing and never weakens your case.
+  [1] 426c91fb917ad6f13bb55a3365b9baa87568aa1cbb028b9459b0f3f0f67b7fb1
+  [2] 4c85452bc9bcff8ec0d66b4634a6fbb4894f4eeaff2b12c521a5b553713eed58
+  [3] cbaf926b4cc17c2d9b84fbfe7511a1aca435d9fb831dd982e8d58bcea27abfb3
+You may answer with the handle itself or with its [index].
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

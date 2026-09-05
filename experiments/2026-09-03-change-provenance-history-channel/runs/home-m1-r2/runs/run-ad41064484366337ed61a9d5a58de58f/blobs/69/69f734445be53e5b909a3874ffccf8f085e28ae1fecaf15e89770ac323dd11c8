@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails on Popper's own terms because it conflates 'acting on' a theory with the 'preference' being an inductive inference. Popper explicitly argued that preferring the better-corroborated theory is rational NOT because it indicates higher truth-likeness (verisimilitude) or survival fitness, but because it has withstood attempts to falsify it. The target claims the cost is 'radical instrumentalism' where science is 'devoid of any claim to describing the world.' However, Popper was a critical realist who believed corroboration signals that a theory is closer to the truth (higher verisimilitude), even if not probable. By framing the preference solely as a Darwinian survival mechanism distinct from truth correspondence, the target misrepresents Popper's actual justification for preference, which relies on the logical asymmetry of falsification and the concept of verisimilitude, not mere pragmatic utility. Thus, the target creates a straw man of Popper's realism to solve the induction problem, failing to address whether Popper's *actual* view (realist verisimilitude) smuggles in induction.",
+      "counterexample": null,
+      "premise": "Popper distinguished between probability (which he rejected for universal laws) and verisimilitude (truth-likeness), arguing that we prefer corroborated theories because they have survived severe tests and thus are arguably closer to the truth, not merely because they are 'fit' for survival in an instrumentalist sense.",
+      "premise_evidence": null,
+      "successor_question": "Does Popper's reliance on 'verisimilitude' to justify preferring corroborated theories implicitly reintroduce an inductive assumption about the future resembling the past?"
+    }
+  ]
+}

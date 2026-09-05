@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'acting on a known falsehood' with 'preferring one non-refuted theory over another.' Popper's problem arises precisely when multiple theories have survived severe tests (are all 'not yet known to be wrong'), yet scientists still prefer the better-corroborated one. The target claims we prefer the corroborated theory simply because the alternative is 'proven false or untested,' which ignores the core dilemma of choosing between two unfalsified rivals where the 'error elimination' logic provides no basis for preference.",
+      "counterexample": null,
+      "premise": "Popper's problem explicitly involves choosing between theories that have both survived severe tests, not choosing between a falsified and an unfalsified theory.",
+      "premise_evidence": null,
+      "successor_question": "If both Theory A (highly corroborated) and Theory B (less corroborated but not yet falsified) are available, how does the 'minimize known error' imperative justify choosing A over B without implicitly assigning higher probability or verisimilitude to A?"
+    }
+  ]
+}

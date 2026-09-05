@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a methodological rule for 'verisimilitude-seeking' rather than an inductive probability assignment; it survives by redefining rational action as the strategic selection of the theory with the highest known content and severest testing history, accepting the cost that this preference offers no guarantee of future success or truth, only the best available guess based on past error-elimination.",
+    "mechanism": "The mechanism distinguishes between 'logical probability' (which Popper rejects as increasing with evidence) and 'methodological preference' (which increases with severity of tests passed). By treating corroboration as a report of past performance in falsification attempts, the scientist chooses the theory that has proven most robust against error, not because it is likely true, but because it is the most informative surviving conjecture. This avoids induction by refusing to project past success into future probability, instead projecting it as a basis for critical discussion and further testing.",
+    "counterconditions": [
+      "If corroboration is interpreted as assigning a higher degree of belief or subjective confidence, the defense collapses into hidden induction.",
+      "If the preference is claimed to minimize the risk of practical failure in a probabilistic sense, it contradicts Popper's denial that survival implies reliability.",
+      "If the agent cannot articulate the difference between 'best guess' and 'most probable', the distinction is merely verbal."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "00d41187823e69c3f3273bf81a4ab21f9675b6062a03ecb9af116b33684000d6",
+        "kind": "rebutted",
+        "note": "The candidate explicitly bridges the gap by defining the normative bridge as 'methodological rationality' (seeking truth via error elimination) rather than 'epistemic probability'. The preference is for the theory that has done the most work in eliminating error, which is a rational basis for action without invoking probability."
+      },
+      {
+        "handle": "0e3388d0b26b9656cd5202a6029fd622b946c2e80cd1735c8124f29d5a06117a",
+        "kind": "rebutted",
+        "note": "The candidate clarifies that 'rational risk-management' here means managing the risk of clinging to easily falsified ideas, not calculating the probability of future failure. It aligns with Popper's view that we act on the best-tested theory because it is the most open to further refutation, not because it is safe."
+      },
+      {
+        "handle": "14d1197c300fd5ac6eaa869e12828ef44a937bccce0fa6891569a04a42d92071",
+        "kind": "revised",
+        "note": "Revised to explicitly address 'acting on' a theory (e.g., building a bridge) by framing it as acting on the theory with the highest verisimilitude potential. The choice is not based on safety but on the fact that this theory has survived the specific stresses relevant to the action better than alternatives."
+      },
+      {
+        "handle": "1f48ae69bf2b39b2937ac45c4b912af31f9dfbe46111d492f7d8ca6e61dfcc61",
+        "kind": "rebutted",
+        "note": "The candidate maintains the distinction: preference is not increased subjective confidence (psychological state) but a commitment to the theory with the greatest empirical content that has not yet been false. This is a logical status, not a psychological one."
+      },
+      {
+        "handle": "20a4be3076cf0068ccfd7925959fdc06e12b723cc54a36a2669e717420054a08",
+        "kind": "rebutted",
+        "note": "The cost of 'radical instrumentalism' is accepted: we have no reason to think the bridge won't fall, only that the theory used to build it has survived more severe tests than the alternative. The defense does not dismiss this cost but embraces it as the price of non-inductive rationality."
+      },
+      {
+        "handle": "31fcf803cc4730175c70f64fdd5a0c1f1980b0e0ac5f6e9007f9cbe8826f4837",
+        "kind": "rebutted",
+        "note": "The candidate identifies the cost clearly: accepting this view costs us any claim to 'justified true belief' or high probability. Rational justification is reduced to 'having subjected the theory to the severest possible criticism and failed to kill it'."
+      },
+      {
+        "handle": "3242ff8180a68616d13678e7eee9deda5089f5e62375a48ac7ae4517ccaf5f78",
+        "kind": "rebutted",
+        "note": "The candidate argues that 'practical utility' in Popper's sense is derived from informational content and testability, not predictive reliability. The theory is useful because it tells us more about the world and where it might be wrong, not because it predicts correctly."
+      },
+      {
+        "handle": "3297a181c053e78a3cd0a0bbe74476e014d05224f7205d2c74154679a5a92258",
+        "kind": "rebutted",
+        "note": "The candidate agrees the preference is not arbitrary but is grounded in the objective history of testing. It is a rule of method: 'prefer the theory that has survived the severest tests,' which is a non-inductive imperative for growth of knowledge."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary-selection-of-species",
+        "courtroom-adversarial-testing"
+      ],
+      "shared_structure": [
+        "Survival of the fittest theory mirrors survival of the fittest species; neither guarantees future survival, but past survival is the only rational basis for selection.",
+        "Cross-examination in court eliminates weak testimonies; the remaining testimony is preferred not because it is certainly true, but because it has resisted the strongest attacks."
+      ],
+      "disanalogies": [
+        "Biological evolution has no goal of truth, whereas scientific methodology explicitly aims at verisimilitude.",
+        "A courtroom verdict often aims for finality (probability > threshold), whereas Popperian science never accepts a theory as finally verified."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the species that survived ice ages to colonize a new cold region, we bet on the theory that survived severe tests to guide action.",
+        "The rationality of the choice lies in the process of elimination, not in the intrinsic properties of the survivor."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that past survival correlates with no future resilience even as a matter of fact, the pragmatic basis vanishes.",
+        "If the definition of 'severe test' is shown to be circular or theory-laden in a way that biases the outcome."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

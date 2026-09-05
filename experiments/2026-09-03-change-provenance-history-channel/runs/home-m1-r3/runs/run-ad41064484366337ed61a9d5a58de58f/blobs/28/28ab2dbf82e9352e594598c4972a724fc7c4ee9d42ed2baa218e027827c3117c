@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to address the problem's specific challenge regarding 'practical action' and 'safety.' By redefining the preference for corroborated theories solely as a strategy for 'maximizing learning potential,' the target ignores scenarios where the cost of failure (e.g., in engineering or medicine) is catastrophic and irreversible. In such contexts, scientists prefer corroborated theories precisely because they act as a proxy for reliability/safety (a form of pragmatic induction), not because they offer the best opportunity for future falsification. The target's mechanism collapses when the goal of action is survival rather than epistemic growth, thereby smuggling in the very inductive assumption (that past survival predicts future safety) that Popper explicitly rejected.",
+      "premise": "Practical action in critical domains requires reliability and safety, not just opportunities for learning.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "If a highly corroborated theory has a known fatal flaw in a specific edge case relevant to a life-critical application, does Popper's framework allow us to reject it in favor of a less corroborated but safer alternative, or must we choose the 'most informative' one and accept the potential catastrophe as a learning event?"
+    }
+  ]
+}

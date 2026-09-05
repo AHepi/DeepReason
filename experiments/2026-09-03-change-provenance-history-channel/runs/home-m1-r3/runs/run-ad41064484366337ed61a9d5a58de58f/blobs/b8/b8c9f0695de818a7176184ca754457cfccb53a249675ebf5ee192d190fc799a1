@@ -1,0 +1,67 @@
+{
+  "candidates": [
+    {
+      "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a methodological rule of 'critical rationalism' that explicitly rejects probabilistic justification, relying instead on the logical asymmetry between verification and falsification to guide action without induction.",
+      "mechanism": "Methodological Decision Rule: Action is guided not by the probability of truth (which is unknowable) but by the severity of tests survived. Choosing the best-tested theory is a rational convention to maximize error-elimination, not an inductive inference that the future will resemble the past.",
+      "counterconditions": [
+        "The agent must accept that the chosen theory may still be false tomorrow.",
+        "The preference must not be framed as increasing the theory's likelihood of being true.",
+        "The decision context must be strictly about which theory to submit to further testing or use as a basis for engineering, not about believing it."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "The normative account is provided by the principle of critical rationalism itself: one *should* choose the best-tested theory because it has withstood the most rigorous attempts at refutation, making it the most reliable current basis for action, even if its truth probability remains zero."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "The response addresses defensibility by defining the norm: the rule is 'prefer the most severely tested.' This is a normative justification within Popper's system, distinct from a descriptive survival value argument."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "rebutted", "note": "This candidate does not rely on verisimilitude comparisons; it relies solely on the binary status of having survived severe tests versus not, avoiding the formal definition problems of truth-likeness."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "The preference is not pragmatic induction; it is a deductive application of the methodological rule: 'If your goal is error elimination, choose the theory that has eliminated the most errors so far.'"},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Clarifies that Popper affirms the rationality of the *choice* based on test severity, not a non-rational faith, distinguishing methodological rationality from justificatory rationality."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "The justification is not hollow; it is robustly negative. We prefer the theory not because it is likely true, but because it is the least likely to be immediately falsified given current knowledge."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "No biological instinct is invoked; the preference is derived from a conscious adherence to the logic of falsification and the goal of scientific progress."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "revised", "note": "Added explicit cost analysis: Accepting this view costs us any claim to positive knowledge or confidence in the future stability of natural laws; we act on a guess that has simply not yet failed."}
+      ],
+      "optional_refs": ["SRC_006", "SRC_007"]
+    },
+    {
+      "claim": "Popper's preference for better-corroborated theories inevitably smuggles induction back in, as the very act of preferring a theory for future action logically presupposes that past performance is a reliable guide to future success, contradicting his rejection of the uniformity of nature.",
+      "mechanism": "Hidden Inductive Premise: To prefer Theory A over Theory B for future action because A survived past tests requires the hidden premise that 'the future will resemble the past regarding these tests.' Without this premise, the past survival is irrelevant to future utility.",
+      "counterconditions": [
+        "The agent attempts to justify the preference using only past data without assuming future regularity.",
+        "The distinction between 'probability' and 'preference' collapses when the preference is acted upon for future gain.",
+        "Popper's own behavior in daily life (e.g., avoiding falling cliffs) mirrors inductive reasoning he theoretically forbids."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_008] against SRC_006", "kind": "rebutted", "note": "The critique argues that no normative account succeeds without induction; thus, the preference is indefensible on Popper's strict anti-inductive terms."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "The argument demonstrates that 'defensibility' fails precisely because the shift to 'survival value' implicitly relies on the inductive assumption that survival predicts future survival."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "departure_declared", "note": "Departing from the need to solve verisimilitude; the core failure is the temporal bridge (past to future), not the degree of truth-likeness."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "rebutted", "note": "Agrees that semantic compartmentalization fails; the 'pragmatic induction' is not a concession but the fatal flaw proving Popper's system cannot sustain action without contradiction."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Argues that calling it a 'methodological choice' is a euphemism for induction; the rationality of the choice depends entirely on the inductive validity of using past tests."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "Confirms the justification is hollow because the link between 'better corroborated' and 'better to act on' is purely inductive, which Popper banned."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "Suggests that if Popper appeals to anything other than strict logic to explain action, he is indeed appealing to a psychological/instinctive form of induction, validating the critic's point."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "revised", "note": "Explicitly states the cost: Accepting this view means admitting Popper's epistemology is practically inert and that all effective scientific action relies on the very induction he sought to eliminate."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_004"]
+    },
+    {
+      "claim": "The preference is defensible only if reinterpreted through an evolutionary epistemology where 'corroboration' signals fitness rather than truth, allowing action based on survival-of-the-fittest theories without committing to their probable truth or the uniformity of nature.",
+      "mechanism": "Evolutionary Analogy: Theories are like species; corroboration shows they have survived environmental pressures (tests). We prefer them not because they are 'true' or will definitely survive tomorrow, but because they are the currently fittest organisms in the ecosystem of ideas.",
+      "counterconditions": [
+        "The agent must abandon the goal of finding 'true' theories in favor of 'fit' theories.",
+        "The analogy must hold strictly: just as a fit species can go extinct instantly, a corroborated theory can be falsified instantly.",
+        "The 'preference' is merely a description of which theory is currently dominant, not a prescription for rational belief."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_008] against SRC_006", "kind": "revised", "note": "Reframes the normative account: One should choose the fittest theory to maximize short-term adaptation, acknowledging this offers no long-term guarantee."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "Defensibility is grounded in biological realism rather than logical necessity; it answers 'why act' with 'because it works until it doesn't,' avoiding the induction trap by accepting contingency."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "rebutted", "note": "Evolutionary fitness does not require a metric of 'verisimilitude,' only a binary survived/died status, bypassing Popper's formal objections."},
+        {"handle": "[SRC_012] against SRC_002", "kind": "departure_declared", "note": "Declares departure from the requirement that the preference be 'non-inductive' in the logical sense; it is 'inductive' only in the biological sense of pattern recognition, which Popper might accept as psychological fact."},
+        {"handle": "[SRC_009] against SRC_007", "kind": "rebutted", "note": "Distinguishes between rational justification (logic) and evolutionary rationality (survival), arguing Popper conflates the two when demanding a logical basis for action."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "The justification is not hollow; it is empirically grounded in the history of science as an evolutionary process, providing a robust, albeit non-foundational, basis for preference."},
+        {"handle": "[SRC_003] against SRC_001", "kind": "rebutted", "note": "Embraces the 'biological' aspect criticized, arguing that Popper's own later work leans toward evolutionary epistemology, making this a consistent extension rather than a misrepresentation."},
+        {"handle": "[SRC_013] against SRC_005", "kind": "revised", "note": "Cost identified: We lose the aspiration for certain truth and must accept science as a perpetual arms race against error with no final victory."}
+      ],
+      "optional_refs": ["SRC_003", "SRC_016"]
+    }
+  ]
+}

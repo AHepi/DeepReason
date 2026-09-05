@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "Popper explicitly defends the preference for better-corroborated theories as a rational choice based on verisimilitude (truth-likeness), not merely as an instrumentalist convention or 'game rule'.",
+      "premise_evidence": null,
+      "case": "The target claims the preference is defensible ONLY by adopting an instrumentalist stance that abandons the realist claim of tracking verisimilitude. This misrepresents Popper's actual solution. Popper argued that while corroboration does not increase probability, it is the best indicator of verisimilitude we have; therefore, preferring the better-corroborated theory IS a rational realist move to get closer to the truth, not a fictionalist surrender. By asserting that one must 'sever the link between corroboration and truth-likeness entirely' to save Popper, the target constructs a straw man: it presents a false dilemma where the only alternative to induction is instrumentalism, ignoring Popper's specific argument that corroboration reports on past severity of tests which correlates with potential verisimilitude without invoking inductive probability.",
+      "counterexample": null,
+      "successor_question": "If Popper explicitly links corroboration to the goal of verisimilitude rather than dismissing it as a mere convention, does the target's insistence on 'abandoning the realist claim' invalidate its own proposed solution?"
+    }
+  ]
+}

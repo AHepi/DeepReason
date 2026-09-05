@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the logical gap between corroboration (historical record) and action (future prediction) within Popper's strict deductive framework. While the target concludes this leads to 'radical skepticism,' it overlooks Popper's own explicit solution: the preference for better-corroborated theories is a critical-rational decision, not an inductive inference. Popper argues that while we cannot know a theory is true or probable, we can critically prefer the one that has withstood the severest tests as the best available guess for action. Therefore, the preference is defensible on Popper's terms without smuggling in induction, rendering the target's conclusion of 'indefensibility' and 'paralysis' factually incorrect regarding Popper's actual position.",
+      "counterexample": null,
+      "premise": "Popper explicitly addresses the problem of action in 'Conjectures and Refutations,' arguing that the rational agent prefers the best-tested theory not because it is more likely to be true, but because it is the most rationally criticizable and thus the best basis for action.",
+      "premise_evidence": null,
+      "successor_question": "How does Popper distinguish between a 'rational preference' based on critical testing and an 'inductive inference' based on probability?"
+    }
+  ]
+}

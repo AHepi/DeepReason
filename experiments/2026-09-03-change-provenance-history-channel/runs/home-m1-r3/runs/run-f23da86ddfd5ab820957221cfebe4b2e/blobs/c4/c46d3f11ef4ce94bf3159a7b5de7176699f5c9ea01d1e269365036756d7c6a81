@@ -1,0 +1,66 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction if rationality is redefined as the strategic selection of the most falsifiable survivor to maximize error elimination, but this defense costs the scientist any claim that the preferred theory is more likely to be true or practically reliable for future predictions.",
+    "mechanism": "The argument reconstructs Popper's 'critical preference' as a non-inductive rule of method: we prefer the theory that has survived severe tests not because it is probable, but because it is the best available target for further refutation. This shifts the goal from 'justified belief' to 'efficient error elimination.' However, this creates a tension: if the preference does not imply greater verisimilitude (truth-likeness) or predictive reliability, then the 'preference' is merely procedural and fails to explain why scientists act on these theories in high-stakes practical contexts (the 'pragmatic problem'). The strongest case for the defense relies on the distinction between logical probability and methodological utility; the strongest case against it highlights that acting on a theory implicitly assumes its future success, which is an inductive leap Popper cannot formally license.",
+    "counterconditions": [
+      "If Popper admits that past severity indicates future testability, he reintroduces induction.",
+      "If the preference implies higher verisimilitude, he must provide a non-inductive measure of truth-likeness.",
+      "If the preference is purely procedural, it fails to justify practical action outside of pure research."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "01a43e4617dbf30441a2791ce8c3d945291ac1a21062b87c5d4756bfefbe54cf",
+        "kind": "revised",
+        "note": "The claim and mechanism now explicitly construct the 'strongest case for each answer' (defense via error elimination vs. critique via pragmatic failure) before rendering the final verdict on costs, satisfying the dialectical requirement.",
+        "where": "claim and mechanism fields"
+      },
+      {
+        "handle": "0202e9a61d35cb7ca1cb016edc18276816a479aa1e49302c2662e1f9e9c2c6f2",
+        "kind": "rebutted",
+        "note": "The argument addresses 'preferability' directly by framing it as a methodological imperative for error elimination rather than mere availability. The distinction is maintained: availability is about unfalsified status; preferability is about choosing the best instrument for criticism.",
+        "where": "mechanism field"
+      },
+      {
+        "handle": "04b8ded9db67d027a9b81c1a6ba0f9ee0c900e2d948e40d6eedb1e58cb2d47d5",
+        "kind": "rebutted",
+        "note": "The candidate does not force a false dichotomy between induction and irrationality. Instead, it proposes a third option: redefining rationality as 'strategic error elimination' while acknowledging the cost (loss of predictive confidence). This aligns with the criticism's suggestion but explicitly details the 'cost' as required by the prompt.",
+        "where": "claim and mechanism fields"
+      },
+      {
+        "handle": "12f262d76a723f9ff07aefd4c44394488073be5e7159b76223e2bed2ad86207",
+        "kind": "revised",
+        "note": "The mechanism now clarifies that relabeling is insufficient; it explicitly links the 'critical attitude' to the goal of error elimination but concedes that without a link to verisimilitude, the solution remains vulnerable to the pragmatic objection.",
+        "where": "mechanism field"
+      },
+      {
+        "handle": "1832fe3dd749ff4b6225ece1ed72298c6163322e74785cadc9fa7f8d5c5c65bc",
+        "kind": "rebutted",
+        "note": "The candidate avoids 'fictionalism' by arguing that the preference is rational *for the specific goal of criticism*, not as a fiction of probability. It distinguishes Popper's actual solution (methodological rule) from the mischaracterization of acting 'as if' probable.",
+        "where": "mechanism field"
+      },
+      {
+        "handle": "19ffa30ca7486869cc04740432c7514aac980a81f25b4f8c067bc85bb2d6a227",
+        "kind": "revised",
+        "note": "Explicitly structured to present the defense (error elimination) and the critique (pragmatic failure/inductive smuggling) as distinct, strong cases before concluding which survives and at what cost.",
+        "where": "claim and mechanism fields"
+      },
+      {
+        "handle": "1a76afe6cb3e70b8a8b152c1f41b2ecae41c069eb31312939cf041481ed04807",
+        "kind": "rebutted",
+        "note": "While acknowledging Popper's appeal to verisimilitude, the candidate argues that this solution is only defensible if one accepts the 'cost' that verisimilitude cannot be probabilistically measured, thus preserving the non-inductive stance but limiting its practical utility.",
+        "where": "claim field"
+      },
+      {
+        "handle": "227f1deae23bf083d99c6563c1f5e5196631d4667ea52aa00cf995e64cee49fd",
+        "kind": "revised",
+        "note": "The counterconditions and mechanism explicitly address the risk that 'past severity' implies 'future testability,' labeling this the precise point where induction might be smuggled in, and framing the 'cost' of the defense as the inability to guarantee this link without circularity.",
+        "where": "mechanism and counterconditions fields"
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

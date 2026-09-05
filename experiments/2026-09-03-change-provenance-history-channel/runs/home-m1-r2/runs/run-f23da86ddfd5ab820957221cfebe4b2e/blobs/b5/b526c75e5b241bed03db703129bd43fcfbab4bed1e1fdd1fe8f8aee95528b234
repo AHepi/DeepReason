@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms without smuggling in induction, provided the preference is interpreted as a methodological rule for selecting the most informative target for future falsification rather than as an inductive bet on future reliability. The cost of this defense is the admission that corroboration offers no rational guarantee for practical action outside the immediate context of scientific testing, forcing a sharp discontinuity between 'scientific rationality' and 'pragmatic decision-making.'",
+    "mechanism": "Reframes 'preference' not as an expectation of truth (which would require induction) but as a strategic selection of the theory with the highest empirical content and severest test history, making it the most efficient vehicle for potential growth of knowledge through refutation.",
+    "counterconditions": [
+      "If the agent requires a probability estimate for life-critical decisions (e.g., bridge building), Popper's framework cannot provide one without illicitly importing inductive assumptions.",
+      "If 'acting on a theory' is indistinguishable from 'believing it will work,' then the distinction between testing and acting collapses, reintroducing induction.",
+      "If the history of science shows that highly corroborated theories are consistently retained rather than discarded upon new falsifications, the methodological rule becomes a de facto inductive practice."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_of_traits",
+        "stress_testing_engineering_prototypes"
+      ],
+      "shared_structure": [
+        "Selection based on survival of severe challenges does not predict future survival.",
+        "Preference for the 'fittest' or 'strongest' candidate is a heuristic for further testing, not a guarantee of permanence.",
+        "The goal is elimination of the weak, not confirmation of the strong."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of knowledge growth, whereas Popperian science does.",
+        "Engineering stress tests often aim to certify safety for future use (inductive), whereas Popperian tests aim to break the theory."
+      ],
+      "transfer_claims": [
+        "Just as we select the strongest bridge prototype to try to break next, scientists select the best-corroborated theory to subject to new, harder tests.",
+        "Survival of past tests indicates high informational content, not high probability of future success."
+      ],
+      "overturn_conditions": [
+        "If evidence shows scientists actually stop testing well-corroborated theories and treat them as verified truths.",
+        "If it can be proven that selecting the 'fittest' theory inherently assumes the uniformity of nature."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "003404da77c855d1fdb70c1968786685a63756f606bb4916c19071415883d022",
+        "kind": "rebutted",
+        "note": "The candidate explicitly distinguishes 'action-guiding reliability' (which implies prediction) from 'methodological preferability' (which implies selecting the best target for falsification). The rebuttal argues Popper only defends the latter."
+      },
+      {
+        "handle": "047ea7b165ebb2b40db2a478a3bf3225602d7b76e333676f368d64b2e8813c3f",
+        "kind": "rebutted",
+        "note": "The candidate addresses the specific question by redefining 'preference' strictly within Popper's logical framework as a rule for theory choice in the context of criticism, not as a shift in the goal of science away from truth."
+      },
+      {
+        "handle": "08218abe2d908092f9126b50809338bd6c6cddb0d43384c3b193e668a34006c6",
+        "kind": "revised",
+        "note": "Clarified that the preference does not entail believing the theory has a higher probability of success; rather, it entails believing the theory is currently the most worthy adversary. Added explicit countercondition regarding practical action."
+      },
+      {
+        "handle": "10d9f60e1c1c5582faa984b8051452e4c8ce369fe468d94cbb5f5b0aa2411016",
+        "kind": "rebutted",
+        "note": "The candidate accepts the distinction between logical and pragmatic problems but argues the 'smuggling' occurs only if one conflates the two. The defense maintains the demarcation by refusing to grant probabilistic weight to corroboration."
+      },
+      {
+        "handle": "2acf3052a09e0e9e5d4ff6ca2ddc687f61e54bf19b61e446a135950857653716",
+        "kind": "rebutted",
+        "note": "The candidate directly answers whether the preference is defensible: yes, if defined methodologically; no, if defined pragmatically for non-scientific action. This nuance addresses the specific normative question."
+      },
+      {
+        "handle": "34ad0d33cac00dc9c4d4b87c266edb3c765de3244ddcf992f0423b84911b04bd",
+        "kind": "departure_declared",
+        "note": "Departing from the assumption that Popper must justify 'acting on' a theory in the everyday sense. The candidate declares that on Popper's strict terms, 'acting on' a theory scientifically means 'testing it,' not 'relying on it.'"
+      },
+      {
+        "handle": "3637cea364444177831be4afb7ba5959e53607caea36edb8855e811c565e4ca6",
+        "kind": "rebutted",
+        "note": "The candidate rejects the need for 'meta-induction.' The preference is derived from the logical asymmetry of falsification and the desire for high content, not from an inductive inference about the method's track record."
+      },
+      {
+        "handle": "40cb62ec8ec9df37aa35b0403869df79b1c96cc2a7da417475cc9cc6267ae17e",
+        "kind": "rebutted",
+        "note": "The resolution answers the normative question by limiting the scope of 'defensibility' to the internal logic of scientific methodology, explicitly noting the failure of this defense in broader pragmatic contexts as the 'cost'."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
