@@ -24,6 +24,8 @@ from deepreason.provider_profile import (
 )
 
 SHALLOW_RESULT_SCHEMA = "deepreason-shallow-result.v1"
+SHALLOW_SEAT_PLUGINS_SCHEMA = "deepreason-shallow-seat-plugins.v1"
+SHALLOW_SEAT_PLUGINS_RECORD = "seat-plugins.json"
 SHALLOW_DEFAULT_TOKEN_BUDGET = 30_000
 SHALLOW_DEFAULT_MAX_CYCLES = 64
 SHALLOW_DISCLAIMER = (
@@ -50,6 +52,34 @@ def _mint_run_id(question: str, *, now: str) -> str:
         + os.urandom(8)
     )
     return f"shallow-{digest[:24]}"
+
+
+def _record_operator_plugins(root: Path, environ: Mapping[str, str]) -> dict:
+    """Load the operator's own section plugins, and record BOTH lists.
+
+    Called once per run, during setup, before the first call -- a plugin
+    registered after a brief was rendered would be a section the run says it
+    had and did not.
+
+    Neither list may be dropped. `loaded` is what this run's briefs can
+    actually reach; `notices` is why the rest cannot. A run that silently
+    omitted the second would leave the operator looking at a brief missing a
+    section with no reason given, which is the failure the loader exists to
+    prevent (all-configurations law: disclose, never die).
+    """
+
+    from deepreason.llm.seat_sections import load_operator_plugins
+
+    loaded, notices = load_operator_plugins(environ=environ)
+    record = {
+        "schema": SHALLOW_SEAT_PLUGINS_SCHEMA,
+        "loaded": list(loaded),
+        "notices": [dict(notice) for notice in notices],
+    }
+    (root / SHALLOW_SEAT_PLUGINS_RECORD).write_text(
+        canonical_json(record).decode("utf-8"), encoding="utf-8"
+    )
+    return record
 
 
 def _endpoint(profile: ProviderProfileV1, key: str):
@@ -112,6 +142,7 @@ def run_shallow_question(
     run_id = _mint_run_id(question, now=now)
     root = _shallow_runs_dir(environ=environ) / run_id
     root.mkdir(parents=True, exist_ok=False)
+    seat_plugins = _record_operator_plugins(root, environment)
     problem_id = f"q-{sha256_hex(canonical_json(question))[:12]}"
 
     summary = mini_run(
@@ -133,6 +164,7 @@ def run_shallow_question(
         "question_problem_id": problem_id,
         "provider": profile.provider,
         "model_id": profile.model_id,
+        "seat_plugins": seat_plugins,
         "summary": summary,
     }
 
@@ -142,6 +174,8 @@ __all__ = [
     "SHALLOW_DEFAULT_TOKEN_BUDGET",
     "SHALLOW_DISCLAIMER",
     "SHALLOW_RESULT_SCHEMA",
+    "SHALLOW_SEAT_PLUGINS_RECORD",
+    "SHALLOW_SEAT_PLUGINS_SCHEMA",
     "ShallowReasonError",
     "run_shallow_question",
 ]

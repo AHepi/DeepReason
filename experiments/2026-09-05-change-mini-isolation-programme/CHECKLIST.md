@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=2 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=3 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -49,11 +49,39 @@ tranche".
       operator declared in <DEEPREASON_HOME>/seat_plugins/ was never registered --
       the failure names the missing section by id.
       ```
-- [ ] 2. (S0a) [COMMIT] Give `load_operator_plugins` its call site in the
+- [x] 2. (S0a) [COMMIT] Give `load_operator_plugins` its call site in the
       managed shallow path, and route BOTH notice lists into the run's
       record.
       done-when: the step-1 test passes AND
       `grep -rn "load_operator_plugins" src/ | wc -l` -> 2 or more (paste)
+
+      ```
+      $ python -m pytest tests/test_seat_section_home.py -q
+      ..........                                                               [100%]
+      10 passed in 0.28s
+      
+      $ grep -rn "load_operator_plugins" src/ --include=*.py
+      src/deepreason/llm/seat_sections.py:558:def load_operator_plugins(*, home=None, environ=None):
+      src/deepreason/shallow.py:71:    from deepreason.llm.seat_sections import load_operator_plugins
+      src/deepreason/shallow.py:73:    loaded, notices = load_operator_plugins(environ=environ)
+      $ ... | wc -l  ->  3
+      
+      $ python -m pytest tests/test_shallow_reason.py -q   ->  6 passed
+      
+      $ python tools/diff_budget.py 1f8108c00a --ceiling 115 --paths <T0 areas>
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "total_insertions": 102,
+       "ceiling": 115, "verdict": "WITHIN"}
+      
+      $ python tools/blast_radius.py --files src/deepreason/shallow.py
+          src/deepreason/llm/seat_sections.py --symbols load_operator_plugins
+          run_shallow_question --against 1f8108c00a
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      reachability: load_operator_plugins UNREACHABLE -> REACHABLE (newly_live)
+                    run_shallow_question REACHABLE -> REACHABLE (unchanged)
+      
+      No drift: CLEAR matches SPEC.md's forecast, and the one newly_live symbol is
+      exactly the row the blast-radius census marked EXPECTED TO MOVE.
+      ```
 - [ ] 3. (S0a) Prove the disclose-never-die half: a plugin file that raises
       on import produces a typed notice in the record and does not stop the
       run.
