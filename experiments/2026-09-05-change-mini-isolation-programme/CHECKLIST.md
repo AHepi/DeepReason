@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=35 blockers=none (T4 diff budget re-baselined at step 34, SPEC.md §Budget). T3 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=36 blockers=none (T4 diff budget re-baselined at step 34, SPEC.md §Budget). T3 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1321,9 +1321,32 @@ tranche".
       chosen over the artifact shape after measuring a frozen-surface contact
       the forecast did not cover.
       ```
-- [ ] 35. (S7) Prove R8 is honoured: the hook changes nothing. A run with the
+- [x] 35. (S7) Prove R8 is honoured: the hook changes nothing. A run with the
       hook and a run without it produce the same rendered briefs.
       done-when: `python -m pytest mini/tests/test_mini_calibration_hook.py -q` -> 0 failed
+
+      ```
+      $ python -m pytest mini/tests/test_mini_calibration_hook.py -q
+      ......                                                                   [100%]
+      6 passed in 2.53s
+
+      Six assertions: the default resolves to the no-op and it is the ONLY
+      registered hook; the no-op returns None for every seat, cycle and entry
+      tuple (and for a non-seat); exactly two source lines name the registration
+      function; ZERO CALLERS -- no Call node named `calibrate` or
+      `resolve_mini_calibration_hook` anywhere under src/ or mini/minireason/
+      (the window's ruling, on the AST); consulting the hook and rendering from
+      what it returns (None -> the layout as declared) gives byte-identical
+      briefs for every seat over a live root; and a second registration under
+      the same id is refused typed.
+
+      Mutation proof (the ruling's own clause): give the loop one call to the
+      hook between cycles --
+        --- MUTATION: the loop consults the hook between cycles ---
+        E AssertionError: ['mini/minireason/loop.py:756: calibrate',
+                           'mini/minireason/loop.py:756: resolve_mini_calibration_hook']
+      Restored, __pycache__ cleared, tree clean; 6 passed.
+      ```
 - [ ] 36. (S11b) [COMMIT] Map: `SUB-minireason.md` gains the commitment seat
       and the hook; `INV-render-layout.md` and
       `CON-packs-and-token-economy.md` gain their rows — SAME COMMIT.
