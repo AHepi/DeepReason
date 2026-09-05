@@ -1,0 +1,57 @@
+ARM_BRIEF_DIFFERENCE_V1  (conjecturer brief, committed golden inputs)
+  A0 control: 5511 bytes
+  A1     5886 bytes  differs, 4 lines
+  A1P    5511 bytes  IDENTICAL TO A0
+  A2     5511 bytes  IDENTICAL TO A0
+  A3     5323 bytes  differs, 9 lines
+
+ARMS THAT VARY NOTHING: A1P, A2
+  These are not treatments. Either the parameter does not reach the brief
+  on this input shape, or the arm is a NOISE-FLOOR pair and PREREG.md says so.
+ARM_BRIEF_DIFFERENCE_V1  (conjecturer brief, committed golden inputs)
+  A0 control: 5511 bytes
+  A1     5886 bytes  differs, 4 lines
+  A1P    5511 bytes  IDENTICAL TO A0
+  A2     5511 bytes  IDENTICAL TO A0
+  A3     5323 bytes  differs, 9 lines
+
+--- unified diff A0 -> A1 ---
+--- A0
++++ A1
+@@ -69,2 +69,6 @@
+ 
++## superseded-conjectures
++SUPERSEDED (refuted — do not re-propose these; they are here so you can tell a new idea from a repeat) — each entry is its CLAIM, distilled; request an alias through context_request to read that artifact whole:
++- c1511d3272c3aaab8721618dcd547cb486e2509e7f9d7c64657eca7c02802b6a: REFUTED CANDIDATE: the whole gap is waste heat from vehicle engines.
++
+ ## crossover
+
+ARMS THAT VARY NOTHING: A1P, A2
+  These are not treatments. Either the parameter does not reach the brief
+  on this input shape, or the arm is a NOISE-FLOOR pair and PREREG.md says so.
+ARM_BRIEF_DIFFERENCE_V1  (conjecturer brief, committed golden inputs)
+  A0 control: 5511 bytes
+  A1     5886 bytes  differs, 4 lines
+  A1P    5511 bytes  IDENTICAL TO A0
+  A2     5511 bytes  IDENTICAL TO A0
+  A3     5323 bytes  differs, 9 lines
+
+--- unified diff A0 -> A3 ---
+--- A0
++++ A3
+@@ -65,5 +65,8 @@
+ ## neighbourhood
+-NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural) — each entry is its CLAIM, distilled; request an alias through context_request to read that artifact whole:
+-- aaf7a8cfb73afb79a21fa9d876823f4a7378b860b043a51b007b249384309642: FOUNDATION: the surviving stage-1 design — a two-layer surface energy balance with an explicit sky view factor term.
+-- 3444759d51d764eb819887cf6061572822412a8e6ac260896add9452b4de1195: """every candidate names the surface it exchanges heat with.""" def check(candidate):     return 'surface' in candidate
++NEIGHBOURHOOD (accepted artifacts already standing on this problem) — identifiers only:
++  · aaf7a8cfb73afb79a21fa9d876823f4a7378b860b043a51b007b249384309642
++  · 3444759d51d764eb819887cf6061572822412a8e6ac260896add9452b4de1195
++  · 511433d9f35883271a8093c9b05241f36961fa7d48433d4f9e143736921e4810
++  · 6571540f6a6f787d350851ffcbe69ae633070b5a268d2a8af53e570500d98a88
++
+ 
+
+ARMS THAT VARY NOTHING: A1P, A2
+  These are not treatments. Either the parameter does not reach the brief
+  on this input shape, or the arm is a NOISE-FLOOR pair and PREREG.md says so.
