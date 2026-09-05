@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=7 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=9 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -202,10 +202,27 @@ tranche".
       refused typed, and no Config field can name a layout. Verified-at advanced to
       db5cc16ff because those checks were actually re-run.
       ```
-- [ ] 7. (T0) Gate: `python -m pytest tests/ -q -n 4`
+- [x] 7. (T0) Gate: `python -m pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" (paste it)
-- [ ] 8. (T0) Mini ring: `python -m pytest mini/tests/ -q`
+
+      ```
+      $ python -m pytest tests/ -q -n 4
+      5077 passed, 6 skipped in 1113.62s (0:18:33)
+      
+      0 failed. Run on an idle box with nothing else in flight -- docs_verify had
+      already finished at step 6, never concurrently.
+      ```
+- [x] 8. (T0) Mini ring: `python -m pytest mini/tests/ -q`
       done-when: "95 passed" or higher, 0 failed (paste)
+
+      ```
+      $ python -m pytest mini/tests/ -q
+      94 passed, 1 skipped in 4.22s
+      
+      95 collected, 0 failed -- the count SPEC.md M7 measured. Run explicitly
+      because the documented gate passes tests/ and so does not reach it (PARKED
+      P1).
+      ```
 - [ ] 9. (T0) [COMMIT] Deliver T0: push, then confirm clean.
       done-when: `git status --porcelain` empty AND branch head on origin
 
