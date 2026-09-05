@@ -1,0 +1,5 @@
+[soak] stub provider on 127.0.0.1:37029 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/cycle-soak-cuqgl94c
+[soak] built root: manifest 6fae546cca68d911…  criteria ['uhi-energy-balance@v1', 'uhi-nocturnal-release@v1', 'uhi-cross-city-modulator@v1']
+[soak] qualified in 4.7s
+[soak] driving 8 cycles …
