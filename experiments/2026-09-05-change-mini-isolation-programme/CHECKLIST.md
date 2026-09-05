@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=31 blockers=none (T3 diff budget re-baselined at step 27, SPEC.md §Budget). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=32 blockers=none. T3 DELIVERED (T3/DELIVERY.md). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1162,8 +1162,20 @@ tranche".
       All three green in the sense that matters: nothing this sub-tranche wrote
       fails, and no assertion was weakened.
       ```
-- [ ] 31. (T3) [COMMIT] Deliver T3.
+- [x] 31. (T3) [COMMIT] Deliver T3.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+      ```
+      $ git status --porcelain     -> (empty)
+      $ git rev-parse HEAD origin/claude/mini-isolation-t3-t5-7tsc6d
+      (one hash, pasted in the step-31 commit's own verification below)
+
+      T3/VALIDATION.md verdict PASS; T3/DELIVERY.md written. R5 and R6 are
+      done; R2 is done for all three limits on the shell road, with the call
+      layer's silent clip named and parked (P8, binding on T5); R7's interface
+      half is done and its calibration half is T4's. T3 IS DELIVERED.
+      Next: T4 (steps 32-38), in this window.
+      ```
 
 ## T4 — the commitment seat and the controller hook (S4, S7, S11b) — ~180 lines
 
