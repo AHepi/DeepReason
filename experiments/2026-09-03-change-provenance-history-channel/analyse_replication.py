@@ -54,6 +54,14 @@ def arm_facts(rel: str) -> dict | None:
     root = HERE / rel
     if not (root / "run-status.json").exists():
         return None
+    # A RUNNING arm is not a partial result, it is no result. Without this the
+    # table happily prints an arm three minutes into its first cycle beside a
+    # finished one and invites the reader to compare them; caught doing exactly
+    # that on R3's treatment, which showed as -82.9% conjectures one minute
+    # after launch.
+    status = json.loads((root / "run-status.json").read_text())
+    if status.get("state") != "completed":
+        return None
     out = subprocess.run(
         ["deepreason", "results", str(root), "--json"],
         capture_output=True, text=True,

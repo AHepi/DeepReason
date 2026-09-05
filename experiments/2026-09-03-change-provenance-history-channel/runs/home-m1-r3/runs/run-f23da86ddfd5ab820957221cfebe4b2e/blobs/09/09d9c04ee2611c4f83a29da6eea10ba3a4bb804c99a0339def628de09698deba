@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target's core argument conflates 'acting on a theory' with 'assigning it higher subjective probability,' ignoring Popper's explicit distinction between rational belief (probability) and rational preference (corroboration as a guide for action without inductive inference).",
+      "premise_evidence": [
+        {
+          "block": "48713e63f19e6db5ddcb1cae",
+          "quote": "any decision to act on a theory necessarily assumes its predictive reliability, which is an inductive leap from past survival to future performance."
+        },
+        {
+          "block": "3124c4170bffecc76cb82080",
+          "quote": "implicitly assigns it a higher subjective probability or reliability than untested alternatives."
+        }
+      ],
+      "case": "The target fails to address the problem's requirement to make the strongest case for the defense ('defensible on Popper's own terms') before judging it. By asserting that acting on a theory *necessarily* assumes predictive reliability (an inductive leap), the target begs the question against Popper's specific solution: that we can prefer the better-corroborated theory as the most 'truthlike' or best-tested option for critical discussion and action *without* assigning it a higher logical probability of being true. Popper argues that while we cannot know the future will resemble the past, we are rationally entitled to choose the theory that has withstood the severest tests so far, not because it is probable, but because it is the most informative and rigorously examined candidate available. The target dismisses this nuanced position by equating 'preference for action' directly with 'inductive assumption of reliability,' thereby failing to engage with the actual philosophical mechanism Popper proposed to avoid induction.",
+      "counterexample": null,
+      "successor_question": "If preferring a theory for action does not require assuming its future success is probable, but only that it is the best current candidate for critical testing, how does the target distinguish this from the 'inductive leap' it claims is unavoidable?"
+    }
+  ]
+}

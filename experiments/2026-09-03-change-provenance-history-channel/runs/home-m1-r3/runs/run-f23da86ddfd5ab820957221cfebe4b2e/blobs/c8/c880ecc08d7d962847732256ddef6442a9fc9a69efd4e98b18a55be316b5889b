@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims the dilemma dissolves by distinguishing 'rational preference' from 'logical entailment,' but this merely relabels the problem without solving it. If Popper's 'critical attitude' provides no link to probable truth or verisimilitude (as the target admits by rejecting positive justification), then preferring one theory over another is pragmatically indistinguishable from arbitrary choice or blind faith. The target fails to explain why a scientist should bet their life on the 'last standing' theory if its survival implies nothing about its future performance or truth-likeness; thus, the distinction does not defend the preference on Popper's own terms but instead exposes that his system cannot ground rational action without smuggling in an inductive assumption that the future will resemble the past.",
+      "premise": "Popper rejected induction and claimed corroboration does not increase probability.",
+      "premise_evidence": null,
+      "counterexample": [
+        "A theory that survived severe tests yesterday may fail immediately tomorrow if the laws of nature change, and without induction, Popper has no basis to claim it won't."
+      ],
+      "successor_question": "If corroboration offers no guide to truth or future success, what non-arbitrary criterion remains for choosing between two unfalsified theories?"
+    }
+  ]
+}
