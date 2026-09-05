@@ -194,3 +194,71 @@ def test_disclosure_a_template_that_cannot_expand_is_named(tmp_path, clean_regis
     with pytest.raises(SeatSectionError) as caught:
         plugin.render(SectionRequestV1(supplied={"name": "x"}), plugin.parameters_model())
     assert caught.value.code == "SEAT_TEMPLATE_NOT_EXPRESSIBLE"
+
+
+# ------------------------------------------------- the managed run reads it
+
+
+def _stub_mini_run():
+    """Stand in for the reduced engine: the loader runs during SETUP, before
+    the first call, so a stubbed loop is enough to decide whether it ran."""
+
+    def mini_run(problems, endpoint, budget, root, max_cycles):
+        return {
+            "engine_profile": "mini",
+            "model_profile": "compact",
+            "stop": "queue-exhausted",
+            "cycles": 1,
+            "tokens": {"total": 0},
+        }
+
+    return mini_run
+
+
+def test_managed_path_loads_operator_plugins(tmp_path, monkeypatch, clean_registry):
+    """A plugin in the operator's own directory is read BY A RUN, not only by
+    a test that calls the loader itself.
+
+    Implements S0a (R7, C8) of the mini isolation programme. Before this
+    landed, `load_operator_plugins` had no call site anywhere under `src/`, so
+    `<DEEPREASON_HOME>/seat_plugins/` was a documented place to put a file
+    that nothing ever opened. Both of the loader's lists — what loaded and
+    what did not — reach the run's record, because a section missing with no
+    reason given is the failure this whole loader exists to prevent.
+    """
+    import json
+
+    from deepreason.shallow import run_shallow_question
+    from tests.test_public_v6_facade import _configure
+
+    state, _ = _configure(monkeypatch, tmp_path)
+    plugins = seat_plugins_root(environ={"DEEPREASON_HOME": str(state)})
+    plugins.mkdir(parents=True, exist_ok=True)
+    (plugins / "dr.operator.probe@experimental-generation-context.tmpl").write_text(
+        "GENERATION NOTES: {{ generation_context }}"
+    )
+    (plugins / "broken.py").write_text("this is not python (")
+
+    monkeypatch.setattr("minireason.loop.run", _stub_mini_run(), raising=True)
+    result = run_shallow_question("why does the sky look blue?")
+
+    # The section itself: the run has seen the operator's file.
+    assert resolve_section_plugin("dr.operator.probe").section_id == (
+        "experimental-generation-context"
+    )
+
+    from deepreason.shallow import SHALLOW_SEAT_PLUGINS_RECORD
+
+    disclosed = result["seat_plugins"]
+    assert disclosed["loaded"] == ["dr.operator.probe"], disclosed
+    assert [notice["code"] for notice in disclosed["notices"]] == [
+        "SEAT_PLUGIN_UNLOADABLE"
+    ], disclosed
+
+    recorded = json.loads(
+        (
+            state / "shallow-runs" / result["run_id"] / SHALLOW_SEAT_PLUGINS_RECORD
+        ).read_text()
+    )
+    assert recorded["loaded"] == ["dr.operator.probe"]
+    assert "broken.py" in recorded["notices"][0]["path"]

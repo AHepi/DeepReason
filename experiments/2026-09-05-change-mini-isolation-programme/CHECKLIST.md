@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=1 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=2 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -31,11 +31,24 @@ tranche".
 
 ## T0 — the prerequisites (S0a, S0b) — ~115 lines
 
-- [ ] 1. (S0a) Write the red test first: a `.tmpl` placed in a temp
+- [x] 1. (S0a) Write the red test first: a `.tmpl` placed in a temp
       `<DEEPREASON_HOME>/seat_plugins/` is NOT found by the managed shallow
       path today.
       done-when: `python -m pytest tests/test_seat_section_home.py::test_managed_path_loads_operator_plugins -q`
       -> 1 failed, and the failure text names the missing section (paste it)
+
+      ```
+      $ python -m pytest tests/test_seat_section_home.py::test_managed_path_loads_operator_plugins -q
+      E   deepreason.llm.seat_sections.SeatSectionError: SEAT_SECTION_PLUGIN_UNKNOWN:
+          no section plugin 'dr.operator.probe'; registered:
+      src/deepreason/llm/seat_sections.py:266: SeatSectionError
+      FAILED tests/test_seat_section_home.py::test_managed_path_loads_operator_plugins
+      1 failed in 0.44s
+      
+      RED as predicted: the managed shallow run completed, and the section the
+      operator declared in <DEEPREASON_HOME>/seat_plugins/ was never registered --
+      the failure names the missing section by id.
+      ```
 - [ ] 2. (S0a) [COMMIT] Give `load_operator_plugins` its call site in the
       managed shallow path, and route BOTH notice lists into the run's
       record.
