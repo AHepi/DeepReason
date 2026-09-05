@@ -185,3 +185,77 @@ GOAL.md class is `defect`; the diff estimate is under 150 lines; the
 blast-radius verdict is CLEAR with no frozen or frozen-adjacent contact.
 Proceeding to `dr-implement-fix` without an operator stop, as the orchestrator's
 gate provides.
+
+---
+
+## Amendment 1 (2026-09-05, during implementation) — two sites FIX.md missed
+
+Recorded before the fix commit, per `dr-implement-fix` step 1. Both were found
+by instruments, not by reading, and both are stated here as corrections to the
+design above rather than as footnotes.
+
+### A1. The canonical field defaults to `None`, not `[]` — a WRITE regression
+
+**FIX.md above got this wrong** and named `default_factory=list` on both
+canonical outputs. `workflow/nonconjecture_recovery.py:335` content-addresses
+the critic output with `canonical_json(output.model_dump(mode="json",
+exclude_none=True))` and, on recovery, compares that digest against the
+admission's stored ref. A field defaulting to `[]` SURVIVES `exclude_none`, so
+every committed critic transaction's digest moved and the committed fixture
+stopped replaying:
+
+    tests/test_l1_continue_resumable_crash.py::test_committed_fixture_replays_without_crashing
+    NonConjectureRecoveryAuthorityError: critic admission differs from the
+    durable validated output
+
+That is a change to what is WRITTEN, made to fix what is READ — the exact
+inversion the orchestrator's design rules forbid. Corrected: the canonical
+field is `list[str] | None = Field(default=None, max_length=8)` on both
+outputs, which is why `successor_question` beside it says the same thing in its
+own comment. The WIRE field stays a plain array (the alias binder writes its
+`items` enum and cannot reach into an `anyOf`), and `compile` sends `None`
+when the seat declared nothing. Pinned by a new test,
+`test_an_undeclared_criticism_canonicalises_to_the_bytes_it_always_did`.
+
+### A2. `tests/test_successor_dispatch.py` — an over-broad instrument, narrowed on the operator's decision
+
+The full gate returned **5080 passed, 1 failed**, and the one failure was
+`test_rules_crit_takes_a_zero_line_diff`: it asserts `git diff --stat
+origin/main -- src/deepreason/rules/crit.py` is EMPTY, so this tranche's two
+threading lines turned it red with a message saying an operator law had been
+overturned.
+
+It had not been. `DR-SEAM-rules-x-scratch` rule 6 forbids the criticism side
+REACHING THE DESTINATION a successor proposal goes to; that tranche's own
+`PARKED.md` scoped the zero-line claim to itself ("both take a zero-line diff
+IN THIS TRANCHE"); and the seam's Traps entry names the two exact grep counts
+as the real guard — both unmoved here. But the seam also reserves overturning
+rule 6 to the operator, so this was PUT TO THEM rather than decided by this
+window. **Operator decision, 2026-09-05: narrow the test to what it guards.**
+
+What moved, and nothing else: the test now scans the lines the branch ADDS to
+`crit.py` for the destination vocabulary and re-checks the seam's two pinned
+counts; the seam document's two references follow the rename, and it gains a
+Traps entry; `docs/ERRATA.md` gains E80. Rule 6 is UNCHANGED. Mutation-proved
+in both directions — a road-A `from deepreason.successor import route` added to
+`crit.py` goes red, and so does rewriting an existing `scratch` mention away
+(which the added-line scan alone would miss, which is why the count half is
+kept).
+
+### Change sites added by this amendment
+
+- `src/deepreason/llm/contracts.py` — `| None = Field(default=None, ...)` on
+  both, with the reason in the comment.
+- `src/deepreason/llm/wire.py` — both `compile`s send `... or None`.
+- `src/deepreason/rules/crit.py` — both call sites send `... or ()`.
+- `tests/test_successor_dispatch.py` — the narrowing (A2).
+- `tests/test_schema_carries_every_prose_rule.py` — the new field added to the
+  critic case of the alias-enum test, as FIX.md promised.
+- `docs/map/SEAM-rules-x-scratch.md` — rule 6's measurement re-worded, its two
+  references renamed, one Traps entry.
+- `docs/ERRATA.md` — E80.
+
+### Budget after the amendment
+
+    python tools/diff_budget.py 323fefb53 --ceiling 150 --paths <the five source files>
+    {"total_insertions": 81, "ceiling": 150, "verdict": "WITHIN"}
