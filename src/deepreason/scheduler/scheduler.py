@@ -59,6 +59,14 @@ from deepreason.ontology.state import counts_as_survivor
 from deepreason.workflow.models import WorkflowTaskKind
 from deepreason.rules.conj import conj
 from deepreason.rules.crit import crit_argumentative_batch, crit_fuzz, crit_program
+from deepreason.runtime.criticism_dispatch import (
+    OUTCOME_COMPLETE,
+    OUTCOME_CUT_BUDGET,
+    OUTCOME_CUT_CALL,
+    OUTCOME_CUT_FOREIGN,
+    OUTCOME_CUT_SEAT,
+    declare_criticism_dispatch,
+)
 from deepreason.rules.spawn import scan_spawns
 from deepreason.rules.synth import synthesize
 from deepreason.workflow.transaction import WorkBudgetDenied
@@ -1538,11 +1546,20 @@ class Scheduler:
                     "SCHOOL_ROUTE_CRITIC_ROLE_MISSING",
                     "manifest foreign criticism has no runtime critic role",
                 )
+            declare_criticism_dispatch(
+                harness, cycle=self._cycles, outcome=OUTCOME_CUT_SEAT,
+                planned=len(admitted_ids), dispatched=0,
+            )
             return
         if criticism_policy is not None:
             self._foreign_arg_crit()
             return
         eligible: list[str] = []
+        # The declaration below distinguishes a pass that looked at everything
+        # from one the ration or a dropped call cut short. Only the first
+        # licenses a reader to treat "nothing landed" as evidence.
+        truncated = False
+        dispatched = 0
         for aid in admitted_ids:
             if harness.state.status.get(aid) != Status.ACCEPTED:
                 continue  # budget triage: already felled by cheaper criticism
@@ -1550,6 +1567,7 @@ class Scheduler:
                 config.ARG_CRIT_PER_CYCLE is not None
                 and self._arg_crit_this_cycle >= config.ARG_CRIT_PER_CYCLE
             ):
+                truncated = True
                 break
             self._arg_crit_this_cycle += 1
             eligible.append(aid)
@@ -1577,12 +1595,30 @@ class Scheduler:
                     eligible.append(aid)
                     self._arg_crit_this_cycle += 1
         size = config.CRIT_BATCH_K or 1
+        dropped = False
         for i in range(0, len(eligible), size):
             batch = eligible[i : i + size]
             try:
                 crit_argumentative_batch(harness, batch, self.adapter, config)
             except (SchemaRepairError, EndpointError) as e:
+                dropped = True
                 self._drop(e)
+            else:
+                dispatched += len(batch)
+        declare_criticism_dispatch(
+            harness,
+            cycle=self._cycles,
+            outcome=(
+                OUTCOME_CUT_CALL
+                if dropped
+                else OUTCOME_CUT_BUDGET
+                if truncated
+                else OUTCOME_COMPLETE
+            ),
+            planned=len(eligible),
+            dispatched=dispatched,
+            targets=eligible[:dispatched],
+        )
         self._run_after_criticism_hooks()
 
     def _run_after_criticism_hooks(self) -> None:
@@ -1649,6 +1685,14 @@ class Scheduler:
         names the exact source call and route so shared models remain visible.
         """
 
+        # Filed at entry, and never `complete`: this road's coverage is counted
+        # by foreign school identity in its own CoverageDebt receipts, which is
+        # a different question from "was every planned criticism call made".
+        # Claiming completeness here would license an absence nobody measured.
+        declare_criticism_dispatch(
+            self.harness, cycle=self._cycles, outcome=OUTCOME_CUT_FOREIGN,
+            planned=0, dispatched=0,
+        )
         manifest = self.run_manifest
         assert manifest is not None and manifest.criticism_policy is not None
         policy = manifest.criticism_policy

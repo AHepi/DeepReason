@@ -1,7 +1,7 @@
 # Checklist for: four evidence states over the record, and a per-cycle
 # declaration that criticism ran in full
 
-State: next=5 blockers=none
+State: next=9 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -100,27 +100,61 @@ its absence test.
         M4 (OPEN default -> SUPPORTED) -> test_open_when_nothing_warranted_was_brought FAILED, PASSED on revert
         transcripts: proof/M1.txt proof/M2.txt proof/M3.txt proof/M4.txt
 
-- [ ] 5. (S2) Emit the declaration from `Scheduler._arg_crit` (three exits) and
+- [x] 5. (S2) Emit the declaration from `Scheduler._arg_crit` (three exits) and
       from the END of `Scheduler._foreign_arg_crit` (`cut:foreign`), obeying all
       four map checks listed above.
       done-when: `python -m pytest tests/test_crit_batch.py tests/test_budget.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_foreign_school_criticism_scheduler_c3.py -q` -> 0 failed
 
-- [ ] 6. (S2) Write `tests/test_criticism_dispatch_declaration.py`: exactly one
+      PROOF:
+        $ python -m pytest tests/test_crit_batch.py tests/test_budget.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_foreign_school_criticism_scheduler_c3.py -q
+        34 passed in 4.69s
+        
+        All four map-check constraints on _arg_crit / _foreign_arg_crit re-asserted
+        directly and hold: the verbatim foreign-road substring, the absence of
+        "argumentative-criticism", the RECRIT_STANDING index order, and the single
+        keyword-free crit_argumentative_batch call.
+
+- [x] 6. (S2) Write `tests/test_criticism_dispatch_declaration.py`: exactly one
       declaration per criticism pass; `complete` on a clean pass; `cut:budget`
       when `ARG_CRIT_PER_CYCLE` truncates; `cut:seat` when the critic role is
       unavailable; `cut:call` when a batch is dropped.
       done-when: `python -m pytest tests/test_criticism_dispatch_declaration.py -q` -> 0 failed
 
-- [ ] 7. (S1, S2) Wire the licence: `evidence_states` reads `complete`
+      PROOF:
+        $ python -m pytest tests/test_criticism_dispatch_declaration.py -q
+        8 passed in 1.43s
+        complete / cut:budget / cut:seat / cut:call each proven on a real scheduler run;
+        one declaration per pass; the writer refuses an outcome outside the closed
+        vocabulary; the event is a Measure with no outputs (no new object kind).
+
+- [x] 7. (S1, S2) Wire the licence: `evidence_states` reads `complete`
       declarations so an un-attacked artifact they name reads SUPPORTED, and
       one they do not name stays OPEN.
       done-when: `python -m pytest tests/test_evidence_states.py -k "licence or absence" -q` -> 0 failed
 
-- [ ] 8. (S8) [COMMIT] Mutation-prove M5 (the completeness rule dropped —
+      PROOF:
+        $ python -m pytest tests/test_evidence_states.py -k "licens or absence or criticised_in_full" -q
+        3 passed, 17 deselected in 0.58s
+        
+        The wiring is proven end to end by two arms of the SAME run with the SAME quiet
+        critic: with the pass unrationed it declares complete and its targets read
+        SUPPORTED; with ARG_CRIT_PER_CYCLE=1 it declares cut:budget and they stay OPEN.
+        (The checklist's original `-k "licence or absence"` matches nothing — the test
+        names read "licenses"; the selector above is the corrected one.)
+
+- [x] 8. (S8) [COMMIT] Mutation-prove M5 (the completeness rule dropped —
       absence counts as SUPPORTED with no declaration).
       done-when: `proof/M5.txt` exists showing
       `test_absence_needs_the_declaration` FAILED under the mutant and PASSED
       on revert
+
+      PROOF:
+        M5 (the completeness rule dropped -- absence of attack counts as SUPPORTED
+        with no declaration): three tests FAILED under the mutant and PASSED on revert
+          test_absence_needs_the_declaration
+          test_a_complete_pass_licenses_only_the_targets_it_names
+          test_a_scheduler_run_that_criticised_in_full_reads_its_survivors
+        transcript: proof/M5.txt
 
 - [ ] 9. (S3) Write `tests/test_evidence_states_law_line.py` — spelling half
       (no forbidden name under scheduler/, adjudication/, rules/; PERMITTED

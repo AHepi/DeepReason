@@ -347,3 +347,69 @@ def test_reading_a_committed_root_leaves_it_byte_unchanged():
         cwd=REPO, capture_output=True, text=True,
     ).stdout
     assert before == after == ""
+
+
+# --- the two halves meet: a real pass's declaration reaches the reader ----- #
+
+
+def test_a_scheduler_run_that_criticised_in_full_reads_its_survivors(tmp_path):
+    """The wiring, end to end (R4): a criticism pass that ran in full and
+    landed nothing turns its targets from OPEN into SUPPORTED, and the same run
+    with the pass rationed leaves them OPEN.
+
+    Both arms use the identical quiet critic, so the ONLY thing separating
+    'survived' from 'untested' is whether the pass declared itself complete —
+    which is the distinction the whole tranche exists to make.
+    """
+
+    import json
+
+    from deepreason.config import Config
+    from deepreason.llm.adapter import LLMAdapter
+    from deepreason.llm.endpoints import MockEndpoint
+    from deepreason.ontology import Commitment, Problem, ProblemProvenance
+    from deepreason.scheduler.scheduler import Scheduler
+
+    def arm(name: str, per_cycle):
+        harness = Harness(tmp_path / name)
+        harness.register_commitment(
+            Commitment(id="k-moon", eval="predicate:'moon' in content")
+        )
+        harness.register_problem(
+            Problem(
+                id="pi-tides", description="explain the tides", criteria=["k-moon"],
+                provenance=ProblemProvenance.model_validate(
+                    {"trigger": "seed", "from": []}
+                ),
+            )
+        )
+        adapter = LLMAdapter(
+            {
+                "conjecturer": MockEndpoint(
+                    lambda prompt: json.dumps({"candidates": [
+                        {"content": f"moon account {i} {hash(prompt) % 997}",
+                         "typicality": 0.5}
+                        for i in range(3)
+                    ]})
+                ),
+                "argumentative_critic": MockEndpoint(
+                    lambda prompt: json.dumps({"attack": False, "case": ""})
+                ),
+            },
+            harness.blobs, retry_max=2,
+        )
+        Scheduler(
+            harness, adapter,
+            Config(VS_K=3, N_SCHOOLS=0, FLOOR=0, ARG_CRIT_PER_CYCLE=per_cycle),
+        ).run(1)
+        return evidence_state_summary(harness)
+
+    ran_in_full = arm("full", None)
+    rationed = arm("rationed", 1)
+
+    assert ran_in_full["completeness"]["complete_passes"] == 1
+    assert ran_in_full["counts"]["supported"] > 0
+
+    assert rationed["completeness"]["complete_passes"] == 0
+    assert rationed["counts"]["supported"] == 0
+    assert rationed["counts"]["open"] > 0

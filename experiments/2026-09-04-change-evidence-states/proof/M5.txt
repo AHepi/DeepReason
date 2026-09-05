@@ -1,0 +1,16 @@
+=== M5 ===
+mutant: in src/deepreason/views/evidence_states.py
+              or (not against and artifact_id in found.licensed)
+  ->
+              or not against
+
+--- with the mutant applied ---
+=========================== short test summary info ============================
+FAILED tests/test_evidence_states.py::test_absence_needs_the_declaration - As...
+FAILED tests/test_evidence_states.py::test_a_complete_pass_licenses_only_the_targets_it_names
+FAILED tests/test_evidence_states.py::test_a_scheduler_run_that_criticised_in_full_reads_its_survivors
+3 failed in 0.66s
+
+--- reverted ---
+...                                                                      [100%]
+3 passed in 0.59s
