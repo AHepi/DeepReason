@@ -777,3 +777,16 @@ so you do not re-trust them.
   current default conjecture form needs stored but not deleted"); and one
   more history conjecture experiment follows the mini isolation programme
   below, not before it.
+
+- **Within mini, criticism overturns nothing; mini is content generation,
+  tested afterwards on the full harness** (2026-09-05, operator's words
+  verbatim, answering the mini isolation programme's Q-A: "within mini,
+  criticism can't overturn anything. The point is content generation for
+  now. Then testing on the full harness."): in the mini isolation flow a
+  critic's objection is written to the record and shown to the seats the
+  layouts allow, and it changes no status — no elimination road is built
+  for mini, not even switched off. Mini's job in this programme is to
+  GENERATE content (conjectures, criticisms, commitment proposals); what
+  that content is worth is decided later by running it through the full
+  harness, whose authority layer is unchanged. Supersedes the programme's
+  SPEC.md Q-A recommendation (E1 default with E2 built OFF): E1 only.
