@@ -375,7 +375,7 @@ def test_an_unparseable_layout_file_is_refused_typed(tmp_path, clean_layouts):
     -- a brief silently composed from something the operator did not ask for.
     """
     from deepreason.llm.seat_sections import (
-        seat_pack_layout_from_file,
+        register_seat_pack_layout_file,
         seat_pack_layout_ids,
     )
 
@@ -390,7 +390,7 @@ def test_an_unparseable_layout_file_is_refused_typed(tmp_path, clean_layouts):
         ("wrong-shape.layout.json", "SEAT_PACK_LAYOUT_FILE_UNPARSEABLE"),
     ):
         with pytest.raises(SeatSectionError) as caught:
-            seat_pack_layout_from_file(root / name)
+            register_seat_pack_layout_file(root / name)
         assert caught.value.code == code, (name, caught.value)
         assert name in str(caught.value), caught.value
 

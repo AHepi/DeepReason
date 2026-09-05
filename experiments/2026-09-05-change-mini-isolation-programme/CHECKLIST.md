@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=5 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=6 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -124,9 +124,45 @@ tranche".
       empty list), and there is no reader at all to refuse a file that does not
       parse -- so today the file is neither read nor refused, it is ignored.
       ```
-- [ ] 5. (S0b) [COMMIT] Add the file-declared layout road with a typed
+- [x] 5. (S0b) [COMMIT] Add the file-declared layout road with a typed
       refusal on a parse failure.
       done-when: the two step-4 tests pass (paste)
+
+      ```
+      $ python -m pytest tests/test_seat_section_home.py tests/test_seat_pack_layout.py \
+            tests/test_seat_section_architecture.py tests/test_shallow_reason.py -q
+      ..........................................                               [100%]
+      42 passed in 1.47s
+      
+      Both step-4 tests now pass. The public entry is
+      register_seat_pack_layout_file(path): it reads one .layout.json, refuses a
+      bad one with SEAT_PACK_LAYOUT_FILE_UNPARSEABLE naming the file, and registers
+      nothing when it refuses. The run-level loader calls the same entry inside its
+      disclosure loop, so at run level that refusal becomes a typed notice carrying
+      its OWN code and the run continues on what did load.
+      
+      $ python tools/diff_budget.py 1f8108c00a --ceiling 115 --paths <S0a/S0b declared files>
+      {"areas": {"src/deepreason/llm/seat_sections.py": 66,
+                  "src/deepreason/shallow.py": 34},
+       "total_insertions": 100, "ceiling": 115, "verdict": "WITHIN"}
+      
+      DISCLOSED, not absorbed: the ceiling is measured over the two source files
+      SPEC.md S0a/S0b declare. Counting tests/test_seat_section_home.py as well
+      gives 308 insertions against the same 115, because SPEC.md S0a/S0b priced
+      production lines (45 + 70 = 115, measured 100) and named no test file in
+      their declared areas. Recording both numbers so the reading is visible.
+      
+      $ python tools/blast_radius.py --files <both> --symbols
+          register_seat_pack_layout_file load_operator_plugins
+          register_seat_pack_layout run_shallow_question --against 1f8108c00a
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      register_seat_pack_layout_file  UNKNOWN -> REACHABLE  (new symbol, live)
+      load_operator_plugins           UNREACHABLE -> REACHABLE (newly_live, predicted)
+      register_seat_pack_layout       REACHABLE -> REACHABLE (unchanged)
+      run_shallow_question            REACHABLE -> REACHABLE (unchanged)
+      
+      No drift against SPEC.md's forecast.
+      ```
 - [ ] 6. (S0a, S0b) Map: `REC-add-a-section-plugin.md` steps 2-4 now work
       end to end; update it and re-run its checks IN THIS COMMIT.
       done-when: `python tools/docs_verify.py` -> 0 failed AND `--audit` -> 0 findings
