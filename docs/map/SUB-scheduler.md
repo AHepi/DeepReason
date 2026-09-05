@@ -1,5 +1,5 @@
 <!-- DR-SUB-scheduler -->
-Verified-at: 66e56fe88
+Verified-at: 5e44a650e
 Verify: python -m pytest tests/test_scheduler.py tests/test_rotation.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_controller.py tests/test_controller_steering_parity.py -q
 Owns: src/deepreason/scheduler/, src/deepreason/controller.py
 Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow, DR-SEAM-schools-x-scheduler, DR-SEAM-llm-x-scheduler, DR-SEAM-evaluation-x-scheduler
@@ -154,6 +154,25 @@ The "one exception" is an exact count, not a hedge: this check AST-scans every
 fails if a SECOND variable-headed signal appears (both mutations were run).
 `check: python -c "import ast,deepreason.signals as S; h=[(n.lineno,next((k.value.elts[0] for k in n.keywords if k.arg=='inputs' and getattr(k.value,'elts',None)),None)) for n in ast.walk(ast.parse(open('src/deepreason/scheduler/scheduler.py').read())) if isinstance(n,ast.Call) and getattr(n.func,'attr',getattr(n.func,'id',''))=='record_measure']; g=lambda e: e.values[0] if isinstance(e,ast.JoinedStr) and e.values else e; bad=[(l,g(e).value) for l,e in h if isinstance(g(e),ast.Constant) and not S.is_known(g(e).value)]; var=sorted(ast.unparse(e) for l,e in h if not isinstance(g(e),ast.Constant)); assert h, 'scan found no record_measure calls'; assert not bad, bad; assert var==['marker','signal'], var"`
 
+## Every criticism pass says whether it ran in full
+
+`_arg_crit` files exactly one `criticism.dispatch.v1` measure per pass, at each
+of its three exits, and `_foreign_arg_crit` files one at entry. The outcome is
+`complete` only when nothing truncated the eligible list and no batch was
+dropped; otherwise `cut:budget`, `cut:seat`, `cut:call` or `cut:foreign`.
+
+The declaration exists for one consumer and one consequence: a reader may treat
+the ABSENCE of a warranted attack on a target as a measurement rather than as a
+gap only if a pass that ran in full NAMES that target. Without it, an artifact
+the ration never reached and one the critics examined and could not fault leave
+the same trace. Nothing in this package reads the consequence — the reading
+lives in `DR-CON-evidence-states` and no deciding package may name it.
+
+Targets skipped because they were already felled by cheaper criticism are not a
+cut: the pass did everything it planned, so they are outside `planned` too.
+
+`check: python -c "import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; from deepreason.runtime.criticism_dispatch import OUTCOMES; f=lambda m: [n for n in ast.walk(ast.parse(textwrap.dedent(inspect.getsource(getattr(S, m))))) if isinstance(n, ast.Call) and getattr(n.func, 'id', '') == 'declare_criticism_dispatch']; assert len(f('_arg_crit')) == 2, len(f('_arg_crit')); assert len(f('_foreign_arg_crit')) == 1; a = inspect.getsource(S._arg_crit); assert a.index('OUTCOME_CUT_SEAT') < a.index('self._foreign_arg_crit()') < a.index('OUTCOME_CUT_CALL'); assert 'OUTCOME_COMPLETE' in a and 'OUTCOME_CUT_BUDGET' in a; assert 'OUTCOME_COMPLETE' not in inspect.getsource(S._foreign_arg_crit)" && python -m pytest tests/test_criticism_dispatch_declaration.py -q`
+
 ## Where to change what
 
 | To change... | Edit | Test |
@@ -162,6 +181,7 @@ fails if a SECOND variable-headed signal appears (both mutations were run).
 | What counts as reflexive/meta work, or its budget share | `_REFLEXIVE_TRIGGERS` + `reflexive_problems`; `Config.INTEGRATION_BUDGET_SHARE` | `tests/test_reflexive_discipline.py::test_reflexive_budget_follows_lineage`, `tests/test_scheduler.py::test_integration_budget_share_caps_connection_work` |
 | Add a per-cycle phase, or reorder the sweep tail | the call list at the end of `step`, plus a `_<name>_step` method | `tests/test_scheduler.py::test_multi_cycle_spawns_and_persistence` |
 | How much LLM criticism a cycle may spend, or its batching | `_arg_crit`; `Config.ARG_CRIT_PER_CYCLE`, `CRIT_BATCH_K`, `RECRIT_STANDING` | `tests/test_budget.py::test_arg_crit_per_cycle_cap` |
+| What counts as a criticism pass having run IN FULL, or add a fifth way it can be cut short | `_arg_crit`'s three exits and `_foreign_arg_crit`'s entry; the CLOSED vocabulary in `runtime/criticism_dispatch.py`. Never widen `complete` by silence — add a member | `tests/test_criticism_dispatch_declaration.py` |
 | Which standing survivors get re-criticized, and in what order | `_standing_recrit_pool` | `tests/test_properties.py::test_standing_recrit_pool_includes_active_properties` |
 | What counts as a survivor in the published set and in the aging weight | NOT this package: `counts_as_survivor` in `ontology/state.py` (`DR-SUB-ontology`). `run_report` and `_select_problem` are consumers and may not re-spell the rule | `tests/test_import_role_survivors.py::test_the_writer_publishes_a_survivor_set_the_invariant_already_holds_over` |
 | Discrimination backoff / when a rivalry is left unresolved | `_disc_paused`; `Config.DISC_ATTEMPTS_MAX`, `DISC_COOLDOWN` | `tests/test_rotation.py::test_attempt_cap_frees_the_rotation`, `::test_transport_drop_defers_instead_of_burning_the_futility_cap` |

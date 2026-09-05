@@ -1,0 +1,17 @@
+=== M2 ===
+mutant: in src/deepreason/views/evidence_states.py
+              failed
+            or artifact_id in found.ruled
+  ->
+              artifact_id in found.ruled
+
+--- with the mutant applied ---
+
+tests/test_evidence_states.py:91: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_evidence_states.py::test_supported_when_a_warranted_attack_was_itself_refuted
+1 failed in 0.11s
+
+--- reverted ---
+.                                                                        [100%]
+1 passed in 0.09s

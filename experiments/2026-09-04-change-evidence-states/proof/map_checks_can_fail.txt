@@ -1,0 +1,39 @@
+Can these map checks fail? One planted mutant each, watched red, reverted.
+
+CON-evidence-states.md:79  completeness rule dropped (line 79)
+    with mutant : exit 1  RED (good)
+    reverted    : exit 0  green
+CON-evidence-states.md:79  licence leaks past its named targets (line 79)
+    with mutant : exit 1  RED (good)
+    reverted    : exit 0  green
+CON-evidence-states.md:60  a critic call moves the target off OPEN (line 60)
+    with mutant : exit 0  GREEN -- THE CHECK IS VACUOUS
+    reverted    : exit 0  green
+CON-evidence-states.md:126  the reader named inside scheduler/ (line 126)
+    with mutant : exit 1  RED (good)
+    reverted    : exit 0  green
+CON-evidence-states.md:105  the vocabulary reopened (line 105)
+    with mutant : exit 1  RED (good)
+    reverted    : exit 0  green
+
+RE-PROOF after strengthening the "a critic CALL is not criticism" check.
+
+The first pass found that check GREEN under a mutant that widened the
+ensemble-split branch to every guard block: its fixture built bare objection
+artifacts but filed no `trial-blocked:` measure, so the branch it was meant to
+bind was never exercised. The fixture now files one guard block per objection.
+
+CON-evidence-states.md:60  split branch widened to every guard block
+    with mutant : exit 1  RED (good)
+    reverted    : exit 0
+CON-evidence-states.md:60  a trial-blocked counted as a completed trial
+    with mutant : exit 1  RED (good)
+    reverted    : exit 0
+
+All six load-bearing checks in CON-evidence-states.md are now mutation-proven
+to fail when the claim they carry stops being true.
+
+SUB-application.md's new check, mutation-proved:
+SUB-application.md:250  stop-report constructs a Harness of its own again
+    with mutant : exit 1  RED (good)
+    reverted    : exit 0

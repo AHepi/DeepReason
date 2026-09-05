@@ -421,10 +421,10 @@ def test_markdown_and_json_carry_the_same_sections(tmp_path):
     rendered = render_stop_report(report)
     assert set(report["sections"]) == {
         "what_actually_ran", "pre_run_check", "provider_health",
-        "classification", "continuability",
+        "classification", "continuability", "evidence_states",
     }
     for title in ("WHAT ACTUALLY RAN", "PRE-RUN CHECK", "PROVIDER HEALTH",
-                  "THE STOP", "CONTINUABILITY"):
+                  "THE STOP", "CONTINUABILITY", "EVIDENCE STATES"):
         assert title in rendered
 
 
@@ -484,6 +484,41 @@ def test_a_home_with_no_run_root_reports_from_qualification_alone(tmp_path):
     rendered = render_stop_report(report)
     assert digest in rendered, "the subject digest the cache was read from (R4)"
     assert "no run root" in rendered.lower()
+
+
+def test_evidence_states_are_a_typed_absence_where_nothing_could_have_survived(tmp_path):
+    """R6 of the 2026-09-04 evidence-states tranche: the section is present on
+    every kind, as a typed absence where the record cannot carry it.
+
+    A home with no run root and a root whose run died before its first call
+    both admitted nothing, so "0 survivors" would be a claim about criticism
+    that never happened. The section says which of the two it is instead.
+    """
+
+    home = tmp_path / "home"
+    (home / "qualification-cache").mkdir(parents=True)
+    (home / "runs").mkdir()
+    digest = "5" * 64
+    payload = _qualification()
+    payload["schema"] = "deepreason-reusable-qualification.v1"
+    payload["subject_digest"] = digest
+    (home / "qualification-cache" / (digest + ".json")).write_text(json.dumps(payload))
+    report = stop_report(home)
+    assert report["source"]["kind"] == "home-no-root"
+    reading = report["sections"]["evidence_states"]
+    assert reading["absent"] is True
+    assert "never started" in reading["reason"]
+    assert "EVIDENCE STATES" in render_stop_report(report)
+
+    root = tmp_path / "compiled-but-never-ran"
+    root.mkdir()
+    (root / "run-manifest.json").write_text("{}")
+    report = stop_report(root)
+    assert report["source"]["kind"] == "root-no-log"
+    reading = report["sections"]["evidence_states"]
+    assert reading["absent"] is True
+    assert "no log.jsonl" in reading["reason"]
+    assert "EVIDENCE STATES" in render_stop_report(report)
 
 
 def test_absent_records_are_typed_absences_not_crashes(tmp_path):

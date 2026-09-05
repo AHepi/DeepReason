@@ -252,11 +252,37 @@ def _block(label: str, rows: list[dict], indent: str = "  ") -> None:
     )
 
 
-def report(root: pathlib.Path) -> None:
+def survivors_only(root: pathlib.Path, rows: list[dict]) -> list[dict]:
+    """Keep only the conjectures the record says came through something.
+
+    The progress law (CLAUDE.md, 2026-09-03) makes "survivors harder to vary"
+    the success criterion, and `accepted` cannot answer that: an artifact
+    nobody attacked carries the same label as one that beat off a warranted
+    attack. `DR-CON-evidence-states` is the derivation; this filter only
+    consumes it, and refuses rather than guesses if the reading cannot be
+    built, because silently measuring the unfiltered pool under a
+    survivors-only flag would report the wrong number under the right name.
+    """
+    from deepreason.harness import Harness
+    from deepreason.views.evidence_states import EvidenceState, evidence_states
+
+    readings = evidence_states(Harness(root, read_only=True))
+    kept = [r for r in rows if readings.get(r["id"]) is EvidenceState.SUPPORTED]
+    print(
+        f"  [--survivors-only] {len(kept)} of {len(rows)} conjectures came "
+        f"through an attack or a trial that ruled; the rest are untested, "
+        f"contested, or fell"
+    )
+    return kept
+
+
+def report(root: pathlib.Path, *, survivors: bool = False) -> None:
     rows = conjectures(root)
     seed = _seed_problem(root)
     print(f"\n=== {root} ===")
     print(f"seed problem: {seed}")
+    if survivors:
+        rows = survivors_only(root, rows)
     by_problem: dict[str | None, list[dict]] = {}
     for row in rows:
         by_problem.setdefault(row["problem"], []).append(row)
@@ -356,13 +382,20 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("roots", nargs="+")
     parser.add_argument("--confound", action="store_true")
+    parser.add_argument(
+        "--survivors-only", action="store_true",
+        help="restrict to artifacts the record says came through an attack or "
+             "a trial that ruled (DR-CON-evidence-states SUPPORTED), so the "
+             "progress law's 'survivors' can be compared on survivors alone. "
+             "Default OFF: without it this instrument behaves exactly as before",
+    )
     args = parser.parse_args()
     for raw in args.roots:
         root = pathlib.Path(raw)
         if args.confound:
             confound(root)
         else:
-            report(root)
+            report(root, survivors=args.survivors_only)
     return 0
 
 

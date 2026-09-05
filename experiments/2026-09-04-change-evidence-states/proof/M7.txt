@@ -1,0 +1,19 @@
+=== M7 ===
+mutant: in src/deepreason/views/evidence_states.py
+      found = _walk(harness)
+    readings = evidence_states(harness)
+  ->
+      found = _walk(harness)
+    harness.record_measure(inputs=["evidence-states-read"])  # mutant
+    readings = evidence_states(harness)
+
+--- with the mutant applied ---
+
+tests/test_evidence_states_law_line.py:153: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_evidence_states_law_line.py::test_computing_the_reading_appends_nothing_to_the_record
+1 failed in 0.09s
+
+--- reverted ---
+.                                                                        [100%]
+1 passed in 0.07s
