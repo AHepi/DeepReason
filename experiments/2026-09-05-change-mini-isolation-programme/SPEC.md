@@ -102,10 +102,68 @@ keeps doing so).
 
 The fence is a TEST, not a convention — that is C8's "enforced" clause.
 
+**AMENDED 2026-09-05, before step 10 ran, on a measurement this item's own
+wording could not survive.** The sentence above — "must not import, at run
+time, any of" the eleven — is FALSE of four of them and cannot be made true
+within this programme, because the modules S1 explicitly ALLOWS import them
+themselves. Measured, in a fresh interpreter each arm
+(`proof/fence_arms.txt`, `proof/fence_measure.py`):
+
+    ARM A  importing ONLY the allowed record modules already pulls in:
+             deepreason.adjudication          <- deepreason.harness imports
+                                                 adjudication.edges
+             deepreason.bridge                <- deepreason.ontology.event
+                                                 imports bridge.events
+             deepreason.capabilities          <- deepreason.ontology.event
+                                                 imports capabilities.events
+             deepreason.workflow.transaction_service
+    ARM B  importing minireason.loop pulls in those four PLUS
+             deepreason.application.text_runs
+    ARM C  what MINI adds beyond ARM A:  ['deepreason.application.text_runs']
+
+So "never imported" would be a fence nobody could pass without changing the
+event ontology and the harness — two frozen surfaces, and both of them the
+RECORD rather than the harness around it, which is exactly why S1 allowed
+them in the first place. The eleven-module list is not wrong about what mini
+must not USE; it is wrong about what "import" can prove.
+
+**The fence, restated so it says something true and still bites.** Three
+parts, each its own test:
+
+1. **No direct dependency.** No module under `mini/minireason/` imports a
+   fenced module directly (AST over mini's own sources, relative imports
+   resolved). Measured today: ONE violation,
+   `mini/minireason/compat.py:38`, `from deepreason.bridge.retry import
+   WorkflowRetryPolicyV1`. Mini takes the manifest's own schema types from
+   `deepreason.run_manifest`, which S1 allows, so its dependency is on the
+   record's schema rather than on the subsystem that happens to define it.
+2. **No closure growth.** Importing mini adds NO fenced package beyond the
+   closure the allowed record modules already bring (ARM C is empty).
+   Measured today: ONE violation, `deepreason.application.text_runs`,
+   which arrives because `deepreason/application/__init__.py` eagerly
+   re-exports the text-run service and mini imports
+   `deepreason.application.conjecture` from that package. Fixed by making
+   those three names lazy — the public surface is unchanged
+   (`from deepreason.application import TextRunApplicationService` still
+   works) and importing the boundary package no longer starts the run
+   engine.
+3. **Nothing new during the run.** A mini isolation run imports no fenced
+   module that was not already loaded when it started. This is what catches
+   a lazy `import deepreason.scheduler` inside a function, which parts 1
+   and 2 would both miss.
+
+What the fence therefore DOES prove: mini reaches for nothing in the larger
+harness, and adds nothing to what the record modules already carry. What it
+does NOT prove, stated so it is never over-read: that no code inside those
+four packages is ever executed. Their event-payload types are constructed by
+the record itself. Proving non-EXECUTION is a different instrument and is
+not built here.
+
     accept: python -m pytest mini/tests/test_isolation_fence.py -q -> passed,
-      and the test fails when any fenced module is imported during a mini run
-      (proven by a mutation in the same commit)
+      and each of the three parts fails under a mutation proven in the same
+      commit (proof/fence_mutation.txt)
     accept: python -m pytest tests/test_shallow_reason.py -q -> 0 failed
+    accept: python proof/fence_measure.py -> ARM C empty
 
 **Record.** Mini's record stays mini's own: typed, append-only, and
 replayable by the code that wrote it (CLAUDE.md's within-version scope
@@ -526,7 +584,14 @@ in the window's own D1. The bare-question form stays, so nothing regresses.
 by asking what a mini run must NOT activate to be a test of mini rather than
 of the harness, and cross-checked against what `compat.py:94-103` already
 declares absent. The fence is a test, so a wrong boundary is visible and
-cheap to move.
+cheap to move — **and it moved.** AMENDED 2026-09-05: the eleven modules
+stand as the list of what mini must not USE, but the fence measures three
+things that can be true rather than one that cannot (S1, amended). Four of
+the eleven are already loaded by modules S1 itself allows, because the event
+ontology and the harness import their payload and edge types; measured in
+`proof/fence_arms.txt`. The amendment costs nothing in scope: mini's two real
+violations — one direct import, one package-`__init__` side effect — are both
+inside T1 and both fixed there.
 
 **A7 (Q7) — "on the fly" means at run configuration time, not mid-run.** A
 flow is resolved once, before the first call, and is immutable thereafter —

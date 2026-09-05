@@ -288,6 +288,27 @@ tranche".
       SPEC.md §S1 names.
       done-when: `python -m pytest mini/tests/test_isolation_fence.py -q` -> fails
       on the tree as it stands, naming which fenced module is imported (paste)
+- [ ] 10a. (S1; ADDED before step 10, see note) [COMMIT] Make the fence
+      PASS: `compat.py` takes `WorkflowRetryPolicyV1` from
+      `deepreason.run_manifest` (allowed) instead of `deepreason.bridge.retry`
+      (fenced), and `deepreason/application/__init__.py` re-exports the three
+      text-run names LAZILY so importing the boundary package does not start
+      the run engine.
+      done-when: `python -m pytest mini/tests/test_isolation_fence.py -q` -> 0
+      failed (paste), AND `python experiments/2026-09-05-change-mini-isolation-
+      programme/proof/fence_measure.py` reports `ARM C ... []` (paste), AND
+      `python -m pytest tests/test_application_text_runs_d0.py
+      tests/test_single_run_path.py mini/tests/ -q` -> 0 failed
+
+      WHY THIS STEP EXISTS: SPEC.md §S1 was AMENDED before step 10 ran, on a
+      measurement its own wording could not survive (see SPEC.md §S1 and
+      §A6, and `proof/fence_arms.txt`). Four of the eleven fenced packages
+      are already loaded by modules S1 explicitly ALLOWS, so "never imported"
+      was unpassable; the fence now measures no direct dependency, no closure
+      growth, and nothing new during the run. Mini's two real violations are
+      one direct import and one package-`__init__` side effect, and this step
+      is where they are fixed.
+
 - [ ] 11. (S1) [COMMIT] Accept a frozen `RunInputManifestV2` via
       `--run-input`; bind it instead of the constant process root when
       supplied. The bare-question form is unchanged.
