@@ -355,3 +355,24 @@ that were blocked on measurements now carry their outcome.
   "history content helps", never "the query surface works".
 - The map has no `CON-provenance` and no `SEAM-rules-x-verification`. Writing
   the covering document is part of Phase 2, in the same commit as the code.
+
+---
+
+## Addendum — operator ruling, 2026-09-05 (monitor, docs only)
+
+S10's "Conjecturer: history ON by default" is SUPERSEDED. After the three-pair
+replication (`RESULTS_M1_REPLICATION.md`: quality indistinguishable once
+length is held constant; cost unresolved; history-on conjectures shorter in
+every pair) the operator ruled, verbatim: "History doesn't improve token
+efficiency or improve answers apparently. So if it's built, it just needs to
+be turned off, not removed. And remain an inactive plug." Ledgered in
+CLAUDE.md the same day.
+
+State of main at the ruling: the history exposure the M1 arms tested was an
+EXPERIMENT ATTACHMENT (`render_history.py` as evidence), never a shipped
+default; the Phase-2 exposure-policy fields (S9) were never built. What ships
+is the `dr.history.v1` section plugin in `seat-pack.conjecturer.legacy-v0`,
+which renders nothing at default (`superseded_summary_n=0`,
+`include_refuted=false`). That is the inactive plug the ruling asks for: it
+stays registered and switchable per run, and is not removed. One more history
+conjecture experiment is queued AFTER the mini isolation programme.
