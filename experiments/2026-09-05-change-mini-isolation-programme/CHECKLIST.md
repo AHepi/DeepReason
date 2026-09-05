@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=12 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=13 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -402,10 +402,42 @@ tranche".
       priced at all. T1 is re-baselined to ~300 with SUB-minireason.md; the
       programme total moves 1320 -> ~1450. No later sub-tranche number is touched.
       ```
-- [ ] 12. (S11a) [COMMIT] Create `docs/map/SUB-minireason.md` — the first map
+- [x] 12. (S11a) [COMMIT] Create `docs/map/SUB-minireason.md` — the first map
       document for `mini/minireason/` — with `check:` lines that re-derive.
       done-when: `python tools/docs_verify.py` -> 0 failed AND `--audit` -> 0
       findings (a check that cannot fail is refused)
+
+      ```
+      $ python tools/docs_verify.py
+      docs_verify: 6 failed  -- the SAME six as steps 6 and 8a, all pre-existing and
+      all outside any document this step touched. NO new failure, so all eleven
+      checks in SUB-minireason.md and the one added to INDEX.md pass.
+      
+      $ python tools/docs_verify.py --audit
+      SEAM-llm-x-rules.md:54: unparseable check ...
+      docs_verify --audit: 1 finding(s)  -- the same known-not-yours row. NONE of
+      the twelve new checks is flagged vacuous, which is what --audit is for: it
+      re-runs each against a deliberately mutated tree and reports the ones that
+      cannot fail.
+      
+      $ python tools/docs_verify.py --links
+      0 dangling reference(s), 81 document(s)  (was 80)
+      
+      Each of the twelve was also run by hand before being written down: 11/11 rc=0.
+      
+      SUB-minireason.md covers mini/minireason/ -- what it is, its four entry
+      points, the state it does NOT own (a mini root is a strict subset of a parent
+      root), the two starting inputs, the isolation fence and what the fence does
+      not prove, a where-to-change-what table, and three Traps. The three traps are
+      written so they go RED WHEN FIXED rather than staying as prose: the gate not
+      reaching mini, the manifest naming a contract the dispatch does not use, and
+      the eager text-run import that step 10a removed.
+      
+      INDEX.md gains the routing row, the subsystem row, and a corrected coverage
+      statement -- closing PARKED P6, which recorded that nothing said where mini
+      was documented. The coverage sentence now carries a check that fails if a
+      second directory outside src/deepreason/ is ever claimed without updating it.
+      ```
 - [ ] 13. (S1) Prove the fence passes and CAN fail: mutate one mini module to
       import `deepreason.scheduler`, show the test red, revert.
       done-when: `proof/fence_mutation.txt` shows the red run and the green one
