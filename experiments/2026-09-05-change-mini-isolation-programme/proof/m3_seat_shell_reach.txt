@@ -1,0 +1,14 @@
+registered section plugins: 0
+registered layouts BEFORE : ()
+registered shells  BEFORE : ()
+ARM A shell resolves -> seat.mini.conjecturer.v0 | form_id: mini.conjecturer.relaxed.v1
+mini State.problems[pid] type: dict | keys: ['criteria', 'description', 'id', 'provenance']
+adapted to ontology Problem: Problem
+  seat-pack.mini.a1.v0: RENDERED 2 section(s); [('problem', 'rendered', 30)]
+  seat-pack.mini.a2.v0: FAILED AttributeError: 'dict' object has no attribute 'content_ref'
+ARM A VERDICT: the shipped seat-shell walk runs from a live mini Session
+               with no scheduler, no V6 transaction and no manifest policy;
+               record-backed sections need ONE adapter (mini State returns dicts).
+ARM B loader notices: ([], [])
+ARM B layouts after   : False
+ARM B VERDICT: a layout declared in a FILE is NOT registered (F2 confirmed)

@@ -1,0 +1,6 @@
+prose chars: 2360
+compile_checks(prose) -> [{"id": "skeleton-wf", "eval": "program:skeleton_wf", "budget": {"steps": 100000, "time_ms": 2000, "extra": {}}, "observation_valued": false}]
+run_checks verdict    -> [{'commitment': 'skeleton-wf', 'eval': 'program:skeleton_wf', 'verdict': 'fail', 'error': 'content does not parse as a skeleton'}]
+summary: {'stop': 'queue-exhausted', 'cycles': 3, 'problems': {'pi-0': 0}, 'refuted': 6, 'gate_blocks': 0}
+verify_root violations: 0
+survivors: []

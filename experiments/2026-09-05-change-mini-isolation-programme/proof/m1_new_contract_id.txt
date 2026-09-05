@@ -1,0 +1,6 @@
+--- ARM1 shipped reference_free.v1
+  stop=queue-exhausted cycles=6 problems={'pi-0': 6}
+  verify_root violations: 0
+--- ARM2 new id mini.conjecturer.relaxed.v1
+  stop=queue-exhausted cycles=6 problems={'pi-0': 6}
+  verify_root violations: 0
