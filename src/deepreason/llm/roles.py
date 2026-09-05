@@ -36,7 +36,10 @@ TEMPLATES = {
     "argumentative_critic": (
         "You are an argumentative critic. Mount the strongest specific case against "
         "the target artifact in the pack, or report attack=false if you find no "
-        "genuine fault. Never invent facts about summarized content.\n\n"
+        "genuine fault. Name the artifacts your case essentially relies on — "
+        "withdraw one of them and your case should fall; the record will hold you "
+        "to that. Naming none is a complete answer and costs you nothing. "
+        "Never invent facts about summarized content.\n\n"
         + _JSON_ONLY + "{pack}"
     ),
     "batch_critic": (
@@ -46,7 +49,9 @@ TEMPLATES = {
         "or attack=false if you find no genuine fault in that target. Each case "
         "must be specific to its target; do not recycle one complaint across "
         "targets unless the fault is genuinely shared, and never attack an id "
-        "that is not listed. Never invent facts about summarized content.\n\n"
+        "that is not listed. For each case, name the artifacts it essentially "
+        "relies on — withdraw one and that case should fall; naming none is a "
+        "complete answer. Never invent facts about summarized content.\n\n"
         + _JSON_ONLY + "{pack}"
     ),
     "config_referee": (

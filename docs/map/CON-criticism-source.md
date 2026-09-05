@@ -90,11 +90,28 @@ warrant.
 | Whether criticism may read the scratchpad | `DR-SEAM-rules-x-scratch` — a seam change, not isolated; follow `docs/map/REC-change-a-seam.md` | `tests/test_prose_refutation_boundaries.py -k scratch` |
 | What a filed premise may cite, and how the citation is checked | `_file_attribution` / `_check_premise_citations` here; the checker itself is `DR-SUB-evidence` | `tests/test_p4_citable_evidence.py -k quote` |
 | What an invited dispatch records about how the seat ANSWERED | `_file_attribution`'s `premise-answer:` Measure here; the tag's meaning is declared in `signals.py` under `DR-REC-add-signal`, never redefined here | `tests/test_premise_channel_loop.py -k "declined or uncited"` |
+| What a criticism may declare as its own ESSENTIAL GROUND | the OPTIONAL `premises_essential` field on `ArgumentativeCriticOutput`/`BatchCase` (`DR-SEAM-llm-x-rules`); what it DOES is not here either but at the trial's mint site, `DR-CON-warrants-and-attacks` | `tests/test_criticism_premises.py::test_the_field_is_optional_on_both_criticism_outputs` |
 | What a critic may PROPOSE as the next question, and where that proposal goes | the OPTIONAL `successor_question` field on `ArgumentativeCriticOutput`/`BatchCase` (`DR-SEAM-llm-x-rules`); its DESTINATION is not here at all but a registered row in `DR-CON-successor-questions` | `tests/test_successor_law_line.py::test_the_contract_field_is_optional_on_both_criticism_outputs` |
 
 This socket owns the FIELD and never the destination, and the separation is
 structural rather than stylistic: a critic proposes in words, and where those
 words go is a run's configuration.
+
+The same separation holds for the ground a criticism declares: this socket
+carries `premises_essential` from the wire to the trial and reads nothing in
+it. Whether a declared premise becomes an attack path is the mint site's
+question, and the socket's own demonstrative mint sites — whose verdicts rest
+on an execution rather than on the case — never receive it.
+`check: python -c "
+import inspect
+from deepreason.rules import crit
+from deepreason.llm.contracts import ArgumentativeCriticOutput as O, BatchCase as B
+for model in (O, B):
+    assert 'premises_essential' in model.model_fields, sorted(model.model_fields)
+source = inspect.getsource(crit)
+assert source.count('premises_essential=') == 2
+assert 'premises_essential' not in inspect.getsource(crit.try_counterexample)
+"`
 `check: python -c "from deepreason.llm.contracts import ArgumentativeCriticOutput as O, BatchCase as B; assert 'successor_question' in O.model_fields and 'successor_question' in B.model_fields" && grep -q "^def crit_argumentative(" src/deepreason/rules/crit.py && ! grep -q "deepreason.successor" src/deepreason/rules/crit.py`
 
 ## Where an `observe_only` criticism goes next

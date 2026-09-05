@@ -143,6 +143,20 @@ class ArgumentativeCriticOutput(BaseModel):
     # field canonicalises to the same bytes it always did under
     # `exclude_none`.
     successor_question: str | None = None
+    # The artifacts this CASE essentially relies on, by resolved id: withdraw
+    # one and the case should fall. Not `premise` above, which is a
+    # presupposition of the PROBLEM. Each entry is registered on the
+    # criticism's validity node as a `RefRole.EVIDENCE` ref, which is the
+    # evidence closure's only entry point (DR-CON-warrants-and-attacks), so a
+    # refuted premise lifts the attack onto the validity node and reinstates
+    # the target in the same fixpoint pass. Optional, and an empty list is a
+    # complete answer that costs the criticism nothing: no admission, rank,
+    # exposure or acceptance path may weigh on whether it is filled. None
+    # rather than [] so an undeclared case canonicalises to the same bytes it
+    # always did under `exclude_none` -- the critic output's dump is content-
+    # addressed and compared on recovery, so an always-present empty list
+    # would invalidate every committed critic transaction.
+    premises_essential: list[str] | None = Field(default=None, max_length=8)
 
 
 class BatchCase(BaseModel):
@@ -159,6 +173,9 @@ class BatchCase(BaseModel):
         default=None, max_length=2
     )
     successor_question: str | None = None  # same semantics as the single contract
+    premises_essential: list[str] | None = Field(  # same semantics as the single contract
+        default=None, max_length=8
+    )
 
 
 class BatchCriticOutput(BaseModel):

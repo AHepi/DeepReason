@@ -14,7 +14,9 @@ the first test below is the measurement of that, not a claim about it.
 
 What is asserted here:
 
-- `rules/crit.py` takes a ZERO-LINE DIFF, measured with `git diff --stat`;
+- no change to `rules/crit.py` REACHES THE DESTINATION -- measured over the
+  added lines of `git diff` plus the two exact counts the seam pins (narrowed
+  from a zero-line diff on 2026-09-05, `docs/ERRATA.md` E80);
 - a recorded successor question reaches the scratchpad, linked to the problem,
   through the PRODUCTION entry rather than a hand call to `route`;
 - dispatch is IDEMPOTENT over an unchanged record, which is what makes a
@@ -30,6 +32,7 @@ What is asserted here:
 from __future__ import annotations
 
 import json
+import pathlib
 import subprocess
 
 import pytest
@@ -120,17 +123,57 @@ def _blocks(harness) -> list:
 # --- the asymmetry survives, and this is the measurement -------------------- #
 
 
-def test_rules_crit_takes_a_zero_line_diff():
+#: Words that would mean the criticism side had learned where a proposal goes.
+#: `DR-SEAM-rules-x-scratch` rule 6 is about exactly this reach and nothing
+#: else, and its own Traps entry pins the two exact counts below as the guard.
+_DESTINATION_WORDS = ("scratch", "successor", "workshop", "route(", "mint(")
+
+
+def test_no_change_to_rules_crit_reaches_the_destination():
     """The whole point of road B. If this goes red, the criticism side was
     widened after all and `DR-SEAM-rules-x-scratch` rule 6 was overturned by an
-    implementer rather than by the operator."""
+    implementer rather than by the operator.
+
+    NARROWED 2026-09-05 (operator decision, tranche
+    `experiments/2026-09-05-criticism-premise-declaration/`; `docs/ERRATA.md`
+    E80). This asserted a ZERO-LINE `git diff --stat` against `main`, which
+    measured road B correctly on the day and then froze a 2 400-line module
+    against every later tranche whatever it touched — a claim strictly wider
+    than rule 6, which that tranche's own PARKED.md scoped to itself ("both
+    take a zero-line diff IN THIS TRANCHE"). What rule 6 forbids is the
+    criticism side REACHING THE DESTINATION, so that is what is measured: no
+    line this branch adds to `crit.py` may name one, and the two exact counts
+    the seam pins may not move. Road A — dispatching `route` from inside
+    `crit.py` — still goes red on both halves.
+    """
     diff = subprocess.run(
-        ["git", "diff", "--stat", "origin/main", "--", "src/deepreason/rules/crit.py"],
+        [
+            "git", "diff", "--unified=0", "origin/main", "--",
+            "src/deepreason/rules/crit.py",
+        ],
         capture_output=True,
         text=True,
         check=True,
     )
-    assert diff.stdout.strip() == "", diff.stdout
+    added = [
+        line[1:]
+        for line in diff.stdout.splitlines()
+        if line.startswith("+") and not line.startswith("+++")
+    ]
+    offenders = [
+        line
+        for line in added
+        if any(word in line.lower() for word in _DESTINATION_WORDS)
+    ]
+    assert offenders == [], offenders
+
+    # The counts the seam's Traps entry pins, checked here too so a rewrite
+    # that merely REPLACED an existing mention cannot pass the added-line scan.
+    lines = pathlib.Path("src/deepreason/rules/crit.py").read_text().splitlines()
+    # Matching lines, not occurrences: the seam pins these with `grep -c`.
+    naming = lambda word: sum(word in line for line in lines)  # noqa: E731
+    assert naming("scratch") == 2, naming("scratch")
+    assert naming("fence") == 6, naming("fence")
 
 
 def test_the_dispatch_site_is_outside_rules():

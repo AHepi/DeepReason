@@ -94,3 +94,61 @@ change — one new menu section. That is the point of the tranche; regenerate
 them deliberately and say in DELIVERY.md what moved. Full gate 0 failed,
 docs_verify 0 failed.
 ```
+
+## P4 — an UNDECIDED essential premise still leaves its target refuted
+
+WHAT: the OIS 1.1 audit's fixture F2
+(`experiments/2026-09-05-audit-ois-1-1-spec-drift/proof/check11_da1_vs_harness.py`).
+When a criticism's essential premise is not refuted but UNDECIDED — the premise
+K and a rival M attack each other, so both suspend — the criticism goes
+`suspended_unsupported` and its target stays `refuted`. Spec §11.3 says an
+undecided essential premise should prevent its dependent from becoming in. This
+is NOT the defect the 2026-09-05 criticism-premise tranche fixed: that one was a
+missing producer at the mint site, this one is pass ORDER inside
+`adjudication/`, which that tranche was forbidden to touch. Recorded there as a
+tripwire, `tests/test_criticism_premises.py::
+test_an_undecided_essential_premise_leaves_its_target_refuted_today`, which
+asserts the current labels and will go red when this is fixed.
+
+Ready-to-send prompt:
+
+```
+EXECUTOR WINDOW — DEFECT TRANCHE: an UNDECIDED essential premise does not
+protect its dependent's target the way a refuted one now does
+
+Read CLAUDE.md IN FULL. Load deepreason-orchestrator, dr-drive-harness,
+dr-ask-the-right-question and pinker-write-for-readers. Start at dr-set-goal.
+Offline; no key.
+
+THE SYMPTOM, already reproduced and already committed as a test: run
+  python -m pytest tests/test_criticism_premises.py -k undecided -q
+It PASSES today, and what it asserts is the defect — A refuted, K suspended,
+M suspended, C suspended_unsupported. Paste those four labels into GOAL.md.
+The audit's own fixture is
+experiments/2026-09-05-audit-ois-1-1-spec-drift/proof/check11_da1_vs_harness.py
+(F2); run it and paste its table too.
+
+THE RULE IT BREAKS: Open Inquiry 1.1 §11.3 — "an undecided essential premise
+prevents its dependent from becoming in". The criticism C is correctly NOT in
+(it is suspended_unsupported), but the attack it contributed still stands, so
+A stays refuted. Compare F1 in the same file, which the 2026-09-05
+criticism-premise tranche fixed by giving the critic a way to declare its
+premise on the validity node: there the closure lifts the attack. Here the
+premise is not refuted, so no closure fires.
+
+WARNING, READ BEFORE DESIGNING: this one almost certainly IS in
+src/deepreason/adjudication/ — pass order between the grounded extension and
+the support cascade. That is not a frozen surface, but it is the module the
+last tranche was explicitly forbidden to touch, and CON-warrants-and-attacks.md
+states the current rule as law with passing checks ("refuting a premise never
+refutes its dependents: pass 2 gives them SUSPENDED_UNSUPPORTED, because
+orphaned is not false"). Changing how a Status is derived from edges
+REINTERPRETS EVERY RECORDED ROOT — the map's own "Where to change what" table
+says so. So: DESIGN AND STOP. Produce FIX.md with the pass-order change, its
+blast radius, and what it does to committed roots, and STOP for the operator
+before writing code. Do not implement on your own reading.
+
+END STATE of this tranche: GOAL.md, DIAGNOSIS.md, REPRO.md, FIX.md committed
+and pushed; no production code changed; the stop presented to the operator in
+one sentence with priced options and a recommendation.
+```

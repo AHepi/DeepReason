@@ -259,3 +259,73 @@ kept).
 
     python tools/diff_budget.py 323fefb53 --ceiling 150 --paths <the five source files>
     {"total_insertions": 81, "ceiling": 150, "verdict": "WITHIN"}
+
+---
+
+## Amendment 2 (2026-09-05, monitor) — every validity-node site disposed of by name, and F2 recorded as a known gap
+
+Authority: the monitor's amendment, resting on the merged audit
+`experiments/2026-09-05-audit-ois-1-1-spec-drift/AUDIT_REPORT.md` rows 1 and 11
+(merged to `main` at `14cc5da49`, after this tranche's base `323fefb53`).
+
+### The census is the audit's, and it is nine sites, not two
+
+FIX.md above disposed of the argumentative sites by name but stopped at the
+five hand-built `Warrant(...)` constructions. The audit's census
+(`proof/check01-census.txt`, `check01-census2.txt`, `check01-mintsites.txt`)
+counts NINE sites that create a validity node, and its finding is stronger than
+this tranche's: **none of the nine can carry a critic's own declared premise**,
+and the three that already mount `EVIDENCE` mount something else. Every one is
+disposed of here, with its verdict after this fix.
+
+| site | type | ν carries today | after this fix |
+|---|---|---|---|
+| `informal/trial.py:1066` — the defended trial | ARGUMENTATIVE | nothing | **CHANGED.** Each declared premise as `RefRole.EVIDENCE`; nothing at all when the criticism declared nothing. This is the one site fed by a critic's prose case against a single target, and the only one this tranche touches. |
+| `informal/trial.py:1401` — pairwise | ARGUMENTATIVE | nothing | unchanged. It rules on a RIVALRY, not on a case against a target; there is no single criticism whose premises could be declared, and `pairwise_discriminate` receives no critic contract. Pinned by a check in `CON-warrants-and-attacks.md`. |
+| `rules/relatedness.py:145` | ARGUMENTATIVE | nothing | unchanged. The case is harness-composed from a relatedness ruling; no `ArgumentativeCriticOutput` is in the loop. |
+| `rules/experiment.py:385` — `relevance_trial` | ARGUMENTATIVE | nothing | unchanged. Same reason: a ruling that a proposed property does not follow from the problem, composed by the harness. |
+| `rules/vision.py:99` | ARGUMENTATIVE | `EVIDENCE` refs to the recorded screenshots | unchanged. It ALREADY declares its ground on ν — the precedent this fix follows — and its contract is not `ArgumentativeCriticOutput`. Widening it is a separate tranche with its own contract question. |
+| `rules/crit.py:1041,1224` (via `register_fail_warrant`) | DEMONSTRATIVE | `MENTION` refs (generator, proposed property) — inert | unchanged, DELIBERATELY. See "What is deliberately NOT registered" above: these verdicts rest on an EXECUTION, and mounting a prose premise on them would let a prose attack disable a refutation that ran. |
+| `informal/trial.py:822` — case law | DEMONSTRATIVE | `MENTION` ref to the applied standard | unchanged. The standard's own refutation already reaches this ν through the case-law closure (`RefRole.MENTION` branch in `build_att`); that is a different, working road, and the rubric verdict rests on a conforming transcript, not on declared prose premises. |
+| `rules/act.py:178` | DEMONSTRATIVE | `EVIDENCE` ref to the evidence artifact | unchanged. Already declares its ground, and its ground is the evidence artifact, not a critic's premises. |
+| `premises.py:569` | DEMONSTRATIVE | `EVIDENCE` ref to a derivation manifest | unchanged. This is `register_fail_warrant`'s `manifest_ref` road — the direct precedent for the mechanism used here, on the demonstrative side. |
+
+So: one site changed, eight disposed of, and the two reasons for leaving a site
+alone are stated rather than implied — either the site is not fed by a critic's
+case at all (pairwise, relatedness, experiment, case law), or its verdict rests
+on an execution and must not become collapsible by prose (the three
+`register_fail_warrant` families), with `vision` a third case that already does
+the right thing for its own contract.
+
+### Record evidence the audit adds, and what it costs this fix
+
+"Across all 86 committed roots, `RefRole.EVIDENCE` appears on a ν only through
+`rules/vision.py`, and no root ran a vision criticism." The correct branch has
+therefore never been exercised by any committed run. That is the strongest
+available statement of the defect and it is the audit's, not this window's — and
+it also fixes the ceiling on what this tranche may claim: after this fix the
+branch is REACHABLE, and no live run has yet taken it. RESULTS.md says so.
+
+### F2 is a different defect and is NOT fixed here
+
+The audit's fixture F2 (`proof/check11_da1_vs_harness.py`) is the case where a
+criticism's essential premise is UNDECIDED rather than refuted — K and a rival M
+attack each other, both suspend, and the criticism's target stays `refuted`.
+Spec §11.3 says an undecided essential premise should prevent its dependent from
+becoming in. Different cause: pass ORDER in `adjudication/`, which GOAL.md and
+the monitor both put outside this tranche.
+
+Per the monitor's instruction, it is RECORDED, not fixed:
+`tests/test_criticism_premises.py::
+test_an_undecided_essential_premise_leaves_its_target_refuted_today` asserts the
+harness's CURRENT labels — `A refuted, K suspended, M suspended, C
+suspended_unsupported` — as a tripwire with the gap named in its docstring, and
+PARKED.md P4 carries the ready-to-send prompt. `adjudication/` is untouched.
+
+### Change sites added by this amendment
+
+- `tests/test_criticism_premises.py` — the F2 known-gap test (assertion only;
+  no production change).
+- `experiments/.../PARKED.md` — P4.
+
+No production code moves under this amendment, so the diff budget is unchanged.
