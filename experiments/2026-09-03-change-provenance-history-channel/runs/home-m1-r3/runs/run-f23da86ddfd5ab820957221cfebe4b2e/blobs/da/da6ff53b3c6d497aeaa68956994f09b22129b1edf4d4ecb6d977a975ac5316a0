@@ -1,0 +1,100 @@
+{
+  "candidates": [
+    {
+      "content": "The relation between the defense of non-inductive preference (SRC_003) and the accusation of smuggling induction (SRC_005) is one of SHARED MECHANISM regarding the 'pragmatic decision to act,' but REFUTED IF the definition of 'action' in the accuser's framework strictly requires a probabilistic forecast of success, whereas the defender's framework defines action as a critical selection of the best error-eliminating candidate without such a forecast. This connects the isolated problem to the neighborhood by showing the dispute hinges on whether 'rational action' entails 'expectation of truth.'",
+      "typicality": 0.85,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "This candidate explicitly names the relation kind ('SHARED MECHANISM') and provides a 'REFUTED IF' condition, satisfying relation-form@578e42df713e."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Same as above; the form is strictly adhered to."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Revised to specify that the shared mechanism is the 'pragmatic decision to act' but clarified the refutation condition to focus on the divergent definitions of 'action' (probabilistic vs. critical selection), addressing the vagueness criticism."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "rebutted", "note": "Relation form compliance confirmed."},
+        {"handle": "[SRC_021] against SRC_020", "kind": "rebutted", "note": "Relation form compliance confirmed."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "The refutation condition here is a single conceptual variable (definition of rational action), not a complex multi-variable game scenario."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "The contradiction arises from the incompatibility of the definitions of rationality, not just methodological rules; if one requires probability and the other forbids it, they are contradictory in this context."},
+        {"handle": "[SRC_018] against SRC_016", "kind": "rebutted", "note": "Relation form compliance confirmed."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "The connection is a CONTRADICTION between the claim that preference assumes future uniformity (SRC_001) and the claim that it is a non-inductive critical attitude (SRC_004), REFUTED IF Popper's 'critical attitude' can be demonstrated to function as a purely negative filter that selects theories solely based on past falsification attempts without making any positive assertion about future reliability, thereby breaking the link to induction entirely.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_001", "SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Explicitly states 'CONTRADICTION' and 'REFUTED IF'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism is specific: 'purely negative filter' vs 'positive assertion'."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_021] against SRC_020", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "Refutation condition is singular: the existence of a purely negative filter mechanism."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Addresses the compatibility issue by positing a strict logical contradiction in the definition of the attitude itself."},
+        {"handle": "[SRC_018] against SRC_016", "kind": "rebutted", "note": "Form compliant."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "This proposes an ABSTRACTION relation where the specific debate over 'smuggling induction' (SRC_002) is an instance of a broader conflict between 'justificational' and 'non-justificational' epistemologies, REFUTED IF the preference for corroborated theories in Popper's system cannot be fully decoupled from any implicit justificatory force, meaning the abstraction fails to capture the inevitable leakage of justification into the pragmatic choice.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_002"],
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Names 'ABSTRACTION' and 'REFUTED IF'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism defined as the mapping of specific debate to broad epistemological conflict."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_021] against SRC_020", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "Refutation condition is a single binary test: can it be fully decoupled?"},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Posits that if the decoupling fails, the contradiction is absolute, not merely methodological."},
+        {"handle": "[SRC_018] against SRC_016", "kind": "rebutted", "note": "Form compliant."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "A DEPENDENCE relation exists where the viability of the 'non-inductive defense' (SRC_003) depends entirely on the successful redefinition of 'rationality' to exclude predictive utility, REFUTED IF any agent acting on such a redefined rationality inevitably behaves indistinguishably from an inductive agent, rendering the theoretical distinction practically null and the dependence circular.",
+      "typicality": 0.90,
+      "neighbours": ["SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Names 'DEPENDENCE' and 'REFUTED IF'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Clarified the mechanism as 'redefinition of rationality' and the refutation as 'behavioral indistinguishability'."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_021] against SRC_020", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "Refutation condition focuses on a single outcome: behavioral indistinguishability."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Argues that practical nullification creates a functional contradiction."},
+        {"handle": "[SRC_018] against SRC_016", "kind": "rebutted", "note": "Form compliant."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "The relation is INHERITANCE, where the 'smuggling induction' critique (SRC_005) inherits the structural flaw of assuming that all rational action must be grounded in probability, a flaw that Popper's system (SRC_004) attempts to bypass, REFUTED IF it can be shown that no form of rational action is possible without a probabilistic ground, thereby validating the critic's inherited assumption and collapsing the bypass.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_005", "SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Names 'INHERITANCE' and 'REFUTED IF'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism is the inheritance of a specific structural flaw regarding probability."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_021] against SRC_020", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "Refutation condition is a single existential proof: is probabilistic ground necessary?"},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Frames the issue as a fundamental clash of axioms rather than compatible methodologies."},
+        {"handle": "[SRC_018] against SRC_016", "kind": "rebutted", "note": "Form compliant."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "Proposes a COMPATIBILITY relation between the 'critical attitude' (SRC_004) and the 'smuggling induction' charge (SRC_001) under the view that they describe different layers of cognition: the logical layer (no induction) and the psychological layer (inductive habit), REFUTED IF Popper's own account of the 'critical attitude' necessitates a conscious suppression of inductive habits that implies their logical priority, thus making the layers inseparable and the compatibility illusory.",
+      "typicality": 0.40,
+      "neighbours": ["SRC_004", "SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Names 'COMPATIBILITY' and 'REFUTED IF'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Specifically defines the mechanism as 'layered cognition' and the refutation as 'inseparability due to suppression'."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_021] against SRC_020", "kind": "rebutted", "note": "Form compliant."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "Refutation condition tests the separability of the layers."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Suggests compatibility is only superficial if the layers are logically entangled."},
+        {"handle": "[SRC_018] against SRC_016", "kind": "rebutted", "note": "Form compliant."}
+      ],
+      "evidence_refs": []
+    }
+  ]
+}

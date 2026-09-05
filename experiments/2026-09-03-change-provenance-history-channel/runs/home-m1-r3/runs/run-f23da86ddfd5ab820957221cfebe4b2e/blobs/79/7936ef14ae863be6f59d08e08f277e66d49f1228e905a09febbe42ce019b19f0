@@ -1,0 +1,189 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, procedural rationality: it selects the theory with the highest 'truth-content' potential (verisimilitude) because it has survived the most severe attempts at falsification, not because it is predicted to succeed in the future.",
+      "mechanism": "Procedural Selection via Severity Filtering. The mechanism treats corroboration reports not as evidence of future probability, but as a filter that eliminates theories with low information content or high ad-hocness. Preferring the survivor is akin to preferring a bridge that has held under maximum load tests over one untested; the preference is based on the current state of critical scrutiny, not an inductive leap about the next truck.",
+      "counterconditions": [
+        "If the universe is such that laws change arbitrarily immediately after a test (radical discontinuity), making past survival irrelevant to any future utility.",
+        "If the goal of science is defined strictly as maximizing short-term predictive success rather than approaching truth."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate explicitly constructs the strongest case for the 'defensible' answer (procedural rationality) AND the strongest case for the 'smuggling induction' answer (see counterconditions and mechanism limits) before concluding that the procedural view survives if one accepts the cost of abandoning predictive certainty. This fulfills the dialectical requirement."
+        },
+        {
+          "handle": "[SRC_011] against SRC_010",
+          "kind": "rebutted",
+          "note": "The distinction is maintained by framing preference as a choice of the 'best currently available critical target,' not a prediction of availability. We prefer it *because* it is the best tested, not because we assume it will remain available or true."
+        },
+        {
+          "handle": "[SRC_015] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to explicitly name the third option: 'Procedural Rationality.' The argument now clarifies that Popper redefines rational action not as acting on probable truth, but as acting on the theory that has withstood the most rigorous attempted refutation, thereby avoiding the false dichotomy of induction vs. irrationality."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The link to verisimilitude is not a relabeling but a structural claim: a theory that survives severe tests has demonstrated higher empirical content. The preference is rational because it aligns with the goal of truth (verisimilitude), even if it entails no logical guarantee of future success."
+        },
+        {
+          "handle": "[SRC_014] against SRC_005",
+          "kind": "rebutted",
+          "note": "Clarified that this is not 'fictionalism' (acting as if). It is a realist commitment to the method: we prefer the corroborated theory *because* it is the one that has actually survived, which is a factual report of its history, not a fictional assumption about its future."
+        },
+        {
+          "handle": "[SRC_007] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate adopts this exact solution: the preference is defensible on non-inductive grounds because it aligns with the goal of finding truth (verisimilitude) through error elimination."
+        },
+        {
+          "handle": "[SRC_009] against SRC_008",
+          "kind": "rebutted",
+          "note": "The argument does not assume uniformity of nature. It assumes only that we seek truth and that falsification is a valid method for eliminating error. No assumption about the future resembling the past is required, only that the past tests were severe."
+        },
+        {
+          "handle": "[SRC_012] against SRC_002",
+          "kind": "rebutted",
+          "note": "The distinction between logical status (unfalsified) and pragmatic preference (corroborated) is the core of the mechanism. Preference is based on the history of testing (corroboration), which is a factual record, not an inductive inference."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_015"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back in, because any practical reliance on a theory's past survival to guide future action implicitly assumes the 'Principle of Uniformity'—that the future will resemble the past—which Popper explicitly rejected as unjustifiable.",
+      "mechanism": "Hidden Inductive Leap in Pragmatic Action. The mechanism posits that while the *logic* of corroboration is negative (falsification), the *psychology* and *pragmatics* of preference are positive (induction). To act on a theory is to bet on its future validity; this bet is only rational if one assumes the conditions that allowed it to survive will persist.",
+      "counterconditions": [
+        "If one can demonstrate a form of rational action that requires no expectation of future success.",
+        "If Popper's 'verisimilitude' can be shown to have operational value without assuming temporal continuity."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "This candidate presents the strongest case for the 'smuggling induction' position, arguing that pragmatic necessity forces an inductive assumption, before contrasting it with the procedural defense to determine which survives."
+        },
+        {
+          "handle": "[SRC_011] against SRC_010",
+          "kind": "rebutted",
+          "note": "The argument addresses preferability by asserting that to prefer X for action *is* to judge X more likely to succeed, collapsing the distinction in the realm of practice even if logic holds them apart."
+        },
+        {
+          "handle": "[SRC_015] against SRC_006",
+          "kind": "rebutted",
+          "note": "It challenges the 'third option' by arguing that redefining rationality as 'procedural' is merely semantic window-dressing if the outcome (acting on the theory) remains indistinguishable from inductive behavior."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "Argues that without a link to probable truth or future success, the 'critical attitude' offers no reason to prefer one unfalsified theory over another, rendering the preference irrational unless induction is secretly invoked."
+        },
+        {
+          "handle": "[SRC_014] against SRC_005",
+          "kind": "rebutted",
+          "note": "Contends that Popper's own advice to act on the best-tested theory functions exactly like a fictionalist 'as if' probability, which undermines his claim to have escaped induction."
+        },
+        {
+          "handle": "[SRC_007] against SRC_006",
+          "kind": "rebutted",
+          "note": "Counters that aligning with the goal of truth is insufficient; one must assume the *method* continues to track truth in the future, which is an inductive assumption."
+        },
+        {
+          "handle": "[SRC_009] against SRC_008",
+          "kind": "rebutted",
+          "note": "Maintains that any appeal to 'past severity' as a guide for 'future action' necessarily relies on the uniformity of nature, regardless of Popper's specific denials."
+        },
+        {
+          "handle": "[SRC_012] against SRC_002",
+          "kind": "rebutted",
+          "note": "Argues that the distinction between logical status and preference breaks down when the preference is used to justify action, which inherently projects logical status into the future."
+        }
+      ],
+      "optional_refs": [
+        "SRC_009",
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves if we view scientific preference not as a judgment of truth or probability, but as an evolutionary selection mechanism where 'corroboration' is simply the report of survival, and 'preference' is the automatic retention of the surviving variant without any need for inductive justification.",
+      "mechanism": "Evolutionary Epistemology Analogy. Just as nature 'prefers' the fit organism without assuming it will remain fit forever, scientists 'prefer' the corroborated theory as the current fittest idea. The preference is a descriptive state of the system (what is kept), not a normative prediction (what will work).",
+      "counterconditions": [
+        "If human agency requires a normative justification for action that biological evolution does not.",
+        "If the concept of 'survival' in science implies a teleological progress towards truth that biological survival lacks."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "Provides a distinct third perspective (evolutionary) that makes the case for defensibility via analogy, satisfying the dialectical requirement by offering a robust alternative to both pure induction and strict proceduralism."
+        },
+        {
+          "handle": "[SRC_011] against SRC_010",
+          "kind": "rebutted",
+          "note": "Reframes 'preferability' as 'retention.' We don't choose it because it's better; we keep it because it hasn't died. This removes the agential burden of 'preference' implying a prediction."
+        },
+        {
+          "handle": "[SRC_015] against SRC_006",
+          "kind": "rebutted",
+          "note": "Offers a concrete realization of the 'third option': rationality as an evolutionary process of error elimination, requiring no inductive bridge."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The link to verisimilitude is replaced by a link to 'current fitness.' The critical attitude is the mutation/testing phase; preference is the selection phase. No entailment of future truth is needed."
+        },
+        {
+          "handle": "[SRC_014] against SRC_005",
+          "kind": "rebutted",
+          "note": "This is not fictionalism; it is naturalism. We act on the surviving theory because it is the only one left standing, not because we pretend it is probable."
+        },
+        {
+          "handle": "[SRC_007] against SRC_006",
+          "kind": "rebutted",
+          "note": "Aligns with the goal of truth by viewing truth as the limit of an infinite evolutionary process, where current preference is just a step, not a guarantee."
+        },
+        {
+          "handle": "[SRC_009] against SRC_008",
+          "kind": "rebutted",
+          "note": "Evolution does not assume uniformity; it reacts to current conditions. Similarly, scientific preference reacts to current test results without assuming they will hold forever."
+        },
+        {
+          "handle": "[SRC_012] against SRC_002",
+          "kind": "rebutted",
+          "note": "The logical status (unfalsified) determines the survival; the preference is merely the acknowledgment of that status. No inductive inference crosses the gap."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "Accepting the preference defensibly costs us the comfort of certainty and the ability to claim our theories are 'probably true'; we must accept that we are acting on the best guess available, knowing it may be falsified tomorrow, and that this 'rationality' is purely negative (avoiding known errors) rather than positive (achieving truth).",
+      "mechanism": "Cost-Benefit Analysis of Critical Rationalism. The mechanism isolates the 'cost' as the abandonment of inductive security. The benefit is the ability to act rationally without dogmatism. The preference is defended as the only non-dogmatic way to proceed.",
+      "counterconditions": [
+        "If agents cannot function psychologically without a belief in probable success.",
+        "If the definition of 'rationality' inherently includes a positive expectation of success."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_004",
+          "kind": "rebutted",
+          "note": "Explicitly details the cost of the defensible position, fulfilling the prompt's requirement to say 'what accepting it costs' after making the strongest cases."
+        },
+        {
+          "handle": "[SRC_011] against SRC_010",
+          "kind": "rebutted",
+          "note": "Clarifies that the preference is for the 'least erroneous' option, not the 'most preferable' in terms of expected utility, maintaining the distinction."
+        },
+        {
+          "handle": "[SRC_015] against SRC_006",
+          "kind": "rebutted",
+          "note": "Defines the third option as 'Negative Rationality': rational because it avoids known falsehoods, even if

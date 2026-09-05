@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a false dichotomy between 'logical probability' and 'methodological preferability,' failing to address that the specific criterion of 'severity' (central to Popper's corroboration) is itself dependent on inductive assumptions about background knowledge. If the assessment of whether a test is 'severe' requires assuming that known auxiliary theories are reliable (i.e., likely true or stable), then the preference for the corroborated theory implicitly smuggles in the very probabilistic reliability the target claims to reject, rendering the 'non-inductive rule of conduct' circular.",
+      "counterexample": null,
+      "premise": "Popper's concept of 'severity' in testing requires reliance on accepted background knowledge which functions as an inductive assumption of stability.",
+      "premise_evidence": null,
+      "successor_question": "Can a test be considered 'severe' in Popper's framework without assuming the reliability of the auxiliary hypotheses used to derive the prediction?"
+    }
+  ]
+}

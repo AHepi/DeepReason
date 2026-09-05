@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the preference is defensible because it maximizes 'error elimination potential' without assuming future uniformity, but this relies on an implicit inductive assumption that a theory's past success in eliminating errors correlates with its future reliability.",
+      "case": "The argument fails to resolve the problem's core tension: if one prefers Theory A over Theory B solely because A has survived severe tests in the past, one is effectively acting on the expectation that A will continue to perform better (or be closer to truth) in the future. Popper explicitly rejected the idea that past performance guarantees future results without an inductive principle. By defining the 'rationality' of the choice as maximizing 'error elimination potential,' the target smuggles in the very inductive assumption it claims to avoid—namely, that the mechanism which eliminated errors in the past will remain effective or relevant in the future. Without this hidden premise, the preference is arbitrary; with it, the solution contradicts Popper's rejection of induction.",
+      "counterexample": [
+        "Consider a theory that has survived 1,000 tests regarding the motion of planets but fails on the 1,001st test involving a new gravitational phenomenon. If the preference for the 'better-corroborated' theory was truly non-inductive, there would be no rational basis to expect the 1,001st test to align with the previous 1,000. Yet, scientists prefer the corroborated theory precisely because they expect it to hold up again. This expectation is an inductive leap that the target's definition of 'critical rationality' attempts to rename but not eliminate."
+      ],
+      "successor_question": "If the preference for better-corroborated theories does not rely on the assumption that the future will resemble the past, what specific non-inductive logical link connects 'surviving past tests' to 'being the best bet for future action'?"
+    }
+  ]
+}

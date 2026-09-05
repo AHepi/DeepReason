@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "premise": "The target claims the dilemma dissolves by separating 'rational preference' from 'logical entailment,' asserting we act on the best-tested theory solely because it is 'the only one left standing.'",
+      "case": "The target's solution fails to address the specific charge of 'smuggling induction' because it conflates logical survival with pragmatic reliability without justification. By stating we prefer the survivor 'because it is the only one left standing,' the target implicitly assumes that past survival (negative instances) is a reliable guide for future action (positive selection). If corroboration truly has no bearing on probability or expected success, as Popper insists, then preferring the survivor over a falsified theory (or an untested one) for the purpose of *action* remains logically arbitrary. The target asserts the distinction allows Popper to act without contradiction, but it does not explain *why* a rational agent should care about which theory is 'left standing' if that status confers no increased likelihood of truth or practical success. Thus, the preference still relies on an inductive principle—that the future will resemble the past regarding test outcomes—which the target claims to avoid but actually presupposes in its mechanism for action.",
+      "counterexample": [
+        "Consider two theories: T1 (severely tested and survived) and T2 (untested). If corroboration implies no probability, T1 is no more likely to be true tomorrow than T2. If a scientist chooses T1 for building a bridge, they are acting on the assumption that T1's past performance predicts its future stability. The target's claim that this is just a 'critical attitude' ignores that the *consequence* of the choice relies on an inductive bet on nature's uniformity."
+      ],
+      "successor_question": "If the status of being 'the only one left standing' provides no probabilistic advantage, what non-inductive reason compels a rational agent to prefer it over an untested alternative when lives are at stake?",
+      "premise_evidence": null
+    }
+  ]
+}

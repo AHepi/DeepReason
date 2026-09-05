@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'betting strategy' fails to distinguish Popperian corroboration from inductive probability because defining 'risk' and 'catastrophic error' inherently relies on inductive expectations about the future stability of nature, which Popper explicitly rejected.",
+      "counterexample": null,
+      "premise": "Popper rejected induction on the grounds that no amount of past observation can logically justify a prediction about the future; however, any calculation of 'risk' or 'cost of error' assumes that the future will resemble the past (i.e., that a theory which failed recently will likely fail again, or that the conditions of the test remain stable).",
+      "premise_evidence": null,
+      "successor_question": "If the definition of 'risk' in the target's betting strategy requires assuming the uniformity of nature, how does this differ substantively from the inductive probability Popper sought to avoid?"
+    }
+  ]
+}

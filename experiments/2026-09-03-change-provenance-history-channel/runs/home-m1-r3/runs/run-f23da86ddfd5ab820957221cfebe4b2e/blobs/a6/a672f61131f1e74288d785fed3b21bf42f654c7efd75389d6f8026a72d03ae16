@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Dependence. The preference for better-corroborated theories (SRC_003) depends on the pragmatic decision rule that maximizes error elimination potential without assuming future uniformity. Refuted If: The preference logically entails a premise that the future will resemble the past, or if acting on the theory requires believing it is likely true, thereby collapsing the distinction between corroboration and induction.",
+      "typicality": 0.92,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "This candidate explicitly includes the phrase 'refuted if' and names the relation kind 'Dependence', satisfying the form critic."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Form compliance verified: 'refuted if' present, relation kind named."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Revised to avoid broad mechanism claims; focuses strictly on the dependency of the preference on the specific decision rule defined in SRC_003."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "Form criteria met with explicit 'refuted if' clause."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "The refutation condition here is a direct logical entailment check, not a complex multi-variable game scenario."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Addresses the contradiction by framing the relation as dependence on a methodological rule, which holds even if propositions are logically compatible under different frameworks."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Form compliance confirmed."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Form compliance confirmed."}
+      ],
+      "neighbours": ["SRC_003"]
+    },
+    {
+      "content": "Relation Kind: Contradiction. The claim that preference smuggles induction (SRC_002) contradicts the claim that preference is a non-inductive critical attitude (SRC_004). Refuted If: It can be demonstrated that 'rational action' requires zero expectation of future success, or if the preference is shown to be purely aesthetic with no bearing on practical decisions, thus dissolving the pragmatic inconsistency.",
+      "typicality": 0.88,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Candidate clearly states 'Contradiction' and includes 'refuted if'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism is narrowly defined as the conflict between 'smuggling induction' and 'non-inductive attitude', avoiding broad pragmatism."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "Refutation conditions are specific counter-conditions derived directly from SRC_002, not external game-theoretic variables."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "The contradiction stands on the definition of rationality; if the definitions hold, the propositions are incompatible."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Form criteria satisfied."}
+      ],
+      "neighbours": ["SRC_002", "SRC_004"]
+    },
+    {
+      "content": "Relation Kind: Shared Mechanism. Both the defense of preference (SRC_005) and the accusation of smuggling induction (SRC_001) share the mechanism of evaluating the 'pragmatic decision to act.' Refuted If: The concept of 'preference' can be decoupled entirely from expectations of future performance, or if a non-inductive rationale for action exists that does not rely on nature's uniformity.",
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Explicitly names 'Shared Mechanism' and provides 'refuted if'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Narrowed the shared mechanism to specifically 'evaluating the pragmatic decision to act' rather than general pragmatism, addressing the breadth criticism."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "Refutation conditions focus on the possibility of decoupling preference from expectation, a binary logical test."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "The shared mechanism highlights the common ground of debate, not a logical contradiction between compatible propositions."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Form criteria satisfied."}
+      ],
+      "neighbours": ["SRC_005", "SRC_001"]
+    },
+    {
+      "content": "Relation Kind: Abstraction. The concept of 'critical rationality' in SRC_003 is an abstraction of the specific 'critical attitude' described in SRC_004, generalizing the methodological choice to bet on high-content theories. Refuted If: 'Verisimilitude' cannot be defined without probabilistic assumptions, or if the 'critical attitude' itself relies on an inductive habit of mind, rendering the abstraction baseless.",
+      "typicality": 0.65,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Names 'Abstraction' and includes 'refuted if'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism is specific to the relationship between 'rationality' and 'attitude', not broad pragmatism."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "Refutation conditions are internal to the definitions of verisimilitude and attitude."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Abstraction relations do not require logical contradiction, only hierarchical derivation."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Form criteria satisfied."}
+      ],
+      "neighbours": ["SRC_003", "SRC_004"]
+    },
+    {
+      "content": "Relation Kind: Reduction. The dispute over whether preference smuggles induction (SRC_005) reduces to the single variable of whether 'acting on corroboration' necessarily assumes the future will resemble the past (SRC_001). Refuted If: One can justify action based solely on the elimination of error without predicting success, or if the assumption is merely a psychological habit rather than a logical premise.",
+      "typicality": 0.55,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Names 'Reduction' and includes 'refuted if'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism is tightly constrained to the necessity of the uniformity assumption."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "revised", "note": "Clarified that the reduction is to a 'single variable' (the necessity of the assumption), and the refutation conditions directly test this variable's necessity, avoiding extraneous game-theoretic complexity."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Reduction identifies the core point of contention, bypassing surface-level compatibility."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Form criteria satisfied."}
+      ],
+      "neighbours": ["SRC_005", "SRC_001"]
+    },
+    {
+      "content": "Relation Kind: Compatibility. The defense of preference as a 'critical rationality' decision rule (SRC_003) is compatible with the accusation that it smuggles induction (SRC_002) only if the concept of 'rationality' allows for non-justificational decision rules that functionally rely on inductive habits. Refuted If: Popper can demonstrate a form of 'rational action' that requires zero expectation of future success, or if the preference implies an expectation that the future will resemble the past, making them mutually exclusive.",
+      "typicality": 0.40,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Names 'Compatibility' and includes 'refuted if'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Mechanism specifies the narrow condition under which compatibility holds (non-justificational rules)."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "Refutation conditions are direct tests of the compatibility premise."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Explicitly addresses the tension between methodological rules and logical compatibility."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Form criteria satisfied."}
+      ],
+      "neighbours": ["SRC_003", "SRC_002"]
+    }
+  ]
+}

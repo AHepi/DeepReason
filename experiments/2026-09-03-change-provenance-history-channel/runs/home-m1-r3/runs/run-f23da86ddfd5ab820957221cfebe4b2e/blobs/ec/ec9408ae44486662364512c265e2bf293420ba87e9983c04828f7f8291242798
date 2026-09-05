@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction by redefining rational action as the strategic selection of the most testable (and thus most falsifiable) hypothesis, rather than the most probable one; this accepts the cost that 'rationality' no longer guarantees proximity to truth or practical success, but only maximizes the speed of error elimination.",
+    "mechanism": "The argument reconstructs Popper's distinction between the logical status of a theory (which remains unproven) and the methodological rule of preference (which aims at high informational content). It posits that preferring a severely tested theory is rational because it has survived attempts to destroy it, leaving it as the best available target for future falsification, whereas an untested or weakly corroborated theory might hide errors. This avoids induction by refusing to infer future success from past survival, instead treating past survival as a prerequisite for being a worthy opponent in the next round of testing.",
+    "counterconditions": [
+      "If one assumes that the ultimate goal of science is immediate practical reliability rather than long-term truth approximation, the preference becomes indefensible without induction.",
+      "If 'preference' is interpreted as a belief in higher probability rather than a decision rule for testing, the argument collapses into the very induction Popper rejected.",
+      "If the uniformity of nature is required to justify even the strategy of error elimination, then the non-inductive claim fails."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "01a43e4617dbf30441a2791ce8c3d945291ac1a21062b87c5d4756bfefbe54cf",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for the opposing view (that preference smuggles in induction) within the 'counterconditions' and the 'cost' analysis, demonstrating that the dialectical requirement is met by showing where the non-inductive defense breaks down if goals shift to practical certainty."
+      },
+      {
+        "handle": "0202e9a61d35cb7ca1cb016edc18276816a479aa1e49302c2662e1f9e9c2c6f2",
+        "kind": "rebutted",
+        "note": "The mechanism addresses 'preferability' directly by defining it as a methodological choice for maximizing testability, distinct from mere 'availability.' The argument explains why one *should* act on the better-corroborated theory specifically because it offers more opportunities for learning, not just because it exists."
+      },
+      {
+        "handle": "04b8ded9db67d027a9b81c1a6ba0f9ee0c900e2d948e40d6eedb1e58cb2d47d5",
+        "kind": "revised",
+        "note": "Revised to explicitly name the 'third option' as the redefinition of rationality towards error elimination speed, clarifying that the dichotomy between 'induction' and 'irrationality' is false because a third category of 'critical rationality' exists."
+      },
+      {
+        "handle": "12f262d76a723f9ff07a3efd4c44394488073be5e7159b76223e2bed2ad86207",
+        "kind": "rebutted",
+        "note": "The rebuttal asserts that the link to truth is not probabilistic but verisimilitudinal in a negative sense: we do not know the preferred theory is truer, but we know the rejected ones are flawed or less informative. The 'critical attitude' links to truth by removing falsehoods, not by confirming truths."
+      },
+      {
+        "handle": "1832fe3dd749ff4b6225ece1ed72298c6163322e74785cadc9fa7f8d5c5c65bc",
+        "kind": "rebutted",
+        "note": "Clarified that the stance is not 'fictionalism' (acting as if true) but 'methodological instrumentalism' (acting as if the most testable theory is the best tool for finding errors). This aligns with Popper's actual solution regarding the goal of finding truth through falsification."
+      },
+      {
+        "handle": "1a76afe6cb3e70b8a8b152c1f41b2ecae41c069eb31312939cf041481ed04807",
+        "kind": "rebutted",
+        "note": "The candidate incorporates the 'verisimilitude' argument explicitly, stating that the preference aligns with the goal of finding truth by eliminating high-content errors, which is the non-inductive ground Popper proposed."
+      },
+      {
+        "handle": "267e8a0199c355c91286f888927929d0a8ee910c74f1e5c2da9f6dea375c1d49",
+        "kind": "rebutted",
+        "note": "The response corrects the misrepresentation by affirming that Popper's solution relies on the logical asymmetry between verification and falsification, not on an assumption of nature's uniformity. The preference is for the theory that sticks its neck out furthest and survives."
+      },
+      {
+        "handle": "2dcf041ebc7cdc14462c5d4072be851769f8da112a05f095771c999da65e487c",
+        "kind": "rebutted",
+        "note": "The distinction between logical status and methodological preference is the core of the mechanism. The argument confirms that no inductive inference about future validity is made; rather, a decision is made to subject the most vulnerable (high-content) survivor to further fire."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense creates a performative contradiction by asserting the preference is 'most rational' while simultaneously denying it increases the likelihood of pragmatic success. If choosing the better-corroborated theory offers no greater expectation of survival or predictive accuracy (as the target admits in the 'cost'), then labeling this choice 'rational' smuggles in a hidden normative premise: that 'rationality' is decoupled from successful action. This redefinition fails to answer the problem's core challenge regarding scientists who act to survive or build bridges; for them, a 'rational' choice that does not correlate with higher success probability is indistinguishable from irrationality, thus the induction remains smuggled in via the undefined link between 'critical alignment' and actual truth-conduciveness.",
+      "counterexample": null,
+      "premise": "Rational action in a survival context necessitates a belief that the chosen method increases the probability of success compared to alternatives.",
+      "premise_evidence": null,
+      "successor_question": "Can Popper define 'rationality' in a way that guides life-or-death decisions without implicitly relying on the assumption that the future will resemble the past?"
+    }
+  ]
+}

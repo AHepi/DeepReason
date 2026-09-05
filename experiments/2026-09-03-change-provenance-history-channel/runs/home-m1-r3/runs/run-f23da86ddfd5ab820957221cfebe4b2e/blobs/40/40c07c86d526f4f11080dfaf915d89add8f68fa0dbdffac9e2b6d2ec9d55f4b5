@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's argument rests on a false dichotomy: it assumes that acting on a corroborated theory necessarily requires an inductive belief that 'the future will resemble the past' (nature's uniformity). This ignores Popper's specific pragmatic solution, where the preference for the better-corroborated theory is justified not by an expectation of its truth or future success, but by the methodological rule that it has withstood the most severe attempts at falsification so far. For Popper, choosing the best-tested theory is rational because it represents our current best guess at the truth having survived critical scrutiny, not because we assume it will continue to work. The target dismisses this distinction as a 'semantic evasion' without engaging with the substantive claim that one can act on the 'best available' option without assigning it a higher probability of future validity, thereby misrepresenting the non-inductive rationale Popper explicitly offers for practical action.",
+      "premise": "Popper distinguishes between corroboration (a report on past performance) and probability (a prediction of future performance), arguing that preferring the former is a methodological choice, not an inductive inference.",
+      "counterexample": [
+        "A scientist chooses Theory A over Theory B because A has survived 100 severe tests while B has survived only 1, not because they believe A is more likely to be true tomorrow, but because A is the most critically examined option currently available."
+      ],
+      "successor_question": "If the preference for corroborated theories is purely methodological and makes no claim about future reliability, how does Popper account for the apparent irrationality of continuing to use a theory that has just failed a test, if not by assuming the failure predicts future failures?"
+    }
+  ]
+}

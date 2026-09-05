@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Kind: Contradiction. The preference for better-corroborated theories (SRC_003) contradicts the claim that such preference smuggles induction (SRC_001) if the 'critical attitude' is strictly a logical report of past error elimination with zero normative force for future action. Refuted If: Any agent acting on the preference demonstrates an expectation of future reliability, thereby converting the methodological rule into an inductive premise.",
+      "typicality": 0.95,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "This candidate explicitly names the relation kind 'Contradiction' and provides a 'Refuted If' condition, satisfying relation-form@578e42df713e."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Relation kind and refutation condition are clearly stated."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Avoids broad mechanism claims; focuses on the specific logical clash between 'report of past' and 'expectation of future'."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "rebutted", "note": "Complies with relation-form by naming kind and refutation."},
+        {"handle": "[SRC_021] against SRC_020", "kind": "rebutted", "note": "Complies with relation-form."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "The refutation condition is a single variable test: presence of 'expectation of future reliability'."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Argues that if the preference entails expectation, it is logically incompatible with the non-inductive defense, establishing genuine contradiction."},
+        {"handle": "[SRC_018] against SRC_016", "kind": "rebutted", "note": "Complies with relation-form."}
+      ],
+      "neighbours": ["SRC_001", "SRC_003"]
+    },
+    {
+      "content": "Kind: Dependence. The defense of the preference as a 'critical rationality' decision rule (SRC_003) depends on the failure of the 'smuggling induction' accusation (SRC_005) to prove that pragmatic action requires probabilistic belief. Refuted If: It is demonstrated that all pragmatic decisions inherently assign subjective probability, making the 'non-inductive' label semantically empty.",
+      "typicality": 0.88,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Names 'Dependence' and 'Refuted If'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Names 'Dependence' and 'Refuted If'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Defines dependence on a specific logical failure (proof of inherent probability assignment), not a broad mechanism."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "rebutted", "note": "Complies with relation-form."},
+        {"handle": "[SRC_021] against SRC_020", "kind": "rebutted", "note": "Complies with relation-form."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "Refutation condition is singular: demonstration of inherent probability assignment in all pragmatism."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Posits that if the accusation holds, the defense collapses, establishing a dependency relation."},
+        {"handle": "[SRC_018] against SRC_016", "kind": "rebutted", "note": "Complies with relation-form."}
+      ],
+      "neighbours": ["SRC_003", "SRC_005"]
+    },
+    {
+      "content": "Kind: Abstraction. The concept of 'verisimilitude' in SRC_004 acts as an abstraction of the 'uniformity of nature' assumption in SRC_002, attempting to retain predictive utility without the metaphysical commitment. Refuted If: Verisimilitude cannot be defined or measured without implicitly invoking the very uniformity principle it seeks to abstract away.",
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Names 'Abstraction' and 'Refuted If'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Names 'Abstraction' and 'Refuted If'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Specific abstraction target identified (uniformity principle)."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "rebutted", "note": "Complies with relation-form."},
+        {"handle": "[SRC_021] against SRC_020", "kind": "rebutted", "note": "Complies with relation-form."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "Refutation condition is a single definitional failure."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Proposes a structural relationship (abstraction) rather than a logical contradiction, avoiding the compatibility critique."},
+        {"handle": "[SRC_018] against SRC_016", "kind": "rebutted", "note": "Complies with relation-form."}
+      ],
+      "neighbours": ["SRC_002", "SRC_004"]
+    },
+    {
+      "content": "Kind: Shared Mechanism. Both SRC_001 and SRC_003 rely on the mechanism of 'demarcation': distinguishing logical validity from pragmatic rationality to resolve the induction problem. Refuted If: One side operates purely on logical grounds while the other operates purely on psychological grounds, showing no shared demarcation mechanism.",
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Names 'Shared Mechanism' and 'Refuted If'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Names 'Shared Mechanism' and 'Refuted If'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Mechanism defined specifically as 'demarcation strategy', not broad 'pragmatic decision'."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "rebutted", "note": "Complies with relation-form."},
+        {"handle": "[SRC_021] against SRC_020", "kind": "rebutted", "note": "Complies with relation-form."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "Refutation condition tests for the absence of a single shared mechanism."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Identifies a structural similarity in argumentation style."},
+        {"handle": "[SRC_018] against SRC_016", "kind": "rebutted", "note": "Complies with relation-form."}
+      ],
+      "neighbours": ["SRC_001", "SRC_003"]
+    },
+    {
+      "content": "Kind: Reduction. The dispute between SRC_002 and SRC_004 reduces to the definition of 'rational action': whether it requires predictive success (SRC_002) or merely error avoidance (SRC_004). Refuted If: The dispute involves additional independent variables such as social consensus or aesthetic preference beyond the definition of rational action.",
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Names 'Reduction' and 'Refuted If'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Names 'Reduction' and 'Refuted If'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Reduces to a single definitional variable."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "rebutted", "note": "Complies with relation-form."},
+        {"handle": "[SRC_021] against SRC_020", "kind": "rebutted", "note": "Complies with relation-form."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "revised", "note": "Explicitly frames reduction around a single variable ('definition of rational action') to address the multi-variable criticism."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Frames the conflict as a definitional reduction."},
+        {"handle": "[SRC_018] against SRC_016", "kind": "rebutted", "note": "Complies with relation-form."}
+      ],
+      "neighbours": ["SRC_002", "SRC_004"]
+    },
+    {
+      "content": "Kind: Integration. SRC_005 integrates the logical critique of SRC_001 with the pragmatic observation of bridge-building to form a unified 'pragmatic inconsistency' argument. Refuted If: The logical critique and the pragmatic observation can be shown to operate in entirely separate domains without influencing each other's validity.",
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Names 'Integration' and 'Refuted If'."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Names 'Integration' and 'Refuted If'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Describes specific integration of logic and pragmatics."},
+        {"handle": "[SRC_019] against SRC_017", "kind": "rebutted", "note": "Complies with relation-form."},
+        {"handle": "[SRC_021] against SRC_020", "kind": "rebutted", "note": "Complies with relation-form."},
+        {"handle": "[SRC_013] against SRC_006", "kind": "rebutted", "note": "Refutation condition tests for domain separation."},
+        {"handle": "[SRC_015] against SRC_010", "kind": "rebutted", "note": "Proposes integration as a synthesis of compatible but distinct points."},
+        {"handle": "[SRC_018] against SRC_016", "kind": "rebutted", "note": "Complies with relation-form."}
+      ],
+      "neighbours": ["SRC_001", "SRC_005"]
+    }
+  ]
+}

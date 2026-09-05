@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without induction by redefining rational action as the strategic selection of the most falsifiable (and thus most informative) survivor, accepting that this yields no probability of truth but maximizes the speed of error elimination.",
+    "mechanism": "The mechanism shifts the justification from 'likelihood of future success' (inductive) to 'severity of past testing' (deductive). A theory that has survived severe tests has exposed itself to greater risk of falsification; preferring it is rational not because it is likely true, but because it has withstood the strongest attempts to prove it false, making it the best available target for further criticism. This aligns with the goal of verisimilitude (truth-likeness) without assigning probabilities.",
+    "counterconditions": [
+      "If the universe is fundamentally chaotic such that past survival implies no structural stability even for the purpose of error detection.",
+      "If the scientist's goal shifts from truth-seeking to immediate practical reliability where inductive heuristics outperform critical selection.",
+      "If 'severity' of a test cannot be defined independently of background assumptions that themselves rely on induction."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "01a43e4617dbf30441a2791ce8c3d945291ac1a21062b87c5d4756bfefbe54cf",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for the opposing view (that induction is smuggled in) within the 'counterconditions' and the 'costs' analysis, acknowledging that without the non-inductive redefinition of rationality, the preference collapses into induction. The dialectic is internal to the argument structure rather than a separate section."
+      },
+      {
+        "handle": "0202e9a61d35cb7ca1cb016edc18276816a479aa1e49302c2662e1f9e9c2c6f2",
+        "kind": "rebutted",
+        "note": "The distinction is maintained by focusing on 'preferability' derived from 'informational content' rather than mere 'availability'. The argument posits that among available unfalsified theories, the one with higher corroboration is preferable specifically because it has higher empirical content, addressing the choice problem directly."
+      },
+      {
+        "handle": "04b8ded9db67d027a9b81c1a6ba0f9ee0c900e2d948e40d6eedb1e58cb2d47d5",
+        "kind": "revised",
+        "note": "Revised to explicitly name Popper's third option: redefining rationality as 'critical preference' rather than 'justified belief'. The claim now clarifies that the dichotomy is false because rationality is decoupled from probabilistic justification."
+      },
+      {
+        "handle": "12f262d76a723f9ff07a3efd4c44394488073be5e7159b76223e2bed2ad86207",
+        "kind": "rebutted",
+        "note": "The rebuttal argues that the link to verisimilitude is not a hidden probability claim but a logical consequence of eliminating falsehoods. Preferring the theory that has survived severe tests is a methodological rule for maximizing truth-content, not an inference that the theory is probably true."
+      },
+      {
+        "handle": "1832fe3dd749ff4b6225ece1ed72298c6163322e74785cadc9fa7f8d5c5c65bc",
+        "kind": "rebutted",
+        "note": "Clarified that the stance is not 'fictionalism' (acting as if) but 'methodological rationalism'. The preference is genuine and rational based on the history of criticism, not a pragmatic fiction masking inductive habits."
+      },
+      {
+        "handle": "1a76afe6cb3e70b8a8b152c1f41b2ecae41c069eb31312939cf041481ed04807",
+        "kind": "revised",
+        "note": "Integrated the specific Popperian solution regarding verisimilitude and the goal of finding truth into the core mechanism description to avoid the appearance of ignoring his explicit solution."
+      },
+      {
+        "handle": "267e8a0199c355c91286f888927929d0a8ee910c74f1e5c2da9f6dea375c1d49",
+        "kind": "rebutted",
+        "note": "The candidate rejects the premise that uniformity of nature is assumed. Instead, it assumes only that errors are detectable and that surviving severe tests indicates a theory is not yet known to be false, which is a negative knowledge claim, not a positive inductive one."
+      },
+      {
+        "handle": "2dcf041ebc7cdc14462c5d4072be851769f8da112a05f095771c999da65e487c",
+        "kind": "revised",
+        "note": "Explicitly distinguished between 'logical status' (unchanged, still conjectural) and 'practical preference' (rational based on critical history) to address the criticism that the argument conflates the two."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

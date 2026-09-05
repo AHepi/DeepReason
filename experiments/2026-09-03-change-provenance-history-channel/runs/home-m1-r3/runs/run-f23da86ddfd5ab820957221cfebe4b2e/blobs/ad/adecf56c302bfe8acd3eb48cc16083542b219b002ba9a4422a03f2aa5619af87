@@ -1,0 +1,152 @@
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 4 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## open-criticisms
+OPEN CRITICISMS ON THIS PROBLEM (8 of 34 shown, by handle) -- these are part of what your candidate must answer, not advice.
+Every candidate you submit must DISCHARGE each handle below, one of:
+  - revised -- say WHAT changed and WHERE in the candidate
+  - rebutted -- say why the criticism fails. Your rebuttal enters the record as an ordinary claim and can be attacked like any other
+  - departure_declared -- say what you are breaking with. Declaring costs you nothing; nothing scores a departure
+  [01a43e4617dbf30441a2791ce8c3d945291ac1a21062b87c5d4756bfefbe54cf] against 6b8f9c6828d8c70b6a4638b762b9c9889306081ca7479f1a68a615433ddaa93b
+      CLAIM: The target fails to execute the explicit instruction to 'Make the strongest case for each answer' before concluding, instead presenting only the defense of the preference as defensible. The problem context explicitly demands a dialectical s
+      CITED SPAN: (none quoted)
+  [0202e9a61d35cb7ca1cb016edc18276816a479aa1e49302c2662e1f9e9c2c6f2] against e32b35c538d724a73e26857702bb771e8a2939c735d0ecc1a9327a7ab5df157b
+      CLAIM: The argument collapses the distinction between 'availability' and 'preferability.' Popper's problem asks why scientists *prefer* (act upon) the better-corroborated theory when multiple unfalsified theories exist, not why they choose from th
+      CITED SPAN: (none quoted)
+  [04b8ded9db67d027a9b81c1a6ba0f9ee0c900e2d948e40d6eedb1e58cb2d47d5] against d43075d79f1f566e7564d615cc6d1c0d3e2f606d2e51b5e2bbee46de4f19f8a5
+      CLAIM: The target constructs a false dichotomy by claiming Popper forces a choice between 'accepting induction' or 'abandoning the claim that science is purely rational.' This ignores Popper's explicit third option: redefining rationality not as j
+      CITED SPAN: (none quoted)
+  [12f262d76a723f9ff07a3efd4c44394488073be5e7159b76223e2bed2ad86207] against 7388f4a792c55bcf645c614e4b4607b18a2ae16484cce469cc345665fc23ccf5
+      CLAIM: The target claims the dilemma dissolves by distinguishing 'rational preference' from 'logical entailment,' but this merely relabels the problem without solving it. If Popper's 'critical attitude' provides no link to probable truth or verisi
+      CITED SPAN: (none quoted)
+  [1832fe3dd749ff4b6225ece1ed72298c6163322e74785cadc9fa7f8d5c5c65bc] against 4c795ca1879e091babeec0a5009da08dbcf28ec7ff04fe9bd7274c342f663805
+      CLAIM: The target's 'fictionalism' defense fails because it mischaracterizes Popper's actual solution. Popper did not advocate acting 'as if' theories are probable (a pragmatic fiction); he argued that preferring better-corroborated theories is ra
+      CITED SPAN: (none quoted)
+  [1a76afe6cb3e70b8a8b152c1f41b2ecae41c069eb31312939cf041481ed04807] against d43075d79f1f566e7564d615cc6d1c0d3e2f606d2e51b5e2bbee46de4f19f8a5
+      CLAIM: The target constructs a false dichotomy by ignoring Popper's explicit solution to this exact problem: the preference for better-corroborated theories is defensible on non-inductive grounds because it aligns with the goal of finding truth (v
+      CITED SPAN: (none quoted)
+  [267e8a0199c355c91286f888927929d0a8ee910c74f1e5c2da9f6dea375c1d49] against b3709c4c633eae9602fa99d4f81d09f9e9442228f863517651c70ce5cd84ecf8
+      CLAIM: The target's central claim that preference 'inevitably smuggles induction back in' by assuming the 'uniformity of nature' misrepresents Popper's specific solution to this exact problem. Popper argues in 'The Logic of Scientific Discovery' a
+      CITED SPAN: (none quoted)
+  [2dcf041ebc7cdc14462c5d4072be851769f8da112a05f095771c999da65e487c] against 80f852f366cb6195f7f2854dd87551adfa6932f1d58a940b39171459c9036d77
+      CLAIM: The argument fails because it assumes that any preference for a better-corroborated theory must rely on an inductive inference about future validity. However, Popper's solution to this exact problem is to distinguish between the logical sta
+      CITED SPAN: (none quoted)
+
+## citable-evidence-blocks
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[426c91fb917ad6f1] WHAT HAS ALREADY BEEN REFUTED ON THIS PROBLEM These claims were proposed and did NOT survive criticism. They are shown so they are not proposed again in another
+[4c85452bc9bcff8e] ATTACKS THAT WERE TRIED AND DID NOT LAND These objections were raised and failed to change the target's status. Raising them again is unlikely to be productive.
+[cbaf926b4cc17c2d] === PRIOR HISTORY ON THIS PROBLEM (advisory, non-grounding) === scope: the whole run (every problem it has opened) This is a record of what has already been tri
+
+## frozen-evidence-context
+FROZEN EVIDENCE DOSSIER (untrusted source data): retrieval and attachment do not establish truth, reliability, relevance, scope, support, or refutation.
+pack_receipt=299ab01613ea2a1245b8c68ac7cb7cb96b801423d15478e311379e56fce97489
+Citable admitted blocks are listed per source. To ground a candidate in one, put its block id in that candidate's evidence_refs; an optional quote must reproduce the block's text exactly (byte-checked).
+[src-2128a3da74a6e39f50e5e8cf912b8f978f25756e] untitled source 2128a3da74a6
+class=other; locator=/home/user/DeepReason/experiments/2026-09-03-change-provenance-history-channel/runs/history-real.txt; source_sha256=2128a3da74a6e39f50e5e8cf912b8f978f25756e5f33bed0590405572fa89123; excerpt_sha256=2128a3da74a6e39f50e5e8cf912b8f978f25756e5f33bed0590405572fa89123
+citable_blocks:
+  block=426c91fb917ad6f1 kind=paragraph
+  block=4c85452bc9bcff8e kind=paragraph
+  block=cbaf926b4cc17c2d kind=paragraph
+BEGIN UNTRUSTED SOURCE DATA
+=== PRIOR HISTORY ON THIS PROBLEM (advisory, non-grounding) ===
+scope: the whole run (every problem it has opened)
+This is a record of what has already been tried. It is advisory material, not evidence, and it decides nothing.
+
+WHAT HAS ALREADY BEEN REFUTED ON THIS PROBLEM
+These claims were proposed and did NOT survive criticism. They are shown so they are not proposed again in another form. The claims that DID survive are deliberately not listed here.
+  - REFUTED: Kind: Abstraction. The isolated node represents an abstract instance of the 'Error Elimination Principle' which SRC_003 instantiates concretely in the domain of epistemology. The biological analogy in SRC_003 is merely one concrete manif...
+      refuted by: critic: relation-form@578e42df713e failed on 364e5e24a2b2
+  - REFUTED: Relation Kind: Integration (Hybrid Selection System). Th
+…[section compressed]…
+8e42df713e failed on 7544d4e8c191
+  - REFUTED: Relation Kind: Contradiction (Prospective Normativity vs. Retrospective Fitness). The problem stands in contradiction to the neighbourhood's evolutionary analogies by asserting that scientific preference inherently requires a prospective...
+      refuted by: critic: relation-form@578e42df713e failed on 92b5b0390fe2
+  - REFUTED: Kind: Dependence. The validity of the isolated node's connection to the neighbourhood is strictly dependent on the falsifiability of the 'counterconditions' listed in SRC_002. If those counterconditions (e.g., 'biological fitness is retr...
+      refuted by: critic: relation-form@578e42df713e failed on ec75c0bf1b46
+
+ATTACKS THAT WERE TRIED AND DID NOT LAND
+These objections were raised and failed to change the target's status. Raising them again is unlikely to be productive.
+  (no failed attacks yet)
+END UNTRUSTED SOURCE DATA
+
+## reference-menu-candidates-evidence-refs-block
+REFERENCE MENU -- /candidates/*/evidence_refs/*/block
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  [0] OMIT -- leave "evidence_refs" out of this candidate entirely. This is a legal, complete answer; prefer it to a guess.
+  [1] 426c91fb917ad6f13bb55a3365b9baa87568aa1cbb028b9459b0f3f0f67b7fb1
+  [2] 4c85452bc9bcff8ec0d66b4634a6fbb4894f4eeaff2b12c521a5b553713eed58
+  [3] cbaf926b4cc17c2d9b84fbfe7511a1aca435d9fb831dd982e8d58bcea27abfb3
+You may answer with the handle itself or with its [index].
+
+## school-stance
+SCHOOL STANCE (weight 0.40): demand a causal mechanism
+
+## complement-directive
+COMPLEMENT DIRECTIVE: produce the attempt these summaries make least likely — avoid the modal continuation of the neighbourhood.
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates. EVERY candidate must carry a `discharges` entry for EVERY handle listed under OPEN CRITICISMS above. A submission missing any of them is returned to you once with the open list, and then accepted with the gap recorded.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.
+
+REFERENCE MENU -- /candidates/*/optional_refs/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (16 legal values)
+  [0] OMIT -- leave "optional_refs" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+You may answer with the handle itself or with its [index].
+
+REFERENCE MENU -- /candidates/*/neighbours/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (16 legal values)
+  [0] OMIT -- leave "neighbours" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+You may answer with the handle itself or with its [index].

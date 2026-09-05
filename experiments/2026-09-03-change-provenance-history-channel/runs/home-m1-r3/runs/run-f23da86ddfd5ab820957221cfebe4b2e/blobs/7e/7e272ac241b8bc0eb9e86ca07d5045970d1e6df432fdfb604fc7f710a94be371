@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without induction if rationality is redefined as the strategic selection of the hypothesis with the highest empirical content (boldness) that has survived severe tests, thereby maximizing the rate of potential error elimination rather than the probability of truth; however, this defense costs the scientist any assurance that the chosen theory is likely to be true or that nature will remain uniform, reducing scientific action to a non-probabilistic wager on boldness.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'logical probability' (which decreases with content) and 'corroboration' (a report of past test performance). It posits that preferring the better-corroborated theory is not an inductive inference about the future but a methodological rule to keep the most informative survivor in play. If Theory A has higher content and survived the same tests as Theory B, A is preferred because its falsification would yield more information. The mechanism fails if one assumes that 'preference for action' logically entails 'belief in probable success,' which Popper denies.",
+    "counterconditions": [
+      "If the agent requires a probabilistic guarantee of success before acting, the Popperian preference collapses into irrationality.",
+      "If 'severity' of a test implicitly relies on the assumption that nature is uniform (that past conditions predict future ones), the non-inductive claim is void.",
+      "If the goal of science is defined as 'finding the true theory' rather than 'eliminating error,' the preference for the boldest survivor is unjustified without induction."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "01a43e4617dbf30441a2791ce8c3d945291ac1a21062b87c5d4756bfefbe54cf",
+        "kind": "revised",
+        "note": "The claim now explicitly constructs the strongest case for the critique (that preference implies induction/probability) in the counterconditions and the final cost analysis, before concluding that the non-inductive definition survives only at high cost."
+      },
+      {
+        "handle": "0202e9a61d35cb7ca1cb016edc18276816a479aa1e49302c2662e1f9e9c2c6f2",
+        "kind": "rebutted",
+        "note": "The rebuttal argues that 'preferability' in Popper's system is derived precisely from 'availability' of informational content. We prefer X not because it is available, but because its availability represents a higher degree of falsifiability survived. The distinction collapses because the criterion for preference IS the measure of available content."
+      },
+      {
+        "handle": "04b8ded9db67d027a9b81c1a6ba0f9ee0c900e2d948e40d6eedb1e58cb2d47d5",
+        "kind": "rebutted",
+        "note": "The candidate does not present a false dichotomy but adopts Popper's specific third option: redefining rationality as 'critical attitude' and 'error elimination.' The claim explicitly states this redefinition as the core mechanism."
+      },
+      {
+        "handle": "12f262d76a723f9ff07a3efd4c44394488073be5e7159b76223e2bed2ad86207",
+        "kind": "revised",
+        "note": "Clarified that the 'link' provided by the critical attitude is not to 'probable truth' (which is rejected) but to 'potential informativeness.' The revision makes explicit that the solution relabels the goal from truth-probability to error-elimination-rate."
+      },
+      {
+        "handle": "1832fe3dd749ff4b6225ece1ed72298c6163322e74785cadc9fa7f8d5c5c65bc",
+        "kind": "rebutted",
+        "note": "The defense is not 'fictionalism' (acting as if true) but 'methodological selectivism' (acting on the best tested instrument). The note distinguishes between pragmatic fiction and the logical imperative to test the hardest cases first."
+      },
+      {
+        "handle": "19ffa30ca7486869cc04740432c7514aac980a81f25b4f8c067bc85bb2d6a227",
+        "kind": "revised",
+        "note": "Structured the response to first articulate the strong inductive critique (that preference smuggles in induction via the uniformity of nature assumption) before presenting the Popperian defense and the final verdict on what survives."
+      },
+      {
+        "handle": "1a76afe6cb3e70b8a8b152c1f41b2ecae41c069eb31312939cf041481ed04807",
+        "kind": "rebutted",
+        "note": "The candidate accepts this handle's description of Popper's solution but argues that the 'cost' mentioned in the prompt is the loss of any connection to verisimilitude guarantees. The defense is valid only if one accepts the cost of agnosticism regarding truth."
+      },
+      {
+        "handle": "227f1deae23bf083d99c6563c1f5e5196631d4667ea52aa00cf995e64cee49fd",
+        "kind": "revised",
+        "note": "Added a specific countercondition addressing the 'uniformity of nature' objection: if severity assumes future tests resemble past ones, the non-inductive claim fails. This directly engages the criticism that strategic selection implicitly relies on induction."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "content": "The relation between SRC_003 (Critical Rationality Decision Rule) and SRC_005 (Smuggling Induction Charge) is one of CONTRADICTION. They are refuted if the 'pragmatic decision to act' can be formally decoupled from any expectation of future reliability, proving that a agent can prefer a theory solely based on past error elimination without implicitly assigning it a higher probability of future success. If such a decoupling is impossible, SRC_003 collapses into the inductive assumption SRC_005 claims it hides.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "This candidate explicitly includes the phrase 'refuted if' and identifies the relation kind as 'CONTRADICTION', satisfying relation-form@578e42df713e."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Relation form compliance verified: 'refuted if' present, relation kind named."},
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "Mechanism defined specifically as the 'decoupling of pragmatic decision from future expectation', avoiding broad vagueness."},
+        {"handle": "[SRC_015] against SRC_006", "kind": "rebutted", "note": "Refutation condition is a single logical test (possibility of decoupling), not a complex multi-variable game scenario."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "Contradiction established by showing SRC_003's claim of non-inductive action logically fails if the decoupling is impossible, directly challenging the methodological rule's validity."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Relation form criteria met with explicit keywords."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "SRC_001 (Uniformity Assumption) and SRC_004 (Verisimilitude Cost) share a SHARED MECHANISM of 'Regulative Idealization'. Both rely on positing a theoretical stance (uniformity or verisimilitude) that functions only if the agent accepts a specific cost (logical violation or lack of guarantee). This relation is refuted if it can be shown that one of these stances operates without any such compensatory cost or idealization, functioning instead as a descriptive fact rather than a normative postulate.",
+      "typicality": 0.72,
+      "neighbours": ["SRC_001", "SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Revised to explicitly state 'SHARED MECHANISM' and include 'refuted if' clause regarding the necessity of cost."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Updated content to ensure predicate compliance."},
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "Mechanism 'Regulative Idealization' is narrowly defined as the trade-off between function and cost, distinct from general 'decision to act'."},
+        {"handle": "[SRC_015] against SRC_006", "kind": "rebutted", "note": "Refutation condition targets the existence of 'cost-free operation', a binary logical state, not a complex equilibrium."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "Compatibility is denied; the relation posits a shared structural dependency that, if broken in one, invalidates the shared mechanism classification."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "revised", "note": "Form corrected to include required phrases."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "SRC_002 (Pragmatic Inconsistency) REDUCES TO SRC_005 (Semantic Evasion) under the condition that 'acting on corroboration' is synonymous with 'presupposing uniformity'. The reduction holds unless there exists a third category of action—'critical experimentation'—which utilizes corroboration strictly for error detection without any forward-looking commitment, thereby breaking the reduction chain. Refuted if such a third category is demonstrated to be sufficient for all scientific practice described in the texts.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_002", "SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Contains 'REDUCES TO' and 'refuted if'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Predicate requirements satisfied."},
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "Mechanism specified as the synonymy of acting and presupposing, with a precise counter-condition (third category of action)."},
+        {"handle": "[SRC_015] against SRC_006", "kind": "rebutted", "note": "Refutation relies on the existence/non-existence of a specific action type, avoiding multi-variable complexity."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "Reduction implies logical entailment; if the third category exists, the reduction fails, establishing a clear contradiction point."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Formal constraints met."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "SRC_003 and SRC_001 are in a relation of DEPENDENCE, where SRC_003's 'critical rationality' depends on SRC_001's 'uniformity assumption' being false for its own coherence. If SRC_001 is true (action requires uniformity), SRC_003's claim of non-inductive preference becomes self-contradictory. This relation is refuted if Popper's 'critical attitude' can be shown to generate normative force for action even in a universe explicitly known to be non-uniform (chaotic), proving independence from the uniformity premise.",
+      "typicality": 0.58,
+      "neighbours": ["SRC_003", "SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Explicitly names 'DEPENDENCE' and uses 'refuted if'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Ensured relation-form compliance."},
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "Dependence mechanism is the logical requirement of non-uniformity for coherence, a specific logical condition."},
+        {"handle": "[SRC_015] against SRC_006", "kind": "rebutted", "note": "Refutation condition is a single counterfactual scenario (action in a chaotic universe)."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "Dependence creates a vulnerability: if the base (SRC_001) is true, the dependent (SRC_003) fails, creating a logical tension distinct from mere compatibility."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "revised", "note": "Keywords included."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "An ATYPICAL ABSTRACTION relation exists between SRC_004 (Verisimilitude) and SRC_002 (Pragmatic Inconsistency): SRC_004 abstracts the 'goal of truth' while SRC_002 concretizes the 'act of building bridges'. The relation is refuted if the 'act of building bridges' cannot be mapped to the 'goal of truth' without remainder, implying that practical action contains elements (e.g., safety, liability) entirely orthogonal to verisimilitude, thus breaking the abstraction hierarchy.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_004", "SRC_002"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Identifies 'ABSTRACTION' and includes 'refuted if'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Meets relation-form criteria."},
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "Mechanism is the mapping fidelity between abstract goals and concrete acts, specifically testing for 'remainder' elements."},
+        {"handle": "[SRC_015] against SRC_006", "kind": "rebutted", "note": "Refutation hinges on the existence of orthogonal elements in practical action, a focused ontological claim."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "Abstraction implies a hierarchical link; failure of mapping breaks the link, validating the critical nature of the relation."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Form compliant."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "SRC_005 and SRC_003 exhibit INTEGRATION only if the 'smuggling' accused in SRC_005 is reinterpreted as an unavoidable psychological feature rather than a logical flaw, allowing SRC_003's logical framework to coexist with human cognitive limits. This integrated view is refuted if Popper's system explicitly demands that agents be free of all inductive psychological habits to qualify as 'critically rational', making the integration of human psychology impossible within his strict logical bounds.",
+      "typicality": 0.42,
+      "neighbours": ["SRC_005", "SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Uses 'INTEGRATION' and 'refuted if'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Predicate check passed."},
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "Mechanism defined as the reinterpretation of smuggling from logical to psychological, with a specific boundary condition regarding Popper's demands on agents."},
+        {"handle": "[SRC_015] against SRC_006", "kind": "rebutted", "note": "Refutation condition is a binary check on Popper's requirements for agency."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "Integration attempts to resolve the contradiction; the refutation condition tests the viability of this resolution."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "revised", "note": "Compliance achieved."}
+      ],
+      "evidence_refs": []
+    }
+  ]
+}

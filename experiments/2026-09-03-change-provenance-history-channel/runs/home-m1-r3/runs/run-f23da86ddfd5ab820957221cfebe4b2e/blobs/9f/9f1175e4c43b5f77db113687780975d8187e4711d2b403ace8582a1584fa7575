@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Contradiction. The isolated node 05e7096fadd9 (asserting that Popper's preference rule is a purely logical, non-inductive maneuver) contradicts SRC_005 (which asserts the preference inevitably smuggles induction via pragmatic action). Refuted If: One can demonstrate a scenario where an agent prefers a highly corroborated theory for action while explicitly holding zero expectation of its future reliability, thereby decoupling 'preference' from 'inductive leap' entirely.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "This candidate explicitly includes the phrase 'refuted if' and names the relation kind 'Contradiction', satisfying relation-form@578e42df713e."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "The refutation condition is specific to the decoupling of preference and expectation, not a vague summary."},
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "The mechanism here is the logical decoupling of action from expectation, which is a precise variable, not a broad 'pragmatic decision'."},
+        {"handle": "[SRC_015] against SRC_006", "kind": "rebutted", "note": "The refutation condition relies on a single psychological state (zero expectation), not a complex multi-variable game theoretic equilibrium."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "The contradiction holds because SRC_005 claims the leap is inevitable; if the leap can be avoided (as per the refutation condition), the inevitability claim is false, creating a genuine logical clash."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Compliance with relation-form@578e42df713e is verified by the presence of 'refuted if' and 'Contradiction'."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "Relation Kind: Reduction. The dispute in 05e7096fadd9 regarding the validity of Popper's critical rationality reduces to the definition of 'rational action' found in SRC_002. Refuted If: It is shown that 'rational action' can be defined without any reference to predictive reliability or subjective probability, rendering the reduction incomplete.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_002"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Revised to explicitly state 'Refuted If' and 'Reduction' in the content string to satisfy the critic."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Added specific refutation condition regarding the definition of rational action."},
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "The reduction targets a specific definitional dependency, avoiding the broad 'pragmatic decision' critique."},
+        {"handle": "[SRC_015] against SRC_006", "kind": "rebutted", "note": "The reduction is to a single definitional variable, not a complex scenario."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "If the definition of rational action requires probability, then SRC_002 and 05e7096fadd9 are incompatible, sustaining the reduction claim."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "revised", "note": "Content updated to ensure 'refuted if' and relation kind are present."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "Relation Kind: Shared Mechanism. Both 05e7096fadd9 and SRC_001 operate on the shared mechanism of 'temporal bridging'—the attempt to connect past test results to future utility. Refuted If: One party can be shown to make no claim whatsoever about future utility, restricting their scope strictly to historical reporting.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_001"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "The candidate text contains 'Shared Mechanism' and 'refuted if' as required."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "The refutation condition is binary: does the party claim future utility? Yes or No."},
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "The mechanism 'temporal bridging' is narrowly defined as the link between past tests and future use, not general pragmatism."},
+        {"handle": "[SRC_015] against SRC_006", "kind": "rebutted", "note": "The condition tests for the absence of a claim, a simple boolean check, not a complex equilibrium."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "If both rely on temporal bridging, they share a mechanism regardless of whether they view it as valid or invalid."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Format compliance confirmed."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "Relation Kind: Abstraction. The argument in 05e7096fadd9 is an abstraction of the specific charge leveled in SRC_004, generalizing the 'cost' of non-inductive preference from 'no guarantee of success' to 'no normative force'. Refuted If: The specific charge in SRC_004 regarding 'verisimilitude' cannot be mapped to the generalized 'normative force' claim without losing essential logical structure.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_004"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Explicitly added 'Abstraction' and 'refuted if' to the text."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Clarified the mapping failure condition."},
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "The mechanism is structural mapping between specific and general claims, distinct from pragmatic decisions."},
+        {"handle": "[SRC_015] against SRC_006", "kind": "rebutted", "note": "The refutation depends on logical structure preservation, not game theory."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "Abstraction relations hold even if the underlying propositions are compatible; the relation describes the structural derivation."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "revised", "note": "Ensured mandatory keywords are present."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "Relation Kind: Dependence. The coherence of the isolated node 05e7096fadd9 depends entirely on the truth of the countercondition in SRC_003: that one can justify action based solely on error elimination without predicting success. Refuted If: Error elimination is demonstrated to be logically insufficient for action justification without an auxiliary premise of nature's uniformity.",
+      "typicality": 0.90,
+      "neighbours": ["SRC_003"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Contains 'Dependence' and 'refuted if'."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Refutation condition is a direct test of the logical sufficiency of error elimination."},
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "The dependence is on a specific logical sufficiency claim, not a broad mechanism."},
+        {"handle": "[SRC_015] against SRC_006", "kind": "rebutted", "note": "Tests a single logical implication: does A imply B without C?"},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "If the dependence holds, the truth of 05e7096fadd9 is contingent on SRC_003's countercondition being met."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Schema requirements met."}
+      ],
+      "evidence_refs": []
+    },
+    {
+      "content": "Relation Kind: Integration. The isolated node 05e7096fadd9 and SRC_005 can be integrated into a unified model where 'preference' is a dual-mode operator: logical in theoretical selection (05e7096fadd9) and inductive in practical application (SRC_005). Refuted If: The context of 'preference' in Popper's work cannot be bifurcated, meaning any instance of preference must be uniformly either wholly inductive or wholly non-inductive.",
+      "typicality": 0.30,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Added 'Integration' and 'refuted if' to satisfy the critic."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Specified the bifurcation constraint as the refutation condition."},
+        {"handle": "[SRC_016] against SRC_010", "kind": "rebutted", "note": "The integration proposes a specific dual-mode mechanism, addressing the breadth critique."},
+        {"handle": "[SRC_015] against SRC_006", "kind": "rebutted", "note": "The refutation condition tests the possibility of bifurcation, a singular logical property."},
+        {"handle": "[SRC_017] against SRC_011", "kind": "rebutted", "note": "Integration suggests compatibility through contextual separation, resolving the apparent contradiction."},
+        {"handle": "[SRC_013] against SRC_008", "kind": "revised", "note": "Keywords included."}
+      ],
+      "evidence_refs": []
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because redefining rational action as 'strategic selection of the most falsifiable survivor' to maximize error elimination implicitly assumes that past severity is a reliable indicator of future testability. This assumption—that a theory which survived severe tests yesterday will continue to be the most efficient vehicle for finding errors tomorrow—is itself an inductive leap about the stability of the testing environment, which Popper explicitly rejected. Without this inductive bridge, there is no non-arbitrary reason to prefer the better-corroborated theory over a new, equally bold conjecture that has not yet been tested.",
+      "counterexample": null,
+      "premise": "Popper rejected induction, meaning he denied that past regularities (survival of tests) provide any logical basis for expecting future regularities (continued utility for error elimination).",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories relies on an inductive assumption about the stability of test conditions, can Popper's framework support any rational preference between unrefuted theories without smuggling in induction?"
+    }
+  ]
+}

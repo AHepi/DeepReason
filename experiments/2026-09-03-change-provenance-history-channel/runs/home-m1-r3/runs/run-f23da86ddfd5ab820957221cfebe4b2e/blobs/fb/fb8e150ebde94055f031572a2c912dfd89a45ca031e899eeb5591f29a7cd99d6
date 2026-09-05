@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to address the 'acting on' component of the prompt. While Popper can defensibly prefer a theory for *testing* based on empirical content (severity), the prompt explicitly notes scientists prefer it to *act on*. Acting on a theory (e.g., building a bridge or administering a drug) inherently relies on an expectation of future success/reliability. By framing the preference solely as a 'strategic heuristic for error elimination,' the target ignores that action requires a pragmatic bet on truth-like behavior. If the choice is made for action rather than further testing, refusing to acknowledge the inductive leap (that past survival indicates future reliability) renders the action irrational on Popper's own terms, thus smuggling induction back in under the guise of methodology.",
+      "counterexample": null,
+      "premise": "Acting on a theory implies a pragmatic expectation of its future reliability, which cannot be justified by past severity alone without an inductive assumption.",
+      "premise_evidence": null,
+      "successor_question": "Can a scientist rationally act on a theory (e.g., use it for engineering) while maintaining it has no higher probability of success than an untested rival?"
+    }
+  ]
+}
