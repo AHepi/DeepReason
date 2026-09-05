@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=23 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=24 blockers=none. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -750,10 +750,34 @@ tranche".
 
 ## T3 — the adapter and the three shells (S5, S6) — ~240 lines
 
-- [ ] 23. (S5) Write the red test first: `_walk_seat_layout` over a mini
+- [x] 23. (S5) Write the red test first: `_walk_seat_layout` over a mini
       session fails on `dr.neighbourhood` with the AttributeError
       `proof/m3_seat_shell_reach.txt` recorded.
       done-when: `python -m pytest mini/tests/test_mini_sources.py -q` -> fails with that exact error (paste)
+
+      ```
+      $ python -m pytest mini/tests/test_mini_sources.py -q
+      .F
+      FAILED mini/tests/test_mini_sources.py::test_the_adapter_lets_the_shipped_neighbourhood_render
+      E   ModuleNotFoundError: No module named 'minireason.sources'
+      1 failed, 1 passed in 1.45s
+
+      The exact error the step names, reproduced from the SAME request the test
+      builds (the raw dict view, `dr.problem` + `dr.neighbourhood`, 4 survivors
+      supplied), run outside pytest so its text is verbatim:
+
+        survivors: 4
+        AttributeError: 'dict' object has no attribute 'content_ref'
+
+      Two tests, deliberately. The one that PASSES is the before-state,
+      committed: it asserts that mini's dict `State`, fed unadapted to the
+      shipped walk, raises exactly that AttributeError -- proof/
+      m3_seat_shell_reach.txt ARM A as a test rather than a proof file, and the
+      statement of the whole gap the adapter answers. The one that FAILS is the
+      adapter test, and it fails on the missing module because there is no
+      adapter yet; it cannot reach the walk without one, which is why the
+      verbatim error is pasted from the before-state's own request above.
+      ```
 - [ ] 24. (S5) [COMMIT] `mini/minireason/sources.py`: the read-only
       projection from mini's dict `State` to the ontology types the plugins
       expect. It writes nothing.
