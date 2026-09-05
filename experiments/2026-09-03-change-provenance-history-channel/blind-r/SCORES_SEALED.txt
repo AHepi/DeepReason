@@ -1,0 +1,22 @@
+SCORES_SEALED_V1 -- replicate set
+=================================
+
+Sealed 2026-09-05, immediately after the 158th replicate candidate was scored
+and BEFORE blind-r/keymap.json was read by anything.
+
+File    : blind-r/scores.json
+sha256  : 3a6d4508ce73b3225c0e0d61a86521488f640e48a9838a1606cf1a36524d0cdd
+bytes   : 387536
+
+Contents at seal:
+  entries                              158
+  candidates in blind-r/candidates.jsonl 158
+  bid sets identical                   yes
+  entries recording a scoring failure  0
+  judges per candidate                 {3: 158}
+  contested (>4 of 15 judge spread)    5
+  pooled candidate totals              min 0.0, max 14.0, mean 5.114 of 15
+
+To re-check: sha256sum blind-r/scores.json
+A difference means the score file moved after the mapping was opened, and every
+per-arm number derived from it is void.
