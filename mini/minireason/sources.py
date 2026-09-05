@@ -29,6 +29,7 @@ from deepreason.llm.seat_sections import (
 )
 from deepreason.ontology import Problem
 from deepreason.programs import content_text
+from minireason.records import MiniRecordV1, mini_records
 
 
 class MiniSourceError(ValueError):
@@ -101,6 +102,7 @@ def mini_section_request(
     values: dict[str, Any] = {
         "target_id": target_id,
         "criteria": _frozen_criteria(session.root, problem_id),
+        "everything": everything_so_far(session),
     }
     if supplied:
         values.update(supplied)
@@ -112,6 +114,54 @@ def mini_section_request(
         layout=layout or resolve_layout_policy(),
         supplied=values,
     )
+
+
+# ---------------------------------------------------------------------------
+# The pool: everything a run has generated so far, in record order.
+#
+# Two things a mini seat can write, in one order. ARTIFACTS (conjectures) sit
+# in the state's artifact map; RECORDS (commitment proposals, and from T5
+# criticisms) are Measure events with a blob, deliberately outside that map so
+# no authority path can read them (`minireason.records`). Both are ordered by
+# the event that first wrote them, so "so far" means the record's own order.
+# Computed by the SOURCE and handed to the plugin as a value, on the
+# `DR-INV-seat-section-sources` pattern: the adapter reads the record, the
+# plugin formats what it was given.
+# ---------------------------------------------------------------------------
+
+#: The kind an artifact is shown as, by the role its provenance carries. A
+#: role not listed is shown as itself. A KIND label, never a status.
+ARTIFACT_KINDS_BY_ROLE = {"conjecturer": "mini.conjecture.v1"}
+
+
+def everything_so_far(session) -> tuple[MiniRecordV1, ...]:
+    """Every artifact and every record this run has generated, oldest first."""
+
+    state = session.harness.state
+    # The event that first wrote each artifact, and its position among that
+    # event's outputs: one batch registers several, in the order it was given.
+    first_write: dict[str, tuple[int, int]] = {}
+    for event in session.state.events:
+        for position, output in enumerate(event.outputs):
+            first_write.setdefault(output, (event.seq, position))
+    keyed = []
+    for artifact in state.artifacts.values():
+        role = getattr(artifact.provenance.role, "value", artifact.provenance.role)
+        seq, position = first_write.get(artifact.id, (artifact.provenance.event_seq, 0))
+        keyed.append(
+            (
+                (seq, position),
+                MiniRecordV1(
+                    seq=seq,
+                    kind=ARTIFACT_KINDS_BY_ROLE.get(role, role),
+                    ref=artifact.id,
+                    about=tuple(ref.target for ref in artifact.interface.refs),
+                    content=content_text(artifact, session.blobs),
+                ),
+            )
+        )
+    keyed.extend(((record.seq, 0), record) for record in mini_records(session))
+    return tuple(entry for _key, entry in sorted(keyed, key=lambda item: item[0]))
 
 
 # ---------------------------------------------------------------------------
@@ -253,7 +303,7 @@ class MiniProblem(_MiniPlugin):
 
 
 class EverythingParams(BaseModel):
-    """The retention rule and its FREE parameters. `exclude_roles` is a KIND
+    """The retention rule and its FREE parameters. `exclude_kinds` is a KIND
     filter, not a merit one: the reseed school-policy declarations are
     scaffolding the loop writes for itself, not content a seat generated."""
 
@@ -262,40 +312,39 @@ class EverythingParams(BaseModel):
     retention_rule: str = DEFAULT_RETENTION_RULE_ID
     budget_chars: int | None = Field(default=None, ge=1)
     keep_last: int | None = Field(default=None, ge=1)
-    exclude_roles: tuple[str, ...] = ("seed",)
+    exclude_kinds: tuple[str, ...] = ("seed",)
 
 
-def _entry_text(index: int, artifact, blobs) -> str:
-    role = getattr(artifact.provenance.role, "value", artifact.provenance.role)
-    lines = [f"[{index}] {role} {artifact.id}"]
-    for ref in artifact.interface.refs:
-        lines.append(f"    about: {ref.target}")
-    lines.append(content_text(artifact, blobs))
+def _entry_text(index: int, entry: MiniRecordV1) -> str:
+    lines = [f"[{index}] {entry.kind} {entry.ref}"]
+    for target in entry.about:
+        lines.append(f"    about: {target}")
+    lines.append(entry.content)
     return "\n".join(lines)
 
 
 class MiniEverythingSoFar(_MiniPlugin):
-    """EVERY artifact generated in this run so far, in full, oldest first,
-    with NO status of any kind (R6). Which entries survive a declared budget
-    is the registered retention rule's decision, recorded in the section."""
+    """EVERYTHING generated in this run so far -- artifacts and records, in
+    full, oldest first, with NO status of any kind (R6). Which entries survive
+    a declared budget is the registered retention rule's decision, recorded
+    in the section."""
 
     plugin_id = "mini.everything-so-far"
     section_id = "everything-so-far"
     parameters_model = EverythingParams
 
     def render(self, request: SectionRequestV1, params: EverythingParams):
-        excluded = set(params.exclude_roles)
+        excluded = set(params.exclude_kinds)
         pool = [
-            artifact
-            for artifact in request.state.artifacts.values()
-            if getattr(artifact.provenance.role, "value", artifact.provenance.role)
-            not in excluded
+            entry
+            for entry in request.supplied.get("everything") or ()
+            if entry.kind not in excluded
         ]
         if not pool:
             return None
         entries = {
-            artifact.id: _entry_text(index, artifact, request.blobs)
-            for index, artifact in enumerate(pool, start=1)
+            entry.ref: _entry_text(index, entry)
+            for index, entry in enumerate(pool, start=1)
         }
         ordered = tuple(entries)
         sizes = {aid: len(text) for aid, text in entries.items()}
@@ -372,11 +421,13 @@ for _plugin in MINI_PLUGINS:
 
 
 __all__ = [
+    "ARTIFACT_KINDS_BY_ROLE",
     "DEFAULT_RETENTION_RULE_ID",
     "EverythingParams",
     "MINI_PLUGINS",
     "MiniRetentionRuleV1",
     "MiniSourceError",
+    "everything_so_far",
     "mini_retention_rule_ids",
     "mini_section_request",
     "register_mini_retention_rule",

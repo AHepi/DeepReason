@@ -11,10 +11,10 @@ commitment artifacts".
 THE ASSERTIONS ARE ON BYTES, NOT COUNTS. A filter that stripped proposal text
 from a rendered section would pass a count of sections and fail here; a
 present-but-blank slot would pass here and fail the structural test, which is
-why both exist. The proposals are PLANTED into a live root through the
-harness's own registration road, because T4 builds the seat that writes them
-and this test must not wait for it: what the critic is shown depends on the
-layout, not on who wrote the artifact.
+why both exist. The proposals are written through the commitment seat's own
+writer (T4; at T3 they were planted as artifacts, because the seat did not
+exist yet): what the critic is shown depends on the layout, not on who wrote
+the thing.
 
 The status-label test plants a REFUTED artifact deliberately: the point is
 that a refuted conjecture is still shown to the seats that see everything --
@@ -26,7 +26,6 @@ import json
 import pytest
 
 from deepreason.invariants import verify_root
-from deepreason.ontology import Interface, Provenance, Ref, Rule
 from minireason.call import MockEndpoint
 from minireason.loop import Session, run
 
@@ -66,18 +65,16 @@ def _mixed_endpoint():
 
 
 def _plant(session, *, about, body):
-    """A commitment proposal written to the record the way any artifact is:
-    the harness's own road, a MENTION ref to the conjecture it is about, and
-    free prose. Returns its id."""
-    artifact = session.harness.create_artifact(
-        json.dumps({"about": about, "body": body}),
-        codec="json",
-        interface=Interface(refs=[Ref(target=about, role="mention")]),
-        provenance=Provenance(role="user", event_seq=session.harness._next_seq),
-        problem_id="pi-0",
-        rule=Rule.REGISTER,
-    )
-    return artifact.id
+    """A commitment proposal written through the commitment seat's own
+    writer (T4): a record naming the conjecture it is about, with its body in
+    a blob. Returns the blob's ref, which is what the brief shows as its id."""
+    from minireason.forms import resolve_mini_form
+    from minireason.seats import record_commitment_proposals
+
+    model = resolve_mini_form("mini.commitment.relaxed.v1").wire_model
+    proposals = model.model_validate({"proposals": [{"about": about, "body": body}]})
+    (event,) = record_commitment_proposals(session, proposals)
+    return next(item for item in event.inputs if item.startswith("blob:"))[len("blob:"):]
 
 
 @pytest.fixture

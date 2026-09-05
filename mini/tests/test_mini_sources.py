@@ -338,7 +338,7 @@ def test_the_retention_rule_withholds_oldest_first_and_says_so(prose_session):
     ordered = [a.id for a in state.artifacts.values() if a.provenance.role.value == "conjecturer"]
 
     text = _everything(prose_session, budget_chars=2500)
-    shown = [aid for aid in ordered if f"] conjecturer {aid}" in text]
+    shown = [aid for aid in ordered if f"] mini.conjecture.v1 {aid}" in text]
     withheld = [aid for aid in ordered if aid not in shown]
     assert shown and withheld, (len(shown), len(withheld))
     # oldest first: everything withheld precedes everything shown
@@ -350,7 +350,7 @@ def test_the_retention_rule_withholds_oldest_first_and_says_so(prose_session):
 
     # a budget smaller than any single entry still shows the newest one
     tiny = _everything(prose_session, budget_chars=1)
-    assert f"] conjecturer {ordered[-1]}" in tiny
+    assert f"] mini.conjecture.v1 {ordered[-1]}" in tiny
     assert f"{len(ordered) - 1} earlier entries" in tiny
 
 
@@ -365,8 +365,8 @@ def test_the_recency_rule_keeps_the_last_n_and_needs_its_window(prose_session):
     state = prose_session.harness.state
     ordered = [a.id for a in state.artifacts.values() if a.provenance.role.value == "conjecturer"]
     text = _everything(prose_session, retention_rule="mini.retention.recency.v1", keep_last=4)
-    assert all(f"] conjecturer {aid}" in text for aid in ordered[-4:])
-    assert not any(f"] conjecturer {aid}" in text for aid in ordered[:-4])
+    assert all(f"] mini.conjecture.v1 {aid}" in text for aid in ordered[-4:])
+    assert not any(f"] mini.conjecture.v1 {aid}" in text for aid in ordered[:-4])
     assert "WITHHELD UNDER RULE mini.retention.recency.v1: 8 earlier entries" in text
 
     with pytest.raises(MiniSourceError) as refused:

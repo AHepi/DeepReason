@@ -46,6 +46,7 @@ assert total * 20 < parent, (total, parent)
 | a reader | `log.replay(root)` → `log.State` | the dict-shaped read view, projected from one canonical `Harness` |
 | a seat brief, before its walk | `sources.mini_section_request(session, problem_id, target_id=…, supplied=…)` | the ONE read-only projection from a mini session to the `SectionRequestV1` the shipped section plugins read; it appends nothing and moves no digest |
 | a mini seat's brief | `seats.render_mini_brief(session, seat_id, problem_id, target_id=…, receipts=…)` | shell → layout → request → the PUBLIC walk and allocation in `deepreason.llm.packs`; builds no section, names no private symbol |
+| the commitment seat, after its call | `seats.record_commitment_proposals(session, proposals, spend=…)` | one record per proposal; drops one that names nothing in the run, typed |
 | a mini seat's form | `seats.form_for_seat(seat_id, form_id=None, shell_id=None)` | the form resolved THROUGH the shell's `form_id` — that field's first consumer anywhere; argument and `DEEPREASON_MINI_FORM` still win |
 
 `check: python -c "
@@ -244,6 +245,40 @@ under the rule's id. Two rules ship, `mini.retention.everything.v1` (the
 default) and `mini.retention.recency.v1`; a third is a registration.
 `check: python -m pytest mini/tests/test_mini_sources.py -q`
 
+## The commitment seat writes a RECORD, never an artifact
+
+**A commitment proposal is recorded, not registered** (R4; the ruling of
+2026-09-05 that within mini criticism overturns nothing; Q-A's E3 not built).
+`seats.record_commitment_proposals` writes each proposal through
+`records.record_mini_output`: a Measure event whose inputs name the marker
+`mini:record`, the kind `mini.commitment-proposal.v1`, the conjecture it is
+about, and a content-addressed blob holding the free-prose body. The
+proposal's ONLY requirement is that it names a conjecture present in the run;
+one that does not is DROPPED with a typed `mini:record-dropped` event, never
+written dangling. The spend lands exactly once.
+
+Why a record and not an artifact: every authority path — rank, admission,
+immunity, attack edges, refutation, status — reads `state.artifacts`, and a
+record is nowhere in that map, so "shape buys nothing" is a property of the
+record's shape rather than of anyone's restraint. The other road, an artifact
+under a new provenance role, was measured and closed: `tools/blast_radius.py`
+reads widening `Provenance` as CONTACT on the harness surface, and no grant
+exists. `records.mini_records` reads them back; `sources.everything_so_far`
+merges artifacts and records into one pool in record order, and that pool is
+what "everything generated so far" shows.
+`check: python -m pytest mini/tests/test_mini_commitment_seat.py -q`
+
+`check: python -c "
+import ast, pathlib
+src = pathlib.Path('mini/minireason/records.py').read_text()
+tree = ast.parse(src)
+names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)} | {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
+for forbidden in ('create_artifact', 'register_artifact', 'register_batch', 'register_commitment', 'register_fail_warrant', 'Artifact', 'Commitment', 'status'):
+    assert forbidden not in names, forbidden
+assert 'measure' in names and 'put' in names
+"`
+
+## The isolation fence
 ## The isolation fence
 
 R1 and R11 — "mini needs to be tested in isolation", "without the larger
@@ -298,6 +333,7 @@ assert 'REFUTED' not in body, 'mini must not label a status itself'
 | what a mini seat's request CARRIES (a target, the frozen criteria, a caller's own keys) | `sources.mini_section_request`'s `supplied` mapping; the caller's keys win. It may READ the state and the record and may never append, and it never reads an artifact's status | `mini/tests/test_mini_sources.py` |
 | what a mini seat is SHOWN, or add a section to a mini brief | a layout in `minireason/seats.py`, or a `.layout.json` under `<DEEPREASON_HOME>/seat_plugins/` naming a registered plugin (`DR-REC-add-a-section-plugin`) — no source edit; the directive wording is a layout entry's `text` param | `mini/tests/test_mini_sources.py`, `mini/tests/test_mini_exposure.py` |
 | how much of the pool a seat sees as it grows | the `mini.everything-so-far` entry's `retention_rule`, `budget_chars`, `keep_last` params; a new rule is `sources.register_mini_retention_rule` | `mini/tests/test_mini_sources.py` |
+| what a mini seat writes when it is not a conjecture, or add a record KIND | `records.record_mini_output(session, kind, body=…, about=…)` — a typed event and a blob, never an artifact; a kind is a string a flow names as data | `mini/tests/test_mini_commitment_seat.py` |
 | which packages a mini run may reach | `mini/tests/test_isolation_fence.py`'s `FENCED` and `ALLOWED` tuples, which quote SPEC S1 verbatim | `mini/tests/test_isolation_fence.py` |
 
 `check: python -m pytest mini/tests/test_loop.py mini/tests/test_gate.py mini/tests/test_checks.py mini/tests/test_compat.py mini/tests/test_mini_forms.py mini/tests/test_mini_commitment_policy.py -q`

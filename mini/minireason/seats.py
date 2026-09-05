@@ -38,7 +38,8 @@ from deepreason.llm.seat_sections import (
     register_seat_shell,
     resolve_seat_shell,
 )
-from minireason.forms import MiniFormV1, select_mini_form
+from minireason.forms import MiniCommitmentProposals, MiniFormV1, select_mini_form
+from minireason.records import record_mini_output
 # Importing the sources module registers the mini section plugins the
 # layouts below name; a layout is refused at registration if its plugins do
 # not resolve, so the order of these two imports is load-bearing.
@@ -48,6 +49,10 @@ CONJECTURER_SEAT = "mini.conjecturer"
 CRITIC_SEAT = "mini.critic"
 COMMITMENT_SEAT = "mini.commitment"
 MINI_SEATS = (CONJECTURER_SEAT, CRITIC_SEAT, COMMITMENT_SEAT)
+
+#: The kind the commitment seat writes. A registered id, so a flow can name
+#: it as data (T5) and a reader can find it in any root.
+COMMITMENT_PROPOSAL_KIND = "mini.commitment-proposal.v1"
 
 CONJECTURER_LAYOUT_ID = "seat-pack.mini.conjecturer.v0"
 CRITIC_LAYOUT_ID = "seat-pack.mini.critic.v0"
@@ -202,12 +207,41 @@ def render_mini_brief(
     return allocate_seat_brief(seat_id, token_budget, sections, receipts)
 
 
+def record_commitment_proposals(session, proposals: MiniCommitmentProposals, *,
+                                spend=None) -> list:
+    """The commitment seat's ONE act: write what it proposed into the record.
+
+    Each proposal's only requirement is that it names the conjecture it is
+    about (S4, in the operator's words: "does not force a strict format").
+    The body is free prose, unbounded, unranked. A proposal naming nothing in
+    this run is dropped with a typed event, never written dangling. Nothing
+    here registers a Commitment, touches a status, or admits, ranks, immunises
+    or refutes anything: the proposal is RECORDED, and the road from a
+    free-prose proposal to an evaluable commitment is not built (Q-A, E3 not
+    built). `spend` lands exactly once, on the first event written.
+    """
+
+    events = []
+    for proposal in proposals.proposals:
+        event = record_mini_output(
+            session,
+            COMMITMENT_PROPOSAL_KIND,
+            about=proposal.about,
+            body=proposal.body,
+            spend=spend if not events else None,
+        )
+        events.append(event)
+    return events
+
+
 __all__ = [
+    "COMMITMENT_PROPOSAL_KIND",
     "COMMITMENT_SHELL",
     "CONJECTURER_SHELL",
     "CRITIC_SHELL",
     "MINI_SHELLS",
     "form_for_seat",
+    "record_commitment_proposals",
     "render_mini_brief",
     "COMMITMENT_LAYOUT",
     "COMMITMENT_LAYOUT_ID",

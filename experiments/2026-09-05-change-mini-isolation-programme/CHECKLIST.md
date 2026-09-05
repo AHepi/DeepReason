@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=32 blockers=none. T3 DELIVERED (T3/DELIVERY.md). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=33 blockers=none (T4 diff budget EXCEEDED at step 32, disclosed; re-baseline at step 34). T3 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1179,10 +1179,67 @@ tranche".
 
 ## T4 — the commitment seat and the controller hook (S4, S7, S11b) — ~180 lines
 
-- [ ] 32. (S4) [COMMIT] The `mini.commitment-proposal.v1` artifact kind and
+- [x] 32. (S4) [COMMIT] The `mini.commitment-proposal.v1` artifact kind and
       its seat. The ONLY requirement is `about`; the body is free prose,
       unbounded, unranked.
       done-when: SPEC.md §S4's minimum/rejection pair passes (paste)
+
+      ```
+      $ python -c "...SPEC S4's minimum/rejection pair, verbatim..."
+      OK: the minimum is accepted; a proposal naming nothing is refused by the form
+
+      $ python -m pytest mini/tests/test_mini_commitment_seat.py -q -> 5 passed
+      $ python -m pytest mini/tests/ -q                             -> 141 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q      -> 3 passed
+      $ git diff --stat e83df7dfd -- src/                           -> (no output)
+
+      THE RECORD SHAPE, and the road not taken. A proposal is a RECORD: a Measure
+      event whose inputs name `mini:record`, the kind, `about:<conjecture id>`
+      and `blob:<content address>` of its free-prose body (minireason/records.py,
+      new). It is in the record -- typed, append-only, replayable, spend attached
+      exactly once -- and OUTSIDE state.artifacts, the one map every authority
+      path reads. So nothing it writes can change a status by construction, not
+      by restraint: the test asserts artifacts, commitments and statuses are
+      identical before and after, the replay digest matches, verify_root is 0.
+      The other road -- an artifact under a new provenance role -- was measured
+      first and CLOSED:
+        $ python tools/blast_radius.py --files src/deepreason/ontology/artifact.py \
+              --symbols ProvenanceRole Provenance --against 14cc5da495
+        frozen_surface_verdict: CONTACT
+          surface: harness.py event application and well-formedness
+          tier: SYMBOL_INDIRECT  target: Provenance  (grep-based)
+      A CONTACT with no grant is a STOP, and a no-contact road existed, so the
+      stop was never needed: nothing under src/ changed.
+
+      The one requirement, enforced at BOTH ends: the FORM refuses a proposal
+      with no `about` (S4's pair); the WRITER drops one whose `about` names
+      nothing in this run, with a typed `mini:record-dropped` event naming the
+      code and the id -- disclose, never die -- and writes the rest.
+
+      "Everything so far" now merges artifacts and records into ONE pool in
+      record order (sources.everything_so_far, a source value the plugin
+      formats), each labelled by KIND (`mini.conjecture.v1`,
+      `mini.commitment-proposal.v1`) and never by status. The T3 exposure test
+      is re-planted through the REAL writer and still passes byte for byte; the
+      seat test proves it again from the seat's side.
+
+      $ python tools/blast_radius.py --files records.py seats.py sources.py --symbols <6> --against e83df7dfd
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+
+      Map, same commit: SUB-minireason.md gains the record-shape section with
+      two checks (the seat suite; an AST check that records.py names no
+      artifact, commitment, warrant or status road) and two rows.
+      docs_verify --fast: 6 failed, the same six known rows.
+
+      STOP CONDITION HIT: diff budget EXCEEDED, disclosed, not absorbed.
+      $ python tools/diff_budget.py e83df7dfd --ceiling 180 --paths mini/minireason
+      {"total_insertions": 238, "ceiling": 180, "verdict": "EXCEEDED"}
+      records.py (~150) is the whole of it beyond the seat's writer: the typed
+      record shape, its reader, the dropped-typed road and the spend rule --
+      the obligations the standing laws attach to "a proposal is RECORDED",
+      which S4's 85 priced as a form and a seat. Re-baselined ONCE at step 34,
+      when the hook is measured too (T2/T3's shape).
+      ```
 - [ ] 33. (S4) The shape-buys-nothing test: no rank, admission, immunity or
       refutation path reads the kind's name.
       done-when: `python -m pytest mini/tests/test_mini_shape_buys_nothing.py -q` -> 0 failed
