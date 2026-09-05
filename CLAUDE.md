@@ -758,3 +758,22 @@ so you do not re-trust them.
   criticism-source socket that refuses to carry score or rank are the
   two ends of that seam as it stands today; each later step moves one
   more thing across it, never by editing a consumer.
+
+- **History is an inactive plug: built, switched OFF by default, never
+  removed** (2026-09-05, operator's words verbatim, ruling on the
+  history-channel replication — three paired runs, RESULTS_M1_REPLICATION.md:
+  quality indistinguishable once length is held constant, cost unresolved,
+  history-on conjectures shorter in every pair: "History doesn't improve
+  token efficiency or improve answers apparently. So if it's built, it
+  just needs to be turned off, not removed. And remain an inactive
+  plug."): the conjecturer's history exposure (the `dr.history.v1` section
+  plugin and the history half of the provenance/history channel) ships
+  OFF by default; the plugin, its parameters, its layouts and its record
+  channel stay registered and selectable per run, so a later experiment
+  turns it on by configuration, never by re-building it. Supersedes the
+  history tranche's SPEC.md S10 "conjecturer: history ON by default".
+  The same day the operator also ruled: the current default conjecture
+  form is STORED, not deleted, while relaxed forms are tried ("the
+  current default conjecture form needs stored but not deleted"); and one
+  more history conjecture experiment follows the mini isolation programme
+  below, not before it.
