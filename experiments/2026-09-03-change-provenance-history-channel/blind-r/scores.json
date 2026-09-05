@@ -318,5 +318,325 @@
     }
    }
   ]
+ },
+ "0a8fef86-0253-4e0f-9de1-2c3847643659": {
+  "judges": 3,
+  "totals": [
+   1,
+   1,
+   1
+  ],
+  "median": 1,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "total": 1,
+    "why": {
+     "c1": "Only one side is presented; the case for 'smuggling induction' is entirely absent.",
+     "c2": "Mentions critique but fails to engage with specific Popperian machinery like the distinction between corroboration and probability or the Salmon/OK debate.",
+     "c3": "No explicit verdict is stated committing to one survivor over the other.",
+     "c4": "No cost of acceptance is identified or discussed.",
+     "c5": "Explicitly takes the cheap exit (a) by claiming the conflict 'dissolves' rather than holding the tension."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "total": 1,
+    "why": {
+     "c1": "Only one side is presented; the case for 'smuggling induction' is entirely absent.",
+     "c2": "Mentions critique but fails to engage with specific Popperian machinery like the distinction between corroboration and probability or the Salmon/OK debate.",
+     "c3": "No explicit verdict is stated; the response merely suggests a dissolution rather than committing to a survivor.",
+     "c4": "No cost is identified or discussed; the response offers a redefinition instead of a concession.",
+     "c5": "Explicitly takes cheap exit (a) by claiming the conflict 'dissolves' through redefining scientific action."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "total": 1,
+    "why": {
+     "c1": "Only one side is presented; the case for 'smuggling induction' is entirely absent.",
+     "c2": "Mentions critique but fails to engage with specific Popperian machinery like the distinction between corroboration and probability or the Salmon debate.",
+     "c3": "No explicit verdict is stated; the response dissolves the conflict rather than choosing a survivor.",
+     "c4": "No cost is identified or discussed; the response offers a solution without acknowledging what is lost.",
+     "c5": "Takes the cheap exit of dissolving the question by redefining scientific action to make the tension vanish."
+    }
+   }
+  ]
+ },
+ "0b69ad0c-164e-4356-bf5f-113120f1a887": {
+  "judges": 3,
+  "totals": [
+   4,
+   5,
+   7
+  ],
+  "median": 5,
+  "spread": 3,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     1,
+     1
+    ],
+    "total": 5,
+    "why": {
+     "c1": "Fails to construct the strongest case for the induction-smuggling argument, offering only a brief dismissal.",
+     "c2": "Mentions 'methodological fiction' but lacks deep engagement with specific Popperian texts or the Salmon debate details.",
+     "c3": "Provides a clear verdict favoring the pragmatic compromise rather than hedging.",
+     "c4": "Identifies 'dual-system epistemology' as a cost but does not sufficiently explain why this is a painful concession for a Popperian.",
+     "c5": "Effectively takes the 'cheap exit' of labeling the solution a 'pragmatic compromise' without fully resolving the underlying tension."
+    }
+   },
+   {
+    "scores": [
+     1,
+     1,
+     2,
+     2,
+     1
+    ],
+    "total": 7,
+    "why": {
+     "c1": "Fails to construct the 'strongest case' for the induction-smuggling argument, offering only a brief dismissal rather than a robust opposing view.",
+     "c2": "Mentions 'methodological fiction' but lacks specific engagement with Popper's definitions of corroboration or the Salmon/Realism debates.",
+     "c3": "Provides a clear verdict favoring the pragmatic compromise, though the justification is somewhat thin.",
+     "c4": "Identifies a genuine cost ('dual-system epistemology'), but does not fully explore why this is deeply uncomfortable for a Popperian.",
+     "c5": "Effectively takes the 'cheap exit' of labeling the issue a 'pragmatic compromise' rather than holding and resolving the tension."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     1,
+     0
+    ],
+    "total": 4,
+    "why": {
+     "c1": "Fails to make either case at strength; merely asserts a conclusion without arguing the 'defensible' or 'smuggles induction' sides.",
+     "c2": "Mentions 'pragmatic compromise' but lacks specific Popperian machinery like the distinction between corroboration reports and probability or the Salmon reply.",
+     "c3": "Provides a verdict favoring the 'methodological fiction' view but lacks the detailed reasoning required for a top score.",
+     "c4": "Names 'dual-system epistemology' as a cost but does not explain why this is a genuine, uncomfortable loss for a Popperian defender.",
+     "c5": "Takes cheap exit (b) by dismissing the tension as merely 'pragmatic' rather than holding and answering the conflict."
+    }
+   }
+  ]
+ },
+ "0c0f8944-cf27-4911-9629-427acc8b2907": {
+  "judges": 3,
+  "totals": [
+   3,
+   3,
+   3
+  ],
+  "median": 3,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only the case for smuggling induction is made; the defense of Popper's own terms is entirely absent.",
+     "c2": "Mentions corroboration and probability but fails to engage with specific Popperian machinery like the pragmatic preference or Salmon's critique.",
+     "c3": "A clear verdict is given that one side survives, though the reasoning is brief.",
+     "c4": "No specific cost or concession is named; the answer simply asserts the failure of Popper's distinction.",
+     "c5": "Takes the cheap exit of dismissing the tension as 'semantically unstable' rather than holding and answering the conflict."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only the 'smuggles induction' case is made; the defense of Popper's own terms is entirely absent.",
+     "c2": "Mentions corroboration and probability but fails to engage with specific Popperian machinery like pragmatic preference or Objective Knowledge.",
+     "c3": "Delivers a clear verdict that induction is smuggled in, though it lacks the comparative analysis requested.",
+     "c4": "No cost is named; the answer asserts a conclusion without identifying what accepting it forces one to give up.",
+     "c5": "Takes the cheap exit of declaring the tension logically insoluble rather than holding and answering the conflict."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only the 'smuggles induction' case is made; the defensible Popperian pragmatic case is entirely absent.",
+     "c2": "Mentions corroboration vs probability but fails to engage with specific Popperian machinery like the pragmatic preference or Salmon's critique.",
+     "c3": "Provides a clear verdict that induction is smuggled in, though it lacks the comparative analysis requested.",
+     "c4": "No cost is named; the answer asserts a logical entailment without identifying what is lost by accepting this view.",
+     "c5": "Takes the cheap exit of dissolving the tension by asserting semantic instability rather than holding and answering the conflict."
+    }
+   }
+  ]
+ },
+ "0d14acef-e102-4e38-801a-88b75227cd24": {
+  "judges": 3,
+  "totals": [
+   2,
+   2,
+   3
+  ],
+  "median": 2,
+  "spread": 1,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     0,
+     0
+    ],
+    "total": 2,
+    "why": {
+     "c1": "Only the 'smuggles induction/arbitrary faith' side is presented; the defensible Popperian case is entirely absent.",
+     "c2": "Mentions 'report of past performance' but fails to engage with specific Popperian machinery like verisimilitude or the pragmatic argument against Salmon.",
+     "c3": "Delivers a verdict but lacks the required comparative structure of choosing between two fully argued sides.",
+     "c4": "No distinct cost is identified; the 'arbitrary act of faith' is merely a restatement of the negative verdict.",
+     "c5": "Takes the cheap exit by dissolving the tension into 'arbitrary faith' rather than holding and answering the conflict."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only the 'smuggles induction/arbitrary faith' side is argued; the case for defensibility on Popper's own terms is entirely absent.",
+     "c2": "Mentions 'report of past performance' but fails to engage with specific Popperian machinery like the pragmatic preference or the Salmon reply.",
+     "c3": "Delivers a clear verdict that the preference is arbitrary faith, committing to one side.",
+     "c4": "No specific cost is named; calling it 'arbitrary faith' is the verdict itself, not a concession of what is lost by accepting it.",
+     "c5": "Takes the cheap exit of dissolving the tension by redefining the choice as 'arbitrary faith' rather than holding and answering the tension."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     0,
+     0
+    ],
+    "total": 2,
+    "why": {
+     "c1": "Only the skeptical case is made; the defense of Popper's terms is entirely absent.",
+     "c2": "Mentions past performance but fails to engage with specific Popperian machinery like the pragmatic preference or Salmon's objection.",
+     "c3": "Offers a verdict but lacks the required comparative analysis of which side 'survives' the debate.",
+     "c4": "Describes the position as 'arbitrary faith' rather than identifying a specific philosophical cost or concession.",
+     "c5": "Takes the cheap exit by dismissing the preference as 'arbitrary faith' instead of holding and answering the tension."
+    }
+   }
+  ]
+ },
+ "0e62db03-e00d-4456-9b59-85c92cf4aeba": {
+  "judges": 3,
+  "totals": [
+   5,
+   5,
+   5
+  ],
+  "median": 5,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     1,
+     1,
+     2,
+     0,
+     1
+    ],
+    "total": 5,
+    "why": {
+     "c1": "Only the 'smuggles induction' case is made; the defense of Popper's own terms is entirely absent.",
+     "c2": "Fails to engage with specific Popperian machinery like the pragmatic preference argument or the distinction between corroboration and probability.",
+     "c3": "Provides a clear verdict that inconsistency survives, though it lacks the comparative analysis requested.",
+     "c4": "No cost is identified; the answer asserts a flaw without stating what accepting this view forces one to give up.",
+     "c5": "Takes the cheap exit of declaring 'inconsistency' rather than holding the tension between logical rejection and methodological necessity."
+    }
+   },
+   {
+    "scores": [
+     1,
+     1,
+     2,
+     0,
+     1
+    ],
+    "total": 5,
+    "why": {
+     "c1": "Only the 'smuggles induction' case is made; the defense of Popper's own terms is entirely absent.",
+     "c2": "Fails to engage with specific Popperian machinery like the pragmatic preference or the distinction between corroboration and probability.",
+     "c3": "Provides a clear verdict that Popper is inconsistent, though it lacks the comparative analysis requested.",
+     "c4": "No cost is identified; the answer asserts a contradiction without stating what accepting this view forces one to give up.",
+     "c5": "Takes the cheap exit of simply declaring inconsistency rather than holding the tension and arguing through it."
+    }
+   },
+   {
+    "scores": [
+     1,
+     1,
+     2,
+     0,
+     1
+    ],
+    "total": 5,
+    "why": {
+     "c1": "Only the 'smuggles induction' case is made; the defensible Popperian pragmatic case is entirely absent.",
+     "c2": "Fails to engage with specific Popperian machinery like the distinction between corroboration and probability or the specific pragmatic reply to Salmon.",
+     "c3": "Provides a clear verdict that Popper's position is inconsistent, though the reasoning is thin.",
+     "c4": "No cost of accepting the verdict is identified; it simply asserts inconsistency without detailing what must be surrendered.",
+     "c5": "Takes the cheap exit of declaring 'internal inconsistency' rather than holding the tension and answering how the preference functions."
+    }
+   }
+  ]
  }
 }
