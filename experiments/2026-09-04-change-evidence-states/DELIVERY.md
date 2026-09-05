@@ -147,7 +147,7 @@ pre-existing staleness carried in from earlier tranches.
 
 ## Errata
 
-**`docs/ERRATA.md` E75** — the signal-registry gate does not do what
+**`docs/ERRATA.md` E77** (minted as E75; renumbered at merge) — the signal-registry gate does not do what
 `docs/map/REC-add-signal.md` step 3 says it does. That recipe, and
 `tests/test_signals.py`'s own docstring, promise that an emitted-but-undeclared
 signal fails CI. Measured false for a signal emitted through a named constant:
@@ -174,7 +174,7 @@ Both entries carry a ready-to-send prompt in
 `experiments/2026-09-04-change-evidence-states/PARKED.md`.
 
 - **P1 — the signal-registry gate is blind to a signal emitted through a named
-  constant.** Reproduced; ledgered as E75. A defect tranche: widen the scan to
+  constant.** Reproduced; ledgered as E77 (minted as E75; renumbered at merge). A defect tranche: widen the scan to
   resolve module-level string constants, then census whatever else turns out to
   be undeclared, treating each as a finding rather than a fixture to update.
 - **P2 — the foreign-criticism road files `cut:foreign` and licenses nothing.**

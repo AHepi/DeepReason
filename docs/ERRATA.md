@@ -2542,7 +2542,7 @@ them. Evidence:
 `experiments/2026-09-04-fix-provider-reasoning-contract/` (GOAL, DIAGNOSIS,
 REPRO, FIX, PROBE.json).
 
-**E75 — the signal-registry gate does not do what the recipe says it does.**
+**E77 (renumbered at merge from E75; that number was taken) — the signal-registry gate does not do what the recipe says it does.**
 `docs/map/REC-add-signal.md` step 3 states: "The AST scan in
 `tests/test_signals.py` fails on an emitted tag that is not declared — that
 check predates the contract and still does its job."
