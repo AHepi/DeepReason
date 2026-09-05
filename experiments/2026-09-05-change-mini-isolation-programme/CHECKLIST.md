@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=4 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=5 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -105,11 +105,25 @@ tranche".
       reaches the interpreter before failing, so only a run can show the failure is
       disclosed rather than fatal.
       ```
-- [ ] 4. (S0b) Write the red tests first: a `.layout.json` under
+- [x] 4. (S0b) Write the red tests first: a `.layout.json` under
       `seat_plugins/` is not registered, and an unparseable one is not
       refused typed.
       done-when: `python -m pytest tests/test_seat_section_home.py::test_a_file_declared_layout_is_registered tests/test_seat_section_home.py::test_an_unparseable_layout_file_is_refused_typed -q`
       -> 2 failed (paste)
+
+      ```
+      $ python -m pytest tests/test_seat_section_home.py::test_a_file_declared_layout_is_registered \
+            tests/test_seat_section_home.py::test_an_unparseable_layout_file_is_refused_typed -q
+      E   AssertionError: assert 'seat-pack.operator.probe.v0' in []
+      E   ImportError: cannot import name 'seat_pack_layout_from_file' from
+                       'deepreason.llm.seat_sections'
+      2 failed in 0.10s
+      
+      RED as predicted, and for the two different reasons S0b names: a .layout.json
+      the operator declared is not registered by any run (the loader returns an
+      empty list), and there is no reader at all to refuse a file that does not
+      parse -- so today the file is neither read nor refused, it is ignored.
+      ```
 - [ ] 5. (S0b) [COMMIT] Add the file-declared layout road with a typed
       refusal on a parse failure.
       done-when: the two step-4 tests pass (paste)

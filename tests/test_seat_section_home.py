@@ -308,3 +308,97 @@ def test_a_plugin_that_raises_on_import_is_a_notice_in_the_record(
     assert notice["code"] == "SEAT_PLUGIN_UNLOADABLE"
     assert "raises.py" in notice["path"]
     assert "RuntimeError" in notice["detail"], "a notice with no reason is a silent skip"
+
+
+# ------------------------------------------ layouts declared in a file (S0b)
+
+
+@pytest.fixture
+def clean_layouts():
+    from deepreason.llm.seat_sections import _LAYOUT_REGISTRY
+
+    before = dict(_LAYOUT_REGISTRY)
+    yield
+    _LAYOUT_REGISTRY.clear()
+    _LAYOUT_REGISTRY.update(before)
+
+
+def test_a_file_declared_layout_is_registered(tmp_path, clean_layouts):
+    """A composition is reachable WITHOUT writing Python.
+
+    Implements S0b (R7, R9, R10, C8). `register_seat_pack_layout` was
+    reachable only from Python, so `DR-REC-add-a-section-plugin` step 3 --
+    "declare the layout that carries it" -- had no road an operator could
+    take without editing the tree. That is the customization point the
+    modularity law says must not require a code edit.
+    """
+    import json
+
+    from deepreason.llm.seat_plugins import ensure_seeded
+    from deepreason.llm.seat_sections import (
+        resolve_seat_pack_layout,
+        seat_pack_layout_ids,
+    )
+
+    ensure_seeded()
+    (_root(tmp_path) / "probe.layout.json").write_text(
+        json.dumps(
+            {
+                "layout_id": "seat-pack.operator.probe.v0",
+                "entries": [
+                    {"plugin_id": "dr.problem", "priority": 1},
+                    {"plugin_id": "dr.criteria", "priority": 2, "droppable": True},
+                ],
+                "default_for_seat": "operator.probe",
+            }
+        )
+    )
+
+    loaded, notices = load_operator_plugins(home=tmp_path, environ={})
+    assert notices == [], notices
+    assert "seat-pack.operator.probe.v0" in loaded
+    assert "seat-pack.operator.probe.v0" in seat_pack_layout_ids()
+
+    layout = resolve_seat_pack_layout("operator.probe")
+    assert layout.plugin_ids == ("dr.problem", "dr.criteria")
+    assert layout.entry_for("dr.criteria").droppable is True
+
+
+def test_an_unparseable_layout_file_is_refused_typed(tmp_path, clean_layouts):
+    """A layout file that does not parse is REFUSED with a code, never a
+    silent fallback to the seat's default.
+
+    Implements S0b (C10). Two faces of one refusal: read directly, the reader
+    raises a coded error naming the file; read by a run's loader, that same
+    refusal becomes a typed notice and the run continues on what did load
+    (disclose, never die). The failure this forbids is the third possibility
+    -- a brief silently composed from something the operator did not ask for.
+    """
+    from deepreason.llm.seat_sections import (
+        seat_pack_layout_from_file,
+        seat_pack_layout_ids,
+    )
+
+    root = _root(tmp_path)
+    (root / "broken.layout.json").write_text("{not json at all")
+    (root / "wrong-shape.layout.json").write_text(
+        '{"layout_id": "seat-pack.operator.bad.v0", "entries": [{"priority": 1}]}'
+    )
+
+    for name, code in (
+        ("broken.layout.json", "SEAT_PACK_LAYOUT_FILE_UNPARSEABLE"),
+        ("wrong-shape.layout.json", "SEAT_PACK_LAYOUT_FILE_UNPARSEABLE"),
+    ):
+        with pytest.raises(SeatSectionError) as caught:
+            seat_pack_layout_from_file(root / name)
+        assert caught.value.code == code, (name, caught.value)
+        assert name in str(caught.value), caught.value
+
+    loaded, notices = load_operator_plugins(home=tmp_path, environ={})
+    assert loaded == []
+    assert [notice["code"] for notice in notices] == [
+        "SEAT_PACK_LAYOUT_FILE_UNPARSEABLE",
+        "SEAT_PACK_LAYOUT_FILE_UNPARSEABLE",
+    ], notices
+    assert all(notice["detail"] for notice in notices), "a notice with no reason"
+    assert "seat-pack.operator.bad.v0" not in seat_pack_layout_ids()
