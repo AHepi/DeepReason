@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=10 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=11 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -284,10 +284,28 @@ tranche".
 
 ## T1 — isolation, the standard input, the fence (S1, S11a) — ~170 lines
 
-- [ ] 10. (S1) Write the fence test first, listing the eleven modules
+- [x] 10. (S1) Write the fence test first, listing the eleven modules
       SPEC.md §S1 names.
       done-when: `python -m pytest mini/tests/test_isolation_fence.py -q` -> fails
       on the tree as it stands, naming which fenced module is imported (paste)
+
+      ```
+      $ python -m pytest mini/tests/test_isolation_fence.py -q
+      E   AssertionError: mini imports the larger harness directly:
+      E     mini/minireason/compat.py:38: deepreason.bridge.retry (fenced: deepreason.bridge)
+      E   AssertionError: importing mini pulls in fenced packages the record modules
+          do not: [deepreason.application.text_runs]
+      2 failed, 1 passed in 2.59s
+      
+      RED on exactly the two violations the amended S1 predicted, each named with
+      its file and line. Part 3 (nothing fenced imported DURING a run) already
+      passes, which is the honest result: mini has no lazy harness import today,
+      and the test is still worth keeping because it is the only one of the three a
+      lazy import inside a function cannot walk past.
+      
+      The eleven fenced modules are listed verbatim in the test, and so is the
+      allowed set, so the fence and SPEC.md cannot drift apart silently.
+      ```
 - [ ] 10a. (S1; ADDED before step 10, see note) [COMMIT] Make the fence
       PASS: `compat.py` takes `WorkflowRetryPolicyV1` from
       `deepreason.run_manifest` (allowed) instead of `deepreason.bridge.retry`
