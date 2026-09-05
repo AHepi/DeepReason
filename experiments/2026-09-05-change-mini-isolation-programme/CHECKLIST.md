@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=26 blockers=none. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=27 blockers=none (diff budget EXCEEDED at step 26, disclosed; re-baseline at step 27). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -890,11 +890,82 @@ tranche".
       0 new failures remain. The full run also covered the T3 tree as of this
       step (the step-26 files were present but unstaged).
       ```
-- [ ] 26. (S5) [COMMIT] The three mini section plugins
+- [x] 26. (S5) [COMMIT] The three mini section plugins
       (`mini.everything-so-far` untruncated, `mini.target-conjecture`,
       `mini.problem`) and the three layouts. The critic layout registers NO
       commitment section.
       done-when: SPEC.md §S5's layout assertion passes (paste)
+
+      ```
+      $ PYTHONPATH=mini python -c "...SPEC S5 layout assertion, the layout lines..."
+      critic layout plugins: ['mini.directive', 'mini.problem', 'mini.target-conjecture']
+        -> no plugin id contains 'commitment'; 'mini.everything-so-far' absent
+      mini.conjecturer -> seat-pack.mini.conjecturer.v0 [mini.problem, mini.everything-so-far, mini.directive]
+      mini.critic      -> seat-pack.mini.critic.v0      [mini.problem, mini.target-conjecture, mini.directive]
+      mini.commitment  -> seat-pack.mini.commitment.v0  [mini.problem, mini.everything-so-far, mini.target-conjecture, mini.directive]
+      mini plugins registered: ['mini.directive', 'mini.everything-so-far', 'mini.problem', 'mini.target-conjecture']
+
+      The assertion is SPEC S5's with two of its lines deferred, and each is
+      deferred to the step that builds what it names: `resolve_seat_shell(
+      'mini.critic')` needs the shells (step 27, where the full assertion is
+      re-run), and `resolve_mini_flow('mini.flow.isolation.v1')` needs the flow
+      registry (T5). Here the critic layout is resolved by seat and by id; the
+      claim it proves -- NO section that could carry a proposal -- is the same.
+
+      FOUR plugins, not three, and the fourth is the shell's own wording as data:
+      `mini.directive` renders what a seat is asked to DO from a `text` param on
+      the LAYOUT ENTRY, so a file-declared layout rewords a seat with no code
+      (the modularity law's customisation clause). None of the three directives
+      names a status, rank or verdict; the critic's says "it overturns nothing".
+
+      Retention is a RULE, not a verdict, as the operator accepted on
+      2026-09-05: `mini.everything-so-far` takes `retention_rule`, `budget_chars`
+      and `keep_last`; two rules ship (`mini.retention.everything.v1`, the
+      default; `mini.retention.recency.v1`); a budget withholds the OLDEST whole
+      entries first, names them in the section under the rule's id, and never
+      empties the section. Measured by the new tests: twelve ~700-char prose
+      conjectures all shown whole (the legacy 8-survivor/300-char cut is gone
+      from this road); budget 2500 withholds oldest-first and names them; budget
+      1 still shows the newest; recency keep_last=4 shows exactly the last four
+      and refuses typed without its window. And the AST test: no mini source
+      reads .status/.accepted/.refuted/.survivors, imports Status, or names it.
+
+      $ python -m pytest mini/tests/test_mini_sources.py -q  -> 8 passed
+      $ python -m pytest mini/tests/ -q                       -> 124 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q -> 3 passed
+      $ git diff --stat 14cc5da495 -- <five frozen surfaces + llm/firewall.py> -> (no output)
+
+      $ python tools/blast_radius.py --files mini/minireason/sources.py mini/minireason/seats.py \
+            --symbols <the 11 top-level defs> --against 14cc5da495
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      reachability: every symbol UNKNOWN -> UNKNOWN (consumers in mini/tests/, P1's blind spot)
+
+      Map, same commit: SUB-minireason.md gains "Who sees what" -- the three
+      layouts' table, the structural-blinding claim with a check that resolves
+      the critic layout by seat AND by id and pins its three plugin ids and
+      every entry mandatory, the retention-rule claim with the test file as its
+      check, and two where-to-change rows. docs_verify --fast: 6 failed, the
+      same six known rows (step 25's packs row is fixed).
+
+      STOP CONDITION HIT: diff budget EXCEEDED, disclosed, not absorbed.
+      $ python tools/diff_budget.py 14cc5da495 --ceiling 240 --paths mini/minireason src/deepreason/llm/packs.py
+      {"areas": {"mini/minireason": 521, "src/deepreason/llm/packs.py": 29},
+       "total_insertions": 550, "ceiling": 240, "verdict": "EXCEEDED"}
+      Trimmed first (module docstring 25 -> 14 lines; a type alias that only
+      restated a signature), 566 -> 550. Itemised, code separated from docstring:
+        sources.py  384 = code ~212 / docstring ~63 / comment ~21 / blank ~80
+        seats.py    137 = code  78 / docstring  28 / comment  11 / blank  20
+        packs.py     29 (step 25)
+      What S5 priced at 130 was "one adapter and three plugins". What ships is
+      the adapter with the frozen-criteria road (R12), FOUR plugins (the
+      directive-as-data is the modularity law's obligation), a registered
+      retention-rule layer with two rules and two typed refusals (a ruling the
+      operator accepted AFTER SPEC.md's numbers were written), and the
+      never-empty / always-named notice (no silent caps). Per PARKED P7 the
+      window instruction says these numbers are lower bounds and an overrun is
+      disclosed, not absorbed; the re-baseline lands ONCE at step 27, when the
+      shells are measured too, in the shape T2 used at its step 19.
+      ```
 - [ ] 27. (S6) [COMMIT] The three mini shells, and mini's dispatch resolving
       its form THROUGH `SeatShellV1.form_id` — its first consumer.
       done-when: SPEC.md §S6's `form_for_seat` assertion passes (paste)

@@ -1,36 +1,43 @@
 """Where a mini seat's brief CONTENT comes from -- a read-only projection of
-mini's record into the request the seat-shell machinery already reads.
+mini's record into the request the seat-shell machinery already reads (S5:
+R5, R6, R12), on `DR-INV-seat-section-sources`' pattern: a source READS the
+state and the record and APPENDS NOTHING.
 
-Implements S5 (R5, R6, R12) of the mini isolation programme, on the pattern
-`DR-INV-seat-section-sources` states for the full harness: a source READS the
-state and the record, computes what a seat is shown, and APPENDS NOTHING. The
-run's next event sequence, the bytes of `log.jsonl` and the state digest are
-the same after any function here has run as before it.
+Measured, not assumed (proof/m3_seat_shell_reach.txt): the shipped walk runs
+from a live mini session and fails on the first record-backed section because
+mini's `State` hands out DICT projections while the plugins read ontology
+objects. That one projection is the whole gap; mini gets no second renderer.
 
-WHY THIS MODULE EXISTS, measured rather than assumed
-(`experiments/2026-09-05-change-mini-isolation-programme/proof/
-m3_seat_shell_reach.txt`): the shipped walk runs from a live mini session with
-no scheduler, no V6 transaction and no manifest policy, and fails on the first
-record-backed section because mini's `State` hands out DICT projections while
-the plugins read ontology objects. So the whole gap between mini and the seat
-shell is one projection, and it lives here. Mini gets no second renderer.
-
-WHAT A SOURCE HERE MAY NOT READ: an artifact's STATUS. The audit of
-2026-09-05 (`experiments/2026-09-05-audit-ois-1-1-spec-drift/`, row 3) found
-the full harness's default critic brief printing adjudicated status labels
-into a seat's context. Within mini a criticism overturns nothing (operator,
-2026-09-05), and no mini brief renders a label of any kind --
-`mini/tests/test_mini_exposure.py` goes red if a source or plugin in this
-module names one.
+NO SOURCE HERE MAY READ AN ARTIFACT'S STATUS. The 2026-09-05 audit (row 3)
+found the full harness's default critic brief printing status labels into a
+seat's context; within mini a criticism overturns nothing, and no mini brief
+renders a label of any kind. `mini/tests/test_mini_sources.py` walks the AST.
 """
 
 from __future__ import annotations
 
-from typing import Any, Mapping
+from dataclasses import dataclass
+from typing import Any, Callable, Mapping
+
+from pydantic import BaseModel, ConfigDict, Field
 
 from deepreason.llm.layout import resolve_layout_policy
-from deepreason.llm.seat_sections import SectionRequestV1
+from deepreason.llm.seat_sections import (
+    SectionRenderV1,
+    SectionRequestV1,
+    register_section_plugin,
+)
 from deepreason.ontology import Problem
+from deepreason.programs import content_text
+
+
+class MiniSourceError(ValueError):
+    """A typed refusal from mini's source layer: an unknown retention rule, a
+    rule asked to run without the parameter it needs."""
+
+    def __init__(self, code: str, message: str) -> None:
+        super().__init__(f"{code}: {message}")
+        self.code = code
 
 
 def _frozen_criteria(root, problem_id: str) -> tuple[tuple[str, str], ...]:
@@ -107,4 +114,271 @@ def mini_section_request(
     )
 
 
-__all__ = ["mini_section_request"]
+# ---------------------------------------------------------------------------
+# Retention: what stays visible to "see everything" as the pool grows.
+#
+# A RULE, NEVER A VERDICT (monitor's recommendation, accepted by the operator
+# 2026-09-05). What a seat is shown of the pool is decided by a declared,
+# configurable rule -- recency, or a budget applied oldest-first -- and never
+# by any judgement of merit, because a source that ranked would be the
+# evidence side arriving in the brief by the back door. The default is
+# EVERYTHING; a budget, when one is declared, withholds the OLDEST whole
+# entries first and says so in the section itself, so the seat is never
+# silently shown less than it was promised. A rule is registered, versioned
+# and selected by id; a third rule -- novelty by the equivalence tiers, say --
+# is a registration here, not an edit.
+# ---------------------------------------------------------------------------
+
+@dataclass(frozen=True, slots=True)
+class MiniRetentionRuleV1:
+    """One registered rule. `select(ordered, sizes, budget_chars, keep_last)`
+    returns `(shown, withheld)`, both in the pool's own order."""
+
+    rule_id: str
+    rule_version: str
+    select: Callable[..., tuple[tuple[str, ...], tuple[str, ...]]]
+
+
+def _withhold_oldest_over_budget(
+    ordered: tuple[str, ...], sizes: Mapping[str, int], budget_chars: int | None
+) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    """Oldest whole entries go first, and the newest is never withheld: a
+    budget that emptied the section would be a silent cut wearing a notice."""
+
+    shown = list(ordered)
+    withheld: list[str] = []
+    if budget_chars is not None:
+        while len(shown) > 1 and sum(sizes[aid] for aid in shown) > budget_chars:
+            withheld.append(shown.pop(0))
+    return tuple(shown), tuple(withheld)
+
+
+def _select_everything(ordered, sizes, budget_chars, keep_last):
+    return _withhold_oldest_over_budget(ordered, sizes, budget_chars)
+
+
+def _select_recency(ordered, sizes, budget_chars, keep_last):
+    if keep_last is None:
+        raise MiniSourceError(
+            "MINI_RETENTION_PARAMETER_MISSING",
+            "the recency rule needs keep_last; a rule that guessed a window "
+            "would be a rule the operator did not configure",
+        )
+    kept = tuple(ordered[-keep_last:])
+    withheld = tuple(aid for aid in ordered if aid not in set(kept))
+    shown, over = _withhold_oldest_over_budget(kept, sizes, budget_chars)
+    return shown, withheld + over
+
+
+_RETENTION_REGISTRY: dict[str, MiniRetentionRuleV1] = {}
+DEFAULT_RETENTION_RULE_ID = "mini.retention.everything.v1"
+
+
+def register_mini_retention_rule(rule: MiniRetentionRuleV1) -> MiniRetentionRuleV1:
+    existing = _RETENTION_REGISTRY.get(rule.rule_id)
+    if existing is not None and existing != rule:
+        raise MiniSourceError(
+            "MINI_RETENTION_RULE_CONFLICT",
+            f"rule id {rule.rule_id!r} is already registered with different values",
+        )
+    _RETENTION_REGISTRY[rule.rule_id] = rule
+    return rule
+
+
+def mini_retention_rule_ids() -> tuple[str, ...]:
+    return tuple(sorted(_RETENTION_REGISTRY))
+
+
+def resolve_mini_retention_rule(rule_id: str) -> MiniRetentionRuleV1:
+    rule = _RETENTION_REGISTRY.get(rule_id)
+    if rule is None:
+        raise MiniSourceError(
+            "MINI_RETENTION_RULE_UNKNOWN",
+            f"no mini retention rule {rule_id!r}; registered: "
+            + ", ".join(mini_retention_rule_ids()),
+        )
+    return rule
+
+
+register_mini_retention_rule(
+    MiniRetentionRuleV1(DEFAULT_RETENTION_RULE_ID, "1.0.0", _select_everything)
+)
+register_mini_retention_rule(
+    MiniRetentionRuleV1("mini.retention.recency.v1", "1.0.0", _select_recency)
+)
+
+
+# ---------------------------------------------------------------------------
+# The mini section plugins -- registered like any other, through the same
+# protocol the shipped ones satisfy. None of them reads a status.
+# ---------------------------------------------------------------------------
+
+
+class NoParams(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+
+class _MiniPlugin:
+    plugin_id = ""
+    plugin_version = "1.0.0"
+    section_id = ""
+    declared_handle_kinds: tuple[str, ...] = ()
+    requires: tuple[str, ...] = ()
+    parameters_model: type[BaseModel] = NoParams
+
+
+class MiniProblem(_MiniPlugin):
+    """The standard input's problem and, when the root was started from one,
+    its frozen criteria (R12). Shown to every mini seat."""
+
+    plugin_id = "mini.problem"
+    section_id = "problem"
+    requires = ("problem",)
+
+    def render(self, request: SectionRequestV1, params: BaseModel):
+        problem = request.problem
+        lines = [f"PROBLEM {problem.id}", problem.description]
+        criteria = tuple(request.supplied.get("criteria") or ())
+        if criteria:
+            lines.append(
+                "CRITERIA (frozen with the standard input; shown, not compiled "
+                "into commitments by the reduced engine):"
+            )
+            lines.extend(f"- {cid}: {spec}" for cid, spec in criteria)
+        return SectionRenderV1(
+            section_id=self.section_id,
+            text="\n".join(lines),
+            provenance_refs=(problem.id,),
+        )
+
+
+class EverythingParams(BaseModel):
+    """The retention rule and its FREE parameters. `exclude_roles` is a KIND
+    filter, not a merit one: the reseed school-policy declarations are
+    scaffolding the loop writes for itself, not content a seat generated."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    retention_rule: str = DEFAULT_RETENTION_RULE_ID
+    budget_chars: int | None = Field(default=None, ge=1)
+    keep_last: int | None = Field(default=None, ge=1)
+    exclude_roles: tuple[str, ...] = ("seed",)
+
+
+def _entry_text(index: int, artifact, blobs) -> str:
+    role = getattr(artifact.provenance.role, "value", artifact.provenance.role)
+    lines = [f"[{index}] {role} {artifact.id}"]
+    for ref in artifact.interface.refs:
+        lines.append(f"    about: {ref.target}")
+    lines.append(content_text(artifact, blobs))
+    return "\n".join(lines)
+
+
+class MiniEverythingSoFar(_MiniPlugin):
+    """EVERY artifact generated in this run so far, in full, oldest first,
+    with NO status of any kind (R6). Which entries survive a declared budget
+    is the registered retention rule's decision, recorded in the section."""
+
+    plugin_id = "mini.everything-so-far"
+    section_id = "everything-so-far"
+    parameters_model = EverythingParams
+
+    def render(self, request: SectionRequestV1, params: EverythingParams):
+        excluded = set(params.exclude_roles)
+        pool = [
+            artifact
+            for artifact in request.state.artifacts.values()
+            if getattr(artifact.provenance.role, "value", artifact.provenance.role)
+            not in excluded
+        ]
+        if not pool:
+            return None
+        entries = {
+            artifact.id: _entry_text(index, artifact, request.blobs)
+            for index, artifact in enumerate(pool, start=1)
+        }
+        ordered = tuple(entries)
+        sizes = {aid: len(text) for aid, text in entries.items()}
+        rule = resolve_mini_retention_rule(params.retention_rule)
+        shown, withheld = rule.select(ordered, sizes, params.budget_chars, params.keep_last)
+        lines = [
+            "EVERYTHING GENERATED SO FAR IN THIS RUN (every artifact, in full, "
+            "oldest first; no verdict of any kind is shown):"
+        ]
+        if withheld:
+            lines.append(
+                f"WITHHELD UNDER RULE {rule.rule_id}: {len(withheld)} earlier "
+                f"entr{'y' if len(withheld) == 1 else 'ies'} exist in this run "
+                "and are not shown here -- " + ", ".join(withheld) + ". Treat "
+                "what follows as partial; do not conclude they do not exist."
+            )
+        lines.extend(entries[aid] for aid in shown)
+        return SectionRenderV1(
+            section_id=self.section_id,
+            text="\n".join(lines),
+            provenance_refs=shown,
+        )
+
+
+class MiniTargetConjecture(_MiniPlugin):
+    """The one conjecture under scrutiny, in full (R5). The critic sees THIS
+    and the problem, and nothing else the run generated."""
+
+    plugin_id = "mini.target-conjecture"
+    section_id = "target-conjecture"
+    requires = ("target_id",)
+
+    def render(self, request: SectionRequestV1, params: BaseModel):
+        target_id = request.supplied["target_id"]
+        target = request.state.artifacts[target_id]
+        return SectionRenderV1(
+            section_id=self.section_id,
+            text=f"TARGET CONJECTURE {target_id}\n{content_text(target, request.blobs)}",
+            provenance_refs=(target_id,),
+        )
+
+
+class DirectiveParams(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    text: str = Field(min_length=1)
+
+
+class _Placeholders(dict):
+    def __missing__(self, key: str) -> str:
+        return "{" + key + "}"
+
+
+class MiniDirective(_MiniPlugin):
+    """What the seat is asked to DO, as text the LAYOUT carries. The wording
+    is data in the layout entry's params, so a file-declared layout can
+    change it with no code; `{name}` placeholders take the request's
+    supplied values (the conjecturer's `{vs_k}`)."""
+
+    plugin_id = "mini.directive"
+    section_id = "directive"
+    parameters_model = DirectiveParams
+
+    def render(self, request: SectionRequestV1, params: DirectiveParams):
+        return SectionRenderV1(
+            section_id=self.section_id,
+            text=params.text.format_map(_Placeholders(request.supplied)),
+        )
+
+
+MINI_PLUGINS = (MiniProblem, MiniEverythingSoFar, MiniTargetConjecture, MiniDirective)
+for _plugin in MINI_PLUGINS:
+    register_section_plugin(_plugin())
+
+
+__all__ = [
+    "DEFAULT_RETENTION_RULE_ID",
+    "EverythingParams",
+    "MINI_PLUGINS",
+    "MiniRetentionRuleV1",
+    "MiniSourceError",
+    "mini_retention_rule_ids",
+    "mini_section_request",
+    "register_mini_retention_rule",
+    "resolve_mini_retention_rule",
+]

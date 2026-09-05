@@ -177,6 +177,54 @@ for form_id in mini_form_ids():
     assert not (fields & banned), (form_id, fields & banned)
 "`
 
+## Who sees what: the three seats' briefs
+
+**Every mini seat's brief is a registered LAYOUT walked through the one public
+road the full harness's seats share** (`deepreason.llm.packs.render_seat_brief`
+and `allocate_seat_brief`); mini builds no section and has no renderer of its
+own. `minireason/sources.py` holds the projection that feeds the walk and the
+four mini section plugins; `minireason/seats.py` holds the three layouts, one
+per seat, bound as each seat's default.
+
+| seat | layout | sections, in order |
+|---|---|---|
+| `mini.conjecturer` | `seat-pack.mini.conjecturer.v0` | problem · everything-so-far · directive |
+| `mini.critic` | `seat-pack.mini.critic.v0` | problem · target-conjecture · directive |
+| `mini.commitment` | `seat-pack.mini.commitment.v0` | problem · everything-so-far · target-conjecture · directive |
+
+**The critic's blinding is STRUCTURAL, not a filter** (R5, "critics see the
+conjecture artifact, not the proposed commitments"): the critic layout
+registers NO section that could carry a proposal, so there is no slot, blank
+or otherwise — the shape the amended judge law (2026-08-28) already required
+of provenance blinding. And no mini brief renders a status label of any kind:
+the audit of 2026-09-05 (row 3) found the full harness's default critic brief
+printing one, and mini's sources may not read a status at all, checked over
+the AST.
+`check: python -c "
+import sys; sys.path.insert(0, 'mini')
+from deepreason.llm.seat_sections import resolve_seat_pack_layout
+import minireason.seats as seats
+critic = resolve_seat_pack_layout(seats.CRITIC_SEAT, seats.CRITIC_LAYOUT_ID)
+ids = [e.plugin_id for e in critic.entries]
+assert ids == ['mini.problem', 'mini.target-conjecture', 'mini.directive'], ids
+assert not any('commitment' in i or 'everything' in i for i in ids), ids
+for seat in seats.MINI_SEATS:
+    layout = resolve_seat_pack_layout(seat)
+    assert layout.layout_id == seats.MINI_LAYOUTS[seat].layout_id, seat
+    for entry in layout.entries:
+        assert not entry.droppable and not entry.compressible, (seat, entry.plugin_id)
+"`
+
+**"Everything generated so far" is shown in FULL, and what stays visible as
+the pool grows is a RULE, never a verdict** (R6; monitor's recommendation the
+operator accepted 2026-09-05). `mini.everything-so-far` renders every artifact
+in the record, whole, oldest first — the legacy loop's eight-survivor window
+and 300-character cut are gone from this road — and a declared budget
+withholds the OLDEST whole entries first, naming them in the section itself
+under the rule's id. Two rules ship, `mini.retention.everything.v1` (the
+default) and `mini.retention.recency.v1`; a third is a registration.
+`check: python -m pytest mini/tests/test_mini_sources.py -q`
+
 ## The isolation fence
 
 R1 and R11 — "mini needs to be tested in isolation", "without the larger
@@ -229,6 +277,8 @@ assert 'REFUTED' not in body, 'mini must not label a status itself'
 | what a compiled commitment MEANS | NOT here: `checks.compile_checks` delegates to `deepreason.informal.skeleton`; mini owns which channels it COMPILES (the policy above), never what a commitment means | `mini/tests/test_checks.py`, `mini/tests/test_normative_kernel.py` |
 | what mini sends on the wire | NOT here: `compat.initialize` selects a parent `WireContract`; mini owns no schema | `mini/tests/test_call.py`, `tests/test_wire_contracts.py` |
 | what a mini seat's request CARRIES (a target, the frozen criteria, a caller's own keys) | `sources.mini_section_request`'s `supplied` mapping; the caller's keys win. It may READ the state and the record and may never append, and it never reads an artifact's status | `mini/tests/test_mini_sources.py` |
+| what a mini seat is SHOWN, or add a section to a mini brief | a layout in `minireason/seats.py`, or a `.layout.json` under `<DEEPREASON_HOME>/seat_plugins/` naming a registered plugin (`DR-REC-add-a-section-plugin`) — no source edit; the directive wording is a layout entry's `text` param | `mini/tests/test_mini_sources.py`, `mini/tests/test_mini_exposure.py` |
+| how much of the pool a seat sees as it grows | the `mini.everything-so-far` entry's `retention_rule`, `budget_chars`, `keep_last` params; a new rule is `sources.register_mini_retention_rule` | `mini/tests/test_mini_sources.py` |
 | which packages a mini run may reach | `mini/tests/test_isolation_fence.py`'s `FENCED` and `ALLOWED` tuples, which quote SPEC S1 verbatim | `mini/tests/test_isolation_fence.py` |
 
 `check: python -m pytest mini/tests/test_loop.py mini/tests/test_gate.py mini/tests/test_checks.py mini/tests/test_compat.py mini/tests/test_mini_forms.py mini/tests/test_mini_commitment_policy.py -q`
