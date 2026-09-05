@@ -4798,5 +4798,325 @@
     }
    }
   ]
+ },
+ "7c0a6e27-d96e-4a0f-a357-b8826a5d2d30": {
+  "judges": 3,
+  "totals": [
+   2,
+   2,
+   5
+  ],
+  "median": 2,
+  "spread": 3,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     0,
+     0
+    ],
+    "total": 2,
+    "why": {
+     "c1": "Only the defensibility case is stated; the induction-smuggling argument is entirely absent.",
+     "c2": "Mentions falsifiability but lacks specific engagement with Popper's distinction between corroboration reports and probability or the Salmon debate.",
+     "c3": "States a position but fails to explicitly weigh it against the alternative before declaring a survivor as required.",
+     "c4": "No cost or concession is identified; the answer presents the solution as cost-free.",
+     "c5": "Takes the cheap exit of redefining preference as a methodological rule to dissolve the tension rather than holding and answering it."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     0,
+     0
+    ],
+    "total": 2,
+    "why": {
+     "c1": "Only the defensive case is made; the induction/smuggling argument is entirely absent.",
+     "c2": "Mentions falsifiability but fails to engage with specific Popperian machinery like the distinction between corroboration reports and predictions or the Salmon debate.",
+     "c3": "States a position but does not explicitly weigh it against the alternative to declare a survivor in a contested field.",
+     "c4": "No cost or concession is identified; the answer presents the solution as cost-free.",
+     "c5": "Takes the cheap exit of redefining preference as a methodological rule to dissolve the tension rather than holding and answering it."
+    }
+   },
+   {
+    "scores": [
+     1,
+     1,
+     2,
+     0,
+     1
+    ],
+    "total": 5,
+    "why": {
+     "c1": "Only the defense case is made; the induction-smuggling objection is entirely absent.",
+     "c2": "Mentions falsifiability but fails to engage with specific Popperian texts (OK/RAS) or the precise nature of corroboration reports.",
+     "c3": "Commits to a survivor but lacks the detailed reasoning required for a full score given the missing counter-argument.",
+     "c4": "No cost is identified; the response does not state what is given up by accepting this view.",
+     "c5": "Takes exit (a) by redefining preference as a methodological rule to dissolve the tension rather than resolving it."
+    }
+   }
+  ]
+ },
+ "7c6ae316-f79e-4865-b3e0-5c778900ad23": {
+  "judges": 3,
+  "totals": [
+   6,
+   6,
+   6
+  ],
+  "median": 6,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     1,
+     1,
+     2,
+     1,
+     1
+    ],
+    "total": 6,
+    "why": {
+     "c1": "Only the defensive case is made; the induction-smuggling argument is entirely absent.",
+     "c2": "Mentions 'methodological rule' but lacks specific engagement with Popper's machinery like the distinction between corroboration reports and predictions or the Salmon reply.",
+     "c3": "A verdict is stated favoring defensibility, though the reasoning is brief.",
+     "c4": "The cost (losing belief in probability) is essentially a restatement of the verdict rather than a genuine concession or uncomfortable loss.",
+     "c5": "Takes the cheap exit of dismissing the tension by simply labeling the preference 'methodological' without grappling with the underlying inductive pressure."
+    }
+   },
+   {
+    "scores": [
+     1,
+     1,
+     2,
+     1,
+     1
+    ],
+    "total": 6,
+    "why": {
+     "c1": "Only the defensible case is argued; the induction-smuggling counter-case is entirely absent.",
+     "c2": "Mentions 'methodological rule' but lacks specific engagement with Popper's machinery like the Salmon reply or the precise nature of corroboration reports.",
+     "c3": "A verdict is stated favoring defensibility, though the reasoning is brief.",
+     "c4": "The cost (losing belief in probability) is a restatement of the verdict rather than a genuine, uncomfortable concession like accepting irrationality or arbitrariness.",
+     "c5": "Takes the cheap exit of defining the tension away via 'methodological rule' without grappling with the underlying logical gap."
+    }
+   },
+   {
+    "scores": [
+     1,
+     1,
+     2,
+     1,
+     1
+    ],
+    "total": 6,
+    "why": {
+     "c1": "Only the defensible case is argued; the induction-smuggling counter-case is absent.",
+     "c2": "Mentions 'methodological rule' but lacks specific engagement with Popper's machinery like the Salmon reply or the nature of corroboration reports.",
+     "c3": "A survivor is named ('defensible'), but the reasoning is brief and lacks the comparative weight required by the prompt.",
+     "c4": "The cost (losing belief in probability) is stated but feels like a restatement of the verdict rather than a deep philosophical concession.",
+     "c5": "Effectively takes exit (b) by resolving the tension immediately via the 'pragmatic/methodological' label without holding the difficulty."
+    }
+   }
+  ]
+ },
+ "7d8cf71b-84bf-48b6-8f01-f78c79f3e920": {
+  "judges": 3,
+  "totals": [
+   1,
+   4,
+   4
+  ],
+  "median": 4,
+  "spread": 3,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     1,
+     0
+    ],
+    "total": 4,
+    "why": {
+     "c1": "Only one side is presented; the case that the preference is defensible on Popper's own realist terms is entirely absent.",
+     "c2": "Mentions verisimilitude but fails to engage with the specific machinery of corroboration as a report on past performance or the pragmatic move against Salmon.",
+     "c3": "A verdict is offered (instrumentalism survives), though it relies on rejecting Popper's realism rather than resolving the internal tension.",
+     "c4": "The cost (abandoning realism) is named, but it functions more as a redefinition of the position than an uncomfortable concession within the surviving framework.",
+     "c5": "Takes the cheap exit of dissolving the tension by redefining the stance as instrumentalist/fictionalist rather than holding and answering the conflict."
+    }
+   },
+   {
+    "scores": [
+     0,
+     0,
+     1,
+     0,
+     0
+    ],
+    "total": 1,
+    "why": {
+     "c1": "Only one side (the instrumentalist critique) is presented; the case for Popper's own defense is entirely absent.",
+     "c2": "Fails to engage with specific Popperian machinery like the distinction between corroboration and probability or the pragmatic preference argument.",
+     "c3": "Offers a conditional verdict rather than a committed choice between the two specific options requested in the prompt.",
+     "c4": "The 'cost' mentioned is actually the premise of the single argument made, not a concession resulting from choosing between two strong cases.",
+     "c5": "Takes the cheap exit of redefining the stance as fictionalism/instrumentalism to dissolve the tension rather than resolving it within Popper's realism."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     1,
+     0
+    ],
+    "total": 4,
+    "why": {
+     "c1": "Only one side is presented; the case for defensibility on Popper's own terms is entirely absent.",
+     "c2": "Mentions verisimilitude but fails to engage with the specific machinery of corroboration as a past-performance report or the pragmatic preference move.",
+     "c3": "Provides a clear verdict favoring instrumentalism, though it relies on an unargued premise.",
+     "c4": "Identifies abandoning realism as a cost, but does not fully explore why this is a devastating loss for Popper's specific project.",
+     "c5": "Takes the cheap exit of redefining the stance as fictionalist/instrumentalist to dissolve the tension rather than resolving it within Popper's framework."
+    }
+   }
+  ]
+ },
+ "7ddb0e03-aa2b-405c-97cc-1eacf7becdc6": {
+  "judges": 3,
+  "totals": [
+   0,
+   0,
+   0
+  ],
+  "median": 0,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "total": 0,
+    "why": {
+     "c1": "The answer fails to state either case, let alone the strongest form of both.",
+     "c2": "It ignores Popper's specific machinery regarding corroboration and pragmatic preference.",
+     "c3": "No verdict is rendered; the question is dissolved rather than answered.",
+     "c4": "No specific cost is named, only a vague appeal to evolutionary persistence.",
+     "c5": "It explicitly takes the cheap exit of dissolving the tension via redefinition."
+    }
+   },
+   {
+    "scores": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "total": 0,
+    "why": {
+     "c1": "The answer fails to state either case, let alone the strongest form of both.",
+     "c2": "It ignores Popper's specific definitions of corroboration and the pragmatic preference move entirely.",
+     "c3": "It dissolves the dilemma rather than delivering a verdict on which side survives.",
+     "c4": "No specific cost is named; the response offers an evolutionary bypass instead of a concession.",
+     "c5": "It explicitly takes the cheap exit of dissolving the question by redefining rationality as evolutionary selection."
+    }
+   },
+   {
+    "scores": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "total": 0,
+    "why": {
+     "c1": "Fails to state either case, let alone the strongest form of both; it simply asserts a third way.",
+     "c2": "Ignores Popperian machinery like corroboration reports, severity, or the Salmon debate entirely.",
+     "c3": "Offers no verdict on the specific dilemma posed, only a dissolution of the problem space.",
+     "c4": "Names no specific cost or uncomfortable concession required by accepting one side over the other.",
+     "c5": "Explicitly takes the cheap exit of dissolving the question via redefinition (evolutionary rationality) rather than answering it."
+    }
+   }
+  ]
+ },
+ "7eef5e74-46b8-444e-b244-866a6d52bf65": {
+  "judges": 3,
+  "totals": [
+   3,
+   5,
+   8
+  ],
+  "median": 5,
+  "spread": 5,
+  "contested": true,
+  "detail": [
+   {
+    "scores": [
+     1,
+     2,
+     3,
+     1,
+     1
+    ],
+    "total": 8,
+    "why": {
+     "c1": "Only the case for 'smuggling induction' is made; the defense of Popper's preference is entirely absent.",
+     "c2": "Correctly identifies corroboration as history vs action as prediction but misses the specific pragmatic machinery (e.g., Salmon reply).",
+     "c3": "Delivers a clear verdict that radical skepticism is the only consistent stance.",
+     "c4": "The cost (quietism) is stated but not analyzed as a genuine, uncomfortable loss for a philosophy of science.",
+     "c5": "Takes the cheap exit of dissolving the tension by declaring the preference a category error rather than holding and answering it."
+    }
+   },
+   {
+    "scores": [
+     1,
+     1,
+     2,
+     0,
+     1
+    ],
+    "total": 5,
+    "why": {
+     "c1": "Only the case for 'smuggling induction' is made; the defense of Popper's preference is entirely absent.",
+     "c2": "Mentions history vs prediction but misses specific Popperian machinery like the pragmatic meta-rule or replies to Salmon.",
+     "c3": "Delivers a clear verdict that skepticism is the only consistent stance, though it ignores the prompt's instruction to weigh both sides first.",
+     "c4": "No specific cost is named; 'radical skepticism' is presented as the logical conclusion rather than an uncomfortable concession.",
+     "c5": "Takes the cheap exit by dissolving the tension into a category error and concluding with quietism rather than holding the tension."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "The answer completely ignores the instruction to make the strongest case for the defensible preference, presenting only the skeptical view.",
+     "c2": "It mentions the history/prediction distinction but fails to engage with Popper's specific pragmatic arguments in 'Objective Knowledge' or the reply to Salmon.",
+     "c3": "It offers a clear verdict favoring skepticism, though it lacks the comparative analysis requested.",
+     "c4": "No specific cost is identified; 'radical skepticism' is presented as the consistent stance rather than an uncomfortable concession.",
+     "c5": "The answer takes the cheap exit of dismissing the preference as a category error and retreating to quietism, thereby dissolving the tension rather than answering it."
+    }
+   }
+  ]
  }
 }
