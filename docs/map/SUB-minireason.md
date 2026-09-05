@@ -293,6 +293,34 @@ registration function: its definition and the no-op's registration; a third
 is a controller stepping in before the operator said how.
 `check: test "$(grep -rn "register_mini_calibration_hook" src/ mini/minireason/ | wc -l)" -eq 2 && python -m pytest mini/tests/test_mini_calibration_hook.py -q`
 
+## The flow: stage order and the set of artifact kinds are data
+
+`minireason/flow.py` registers `MiniFlowV1`s by id: a tuple of `MiniStageV1`s
+(seat, shell, the kind produced, the kinds read, once per cycle or once per
+target), the SET of artifact kinds the flow may carry, its commitment policy
+and its calibration hook id. A stage naming a kind the flow does not declare
+is refused at construction. Two ship: `mini.flow.legacy-v0`, the DEFAULT —
+one conjecturer stage under `seat.mini.conjecturer.legacy-v0`, which renders
+today's prompt byte for byte through the same road as every other seat (one
+section, pinned by `mini/tests/goldens/mini_legacy_prompt.txt`) and fills the
+STORED form with both commitment channels ON; and `mini.flow.isolation.v1`,
+conjecturer → critic → commitment with both channels OFF. Selection is
+argument, then `DEEPREASON_MINI_FLOW`, then the default; never `Config`,
+never the manifest.
+`check: python -m pytest mini/tests/test_mini_flow.py -q`
+
+`check: python -c "
+import sys; sys.path.insert(0, 'mini')
+from minireason.flow import DEFAULT_MINI_FLOW_ID, resolve_mini_flow, select_mini_flow, mini_flow_ids
+assert DEFAULT_MINI_FLOW_ID == 'mini.flow.legacy-v0' and select_mini_flow().flow_id == DEFAULT_MINI_FLOW_ID
+legacy = resolve_mini_flow('mini.flow.legacy-v0'); iso = resolve_mini_flow('mini.flow.isolation.v1')
+assert len(legacy.stages) == 1 and legacy.commitment_policy.disabled_channels == ()
+assert [s.stage_id for s in iso.stages] == ['conjecture', 'criticism', 'commitment']
+assert set(iso.artifact_kinds) == {s.produces_kind for s in iso.stages}
+assert len(iso.commitment_policy.disabled_channels) == 2
+"`
+
+## The isolation fence
 ## The isolation fence
 ## The isolation fence
 ## The isolation fence
@@ -351,6 +379,7 @@ assert 'REFUTED' not in body, 'mini must not label a status itself'
 | how much of the pool a seat sees as it grows | the `mini.everything-so-far` entry's `retention_rule`, `budget_chars`, `keep_last` params; a new rule is `sources.register_mini_retention_rule` | `mini/tests/test_mini_sources.py` |
 | what a mini seat writes when it is not a conjecture, or add a record KIND | `records.record_mini_output(session, kind, body=…, about=…)` — a typed event and a blob, never an artifact; a kind is a string a flow names as data | `mini/tests/test_mini_commitment_seat.py` |
 | how a controller would reshape what a seat is shown | NOT yet: implement `MiniCalibrationHookV1`, register it — and the operator says when (R8); today only the no-op is registered and nothing calls it | `mini/tests/test_mini_calibration_hook.py` |
+| which seats run, in what order, producing which kinds — or add a stage | a `MiniFlowV1` registered through `flow.register_mini_flow` (from any module, a test file included), selected by argument or `DEEPREASON_MINI_FLOW`; never `loop.py`, which names no seat, kind or stage | `mini/tests/test_mini_flow.py`, `mini/tests/test_mini_architecture.py` |
 | which packages a mini run may reach | `mini/tests/test_isolation_fence.py`'s `FENCED` and `ALLOWED` tuples, which quote SPEC S1 verbatim | `mini/tests/test_isolation_fence.py` |
 
 `check: python -m pytest mini/tests/test_loop.py mini/tests/test_gate.py mini/tests/test_checks.py mini/tests/test_compat.py mini/tests/test_mini_forms.py mini/tests/test_mini_commitment_policy.py -q`

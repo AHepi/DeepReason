@@ -45,17 +45,21 @@ from minireason.records import record_mini_output
 # Importing the sources module registers the mini section plugins the
 # layouts below name; a layout is refused at registration if its plugins do
 # not resolve, so the order of these two imports is load-bearing.
-from minireason.sources import mini_section_request
+from minireason.sources import ARTIFACT_KINDS_BY_ROLE, mini_section_request
 
 CONJECTURER_SEAT = "mini.conjecturer"
 CRITIC_SEAT = "mini.critic"
 COMMITMENT_SEAT = "mini.commitment"
 MINI_SEATS = (CONJECTURER_SEAT, CRITIC_SEAT, COMMITMENT_SEAT)
 
-#: The kind the commitment seat writes. A registered id, so a flow can name
-#: it as data (T5) and a reader can find it in any root.
+#: The kinds a mini seat can produce, as ids a flow names as data. The
+#: conjecture's is the label the source layer already gives a conjecturer's
+#: artifact; the other two are RECORD kinds (`minireason.records`).
+CONJECTURE_KIND = ARTIFACT_KINDS_BY_ROLE["conjecturer"]
+CRITICISM_KIND = "mini.criticism.v1"
 COMMITMENT_PROPOSAL_KIND = "mini.commitment-proposal.v1"
 
+CONJECTURER_LEGACY_LAYOUT_ID = "seat-pack.mini.conjecturer.legacy-v0"
 CONJECTURER_LAYOUT_ID = "seat-pack.mini.conjecturer.v0"
 CRITIC_LAYOUT_ID = "seat-pack.mini.critic.v0"
 COMMITMENT_LAYOUT_ID = "seat-pack.mini.commitment.v0"
@@ -124,6 +128,16 @@ COMMITMENT_LAYOUT = SeatPackLayoutV1(
     ),
 )
 
+# Today's conjecturer prompt as ONE section, so the legacy flow renders
+# through the same road. It is bound by the legacy SHELL, never as a seat's
+# default: the default layout for `mini.conjecturer` is the relaxed one, and
+# the legacy flow names its shell explicitly.
+CONJECTURER_LEGACY_LAYOUT = SeatPackLayoutV1(
+    layout_id=CONJECTURER_LEGACY_LAYOUT_ID,
+    entries=(_entry("mini.legacy.prompt", 1),),
+)
+register_seat_pack_layout(CONJECTURER_LEGACY_LAYOUT)
+
 MINI_LAYOUTS = {
     CONJECTURER_SEAT: CONJECTURER_LAYOUT,
     CRITIC_SEAT: CRITIC_LAYOUT,
@@ -148,6 +162,16 @@ def _shell(seat: str, layout_id: str, form_id: str) -> SeatShellV1:
 
 
 CONJECTURER_SHELL = _shell(CONJECTURER_SEAT, CONJECTURER_LAYOUT_ID, "mini.conjecturer.relaxed.v1")
+# The legacy pairing: today's prompt and the STORED form (R-stored). Registered
+# beside the relaxed shell, never as the seat's default.
+CONJECTURER_LEGACY_SHELL = SeatShellV1(
+    shell_id="seat.mini.conjecturer.legacy-v0",
+    seat_id=CONJECTURER_SEAT,
+    layout_id=CONJECTURER_LEGACY_LAYOUT_ID,
+    form_id="mini.conjecturer.legacy-v0",
+    role_prompt_template_id="role-prompt.legacy-v0",
+)
+register_seat_shell(CONJECTURER_LEGACY_SHELL)
 CRITIC_SHELL = _shell(CRITIC_SEAT, CRITIC_LAYOUT_ID, "mini.critic.relaxed.v1")
 COMMITMENT_SHELL = _shell(COMMITMENT_SEAT, COMMITMENT_LAYOUT_ID, "mini.commitment.relaxed.v1")
 MINI_SHELLS = {
@@ -325,6 +349,11 @@ register_mini_calibration_hook(_NoopCalibrationHook())
 
 __all__ = [
     "COMMITMENT_PROPOSAL_KIND",
+    "CONJECTURE_KIND",
+    "CONJECTURER_LEGACY_LAYOUT",
+    "CONJECTURER_LEGACY_LAYOUT_ID",
+    "CONJECTURER_LEGACY_SHELL",
+    "CRITICISM_KIND",
     "DEFAULT_CALIBRATION_HOOK_ID",
     "MiniCalibrationHookV1",
     "MiniSeatError",

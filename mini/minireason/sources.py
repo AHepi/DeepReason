@@ -415,7 +415,45 @@ class MiniDirective(_MiniPlugin):
         )
 
 
-MINI_PLUGINS = (MiniProblem, MiniEverythingSoFar, MiniTargetConjecture, MiniDirective)
+class MiniLegacyPrompt(_MiniPlugin):
+    """Today's conjecturer prompt, byte for byte, as ONE section -- so the
+    legacy flow renders through the same road as every other seat and
+    `mini/tests/goldens/mini_legacy_prompt.txt` can pin it. It takes the
+    stance directive, the legacy neighbourhood (the loop's own survivors-only,
+    300-character window, computed by the CALLER and never by a source) and
+    `vs_k` from the request, and the problem from the request itself."""
+
+    plugin_id = "mini.legacy.prompt"
+    section_id = "legacy-prompt"
+    requires = ("problem",)
+
+    def render(self, request: SectionRequestV1, params: BaseModel):
+        supplied = request.supplied
+        neighbourhood = supplied.get("legacy_neighbourhood") or ""
+        text = (
+            "You are the conjecture operator: propose bold, criticizable explanations "
+            "for the PROBLEM below. Verbalized Sampling: return a DISTRIBUTION of "
+            f"{supplied.get('vs_k')} diverse candidates, each with a typicality estimate in [0,1].\n"
+            f"STANCE (condition your generation on it): {supplied.get('stance_directive')}.\n"
+            "Each candidate's content MUST be a JSON skeleton embedded as a string: "
+            '{"claim": ..., "mechanism": ..., "scope": {"covers": [], "excludes": []}, '
+            '"forbidden": [{"case": ..., "eval": ...}], "prose_notes": ...}. '
+            'Each forbidden case states evidence that would REFUTE the candidate; eval is '
+            'a known "program:<name>" for mechanically checkable cases. Inline predicates '
+            'from model output are forbidden. Rubric commitments are '
+            'outside this reduced engine and are dropped before registration. A candidate '
+            'that forbids nothing '
+            "is refuted on arrival.\n\n"
+            f"PROBLEM: {request.problem.description}\n"
+            + (f"\nRECENT SURVIVORS (do not repeat; differ substantively):\n{neighbourhood}\n"
+               if neighbourhood else "")
+        )
+        return SectionRenderV1(section_id=self.section_id, text=text)
+
+
+MINI_PLUGINS = (
+    MiniProblem, MiniEverythingSoFar, MiniTargetConjecture, MiniDirective, MiniLegacyPrompt,
+)
 for _plugin in MINI_PLUGINS:
     register_section_plugin(_plugin())
 

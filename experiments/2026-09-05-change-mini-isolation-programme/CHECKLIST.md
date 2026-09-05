@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=39 blockers=none. T3 and T4 DELIVERED (T3/DELIVERY.md, T4/DELIVERY.md). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=40 blockers=none (T5 diff budget EXCEEDED at step 39, disclosed; re-baseline at step 42). T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1430,10 +1430,57 @@ tranche".
 
 ## T5 — the pluggable flow and the architecture tests (S8, S9) — ~240 lines
 
-- [ ] 39. (S8) [COMMIT] `mini/minireason/flow.py`: `MiniFlowV1`,
+- [x] 39. (S8) [COMMIT] `mini/minireason/flow.py`: `MiniFlowV1`,
       `MiniStageV1`, the registry, and the two shipped flows. Default stays
       `mini.flow.legacy-v0` — today's behaviour exactly.
       done-when: `python -m pytest mini/tests/test_mini_flow.py -q` -> 0 failed
+
+      ```
+      $ python -m pytest mini/tests/test_mini_flow.py -q
+      ......                                                                   [100%]
+      6 passed in 1.10s
+      $ python -m pytest mini/tests/ -q                       -> 156 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q -> 3 passed
+      $ git diff --stat d800b622b -- src/                     -> (no output)
+
+      "Today's behaviour exactly", made checkable BEFORE anything moved: the
+      loop's own prompt builder was run over two fixed inputs and its bytes
+      committed as mini/tests/goldens/mini_legacy_prompt.txt (2 139 bytes) in
+      this step, ahead of the loop's rewrite in step 40. The legacy flow's one
+      stage renders through `seat.mini.conjecturer.legacy-v0` -- a shell whose
+      layout is ONE section, `mini.legacy.prompt`, carrying that prompt text
+      verbatim, and whose form is the STORED one (R-stored) -- and the test
+      asserts the rendered brief equals the golden byte for byte after the one
+      visible difference, the `## legacy-prompt` header the shared allocator
+      prefixes, which is asserted rather than glossed. The legacy shell is
+      registered BESIDE the relaxed one and is not the seat's default; the
+      legacy flow names it explicitly.
+
+      What the six tests pin: both flows registered and the default is
+      legacy; selection argument -> DEEPREASON_MINI_FLOW -> default, with an
+      unknown id refused typed; the legacy flow is one conjecturer stage,
+      stored form, both channels ON; the isolation flow is conjecture ->
+      criticism -> commitment, per-target for the last two, both channels
+      OFF; a stage naming a kind the flow does not declare is refused at
+      construction (the SET of kinds is data); the legacy brief is today's
+      prompt.
+
+      $ python tools/blast_radius.py --files flow.py seats.py sources.py --symbols <7> --against d800b622b
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+
+      Map, same commit: SUB-minireason.md gains the flow section with two
+      checks (the flow suite; the default, the two shapes and the kind set
+      pinned) and a where-to-change row. docs_verify --fast: 6 failed, the
+      same six known rows.
+
+      STOP CONDITION HIT: diff budget EXCEEDED, disclosed, not absorbed.
+      $ python tools/diff_budget.py d800b622b --ceiling 240 --paths mini/minireason
+      {"total_insertions": 302, "ceiling": 240, "verdict": "EXCEEDED"}
+      flow.py (~230 with its docstrings) plus the legacy plugin, layout and
+      shell (~70). S8 priced 150 for the registry and the loop rewrite
+      together; the loop is still to come. Re-baselined ONCE at step 42, when
+      the loop and the architecture tests are measured too (T2-T4's shape).
+      ```
 - [ ] 40. (S8) [COMMIT] `loop.run` walks `flow.stages` and names no seat, no
       kind and no stage.
       done-when: SPEC.md §S8's `ast`/substring assertion passes (paste)
