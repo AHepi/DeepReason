@@ -23,6 +23,12 @@ Measured here: `criticism.dispatch.v1` was emitted from
 own test, so THIS signal is covered — but the hole is general and the next
 channel will fall in it.
 
+This is also the FIRST RECORDED FAILURE of `docs/map/REC-add-signal.md` under
+that document's own "If this recipe fails you" clause — step 3 tells an author
+the scan will catch an undeclared signal, and for a constant-headed signal it
+will not. Two recorded failures is that document's tripwire for building a
+dedicated workflow; this is one. Ledgered as `docs/ERRATA.md` E75.
+
 NOT FIXED HERE because widening a shared gate's scanner is a change to an
 instrument every tranche depends on, and this tranche's goal is the evidence
 reading.

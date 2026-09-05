@@ -2541,3 +2541,40 @@ committed documents are corrected by appending here rather than by rewriting
 them. Evidence:
 `experiments/2026-09-04-fix-provider-reasoning-contract/` (GOAL, DIAGNOSIS,
 REPRO, FIX, PROBE.json).
+
+**E75 — the signal-registry gate does not do what the recipe says it does.**
+`docs/map/REC-add-signal.md` step 3 states: "The AST scan in
+`tests/test_signals.py` fails on an emitted tag that is not declared — that
+check predates the contract and still does its job."
+`tests/test_signals.py`'s own module docstring makes the same promise: "a new
+signal ships with its meaning or CI fails."
+
+Both are FALSE for a signal emitted through a named constant.
+`_emitted_signals` recognises only a LITERAL head at a `record_measure` call
+site (`_literal_head` returns `None` for anything that is not an `ast.Constant`
+string or an f-string with a constant prefix), so
+`record_measure(inputs=[SOME_SIGNAL, ...])` — the shape every recent typed
+channel uses, `seat.retired.v1` included — is invisible to it.
+
+Measured 2026-09-04: with `criticism.dispatch.v1` emitted from
+`src/deepreason/runtime/criticism_dispatch.py` and NOT declared,
+`python -m pytest tests/test_signals.py -q` reported **9 passed** while
+`deepreason.signals.is_known("criticism.dispatch.v1")` returned `False`.
+
+Uncorrected in the instrument, deliberately: widening a gate every tranche
+depends on is its own tranche, and the widened scan's first job is a census of
+whatever else is already undeclared — findings, not fixtures to update. Parked
+with a ready-to-send prompt at
+`experiments/2026-09-04-change-evidence-states/PARKED.md` P1, which also
+records this as the recipe's first failure under `REC-add-signal.md`'s own "If
+this recipe fails you" clause (two recorded failures is that document's
+tripwire for building a dedicated workflow; this is one).
+
+Corrected FOR THIS SIGNAL rather than in general: the declaration was written
+anyway, and
+`tests/test_criticism_dispatch_declaration.py::test_the_signal_is_declared_in_the_registry`
+asserts the registration directly, with its unit, its staleness and its
+producer-agnostic semantics, so this one signal cannot rot even though the
+shared gate cannot see it. Evidence:
+`experiments/2026-09-04-change-evidence-states/` (PARKED.md P1, VALIDATION.md
+Map section).
