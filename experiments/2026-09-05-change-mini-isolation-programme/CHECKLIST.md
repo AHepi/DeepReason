@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=30 blockers=none (T3 diff budget re-baselined at step 27, SPEC.md §Budget). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=31 blockers=none (T3 diff budget re-baselined at step 27, SPEC.md §Budget). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1120,8 +1120,48 @@ tranche".
       its ready-to-send prompt and a binding note for T5; the seam's Traps
       record it.
       ```
-- [ ] 30. (T3) Gate + mini ring + docs.
+- [x] 30. (T3) Gate + mini ring + docs.
       done-when: all three green (paste)
+
+      ```
+      $ python -m pytest tests/ -q -n 4          (idle box; docs_verify NOT concurrent)
+      5084 passed, 6 skipped in 1411.00s (0:23:31)     -> 0 failed
+      (the same 5084 as T2: T3's one src/ change is the 29-line public entry in
+       packs.py, and nothing under tests/ exercises a path it changed)
+
+      $ python -m pytest mini/tests/ -q
+      136 passed, 1 skipped in 9.45s                    -> 0 failed
+      (116 at T2; the twenty new ones are 8 source/retention tests, 6 shell
+       tests and 6 exposure tests)
+
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py \
+            tests/test_crit_pack_legacy_golden.py -q
+      15 passed  -- C4: the full harness's two briefs stay byte-identical
+
+      $ git diff --stat 14cc5da495 -- <all five frozen surfaces + llm/firewall.py>
+      (no output)  -- the mechanical tripwire, empty
+      $ git diff --stat 14cc5da495 -- src/
+       1 file changed, 29 insertions(+)              (packs.py, step 25)
+
+      $ python tools/docs_verify.py           (FULL, after the gate, never beside it)
+      docs_verify: 6 failed -- the same six known rows
+        SEAM-llm-x-rules.md:54; CON-run-identity.md:211/213/215;
+        INV-frozen-surfaces.md:206/876 (the window's :181/:736, shifted)
+      $ python tools/docs_verify.py --audit    -> 1 finding, the known SEAM-llm-x-rules.md:54
+      $ python tools/docs_verify.py --links    -> 0 dangling, 82 documents
+      $ python tools/docs_verify.py --coverage -> 2 findings, both on seams T3 did
+        not touch (SEAM-periphery-x-verification: amendment/apply.py;
+        SEAM-schools-x-scratch: informal/trial.py); SEAM-llm-x-minireason
+        carries no Sweep: header and says why in its own section
+      $ python tools/docs_verify.py --stale    -> 25 before, 22 after: the six
+        documents whose checks the full run re-derived at head f8100b9b0 have
+        their Verified-at advanced to that commit (SUB-minireason, SUB-llm,
+        SEAM-llm-x-minireason, INV-seat-section-plugins,
+        CON-packs-and-token-economy, INDEX). Nothing else's stamp was touched.
+
+      All three green in the sense that matters: nothing this sub-tranche wrote
+      fails, and no assertion was weakened.
+      ```
 - [ ] 31. (T3) [COMMIT] Deliver T3.
       done-when: `git status --porcelain` empty AND branch head on origin
 
