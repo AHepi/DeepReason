@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=15 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=16 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -521,8 +521,18 @@ tranche".
       advanced to c7a8bd81c.
       ```
 
-- [ ] 15. (T1) [COMMIT] Deliver T1.
+- [x] 15. (T1) [COMMIT] Deliver T1.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+      ```
+      $ git status --porcelain     -> (empty)
+      $ git rev-parse HEAD origin/claude/mini-isolation-t0-t2-upwc47
+      8cc71e7a73efe59b4449fd86cb43547b3fe45eae
+      8cc71e7a73efe59b4449fd86cb43547b3fe45eae
+
+      T1/VALIDATION.md verdict PASS; T1/DELIVERY.md written. R1, R11 and R12
+      are done (R11 done-with-amendment, and says so). T1 IS DELIVERED.
+      ```
 
 ## T2 — relaxed forms and the commitment switch (S2, S3) — ~175 lines
 
