@@ -35,7 +35,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.config import Config
 from deepreason.evidence import (
     AttachedSourceProvenanceV1,
@@ -59,6 +58,10 @@ from deepreason.run_manifest import (
     ControlPlanePolicyV3,
     RunManifest,
     SchoolExecutionPolicyV1,
+    # Taken from the MANIFEST module, not from the subsystem that defines it:
+    # mini depends on the record's own schema, never on the harness around it,
+    # and `mini/tests/test_isolation_fence.py` goes red if that reverses.
+    WorkflowRetryPolicyV1,
     compile_run_manifest,
     load_run_manifest,
     persist_run_manifest,

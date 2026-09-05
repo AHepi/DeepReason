@@ -306,7 +306,7 @@ tranche".
       The eleven fenced modules are listed verbatim in the test, and so is the
       allowed set, so the fence and SPEC.md cannot drift apart silently.
       ```
-- [ ] 10a. (S1; ADDED before step 10, see note) [COMMIT] Make the fence
+- [x] 10a. (S1; ADDED before step 10, see note) [COMMIT] Make the fence
       PASS: `compat.py` takes `WorkflowRetryPolicyV1` from
       `deepreason.run_manifest` (allowed) instead of `deepreason.bridge.retry`
       (fenced), and `deepreason/application/__init__.py` re-exports the three
@@ -326,6 +326,46 @@ tranche".
       growth, and nothing new during the run. Mini's two real violations are
       one direct import and one package-`__init__` side effect, and this step
       is where they are fixed.
+
+      ```
+      $ python -m pytest mini/tests/test_isolation_fence.py -q
+      3 passed in 2.62s
+
+      $ python experiments/.../proof/fence_measure.py
+      ARM C  what MINI adds beyond ARM A: []
+
+      $ python -m pytest tests/test_application_text_runs_d0.py \
+            tests/test_single_run_path.py mini/tests/ -q
+      120 passed, 1 skipped in 42.06s
+
+      Widened, because making a package re-export lazy reaches every consumer
+      of that package:
+      $ python -m pytest tests/test_v6_only_application_admission.py \
+            tests/test_v6_only_cli_admission.py tests/test_mcp_run.py \
+            tests/test_mcp_scratch_bridge.py tests/test_results_command.py \
+            tests/test_amendment_epochs.py tests/test_stop_report.py \
+            tests/test_cli_bridge.py tests/test_wheel_operational.py -q
+      387 passed in 250.57s
+
+      $ python scripts/wheel_smoke.py
+      wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+      points, module parity, MCP registration, and exact MCP schemas
+      (run because module parity is a pinned surface and this step changes what
+       a package imports; no pin moved, so none was updated)
+
+      $ python tools/diff_budget.py 1f8108c00a --ceiling 170 --paths <T1 areas>
+      {"total_insertions": 55, "ceiling": 170, "verdict": "WITHIN"}
+
+      $ python tools/blast_radius.py --files mini/minireason/compat.py
+            src/deepreason/application/__init__.py --symbols
+            _mini_control_plane_policy bind_mini_root initialize --against 1f8108c00a
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      no unpredicted reachability change
+
+      The public surface of deepreason.application is unchanged: `from
+      deepreason.application import TextRunApplicationService` still works, and
+      now forwards to the live module rather than to a copy bound at import.
+      ```
 
 - [ ] 11. (S1) [COMMIT] Accept a frozen `RunInputManifestV2` via
       `--run-input`; bind it instead of the constant process root when
