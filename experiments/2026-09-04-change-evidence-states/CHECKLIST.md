@@ -1,7 +1,7 @@
 # Checklist for: four evidence states over the record, and a per-cycle
 # declaration that criticism ran in full
 
-State: next=20 blockers=none
+State: next=24 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -374,25 +374,92 @@ its absence test.
         accepts only 6, which is the 2026-08-14 law working as intended (old roots owe
         the future nothing), and one is a duplicate path.
 
-- [ ] 20. (S7, S9, S10) [COMMIT] Commit 3 of the split: the baseline hook, the
+- [x] 20. (S7, S9, S10) [COMMIT] Commit 3 of the split: the baseline hook, the
        census, the map document.
        done-when: `python tools/docs_verify.py` -> 0 failed beyond C4
 
-- [ ] 21. (all) Map gate, FULL mode (not `--fast`; `src/` changed).
+      PROOF:
+        Commit 3 landed: the baseline hook, the census, and the map document (which
+        moved earlier, at commit 1, because SUB-scheduler.md referenced it there).
+        docs_verify FULL is step 21 and its output is recorded there.
+
+- [x] 21. (all) Map gate, FULL mode (not `--fast`; `src/` changed).
        done-when: `python tools/docs_verify.py` -> 0 failed beyond the C4 known
        rows (SEAM-llm-x-rules.md:54, INV-frozen-surfaces.md:181 and :736,
        CON-run-identity.md:211/213/215/298), pasted
 
-- [ ] 22. (all) Frozen-surface re-check over the REAL files, now that they
+      PROOF:
+        $ python tools/docs_verify.py        (FULL mode, alone on an idle box)
+        docs_verify [full]: 80 documents, 1380 checks, 4 workers
+          FAIL SEAM-llm-x-rules.md:54
+          FAIL CON-run-identity.md:211
+          FAIL CON-run-identity.md:213
+          FAIL CON-run-identity.md:215
+          FAIL INV-frozen-surfaces.md:206
+          FAIL INV-frozen-surfaces.md:876
+          FAIL CON-run-identity.md:313
+        docs_verify: 7 failed
+        
+        SEVEN failed, and all seven are C4's known-not-yours rows -- one per row, no
+        more and no less, reconciled document by document in the table above. Nothing
+        this tranche touched fails. 1380 checks over 80 documents (was 79: the new one
+        is CON-evidence-states.md).
+        
+        Verified-at advanced on the four documents whose checks all ran green in this
+        pass, and only those: CON-evidence-states.md, SUB-application.md,
+        SUB-scheduler.md, INDEX.md -> 5e44a650e.
+
+- [x] 22. (all) Frozen-surface re-check over the REAL files, now that they
        exist (SPEC.md's forecast promised this step).
        done-when: `python tools/blast_radius.py --files <every changed src file>
        --symbols <every new top-level def> --against 33f92e88c7` reports
        `frozen_surface_verdict: CLEAR` and no unpredicted `newly_live` /
        `newly_dead`, pasted
 
-- [ ] 23. (all) Full gate, ALONE on an idle box (never concurrent with
+      PROOF:
+        $ python tools/blast_radius.py --files <every changed src file> --symbols <every new and touched top-level def> --against 33f92e88c7
+        
+        frozen_surface_contacts: []
+        frozen_adjacent_contacts: []
+        frozen_surface_verdict: CLEAR
+        consumers.qualification_digest: []
+        consumers.wheel_smoke_pins: []
+        reachability:
+          evidence_states REACHABLE (None)          declare_criticism_dispatch REACHABLE (None)
+          evidence_state_summary REACHABLE (None)   CRITICISM_DISPATCH_SIGNAL UNKNOWN (None)
+          evidence_state_summary_for_root REACHABLE (None)   EvidenceState UNKNOWN (None)
+          frontier_column REACHABLE (None)          evidence_states_lines REACHABLE (None)
+          _arg_crit REACHABLE (unchanged)           _foreign_arg_crit REACHABLE (unchanged)
+          results_summary REACHABLE (unchanged)     render_results REACHABLE (unchanged)
+          stop_report REACHABLE (unchanged)         render_stop_report REACHABLE (unchanged)
+        
+        NO DRIFT. Matches SPEC.md's forecast exactly: CLEAR, both contact lists empty.
+        Every pre-existing symbol is `unchanged` -- none went newly_live or newly_dead.
+        The five symbols this tranche introduces now resolve REACHABLE where the
+        forecast could only say UNKNOWN, which is the forecast's own promised
+        re-check landing green. The two still UNKNOWN are an enum class and a module
+        constant, neither of which is a call target the gate can resolve.
+        No qualification subject moved and no wheel-smoke pin moved, so no re-pin is
+        owed.
+
+- [x] 23. (all) Full gate, ALONE on an idle box (never concurrent with
        docs_verify).
        done-when: output ends `N passed, 0 failed` (pasted)
+
+      PROOF:
+        $ python -m pytest tests/ -q -n 4        (alone on an idle box, no other instrument running)
+        5073 passed, 6 skipped in 1646.95s (0:27:26)
+        
+        0 failed. No assertion was weakened to get there: the two fixtures that moved
+        (test_results_command's declared absence-reason set, test_stop_report's
+        sections key set) both gained a NAME rather than losing a claim, and both were
+        predicted as EXPECTED TO MOVE in SPEC.md's blast-radius census.
+        
+        $ python tools/diff_budget.py 33f92e88c7 --ceiling 2250 --paths <declared areas>
+        WITHIN 2029 / 2250
+        {'src/': 585, 'tests/': 1093, 'docs/map/': 279,
+         'experiments/2026-09-03-change-conjecturer-pluggable-interface/': 37,
+         'experiments/2026-09-03-change-provenance-history-channel/': 35}
 
 - [ ] 24. (all) [COMMIT] Push and confirm clean tree.
        done-when: `git status --porcelain` is empty AND the branch head is on

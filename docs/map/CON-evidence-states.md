@@ -1,5 +1,5 @@
 <!-- DR-CON-evidence-states -->
-Verified-at: b76fa3d1a
+Verified-at: 5e44a650e
 Verify: python -m pytest tests/test_evidence_states.py tests/test_evidence_states_law_line.py tests/test_criticism_dispatch_declaration.py -q
 Owns: src/deepreason/views/evidence_states.py, src/deepreason/runtime/criticism_dispatch.py
 Seams: 
