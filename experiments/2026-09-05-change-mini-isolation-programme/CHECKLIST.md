@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=33 blockers=none (T4 diff budget EXCEEDED at step 32, disclosed; re-baseline at step 34). T3 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=34 blockers=none (T4 diff budget EXCEEDED at step 32, disclosed; re-baseline at step 34). T3 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1240,9 +1240,38 @@ tranche".
       which S4's 85 priced as a form and a seat. Re-baselined ONCE at step 34,
       when the hook is measured too (T2/T3's shape).
       ```
-- [ ] 33. (S4) The shape-buys-nothing test: no rank, admission, immunity or
+- [x] 33. (S4) The shape-buys-nothing test: no rank, admission, immunity or
       refutation path reads the kind's name.
       done-when: `python -m pytest mini/tests/test_mini_shape_buys_nothing.py -q` -> 0 failed
+
+      ```
+      $ python -m pytest mini/tests/test_mini_shape_buys_nothing.py -q
+      ...                                                                      [100%]
+      3 passed in 1.31s
+
+      Three limbs. (1) The authority side -- scheduler, adjudication, rules,
+      harness.py, invariants.py, verification, capabilities/state.py, and
+      mini's own nine admit/register/guard/refute functions by name -- never
+      contains 'commitment-proposal', 'mini:record', 'mini.commitment' or
+      'mini.criticism': a path that cannot name a thing cannot rank it.
+      (2) EVERY mini schema enumerated -- each registered form's whole rendered
+      schema at every nesting depth, and every dataclass and pydantic model in
+      records, sources, seats, policy and forms -- carries none of score, rank,
+      weight, confidence, priority, authority, severity (the window's ruling,
+      verbatim). (3) A proposal about a STANDING conjecture and one about a
+      REFUTED conjecture: neither status moves, survivors unchanged, replay
+      digest matches, verify_root 0.
+
+      Mutation-proven twice:
+        --- MUTATION 1: refute() reads the kind's name ---
+        E AssertionError: ['mini/minireason/loop.py::refute: commitment-proposal',
+                           'mini/minireason/loop.py::refute: mini.commitment']
+        1 failed, 2 passed
+        --- MUTATION 2: the proposal form gains a severity field ---
+        E AssertionError: [('mini.commitment.relaxed.v1', {'severity'}),
+                           ('forms.MiniCommitmentProposal', {'severity'}), ...]
+      Both restored, __pycache__ cleared; 3 passed.
+      ```
 - [ ] 34. (S7) [COMMIT] `MiniCalibrationHookV1` declared, with
       `mini.calibration.noop.v1` as the only registered implementation,
       called between cycles and returning `None`.
