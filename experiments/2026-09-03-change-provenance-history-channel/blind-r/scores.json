@@ -4158,5 +4158,325 @@
     }
    }
   ]
+ },
+ "60fb5ed5-3f31-4957-b1f0-f89127c86cc8": {
+  "judges": 3,
+  "totals": [
+   3,
+   3,
+   3
+  ],
+  "median": 3,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     1,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Fails to make the case for smuggling induction; only presents one side.",
+     "c2": "Mentions evolutionary epistemology but misses specific Popperian machinery like the distinction between corroboration and probability or the Salmon debate.",
+     "c3": "States a survivor but lacks the required argumentative commitment derived from comparing the two cases.",
+     "c4": "Names a cost (local adaptation) but it feels like a definitional consequence rather than a painful concession within the debate.",
+     "c5": "Takes the cheap exit of redefining corroboration via evolutionary terms to dissolve the tension rather than holding and answering it."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     1,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Fails to make the case for smuggling induction; presents only one side.",
+     "c2": "Mentions evolutionary epistemology but misses specific Popperian machinery like the distinction between corroboration and probability or the Salmon debate.",
+     "c3": "States a survivor but lacks the argumentative commitment required for a full verdict.",
+     "c4": "Names a cost (local adaptation) but it feels like a definitional consequence rather than a painful philosophical concession.",
+     "c5": "Takes the cheap exit of redefining corroboration via evolutionary terms to dissolve the tension rather than holding it."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     1,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only one side (the evolutionary reinterpretation) is presented; the case for 'smuggling induction' is entirely absent.",
+     "c2": "Mentions 'corroboration' but fails to engage with the specific Popperian machinery regarding probability vs. report on past tests or the Salmon/Realism debate.",
+     "c3": "A verdict is implied by the opening phrase, but it lacks the explicit comparative reasoning required by the prompt's structure.",
+     "c4": "A cost is named (loss of universal rationality), but it feels like a restatement of the evolutionary thesis rather than a concession forced by the tension.",
+     "c5": "Takes exit (a) by redefining corroboration through evolutionary epistemology to dissolve the original tension rather than holding and answering it."
+    }
+   }
+  ]
+ },
+ "62f53d4b-4aac-4a08-8330-d0c67ee2232b": {
+  "judges": 3,
+  "totals": [
+   11,
+   11,
+   12
+  ],
+  "median": 11,
+  "spread": 1,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     1,
+     2,
+     3,
+     3,
+     2
+    ],
+    "total": 11,
+    "why": {
+     "c1": "The case for 'smuggling induction' is asserted as a consequence but not argued at strength as a competent proponent (e.g., Salmon) would.",
+     "c2": "Identifies corroboration as a report on past performance and the preference as methodological, but lacks specific textual engagement (e.g., OK vs RAS).",
+     "c3": "Clearly commits to the verdict that the preference is defensible on Popper's own terms.",
+     "c4": "Names a genuine, uncomfortable cost: the abandonment of predictive reliability as a basis for rationality.",
+     "c5": "Avoids cheap exits but leans heavily on dissolving the tension via definition rather than holding the full weight of the skeptical counter-argument."
+    }
+   },
+   {
+    "scores": [
+     1,
+     2,
+     3,
+     3,
+     2
+    ],
+    "total": 11,
+    "why": {
+     "c1": "Only the 'defensible' case is argued; the 'smuggles induction' side is absent.",
+     "c2": "Correctly identifies corroboration as a report on past performance and links it to methodological rules, though lacks specific textual engagement (e.g., Salmon).",
+     "c3": "Clearly commits to the verdict that the preference is defensible on procedural grounds.",
+     "c4": "Explicitly names a genuine cost: the loss of claiming future predictive reliability.",
+     "c5": "Avoids dissolving the tension but fails to fully engage the 'smuggles induction' argument before dismissing it."
+    }
+   },
+   {
+    "scores": [
+     1,
+     2,
+     3,
+     3,
+     3
+    ],
+    "total": 12,
+    "why": {
+     "c1": "The case for 'smuggling induction' is asserted but not argued; no strongest-case construction for the critic is provided.",
+     "c2": "Correctly identifies corroboration as a report on past performance and links to methodological rules, though lacks specific textual engagement (e.g., Salmon).",
+     "c3": "Clearly commits to the verdict that the preference is defensible on Popper's own terms.",
+     "c4": "Identifies a genuine, uncomfortable cost: the surrender of predictive reliability as a basis for rational preference.",
+     "c5": "Holds the tension by accepting the cost rather than dissolving the problem or hiding behind a mere label."
+    }
+   }
+  ]
+ },
+ "65de1511-e33d-4816-b968-56b9024322e2": {
+  "judges": 3,
+  "totals": [
+   5,
+   5,
+   5
+  ],
+  "median": 5,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     1,
+     1,
+     2,
+     0,
+     1
+    ],
+    "total": 5,
+    "why": {
+     "c1": "Only the case for defensibility is made; the induction-smuggling argument is entirely absent.",
+     "c2": "Fails to engage with specific Popperian machinery like the distinction between corroboration and probability or the Salmon debate.",
+     "c3": "A verdict is stated favoring defensibility, though the reasoning is thin.",
+     "c4": "No cost is identified; the answer presents the position as a pure gain without concession.",
+     "c5": "Takes the cheap exit of redefining the preference as simple error-avoidance to dissolve the tension rather than answering it."
+    }
+   },
+   {
+    "scores": [
+     1,
+     1,
+     2,
+     0,
+     1
+    ],
+    "total": 5,
+    "why": {
+     "c1": "Only the case for defensibility is made; the induction-smuggling counter-argument is entirely absent.",
+     "c2": "Mentions 'corroborated' but fails to engage with Popper's specific definitions or the Salmon/OK machinery.",
+     "c3": "Provides a clear verdict favoring defensibility, though the justification is thin.",
+     "c4": "No cost is identified; the answer presents the position as a pure gain without concession.",
+     "c5": "Attempts to dissolve the tension by redefining the preference as simple error avoidance rather than holding the contradiction."
+    }
+   },
+   {
+    "scores": [
+     1,
+     1,
+     2,
+     0,
+     1
+    ],
+    "total": 5,
+    "why": {
+     "c1": "Only the case for defensibility is made; the induction-smuggling argument is entirely absent.",
+     "c2": "Fails to engage with specific Popperian machinery like the distinction between corroboration reports and probability or the Salmon reply.",
+     "c3": "A verdict is stated favoring defensibility, though the reasoning is thin.",
+     "c4": "No cost is identified; the answer presents the position as a pure gain without concession.",
+     "c5": "Takes the cheap exit of redefining the preference as simple error-avoidance to dissolve the tension rather than resolving it."
+    }
+   }
+  ]
+ },
+ "69ad16d1-9a8a-4a8f-b025-dfc062d96d96": {
+  "judges": 3,
+  "totals": [
+   2,
+   2,
+   2
+  ],
+  "median": 2,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     0,
+     0
+    ],
+    "total": 2,
+    "why": {
+     "c1": "Only one side is presented; the case for smuggling induction is entirely absent.",
+     "c2": "Mentions content and testability but fails to engage with the specific pragmatic preference or Salmon objection.",
+     "c3": "Offers a conditional interpretation rather than a committed verdict on which argument survives.",
+     "c4": "No specific cost or concession is identified, only a methodological redefinition.",
+     "c5": "Explicitly takes exit (a) by redefining corroboration to dissolve the tension rather than answering it."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     0,
+     0
+    ],
+    "total": 2,
+    "why": {
+     "c1": "Only one side is presented; the case that it smuggles in induction is entirely absent.",
+     "c2": "Mentions content and testability but fails to engage with the specific pragmatic move or the report-on-past-tests distinction central to the prompt.",
+     "c3": "States a conditional preference rather than a definitive verdict on which argument survives the tension.",
+     "c4": "No cost is identified; the response does not articulate what is lost by accepting the surviving view.",
+     "c5": "Takes exit (a) by redefining corroboration as 'structural richness' to dissolve the tension rather than holding and answering it."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     0,
+     0
+    ],
+    "total": 2,
+    "why": {
+     "c1": "Only one side is presented; the case for 'smuggling induction' is entirely absent.",
+     "c2": "Mentions content/testability but fails to engage with the specific pragmatic preference or Salmon objection central to the prompt.",
+     "c3": "Offers a conditional statement rather than a definitive verdict on which argument survives.",
+     "c4": "No specific cost or concession is identified, only a methodological reinterpretation.",
+     "c5": "Takes exit (a) by redefining corroboration to dissolve the tension rather than holding and answering it."
+    }
+   }
+  ]
+ },
+ "6aba8543-7309-4678-81c9-74228a12c603": {
+  "judges": 3,
+  "totals": [
+   2,
+   3,
+   4
+  ],
+  "median": 3,
+  "spread": 2,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     0,
+     1
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only the case for defensibility is stated; the induction-smuggling argument is entirely absent.",
+     "c2": "Mentions error elimination but fails to engage with specific Popperian texts or the Salmon objection details.",
+     "c3": "States a preference but lacks a reasoned verdict explaining why one side survives over the other.",
+     "c4": "No cost of accepting the view is identified or discussed.",
+     "c5": "Partially evades the tension by defining away the problem rather than holding and resolving the conflict."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     0,
+     0
+    ],
+    "total": 2,
+    "why": {
+     "c1": "Only the defense case is presented; the induction-smuggling argument is entirely absent.",
+     "c2": "Mentions error elimination but fails to engage with specific Popperian texts or the Salmon/Realism debate.",
+     "c3": "States a preference but lacks a reasoned verdict explaining why one side survives the other.",
+     "c4": "No cost or concession is identified; the answer implies a cost-free solution.",
+     "c5": "Takes the cheap exit of redefining the tension away via methodological commitment rather than resolving it."
+    }
+   },
+   {
+    "scores": [
+     1,
+     1,
+     1,
+     0,
+     1
+    ],
+    "total": 4,
+    "why": {
+     "c1": "Only the 'defensible' case is presented; the 'smuggles induction' argument is entirely absent.",
+     "c2": "Mentions error elimination but fails to engage with specific Popperian texts (OK/RAS) or the Salmon objection explicitly.",
+     "c3": "A verdict is implied but lacks the required argumentative structure of choosing between two fought-out sides.",
+     "c4": "No cost is identified; the response does not address what is sacrificed by accepting this view.",
+     "c5": "Partially evades the tension by defining the problem away rather than holding the conflict between preference and non-probability."
+    }
+   }
+  ]
  }
 }
