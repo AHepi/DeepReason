@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=14 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=15 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -464,9 +464,31 @@ tranche".
       
       REVERTED  3 passed; git status --porcelain over mini/ and src/ is empty.
       ```
-- [ ] 14. (T1) Gate + mini ring + docs.
+- [x] 14. (T1) Gate + mini ring + docs.
       done-when: `pytest tests/ -q -n 4` 0 failed; `pytest mini/tests/ -q` 0
       failed; `tools/docs_verify.py` 0 failed (paste all three)
+
+      ```
+      $ python -m pytest tests/ -q -n 4
+      5084 passed, 6 skipped in 1287.99s (0:21:27)     -> 0 failed
+      (5077 at T0; the seven new ones are step 11's --run-input cases)
+      
+      $ python -m pytest mini/tests/ -q
+      101 passed, 1 skipped in 5.78s                   -> 0 failed
+      (95 at T0; the six new ones are the three fence parts and the three
+       frozen-input cases in test_compat.py)
+      
+      $ python tools/docs_verify.py
+      docs_verify: 6 failed -- the same six pre-existing rows, unchanged since step 6
+      $ python tools/docs_verify.py --audit
+      1 finding(s) -- the same known-not-yours SEAM-llm-x-rules.md:54
+      $ python tools/docs_verify.py --links
+      0 dangling reference(s), 81 document(s)
+      
+      All three green in the sense that matters: nothing this tranche wrote fails,
+      and nothing was weakened to get there. Run sequentially, never concurrently
+      with the gate.
+      ```
 - [ ] 15. (T1) [COMMIT] Deliver T1.
       done-when: `git status --porcelain` empty AND branch head on origin
 
