@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=36 blockers=none (T4 diff budget re-baselined at step 34, SPEC.md §Budget). T3 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=37 blockers=none (T4 diff budget re-baselined at step 34, SPEC.md §Budget). T3 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1347,10 +1347,35 @@ tranche".
                            'mini/minireason/loop.py:756: resolve_mini_calibration_hook']
       Restored, __pycache__ cleared, tree clean; 6 passed.
       ```
-- [ ] 36. (S11b) [COMMIT] Map: `SUB-minireason.md` gains the commitment seat
+- [x] 36. (S11b) [COMMIT] Map: `SUB-minireason.md` gains the commitment seat
       and the hook; `INV-render-layout.md` and
       `CON-packs-and-token-economy.md` gain their rows — SAME COMMIT.
       done-when: `python tools/docs_verify.py` 0 failed, `--audit` 0 findings
+
+      ```
+      $ python tools/docs_verify.py --fast   -> 6 failed, the same six known rows
+      $ python tools/docs_verify.py --audit  -> 1 finding, the known SEAM-llm-x-rules.md:54
+      $ python tools/docs_verify.py --links  -> 0 dangling, 82 documents
+      (the FULL run is step 37's, after the gate and never beside it)
+
+      SUB-minireason.md's commitment-seat and hook sections landed in the
+      commits that built them (steps 32 and 34; the map moves with the code).
+      This step adds the two full-harness documents' rows:
+        CON-packs-and-token-economy.md -- two "Where it lives" rows (the public
+          road; the reduced engine's compositions, plugins and retention rule),
+          one "Where to change what" row (what a MINI seat is shown, never via
+          packs.py), and one check: the reduced engine keeps to the two public
+          entries (the public-road pytest).
+        INV-render-layout.md -- a consumers row (the adapter resolves the
+          arrangement policy per request), and a paragraph with a check: mini's
+          three layouts are compositions under the same SeatPackLayoutV1; how
+          much of the pool a seat keeps is a COMPOSITION-side knob on the
+          everything plugin (retention_rule, budget_chars, keep_last), and none
+          of those names is an arrangement field on RenderLayoutPolicyV1.
+      Mutation-proven: removing retention_rule from the plugin's parameters --
+        AssertionError: {'keep_last', 'budget_chars', 'exclude_kinds'}
+      Restored; tree clean but for the map edits.
+      ```
 - [ ] 37. (T4) Gate + mini ring + docs.
       done-when: all three green (paste)
 - [ ] 38. (T4) [COMMIT] Deliver T4.

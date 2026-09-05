@@ -46,6 +46,8 @@ section mandatory.
 | Batch criticism pack — NOT on the IR | `src/deepreason/llm/packs.py` | `render_batch_crit_pack`, `_clip` |
 | Auxiliary packs — NOT on the IR | `src/deepreason/llm/packs.py` | `render_experiment_pack`, `render_property_pack`, `render_cx_retry_pack` |
 | "Already budgeted, do not re-clip" marker | `src/deepreason/llm/packs.py` | `AllocatedPack` |
+| The PUBLIC road a consumer outside `packs.py` takes to the same walk and allocator (the reduced engine's seats; each entry one call to its private counterpart) | `src/deepreason/llm/packs.py` | `render_seat_brief`, `allocate_seat_brief` |
+| The reduced engine's compositions and plugins — three layouts, one per mini seat, every entry mandatory; four plugins; a retention RULE deciding what "everything so far" keeps, never a verdict | `mini/minireason/seats.py`, `mini/minireason/sources.py` | `MINI_LAYOUTS`, `MINI_PLUGINS`, `register_mini_retention_rule` — `DR-SUB-minireason`, `DR-SEAM-llm-x-minireason` |
 | Section-size constants | `src/deepreason/llm/packs.py` | `NEIGHBOURHOOD_N`, `ATTACKERS_N`, `FOUNDATION_CHARS` |
 | Where a rendered prompt puts what it carries | `src/deepreason/llm/layout.py` | `RenderLayoutPolicyV1` — see `DR-INV-render-layout` |
 | The question, restated last | `src/deepreason/llm/packs.py` | `_question_section`, `_QUESTION_PRIORITY` |
@@ -381,6 +383,11 @@ NOT merged and must not be: a dropped section leaves no header, so the header's
 presence is the only signal that a section survived allocation.
 `check: python -m pytest tests/test_render_layout_rules.py -k block -q`
 
+The reduced engine is a THIRD consumer of this economy, and it keeps to the
+two public entries: no module under `mini/minireason/` names a private symbol
+of `packs.py`, builds a `PackSection` or calls `allocate_pack`.
+`check: python -m pytest mini/tests/test_mini_seat_shell.py::test_mini_renders_through_the_public_road_only -q`
+
 ## Where to change what
 
 | To change... | Edit | Test |
@@ -393,6 +400,7 @@ presence is the only signal that a section survived allocation.
 | The request-envelope bound or its typed error | `llm/adapter.py` `_enforce_request_envelope`, `RequestEnvelopeExceeded` | `tests/test_v6_request_envelope.py` |
 | The provider ceiling's reservation arithmetic | `llm/budget.py` `conservative_prompt_bound`, `TokenMeter.reserve` | `tests/test_token_reserve.py`, `tests/test_budget.py` |
 | Moving a legacy renderer onto the IR | `llm/packs.py`, replacing `_clip(...)` with `_allocate_sections(...)` | `tests/test_pack_ir.py`, `tests/test_crit_batch.py` |
+| What a MINI seat is shown, or how much of the pool it keeps | a layout in `mini/minireason/seats.py` (or a `.layout.json` under `seat_plugins/`), and the `mini.everything-so-far` entry's `retention_rule` / `budget_chars` / `keep_last` params — never `packs.py` | `mini/tests/test_mini_exposure.py`, `mini/tests/test_mini_sources.py` |
 
 
 ## The frame slice is the only pack section a controller may widen (Rung 8)

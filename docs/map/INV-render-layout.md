@@ -80,6 +80,27 @@ assert LAYOUT_POLICY_ENV not in fields and SEAT_PACK_LAYOUT_ENV not in fields
 assert not [f for f in fields if 'SEAT_PACK' in f or 'SECTION_PLUGIN' in f]
 "`
 
+The reduced engine's three seats are the first compositions declared outside
+`src/`: `SeatPackLayoutV1`s under `mini/minireason/seats.py`, resolved by the
+same registry and the same order. How much of a growing pool one of them
+keeps is a COMPOSITION-side rule declared on the layout entry (a retention
+rule, `DR-SUB-minireason`), not an arrangement knob here: `RenderLayoutPolicyV1`
+still says where a rendered prompt puts what it carries, and a mini brief
+reads it through the adapter like any other.
+`check: python -c "
+import sys; sys.path.insert(0, 'mini')
+from deepreason.llm.seat_sections import SeatPackLayoutV1, resolve_seat_pack_layout
+from deepreason.llm.layout import RenderLayoutPolicyV1
+import minireason.seats as seats
+for seat in seats.MINI_SEATS:
+    assert isinstance(resolve_seat_pack_layout(seat), SeatPackLayoutV1), seat
+from deepreason.llm.seat_sections import resolve_section_plugin
+assert seats.CONJECTURER_LAYOUT.entry_for('mini.everything-so-far') is not None
+knobs = set(resolve_section_plugin('mini.everything-so-far').parameters_model.model_fields)
+assert {'retention_rule', 'budget_chars', 'keep_last'} <= knobs, knobs
+assert not ({'retention_rule', 'budget_chars', 'keep_last'} & set(RenderLayoutPolicyV1.model_fields))
+"`
+
 ## Entry points
 
 | What | Where |
@@ -90,6 +111,7 @@ assert not [f for f in fields if 'SEAT_PACK' in f or 'SECTION_PLUGIN' in f]
 | adding an arrangement | `llm/layout.py` `register_layout_policy` |
 | the unit the instruction ceiling is in | `llm/layout.py` `count_standing_instructions` |
 | consumers | `llm/packs.py` `render_conj_pack`/`render_crit_pack`, `llm/roles.py` `render_role_prompt`, `informal/trial.py` `argument_trial_judge_pack`/`_judge_pack` |
+| a consumer outside `src/`: the reduced engine's seats | `mini/minireason/sources.py` `mini_section_request` resolves the policy per request and hands it to the same plugins (`DR-SEAM-llm-x-minireason`) |
 
 ## The invariants
 
