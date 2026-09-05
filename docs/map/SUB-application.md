@@ -108,6 +108,11 @@ No `Seams:` entries yet.
   `embedder_summary_for_root`, never the harness-taking one: clients are thin
   service dispatch and may not construct a `Harness`
   (`test_clients_have_only_thin_service_dispatch_and_one_registry`).
+  Since 2026-09-04 it also carries an `evidence_states` section and a
+  per-artifact column on the frontier listing, because `accepted` cannot tell
+  an artifact nobody attacked from one that beat off a warranted attack. The
+  reading itself is `DR-CON-evidence-states`; this file only shows it, and
+  shows a typed absence when the replay cannot be rebuilt.
 `check: for s in results_summary render_results resolve_results_root embedder_summary embedder_summary_for_root; do grep -q "^def $s(" src/deepreason/application/results.py || exit 1; done; grep -q "from deepreason.findings import findings_summary" src/deepreason/application/results.py && python -c "import ast, pathlib; src = pathlib.Path('src/deepreason/cli/main.py').read_text(); f = [n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef) and n.name == '_cmd_reason'][0]; body = ast.get_source_segment(src, f); assert 'embedder_line(embedder_summary_for_root(' in body, 'the run terminal must report the embedder it measured with'; assert not [n for n in ast.walk(f) if isinstance(n, ast.Assign) and any(isinstance(x, ast.Subscript) and getattr(x.value, 'id', '') == 'payload' and getattr(getattr(x, 'slice', None), 'value', None) == 'embedder' for x in n.targets)], 'the embedder must NOT become a key on the durable result payload: MCP run_result must stay byte-identical to CLI stdout'; assert 'Harness(' not in body, 'the client stays thin: the application layer opens the root'" && ! grep -rn "embedder" src/deepreason/runtime/terminal_authority.py && python -m pytest tests/test_results_command.py::test_results_summary_writes_nothing_into_a_committed_root tests/test_results_command.py::test_absent_facts_are_typed_absences_not_omitted_keys tests/test_results_command.py::test_verification_reads_the_stored_verdict_and_does_not_replay tests/test_results_command.py::test_top_level_help_names_the_results_verb tests/test_results_command.py::test_results_surfaces_the_embedder_and_names_a_fallback_loudly tests/test_results_command.py::test_results_embedder_absence_is_typed_not_a_failure -q`
 - `application.stop_report.stop_report` / `render_stop_report` /
   `resolve_report_source` — the typed FIRST FAILURE REPORT behind
@@ -127,6 +132,11 @@ No `Seams:` entries yet.
   asserts a defect; `HARNESS` is claimable only when the other three are
   ruled out with cited evidence, and a clean terminal attributes no box
   at all. See `DR-CON-configuration-stages` for the four stages it reads.
+  Its sixth section, added 2026-09-04, is `DR-CON-evidence-states`: what
+  survived criticism and what was merely left alone. It reaches the reading
+  through the PATH-taking `evidence_state_summary_for_root`, which is what
+  keeps the no-`Harness` property above true — the root is opened in the views
+  layer, where reading belongs, not here.
 `check: for s in stop_report render_stop_report resolve_report_source; do grep -q "^def $s(" src/deepreason/application/stop_report.py || exit 1; done; python -c "
 import ast, inspect
 from deepreason.application import stop_report as m
@@ -233,10 +243,27 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
 `record_measure` wrapper.
 `check: test -z "$(grep -rhoE "harness\.record_[a-z_]+" --include=*.py src/deepreason/cli)" && test "$(grep -rhoE "harness\.record_[a-z_]+" --include=*.py src/deepreason/runtime | sort -u | tr "\n" " ")" = "harness.record_measure harness.record_resume_transition harness.record_terminal_commitment " && test "$(grep -rhoE "harness\.record_[a-z_]+" --include=*.py src/deepreason/application | sort -u | tr "\n" " ")" = "harness.record_lifecycle_transition harness.record_measure " && test "$(grep -rhoE "harness\.record_[a-z_]+" --include=*.py src/deepreason/workflows src/deepreason/easy.py | sort -u | tr "\n" " ")" = "harness.record_llm_calls harness.record_measure " && grep -q "harness.record_terminal_commitment(expected, expected_draft)" src/deepreason/runtime/terminal_authority.py && grep -q "harness.record_resume_transition(snapshot, resume)" src/deepreason/runtime/continuation.py && grep -q "harness.record_lifecycle_transition(observation, snapshot, lifecycle)" src/deepreason/application/text_runs.py && grep -q "self.record_measure(inputs=\[tag, \*extra\], llm=call)" src/deepreason/harness.py && grep -q "service.record_attention_receipt(receipt, context_ref=" src/deepreason/application/scratch.py`
 
+Both readers show the evidence-state reading, and neither computes it: the
+four counts come from one derivation in the views layer, so the two surfaces
+cannot disagree about what survived. `stop-report` reaches it by PATH, which is
+how it keeps opening no `Harness` of its own.
+`check: python -c "
+import inspect
+from deepreason.application import results, stop_report
+from deepreason.views import evidence_states as reading
+assert 'Harness(' not in inspect.getsource(stop_report)
+assert 'evidence_state_summary_for_root' in inspect.getsource(stop_report)
+assert 'evidence_state_summary' in inspect.getsource(results)
+assert 'frontier_column' in inspect.getsource(results)
+for name in ('evidence_states', 'evidence_state_summary', 'evidence_state_summary_for_root', 'frontier_column'):
+    assert hasattr(reading, name), name
+" && python -m pytest tests/test_stop_report.py::test_evidence_states_are_a_typed_absence_where_nothing_could_have_survived tests/test_stop_report.py::test_markdown_and_json_carry_the_same_sections tests/test_results_command.py::test_every_absence_reason_is_reachable_from_the_declared_set -q`
+
 ## Where to change what
 
 | To change... | Edit | Test |
 |---|---|---|
+| How a run's survivors are told apart from its untested conjectures, on either surface | NOT here: `DR-CON-evidence-states` owns the reading. These two files only show it | `tests/test_results_command.py`, `tests/test_stop_report.py` |
 | What `deepreason results` reports, or how a fact's absence is typed | `results_summary` and `ABSENCE_REASONS` in `application/results.py`; `render_results` for the glossed human mode | `tests/test_results_command.py::test_absent_facts_are_typed_absences_not_omitted_keys` |
 | What the reported survivor COUNT means | NOT this package: `is_import_admission` in `ontology/state.py` (`DR-SUB-ontology`). `_survivor_count` may only SUBTRACT the admission records the invariant bars from the set the record published — never re-derive membership, never re-adjudicate a member's status | `tests/test_import_role_survivors.py::test_the_results_surface_reports_the_conjectures_and_not_the_dossier` |
 | Add, rename or retire a CLI verb | `build_parser` and the matching `_main` branch in `cli/main.py`; add it to `_ROOT_ADMISSION_COMMANDS` if it reads a run root | `tests/test_v6_only_cli_admission.py::test_public_parser_omits_make_and_unqualified_advanced_commands` |

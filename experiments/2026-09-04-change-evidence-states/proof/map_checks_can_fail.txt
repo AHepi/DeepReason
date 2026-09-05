@@ -32,3 +32,8 @@ CON-evidence-states.md:60  a trial-blocked counted as a completed trial
 
 All six load-bearing checks in CON-evidence-states.md are now mutation-proven
 to fail when the claim they carry stops being true.
+
+SUB-application.md's new check, mutation-proved:
+SUB-application.md:250  stop-report constructs a Harness of its own again
+    with mutant : exit 1  RED (good)
+    reverted    : exit 0

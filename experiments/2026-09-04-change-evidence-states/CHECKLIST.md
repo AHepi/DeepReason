@@ -1,7 +1,7 @@
 # Checklist for: four evidence states over the record, and a per-cycle
 # declaration that criticism ran in full
 
-State: next=12 blockers=none
+State: next=16 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -203,26 +203,102 @@ its absence test.
         able to fail (proof/map_checks_can_fail.txt) -- one was found VACUOUS on the
         first pass and strengthened before it was written down.
 
-- [ ] 12. (S4) Add the `evidence_states` section to `results_summary` and the
+- [x] 12. (S4) Add the `evidence_states` section to `results_summary` and the
        `## Evidence states` block plus the per-artifact frontier column to
        `render_results`, in the operator's vocabulary.
        done-when: `python -m pytest tests/test_results_command.py -q` -> 0 failed
        AND `deepreason results experiments/2026-09-02-live-p-a2-corrected/run --json | python -c "import json,sys; d=json.load(sys.stdin); print(d['evidence_states']['counts'])"` prints the four keys
 
-- [ ] 13. (S5) Add the `evidence_states` section to `stop_report` and
+      PROOF:
+        $ python -m pytest tests/test_results_command.py tests/test_error_catalog.py -q
+        33 passed in 55.58s
+        
+        $ deepreason results experiments/2026-09-02-live-p-a2-corrected/run --json | ... ['evidence_states']['counts']
+        {'contested': 11, 'open': 63, 'refuted': 12, 'supported': 8}
+        
+        Rendered block, on the same root:
+          nothing has been brought against it yet: 63
+          it came through an attack, or a trial that ruled and did not sustain: 8
+          it fell: 12
+          the evidence points both ways: 11
+          nothing on this record says whether any round of criticism ran to the end, ...
+          per episode (untested/came-through/fell/both-ways) - pre-cycle: 4/0/0/0, 0: 15/3/5/7, 1: 1/0/0/0, 2: 24/0/1/0, 3: 12/5/5/4, 4: 7/0/1/0
+        Frontier listing now carries the per-artifact column:
+          07ab5f5c74c8 [open], 176ab7f3eaba [open], ... (+24 more)
+        
+        CORRECTION FOUND BY RUNNING THIS SURFACE (recorded, not quietly fixed): the
+        reader's first version counted EVERY trial-declined and trial-observation as a
+        trial the target came through. Running it over the P-A2 root showed that root
+        files 16 `execution-backed`, 11 `ensemble-split` and 4 `referential-integrity`
+        declines -- all guards stopping the trial BEFORE it ruled, or the judges
+        splitting -- and the reading called 39 of 94 artifacts survivors. The trial
+        vocabulary is now read precisely: `defence-sustained` is the ONE outcome that
+        means the trial ruled and the target came through; `ensemble-split` is
+        CONTESTED by all three carriers; every other outcome is a trial that never
+        ruled and moves nothing. The same root now reads 8 SUPPORTED, 11 CONTESTED.
+        Two new absence reasons declared in the closed vocabulary:
+        NO_CRITICISM_DISPATCH_DECLARATION, NO_REPLAY_HARNESS.
+
+- [x] 13. (S5) Add the `evidence_states` section to `stop_report` and
        `render_stop_report`, with the typed absence on `home-no-root` and
        `root-no-log`.
        done-when: `python -m pytest tests/test_stop_report.py -q` -> 0 failed
        AND `deepreason stop-report experiments/2026-09-02-live-p-a2-corrected/run | grep -c "Evidence states"` prints 1
 
-- [ ] 14. (S6) Prove the committed roots are untouched by the surfaces.
+      PROOF:
+        $ python -m pytest tests/test_stop_report.py -q
+        19 passed in 0.37s
+        
+        $ deepreason stop-report experiments/2026-09-02-live-p-a2-corrected/run | grep -c "EVIDENCE STATES"
+        1
+        
+        Section 6 renders the four counts, the completeness line, and a per-episode
+        table. The sections-parity test now names evidence_states in both the JSON key
+        set and the rendered titles (predicted EXPECTED TO MOVE in SPEC.md's census).
+        A new test pins the typed absence on both kinds that cannot carry the reading:
+        home-no-root ("the run never started, so nothing was admitted and nothing could
+        have survived criticism") and root-no-log ("no log.jsonl: the run stopped
+        before its first reasoning call").
+
+- [x] 14. (S6) Prove the committed roots are untouched by the surfaces.
        done-when: `git status --porcelain experiments/ | head` is EMPTY after
        steps 12-13 ran against a committed root
 
-- [ ] 15. (S4, S5, S6) [COMMIT] Commit 2 of the split: the surfaces, plus the
+      PROOF:
+        $ git status --porcelain experiments/
+         M experiments/2026-09-04-change-evidence-states/CHECKLIST.md
+        
+        The only modified path under experiments/ is this tranche's own ledger. Every
+        committed run root that `deepreason results` and `deepreason stop-report` were
+        just run against is byte-unchanged, and
+        tests/test_evidence_states.py::test_reading_a_committed_root_leaves_it_byte_unchanged
+        plus tests/test_results_command.py::test_results_summary_writes_nothing_into_a_committed_root
+        hold that as a standing assertion rather than a one-off observation.
+
+- [x] 15. (S4, S5, S6) [COMMIT] Commit 2 of the split: the surfaces, plus the
        `DR-SUB-application` map edit for the new section.
        done-when: `python tools/docs_verify.py` -> 0 failed beyond C4, AND
        `python -m pytest tests/test_results_command.py tests/test_stop_report.py -q` -> 0 failed
+
+      PROOF:
+        $ python -m pytest tests/test_results_command.py tests/test_stop_report.py tests/test_evidence_states.py tests/test_evidence_states_law_line.py -q
+        74 passed in 111.14s
+        
+        $ python - (every check in docs/map/SUB-application.md)
+        SUB-application failed: 0 of 36
+        
+        The new SUB-application check is mutation-proven: restoring a Harness
+        construction inside stop_report.py turns it RED (proof/map_checks_can_fail.txt).
+        
+        DESIGN CORRECTION made here rather than a map claim weakened: the first wiring
+        put a read-only Harness inside stop_report.py, which would have broken that
+        document's standing claim that the report "opens no Harness of its own". Fixed
+        by adding evidence_state_summary_for_root to the views layer -- the same
+        PATH-taking pattern embedder_summary_for_root already uses -- so the root is
+        opened where reading belongs and the claim stays true.
+        
+        Diff budget EXCEEDED 1797/855: read as a stop, disposed in SPEC.md Amendment 1.
+        blast_radius CLEAR, no reachability drift.
 
 - [ ] 16. (S7) Capture each instrument's DEFAULT output BEFORE the change
        (`proof/instruments_before.txt`), then add `--survivors-only` to both
@@ -341,3 +417,25 @@ and the map rule is that the map moves in the same commit as the code it
 describes. The reading it documents lands in this commit, so this is where the
 document belongs. Step 18 is therefore already satisfied and is marked as such
 with its proof; nothing was dropped.
+
+
+## STOP read and disposed at step 15 — the diff budget
+
+`tools/diff_budget.py 33f92e88c7 --ceiling 855 --paths <the declared areas>`
+read **EXCEEDED 1797 / 855**. Read as a stop, not a footnote: SPEC.md
+Amendment 1 carries the decision in one sentence, the per-file table showing
+every insertion traces to a spec item, three roads priced, and the
+recommendation taken (A: finish under a ceiling re-priced to 2250). Nothing in
+the operator's R1-R13 changed; the estimate did.
+
+`tools/blast_radius.py --against 33f92e88c7` over every changed src file:
+
+    frozen_surface_contacts: []
+    frozen_adjacent_contacts: []
+    frozen_surface_verdict: CLEAR
+    reachability direction: _arg_crit unchanged, results_summary unchanged,
+      render_results unchanged, stop_report unchanged, render_stop_report
+      unchanged
+
+No DRIFT: matches SPEC.md's forecast, and no symbol went newly_live or
+newly_dead.

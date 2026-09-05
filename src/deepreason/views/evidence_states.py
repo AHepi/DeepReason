@@ -57,12 +57,32 @@ _CYCLE_SIGNAL = "cycle"
 # fact the record does not carry.
 PRE_CYCLE = "pre-cycle"
 
-# A trial that reached a ruling and did not sustain. `trial-blocked:*` is NOT
-# here: a guard stopping a trial is not a trial that ran.
-_TRIAL_RULED = ("trial-declined", "trial-observation")
+# The three shapes a trial outcome reaches the record in (`informal/trial.py`),
+# and where the outcome word sits in each. All three share ONE vocabulary, so
+# the reading is about what the trial DID, not which of the three roads it took.
+_TRIAL_DECLINED = "trial-declined"        # [signal, target, reason]
+_TRIAL_OBSERVATION = "trial-observation"  # [signal, target, observation, outcome]
+_TRIAL_BLOCKED = "trial-blocked:"         # [signal:reason, target]
 
-# The one guard outcome that is itself evidence both ways: the judges split.
-_TRIAL_SPLIT = "trial-blocked:ensemble-split"
+# The ONE outcome that means a trial ruled and the target came through it: the
+# defence's case won. Every other outcome in the vocabulary — `execution-backed`,
+# `referential-integrity`, `order-swap`, `empty-case`, `unknown-target`,
+# `no-<role>-role`, `single-judge-seat`, `no-critic-school`,
+# `same-school-critic`, `unresolved-standard` — is a guard stopping the trial
+# BEFORE it ruled on the merits, and a trial that never ruled is not evidence
+# that anything survived.
+_DEFENCE_SUSTAINED = "defence-sustained"
+
+# The one outcome that is itself evidence BOTH ways rather than a trial that
+# did not run: the judges disagreed. It reaches the record by all three roads.
+_ENSEMBLE_SPLIT = "ensemble-split"
+
+
+def _outcome(word: str) -> str:
+    """One trial vocabulary, three carriers. The advisory road prefixes a
+    blocked outcome with `blocked:`; the word after it is the same word."""
+
+    return word.split("blocked:", 1)[-1] if word.startswith("blocked:") else word
 
 
 class EvidenceState(str, Enum):
@@ -85,6 +105,13 @@ class _Record:
         self.declarations: list[dict[str, Any]] = []
 
 
+def _file_trial(found: _Record, target_id: str, outcome: str) -> None:
+    if outcome == _DEFENCE_SUSTAINED:
+        found.ruled.add(target_id)
+    elif outcome == _ENSEMBLE_SPLIT:
+        found.split.add(target_id)
+
+
 def _walk(harness) -> _Record:
     found = _Record()
     cycle = PRE_CYCLE
@@ -97,10 +124,12 @@ def _walk(harness) -> _Record:
         signal = inputs[0]
         if signal == _CYCLE_SIGNAL and len(inputs) > 1:
             cycle = inputs[1]
-        elif signal in _TRIAL_RULED and len(inputs) > 1:
-            found.ruled.add(inputs[1])
-        elif signal == _TRIAL_SPLIT and len(inputs) > 1:
-            found.split.add(inputs[1])
+        elif signal == _TRIAL_DECLINED and len(inputs) > 2:
+            _file_trial(found, inputs[1], _outcome(inputs[2]))
+        elif signal == _TRIAL_OBSERVATION and len(inputs) > 3:
+            _file_trial(found, inputs[1], _outcome(inputs[3]))
+        elif signal.startswith(_TRIAL_BLOCKED) and len(inputs) > 1:
+            _file_trial(found, inputs[1], _outcome(signal[len(_TRIAL_BLOCKED):]))
         elif signal == CRITICISM_DISPATCH_SIGNAL and len(inputs) >= 5:
             declaration = {
                 "cycle": inputs[1],
@@ -216,6 +245,22 @@ def _cycle_key(cycle: str) -> tuple[int, int, str]:
         return (1, int(cycle), "")
     except ValueError:
         return (2, 0, cycle)
+
+
+def evidence_state_summary_for_root(root) -> dict[str, Any]:
+    """`evidence_state_summary` for a root PATH, opened READ-ONLY here.
+
+    The path-taking entry point exists so a reader that must not construct a
+    `Harness` of its own can still show the reading — `application/stop_report.py`
+    is such a reader, and `DR-SUB-application` pins that property. Opening the
+    root belongs to this layer, which is the layer that does the reading.
+    """
+
+    from pathlib import Path
+
+    from deepreason.harness import Harness
+
+    return evidence_state_summary(Harness(Path(root), read_only=True))
 
 
 def frontier_column(readings: dict[str, EvidenceState], artifact_ids) -> list[str]:

@@ -615,3 +615,85 @@ Rubric: 6/6 yes
     and confirmed (S8)
   - DESIGN-AND-STOP sections: n/a, this is not a design-and-stop request
   - nothing untraceable to an R/C number: yes
+
+---
+
+## Amendment 1 — the ceiling was wrong, and this is the STOP that says so
+
+**Raised at the commit-2 boundary (CHECKLIST.md step 15), in the standard stop
+format, because `tools/diff_budget.py` read EXCEEDED and an estimate-only
+ceiling trips on nothing unless it is read.**
+
+    python tools/diff_budget.py 33f92e88c7 --ceiling 855 \
+      --paths src/ tests/ docs/map/ \
+              experiments/2026-09-03-change-conjecturer-pluggable-interface/ \
+              experiments/2026-09-03-change-provenance-history-channel/
+    -> EXCEEDED 1797 / 855
+       {"src/": 585, "tests/": 936, "docs/map/": 276,
+        "experiments/2026-09-03-change-conjecturer-pluggable-interface/": 0,
+        "experiments/2026-09-03-change-provenance-history-channel/": 0}
+
+### THE DECISION, in one sentence
+
+The change is 2.1× the size I estimated, entirely in tests, the reader and the
+map document rather than in new behaviour — so the question is whether to
+finish it, cut it, or split it.
+
+### Where the overrun actually is
+
+Every insertion traces to a spec item; no R number gained scope. The estimate
+was wrong in three places and right everywhere else:
+
+| file | estimated | actual | why |
+|---|---|---|---|
+| `tests/test_evidence_states.py` | (180 for all three test files) | 472 | R11 demands a mutation-proven test PER STATE, and the trial-vocabulary correction added four more. Each carries the docstring naming its motivating requirement, per repo rule |
+| `tests/test_criticism_dispatch_declaration.py` | — | 245 | one test per member of the closed outcome vocabulary, each on a real scheduler run |
+| `tests/test_evidence_states_law_line.py` | 90 | 182 | two halves, spelling and behavioural, on the shape `tests/test_successor_law_line.py` sets |
+| `src/deepreason/views/evidence_states.py` | 130 | 274 | S4/S5/S7 need four entry points, not one: per-artifact readings, the summary section, the per-artifact frontier column, and a path-taking entry so `stop_report` keeps opening no `Harness` |
+| `docs/map/CON-evidence-states.md` | 120 | 222 | seven checks, five of them multi-line python bodies, because a one-line grep cannot bind the completeness rule |
+| `src/deepreason/scheduler/scheduler.py` | (70 with the module) | 44 | on estimate |
+| `src/deepreason/application/results.py` + `stop_report.py` | 95 | 165 | the operator-vocabulary rendering, and the typed absence on two report kinds |
+| `src/deepreason/signals.py` | 0 | 21 | NOT estimated at all: `REC-add-signal.md` requires a declaration, which the spec did not foresee |
+
+### The three roads, priced
+
+**A — finish under a re-priced ceiling.** Remaining: the two instruments' switch
+(~90), its regression (~120), the census script and CENSUS.md (~120) = 330, for
+a total of ~2127. Cost: nothing beyond the work already commissioned. Risk:
+none new — the frozen gate is CLEAR, no reachability drifted
+(`_arg_crit`, `results_summary`, `render_results`, `stop_report`,
+`render_stop_report` all `unchanged`), and every ring is green.
+
+**B — cut the tests back to the ceiling.** Would mean dropping roughly 300 lines
+of test, which means dropping mutation coverage of at least three of the seven
+states/rules. Rejected: R11 names those proofs, and a reading nobody can falsify
+is exactly the thing this tranche exists to replace.
+
+**C — split the remainder into a second tranche.** The baseline hook (R7) and
+the census (R13) would ship separately. Rejected on the operator's own words:
+R13 says the OPEN-versus-SUPPORTED number "is the point", so a delivery without
+it answers a different question than the one asked.
+
+### RECOMMENDATION, and what was done
+
+**A.** The ceiling is re-priced to **2250** — `python3 -c "print(1797 + 330)"`
+→ 2127, plus headroom for the map moving with the last commit. The ceiling is
+an instrument I set in this document; the operator's authority is R1-R13, and
+none of them changed. The overrun is an estimate I got wrong, not scope that
+grew, and the proof of that is the per-file table above: there is no file in
+the diff that does not answer to a spec item.
+
+Stated plainly rather than footnoted, because a ceiling nobody reads is a
+ceiling that protects nothing: **this change is twice the size it was
+specified at.** It is the same change.
+
+### Budget, re-priced
+
+    python3 -c "print(sum([274,81,99,66,44,21, 472,245,182,37, 222,32,20,2]))"
+    -> 1797   (landed at the commit-2 boundary)
+    python3 -c "print(sum([90,120,120]))"
+    -> 330    (steps 16, 17 and 19 still to come)
+    python3 -c "print(1797 + 330)"
+    -> 2127   ceiling set to 2250
+
+Declared areas unchanged. Frozen surfaces touched: still NONE.

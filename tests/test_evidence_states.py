@@ -92,11 +92,68 @@ def test_supported_when_a_warranted_attack_was_itself_refuted(harness):
 
 
 def test_supported_when_a_trial_ruled_and_did_not_sustain(harness):
-    """R1: 'or defended trial'. `trial-declined` is the typed non-sustained
-    outcome `informal/trial.py::_decline` files."""
+    """R1: 'or defended trial'. `defence-sustained` is the ONE outcome in
+    `informal/trial.py`'s vocabulary that means the trial ruled and the
+    defence's case won."""
 
     a = art(harness, "a conjecture put on trial")
-    harness.record_measure(inputs=["trial-declined", a.id, "guard_blocked_nothing"])
+    harness.record_measure(inputs=["trial-declined", a.id, "defence-sustained"])
+    assert evidence_states(harness)[a.id] is EvidenceState.SUPPORTED
+
+
+def test_a_trial_a_guard_stopped_is_not_a_trial_that_ruled(harness):
+    """The correction of 2026-09-04, found by running the surface over
+    `experiments/2026-09-02-live-p-a2-corrected/run`: that root files 16
+    `execution-backed` and 4 `referential-integrity` declines, and reading
+    every decline as a survival called 39 of its 94 artifacts survivors when
+    the real number is 8.
+
+    Each of these reasons is a guard stopping the trial BEFORE it ruled on the
+    merits — the target was protected by execution backing, the case failed a
+    structural check, no critic school was available. A trial that never ruled
+    is not evidence that anything survived.
+    """
+
+    for reason in (
+        "execution-backed", "referential-integrity", "order-swap", "empty-case",
+        "unknown-target", "no-defender-role", "single-judge-seat",
+        "no-critic-school", "same-school-critic", "unresolved-standard",
+    ):
+        a = art(harness, f"a conjecture whose trial was stopped by {reason}")
+        harness.record_measure(inputs=["trial-declined", a.id, reason])
+        assert evidence_states(harness)[a.id] is EvidenceState.OPEN, reason
+
+
+def test_an_ensemble_split_reaches_contested_by_all_three_roads(harness):
+    """One trial vocabulary, three carriers (`informal/trial.py`): `_decline`
+    files the reason third, `_record_trial_observation` files the outcome
+    fourth with a `blocked:` prefix, and `_block` puts it in the signal itself.
+    A split is evidence both ways whichever road it arrives by."""
+
+    by_decline = art(harness, "split, filed as a decline")
+    harness.record_measure(inputs=["trial-declined", by_decline.id, "ensemble-split"])
+
+    by_observation = art(harness, "split, filed as an advisory observation")
+    harness.record_measure(
+        inputs=["trial-observation", by_observation.id, "obs-1", "blocked:ensemble-split"]
+    )
+
+    by_block = art(harness, "split, filed as a block")
+    harness.record_measure(inputs=["trial-blocked:ensemble-split", by_block.id])
+
+    readings = evidence_states(harness)
+    for artifact in (by_decline, by_observation, by_block):
+        assert readings[artifact.id] is EvidenceState.CONTESTED, artifact.id
+
+
+def test_an_advisory_observation_that_ruled_for_the_defence_supports(harness):
+    """The observe-only road carries the same words: `defence-sustained`
+    without a `blocked:` prefix is a ruling there too."""
+
+    a = art(harness, "a conjecture the advisory road ruled on")
+    harness.record_measure(
+        inputs=["trial-observation", a.id, "obs-1", "defence-sustained"]
+    )
     assert evidence_states(harness)[a.id] is EvidenceState.SUPPORTED
 
 

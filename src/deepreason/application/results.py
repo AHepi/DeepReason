@@ -28,12 +28,14 @@ from typing import Any
 ABSENCE_REASONS = frozenset(
     {
         "AMENDMENT_CHAIN_UNREADABLE",
+        "NO_CRITICISM_DISPATCH_DECLARATION",
         "NO_CYCLE_RECORD",
         "NO_EMBEDDER_RECORD",
         "NO_FINDING_FAMILIES",
         "NO_FRONTIER_RECORD",
         "NO_LIFECYCLE_REFUSAL_RECORD",
         "NO_PROVIDER_ATTEMPTS",
+        "NO_REPLAY_HARNESS",
         "NO_REPLAY_VALIDATION_JSON",
         "NO_RUN_IDENTITY_RECORD",
         "NO_RUN_INPUT",
@@ -247,6 +249,7 @@ def _artifacts(
     status: dict | None,
     result: dict | None,
     state: Any | None,
+    harness: Any = None,
 ) -> dict[str, Any]:
     """The run's artifact counts. `survivor_count` is the published survivor
     set MINUS its import-role admission records, which the invariant says
@@ -281,6 +284,11 @@ def _artifacts(
         status.get("problem_id", _absent("NO_RUN_STATUS_JSON"))
         if status
         else _absent("NO_RUN_STATUS_JSON")
+    )
+    frontier["evidence_states"] = (
+        _frontier_states(harness, frontier["artifact_ids"])
+        if harness is not None
+        else _absent("NO_REPLAY_HARNESS")
     )
     counts["survivor_count"] = survivors
     counts["frontier"] = frontier
@@ -324,6 +332,37 @@ def _adjudication(harness) -> dict[str, Any]:
         "trial_declined": dict(sorted(declined.items())),
         "trial_blocked": dict(sorted(blocked.items())),
     }
+
+
+def _evidence_states(harness) -> dict[str, Any]:
+    """Which artifacts actually survived something, and which were never tested.
+
+    `accepted` cannot answer that: an artifact nobody attacked and one that beat
+    off a warranted attack carry the same label. The reading is derived, decides
+    nothing, and lives in `DR-CON-evidence-states`; this surface only shows it.
+    A run whose replay cannot be read reports a typed absence rather than an
+    empty count, which would state a result the record never held.
+    """
+
+    from deepreason.views.evidence_states import evidence_state_summary
+
+    try:
+        return evidence_state_summary(harness)
+    except Exception:  # noqa: BLE001 - a legacy root may defeat the replay reader
+        return _absent("REPLAY_STATE_UNREADABLE")
+
+
+def _frontier_states(harness, artifact_ids: Any) -> Any:
+    """One reading per frontier id, aligned with the listing above it."""
+
+    from deepreason.views.evidence_states import evidence_states, frontier_column
+
+    if not isinstance(artifact_ids, list):
+        return artifact_ids
+    try:
+        return frontier_column(evidence_states(harness), artifact_ids)
+    except Exception:  # noqa: BLE001 - same legacy-root tolerance as above
+        return _absent("REPLAY_STATE_UNREADABLE")
 
 
 def embedder_summary(harness) -> dict[str, Any]:
@@ -717,6 +756,54 @@ def embedder_line(embedder: dict[str, Any]) -> str:
     )
 
 
+def evidence_states_lines(reading: dict[str, Any]) -> list[str]:
+    """What actually survived, said plainly.
+
+    `accepted` is the label a conjecture keeps whether it was tested or merely
+    left alone, so a reader counting accepted artifacts is counting two
+    different things. These four lines separate them.
+    """
+
+    if _is_absent(reading):
+        return [f"  {_show(reading)}"]
+    counts = reading["counts"]
+    lines = [
+        f"  nothing has been brought against it yet: {counts['open']}",
+        f"  it came through an attack, or a trial that ruled and did not "
+        f"sustain: {counts['supported']}",
+        f"  it fell: {counts['refuted']}",
+        f"  the evidence points both ways: {counts['contested']}",
+    ]
+    if reading["excluded_import_admissions"]:
+        lines.append(
+            f"  (not counted: {reading['excluded_import_admissions']} admission "
+            f"records for attached material — bookkeeping, never positions)"
+        )
+    completeness = reading["completeness"]
+    if _is_absent(completeness):
+        lines.append(
+            "  nothing on this record says whether any round of criticism ran "
+            "to the end, so nothing here counts as having come through "
+            "criticism merely because it was left alone"
+        )
+    else:
+        lines.append(
+            f"  rounds of criticism that ran to the end: "
+            f"{completeness['complete_passes']} of {completeness['passes']}, "
+            f"covering {completeness['licensed_artifacts']} artifacts"
+        )
+        cuts = {k: v for k, v in completeness["outcomes"].items() if k != "complete"}
+        if cuts:
+            lines.append(f"  rounds cut short, and by what: {cuts}")
+    by_cycle = ", ".join(
+        f"{cycle}: {row['open']}/{row['supported']}/{row['refuted']}/{row['contested']}"
+        for cycle, row in reading["per_cycle"].items()
+    )
+    if by_cycle:
+        lines.append(f"  per episode (untested/came-through/fell/both-ways) — {by_cycle}")
+    return lines
+
+
 def render_results(summary: dict[str, Any]) -> str:
     """The summary as reader-facing text, every technical label glossed in place.
 
@@ -762,9 +849,18 @@ def render_results(summary: dict[str, Any]) -> str:
     ]
     ids = artifacts["frontier"]["artifact_ids"]
     if isinstance(ids, list) and ids:
-        preview = ", ".join(entry[:12] for entry in ids[:_FRONTIER_PREVIEW])
+        column = artifacts["frontier"].get("evidence_states")
+        if isinstance(column, list) and len(column) == len(ids):
+            preview = ", ".join(
+                f"{entry[:12]} [{reading}]"
+                for entry, reading in zip(ids[:_FRONTIER_PREVIEW], column)
+            )
+        else:
+            preview = ", ".join(entry[:12] for entry in ids[:_FRONTIER_PREVIEW])
         more = len(ids) - _FRONTIER_PREVIEW
         lines.append(f"    {preview}" + (f" (+{more} more)" if more > 0 else ""))
+
+    lines += ["", "## Evidence states", *evidence_states_lines(summary["evidence_states"])]
 
     lines += [
         "",
@@ -901,8 +997,9 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
         "question": findings.get("question") or _absent("NO_RUN_INPUT"),
         "identity": _identity(root, status, replay),
         "run": _run(status, stop, harness),
-        "artifacts": _artifacts(positions, status, result, replayed_state),
+        "artifacts": _artifacts(positions, status, result, replayed_state, harness),
         "adjudication": _adjudication(harness),
+        "evidence_states": _evidence_states(harness),
         "embedder": embedder_summary(harness),
         "provider_health": provider_health_summary(harness),
         "seat_retirement": seat_retirement_summary(harness),

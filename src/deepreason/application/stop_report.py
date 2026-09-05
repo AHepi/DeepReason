@@ -743,6 +743,33 @@ def _config_diff(config_path: Path | None, manifest: dict | None) -> list[str] |
 # Public surface
 # ---------------------------------------------------------------------------
 
+def _evidence_states(root: Path | None, kind: str) -> dict[str, Any]:
+    """What survived, and what was merely left alone (`DR-CON-evidence-states`).
+
+    A stop report exists to say what a run actually did, and "78 accepted" does
+    not answer that: an artifact nobody attacked carries the same label as one
+    that beat off a warranted attack. Read from the root's own replay through the PATH-taking
+    entry point, so this module still opens no `Harness` of its own
+    (`DR-SUB-application` pins that). A kind
+    with no replayable log says so as a typed absence, the way the provider and
+    continuability sections already do for the same two kinds.
+    """
+
+    if kind == "home-no-root":
+        return _absent("no run root: the run never started, so nothing was "
+                       "admitted and nothing could have survived criticism")
+    if kind == "root-no-log" or root is None:
+        return _absent("no log.jsonl: the run stopped before its first "
+                       "reasoning call, so no artifact was ever admitted")
+    from deepreason.views.evidence_states import evidence_state_summary_for_root
+
+    try:
+        return evidence_state_summary_for_root(root)
+    except Exception:  # noqa: BLE001 - a legacy root may defeat the replay reader
+        return _absent("the replay reader could not rebuild this root's state, "
+                       "so what survived cannot be derived from it")
+
+
 def stop_report(path: Path | str, *, config_path: Path | str | None = None,
                 verify: bool = False) -> dict[str, Any]:
     """Build the typed stop report for the run root or home at ``path``."""
@@ -818,6 +845,7 @@ def stop_report(path: Path | str, *, config_path: Path | str | None = None,
             "provider_health": health,
             "classification": classification,
             "continuability": continuability,
+            "evidence_states": _evidence_states(root, kind),
         },
     }
 
@@ -973,6 +1001,44 @@ def render_stop_report(report: dict[str, Any]) -> str:
         out.append(f"- verify_root: {json.dumps(cont['verify_root'], sort_keys=True)}")
         out.append(f"- continue: **{cont['continue']}** — {cont['continuation_reason']}")
         out.append(f"- amend: **{cont['amend']}** — {cont['continuation_reason']}")
+        out.append("")
+
+    # 6
+    out.append("## 6. EVIDENCE STATES")
+    out.append("")
+    reading = sections["evidence_states"]
+    absent = _absence_line(reading)
+    if absent:
+        out.append(absent)
+    else:
+        counts = reading["counts"]
+        out.append("| what happened to it | artifacts |")
+        out.append("|---|---|")
+        out.append(f"| nothing has been brought against it yet | {counts['open']} |")
+        out.append(f"| it came through an attack, or a trial that ruled and "
+                   f"did not sustain | {counts['supported']} |")
+        out.append(f"| it fell | {counts['refuted']} |")
+        out.append(f"| the evidence points both ways | {counts['contested']} |")
+        out.append("")
+        completeness = reading["completeness"]
+        if completeness.get("absent"):
+            out.append("Nothing on this record says whether any round of "
+                       "criticism ran to the end, so nothing above counts as "
+                       "having come through criticism merely because it was "
+                       "left alone.")
+        else:
+            out.append(f"- rounds of criticism that ran to the end: "
+                       f"**{completeness['complete_passes']}** of "
+                       f"{completeness['passes']}, covering "
+                       f"{completeness['licensed_artifacts']} artifacts")
+            out.append(f"- every round's outcome: "
+                       f"{json.dumps(completeness['outcomes'], sort_keys=True)}")
+        out.append("")
+        out.append("| episode | untested | came through | fell | both ways |")
+        out.append("|---|---|---|---|---|")
+        for cycle, row in reading["per_cycle"].items():
+            out.append(f"| {cycle} | {row['open']} | {row['supported']} | "
+                       f"{row['refuted']} | {row['contested']} |")
         out.append("")
 
     return "\n".join(out).rstrip() + "\n"
