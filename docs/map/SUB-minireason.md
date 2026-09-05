@@ -1,5 +1,5 @@
 <!-- DR-SUB-minireason -->
-Verified-at: 9d87325c3
+Verified-at: 2b6440d28
 Verify: python -m pytest mini/tests/ -q
 Owns: mini/minireason/
 Seams: DR-SEAM-llm-x-minireason
