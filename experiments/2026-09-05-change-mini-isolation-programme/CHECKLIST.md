@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=24 blockers=none. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=25 blockers=none. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -778,11 +778,57 @@ tranche".
       adapter yet; it cannot reach the walk without one, which is why the
       verbatim error is pasted from the before-state's own request above.
       ```
-- [ ] 24. (S5) [COMMIT] `mini/minireason/sources.py`: the read-only
+- [x] 24. (S5) [COMMIT] `mini/minireason/sources.py`: the read-only
       projection from mini's dict `State` to the ontology types the plugins
       expect. It writes nothing.
       done-when: step 23's test passes AND `verify_root` over a mini run is
       unchanged at 0 violations (paste)
+
+      ```
+      $ python -m pytest mini/tests/test_mini_sources.py -q
+      ....                                                                     [100%]
+      4 passed in 1.43s
+
+      The step-23 test passes: `dr.problem` AND `dr.neighbourhood` render from a
+      live mini session through `sources.mini_section_request`, receipts
+      {problem: rendered, neighbourhood: rendered}. The writes-nothing test pins
+      the NEVER APPEND clause the same way the full harness's sources are held
+      to it: after two requests and two walks, log.jsonl's bytes, the next event
+      seq, the state digest, the replay digest and verify_root are unchanged --
+        verify_root(root)["violations"] == []   before AND after
+      A fourth test proves R12's half: a root started from the STANDARD frozen
+      input carries its criteria into the request as (id, eval) pairs, and a
+      root started from a bare question gets () -- never an error.
+
+      Two shapes the design sketch got wrong, corrected by the code rather than
+      argued around: the standard input's criteria are complete commitment
+      records (id, eval), not strings; and verify_root returns a report dict,
+      not a list. Neither changes what the step claims.
+
+      The projection's one design decision, stated: `problem` is projected from
+      the dict view into the ontology Problem, while the STATE handed to the
+      plugins is the canonical EpistemicState the dict view is itself projected
+      from -- the same objects the harness holds -- because re-validating every
+      artifact from its dict would be a second copy of the record for nothing.
+
+      $ python -m pytest mini/tests/ -q            -> 120 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q -> 3 passed
+      (re-run because a NEW mini module could import a fenced package; it does not)
+
+      $ python tools/diff_budget.py 14cc5da495 --ceiling 240 --paths mini/minireason src/deepreason/llm/packs.py
+      {"total_insertions": 110, "ceiling": 240, "verdict": "WITHIN"}
+
+      $ python tools/blast_radius.py --files mini/minireason/sources.py --symbols mini_section_request _frozen_criteria --against 14cc5da495
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      reachability: both symbols UNKNOWN -> UNKNOWN (the gate greps tests/ only;
+        their consumers are in mini/tests/, PARKED P1's blind spot)
+      $ git diff --stat 14cc5da495 -- <five frozen surfaces + llm/firewall.py>
+      (no output)  -- the mechanical tripwire, empty
+
+      Map, same commit: SUB-minireason.md gains the adapter's entry-point row and
+      a where-to-change row (what a request carries; it may read, never append,
+      and never reads status). Its ring re-run: 120 passed, 1 skipped.
+      ```
 - [ ] 25. (S6) [COMMIT] `render_seat_brief` as the public entry over
       `_walk_seat_layout`; no behaviour change for the two existing seats.
       done-when: `python -m pytest tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py -q` -> 0 failed (C4)

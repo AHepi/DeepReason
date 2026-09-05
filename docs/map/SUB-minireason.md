@@ -44,6 +44,7 @@ assert total * 20 < parent, (total, parent)
 | `loop.run`, once, before the first call | `compat.initialize(root, endpoint, model_profile, run_input, dossier)` | freezes the route, the compact wire contract and the v6 manifest |
 | anyone binding a root without running | `compat.bind_mini_root(...)` | binds (or verifies) one immutable schema-6 manifest and its run input |
 | a reader | `log.replay(root)` → `log.State` | the dict-shaped read view, projected from one canonical `Harness` |
+| a seat brief, before its walk | `sources.mini_section_request(session, problem_id, target_id=…, supplied=…)` | the ONE read-only projection from a mini session to the `SectionRequestV1` the shipped section plugins read; it appends nothing and moves no digest |
 
 `check: python -c "
 import inspect
@@ -227,6 +228,7 @@ assert 'REFUTED' not in body, 'mini must not label a status itself'
 | what counts as orbiting, or a gate block | `gate.orbit`, `gate.gate_blocks` | `mini/tests/test_gate.py` |
 | what a compiled commitment MEANS | NOT here: `checks.compile_checks` delegates to `deepreason.informal.skeleton`; mini owns which channels it COMPILES (the policy above), never what a commitment means | `mini/tests/test_checks.py`, `mini/tests/test_normative_kernel.py` |
 | what mini sends on the wire | NOT here: `compat.initialize` selects a parent `WireContract`; mini owns no schema | `mini/tests/test_call.py`, `tests/test_wire_contracts.py` |
+| what a mini seat's request CARRIES (a target, the frozen criteria, a caller's own keys) | `sources.mini_section_request`'s `supplied` mapping; the caller's keys win. It may READ the state and the record and may never append, and it never reads an artifact's status | `mini/tests/test_mini_sources.py` |
 | which packages a mini run may reach | `mini/tests/test_isolation_fence.py`'s `FENCED` and `ALLOWED` tuples, which quote SPEC S1 verbatim | `mini/tests/test_isolation_fence.py` |
 
 `check: python -m pytest mini/tests/test_loop.py mini/tests/test_gate.py mini/tests/test_checks.py mini/tests/test_compat.py mini/tests/test_mini_forms.py mini/tests/test_mini_commitment_policy.py -q`

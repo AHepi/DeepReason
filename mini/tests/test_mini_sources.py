@@ -139,5 +139,96 @@ def test_the_adapter_lets_the_shipped_neighbourhood_render(session):
     assert rendered == {"problem": "rendered", "neighbourhood": "rendered"}, rendered
     texts = {s.id: s.text_ref for s in sections}
     assert "why did X happen?" in texts["problem"]
-    for aid in accepted:
+    # `dr.neighbourhood` distils everything BEFORE the layout policy's live
+    # tail, which `dr.neighbourhood.live` renders whole; the split is the
+    # policy's, so it is read from the request rather than assumed.
+    live = request.layout.live_verbatim_n
+    distilled = accepted[:-live] if live else accepted
+    assert distilled, accepted
+    for aid in distilled:
         assert aid in texts["neighbourhood"], aid
+
+
+def test_the_adapter_writes_nothing(session):
+    """`DR-INV-seat-section-sources`' NEVER APPEND clause, owed by mini's
+    adapter too: after building requests and walking a layout with them, the
+    log's bytes, the next event sequence, the state digest and `verify_root`
+    are exactly what they were."""
+    from deepreason.invariants import verify_root
+    from deepreason.llm.packs import _walk_seat_layout
+    from minireason.log import replay
+    from minireason.sources import mini_section_request
+
+    layout = _neighbourhood_layout()
+    log_path = session.root / "log.jsonl"
+    before_bytes = log_path.read_bytes()
+    before_seq = session.harness._next_seq
+    before_digest = session.state.digest()
+    assert verify_root(session.root)["violations"] == []
+
+    for _ in range(2):
+        request = mini_section_request(
+            session, "pi-0", supplied={"accepted": tuple(session.survivors("pi-0"))}
+        )
+        _walk_seat_layout("mini.conjecturer", layout.layout_id, request, [])
+
+    assert log_path.read_bytes() == before_bytes
+    assert session.harness._next_seq == before_seq
+    assert session.state.digest() == before_digest
+    assert replay(session.root).digest() == before_digest
+    assert verify_root(session.root)["violations"] == []
+
+
+def test_the_frozen_criteria_reach_the_request_only_from_the_standard_input(tmp_path):
+    """R12: a root started from the STANDARD frozen input shows its criteria;
+    a root started from a bare question -- mini's constant process root -- has
+    none to show and gets an empty tuple, never an error."""
+    from deepreason.evidence import (
+        AttachedSourceProvenanceV1,
+        EvidenceDossierV1,
+        RunInputCommitmentV1,
+        RunInputManifestV2,
+        RunInputProblemV2,
+    )
+    from minireason.sources import mini_section_request
+
+    dossier = EvidenceDossierV1.create(
+        problem_ref="frozen-1",
+        sources=(),
+        total_byte_count=0,
+        creation_provenance=AttachedSourceProvenanceV1(
+            supplied_by="test", acquisition_method="none", note="empty"
+        ),
+    )
+    frozen = RunInputManifestV2.create(
+        problem=RunInputProblemV2(
+            id="frozen-1",
+            description="why did X happen?",
+            criteria=(
+                RunInputCommitmentV1(id="c-mechanism", eval="program:json-wf"),
+                RunInputCommitmentV1(id="c-refutable", eval="program:nonempty"),
+            ),
+        ),
+        evidence_dossier_digest=dossier.dossier_digest,
+    )
+    root = tmp_path / "frozen"
+    run(
+        [("frozen-1", "why did X happen?")],
+        _endpoint(),
+        budget=200_000,
+        root=root,
+        vs_k=2,
+        max_cycles=1,
+        run_input=frozen,
+        dossier=dossier,
+    )
+    request = mini_section_request(Session(root), "frozen-1")
+    assert request.supplied["criteria"] == (
+        ("c-mechanism", "program:json-wf"),
+        ("c-refutable", "program:nonempty"),
+    )
+    assert request.problem is not None and request.problem.id == "frozen-1"
+
+    bare = tmp_path / "bare"
+    run([("pi-0", "why?")], _endpoint(), budget=200_000, root=bare, vs_k=2, max_cycles=1)
+    assert mini_section_request(Session(bare), "pi-0").supplied["criteria"] == ()
