@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=45 blockers=none (T5 diff budget re-baselined at step 42, SPEC.md §Budget). T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=46 blockers=none. T3, T4 and T5 DELIVERED (T3/, T4/, T5/ DELIVERY.md); this window ends; T6 and T7 go to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1715,8 +1715,25 @@ tranche".
       All three green in the sense that matters: nothing this sub-tranche wrote
       fails, and no assertion was weakened.
       ```
-- [ ] 45. (T5) [COMMIT] Deliver T5.
+- [x] 45. (T5) [COMMIT] Deliver T5.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+      ```
+      $ git status --porcelain     -> (empty)
+      $ git rev-parse HEAD origin/claude/mini-isolation-t3-t5-7tsc6d
+      (one hash; verified after this step's push)
+
+      T5/VALIDATION.md verdict PASS; T5/DELIVERY.md written. R9 and R10 are
+      done; the three seats are a flow whose stage order and kind set are
+      data; the loop names no seat; a fourth kind is a registration; five
+      architecture checks go red on a bypass; nothing under src/ changed.
+      P8 disposed; P9 parked. T5 IS DELIVERED.
+
+      THIS WINDOW ENDS HERE, as instructed. T6 and T7 (steps 46-57) go to the
+      last window. Whoever takes T6 should read PARKED.md P7 and P9 first, and
+      note that every instrument T6 will record has been run at each of the
+      three deliveries here (T3/T4/T5 VALIDATION.md).
+      ```
 
 ## T6 — regression, goldens, the record (S10) — ~120 lines
 
