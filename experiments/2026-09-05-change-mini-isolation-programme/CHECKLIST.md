@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=41 blockers=none (T5 diff budget EXCEEDED at step 39, disclosed; re-baseline at step 42). T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=42 blockers=none (T5 diff budget EXCEEDED at step 39, disclosed; re-baseline at step 42). T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1575,10 +1575,29 @@ tranche".
 
       Budget: 619 of 240, EXCEEDED, disclosed; re-baselined at step 42.
       ```
-- [ ] 41. (S8) The registration proof (R10): a flow declared only in a test
+- [x] 41. (S8) The registration proof (R10): a flow declared only in a test
       file adds a FOURTH artifact kind and its seat, and runs end to end,
       with no edit under `mini/minireason/`.
       done-when: `python -m pytest mini/tests/test_mini_flow.py::test_a_new_artifact_kind_is_a_registration -q` -> passed
+
+      ```
+      $ python -m pytest mini/tests/test_mini_flow.py::test_a_new_artifact_kind_is_a_registration -q
+      .                                                                        [100%]
+      1 passed in 1.08s
+
+      The fourth kind is a "successor-question" seat: it reads a conjecture and
+      writes the deeper problem it opens, in free prose. Declared ENTIRELY in
+      the test file -- a form (a WireContract with `records_of`), a layout
+      composed of the three shipped mini plugins with its own directive as
+      data, a shell pairing them, a stage naming them, and a flow that is the
+      isolation flow plus that stage and that kind -- then run for two cycles
+      against the stub. Eight calls; the record carries [criticism, proposal,
+      successor-question] x 2, each about a conjecture of this run; the second
+      cycle's conjecturer was shown the fourth kind whole; meter equals log;
+      and the mtime of every file under mini/minireason/ is identical before
+      and after. R10 in the operator's words -- "add new artifact types on the
+      fly if I can see it might help" -- costs a registration and no edit.
+      ```
 - [ ] 42. (S9) [COMMIT] The five architecture tests, each with its mutation
       proof captured to `proof/mutation_<n>.txt` showing it RED.
       done-when: `python -m pytest mini/tests/test_mini_architecture.py -q`

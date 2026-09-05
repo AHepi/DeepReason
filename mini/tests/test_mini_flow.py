@@ -263,3 +263,113 @@ def test_the_legacy_flow_runs_exactly_as_before(tmp_path):
     assert "RECENT SURVIVORS" in calls[1]
     markers = [i for e in session.state.events for i in e.inputs if i.startswith("mini:")]
     assert markers == []
+
+
+# --------------------------------------- the registration proof (step 41)
+
+
+def test_a_new_artifact_kind_is_a_registration(tmp_path):
+    """R10, as the modularity law demands it be proven: a FOURTH artifact
+    kind and its seat -- a form, a layout, a shell, a stage, and a flow that
+    names them -- are declared HERE, in a test file, and run end to end
+    with no edit under `mini/minireason/`. The fourth seat is a
+    "successor-question" seat that reads a conjecture and writes the deeper
+    problem it opens; nothing in the engine has heard of it."""
+    import os
+    import time
+
+    from pydantic import BaseModel, ConfigDict, Field
+
+    from deepreason.llm.seat_sections import (
+        SeatPackLayoutEntryV1,
+        SeatPackLayoutV1,
+        SeatShellV1,
+        register_seat_pack_layout,
+        register_seat_shell,
+    )
+    from deepreason.llm.wire import WireContract
+    from minireason.flow import MiniFlowV1, MiniStageV1, register_mini_flow, resolve_mini_flow
+    from minireason.forms import MiniFormV1, register_mini_form
+    from minireason.records import mini_records
+
+    engine = pathlib.Path(__file__).resolve().parents[1] / "minireason"
+    before = {p: p.stat().st_mtime_ns for p in engine.rglob("*.py")}
+
+    # 1. the FORM: free prose, the only requirement is naming the conjecture
+    class _Successor(BaseModel):
+        model_config = ConfigDict(extra="forbid")
+        about: str = Field(min_length=1)
+        body: str = Field(min_length=1)
+
+    class _Successors(BaseModel):
+        model_config = ConfigDict(extra="forbid")
+        successors: list[_Successor] = Field(min_length=1)
+
+    class _Contract(WireContract):
+        def __init__(self):
+            super().__init__("test.successor.v1", _Successors, _Successors, variant="mini")
+
+        def compile(self, wire):
+            return wire
+
+    register_mini_form(MiniFormV1(
+        form_id="test.successor.v1", form_version="1.0.0", contract=_Contract(),
+        records_of=lambda out: [(s.about, s.body) for s in out.successors],
+    ))
+    # 2. the LAYOUT: the problem, the target, and a directive as data
+    register_seat_pack_layout(SeatPackLayoutV1(
+        layout_id="seat-pack.test.successor.v1",
+        entries=(
+            SeatPackLayoutEntryV1(plugin_id="mini.problem", priority=1),
+            SeatPackLayoutEntryV1(plugin_id="mini.target-conjecture", priority=2),
+            SeatPackLayoutEntryV1(plugin_id="mini.directive", priority=98, params={
+                "text": "You are the successor seat. Name the deeper problem the TARGET "
+                        "CONJECTURE above opens, in free prose."}),
+        ),
+    ))
+    # 3. the SHELL: the pairing that IS the seat
+    register_seat_shell(SeatShellV1(
+        shell_id="seat.test.successor.v1", seat_id="test.successor",
+        layout_id="seat-pack.test.successor.v1", form_id="test.successor.v1",
+        role_prompt_template_id="role-prompt.legacy-v0",
+    ), default_for_seat="test.successor")
+    # 4. the STAGE and the FLOW that names them, beside the shipped three
+    base = resolve_mini_flow("mini.flow.isolation.v1")
+    flow = register_mini_flow(MiniFlowV1(
+        flow_id="test.flow.four-kinds.v1", flow_version="1.0.0",
+        stages=base.stages + (MiniStageV1(
+            stage_id="test.stage.successor", seat_id="test.successor",
+            shell_id="seat.test.successor.v1", produces_kind="test.successor-question.v1",
+            reads_kinds=("mini.conjecture.v1",), per_target=True,
+        ),),
+        artifact_kinds=base.artifact_kinds + ("test.successor-question.v1",),
+        commitment_policy=base.commitment_policy,
+    ))
+
+    calls: list[str] = []
+    inner = _stage_endpoint(calls)
+
+    def endpoint_fn(prompt):
+        if "You are the successor seat" in prompt:
+            calls.append(prompt)
+            target = prompt.split("TARGET CONJECTURE ", 1)[1].split("\n", 1)[0].strip()
+            return json.dumps({"successors": [
+                {"about": target, "body": f"SUCCESSOR-SENTINEL-{len(calls)}: why only these molecules?"},
+            ]})
+        return inner._fn(prompt)
+
+    root = tmp_path / "four"
+    summary = run([("pi-0", "why does the sky look blue?")], MockEndpoint(endpoint_fn),
+                  budget=300_000, root=root, vs_k=1, max_cycles=2, flow=flow)
+    session = Session(root)
+    assert summary["flow"] == "test.flow.four-kinds.v1"
+    kinds = [r.kind for r in mini_records(session)]
+    assert kinds == ["mini.criticism.v1", "mini.commitment-proposal.v1",
+                     "test.successor-question.v1"] * 2, kinds
+    assert len(calls) == 8 and "You are the successor seat" in calls[3]
+    # the second cycle's conjecturer saw the fourth kind, whole
+    assert "test.successor-question.v1" in calls[4] and "SUCCESSOR-SENTINEL-4" in calls[4]
+    assert summary["meter_equals_log"]
+
+    after = {p: p.stat().st_mtime_ns for p in engine.rglob("*.py")}
+    assert before == after, "a file under mini/minireason/ changed while adding a kind"
