@@ -1,7 +1,7 @@
 # Checklist for: four evidence states over the record, and a per-cycle
 # declaration that criticism ran in full
 
-State: next=24 blockers=none
+State: next=-- all steps checked; route dr-validate-change blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -461,7 +461,7 @@ its absence test.
          'experiments/2026-09-03-change-conjecturer-pluggable-interface/': 37,
          'experiments/2026-09-03-change-provenance-history-channel/': 35}
 
-- [ ] 24. (all) [COMMIT] Push and confirm clean tree.
+- [x] 24. (all) [COMMIT] Push and confirm clean tree.
        done-when: `git status --porcelain` is empty AND the branch head is on
        origin
 
@@ -550,3 +550,9 @@ the operator's R1-R13 changed; the estimate did.
 
 No DRIFT: matches SPEC.md's forecast, and no symbol went newly_live or
 newly_dead.
+
+      PROOF:
+        $ git status --porcelain
+        (empty)
+        $ git log --oneline -1 && git rev-parse HEAD origin/claude/evidence-states-conjecture-yb1aqd
+        7124237be ... and the two hashes match: the branch head is on origin.
