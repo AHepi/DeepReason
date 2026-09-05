@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=27 blockers=none (diff budget EXCEEDED at step 26, disclosed; re-baseline at step 27). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=28 blockers=none (T3 diff budget re-baselined at step 27, SPEC.md §Budget). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -966,9 +966,61 @@ tranche".
       disclosed, not absorbed; the re-baseline lands ONCE at step 27, when the
       shells are measured too, in the shape T2 used at its step 19.
       ```
-- [ ] 27. (S6) [COMMIT] The three mini shells, and mini's dispatch resolving
+- [x] 27. (S6) [COMMIT] The three mini shells, and mini's dispatch resolving
       its form THROUGH `SeatShellV1.form_id` — its first consumer.
       done-when: SPEC.md §S6's `form_for_seat` assertion passes (paste)
+
+      ```
+      $ PYTHONPATH=mini python -c "...SPEC S6 accept, verbatim..."
+      SPEC S6 form_for_seat accept: OK
+      $ ... SPEC S5's layout assertion, now WITH its resolve_seat_shell line ...
+      SPEC S5 layout accept (shell line): OK -> ['mini.directive', 'mini.problem', 'mini.target-conjecture']
+      (its resolve_mini_flow line still waits for T5's flow registry)
+
+      $ python -m pytest mini/tests/test_mini_seat_shell.py mini/tests/test_mini_sources.py -q
+      14 passed in 1.90s
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py \
+            tests/test_seat_shell_swap.py tests/test_seat_section_architecture.py -q
+      29 passed in 1.68s                       -> C4: the two shipped shells resolve
+                                                  exactly as before; goldens unmoved
+      $ python -m pytest mini/tests/ -q         -> 130 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q -> 3 passed
+      $ git diff --stat 14cc5da495 -- <five frozen surfaces + llm/firewall.py> -> (no output)
+
+      What the six new tests pin: each seat's form is its shell's; argument and
+      DEEPREASON_MINI_FORM still win over the shell (the stored form is one
+      selection away); binding the CRITIC's shell in the conjecturer's seat
+      changes BOTH the brief (target-conjecture in, everything-so-far out, the
+      critic's directive) AND the form asked for (mini.critic.relaxed.v1) --
+      C7's two halves in one test; the directive takes the request's values and
+      leaves an unsupplied placeholder visible rather than blank; no mini module
+      names a private symbol of deepreason.llm.packs (AST over every file under
+      mini/minireason/); and the full harness's two shells are untouched.
+
+      $ python tools/blast_radius.py --files mini/minireason/seats.py --symbols form_for_seat \
+            render_mini_brief CONJECTURER_SHELL CRITIC_SHELL COMMITMENT_SHELL --against 14cc5da495
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      reachability: every symbol UNKNOWN -> UNKNOWN (consumers in mini/tests/)
+
+      Map, same commit: SUB-minireason.md gains two entry-point rows
+      (render_mini_brief, form_for_seat) and the three-shells claim with a check
+      that each seat's shell is the registered one, its form is the shell's, and
+      the two full-harness shells resolve unchanged. docs_verify --fast: 6 failed,
+      the same six known rows.
+
+      STOP CONDITION (diff budget), RE-BASELINED HERE as step 26 said it would be:
+      $ python tools/diff_budget.py 14cc5da495 --ceiling 240 --paths mini/minireason src/deepreason/llm/packs.py
+      {"areas": {"mini/minireason": 607, "src/deepreason/llm/packs.py": 29},
+       "total_insertions": 636, "ceiling": 240, "verdict": "EXCEEDED"}
+        sources.py 384 = code 223 / doc 63 / comment 21 / blank 77
+        seats.py   223 = code 129 / doc 47 / comment 14 / blank 33
+        packs.py    29
+      SPEC.md §Budget now carries the T3 re-baseline in T1/T2's shape: itemised
+      per file, code separated from docstring, each file's extra lines traced to
+      the obligation they discharge. T3 restated as ~640; programme ~2 100. The
+      T3-specific cause beyond P7's: the retention-as-a-rule ruling arrived after
+      SPEC.md's numbers were written.
+      ```
 - [ ] 28. (S5) The exposure test: a rendered critic brief over a run that
       contains commitment proposals contains none of their bytes.
       done-when: `python -m pytest mini/tests/test_mini_exposure.py -q` -> 0 failed

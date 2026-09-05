@@ -29,15 +29,20 @@ the `mini.everything-so-far` entry and disclosed inside the section
 
 from __future__ import annotations
 
+from deepreason.llm.packs import allocate_seat_brief, render_seat_brief
 from deepreason.llm.seat_sections import (
     SeatPackLayoutEntryV1,
     SeatPackLayoutV1,
+    SeatShellV1,
     register_seat_pack_layout,
+    register_seat_shell,
+    resolve_seat_shell,
 )
+from minireason.forms import MiniFormV1, select_mini_form
 # Importing the sources module registers the mini section plugins the
 # layouts below name; a layout is refused at registration if its plugins do
 # not resolve, so the order of these two imports is load-bearing.
-from minireason import sources as _sources  # noqa: F401
+from minireason.sources import mini_section_request
 
 CONJECTURER_SEAT = "mini.conjecturer"
 CRITIC_SEAT = "mini.critic"
@@ -122,7 +127,88 @@ for _seat, _layout in MINI_LAYOUTS.items():
     register_seat_pack_layout(_layout, default_for_seat=_seat)
 
 
+# The three shells: a seat kind IS this pairing of a layout and a form. Mini's
+# call layer builds its own directive around the form's schema, so the
+# role-prompt template named here is the shipped one and is not read by mini.
+def _shell(seat: str, layout_id: str, form_id: str) -> SeatShellV1:
+    return SeatShellV1(
+        shell_id=f"seat.{seat}.v0",
+        seat_id=seat,
+        layout_id=layout_id,
+        form_id=form_id,
+        role_prompt_template_id="role-prompt.legacy-v0",
+    )
+
+
+CONJECTURER_SHELL = _shell(CONJECTURER_SEAT, CONJECTURER_LAYOUT_ID, "mini.conjecturer.relaxed.v1")
+CRITIC_SHELL = _shell(CRITIC_SEAT, CRITIC_LAYOUT_ID, "mini.critic.relaxed.v1")
+COMMITMENT_SHELL = _shell(COMMITMENT_SEAT, COMMITMENT_LAYOUT_ID, "mini.commitment.relaxed.v1")
+MINI_SHELLS = {
+    CONJECTURER_SEAT: CONJECTURER_SHELL,
+    CRITIC_SEAT: CRITIC_SHELL,
+    COMMITMENT_SEAT: COMMITMENT_SHELL,
+}
+
+for _seat, _seat_shell in MINI_SHELLS.items():
+    register_seat_shell(_seat_shell, default_for_seat=_seat)
+
+
+def form_for_seat(
+    seat_id: str, form_id: str | None = None, *, shell_id: str | None = None
+) -> MiniFormV1:
+    """The FORM a mini seat fills, resolved THROUGH its shell.
+
+    `SeatShellV1.form_id` had no consumer anywhere before this (PARKED P3):
+    the shell paired a layout with a form declaratively while every dispatch
+    site still chose its form inline. Here the shell's `form_id` is the
+    declared default, so binding another shell in a seat's place changes what
+    the seat is asked for as well as what it is shown -- the two halves of
+    "a seat is a shell". An explicit argument, then `DEEPREASON_MINI_FORM`,
+    still win, as `select_mini_form` orders them.
+    """
+
+    shell = resolve_seat_shell(seat_id, shell_id)
+    return select_mini_form(seat_id, form_id, default=shell.form_id)
+
+
+def render_mini_brief(
+    session,
+    seat_id: str,
+    problem_id: str,
+    *,
+    target_id: str | None = None,
+    token_budget: int = 4096,
+    shell_id: str | None = None,
+    layout_id: str | None = None,
+    supplied=None,
+    receipts=None,
+) -> str:
+    """One seat's brief, from a live mini session, through the public road.
+
+    Shell -> layout -> request -> walk -> allocation, and nothing else: no
+    section is built here and no private name of `packs` is reached. Every
+    mini layout entry is mandatory, so the budget bounds nothing the layout
+    carries; what a seat is shown of a growing pool is the retention rule's
+    decision, disclosed inside the section. `receipts`, when passed, receives
+    the typed record of what actually rendered.
+    """
+
+    shell = resolve_seat_shell(seat_id, shell_id)
+    layout = layout_id or shell.layout_id
+    request = mini_section_request(
+        session, problem_id, target_id=target_id, supplied=supplied
+    )
+    sections, receipts = render_seat_brief(seat_id, layout, request, receipts)
+    return allocate_seat_brief(seat_id, token_budget, sections, receipts)
+
+
 __all__ = [
+    "COMMITMENT_SHELL",
+    "CONJECTURER_SHELL",
+    "CRITIC_SHELL",
+    "MINI_SHELLS",
+    "form_for_seat",
+    "render_mini_brief",
     "COMMITMENT_LAYOUT",
     "COMMITMENT_LAYOUT_ID",
     "COMMITMENT_SEAT",

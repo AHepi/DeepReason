@@ -45,6 +45,8 @@ assert total * 20 < parent, (total, parent)
 | anyone binding a root without running | `compat.bind_mini_root(...)` | binds (or verifies) one immutable schema-6 manifest and its run input |
 | a reader | `log.replay(root)` → `log.State` | the dict-shaped read view, projected from one canonical `Harness` |
 | a seat brief, before its walk | `sources.mini_section_request(session, problem_id, target_id=…, supplied=…)` | the ONE read-only projection from a mini session to the `SectionRequestV1` the shipped section plugins read; it appends nothing and moves no digest |
+| a mini seat's brief | `seats.render_mini_brief(session, seat_id, problem_id, target_id=…, receipts=…)` | shell → layout → request → the PUBLIC walk and allocation in `deepreason.llm.packs`; builds no section, names no private symbol |
+| a mini seat's form | `seats.form_for_seat(seat_id, form_id=None, shell_id=None)` | the form resolved THROUGH the shell's `form_id` — that field's first consumer anywhere; argument and `DEEPREASON_MINI_FORM` still win |
 
 `check: python -c "
 import inspect
@@ -213,6 +215,23 @@ for seat in seats.MINI_SEATS:
     assert layout.layout_id == seats.MINI_LAYOUTS[seat].layout_id, seat
     for entry in layout.entries:
         assert not entry.droppable and not entry.compressible, (seat, entry.plugin_id)
+"`
+
+**Three shells, and the shell's form is READ.** `seat.mini.conjecturer.v0`,
+`seat.mini.critic.v0` and `seat.mini.commitment.v0` each pair a layout with a
+relaxed form; binding another shell in a seat's place changes both what the
+seat is shown and what it is asked for, because `form_for_seat` takes the
+shell's `form_id` as its default.
+`check: python -c "
+import sys; sys.path.insert(0, 'mini')
+from deepreason.llm.seat_sections import resolve_seat_shell
+from deepreason.llm.seat_layouts import CONJECTURER_LEGACY_SHELL, CRITIC_LEGACY_SHELL
+from minireason.seats import MINI_SEATS, MINI_SHELLS, form_for_seat
+for seat in MINI_SEATS:
+    shell = resolve_seat_shell(seat)
+    assert shell == MINI_SHELLS[seat] and form_for_seat(seat).form_id == shell.form_id, seat
+assert resolve_seat_shell('conjecturer') == CONJECTURER_LEGACY_SHELL
+assert resolve_seat_shell('argumentative_critic') == CRITIC_LEGACY_SHELL
 "`
 
 **"Everything generated so far" is shown in FULL, and what stays visible as

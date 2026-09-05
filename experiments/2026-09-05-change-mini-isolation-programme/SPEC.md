@@ -972,6 +972,30 @@ design sketch does not see. T3–T7's numbers were written the same way and
 should be read as lower bounds, not ceilings. Rowed in PARKED.md as P7 so the
 later windows are not surprised by it.
 | T3 | the mini source adapter and the three shells | S5+S6 | 240 |
+
+**T3's 240 is EXCEEDED, and re-baselined with every file measured (2026-09-05,
+at step 27, once the shells were in).** Against main at `14cc5da495`:
+
+| file | insertions | code / docstring / comment / blank | why |
+|---|---|---|---|
+| `mini/minireason/sources.py` | 384 | 223 / 63 / 21 / 77 | S5 priced 130 for "one adapter and three plugins". What ships is the adapter with the frozen-criteria road (R12), FOUR plugins (the directive-as-layout-data is the modularity law's customisation clause), a registered retention-rule layer with two rules and two typed refusals — a ruling the operator accepted on 2026-09-05, AFTER these numbers were written — and the never-empty, always-named withheld notice (no silent caps) |
+| `mini/minireason/seats.py` | 223 | 129 / 47 / 14 / 33 | S6 priced 110 for "three shells and a public entry". What ships is three layouts carrying their directives as data, three shells, `form_for_seat` (the first consumer of `SeatShellV1.form_id`, PARKED P3) and `render_mini_brief` — the one function that walks shell → layout → request → public walk → public allocation |
+| `src/deepreason/llm/packs.py` | 29 | — | TWO public entries, not one: a consumer given only the walk would reach past the second underscore to get text, so the allocator's entry ships beside it, each pinned as one call to its private counterpart |
+| **total** | **636** | | against 240 |
+
+**Trimmed before disclosing**: the sources module docstring (25 → 14 lines)
+and a type alias that only restated a signature, 566 → 550 at step 26. What
+remains is 352 lines of code across the two new modules and 110 of docstring,
+and the docstrings carry the constraints the code cannot show (why the
+critic's layout is short, why retention is a rule, why the shell's form_id is
+consulted, why every entry is mandatory).
+
+**T3 is therefore restated as ~640**, and the programme total moves to
+~2 100. This is the third consecutive overrun with the cause PARKED P7 already
+names — the estimates priced the mechanism, not the obligations the standing
+laws attach to it — plus one cause specific to T3: a ruling (retention as a
+rule) that arrived after the numbers did. T4 and T5's numbers stay as written
+and are read as lower bounds.
 | T4 | the commitment seat, the controller hook, the map | S4+S7+S11b | 180 |
 | T5 | the pluggable flow and the architecture tests | S8+S9 | 240 |
 | T6 | regression, goldens, the record | S10 | 120 |
