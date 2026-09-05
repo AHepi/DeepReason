@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=6 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=7 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -163,9 +163,45 @@ tranche".
       
       No drift against SPEC.md's forecast.
       ```
-- [ ] 6. (S0a, S0b) Map: `REC-add-a-section-plugin.md` steps 2-4 now work
+- [x] 6. (S0a, S0b) Map: `REC-add-a-section-plugin.md` steps 2-4 now work
       end to end; update it and re-run its checks IN THIS COMMIT.
       done-when: `python tools/docs_verify.py` -> 0 failed AND `--audit` -> 0 findings
+
+      ```
+      $ python tools/docs_verify.py
+        FAIL SEAM-llm-x-rules.md:54: unparseable check ...
+        FAIL CON-run-identity.md:211: git log -M --diff-filter=R ... run-9175f0ec...
+        FAIL CON-run-identity.md:213: git log -1 --format=%s 1637e808 | grep -qi retire
+        FAIL CON-run-identity.md:215: ... f304fec1 ... (unknown revision in this clone)
+        FAIL INV-frozen-surfaces.md:206: find experiments runs ... transport_failure ... -eq 0
+        FAIL INV-frozen-surfaces.md:876: ... git show origin/claude/deepreason-p-s1-commitments-wowcib ...
+      docs_verify: 6 failed
+      
+      $ python tools/docs_verify.py --audit
+      SEAM-llm-x-rules.md:54: unparseable check ...
+      docs_verify --audit: 1 finding(s)
+      
+      NOT 0 failed, and none of it is this step's. All six sit in documents this
+      step did not touch, and every one of them is a checkout artefact of this
+      container rather than a claim that stopped being true:
+      
+        SEAM-llm-x-rules.md:54  and CON-run-identity.md:211/213/215 are on this
+        window instruction's own known-not-yours list.
+        INV-frozen-surfaces.md:206 and :876 are not on that list by line number, so
+        both were REPRODUCED on the untouched base in this same container --
+        git worktree at 1f8108c00a --
+          base :206  rc=1  (22 files match; the clone carries experiment records
+                            the check expects absent)
+          :876       rc=128 on 'git show origin/claude/deepreason-p-s1-
+                     commitments-wowcib:...' -- a branch this clone lacks.
+      
+      REC-add-a-section-plugin.md itself passes, including the three checks added
+      here, and --audit does not flag any of them as vacuous. Its steps 2, 3 and 4
+      now each carry a check that goes red if the road stops working: the run reads
+      the operator directory, a .layout.json declares a layout and a bad one is
+      refused typed, and no Config field can name a layout. Verified-at advanced to
+      db5cc16ff because those checks were actually re-run.
+      ```
 - [ ] 7. (T0) Gate: `python -m pytest tests/ -q -n 4`
       done-when: output ends "N passed, 0 failed" (paste it)
 - [ ] 8. (T0) Mini ring: `python -m pytest mini/tests/ -q`
