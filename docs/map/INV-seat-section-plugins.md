@@ -71,7 +71,24 @@ else:
 | the shipped layouts and shells | `llm/seat_layouts.py` |
 | formatting without code | `llm/seat_templates.py` |
 | the prose that wraps a brief | `llm/role_prompts.py` |
-| the one walk that builds a section | `llm/packs.py::_walk_seat_layout` |
+| the one walk that builds a section | `llm/packs.py::_walk_seat_layout` (private; the two shipped renderers call it) |
+| the PUBLIC road to a brief for any consumer outside `packs.py` | `llm/packs.py::render_seat_brief` (the walk) and `::allocate_seat_brief` (the allocator) — added 2026-09-05 for the reduced engine's seats, so a third consumer neither reaches past an underscore nor builds a second renderer |
+
+Each public entry is ONE call to its private counterpart and nothing else, so
+a consumer using it gets the walk's own accounting rather than a copy of it.
+`check: python -c "
+import ast, pathlib
+src = pathlib.Path('src/deepreason/llm/packs.py').read_text()
+tree = ast.parse(src)
+fns = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+for public, private in (('render_seat_brief', '_walk_seat_layout'),
+                        ('allocate_seat_brief', '_allocate_sections')):
+    fn = fns[public]
+    body = [n for n in fn.body if not isinstance(n, ast.Expr)]
+    assert len(body) == 1 and isinstance(body[0], ast.Return), public
+    call = body[0].value
+    assert isinstance(call, ast.Call) and call.func.id == private, public
+"`
 
 ## The invariants
 

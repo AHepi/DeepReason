@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=25 blockers=none. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=26 blockers=none. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -829,9 +829,67 @@ tranche".
       a where-to-change row (what a request carries; it may read, never append,
       and never reads status). Its ring re-run: 120 passed, 1 skipped.
       ```
-- [ ] 25. (S6) [COMMIT] `render_seat_brief` as the public entry over
+- [x] 25. (S6) [COMMIT] `render_seat_brief` as the public entry over
       `_walk_seat_layout`; no behaviour change for the two existing seats.
       done-when: `python -m pytest tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py -q` -> 0 failed (C4)
+
+      ```
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py \
+            tests/test_seat_section_architecture.py tests/test_seat_shell_swap.py -q
+      29 passed in 1.75s                       -> 0 failed (C4 holds)
+      $ python -m pytest tests/test_seat_section_contract.py tests/test_seat_pack_layout.py \
+            tests/test_render_layout_policy.py -q
+      44 passed in 0.35s
+
+      TWO public entries, not one, and the second is forced by the first. A brief
+      is walked AND allocated, and both roads were private (`_walk_seat_layout`,
+      `_allocate_sections`). A consumer given only the walk would reach past the
+      second underscore to get text -- exactly the bypass PARKED P4 records -- so
+      `allocate_seat_brief` ships beside `render_seat_brief`. Each is ONE call to
+      its private counterpart and nothing else, pinned by a new map check in
+      INV-seat-section-plugins.md (same commit), so a consumer gets the walk's
+      own accounting rather than a copy. The two shipped renderers keep calling
+      the private walk directly, which is why their bytes cannot have moved and
+      the architecture test's "walked == 1" count is untouched.
+
+      $ python tools/diff_budget.py 14cc5da495 --ceiling 240 --paths mini/minireason src/deepreason/llm/packs.py
+      {"areas": {"mini/minireason": 110, "src/deepreason/llm/packs.py": 29},
+       "total_insertions": 139, "ceiling": 240, "verdict": "WITHIN"}
+
+      $ python tools/blast_radius.py --files src/deepreason/llm/packs.py \
+            --symbols render_seat_brief allocate_seat_brief --against 14cc5da495
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      reachability: render_seat_brief   UNKNOWN -> UNREACHABLE (direction: none)
+                    allocate_seat_brief UNKNOWN -> UNREACHABLE (direction: none)
+      qualification_digest: []   wheel_smoke_pins: []
+      Not drift: both are NEW symbols with no consumer until step 26 registers
+      mini's seats; neither is newly_live nor newly_dead. The consumer census over
+      packs.py is the 5 test hits and 42 map hits SPEC.md's census already
+      classifies as MUST NOT MOVE / EXPECTED TO MOVE for S11b.
+      $ git diff --stat 14cc5da495 -- <five frozen surfaces + llm/firewall.py>
+      (no output)
+
+      Map, same commit: INV-seat-section-plugins.md's entry-point table gains the
+      public road, and one check that each public entry is exactly one call to
+      its private counterpart.
+
+      $ python tools/docs_verify.py            (FULL, owed because src/ changed)
+      docs_verify: 7 failed
+        SEAM-llm-x-rules.md:54          known-not-mine (window list)
+        CON-run-identity.md:211/213/215 known-not-mine (window list)
+        INV-frozen-surfaces.md:206/876  known-not-mine (the window's :181/:736,
+                                        shifted by that document's later edits;
+                                        same two checks: the transport_failure
+                                        census and the judge-canary price script)
+        CON-packs-and-token-economy.md:293  MINE -- "only two renderers are on
+          the IR" pins the set of callers of _allocate_sections, and
+          allocate_seat_brief is now a third. Moved with the code, not deleted:
+          the claim now reads "two renderers plus the one declared public entry"
+          and the check pins all three by name. Re-run: check OK.
+      So 6 known rows + 1 that this step caused and fixed in the same commit;
+      0 new failures remain. The full run also covered the T3 tree as of this
+      step (the step-26 files were present but unstaged).
+      ```
 - [ ] 26. (S5) [COMMIT] The three mini section plugins
       (`mini.everything-so-far` untruncated, `mini.target-conjecture`,
       `mini.problem`) and the three layouts. The critic layout registers NO

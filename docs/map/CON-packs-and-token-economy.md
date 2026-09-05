@@ -282,15 +282,19 @@ epistemic one: an argument cannot be refuted on bytes the critic was never
 shown.
 `check: python -m pytest tests/test_pack_prefix.py::test_long_critic_target_arrives_whole_rather_than_excerpted -q`
 
-**Only two renderers are on the IR.** `render_conj_pack` and `render_crit_pack`
-go through `_allocate_sections`; `render_batch_crit_pack`,
+**Only two renderers are on the IR, plus the one declared public entry.**
+`render_conj_pack` and `render_crit_pack` go through `_allocate_sections`, and
+since 2026-09-05 so does `allocate_seat_brief` — not a renderer but the public
+road a consumer outside `packs.py` (the reduced engine's seats) takes to the
+same allocator, so that it neither reaches past the underscore nor builds a
+second one (`DR-INV-seat-section-plugins`, entry points). `render_batch_crit_pack`,
 `render_experiment_pack`, `render_property_pack` and `render_cx_retry_pack`
 still return a raw prefix clip at `token_budget * 4` chars and, being plain
 `str`, are clipped a second time by the profile inside the adapter. Batch
 criticism is the surprise here — the batched critic gets prefix truncation
 where the single-target critic gets section allocation.
 `check: test "$(grep -cF '_clip("' src/deepreason/llm/packs.py)" = 4`
-`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());H=sorted(n.name for n in ast.walk(T) if isinstance(n,ast.FunctionDef) and any(isinstance(c,ast.Call) and getattr(c.func,'id','')=='_allocate_sections' for c in ast.walk(n)));assert H==['render_conj_pack','render_crit_pack']"`
+`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());H=sorted(n.name for n in ast.walk(T) if isinstance(n,ast.FunctionDef) and any(isinstance(c,ast.Call) and getattr(c.func,'id','')=='_allocate_sections' for c in ast.walk(n)));assert H==['allocate_seat_brief','render_conj_pack','render_crit_pack'],H"`
 `check: grep -qF '_CHARS_PER_TOKEN = 4' src/deepreason/llm/packs.py && grep -qF 'return text[: token_budget * _CHARS_PER_TOKEN]' src/deepreason/llm/packs.py`
 
 **NEGATIVE — an allocated pack must never be re-clipped by the profile.**

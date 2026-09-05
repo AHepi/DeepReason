@@ -533,6 +533,35 @@ def _walk_seat_layout(seat_id: str, layout_id, request, receipts=None):
     return sections, receipts
 
 
+def render_seat_brief(seat_id: str, layout_id, request, receipts=None):
+    """The declared PUBLIC entry over the walk -- the one road to a brief for
+    any consumer outside this module.
+
+    `_walk_seat_layout` is private, and a consumer reaching past that
+    underscore is exactly the bypass the modularity law's architecture tests
+    exist to catch; a consumer that built its own walk instead would be a
+    second renderer, which is worse. This name is the third road, and the
+    only legal one: the reduced engine's seats render through it, and the
+    two shipped renderers keep calling the walk directly, so their bytes do
+    not move. Returns `(sections, receipts)`, unallocated -- allocation is
+    `allocate_seat_brief`'s.
+    """
+
+    return _walk_seat_layout(seat_id, layout_id, request, receipts)
+
+
+def allocate_seat_brief(role: str, token_budget: int, sections, receipts=None):
+    """The declared public entry over the allocator, for the same reason.
+
+    NO SILENT CAPS travels with it: a section the budget cuts is either
+    absent with a receipt saying so, or named in the withheld notice when it
+    is in `DISCLOSED_ON_DROP`. Returns the allocated brief as an
+    `AllocatedPack`.
+    """
+
+    return _allocate_sections(role, token_budget, list(sections), receipts=receipts)
+
+
 def _reconcile_receipts(receipts, result) -> None:
     """Rewrite each receipt's disposition from what the ALLOCATOR did.
 
