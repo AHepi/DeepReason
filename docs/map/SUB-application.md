@@ -1,5 +1,5 @@
 <!-- DR-SUB-application -->
-Verified-at: 9e8b55b44
+Verified-at: c7a8bd81c
 Verify: python -m pytest tests/test_v6_only_cli_admission.py tests/test_v6_only_application_admission.py tests/test_easy.py -q && python -m pytest tests/test_application_text_runs_d0.py tests/test_r0_terminal_verification.py tests/test_continuation.py tests/test_stop_policy.py tests/test_progress.py -q
 Owns: src/deepreason/application/, src/deepreason/workflows/, src/deepreason/cli/, src/deepreason/runtime/, src/deepreason/easy.py, src/deepreason/intake_form.py, src/deepreason/shallow.py
 Seams: 
@@ -283,6 +283,7 @@ for name in ('evidence_states', 'evidence_state_summary', 'evidence_state_summar
 | What a FAILURE terminal records about its own continuability | two of the THREE exits of `_worker`'s single `except (Exception, SystemExit)` block in `application/text_runs.py` — `TERMINAL_NO_CHECKPOINT_WRITTEN` (no harness) and `TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL` (ordinary), both through `_refusal` onto the existing `terminal_lifecycle_refusal` key. The third exit (`current_terminal_commitment is not None`) still records nothing — parked, `2026-08-30-change-checkpoint-hardening` F10 | `tests/test_checkpoint_hardening.py::test_a_failure_terminal_records_why_it_cannot_be_continued` |
 | How a caller holding a compiled manifest starts a run, and what `deepreason run --run-manifest` dispatches into | `TextRunApplicationService.start_manifest_run` in `application/text_runs.py`; `_dispatch_managed_run` in `cli/main.py` renders the result and owns nothing else | `tests/test_single_run_path.py::test_the_door_narrows_no_configuration_the_compiler_admits` |
 | How a root that stopped without a terminal reaches one | `finalize_stopped_root` in `application/text_runs.py` and `_cmd_finalize` in `cli/main.py` | `tests/test_lifecycle_operation_parity.py::test_finalize_reaches_terminal_on_a_root_that_stopped_without_one` |
+| What a run may be STARTED FROM on the reduced-engine path | `_load_frozen_input` and `run_shallow_question`'s `run_input_root` in `shallow.py`; `--run-input` and the two refusals in `_cmd_reason` in `cli/main.py`. Two starting inputs and no third: a bare question, or the STANDARD `RunInputManifestV2` that `deepreason input freeze` writes and the full harness takes. Which one was used is SAID in the result's `run_input` block, and frozen criteria that are bound but not compiled into commitments carry their own notice rather than being left to be inferred from a count | `tests/test_shallow_reason.py::test_shallow_takes_the_standard_frozen_input`, `::test_the_bare_question_form_is_unchanged`, `::test_frozen_criteria_are_bound_and_their_non_use_is_disclosed` |
 | Whether the operator's own section plugins reach a run at all, and where the disclosure of what did NOT load lands | `_record_operator_plugins` in `shallow.py`, called once during setup BEFORE the first call -- a plugin registered after a brief was rendered would be a section the run says it had and did not. Both of the loader's lists go to `seat-plugins.json` in the run root and to the result payload; dropping the second would leave a brief missing a section with no reason given | `tests/test_seat_section_home.py::test_managed_path_loads_operator_plugins`, `::test_a_plugin_that_raises_on_import_is_a_notice_in_the_record` |
 | Provider presets, or what the wizard asks | `PROVIDERS` / `MAKE_OVERRIDES` / `setup_wizard` / `apply_setup` in `easy.py` | `tests/test_easy.py::test_setup_wizard_writes_config_without_the_key` |
 | Website stage order, retry scope, or design-manifest compilation | `_NEXT_STAGE` and `WebsiteStateMachine` in `workflows/website.py`; `ManifestCompiler.compile` in `workflows/manifest_compiler.py` | `tests/test_website_state_machine.py::test_retry_is_local_and_cannot_choose_a_transition` |
@@ -314,6 +315,24 @@ assert len(calls) == 1, ('setup must load them exactly once', len(calls))
 doors = [p.name for p in pathlib.Path('src/deepreason/application').rglob('*.py')
          if 'load_operator_plugins' in p.read_text()]
 assert doors == [], doors
+"`
+
+Importing this package must not start the run engine. The three text-run names
+are reached through a module `__getattr__` rather than an eager import, so a
+reduced-engine run that legitimately uses `application.conjecture` does not
+drag the v6 text-run stack in behind it. The public names are unchanged and now
+forward to the live module rather than to a copy bound at import.
+`check: python -c "
+import ast, pathlib
+src = pathlib.Path('src/deepreason/application/__init__.py').read_text()
+tree = ast.parse(src)
+eager = [n for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)
+         and n.module == 'deepreason.application.text_runs']
+assert eager == [], 'the eager text-run import is back'
+assert any(isinstance(n, ast.FunctionDef) and n.name == '__getattr__'
+           for n in tree.body), 'the lazy accessor is gone'
+from deepreason.application import TextRunApplicationService, TEXT_RUN_SERVICE
+assert TextRunApplicationService.__name__ == 'TextRunApplicationService'
 "`
 
 ## Seat retirement reaches the one retrieval surface

@@ -489,6 +489,38 @@ tranche".
       and nothing was weakened to get there. Run sequentially, never concurrently
       with the gate.
       ```
+- [x] 14a. (S1; ADDED during T1 validation) [COMMIT] Map: `SUB-application.md`
+      gains the `--run-input` road and the lazy text-run re-export, both of
+      which changed files it owns (`shallow.py`, `cli/`, `application/`).
+      done-when: `python tools/docs_verify.py --stale` no longer lists it
+      against a commit from this tranche (paste), and `docs_verify.py` reports
+      no NEW failure
+
+      WHY THIS STEP EXISTS: same shape as step 8a, and the second time this
+      tranche has caught it. Step 12's map work was scoped to the document the
+      checklist named (`SUB-minireason.md`) while steps 10a and 11 changed
+      three files `SUB-application.md` owns. Recorded as a finding rather than
+      absorbed: the checklist names ONE map document per map step, and a step
+      that changes files owned by another needs its own.
+
+      ```
+      $ python tools/docs_verify.py --stale
+      (before) SUB-application.md: 2 commit(s) to owned files since 9e8b55b44
+               24 document(s) worth re-reading
+      (after)  not listed
+               23 document(s) worth re-reading
+
+      $ python tools/docs_verify.py
+      docs_verify: 6 failed -- the same six pre-existing rows. No new failure.
+
+      SUB-application.md gains one row (what a run may be STARTED FROM on the
+      reduced-engine path: two starting inputs and no third, with the run_input
+      block that says which was used) and one check on the lazy text-run
+      re-export. Mutation-proven: restoring the eager import turns it red --
+      "mutation caught: the eager text-run import is back". Verified-at
+      advanced to c7a8bd81c.
+      ```
+
 - [ ] 15. (T1) [COMMIT] Deliver T1.
       done-when: `git status --porcelain` empty AND branch head on origin
 
