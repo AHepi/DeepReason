@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=38 blockers=none (T4 diff budget re-baselined at step 34, SPEC.md §Budget). T3 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=39 blockers=none. T3 and T4 DELIVERED (T3/DELIVERY.md, T4/DELIVERY.md). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1413,8 +1413,20 @@ tranche".
       All three green in the sense that matters: nothing this sub-tranche wrote
       fails, and no assertion was weakened.
       ```
-- [ ] 38. (T4) [COMMIT] Deliver T4.
+- [x] 38. (T4) [COMMIT] Deliver T4.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+      ```
+      $ git status --porcelain     -> (empty)
+      $ git rev-parse HEAD origin/claude/mini-isolation-t3-t5-7tsc6d
+      (one hash; verified after this step's push)
+
+      T4/VALIDATION.md verdict PASS; T4/DELIVERY.md written. R4 is done (as a
+      record, not an artifact -- done-with-assumption, the road not taken
+      measured and recorded), R8 is honoured and enforced with zero callers,
+      R13 is structural. Nothing under src/ changed. T4 IS DELIVERED.
+      Next: T5 (steps 39-45), the last sub-tranche of this window.
+      ```
 
 ## T5 — the pluggable flow and the architecture tests (S8, S9) — ~240 lines
 
