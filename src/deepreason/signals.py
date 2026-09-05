@@ -461,6 +461,27 @@ _DECLARED: tuple[SignalDeclaration, ...] = (
                   "again resets the streak",
         staleness="cycle",
     ),
+    # Whether one criticism pass ran in full (2026-09-04).
+    SignalDeclaration(
+        name="criticism.dispatch.v1",
+        unit="event",
+        semantics="one criticism pass finished, and this is whether it made "
+                  "every call it planned (inputs: [signal, cycle, outcome, "
+                  "planned, dispatched, *dispatched target ids]). The outcome "
+                  "is `complete` or one of four cuts -- `cut:budget` (a "
+                  "per-cycle ration truncated the targets), `cut:seat` (no "
+                  "critic was available to dispatch to), `cut:call` (a planned "
+                  "call was dropped before it was made), `cut:foreign` (the "
+                  "manifest-owned road, whose coverage is a different question "
+                  "counted in its own receipts). It is a fact about DISPATCH, "
+                  "never about any artifact: `complete` says nothing was left "
+                  "unlooked-at, and NOT that anything survived. Its one "
+                  "consumer-visible consequence is that the absence of a "
+                  "warranted attack on a target this pass NAMES may be read as "
+                  "a measurement rather than as a gap. It may not reach a "
+                  "label, a rank or an admission",
+        staleness="permanent",
+    ),
     # Seat retirement, and the warning for turning it off (2026-09-04).
     SignalDeclaration(
         name="seat.retired.v1",

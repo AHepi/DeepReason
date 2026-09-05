@@ -1,0 +1,20 @@
+=== M6 ===
+mutant: in src/deepreason/scheduler/scheduler.py
+          harness, config = self.harness, self.config
+        criticism_policy = (
+  ->
+          from deepreason.views.evidence_states import evidence_states  # mutant
+        harness, config = self.harness, self.config
+        _ = evidence_states
+        criticism_policy = (
+
+--- with the mutant applied ---
+
+tests/test_evidence_states_law_line.py:100: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_evidence_states_law_line.py::test_no_deciding_package_names_the_reading
+1 failed in 0.08s
+
+--- reverted ---
+.                                                                        [100%]
+1 passed in 0.05s

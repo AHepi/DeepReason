@@ -219,3 +219,27 @@ def test_the_declaration_adds_no_record_object_kind(tmp_path):
     for event in filed:
         assert event.rule.value == "Measure", event.rule
         assert not event.outputs
+
+
+def test_the_signal_is_declared_in_the_registry():
+    """`REC-add-signal.md` step 2: a new signal ships with its meaning.
+
+    `tests/test_signals.py`'s AST scan cannot see this one — it reads literal
+    heads out of `record_measure(inputs=[...])` call sites, and this signal is
+    emitted through a named constant in one writer rather than a literal at the
+    call site. That blindness is PARKED as a finding about the scanner; it is
+    not a licence to leave the signal undeclared, so the registration is
+    asserted here directly.
+    """
+
+    from deepreason.signals import SIGNAL_DECLARATIONS, is_known
+
+    assert is_known(CRITICISM_DISPATCH_SIGNAL)
+    declaration = SIGNAL_DECLARATIONS[CRITICISM_DISPATCH_SIGNAL]
+    assert declaration.unit != "unspecified"
+    assert declaration.staleness != "unspecified"
+    # Producer-agnostic by the contract: the semantics say what one occurrence
+    # MEANS, never which subsystem emitted it.
+    assert "scheduler" not in declaration.semantics
+    # And what it is NOT evidence of, which is the field consumers get wrong.
+    assert "never about any artifact" in declaration.semantics

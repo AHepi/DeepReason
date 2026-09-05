@@ -26,6 +26,7 @@ contract: ID grammar, the check rule, and how a document is updated.
 | know what a particular MODEL does with a reasoning value, or describe a new model | `CON-model-profiles.md` — the document a human writes, never a source edit |
 | know which outside-reaching channels a run has, and how one is turned off | `INV-evidence-channels.md` |
 | know whether a channel that says ON can actually reach the capability it enables | `SEAM-capabilities-x-channels.md` |
+| tell whether an accepted artifact actually survived anything | `CON-evidence-states.md` |
 | understand a cross-cutting idea (schools, authority, warrants) | the concept table |
 | diagnose a defect | the `Traps` section of the covering document, then the record |
 | know which rung answers for a calculus axiom | `INV-axiom-basis.md` |
@@ -85,6 +86,7 @@ than you need.
 | `CON-successor-questions.md` | the question a criticism proposes should be asked next: where it goes, and the gate that can turn it into a problem |
 | `CON-model-profiles.md` | one model's settings as a document a human wrote: where it lives, what it may say, and what the harness is allowed to conclude from its absence |
 | `CON-configuration-stages.md` | the four stages a setting passes through — your file, the compiled manifest, run-time restoration from notices, what the seat receives — and the command that reveals each |
+| `CON-evidence-states.md` | telling a survivor from an untested conjecture: the four derived readings, and the declaration that says whether a criticism pass ran in full |
 
 ## Invariants and recipes
 

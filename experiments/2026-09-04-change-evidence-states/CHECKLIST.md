@@ -1,7 +1,7 @@
 # Checklist for: four evidence states over the record, and a per-cycle
 # declaration that criticism ran in full
 
-State: next=9 blockers=none
+State: next=12 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -156,23 +156,52 @@ its absence test.
           test_a_scheduler_run_that_criticised_in_full_reads_its_survivors
         transcript: proof/M5.txt
 
-- [ ] 9. (S3) Write `tests/test_evidence_states_law_line.py` — spelling half
+- [x] 9. (S3) Write `tests/test_evidence_states_law_line.py` — spelling half
       (no forbidden name under scheduler/, adjudication/, rules/; PERMITTED
       empty) and behavioural half (computing the reading appends no event and
       moves no status).
       done-when: `python -m pytest tests/test_evidence_states_law_line.py -q` -> 0 failed
 
-- [ ] 10. (S8) [COMMIT] Mutation-prove M6 and M7 (reader named inside
+      PROOF:
+        $ python -m pytest tests/test_evidence_states_law_line.py -q
+        7 passed in 23.29s
+        
+        Spelling half: no file under scheduler/, adjudication/ or rules/ names the
+        reading; PERMITTED is empty and emptiness is the claim; the reader/writer
+        non-import is asserted by AST, not source text, because the writer's docstring
+        names the reader on purpose and a text search would read prose as coupling.
+        Behavioural half: computing the reading appends no event and moves no status,
+        on a built harness and on a committed root.
+
+- [x] 10. (S8) [COMMIT] Mutation-prove M6 and M7 (reader named inside
       `scheduler/`; reader appends a measure).
       done-when: `proof/M6.txt` and `proof/M7.txt` each show the law-line test
       FAILED under the mutant and PASSED on revert
 
-- [ ] 11. (S1, S2, S3, S8) [COMMIT] Commit 1 of SPEC.md's split: the reading,
+      PROOF:
+        M6 (the reader imported inside scheduler/) -> test_no_deciding_package_names_the_reading FAILED, PASSED on revert
+        M7 (the reader appends a measure)          -> test_computing_the_reading_appends_nothing_to_the_record FAILED, PASSED on revert
+        transcripts: proof/M6.txt proof/M7.txt
+
+- [x] 11. (S1, S2, S3, S8) [COMMIT] Commit 1 of SPEC.md's split: the reading,
        the declaration, the law line, their tests and proofs, plus the
        `DR-SUB-scheduler` map edit describing the declaration `_arg_crit` now
        files (map moves in the SAME commit).
        done-when: `python tools/docs_verify.py` -> 0 failed beyond the C4 known
        rows, AND `python -m pytest tests/test_evidence_states.py tests/test_criticism_dispatch_declaration.py tests/test_evidence_states_law_line.py -q` -> 0 failed
+
+      PROOF:
+        $ python -m pytest tests/test_evidence_states.py tests/test_criticism_dispatch_declaration.py tests/test_evidence_states_law_line.py tests/test_signals.py tests/test_signal_contract.py -q
+        55 passed in 57.90s
+        
+        docs_verify: the two rows this tranche broke are fixed (INDEX --links now 0
+        dangling across 80 documents; SUB-application's record_* census updated). The
+        seven remaining are C4's own, reconciled row by row above.
+        docs_verify --audit: 1 finding, and it is C4's SEAM-llm-x-rules.md:54.
+        docs_verify --links: 0 dangling reference(s), 80 document(s).
+        All seven CON-evidence-states.md checks green, and six of them mutation-proven
+        able to fail (proof/map_checks_can_fail.txt) -- one was found VACUOUS on the
+        first pass and strengthened before it was written down.
 
 - [ ] 12. (S4) Add the `evidence_states` section to `results_summary` and the
        `## Evidence states` block plus the per-artifact frontier column to
@@ -206,11 +235,18 @@ its absence test.
        SUPPORTED artifacts.
        done-when: `python -m pytest tests/test_survivors_only_switch.py -q` -> 0 failed
 
-- [ ] 18. (S10) Create `docs/map/CON-evidence-states.md` per `SCHEMA.md`, with
+- [x] 18. (S10) Create `docs/map/CON-evidence-states.md` per `SCHEMA.md`, with
        four checks each first RUN AGAINST THE PRE-CHANGE TREE to confirm it
        FAILS. Add the `INDEX.md` routing row and concept-table row.
        done-when: `python tools/docs_verify.py --audit` reports no finding for
        `CON-evidence-states.md`, AND `python tools/docs_verify.py --links` -> 0 failed
+
+      PROOF:
+        Satisfied early, at step 11 -- see the re-plan note above. CON-evidence-states.md
+        created with seven checks, all green; docs_verify --audit reports no finding for
+        it; --links 0 dangling; six checks mutation-proven RED under a planted violation
+        (proof/map_checks_can_fail.txt). INDEX.md carries both a routing row and a
+        concept-table row.
 
 - [ ] 19. (S9) Write `census.py` (runs the SHIPPED reader over every committed
        root, tables OPEN vs SUPPORTED on the frontier) and paste its output into
@@ -273,3 +309,35 @@ No DRIFT: matches SPEC.md's forecast (CLEAR, empty both lists). The three
 UNREACHABLE entries carry `direction: None`, not `newly_dead` — they are new
 symbols with no caller yet; the surfaces that call them land at steps 12-13 and
 step 22 re-runs this gate once they do.
+
+## The known-not-yours docs_verify rows, reconciled (step 11)
+
+C4 names seven rows by line number. Those numbers are stale — the DOCUMENTS and
+the ROWS match exactly, seven of them, and each was confirmed pre-existing by
+running its own command rather than by trusting the count:
+
+| C4 says | actually at | why it fails, and why it is not this tranche's |
+|---|---|---|
+| SEAM-llm-x-rules.md:54 | :54 | unparseable check (an opener that never closes). Untouched by this tranche |
+| INV-frozen-surfaces.md:181 | :206 | `find experiments runs -path '*workflow-provider-attempt-v1/*.json' -exec grep -l transport_failure` returns 22 files, all under `experiments/2026-09-01-live-all-modules-p-a1/run/`, committed before this branch existed |
+| INV-frozen-surfaces.md:736 | :876 | needs `origin/claude/deepreason-p-s1-commitments-wowcib`, a remote branch this container has no ref for: `fatal: invalid object name`. Environmental |
+| CON-run-identity.md:211 | :211 | a `git log -M --diff-filter=R` history claim |
+| CON-run-identity.md:213 | :213 | `fatal: ambiguous argument '1637e808'` — a revision this container does not have |
+| CON-run-identity.md:215 | :215 | same, for `f304fec1` |
+| CON-run-identity.md:298 | :313 | TIMEOUT at 300s running `tests/test_jailbreak_gate.py`. Timed directly: **9 passed in 318.16s** — the test is GREEN and the CHECK is over docs_verify's per-check budget, which is what its own message says. Pre-existing cost |
+
+Two rows WERE this tranche's, and both are fixed in this commit rather than
+excused: `INDEX.md --links` reported `dangling DR-CON-evidence-states <-
+SUB-scheduler.md` (the concept document was referenced before it existed), and
+`SUB-application.md`'s per-package `harness.record_*` census moved because
+`runtime/criticism_dispatch.py` appends a Measure. `--links` now reports 0
+dangling across 80 documents; the census now names the new recorder.
+
+## Re-plan, recorded at execution (step 11)
+
+`docs/map/CON-evidence-states.md` was planned for step 18 (commit 3) and is
+created HERE, at commit 1, because `SUB-scheduler.md` references it at commit 1
+and the map rule is that the map moves in the same commit as the code it
+describes. The reading it documents lands in this commit, so this is where the
+document belongs. Step 18 is therefore already satisfied and is marked as such
+with its proof; nothing was dropped.
