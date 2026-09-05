@@ -1,5 +1,5 @@
 <!-- DR-SUB-application -->
-Verified-at: 5e44a650e
+Verified-at: 9e8b55b44
 Verify: python -m pytest tests/test_v6_only_cli_admission.py tests/test_v6_only_application_admission.py tests/test_easy.py -q && python -m pytest tests/test_application_text_runs_d0.py tests/test_r0_terminal_verification.py tests/test_continuation.py tests/test_stop_policy.py tests/test_progress.py -q
 Owns: src/deepreason/application/, src/deepreason/workflows/, src/deepreason/cli/, src/deepreason/runtime/, src/deepreason/easy.py, src/deepreason/intake_form.py, src/deepreason/shallow.py
 Seams: 
@@ -283,12 +283,38 @@ for name in ('evidence_states', 'evidence_state_summary', 'evidence_state_summar
 | What a FAILURE terminal records about its own continuability | two of the THREE exits of `_worker`'s single `except (Exception, SystemExit)` block in `application/text_runs.py` — `TERMINAL_NO_CHECKPOINT_WRITTEN` (no harness) and `TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL` (ordinary), both through `_refusal` onto the existing `terminal_lifecycle_refusal` key. The third exit (`current_terminal_commitment is not None`) still records nothing — parked, `2026-08-30-change-checkpoint-hardening` F10 | `tests/test_checkpoint_hardening.py::test_a_failure_terminal_records_why_it_cannot_be_continued` |
 | How a caller holding a compiled manifest starts a run, and what `deepreason run --run-manifest` dispatches into | `TextRunApplicationService.start_manifest_run` in `application/text_runs.py`; `_dispatch_managed_run` in `cli/main.py` renders the result and owns nothing else | `tests/test_single_run_path.py::test_the_door_narrows_no_configuration_the_compiler_admits` |
 | How a root that stopped without a terminal reaches one | `finalize_stopped_root` in `application/text_runs.py` and `_cmd_finalize` in `cli/main.py` | `tests/test_lifecycle_operation_parity.py::test_finalize_reaches_terminal_on_a_root_that_stopped_without_one` |
+| Whether the operator's own section plugins reach a run at all, and where the disclosure of what did NOT load lands | `_record_operator_plugins` in `shallow.py`, called once during setup BEFORE the first call -- a plugin registered after a brief was rendered would be a section the run says it had and did not. Both of the loader's lists go to `seat-plugins.json` in the run root and to the result payload; dropping the second would leave a brief missing a section with no reason given | `tests/test_seat_section_home.py::test_managed_path_loads_operator_plugins`, `::test_a_plugin_that_raises_on_import_is_a_notice_in_the_record` |
 | Provider presets, or what the wizard asks | `PROVIDERS` / `MAKE_OVERRIDES` / `setup_wizard` / `apply_setup` in `easy.py` | `tests/test_easy.py::test_setup_wizard_writes_config_without_the_key` |
 | Website stage order, retry scope, or design-manifest compilation | `_NEXT_STAGE` and `WebsiteStateMachine` in `workflows/website.py`; `ManifestCompiler.compile` in `workflows/manifest_compiler.py` | `tests/test_website_state_machine.py::test_retry_is_local_and_cannot_choose_a_transition` |
 | What the global `--config` DOES on the two public verbs, and why both must read it (2026-08-29) | `_cmd_reason` passes `config_path=args.config` into `RunPreparationRequestV1`; `_qualify_one_profile` passes the loaded `Config` into `qualification_subject_manifest`, both in `cli/main.py`. One configuration, one qualification subject: the battery `qualify` warms must be the battery a configured `reason` needs, or a configuration that compiles is one no operation can qualify (operations-parity law, 2026-08-13). The two BUILDERS agreeing is not evidence that either VERB calls them: deleting the `config=` line from `_qualify_one_profile` left the whole suite green until the two tests below were added | `tests/test_managed_path_config_read.py::test_prepare_compiles_the_run_from_the_operator_config_file` and `::test_qualify_addresses_the_subject_the_configured_run_needs` |
 `check: python -m pytest tests/test_managed_path_config_read.py::test_qualify_and_reason_agree_on_the_subject_for_every_configuration tests/test_managed_path_config_read.py::test_a_configured_run_is_refused_nowhere_a_default_run_starts tests/test_managed_path_config_read.py::test_prepare_compiles_the_run_from_the_operator_config_file tests/test_managed_path_config_read.py::test_qualify_addresses_the_subject_the_configured_run_needs -q`
 | `deepreason qualify`'s per-profile loop, or `deepreason status`'s per-seat section (Rung S4 of role-seat separation) | `_qualify_one_profile` (the extracted single-profile body, called once for the unchanged combination and additionally per distinct bound profile) and `_print_qualify_headline`/`_print_qualify_failure` in `cli/main.py`; `get_seat_readiness` is called from `_cmd_status`, defined in `readiness.py` (see `DR-CON-seats`, which owns that file) | `tests/test_qualification_per_seat.py::test_two_profile_home_qualifies_each_seat_plus_the_combination` |
 `check: python -m pytest tests/test_v6_only_cli_admission.py::test_public_parser_omits_make_and_unqualified_advanced_commands tests/test_v6_only_cli_admission.py::test_every_shared_root_command_rejects_a_historical_manifest tests/test_v6_only_cli_admission.py::test_run_requires_qualification_before_operator_lock tests/test_v6_only_application_admission.py::test_v6_rejects_mismatched_question tests/test_v6_only_application_admission.py::test_require_v6_launch_allowed_fails_closed_for_non_v6 tests/test_application_text_runs_d0.py::test_start_intent_is_strict_and_has_no_client_authority_fields tests/test_r0_terminal_verification.py::test_run_result_exit_contract tests/test_stop_policy.py::test_corroborated_stuck_exhausts_fixed_escape_ladder_before_stop tests/test_progress.py::test_progress_is_monotonic_append_only_and_latest_is_atomic tests/test_continuation.py::test_continue_rejects_tampered_stop_digest tests/test_cli_production_doctor_v6.py::test_report_computes_19_of_20_gate_and_all_metrics tests/test_easy.py::test_setup_wizard_writes_config_without_the_key tests/test_website_state_machine.py::test_retry_is_local_and_cannot_choose_a_transition tests/test_website_state_machine.py::test_manifest_failure_selects_component_contract_repair tests/test_qualification_per_seat.py::test_two_profile_home_qualifies_each_seat_plus_the_combination tests/test_qualification_per_seat.py::test_status_two_seat_home_names_both_seats tests/test_qualification_per_seat.py::test_single_profile_home_qualify_output_is_byte_identical_to_pre_s4 -q && grep -q "^PRODUCTION_CASES_PER_PAIR = 20" src/deepreason/cli/doctor.py && grep -q "^PRODUCTION_EVENTUAL_VALID_MINIMUM = 19" src/deepreason/cli/doctor.py && grep -q "^ESCAPE_LADDER = (" src/deepreason/runtime/stop.py && grep -q "^_NEXT_STAGE = {" src/deepreason/workflows/website.py && grep -q "^PROVIDERS = {" src/deepreason/easy.py && grep -q "^MAKE_OVERRIDES = {" src/deepreason/easy.py && grep -q "^def _read_policy(" src/deepreason/runtime/launch_policy.py && grep -q "^class WebsiteStateMachine" src/deepreason/workflows/website.py && grep -q "    def compile(" src/deepreason/workflows/manifest_compiler.py && grep -q "^def _v6_run_result(" src/deepreason/application/text_runs.py && grep -q "^def _qualify_one_profile(" src/deepreason/cli/main.py && grep -q "^def _print_qualify_headline(" src/deepreason/cli/main.py && grep -q "^def _print_qualify_failure(" src/deepreason/cli/main.py && grep -q "get_seat_readiness()" src/deepreason/cli/main.py`
+
+The shallow entry loads the operator's plugins itself; nothing else under
+`application/` does, so a second loader appearing here would be a second door
+into a trust boundary.
+`check: python -c "
+import ast, pathlib
+src = pathlib.Path('src/deepreason/shallow.py').read_text()
+tree = ast.parse(src)
+fn = next(n for n in ast.walk(tree)
+          if isinstance(n, ast.FunctionDef) and n.name == '_record_operator_plugins')
+loads = [c for c in ast.walk(fn) if isinstance(c, ast.Call)
+         and getattr(c.func, 'id', getattr(c.func, 'attr', '')) == 'load_operator_plugins']
+assert len(loads) == 1, ('setup must CALL the loader once', len(loads))
+keys = {k.value for d in ast.walk(fn) if isinstance(d, ast.Dict)
+        for k in d.keys if isinstance(k, ast.Constant)}
+assert {'loaded', 'notices'} <= keys, ('a list stopped reaching the record', keys)
+run = next(n for n in ast.walk(tree)
+           if isinstance(n, ast.FunctionDef) and n.name == 'run_shallow_question')
+calls = [c for c in ast.walk(run) if isinstance(c, ast.Call)
+         and getattr(c.func, 'id', '') == '_record_operator_plugins']
+assert len(calls) == 1, ('setup must load them exactly once', len(calls))
+doors = [p.name for p in pathlib.Path('src/deepreason/application').rglob('*.py')
+         if 'load_operator_plugins' in p.read_text()]
+assert doors == [], doors
+"`
 
 ## Seat retirement reaches the one retrieval surface
 

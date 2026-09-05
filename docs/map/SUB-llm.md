@@ -1,5 +1,5 @@
 <!-- DR-SUB-llm -->
-Verified-at: 9e80ceab0
+Verified-at: 9e8b55b44
 Verify: python -m pytest tests/test_llm.py tests/test_model_firewall.py tests/test_wire_contracts.py tests/test_llm_repair_capabilities.py tests/test_adapter_attempt_logging.py tests/test_compact_profiles.py tests/test_providers.py tests/test_budget.py -q
 Owns: src/deepreason/llm/
 Seams: DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules, DR-SEAM-bridge-x-llm, DR-SEAM-llm-x-scheduler, DR-SEAM-llm-x-verification
@@ -177,10 +177,26 @@ through the caller, including on the failure paths.
 | How a school resolves to a seat | `resolve_school_role_lease` (see DR-CON-schools) | `tests/test_school_execution_binding_v4.py` |
 | v6 transactional dispatch preconditions | `bind_v6_authority`, `_require_transactional_route_dispatchable`, `_transactional_profile_for` | `tests/test_adapter_workflow_authorization_c2.py`, `tests/test_v6_insufficient_capability_terminal.py` |
 | Which capabilities are probed, or the profile they select | `deterministic_probe_cases` + `probe_capabilities`; `select_profile` in `llm/profiles.py` | `tests/test_llm_repair_capabilities.py::test_capability_probes_are_deterministic_and_cached_by_revision`, `tests/test_compact_profiles.py::test_capable_route_selects_frontier_and_unknown_length_selects_standard` |
+| Declare a brief COMPOSITION without writing Python, or what a malformed declaration does | `register_seat_pack_layout_file` in `llm/seat_sections.py`: a `<name>.layout.json` under `<DEEPREASON_HOME>/seat_plugins/` carrying the layout's own `layout_id`, `entries` and an optional `default_for_seat`. A file that does not parse is refused `SEAT_PACK_LAYOUT_FILE_UNPARSEABLE` and registers NOTHING -- never a silent fall back to the seat's default | `tests/test_seat_section_home.py::test_a_file_declared_layout_is_registered`, `::test_an_unparseable_layout_file_is_refused_typed` |
 | The embedding backend or its drift stamp | `build_embedder`, `HashingEmbedder.fingerprint`, `NeuralEmbedder` | `tests/test_embedder.py` |
 | Whether the configured backend can be BUILT at all | `pyproject.toml`'s core dependency list (fastembed), `deepreason embedder-warmup` | `tests/test_embedder.py::test_fastembed_is_a_core_dependency` |
 
 `check: python -m pytest tests/test_providers.py tests/test_compact_profiles.py tests/test_wire_contracts.py tests/test_schema_carries_every_prose_rule.py tests/test_llm_repair_capabilities.py tests/test_model_firewall.py tests/test_llm.py tests/test_budget.py tests/test_judge_ensemble_boundary.py tests/test_school_execution_binding_v4.py tests/test_adapter_workflow_authorization_c2.py tests/test_v6_insufficient_capability_terminal.py tests/test_embedder.py -q`
+
+A layout file is DATA and never code: the loader that reads one imports no
+module from it, so the trust boundary a `.py` plugin crosses is not widened by
+declaring a composition.
+`check: python -c "
+import ast, pathlib
+src = pathlib.Path('src/deepreason/llm/seat_sections.py').read_text()
+fn = next(n for n in ast.walk(ast.parse(src))
+          if isinstance(n, ast.FunctionDef)
+          and n.name == 'register_seat_pack_layout_file')
+body = ast.get_source_segment(src, fn)
+assert 'spec_from_file_location' not in body, 'a layout file must not be imported'
+assert 'SEAT_PACK_LAYOUT_FILE_UNPARSEABLE' in body, 'the typed refusal is gone'
+assert 'register_seat_pack_layout(' in body
+"`
 
 ## Traps
 

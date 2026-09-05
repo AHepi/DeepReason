@@ -223,6 +223,51 @@ tranche".
       because the documented gate passes tests/ and so does not reach it (PARKED
       P1).
       ```
+- [x] 8a. (S0a, S0b; ADDED mid-T0, see note) [COMMIT] Map: the two SUBSYSTEM
+      documents that own the changed files gain their rows and checks --
+      `SUB-application.md` (`Owns: .../shallow.py`) and `SUB-llm.md`
+      (`Owns: src/deepreason/llm/`).
+      done-when: `python tools/docs_verify.py --stale` no longer lists either
+      document against a commit from this tranche (paste), and
+      `docs_verify.py` reports no NEW failure (paste)
+
+      WHY THIS STEP EXISTS: step 6 updated the RECIPE document, which is what
+      CHECKLIST step 6 named, and stopped there. CLAUDE.md's rule is that the
+      map moves in the same commit as the code, and steps 2 and 5 changed
+      files owned by two SUBSYSTEM documents that step 6 did not name. The
+      omission was caught by `docs_verify --stale` before T0's validation, so
+      it is repaired as its own step rather than absorbed into the delivery.
+
+      ```
+      $ python tools/docs_verify.py --stale   (before)
+      SUB-application.md: 1 commit(s) to owned files since 5e44a650e
+          3276a70ff step 2: (S0a) the managed shallow path loads the operator's...
+      SUB-llm.md: 1 commit(s) to owned files since 9e80ceab0
+          db5cc16ff step 5: (S0b) a layout can be declared in a file...
+      docs_verify --stale: 25 document(s) worth re-reading
+
+      $ python tools/docs_verify.py --stale   (after)
+      (neither document listed)
+      docs_verify --stale: 23 document(s) worth re-reading
+
+      $ python tools/docs_verify.py
+      docs_verify: 6 failed -- the SAME six as step 6, all pre-existing, none
+      in a document this step touched. No new failure.
+
+      Each document gained one row in its "Where to change what" table and one
+      column-0 check, both mutation-proven before being written down:
+        SUB-application.md -- replacing the loader call with a literal turns
+          the check red: "('setup must CALL the loader once', 0)". The first
+          draft of this check only grepped for the name and PASSED under that
+          mutation, because the import line still carried it; it counts Call
+          nodes now.
+        SUB-llm.md -- renaming the typed refusal code turns the check red:
+          "the typed refusal is gone".
+      Verified-at advanced to 9e8b55b44 on both, because every check in both
+      documents was executed against this tree (step 6's full run, then this
+      step's run over the changed files).
+      ```
+
 - [ ] 9. (T0) [COMMIT] Deliver T0: push, then confirm clean.
       done-when: `git status --porcelain` empty AND branch head on origin
 
