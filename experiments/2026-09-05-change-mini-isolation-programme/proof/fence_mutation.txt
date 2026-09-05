@@ -1,0 +1,35 @@
+=== fence_mutation.txt — the isolation fence, proven able to fail ===
+Generated at step 13 of the mini isolation programme, on the tree at b14c431f9.
+Each part of mini/tests/test_isolation_fence.py is broken in turn, shown RED,
+and reverted. A test that has never been seen red is a test nobody has
+checked (dr-execute-step, durable-tests rule 3).
+
+--- GREEN baseline ---
+...                                                                      [100%]
+3 passed in 2.74s
+
+--- MUTATION 1: mini/minireason/rotate.py imports deepreason.scheduler ---
+E       AssertionError: mini imports the larger harness directly:
+E         mini/minireason/rotate.py:1: deepreason.scheduler (fenced: deepreason.scheduler)
+E       assert not ['mini/minireason/rotate.py:1: deepreason.scheduler (fenced: deepreason.scheduler)']
+1 failed in 0.76s
+
+--- MUTATION 2: the eager text-run import returns to application/__init__.py ---
+E       AssertionError: importing mini pulls in fenced packages the record modules do not: ['deepreason.application.text_runs']
+E       assert ['deepreason....on.text_runs'] == []
+E         
+E         Left contains one more item: 'deepreason.application.text_runs'
+
+--- MUTATION 3: a lazy 'import deepreason.qualification' inside loop.run ---
+    (parts 1 and 2 both walk past this one; only part 3 sees it)
+E       AssertionError: a mini run imported the larger harness while running: ['deepreason.qualification']
+E       assert {'deepreason.qualification'} == set()
+E         
+E         Extra items in the left set:
+E         'deepreason.qualification'
+E         Use -v to get more diff
+
+--- REVERTED: green again ---
+...                                                                      [100%]
+3 passed in 2.58s
+git status (must be clean of mutations):

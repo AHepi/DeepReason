@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=13 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=14 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -438,9 +438,32 @@ tranche".
       was documented. The coverage sentence now carries a check that fails if a
       second directory outside src/deepreason/ is ever claimed without updating it.
       ```
-- [ ] 13. (S1) Prove the fence passes and CAN fail: mutate one mini module to
+- [x] 13. (S1) Prove the fence passes and CAN fail: mutate one mini module to
       import `deepreason.scheduler`, show the test red, revert.
       done-when: `proof/fence_mutation.txt` shows the red run and the green one
+
+      ```
+      proof/fence_mutation.txt written. GREEN baseline, three mutations, green
+      again, and a clean git status at the end.
+      
+      MUTATION 1  mini/minireason/rotate.py imports deepreason.scheduler
+        E  mini imports the larger harness directly:
+           mini/minireason/rotate.py:1: deepreason.scheduler (fenced: deepreason.scheduler)
+        1 failed
+      
+      MUTATION 2  the eager text-run import returns to application/__init__.py
+        E  importing mini pulls in fenced packages the record modules do not:
+           [deepreason.application.text_runs]
+      
+      MUTATION 3  a lazy import deepreason.qualification inside loop.run
+        E  a mini run imported the larger harness while running:
+           [deepreason.qualification]
+        Parts 1 and 2 BOTH pass under this mutation -- only part 3 sees it, which is
+        the reason part 3 exists and why it was kept even though it was already
+        green when written.
+      
+      REVERTED  3 passed; git status --porcelain over mini/ and src/ is empty.
+      ```
 - [ ] 14. (T1) Gate + mini ring + docs.
       done-when: `pytest tests/ -q -n 4` 0 failed; `pytest mini/tests/ -q` 0
       failed; `tools/docs_verify.py` 0 failed (paste all three)
