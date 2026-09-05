@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=18 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=19 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -594,10 +594,37 @@ tranche".
       too, so the amendment carries real numbers for both halves rather than an
       estimate for one.
       ```
-- [ ] 18. (S3) Write the red test first: a free-prose candidate under the
+- [x] 18. (S3) Write the red test first: a free-prose candidate under the
       relaxed form is refuted on arrival today (this reproduces
       `proof/m2_free_prose_today.txt` as a committed test).
       done-when: `python -m pytest mini/tests/test_mini_commitment_policy.py -q` -> fails, 0 survivors (paste)
+
+      ```
+      $ python -m pytest mini/tests/test_mini_commitment_policy.py -q
+      FAILED ::test_with_both_channels_off_free_prose_survives
+      FAILED ::test_the_default_policy_is_unchanged
+      FAILED ::test_each_channel_switches_independently
+      FAILED ::test_switching_a_channel_off_writes_a_typed_warning_into_the_record
+      4 failed, 2 passed in 1.18s
+      (all four on ModuleNotFoundError: minireason.policy does not exist yet)
+      
+      The two that PASS are the before-state, and they reproduce
+      proof/m2_free_prose_today.txt as committed tests rather than a proof file:
+      
+        compile_checks(prose) -> [skeleton-wf]
+        run_checks verdict    -> fail, "content does not parse as a skeleton"
+        a 3-cycle run of free prose:
+          summary  {stop: queue-exhausted, cycles: 3, problems: {pi-0: 0}, refuted: 6}
+          survivors []
+      
+      Six admitted, six refuted, ZERO survivors -- the same numbers the design
+      measured. That is what R2 alone produces, and it is why R3 is not a separate
+      wish: relaxing the form buys nothing while the mandatory well-formedness
+      commitment destroys every free-prose candidate on arrival.
+      
+      The sixth test asserts the WARNING'S ABSENCE under the default policy, because
+      a warning means something only if its absence does too.
+      ```
 - [ ] 19. (S3) [COMMIT] `MiniCommitmentPolicyV1` with two independent
       switches; `compile_checks` consults it; switching either off writes a
       typed WARNING record naming what is no longer checked.
