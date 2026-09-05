@@ -47,8 +47,14 @@ the package's bookkeeping reference, not on DeepReason.
 Rings re-run to reproduce the checks (no full gate; this is a read-only audit):
 `tests/test_adjudication.py tests/test_adjudication_blindness.py` — **15 passed**;
 `tests/test_discharge_law_line.py tests/test_discharge_channel.py` — **21 passed**;
-`tests/test_seat_section_sources.py` — **26 passed**. (`proof/rings.txt`,
-`proof/check05-discharge.txt`, `proof/check08-crossings.txt`.)
+`tests/test_seat_section_sources.py` — **26 passed**. (`proof/rings.txt`.)
+
+One further result, recorded because it happened rather than because the audit
+wanted it: a mistyped background ring command collected the whole suite instead
+of two files, and returned **5167 passed, 7 skipped, 0 failed** in 1:09:17 on
+this HEAD. The brief forbids running the full gate for a read-only audit, so
+this is logged as an accident, with the mistake that caused it, in
+`proof/full-gate-incidental.txt`.
 
 ---
 

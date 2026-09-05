@@ -40,6 +40,10 @@ Rings re-run (no full gate — read-only audit):
 `tests/test_discharge_law_line.py tests/test_discharge_channel.py` 21 passed;
 `tests/test_seat_section_sources.py` 26 passed. `proof/rings.txt`.
 
+A mistyped background ring command collected the whole suite by accident and
+returned 5167 passed, 7 skipped, 0 failed. Logged with its cause in
+`proof/full-gate-incidental.txt`; the audit did not intend to run a full gate.
+
 Close gates (`proof/close-gates.txt`): `git status --porcelain -- experiments/`
 outside this tranche prints nothing; `git diff --stat` prints nothing. No
 committed run root was written; nothing outside the tranche directory changed.

@@ -1,0 +1,27 @@
+INCIDENTAL FULL GATE — not requested by the audit brief, recorded because it ran.
+
+A backgrounded ring command was written as:
+
+    python -m pytest $(ls tests/test_adjudicate*.py tests/test_edges*.py \
+                          tests/test_status*.py 2>/dev/null) -q
+
+None of those three globs matches a file in tests/, so `ls` produced nothing,
+pytest received no path argument, and it collected the whole suite instead of
+the intended ring. The result, verbatim from the job's own output file:
+
+    5167 passed, 7 skipped in 4157.11s (1:09:17)
+    [exited with code 0]
+
+0 failed, on HEAD c26c66de7266968157c61e269fb927c5e368d2c3 with the tranche's
+own files present (all of which are untracked-then-committed markdown, scripts
+and proofs under experiments/, collected by nothing).
+
+This is reported as an accident, not as a gate the audit ran on purpose: the
+brief says "DO NOT ... run the full gate (read-only audit, the affected rings
+suffice)". It is recorded because a green full suite is a fact about this tree
+and suppressing it would be the dishonest half of honest-ledger discipline.
+
+The intended rings, re-run against the correct filenames after the mix-up, are
+in rings.txt. An earlier version of rings.txt carried this run's tail under the
+rings' command line, because both jobs wrote to that path; that file has been
+rewritten from a clean re-run and no longer misattributes either result.

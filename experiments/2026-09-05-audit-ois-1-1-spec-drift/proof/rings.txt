@@ -1,3 +1,11 @@
 $ python -m pytest tests/test_adjudication.py tests/test_adjudication_blindness.py -q
 ...............                                                          [100%]
-15 passed in 73.74s (0:01:13)
+15 passed in 75.50s (0:01:15)
+
+$ python -m pytest tests/test_discharge_law_line.py tests/test_discharge_channel.py -q
+.....................                                                    [100%]
+21 passed in 2.65s
+
+$ python -m pytest tests/test_seat_section_sources.py -q
+..........................                                               [100%]
+26 passed in 0.61s
