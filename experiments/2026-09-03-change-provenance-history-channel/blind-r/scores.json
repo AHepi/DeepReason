@@ -1278,5 +1278,325 @@
     }
    }
   ]
+ },
+ "23017d21-9c4b-4f9d-98bd-e4f6845c8ed9": {
+  "judges": 3,
+  "totals": [
+   0,
+   1,
+   1
+  ],
+  "median": 1,
+  "spread": 1,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "total": 1,
+    "why": {
+     "c1": "Only one side is presented; the case that preference smuggles in induction is entirely absent.",
+     "c2": "Mentions evolutionary selection but fails to engage with Popper's specific definition of corroboration or the Salmon/OK machinery.",
+     "c3": "No verdict is offered; the response claims the problem 'dissolves' rather than choosing a survivor.",
+     "c4": "No cost is named, as the answer denies the tension exists rather than accepting a loss.",
+     "c5": "Explicitly takes cheap exit (a) by asserting the problem dissolves via redefinition rather than holding the tension."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     0,
+     0,
+     0
+    ],
+    "total": 1,
+    "why": {
+     "c1": "Only one side (the evolutionary defense) is presented; the case for smuggling induction is entirely absent.",
+     "c2": "Mentions variation/elimination but fails to engage with the specific definition of corroboration or the Salmon/OK debate.",
+     "c3": "No explicit verdict is stated; the response merely asserts a dissolution rather than choosing a survivor.",
+     "c4": "No cost is identified or discussed; the answer treats the solution as cost-free.",
+     "c5": "Explicitly takes cheap exit (a) by claiming the problem 'dissolves' via redefinition rather than holding the tension."
+    }
+   },
+   {
+    "scores": [
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "total": 0,
+    "why": {
+     "c1": "Fails to present either case, let alone the strongest form of both arguments.",
+     "c2": "Ignores Popper's specific machinery regarding corroboration reports and pragmatic preference.",
+     "c3": "Dissolves the question rather than delivering a committed verdict on the specific tension.",
+     "c4": "Identifies no specific cost or uncomfortable concession required by the chosen stance.",
+     "c5": "Explicitly takes the 'cheap exit' of dissolving the problem via redefinition (evolutionary analogy)."
+    }
+   }
+  ]
+ },
+ "2396b345-431a-425c-a691-57df2ab3ef64": {
+  "judges": 3,
+  "totals": [
+   11,
+   11,
+   11
+  ],
+  "median": 11,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     1,
+     2,
+     3,
+     3,
+     2
+    ],
+    "total": 11,
+    "why": {
+     "c1": "The case for induction is asserted but not developed with the strength of a proponent like Salmon or Hume.",
+     "c2": "It correctly identifies corroboration as a past report and the methodological rule, but lacks specific textual engagement (e.g., Salmon debate).",
+     "c3": "The verdict is clear and commits definitively to the 'defensible' side.",
+     "c4": "The cost identified (discontinuity between scientific rationality and pragmatic action) is a genuine, uncomfortable concession.",
+     "c5": "It avoids dissolving the tension but leans heavily on the 'pragmatic' label which risks being the cheap exit named in criterion 5b."
+    }
+   },
+   {
+    "scores": [
+     1,
+     2,
+     3,
+     3,
+     2
+    ],
+    "total": 11,
+    "why": {
+     "c1": "The case for the preference being defensible is strong, but the opposing case (that it smuggles in induction) is merely asserted rather than developed with equal strength.",
+     "c2": "It correctly identifies corroboration as a report on past performance and the methodological rule aspect, though it lacks specific engagement with the Salmon/Realism and the Aim of Science debate details.",
+     "c3": "The response clearly commits to the verdict that the preference is defensible on Popper's terms.",
+     "c4": "The cost identified (the discontinuity between scientific rationality and pragmatic decision-making) is a genuine, uncomfortable concession for a Popperian.",
+     "c5": "It avoids redefining corroboration but leans heavily on the 'pragmatic' distinction which risks bordering on the cheap exit of naming the problem rather than fully resolving the tension."
+    }
+   },
+   {
+    "scores": [
+     1,
+     2,
+     3,
+     3,
+     2
+    ],
+    "total": 11,
+    "why": {
+     "c1": "The case for smuggling induction is asserted but not developed with the strength of a proponent like Salmon.",
+     "c2": "It correctly identifies corroboration as a report on past performance and the methodological rule, though lacks deep textual engagement.",
+     "c3": "The verdict is clear, committing definitively to the defensibility of the preference on Popper's terms.",
+     "c4": "The cost identified (discontinuity between scientific rationality and pragmatic decision-making) is a genuine, uncomfortable concession.",
+     "c5": "It avoids dissolving the tension but leans heavily on the 'methodological rule' distinction which risks appearing as a semantic exit."
+    }
+   }
+  ]
+ },
+ "23c46fc5-6d8e-4bca-b93c-927dafba5e8e": {
+  "judges": 3,
+  "totals": [
+   3,
+   3,
+   3
+  ],
+  "median": 3,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only the case for smuggling induction is made; the defense on Popper's own terms is entirely absent.",
+     "c2": "Mentions past vs future performance but fails to engage with specific Popperian machinery like 'Objective Knowledge' or the distinction between corroboration and probability.",
+     "c3": "A verdict is stated clearly, though it lacks the comparative reasoning required by the prompt's structure.",
+     "c4": "No cost of accepting the verdict is identified or discussed.",
+     "c5": "Takes the cheap exit of simply asserting the inductive assumption without holding or answering the tension regarding Popper's pragmatic reply."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only the induction-smuggling case is made; the defense on Popper's own terms is entirely absent.",
+     "c2": "Mentions past vs future performance but fails to engage with specific Popperian machinery like the pragmatic preference or the nature of corroboration reports.",
+     "c3": "Commits to a verdict that induction is smuggled in, though the reasoning is thin due to the lack of a counter-case.",
+     "c4": "No cost of accepting the verdict is identified or discussed.",
+     "c5": "Takes the cheap exit of simply asserting the definition of induction without holding or answering the tension regarding Popper's pragmatic solution."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only the induction-smuggling case is made; the defense on Popper's own terms is entirely absent.",
+     "c2": "Mentions past vs future performance but fails to engage with specific Popperian machinery like pragmatic preference or the nature of corroboration reports.",
+     "c3": "Commits to a verdict that induction is smuggled in, though the justification is thin due to the lack of counter-argument analysis.",
+     "c4": "No cost of accepting the verdict is identified or discussed.",
+     "c5": "Takes the cheap exit of simply asserting the inductive assumption without holding the tension or addressing Popper's pragmatic reply."
+    }
+   }
+  ]
+ },
+ "25163a13-402c-4178-bbe6-9d6ad261b2bd": {
+  "judges": 3,
+  "totals": [
+   2,
+   3,
+   3
+  ],
+  "median": 3,
+  "spread": 1,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only the induction-smuggling case is made; the defense on Popper's own terms is entirely absent.",
+     "c2": "Mentions past/future tension but fails to engage with specific Popperian machinery like corroboration reports or pragmatic preference.",
+     "c3": "Commits to a verdict that induction is smuggled in, though the justification is thin.",
+     "c4": "No cost of accepting the verdict is identified or discussed.",
+     "c5": "Takes the cheap exit of conceding Salmon's point and labeling the residue as reliance on uniformity without holding the tension."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     0,
+     0
+    ],
+    "total": 2,
+    "why": {
+     "c1": "Only the induction-smuggling case is made; the Popperian defense is entirely absent.",
+     "c2": "Mentions past/future tests but fails to engage with specific Popperian machinery like corroboration reports or pragmatic preference.",
+     "c3": "States a verdict but lacks the required comparative analysis of which side survives the debate.",
+     "c4": "No cost of accepting the verdict is identified or discussed.",
+     "c5": "Takes the cheap exit of conceding Salmon's point and labeling the issue as inductive without holding the tension."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only the induction-smuggling case is made; the defense on Popper's own terms is entirely absent.",
+     "c2": "Mentions past/future reliability but fails to engage with specific Popperian machinery like corroboration reports or the pragmatic preference distinction.",
+     "c3": "A verdict is implied favoring induction, but it lacks the explicit comparative structure requested ('which one survives').",
+     "c4": "No cost of accepting the verdict is identified or discussed.",
+     "c5": "Takes the cheap exit of simply asserting the inductive assumption without holding the tension or answering how Popper specifically responds."
+    }
+   }
+  ]
+ },
+ "2527fdaa-e518-4cc3-ba24-5b1e2af7326c": {
+  "judges": 3,
+  "totals": [
+   3,
+   3,
+   3
+  ],
+  "median": 3,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only the induction-smuggling case is made; the defense of Popper's own terms is entirely absent.",
+     "c2": "Mentions past performance but fails to engage with specific Popperian machinery like pragmatic preference or the nature of corroboration reports.",
+     "c3": "A verdict is stated, but it lacks the required comparative analysis since only one side was argued.",
+     "c4": "No cost of accepting the verdict is identified or discussed.",
+     "c5": "Takes the cheap exit of dismissing Popper's distinction rather than holding and answering the tension."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only the 'smuggles induction' case is made; the defense on Popper's own terms is entirely absent.",
+     "c2": "Fails to engage with Popperian machinery like the distinction between corroboration reports and probability or the pragmatic argument.",
+     "c3": "Provides a clear verdict but lacks the required comparative analysis of both sides before concluding.",
+     "c4": "No specific cost or concession is identified; the answer simply asserts the opponent's view is wrong.",
+     "c5": "Takes the cheap exit of dismissing Popper's protest rather than holding the tension and answering it within his framework."
+    }
+   },
+   {
+    "scores": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "total": 3,
+    "why": {
+     "c1": "Only the induction-smuggling case is made; the defense on Popper's own terms is entirely absent.",
+     "c2": "Mentions past performance but fails to engage with specific Popperian machinery like the pragmatic preference or the distinction between corroboration and probability.",
+     "c3": "Provides a clear verdict that induction is smuggled in, though it lacks the comparative analysis requested.",
+     "c4": "No cost of accepting the verdict is identified or discussed.",
+     "c5": "Takes the cheap exit of dismissing Popper's protests rather than holding the tension between his anti-induction stance and his pragmatic advice."
+    }
+   }
+  ]
  }
 }
