@@ -1,5 +1,14 @@
 # M1 — does showing a conjecturer a problem's history change what it produces?
 
+> **SUPERSEDED IN PART, 2026-09-05, by `RESULTS_M1_REPLICATION.md`.** The cost
+> result below — the treatment spending 21.6% fewer tokens per admitted
+> conjecture, called "the most interesting result" — did NOT replicate: it
+> reversed to +23.4% in the third of three paired runs, which the
+> pre-registered rule scores UNRESOLVED. The quality row, filled in on
+> 2026-09-04 as "judged lower", is also superseded: the difference is a length
+> effect and vanishes when length is held constant. Everything below is left as
+> written. See `docs/ERRATA.md` E75 and E76.
+
 Answers R6 ("conjectures themselves usually have a long history, and
 understanding that history might help LLMs craft better conjectures").
 
