@@ -171,7 +171,7 @@ register_mini_flow(
         flow_version="0.1.0",
         stages=(
             MiniStageV1(
-                stage_id="conjecture",
+                stage_id="mini.stage.conjecture",
                 seat_id=CONJECTURER_SEAT,
                 shell_id=CONJECTURER_LEGACY_SHELL.shell_id,
                 produces_kind=CONJECTURE_KIND,
@@ -187,13 +187,13 @@ register_mini_flow(
         flow_version="1.0.0",
         stages=(
             MiniStageV1(
-                stage_id="conjecture",
+                stage_id="mini.stage.conjecture",
                 seat_id=CONJECTURER_SEAT,
                 shell_id=CONJECTURER_SHELL.shell_id,
                 produces_kind=CONJECTURE_KIND,
             ),
             MiniStageV1(
-                stage_id="criticism",
+                stage_id="mini.stage.criticism",
                 seat_id=CRITIC_SEAT,
                 shell_id=CRITIC_SHELL.shell_id,
                 produces_kind=CRITICISM_KIND,
@@ -201,7 +201,7 @@ register_mini_flow(
                 per_target=True,
             ),
             MiniStageV1(
-                stage_id="commitment",
+                stage_id="mini.stage.commitment",
                 seat_id=COMMITMENT_SEAT,
                 shell_id=COMMITMENT_SHELL.shell_id,
                 produces_kind=COMMITMENT_PROPOSAL_KIND,

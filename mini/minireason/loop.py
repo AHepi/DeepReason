@@ -15,12 +15,12 @@ from types import MappingProxyType
 
 from deepreason.application.conjecture import ConjectureApplicationBoundary
 from deepreason.harness import Harness
+from deepreason.llm.contracts import ConjecturerOutput as ConjOut  # noqa: F401 - kept for callers
 from deepreason.log.event_log import (
     ConcurrentWriterError,
     CorruptLogError,
     EventSequenceError,
 )
-from deepreason.llm.contracts import ConjecturerOutput as ConjOut
 from deepreason.ontology import (
     Artifact,
     Commitment,
@@ -53,7 +53,10 @@ from minireason.compat import (
     MINI_NEAR_DUP_EPS,
     initialize,
 )
+from minireason.flow import select_mini_flow
 from minireason.log import Call, Event, SeqError, State, canonical_json
+from minireason.records import record_mini_output
+from minireason.seats import form_for_seat, render_mini_brief
 
 
 RUBRIC_POLICY_ERROR = "RUBRIC_INPUT_FORBIDDEN"
@@ -352,27 +355,6 @@ def _neighbourhood(session: Session, problem_id: str, k: int) -> str:
     return "\n".join(texts)
 
 
-def _prompt(description: str, stance_directive: str, neighbourhood: str, vs_k: int) -> str:
-    return (
-        "You are the conjecture operator: propose bold, criticizable explanations "
-        "for the PROBLEM below. Verbalized Sampling: return a DISTRIBUTION of "
-        f"{vs_k} diverse candidates, each with a typicality estimate in [0,1].\n"
-        f"STANCE (condition your generation on it): {stance_directive}.\n"
-        "Each candidate's content MUST be a JSON skeleton embedded as a string: "
-        '{"claim": ..., "mechanism": ..., "scope": {"covers": [], "excludes": []}, '
-        '"forbidden": [{"case": ..., "eval": ...}], "prose_notes": ...}. '
-        'Each forbidden case states evidence that would REFUTE the candidate; eval is '
-        'a known "program:<name>" for mechanically checkable cases. Inline predicates '
-        'from model output are forbidden. Rubric commitments are '
-        'outside this reduced engine and are dropped before registration. A candidate '
-        'that forbids nothing '
-        "is refuted on arrival.\n\n"
-        f"PROBLEM: {description}\n"
-        + (f"\nRECENT SURVIVORS (do not repeat; differ substantively):\n{neighbourhood}\n"
-           if neighbourhood else "")
-    )
-
-
 def _mini_guard_finding(
     candidate_ref: str,
     artifact_ref: str,
@@ -517,6 +499,160 @@ def _admit_controlled_candidates(
     return admitted, findings
 
 
+def _conjecture_stage(session, kernel, out, spend, workflow, pid, vs_k, stance,
+                      commitment_policy, near_dup_eps, meter):
+    """The conjecture road: candidates -> guards -> registration -> checks.
+    Unchanged from the loop that shipped before flows existed, lifted out
+    so the stage walk can call it for any stage whose form compiles to
+    conjecture candidates. Returns the admitted artifact ids."""
+
+    admitted: list[tuple[Artifact, list[dict]]] = []
+    controlled = bool(
+        workflow is not None and spend.work_order_id == workflow.work_order_id
+    )
+    source_call_seq = None
+    if controlled:
+        prepared = _prepare_controlled_candidates(
+            session, out, vs_k, stance, commitment_policy
+        )
+        source = session.measure(["workflow-conjecture-call", pid], spend)
+        source_call_seq = source.seq
+        workflow.record_provider_result(
+            source_call_seq=source.seq,
+            llm_call=spend,
+            candidate_refs=tuple(row[0] for row in prepared),
+        )
+        admitted_rows, findings = _admit_controlled_candidates(
+            session, prepared, near_dup_eps=near_dup_eps
+        )
+        workflow.record_guard(findings)
+        for artifact, cks, candidate_commitments in admitted_rows:
+            commitment_ids = [commitment.id for commitment in candidate_commitments]
+            registered = session.register_commitments(cks)
+            if registered != commitment_ids:
+                continue
+            admitted.append(
+                (
+                    artifact.model_copy(
+                        update={
+                            "provenance": artifact.provenance.model_copy(
+                                update={"event_seq": session.harness._next_seq}
+                            )
+                        }
+                    ),
+                    cks,
+                )
+            )
+    else:
+        seen: set[str] = set()
+        for candidate in out.candidates[:vs_k]:
+            content = candidate.content
+            cks = checks.compile_checks(content, policy=commitment_policy)
+            blocked = session._rubric_commitments(cks)
+            if blocked:
+                session._policy_drop(blocked)
+                continue
+            candidate_commitments = [
+                Commitment.model_validate(record) for record in cks
+            ]
+            commitment_ids = [commitment.id for commitment in candidate_commitments]
+            artifact = session.build_candidate(content, commitment_ids, stance)
+            ok, reason = session.admit_candidate(
+                artifact,
+                [],
+                candidate_commitments=candidate_commitments,
+                near_dup_eps=near_dup_eps,
+            )
+            if not ok:
+                session.measure([f"gate:{reason}"])
+                continue
+            if artifact.id in session.state.artifacts or artifact.id in seen:
+                continue  # dedupe of live content: skipped, never gated
+            # Only the exact candidate that survived the mandatory guard
+            # may make its model-derived commitments canonical.
+            registered = session.register_commitments(cks)
+            if registered != commitment_ids:
+                continue
+            seen.add(artifact.id)
+            admitted.append((artifact, cks))
+    if admitted:
+        session.register_candidates(
+            [(artifact, []) for artifact, _ in admitted],
+            pid,
+            None if controlled else spend,
+            source_call_seq=source_call_seq,
+        )
+        for artifact, cks in admitted:
+            content = artifact.content_ref[len("inline:"):]
+            failures = checks.run_checks(content, cks)
+            if failures:
+                session.refute(artifact.id, failures)
+    else:
+        session.measure(
+            ["all-blocked"], None if controlled else spend
+        )  # spend lands exactly once
+    if controlled:
+        workflow.complete(
+            admitted_refs=tuple(artifact.id for artifact, _ in admitted),
+            meter_after=meter.snapshot(),
+        )
+    return [artifact.id for artifact, _ in admitted]
+
+
+def _record_stage(session, out, spend, form, stage, target):
+    """The record road: every `(about, body)` the form reads off the reply
+    becomes one record of the stage's kind. A stage bound to one target
+    records about THAT target and keeps what the seat wrote as `named`; a
+    stage with no target records what the seat named, dropped typed if it
+    names nothing in the run. The spend lands exactly once."""
+
+    written = []
+    for named, body in form.records_of(out):
+        about = target if target is not None else named
+        event = record_mini_output(
+            session,
+            stage.produces_kind,
+            about=about,
+            body=body,
+            named=named,
+            spend=spend if not written else None,
+        )
+        written.append(event)
+    refs = [
+        next(item[len("blob:"):] for item in event.inputs if item.startswith("blob:"))
+        for event in written
+        if event is not None
+    ]
+    if not written:
+        session.measure(["mini:stage-empty", f"stage:{stage.stage_id}"], spend)
+    elif written[0] is None:
+        # The first reply was dropped typed and carried the spend; nothing
+        # else to do -- the drop event already holds it.
+        pass
+    return refs
+
+
+def _call_stage(session, kernel, endpoint, brief, form, meter, retry_max, workflow):
+    """One provider call for one stage, through the ONE leased route. Returns
+    `(out, spend)` or raises the call layer's typed failures for the loop to
+    dispose of. The lease's role is the record's `LLMCall.role`; which SEAT
+    spoke is stated by the record the stage writes."""
+
+    return llm.call(
+        endpoint, brief, form.canonical_model, meter, session.blobs, retry_max,
+        role=kernel.lease.role,
+        model_profile=kernel.profile,
+        wire_contract=form.contract,
+        endpoint_lease=kernel.lease,
+        workflow_dispatch_observer=(
+            workflow.authorize_dispatch if workflow is not None else None
+        ),
+        workflow_repair_observer=(
+            workflow.authorize_repair if workflow is not None else None
+        ),
+    )
+
+
 def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str,
         vs_k: int | None = None, neighbourhood: int = 8,
         stance_decay: int = rotate.STANCE_DECAY, turnover_k: int = rotate.TURNOVER_K,
@@ -525,14 +661,24 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
         model_profile: str = DEFAULT_MODEL_PROFILE.value,
         near_dup_eps: float | None = MINI_NEAR_DUP_EPS,
         run_input=None, dossier=None,
-        commitment_policy: MiniCommitmentPolicyV1 | None = None) -> dict:
+        commitment_policy: MiniCommitmentPolicyV1 | None = None,
+        flow=None) -> dict:
     """Drive (pid, description) problems until budget death, queue
     exhaustion, or global dryness. Returns the run summary; the log at
     ``root`` is the real output.
 
     ``run_input``/``dossier`` bind the STANDARD frozen input to this root
     instead of mini's constant process root. The problems still arrive as
-    arguments: what a caller freezes is the run's identity, not its queue."""
+    arguments: what a caller freezes is the run's identity, not its queue.
+
+    ``flow`` is the registered flow to walk -- an id, the flow itself, or
+    None for argument -> ``DEEPREASON_MINI_FLOW`` -> the legacy default. Every
+    cycle walks the flow's stages in order; this function names no seat, no
+    artifact kind and no stage, and `mini/tests/test_mini_architecture.py`
+    goes red if it ever does. ``commitment_policy`` overrides the flow's own
+    when given, so a caller that selected nothing before still gets exactly
+    what it got."""
+    flow = select_mini_flow(flow)
     # Resolve presentation, wire schema, and the exact endpoint route before
     # the first call.  The reduced engine stays MiniReason; compact is its
     # explicit default model-facing representation.
@@ -540,7 +686,7 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
     vs_k = kernel.profile.vs_k if vs_k is None else vs_k
     session = Session(root)
     commitment_policy = (
-        DEFAULT_MINI_COMMITMENT_POLICY if commitment_policy is None else commitment_policy
+        flow.commitment_policy if commitment_policy is None else commitment_policy
     )
     # A gate switched off is a WARNING in the run's OWN record, never a refusal
     # and never silence: a reader opening this root months from now must be
@@ -551,6 +697,10 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
     logged_before = session.state.logged_tokens()
     meter = llm.TokenMeter(budget=budget)
     rotation = rotate.Rotation(decay=stance_decay)
+    # The call layer clips every prompt at the profile's pack budget; the
+    # stage walk keeps a brief under it by handing the everything section
+    # its share, and DISCLOSES any brief that still overruns (PARKED P8).
+    prompt_limit = kernel.profile.pack_budget() * 4
     queue = list(problems)
     stop = "queue-exhausted"
     cycles = 0
@@ -560,197 +710,130 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
         turnover = rotate.Turnover(k=turnover_k)
         while not turnover.dry and cycles < max_cycles:
             cycles += 1
-            prompt = _prompt(description, rotation.directive,
-                             _neighbourhood(session, pid, neighbourhood), vs_k)
-            workflow = ConjectureApplicationBoundary.begin(
-                session.harness,
-                kernel.manifest,
-                problem_ref=pid,
-                route_lease=kernel.lease,
-                contract_id=kernel.wire_contract.contract_id,
-                meter_before=meter.snapshot(),
-            )
-            try:
-                out, spend = llm.call(endpoint, prompt, ConjOut, meter,
-                                      session.blobs, retry_max, role="conjecturer",
-                                      model_profile=kernel.profile,
-                                      wire_contract=kernel.wire_contract,
-                                      endpoint_lease=kernel.lease,
-                                      workflow_dispatch_observer=(
-                                          workflow.authorize_dispatch
-                                          if workflow is not None
-                                          else None
-                                      ),
-                                      workflow_repair_observer=(
-                                          workflow.authorize_repair
-                                          if workflow is not None
-                                          else None
-                                      ))
-            except llm.BudgetExceeded as e:
-                if e.spend:  # exhaustion mid-retry still carries spend (G1)
-                    # No complete provider result exists to settle a proposal
-                    # receipt. Keep the spend honest but unbound, then close
-                    # the issued shadow work explicitly.
-                    partial = e.spend.model_copy(update={"work_order_id": None})
-                    session.measure(["budget-exhausted"], partial)
-                if workflow is not None:
-                    workflow.abandon("mini:budget-exhausted")
-                stop = "budget"
-                queue = []
-                break
-            except llm.SchemaError as e:
-                if (
-                    workflow is not None
-                    and e.spend is not None
-                    and e.spend.work_order_id == workflow.work_order_id
-                ):
-                    source = session.measure(
-                        ["workflow-conjecture-call", pid], e.spend
-                    )
-                    workflow.record_provider_result(
-                        source_call_seq=source.seq,
-                        llm_call=e.spend,
-                        candidate_refs=(),
-                    )
-                    session.measure(["dropped-call"])
-                    workflow.complete(
-                        admitted_refs=(), meter_after=meter.snapshot()
-                    )
+            produced: dict[str, list[str]] = {}
+            new_survivors = 0
+            halted = None
+            for stage in flow.stages:
+                if stage.per_target:
+                    targets = [
+                        ref for kind in stage.reads_kinds for ref in produced.get(kind, [])
+                    ]
+                    if not targets:
+                        session.measure(
+                            ["mini:stage-skipped", f"stage:{stage.stage_id}", "no-targets"]
+                        )
+                        continue
                 else:
-                    session.measure(["dropped-call"], e.spend)
-                rotation.tick()
-                turnover.draw(0)
-                continue
-            except llm.EndpointError as e:
-                if e.spend:
-                    if (
-                        workflow is not None
-                        and e.spend.work_order_id == workflow.work_order_id
-                    ):
-                        source = session.measure(
-                            ["workflow-conjecture-call", pid], e.spend
+                    targets = [None]
+                form = form_for_seat(stage.seat_id, shell_id=stage.shell_id)
+                conjecture_road = form.records_of is None
+                for target in targets:
+                    brief = render_mini_brief(
+                        session, stage.seat_id, pid,
+                        target_id=target,
+                        shell_id=stage.shell_id,
+                        token_budget=kernel.profile.pack_budget(),
+                        supplied={
+                            "vs_k": vs_k,
+                            "stance_directive": rotation.directive,
+                            "legacy_neighbourhood": _neighbourhood(session, pid, neighbourhood),
+                            "brief_budget_chars": int(prompt_limit * stage.brief_share),
+                        },
+                    )
+                    if len(brief) > prompt_limit:
+                        session.measure([
+                            "mini:brief-clipped", f"stage:{stage.stage_id}",
+                            f"chars:{len(brief)}", f"limit:{prompt_limit}",
+                        ])
+                    workflow = (
+                        ConjectureApplicationBoundary.begin(
+                            session.harness,
+                            kernel.manifest,
+                            problem_ref=pid,
+                            route_lease=kernel.lease,
+                            contract_id=form.contract.contract_id,
+                            meter_before=meter.snapshot(),
                         )
-                        workflow.record_provider_result(
-                            source_call_seq=source.seq,
-                            llm_call=e.spend,
-                            candidate_refs=(),
+                        if conjecture_road
+                        else None
+                    )
+                    try:
+                        out, spend = _call_stage(
+                            session, kernel, endpoint, brief, form, meter, retry_max, workflow
                         )
-                        session.measure(["dropped-call"])
-                        workflow.complete(
-                            admitted_refs=(), meter_after=meter.snapshot()
+                    except llm.BudgetExceeded as e:
+                        if e.spend:  # exhaustion mid-retry still carries spend (G1)
+                            # No complete provider result exists to settle a proposal
+                            # receipt. Keep the spend honest but unbound, then close
+                            # the issued shadow work explicitly.
+                            partial = e.spend.model_copy(update={"work_order_id": None})
+                            session.measure(["budget-exhausted"], partial)
+                        if workflow is not None:
+                            workflow.abandon("mini:budget-exhausted")
+                        halted = "budget"
+                        break
+                    except llm.SchemaError as e:
+                        if (
+                            workflow is not None
+                            and e.spend is not None
+                            and e.spend.work_order_id == workflow.work_order_id
+                        ):
+                            source = session.measure(
+                                ["workflow-conjecture-call", pid], e.spend
+                            )
+                            workflow.record_provider_result(
+                                source_call_seq=source.seq,
+                                llm_call=e.spend,
+                                candidate_refs=(),
+                            )
+                            session.measure(["dropped-call"])
+                            workflow.complete(
+                                admitted_refs=(), meter_after=meter.snapshot()
+                            )
+                        else:
+                            session.measure(["dropped-call"], e.spend)
+                        continue
+                    except llm.EndpointError as e:
+                        if e.spend:
+                            if (
+                                workflow is not None
+                                and e.spend.work_order_id == workflow.work_order_id
+                            ):
+                                source = session.measure(
+                                    ["workflow-conjecture-call", pid], e.spend
+                                )
+                                workflow.record_provider_result(
+                                    source_call_seq=source.seq,
+                                    llm_call=e.spend,
+                                    candidate_refs=(),
+                                )
+                                session.measure(["dropped-call"])
+                                workflow.complete(
+                                    admitted_refs=(), meter_after=meter.snapshot()
+                                )
+                            else:
+                                session.measure(["dropped-call"], e.spend)
+                        elif workflow is not None:
+                            workflow.abandon("mini:endpoint-error")
+                        halted = "endpoint-error"
+                        break
+                    if conjecture_road:
+                        ids = _conjecture_stage(
+                            session, kernel, out, spend, workflow, pid, vs_k,
+                            rotation.stance, commitment_policy, near_dup_eps, meter,
+                        )
+                        new_survivors += sum(
+                            1 for aid in ids if aid not in session.state.refuted
                         )
                     else:
-                        session.measure(["dropped-call"], e.spend)
-                elif workflow is not None:
-                    workflow.abandon("mini:endpoint-error")
-                stop = "endpoint-error"
+                        ids = _record_stage(session, out, spend, form, stage, target)
+                    produced.setdefault(stage.produces_kind, []).extend(ids)
+                if halted:
+                    break
+            if halted:
+                stop = halted
                 queue = []
                 break
-            admitted: list[tuple[Artifact, list[dict]]] = []
-            controlled = bool(
-                workflow is not None
-                and spend.work_order_id == workflow.work_order_id
-            )
-            source_call_seq = None
-            if controlled:
-                prepared = _prepare_controlled_candidates(
-                    session, out, vs_k, rotation.stance, commitment_policy
-                )
-                source = session.measure(
-                    ["workflow-conjecture-call", pid], spend
-                )
-                source_call_seq = source.seq
-                workflow.record_provider_result(
-                    source_call_seq=source.seq,
-                    llm_call=spend,
-                    candidate_refs=tuple(row[0] for row in prepared),
-                )
-                admitted_rows, findings = _admit_controlled_candidates(
-                    session,
-                    prepared,
-                    near_dup_eps=near_dup_eps,
-                )
-                workflow.record_guard(findings)
-                for artifact, cks, candidate_commitments in admitted_rows:
-                    commitment_ids = [
-                        commitment.id for commitment in candidate_commitments
-                    ]
-                    registered = session.register_commitments(cks)
-                    if registered != commitment_ids:
-                        continue
-                    admitted.append(
-                        (
-                            artifact.model_copy(
-                                update={
-                                    "provenance": artifact.provenance.model_copy(
-                                        update={"event_seq": session.harness._next_seq}
-                                    )
-                                }
-                            ),
-                            cks,
-                        )
-                    )
-            else:
-                seen: set[str] = set()
-                for candidate in out.candidates[:vs_k]:
-                    content = candidate.content
-                    cks = checks.compile_checks(content, policy=commitment_policy)
-                    blocked = session._rubric_commitments(cks)
-                    if blocked:
-                        session._policy_drop(blocked)
-                        continue
-                    candidate_commitments = [
-                        Commitment.model_validate(record) for record in cks
-                    ]
-                    commitment_ids = [
-                        commitment.id for commitment in candidate_commitments
-                    ]
-                    artifact = session.build_candidate(
-                        content, commitment_ids, rotation.stance
-                    )
-                    ok, reason = session.admit_candidate(
-                        artifact,
-                        [],
-                        candidate_commitments=candidate_commitments,
-                        near_dup_eps=near_dup_eps,
-                    )
-                    if not ok:
-                        session.measure([f"gate:{reason}"])
-                        continue
-                    if artifact.id in session.state.artifacts or artifact.id in seen:
-                        continue  # dedupe of live content: skipped, never gated
-                    # Only the exact candidate that survived the mandatory guard
-                    # may make its model-derived commitments canonical.
-                    registered = session.register_commitments(cks)
-                    if registered != commitment_ids:
-                        continue
-                    seen.add(artifact.id)
-                    admitted.append((artifact, cks))
-            if admitted:
-                session.register_candidates(
-                    [(artifact, []) for artifact, _ in admitted],
-                    pid,
-                    None if controlled else spend,
-                    source_call_seq=source_call_seq,
-                )
-                for artifact, cks in admitted:
-                    content = artifact.content_ref[len("inline:"):]
-                    failures = checks.run_checks(content, cks)
-                    if failures:
-                        session.refute(artifact.id, failures)
-            else:
-                session.measure(
-                    ["all-blocked"],
-                    None if controlled else spend,
-                )  # spend lands exactly once
-            if controlled:
-                workflow.complete(
-                    admitted_refs=tuple(artifact.id for artifact, _ in admitted),
-                    meter_after=meter.snapshot(),
-                )
-            new_survivors = sum(
-                1 for artifact, _ in admitted if artifact.id not in session.state.refuted
-            )
             rotation.tick()
             turnover.draw(new_survivors)
             orbit_school = gate.orbit(session.state.events, session.state.artifacts,
@@ -768,6 +851,7 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
         "engine_profile": ENGINE_PROFILE,
         "model_profile": kernel.profile.name.value,
         "run_manifest_sha256": kernel.manifest.sha256,
+        "flow": flow.flow_id,
         "stop": stop if stop != "queue-exhausted" or not queue else "max-cycles",
         "cycles": cycles,
         "problems": {p: len(session.survivors(p)) for p in session.state.problems},

@@ -56,6 +56,7 @@ _MINI_AUTHORITY_FUNCTIONS = (
     "_prepare_controlled_candidates",
     "_admit_controlled_candidates",
     "_mini_guard_finding",
+    "_conjecture_stage",
 )
 
 _FORBIDDEN_FIELDS = {"score", "rank", "weight", "confidence", "priority", "authority", "severity"}

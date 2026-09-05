@@ -349,7 +349,14 @@ class MiniEverythingSoFar(_MiniPlugin):
         ordered = tuple(entries)
         sizes = {aid: len(text) for aid, text in entries.items()}
         rule = resolve_mini_retention_rule(params.retention_rule)
-        shown, withheld = rule.select(ordered, sizes, params.budget_chars, params.keep_last)
+        # A layout that declares no budget takes the CALLER's: the loop supplies
+        # the share of the profile's prompt budget this section may take, so a
+        # brief stays inside the call layer's clip and what is withheld is
+        # disclosed here rather than cut there (PARKED P8's disposal).
+        budget = params.budget_chars
+        if budget is None:
+            budget = request.supplied.get("brief_budget_chars")
+        shown, withheld = rule.select(ordered, sizes, budget, params.keep_last)
         lines = [
             "EVERYTHING GENERATED SO FAR IN THIS RUN (every artifact, in full, "
             "oldest first; no verdict of any kind is shown):"

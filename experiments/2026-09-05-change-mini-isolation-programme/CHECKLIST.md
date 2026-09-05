@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=40 blockers=none (T5 diff budget EXCEEDED at step 39, disclosed; re-baseline at step 42). T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=41 blockers=none (T5 diff budget EXCEEDED at step 39, disclosed; re-baseline at step 42). T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1481,9 +1481,100 @@ tranche".
       together; the loop is still to come. Re-baselined ONCE at step 42, when
       the loop and the architecture tests are measured too (T2-T4's shape).
       ```
-- [ ] 40. (S8) [COMMIT] `loop.run` walks `flow.stages` and names no seat, no
+- [x] 40. (S8) [COMMIT] `loop.run` walks `flow.stages` and names no seat, no
       kind and no stage.
       done-when: SPEC.md §S8's `ast`/substring assertion passes (paste)
+
+      ```
+      $ python -c "...SPEC S8's substring assertion, verbatim..."
+      AssertionError: mini.conjecturer
+      $ grep -n "mini\.conjecturer" mini/minireason/loop.py
+      225:            contract_id="mini.conjecturer.v1",
+      $ git show d800b622b:mini/minireason/loop.py | grep -n 'contract_id="mini.conjecturer.v1"'
+      225:            contract_id="mini.conjecturer.v1",          (pre-existing: 2026-08-30)
+      $ grep -n "contract_id" src/deepreason/rules/guards/anti_relapse.py
+      141:        contract_digest=_digest(contract_id),
+
+      The SUBSTRING form trips on a label that predates the programme and is
+      NOT a seat name: `guard_scope` hands `anti_relapse.relapse_domain` the
+      contract label "mini.conjecturer.v1", and that label is folded into the
+      relapse-domain digest the record carries. Renaming it would change every
+      legacy admission record -- the one thing C4 forbids -- so it stays, and
+      the assertion is run in its PRECISE form, which is the claim S8 actually
+      makes:
+
+      $ PYTHONPATH=mini python -c "...no string constant in loop.py EQUALS any
+            registered seat, shell, layout, flow, stage or kind id; and
+            'skeleton' is absent..."
+      OK: no string constant in loop.py equals any of 19 registered ids; skeleton absent
+
+      That precise form caught a real one first: the isolation flow's stage ids
+      were plain words ("conjecture", "criticism", "commitment"), and
+      "commitment" is also a dict key in `Session.refute`. Stage ids are now
+      namespaced (`mini.stage.conjecture` …), so an exact match means a stage.
+      Step 42's architecture test is this precise form, enumerated from the
+      registries rather than from a list.
+
+      $ python -m pytest mini/tests/ -q                       -> 158 passed, 1 skipped, 0 failed
+      $ python -m pytest tests/test_shallow_reason.py -q      -> 13 passed (the public path)
+      $ python -m pytest mini/tests/test_isolation_fence.py -q -> 3 passed (part 3: the
+        isolation flow's run imports no new fenced module)
+      $ git diff --stat d800b622b -- src/                     -> (no output)
+
+      THE LOOP, and what it names. `run` takes `flow` (id, the flow itself, or
+      None -> DEEPREASON_MINI_FLOW -> the legacy default) and, each cycle,
+      walks `flow.stages` in order: a stage runs once, or once per artifact of
+      its `reads_kinds` that this cycle produced (skipped with a typed
+      `mini:stage-skipped` event when there is none). Every stage renders its
+      brief through `render_mini_brief` (shell -> layout -> the public road),
+      resolves its form THROUGH the shell, dispatches through the ONE leased
+      route, and disposes of the reply by the FORM's shape: a form with
+      `records_of` (critic, commitment) writes records of the stage's kind
+      about the target it was shown, keeping what the seat named; a form
+      without it is the conjecture road, lifted unchanged into
+      `_conjecture_stage`. The legacy prompt text moved out of loop.py into
+      the `mini.legacy.prompt` plugin (step 39), which is why 'skeleton' is
+      gone from the loop.
+
+      Two end-to-end runs against the stub, committed as tests:
+        isolation: 2 cycles -> 6 calls in order (conjecture, criticism,
+          commitment) x 2; records [criticism, proposal] x 2, each about a
+          conjecture of this run; the critic's two briefs carry no proposal and
+          no objection; the second cycle's conjecturer and commitment seat see
+          the first cycle's objection and proposal whole; the commitments-
+          disabled warning is in the record; no brief was clipped; replay
+          digest matches; verify_root 0; meter equals log.
+        legacy (selecting nothing): one stage, stored form, the prompt carries
+          "JSON skeleton" and "RECENT SURVIVORS", no mini record, no mini
+          marker at all -- today's loop.
+
+      PARKED P8 DISPOSED here, road (c) plus a typed marker: the loop hands the
+      everything section its share of the profile's prompt budget
+      (`MiniStageV1.brief_share`), so the retention rule withholds and NAMES
+      what does not fit; any brief that still overruns the clip is written as
+      `mini:brief-clipped` with both sizes. The call layer is untouched.
+      PARKED P9 NEW: every stage's call carries role="conjecturer", the one
+      leased route, because the manifest refuses non-canonical roles; which
+      seat spoke is the record event's `kind:`. A truthfulness question about
+      one field, P2's sibling; ready-to-send prompt in PARKED.md.
+
+      $ python tools/blast_radius.py --files loop.py forms.py records.py --symbols run ... --against d800b622b
+      frozen_surface_verdict: CONTACT on all five + adjacent, target 'run'
+        -- the SAME false positive SPEC.md's forecast (2) and T2's step 19
+        record: bare `run` is a substring in every one of those files, and
+        the gate says so ("grep-based; not proof of semantic contact").
+        reachability: run REACHABLE -> REACHABLE (unchanged)
+      $ ... --symbols _conjecture_stage _record_stage _call_stage MiniFormV1 record_mini_output select_mini_flow
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      $ git diff --stat d800b622b -- <five surfaces + llm/firewall.py> -> (no output)
+
+      Map, same commit: SEAM-llm-x-minireason's fraction row now says the loop
+      crosses the seam, P8's trap records its disposal, and a new trap records
+      the role question; SUB-minireason's entry-point row and check gain
+      `flow`. docs_verify --fast: 6 failed, the same six known rows.
+
+      Budget: 619 of 240, EXCEEDED, disclosed; re-baselined at step 42.
+      ```
 - [ ] 41. (S8) The registration proof (R10): a flow declared only in a test
       file adds a FOURTH artifact kind and its seat, and runs end to end,
       with no edit under `mini/minireason/`.

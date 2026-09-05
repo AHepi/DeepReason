@@ -40,7 +40,7 @@ assert total * 20 < parent, (total, parent)
 
 | Called by | Entry | What it does |
 |---|---|---|
-| `deepreason reason --shallow` (via `src/deepreason/shallow.py`) | `loop.run(problems, endpoint, budget, root, …)` | drives cycles until budget death, queue exhaustion, or global dryness; returns the summary, while the log at `root` is the real output |
+| `deepreason reason --shallow` (via `src/deepreason/shallow.py`) | `loop.run(problems, endpoint, budget, root, …, flow=None)` | drives cycles until budget death, queue exhaustion, or global dryness, each cycle walking the selected flow's stages in order; returns the summary (which names the flow), while the log at `root` is the real output |
 | `loop.run`, once, before the first call | `compat.initialize(root, endpoint, model_profile, run_input, dossier)` | freezes the route, the compact wire contract and the v6 manifest |
 | anyone binding a root without running | `compat.bind_mini_root(...)` | binds (or verifies) one immutable schema-6 manifest and its run input |
 | a reader | `log.replay(root)` → `log.State` | the dict-shaped read view, projected from one canonical `Harness` |
@@ -53,7 +53,7 @@ assert total * 20 < parent, (total, parent)
 import inspect
 from minireason import compat, loop
 run = inspect.signature(loop.run).parameters
-for name in ('problems', 'endpoint', 'budget', 'root', 'run_input', 'dossier'):
+for name in ('problems', 'endpoint', 'budget', 'root', 'run_input', 'dossier', 'flow'):
     assert name in run, (name, list(run))
 init = inspect.signature(compat.initialize).parameters
 for name in ('root', 'endpoint', 'model_profile', 'run_input', 'dossier'):
@@ -315,7 +315,7 @@ from minireason.flow import DEFAULT_MINI_FLOW_ID, resolve_mini_flow, select_mini
 assert DEFAULT_MINI_FLOW_ID == 'mini.flow.legacy-v0' and select_mini_flow().flow_id == DEFAULT_MINI_FLOW_ID
 legacy = resolve_mini_flow('mini.flow.legacy-v0'); iso = resolve_mini_flow('mini.flow.isolation.v1')
 assert len(legacy.stages) == 1 and legacy.commitment_policy.disabled_channels == ()
-assert [s.stage_id for s in iso.stages] == ['conjecture', 'criticism', 'commitment']
+assert [s.stage_id for s in iso.stages] == ['mini.stage.conjecture', 'mini.stage.criticism', 'mini.stage.commitment']
 assert set(iso.artifact_kinds) == {s.produces_kind for s in iso.stages}
 assert len(iso.commitment_policy.disabled_channels) == 2
 "`

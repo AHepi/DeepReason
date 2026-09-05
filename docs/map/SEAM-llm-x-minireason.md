@@ -101,7 +101,7 @@ assert {'clip_pack', 'route_fingerprint'} <= names, sorted(names)
 | Side | The part this seam touches |
 |---|---|
 | `DR-SUB-llm` | `seat_sections.py` (the registries and the request/render/receipt models), the two public entries in `packs.py`, `wire.py`'s `WireContract` base and the shipped reference-free contract, `firewall.py`'s lease and fingerprint, `profiles.py`'s clip, `repair.py`'s bounded session. Nothing in `llm/` knows mini exists. |
-| `DR-SUB-minireason` | `sources.py` (the projection and the four plugins), `seats.py` (layouts, shells, `form_for_seat`, `render_mini_brief`), `forms.py` (the contracts), `call.py` (dispatch), `compat.py` (the lease and the kernel). The loop itself does not yet cross this seam: until the programme's T5 it renders its own prompt string. |
+| `DR-SUB-minireason` | `sources.py` (the projection and the five plugins), `seats.py` (layouts, shells, `form_for_seat`, `render_mini_brief`), `forms.py` (the contracts), `call.py` (dispatch), `compat.py` (the lease and the kernel), and since the programme's T5 `loop.py`, whose stage walk renders every seat's brief through `render_mini_brief` and dispatches through the ONE leased route. |
 
 ## Where to change what
 
@@ -145,9 +145,21 @@ shown red under a mutation before it was written down.
   record. The programme's SPEC named two silent cuts in the loop's own prompt
   builder and removed both; this third one sits one layer down and was found
   while T3 was designed. NOT fixed here: parked with a ready-to-send prompt at
-  `experiments/2026-09-05-change-mini-isolation-programme/PARKED.md` P8, and
-  T5 must dispose of it before the isolation flow dispatches a shell-rendered
-  brief through this call.
+  `experiments/2026-09-05-change-mini-isolation-programme/PARKED.md` P8.
+  DISPOSED by T5 (step 40) without touching the call layer: the loop hands
+  the everything section its share of the profile's prompt budget
+  (`MiniStageV1.brief_share`), so the retention rule withholds and NAMES what
+  does not fit instead of the clip cutting it; and any brief that still
+  overruns the clip is recorded as `mini:brief-clipped` with both sizes, so
+  the cut is never silent in the record. The clip itself is unchanged.
+- **`LLMCall.role` names the leased route, not the seat.** Mini's manifest
+  grants one canonical role, `conjecturer`, and the manifest refuses
+  non-canonical roles, so every stage -- critic and commitment seats included
+  -- dispatches through that lease and its calls carry `role="conjecturer"`.
+  Which SEAT spoke is stated by the record the stage writes (`kind:` on the
+  `mini:record` event that carries the spend), never by the call. A
+  per-seat role in the call would need canonical roles or a manifest change
+  on a frozen surface; parked as P9 of the programme.
 - **A counted map claim moves when a public entry is added.**
   `CON-packs-and-token-economy` pinned "only two renderers are on the IR" by
   counting callers of `_allocate_sections`; `allocate_seat_brief` was a third

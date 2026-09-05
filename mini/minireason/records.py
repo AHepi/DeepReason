@@ -60,12 +60,17 @@ class MiniRecordV1:
     content: str
 
 
-def _payload(kind: str, about: str | None, body: str) -> bytes:
-    return canonical_json({"kind": kind, "about": about, "body": body})
+def _payload(kind: str, about: str | None, body: str, named: str | None) -> bytes:
+    payload = {"kind": kind, "about": about, "body": body}
+    if named is not None and named != about:
+        # What the seat WROTE as its target, when the stage bound it to the
+        # one it was shown: kept, so the record never loses the seat's words.
+        payload["named"] = named
+    return canonical_json(payload)
 
 
 def record_mini_output(session, kind: str, *, body: str, about: str | None = None,
-                       spend=None):
+                       named: str | None = None, spend=None):
     """Write one record: a Measure event naming the kind, what it is about and
     the blob holding its body. Returns the event.
 
@@ -83,7 +88,7 @@ def record_mini_output(session, kind: str, *, body: str, about: str | None = Non
             spend,
         )
         return None
-    ref = session.blobs.put(_payload(kind, about, body))
+    ref = session.blobs.put(_payload(kind, about, body, named))
     inputs = [MINI_RECORD_MARKER, f"kind:{kind}"]
     if about is not None:
         inputs.append(f"about:{about}")
