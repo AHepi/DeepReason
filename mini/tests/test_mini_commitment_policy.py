@@ -185,11 +185,11 @@ def test_switching_a_channel_off_writes_a_typed_warning_into_the_record(tmp_path
         event
         for event in replay(root).events
         if any(
-            output.startswith("mini:commitments-disabled") for output in event.outputs
+            marker.startswith("mini:commitments-disabled") for marker in event.inputs
         )
     ]
     assert warnings, "a gate switched off in silence is the failure C10 names"
-    named = " ".join(output for event in warnings for output in event.outputs)
+    named = " ".join(marker for event in warnings for marker in event.inputs)
     assert "skeleton" in named and "forbidden" in named, named
 
 
@@ -207,6 +207,6 @@ def test_a_run_with_the_default_policy_writes_no_warning(tmp_path):
         event
         for event in replay(root).events
         if any(
-            output.startswith("mini:commitments-disabled") for output in event.outputs
+            marker.startswith("mini:commitments-disabled") for marker in event.inputs
         )
     ]

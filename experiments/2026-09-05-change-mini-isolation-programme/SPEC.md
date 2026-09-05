@@ -937,6 +937,40 @@ refusals — would ship a smaller change that lies about itself.
 later sub-tranches' numbers are untouched; whether they hold is measured when
 they run, not assumed here.
 | T2 | the mini form registry and the commitment switch | S2+S3 | 175 |
+
+**T2's 175 is EXCEEDED too, and re-baselined with both halves measured
+(2026-09-05, at step 19).** Against T1's delivery head `577365da4`:
+
+| file | insertions | code / docstring / comment / blank | why |
+|---|---|---|---|
+| `mini/minireason/forms.py` | 305 | 150 / 69 / 13 / 74 | S2 priced 120 for "a registry". What ships is a registry PLUS four forms, four wire models, the three-step selection order and four typed refusals |
+| `mini/minireason/policy.py` | 72 | 25 / 26 / 2 / 20 | S3 priced 55 for two switches; the warning markers and their per-channel naming are the rest |
+| `mini/minireason/checks.py` | 16 | — | the policy parameter and its docstring |
+| `mini/minireason/loop.py` | 20 | — | forwarding, plus writing the warning into the record |
+| **total** | **413** | | against 175 |
+
+**Trimmed before disclosing.** Two near-identical passthrough contracts were
+merged into one and the module docstring was cut: 319 → 306 on `forms.py`.
+What remains is 175 lines of code across the two new modules and 95 of
+docstring — and the docstrings are where the load-bearing constraints live
+(why not `Config`, why two switches and not one, what "not limit prose length
+at all" excludes), which CLAUDE.md's own convention says is what a comment is
+for.
+
+**T2 is therefore restated as ~420**, and the programme total moves to
+~1 700.
+
+---
+
+**A finding about the ESTIMATES THEMSELVES, not about any one sub-tranche.**
+Two consecutive sub-tranches have overrun by 1.3x and 2.4x, and both for the
+same reason: SPEC.md's per-item numbers priced the MECHANISM and not the
+obligations the standing laws attach to it. Every overrun so far is typed
+refusals, disclosure records and per-channel naming — the parts that make a
+change honest about itself, and the parts a line estimate written from a
+design sketch does not see. T3–T7's numbers were written the same way and
+should be read as lower bounds, not ceilings. Rowed in PARKED.md as P7 so the
+later windows are not surprised by it.
 | T3 | the mini source adapter and the three shells | S5+S6 | 240 |
 | T4 | the commitment seat, the controller hook, the map | S4+S7+S11b | 180 |
 | T5 | the pluggable flow and the architecture tests | S8+S9 | 240 |

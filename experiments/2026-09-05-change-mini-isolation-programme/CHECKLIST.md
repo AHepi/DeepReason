@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=19 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=21 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -625,14 +625,80 @@ tranche".
       The sixth test asserts the WARNING'S ABSENCE under the default policy, because
       a warning means something only if its absence does too.
       ```
-- [ ] 19. (S3) [COMMIT] `MiniCommitmentPolicyV1` with two independent
+- [x] 19. (S3) [COMMIT] `MiniCommitmentPolicyV1` with two independent
       switches; `compile_checks` consults it; switching either off writes a
       typed WARNING record naming what is no longer checked.
       done-when: SPEC.md §S3's two-line accept passes AND a run with both off
       records >=1 survivor and >=1 warning (paste)
-- [ ] 20. (S2, S3) Map: `SUB-minireason.md` gains the form registry and the
+
+      ```
+      $ python -c "...SPEC S3 two-line accept..."
+      OK  -- compile_checks(prose, policy=off) == [] and the default is unchanged
+      
+      A run with both channels off, against the same free-prose endpoint the step-18
+      before-state used:
+        summary   {stop: queue-exhausted, cycles: 3, problems: {pi-0: 6}, refuted: 0}
+        survivors 6
+        warning markers in the record:
+          mini:commitments-disabled:skeleton-wf
+          mini:commitments-disabled:model-authored-forbidden
+          mini:commitments-disabled: these cycles ran without skeleton-wf,
+                                     model-authored-forbidden
+        replay digest matches: True
+      
+      The measurement flips exactly: 6 refuted / 0 survivors becomes 0 refuted /
+      6 survivors, and the record still replays.
+      
+      $ python -m pytest mini/tests/test_mini_commitment_policy.py -q  -> 6 passed
+      $ python -m pytest mini/tests/ -q                                -> 116 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q          -> 3 passed
+      
+      Mutation-proven twice, because C10 has two halves:
+        warning present but vague  -> E assert (skeleton in mini:commitments-disabled)
+        switch silent (if False)   -> E a gate switched off in silence is the
+                                       failure C10 names
+      
+      FROZEN-SURFACE FALSE POSITIVE, disposed as SPEC.md predicted it would need to
+      be. Declaring the bare symbol run returned CONTACT on all five surfaces plus
+      the frozen-adjacent one, because run is a substring of ordinary words in every
+      one of those files -- SPEC.md Frozen-surface contact forecast disclosure (2)
+      documents exactly this and says to declare precise symbols. Re-run with
+      precise symbols:
+        frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      And the mechanical tripwire agrees: git diff over all five surfaces plus
+      llm/firewall.py is EMPTY, and this step touched no file under src/ at all.
+      
+      STOP CONDITION: diff budget EXCEEDED, 413 of 175, re-baselined with BOTH
+      halves itemised per file and code separated from docstring (SPEC.md Budget).
+      Parked as P7: two consecutive sub-tranches have overrun for the same reason --
+      the estimates priced the mechanism, not the obligations the standing laws
+      attach to it -- so T3-T7 numbers should be read as lower bounds.
+      ```
+- [x] 20. (S2, S3) Map: `SUB-minireason.md` gains the form registry and the
       commitment policy, with checks, IN THIS COMMIT.
       done-when: `python tools/docs_verify.py` -> 0 failed, `--audit` -> 0 findings
+
+      ```
+      $ python tools/docs_verify.py
+      docs_verify: 6 failed -- the same six pre-existing rows. No new failure.
+      $ python tools/docs_verify.py --audit
+      docs_verify --audit: 1 finding(s) -- the same known SEAM-llm-x-rules.md:54.
+      None of SUB-minireason.md new checks is flagged vacuous.
+      
+      SUB-minireason.md gains one section, two where-to-change rows and three
+      checks, in the same commit as the code: what a form is and how one is
+      selected (never Config, never the manifest, with the measured reason), the
+      two commitment channels and why they switch independently, the before/after
+      measurement, the typed warning per channel, and the operator ruling that
+      within mini a criticism overturns nothing -- with a check enumerating every
+      registered form schema for a score, rank, weight, confidence, priority,
+      authority or severity field.
+      
+      One existing row was CORRECTED rather than added to: it said mini owns
+      "which commitments a candidate must satisfy", which is now wrong in a way
+      that matters -- mini owns which channels it COMPILES, never what a commitment
+      MEANS.
+      ```
 - [ ] 21. (T2) Gate + mini ring + docs.
       done-when: all three green (paste)
 - [ ] 22. (T2) [COMMIT] Deliver T2.

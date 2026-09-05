@@ -17,6 +17,7 @@ from deepreason.informal.skeleton import (
     skeleton_wf_commitment,
 )
 from deepreason.ontology import Artifact, Commitment, Interface, Provenance
+from minireason.policy import DEFAULT_MINI_COMMITMENT_POLICY, MiniCommitmentPolicyV1
 
 # Historical Mini imports remain valid, but their implementations are the
 # canonical ones. They are useful for direct trusted predicate diagnostics;
@@ -64,16 +65,25 @@ def forbidden_commitment_id(case: ForbiddenCase) -> str:
     return forbidden_commitment(case).id
 
 
-def compile_checks(text: str) -> list[dict]:
+def compile_checks(text: str, policy: MiniCommitmentPolicyV1 | None = None) -> list[dict]:
     """Compile canonical commitments without registering them.
 
     Rubric cases remain in the returned records so Session can apply the
     manifest preflight and drop the complete candidate before registration.
+
+    The POLICY decides which channels are compiled at all, and defaults to
+    both ON, so a caller that selects nothing gets exactly today's behaviour.
+    An omitted commitment is not a weakened one: nothing here relaxes what a
+    compiled commitment MEANS, only whether this run compiles it (R3, C10).
     """
-    commitments = [skeleton_wf_commitment()]
-    skeleton = parse_skeleton(text)
-    if skeleton is not None:
-        commitments.extend(forbidden_commitment(case) for case in skeleton.forbidden)
+    policy = DEFAULT_MINI_COMMITMENT_POLICY if policy is None else policy
+    commitments = [skeleton_wf_commitment()] if policy.mandatory_skeleton_wf else []
+    if policy.model_authored_forbidden:
+        skeleton = parse_skeleton(text)
+        if skeleton is not None:
+            commitments.extend(
+                forbidden_commitment(case) for case in skeleton.forbidden
+            )
     return [
         commitment.model_dump(mode="json", by_alias=True)
         for commitment in commitments
@@ -96,6 +106,7 @@ def run_checks(text: str, checks: list[dict], codec: str = "utf8") -> list[dict]
 
 __all__ = [
     "ForbiddenCase",
+    "MiniCommitmentPolicyV1",
     "PROGRAMS",
     "SKELETON_WF_ID",
     "Scope",

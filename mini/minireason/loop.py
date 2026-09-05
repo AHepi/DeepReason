@@ -43,6 +43,10 @@ from deepreason.run_manifest import (
 )
 from minireason import call as llm
 from minireason import checks, gate, rotate
+from minireason.policy import (
+    DEFAULT_MINI_COMMITMENT_POLICY,
+    MiniCommitmentPolicyV1,
+)
 from minireason.compat import (
     DEFAULT_MODEL_PROFILE,
     ENGINE_PROFILE,
@@ -405,14 +409,15 @@ def _mini_guard_finding(
     )
 
 
-def _prepare_controlled_candidates(session, output, vs_k: int, stance: str):
+def _prepare_controlled_candidates(session, output, vs_k: int, stance: str,
+                                   commitment_policy=None):
     """Compile semantic values without guarding or mutating canonical state."""
 
     prepared = []
     occurrences: dict[str, int] = {}
     for candidate in output.candidates[:vs_k]:
         content = candidate.content
-        commitment_values = checks.compile_checks(content)
+        commitment_values = checks.compile_checks(content, policy=commitment_policy)
         blocked = session._rubric_commitments(commitment_values)
         candidate_commitments = tuple(
             Commitment.model_validate(record) for record in commitment_values
@@ -519,7 +524,8 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
         max_cycles: int = 1000,
         model_profile: str = DEFAULT_MODEL_PROFILE.value,
         near_dup_eps: float | None = MINI_NEAR_DUP_EPS,
-        run_input=None, dossier=None) -> dict:
+        run_input=None, dossier=None,
+        commitment_policy: MiniCommitmentPolicyV1 | None = None) -> dict:
     """Drive (pid, description) problems until budget death, queue
     exhaustion, or global dryness. Returns the run summary; the log at
     ``root`` is the real output.
@@ -533,6 +539,15 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
     kernel = initialize(root, endpoint, model_profile, run_input, dossier)
     vs_k = kernel.profile.vs_k if vs_k is None else vs_k
     session = Session(root)
+    commitment_policy = (
+        DEFAULT_MINI_COMMITMENT_POLICY if commitment_policy is None else commitment_policy
+    )
+    # A gate switched off is a WARNING in the run's OWN record, never a refusal
+    # and never silence: a reader opening this root months from now must be
+    # able to see that these cycles ran without the checks, and which ones.
+    markers = commitment_policy.warning_markers()
+    if markers:
+        session.measure(list(markers))
     logged_before = session.state.logged_tokens()
     meter = llm.TokenMeter(budget=budget)
     rotation = rotate.Rotation(decay=stance_decay)
@@ -639,7 +654,7 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
             source_call_seq = None
             if controlled:
                 prepared = _prepare_controlled_candidates(
-                    session, out, vs_k, rotation.stance
+                    session, out, vs_k, rotation.stance, commitment_policy
                 )
                 source = session.measure(
                     ["workflow-conjecture-call", pid], spend
@@ -679,7 +694,7 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
                 seen: set[str] = set()
                 for candidate in out.candidates[:vs_k]:
                     content = candidate.content
-                    cks = checks.compile_checks(content)
+                    cks = checks.compile_checks(content, policy=commitment_policy)
                     blocked = session._rubric_commitments(cks)
                     if blocked:
                         session._policy_drop(blocked)

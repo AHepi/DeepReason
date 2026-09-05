@@ -1,5 +1,5 @@
 <!-- DR-SUB-minireason -->
-Verified-at: f2b736b6a
+Verified-at: f3c0bb403
 Verify: python -m pytest mini/tests/ -q
 Owns: mini/minireason/
 Seams:
@@ -104,6 +104,78 @@ trap. Rebinding the SAME one is not a refusal — it is the crash-recovery path.
 
 `check: python -m pytest mini/tests/test_compat.py -k "frozen_input or process_root or run_input" -q`
 
+## Forms, and the commitment channels a run executes
+
+**A FORM is what a mini seat is ASKED FOR.** `minireason/forms.py` registers
+them by id, beside each other, so selecting one is configuration rather than a
+code edit. Four ship: the STORED conjecturer form (the shipped
+`ReferenceFreeConjecturerWireContract` instance, held rather than copied, so
+"stored, not deleted" is a property of an object nobody rewrote), a relaxed
+conjecturer, a relaxed critic and a relaxed commitment proposal.
+
+Selection is argument, then `DEEPREASON_MINI_FORM` (as `<seat>=<form_id>`
+terms, because one process renders every seat), then the caller's declared
+default. **Never `Config` and never the manifest**, for the measured reason:
+`run_manifest.py` dumps every `Config` field into `engine_config_json` and
+`qualification.py` folds that into every qualification subject digest, so an
+id declared there would move the digest of every qualification bundle in the
+tree.
+
+No mini form bounds a string or a list. Checked over every registered form's
+whole rendered schema rather than over the fields one tranche happened to
+write, because a bound added later to a nested model would be just as much a
+limit and just as invisible.
+`check: python -m pytest mini/tests/test_mini_forms.py -q`
+
+**COMMITMENTS ARE TWO CHANNELS, AND EACH SWITCHES INDEPENDENTLY.**
+`minireason/policy.py` declares `MiniCommitmentPolicyV1`, with
+`mandatory_skeleton_wf` (the well-formedness commitment compiled onto EVERY
+candidate) and `model_authored_forbidden` (the candidate's own `forbidden[]`).
+Both default ON, so a caller that selects nothing gets exactly the behaviour
+that shipped before this existed.
+
+Why two and not one: the operator must be able to restore either. And why the
+switch exists at all — relaxing the FORM buys nothing on its own, because free
+prose already passes the shipped wire schema. Measured, and committed as a
+test rather than left in a proof file: a three-cycle run of free prose under
+the default policy ends 6 admitted, 6 refuted, ZERO survivors; the same run
+with both channels off ends 0 refuted, 6 survivors, and still replays.
+
+**Switching a channel off writes a typed WARNING into the run's own record**,
+never a refusal and never silence — one marker per disabled channel plus a
+summary line, all prefixed `mini:commitments-disabled`. Per channel rather
+than one blob, because a reader wants to know WHICH check did not run.
+`check: python -m pytest mini/tests/test_mini_commitment_policy.py -q`
+
+`check: python -c "
+from minireason.checks import compile_checks
+from minireason.policy import MiniCommitmentPolicyV1
+off = MiniCommitmentPolicyV1(mandatory_skeleton_wf=False,
+                             model_authored_forbidden=False)
+assert compile_checks('free prose, no skeleton', policy=off) == []
+assert compile_checks('free prose, no skeleton') != []
+assert MiniCommitmentPolicyV1().warning_markers() == ()
+assert len(off.warning_markers()) == 3, off.warning_markers()
+"`
+
+**Within mini, a criticism overturns nothing** (operator, 2026-09-05: "within
+mini, criticism can't overturn anything. The point is content generation for
+now. Then testing on the full harness."). The critic and commitment forms
+carry no score, rank, weight, confidence, priority, authority or severity
+field, and no elimination road is built for mini — not behind a switch, not
+off by default, not at all.
+`check: python -c "
+from minireason.forms import mini_form_ids, resolve_mini_form
+banned = {'score', 'rank', 'weight', 'confidence', 'priority', 'authority',
+          'severity'}
+for form_id in mini_form_ids():
+    schema = resolve_mini_form(form_id).wire_model.model_json_schema()
+    fields = set(schema.get('properties', {}))
+    for nested in schema.get('\$defs', {}).values():
+        fields |= set(nested.get('properties', {}))
+    assert not (fields & banned), (form_id, fields & banned)
+"`
+
 ## The isolation fence
 
 R1 and R11 — "mini needs to be tested in isolation", "without the larger
@@ -148,14 +220,16 @@ assert 'REFUTED' not in body, 'mini must not label a status itself'
 | To change... | Edit | Test |
 |---|---|---|
 | what a mini run is started FROM | `compat.bind_mini_root`'s `run_input`/`dossier` parameters, and `shallow.py::_load_frozen_input` for the CLI road | `mini/tests/test_compat.py`, `tests/test_shallow_reason.py::test_shallow_takes_the_standard_frozen_input` |
+| which FORM a seat is asked to fill, or add one | `minireason/forms.py`: register a `MiniFormV1` beside the others. Never `Config`, never the manifest | `mini/tests/test_mini_forms.py` |
+| which commitment channels a run executes | `MiniCommitmentPolicyV1` in `minireason/policy.py`, passed to `loop.run` as `commitment_policy`. Switching one off writes its own typed warning into the record | `mini/tests/test_mini_commitment_policy.py` |
 | the stop conditions, or the cycle ceiling | `loop.run`'s `while` conditions and `max_cycles` | `mini/tests/test_loop.py::test_budget_death_is_a_logged_stop` |
 | when a problem is called dry, or the stance rotates | `rotate.Turnover` and `rotate.Rotation` | `mini/tests/test_loop.py::test_turnover_advances_the_queue` |
 | what counts as orbiting, or a gate block | `gate.orbit`, `gate.gate_blocks` | `mini/tests/test_gate.py` |
-| which commitments a candidate must satisfy | NOT here: `checks.compile_checks` delegates to `deepreason.informal.skeleton`; mini owns the reduced POLICY of executing them immediately, not the constructors | `mini/tests/test_checks.py`, `mini/tests/test_normative_kernel.py` |
+| what a compiled commitment MEANS | NOT here: `checks.compile_checks` delegates to `deepreason.informal.skeleton`; mini owns which channels it COMPILES (the policy above), never what a commitment means | `mini/tests/test_checks.py`, `mini/tests/test_normative_kernel.py` |
 | what mini sends on the wire | NOT here: `compat.initialize` selects a parent `WireContract`; mini owns no schema | `mini/tests/test_call.py`, `tests/test_wire_contracts.py` |
 | which packages a mini run may reach | `mini/tests/test_isolation_fence.py`'s `FENCED` and `ALLOWED` tuples, which quote SPEC S1 verbatim | `mini/tests/test_isolation_fence.py` |
 
-`check: python -m pytest mini/tests/test_loop.py mini/tests/test_gate.py mini/tests/test_checks.py mini/tests/test_compat.py -q`
+`check: python -m pytest mini/tests/test_loop.py mini/tests/test_gate.py mini/tests/test_checks.py mini/tests/test_compat.py mini/tests/test_mini_forms.py mini/tests/test_mini_commitment_policy.py -q`
 
 ## Traps
 

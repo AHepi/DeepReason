@@ -242,3 +242,40 @@ INDEX.md's coverage section says the map describes src/deepreason/.
 End state: INDEX.md's coverage section names mini/ explicitly, and either
 routes to SUB-minireason.md or records its absence as a known gap.
 ```
+
+---
+
+## P7 — SPEC.md's per-item line estimates are lower bounds, not ceilings
+
+**What.** Two consecutive sub-tranches overran their diff budget, T1 by 1.3x
+(218 against 170) and T2 by 2.4x (413 against 175), and both for the same
+reason rather than two different ones. Every overrun measured so far is typed
+refusals, disclosure records, per-channel naming and the docstrings that carry
+the constraints — the parts that make a change honest about itself. SPEC.md's
+numbers priced the MECHANISM ("accept a `--run-input` and bind it", "a
+registry"), which is the part a line estimate written from a design sketch can
+see; the obligations the standing laws attach to that mechanism are the part
+it cannot.
+
+**Not a defect in any code, and not a reason to write less.** The alternative
+in both cases was to ship a smaller change that lies about itself: no typed
+refusal at the point of use, no record of which gate was switched off, no
+notice that frozen criteria are bound but not compiled. Each of those is
+required by a law the operator stated.
+
+**Why it matters now.** T3–T7 go to later windows, and their numbers (240,
+180, 240, 120, 80) were written the same way. A window that treats them as
+ceilings will either stop on a false alarm or trim the wrong thing.
+
+```
+Route: no tranche. This is a note for whoever plans the remaining
+sub-tranches, and for dr-spec-change's estimating habit.
+Goal: read SPEC.md's T3-T7 numbers as lower bounds. Re-baseline in the same
+shape T1 and T2 did -- itemise per file, separate code from docstring, say
+which obligation the extra lines discharge -- rather than trimming a
+disclosure to fit a number.
+Evidence: SPEC.md Budget carries both re-baselines with their itemisations;
+T1/VALIDATION.md and T2/VALIDATION.md carry the diff_budget output.
+End state: either the later windows' overruns are disclosed the same way, or
+dr-spec-change learns to price the obligations alongside the mechanism.
+```
