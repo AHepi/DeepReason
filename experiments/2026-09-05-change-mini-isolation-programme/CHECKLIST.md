@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=43 blockers=none (T5 diff budget re-baselined at step 42, SPEC.md §Budget). T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=44 blockers=none (T5 diff budget re-baselined at step 42, SPEC.md §Budget). T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1655,9 +1655,27 @@ tranche".
       SPEC.md §Budget carries the T5 re-baseline: ~620 by the gate's count,
       ~400 by net lines; programme ~2 850 by the gate's count.
       ```
-- [ ] 43. (S8, S9) Map: `SUB-minireason.md` gains the flow registry and the
+- [x] 43. (S8, S9) Map: `SUB-minireason.md` gains the flow registry and the
       five enforcement checks — SAME COMMIT.
       done-when: `python tools/docs_verify.py` 0 failed, `--audit` 0 findings
+
+      ```
+      $ python tools/docs_verify.py --fast   -> 6 failed, the same six known rows
+      $ python tools/docs_verify.py --audit  -> 1 finding, the known SEAM-llm-x-rules.md:54
+      $ python tools/docs_verify.py --links  -> 0 dangling, 82 documents
+      (the FULL run is step 44's, after the gate and never beside it)
+
+      The flow registry section landed with the code at step 39 (the map moves
+      with the code); this step adds the "Enforced, not promised" section: the
+      five checks named with what makes each enforced, a check that runs the
+      architecture suite, and a second check that re-derives check 1 in place
+      (the registry enumeration, >= 19 ids, no whole-constant match in loop.py,
+      'skeleton' absent, the flow selection and the brief render present in
+      the loop). The relapse-domain label the substring form trips on is
+      recorded in the map with the reason it stays. The second check's
+      mutation is proof/mutation_1.txt's (the same assertion form went red on
+      the same planted seat name).
+      ```
 - [ ] 44. (T5) Gate + mini ring + docs.
       done-when: all three green (paste)
 - [ ] 45. (T5) [COMMIT] Deliver T5.

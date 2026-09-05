@@ -320,6 +320,43 @@ assert set(iso.artifact_kinds) == {s.produces_kind for s in iso.stages}
 assert len(iso.commitment_policy.disabled_channels) == 2
 "`
 
+## Enforced, not promised: the five architecture checks
+
+The modularity law's "enforced" clause is a check that can FAIL when a
+consumer bypasses the interface or a customization point requires a code
+edit to use. `mini/tests/test_mini_architecture.py` is five such checks, each
+shown red under a planted bypass before it was written down
+(`experiments/2026-09-05-change-mini-isolation-programme/proof/mutation_<n>.txt`):
+(1) the loop names no seat, kind or stage — enumerated from the registries
+and matched as whole string constants on the AST; (2) no evidence-side path,
+in the full harness or in mini's own admit/register/guard/refute functions,
+reads a mini seat name or kind; (3) a section added to a mini brief needs no
+source edit; (4) a new artifact kind needs no source edit; (5) only the no-op
+calibration hook is registered.
+`check: python -m pytest mini/tests/test_mini_architecture.py -q`
+
+`check: python -c "
+import sys; sys.path.insert(0, 'mini')
+import ast, pathlib
+from deepreason.llm.seat_sections import seat_pack_layout_ids, seat_shell_ids
+import minireason.flow as flow, minireason.seats as seats
+names = set(seats.MINI_SEATS) | set(seat_shell_ids()) | set(seat_pack_layout_ids()) | set(flow.mini_flow_ids())
+for fid in flow.mini_flow_ids():
+    f = flow.resolve_mini_flow(fid); names |= set(f.artifact_kinds) | {s.stage_id for s in f.stages}
+assert len(names) >= 19, len(names)
+src = pathlib.Path('mini/minireason/loop.py').read_text()
+consts = {n.value for n in ast.walk(ast.parse(src)) if isinstance(n, ast.Constant) and isinstance(n.value, str)}
+assert not (consts & names), sorted(consts & names)
+assert 'skeleton' not in src and 'select_mini_flow' in src and 'render_mini_brief' in src
+"`
+
+**One label the substring form of that claim trips on, and why it stays.**
+`Session.guard_scope` hands the relapse guard the contract label
+`mini.conjecturer.v1`, which predates the programme and is folded into the
+relapse-domain digest the record carries; renaming it would change every
+legacy admission record. It is not a seat id, and the whole-constant check
+above does not match it.
+
 ## The isolation fence
 ## The isolation fence
 ## The isolation fence
