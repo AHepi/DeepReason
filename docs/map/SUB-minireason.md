@@ -278,6 +278,22 @@ for forbidden in ('create_artifact', 'register_artifact', 'register_batch', 'reg
 assert 'measure' in names and 'put' in names
 "`
 
+## The controller hook: declared, and called by nothing
+
+R7 asks that what a seat is shown be "calibrated on the fly and modifiable by
+the controller"; R8 is "Don't change the controller just yet". So
+`seats.MiniCalibrationHookV1` is the SEAM and nothing behind it: a protocol
+(`calibrate(seat_id, cycle, entries) -> entries | None`), a registry selected
+by id with typed refusals, and ONE registered implementation,
+`mini.calibration.noop.v1`, which returns `None`. The window ruling of
+2026-09-05 binds the other half — the hook has ZERO callers, asserted on the
+AST — and supersedes the programme SPEC's earlier "the loop calls it between
+cycles". Exactly two lines under `src/` and `mini/minireason/` name the
+registration function: its definition and the no-op's registration; a third
+is a controller stepping in before the operator said how.
+`check: test "$(grep -rn "register_mini_calibration_hook" src/ mini/minireason/ | wc -l)" -eq 2 && python -m pytest mini/tests/test_mini_calibration_hook.py -q`
+
+## The isolation fence
 ## The isolation fence
 ## The isolation fence
 
@@ -334,6 +350,7 @@ assert 'REFUTED' not in body, 'mini must not label a status itself'
 | what a mini seat is SHOWN, or add a section to a mini brief | a layout in `minireason/seats.py`, or a `.layout.json` under `<DEEPREASON_HOME>/seat_plugins/` naming a registered plugin (`DR-REC-add-a-section-plugin`) — no source edit; the directive wording is a layout entry's `text` param | `mini/tests/test_mini_sources.py`, `mini/tests/test_mini_exposure.py` |
 | how much of the pool a seat sees as it grows | the `mini.everything-so-far` entry's `retention_rule`, `budget_chars`, `keep_last` params; a new rule is `sources.register_mini_retention_rule` | `mini/tests/test_mini_sources.py` |
 | what a mini seat writes when it is not a conjecture, or add a record KIND | `records.record_mini_output(session, kind, body=…, about=…)` — a typed event and a blob, never an artifact; a kind is a string a flow names as data | `mini/tests/test_mini_commitment_seat.py` |
+| how a controller would reshape what a seat is shown | NOT yet: implement `MiniCalibrationHookV1`, register it — and the operator says when (R8); today only the no-op is registered and nothing calls it | `mini/tests/test_mini_calibration_hook.py` |
 | which packages a mini run may reach | `mini/tests/test_isolation_fence.py`'s `FENCED` and `ALLOWED` tuples, which quote SPEC S1 verbatim | `mini/tests/test_isolation_fence.py` |
 
 `check: python -m pytest mini/tests/test_loop.py mini/tests/test_gate.py mini/tests/test_checks.py mini/tests/test_compat.py mini/tests/test_mini_forms.py mini/tests/test_mini_commitment_policy.py -q`

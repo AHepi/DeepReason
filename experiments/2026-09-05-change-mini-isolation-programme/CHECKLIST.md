@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=34 blockers=none (T4 diff budget EXCEEDED at step 32, disclosed; re-baseline at step 34). T3 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=35 blockers=none (T4 diff budget re-baselined at step 34, SPEC.md §Budget). T3 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1272,10 +1272,55 @@ tranche".
                            ('forms.MiniCommitmentProposal', {'severity'}), ...]
       Both restored, __pycache__ cleared; 3 passed.
       ```
-- [ ] 34. (S7) [COMMIT] `MiniCalibrationHookV1` declared, with
+- [x] 34. (S7) [COMMIT] `MiniCalibrationHookV1` declared, with
       `mini.calibration.noop.v1` as the only registered implementation,
       called between cycles and returning `None`.
       done-when: `grep -rn "register_mini_calibration_hook" src/ mini/minireason/ | wc -l` -> 2 (paste)
+
+      ```
+      $ grep -rn "register_mini_calibration_hook" src/ mini/minireason/
+      mini/minireason/seats.py:...:def register_mini_calibration_hook(hook: MiniCalibrationHookV1) -> ...
+      mini/minireason/seats.py:...:register_mini_calibration_hook(_NoopCalibrationHook())
+      $ ... | wc -l  ->  2
+
+      SUPERSEDED IN THIS STEP'S OWN WORDING: "called between cycles". The window
+      instruction's RULINGS THAT BIND (2026-09-05) say "The hook is an interface
+      with a no-op default and zero callers; an architecture test asserts zero
+      callers." The window is the operator's later word, so the hook is
+      DECLARED and CALLED BY NOTHING: a runtime-checkable protocol, a registry
+      selected by id with two typed refusals (malformed, conflict), one no-op
+      registration returning None for every input, and no call to `calibrate`
+      or `resolve_mini_calibration_hook` anywhere under src/ or mini/minireason/
+      (asserted on the AST in step 35's test). SPEC S7's "the mini loop calls
+      it between cycles" is recorded as superseded in SUB-minireason.md.
+
+      $ python -m pytest mini/tests/test_mini_calibration_hook.py -q -> 6 passed
+      $ python -m pytest mini/tests/ -q                               -> 150 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q        -> 3 passed
+      $ git diff --stat e83df7dfd -- src/                             -> (no output)
+      $ python tools/blast_radius.py --files mini/minireason/seats.py --symbols MiniCalibrationHookV1 \
+            register_mini_calibration_hook resolve_mini_calibration_hook DEFAULT_CALIBRATION_HOOK_ID --against e83df7dfd
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+
+      One correction while counting: the name also sat in seats.py's __all__,
+      making the grep 3. The export list is not the mechanism; the name left it.
+
+      Map, same commit: SUB-minireason.md gains the hook section (the seam, the
+      supersession, the zero-callers ruling) with a check pinning the grep at
+      exactly 2 AND running the hook suite, plus a where-to-change row.
+      docs_verify --fast: 6 failed, the same six known rows.
+
+      STOP CONDITION (diff budget), RE-BASELINED HERE as step 32 said:
+      $ python tools/diff_budget.py e83df7dfd --ceiling 180 --paths mini/minireason
+      {"total_insertions": 332, "ceiling": 180, "verdict": "EXCEEDED"}
+        records.py (new) 134 = code 63 / doc 42 / comment 3 / blank 26
+        seats.py        +129 = code +67 / doc +17
+        sources.py       +69 = code +27 / doc +2 (−18)
+      SPEC.md §Budget carries the T4 re-baseline in T1-T3's shape. T4 restated
+      as ~330; programme ~2 250. The T4-specific cause: the record shape was
+      chosen over the artifact shape after measuring a frozen-surface contact
+      the forecast did not cover.
+      ```
 - [ ] 35. (S7) Prove R8 is honoured: the hook changes nothing. A run with the
       hook and a run without it produce the same rendered briefs.
       done-when: `python -m pytest mini/tests/test_mini_calibration_hook.py -q` -> 0 failed

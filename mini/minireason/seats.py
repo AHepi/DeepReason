@@ -29,6 +29,8 @@ the `mini.everything-so-far` entry and disclosed inside the section
 
 from __future__ import annotations
 
+from typing import Protocol, runtime_checkable
+
 from deepreason.llm.packs import allocate_seat_brief, render_seat_brief
 from deepreason.llm.seat_sections import (
     SeatPackLayoutEntryV1,
@@ -234,8 +236,100 @@ def record_commitment_proposals(session, proposals: MiniCommitmentProposals, *,
     return events
 
 
+# ---------------------------------------------------------------------------
+# The controller hook: DECLARED, never implemented, called by nothing.
+#
+# R7 asks that what each seat is shown be "calibrated on the fly and
+# modifiable by the controller"; R8 says "Don't change the controller just
+# yet, the controller steps in only when I can see how best to manage input
+# output flows in mini properly." So this is the seam and nothing behind it:
+# an interface a future controller can implement, a registry it is selected
+# from by id, and ONE registered implementation that returns None. The window
+# ruling of 2026-09-05 binds the other half: the hook has ZERO callers, and
+# `mini/tests/test_mini_calibration_hook.py` asserts that on the AST. A promise
+# is not a mechanism; the test is.
+# ---------------------------------------------------------------------------
+
+
+class MiniSeatError(ValueError):
+    """A typed refusal from the seat layer: an unknown or duplicate hook."""
+
+    def __init__(self, code: str, message: str) -> None:
+        super().__init__(f"{code}: {message}")
+        self.code = code
+
+
+@runtime_checkable
+class MiniCalibrationHookV1(Protocol):
+    """Given a seat's layout entries for a cycle, return a reshaped tuple --
+    or None to leave them exactly as the layout declared them."""
+
+    hook_id: str
+    hook_version: str
+
+    def calibrate(
+        self, *, seat_id: str, cycle: int, entries: tuple[SeatPackLayoutEntryV1, ...]
+    ) -> tuple[SeatPackLayoutEntryV1, ...] | None: ...
+
+
+class _NoopCalibrationHook:
+    hook_id = "mini.calibration.noop.v1"
+    hook_version = "1.0.0"
+
+    def calibrate(self, *, seat_id, cycle, entries):
+        return None
+
+
+DEFAULT_CALIBRATION_HOOK_ID = _NoopCalibrationHook.hook_id
+_CALIBRATION_HOOKS: dict[str, MiniCalibrationHookV1] = {}
+
+
+def register_mini_calibration_hook(hook: MiniCalibrationHookV1) -> MiniCalibrationHookV1:
+    """Add a hook. A SECOND registration anywhere under `src/` or
+    `mini/minireason/` is a violation of R8, and the architecture test says
+    so by name: the operator has not yet said how the controller steps in."""
+
+    if not isinstance(hook, MiniCalibrationHookV1):
+        raise MiniSeatError(
+            "MINI_CALIBRATION_HOOK_MALFORMED",
+            "a calibration hook must carry hook_id, hook_version and calibrate",
+        )
+    existing = _CALIBRATION_HOOKS.get(hook.hook_id)
+    if existing is not None and existing is not hook:
+        raise MiniSeatError(
+            "MINI_CALIBRATION_HOOK_CONFLICT",
+            f"hook id {hook.hook_id!r} is already registered",
+        )
+    _CALIBRATION_HOOKS[hook.hook_id] = hook
+    return hook
+
+
+def mini_calibration_hook_ids() -> tuple[str, ...]:
+    return tuple(sorted(_CALIBRATION_HOOKS))
+
+
+def resolve_mini_calibration_hook(hook_id: str | None = None) -> MiniCalibrationHookV1:
+    requested = DEFAULT_CALIBRATION_HOOK_ID if hook_id is None else hook_id
+    hook = _CALIBRATION_HOOKS.get(requested)
+    if hook is None:
+        raise MiniSeatError(
+            "MINI_CALIBRATION_HOOK_UNKNOWN",
+            f"no mini calibration hook {requested!r}; registered: "
+            + ", ".join(mini_calibration_hook_ids()),
+        )
+    return hook
+
+
+register_mini_calibration_hook(_NoopCalibrationHook())
+
+
 __all__ = [
     "COMMITMENT_PROPOSAL_KIND",
+    "DEFAULT_CALIBRATION_HOOK_ID",
+    "MiniCalibrationHookV1",
+    "MiniSeatError",
+    "mini_calibration_hook_ids",
+    "resolve_mini_calibration_hook",
     "COMMITMENT_SHELL",
     "CONJECTURER_SHELL",
     "CRITIC_SHELL",

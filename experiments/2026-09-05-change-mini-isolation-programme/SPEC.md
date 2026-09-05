@@ -997,6 +997,22 @@ laws attach to it — plus one cause specific to T3: a ruling (retention as a
 rule) that arrived after the numbers did. T4 and T5's numbers stay as written
 and are read as lower bounds.
 | T4 | the commitment seat, the controller hook, the map | S4+S7+S11b | 180 |
+
+**T4's 180 is EXCEEDED, and re-baselined with every file measured (2026-09-05,
+at step 34, once the hook was in).** Against T3's delivery head `e83df7dfd`:
+
+| file | insertions | code / docstring / comment / blank | why |
+|---|---|---|---|
+| `mini/minireason/records.py` (new) | 134 | 63 / 42 / 3 / 26 | S4 priced 85 for "an artifact kind and its seat". What ships is a RECORD shape instead of an artifact — a typed event with its body in a blob, deliberately outside the one map every authority path reads — with its reader, the typed dropped road for a proposal naming nothing in the run, and the spend-lands-once rule. The artifact road was measured CONTACT on the harness surface and not taken |
+| `mini/minireason/seats.py` | +129 | code +67 / doc +17 | the seat's writer (~30), and S7's hook: the protocol, a registry with two typed refusals, the one no-op registration (~90). S7 priced 35 for "a Protocol and a no-op"; the registry and its refusals are what make "selected by id" true |
+| `mini/minireason/sources.py` | +69 (−18) | code +27 | the pool as a SOURCE value merging artifacts and records in record order, labelled by kind — the consequence of records not being artifacts |
+| **total** | **332** | | against 180 |
+
+**T4 is therefore restated as ~330**, and the programme total moves to
+~2 250. Same cause as P7 names, plus one specific to T4: the record shape was
+chosen over the artifact shape AFTER measuring the frozen-surface contact the
+SPEC's forecast did not cover (it forecast S4 as a form and a seat, not as a
+new record kind).
 | T5 | the pluggable flow and the architecture tests | S8+S9 | 240 |
 | T6 | regression, goldens, the record | S10 | 120 |
 | T7 | the measure | S12 | 80 |
