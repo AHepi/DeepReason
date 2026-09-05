@@ -1,1 +1,32 @@
 ### soak A1 start 2026-09-05T00:03:23Z
+### soak A1 exit=0 2026-09-05T00:09:06Z
+### soak A1P start 2026-09-05T00:09:06Z
+### soak A1P exit=0 2026-09-05T00:14:38Z
+### soak A2 start 2026-09-05T00:14:38Z
+### soak A2 exit=0 2026-09-05T00:20:32Z
+Fatal Python error: init_import_site: Failed to import the site module
+Python runtime state: initialized
+Traceback (most recent call last):
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 980, in exec_module
+  File "<frozen site>", line 642, in <module>
+  File "<frozen site>", line 635, in main
+  File "<frozen site>", line 574, in execsitecustomize
+  File "/home/user/DeepReason/experiments/2026-09-04-experiment-brief-variation-step1/rig/sitecustomize.py", line 21, in <module>
+    armrig.install()
+  File "/home/user/DeepReason/experiments/2026-09-04-experiment-brief-variation-step1/rig/armrig.py", line 198, in install
+    raise SystemExit(
+SystemExit: ARM RIG REFUSED: arm A3 needs 'op.neighbourhood.v1' from the operator plugin directory; loaded=[] notices=[]. An A3 that silently fell back to the shipped neighbourhood would be A0 wearing A3's label.
+### soak A3 start 2026-09-05T00:20:33Z
+### soak A3 exit=1 2026-09-05T00:20:33Z
+template -> /home/user/DeepReason/experiments/2026-09-04-experiment-brief-variation-step1/soak/home-A3/seat_plugins/op.neighbourhood.v1@neighbourhood.tmpl
+### soak A3 start 2026-09-05T12:32:52Z
+### soak A3 exit=1 2026-09-05T12:32:54Z
+template -> /tmp/soak-a3/home/seat_plugins/op.neighbourhood.v1@neighbourhood.tmpl
+### soak A3 start 2026-09-05T12:33:44Z
+### soak A3 exit=1 2026-09-05T12:33:44Z
+template -> /tmp/soak-a3/home/seat_plugins/op.neighbourhood.v1@neighbourhood.tmpl
+### soak A3 start 2026-09-05T12:34:38Z
+### soak A3 exit=0 2026-09-05T12:40:17Z
