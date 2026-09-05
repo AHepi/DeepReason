@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=9 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=10 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -268,8 +268,19 @@ tranche".
       step's run over the changed files).
       ```
 
-- [ ] 9. (T0) [COMMIT] Deliver T0: push, then confirm clean.
+- [x] 9. (T0) [COMMIT] Deliver T0: push, then confirm clean.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+      ```
+      $ git status --porcelain     -> (empty)
+      $ git rev-parse HEAD origin/claude/mini-isolation-t0-t2-upwc47
+      37f3c64ef323af2f28734fc0840de90dbaf420b9
+      37f3c64ef323af2f28734fc0840de90dbaf420b9
+
+      T0/VALIDATION.md verdict PASS; T0/DELIVERY.md written with the
+      requirement reconciliation, the map delta, "errata: none" and the parked
+      queue. T0 IS DELIVERED.
+      ```
 
 ## T1 — isolation, the standard input, the fence (S1, S11a) — ~170 lines
 
