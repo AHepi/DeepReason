@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=3 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=4 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -82,10 +82,29 @@ tranche".
       No drift: CLEAR matches SPEC.md's forecast, and the one newly_live symbol is
       exactly the row the blast-radius census marked EXPECTED TO MOVE.
       ```
-- [ ] 3. (S0a) Prove the disclose-never-die half: a plugin file that raises
+- [x] 3. (S0a) Prove the disclose-never-die half: a plugin file that raises
       on import produces a typed notice in the record and does not stop the
       run.
       done-when: `python -m pytest tests/test_seat_section_home.py -q` -> 0 failed
+
+      ```
+      $ python -m pytest tests/test_seat_section_home.py -q
+      ...........                                                              [100%]
+      11 passed in 0.30s
+      
+      Mutation proof (rule 3 of dr-execute-step's durable-tests list): making the
+      loader re-raise instead of disclosing turns the new test RED --
+      
+        --- MUTATION (loader re-raises instead of disclosing) ---
+        .../seat_plugins/raises.py:1: RuntimeError
+        FAILED tests/test_seat_section_home.py::test_a_plugin_that_raises_on_import_is_a_notice_in_the_record
+        1 failed in 0.31s
+      
+      Reverted; 11 passed again. The new case is distinct from the loader-level
+      one already present: a file that PARSES and then raises while executing
+      reaches the interpreter before failing, so only a run can show the failure is
+      disclosed rather than fatal.
+      ```
 - [ ] 4. (S0b) Write the red tests first: a `.layout.json` under
       `seat_plugins/` is not registered, and an unparseable one is not
       refused typed.

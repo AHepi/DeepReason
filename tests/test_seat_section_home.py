@@ -262,3 +262,49 @@ def test_managed_path_loads_operator_plugins(tmp_path, monkeypatch, clean_regist
     )
     assert recorded["loaded"] == ["dr.operator.probe"]
     assert "broken.py" in recorded["notices"][0]["path"]
+
+
+def test_a_plugin_that_raises_on_import_is_a_notice_in_the_record(
+    tmp_path, monkeypatch, clean_registry
+):
+    """Disclose, never die, measured THROUGH A RUN rather than through the
+    loader alone.
+
+    Implements S0a (R7, C10). The distinction from the loader-level case
+    above is the one that matters operationally: a file that PARSES and then
+    raises while executing gets as far as the interpreter before it fails, so
+    only a run can show that the failure is disclosed rather than fatal.
+    """
+    import json
+
+    from deepreason.shallow import (
+        SHALLOW_SEAT_PLUGINS_RECORD,
+        run_shallow_question,
+    )
+    from tests.test_public_v6_facade import _configure
+
+    state, _ = _configure(monkeypatch, tmp_path)
+    plugins = seat_plugins_root(environ={"DEEPREASON_HOME": str(state)})
+    plugins.mkdir(parents=True, exist_ok=True)
+    (plugins / "good.py").write_text(_GOOD)
+    (plugins / "raises.py").write_text(
+        'raise RuntimeError("the operator\'s own experiment blew up")\n'
+    )
+
+    monkeypatch.setattr("minireason.loop.run", _stub_mini_run(), raising=True)
+    result = run_shallow_question("does a broken plugin stop a run?")
+
+    # The run did not stop, and the plugins that did load are usable.
+    assert result["completed"] is True
+    assert result["seat_plugins"]["loaded"] == ["dr.operator.probe"]
+
+    recorded = json.loads(
+        (
+            state / "shallow-runs" / result["run_id"] / SHALLOW_SEAT_PLUGINS_RECORD
+        ).read_text()
+    )
+    assert len(recorded["notices"]) == 1, recorded
+    notice = recorded["notices"][0]
+    assert notice["code"] == "SEAT_PLUGIN_UNLOADABLE"
+    assert "raises.py" in notice["path"]
+    assert "RuntimeError" in notice["detail"], "a notice with no reason is a silent skip"
