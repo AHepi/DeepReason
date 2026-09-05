@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=28 blockers=none (T3 diff budget re-baselined at step 27, SPEC.md §Budget). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=29 blockers=none (T3 diff budget re-baselined at step 27, SPEC.md §Budget). THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1021,9 +1021,50 @@ tranche".
       T3-specific cause beyond P7's: the retention-as-a-rule ruling arrived after
       SPEC.md's numbers were written.
       ```
-- [ ] 28. (S5) The exposure test: a rendered critic brief over a run that
+- [x] 28. (S5) The exposure test: a rendered critic brief over a run that
       contains commitment proposals contains none of their bytes.
       done-when: `python -m pytest mini/tests/test_mini_exposure.py -q` -> 0 failed
+
+      ```
+      $ python -m pytest mini/tests/test_mini_exposure.py -q
+      ......                                                                   [100%]
+      6 passed in 2.78s
+      $ python -m pytest mini/tests/ -q   -> 136 passed, 1 skipped, 0 failed
+
+      The fixture is a LIVE root, not a hand-built state: two standing skeleton
+      conjectures, two free-prose ones refuted on arrival under the default
+      policy, and three commitment proposals PLANTED through the harness's own
+      registration road (a MENTION ref to the conjecture each is about, free
+      prose bodies carrying a sentinel). verify_root: 0 violations before and
+      after every brief is rendered; digest and next seq unchanged.
+
+      Six assertions, on BYTES:
+        - the critic's brief carries not one proposal body, sentinel or id,
+          while its target conjecture is there whole; receipts name exactly
+          problem, target-conjecture, directive
+        - the structural half: every critic receipt is `rendered`; none is an
+          absent or dropped slot a proposal might have filled
+        - the conjecturer's and the commitment seat's briefs carry every
+          proposal whole, its `about:` link, and every conjecture -- standing
+          AND refuted -- by id (R6)
+        - no mini brief, any seat, contains accepted / refuted / suspended /
+          status / sustained / verdict; and the refuted conjectures are still
+          SHOWN, whole and unlabelled, to the seats that see everything
+        - rendering all three appends nothing
+
+      Mutation proof (durable-tests rule 3): give the critic layout a
+      `mini.everything-so-far` entry --
+        --- MUTATION (critic layout gains mini.everything-so-far) ---
+        FAILED test_mini_exposure.py::test_critic_brief_carries_no_proposal_bytes
+        FAILED test_mini_exposure.py::test_the_critic_layout_has_no_slot_a_proposal_could_fill
+        2 failed, 4 passed
+      Restored, __pycache__ cleared (SCHEMA.md's stale-bytecode rule); 6 passed.
+
+      One correction to my own fixture, recorded because it is the check
+      working: the first proposal body said "is refuted by any measurement",
+      and the label test caught its own bait. Reworded to "fails if any
+      measurement shows"; the test was right, the fixture was not.
+      ```
 - [ ] 29. (S6) [COMMIT] Map: create `docs/map/SEAM-llm-x-minireason.md`, and
       update `INV-seat-section-plugins.md` (the `form_id` consumer row, the
       `render_seat_brief` entry point) and `INDEX.md`'s seam matrix — SAME
