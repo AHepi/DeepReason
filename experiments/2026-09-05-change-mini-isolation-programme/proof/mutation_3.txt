@@ -1,0 +1,6 @@
+MUTATION 3: render_mini_brief renders the shell's layout only; a file-declared layout cannot be selected
+tree: mini/minireason mutated as described; tests unchanged
+
+E       AssertionError: assert 'A MINI SECTION NOBODY EDITED CODE FOR 863f39a2' in '## problem\nPROBLEM pi-0\nwhy?\n\n## everything-so-far\nEVERYTHING GENERATED SO FAR IN THIS RUN (every artifact, in f...each with a typicality estimate in [0,1]. Do not repeat what has already been generated; differ from it substantively.'
+FAILED mini/tests/test_mini_architecture.py::test_3_a_section_added_to_a_mini_brief_needs_no_source_edit
+1 failed in 1.10s

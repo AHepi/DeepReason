@@ -1014,6 +1014,27 @@ chosen over the artifact shape AFTER measuring the frozen-surface contact the
 SPEC's forecast did not cover (it forecast S4 as a form and a seat, not as a
 new record kind).
 | T5 | the pluggable flow and the architecture tests | S8+S9 | 240 |
+
+**T5's 240 is EXCEEDED, and re-baselined with every file measured (2026-09-05,
+at step 42, once the architecture tests were in).** Against T4's delivery head
+`d800b622b`:
+
+| file | insertions | net lines | code / docstring delta | why |
+|---|---|---|---|---|
+| `mini/minireason/flow.py` (new) | 231 | +231 | +148 / +49 | S8 priced 150 for the registry AND the loop rewrite. The registry alone is this: two dataclasses, a refusal for a stage naming an undeclared kind, a registry with three typed refusals, the three-step selection, and the two shipped flows as data |
+| `mini/minireason/loop.py` | 292 (−208) | +84 | +50 / +21 | the conjecture road LIFTED unchanged into `_conjecture_stage` (most of the 292 are moved lines the numstat counts as new), plus the stage walk, the record road, the one-lease call, the P8 disposal (brief share, typed clipped marker) and the typed skipped-stage event |
+| `mini/minireason/sources.py` | 47 (−2) | +45 | +31 / +6 | today's prompt as the `mini.legacy.prompt` plugin, verbatim, so the legacy flow renders through the same road and a golden can pin it; the everything section's default budget from the request |
+| `mini/minireason/seats.py` | 32 (−3) | +29 | +21 / 0 | the three kind ids, the legacy layout and shell |
+| `mini/minireason/forms.py` | 8 (−1) | +7 | +3 / 0 | `records_of`, the declared accessor the loop dispatches on instead of a seat name |
+| `mini/minireason/records.py` | 9 (−4) | +5 | +3 / 0 | the seat's own naming kept beside the bound target |
+| **total** | **619** | **+401** | **+256 / +76** | against 240 |
+
+**T5 is therefore restated as ~620 by the gate's count and ~400 by net
+lines**, and the programme total moves to ~2 850 by the gate's count. Same
+cause as P7 names; the T5-specific one is that S8's 150 priced a registry and
+a loop rewrite as one item, and the rewrite alone lifts 200 lines of the
+existing conjecture road into a function so the stage walk can call it — a
+move the numstat counts as insertions.
 | T6 | regression, goldens, the record | S10 | 120 |
 | T7 | the measure | S12 | 80 |
 

@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=42 blockers=none (T5 diff budget EXCEEDED at step 39, disclosed; re-baseline at step 42). T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=43 blockers=none (T5 diff budget re-baselined at step 42, SPEC.md §Budget). T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1598,11 +1598,63 @@ tranche".
       and after. R10 in the operator's words -- "add new artifact types on the
       fly if I can see it might help" -- costs a registration and no edit.
       ```
-- [ ] 42. (S9) [COMMIT] The five architecture tests, each with its mutation
+- [x] 42. (S9) [COMMIT] The five architecture tests, each with its mutation
       proof captured to `proof/mutation_<n>.txt` showing it RED.
       done-when: `python -m pytest mini/tests/test_mini_architecture.py -q`
       -> 0 failed AND five `proof/mutation_*.txt` files exist, each showing a
       red run (paste one)
+
+      ```
+      $ python -m pytest mini/tests/test_mini_architecture.py -q
+      .....                                                                    [100%]
+      5 passed in 2.96s
+      $ ls experiments/2026-09-05-change-mini-isolation-programme/proof/mutation_*.txt
+      mutation_1.txt  mutation_2.txt  mutation_3.txt  mutation_4.txt  mutation_5.txt
+
+      $ cat proof/mutation_4.txt
+      MUTATION 4: MiniFlowV1 refuses any kind outside the three shipped ones -- a new kind would need an edit
+      E   minireason.flow.MiniFlowError: MINI_FLOW_KIND_UNDECLARED: stage 'test.stage.ce495e60'
+          names kind 'test.kind.ce495e60.v1', which flow 'test.flow.ce495e60' does not declare
+      FAILED mini/tests/test_mini_architecture.py::test_4_a_new_artifact_kind_needs_no_source_edit
+      1 failed in 1.01s
+
+      The other four, one line each (the files carry the full pastes):
+        1  loop.py tests stage.seat_id == 'mini.critic'      -> RED: 'mini.critic'
+        2  Session.refute compares an id to 'mini.criticism.v1' -> RED: loop.py::refute: mini.criticism.v1
+        3  render_mini_brief ignores the caller's layout       -> RED: the operator's section absent
+        5  seats.py registers a second hook                    -> RED: ids != (noop,)
+      Each mutation was applied, the one test run, the file restored and
+      __pycache__ cleared; 5 passed again on the restored tree.
+
+      The five, and what makes each enforced rather than promised:
+        1 the loop names no seat, kind or stage -- ENUMERATED from the
+          registries (seats, shells, layouts, flows, stages, kinds, the record
+          marker) and matched as whole string constants on the AST, so a new
+          registration widens the check and the pre-existing relapse-domain
+          label cannot false-positive it;
+        2 no evidence-side path reads a mini seat name or kind -- the same
+          enumeration over the full harness's authority packages and mini's
+          ten admit/register/guard/refute functions;
+        3 a section added to a mini brief needs no source edit -- a plugin
+          file and a layout file in an operator home, loaded by the shipped
+          loader, rendered into a mini seat's brief; every mtime under
+          mini/minireason/ and src/ unchanged;
+        4 a new artifact kind needs no source edit -- a kind under a unique
+          id with its form, layout, shell, stage and flow registered in the
+          test, one cycle run, the record carrying the kind; mtimes unchanged;
+        5 only the no-op hook is registered -- one id, two source lines,
+          zero callers.
+
+      STOP CONDITION (diff budget), RE-BASELINED HERE as step 39 said:
+      $ python tools/diff_budget.py d800b622b --ceiling 240 --paths mini/minireason
+      {"total_insertions": 619, "ceiling": 240, "verdict": "EXCEEDED"}
+      Per file (insertions / net lines / code delta): flow.py 231/+231/+148;
+      loop.py 292(-208)/+84/+50 -- the conjecture road LIFTED unchanged into
+      _conjecture_stage, which the numstat counts as new lines; sources.py
+      47/+45/+31; seats.py 32/+29/+21; forms.py 8/+7/+3; records.py 9/+5/+3.
+      SPEC.md §Budget carries the T5 re-baseline: ~620 by the gate's count,
+      ~400 by net lines; programme ~2 850 by the gate's count.
+      ```
 - [ ] 43. (S8, S9) Map: `SUB-minireason.md` gains the flow registry and the
       five enforcement checks — SAME COMMIT.
       done-when: `python tools/docs_verify.py` 0 failed, `--audit` 0 findings

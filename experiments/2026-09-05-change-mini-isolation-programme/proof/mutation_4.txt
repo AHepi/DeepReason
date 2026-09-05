@@ -1,0 +1,6 @@
+MUTATION 4: MiniFlowV1 refuses any kind outside the three shipped ones -- a new kind would need an edit
+tree: mini/minireason mutated as described; tests unchanged
+
+E                   minireason.flow.MiniFlowError: MINI_FLOW_KIND_UNDECLARED: stage 'test.stage.ce495e60' names kind 'test.kind.ce495e60.v1', which flow 'test.flow.ce495e60' does not declare in artifact_kinds
+FAILED mini/tests/test_mini_architecture.py::test_4_a_new_artifact_kind_needs_no_source_edit
+1 failed in 1.01s

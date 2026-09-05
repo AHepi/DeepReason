@@ -1,0 +1,10 @@
+MUTATION 2: Session.refute compares a commitment id to the criticism kind 'mini.criticism.v1'
+tree: mini/minireason mutated as described; tests unchanged
+
+E       AssertionError: ['mini/minireason/loop.py::refute: mini.criticism.v1']
+E       assert ['mini/minire...criticism.v1'] == []
+E         
+E         Left contains one more item: 'mini/minireason/loop.py::refute: mini.criticism.v1'
+E         Use -v to get more diff
+FAILED mini/tests/test_mini_architecture.py::test_2_no_evidence_side_path_reads_a_mini_seat_name_or_kind
+1 failed in 1.19s
