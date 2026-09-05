@@ -79,3 +79,7 @@ for the current model id.
 4. Commit and push the tranche dir. Report to the operator: counts
    first, then the three highest-consequence findings in plain
    language, then where PARKED.md is.
+
+## MANDATORY (operator, 2026-09-05)
+
+Never verify a review without the operator's explicit permission. An audit or review window reads and reports; it does not run the full gate, `docs_verify`, smokes, soaks or live calls unless the operator said so for this task. Reproducing one cited check by its own named command is reading. See CLAUDE.md's MANDATORY block.

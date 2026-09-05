@@ -450,3 +450,7 @@ are queued, in this order:
 NOT adopted: the proof-assistant kernel, the four-layer rewrite, authorship /
 physical-realisation certificates, re-encoding the record in the document's
 event vocabulary (cross-version work the operator retired).
+
+## MANDATORY rule added 2026-09-05 — never verify a review without explicit permission
+
+Operator, verbatim: "Don't not ever verify a review without my explicit permission. Make it for every model working in Claude Code and make it mandatory." For the monitor this ENDS the post-merge test rings the monitor had been running to check its own conflict resolutions (owned to the operator 2026-09-04; the operator never granted them). Merge, compile-check by reading, push; if a merge needs a test run, ASK first and name the command. Full text in CLAUDE.md's MANDATORY block.

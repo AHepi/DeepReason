@@ -8,6 +8,26 @@ is the only admissible evidence about what a run did. Model prose is
 never evidence; `log.jsonl`, `objects/`, `progress.jsonl`,
 `run-status.json`, `REPLAY_VALIDATION.json`, and `verify_root` are.
 
+## MANDATORY for every model working in Claude Code on this repository
+
+**Never verify a review without the operator's explicit permission.**
+Operator's words, verbatim (2026-09-05): "Don't not ever verify a review
+without my explicit permission. Make it for every model working in Claude
+Code and make it mandatory." Operational reading, binding on the monitor,
+every executor window, every subagent and every audit or review window:
+a review-kind task (an audit, a code review, a verdict on a delivered
+branch, a monitor merge review) READS and REPORTS; it does not run the
+full gate, `docs_verify`, the wheel smokes, a soak, a live call, or any
+other verification instrument to "confirm" what it is reviewing, unless
+the operator has said so for that task in so many words. Reproducing a
+single cited check by its own command, where the review brief names it, is
+reading; anything wider is verification and needs permission. This applies
+to the monitor's post-merge test rings too: none without permission. The
+incident: the 2026-09-05 spec-drift audit ran the whole 5,167-test gate for
+69 minutes by a mistyped ring command in a read-only window. "I did not
+mean to" is not permission. Recorded in the operator design laws below as
+well; this block is here so it is the first rule read.
+
 ## Which workflow to use
 
 Both families now begin with a MAP PREFLIGHT: resolve the work to
@@ -790,3 +810,14 @@ so you do not re-trust them.
   that content is worth is decided later by running it through the full
   harness, whose authority layer is unchanged. Supersedes the programme's
   SPEC.md Q-A recommendation (E1 default with E2 built OFF): E1 only.
+
+- **Never verify a review without the operator's explicit permission**
+  (2026-09-05, operator's words verbatim: "Don't not ever verify a review
+  without my explicit permission. Make it for every model working in
+  Claude Code and make it mandatory."): mandatory for every model, every
+  window, every subagent. A review, audit, or verdict task reads and
+  reports; running the gate, `docs_verify`, smokes, soaks, live calls or
+  any verification instrument inside such a task requires the operator's
+  permission stated for that task. Reproducing one cited check by the
+  command the brief names is reading. The full text and the incident that
+  prompted it are in the MANDATORY block at the top of this file.
