@@ -82,6 +82,87 @@ def _record_operator_plugins(root: Path, environ: Mapping[str, str]) -> dict:
     return record
 
 
+def _load_frozen_input(run_input_root: Path | str):
+    """Read the STANDARD frozen input: the record `deepreason input freeze`
+    writes, and the one the full harness takes.
+
+    R12's "standard" is this artifact and no other. A v1 manifest is refused
+    rather than widened: v1 carries no criteria in the shape v2 does, so
+    accepting one would mean a run silently answering a differently-shaped
+    question.
+
+    A dossier carrying evidence SOURCES is refused too, with its own code. The
+    blobs it names would have to be staged into the run root before the record
+    could be bound there, and staging them is not built. This is an
+    impossibility surfacing at the point of use, which is where the
+    all-configurations law says it belongs -- not a configuration refused at
+    compile.
+    """
+
+    from deepreason.evidence import (
+        RunInputManifestV2,
+        load_evidence_dossier,
+        load_run_input,
+    )
+    from deepreason.evidence.state import RunInputError
+
+    path = Path(run_input_root)
+    try:
+        run_input = load_run_input(path)
+        dossier = load_evidence_dossier(path)
+    except (OSError, RunInputError, ValueError) as error:
+        raise ShallowReasonError(
+            "SHALLOW_RUN_INPUT_UNREADABLE",
+            f"{path} does not hold a readable frozen input: {error}",
+        ) from error
+    if not isinstance(run_input, RunInputManifestV2):
+        raise ShallowReasonError(
+            "SHALLOW_RUN_INPUT_VERSION",
+            "the reduced engine takes run-input-manifest.v2, the same record "
+            f"the full harness takes; {path} holds {run_input.schema_}",
+        )
+    if dossier.sources:
+        raise ShallowReasonError(
+            "SHALLOW_RUN_INPUT_HAS_EVIDENCE",
+            f"{path}'s dossier names {len(dossier.sources)} evidence "
+            "source(s); staging their blobs into a reduced-engine run root is "
+            "not built, so the record could not be bound there truthfully",
+        )
+    return run_input, dossier
+
+
+def _run_input_report(frozen) -> dict:
+    """What the run was started from, said in the result rather than implied.
+
+    The criteria count carries a NOTICE when it is non-zero: the reduced
+    engine binds the frozen record to its root, so the criteria are in the
+    run's identity, but it does not yet compile them into commitments. A
+    reader who saw only the count would reasonably assume it did.
+    """
+
+    if frozen is None:
+        return {"source": "question", "criteria": 0, "notices": []}
+    notices = []
+    if frozen.problem.criteria:
+        notices.append(
+            {
+                "code": "SHALLOW_RUN_INPUT_CRITERIA_NOT_COMPILED",
+                "detail": (
+                    f"{len(frozen.problem.criteria)} frozen criterion/criteria "
+                    "are bound to this root's identity but are not compiled "
+                    "into commitments by the reduced engine"
+                ),
+            }
+        )
+    return {
+        "source": "frozen-input",
+        "problem_id": frozen.problem.id,
+        "run_input_digest": frozen.run_input_digest,
+        "criteria": len(frozen.problem.criteria),
+        "notices": notices,
+    }
+
+
 def _endpoint(profile: ProviderProfileV1, key: str):
     from minireason.call import HttpEndpoint
 
@@ -94,15 +175,35 @@ def _endpoint(profile: ProviderProfileV1, key: str):
 
 
 def run_shallow_question(
-    question: str,
+    question: str | None = None,
     *,
     cycles: int | None = None,
     token_budget: int | None = None,
     profile_path: Path | str | None = None,
+    run_input_root: Path | str | None = None,
     environ: Mapping[str, str] | None = None,
 ) -> dict:
-    """Run one clearly-labeled shallow inquiry; return the summary payload."""
+    """Run one clearly-labeled shallow inquiry; return the summary payload.
 
+    Two starting inputs, and the second is the point of `run_input_root`: a
+    bare question, exactly as before, or the STANDARD frozen input -- problem
+    plus criteria -- that `deepreason input freeze` writes and the full
+    harness takes. When one is supplied it decides the problem's id and its
+    description, and it is bound to the run root instead of mini's constant
+    process root.
+    """
+
+    frozen = None
+    if run_input_root is not None:
+        frozen, frozen_dossier = _load_frozen_input(run_input_root)
+        supplied = (question or "").strip()
+        if supplied and supplied != frozen.problem.description:
+            raise ShallowReasonError(
+                "SHALLOW_QUESTION_CONFLICTS_WITH_RUN_INPUT",
+                "a frozen input already states the question; passing a "
+                "different one would leave the record saying two things",
+            )
+        question = frozen.problem.description
     question = (question or "").strip()
     if not question:
         raise ShallowReasonError("SHALLOW_QUESTION_REQUIRED", "provide one question")
@@ -143,14 +244,26 @@ def run_shallow_question(
     root = _shallow_runs_dir(environ=environ) / run_id
     root.mkdir(parents=True, exist_ok=False)
     seat_plugins = _record_operator_plugins(root, environment)
-    problem_id = f"q-{sha256_hex(canonical_json(question))[:12]}"
+    problem_id = (
+        frozen.problem.id
+        if frozen is not None
+        else f"q-{sha256_hex(canonical_json(question))[:12]}"
+    )
 
+    # The frozen input is passed only when there IS one, so the bare-question
+    # path calls the engine with exactly the arguments it always did. That is
+    # the mechanical form of "the bare-question form keeps working unchanged":
+    # a stub written against the old signature still serves it.
+    frozen_binding = (
+        {"run_input": frozen, "dossier": frozen_dossier} if frozen is not None else {}
+    )
     summary = mini_run(
         [(problem_id, question)],
         _endpoint(profile, environment[profile.credential_env]),
         budget=budget,
         root=root,
         max_cycles=max_cycles,
+        **frozen_binding,
     )
     stop = str(summary.get("stop", ""))
     return {
@@ -165,6 +278,7 @@ def run_shallow_question(
         "provider": profile.provider,
         "model_id": profile.model_id,
         "seat_plugins": seat_plugins,
+        "run_input": _run_input_report(frozen),
         "summary": summary,
     }
 

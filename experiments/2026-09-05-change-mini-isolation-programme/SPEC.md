@@ -904,6 +904,38 @@ PROGRAMME of eight ordered sub-tranches, each with its own delivery**
 |---|---|---|---|
 | T0 | prerequisites (F1, F2) | S0a+S0b | 115 |
 | T1 | isolation entry, standard input, the module fence, `SUB-minireason.md` | S1+S11a | 170 |
+
+**T1's 170 is EXCEEDED, and re-baselined rather than absorbed (2026-09-05,
+during step 11).** Measured against T0's delivery head `d319f2d6c`, S1's
+production diff is **218 insertions**, and `SUB-minireason.md` has not been
+written yet (S11a, ~80). Itemised, with what each line is for:
+
+| file | insertions | why |
+|---|---|---|
+| `src/deepreason/shallow.py` | 117 | the frozen-input reader and its three typed refusals (~50), the `run_input` report that discloses criteria are bound but not compiled (~35), the two starting inputs and their conflict refusal (~25); ~10 lines are comments stating constraints |
+| `src/deepreason/cli/main.py` | 40 | `--run-input`, `question` made optional, and the two refusals on the full path that keep "optional" from becoming a silent difference between the paths |
+| `mini/minireason/compat.py` | 36 | `bind_mini_root`/`initialize` take a supplied run input; the reopening-mismatch refusal; the fenced `bridge.retry` import replaced |
+| `mini/minireason/loop.py` | 8 | forwarding only |
+| `src/deepreason/application/__init__.py` | 17 | **not foreseen by S1 at all** — the lazy text-run re-export, which is the S1 amendment's own consequence |
+
+**Why the estimate was low, stated plainly.** S1 priced ONE thing — accept a
+`--run-input` and bind it. Three obligations it did not price came with it,
+and each is required by a standing law rather than by taste: a frozen input
+that cannot be read must fail typed at the point of use, not silently
+(all-configurations law); criteria that reach a root's identity without being
+compiled into commitments must be DISCLOSED, or a reader who saw the count
+would assume they were (disclose-never-die); and making `question` optional
+must not leave the full path silently accepting a flag that does nothing.
+Together those are ~110 of the 218.
+
+**Nothing here is scope creep.** Every line traces to R1, R11, R12 or to the
+amended fence, and the alternative — dropping the disclosure and the
+refusals — would ship a smaller change that lies about itself.
+
+**T1's budget is therefore restated as ~300** (218 measured + ~80 for
+`SUB-minireason.md`), and the programme total moves from 1 320 to ~1 450. The
+later sub-tranches' numbers are untouched; whether they hold is measured when
+they run, not assumed here.
 | T2 | the mini form registry and the commitment switch | S2+S3 | 175 |
 | T3 | the mini source adapter and the three shells | S5+S6 | 240 |
 | T4 | the commitment seat, the controller hook, the map | S4+S7+S11b | 180 |

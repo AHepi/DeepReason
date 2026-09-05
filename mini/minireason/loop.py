@@ -518,14 +518,19 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
         window: int = 20, orbit_floor: int = 5, retry_max: int = 2,
         max_cycles: int = 1000,
         model_profile: str = DEFAULT_MODEL_PROFILE.value,
-        near_dup_eps: float | None = MINI_NEAR_DUP_EPS) -> dict:
+        near_dup_eps: float | None = MINI_NEAR_DUP_EPS,
+        run_input=None, dossier=None) -> dict:
     """Drive (pid, description) problems until budget death, queue
     exhaustion, or global dryness. Returns the run summary; the log at
-    ``root`` is the real output."""
+    ``root`` is the real output.
+
+    ``run_input``/``dossier`` bind the STANDARD frozen input to this root
+    instead of mini's constant process root. The problems still arrive as
+    arguments: what a caller freezes is the run's identity, not its queue."""
     # Resolve presentation, wire schema, and the exact endpoint route before
     # the first call.  The reduced engine stays MiniReason; compact is its
     # explicit default model-facing representation.
-    kernel = initialize(root, endpoint, model_profile)
+    kernel = initialize(root, endpoint, model_profile, run_input, dossier)
     vs_k = kernel.profile.vs_k if vs_k is None else vs_k
     session = Session(root)
     logged_before = session.state.logged_tokens()

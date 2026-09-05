@@ -266,3 +266,128 @@ def test_existing_full_root_cannot_be_silently_downgraded(tmp_path):
 
     with pytest.raises(RouteFirewallError, match="ENGINE_MISMATCH"):
         initialize(tmp_path / "run", endpoint)
+
+
+# ------------------------------- the STANDARD frozen input (S1, R12)
+
+
+def _frozen_root(tmp_path, *, criteria=()):
+    """Write the record `deepreason input freeze` writes, by the same call."""
+    from deepreason.evidence import (
+        AttachedSourceProvenanceV1,
+        EvidenceDossierV1,
+        RunInputManifestV2,
+        RunInputProblemV2,
+        bind_run_input,
+    )
+
+    root = tmp_path / "frozen"
+    dossier = EvidenceDossierV1.create(
+        problem_ref="pi-standard",
+        sources=(),
+        total_byte_count=0,
+        creation_provenance=AttachedSourceProvenanceV1(
+            supplied_by="operator workload",
+            acquisition_method="deepreason input freeze",
+        ),
+    )
+    run_input = RunInputManifestV2.create(
+        problem=RunInputProblemV2(
+            id="pi-standard",
+            description="why does the sky look blue?",
+            criteria=criteria,
+        ),
+        evidence_dossier_digest=dossier.dossier_digest,
+    )
+    bind_run_input(run_input, dossier, root)
+    return run_input, dossier
+
+
+def test_a_supplied_frozen_input_is_bound_instead_of_the_process_root(tmp_path):
+    """Implements R12: "It's starting input should be standard."
+
+    The standard input is the RunInputManifestV2 the full harness takes. When
+    one is supplied, mini binds THAT to its root -- the manifest's
+    run_input_digest is the frozen record's, not the constant process root's.
+    """
+    from minireason.call import MockEndpoint
+    from minireason.compat import (
+        MINI_RUN_INPUT_PROBLEM_ID,
+        bind_mini_root,
+        mini_run_input,
+    )
+    from deepreason.evidence import load_run_input
+
+    run_input, dossier = _frozen_root(tmp_path)
+    constant, _ = mini_run_input()
+    assert run_input.run_input_digest != constant.run_input_digest
+
+    root = tmp_path / "run"
+    endpoint = MockEndpoint(lambda prompt: "{}")
+    manifest = bind_mini_root(root, endpoint, run_input=run_input, dossier=dossier)
+
+    assert manifest.run_input_digest == run_input.run_input_digest
+    bound = load_run_input(root)
+    assert bound.problem.id == "pi-standard" != MINI_RUN_INPUT_PROBLEM_ID
+    assert bound.problem.description == "why does the sky look blue?"
+
+
+def test_no_supplied_input_still_binds_the_constant_process_root(tmp_path):
+    """The bare form is unchanged: mini's constant process root, byte for byte."""
+    from minireason.call import MockEndpoint
+    from minireason.compat import bind_mini_root, mini_run_input
+
+    constant, _ = mini_run_input()
+    manifest = bind_mini_root(tmp_path / "run", MockEndpoint(lambda p: "{}"))
+    assert manifest.run_input_digest == constant.run_input_digest
+
+
+def test_reopening_a_root_against_a_different_frozen_input_is_refused(tmp_path):
+    """A root's identity includes what it was asked.
+
+    A manifest that says one thing while the run answered another is a
+    reader's trap; the refusal is typed so it can be acted on.
+    """
+    import pytest
+
+    from deepreason.llm.firewall import RouteFirewallError
+    from minireason.call import MockEndpoint
+    from minireason.compat import bind_mini_root
+
+    run_input, dossier = _frozen_root(tmp_path)
+    other, other_dossier = _frozen_root(tmp_path / "second")
+    root = tmp_path / "run"
+    endpoint = MockEndpoint(lambda prompt: "{}")
+    bind_mini_root(root, endpoint, run_input=run_input, dossier=dossier)
+
+    # Same root, a DIFFERENT frozen input: refused, named.
+    from deepreason.evidence import RunInputManifestV2, RunInputProblemV2
+
+    different = RunInputManifestV2.create(
+        problem=RunInputProblemV2(
+            id="pi-standard",
+            description="a different question entirely",
+            criteria=(),
+        ),
+        evidence_dossier_digest=dossier.dossier_digest,
+    )
+    with pytest.raises(RouteFirewallError) as caught:
+        bind_mini_root(root, endpoint, run_input=different, dossier=dossier)
+    assert "MINI_ROOT_RUN_INPUT_MISMATCH" in str(caught.value)
+
+    # Rebinding the SAME one is not a refusal: it is the recovery path.
+    bind_mini_root(root, endpoint, run_input=run_input, dossier=dossier)
+
+
+def test_a_run_input_without_its_dossier_is_refused(tmp_path):
+    import pytest
+
+    from deepreason.llm.firewall import RouteFirewallError
+    from minireason.call import MockEndpoint
+    from minireason.compat import bind_mini_root
+
+    run_input, _ = _frozen_root(tmp_path)
+    with pytest.raises(RouteFirewallError) as caught:
+        bind_mini_root(tmp_path / "run", MockEndpoint(lambda p: "{}"),
+                       run_input=run_input)
+    assert "MINI_RUN_INPUT_INCOMPLETE" in str(caught.value)

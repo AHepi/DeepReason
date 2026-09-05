@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=11 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=12 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -367,10 +367,41 @@ tranche".
       now forwards to the live module rather than to a copy bound at import.
       ```
 
-- [ ] 11. (S1) [COMMIT] Accept a frozen `RunInputManifestV2` via
+- [x] 11. (S1) [COMMIT] Accept a frozen `RunInputManifestV2` via
       `--run-input`; bind it instead of the constant process root when
       supplied. The bare-question form is unchanged.
       done-when: `python -m pytest tests/test_shallow_reason.py mini/tests/test_compat.py -q` -> 0 failed
+
+      ```
+      $ python -m pytest tests/test_shallow_reason.py mini/tests/test_compat.py -q
+      (with the wider ring, because the CLI parser and a package re-export moved)
+      $ python -m pytest tests/test_shallow_reason.py mini/tests/ \
+            tests/test_v6_only_cli_admission.py tests/test_v6_only_application_admission.py \
+            tests/test_managed_path_config_read.py -q
+      241 passed, 1 skipped in 59.23s     -> 0 failed
+      
+      $ python scripts/wheel_smoke.py
+      wheel smoke passed: ... exact entry points ...
+      (run because this step changes the public CLI surface; no pin moved)
+      
+      STOP CONDITION HIT AND DISPOSED: diff budget EXCEEDED.
+      
+      $ python tools/diff_budget.py d319f2d6c --ceiling 170 --paths <T1 areas>
+      {"areas": {"src/deepreason/shallow.py": 117, "src/deepreason/cli/main.py": 40,
+                  "mini/minireason/compat.py": 36, "mini/minireason/loop.py": 8,
+                  "src/deepreason/application/__init__.py": 17},
+       "total_insertions": 218, "ceiling": 170, "verdict": "EXCEEDED"}
+      
+      DISCLOSED, NOT ABSORBED. SPEC.md Budget now carries the itemisation and the
+      reason: S1 priced ONE thing (accept a --run-input and bind it) and three
+      obligations came with it that standing laws require -- a typed refusal at the
+      point of use for an unreadable frozen input, a disclosure that frozen criteria
+      are bound but not compiled, and two refusals keeping an optional question from
+      becoming a silent difference between the two paths. Together ~110 of the 218.
+      Seventeen more lines are the S1 amendment's own consequence and were not
+      priced at all. T1 is re-baselined to ~300 with SUB-minireason.md; the
+      programme total moves 1320 -> ~1450. No later sub-tranche number is touched.
+      ```
 - [ ] 12. (S11a) [COMMIT] Create `docs/map/SUB-minireason.md` — the first map
       document for `mini/minireason/` — with `check:` lines that re-derive.
       done-when: `python tools/docs_verify.py` -> 0 failed AND `--audit` -> 0

@@ -213,6 +213,7 @@ def _verify_existing(
     manifest: RunManifest,
     profile: ProfileSpec,
     lease: EndpointLease,
+    run_input: RunInputManifestV2 | None = None,
 ) -> None:
     if manifest.engine_profile != ENGINE_PROFILE:
         raise RouteFirewallError(
@@ -232,21 +233,36 @@ def _verify_existing(
         raise RouteFirewallError(
             "MINI_ROOT_RUBRIC_POLICY_MISMATCH: MiniReason does not run rubric judging"
         )
+    if run_input is not None and manifest.run_input_digest != run_input.run_input_digest:
+        raise RouteFirewallError(
+            "MINI_ROOT_RUN_INPUT_MISMATCH: existing root is bound to a "
+            "different frozen input"
+        )
 
 
 def bind_mini_root(
     root: Path | str,
     endpoint: object,
     model_profile: str | ModelProfile | ProfileSpec = DEFAULT_MODEL_PROFILE,
+    run_input: RunInputManifestV2 | None = None,
+    dossier: EvidenceDossierV1 | None = None,
 ) -> RunManifest:
     """Bind (or verify) one immutable v6 mini manifest on a run root.
 
-    New roots receive, in order, the constant process run input and then the
-    compiled schema-6 mini manifest — the exact interface later mini phases
-    (advisory/scratch) should build on.  Existing v6 roots are verified
-    against the requested route and profile; legacy pre-v6 roots fail closed
-    in the parent loader with ``UNSUPPORTED_RUN_MANIFEST_VERSION`` and are
-    never rewritten.
+    New roots receive, in order, a run input and then the compiled schema-6
+    mini manifest — the exact interface later mini phases (advisory/scratch)
+    should build on.  Existing v6 roots are verified against the requested
+    route and profile; legacy pre-v6 roots fail closed in the parent loader
+    with ``UNSUPPORTED_RUN_MANIFEST_VERSION`` and are never rewritten.
+
+    THE RUN INPUT IS SUPPLIED OR CONSTANT, never both. A caller that hands in
+    the STANDARD frozen input — the same ``RunInputManifestV2`` the full
+    harness takes from ``deepreason input freeze`` — binds that; a caller that
+    hands in nothing gets mini's constant process root, which is what every
+    mini run bound before this existed. Reopening a root against a DIFFERENT
+    frozen input is refused: a root's identity includes what it was asked, and
+    a manifest that says one thing while the run answered another is exactly
+    the reader's trap this refusal exists to prevent.
     """
 
     profile = get_profile(model_profile)
@@ -257,11 +273,16 @@ def bind_mini_root(
     )
     root_path = Path(root)
     path = root_path / MANIFEST_NAME
+    if (run_input is None) != (dossier is None):
+        raise RouteFirewallError(
+            "MINI_RUN_INPUT_INCOMPLETE: a supplied run input needs its dossier"
+        )
     if path.exists():
         manifest = load_run_manifest(path)
-        _verify_existing(manifest, profile, lease)
+        _verify_existing(manifest, profile, lease, run_input)
         return manifest
-    run_input, dossier = mini_run_input()
+    if run_input is None:
+        run_input, dossier = mini_run_input()
     bind_run_input(run_input, dossier, root_path)
     manifest = _new_manifest(profile, lease, run_input.run_input_digest)
     persist_run_manifest(manifest, root_path)
@@ -272,6 +293,8 @@ def initialize(
     root: Path | str,
     endpoint: object,
     model_profile: str | ModelProfile | ProfileSpec = DEFAULT_MODEL_PROFILE,
+    run_input: RunInputManifestV2 | None = None,
+    dossier: EvidenceDossierV1 | None = None,
 ) -> CompatibilityKernel:
     """Freeze MiniReason's route and compact transport before its first call."""
 
@@ -282,7 +305,7 @@ def initialize(
         route=route_from_endpoint(endpoint),
     )
     lease.verify(endpoint)
-    manifest = bind_mini_root(root, endpoint, profile)
+    manifest = bind_mini_root(root, endpoint, profile, run_input, dossier)
     # Mini does not preserve conjecturer references in its canonical candidate
     # path. Its compact schema therefore omits references entirely instead of
     # exposing raw ids or pretending an empty alias table is a usable contract.
