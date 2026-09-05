@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=16 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=17 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -536,9 +536,27 @@ tranche".
 
 ## T2 — relaxed forms and the commitment switch (S2, S3) — ~175 lines
 
-- [ ] 16. (S2) Pin the STORED default before touching anything: a golden of
+- [x] 16. (S2) Pin the STORED default before touching anything: a golden of
       today's `ReferenceFreeConjecturer` wire schema (R-stored).
       done-when: `python -m pytest mini/tests/test_mini_forms.py::test_the_stored_form_is_byte_identical -q` -> passed
+
+      ```
+      $ python -m pytest mini/tests/test_mini_forms.py::test_the_stored_form_is_byte_identical -q
+      1 passed in 0.42s
+      
+      The golden is the WHOLE contract as a mini run sees it -- its id, its variant,
+      both model names, and the complete JSON Schema a seat is shown -- committed at
+      mini/tests/goldens/mini_stored_conjecturer_form.json (1236 bytes). Comparing
+      rendered bytes rather than a field or two is deliberate: a form is what the
+      model is ASKED FOR, and any change in that schema is a change to the question,
+      however small it looks in a diff.
+      
+      Mutation-proven before anything else in T2 was written. Nudging one title in
+      the golden turns it red:
+        E  AssertionError: the stored default conjecture form moved; R-stored says
+           it is stored, not changed. If a new form is wanted, REGISTER ONE BESIDE IT.
+      Restored; 1 passed.
+      ```
 - [ ] 17. (S2) [COMMIT] `mini/minireason/forms.py`: the registry, the four
       shipped forms, selection by argument → `DEEPREASON_MINI_FORM` → the
       flow default. Never `Config`, never the manifest.
