@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' as an objective metric for preferring theories, but it fails to address Popper's own concession that verisimilitude cannot be quantified or formally defined without falling back into induction. If the mechanism for choosing the 'better' theory lacks a non-inductive metric (since we cannot measure truth-likeness independently of successful predictions which imply induction), the preference becomes indistinguishable from the pragmatic induction Popper sought to reject, rendering the 'methodological rule' empty of the specific anti-inductive content claimed.",
+      "counterexample": null,
+      "premise": "Popper conceded that his definition of verisimilitude was flawed and that we cannot objectively measure truth-likeness without relying on inductive assumptions about future performance.",
+      "premise_evidence": null,
+      "successor_question": "Can a methodological rule for theory preference be considered non-inductive if the metric it relies on (verisimilitude) cannot be assessed without assuming the uniformity of nature?"
+    }
+  ]
+}

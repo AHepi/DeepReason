@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is defensible only by shifting the goal to 'error detection' creates a false dilemma. Popper explicitly defends preferring the better-corroborated theory not merely as a tool for criticism, but because it has withstood the severest tests, making it the 'best tested' candidate for truth (verisimilitude) even if probability cannot be assigned. By reducing the rationale solely to 'maximizing error detection potential,' the target ignores Popper's argument that surviving severe tests provides a rational (though non-probabilistic) ground for acting on a theory as the closest approximation to truth available, thus misrepresenting the 'cost' as a abandonment of truth-seeking rather than a refinement of how truth is approached without induction.",
+      "premise": "Popper argues that we prefer the better-corroborated theory because it has survived the severest tests, which makes it the best candidate for verisimilitude (closeness to truth), not just a tool for future falsification.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "Does Popper's concept of verisimilitude allow for a rational preference for better-corroborated theories without reducing the aim of science to mere error detection?"
+    }
+  ]
+}

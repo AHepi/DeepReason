@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a false dichotomy between 'logical justification of truth' and 'mere expediency,' ignoring Popper's explicit requirement that methodological rules must be aimed at the growth of knowledge (verisimilitude). By characterizing the preference for better-corroborated theories as 'rational faith' that is 'logically unjustifiable regarding future truth,' the target inadvertently validates the critic's charge: if the rule offers no rational link to the theory being closer to the truth (even tentatively), then acting on it is indistinguishable from irrational faith or arbitrary convention. Popper defends the preference precisely because severe testing eliminates error, thereby increasing the *content* of what we know, not because it increases probability; the target's framing surrenders this epistemic gain, reducing Popper's critical rationalism to the very decisionism he sought to avoid, thus failing to show the preference is defensible *on Popper's own terms* which demand a non-inductive yet rational connection to truth-likeness.",
+      "counterexample": null,
+      "premise": "Popper argues that while corroboration does not increase probability, it indicates that a theory has withstood attempts to falsify it, making it a better candidate for containing truth (verisimilitude) than a refuted or untested theory.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is merely 'faith' without a rational claim to improved verisimilitude, how does Popper's methodology differ from conventionalism?"
+    }
+  ]
+}

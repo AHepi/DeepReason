@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that accepting evolutionary epistemology costs 'the universal applicability of scientific rationality' misrepresents Popper's position. Popper explicitly rejected the idea that his critical rationalism provided a justification or guarantee for action; he viewed the preference for well-corroborated theories as a non-justified, rational decision (a 'convention' or 'act of faith') rather than a logical derivation. By framing the loss of 'universal applicability' as a specific cost of the evolutionary reinterpretation, the target implies Popper's original framework possessed such applicability or that the evolutionary view uniquely diminishes it. In reality, Popper's own terms never offered a universal logical bridge from corroboration to action in the first place, so the evolutionary analogy does not incur this specific 'cost' but rather aligns with Popper's existing admission that acting on science requires a non-inductive leap. The target constructs a false dilemma where the evolutionary view fails because it lacks what Popper never claimed to have.",
+      "counterexample": null,
+      "premise": "Popper maintained that preferring a corroborated theory is a rational decision but not one grounded in logic or probability, effectively admitting there is no 'universal applicability' of scientific rationality that guarantees successful action.",
+      "premise_evidence": null,
+      "successor_question": "Does Popper's concept of 'rational decision' in the absence of logical justification already preclude the 'universal applicability' the target claims is lost only under evolutionary epistemology?"
+    }
+  ]
+}

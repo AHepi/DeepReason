@@ -1,0 +1,104 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological imperative to maximize falsifiability, not an inductive prediction of truth. We prefer the theory that has survived severe tests because it is the most informative and thus offers the greatest potential for future refutation, which is the engine of scientific growth.",
+      "mechanism": "Methodological Utility: The rational agent chooses the theory with the highest empirical content (severity of tests passed) to accelerate the discovery of error. This is a decision rule for action, not a probability assignment.",
+      "counterconditions": [
+        "If the chosen theory fails immediately in the next test, the methodological choice was still rational because it exposed the error faster than a less-testable theory would have.",
+        "If the agent claims the theory is 'likely true' based on past success, they have left Popper's framework."
+      ],
+      "typicality": 0.92,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "The normative account is provided by the imperative to learn: one *should* choose the bold theory because it risks more and teaches more, regardless of its truth probability."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "This candidate explicitly separates methodological rationality (choosing the best test vehicle) from justificatory rationality (believing it true), avoiding the conflation."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "The justification is not hollow; it is grounded in the goal of science (error elimination). The 'because' is 'to learn faster', not 'because it works'."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "No biological instinct is invoked; the preference is a conscious adherence to the logic of situational analysis within the scientific game."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "revised", "note": "Revised to avoid claiming 'higher verisimilitude' as a proven fact. Instead, we choose the theory that *appears* to have higher verisimilitude as a regulative ideal for testing."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Agrees that expectation of truth is not the basis; the basis is the optimization of the critical process itself."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "In high-stakes action, the 'best' theory is the one whose failure modes are best understood. A well-tested bridge design is preferred not because it won't fall, but because we know exactly how it might fall and have ruled out those ways."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Rejects the dichotomy. The third option is 'methodological rationality': acting to maximize the rate of error correction."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_014"]
+    },
+    {
+      "claim": "The preference inevitably smuggles induction back in. Any practical reliance on corroboration implicitly assumes that the future will resemble the past (that the mechanisms which survived testing will continue to hold), which is the very principle of induction Popper sought to eliminate.",
+      "mechanism": "Hidden Inductive Premise: Action requires a bridge from 'has survived' to 'will survive'. Without this bridge, choosing Theory A over Theory B is arbitrary. The act of choosing implies a belief in the stability of nature's regularities.",
+      "counterconditions": [
+        "If Popper admits any pragmatic reason to expect success based on past tests, he has reintroduced induction under a different name.",
+        "If the choice is purely arbitrary, then science has no advantage over guesswork in practical application."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "The normative account fails because without an inductive link, there is no rational basis to prefer one arbitrary guess over another for action."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Argues that the distinction between 'methodological choice' and 'truth justification' collapses when the choice has real-world consequences dependent on truth-like behavior."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Confirms the criticism: the utility *is* derived from the implicit belief that past performance predicts future reliability."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Even if not 'biological', the reliance on past success is psychologically and logically inductive."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Supports the critic: since verisimilitude cannot be known, the only remaining ground for preference is inductive habit."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "departure_declared", "note": "Departure: This candidate asserts that Popper's attempt to define a non-inductive rationality for action is fundamentally incoherent."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "In high-stakes scenarios, 'learning opportunities' are irrelevant; only survival matters. Choosing based on learning is irrational if it doesn't correlate with survival."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Insists the dichotomy holds: either you believe the future resembles the past (induction) or you don't. If you don't, you can't act rationally."}
+      ],
+      "optional_refs": ["SRC_010", "SRC_006"]
+    },
+    {
+      "claim": "The preference is defensible via an evolutionary epistemology where 'rationality' is redefined as 'fitness-enhancing behavior'. We prefer corroborated theories not because they are true or probably true, but because organisms/methods that do so have survived longer.",
+      "mechanism": "Evolutionary Pragmatism: Corroboration is a marker of adaptive fitness of the theory-method pair. The 'smuggling' is not of logical induction, but of biological selection. We act on the best-corroborated theory because our cognitive apparatus is selected to trust patterns that haven't killed us yet.",
+      "counterconditions": [
+        "If evolution selects for fitness rather than truth, this merely shifts the problem: why trust that fitness correlates with the specific predictions needed for novel actions?",
+        "This approach accepts that rationality is local to the species' history, not universal."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "The normative 'should' becomes 'if you want to survive/continue the tradition of science, you should...'."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Reframes the solution: it is a naturalistic account of methodological choice, avoiding logical justification entirely."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "The utility is real (survival), even if the logical link to truth is broken."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "revised", "note": "Explicitly embraces the 'biological/psychological' aspect as a feature, not a bug, arguing Popper himself leaned towards evolutionary epistemology later in life."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Verisimilitude is replaced by 'adaptive fit'."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Rationality is defined as acting in accordance with evolved heuristics that have worked."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "High-stakes action relies on deep-seated evolutionary heuristics, which align with preferring tested theories."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Proposes a third way: neither logical induction nor arbitrary choice, but evolutionary conditioning."}
+      ],
+      "optional_refs": ["SRC_009", "SRC_003"]
+    },
+    {
+      "claim": "The preference is a 'rational faith' or a non-cognitive commitment to the rules of the scientific game. It is defensible only if one accepts the meta-decision to play the game of science, which inherently values severe testing.",
+      "mechanism": "Decisionism/Game Theory: Popper's system rests on a foundational decision to value truth-seeking via falsification. Within this game, preferring corroborated theories is a move consistent with the rules. Outside the game, no defense is possible or needed.",
+      "counterconditions": [
+        "If the game itself cannot be justified without induction, the whole structure rests on an arbitrary foundation.",
+        "This reduces scientific rationality to a form of voluntary convention."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "The normative force comes from the voluntary acceptance of the scientific ethos."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Clarifies that the 'faith' is in the method, not the outcome, distinguishing it from inductive faith in nature's uniformity."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "The justification is internal to the system: 'utility' is defined by the game's goals."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "It is a philosophical commitment, not a blind instinct."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Verisimilitude is the goal of the game, not a guaranteed state."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Rationality is conformity to the chosen rules of inquiry."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "rebutted", "note": "Even in high stakes, if one chooses to act scientifically, one must follow the rules of the game."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "The dichotomy is false because 'decisionist commitment' is a valid third category of justification."}
+      ],
+      "optional_refs": ["SRC_012", "SRC_015"]
+    },
+    {
+      "claim": "The problem dissolves if we view corroboration as a measure of 'informational content retained' rather than 'truth likelihood'. We prefer the theory that retains the most information after attempted destruction, simply because it is the richer object of study, regardless of its future performance.",
+      "mechanism": "Information Retention: Severe tests strip away weak theories. The survivor is the one with the most structural integrity relative to the attacks. Preference is for complexity and resilience, not prediction.",
+      "counterconditions": [
+        "If the richer theory fails tomorrow, the preference yielded no practical benefit, challenging the 'action' component of the prompt.",
+        "This view struggles to explain why we bet lives on the retained information."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "One should act on the richer theory because it contains more specific details to potentially fail, offering finer control."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Distinguishes clearly between content (which is measurable) and truth (which is not)."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Utility is defined as 'maximizing informational yield per unit time'."},
+        {"handle": "[SRC_009] against SRC_004", "kind": "rebutted", "note": "Purely logical preference for high-content statements."},
+        {"handle": "[SRC_006] against SRC_001", "kind": "rebutted", "note": "Avoids verisimilitude by focusing on syntactic/semantic density surviving tests."},
+        {"handle": "[SRC_007] against SRC_002", "kind": "rebutted", "note": "Rationality is the maximization of information exposure."},
+        {"handle": "[SRC_008] against SRC_003", "kind": "departure_declared", "note": "Departure: Denies that 'action' in high-stakes contexts requires a belief in future success; it only requires the best available map, however flawed."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Offers a non-inductive, non-probabilistic metric: informational density."}
+      ],
+      "optional_refs": ["SRC_004", "SRC_008"]
+    }
+  ]
+}

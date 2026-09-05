@@ -1,0 +1,64 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule of 'rational action' distinct from 'inductive inference,' where acting on the best-tested theory is the only non-arbitrary choice available, even if it implies no increase in probability.",
+      "mechanism": "Methodological Conventionalism: The choice is governed by a decision to seek truth, not by a logical derivation that the theory is likely true. The cost is accepting that rational action does not guarantee success or imply likelihood, creating a gap between 'best bet' and 'probable outcome'.",
+      "counterconditions": [
+        "If 'rational action' implicitly relies on the assumption that the future will resemble the past (uniformity of nature), the distinction collapses into induction.",
+        "If the definition of 'severe test' inherently selects for improbable theories, preferring them smuggles in probabilistic reasoning."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_005", "kind": "rebutted", "note": "The candidate explicitly details the cost: the acceptance of a gap between rational methodology and probabilistic assurance, directly answering 'what accepting it costs'."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "rebutted", "note": "Rebuttals that severe tests require improbability are addressed by distinguishing 'logical improbability' (content) from 'epistemic probability' (likelihood of truth); Popper prefers high content, not high probability."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "revised", "note": "Clarified that the normative account is based on the goal of truth-seeking rather than survival value, framing the preference as a constitutive rule of science."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "rebutted", "note": "The argument maintains the normative ground of 'rationality defined by critical scrutiny' rather than shifting to descriptive survival."},
+        {"handle": "[SRC_012] against SRC_011", "kind": "departure_declared", "note": "Departing from verisimilitude as the primary justification; relying instead on the absence of better alternatives as the sole rational basis."},
+        {"handle": "[SRC_010] against SRC_001", "kind": "rebutted", "note": "Argues that 'pragmatic induction' is a misnomer; it is a pragmatic decision without inductive logic, akin to crossing a bridge because it is the only one standing, not because it is probable to hold."},
+        {"handle": "[SRC_007] against SRC_004", "kind": "revised", "note": "Refined the distinction between justifying truth (impossible) and justifying the method of selection (possible via convention)."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The justification is not hollow; it is the only non-irrational path. To choose a refuted theory is irrational; to choose an untested one is arbitrary; thus the tested one is the only rational choice."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_007"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories unavoidably smuggles induction back in, because any claim that a survived test makes a theory a 'better bet' for future action logically presupposes that the future will resemble the past.",
+      "mechanism": "Hidden Premise Exposure: The move from 'has survived' to 'should be used' contains a suppressed major premise about the stability of natural laws, which is itself an inductive assumption Popper rejected.",
+      "counterconditions": [
+        "If Popper can define 'rationality' purely as adherence to critical methods without reference to future success, the inductive leap is avoided.",
+        "If the preference is merely psychological or evolutionary rather than logical, the charge of smuggling induction fails."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_005", "kind": "rebutted", "note": "The cost identified here is the collapse of Popper's entire demarcation criterion, forcing him to admit he was an inductivist in practice."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "revised", "note": "Strengthened the link between 'severe testing' and the implicit assumption that passing such tests correlates with future reliability."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "Provides the normative account: one *should* prefer the corroborated theory only if one accepts induction; otherwise, there is no 'should'."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "rebutted", "note": "Argues that 'survival value' is the only possible defense, which confirms the inductive nature of the preference."},
+        {"handle": "[SRC_012] against SRC_011", "kind": "rebutted", "note": "Agrees that verisimilitude fails, reinforcing the conclusion that only induction remains as a basis for preference."},
+        {"handle": "[SRC_010] against SRC_001", "kind": "revised", "note": "Explicitly labels the 'methodological utility' as a disguised form of pragmatic induction."},
+        {"handle": "[SRC_007] against SRC_004", "kind": "rebutted", "note": "Contends that conflating methodological choice with truth-conduciveness is exactly where the induction hides."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "revised", "note": "Accepts the 'hollow justification' critique: without induction, the preference is indeed groundless."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_010"]
+    },
+    {
+      "claim": "Popper's preference is defensible not as an inference to truth or probability, but as an evolutionary analogy: science selects theories that have proven robust against environmental pressure (tests), and acting on them is akin to an organism using traits that have survived selection.",
+      "mechanism": "Evolutionary Epistemology: Corroboration is a record of survival, not a measure of likelihood. The cost is abandoning the idea that science converges on truth, viewing it instead as a process of eliminating error without guarantee of progress.",
+      "counterconditions": [
+        "If biological survival does not imply future fitness in a changing environment, the analogy fails to justify action.",
+        "If scientists act on theories expecting them to be 'true' rather than just 'currently fit', the evolutionary model mismatches scientific intent."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_005", "kind": "revised", "note": "Specifies the cost: the loss of scientific realism and the acceptance of science as a perpetual state of conjecture without accumulation of positive knowledge."},
+        {"handle": "[SRC_015] against SRC_014", "kind": "rebutted", "note": "Evolutionary fitness does not require 'improbability' in the logical sense, but rather 'adaptiveness' to specific test conditions."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "The normative force comes from the goal of survival/error-elimination, not from a duty to find truth."},
+        {"handle": "[SRC_009] against SRC_008", "kind": "revised", "note": "Clarifies that 'survival value' is the intended justification, reframing the question from 'defensibility' to 'functional efficacy'."},
+        {"handle": "[SRC_012] against SRC_011", "kind": "rebutted", "note": "Evolutionary fitness is comparable (who survived longer?) even if absolute verisimilitude is not."},
+        {"handle": "[SRC_010] against SRC_001", "kind": "departure_declared", "note": "Departing from the need for 'justification' in the traditional sense; replacing it with 'explanation of efficacy'."},
+        {"handle": "[SRC_007] against SRC_004", "kind": "rebutted", "note": "This approach avoids the trap of justifying truth, focusing solely on the rationality of the elimination process."},
+        {"handle": "[SRC_002] against SRC_001", "kind": "rebutted", "note": "The justification is not hollow; it is grounded in the observable history of error elimination."}
+      ],
+      "optional_refs": ["SRC_006", "SRC_009"]
+    }
+  ]
+}

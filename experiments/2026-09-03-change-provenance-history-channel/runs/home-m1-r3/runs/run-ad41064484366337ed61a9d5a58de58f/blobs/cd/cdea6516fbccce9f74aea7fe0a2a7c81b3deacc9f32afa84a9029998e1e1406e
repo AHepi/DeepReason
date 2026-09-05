@@ -1,0 +1,334 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a rational methodological choice based on verisimilitude (truth-likeness), not inductive probability. We prefer the theory that has withstood severe tests because it is the best candidate for truth we currently possess, even if we cannot assign it a higher probability of being true.",
+      "mechanism": "Distinction between logical probability (which remains zero or undefined for universal laws) and verisimilitude (which can increase through falsification of rivals). The rational agent acts on the theory with the highest content that has not yet been falsified, maximizing the potential for learning and avoiding known errors.",
+      "counterconditions": [
+        "If 'verisimilitude' is shown to be unmeasurable or logically incoherent within Popper's own framework (as later critics argued).",
+        "If the preference relies on an implicit assumption that the future will resemble the past (induction) rather than just avoiding past errors."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The normative account is provided by the imperative to seek truth and avoid error. Rational action consists in choosing the theory that best satisfies these aims given current critical knowledge, not one that is probabilistically safe."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "The argument addresses defensibility directly by grounding it in the logic of situational analysis: given the goal of truth, the non-refuted theory with greater empirical content is the only rational choice, distinct from mere survival value."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "This proposal explicitly separates the justification of truth (denied) from the rationality of the methodological choice (affirmed via verisimilitude), correcting the alleged conflation."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The justification is not hollow; it is substantive because it relies on the objective relation of the theory to evidence (survival of severe tests) which increases its verisimilitude, not its probability."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "No biological instinct is invoked; the preference is derived from the logical structure of critical rationalism and the definition of scientific progress."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "revised",
+          "note": "Revised to acknowledge Popper's later difficulties with defining verisimilitude formally, framing it instead as a regulative ideal necessary for the concept of progress, rather than a strictly quantifiable metric."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "The basis for action is not an expectation of future truth (induction) but the absence of known falsity and the presence of high informational content, which are static logical properties at the moment of choice."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "In high-stakes action, the theory with higher verisimilitude is preferred precisely because it has survived more severe tests relevant to the stakes, minimizing the risk of acting on a known falsehood."
+        }
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_001",
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories smuggles induction back into Popper's system. Any claim that a theory surviving past tests is 'better' for future action implicitly assumes the principle of uniformity of nature—that the future will resemble the past—which is the very essence of induction Popper sought to eliminate.",
+      "mechanism": "Demonstration that 'corroboration' reports only on past performance. To move from 'Theory T survived tests in the past' to 'Theory T is preferable for future action' requires a bridging premise that past success indicates future reliability. Without this inductive bridge, the preference is arbitrary.",
+      "counterconditions": [
+        "If Popper can provide a non-inductive justification for why past survival is relevant to future choice (e.g., via purely logical relations of content).",
+        "If the concept of 'preference' can be decoupled from any expectation of successful outcomes."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The criticism argues that no normative account succeeds without induction; thus, the failure to provide a non-inductive account demonstrates the indefensibility on Popper's strict terms."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "This candidate directly answers the question by concluding the preference is NOT defensible on Popper's terms because it inevitably relies on the smuggled inductive premise."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "It argues that Popper's attempt to separate methodological choice from truth justification fails because the utility of the method itself depends on an inductive assumption about the world's stability."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Confirms the critic's suspicion: the 'methodological utility' is hollow precisely because it secretly rests on the inductive belief that what worked before will work again."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Clarifies that the 'instinct' charge is metaphorical for the unavoidable cognitive reliance on induction, which Popper tries but fails to logicalize away."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "Agrees that verisimilitude fails as a savior here, reinforcing the view that without it, the preference collapses into induction."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "Contests the claim that Popper offers a non-expectation-based rationality; argues that 'rationality' in action inherently implies an expectation of efficacy, which is inductive."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "Argues that in high-stakes scenarios, the lack of an inductive guarantee makes the preference for corroborated theories irrational, exposing the flaw in Popper's system."
+        }
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference is defensible not as a claim about truth or probability, but as a pragmatic commitment to the 'game of science' where the rules dictate playing the most informative non-refuted conjecture. It costs us the assurance of success, but preserves the integrity of critical rationalism.",
+      "mechanism": "Re-framing corroboration as a scorecard in a critical game. The 'preference' is a rule of the game (like preferring a higher score), not a prediction of reality. We act on the best-corroborated theory because that is what it means to be a scientist, accepting that this offers no guarantee against future disaster.",
+      "counterconditions": [
+        "If scientists require more than game-rules to justify life-and-death decisions (e.g., building a bridge).",
+        "If the 'game' analogy fails to capture the normative force scientists feel they have."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The normative account is internal to the practice of critical rationalism: one ought to follow the rules of the game one has voluntarily adopted to seek truth."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Answers the question by redefining 'defensible' as 'consistent with the methodological rules of the system,' shifting away from external justification."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Clarifies that Popper affirms the rationality of the methodological choice *as a move in the game*, distinct from claiming the move guarantees truth."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The utility is not hollow; it is the utility of maintaining consistency with the critical method, which is the only tool available for growth of knowledge."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Rejects the biological instinct interpretation in favor of a voluntary adherence to a methodological framework."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "Sidesteps the verisimilitude technicality by focusing on the procedural rationality of choosing the most tested option available."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "Asserts that rationality in this context is defined by adherence to critical methods, not by the expectation of future truth."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "departure_declared",
+          "note": "Departure: Accepts that for high-stakes practical action outside pure science, Popper's 'game' may be insufficient, suggesting a domain limit to his defense."
+        }
+      ],
+      "typicality": 0.60,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Popper's solution relies on a hidden 'faith' in reason or the intelligibility of the universe, which functions as a substitute for induction. The preference for corroborated theories is defensible only if one accepts this meta-physical faith that the world allows for critical learning.",
+      "mechanism": "Identification of a foundational axiom in Popper's work: the belief that the universe is structured such that critical testing yields progress. This faith replaces the inductive principle as the warrant for action.",
+      "counterconditions": [
+        "If this 'faith' can be shown to be a necessary precondition for any rational action, not just Popper's.",
+        "If Popper explicitly denies relying on any such faith."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "Provides a normative account grounded in a voluntary metaphysical commitment to the intelligibility of the world."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Argues the preference is defensible on Popper's terms *if* those terms include his implicit metaphysical stance, challenging the critic's narrow reading."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Suggests that what looks like 'non-rational faith' is actually the necessary starting point for any critical rationalist project."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The justification is robust because it acknowledges the ultimate limits of justification and posits a responsible choice of framework."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Reframes 'instinct' as a conscious philosophical commitment to the possibility of learning from error."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "Uses the failure of formal verisimilitude to motivate the need for this deeper, faith-based commitment."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "Argues that the 'expectation' is not of specific truths, but of the general fruitfulness of the critical method, warranted by faith."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "Claims that in high-stakes action, this faith in the method is the only alternative to paralysis or dogmatism."
+        }
+      ],
+      "typicality": 0.45,
+      "optional_refs": [
+        "SRC_004",
+        "SRC_009"
+      ]
+    },
+    {
+      "claim": "The dilemma is false: Popper does not need to justify 'preference' in terms of truth or probability because 'preference' in science is simply the decision to subject a theory to further testing. Action in the practical sense is outside the scope of his logical analysis of science.",
+      "mechanism": "Restricting the domain of Popper's claims to the context of discovery and testing. When Popper speaks of 'acting on' a theory, he means 'using it as a basis for further experiments,' not 'building a bridge on it.' The smuggling of induction occurs only when we illegitimately extend scientific methodology to practical engineering without additional pragmatic axioms.",
+      "counterconditions": [
+        "If Popper himself applies his logic to practical political or ethical decisions (which he did).",
+        "If the distinction between 'scientific action' and 'practical action' cannot be maintained."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "departure_declared",
+          "note": "Departure: Rejects the premise that Popper owes a normative account for *practical* action, limiting his responsibility to *scientific* action."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Answers the question by narrowing the scope of 'defensible' to the internal logic of scientific inquiry, excluding extra-scientific application."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Clarifies that the methodological choice is purely about selecting the next experiment, avoiding the trap of justifying practical utility."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The utility is specific to the generation of new knowledge, not general practical success, rendering the 'hollow' charge misplaced."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Denies that any instinct is needed; only a commitment to the continuation of the critical process is required."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "Verisimilitude is irrelevant here because the goal is not truth-possession but truth-seeking via test selection."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "Rationality is defined as the consistency of choosing the most testable path, not the expectation of a specific outcome."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "High-stakes practical action requires a different framework (e.g., precautionary principle) and should not be conflated with Popper's scientific methodology."
+        }
+      ],
+      "typicality": 0.30,
+      "optional_refs": [
+        "SRC_005",
+        "SRC_010"
+      ]
+    },
+    {
+      "claim": "The preference is an evolutionary adaptation: humans prefer corroborated theories because those who didn't died out. This is a naturalistic explanation that bypasses the need for logical justification, rendering the question of 'defensibility on Popper's terms' category-mistaken.",
+      "mechanism": "Evolutionary epistemology. Corroboration tracks survival value in an evolutionary sense. The 'preference' is a hardwired heuristic, not a logical conclusion. Popper's terms (logical) are ill-suited to describe a biological fact.",
+      "counterconditions": [
+        "If Popper explicitly rejects evolutionary explanations for rational norms.",
+        "If the question demands a logical justification regardless of evolutionary origins."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "departure_declared",
+          "note": "Departure: Replaces the demand for a normative logical account with a descriptive evolutionary one."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Argues the question presupposes a logical framework where a naturalistic one is more appropriate."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "Suggests Popper's 'methodological choice' is itself an evolved trait, blending the descriptive and normative."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The utility is real (survival), not hollow, but it is biological, not logical."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "Embraces the 'biological instinct' interpretation as the correct reading, contrary to the critic's dismissal."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "Verisimilitude is an evolutionary proxy for fitness, not a logical measure."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "Rationality is redefined as evolutionary fitness, making the preference defensible on naturalistic terms."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "High-stakes action is exactly where evolutionary heuristics are most active, validating the approach."
+        }
+      ],
+      "typicality": 0.20,
+      "optional_refs": [
+        "SRC_011",
+        "SRC_013"
+      ]
+    }
+  ]
+}

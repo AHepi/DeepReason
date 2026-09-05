@@ -1,0 +1,169 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule of 'rational action' distinct from 'inductive inference,' where corroboration reports past performance without predicting future probability, thus avoiding the smuggled induction.",
+      "mechanism": "Semantic compartmentalization: separating the logical status of a theory (unprovable, improbable) from the pragmatic decision rule for acting on it (prefer the one that survived severe tests).",
+      "counterconditions": [
+        "If the reason for preferring the survived theory relies on an expectation that it will continue to survive, induction is smuggled back in.",
+        "If 'rational action' cannot be defined without referencing future success probabilities, the distinction collapses."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate explicitly addresses 'what accepting it costs': the cost is the abandonment of any claim that the preferred theory is more likely to be true or successful, accepting instead a non-justificatory decision rule."
+        },
+        {
+          "handle": "[SRC_008] against SRC_005",
+          "kind": "rebutted",
+          "note": "The normative account provided is that rationality consists in criticizing errors; preferring the best-tested theory is the only action consistent with having learned from past errors, without claiming those errors predict the future."
+        },
+        {
+          "handle": "[SRC_011] against SRC_010",
+          "kind": "revised",
+          "note": "Revised to clarify that 'survival value' is not the justification; rather, the justification is the logical consistency of acting on the results of severe testing while denying those results confer probability."
+        },
+        {
+          "handle": "[SRC_014] against SRC_013",
+          "kind": "rebutted",
+          "note": "This defense does not rely on verisimilitude comparisons but on the procedural rationality of the scientific method itself."
+        },
+        {
+          "handle": "[SRC_012] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate denies that this is 'pragmatic induction'; it is a pragmatic rule based on past data that makes no inductive leap regarding the future."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "Clarifies that Popper's solution is indeed a methodological choice about how to act given ignorance, not a claim about the rationality of belief in truth."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "The justification is not hollow; it solves the problem of action by providing a rule that respects the logical prohibition on induction while allowing science to proceed."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "The argument relies on methodological rules, not biological instincts."
+        }
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because any rationale for acting on past test results presupposes the uniformity of nature or the reliability of memory, which are inductive assumptions.",
+      "mechanism": "Reductio ad absurdum of the 'methodological rule': demonstrating that the rule 'prefer X' is irrational unless one assumes 'X is a reliable guide to future success,' which is an inductive claim.",
+      "counterconditions": [
+        "If a non-inductive basis for action (e.g., convention, decisionism) can be coherently articulated without assuming future regularity.",
+        "If the definition of 'rationality' is restricted solely to logical consistency with past data, ignoring future application."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_007",
+          "kind": "rebutted",
+          "note": "Accepting this view costs Popper his entire demarcation criterion, collapsing critical rationalism into a form of skepticism or hidden induction."
+        },
+        {
+          "handle": "[SRC_008] against SRC_005",
+          "kind": "rebutted",
+          "note": "The normative account fails because if the preference is indefensible on Popper's terms, then scientists acting on it are being irrational by Popper's own standards."
+        },
+        {
+          "handle": "[SRC_011] against SRC_010",
+          "kind": "rebutted",
+          "note": "The shift to 'survival value' is shown here to be an implicit inductive claim that survival indicates fitness for future environments."
+        },
+        {
+          "handle": "[SRC_014] against SRC_013",
+          "kind": "revised",
+          "note": "Revised to focus on the necessity of induction for *any* action, rather than specifically verisimilitude."
+        },
+        {
+          "handle": "[SRC_012] against SRC_002",
+          "kind": "rebutted",
+          "note": "Confirms that the 'semantic compartmentalization' is a linguistic trick that cannot hide the underlying inductive reliance on the past informing the future."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "Argues that distinguishing 'methodological choice' from 'truth justification' does not escape the need for an inductive warrant for the choice itself."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "Agrees the justification is hollow if it claims to be non-inductive while functioning inductively."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "Suggests that if not biological instinct, then the reliance on past tests is simply an unacknowledged inductive habit."
+        }
+      ],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if accepted as a 'conventionalist decision' or 'faith' in the rationality of criticism, costing Popper the claim that his system is purely logical and forcing an admission of a non-rational (but not irrational) commitment to the game of science.",
+      "mechanism": "Decisionism: framing the preference as a voluntary adoption of a set of rules (the game of science) that defines 'rational action' internally, without external inductive validation.",
+      "counterconditions": [
+        "If the choice of these specific rules (prefer corroborated theories) over others requires an inductive justification.",
+        "If 'faith' or 'decision' is indistinguishable from the 'psychological instinct' Popper rejected."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_007",
+          "kind": "rebutted",
+          "note": "The cost identified is the surrender of pure logicism in favor of conventionalism, directly answering 'what accepting it costs'."
+        },
+        {
+          "handle": "[SRC_008] against SRC_005",
+          "kind": "rebutted",
+          "note": "The normative account is that one *should* choose this theory because one has chosen to play the game of science, which defines this move as correct."
+        },
+        {
+          "handle": "[SRC_011] against SRC_010",
+          "kind": "rebutted",
+          "note": "Defensibility is grounded in the internal coherence of the adopted convention, not in survival value."
+        },
+        {
+          "handle": "[SRC_014] against SRC_013",
+          "kind": "rebutted",
+          "note": "Avoids verisimilitude entirely by grounding the preference in rule-following."
+        },
+        {
+          "handle": "[SRC_012] against SRC_002",
+          "kind": "departure_declared",
+          "note": "Departure: This candidate accepts that a form of 'pragmatic induction' (as convention) is necessary, rejecting the strict separation Popper attempted."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "Reframes the 'non-rational faith' not as a bug but as the necessary foundation of any methodological system."
+        },
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "The justification is not hollow; it is foundationalist regarding the rules of the scientific game."
+        },
+        {
+          "handle": "[SRC_003] against SRC_001",
+          "kind": "rebutted",
+          "note": "Distinguishes 'conventional decision' from 'biological instinct' as a philosophical stance rather than a psychological drive."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_009"
+      ]
+    }
+  ]
+}

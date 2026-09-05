@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly identifies the central tension in Popper's philosophy regarding action, but fails to engage with the specific directive to 'Make the strongest case for each answer' and then adjudicate. The problem explicitly requires a dialectical structure: first defending the preference on Popperian terms (e.g., via verisimilitude or critical preference without inductive probability), then defending the induction charge, and finally selecting a survivor. The target provides only the argument for the induction charge, omitting the defense of Popper's own terms entirely, thus leaving the core comparative task of the prompt unanswered.",
+      "counterexample": null,
+      "premise": "The problem statement demands: 'Make the strongest case for each answer, then say which one survives.'",
+      "premise_evidence": null,
+      "successor_question": "How would a Popperian defend the preference for a well-corroborated theory over a falsified one without invoking the principle of induction, perhaps by appealing to the concept of verisimilitude or the logic of critical preference?"
+    }
+  ]
+}

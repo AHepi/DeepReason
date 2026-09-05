@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as the aim of science to justify preferring better-corroborated theories, but it fails to address the logical collapse of this concept. As demonstrated by Tichý and Miller, Popper's own definition of verisimilitude entails that no false theory can be closer to the truth than another false theory; since all scientific theories are arguably false (or will be falsified), the metric becomes undefined or trivial. The target asserts that acting on the best-tested theory is rational because it approximates truth, yet without a coherent, non-circular definition of verisimilitude that applies to false theories, this 'aim' provides no logical basis for preference over any other unrefuted theory, effectively smuggling in an inductive assumption that past survival correlates with truth-content.",
+      "counterexample": null,
+      "premise": "Tichý and Miller proved that Popper's qualitative definition of verisimilitude yields counter-intuitive results where obviously better theories are deemed not closer to the truth, rendering the concept unusable as a guide for theory choice without substantial revision.",
+      "premise_evidence": null,
+      "successor_question": "How can Popperians define a coherent measure of verisimilitude that distinguishes between false theories without reintroducing probabilistic assumptions?"
+    }
+  ]
+}

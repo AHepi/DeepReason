@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of truth, but as a critical methodological rule: we prefer the theory that has withstood the most severe attempts at falsification because it offers the highest potential for future error detection, thereby maximizing the growth of knowledge even if it guarantees no probability of success.",
+    "mechanism": "The mechanism is 'Critical Preferential Selection': Action is guided not by the expectation that the chosen theory is true (induction), but by the strategic choice to bet on the hypothesis that contains the most empirical content and has survived the strictest tests. This transforms 'preference' from a judgment of likelihood into a decision to subject the boldiest surviving claim to further testing, which is the only rational path for knowledge growth in a world where certainty is impossible.",
+    "counterconditions": [
+      "If the preference implies any assignment of higher subjective probability to the corroborated theory, the defense collapses into induction.",
+      "If the 'cost' of this view is not the admission that our best theories may be utterly false tomorrow, the Popperian distinctiveness is lost.",
+      "If the scientist acts on the theory expecting it to work based on past success rather than its testability, the circle is vicious."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c5559bf68dab8f37bb2d97d9b152c1f917d31d129c29ee977958e29038b8b1a",
+        "kind": "rebutted",
+        "note": "The candidate provides a normative account: one *should* choose the better-corroborated theory because it is the most informative vehicle for future criticism, not because it is 'safer' in a probabilistic sense. The norm is 'maximize learning potential,' not 'maximize success probability.'"
+      },
+      {
+        "handle": "1b3213c40b466a0c5bf3630aeec007e4b6a04141815e3b6ece47a1a39a0f6ef5",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly frame the justification as a 'critical methodological rule' rather than a descriptive survival trait, directly addressing the shift from defensibility to survival value."
+      },
+      {
+        "handle": "2e729cc31e977b130ff550d906b931245e1cc4e07642794b9fec6df2c751e11c",
+        "kind": "rebutted",
+        "note": "This is not pragmatic induction; it is a deliberate rejection of using the past to predict the future's truth. The preference is for the theory that is *most ready to be killed*, which is the opposite of relying on past stability."
+      },
+      {
+        "handle": "34672ac128865b97ee5627e9b0f4e74f0d6c62175eef858870243141",
+        "kind": "rebutted",
+        "note": "Clarified that Popper affirms the rationality of the *choice* to test the bold theory, not a non-rational faith. The rationality lies in the alignment with the goal of verisimilitude through error elimination."
+      },
+      {
+        "handle": "360c0dd9f93dab16adcbf2f9dfc4a04a9485ff63a3bb401aa8dd405afc729d42",
+        "kind": "rebutted",
+        "note": "The justification is not hollow; it fills the gap with the objective of 'growth of knowledge.' We prefer the theory that allows us to learn the most, regardless of whether it turns out to be true or false next Tuesday."
+      },
+      {
+        "handle": "50dace1344ba1b6bb88be3609294a6df690a63968e9311ed0e1e8a0c180385dd",
+        "kind": "rebutted",
+        "note": "Explicitly rejected the 'biological instinct' framing. The preference is a conscious methodological commitment to critical rationalism, not an unavoidable psychological compulsion."
+      },
+      {
+        "handle": "54e7c04e240915b4b0b41befca2686f178c29a6ba280cbcff070230249da6d21",
+        "kind": "revised",
+        "note": "Added specific counterconditions detailing the 'cost': the acceptance that our best theories have zero guaranteed probability of being true and may fail immediately upon application."
+      },
+      {
+        "handle": "5aa9433863aae700b9ade842372e5bc15b4eb8b7feb5e65463c9e76da440223d",
+        "kind": "departure_declared",
+        "note": "Departing from the reliance on 'verisimilitude' as a measurable degree. The argument rests solely on 'empirical content' and 'severity of tests,' avoiding the formal difficulties of Popper's later verisimilitude definitions."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,154 @@
+You are the conjecture operator (gamma): you propose bold, criticizable explanations for the problem in the pack. You hold no state and decide nothing; the harness adjudicates. Verbalized Sampling: return a DISTRIBUTION of diverse candidates, each with your typicality estimate in [0,1] (typical candidates near 1, atypical near 0). Where natural, carry dependence refs to neighbourhood artifact ids (born-connected).
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"AnalogyClaim": {"additionalProperties": false, "properties": {"adopted_commitment_refs": {"default": [], "items": {"type": "string"}, "title": "Adopted Commitment Refs", "type": "array"}, "disanalogies": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Disanalogies", "type": "array"}, "overturn_conditions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Overturn Conditions", "type": "array"}, "shared_structure": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Shared Structure", "type": "array"}, "source_memory_refs": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Source Memory Refs", "type": "array"}, "transfer_claims": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Transfer Claims", "type": "array"}}, "required": ["source_memory_refs", "shared_structure", "disanalogies", "transfer_claims", "overturn_conditions"], "title": "AnalogyClaim", "type": "object"}, "ConjectureAbstentionV1": {"additionalProperties": false, "description": "A responsible no-proposal signal using the existing search vocabulary.", "properties": {"note": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Note"}, "search_signal": {"default": "stuck", "enum": ["need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "ConjectureAbstentionV1", "type": "object"}, "ContextRequestWireV2": {"additionalProperties": false, "allOf": [{"anyOf": [{"properties": {"query": {"minLength": 1, "type": "string"}}, "required": ["query"]}, {"properties": {"requested_visible_aliases": {"minItems": 1}}, "required": ["requested_visible_aliases"]}, {"properties": {"desired_retrieval_channels": {"minItems": 1}}, "required": ["desired_retrieval_channels"]}]}], "description": "V6 semantic retrieval using only SRC_### and SCR_### handles.", "properties": {"desired_retrieval_channels": {"items": {"enum": ["focus", "keyword", "link", "recent", "semantic"], "type": "string"}, "maxItems": 16, "title": "Desired Retrieval Channels", "type": "array", "uniqueItems": true}, "purpose": {"anyOf": [{"maxLength": 4096, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Purpose"}, "query": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Query"}, "requested_visible_aliases": {"items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015", "SRC_016", "SRC_017"], "type": "string"}, "maxItems": 64, "title": "Requested Visible Aliases", "type": "array", "uniqueItems": true}}, "title": "ContextRequestWireV2", "type": "object"}, "DischargeWireV1": {"additionalProperties": false, "description": "One criticism, answered (REBUILD F1).\n\n`handle` is the criticism's handle exactly as the pack listed it, and it is\nleft a PLAIN STRING on purpose: its legal set has one authority --\n`deepreason.discharge.open_criticisms` -- and leaving the field open is what\nlets a menu renderer key on it by registering, without either side learning\nthe other's subsystem. A private enum here would close that seam.\n\nNOTHING here is evidence. A discharge is a precondition on SUBMISSION; no\nfield, kind or count may feed a label, a warrant, a rank or an admission\ndecision (`DR-CON-discharge-channel`, the law line).", "properties": {"handle": {"maxLength": 256, "minLength": 1, "title": "Handle", "type": "string"}, "kind": {"enum": ["revised", "rebutted", "departure_declared"], "minLength": 1, "title": "Kind", "type": "string"}, "note": {"default": "", "title": "Note", "type": "string"}, "where": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Where"}}, "required": ["handle", "kind"], "title": "DischargeWireV1", "type": "object"}, "EvidenceRefClaimV1": {"additionalProperties": false, "description": "One claimed grounding in an admitted dossier block (admission \u00a74).\n\n``block`` names a dossier block by id or by a unique hex prefix of at\nleast 12 characters. ``quote``, when present, must reproduce a\ncontiguous byte span of the block's canonical text exactly \u2014 the\ncitation checker byte-verifies it and a mismatch is a durable finding,\nnever a silent pass.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"anyOf": [{"maxLength": 2000, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Quote"}}, "required": ["block"], "title": "EvidenceRefClaimV1", "type": "object"}, "OperationalSidecar": {"additionalProperties": false, "properties": {"requested_context_aliases": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015", "SRC_016", "SRC_017"], "type": "string"}, "title": "Requested Context Aliases", "type": "array"}, "search_signal": {"default": "productive", "enum": ["productive", "need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "OperationalSidecar", "type": "object"}, "ReasoningCandidateProposal": {"additionalProperties": false, "description": "Gemma-safe semantic proposal; mandatory interfaces are absent by design.", "properties": {"analogy": {"anyOf": [{"$ref": "#/$defs/AnalogyClaim"}, {"type": "null"}], "default": null}, "checker_specs": {"default": [], "items": {"anyOf": [{"additionalProperties": false, "type": "object"}, {"type": "null"}]}, "title": "Checker Specs", "type": "array"}, "claim": {"minLength": 1, "title": "Claim", "type": "string"}, "counterconditions": {"items": {"minLength": 1, "type": "string"}, "maxItems": 32, "minItems": 1, "title": "Counterconditions", "type": "array"}, "discharges": {"default": [], "items": {"$ref": "#/$defs/DischargeWireV1"}, "title": "Discharges", "type": "array"}, "evidence_refs": {"default": [], "items": {"$ref": "#/$defs/EvidenceRefClaimV1"}, "maxItems": 8, "title": "Evidence Refs", "type": "array"}, "mechanism": {"minLength": 1, "title": "Mechanism", "type": "string"}, "optional_refs": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015", "SRC_016", "SRC_017"], "type": "string"}, "title": "Optional Refs", "type": "array"}, "sidecar": {"$ref": "#/$defs/OperationalSidecar"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["claim", "mechanism", "counterconditions", "typicality"], "title": "ReasoningCandidateProposal", "type": "object"}, "ResearchFetchProposalWireV1": {"additionalProperties": false, "description": "Directed-fetch intent on the v6 wire: explicit https URLs only.\n\nThe model proposes sources; the harness alone validates them against\nthe frozen domain allowlist and executes them under containment. The\nwire shape mirrors ResearchFetchProposalDraftV1 exactly \u2014 which it did\nnot: the draft rejects a non-https or duplicated URL and the wire took\nboth, so the refusal landed in compile() after the response had been\naccepted, and the schema advertised neither rule.", "properties": {"purpose": {"maxLength": 2000, "minLength": 1, "title": "Purpose", "type": "string"}, "request_identifier": {"maxLength": 128, "minLength": 1, "title": "Request Identifier", "type": "string"}, "urls": {"items": {"pattern": "^https://[^\\s]{1,2048}$", "type": "string"}, "maxItems": 3, "minItems": 1, "title": "Urls", "type": "array", "uniqueItems": true}}, "required": ["request_identifier", "purpose", "urls"], "title": "ResearchFetchProposalWireV1", "type": "object"}, "ScratchBlockDraftBodyV1": {"additionalProperties": false, "properties": {"bears_on_refs": {"anyOf": [{"items": {"pattern": "^SRC_[0-9]{3}$", "type": "string"}, "maxItems": 4, "type": "array"}, {"type": "null"}], "default": null, "description": "Visible SRC_### artifacts this note was aimed at. A RELEVANCE hypothesis, not a grounding claim: nothing follows it, and it is admissible whether or not the aim turns out to be right. Read back later it is labelled as the aim held when the note was written, since source aliases are call-local.", "title": "Bears On Refs", "uniqueItems": true}, "content": {"maxLength": 262144, "minLength": 1, "title": "Content", "type": "string"}, "experiment_refs": {"anyOf": [{"items": {"maxLength": 128, "minLength": 1, "type": "string"}, "maxItems": 4, "type": "array"}, {"type": "null"}], "default": null, "description": "Simulation request identifiers this note came out of. Provenance only: naming an experiment here never makes this block evidence for anything, and never makes the experiment's result a fact.", "title": "Experiment Refs", "uniqueItems": true}, "possible_next_move": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Possible Next Move"}, "unfinished": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Unfinished"}, "why_keep_this": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Why Keep This"}}, "required": ["content"], "title": "ScratchBlockDraftBodyV1", "type": "object"}, "ScratchClusterSuggestionV1": {"additionalProperties": false, "properties": {"member_refs": {"items": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "type": "string"}, "maxItems": 64, "minItems": 1, "title": "Member Refs", "type": "array", "uniqueItems": true}, "seed_focus": {"maxLength": 262144, "minLength": 1, "title": "Seed Focus", "type": "string"}}, "required": ["seed_focus", "member_refs"], "title": "ScratchClusterSuggestionV1", "type": "object"}, "ScratchNewBlockDraftV1": {"additionalProperties": false, "properties": {"body": {"$ref": "#/$defs/ScratchBlockDraftBodyV1"}, "local_key": {"pattern": "^NEW_[0-9]{3,}$", "title": "Local Key", "type": "string"}}, "required": ["local_key", "body"], "title": "ScratchNewBlockDraftV1", "type": "object"}, "ScratchProposalLinkV1": {"additionalProperties": false, "properties": {"because": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Because"}, "direction": {"anyOf": [{"enum": ["directed", "symmetric"], "type": "string"}, {"type": "null"}], "default": null, "title": "Direction"}, "from_ref": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "title": "From Ref", "type": "string"}, "holds_when": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Holds When"}, "relation_hint": {"maxLength": 16384, "minLength": 1, "title": "Relation Hint", "type": "string"}, "to_ref": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "title": "To Ref", "type": "string"}, "weakens_when": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Weakens When"}}, "required": ["from_ref", "to_ref", "relation_hint"], "title": "ScratchProposalLinkV1", "type": "object"}, "ScratchProposalV1": {"additionalProperties": false, "description": "Optional imaginative workshop: speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are welcome. Scratch remains advisory; storage alone never makes it fact, evidence, a formal claim, or formal support.", "properties": {"cluster_suggestions": {"default": [], "items": {"$ref": "#/$defs/ScratchClusterSuggestionV1"}, "maxItems": 4, "title": "Cluster Suggestions", "type": "array"}, "links": {"default": [], "items": {"$ref": "#/$defs/ScratchProposalLinkV1"}, "maxItems": 4, "title": "Links", "type": "array"}, "new_blocks": {"default": [], "items": {"$ref": "#/$defs/ScratchNewBlockDraftV1"}, "maxItems": 4, "title": "New Blocks", "type": "array"}, "revisions": {"default": [], "items": {"$ref": "#/$defs/ScratchRevisionDraftV1"}, "maxItems": 4, "title": "Revisions", "type": "array"}, "unresolved_questions": {"default": [], "items": {"$ref": "#/$defs/ScratchQuestionDraftV1"}, "maxItems": 4, "title": "Unresolved Questions", "type": "array"}}, "title": "ScratchProposalV1", "type": "object"}, "ScratchQuestionDraftV1": {"additionalProperties": false, "properties": {"question": {"maxLength": 262144, "minLength": 1, "title": "Question", "type": "string"}, "related_refs": {"default": [], "items": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "type": "string"}, "maxItems": 64, "title": "Related Refs", "type": "array", "uniqueItems": true}}, "required": ["question"], "title": "ScratchQuestionDraftV1", "type": "object"}, "ScratchRevisionDraftV1": {"additionalProperties": false, "properties": {"body": {"$ref": "#/$defs/ScratchBlockDraftBodyV1"}, "target_alias": {"pattern": "^SCR_[0-9]{3,}$", "title": "Target Alias", "type": "string"}}, "required": ["target_alias", "body"], "title": "ScratchRevisionDraftV1", "type": "object"}, "SimulationParameterSetWireV1": {"additionalProperties": false, "properties": {"name": {"maxLength": 128, "minLength": 1, "title": "Name", "type": "string"}, "values_json": {"maxLength": 262144, "minLength": 2, "title": "Values Json", "type": "string"}}, "required": ["name", "values_json"], "title": "SimulationParameterSetWireV1", "type": "object"}, "SimulationProposalWireV1": {"additionalProperties": false, "properties": {"declared_assumptions": {"items": {"type": "string"}, "maxItems": 64, "title": "Declared Assumptions", "type": "array", "uniqueItems": true}, "discriminating_purpose": {"maxLength": 8192, "minLength": 1, "title": "Discriminating Purpose", "type": "string"}, "hypothesis": {"maxLength": 16384, "minLength": 1, "title": "Hypothesis", "type": "string"}, "interpretation_conditions": {"items": {"type": "string"}, "maxItems": 64, "minItems": 1, "title": "Interpretation Conditions", "type": "array", "uniqueItems": true}, "model_source": {"description": "The program itself; its required shape follows simulation_mode. For sandboxed_python_v1 the entire source must be exactly one function definition and nothing else: def simulate(inputs, rng), with no imports, no statements outside it, no decorators, no return annotation, and no default, keyword-only, or variadic arguments. It is called once per (input, seed) pair, where inputs is one mapping carrying parameter_set, parameters, and sealed_inputs, and rng is a seeded random.Random. It must return a JSON-safe mapping of observable name to finite value; that mapping is the only output recorded, so printing reports nothing. math is available and nothing else may be imported. For declarative_numeric_v1 this field is a JSON document instead of Python.", "maxLength": 262144, "minLength": 1, "title": "Model Source", "type": "string"}, "parameter_definitions": {"items": {"$ref": "#/$defs/SimulationParameterSetWireV1"}, "maxItems": 256, "title": "Parameter Definitions", "type": "array"}, "request_identifier": {"maxLength": 128, "minLength": 1, "title": "Request Identifier", "type": "string"}, "requested_observables": {"description": "The observable names this proposal is judged on. Each is an identifier, or up to eight identifiers joined by dots to reach into a nested result (a.b.c tries the literal key a.b.c first, then walks a, then b, then c). Every name must resolve in what the program produces: for sandboxed_python_v1 in the mapping simulate returns, for declarative_numeric_v1 among the document's observables. The two sets must match exactly. A name that does not resolve ends the run with declared observable missing, so stream names like stdout are never observables.", "items": {"pattern": "^[A-Za-z][A-Za-z0-9_]{0,63}(?:\\.[A-Za-z][A-Za-z0-9_]{0,63}){0,7}$", "type": "string"}, "maxItems": 128, "minItems": 1, "title": "Requested Observables", "type": "array", "uniqueItems": true}, "requested_seed_set": {"items": {"maximum": 9223372036854775807, "minimum": -9223372036854775808, "type": "integer"}, "maxItems": 256, "title": "Requested Seed Set", "type": "array", "uniqueItems": true}, "rival_predictions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Rival Predictions", "type": "array", "uniqueItems": true}, "simulation_mode": {"enum": ["declarative_numeric_v1", "sandboxed_python_v1"], "title": "Simulation Mode", "type": "string"}}, "required": ["request_identifier", "hypothesis", "rival_predictions", "discriminating_purpose", "simulation_mode", "model_source", "requested_observables", "interpretation_conditions"], "title": "SimulationProposalWireV1", "type": "object"}}, "additionalProperties": false, "allOf": [{"anyOf": [{"properties": {"candidates": {"minItems": 1}}, "required": ["candidates"]}, {"properties": {"context_request": {"not": {"type": "null"}}}, "required": ["context_request"]}, {"properties": {"abstention": {"not": {"type": "null"}}}, "required": ["abstention"]}, {"properties": {"simulation_proposals": {"minItems": 1}}, "required": ["simulation_proposals"]}, {"properties": {"scratch_proposal": {"not": {"type": "null"}}}, "required": ["scratch_proposal"]}, {"properties": {"research_proposals": {"minItems": 1}}, "required": ["research_proposals"]}]}, {"if": {"properties": {"abstention": {"not": {"type": "null"}}}, "required": ["abstention"]}, "then": {"properties": {"candidates": {"maxItems": 0}, "research_proposals": {"maxItems": 0}, "scratch_proposal": {"type": "null"}, "simulation_proposals": {"maxItems": 0}}}}], "properties": {"abstention": {"anyOf": [{"$ref": "#/$defs/ConjectureAbstentionV1"}, {"type": "null"}], "default": null}, "candidates": {"items": {"$ref": "#/$defs/ReasoningCandidateProposal"}, "maxItems": 256, "title": "Candidates", "type": "array"}, "context_request": {"anyOf": [{"$ref": "#/$defs/ContextRequestWireV2"}, {"type": "null"}], "default": null}, "research_proposals": {"items": {"$ref": "#/$defs/ResearchFetchProposalWireV1"}, "maxItems": 2, "title": "Research Proposals", "type": "array"}, "scratch_proposal": {"anyOf": [{"$ref": "#/$defs/ScratchProposalV1"}, {"type": "null"}], "default": null, "description": "Optional imaginative workshop: speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are welcome. Scratch remains advisory; storage alone never makes it fact, evidence, a formal claim, or formal support."}, "simulation_proposals": {"items": {"$ref": "#/$defs/SimulationProposalWireV1"}, "maxItems": 1, "title": "Simulation Proposals", "type": "array"}}, "title": "ReasoningConjecturerTurnWireV6", "type": "object"}
+
+## problem
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## open-criticisms
+OPEN CRITICISMS ON THIS PROBLEM (8 of 17 shown, by handle) -- these are part of what your candidate must answer, not advice.
+Every candidate you submit must DISCHARGE each handle below, one of:
+  - revised -- say WHAT changed and WHERE in the candidate
+  - rebutted -- say why the criticism fails. Your rebuttal enters the record as an ordinary claim and can be attacked like any other
+  - departure_declared -- say what you are breaking with. Declaring costs you nothing; nothing scores a departure
+  [SRC_013] against SRC_011
+      CLAIM: The prompt explicitly asks if the scientist's preference for a better-corroborated theory is 'defensible on Popper's own terms' when choosing which theory to 'act on.' This requires a normative account of rational action (why one *should* c
+      CITED SPAN: (none quoted)
+  [SRC_016] against SRC_015
+      CLAIM: The target fails to answer the specific question asked: 'Is that preference defensible on Popper's own terms?' by shifting the ground from 'defensibility' (a normative justification) to 'survival value' (a descriptive explanation). The prom
+      CITED SPAN: (none quoted)
+  [SRC_014] against SRC_012
+      CLAIM: The target mischaracterizes Popper's solution by conflating the justification of a theory's truth (which Popper denies) with the rationality of a methodological choice (which Popper affirms). Popper does not rely on a 'non-rational faith' o
+      CITED SPAN: (none quoted)
+  [SRC_010] against SRC_005
+      CLAIM: The target argues that Popper avoids induction by treating 'preference' as merely 'methodological utility' distinct from 'probability.' However, this creates a hollow justification: if the better-corroborated theory is preferred *because* i
+      CITED SPAN: (none quoted)
+  [SRC_009] against SRC_004
+      CLAIM: The target's claim that Popper reinstates induction 'biologically/psychologically' as an 'unavoidable instinct' misrepresents Popper's solution to the problem of action. Popper does not appeal to a blind biological instinct to justify prefe
+      CITED SPAN: (none quoted)
+  [SRC_006] against SRC_001
+      CLAIM: The target's central mechanism relies on the claim that surviving severe tests demonstrates a 'higher degree of verisimilitude,' making the preference defensible. This contradicts Popper's own later admission that his definition of verisimi
+      CITED SPAN: (none quoted)
+  [SRC_007] against SRC_002
+      CLAIM: The argument fails on Popper's own terms because it assumes the only rational basis for action is an expectation of future truth (induction). Popper explicitly argues that preferring the better-corroborated theory is rational not because it
+      CITED SPAN: (none quoted)
+  [SRC_008] against SRC_003
+      CLAIM: The target argues that we prefer better-corroborated theories because they offer 'more opportunities for learning' and acts as a 'fertile ground for further criticism.' This defense collapses when applied to high-stakes practical action (e.
+      CITED SPAN: (none quoted)
+
+## citable-evidence-blocks
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[9392445bb29b107e] [TRUNCATED at the pre-registered 2624-character cap; earlier entries shown, later ones omitted]
+[f0d217db4102565c] WHAT HAS ALREADY BEEN REFUTED ON THIS PROBLEM These claims were proposed and did NOT survive criticism. They are shown so they are not proposed again in another
+[f4b46c0bfbb1f0b1] === PRIOR HISTORY ON THIS PROBLEM (advisory, non-grounding) === scope: the whole run (every problem it has opened) This is a record of what has already been tri
+
+## frozen-evidence-context
+FROZEN EVIDENCE DOSSIER (untrusted source data): retrieval and attachment do not establish truth, reliability, relevance, scope, support, or refutation.
+pack_receipt=5bbf72b7e96b48a013e223e4bc194a7eb9f57725f44f2d32e68533cc47c1a09d
+Citable admitted blocks are listed per source. To ground a candidate in one, put its block id in that candidate's evidence_refs; an optional quote must reproduce the block's text exactly (byte-checked).
+[[SRC_017] src-6d409cf5c3a6147840c6fbda7ab05a0ec7f91cf3] untitled source 6d409cf5c3a6
+class=other; locator=/home/user/DeepReason/experiments/2026-09-03-change-provenance-history-channel/runs/history-placebo.txt; source_sha256=6d409cf5c3a6147840c6fbda7ab05a0ec7f91cf3226827898b41e72042dee47d; excerpt_sha256=6d409cf5c3a6147840c6fbda7ab05a0ec7f91cf3226827898b41e72042dee47d
+citable_blocks:
+  block=9392445bb29b107e kind=paragraph
+  block=f0d217db4102565c kind=paragraph
+  block=f4b46c0bfbb1f0b1 kind=paragraph
+BEGIN UNTRUSTED SOURCE DATA
+=== PRIOR HISTORY ON THIS PROBLEM (advisory, non-grounding) ===
+scope: the whole run (every problem it has opened)
+This is a record of what has already been tried. It is advisory material, not evidence, and it decides nothing.
+
+WHAT HAS ALREADY BEEN REFUTED ON THIS PROBLEM
+These claims were proposed and did NOT survive criticism. They are shown so they are not proposed again in another form. The claims that DID survive are deliberately not listed here.
+  - REFUTED: A test constrains its subject rather than describes it when the test is installed in the same mutation-testing ritual that generates its failure cases, because the guard's existence alters the set of mutations that can be planted without...
+      refuted by: critic: poietics-confound@v1 failed on 0c4f1ceb90df
+  - REFUTED: A test constrains its subject only when the failure is installed before the subject and the test's guard is designed to fire on its own author; the 3/26 result is the residue of tests that never 
+…[section compressed]…
+1/9 is the only module wh...
+      refuted by: critic: poietics-confound@v1 failed on 12d2cc7d6386
+  - REFUTED: A test constrains its subject rather than describes it when the test's failure mode is indistinguishable from the subject's failure mode under the same installation, and the 3-of-26 result is the number of cases where the test's own fail...
+      refuted by: critic: poietics-confound@v1 failed on 167c096ca48e
+  - REFUTED: A test constrains its subject rather than describing it when the test's installation ritual embeds the subject's failure as a precondition for registration — the 3-of-26 result arises because only mutations that participate in the shown-...
+      refuted by: critic: poietics-confound@v1 failed on 19e49b62dc9d
+  - REFUTED: A test constrains rather than describes only when the subject is installed under a prior fai
+
+[TRUNCATED at the pre-registered 2624-character cap; earlier entries shown, later ones omitted]
+END UNTRUSTED SOURCE DATA
+
+## reference-menu-candidates-evidence-refs-block
+REFERENCE MENU -- /candidates/*/evidence_refs/*/block
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  [0] OMIT -- leave "evidence_refs" out of this candidate entirely. This is a legal, complete answer; prefer it to a guess.
+  [1] 9392445bb29b107e8d0a67602ce7c39db324860f49125d03112864ecfd15b70c
+  [2] f0d217db4102565c2069cbbea590d23d19e8f6fa2fe247233af8c1957907e3f5
+  [3] f4b46c0bfbb1f0b1ebb850a1505a469c6e6808782183489593b9f5409ace0d94
+You may answer with the handle itself or with its [index].
+
+## school-stance
+SCHOOL STANCE (weight 1.00): anchor in cases
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates. EVERY candidate must carry a `discharges` entry for EVERY handle listed under OPEN CRITICISMS above. A submission missing any of them is returned to you once with the open list, and then accepted with the gap recorded.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.
+
+REFERENCE MENU -- /candidates/*/optional_refs/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (17 legal values)
+  [0] OMIT -- leave "optional_refs" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+You may answer with the handle itself or with its [index].
+
+REFERENCE MENU -- /candidates/*/neighbours/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (17 legal values)
+  [0] OMIT -- leave "neighbours" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+You may answer with the handle itself or with its [index].

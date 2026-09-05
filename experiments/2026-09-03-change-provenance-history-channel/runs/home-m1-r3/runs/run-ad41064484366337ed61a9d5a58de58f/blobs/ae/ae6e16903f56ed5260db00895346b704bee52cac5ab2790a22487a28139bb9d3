@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target conflates Popper's descriptive 'evolutionary epistemology' with a normative inconsistency, failing to recognize that Popper explicitly defends the preference for corroborated theories as a rational critical choice (selecting the theory that has withstood the most severe tests) rather than an inductive inference or a mere biological instinct.",
+      "counterexample": null,
+      "premise": "Popper distinguishes between the logical impossibility of justifying induction and the rational necessity of preferring theories that have survived severe criticism, arguing that this preference is based on the content of the tests passed, not on an expectation of future success derived from the past.",
+      "premise_evidence": null,
+      "successor_question": "Does the target's reliance on 'biological instinct' ignore Popper's specific argument that acting on the best-tested theory is the only rational course available to a critical rationalist, even without assuming the uniformity of nature?"
+    }
+  ]
+}

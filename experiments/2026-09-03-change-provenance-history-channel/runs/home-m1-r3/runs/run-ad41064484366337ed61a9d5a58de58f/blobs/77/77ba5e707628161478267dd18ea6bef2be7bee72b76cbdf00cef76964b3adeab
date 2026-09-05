@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to establish a substantive relation because the 'REFUTED IF' condition describes a difference in operational principles (biological vs. cultural) which is already acknowledged in the premise ('biological vs. cultural'), yet the target asserts a 'Shared Mechanism' based on the abstract similarity of 'non-rational selection'. This creates a logical contradiction where the specific distinction that would refute the analogy is admitted, but the analogy is asserted anyway without bridging how distinct principles constitute a shared mechanism. The relation is merely an assertion of similarity despite admitted fundamental differences, failing the requirement for a substantive link that holds under the stated refutation conditions.",
+      "premise": "The evolutionary explanation in SRC_004 SHARED MECHANISM with the psychological instinct in SRC_001, as both rely on non-rational selection processes (biological vs. cultural) rather than logical deduction.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "successor_question": "How can a mechanism be considered 'shared' when the defining operational principles (biological natural selection vs. cultural theory survival) are explicitly admitted to be fundamentally distinct?"
+    }
+  ]
+}

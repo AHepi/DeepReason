@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, methodological rule of 'critical rationalism' that maximizes verisimilitude (truth-likeness) without assigning probability; however, accepting this defense costs the scientist any guarantee of predictive success, reducing rational action to a gamble on the theory that has best withstood falsification so far, rather than one likely to be true.",
+    "mechanism": "The mechanism distinguishes between 'justification of truth' (which requires induction and is rejected) and 'rationality of choice' (which relies on the logical asymmetry of falsification). By choosing the theory that survives the severest tests, the scientist selects the one with the highest current verisimilitude content, not the highest probability. This avoids induction because past survival does not imply future survival; it only implies that the theory has not yet been shown false, making it the most informative and thus the most rational target for further criticism and tentative application.",
+    "counterconditions": [
+      "If 'verisimilitude' cannot be formally defined or measured without relying on inductive assumptions about the structure of reality, the distinction collapses into disguised induction.",
+      "If the practical necessity of acting 'as if' the preferred theory will hold in the future functionally equates to believing it is probable, then the semantic separation is merely verbal and fails to escape Hume's problem.",
+      "If Popper's appeal to 'biological propensity' or 'psychological faith' to bridge the gap between corroboration and action is admitted, the system surrenders its claim to pure logical rationality."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0c5559bf68dab8f37bb2d97d9b152c1f917d31d129c29ee977958e29038b8b1a",
+        "kind": "rebutted",
+        "note": "The candidate provides a normative account of rational action based on 'critical rationalism' and the duty to test the most informative theory, explicitly addressing why one *should* choose the corroborated theory without invoking probability."
+      },
+      {
+        "handle": "1b3213c40b466a0c5bf3630aeec007e4b6a04141815e3b6ece47a1a39a0f6ef5",
+        "kind": "rebutted",
+        "note": "The response directly answers defensibility by constructing a normative framework (methodological rule) distinct from descriptive survival value, grounding the preference in the logic of falsification rather than biological success."
+      },
+      {
+        "handle": "2e729cc31e977b130ff550d906b931245e1cc4e07642794b9fec6df2c751e11c",
+        "kind": "rebutted",
+        "note": "The candidate argues that the preference is not pragmatic induction but a logical consequence of seeking high content and falsifiability; the 'pragmatic' element is confined to the decision to act, not the justification of the theory's truth."
+      },
+      {
+        "handle": "34672ac128865b97ee5627e9b0f4e74f0d6c62175eef858870243141",
+        "kind": "revised",
+        "note": "Clarified that Popper's solution is not 'non-rational faith' but a specific form of rationality (critical rationalism) that accepts uncertainty while maximizing informational content, correcting the potential mischaracterization of the methodological choice."
+      },
+      {
+        "handle": "360c0dd9f93dab16adcbf2f9dfc4a04a9485ff63a3bb401aa8dd405afc729d42",
+        "kind": "rebutted",
+        "note": "The hollowness is acknowledged as the 'cost' in the claim: the justification is indeed thin (no guarantee of success), but it is not circular because it does not claim the theory is *likely* true, only that it is the *best available guess* given severe testing."
+      },
+      {
+        "handle": "50dace1344ba1b6bb88be3609294a6df690a63968e9311ed0e1e8a0c180385dd",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids appealing to 'blind biological instinct' as a justification, instead rooting the preference in the logical imperative to test the strongest theories, thereby respecting Popper's rejection of psychologism."
+      },
+      {
+        "handle": "54e7c04e240915b4b0b41befca2686f178c29a6ba280cbcff070230249da6d21",
+        "kind": "revised",
+        "note": "Explicitly added the 'cost' clause to the main claim and mechanism: accepting this view costs the scientist any assurance of predictive reliability, reducing action to a critical gamble."
+      },
+      {
+        "handle": "5aa9433863aae700b9ade842372e5bc15b4eb8b7feb5e65463c9e76da440223d",
+        "kind": "rebutted",
+        "note": "The argument relies on 'corroboration' indicating higher verisimilitude as a regulative ideal, not a proven metric; the defense holds even if verisimilitude is not fully formalizable, provided it serves as a guiding principle for critical selection rather than a measure of probability."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
