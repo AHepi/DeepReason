@@ -1,12 +1,13 @@
 # Checklist for: the mini isolation programme
-State: next=22 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=23 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
 behind a switch, not at all); E3 is NOT built here (T4's commitment artifact
 proposes commitments and eliminates nothing). Recorded as REQUEST.md
-Amendment 1 (R13, R14) and in SPEC.md §Q-A. THIS WINDOW EXECUTES T0, T1 and
-T2 ONLY (steps 1-22); T3-T7 go to later windows.
+Amendment 1 (R13, R14) and in SPEC.md §Q-A. THIS WINDOW EXECUTED T0, T1 and
+T2 (steps 1-22, plus 8a, 10a and 14a added on the record); all three are
+DELIVERED. T3-T7 (steps 23-57) go to later windows.
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per `dr-execute-step` invocation.
@@ -729,8 +730,23 @@ tranche".
       All three green in the sense that matters: nothing this tranche wrote fails,
       and no assertion was weakened.
       ```
-- [ ] 22. (T2) [COMMIT] Deliver T2.
+- [x] 22. (T2) [COMMIT] Deliver T2.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+      ```
+      $ git status --porcelain     -> (empty)
+      $ git rev-parse HEAD origin/claude/mini-isolation-t0-t2-upwc47
+      ed179c9bf62cb58a61737923a3337b2eee4b0f6c
+      ed179c9bf62cb58a61737923a3337b2eee4b0f6c
+
+      T2/VALIDATION.md verdict PASS; T2/DELIVERY.md written. R3 and R-stored
+      are done; R2 is done for two of its three limits, with the third named
+      and assigned to T3. T2 IS DELIVERED.
+
+      THIS WINDOW ENDS HERE, as instructed. T3-T7 (steps 23-57) go to later
+      windows. Whoever takes T3 should read PARKED.md P7 first: the remaining
+      sub-tranches' line estimates are lower bounds, not ceilings.
+      ```
 
 ## T3 — the adapter and the three shells (S5, S6) — ~240 lines
 
