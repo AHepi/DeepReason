@@ -154,4 +154,41 @@ Q7: R10's "add new artifact types on the fly" — at run configuration time, or
 (append-only; later operator messages land here as R13... or "R2a supersedes
 R2", each with its verbatim quote)
 
-*None yet.*
+### Amendment 1 (2026-09-05) — SPEC.md approved; Q-A answered; E2 and E3 forbidden
+
+Captured from the executor-window instruction of 2026-09-05 carrying the
+operator's message of the same date, which also ledgered the ruling in
+CLAUDE.md as a standing law.
+
+**Approval.** SPEC.md is APPROVED AS WRITTEN (2026-09-05). CHECKLIST.md's
+blocker is lifted and step 1 may run.
+
+**The operator's words, verbatim, answering Q-A:**
+
+> within mini, criticism can't overturn anything. The point is content
+> generation for now. Then testing on the full harness.
+
+**R13 (behavior, binding): "within mini, criticism can't overturn
+anything."** In the mini flow a criticism is written to the record and shown
+to whichever seats the layouts allow, and it changes NO status. This is
+Q-A's road E1 and only E1.
+
+**R14 (scope, binding): "The point is content generation for now. Then
+testing on the full harness."** Mini's job in this programme is to GENERATE
+content — conjectures, criticisms, commitment proposals. What that content
+is worth is decided later by running it through the full harness, whose
+authority layer this programme does not touch.
+
+**What R13/R14 forbid, stated so it is not rediscovered.** Q-A road E2 (a
+critic that may eliminate behind a per-run switch) is NOT built — not behind
+a switch, not off by default, not at all. Q-A road E3 (elimination arriving
+with the commitment artifact) is NOT built here either: the T4 commitment
+artifact PROPOSES commitments and eliminates nothing. SPEC.md's earlier
+recommendation ("E1 as the isolation flow's default, with E2 built and
+switched OFF, and E3 as the flow that follows") is SUPERSEDED by the
+operator's own answer; SPEC.md §Q-A records it as answered rather than
+deleting it.
+
+**Window scope (this executor window only):** T0, T1, T2. Each sub-tranche
+is its own delivery — `dr-validate-change` then `dr-deliver-change` before
+the next starts. T3-T7 go to later windows.

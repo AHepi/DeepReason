@@ -1,5 +1,5 @@
 <!-- DR-INDEX -->
-Verified-at: 5e44a650e
+Verified-at: f2b736b6a
 Verify: python tools/docs_verify.py --links
 
 # The map — start here
@@ -36,6 +36,7 @@ contract: ID grammar, the check rule, and how a document is updated.
 | know what a pack shows about the criticism already made of a problem | `CON-discharge-channel.md` |
 | change WHERE a rendered prompt puts something, or how much of a prior round it carries | `INV-render-layout.md`, then `CON-packs-and-token-economy.md` |
 | change what a seat is SHOWN in one section, or feed a section from somewhere else | `INV-seat-section-sources.md`, then `REC-add-a-section-plugin.md` |
+| change what the REDUCED engine does, or what it may reach | `SUB-minireason.md` |
 | write or update a map document | `SCHEMA.md` |
 
 **The one ordering rule:** read the SEAM before the subsystems it joins. A seam
@@ -61,6 +62,7 @@ than you need.
 | `SUB-verification.md` | `verify_root`, replay validation, epistemic checks. **Frozen** |
 | `SUB-manifest.md` | RunManifest schema and validators, qualification. **Frozen** |
 | `SUB-evaluation.md` | programs, oracles, measures, informal trials — where formal meets informal |
+| `SUB-minireason.md` | the reduced engine at `mini/minireason/`, reached by `deepreason reason --shallow`: an outer scheduling loop over the parent's record, and the isolation fence that says what it may not reach |
 | `SUB-calculus.md` | the typed claim substrate: a CLOSED body union and the one controller-owned compiler that assigns every ref role; also nomination (what makes a promotion problem exist) and the six promotion criteria |
 
 ## Concepts (not packages — that is why they need documents)
@@ -211,9 +213,23 @@ untrustworthy where it *is* good.
   `python tools/docs_verify.py --stale` only if their document exists at all;
   to find uncovered ground, compare `Owns:` headers against `src/deepreason/`.
 - Seam documents exist for the pairs marked above and no others.
-- `docs/map` describes `src/deepreason/`. `tests/` and `experiments/` are
-  navigated by convention: a test file mirrors the module it guards, and a
-  tranche directory is named `<date>-<fix|change>-<slug>`.
+- `docs/map` describes `src/deepreason/`, plus ONE engine directory outside
+  it: `mini/minireason/`, the reduced engine, covered by `SUB-minireason.md`
+  since 2026-09-05. (`REC-change-a-seam.md` owns `docs/map/` itself, which is
+  this directory rather than code.) Nothing else outside `src/deepreason/` has
+  a document, and that is a gap rather than a decision. `tests/` and `experiments/` are navigated by
+  convention: a test file mirrors the module it guards, and a tranche directory
+  is named `<date>-<fix|change>-<slug>`.
+  `check: python -c "
+  import pathlib
+  owned = []
+  for doc in pathlib.Path('docs/map').glob('*.md'):
+      for line in doc.read_text().split(chr(10))[:8]:
+          if line.startswith('Owns:'):
+              owned += [v.strip() for v in line[5:].split(',') if v.strip()]
+  outside = sorted({o for o in owned if not o.startswith('src/deepreason')})
+  assert outside == ['docs/map/', 'mini/minireason/'], outside
+  "`
 
 Closing a gap is ordinary work: `SCHEMA.md` says how, and the orchestrator
 skills require the map to move with the code that changes it.

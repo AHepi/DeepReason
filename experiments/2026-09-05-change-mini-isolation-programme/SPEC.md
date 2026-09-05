@@ -102,10 +102,68 @@ keeps doing so).
 
 The fence is a TEST, not a convention — that is C8's "enforced" clause.
 
+**AMENDED 2026-09-05, before step 10 ran, on a measurement this item's own
+wording could not survive.** The sentence above — "must not import, at run
+time, any of" the eleven — is FALSE of four of them and cannot be made true
+within this programme, because the modules S1 explicitly ALLOWS import them
+themselves. Measured, in a fresh interpreter each arm
+(`proof/fence_arms.txt`, `proof/fence_measure.py`):
+
+    ARM A  importing ONLY the allowed record modules already pulls in:
+             deepreason.adjudication          <- deepreason.harness imports
+                                                 adjudication.edges
+             deepreason.bridge                <- deepreason.ontology.event
+                                                 imports bridge.events
+             deepreason.capabilities          <- deepreason.ontology.event
+                                                 imports capabilities.events
+             deepreason.workflow.transaction_service
+    ARM B  importing minireason.loop pulls in those four PLUS
+             deepreason.application.text_runs
+    ARM C  what MINI adds beyond ARM A:  ['deepreason.application.text_runs']
+
+So "never imported" would be a fence nobody could pass without changing the
+event ontology and the harness — two frozen surfaces, and both of them the
+RECORD rather than the harness around it, which is exactly why S1 allowed
+them in the first place. The eleven-module list is not wrong about what mini
+must not USE; it is wrong about what "import" can prove.
+
+**The fence, restated so it says something true and still bites.** Three
+parts, each its own test:
+
+1. **No direct dependency.** No module under `mini/minireason/` imports a
+   fenced module directly (AST over mini's own sources, relative imports
+   resolved). Measured today: ONE violation,
+   `mini/minireason/compat.py:38`, `from deepreason.bridge.retry import
+   WorkflowRetryPolicyV1`. Mini takes the manifest's own schema types from
+   `deepreason.run_manifest`, which S1 allows, so its dependency is on the
+   record's schema rather than on the subsystem that happens to define it.
+2. **No closure growth.** Importing mini adds NO fenced package beyond the
+   closure the allowed record modules already bring (ARM C is empty).
+   Measured today: ONE violation, `deepreason.application.text_runs`,
+   which arrives because `deepreason/application/__init__.py` eagerly
+   re-exports the text-run service and mini imports
+   `deepreason.application.conjecture` from that package. Fixed by making
+   those three names lazy — the public surface is unchanged
+   (`from deepreason.application import TextRunApplicationService` still
+   works) and importing the boundary package no longer starts the run
+   engine.
+3. **Nothing new during the run.** A mini isolation run imports no fenced
+   module that was not already loaded when it started. This is what catches
+   a lazy `import deepreason.scheduler` inside a function, which parts 1
+   and 2 would both miss.
+
+What the fence therefore DOES prove: mini reaches for nothing in the larger
+harness, and adds nothing to what the record modules already carry. What it
+does NOT prove, stated so it is never over-read: that no code inside those
+four packages is ever executed. Their event-payload types are constructed by
+the record itself. Proving non-EXECUTION is a different instrument and is
+not built here.
+
     accept: python -m pytest mini/tests/test_isolation_fence.py -q -> passed,
-      and the test fails when any fenced module is imported during a mini run
-      (proven by a mutation in the same commit)
+      and each of the three parts fails under a mutation proven in the same
+      commit (proof/fence_mutation.txt)
     accept: python -m pytest tests/test_shallow_reason.py -q -> 0 failed
+    accept: python proof/fence_measure.py -> ARM C empty
 
 **Record.** Mini's record stays mini's own: typed, append-only, and
 replayable by the code that wrote it (CLAUDE.md's within-version scope
@@ -526,7 +584,14 @@ in the window's own D1. The bare-question form stays, so nothing regresses.
 by asking what a mini run must NOT activate to be a test of mini rather than
 of the harness, and cross-checked against what `compat.py:94-103` already
 declares absent. The fence is a test, so a wrong boundary is visible and
-cheap to move.
+cheap to move — **and it moved.** AMENDED 2026-09-05: the eleven modules
+stand as the list of what mini must not USE, but the fence measures three
+things that can be true rather than one that cannot (S1, amended). Four of
+the eleven are already loaded by modules S1 itself allows, because the event
+ontology and the harness import their payload and edge types; measured in
+`proof/fence_arms.txt`. The amendment costs nothing in scope: mini's two real
+violations — one direct import, one package-`__init__` side effect — are both
+inside T1 and both fixed there.
 
 **A7 (Q7) — "on the fly" means at run configuration time, not mid-run.** A
 flow is resolved once, before the first call, and is immutable thereafter —
@@ -542,47 +607,57 @@ removable by configuration.** Both mini flows ship; the default is
 full harness changes default behaviour, and the two existing seats' goldens
 are pinned byte-identical (C4, S10.3).
 
+**A9 (Q-A) — NOT an assumption: an operator ruling.** "Within mini,
+criticism overturns nothing" is the operator's own answer of 2026-09-05,
+ledgered in CLAUDE.md the same day and recorded in REQUEST.md as Amendment
+1. It sits here only as a pointer, so a reader of the assumption list is not
+left thinking the question is still open.
+
 ---
 
 ## Questions for operator (STOP if non-empty)
 
-**ONE question. It survives the dominance test because it is a conflict
-WITHIN the operator's own recorded words, not a gap in them.**
+**NONE OPEN.** The one question this document asked (Q-A) was answered by
+the operator on 2026-09-05, before any step ran. It is recorded below as
+answered, not deleted, so the reasoning that produced it stays readable.
 
-### Q-A — with commitments off, may a critic eliminate?
+### Q-A — with commitments off, may a critic eliminate? — ANSWERED: E1 ONLY
 
-**The decision in one sentence:** in the isolation run, does a critic's
-free-prose objection get the authority to change a conjecture's status, or
-does criticism get recorded while elimination waits for the commitment
-artifact?
+**The operator's words, verbatim (2026-09-05):** "within mini, criticism
+can't overturn anything. The point is content generation for now. Then
+testing on the full harness."
 
-**Why it cannot be derived.** Two of your standing rulings point opposite
-ways here, and both are load-bearing.
+**The ruling, as it binds this programme.** ROAD E1, and only E1. In the
+mini flow a criticism is written to the record and shown to whichever seats
+the layouts allow, and it CHANGES NO STATUS. No elimination road is built
+for mini — not behind a switch, not off by default, not at all.
 
-- The progress law (2026-09-03) makes "more error eliminated" the measure of
-  success. A run in which nothing can be eliminated cannot show error
-  elimination, so D8 would compare a generation-and-commentary run against a
-  single call — a much weaker test than the one you asked for.
-- The warrant chain (`DR-CON-warrants-and-attacks`, and the seats-generate-
-  never-evidence law) says no warrant, no attack edge, no REFUTED. With both
-  commitment channels off (R3), mini has no warrant road at all, so a critic
-  that eliminates would be prose changing status directly.
+- **E2 is NOT built.** The recommendation this document previously made
+  ("E2 built and switched OFF") is SUPERSEDED by the operator's answer. No
+  per-run switch, no fail-warrant road from a free-prose objection, no
+  ~40 lines in `mini/minireason/seats.py`.
+- **E3 is NOT built here either.** The commitment artifact at S4 PROPOSES
+  commitments and eliminates nothing; a proposal is RECORDED, never
+  registered as a canonical `Commitment`. S4 already said this; the ruling
+  makes it binding rather than provisional, and removes "the flow that
+  follows" from this programme's scope.
+- **What mini's content is worth is decided later**, by running it through
+  the full harness, whose authority layer is unchanged by this programme.
+  That is the operator's own "then testing on the full harness".
 
-**The roads, priced.**
+**Consequence for D8/S12.** The measure compares better-criticised
+conjectures against a single call, not eliminated ones. That is the weaker
+but honest first result E1's row priced, and the operator has chosen it
+knowingly. S12 reports it as such; an inconclusive result stays recorded as
+inconclusive (C6, CLAUDE.md Conventions).
 
-| | what it does | cost | risk |
-|---|---|---|---|
-| **E1 — record only** *(recommended)* | criticism is written to the record and shown to nobody it should not be; status never changes in the R3 flow | ~0 extra lines; it is the flow's default | D8 measures better-criticised conjectures, not eliminated ones — a weaker but honest first result |
-| **E2 — critic may eliminate, behind a per-run switch, default OFF, typed warning on enablement** | a free-prose objection can mint a fail warrant | ~40 lines in `mini/minireason/seats.py` | prose changes status; the guardrail against exactly that is one of the older rulings here |
-| **E3 — elimination arrives with the commitment artifact** | the commitment seat's proposals, where they are mechanically evaluable, become the warrant road; critics still never see them (R5) | ~60 lines, one more registered stage | this is what R4 is FOR, but it is the R4 configuration, not the R3 one |
+**The roads as they were priced, kept for the record.**
 
-**Recommendation: E1 as the isolation flow's default, with E2 built and
-switched OFF, and E3 as the flow that follows.** The reason is that this is
-the shape every comparable ruling of yours has taken — successor-question
-minting is built and off by default with your own warning text; the history
-channel is built, off, and not removed. It also keeps R3 and R4 as the
-sequence you wrote them in: run the cycles with commitments disabled first,
-then add the artifact that generates them. You can answer with one word.
+| | what it does | cost | risk | disposition |
+|---|---|---|---|---|
+| **E1 — record only** | criticism is written to the record and shown to nobody it should not be; status never changes in the R3 flow | ~0 extra lines; it is the flow's default | D8 measures better-criticised conjectures, not eliminated ones | **CHOSEN by the operator, 2026-09-05** |
+| **E2 — critic may eliminate, behind a per-run switch, default OFF** | a free-prose objection can mint a fail warrant | ~40 lines in `mini/minireason/seats.py` | prose changes status | **NOT BUILT** — "criticism can't overturn anything" |
+| **E3 — elimination arrives with the commitment artifact** | the commitment seat's proposals become the warrant road | ~60 lines, one more registered stage | this is the R4 configuration, not the R3 one | **NOT BUILT HERE** — S4 proposes; it eliminates nothing |
 
 ---
 
@@ -600,6 +675,9 @@ then add the artifact that generates them. You can answer with one word.
   unnecessary (§Options). Not requested.
 - **Making the full harness use any of this.** Every default is unchanged.
   Not requested.
+- **Any elimination road inside mini** (Q-A roads E2 and E3) — the operator
+  ruled E1 only on 2026-09-05: "within mini, criticism can't overturn
+  anything." Not requested, and now forbidden.
 
 ---
 
@@ -826,7 +904,73 @@ PROGRAMME of eight ordered sub-tranches, each with its own delivery**
 |---|---|---|---|
 | T0 | prerequisites (F1, F2) | S0a+S0b | 115 |
 | T1 | isolation entry, standard input, the module fence, `SUB-minireason.md` | S1+S11a | 170 |
+
+**T1's 170 is EXCEEDED, and re-baselined rather than absorbed (2026-09-05,
+during step 11).** Measured against T0's delivery head `d319f2d6c`, S1's
+production diff is **218 insertions**, and `SUB-minireason.md` has not been
+written yet (S11a, ~80). Itemised, with what each line is for:
+
+| file | insertions | why |
+|---|---|---|
+| `src/deepreason/shallow.py` | 117 | the frozen-input reader and its three typed refusals (~50), the `run_input` report that discloses criteria are bound but not compiled (~35), the two starting inputs and their conflict refusal (~25); ~10 lines are comments stating constraints |
+| `src/deepreason/cli/main.py` | 40 | `--run-input`, `question` made optional, and the two refusals on the full path that keep "optional" from becoming a silent difference between the paths |
+| `mini/minireason/compat.py` | 36 | `bind_mini_root`/`initialize` take a supplied run input; the reopening-mismatch refusal; the fenced `bridge.retry` import replaced |
+| `mini/minireason/loop.py` | 8 | forwarding only |
+| `src/deepreason/application/__init__.py` | 17 | **not foreseen by S1 at all** — the lazy text-run re-export, which is the S1 amendment's own consequence |
+
+**Why the estimate was low, stated plainly.** S1 priced ONE thing — accept a
+`--run-input` and bind it. Three obligations it did not price came with it,
+and each is required by a standing law rather than by taste: a frozen input
+that cannot be read must fail typed at the point of use, not silently
+(all-configurations law); criteria that reach a root's identity without being
+compiled into commitments must be DISCLOSED, or a reader who saw the count
+would assume they were (disclose-never-die); and making `question` optional
+must not leave the full path silently accepting a flag that does nothing.
+Together those are ~110 of the 218.
+
+**Nothing here is scope creep.** Every line traces to R1, R11, R12 or to the
+amended fence, and the alternative — dropping the disclosure and the
+refusals — would ship a smaller change that lies about itself.
+
+**T1's budget is therefore restated as ~300** (218 measured + ~80 for
+`SUB-minireason.md`), and the programme total moves from 1 320 to ~1 450. The
+later sub-tranches' numbers are untouched; whether they hold is measured when
+they run, not assumed here.
 | T2 | the mini form registry and the commitment switch | S2+S3 | 175 |
+
+**T2's 175 is EXCEEDED too, and re-baselined with both halves measured
+(2026-09-05, at step 19).** Against T1's delivery head `577365da4`:
+
+| file | insertions | code / docstring / comment / blank | why |
+|---|---|---|---|
+| `mini/minireason/forms.py` | 305 | 150 / 69 / 13 / 74 | S2 priced 120 for "a registry". What ships is a registry PLUS four forms, four wire models, the three-step selection order and four typed refusals |
+| `mini/minireason/policy.py` | 72 | 25 / 26 / 2 / 20 | S3 priced 55 for two switches; the warning markers and their per-channel naming are the rest |
+| `mini/minireason/checks.py` | 16 | — | the policy parameter and its docstring |
+| `mini/minireason/loop.py` | 20 | — | forwarding, plus writing the warning into the record |
+| **total** | **413** | | against 175 |
+
+**Trimmed before disclosing.** Two near-identical passthrough contracts were
+merged into one and the module docstring was cut: 319 → 306 on `forms.py`.
+What remains is 175 lines of code across the two new modules and 95 of
+docstring — and the docstrings are where the load-bearing constraints live
+(why not `Config`, why two switches and not one, what "not limit prose length
+at all" excludes), which CLAUDE.md's own convention says is what a comment is
+for.
+
+**T2 is therefore restated as ~420**, and the programme total moves to
+~1 700.
+
+---
+
+**A finding about the ESTIMATES THEMSELVES, not about any one sub-tranche.**
+Two consecutive sub-tranches have overrun by 1.3x and 2.4x, and both for the
+same reason: SPEC.md's per-item numbers priced the MECHANISM and not the
+obligations the standing laws attach to it. Every overrun so far is typed
+refusals, disclosure records and per-channel naming — the parts that make a
+change honest about itself, and the parts a line estimate written from a
+design sketch does not see. T3–T7's numbers were written the same way and
+should be read as lower bounds, not ceilings. Rowed in PARKED.md as P7 so the
+later windows are not surprised by it.
 | T3 | the mini source adapter and the three shells | S5+S6 | 240 |
 | T4 | the commitment seat, the controller hook, the map | S4+S7+S11b | 180 |
 | T5 | the pluggable flow and the architecture tests | S8+S9 | 240 |

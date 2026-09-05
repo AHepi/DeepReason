@@ -1,0 +1,49 @@
+{
+  "canonical_model": "ConjecturerOutput",
+  "contract_id": "conjecturer.compact.reference_free.v1",
+  "schema": {
+    "$defs": {
+      "ReferenceFreeConjectureCandidate": {
+        "additionalProperties": false,
+        "description": "Compact conjecture value for schedulers that cannot preserve refs.",
+        "properties": {
+          "content": {
+            "minLength": 1,
+            "title": "Content",
+            "type": "string"
+          },
+          "typicality": {
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Typicality",
+            "type": "number"
+          }
+        },
+        "required": [
+          "content",
+          "typicality"
+        ],
+        "title": "ReferenceFreeConjectureCandidate",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "candidates": {
+        "items": {
+          "$ref": "#/$defs/ReferenceFreeConjectureCandidate"
+        },
+        "minItems": 1,
+        "title": "Candidates",
+        "type": "array"
+      }
+    },
+    "required": [
+      "candidates"
+    ],
+    "title": "ReferenceFreeConjecturer",
+    "type": "object"
+  },
+  "variant": "compact",
+  "wire_model": "ReferenceFreeConjecturer"
+}

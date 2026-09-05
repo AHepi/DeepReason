@@ -194,3 +194,211 @@ def test_disclosure_a_template_that_cannot_expand_is_named(tmp_path, clean_regis
     with pytest.raises(SeatSectionError) as caught:
         plugin.render(SectionRequestV1(supplied={"name": "x"}), plugin.parameters_model())
     assert caught.value.code == "SEAT_TEMPLATE_NOT_EXPRESSIBLE"
+
+
+# ------------------------------------------------- the managed run reads it
+
+
+def _stub_mini_run():
+    """Stand in for the reduced engine: the loader runs during SETUP, before
+    the first call, so a stubbed loop is enough to decide whether it ran."""
+
+    def mini_run(problems, endpoint, budget, root, max_cycles):
+        return {
+            "engine_profile": "mini",
+            "model_profile": "compact",
+            "stop": "queue-exhausted",
+            "cycles": 1,
+            "tokens": {"total": 0},
+        }
+
+    return mini_run
+
+
+def test_managed_path_loads_operator_plugins(tmp_path, monkeypatch, clean_registry):
+    """A plugin in the operator's own directory is read BY A RUN, not only by
+    a test that calls the loader itself.
+
+    Implements S0a (R7, C8) of the mini isolation programme. Before this
+    landed, `load_operator_plugins` had no call site anywhere under `src/`, so
+    `<DEEPREASON_HOME>/seat_plugins/` was a documented place to put a file
+    that nothing ever opened. Both of the loader's lists — what loaded and
+    what did not — reach the run's record, because a section missing with no
+    reason given is the failure this whole loader exists to prevent.
+    """
+    import json
+
+    from deepreason.shallow import run_shallow_question
+    from tests.test_public_v6_facade import _configure
+
+    state, _ = _configure(monkeypatch, tmp_path)
+    plugins = seat_plugins_root(environ={"DEEPREASON_HOME": str(state)})
+    plugins.mkdir(parents=True, exist_ok=True)
+    (plugins / "dr.operator.probe@experimental-generation-context.tmpl").write_text(
+        "GENERATION NOTES: {{ generation_context }}"
+    )
+    (plugins / "broken.py").write_text("this is not python (")
+
+    monkeypatch.setattr("minireason.loop.run", _stub_mini_run(), raising=True)
+    result = run_shallow_question("why does the sky look blue?")
+
+    # The section itself: the run has seen the operator's file.
+    assert resolve_section_plugin("dr.operator.probe").section_id == (
+        "experimental-generation-context"
+    )
+
+    from deepreason.shallow import SHALLOW_SEAT_PLUGINS_RECORD
+
+    disclosed = result["seat_plugins"]
+    assert disclosed["loaded"] == ["dr.operator.probe"], disclosed
+    assert [notice["code"] for notice in disclosed["notices"]] == [
+        "SEAT_PLUGIN_UNLOADABLE"
+    ], disclosed
+
+    recorded = json.loads(
+        (
+            state / "shallow-runs" / result["run_id"] / SHALLOW_SEAT_PLUGINS_RECORD
+        ).read_text()
+    )
+    assert recorded["loaded"] == ["dr.operator.probe"]
+    assert "broken.py" in recorded["notices"][0]["path"]
+
+
+def test_a_plugin_that_raises_on_import_is_a_notice_in_the_record(
+    tmp_path, monkeypatch, clean_registry
+):
+    """Disclose, never die, measured THROUGH A RUN rather than through the
+    loader alone.
+
+    Implements S0a (R7, C10). The distinction from the loader-level case
+    above is the one that matters operationally: a file that PARSES and then
+    raises while executing gets as far as the interpreter before it fails, so
+    only a run can show that the failure is disclosed rather than fatal.
+    """
+    import json
+
+    from deepreason.shallow import (
+        SHALLOW_SEAT_PLUGINS_RECORD,
+        run_shallow_question,
+    )
+    from tests.test_public_v6_facade import _configure
+
+    state, _ = _configure(monkeypatch, tmp_path)
+    plugins = seat_plugins_root(environ={"DEEPREASON_HOME": str(state)})
+    plugins.mkdir(parents=True, exist_ok=True)
+    (plugins / "good.py").write_text(_GOOD)
+    (plugins / "raises.py").write_text(
+        'raise RuntimeError("the operator\'s own experiment blew up")\n'
+    )
+
+    monkeypatch.setattr("minireason.loop.run", _stub_mini_run(), raising=True)
+    result = run_shallow_question("does a broken plugin stop a run?")
+
+    # The run did not stop, and the plugins that did load are usable.
+    assert result["completed"] is True
+    assert result["seat_plugins"]["loaded"] == ["dr.operator.probe"]
+
+    recorded = json.loads(
+        (
+            state / "shallow-runs" / result["run_id"] / SHALLOW_SEAT_PLUGINS_RECORD
+        ).read_text()
+    )
+    assert len(recorded["notices"]) == 1, recorded
+    notice = recorded["notices"][0]
+    assert notice["code"] == "SEAT_PLUGIN_UNLOADABLE"
+    assert "raises.py" in notice["path"]
+    assert "RuntimeError" in notice["detail"], "a notice with no reason is a silent skip"
+
+
+# ------------------------------------------ layouts declared in a file (S0b)
+
+
+@pytest.fixture
+def clean_layouts():
+    from deepreason.llm.seat_sections import _LAYOUT_REGISTRY
+
+    before = dict(_LAYOUT_REGISTRY)
+    yield
+    _LAYOUT_REGISTRY.clear()
+    _LAYOUT_REGISTRY.update(before)
+
+
+def test_a_file_declared_layout_is_registered(tmp_path, clean_layouts):
+    """A composition is reachable WITHOUT writing Python.
+
+    Implements S0b (R7, R9, R10, C8). `register_seat_pack_layout` was
+    reachable only from Python, so `DR-REC-add-a-section-plugin` step 3 --
+    "declare the layout that carries it" -- had no road an operator could
+    take without editing the tree. That is the customization point the
+    modularity law says must not require a code edit.
+    """
+    import json
+
+    from deepreason.llm.seat_plugins import ensure_seeded
+    from deepreason.llm.seat_sections import (
+        resolve_seat_pack_layout,
+        seat_pack_layout_ids,
+    )
+
+    ensure_seeded()
+    (_root(tmp_path) / "probe.layout.json").write_text(
+        json.dumps(
+            {
+                "layout_id": "seat-pack.operator.probe.v0",
+                "entries": [
+                    {"plugin_id": "dr.problem", "priority": 1},
+                    {"plugin_id": "dr.criteria", "priority": 2, "droppable": True},
+                ],
+                "default_for_seat": "operator.probe",
+            }
+        )
+    )
+
+    loaded, notices = load_operator_plugins(home=tmp_path, environ={})
+    assert notices == [], notices
+    assert "seat-pack.operator.probe.v0" in loaded
+    assert "seat-pack.operator.probe.v0" in seat_pack_layout_ids()
+
+    layout = resolve_seat_pack_layout("operator.probe")
+    assert layout.plugin_ids == ("dr.problem", "dr.criteria")
+    assert layout.entry_for("dr.criteria").droppable is True
+
+
+def test_an_unparseable_layout_file_is_refused_typed(tmp_path, clean_layouts):
+    """A layout file that does not parse is REFUSED with a code, never a
+    silent fallback to the seat's default.
+
+    Implements S0b (C10). Two faces of one refusal: read directly, the reader
+    raises a coded error naming the file; read by a run's loader, that same
+    refusal becomes a typed notice and the run continues on what did load
+    (disclose, never die). The failure this forbids is the third possibility
+    -- a brief silently composed from something the operator did not ask for.
+    """
+    from deepreason.llm.seat_sections import (
+        register_seat_pack_layout_file,
+        seat_pack_layout_ids,
+    )
+
+    root = _root(tmp_path)
+    (root / "broken.layout.json").write_text("{not json at all")
+    (root / "wrong-shape.layout.json").write_text(
+        '{"layout_id": "seat-pack.operator.bad.v0", "entries": [{"priority": 1}]}'
+    )
+
+    for name, code in (
+        ("broken.layout.json", "SEAT_PACK_LAYOUT_FILE_UNPARSEABLE"),
+        ("wrong-shape.layout.json", "SEAT_PACK_LAYOUT_FILE_UNPARSEABLE"),
+    ):
+        with pytest.raises(SeatSectionError) as caught:
+            register_seat_pack_layout_file(root / name)
+        assert caught.value.code == code, (name, caught.value)
+        assert name in str(caught.value), caught.value
+
+    loaded, notices = load_operator_plugins(home=tmp_path, environ={})
+    assert loaded == []
+    assert [notice["code"] for notice in notices] == [
+        "SEAT_PACK_LAYOUT_FILE_UNPARSEABLE",
+        "SEAT_PACK_LAYOUT_FILE_UNPARSEABLE",
+    ], notices
+    assert all(notice["detail"] for notice in notices), "a notice with no reason"
+    assert "seat-pack.operator.bad.v0" not in seat_pack_layout_ids()

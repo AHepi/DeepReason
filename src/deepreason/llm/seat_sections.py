@@ -544,6 +544,12 @@ def resolve_seat_pack_layout(
 # taken lazily rather than at import.
 SEAT_PLUGINS_DIRNAME = "seat_plugins"
 TEMPLATE_SUFFIX = ".tmpl"
+# A layout is DATA, not code, so it declares itself in JSON rather than in a
+# module: nothing in a composition needs to run. The id comes from the file's
+# own `layout_id` rather than from its name, because a layout id is already a
+# field of the thing being declared and two sources for one identity is one
+# too many.
+LAYOUT_SUFFIX = ".layout.json"
 
 
 def seat_plugins_root(*, home=None, environ=None):
@@ -574,7 +580,11 @@ def load_operator_plugins(*, home=None, environ=None):
     notices: list[dict[str, str]] = []
     root = seat_plugins_root(home=home, environ=environ)
     try:
-        candidates = sorted(root.glob("*.py")) + sorted(root.glob(f"*{TEMPLATE_SUFFIX}"))
+        candidates = (
+            sorted(root.glob("*.py"))
+            + sorted(root.glob(f"*{TEMPLATE_SUFFIX}"))
+            + sorted(root.glob(f"*{LAYOUT_SUFFIX}"))
+        )
     except OSError as error:
         return loaded, [
             {
@@ -588,11 +598,23 @@ def load_operator_plugins(*, home=None, environ=None):
 
     for path in candidates:
         try:
+            if path.name.endswith(LAYOUT_SUFFIX):
+                loaded.append(register_seat_pack_layout_file(path).layout_id)
+                continue
             if path.suffix == TEMPLATE_SUFFIX:
                 plugin = _template_plugin(path)
             else:
                 plugin = _python_plugin(path)
             register_section_plugin(plugin)
+        except SeatSectionError as error:
+            # A coded refusal keeps its own code in the notice: the operator
+            # reading the record needs to know WHICH refusal this was, and
+            # flattening every one of them to SEAT_PLUGIN_UNLOADABLE would
+            # throw that away at the only point it is read.
+            notices.append(
+                {"code": error.code, "path": str(path), "detail": str(error)}
+            )
+            continue
         except Exception as error:  # noqa: BLE001 - disclosed, never raised
             notices.append(
                 {
@@ -604,6 +626,49 @@ def load_operator_plugins(*, home=None, environ=None):
             continue
         loaded.append(plugin.plugin_id)
     return loaded, notices
+
+
+def register_seat_pack_layout_file(path) -> SeatPackLayoutV1:
+    """Read one `.layout.json` and register the layout it declares.
+
+    REFUSED, NEVER FALLEN BACK FROM. Every failure -- unreadable file,
+    malformed JSON, a shape the model rejects -- raises one coded error naming
+    the file, and nothing is registered. The third possibility is the one an
+    operator would actually be hurt by: a brief silently composed from the
+    seat's default while the file they wrote sits unread.
+
+    `default_for_seat` is accepted alongside the layout's own fields because
+    binding is a property of the DECLARATION, not of the composition; the
+    model forbids extras, so it is taken out before validation.
+    """
+
+    import json
+
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as error:
+        raise SeatSectionError(
+            "SEAT_PACK_LAYOUT_FILE_UNPARSEABLE",
+            f"{path.name} is not readable JSON: {type(error).__name__}: {error}",
+        ) from error
+    if not isinstance(raw, dict):
+        raise SeatSectionError(
+            "SEAT_PACK_LAYOUT_FILE_UNPARSEABLE",
+            f"{path.name} declares {type(raw).__name__}, not one layout object",
+        )
+    data = dict(raw)
+    default_for_seat = data.pop("default_for_seat", None)
+    try:
+        layout = SeatPackLayoutV1(**data)
+    except SeatSectionError:
+        raise
+    except Exception as error:  # noqa: BLE001 - re-typed with the file's name
+        raise SeatSectionError(
+            "SEAT_PACK_LAYOUT_FILE_UNPARSEABLE",
+            f"{path.name} is not one well-formed layout: "
+            f"{type(error).__name__}: {error}",
+        ) from error
+    return register_seat_pack_layout(layout, default_for_seat=default_for_seat)
 
 
 def _python_plugin(path):

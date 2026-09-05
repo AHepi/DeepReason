@@ -57,11 +57,23 @@ from deepreason.application.scratch import (
     ScratchSearchQueryV1,
     ScratchSearchResultV1,
 )
-from deepreason.application.text_runs import (
-    TEXT_RUN_SERVICE,
-    TEXT_RUN_WORKERS,
-    TextRunApplicationService,
-)
+# The text-run service is reached LAZILY, and that is a constraint rather than
+# a style choice: importing this package must not start the run engine.
+# `application.conjecture` is a boundary a reduced-engine run legitimately
+# uses, and importing it executes this module; an eager import here would drag
+# the whole text-run stack into a run that never touches it. The public names
+# are unchanged -- `from deepreason.application import TextRunApplicationService`
+# still works -- and `mini/tests/test_isolation_fence.py` goes red if the
+# eager import returns.
+_LAZY_TEXT_RUNS = ("TEXT_RUN_SERVICE", "TEXT_RUN_WORKERS", "TextRunApplicationService")
+
+
+def __getattr__(name: str):
+    if name in _LAZY_TEXT_RUNS:
+        from deepreason.application import text_runs
+
+        return getattr(text_runs, name)
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 __all__ = [
     "CancelTextRunIntentV1",

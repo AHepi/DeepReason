@@ -1,0 +1,12 @@
+ARM A  allowed record modules alone pull in:
+    deepreason.adjudication
+    deepreason.bridge
+    deepreason.capabilities
+    deepreason.workflow.transaction_service
+ARM B  importing minireason.loop pulls in:
+    deepreason.adjudication
+    deepreason.application.text_runs
+    deepreason.bridge
+    deepreason.capabilities
+    deepreason.workflow.transaction_service
+ARM C  what MINI adds beyond ARM A: ['deepreason.application.text_runs']

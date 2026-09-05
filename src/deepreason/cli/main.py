@@ -286,7 +286,25 @@ def build_parser() -> argparse.ArgumentParser:
         "reason",
         help="prepare and reason over one normal question (--shallow runs the reduced engine)",
     )
-    reason_cmd.add_argument("question", help="the question DeepReason should examine")
+    reason_cmd.add_argument(
+        "question",
+        nargs="?",
+        default=None,
+        help=(
+            "the question DeepReason should examine; optional only when "
+            "--run-input names a frozen input that already states it"
+        ),
+    )
+    reason_cmd.add_argument(
+        "--run-input",
+        default=None,
+        metavar="ROOT",
+        help=(
+            "start from the STANDARD frozen input written by deepreason input "
+            "freeze --root ROOT (problem plus criteria) instead of a bare "
+            "question; reduced engine only, with --shallow"
+        ),
+    )
     reason_cmd.add_argument("--cycles", type=int, default=None)
     reason_cmd.add_argument("--token-budget", type=int, default=None)
     reason_cmd.add_argument(
@@ -2315,6 +2333,7 @@ def _cmd_reason_shallow(args) -> int:
             cycles=args.cycles,
             token_budget=args.token_budget,
             profile_path=args.provider_profile,
+            run_input_root=args.run_input,
         )
     except ShallowReasonError as error:
         print(str(error), file=sys.stderr)
@@ -2482,6 +2501,26 @@ def _cmd_reason(args) -> int:
 
     if getattr(args, "shallow", False):
         return _cmd_reason_shallow(args)
+
+    # `question` became optional so --run-input could state it instead. The
+    # two refusals below are what keeps that from turning into a silent
+    # difference between the two paths: the full path has no frozen-input
+    # entry yet, and neither path may start with nothing to examine.
+    if getattr(args, "run_input", None) is not None:
+        print(
+            "REASON_RUN_INPUT_SHALLOW_ONLY: --run-input starts the reduced "
+            "engine; pass --shallow, or compile a run manifest against the "
+            "frozen root for the full path",
+            file=sys.stderr,
+        )
+        return 1
+    if not (args.question or "").strip():
+        print(
+            "REASON_QUESTION_REQUIRED: give a question, or --shallow "
+            "--run-input ROOT to take one from a frozen input",
+            file=sys.stderr,
+        )
+        return 1
 
     from deepreason.application import InspectTextRunIntentV1, TEXT_RUN_SERVICE
     from deepreason.application.intents import start_text_run_intent

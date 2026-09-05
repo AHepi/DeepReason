@@ -205,3 +205,157 @@ def test_shallow_result_root_is_isolated_per_run(tmp_path, monkeypatch):
     assert first["run_id"] != second["run_id"]
     assert calls[0]["root"] != calls[1]["root"]
     assert shallow_module.SHALLOW_DISCLAIMER in first["disclaimer"]
+
+
+# ------------------------- the STANDARD frozen input (S1, R12)
+
+
+def _freeze(root, *, description="why does the sky look blue?", criteria=()):
+    """Write what `deepreason input freeze --root` writes, by the same call."""
+    from deepreason.evidence import (
+        AttachedSourceProvenanceV1,
+        EvidenceDossierV1,
+        RunInputManifestV2,
+        RunInputProblemV2,
+        bind_run_input,
+    )
+
+    dossier = EvidenceDossierV1.create(
+        problem_ref="pi-standard",
+        sources=(),
+        total_byte_count=0,
+        creation_provenance=AttachedSourceProvenanceV1(
+            supplied_by="operator workload",
+            acquisition_method="deepreason input freeze",
+        ),
+    )
+    run_input = RunInputManifestV2.create(
+        problem=RunInputProblemV2(
+            id="pi-standard", description=description, criteria=criteria
+        ),
+        evidence_dossier_digest=dossier.dossier_digest,
+    )
+    bind_run_input(run_input, dossier, root)
+    return run_input
+
+
+def _stub_mini_run_accepting_input(calls):
+    def mini_run(problems, endpoint, budget, root, max_cycles, **bound):
+        calls.append({"problems": problems, "root": root, "bound": bound})
+        return {
+            "engine_profile": "mini",
+            "model_profile": "compact",
+            "stop": "queue-exhausted",
+            "cycles": 1,
+            "tokens": {"total": 0},
+        }
+
+    return mini_run
+
+
+def test_shallow_takes_the_standard_frozen_input(tmp_path, monkeypatch, capsys):
+    """Implements R12: "It's starting input should be standard."
+
+    The standard input is the RunInputManifestV2 `deepreason input freeze`
+    writes and the full harness takes -- problem plus criteria. The reduced
+    engine takes the same record, states the same problem id, and binds it to
+    the run root instead of mini's constant process root.
+    """
+    state, _ = _configure(monkeypatch, tmp_path)
+    frozen_root = tmp_path / "frozen"
+    frozen = _freeze(frozen_root)
+    calls = []
+    monkeypatch.setattr(
+        "minireason.loop.run", _stub_mini_run_accepting_input(calls), raising=True
+    )
+
+    assert main(["reason", "--shallow", "--run-input", str(frozen_root)]) == 0
+    payload = json.loads(capsys.readouterr().out)
+
+    assert payload["question_problem_id"] == "pi-standard"
+    assert payload["run_input"]["source"] == "frozen-input"
+    assert payload["run_input"]["run_input_digest"] == frozen.run_input_digest
+    assert payload["run_input"]["notices"] == []
+
+    assert len(calls) == 1
+    problem_id, question = calls[0]["problems"][0]
+    assert problem_id == "pi-standard"
+    assert question == "why does the sky look blue?"
+    assert calls[0]["bound"]["run_input"].run_input_digest == frozen.run_input_digest
+
+
+def test_the_bare_question_form_is_unchanged(tmp_path, monkeypatch, capsys):
+    """C1/C4: nothing regresses for the caller who does not use the new road.
+
+    The engine is called with EXACTLY the arguments it was called with before
+    --run-input existed -- the stub below takes no **kwargs, so an extra one
+    would be a TypeError rather than a silent difference.
+    """
+    _configure(monkeypatch, tmp_path)
+    calls = []
+    monkeypatch.setattr("minireason.loop.run", _stub_mini_run(calls), raising=True)
+
+    assert main(["reason", "why does the sky look blue?", "--shallow"]) == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["run_input"] == {"source": "question", "criteria": 0, "notices": []}
+    assert payload["question_problem_id"].startswith("q-")
+
+
+def test_frozen_criteria_are_bound_and_their_non_use_is_disclosed(
+    tmp_path, monkeypatch, capsys
+):
+    """Criteria reach the run's identity; that they are not compiled into
+    commitments is SAID, not left to be inferred from a count."""
+    from deepreason.evidence import RunInputCommitmentV1
+
+    _configure(monkeypatch, tmp_path)
+    frozen_root = tmp_path / "frozen"
+    _freeze(
+        frozen_root,
+        criteria=(
+            RunInputCommitmentV1(id="c-1", eval="program:json-wf"),
+        ),
+    )
+    monkeypatch.setattr(
+        "minireason.loop.run", _stub_mini_run_accepting_input([]), raising=True
+    )
+    assert main(["reason", "--shallow", "--run-input", str(frozen_root)]) == 0
+    payload = json.loads(capsys.readouterr().out)
+
+    assert payload["run_input"]["criteria"] == 1
+    assert [n["code"] for n in payload["run_input"]["notices"]] == [
+        "SHALLOW_RUN_INPUT_CRITERIA_NOT_COMPILED"
+    ]
+
+
+def test_a_question_that_contradicts_the_frozen_input_is_refused(tmp_path, monkeypatch):
+    """Two starting inputs that disagree would leave the record saying two
+    things; the refusal is typed rather than a silent precedence rule."""
+    _configure(monkeypatch, tmp_path)
+    frozen_root = tmp_path / "frozen"
+    _freeze(frozen_root)
+    with pytest.raises(ShallowReasonError, match="SHALLOW_QUESTION_CONFLICTS_WITH_RUN_INPUT"):
+        run_shallow_question("a different question", run_input_root=frozen_root)
+
+
+def test_an_unreadable_or_v1_frozen_input_is_refused_typed(tmp_path, monkeypatch):
+    _configure(monkeypatch, tmp_path)
+    with pytest.raises(ShallowReasonError, match="SHALLOW_RUN_INPUT_UNREADABLE"):
+        run_shallow_question(run_input_root=tmp_path / "nothing-here")
+
+
+def test_the_full_path_refuses_run_input_rather_than_ignoring_it(tmp_path, monkeypatch, capsys):
+    """--run-input starts the reduced engine. Accepting it silently on the
+    full path would be a flag that did nothing, which is the shape the
+    all-configurations law names as a gate the operator cannot turn on."""
+    _configure(monkeypatch, tmp_path)
+    frozen_root = tmp_path / "frozen"
+    _freeze(frozen_root)
+    assert main(["reason", "q", "--run-input", str(frozen_root)]) == 1
+    assert "REASON_RUN_INPUT_SHALLOW_ONLY" in capsys.readouterr().err
+
+
+def test_reason_with_no_question_and_no_frozen_input_is_refused(tmp_path, monkeypatch, capsys):
+    _configure(monkeypatch, tmp_path)
+    assert main(["reason"]) == 1
+    assert "REASON_QUESTION_REQUIRED" in capsys.readouterr().err
