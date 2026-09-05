@@ -1,0 +1,653 @@
+{
+  "generated_utc": "2026-09-05T09:15:49.858228+00:00",
+  "python": "3.13.5",
+  "baseline_tests": 66,
+  "two_node_combinations": 2304,
+  "selected_mutations": 9,
+  "detected_mutations": 9,
+  "interpretive_limit": "Stipulated fixture meanings; no semantic truth or capacity decision.",
+  "fixtures": [
+    {
+      "fixture": "balances-r1",
+      "entry_count": 6,
+      "subject_bindings": {
+        "ref": "k_ref",
+        "disc": "k_disc",
+        "initial": "w_initial",
+        "crit_ref": "c_ref"
+      },
+      "report": {
+        "claim": {
+          "predicate": "Account",
+          "subject": "s:contribution",
+          "history": "fixture_history",
+          "boundary": "s",
+          "grain": "explanatory",
+          "contribution": "delta1",
+          "situation_before": "xi0",
+          "situation_after": "not_applicable",
+          "respect": "stated_local_respect",
+          "interpretation": "fixture-I-1"
+        },
+        "snapshot": "71b71b87c04face6c0ad6fc6d83144dc95a273e8d6f004f9907f2b14941767f8",
+        "bindings": {
+          "authority_digest": "66839c4aff0095015965dd6083347f2e3e78340170fa3d9ffe26caa337015d4e",
+          "specification_digest": "c5e75456d46f7d2ac3fdf47abd29077b23c34a70bd65a69ac59cb77271c63799",
+          "interpretation_version": "fixture-I-1",
+          "profile_version": "stipulated-fixtures-1.1",
+          "checker_version": "reference-1.1:6edcbd90ce0e99d0af7058e3fc0f7dd4d87e496b228f79156ceae8d8ea3392e6",
+          "policy_version": "DA-1"
+        },
+        "policy": "DA-1",
+        "raw": "POSITIVE_CASE_ONLY",
+        "usable": "NO_CASE",
+        "raw_case_ids": [
+          "w_initial"
+        ],
+        "usable_case_ids": [],
+        "unassessed_case_ids": [],
+        "labels": {
+          "ref": "out",
+          "disc": "in",
+          "initial": "out",
+          "crit_ref": "in"
+        },
+        "checks": {
+          "ref": "PASS",
+          "disc": "PASS",
+          "initial": "PASS",
+          "crit_ref": "PASS"
+        },
+        "activation": {
+          "ref": "RECORDED",
+          "disc": "RECORDED",
+          "initial": "RECORDED",
+          "crit_ref": "RECORDED"
+        },
+        "semantic_decision": "NOT_EVALUATED"
+      }
+    },
+    {
+      "fixture": "balances-r2",
+      "entry_count": 13,
+      "subject_bindings": {
+        "ref": "k_ref",
+        "disc": "k_disc",
+        "initial": "w_initial",
+        "crit_ref": "c_ref",
+        "alg": "k_alg",
+        "xm_formal": "XM",
+        "xm_physical": "XM",
+        "crit_lim": "c_lim",
+        "lim": "w_lim",
+        "progress": "w_progress"
+      },
+      "report": {
+        "claim": {
+          "predicate": "Progress",
+          "subject": "s:contribution",
+          "history": "fixture_history",
+          "boundary": "s",
+          "grain": "explanatory",
+          "contribution": "delta1",
+          "situation_before": "xi0",
+          "situation_after": "xi1",
+          "respect": "stated_local_respect",
+          "interpretation": "fixture-I-1"
+        },
+        "snapshot": "fb041f83c0bfe5e4264e6263663f70c7083ee470cb3f0dc0b61ab9e3337d77f2",
+        "bindings": {
+          "authority_digest": "66839c4aff0095015965dd6083347f2e3e78340170fa3d9ffe26caa337015d4e",
+          "specification_digest": "c5e75456d46f7d2ac3fdf47abd29077b23c34a70bd65a69ac59cb77271c63799",
+          "interpretation_version": "fixture-I-1",
+          "profile_version": "stipulated-fixtures-1.1",
+          "checker_version": "reference-1.1:6edcbd90ce0e99d0af7058e3fc0f7dd4d87e496b228f79156ceae8d8ea3392e6",
+          "policy_version": "DA-1"
+        },
+        "policy": "DA-1",
+        "raw": "POSITIVE_CASE_ONLY",
+        "usable": "POSITIVE_CASE_ONLY",
+        "raw_case_ids": [
+          "w_progress"
+        ],
+        "usable_case_ids": [
+          "w_progress"
+        ],
+        "unassessed_case_ids": [],
+        "labels": {
+          "ref": "out",
+          "disc": "in",
+          "initial": "out",
+          "crit_ref": "in",
+          "alg": "in",
+          "xm_formal": "in",
+          "xm_physical": "in",
+          "crit_lim": "in",
+          "lim": "in",
+          "progress": "in"
+        },
+        "checks": {
+          "ref": "PASS",
+          "disc": "PASS",
+          "initial": "PASS",
+          "crit_ref": "PASS",
+          "alg": "PASS",
+          "xm_formal": "PASS",
+          "xm_physical": "PASS",
+          "crit_lim": "PASS",
+          "lim": "PASS",
+          "progress": "PASS"
+        },
+        "activation": {
+          "ref": "RECORDED",
+          "disc": "RECORDED",
+          "initial": "RECORDED",
+          "crit_ref": "RECORDED",
+          "alg": "RECORDED",
+          "xm_formal": "RECORDED",
+          "xm_physical": "RECORDED",
+          "crit_lim": "RECORDED",
+          "lim": "RECORDED",
+          "progress": "RECORDED"
+        },
+        "semantic_decision": "NOT_EVALUATED"
+      }
+    },
+    {
+      "fixture": "balances-r3",
+      "entry_count": 15,
+      "subject_bindings": {
+        "ref": "k_ref",
+        "disc": "k_disc",
+        "initial": "w_initial",
+        "crit_ref": "c_ref",
+        "alg": "k_alg",
+        "xm_formal": "XM",
+        "xm_physical": "XM",
+        "crit_lim": "c_lim",
+        "lim": "w_lim",
+        "progress": "w_progress",
+        "crit_rule": "c_rule"
+      },
+      "report": {
+        "claim": {
+          "predicate": "Progress",
+          "subject": "s:contribution",
+          "history": "fixture_history",
+          "boundary": "s",
+          "grain": "explanatory",
+          "contribution": "delta1",
+          "situation_before": "xi0",
+          "situation_after": "xi1",
+          "respect": "stated_local_respect",
+          "interpretation": "fixture-I-1"
+        },
+        "snapshot": "17ce5acad70a623c7d371d87c1a0b159fc0fa7622ca483a493c4801e55ad1991",
+        "bindings": {
+          "authority_digest": "66839c4aff0095015965dd6083347f2e3e78340170fa3d9ffe26caa337015d4e",
+          "specification_digest": "c5e75456d46f7d2ac3fdf47abd29077b23c34a70bd65a69ac59cb77271c63799",
+          "interpretation_version": "fixture-I-1",
+          "profile_version": "stipulated-fixtures-1.1",
+          "checker_version": "reference-1.1:6edcbd90ce0e99d0af7058e3fc0f7dd4d87e496b228f79156ceae8d8ea3392e6",
+          "policy_version": "DA-1"
+        },
+        "policy": "DA-1",
+        "raw": "POSITIVE_CASE_ONLY",
+        "usable": "NO_CASE",
+        "raw_case_ids": [
+          "w_progress"
+        ],
+        "usable_case_ids": [],
+        "unassessed_case_ids": [],
+        "labels": {
+          "ref": "out",
+          "disc": "in",
+          "initial": "out",
+          "crit_ref": "in",
+          "alg": "out",
+          "xm_formal": "in",
+          "xm_physical": "in",
+          "crit_lim": "out",
+          "lim": "out",
+          "progress": "out",
+          "crit_rule": "in"
+        },
+        "checks": {
+          "ref": "PASS",
+          "disc": "PASS",
+          "initial": "PASS",
+          "crit_ref": "PASS",
+          "alg": "PASS",
+          "xm_formal": "PASS",
+          "xm_physical": "PASS",
+          "crit_lim": "PASS",
+          "lim": "PASS",
+          "progress": "PASS",
+          "crit_rule": "PASS"
+        },
+        "activation": {
+          "ref": "RECORDED",
+          "disc": "RECORDED",
+          "initial": "RECORDED",
+          "crit_ref": "RECORDED",
+          "alg": "RECORDED",
+          "xm_formal": "RECORDED",
+          "xm_physical": "RECORDED",
+          "crit_lim": "RECORDED",
+          "lim": "RECORDED",
+          "progress": "RECORDED",
+          "crit_rule": "RECORDED"
+        },
+        "semantic_decision": "NOT_EVALUATED"
+      }
+    },
+    {
+      "fixture": "balances-r4",
+      "entry_count": 17,
+      "subject_bindings": {
+        "ref": "k_ref",
+        "disc": "k_disc",
+        "initial": "w_initial",
+        "crit_ref": "c_ref",
+        "alg": "k_alg",
+        "xm_formal": "XM",
+        "xm_physical": "XM",
+        "crit_lim": "c_lim",
+        "lim": "w_lim",
+        "progress": "w_progress",
+        "crit_rule": "c_rule",
+        "counter": "c_counter"
+      },
+      "report": {
+        "claim": {
+          "predicate": "Progress",
+          "subject": "s:contribution",
+          "history": "fixture_history",
+          "boundary": "s",
+          "grain": "explanatory",
+          "contribution": "delta1",
+          "situation_before": "xi0",
+          "situation_after": "xi1",
+          "respect": "stated_local_respect",
+          "interpretation": "fixture-I-1"
+        },
+        "snapshot": "80e5ec738347b52bf2b58996e472ea5798cd443697222acd298609ed84690dfd",
+        "bindings": {
+          "authority_digest": "66839c4aff0095015965dd6083347f2e3e78340170fa3d9ffe26caa337015d4e",
+          "specification_digest": "c5e75456d46f7d2ac3fdf47abd29077b23c34a70bd65a69ac59cb77271c63799",
+          "interpretation_version": "fixture-I-1",
+          "profile_version": "stipulated-fixtures-1.1",
+          "checker_version": "reference-1.1:6edcbd90ce0e99d0af7058e3fc0f7dd4d87e496b228f79156ceae8d8ea3392e6",
+          "policy_version": "DA-1"
+        },
+        "policy": "DA-1",
+        "raw": "POSITIVE_CASE_ONLY",
+        "usable": "POSITIVE_CASE_ONLY",
+        "raw_case_ids": [
+          "w_progress"
+        ],
+        "usable_case_ids": [
+          "w_progress"
+        ],
+        "unassessed_case_ids": [],
+        "labels": {
+          "ref": "out",
+          "disc": "in",
+          "initial": "out",
+          "crit_ref": "in",
+          "alg": "in",
+          "xm_formal": "in",
+          "xm_physical": "in",
+          "crit_lim": "in",
+          "lim": "in",
+          "progress": "in",
+          "crit_rule": "out",
+          "counter": "in"
+        },
+        "checks": {
+          "ref": "PASS",
+          "disc": "PASS",
+          "initial": "PASS",
+          "crit_ref": "PASS",
+          "alg": "PASS",
+          "xm_formal": "PASS",
+          "xm_physical": "PASS",
+          "crit_lim": "PASS",
+          "lim": "PASS",
+          "progress": "PASS",
+          "crit_rule": "PASS",
+          "counter": "PASS"
+        },
+        "activation": {
+          "ref": "RECORDED",
+          "disc": "RECORDED",
+          "initial": "RECORDED",
+          "crit_ref": "RECORDED",
+          "alg": "RECORDED",
+          "xm_formal": "RECORDED",
+          "xm_physical": "RECORDED",
+          "crit_lim": "RECORDED",
+          "lim": "RECORDED",
+          "progress": "RECORDED",
+          "crit_rule": "RECORDED",
+          "counter": "RECORDED"
+        },
+        "semantic_decision": "NOT_EVALUATED"
+      }
+    },
+    {
+      "fixture": "balances-r5",
+      "entry_count": 19,
+      "subject_bindings": {
+        "ref": "k_ref",
+        "disc": "k_disc",
+        "initial": "w_initial",
+        "crit_ref": "c_ref",
+        "alg": "k_alg",
+        "xm_formal": "XM",
+        "xm_physical": "XM",
+        "crit_lim": "c_lim",
+        "lim": "w_lim",
+        "progress": "w_progress",
+        "crit_rule": "c_rule",
+        "counter": "c_counter",
+        "physical": "c_physical"
+      },
+      "report": {
+        "claim": {
+          "predicate": "Progress",
+          "subject": "s:contribution",
+          "history": "fixture_history",
+          "boundary": "s",
+          "grain": "explanatory",
+          "contribution": "delta1",
+          "situation_before": "xi0",
+          "situation_after": "xi1",
+          "respect": "stated_local_respect",
+          "interpretation": "fixture-I-1"
+        },
+        "snapshot": "f92aacb4c776c196844a9b490e40ba4f743cb6409296c2c90eb7fc708fece6f8",
+        "bindings": {
+          "authority_digest": "66839c4aff0095015965dd6083347f2e3e78340170fa3d9ffe26caa337015d4e",
+          "specification_digest": "c5e75456d46f7d2ac3fdf47abd29077b23c34a70bd65a69ac59cb77271c63799",
+          "interpretation_version": "fixture-I-1",
+          "profile_version": "stipulated-fixtures-1.1",
+          "checker_version": "reference-1.1:6edcbd90ce0e99d0af7058e3fc0f7dd4d87e496b228f79156ceae8d8ea3392e6",
+          "policy_version": "DA-1"
+        },
+        "policy": "DA-1",
+        "raw": "POSITIVE_CASE_ONLY",
+        "usable": "POSITIVE_CASE_ONLY",
+        "raw_case_ids": [
+          "w_progress"
+        ],
+        "usable_case_ids": [
+          "w_progress"
+        ],
+        "unassessed_case_ids": [],
+        "labels": {
+          "ref": "out",
+          "disc": "in",
+          "initial": "out",
+          "crit_ref": "in",
+          "alg": "in",
+          "xm_formal": "in",
+          "xm_physical": "out",
+          "crit_lim": "in",
+          "lim": "in",
+          "progress": "in",
+          "crit_rule": "out",
+          "counter": "in",
+          "physical": "in"
+        },
+        "checks": {
+          "ref": "PASS",
+          "disc": "PASS",
+          "initial": "PASS",
+          "crit_ref": "PASS",
+          "alg": "PASS",
+          "xm_formal": "PASS",
+          "xm_physical": "PASS",
+          "crit_lim": "PASS",
+          "lim": "PASS",
+          "progress": "PASS",
+          "crit_rule": "PASS",
+          "counter": "PASS",
+          "physical": "PASS"
+        },
+        "activation": {
+          "ref": "RECORDED",
+          "disc": "RECORDED",
+          "initial": "RECORDED",
+          "crit_ref": "RECORDED",
+          "alg": "RECORDED",
+          "xm_formal": "RECORDED",
+          "xm_physical": "RECORDED",
+          "crit_lim": "RECORDED",
+          "lim": "RECORDED",
+          "progress": "RECORDED",
+          "crit_rule": "RECORDED",
+          "counter": "RECORDED",
+          "physical": "RECORDED"
+        },
+        "semantic_decision": "NOT_EVALUATED"
+      }
+    },
+    {
+      "fixture": "seasons-r1",
+      "entry_count": 9,
+      "subject_bindings": {
+        "time": "k_time",
+        "scope": "k_scope",
+        "adequacy": "w_adequacy",
+        "adequacy_use": "w_adequacy",
+        "gain": "w_gain"
+      },
+      "report": {
+        "claim": {
+          "predicate": "Progress",
+          "subject": "s:contribution",
+          "history": "fixture_history",
+          "boundary": "s",
+          "grain": "explanatory",
+          "contribution": "seasons_delta",
+          "situation_before": "seasons_xi0",
+          "situation_after": "seasons_xi1",
+          "respect": "stated_local_respect",
+          "interpretation": "fixture-I-1"
+        },
+        "snapshot": "acc6fe5e516fdf864244f0bca9aceee6564331ca64e9f184daf0120dc1d3d197",
+        "bindings": {
+          "authority_digest": "66839c4aff0095015965dd6083347f2e3e78340170fa3d9ffe26caa337015d4e",
+          "specification_digest": "c5e75456d46f7d2ac3fdf47abd29077b23c34a70bd65a69ac59cb77271c63799",
+          "interpretation_version": "fixture-I-1",
+          "profile_version": "stipulated-fixtures-1.1",
+          "checker_version": "reference-1.1:6edcbd90ce0e99d0af7058e3fc0f7dd4d87e496b228f79156ceae8d8ea3392e6",
+          "policy_version": "DA-1"
+        },
+        "policy": "DA-1",
+        "raw": "POSITIVE_CASE_ONLY",
+        "usable": "POSITIVE_CASE_ONLY",
+        "raw_case_ids": [
+          "w_gain"
+        ],
+        "usable_case_ids": [
+          "w_gain"
+        ],
+        "unassessed_case_ids": [],
+        "labels": {
+          "time": "in",
+          "scope": "in",
+          "adequacy": "in",
+          "adequacy_use": "in",
+          "gain": "in"
+        },
+        "checks": {
+          "time": "PASS",
+          "scope": "PASS",
+          "adequacy": "PASS",
+          "adequacy_use": "PASS",
+          "gain": "PASS"
+        },
+        "activation": {
+          "time": "RECORDED",
+          "scope": "RECORDED",
+          "adequacy": "RECORDED",
+          "adequacy_use": "RECORDED",
+          "gain": "RECORDED"
+        },
+        "semantic_decision": "NOT_EVALUATED"
+      }
+    },
+    {
+      "fixture": "seasons-r2",
+      "entry_count": 12,
+      "subject_bindings": {
+        "time": "k_time",
+        "scope": "k_scope",
+        "adequacy": "w_adequacy",
+        "adequacy_use": "w_adequacy",
+        "gain": "w_gain",
+        "negative": "w_negative",
+        "conflict": "conflict_account"
+      },
+      "report": {
+        "claim": {
+          "predicate": "Progress",
+          "subject": "s:contribution",
+          "history": "fixture_history",
+          "boundary": "s",
+          "grain": "explanatory",
+          "contribution": "seasons_delta",
+          "situation_before": "seasons_xi0",
+          "situation_after": "seasons_xi1",
+          "respect": "stated_local_respect",
+          "interpretation": "fixture-I-1"
+        },
+        "snapshot": "d2e8049c7f82cce17206ac17b629d90e31e59e588d46b09c3e68cb9f1f1eb045",
+        "bindings": {
+          "authority_digest": "66839c4aff0095015965dd6083347f2e3e78340170fa3d9ffe26caa337015d4e",
+          "specification_digest": "c5e75456d46f7d2ac3fdf47abd29077b23c34a70bd65a69ac59cb77271c63799",
+          "interpretation_version": "fixture-I-1",
+          "profile_version": "stipulated-fixtures-1.1",
+          "checker_version": "reference-1.1:6edcbd90ce0e99d0af7058e3fc0f7dd4d87e496b228f79156ceae8d8ea3392e6",
+          "policy_version": "DA-1"
+        },
+        "policy": "DA-1",
+        "raw": "POSITIVE_CASE_ONLY",
+        "usable": "NO_CASE",
+        "raw_case_ids": [
+          "w_gain"
+        ],
+        "usable_case_ids": [],
+        "unassessed_case_ids": [],
+        "labels": {
+          "time": "in",
+          "scope": "in",
+          "adequacy": "in",
+          "adequacy_use": "out",
+          "gain": "out",
+          "negative": "in",
+          "conflict": "in"
+        },
+        "checks": {
+          "time": "PASS",
+          "scope": "PASS",
+          "adequacy": "PASS",
+          "adequacy_use": "PASS",
+          "gain": "PASS",
+          "negative": "PASS",
+          "conflict": "PASS"
+        },
+        "activation": {
+          "time": "RECORDED",
+          "scope": "RECORDED",
+          "adequacy": "RECORDED",
+          "adequacy_use": "RECORDED",
+          "gain": "RECORDED",
+          "negative": "RECORDED",
+          "conflict": "RECORDED"
+        },
+        "semantic_decision": "NOT_EVALUATED"
+      }
+    },
+    {
+      "fixture": "seasons-r3",
+      "entry_count": 14,
+      "subject_bindings": {
+        "time": "k_time",
+        "scope": "k_scope",
+        "adequacy": "w_adequacy",
+        "adequacy_use": "w_adequacy",
+        "gain": "w_gain",
+        "negative": "w_negative",
+        "conflict": "conflict_account",
+        "scope_criticism": "c_negative_scope"
+      },
+      "report": {
+        "claim": {
+          "predicate": "Progress",
+          "subject": "s:contribution",
+          "history": "fixture_history",
+          "boundary": "s",
+          "grain": "explanatory",
+          "contribution": "seasons_delta",
+          "situation_before": "seasons_xi0",
+          "situation_after": "seasons_xi1",
+          "respect": "stated_local_respect",
+          "interpretation": "fixture-I-1"
+        },
+        "snapshot": "00fe3586dea472b7fe9755d8c27bf921c2136cfca2141659dd030accd2173138",
+        "bindings": {
+          "authority_digest": "66839c4aff0095015965dd6083347f2e3e78340170fa3d9ffe26caa337015d4e",
+          "specification_digest": "c5e75456d46f7d2ac3fdf47abd29077b23c34a70bd65a69ac59cb77271c63799",
+          "interpretation_version": "fixture-I-1",
+          "profile_version": "stipulated-fixtures-1.1",
+          "checker_version": "reference-1.1:6edcbd90ce0e99d0af7058e3fc0f7dd4d87e496b228f79156ceae8d8ea3392e6",
+          "policy_version": "DA-1"
+        },
+        "policy": "DA-1",
+        "raw": "POSITIVE_CASE_ONLY",
+        "usable": "POSITIVE_CASE_ONLY",
+        "raw_case_ids": [
+          "w_gain"
+        ],
+        "usable_case_ids": [
+          "w_gain"
+        ],
+        "unassessed_case_ids": [],
+        "labels": {
+          "time": "in",
+          "scope": "in",
+          "adequacy": "in",
+          "adequacy_use": "in",
+          "gain": "in",
+          "negative": "out",
+          "conflict": "out",
+          "scope_criticism": "in"
+        },
+        "checks": {
+          "time": "PASS",
+          "scope": "PASS",
+          "adequacy": "PASS",
+          "adequacy_use": "PASS",
+          "gain": "PASS",
+          "negative": "PASS",
+          "conflict": "PASS",
+          "scope_criticism": "PASS"
+        },
+        "activation": {
+          "time": "RECORDED",
+          "scope": "RECORDED",
+          "adequacy": "RECORDED",
+          "adequacy_use": "RECORDED",
+          "gain": "RECORDED",
+          "negative": "RECORDED",
+          "conflict": "RECORDED",
+          "scope_criticism": "RECORDED"
+        },
+        "semantic_decision": "NOT_EVALUATED"
+      }
+    }
+  ]
+}

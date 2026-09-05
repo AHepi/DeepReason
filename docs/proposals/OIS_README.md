@@ -27,3 +27,22 @@ docs/HANDOVER_MONITOR_2026-08-29.md ("Queued 2026-09-04").
   spec-drift audit once the operator supplies the 1.1 specification it is
   baselined on; and a change-request draft (§7), of which R1 is the defect
   tranche.
+
+## `ois-1.1/` — the specification package, filed 2026-09-05
+
+The zip the operator uploaded as `PopperSemantics_OpenInquiry_Hardened_1_1.zip`,
+unpacked verbatim: `PopperSemanticsV1_1.md` (the proposed semantic authority),
+`Open_Inquiry_Specification_1_1.md` (the subordinate staged specification the
+configuration document above is bound to and the audit brief is baselined on),
+`Hardening_Audit.md` (25 findings S01-S24 + A01-A05 against the 1.0 versions),
+`manifest.json`, and `verification/` (a standard-library reference checker,
+66 tests, two fixture generators, a mutation runner, results).
+
+Monitor's checks on filing: the three documents' SHA-256 match the manifest;
+`python -m unittest` in `verification/` passes 66 tests here;
+`run_mutations.py` detects 9 of 9 selected mutations here. Those are checks on
+the package's own bookkeeping reference, exactly as its report says — not on
+DeepReason and not on any semantic claim. The package's own status line:
+"Proposed revisions; not automatically user-adopted." Nothing is adopted by
+filing. `docs_verify` reads only `docs/map/`; the gate collects only
+`tests/` and `mini/tests/`, so nothing here enters either.

@@ -1,0 +1,93 @@
+{
+  "package": "PopperSemantics / Open Inquiry hardening 1.1",
+  "adoption_status": "Proposed revisions; not automatically user-adopted",
+  "semantic_authority": "PopperSemanticsV1_1.md",
+  "subordinate_specification": "Open_Inquiry_Specification_1_1.md",
+  "original_target_files": [
+    {
+      "filename": "PopperSemanticsV1.md",
+      "sha256": "02df7fbb39fbd5a66dd17b6f6ab905c7da4345fe8ef3117219df44b0fd8cce6d",
+      "bytes": 77057
+    },
+    {
+      "filename": "Open_Inquiry_Semantics_1_0(1).md",
+      "sha256": "8b2bd2ec6e024b15fa18be4ef054716421e1ec87fcc36f7bb0bba4e9c4236af6",
+      "bytes": 118121
+    }
+  ],
+  "verification": {
+    "baseline_tests_passed": 66,
+    "two_node_configurations": 2304,
+    "selected_mutations_detected": 9,
+    "selected_mutations_total": 9,
+    "grounded_appraisal_slices": 8
+  },
+  "files": [
+    {
+      "path": "Hardening_Audit.md",
+      "sha256": "54de22d13b6c5ff9e41336430cea34a1460204b58697ff2e3c923daf15f346d9",
+      "bytes": 36874
+    },
+    {
+      "path": "Open_Inquiry_Specification_1_1.md",
+      "sha256": "c5e75456d46f7d2ac3fdf47abd29077b23c34a70bd65a69ac59cb77271c63799",
+      "bytes": 88366
+    },
+    {
+      "path": "PopperSemanticsV1_1.md",
+      "sha256": "66839c4aff0095015965dd6083347f2e3e78340170fa3d9ffe26caa337015d4e",
+      "bytes": 89143
+    },
+    {
+      "path": "README.md",
+      "sha256": "b67755b64159c20a9b9ddcfb96f9b166b0ade9c783dc9c5cc5510df3df77516b",
+      "bytes": 2294
+    },
+    {
+      "path": "verification/Verification_Report.md",
+      "sha256": "5ff083521609b72d497c6f42d5b6743b01eaf1097c66a1741bb9371f50b62366",
+      "bytes": 4295
+    },
+    {
+      "path": "verification/build_reports.py",
+      "sha256": "62e5aa0590822f723396028464aaba76f58e0abefbdd6fc85b68c98c149250bf",
+      "bytes": 6414
+    },
+    {
+      "path": "verification/fixture_results.json",
+      "sha256": "6abbdf552e7d1af95a6b51f2ed99b3fc813fdaeafa6bc9de713eda6e104b08bb",
+      "bytes": 20552
+    },
+    {
+      "path": "verification/fixtures.py",
+      "sha256": "7f1168d1c77cd48cb14b8150a3989f49e7110fffa8e3149829ca26bd425f4060",
+      "bytes": 7622
+    },
+    {
+      "path": "verification/mutation_results.json",
+      "sha256": "2d249c4c5673c4c9c9eba97350c458be5f260b886ffe4ec052df5ce33d11e5f3",
+      "bytes": 3776
+    },
+    {
+      "path": "verification/reference_kernel.py",
+      "sha256": "6edcbd90ce0e99d0af7058e3fc0f7dd4d87e496b228f79156ceae8d8ea3392e6",
+      "bytes": 15121
+    },
+    {
+      "path": "verification/run_mutations.py",
+      "sha256": "160e3fc01a6aecd202fabe87ad5c2776659e6045df8c327862cd2f84b97f375b",
+      "bytes": 3818
+    },
+    {
+      "path": "verification/test_reference_kernel.py",
+      "sha256": "7f301e222e462f2ec802a43649b1b2a5d4577e1ae99004240700483d75c99620",
+      "bytes": 23688
+    },
+    {
+      "path": "verification/test_results.txt",
+      "sha256": "7aab758d57a657c47f7e99a8931eece59c5eb8f01c700fefb2ee128f9b224e32",
+      "bytes": 9698
+    }
+  ],
+  "limits": "Hashes identify bytes. Tests cover finite bookkeeping and stipulated interpretations, not semantic truth, actual creativity, or universal capacity."
+}

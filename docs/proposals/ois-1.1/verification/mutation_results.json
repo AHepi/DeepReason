@@ -1,0 +1,82 @@
+[
+  {
+    "mutation": "M01-failed-body-counts",
+    "detected": true,
+    "returncode": 1,
+    "failing_checks": [
+      "FAIL: test_failed_attack_does_not_defeat (test_reference_kernel.AppraisalTests.test_failed_attack_does_not_defeat)",
+      "FAIL: test_failed_body_does_not_count_without_a_criticism (test_reference_kernel.AppraisalTests.test_failed_body_does_not_count_without_a_criticism)",
+      "FAIL: test_all_two_node_graphs_match_least_complete_labeling (test_reference_kernel.ExhaustivePolicyTests.test_all_two_node_graphs_match_least_complete_labeling)"
+    ]
+  },
+  {
+    "mutation": "M02-criticism-dependency-exemption",
+    "detected": true,
+    "returncode": 1,
+    "failing_checks": [
+      "FAIL: test_ordinary_observation_defeat_reaches_dependent_criticism (test_reference_kernel.AppraisalTests.test_ordinary_observation_defeat_reaches_dependent_criticism)",
+      "FAIL: test_standard_defeat_reaches_criticism_without_exemption (test_reference_kernel.AppraisalTests.test_standard_defeat_reaches_criticism_without_exemption)",
+      "FAIL: test_balances_method_challenge_reaches_critic_and_progress (test_reference_kernel.IntegratedFixtureTests.test_balances_method_challenge_reaches_critic_and_progress)"
+    ]
+  },
+  {
+    "mutation": "M03-missing-activation-counts",
+    "detected": true,
+    "returncode": 1,
+    "failing_checks": [
+      "FAIL: test_missing_activation_is_unknown_not_in (test_reference_kernel.AppraisalTests.test_missing_activation_is_unknown_not_in)"
+    ]
+  },
+  {
+    "mutation": "M04-incompatible-history-allowed",
+    "detected": true,
+    "returncode": 1,
+    "failing_checks": [
+      "FAIL: test_alternative_criticism_actions_are_representable (test_reference_kernel.RecordTests.test_alternative_criticism_actions_are_representable)",
+      "FAIL: test_counterfactual_rival_cannot_ground_actual_comparison (test_reference_kernel.RecordTests.test_counterfactual_rival_cannot_ground_actual_comparison)"
+    ]
+  },
+  {
+    "mutation": "M05-ungrounded-reference-allowed",
+    "detected": true,
+    "returncode": 1,
+    "failing_checks": [
+      "FAIL: test_external_future_transport_is_rejected (test_reference_kernel.RecordTests.test_external_future_transport_is_rejected)",
+      "FAIL: test_hidden_nested_reference_is_checked (test_reference_kernel.RecordTests.test_hidden_nested_reference_is_checked)",
+      "FAIL: test_local_reference_cannot_name_nonlocal_artifact (test_reference_kernel.RecordTests.test_local_reference_cannot_name_nonlocal_artifact)",
+      "FAIL: test_target_only_template_eligibility_is_insufficient (test_reference_kernel.RecordTests.test_target_only_template_eligibility_is_insufficient)"
+    ]
+  },
+  {
+    "mutation": "M06-boundary-erased",
+    "detected": true,
+    "returncode": 1,
+    "failing_checks": [
+      "FAIL: test_foreign_boundary_does_not_answer_query (test_reference_kernel.AppraisalTests.test_foreign_boundary_does_not_answer_query)"
+    ]
+  },
+  {
+    "mutation": "M07-contribution-erased",
+    "detected": true,
+    "returncode": 1,
+    "failing_checks": [
+      "FAIL: test_later_authorship_cannot_validate_earlier_act (test_reference_kernel.ProjectionAndCountermodelTests.test_later_authorship_cannot_validate_earlier_act)"
+    ]
+  },
+  {
+    "mutation": "M08-empty-family-counts",
+    "detected": true,
+    "returncode": 1,
+    "failing_checks": [
+      "FAIL: test_empty_variation_family_is_uninformative (test_reference_kernel.ProjectionAndCountermodelTests.test_empty_variation_family_is_uninformative)"
+    ]
+  },
+  {
+    "mutation": "M09-nested-reference-ignored",
+    "detected": true,
+    "returncode": 1,
+    "failing_checks": [
+      "FAIL: test_hidden_nested_reference_is_checked (test_reference_kernel.RecordTests.test_hidden_nested_reference_is_checked)"
+    ]
+  }
+]
