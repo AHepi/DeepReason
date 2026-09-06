@@ -1,0 +1,55 @@
+{
+  "candidates": [
+    {
+      "content": "The preference for better-corroborated theories depends on the implicit inductive assumption that past performance guides future reliability, a relation refuted if Popper explicitly distinguished 'corroboration' as a historical report from 'probability' as a future prediction in a way that validates action without induction.",
+      "evidence_refs": [
+        {
+          "block": "16c4445643674d71",
+          "quote": "The preference is indefensible on Popper's own terms and indeed smuggles induction back in through t"
+        },
+        {
+          "block": "3a5ebf3b2c2c80a0",
+          "quote": "The conjecture is refuted if a coherent account can be provided where pref"
+        }
+      ],
+      "neighbours": [
+        "SRC_001"
+      ],
+      "typicality": 0.5
+    },
+    {
+      "content": "The preference for better-corroborated theories reduces to a description of psychological habit rather than a logical framework due to its reliance on the uniformity of nature, a relation refuted if it can be demonstrated that Popper explicitly justified the preference solely on maximizing testability without invoking expectations of future success.",
+      "evidence_refs": [
+        {
+          "block": "4168dca7f8704df4",
+          "quote": "The preference is indefensible on Popper's own terms and constitutes a performative contradictio"
+        },
+        {
+          "block": "039f61bcd0e576ce",
+          "quote": "The conjecture is refuted if it can be demonstrated that Popper explicitly grou"
+        }
+      ],
+      "neighbours": [
+        "SRC_003"
+      ],
+      "typicality": 0.5
+    },
+    {
+      "content": "The preference for better-corroborated theories shares the mechanism of crypto-induction with inductivist frameworks by acting on past survival as an indicator of future stability, a relation refuted if a coherent account justifies preferring better-corroborated theories solely to maximize the severity of future tests without assuming they will succeed.",
+      "evidence_refs": [
+        {
+          "block": "16c4445643674d71",
+          "quote": "The preference is indefensible on Popper's own terms and indeed smuggles induction back in through t"
+        },
+        {
+          "block": "0857c2c7dd130388",
+          "quote": "The conjecture is refuted if it can be demonstrated that preferring the better-corrob"
+        }
+      ],
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.5
+    }
+  ]
+}

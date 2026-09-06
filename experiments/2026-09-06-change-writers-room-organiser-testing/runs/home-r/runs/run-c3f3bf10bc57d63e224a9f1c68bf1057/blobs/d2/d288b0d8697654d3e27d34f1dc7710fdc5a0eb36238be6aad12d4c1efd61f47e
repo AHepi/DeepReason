@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'asymmetry of risk' argument fails to distinguish Popper's view from the induction it seeks to avoid because minimizing the 'risk of immediate falsification' based on past performance logically presupposes that past test results are a reliable guide to future behavior. If the preference for the better-corroborated theory is not based on the expectation that it will continue to survive tests (a probabilistic or inductive belief about the future), then the claim that rejecting it exposes one to 'higher risk' is empty; the risk is only higher if one assumes nature is uniform enough that past success predicts future stability. Thus, the mechanism smuggles in the very inductive assumption (the uniformity of nature) that Popper rejected, making the preference indefensible on his own strict terms without accepting that cost.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Minimizing risk based on past test results logically presupposes that past performance is a reliable guide to future behavior.",
+      "premise_evidence": null,
+      "successor_question": "Can a rational agent claim to minimize 'risk' based on past data without implicitly assigning a higher probability to the continuation of that data pattern?"
+    }
+  ]
+}

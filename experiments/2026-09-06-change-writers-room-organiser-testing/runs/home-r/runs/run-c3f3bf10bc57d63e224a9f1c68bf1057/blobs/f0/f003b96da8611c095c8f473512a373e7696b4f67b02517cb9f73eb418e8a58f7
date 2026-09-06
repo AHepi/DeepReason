@@ -1,0 +1,185 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is indefensible on Popper's own terms and smuggles induction back in by implicitly asserting that past performance is a reliable guide to future reliability.",
+      "mechanism": "By advising scientists to 'prefer' the better-corroborated theory for action, Popper implicitly relies on the principle that nature is uniform or that successful methods tend to remain successful, which contradicts his rejection of induction. Acting on corroboration requires an inductive leap that reduces his methodology to a description of psychological habit rather than a logical framework.",
+      "counterconditions": [
+        "refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed or remain unfalsified in the future",
+        "refuted if Popper explicitly distinguished 'rational preference' based on critical scrutiny versus 'inductive inference' based on probability assignments",
+        "refuted if a definitive textual analysis shows Popper advised preference based on 'past performance' as a guide to 'future reliability'",
+        "refuted if it can be demonstrated that Popper explicitly justified the preference for better-corroborated theories in practical decisions solely on the grounds of maximizing testability and information content, without invoking any expectation of future success based on past performance"
+      ],
+      "typicality": 0.5,
+      "evidence_refs": [
+        {
+          "block": "16c4445643674d71"
+        },
+        {
+          "block": "3a5ebf3b2c2c80a0"
+        },
+        {
+          "block": "3f3a8232e4114613"
+        },
+        {
+          "block": "3b41538219979f02"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate does not equate 'minimizing known unknowns' with a 'logical deduction' but argues that the act of preference itself entails an inductive assumption about future reliability, which Popper explicitly rejects. The criticism targets a different mechanism (Asymmetry of Risk) than the one proposed here (Performative Contradiction)."
+        },
+        {
+          "handle": "[SRC_012] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate avoids probabilistic language like 'likelihood of immediate error.' Instead, it argues that the preference implies a belief in 'reliable guidance,' which is functionally equivalent to induction regardless of whether it is framed as probability or reliability."
+        },
+        {
+          "handle": "[SRC_014] against SRC_013",
+          "kind": "rebutted",
+          "note": "This candidate does not rely on verisimilitude as a defense; it argues that the preference is indefensible precisely because attempts to ground it (whether in verisimilitude or pragmatics) fail to escape induction. Thus, the criticism of verisimilitude definitions does not refute this specific claim of indefensibility."
+        },
+        {
+          "handle": "[SRC_015] against SRC_007",
+          "kind": "rebutted",
+          "note": "This candidate aligns with the criticism that acting on a wager assumes the future resembles the past. It uses this alignment to support its claim that the preference is indefensible on Popper's terms, rather than trying to defend the wager as non-inductive."
+        },
+        {
+          "handle": "[SRC_011] against SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate explicitly addresses 'choosing which theory to act on' and argues that this specific context forces the inductive leap. It does not conflate acting with testing; it argues that acting *requires* an inductive assumption that testing alone does not."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "This candidate does not claim choices are indistinguishable from flipping a coin; it claims the preference is irrational within Popper's system because it smuggles in induction. The 'coin flip' argument is a consequence of the strict Popperian view, which this candidate leverages to show the inconsistency of the preference."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "Similar to SRC_015, this candidate accepts the premise that the pragmatic wager fails without induction. It uses this failure to conclude that the preference is indefensible, thereby discharging the criticism by agreeing with its core logical point."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate argues that Popper's explicit defense (distinguishing logical status from pragmatic decision) is insufficient because the *act* of preference for action inherently carries the inductive weight he sought to avoid. It challenges the sufficiency of the distinction rather than ignoring it."
+        }
+      ],
+      "optional_refs": [
+        "SRC_016",
+        "SRC_017",
+        "SRC_018"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated theory increases the likelihood of immediate error without offering compensatory increase in testability.",
+      "mechanism": "Choosing the better-corroborated theory minimizes 'known unknowns' relative to alternatives. This is a defensive posture requiring no belief in the future validity of the theory, only a recognition of its current robustness having survived greater exposure to falsification. It is a logical deduction about the current state of knowledge, not an inductive prediction.",
+      "counterconditions": [
+        "refuted if it could be demonstrated that the concept of 'minimizing known unknowns' logically entails a probabilistic assessment of future performance, thereby collapsing the distinction between a deductive statement about past tests and an inductive expectation of future reliability",
+        "refuted if it could be demonstrated that Popper explicitly grounded the preference for better-corroborated theories in a pragmatic decision rule without invoking any metaphysical assumption about the theory's proximity to truth or verisimilitude",
+        "refuted if it can be shown that Popper explicitly justified the preference for better-corroborated theories in practical, life-or-death decisions on the grounds of safety or reliability rather than solely on the grounds of maximizing testability and information content",
+        "refuted if a consistent Popperian agent cannot prefer Theory A over Theory B for action while simultaneously maintaining that there is no logical reason to believe Theory A is more likely to be true or to yield correct predictions than Theory B in any future trial"
+      ],
+      "typicality": 0.5,
+      "evidence_refs": [
+        {
+          "block": "193e9093bea201f6"
+        },
+        {
+          "block": "3b41538219979f02"
+        },
+        {
+          "block": "07785266ae5808f5"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate explicitly frames the preference as a 'defensive posture' regarding current robustness, not a 'logical deduction' of future success. It argues that minimizing 'known unknowns' is a static assessment of test history, not a dynamic prediction, thus avoiding the collapse into induction alleged by the criticism."
+        },
+        {
+          "handle": "[SRC_012] against SRC_003",
+          "kind": "revised",
+          "note": "Revised to clarify that 'likelihood of immediate error' refers to the logical status of having fewer untested vulnerabilities ('known unknowns') rather than a probabilistic frequency. The mechanism now emphasizes 'current robustness' over 'likelihood' to avoid probabilistic connotations."
+        },
+        {
+          "handle": "[SRC_014] against SRC_013",
+          "kind": "rebutted",
+          "note": "This candidate does not rely on verisimilitude as a metaphysical commitment but on the logical asymmetry of risk. Therefore, criticisms regarding the definition of verisimilitude do not apply to this specific mechanism."
+        },
+        {
+          "handle": "[SRC_015] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate argues that the preference is based on the *current* state of having survived tests, not on an assumption that the *future* will resemble the past. The 'risk' being minimized is the risk of ignoring available data about past falsification attempts, which is a rational, non-inductive use of historical data."
+        },
+        {
+          "handle": "[SRC_011] against SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate distinguishes between 'acting to test' and 'acting to avoid known errors.' It posits that choosing the well-tested theory is a rational avoidance of known vulnerabilities (theories that haven't been tested), which is a valid basis for action even without expecting future success."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate argues that the choice is NOT indistinguishable from flipping a coin because one option (the well-corroborated theory) has demonstrably survived severe tests while the other has not. This difference in 'survival history' provides a non-probabilistic, logical basis for preference based on risk minimization."
+        },
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate maintains that the 'wager' is not on future success but on the reliability of the *process* of elimination. Preferring the theory that has survived is a commitment to the logic of falsification, not an inductive bet on nature's uniformity."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate argues that the preference does not imply believing the theory is 'true' or 'probable' in an inductive sense, but simply that it is the 'least refuted' option available. This preserves the distinction between logical status and pragmatic choice."
+        }
+      ],
+      "optional_refs": [
+        "SRC_016",
+        "SRC_017",
+        "SRC_018"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories is defensible because corroboration functions as a measure of informational content rather than likelihood, preferring boldness and precision to provide the richest basis for further criticism.",
+      "mechanism": "We choose the better-corroborated theory not because we think it will hold true, but because it offers the most detailed map of the world currently available. The cost is that 'action' becomes purely experimental; we act on the bold theory specifically to try to break it, meaning our 'preference' is actually a preference for the most efficient path to potential falsification.",
+      "counterconditions": [
+        "refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true, thereby collapsing the distinction between preferring a bold theory and preferring a probable one",
+        "refuted if it can be demonstrated that Popper explicitly justified the preference for better-corroborated theories in practical, life-or-death decisions on the grounds of safety or reliability rather than solely on the grounds of maximizing testability and information content",
+        "refuted if evidence from scientific history shows researchers consistently choosing less established, riskier hypotheses over well-corroborated ones solely to accelerate falsification",
+        "refuted if a clear articulation cannot be provided of how an engineer can rationally rely on a theory for safety-critical design while simultaneously holding zero belief in its likelihood of being true"
+      ],
+      "typicality": 0.5,
+      "evidence_refs": [
+        {
+          "block": "182a58bdd39650d7"
+        },
+        {
+          "block": "3a5ebf3b2c2c80a0"
+        },
+        {
+          "block": "19d7f4e301abfb17"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_006",
+          "kind": "rebutted",
+          "note": "This candidate does not rely on 'minimizing known unknowns' but on 'maximizing informational content.' The criticism regarding logical deduction of future reliability does not apply to a mechanism focused on the efficiency of falsification."
+        },
+        {
+          "handle": "[SRC_012] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate explicitly rejects 'likelihood of immediate error' as a metric, replacing it with 'efficiency of falsification.' Thus, the charge of introducing probabilistic assessment is avoided by changing the terminal goal of the action."
+        },
+        {
+          "handle": "[SRC_014] against SRC_013",
+          "kind": "rebutted",
+          "note": "This candidate grounds
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

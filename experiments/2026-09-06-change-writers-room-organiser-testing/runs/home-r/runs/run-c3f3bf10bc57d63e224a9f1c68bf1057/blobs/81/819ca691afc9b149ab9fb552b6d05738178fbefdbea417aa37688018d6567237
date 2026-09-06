@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's mechanism claims that choosing a well-corroborated theory minimizes 'known unknowns' without invoking probability. However, the term 'likelihood of immediate error' used in the claim inherently introduces a probabilistic assessment of future performance. In Popper's framework, which strictly rejects induction and degrees of confirmation, one cannot logically assert that a theory is 'less likely' to fail in the next instance based solely on past survival. By framing the preference as a risk minimization strategy involving 'likelihood,' the target smuggles in the very inductive logic (probabilistic expectation of future behavior) that Popper explicitly rejected, failing to provide a non-probabilistic justification for the preference.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's philosophy strictly separates corroboration (past performance) from probability (future expectation), rejecting any inductive inference that past survival makes future success more likely.",
+      "premise_evidence": null,
+      "successor_question": "Can a decision rule based on 'minimizing likelihood of error' be formulated without implicitly assigning a higher degree of confirmation or probabilistic weight to the corroborated theory?"
+    }
+  ]
+}

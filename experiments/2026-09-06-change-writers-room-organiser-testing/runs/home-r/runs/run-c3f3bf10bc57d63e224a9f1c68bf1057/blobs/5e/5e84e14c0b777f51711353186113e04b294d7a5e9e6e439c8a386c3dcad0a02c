@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses into the very induction it seeks to avoid by equating 'minimizing known unknowns' with a 'logical deduction about the current state of knowledge.' Popper explicitly rejects the idea that past survival (corroboration) yields any logical statement about the current 'likelihood' of error or future reliability; for Popper, all unfalsified theories are equally 'true' in the present regardless of test history. By claiming that rejecting a well-corroborated theory increases the 'likelihood of immediate error,' the target smuggles in an inductive premise: that past performance is a reliable guide to present robustness or future success. This directly contradicts Popper's core tenet that corroboration reports only past tests and implies nothing about the probability or likelihood of the theory being true now or later. The target fails to show how one can deduce a 'higher likelihood of error' from mere survival without invoking the inductive principle that 'what worked before is less likely to be wrong now,' which Popper forbids.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper holds that corroboration reports only past tests and logically implies nothing about the probability, likelihood, or truth of a theory in the present or future; all unfalsified theories stand on equal logical footing regarding their current status.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration cannot logically entail a 'likelihood of error,' what non-inductive basis does Popper offer for preferring one unfalsified theory over another in life-or-death situations besides arbitrary choice?"
+    }
+  ]
+}

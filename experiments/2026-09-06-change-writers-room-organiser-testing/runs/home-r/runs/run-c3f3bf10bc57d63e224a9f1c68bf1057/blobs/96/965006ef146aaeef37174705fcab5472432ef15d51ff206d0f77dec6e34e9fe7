@@ -1,0 +1,38 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms without smuggling in induction, provided it is framed strictly as a methodological rule for selecting the most informative surviving theory rather than a prediction of future success.",
+    "mechanism": "This defense operates by distinguishing between 'corroboration' (a historical report of severity passed) and 'probability' (a forecast of truth). The mechanism relies on the asymmetry of risk: choosing a highly corroborated theory maximizes informational content and exposes the agent to greater potential falsification, whereas choosing a less tested or ad-hoc theory minimizes risk and content. By adopting the methodological rule to prefer the theory with the highest empirical content that has not yet been falsified, the scientist acts rationally within a non-inductive framework, accepting that the choice offers no guarantee of future performance but represents the best available target for critical testing.",
+    "counterconditions": [
+      "If Popper explicitly stated that preferring a theory implies an expectation of its future success or higher probability of truth.",
+      "If the preference cannot be separated from a pragmatic wager that assumes the future will resemble the past.",
+      "If the concept of 'verisimilitude' (truth-likeness) is required to justify the preference, given Popper's later admission that verisimilitude could not be formally defined within his logic."
+    ],
+    "typicality": 0.85,
+    "evidence_refs": [
+      {
+        "block": "182a58bdd39650d7",
+        "quote": "The preference is defensible because corroboration functions as a measure of informational c"
+      },
+      {
+        "block": "193e9093bea201f6",
+        "quote": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated"
+      },
+      {
+        "block": "08c37be0a0e09d91",
+        "quote": "The conjecture forbids the interpretation that corroboration serves as a pro"
+      }
+    ],
+    "discharges": [],
+    "analogy": null,
+    "checker_specs": [],
+    "optional_refs": [
+      "SRC_005",
+      "SRC_007",
+      "SRC_014"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}

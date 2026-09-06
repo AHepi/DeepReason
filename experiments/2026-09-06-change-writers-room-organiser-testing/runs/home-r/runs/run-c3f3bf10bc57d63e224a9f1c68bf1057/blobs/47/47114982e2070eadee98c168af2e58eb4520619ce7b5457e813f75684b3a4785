@@ -1,0 +1,30 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms without smuggling in induction, by framing it as a methodological rule grounded in the asymmetry of risk and informational content rather than a probabilistic prediction of future success.",
+    "mechanism": "Popper distinguishes between the logical status of a theory (which cannot be made probable by past tests) and the rational decision to act upon it. The mechanism relies on two pillars: (1) Corroboration as a historical report of informational content, where severe tests indicate a theory's high empirical content and survival; and (2) The asymmetry of risk, where choosing a well-corroborated theory minimizes the likelihood of immediate falsification compared to an untested or poorly tested rival, without asserting that the chosen theory is 'true' or 'probable' in the future. This transforms the choice from an inductive inference into a critical preference based on current critical discussion status.",
+    "counterconditions": [
+      "If Popper explicitly stated that acting on corroboration requires an inductive assumption about the uniformity of nature.",
+      "If the distinction between 'rational preference' and 'probabilistic expectation' collapses under scrutiny, making the preference functionally identical to induction.",
+      "If the concept of 'verisimilitude' (truth-likeness) is required to justify the preference but is proven logically incoherent within Popper's own framework."
+    ],
+    "typicality": 0.85,
+    "evidence_refs": [
+      {
+        "block": "193e9093bea201f6",
+        "quote": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated"
+      },
+      {
+        "block": "182a58bdd39650d7",
+        "quote": "The preference is defensible because corroboration functions as a measure of informational c"
+      },
+      {
+        "block": "08c37be0a0e09d91",
+        "quote": "The conjecture forbids the interpretation that corroboration serves as a pro"
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

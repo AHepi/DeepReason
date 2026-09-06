@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to address the 'action' component of the prompt because it restricts the preference for corroborated theories solely to the context of 'selecting... to subject to further falsification.' However, the problem explicitly cites Popper himself 'choosing which theory to act on' (e.g., in engineering or policy), where the goal is successful performance, not error elimination. By redefining the scope of 'acting on' a theory as merely 'testing' it, the target avoids the central tension: if one acts on a theory expecting it to work (e.g., building a bridge based on it), one is implicitly relying on its future reliability, which smuggles in the inductive assumption that past success predicts future performance. The target's claim that this is not a 'prediction of future success' is incompatible with the practical reality of 'acting on' a theory outside of a purely experimental context.",
+      "premise": "Acting on a theory in a practical context (non-experimental) necessitates an expectation of future reliability, which constitutes an inductive bet.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "successor_question": "If Popper advises acting on the best-corroborated theory for practical purposes (like building a bridge), how can he logically deny that this advice relies on the expectation that the theory will continue to hold true in the future?"
+    }
+  ]
+}

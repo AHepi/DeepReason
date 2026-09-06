@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'acting on a theory' with 'testing a theory.' The problem context explicitly notes that scientists (and Popper) prefer better-corroborated theories when 'choosing which theory to act on,' implying reliance for practical prediction or engineering, not merely selecting the next experiment to falsify. By redefining this preference as solely a strategy to 'break' the theory, the target sidesteps the core dilemma: if we rely on the theory for real-world action (e.g., building a bridge), we are implicitly assuming its future reliability based on past survival, which smuggles in the very induction Popper rejected. The target's claim that action becomes 'purely experimental' contradicts the standard scientific practice of relying on corroborated theories for non-experimental, practical application.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguishes between choosing a theory to test (falsification) and choosing a theory to act upon (practical reliance), yet the target collapses this distinction.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is only for the purpose of falsification, how does Popper account for the rationality of using these theories in critical engineering contexts where failure is not an option for experimentation?"
+    }
+  ]
+}
