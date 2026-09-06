@@ -502,10 +502,10 @@
  ],
  "root": "/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-c3f3bf10bc57d63e224a9f1c68bf1057",
  "run": {
-  "cycle": 3,
-  "state": "failed",
-  "stop_reason": "operational_failure",
-  "token_limit": 500000,
+  "cycle": 4,
+  "state": "completed",
+  "stop_reason": "budget_exhausted",
+  "token_limit": 1695362,
   "token_spend": 495362
  },
  "schema": "organiser-census.v1",

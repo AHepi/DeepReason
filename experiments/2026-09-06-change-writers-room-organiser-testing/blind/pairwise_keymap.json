@@ -1,0 +1,90 @@
+{
+ "units": {
+  "c19f0e79-b4c5-4e7e-9df3-1b6660a9fc8c": {
+   "arm": "ARM0-single-call",
+   "source": "arm0/call-1@sha256:13fbff724bc51a1f55a635d928c40892f763562689959a3ef7a320c953339d08",
+   "chars": 7262
+  },
+  "3fb0247e-0d1d-44a7-b33b-1e3c36dc4d9d": {
+   "arm": "ARM0-single-call",
+   "source": "arm0/call-2@sha256:0de4306afcd807046f8365b1c1e49599ecb739d522def05a8f7e1f90b307c9e3",
+   "chars": 7688
+  },
+  "ab0deb96-6bb5-4ad3-a8b7-ee1691562ff3": {
+   "arm": "ARM0-single-call",
+   "source": "arm0/call-3@sha256:21b0c63dbd38baed41a79ca979b49d92d0099e0ec9914b070e702e2c7caaaf71",
+   "chars": 7985
+  },
+  "17df05cd-78e1-48ce-bff1-1fcbd3035fe8": {
+   "arm": "ARM0R-room-bare",
+   "source": "arm0R/call-1@sha256:effb8afea157e4ffcb69bf8ea7b8434927144c363687736068f524c6bc5a31e5",
+   "chars": 6879
+  },
+  "70031997-14c5-4f6b-a2c4-7c60ccee504f": {
+   "arm": "ARM0R-room-bare",
+   "source": "arm0R/call-2@sha256:94dca7e6824a7895947c4137d66d6f3df5f0e25209ba1c32c2f37deb15b1a03f",
+   "chars": 7334
+  },
+  "40270450-ff38-4442-9a7b-498b23dd4175": {
+   "arm": "ARM0R-room-bare",
+   "source": "arm0R/call-3@sha256:70003e8af67a74d5fc97c3bb20c7179f21c5f0fa6de14a123e1276d7b0ac66eb",
+   "chars": 5875
+  }
+ },
+ "pairs": [
+  {
+   "pair_id": "159068a8-3184-45a5-81a9-9f38bd55fa6b",
+   "role": "control",
+   "left": "70031997-14c5-4f6b-a2c4-7c60ccee504f",
+   "right": "ab0deb96-6bb5-4ad3-a8b7-ee1691562ff3"
+  },
+  {
+   "pair_id": "2186f687-aea3-49f6-b620-6b5169998ddf",
+   "role": "control",
+   "left": "40270450-ff38-4442-9a7b-498b23dd4175",
+   "right": "ab0deb96-6bb5-4ad3-a8b7-ee1691562ff3"
+  },
+  {
+   "pair_id": "323c4784-f291-48da-890a-edc58abae225",
+   "role": "control",
+   "left": "17df05cd-78e1-48ce-bff1-1fcbd3035fe8",
+   "right": "3fb0247e-0d1d-44a7-b33b-1e3c36dc4d9d"
+  },
+  {
+   "pair_id": "5737ca5c-e6bd-479c-903b-79af1c73c518",
+   "role": "control",
+   "left": "40270450-ff38-4442-9a7b-498b23dd4175",
+   "right": "3fb0247e-0d1d-44a7-b33b-1e3c36dc4d9d"
+  },
+  {
+   "pair_id": "67dd5acd-8a9c-4673-8b0d-9f0c3d141da2",
+   "role": "control",
+   "left": "70031997-14c5-4f6b-a2c4-7c60ccee504f",
+   "right": "3fb0247e-0d1d-44a7-b33b-1e3c36dc4d9d"
+  },
+  {
+   "pair_id": "7c27fffc-8851-406e-b549-45ca9f09254b",
+   "role": "control",
+   "left": "70031997-14c5-4f6b-a2c4-7c60ccee504f",
+   "right": "c19f0e79-b4c5-4e7e-9df3-1b6660a9fc8c"
+  },
+  {
+   "pair_id": "81082532-7267-4d03-9a3b-9c5de5f1c82a",
+   "role": "control",
+   "left": "40270450-ff38-4442-9a7b-498b23dd4175",
+   "right": "c19f0e79-b4c5-4e7e-9df3-1b6660a9fc8c"
+  },
+  {
+   "pair_id": "ec6f7e36-1734-4835-8289-9817ce94ae67",
+   "role": "control",
+   "left": "17df05cd-78e1-48ce-bff1-1fcbd3035fe8",
+   "right": "ab0deb96-6bb5-4ad3-a8b7-ee1691562ff3"
+  },
+  {
+   "pair_id": "f562f416-164c-4da4-a8cd-18aeb18b54c8",
+   "role": "control",
+   "left": "17df05cd-78e1-48ce-bff1-1fcbd3035fe8",
+   "right": "c19f0e79-b4c5-4e7e-9df3-1b6660a9fc8c"
+  }
+ ]
+}
