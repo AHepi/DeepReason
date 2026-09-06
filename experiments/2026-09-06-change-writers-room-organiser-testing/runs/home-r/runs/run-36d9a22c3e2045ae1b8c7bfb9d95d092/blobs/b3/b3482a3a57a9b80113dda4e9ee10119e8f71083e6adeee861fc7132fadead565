@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is defensible 'only by accepting a non-probabilistic metaphysical commitment to verisimilitude' is factually incomplete and misleading regarding Popper's own terms. It ignores Popper's explicit pragmatic solution: the methodological rule to prefer the better-corroborated theory as the one that has withstood the severest tests so far, without asserting it is closer to the truth. By framing the defense as requiring a metaphysical leap to 'truth-likeness,' the target constructs a false dilemma that omits the actual pragmatic decision rule Popper advocated to avoid induction.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly distinguished between the logical status of corroboration (which does not imply probability or truth) and the pragmatic decision to act on the best-tested theory.",
+      "premise_evidence": null,
+      "successor_question": "Does the target's exclusion of Popper's pragmatic decision rule constitute a misrepresentation of his solution to the problem of induction?"
+    }
+  ]
+}

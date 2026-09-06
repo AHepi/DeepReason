@@ -1,0 +1,301 @@
+{
+ "accepted_on_seed": 16,
+ "citation_checks": {
+  "EVIDENCE_CITATION_VERIFIED": 21,
+  "EVIDENCE_QUOTE_MISMATCH": 7,
+  "EVIDENCE_REF_UNKNOWN_BLOCK": 58
+ },
+ "conjecturer_call_tokens": [
+  30678,
+  34339,
+  30929,
+  32700,
+  32286,
+  31913,
+  31659,
+  13568,
+  14525,
+  14650,
+  15128,
+  15031,
+  15600,
+  15649,
+  31930,
+  6503,
+  4262,
+  4308,
+  4346,
+  4248,
+  4326,
+  4338
+ ],
+ "counterconditions_on_seed": 54,
+ "counterconditions_registered": 54,
+ "positions": [
+  {
+   "counterconditions": 4,
+   "id": "5569474a29b2",
+   "room_conjectures_cited": [
+    "a0b919ae"
+   ],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 1
+  },
+  {
+   "counterconditions": 4,
+   "id": "2c99d5f6ed26",
+   "room_conjectures_cited": [
+    "92968bc0"
+   ],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 1
+  },
+  {
+   "counterconditions": 4,
+   "id": "ed98a025e081",
+   "room_conjectures_cited": [],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 0
+  },
+  {
+   "counterconditions": 4,
+   "id": "f6bfceb05084",
+   "room_conjectures_cited": [
+    "e0959a2b"
+   ],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 1
+  },
+  {
+   "counterconditions": 4,
+   "id": "46a0ef71ad59",
+   "room_conjectures_cited": [
+    "76f24493"
+   ],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 1
+  },
+  {
+   "counterconditions": 4,
+   "id": "1e295c6016be",
+   "room_conjectures_cited": [],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 0
+  },
+  {
+   "counterconditions": 3,
+   "id": "e1efa4917b0c",
+   "room_conjectures_cited": [],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 0
+  },
+  {
+   "counterconditions": 3,
+   "id": "3152bb6b7d74",
+   "room_conjectures_cited": [],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 0
+  },
+  {
+   "counterconditions": 3,
+   "id": "a7dcf1a2d524",
+   "room_conjectures_cited": [],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 0
+  },
+  {
+   "counterconditions": 3,
+   "id": "e97f014dbfd5",
+   "room_conjectures_cited": [
+    "055185d5"
+   ],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 1
+  },
+  {
+   "counterconditions": 3,
+   "id": "31119f6590a1",
+   "room_conjectures_cited": [
+    "a0b919ae"
+   ],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 1
+  },
+  {
+   "counterconditions": 3,
+   "id": "2204be08fe87",
+   "room_conjectures_cited": [
+    "d8dfb83a"
+   ],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 1
+  },
+  {
+   "counterconditions": 3,
+   "id": "525a98fe9fe5",
+   "room_conjectures_cited": [
+    "e0959a2b"
+   ],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 1
+  },
+  {
+   "counterconditions": 3,
+   "id": "f1e8ebb94f68",
+   "room_conjectures_cited": [
+    "055185d5"
+   ],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 1
+  },
+  {
+   "counterconditions": 3,
+   "id": "483c2a188ab6",
+   "room_conjectures_cited": [],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 1
+  },
+  {
+   "counterconditions": 3,
+   "id": "0e8c95a45578",
+   "room_conjectures_cited": [],
+   "seed": true,
+   "status": "accepted",
+   "verified_citations": 0
+  },
+  {
+   "counterconditions": 0,
+   "id": "ba87ac258f15",
+   "room_conjectures_cited": [
+    "a0b919ae"
+   ],
+   "seed": false,
+   "status": "accepted",
+   "verified_citations": 2
+  },
+  {
+   "counterconditions": 0,
+   "id": "7e0986c01943",
+   "room_conjectures_cited": [
+    "92968bc0"
+   ],
+   "seed": false,
+   "status": "refuted",
+   "verified_citations": 2
+  },
+  {
+   "counterconditions": 0,
+   "id": "97a7ec0a8c7d",
+   "room_conjectures_cited": [
+    "20b35eec"
+   ],
+   "seed": false,
+   "status": "accepted",
+   "verified_citations": 2
+  },
+  {
+   "counterconditions": 0,
+   "id": "c56701b5dcdf",
+   "room_conjectures_cited": [
+    "92968bc0",
+    "a0b919ae"
+   ],
+   "seed": false,
+   "status": "accepted",
+   "verified_citations": 2
+  },
+  {
+   "counterconditions": 0,
+   "id": "f2778bfaa876",
+   "room_conjectures_cited": [],
+   "seed": false,
+   "status": "accepted",
+   "verified_citations": 0
+  },
+  {
+   "counterconditions": 0,
+   "id": "326c1f0fceec",
+   "room_conjectures_cited": [
+    "a0b919ae"
+   ],
+   "seed": false,
+   "status": "accepted",
+   "verified_citations": 1
+  },
+  {
+   "counterconditions": 0,
+   "id": "77d7e7bf7eb1",
+   "room_conjectures_cited": [
+    "92968bc0"
+   ],
+   "seed": false,
+   "status": "accepted",
+   "verified_citations": 1
+  },
+  {
+   "counterconditions": 0,
+   "id": "51254cf96eff",
+   "room_conjectures_cited": [
+    "a0b919ae"
+   ],
+   "seed": false,
+   "status": "accepted",
+   "verified_citations": 1
+  },
+  {
+   "counterconditions": 0,
+   "id": "d11a55ac634e",
+   "room_conjectures_cited": [],
+   "seed": false,
+   "status": "accepted",
+   "verified_citations": 0
+  }
+ ],
+ "positions_on_seed": 16,
+ "positions_total": 25,
+ "refuted_on_seed": 0,
+ "room_conjectures_available": 12,
+ "room_conjectures_carried": [
+  "055185d5",
+  "20b35eec",
+  "76f24493",
+  "92968bc0",
+  "a0b919ae",
+  "d8dfb83a",
+  "e0959a2b"
+ ],
+ "root": "runs/home-r/runs/run-36d9a22c3e2045ae1b8c7bfb9d95d092",
+ "run": {
+  "cycle": 3,
+  "state": "failed",
+  "stop_reason": "operational_failure",
+  "token_limit": 500000,
+  "token_spend": 464359
+ },
+ "schema": "organiser-census.v1",
+ "seats": {
+  "argumentative_critic": {
+   "calls": 42,
+   "tokens": 71443
+  },
+  "conjecturer": {
+   "calls": 22,
+   "tokens": 392916
+  }
+ }
+}

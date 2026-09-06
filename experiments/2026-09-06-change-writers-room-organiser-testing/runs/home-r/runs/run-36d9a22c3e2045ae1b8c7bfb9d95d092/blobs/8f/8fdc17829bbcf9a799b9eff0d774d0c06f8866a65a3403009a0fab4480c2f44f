@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "The Pragmatic Wager (a0b919ae506615d2) depends on the rejection of inductive probability as a necessary condition for its validity. The relation is refuted if it can be demonstrated that preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects.",
+      "typicality": 0.5,
+      "evidence_refs": [
+        {
+          "block": "5760eda6c518c3d1",
+          "quote": "The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim."
+        },
+        {
+          "block": "07ec28399009e60b",
+          "quote": "The analogy of betting on a horse that has won every race fails under Popperian scrutiny because, unlike a horse race, scientific testing does not provide a statistical basis for predicting future outcomes."
+        }
+      ],
+      "neighbours": [
+        "SRC_005",
+        "SRC_003"
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_010",
+          "kind": "revised",
+          "note": "Revised to explicitly name the relation kind ('depends on') and state a specific 'refuted if' condition derived from Proposal 327f6ea7cd7e8284, addressing the failure to propose a substantive relation."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "revised",
+          "note": "Revised to replace open-ended conditional questions with a definitive 'refuted if' statement: 'if it can be demonstrated that preferring... entails an assumption...'."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The criticism claims the refutation condition describes an internal failure rather than defining endpoints. However, the endpoint of the relation (dependence on non-induction) is precisely defined by the failure of that dependency (i.e., if induction is required, the dependence breaks and the conjecture falls). This is a valid boundary condition for the proposed relation."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "Revised to clearly link 'The Pragmatic Wager' to its foundational constraint (rejection of induction) using the phrase 'depends on', satisfying the requirement for a named substantive relation."
+        },
+        {
+          "handle": "SRC_009",
+          "kind": "revised",
+          "note": "Revised content now explicitly contains 'depends on' and 'refuted if', satisfying the relation-form@578e42df713e predicate requirements."
+        }
+      ]
+    },
+    {
+      "content": "Verisimilitude as a Regulative Ideal (92968bc0cf42d965) reduces to the methodological aim of increasing truth-likeness without probabilistic commitment. The relation is refuted if it can be shown that the concept of 'verisimilitude' cannot be formally defined without implicitly relying on inductive probability, thereby making the shift from probability to verisimilitude merely a semantic disguise for the very induction Popper rejected.",
+      "typicality": 0.5,
+      "evidence_refs": [
+        {
+          "block": "4367b2ed8c73936e",
+          "quote": "The defense lies in shifting the goal from 'probability' to 'verisimilitude' (truth-likeness)."
+        },
+        {
+          "block": "2ca79ab9e6d293c3",
+          "quote": "The conjecture relies on the concept of 'verisimilitude' (truth-likeness) to bridge the gap between corroboration and rational preference."
+        }
+      ],
+      "neighbours": [
+        "SRC_005",
+        "SRC_003"
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_010",
+          "kind": "revised",
+          "note": "Revised to explicitly name the relation kind ('reduces to') and provide a concrete 'refuted if' condition based on Proposal 26d5b990b5bc8574."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "revised",
+          "note": "Revised to state a specific falsification condition regarding the formal definability of verisimilitude, removing open-ended questioning."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The refuted-if condition targets the structural integrity of the reduction (whether verisimilitude stands independent of induction). If the concept collapses into induction, the reduction fails. This defines the limit of the relation's validity."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "Revised to clearly articulate the reduction of the conjecture to its core methodological aim and the condition under which this reduction fails."
+        },
+        {
+          "handle": "SRC_009",
+          "kind": "revised",
+          "note": "Content updated to include 'reduces to' and 'refuted if' phrases to satisfy the relation-form criterion."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation as required by the problem context. Instead of naming a specific kind of relation (e.g., dependence, reduction) and stating what it is refuted if, the text provides a narrative summary of the 'Pragmatic Wager' and its conditions. The phrase 'depends on' appears only as part of the descriptive content of the wager itself, not as the explicit naming of the relation between the isolated node and its neighbourhood in the format demanded (Relation Kind + Refutation Condition). Consequently, it does not establish the required structural link between endpoints.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "The problem context requires proposing a substantive relation by naming its kind and stating what it is refuted if, whereas the target only summarizes the internal logic of the 'Pragmatic Wager' without explicitly defining the external relational structure.",
+      "premise_evidence": null,
+      "successor_question": "Can you restate the connection between 'The Pragmatic Wager' and 'the rejection of inductive probability' by explicitly naming the relation kind (e.g., 'Dependence') and completing the sentence: 'This [Relation Kind] is refuted if...'?"
+    }
+  ]
+}

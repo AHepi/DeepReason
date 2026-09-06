@@ -1,0 +1,386 @@
+{
+ "05d57401-e52b-4a16-975f-02cf260cc3fe": {
+  "judges": 3,
+  "totals": [
+   15,
+   15,
+   15
+  ],
+  "median": 15,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the methodological defense (informational yield) and the inductive critique (performative contradiction) are articulated with maximum charitable strength.",
+     "c2": "Explicitly deploys core Popperian concepts: corroboration as historical report, empirical content, asymmetry of information, verisimilitude, and the specific tension regarding action.",
+     "c3": "Delivers a clear, unambiguous verdict that the case for indefensibility survives due to the failure to bridge theory and action without induction.",
+     "c4": "Identifies a substantial cost: the collapse of a purely deductive logic of discovery and the necessary rehabilitation of pragmatic induction.",
+     "c5": "Refuses to dissolve the tension via redefinition or empty pragmatism; instead, it confronts the logical gap between past survival and future action directly."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the methodological defense (informational yield) and the inductive critique (performative contradiction of action) are articulated with maximum charitable strength.",
+     "c2": "Explicitly deploys core Popperian concepts: corroboration as historical report, empirical content, asymmetry of information, verisimilitude, and the specific tension between theory and action.",
+     "c3": "Delivers a clear, unambiguous verdict that the 'Indefensibility' case survives due to the failure to bridge past tests and future safety without induction.",
+     "c4": "Identifies a genuine, painful cost: the collapse of a purely deductive logic of discovery and the necessary rehabilitation of pragmatic induction.",
+     "c5": "Refuses to dissolve the tension via redefinition or empty pragmatism; instead, it confronts the logical gap head-on and accepts the damaging conclusion."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the methodological defense (informational yield) and the inductive critique (performative contradiction of action) are articulated with maximum charitable strength.",
+     "c2": "Explicitly deploys Popperian concepts like empirical content, severity, verisimilitude, and the specific tension between theoretical falsification and practical action.",
+     "c3": "Delivers a clear, unambiguous verdict that the 'Indefensibility' case survives due to the failure to bridge past tests and future safety.",
+     "c4": "Identifies a genuine, painful cost: the collapse of a purely deductive logic of science and the necessary rehabilitation of pragmatic induction.",
+     "c5": "Refuses to dissolve the tension or hide behind labels; it directly confronts the logical gap between corroboration reports and action-oriented preferences."
+    }
+   }
+  ]
+ },
+ "38e7f5c0-5ea6-480b-8a28-a603a0d278c0": {
+  "judges": 3,
+  "totals": [
+   15,
+   15,
+   15
+  ],
+  "median": 15,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the methodological efficiency argument and the performative contradiction argument are articulated with maximum charitable strength.",
+     "c2": "Explicitly engages Popper's definition of corroboration as a historical report versus the pragmatic move required for action.",
+     "c3": "Delivers a clear verdict that the indefensibility case survives, rejecting the methodological defense for practical contexts.",
+     "c4": "Identifies specific, painful costs: the loss of demarcation purity and the reduction of Critical Rationalism to incomplete pragmatism.",
+     "c5": "Holds the tension between logic and action without dissolving it via redefinition or dismissing the problem as merely 'pragmatic'."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the methodological efficiency argument and the performative contradiction argument are articulated with maximum charitable strength.",
+     "c2": "Explicitly engages Popper's specific definitions of corroboration as a historical report versus probability and targets the pragmatic preference move directly.",
+     "c3": "Delivers a clear, committed verdict that the indefensibility case survives due to the failure to justify practical action without induction.",
+     "c4": "Identifies a genuine, painful cost: the collapse of Critical Rationalism into pragmatic conventionalism and the loss of its claim to solve induction logically.",
+     "c5": "Refuses to dissolve the tension via redefinition or empty pragmatism, instead confronting the logical gap between past survival and future action head-on."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the 'maximum learnability' defense and the 'performative contradiction' critique are articulated with maximum charitable strength.",
+     "c2": "Explicitly engages with corroboration as a historical report, verisimilitude, and the specific tension between methodology and practical action.",
+     "c3": "Delivers a clear verdict favoring the indefensibility argument based on the failure to bridge theory and practice without induction.",
+     "c4": "Identifies a genuine, painful cost: the collapse of Popper's claim to a purely logical solution and the reduction to pragmatic conventionalism.",
+     "c5": "Refuses to dissolve the tension or hide behind labels; it directly confronts the contradiction between rejecting induction and acting on past success."
+    }
+   }
+  ]
+ },
+ "68932f5a-e10e-4952-9c2e-c7e3b210f730": {
+  "judges": 3,
+  "totals": [
+   15,
+   15,
+   15
+  ],
+  "median": 15,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the inductive critique (Humean gap) and the Popperian defense (evolutionary robustness) are articulated with maximum charitable strength.",
+     "c2": "Explicitly distinguishes corroboration as a retrospective report versus a predictive probability and addresses the pragmatic nature of the preference.",
+     "c3": "Delivers a clear verdict that Case B survives specifically as a pragmatic methodology rather than a logical proof.",
+     "c4": "Identifies genuine, uncomfortable costs: zero epistemic security, the redefinition of rationality to mere procedure, and the 'miracle' of success.",
+     "c5": "Holds the tension firmly without dissolving it via redefinition or dismissing the problem with a lazy 'pragmatic' label."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the inductive critique (Hume/Uniformity) and the Popperian defense (evolutionary/robustness) are articulated with maximum charitable strength.",
+     "c2": "Explicitly engages with corroboration as a retrospective report, verisimilitude, and the distinction between logical probability and pragmatic preference.",
+     "c3": "Delivers a clear verdict that Case B survives specifically as a pragmatic methodology rather than a logical proof.",
+     "c4": "Identifies genuine, uncomfortable costs: zero epistemic security, the redefinition of rationality to mere procedure, and the 'miracle' of success.",
+     "c5": "Successfully holds the tension without dissolving it; admits the lack of logical guarantee while defending the procedural necessity."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the induction-smuggling argument (via Hume/Uniformity) and the Popperian defense (via verisimilitude/critical scrutiny) are articulated with maximum charitable strength.",
+     "c2": "Explicitly engages with corroboration as a 'historical report' vs prediction and frames the preference as a methodological rule rather than a probability claim.",
+     "c3": "Delivers a clear verdict that Case B survives specifically as a pragmatic methodology while conceding it fails as a logical proof.",
+     "c4": "Identifies genuine, uncomfortable costs: the loss of epistemic security, the redefinition of rationality to mere procedure, and the 'miracle' of scientific success.",
+     "c5": "Holds the tension firmly without dissolving it; explicitly acknowledges the lack of logical guarantee while defending the procedural rationality."
+    }
+   }
+  ]
+ },
+ "b783ab2f-0960-4102-bf35-2c9984b96eb0": {
+  "judges": 3,
+  "totals": [
+   15,
+   15,
+   15
+  ],
+  "median": 15,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the induction-smuggling argument (via decision theory and uniformity) and the Popperian defense (via critical rationalism and content) are articulated with maximum charitable strength.",
+     "c2": "The response explicitly engages with corroboration as a historical report, distinguishes it from probability, and addresses the pragmatic preference without generic filler.",
+     "c3": "The verdict clearly selects Case B as the survivor while acknowledging the specific modification to 'rationality' required to sustain it.",
+     "c4": "The costs identified (loss of assurance, disconnect between rationality and success rates, and the unresolved formal problem of verisimilitude) are genuine, uncomfortable concessions for a Popperian.",
+     "c5": "The answer holds the tension firmly, refusing to dissolve the problem by redefinition or to dismiss the critique merely by labeling the solution 'pragmatic'."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the induction-smuggling argument (via decision theory and uniformity) and the critical-rationality defense are presented with maximum charitable strength.",
+     "c2": "Explicitly engages Popper's specific distinctions: corroboration as historical report vs prediction, the rejection of probability for content, and the shift from justification to criticism.",
+     "c3": "Delivers a clear verdict that Case B survives, grounded in the redefinition of rationality as critical rather than inductive.",
+     "c4": "Identifies genuine, uncomfortable costs: the loss of probabilistic assurance, the counter-intuitive decoupling of rationality from success rates, and the unresolved formal issues with verisimilitude.",
+     "c5": "Holds the tension firmly without dissolving it via redefinition or dismissing the problem as merely 'pragmatic'; it confronts the lack of guarantee head-on."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the induction-smuggling argument and the critical-rationality defense are articulated with maximum charitable strength and logical force.",
+     "c2": "The response explicitly engages with Popper's specific distinctions (corroboration as historical report vs. probability, verisimilitude, and the shift from justification to criticism).",
+     "c3": "A clear verdict is delivered stating Case B survives, grounded in the redefinition of rationality rather than equivocation.",
+     "c4": "The costs identified (loss of assurance, disconnect between rationality and success rates, and the unresolved formal problem of verisimilitude) are genuine philosophical concessions.",
+     "c5": "The answer holds the tension firmly, avoiding the cheap exits of redefining terms to dissolve the problem or dismissing the issue as merely 'pragmatic' without analysis."
+    }
+   }
+  ]
+ },
+ "d3a9bc32-21f7-4bc0-96c6-c1f4f8d55c14": {
+  "judges": 3,
+  "totals": [
+   15,
+   15,
+   15
+  ],
+  "median": 15,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the induction-smuggling critique and the error-elimination defense are articulated with high fidelity to their respective proponents' strongest arguments.",
+     "c2": "The response explicitly deploys core Popperian machinery including the asymmetry of falsification, verisimilitude, and the distinction between logical probability and rational preference.",
+     "c3": "A clear verdict is rendered selecting Case B as the survivor with a specific justification rooted in the asymmetry of falsification.",
+     "c4": "The costs identified (loss of predictive assurance, the formal failure of verisimilitude, and the logic-pragmatics gap) are genuine, uncomfortable concessions for a Popperian.",
+     "c5": "The answer maintains the tension throughout, refusing to dissolve the problem via redefinition or dismiss it as merely 'pragmatic' without analyzing the logical implications."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the induction-smuggling critique and the error-elimination defense are articulated with maximum charitable strength and logical rigor.",
+     "c2": "The response explicitly engages with Popper's specific machinery, including verisimilitude, the asymmetry of falsification, and the distinction between historical report and future prediction.",
+     "c3": "A clear verdict is rendered selecting Case B as the survivor with a precise justification based on comparative logical status.",
+     "c4": "The costs named (loss of predictive assurance, the formal refutation of verisimilitude, and the logic-pragmatics gap) are genuine, uncomfortable concessions for a Popperian.",
+     "c5": "The answer holds the tension firmly, avoiding the cheap exits of redefining corroboration or dismissing the issue as merely 'pragmatic' without analysis."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the induction-smuggling critique and the error-elimination defense are articulated with maximum charitable strength, avoiding straw men.",
+     "c2": "The response explicitly deploys core Popperian machinery including corroboration as a historical report, verisimilitude, and the asymmetry of falsification.",
+     "c3": "A clear verdict is rendered selecting Case B as the survivor with a specific justification based on comparative logical status.",
+     "c4": "The costs are genuine and uncomfortable, specifically citing the formal refutation of verisimilitude by Tich\u00fd and Miller and the loss of predictive assurance.",
+     "c5": "The answer holds the tension between logic and pragmatics without dissolving it via redefinition or dismissing the problem as merely 'pragmatic'."
+    }
+   }
+  ]
+ },
+ "f273e8eb-f94b-40d4-9e25-cfe4b37b05d5": {
+  "judges": 3,
+  "totals": [
+   15,
+   15,
+   15
+  ],
+  "median": 15,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the methodological wager and the performative contradiction arguments are articulated with maximum charitable strength and logical force.",
+     "c2": "The response explicitly engages with Popper's specific definitions of corroboration as a past report versus probability, and directly addresses the tension in acting on theories.",
+     "c3": "A clear, unambiguous verdict is delivered selecting the 'Indefensibility' case with a concise justification rooted in the gap between logic and action.",
+     "c4": "The identified cost\u2014the loss of purely deductive science and the reclassification of Popper as a psychologist rather than a logician\u2014is a genuine, painful concession for a Popperian.",
+     "c5": "The answer resists dissolving the tension via semantic tricks or lazy pragmatic labeling, instead holding the contradiction open to deliver a hard verdict."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the methodological wager and the performative contradiction arguments are articulated with maximum charitable strength and logical force.",
+     "c2": "The response explicitly engages with Popper's specific definitions of corroboration as a past-tense report and the distinction between epistemic probability and methodological preference.",
+     "c3": "The verdict clearly selects the 'Indefensibility' case and provides a decisive reason centered on the gap between logic and action.",
+     "c4": "The identified cost\u2014the loss of a purely deductive science and the reclassification of Popper as a psychologist rather than a logician\u2014is a genuine and uncomfortable concession for a Popperian.",
+     "c5": "The answer maintains the tension throughout, refusing to dissolve the problem via semantic tricks or empty pragmatic labels."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the methodological wager and the performative contradiction arguments are articulated with maximum charitable strength and logical force.",
+     "c2": "The response explicitly engages with Popper's specific definitions of corroboration as a past report versus probability, and addresses the critical context of action versus pure theory.",
+     "c3": "The verdict clearly selects the 'Indefensibility' case and provides a decisive reason rooted in the gap between logic and practical action.",
+     "c4": "The identified cost\u2014the loss of a purely deductive science and the reclassification of Popper as a psychologist rather than a logician\u2014is a genuine, uncomfortable concession for a Popperian.",
+     "c5": "The answer holds the tension firmly, refusing to dissolve the problem via semantic redefinition or dismiss it as merely 'pragmatic' without addressing the logical contradiction."
+    }
+   }
+  ]
+ }
+}

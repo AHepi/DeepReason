@@ -23,7 +23,7 @@ import statistics
 
 HERE = pathlib.Path(__file__).resolve().parent
 BLIND = HERE.parent / "blind"
-ARM0, ARMH, ARMR = "ARM0-single-call", "ARMH-harness", "ARMR-organiser"
+ARM0, ARM0R, ARMH, ARMR = "ARM0-single-call", "ARM0R-room-bare", "ARMH-harness", "ARMR-organiser"
 MARGIN = 2.0          # of 15, PREREG §7
 LENGTH_RATIO = 1.5    # PREREG §6
 
@@ -87,35 +87,43 @@ def main() -> int:
     by_arm = units()
     print("ORGANISER_VERDICT_V1  (median of 3 judges per unit, 0-15)")
     summaries = {}
-    for arm in (ARM0, ARMH, ARMR):
+    for arm in (ARM0, ARM0R, ARMH, ARMR):
         rows = by_arm.get(arm, [])
         if not rows:
-            print(f"  {arm:<18} n=0  -- no usable unit")
+            print(f"  {arm:<18} n=0  -- {'deferred (PREREG Amendment 3)' if arm == ARMH else 'no usable unit'}")
             continue
         summaries[arm] = arm_summary(rows)
         s = summaries[arm]
         print(f"  {arm:<18} units={s['n_units']}  score={s['score']:.1f}  worst judge={s['worst_judge']:.0f}  "
               f"chars={s['chars']:.0f}  contested={s['contested_units']}")
         for r in rows:
-            print(f"      {r['source']:<24} median={r['median']:.1f} [{r['min']:.0f}..{r['max']:.0f}] chars={r['chars']}")
-    result: dict = {"schema": "organiser-verdict.v1", "arms": summaries}
-    if any(arm not in summaries for arm in (ARM0, ARMH, ARMR)):
+            print(f"      {r['source'][:40]:<40} median={r['median']:.1f} [{r['min']:.0f}..{r['max']:.0f}] chars={r['chars']}")
+    result: dict = {"schema": "organiser-verdict.v2", "arms": summaries}
+    # PREREG Amendment 4: the rule is pairwise against the two BARE arms; ARM H
+    # is reported beside it when present and is not part of the rule.
+    if any(arm not in summaries for arm in (ARM0, ARM0R, ARMR)):
         result["verdict"] = "INCONCLUSIVE"
         result["why"] = "an arm has no usable unit (§7 floor)"
     else:
         r0 = pairwise(summaries[ARMR], summaries[ARM0], "R vs 0")
-        rh = pairwise(summaries[ARMR], summaries[ARMH], "R vs H")
-        h0 = pairwise(summaries[ARMH], summaries[ARM0], "H vs 0 (reported, not part of the rule)")
-        result["pairs"] = [r0, rh, h0]
-        for p in (r0, rh, h0):
-            print(f"  {p['pair']:<40} gap={p['gap']:+.1f}  length ratio={p['length_ratio']:.2f}  -> {p['verdict']}")
-        if r0["verdict"] == "BETTER" and rh["verdict"] == "BETTER":
-            result["verdict"], result["why"] = "ARM R MATERIALLY BETTER", "better than BOTH ARM 0 and ARM H under §7, length within §6"
-        elif "WORSE" in (r0["verdict"], rh["verdict"]):
-            result["verdict"], result["why"] = "ARM R WORSE", "worse than ARM 0 or ARM H under §7"
+        r0r = pairwise(summaries[ARMR], summaries[ARM0R], "R vs 0R")
+        pairs = [r0, r0r, pairwise(summaries[ARM0R], summaries[ARM0], "0R vs 0 (reported, not part of the rule)")]
+        if ARMH in summaries:
+            pairs.append(pairwise(summaries[ARMR], summaries[ARMH], "R vs H (reported, not part of the rule)"))
+        result["pairs"] = pairs
+        for p in pairs:
+            print(f"  {p['pair']:<44} gap={p['gap']:+.1f}  length ratio={p['length_ratio']:.2f}  -> {p['verdict']}")
+        if r0["verdict"] == "BETTER" and r0r["verdict"] == "BETTER":
+            result["verdict"], result["why"] = "ARM R MATERIALLY BETTER", "better than BOTH ARM 0 and ARM 0R under §7, length within §6"
+        elif "WORSE" in (r0["verdict"], r0r["verdict"]):
+            result["verdict"], result["why"] = "ARM R WORSE", "worse than ARM 0 or ARM 0R under §7"
         else:
             result["verdict"], result["why"] = "NULL", "not better than both under §7 (or a BETTER was length-uncontrolled under §6)"
-    print(f"\nVERDICT (PREREG §7): {result['verdict']} -- {result['why']}")
+        if r0["verdict"] == "BETTER" and r0r["verdict"] != "BETTER":
+            result["reading"] = ("R better than 0 but not better than 0R: the ROOM'S CONTENT, not the "
+                                 "harness, carried the gain (PREREG Amendment 4)")
+            print(f"  reading: {result['reading']}")
+    print(f"\nVERDICT (PREREG §7 as amended): {result['verdict']} -- {result['why']}")
     if args.json:
         pathlib.Path(args.json).write_text(json.dumps(result, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     return 0

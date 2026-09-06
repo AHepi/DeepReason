@@ -1,0 +1,114 @@
+{
+  "candidates": [
+    {
+      "content": "The Pragmatic Wager (a0b919ae506615d2) depends on the rejection of inductive probability as its necessary precondition: the wager is only rational if one accepts that past success guarantees nothing about the future. This relation is refuted if preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects.",
+      "typicality": 0.5,
+      "evidence_refs": [
+        {
+          "block": "5760eda6c518c3d1",
+          "quote": "The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim."
+        },
+        {
+          "block": "07ec28399009e60b",
+          "quote": "The analogy of betting on a horse that has won every race fails under Popperian scrutiny because, u"
+        }
+      ],
+      "neighbours": [
+        "SRC_005",
+        "SRC_003"
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "The candidate explicitly names 'dependence' as the relation kind and defines the structural link between the wager and the rejection of induction, rather than reducing verisimilitude to a mere attitude."
+        },
+        {
+          "handle": "SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate names the relation kind ('depends on') and provides a specific 'REFUTED IF' condition derived from Proposal 327f6ea7cd7e8284, avoiding narrative summary."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "The candidate avoids narrative summary by stating a conditional refutation criterion: 'refuted if preferring... entails an assumption...'."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "The candidate states a definitive 'REFUTED IF' condition rather than posing open-ended questions."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The refutation condition targets the logical entailment of induction (the relation's failure condition), not an internal failure of the risk asymmetry concept."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "This candidate addresses 'The Pragmatic Wager' specifically, naming 'dependence' and linking it to the rejection of induction with a clear refutation condition, unlike the criticized target."
+        },
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "The content includes the predicate 'refuted if' and the relation keyword 'depends on', satisfying the relation-form criteria."
+        }
+      ]
+    },
+    {
+      "content": "Verisimilitude as a Regulative Ideal (92968bc0cf42d965) inherits its defensive structure from the aim of science being truth rather than certainty; the preference for corroborated theories is a methodological move consistent with increasing truth-likeness. This relation is refuted if it can be shown that the concept of 'verisimilitude' cannot be formally defined without implicitly relying on inductive probability, thereby making the shift from probability to verisimilitude merely a semantic disguise for the very induction Popper rejected.",
+      "typicality": 0.5,
+      "evidence_refs": [
+        {
+          "block": "4367b2ed8c73936e",
+          "quote": "The defense lies in shifting the goal from 'probability' to 'verisimilitude' (truth-likeness)."
+        },
+        {
+          "block": "2ca79ab9e6d293c3",
+          "quote": "The conjecture relies on the concept of 'verisimilitude' (truth-likeness) to bridge the gap between"
+        }
+      ],
+      "neighbours": [
+        "SRC_005",
+        "SRC_003"
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "The candidate proposes 'inheritance' as a substantive relation regarding the defensive structure of the argument, grounded in the aim of science, not merely a reduction to commitment."
+        },
+        {
+          "handle": "SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate explicitly names 'inherits' as the relation kind and provides a specific 'REFUTED IF' condition based on Proposal 26d5b990b5bc8574."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "The response provides a conditional refutation statement ('refuted if it can be shown...') rather than a narrative summary."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "The candidate states a direct refutation condition regarding formal definability, avoiding open-ended questions."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The refutation condition addresses the dependency on inductive probability, which defines the boundary of the inheritance relation, rather than an internal conceptual failure."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "This candidate addresses 'Verisimilitude as a Regulative Ideal', explicitly naming 'inherits' and linking it to the aim of science with a clear refutation condition."
+        },
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "The content contains 'refuted if' and 'inherits', satisfying the relation-form requirement."
+        }
+      ]
+    }
+  ]
+}

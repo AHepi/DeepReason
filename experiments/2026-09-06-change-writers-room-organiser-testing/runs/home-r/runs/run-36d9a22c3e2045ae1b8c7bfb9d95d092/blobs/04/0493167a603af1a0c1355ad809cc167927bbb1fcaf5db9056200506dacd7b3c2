@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that Popper views the preference for better-corroborated theories as a 'non-rational, psychological commitment' contradicts Popper's explicit argument in 'The Logic of Scientific Discovery' and later works that such preference is a rational decision based on critical discussion and the aim of verisimilitude (truth-likeness), not a blind biological impulse. Popper distinguishes between the logical status of corroboration (which implies no probability) and the rationality of choosing the best-tested theory for action, arguing the latter is the only rational course available to a critical rationalist, thereby refuting the target's assertion that the preference is merely non-rational or extra-logical.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly argued that preferring the better-corroborated theory is a rational decision based on critical discussion and the aim of finding truth, not a blind biological impulse.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for better-corroborated theories is rational rather than non-rational, how does Popper reconcile this with his rejection of induction without implying that corroboration indicates a higher probability of truth?"
+    }
+  ]
+}

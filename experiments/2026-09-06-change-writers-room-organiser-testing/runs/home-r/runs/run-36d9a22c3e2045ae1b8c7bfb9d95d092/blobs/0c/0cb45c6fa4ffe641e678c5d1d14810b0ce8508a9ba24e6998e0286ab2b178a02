@@ -1,0 +1,202 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic wager: choosing the theory that has survived severe tests is the only rational bet available for action, not because it predicts future success (which would be induction), but because it demonstrates a capacity to withstand falsification that alternatives lack.",
+      "mechanism": "The mechanism distinguishes between epistemic probability (rejected) and pragmatic rationality (accepted): acting on the 'fittest' theory is an educated guess grounded in past survival without asserting that nature is uniform or that the theory is likely true.",
+      "counterconditions": [
+        "refuted if preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects",
+        "refuted if the phrase 'educated guesswork' implies that past experience improves the quality of the guess, which contradicts the non-inductive framework where corroboration adds no probability",
+        "refuted if a consistent Popperian agent cannot choose the better-corroborated theory while simultaneously asserting they have no reason to believe it will perform better in the next instance"
+      ],
+      "evidence_refs": [
+        {
+          "block": "5760eda6c518c3d1"
+        },
+        {
+          "block": "327f6ea7cd7e8284"
+        },
+        {
+          "block": "eb00f7c3429ea82e"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "This candidate addresses the Tichý/Miller refutation by grounding the defense in pragmatic wagering rather than verisimilitude; it does not rely on the mechanism of increasing truth-likeness which was the target of that specific logical refutation."
+        },
+        {
+          "handle": "[SRC_012] against SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate explicitly adopts the pragmatic justification mentioned in the criticism, arguing that the preference is a rational bet based on available evidence of fitness, not a metaphysical commitment to verisimilitude."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "revised",
+          "note": "The claim has been revised to explicitly frame the argument as a 'pragmatic wager' which inherently acknowledges the opposing view (that induction is smuggled in) by denying predictive power while maintaining rational choice."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate resolves the tension by defining the preference as a 'rational bet' for action specifically, distinguishing it from a methodological rule for falsification alone; the rationality comes from maximizing the use of known robustness, not just seeking error."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "The rebuttal asserts that 'fitness' in this context is a report of past survival, not a prediction of future utility; the 'wager' accepts the risk of failure, thus avoiding the inductive claim that past success guarantees future success."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "rebutted",
+          "note": "The candidate addresses the 'acting on' tension by positing that action requires a decision under uncertainty, and the 'pragmatic wager' provides the non-inductive rationale for that decision without requiring belief in reliability."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate maintains the distinction between pragmatic preference and assertion of reliability by explicitly stating the preference is devoid of predictive probability, aligning with Popper's separation of action from belief in truth."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "The horse race analogy is defended as illustrating a choice based on available data (past wins) without assuming the laws of physics governing the race will change; the rationality lies in using the best available information, not in assuming uniformity."
+        }
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is indefensible on Popper's own terms and constitutes a performative contradiction: by advising scientists to prefer better-corroborated theories for action, Popper implicitly relies on the inductive premise that past performance indicates future reliability, reducing his methodology to psychological habit.",
+      "mechanism": "The mechanism identifies a logical gap between the report of past corroboration and the directive for future action; bridging this gap requires an inductive leap (uniformity of nature) which Popper explicitly rejected, rendering the preference irrational within his strict deductive framework.",
+      "counterconditions": [
+        "refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed",
+        "refuted if Popper explicitly distinguished between 'corroboration' as a report of past performance and 'probability' as a prediction of future frequency, allowing for rational preference without inductive inference",
+        "refuted if a consistent Popperian scientist can rationally distinguish between choosing a well-tested bridge design and a randomly selected unfalsified design for actual construction"
+      ],
+      "evidence_refs": [
+        {
+          "block": "2c5c1b5212684c58"
+        },
+        {
+          "block": "6035a9c4dd99607c"
+        },
+        {
+          "block": "e3374255cb01e7a3"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "This candidate argues that the performative contradiction exists regardless of verisimilitude; the act of preferring for action itself smuggles in induction, making the specific mechanism of verisimilitude irrelevant to the core charge."
+        },
+        {
+          "handle": "[SRC_012] against SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate contends that even pragmatic justifications fail if they require acting as if the future resembles the past; thus, ignoring verisimilitude does not save the preference from the charge of cryptic inductivism."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "revised",
+          "note": "The claim is strengthened by explicitly framing the 'performative contradiction' as the failure to provide a non-inductive bridge between past reports and future actions, addressing the requirement to make the strongest case for the negative answer."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "The rebuttal argues that maximizing severity of future tests cannot justify high-stakes practical action (like bridge building) without an implicit expectation of safety, which is an inductive expectation."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate agrees with the criticism that the 'wager' is functionally indistinguishable from induction, reinforcing the claim that the preference collapses into the very principle Popper sought to destroy."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "rebutted",
+          "note": "The candidate asserts that the tension regarding 'acting on' a theory is fatal to Popper's system; one cannot act on a theory for practical ends without expecting it to work, which is an inductive commitment."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate rejects the distinction between pragmatic preference and assertion of reliability, arguing that in the context of action (e.g., crossing a bridge), the preference logically entails an expectation of success."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "The candidate argues that the horse race analogy fails because the rationality of the bet depends on the assumption that the conditions of the race (nature's laws) remain constant, which is the inductive principle of uniformity."
+        }
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is defensible by shifting the goal from probability to verisimilitude (truth-likeness): a highly corroborated theory is not more probable, but it is a better candidate for being closer to the truth because it has withstood attempts to show it is false.",
+      "mechanism": "The mechanism operates by redefining the aim of science as the pursuit of truth-likeness rather than certainty; selecting the theory with the highest empirical content that has not been refuted is the only methodological move consistent with increasing verisimilitude.",
+      "counterconditions": [
+        "refuted if it can be shown that the concept of 'verisimilitude' cannot be formally defined without implicitly relying on inductive probability",
+        "refuted if the 'metaphysical hope' that surviving tests correlates with truth-likeness functions identically to an inductive premise in guiding practical scientific action",
+        "refuted if Popper explicitly grounded the preference for better-corroborated theories in a pragmatic decision rule without invoking any metaphysical assumption about the theory's proximity to truth"
+      ],
+      "evidence_refs": [
+        {
+          "block": "4367b2ed8c73936e"
+        },
+        {
+          "block": "26d5b990b5bc8574"
+        },
+        {
+          "block": "c6f64791220fad18"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "While acknowledging the Tichý/Miller refutation of the formal definition, this candidate argues that the *regulative ideal* of verisimilitude remains a valid non-probabilistic guide for preference, even if the formal logic was later refined."
+        },
+        {
+          "handle": "[SRC_012] against SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate maintains that the metaphysical commitment to verisimilitude is necessary and distinct from pragmatic justification; it provides the epistemic direction that pure pragmatism lacks."
+        },
+        {
+          "handle": "[SRC_008] against SRC_004",
+          "kind": "revised",
+          "note": "The claim is framed as a specific defense strategy (shifting to verisimilitude) which implicitly acknowledges the difficulty of the opposing view (the charge of induction) by attempting to bypass probability entirely."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate argues that verisimilitude provides a rational basis for action because acting on a theory closer to the truth is inherently more rational than acting on one further away, regardless of probabilistic guarantees."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "The rebuttal asserts that verisimilitude is a logical relation of content, not an inductive inference; thus, preferring higher verisimilitude does not assume nature's uniformity in the same way induction does."
+        },
+        {
+          "handle": "[SRC_016] against SRC_014",
+          "kind": "rebutted",
+          "note": "The candidate resolves the 'acting on' tension by positing that agents act on the theory they deem closest to the truth (highest verisimilitude), which is a rational choice distinct from expecting guaranteed success."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate argues that the preference for verisimilitude is not a performative contradiction because it does not assert probability, only a comparative closeness to truth based on critical scrutiny."
+        },
+        {
+          "handle": "[SRC_015] against SRC_013",
+          "kind": "rebutted",
+          "note": "The candidate distinguishes the verisimilitude approach from the horse race analogy by grounding the preference in logical content comparison rather than empirical frequency of past wins."
+        }
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ]
+}

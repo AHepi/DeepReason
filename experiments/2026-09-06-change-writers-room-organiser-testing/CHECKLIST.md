@@ -49,7 +49,7 @@ Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 inserti
 - [x] 15. (S20) [COMMIT] Run `python -u scripts/cycle_soak.py --case epoch3 | tee runs/soak.log` (offline; no key needed) and commit the log.
       done-when: `runs/soak.log` ends with a clean exit (`rc=0` appended by the runner line)
       output: `runs/soak.log` ends `[soak] exit 0 (clean)` / `rc=0` — epoch3, qualified in 3.5s, 8 cycles driven against the stub, 32 semantic admissions, 63 token reservations. Run after the full docs_verify returned (one worker-spawning instrument at a time).
-- [ ] 16. (S10, S22, S23, S24) [COMMIT] Write `RESULTS.md`: the dated segment (what the record shows offline; what it does not — no arm ran; one question, one model, one room), the 12-of-12 statement, the failure-budget ledger at 0.
+- [x] 16. (S10, S22, S23, S24) [COMMIT] Write `RESULTS.md`: the dated segment (what the record shows offline; what it does not — no arm ran; one question, one model, one room), the 12-of-12 statement, the failure-budget ledger at 0.
       done-when: the S10, S22, S23 (RESULTS half), S24 greps hold
 - [x] 17. (S25) Map check, full: `python tools/docs_verify.py` and `--audit` and `--links`.
       done-when: 0 failed; 0 audit findings; 0 dangling
@@ -60,3 +60,41 @@ Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 inserti
 - [x] 19. (all) [COMMIT] push and confirm clean tree.
       done-when: `git status --porcelain` is empty AND `git rev-parse HEAD origin/claude/writers-room-organiser-testing-degagn` prints one hash twice
       output: final commit below; `git status --porcelain` empty and one hash from `git rev-parse HEAD origin/claude/writers-room-organiser-testing-degagn` — pasted in DELIVERY's branch line.
+
+## Launch window (SPEC Amendment 3; R26–R36). State: DONE — all 30 steps checked; VALIDATION PASS; delivered. The measure's verdict is INCONCLUSIVE (ARM R failed; the rubric is saturated).
+Pre-launch base: the commit that seals PREREG Amendments 1–4 (step 23).
+
+- [x] 20. (S30) Write `runs/arm0R.py` and `runs/arm0R.sh`; `chmod +x`.
+      done-when: `python runs/arm0R.py --dry-run` prints the prompt's byte count and sha256 and makes no call; `bash -n runs/arm0R.sh` exit 0
+      output: `prompt 60675 chars, 60680 bytes, sha256 03a8280867a704459d835e9facc6d81573e7a755ea27c3bc561218732e050f5e; no call made`; `bash -n runs/arm0R.sh` exit 0.
+- [x] 21. (S29) Extend `tools/judge_organiser.py` (fourth arm; ARM H deferred as a notice) and `tools/analyse_organiser.py` (R vs 0, R vs 0R; the room-content reading).
+      done-when: CRITERIA diff against `d8/judge_d8.py` empty; both `--help` exit 0; `grep -c 'ARM0R-room-bare'` ≥ 1 in each
+      output: `CRITERIA identical`; `help ok` (both); `grep -c ARM0R-room-bare` -> 1 and 1.
+- [x] 22. (S27, S30) [COMMIT] Edit `runs/armR.sh` line 26 (`--token-budget 500000`) and `runs/chain.sh` (drop lines 14's `armH` dir, 21, 23; append ARM 0R after ARM R); commit steps 20–22.
+      done-when: `grep -c -- '--token-budget 500000' runs/armR.sh` -> 1; `! grep -q armH.sh runs/chain.sh`; `grep -c arm0R.sh runs/chain.sh` -> 1; `bash -n` on both
+      output: armR.sh line 26 `--token-budget 500000` (2 diff lines: `-`/`+`); chain.sh: `! grep -q armH.sh` ok, `arm0R.sh` count 1, `bash -n` ok; diff: line 14 mkdir now `armR arm0R`, lines 21 (ARM H setup) and 23 (ARM H arm) removed, `arm0R.sh` appended after ARM R, header comment rewritten.
+      output: RESULTS.md's first dated segment written in the build window (the offline record, the 12-of-12 statement, the failure-budget ledger at 0); its accepts are VALIDATION S10, S22, S23, S24, all PASS. Box ticked late, at the launch window's close.
+- [x] 23. (S28) [COMMIT] Append PREREG.md Amendments 1–4 with the instruments' sha256s pinned; commit with `sha256: <digest of PREREG.md>` in the message.
+      done-when: `sha256sum PREREG.md` equals the digest in the commit message
+      output: PREREG Amendments 1–4 appended and sealed: the commit for `PREREG.md` carries `sha256: c371b129417693257bbc47d3f8cb5f25350a6b9397d2143e66bfc352c6ecf012`, which equalled `sha256sum PREREG.md` at that commit; the instruments' digests are pinned in the amendment. (Amendments 5 and 6 were appended later, each re-sealed the same way; the current digest is `cd4b19da…`.) The first attempt at this step was interrupted before the file was written and left no trace; re-run and verified.
+- [x] 24. (S31, S26) Launch: `env` present, ignored, mode 600; `setsid nohup runs/chain.sh > runs/chain.log 2>&1 & disown` from the repository root.
+      done-when: `runs/chain.log` shows `soak rc=0` and the battery started; the snapshot loop's PID exists
+      output: `env ignored` / `600 73 bytes` / `no key in the record`; launched detached from the repository root at 2026-09-06T08:50:29Z on head `337fc5cc6`; `chain.log` opens `=== chain started … ===` and `--- soak: cycle_soak --case epoch3 ---`; chain PID 2185. A monitor is armed on `chain.log` for the rc lines, roots and failure signatures.
+- [x] 25. (S32) Monitor to ARM R's terminal: `progress.jsonl` (cycle, phase, tokens) and the `rc=` lines; on `rc=0` commit the root and logs.
+      done-when: `run-status.json` `state: completed`; `deepreason results --json --verify` 0 violations; organiser-rendered count > 0; dossier digest `2a49cd52…` in the admission summary
+      output: ARM R terminal: `state failed, stop_reason operational_failure, cycle 3, spend 464359 of 500000`; `verify_root` 0 violations, `/verification/valid True`; 15 section plans name `dr.output-contract.organiser` (0 would have been INVALID); admission 3 sources / 94 blocks / 0 refusals under digest `d2120e7d…` (the pin corrected by Amendment 5). A FAILED arm under PREREG §3; not relaunched.
+- [x] 26. (S30) ARM 0R's three calls complete (chain runs them); commit `runs/arm0R/`.
+      done-when: `ARM0R_RESULT.json` has `completed_calls: 3`
+      output: `completed_calls 3, total_tokens 47345`; three calls at 5875/7334/5875-plus chars, all `finish_reason: stop`; `runs/arm0R/` committed whole.
+- [x] 27. (S33) [COMMIT] `judge_organiser.py harvest`, then `score`, then `reveal`; commit `blind/` whole.
+      done-when: `blind/scores.json` exists with every unit scored or marked failed; reveal output pasted
+      output: harvest: `notice: armR is a FAILED arm … its unit is NOT harvested (PREREG §3)`, `notice: ARM H deferred`, `harvested 6 units from 3 arms`; score: `scored 6 candidates`; reveal: ARM0 mean 15.00, ARM0R mean 15.00, contested 0. `blind/` committed whole.
+- [x] 28. (S29, S34) [COMMIT] `analyse_organiser.py --json runs/VERDICT.json`; RESULTS.md dated segment with every R35 content and the appendix.
+      done-when: S34's greps hold; the verdict is quoted in the rule's words
+      output: `VERDICT (PREREG §7 as amended): INCONCLUSIVE -- an arm has no usable unit (§7 floor)`; RESULTS.md's second dated segment carries the terminals, the spend table, the census, the scores, the verdict in the rule's words, the appendix and the residue.
+- [x] 29. (S35, S36) VALIDATION.md re-issued (every S26–S36 accept run; scope diffs pasted; no gate — say so).
+      done-when: verdict line present
+      output: VALIDATION.md's launch-window section: every S26–S36 accept run with output; scope diffs empty; no gate run and none owed.
+- [x] 30. (S36) [COMMIT] DELIVERY.md re-issued with R1–R36; push; clean tree.
+      done-when: `git status --porcelain` empty; one hash from `git rev-parse HEAD origin/…`
+      output: DELIVERY.md extended with R26–R36; `git status --porcelain` empty; `git rev-parse HEAD origin/…` prints `3acb0b187c0f6df05e99073a9a3efc67feefe2b4` twice.

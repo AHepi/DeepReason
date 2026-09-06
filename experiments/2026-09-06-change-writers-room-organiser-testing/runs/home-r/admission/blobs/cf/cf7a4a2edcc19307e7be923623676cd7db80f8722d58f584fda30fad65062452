@@ -1,0 +1,183 @@
+PROPOSAL id=327f6ea7cd7e8284 cycle=1 about=a0b919ae506615d2 kind=refuted-if
+The conjecture is refuted if it can be demonstrated that preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects.
+[kind: refuted-if]
+
+PROPOSAL id=26d5b990b5bc8574 cycle=1 about=92968bc0cf42d965 kind=refuted-if
+The conjecture is refuted if it can be shown that the concept of 'verisimilitude' (truth-likeness) cannot be formally defined without implicitly relying on inductive probability, thereby making the shift from probability to verisimilitude merely a semantic disguise for the very induction Popper rejected.
+[kind: refuted-if]
+
+PROPOSAL id=6035a9c4dd99607c cycle=1 about=67873974ceb0d9a1 kind=refuted-if
+The conjecture is refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests (i.e., choosing the theory most likely to fail quickly if false) without any assumption that the theory will actually succeed or remain unfalsified in the future.
+[kind: refuted-if]
+
+PROPOSAL id=36cfcd3be6fec4dd cycle=1 about=e0959a2b912e796c kind=refuted-if
+The conjecture is refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true, thereby collapsing the distinction between preferring a bold theory and preferring a probable one.
+[kind: refuted-if]
+
+PROPOSAL id=1505af0e644ade00 cycle=2 about=da6f74bed07c54a4 kind=refuted-if
+The conjecture is refuted if it can be shown that Popper explicitly justified the preference for better-corroborated theories in practical, life-or-death decisions (such as crossing a bridge) on the grounds of safety or reliability rather than solely on the grounds of maximizing testability and information content.
+[kind: refuted-if]
+
+PROPOSAL id=894962a1f008e6a9 cycle=2 about=d8dfb83afbb1d054 kind=refuted-if
+The conjecture is refuted if it can be demonstrated that Popper explicitly grounded the preference for better-corroborated theories in a pragmatic decision rule (such as minimizing immediate risk or maximizing informational content) without invoking any metaphysical assumption about the theory's proximity to truth or verisimilitude.
+[kind: refuted-if]
+
+PROPOSAL id=7e9418dfffc8d0e7 cycle=2 about=055185d569b6c415 kind=refuted-if
+The conjecture is refuted if it can be demonstrated that Popper explicitly justified the preference for better-corroborated theories in practical decisions solely on the grounds of maximizing testability and information content, without invoking any expectation of future success based on past performance.
+[kind: refuted-if]
+
+PROPOSAL id=4130c76430265dbd cycle=2 about=20b35eec8f966227 kind=refuted-if
+The conjecture is refuted if Popper can be shown to have explicitly grounded the preference for better-corroborated theories in a non-inductive decision rule, such as maximizing informational content or minimizing the risk of immediate falsification, without invoking any expectation of future success based on past performance.
+[kind: refuted-if]
+
+PROPOSAL id=f05e2b4be3097c27 cycle=3 about=6b78e82f822685c4 kind=refuted-if
+The conjecture would be refuted if it could be demonstrated that maximizing 'informational content at risk' logically necessitates an assumption that the future will resemble the past, thereby collapsing the proposed distinction between a methodological rule for learning and a probabilistic claim about the world's stability.
+[kind: refuted-if]
+
+PROPOSAL id=80747775872400a1 cycle=3 about=6bdc16fc61c22003 kind=refuted-if
+The conjecture would be refuted if Popper explicitly distinguished 'verisimilitude' as a logical relation of content comparison rather than a predictive expectation, demonstrating that one can prefer a theory with higher verisimilitude solely to maximize the severity of future tests without assuming the future will resemble the past.
+[kind: refuted-if]
+
+PROPOSAL id=41655a0386ab6680 cycle=3 about=e8cdaadd3471f4ba kind=refuted-if
+The conjecture would be refuted if Popper explicitly argued in his published works that the preference for well-corroborated theories in practical action is a 'non-rational' or purely 'psychological' commitment, rather than a methodologically rational choice based on critical discussion.
+[kind: refuted-if]
+
+PROPOSAL id=d36cdb85a1ff8209 cycle=3 about=76f244935b33bbf8 kind=refuted-if
+The conjecture would be refuted if it could be demonstrated that the concept of 'minimizing known unknowns' logically entails a probabilistic assessment of future performance, thereby collapsing the distinction between a deductive statement about past tests and an inductive expectation of future reliability.
+[kind: refuted-if]
+
+PROPOSAL id=9f6d3e913488869c cycle=1 about=a0b919ae506615d2 kind=forbids
+The conjecture forbids attributing any increased likelihood of future success or truth to a theory solely on the basis of its survival of past tests; it must maintain that the preference is entirely devoid of predictive probability.
+[kind: forbids]
+
+PROPOSAL id=0b2aecf320d7c57c cycle=1 about=92968bc0cf42d965 kind=forbids
+The conjecture forbids claiming that surviving severe tests provides a rational basis for preferring one theory over another unless it can demonstrate a logical connection between test survival and increased truth-likeness that does not itself assume the uniformity of nature.
+[kind: forbids]
+
+PROPOSAL id=ea3ee63d9cfa224e cycle=1 about=67873974ceb0d9a1 kind=forbids
+The conjecture forbids equating the pragmatic choice of a theory for application with an epistemic belief in its truth or future reliability; it must maintain that acting on a corroborated theory is a decision to expose it to new risks, not a prediction of its safety.
+[kind: forbids]
+
+PROPOSAL id=246d6bf09acaadbf cycle=1 about=e0959a2b912e796c kind=forbids
+The conjecture forbids attributing any pragmatic advantage to the better-corroborated theory regarding its reliability in future applications, such as bridge building or medical treatment, beyond its utility as a tool for generating new tests.
+[kind: forbids]
+
+PROPOSAL id=f78dd7b72be6be4b cycle=2 about=da6f74bed07c54a4 kind=forbids
+The conjecture forbids the interpretation that corroboration serves as a proxy for truth-likeness or verisimilitude in decision-making contexts; it restricts the function of corroboration strictly to identifying the best candidate for immediate falsification.
+[kind: forbids]
+
+PROPOSAL id=860860e77979b7dc cycle=2 about=d8dfb83afbb1d054 kind=forbids
+The conjecture forbids the interpretation that accepting verisimilitude as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated as a logical relation of content rather than a statistical likelihood of future success.
+[kind: forbids]
+
+PROPOSAL id=87fd1b233fbc5cda cycle=2 about=055185d569b6c415 kind=forbids
+The conjecture forbids the interpretation that accepting verisimilitude as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated as a logical relation of content rather than a statistical likelihood of future success.
+[kind: forbids]
+
+PROPOSAL id=cfd595809bceedd4 cycle=2 about=20b35eec8f966227 kind=forbids
+The conjecture forbids the interpretation that accepting verisimilitude (truth-likeness) as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated strictly as a logical comparison of content rather than a statistical prediction of future reliability.
+[kind: forbids]
+
+PROPOSAL id=1b22593776a82d32 cycle=3 about=6b78e82f822685c4 kind=forbids
+The conjecture forbids interpreting the preference for better-corroborated theories as having any predictive power regarding the specific success of the theory in the next immediate test case; it must strictly limit the justification to the value of the potential falsification itself.
+[kind: forbids]
+
+PROPOSAL id=167ae189aba74907 cycle=3 about=6bdc16fc61c22003 kind=forbids
+The conjecture forbids the interpretation that acting on a theory with greater verisimilitude entails a belief that this theory is more likely to yield true predictions in specific future applications compared to a less corroborated rival.
+[kind: forbids]
+
+PROPOSAL id=f5af1d40f91fcb34 cycle=3 about=e8cdaadd3471f4ba kind=forbids
+The conjecture forbids the interpretation that Popper considered the act of choosing the best-tested theory for action to be a logical extension of scientific rationality; it must maintain that this specific choice lies outside the bounds of strict scientific logic.
+[kind: forbids]
+
+PROPOSAL id=892b4d95ca1fbdc2 cycle=3 about=76f244935b33bbf8 kind=forbids
+The conjecture forbids the interpretation that choosing the better-corroborated theory provides any rational basis for expecting it to succeed in the next specific instance; the justification must remain strictly limited to the logical asymmetry of having survived more severe tests thus far.
+[kind: forbids]
+
+PROPOSAL id=8df03babcebe473a cycle=1 about=a0b919ae506615d2 kind=must-not
+The conjecture must not claim that the 'fitness' demonstrated by surviving severe tests provides a rational basis for action if that basis secretly relies on the unstated premise that nature is uniform enough for past fitness to matter for future outcomes.
+[kind: must-not]
+
+PROPOSAL id=c6f64791220fad18 cycle=1 about=92968bc0cf42d965 kind=must-not
+The conjecture must not treat the 'metaphysical hope' that surviving tests correlates with truth-likeness as a sufficient defense against the charge of cryptic inductivism if that hope functions identically to an inductive premise in guiding practical scientific action.
+[kind: must-not]
+
+PROPOSAL id=e0e189524f5ca805 cycle=1 about=67873974ceb0d9a1 kind=must-not
+The conjecture must not claim that Popper's framework reduces to mere psychological habit unless it first demonstrates that no non-inductive logical rule (such as the methodological rule to test the boldiest surviving hypothesis) can govern the preference for better-corroborated theories.
+[kind: must-not]
+
+PROPOSAL id=e5341a7146dfcce4 cycle=1 about=e0959a2b912e796c kind=must-not
+The conjecture must not claim that acting on a theory solely to falsify it constitutes a coherent defense for scientific practice in domains where failure results in catastrophic loss rather than merely new knowledge.
+[kind: must-not]
+
+PROPOSAL id=bd5ea987593030ca cycle=2 about=da6f74bed07c54a4 kind=must-not
+The conjecture must not imply that a scientist acting on a well-corroborated theory expects it to work in the future; if the defense requires any expectation of future success derived from past performance, it smuggles in the very induction it claims to avoid.
+[kind: must-not]
+
+PROPOSAL id=3c12f1ad9f1f9663 cycle=2 about=d8dfb83afbb1d054 kind=must-not
+The conjecture must not conflate the methodological rule of preferring bold, testable theories with a metaphysical belief that nature is structured to reward such boldness with truth; the defense must remain agnostic regarding nature's actual response to boldness.
+[kind: must-not]
+
+PROPOSAL id=7bba8c754d2a49ef cycle=2 about=055185d569b6c415 kind=must-not
+The conjecture must not conflate the methodological rule of preferring bold, testable theories with a metaphysical belief that nature is structured to reward such boldness with truth; the defense must remain agnostic regarding nature's actual response to boldness.
+[kind: must-not]
+
+PROPOSAL id=3a1c5fca00655777 cycle=2 about=20b35eec8f966227 kind=must-not
+The conjecture must not conflate the methodological imperative to test bold theories with a metaphysical belief that nature rewards such boldness with truth; it must remain agnostic regarding whether the universe is structured to favor high-content theories.
+[kind: must-not]
+
+PROPOSAL id=55f7c25a486af510 cycle=3 about=6b78e82f822685c4 kind=must-not
+The conjecture must not imply that an agent acting on this 'rational bet' expects a higher rate of successful outcomes compared to choosing a less corroborated theory, as such an expectation would reintroduce the inductive principle of uniformity that the conjecture explicitly seeks to avoid.
+[kind: must-not]
+
+PROPOSAL id=c39a4baf52449b16 cycle=3 about=6bdc16fc61c22003 kind=must-not
+The conjecture must not conflate the methodological rule of choosing the best-tested theory for the purpose of critical discussion with the psychological act of expecting successful practical outcomes, as doing so would misrepresent Popper's separation of the context of justification from the context of discovery.
+[kind: must-not]
+
+PROPOSAL id=7dd095c5b147e13f cycle=3 about=e8cdaadd3471f4ba kind=must-not
+The conjecture must not imply that the 'biological or pragmatic imperative' cited as the basis for action retains any epistemic weight regarding the truth-likeness or future reliability of the theory, as this would reintroduce the inductive element the conjecture claims to isolate.
+[kind: must-not]
+
+PROPOSAL id=017c72cde89ffc1d cycle=3 about=76f244935b33bbf8 kind=must-not
+The conjecture must not imply that the 'defensive posture' of avoiding immediate error is functionally equivalent to a strategy for maximizing long-term predictive success, as such an equivalence would smuggle in the principle of the uniformity of nature that Popper rejected.
+[kind: must-not]
+
+PROPOSAL id=eb00f7c3429ea82e cycle=1 about=a0b919ae506615d2 kind=predicts
+The conjecture predicts that a consistent Popperian agent, when forced to choose between two unfalsified theories where one is better corroborated, will always choose the better-corroborated one while simultaneously asserting they have no reason to believe it will perform better in the next instance.
+[kind: predicts]
+
+PROPOSAL id=08cacb9ef7debef8 cycle=1 about=92968bc0cf42d965 kind=predicts
+The conjecture predicts that a scientist acting strictly on this verisimilitude-based preference will choose the better-corroborated theory for critical applications while simultaneously maintaining that this choice offers no greater expectation of predictive success than choosing a random unfalsified theory.
+[kind: predicts]
+
+PROPOSAL id=e3374255cb01e7a3 cycle=1 about=67873974ceb0d9a1 kind=predicts
+The conjecture predicts that if its interpretation is correct, a consistent Popperian scientist would be unable to rationally distinguish between choosing a well-tested bridge design and a randomly selected unfalsified design for actual construction, as both choices would carry identical expectations regarding future performance.
+[kind: predicts]
+
+PROPOSAL id=c337b90ec871b602 cycle=1 about=e0959a2b912e796c kind=predicts
+The conjecture predicts that a scientist strictly adhering to this view would choose the most precise, high-risk theory for critical real-world decisions even when a vaguer, safer, and equally unfalsified alternative exists, provided the choice is framed as an experiment.
+[kind: predicts]
+
+PROPOSAL id=103f120f459fe816 cycle=2 about=da6f74bed07c54a4 kind=predicts
+The conjecture predicts that if one were to choose a less-corroborated theory over a better-corroborated one purely for practical action, Popper would criticize this not as irrational risk-taking, but as a methodological failure to prioritize the speed of error detection.
+[kind: predicts]
+
+PROPOSAL id=a32e11e960cf29aa cycle=2 about=d8dfb83afbb1d054 kind=predicts
+The conjecture predicts that if the preference for corroborated theories were based solely on past performance without the 'verisimilitude gamble,' Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ in content.
+[kind: predicts]
+
+PROPOSAL id=79f0852177b3982b cycle=2 about=055185d569b6c415 kind=predicts
+The conjecture predicts that if the preference for corroborated theories were based solely on past performance without the 'verisimilitude gamble,' Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ in content.
+[kind: predicts]
+
+PROPOSAL id=7dda28d49f50a5b3 cycle=2 about=20b35eec8f966227 kind=predicts
+The conjecture predicts that if the preference for corroborated theories were based solely on past survival without a 'verisimilitude gamble' or similar non-inductive heuristic, Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ significantly in empirical content.
+[kind: predicts]
+
+PROPOSAL id=eebc3dcbc9288c6d cycle=3 about=e8cdaadd3471f4ba kind=predicts
+The conjecture predicts that any attempt to justify the preference for corroborated theories in action solely through Popperian scientific logic will fail, necessitating an appeal to extra-logical factors such as instinct, convention, or pragmatic survival needs.
+[kind: predicts]
+
+PROPOSAL id=68235e6e2bc905b5 cycle=3 about=76f244935b33bbf8 kind=predicts
+The conjecture predicts that a consistent Popperian agent can prefer Theory A over Theory B for action while simultaneously maintaining that there is no logical reason to believe Theory A is more likely to be true or to yield correct predictions than Theory B in any future trial.
+[kind: predicts]

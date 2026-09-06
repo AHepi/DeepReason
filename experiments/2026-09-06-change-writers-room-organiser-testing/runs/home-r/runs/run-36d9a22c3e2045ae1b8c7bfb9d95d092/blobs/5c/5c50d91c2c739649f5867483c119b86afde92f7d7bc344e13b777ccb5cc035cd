@@ -1,0 +1,346 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'Pragmatic Wager': it is a rational bet based on past fitness in the specific environment of reality, not an epistemic probability claim that the theory will succeed in the future.",
+      "mechanism": "Choosing the theory that has survived severe tests is akin to betting on a horse that has won every race; we do not know it will win the next, but it has demonstrated a capacity to withstand falsification that others lack, making it the only rational choice if one must act.",
+      "counterconditions": [
+        "Refuted if preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects.",
+        "Refuted if the 'fitness' demonstrated by surviving severe tests provides a rational basis for action only by secretly relying on the unstated premise that nature is uniform enough for past fitness to matter for future outcomes.",
+        "Refuted if a consistent Popperian agent cannot choose the better-corroborated theory while simultaneously asserting they have no reason to believe it will perform better in the next instance."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "This candidate (Pragmatic Wager) does not rely on verisimilitude or the mechanism of increasing truth-likeness; it relies solely on the pragmatic necessity of choosing the 'fittest' survivor for action, distinct from the verisimilitude defense addressed by the criticism."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to explicitly frame the claim as the 'strongest case for the affirmative answer' (defensibility) as required by the problem, acknowledging that the full problem requires balancing this against the negative case (smuggling induction) which is presented in subsequent candidates."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The criticism claims the wager is functionally indistinguishable from induction. The rebuttal is that the wager explicitly denies predictive probability and relies only on the lack of alternatives for a rational agent who must act, distinguishing the 'rationality of the choice given ignorance' from 'inductive inference of success'."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "departure_declared",
+          "note": "Departing from the 'Performative Contradiction' angle (SRC_003) which this candidate opposes; this candidate asserts the preference is defensible, whereas the criticism defends the indefensibility charge."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The criticism argues redefining preference as 'efficient falsification' contradicts acting 'to achieve results'. This candidate accepts that tension but argues the 'wager' is precisely the bridge: we act on the best-tested theory because it is our best guess, even if the logical justification is only that it is the least irrational option available, not that it guarantees results."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The criticism claims Popper viewed the preference as rational, not psychological. This candidate aligns with that by framing the wager as a 'rational choice available if we must act', distinct from a blind biological impulse, thus satisfying Popper's view of rational decision-making under uncertainty."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "block": "5760eda6c518c3d1",
+          "quote": "The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim. Popper argues that while past success guarantees nothing about the future (rejecting induction), the theory that has survived the severest tests has proven its 'fitness' in the specific environment of reality so far."
+        },
+        {
+          "block": "327f6ea7cd7e8284"
+        },
+        {
+          "block": "8df03babcebe473a"
+        },
+        {
+          "block": "eb00f7c3429ea82e"
+        }
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "The preference is defensible by shifting the goal from 'probability' to 'verisimilitude' (truth-likeness): a highly corroborated theory is a better candidate for being closer to the truth because it has withstood attempts to show it is false, making its selection the only methodological move consistent with the aim of science.",
+      "mechanism": "Science aims at truth, not certainty; therefore, selecting the theory with the highest empirical content that has not yet been refuted is the rational path to increasing verisimilitude, operating on the regulative ideal that surviving severe tests correlates with truth-likeness.",
+      "counterconditions": [
+        "Refuted if it can be shown that the concept of 'verisimilitude' cannot be formally defined without implicitly relying on inductive probability, thereby making the shift from probability to verisimilitude merely a semantic disguise for the very induction Popper rejected.",
+        "Refuted if the 'metaphysical hope' that surviving tests correlates with truth-likeness functions identically to an inductive premise in guiding practical scientific action.",
+        "Refuted if Popper explicitly grounded the preference for better-corroborated theories in a pragmatic decision rule without invoking any metaphysical assumption about the theory's proximity to truth."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "While Tichý and Miller refuted Popper's initial formal definition, this candidate relies on the 'regulative ideal' aspect where verisimilitude functions as a guiding principle rather than a strictly defined logical metric, arguing that the methodological commitment survives the formal refutation."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to present this as the second strongest case for defensibility, focusing on the metaphysical/regulative aspect distinct from the pragmatic wager."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "departure_declared",
+          "note": "Departing from the 'Pragmatic Wager' (SRC_001) to focus on the 'Verisimilitude' defense; the mechanisms differ (fitness vs. truth-likeness)."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The criticism targets the 'Performative Contradiction' charge. This candidate rebuts by asserting that aiming for verisimilitude is a rational methodological rule, not a performative contradiction, as it does not claim certainty but directionality toward truth."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The criticism argues against redefining preference as falsification efficiency. This candidate counters that the preference is for 'truth-likeness', which inherently values the survival of severe tests as evidence of structural fidelity, not just speed of refutation."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Aligns with Popper's view that the preference is rational (based on the aim of truth) rather than non-rational/psychological, directly addressing the criticism's requirement."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "block": "4367b2ed8c73936e",
+          "quote": "The defense lies in shifting the goal from 'probability' to 'verisimilitude' (truth-likeness). A highly corroborated theory is not more probable, but it is a better candidate for being closer to the truth because it has withstood attempts to show it is false."
+        },
+        {
+          "block": "26d5b990b5bc8574"
+        },
+        {
+          "block": "c6f64791220fad18"
+        },
+        {
+          "block": "894962a1f008e6a9"
+        }
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "The preference is indefensible on Popper's own terms and constitutes a 'Performative Contradiction': by advising scientists to prefer the better-corroborated theory for action, Popper implicitly asserts that past performance is a reliable guide to future reliability, smuggling induction back in.",
+      "mechanism": "If corroboration reports only past history and implies nothing about the future, then preferring Theory A over Theory B for future application is irrational within his system; acting on corroboration requires an inductive leap that reduces his methodology to a description of psychological habit.",
+      "counterconditions": [
+        "Refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed or remain unfalsified in the future.",
+        "Refuted if Popper explicitly distinguishes between 'pragmatic preference for action' and 'assertion of future reliability', showing that one can prefer the best-tested map without assuming the territory will not change.",
+        "Refuted if a consistent Popperian scientist can rationally distinguish between choosing a well-tested bridge design and a randomly selected unfalsified design for actual construction."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "departure_declared",
+          "note": "This candidate argues the preference is indefensible (smuggles induction), whereas the criticism discusses the verisimilitude defense; this candidate rejects verisimilitude as a successful shield against the induction charge."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to explicitly frame this as the 'strongest case for the negative answer' (indefensibility/smuggling induction) as required by the problem prompt."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The criticism attacks the Pragmatic Wager. This candidate supports that attack, agreeing that the wager collapses into induction, thus reinforcing the 'Performative Contradiction' claim."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The criticism claims the charge relies on a false equivalence. This candidate rebuts by insisting the equivalence is real: acting on a theory for future application *is* asserting its future reliability, making the distinction semantic rather than substantive."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The criticism defends the 'efficient falsification' redefinition. This candidate rejects that redefinition as incompatible with the reality of scientific action (e.g., building bridges), where the goal is success, not just learning."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The criticism claims Popper viewed the preference as rational. This candidate argues that if the preference smuggles in induction, then Popper's claim to rationality is flawed, and the 'rationality' he describes is actually disguised irrationalism (habit)."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "block": "67873974ceb0d9a1",
+          "quote": "The preference is indefensible on Popper's own terms and indeed smuggles induction back in through the back door. By advising scientists to 'prefer' the better-corroborated theory for action, Popper implicitly asserts that past performance is a reliable guide to future reliability, which is the very definition of inductive reasoning he sought to destroy."
+        },
+        {
+          "block": "6035a9c4dd99607c"
+        },
+        {
+          "block": "e0e189524f5ca805"
+        },
+        {
+          "block": "e3374255cb01e7a3"
+        }
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "The preference is defensible as a methodological rule for maximizing informational content: we choose the better-corroborated theory not because we think it will hold true, but because it offers the most detailed map currently available, providing the richest basis for further criticism and testing.",
+      "mechanism": "A theory that survives severe tests is one that took a greater risk of being wrong; preferring it is a preference for boldness and precision, acting on the bold theory specifically to try to break it, meaning our 'preference' is actually a preference for the most efficient path to potential falsification.",
+      "counterconditions": [
+        "Refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true, thereby collapsing the distinction between preferring a bold theory and preferring a probable one.",
+        "Refuted if acting on a theory solely to falsify it constitutes a coherent defense for scientific practice in domains where failure results in catastrophic loss rather than merely new knowledge.",
+        "Refuted if a scientist strictly adhering to this view would not choose the most precise, high-risk theory for critical real-world decisions even when a vaguer, safer alternative exists."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "departure_declared",
+          "note": "This candidate avoids verisimilitude entirely, focusing on informational content and falsification efficiency, thus sidestepping the specific logical refutation of verisimilitude."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to present this as an alternative defensive case (Informational Content) distinct from the Pragmatic Wager and Verisimilitude arguments."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "departure_declared",
+          "note": "Departing from the 'Pragmatic Wager' mechanism; this candidate relies on the value of information and testability rather than 'fitness'."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The criticism defends the separation of preference and reliability. This candidate leverages that separation, arguing the preference is purely for 'testability', not reliability, thus avoiding the performative contradiction."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The criticism claims redefining preference as 'efficient falsification' contradicts acting to achieve results. This candidate accepts this cost, arguing that for a strict Popperian, 'action' in science is always experimental, and the apparent contradiction arises only if one assumes science aims for static truth rather than growth."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Argues that preferring the most testable theory is a rational methodological rule, consistent with Popper's view of rationality as critical debate, not a psychological habit."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "block": "34f3d4b29076900a",
+          "quote": "The preference is defensible because corroboration functions as a measure of informational content rather than likelihood. A theory that survives severe tests is one that took a greater risk of being wrong; preferring it is a preference for boldness and precision."
+        },
+        {
+          "block": "36cfcd3be6fec4dd"
+        },
+        {
+          "block": "e5341a7146dfcce4"
+        },
+        {
+          "block": "c337b90ec871b602"
+        }
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "The preference is defensible through the 'Asymmetry of Risk': rejecting a well-corroborated theory in favor of a poorly tested one increases the likelihood of immediate error without offering compensatory increase in testability, making the choice of the robust theory a logical deduction about the current state of knowledge.",
+      "mechanism": "The better-corroborated theory is simply the one that has not yet been falsified despite greater exposure to falsification; choosing it minimizes 'known unknowns' relative to alternatives, a defensive posture requiring no belief in future validity, only recognition of current robustness.",
+      "counterconditions": [
+        "Refuted if it could be demonstrated that the concept of 'minimizing known unknowns' logically entails a probabilistic assessment of future performance, thereby collapsing the distinction between a deductive statement about past tests and an inductive expectation of future reliability.",
+        "Refuted if the 'defensive posture' of avoiding immediate error is functionally equivalent to a strategy for maximizing long-term predictive success, as such an equivalence would smuggle in the principle of the uniformity of nature.",
+        "Refuted if a consistent Popperian agent cannot prefer Theory A over Theory B for action while maintaining there is no logical reason to believe Theory A is more likely to yield correct predictions."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "departure_declared",
+          "note": "This candidate relies on risk asymmetry and current knowledge states, not verisimilitude, avoiding the Tichý/Miller refutation."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to present this as another strong case for defensibility, focusing on risk management rather than truth-likeness or pragmatism."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The criticism claims the wager is inductive. This candidate rebuts by framing the choice as a logical deduction about the *current* state of falsification (Theory A has survived more), not a prediction about the *future*, thus avoiding the uniformity assumption."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The criticism defends the separation of preference and reliability. This candidate uses that separation to argue that minimizing 'known unknowns' is a rational static assessment, not a dynamic prediction."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The criticism argues against redefining preference. This candidate argues that 'minimizing immediate error' is the only rational goal compatible with fallibilism, and that expecting 'success' is the inductive trap."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Asserts that recognizing asymmetry of risk is a rational logical operation, consistent with Popper's critical rationalism, not a psychological habit."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "block": "57f441db5943af87",
+          "quote": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated theory in favor of a poorly tested one increases the likelihood of immediate error without offering any compensatory increase in testability."
+        },
+        {
+          "block": "d36cdb85a1ff8209"
+        },
+        {
+          "block": "017c72cde89ffc1d"
+        },
+        {
+          "block": "68235e6e2bc905b5"
+        }
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "The preference smuggles induction back in because 'verisimilitude' functions as a covert proxy for probability: to prefer a theory as 'closer to the truth' based on past tests is to assume a uniformity in nature that the structural features allowing survival will continue to align with reality.",
+      "mechanism": "Without the inductive assumption that the future resembles the past, the concept of verisimilitude offers no actionable guide; thus, Popper's advice to scientists is practically empty unless it relies on the very principle of uniformity he rejected.",
+      "counterconditions": [
+        "Refuted if Popper explicitly distinguished 'verisimilitude' as a logical relation of content comparison rather than a predictive expectation, demonstrating that one can prefer a theory with higher verisimilitude solely to maximize the severity of future tests without assuming the future will resemble the past.",
+        "Refuted if verisimilitude can be defined purely logically without invoking the principle of the uniformity of nature.",
+        "Refuted if the preference for better-corroborated theories is defensible as a methodological rule guiding where to look for errors next, rather than guaranteeing future predictive success."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "This candidate agrees with the spirit of the criticism (that verisimilitude fails as a shield) but extends it to argue that verisimilitude itself *is* the smuggled induction, rather than just being formally refuted."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to serve as the strongest articulation of the 'smuggling induction' charge specifically via the failure of verisimilitude, complementing the 'Performative Contradiction' candidate."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The criticism attacks the Pragmatic Wager. This candidate supports the broader thesis that *all* defenses (including verisimilitude) collapse into induction, reinforcing the negative answer."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "The criticism claims the 'Performative Contradiction' charge relies on a false equivalence. This candidate rebuts by arguing that using verisimilitude as a guide *is* asserting future reliability, making the equivalence valid."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The criticism defends methodological rules. This candidate argues that if the rule (verisimilitude) relies on uniformity to be actionable, then the rule itself is inductive, regardless of how it is labeled."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The criticism claims Popper viewed the preference as rational. This candidate argues that if the preference relies on a hidden inductive premise (uniformity), then Popper's claim to a purely rational, non-inductive foundation is false."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "block": "6bdc16fc61c22003",
+          "quote": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because 'verisimilitude' (truth-likeness) functions as a covert proxy for probability. To prefer Theory A over Theory B on the grounds that A is 'closer to the truth' based on past tests is to assume a uniformity in nature..."
+        },
+        {
+          "block": "80747775872400a1"
+        },
+        {
+          "block": "c39a4baf52449b16"
+        },
+        {
+          "block": "109c6e75b7fc93d6"
+        }
+      ],
+      "typicality": 0.5
+    }
+  ]
+}

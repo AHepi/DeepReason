@@ -1,0 +1,21 @@
+{
+ "arms": {
+  "ARM0-single-call": {
+   "chars": 7688,
+   "contested_units": 0,
+   "n_units": 3,
+   "score": 15.0,
+   "worst_judge": 15.0
+  },
+  "ARM0R-room-bare": {
+   "chars": 6879,
+   "contested_units": 0,
+   "n_units": 3,
+   "score": 15.0,
+   "worst_judge": 15.0
+  }
+ },
+ "schema": "organiser-verdict.v2",
+ "verdict": "INCONCLUSIVE",
+ "why": "an arm has no usable unit (\u00a77 floor)"
+}

@@ -1,0 +1,64 @@
+=== ARM 0R started 2026-09-06T09:21:52Z ===
+01-conjectures.txt: OK
+02-proposals.txt: OK
+03-objections.txt: OK
+CONVERSION.json: OK
+prompt 60675 chars, 60680 bytes, sha256 03a8280867a704459d835e9facc6d81573e7a755ea27c3bc561218732e050f5e; no call made
+{
+ "01-conjectures.txt": "feb1dc480421d1cdb26260223a82ea82d88d9e14ff761ad63ec9662acd4088bb",
+ "02-proposals.txt": "cf7a4a2edcc19307e7be923623676cd7db80f8722d58f584fda30fad65062452",
+ "03-objections.txt": "87163fb464c30da6e06e4daf475245637aad04de8a7f92d6e482b1cb734e0ded"
+}
+call 1: started 2026-09-06T09:21:52Z
+call 1: completed=True chars=6879 usage={'prompt_tokens': 14375, 'completion_tokens': 1465, 'total_tokens': 15840} finish=stop s=19.5
+call 2: started 2026-09-06T09:22:11Z
+call 2: completed=True chars=7334 usage={'prompt_tokens': 14375, 'completion_tokens': 1561, 'total_tokens': 15936} finish=stop s=20.9
+call 3: started 2026-09-06T09:22:32Z
+call 3: completed=True chars=5875 usage={'prompt_tokens': 14375, 'completion_tokens': 1194, 'total_tokens': 15569} finish=stop s=15.3
+{
+ "schema": "organiser-arm0R-result.v1",
+ "model": "qwen3.5:397b",
+ "k": 3,
+ "calls": [
+  {
+   "k": 1,
+   "completed": true,
+   "content_chars": 6879,
+   "usage": {
+    "prompt_tokens": 14375,
+    "completion_tokens": 1465,
+    "total_tokens": 15840
+   },
+   "finish_reason": "stop",
+   "seconds": 19.5
+  },
+  {
+   "k": 2,
+   "completed": true,
+   "content_chars": 7334,
+   "usage": {
+    "prompt_tokens": 14375,
+    "completion_tokens": 1561,
+    "total_tokens": 15936
+   },
+   "finish_reason": "stop",
+   "seconds": 20.9
+  },
+  {
+   "k": 3,
+   "completed": true,
+   "content_chars": 5875,
+   "usage": {
+    "prompt_tokens": 14375,
+    "completion_tokens": 1194,
+    "total_tokens": 15569
+   },
+   "finish_reason": "stop",
+   "seconds": 15.3
+  }
+ ],
+ "completed_calls": 3,
+ "total_tokens": 47345
+}
+rc=0
+=== ARM 0R finished 2026-09-06T09:22:48Z ===

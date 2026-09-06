@@ -82,4 +82,29 @@ A10: labels stay inside the verbatim bodies; the header carries kind and label s
 A11: the organiser wording moves the conjecturer's prose alone.
 Amendment 2: the diff-budget ceiling raised 450 → 800 (fixture copy removed; the twelve-proof test file kept whole).
 
+## Launch window (SPEC Amendment 3; R26–R36), 2026-09-06
+
+Re-validated for the launch window. The build's own verdict above is unchanged.
+
+S26: `soak rc=0`; the chain's four `rc=0` lines (warmup, setup, qualify, ARM 0R) and ARM R's `rc=4`; `root=…run-36d9a22c3e2045ae1b8c7bfb9d95d092`; `=== chain finished ===`. ARM R's `run-status.json`: `state failed stop_reason operational_failure cycle 3 spend 464359 limit 500000` : PASS (the launch ran; the arm failed, which is a recorded outcome, not a validation failure)
+S27: `grep -c -- '--token-budget 500000' runs/armR.sh` -> 1; `git diff 50fc35847 -- runs/armR.sh` -> exactly two lines, `-… 800000 \` / `+… 500000 \` : PASS
+S28: PREREG carries one `## Amendments` heading with six numbered amendments (1–4 pre-launch, 5 and 6 during and after, each dated and saying what it changes); `sha256sum PREREG.md` `cd4b19da24882884…` equals the digest in its commit message : PASS
+S29: CRITERIA diff against `d8/judge_d8.py` empty; `ARM0R-room-bare` in both instruments; both `--help` exit 0 : PASS
+S30: `bash -n` on `runs/arm0R.sh` and `runs/chain.sh` exit 0; no `armH.sh` in the chain; `arm0R.sh` once; `runs/arm0R/` holds three `call-*.json` and `ARM0R_RESULT.json` with `completed_calls 3, total_tokens 47345` : PASS
+S31: `git check-ignore -q env` exit 0; mode `600`; `git grep` finds no key anywhere in the tranche : PASS
+S32: judged on typed outcomes only — `run-status.json`, `deepreason results --json --verify` (`/verification/valid True`, `/verification/violations 0`), the admission summary (3 sources, 94 blocks, 0 refusals; the digest pin corrected by Amendment 5), and 15 section plans naming `dr.output-contract.organiser` (0 would have made the arm invalid; it did not) : PASS
+S33: `blind/` holds `candidates.jsonl`, `keymap.json`, `scores.json`; 6 units scored, 0 failed; the keymap was opened only by `reveal`, after the scores existed : PASS
+S34: RESULTS.md carries two dated segments, the appendix, the failure-budget ledger (spent 0), and the verdict in the rule's own word (`INCONCLUSIVE`, four occurrences) : PASS
+S35: `git diff --stat 50fc35847..HEAD -- src mini tests` -> empty (0 lines); `sha256sum -c attachment/ATTACHMENT.sha256` -> all four OK; no gate run and none owed (no code under `src/`, `tests/` moved) : PASS
+S36: this section and DELIVERY.md's table extended to R36 : PASS
+
+## Full gate (launch window)
+not run and not owed: `git diff --stat 50fc35847..HEAD -- src mini tests` is empty, so no code the gate covers moved (R36, C5). The build's gate above (`5106 passed, 6 skipped, 0 failed`) is the last one on this tree.
+
+## Map (launch window)
+untouched — no `docs/map/` document moved in this window, and no behaviour under `src/` changed. The two findings this run produced are parked (P6, P7), not documented as behaviour.
+
 ## Verdict: PASS
+The window did what it was asked: it amended, sealed, launched, monitored, judged and reported. The measure's own verdict is INCONCLUSIVE, which is an outcome of the experiment, not of the work.
+
+## Build verdict (unchanged): PASS

@@ -205,3 +205,149 @@ such.
 - The organiser runs every cycle; cycles 2–4 are its "carry what is not yet carried, else abstain" turns, not the ordinary conjecturer's (PARKED P3).
 - The soak covers the managed path's shape, not the organiser shell.
 - If no credential is present when this is delivered, none of §10's steps 3–5 has run, RESULTS.md says so, and this document stands sealed for the operator to launch with one command (`chain.sh`).
+
+---
+
+## Amendments (dated, numbered, append-only; the document above is unchanged)
+
+**Amendment 1 (2026-09-06, the launch window — before any live call): ARM R's ceiling is 500 000.**
+The operator: "It needs a test run now. Propose some for a single model run
+and test against bare model. 500k tokens". §0's row "Cycles and ceiling"
+becomes, for ARM R, `--cycles 4 --token-budget 500000`; cycles stay 4 as
+sealed. A `budget_exhausted` stop is a CLEAN terminal (operator law
+2026-08-29) and the run is judged as it stands at that stop. What moved:
+`runs/armR.sh` line 26, `--token-budget 800000` → `--token-budget 500000`, and
+nothing else in that file. Prediction, registered now from the record: the M1
+control arm (same model and question family, 4 cycles, pack 2 500) spent
+541 666 tokens — ~135 000 per cycle, 48 conjecturer calls at a mean of 8 210
+and 88 critic calls; ARM R's organiser brief is ~23 000 prompt tokens
+(`proof/ORGANISER_RECEIPTS.json`) but only the seed problem's calls render
+the room (derived problems get the 6 113-byte legend only), so a cycle costs
+~135 000 plus ~17 000 per seed-problem conjecturer call. **The 500 000
+ceiling ends the run in CYCLE 3** (the registered prediction); in cycle 2 if
+the seed problem is called more than ~4 times a cycle; reaching cycle 4
+falsifies the estimate that the room costs at least 35 000 tokens per cycle.
+Budget (§0): ARM R ≤ 500 000; the attached-evidence battery is the plan and
+not counted in it.
+
+**Amendment 2 (same date): ARM 0R — the bare model with the room pasted in.**
+A fourth arm, `ARM0R-room-bare`: the same model and profile as §0, the same
+frozen question, and the user message = the problem description, one blank
+line, then the three attachment files' bytes VERBATIM in name order separated
+by blank lines — no harness, no schema, no system prompt, reasoning off,
+`max_tokens` 8192 — PREREG_D8 §1's call shape plus the room text. Three
+independent calls; each is on its own "one call, no harness, plus the room".
+Measured before launch (`runs/arm0R.py --dry-run`): the prompt is 60 675
+characters (60 680 bytes), sha256
+`03a8280867a704459d835e9facc6d81573e7a755ea27c3bc561218732e050f5e`; the
+attachment digests are §0's. Recorded per call in `runs/arm0R/call-<k>.json`
+(request with key omitted, response, usage, finish_reason, content, the
+prompt's sha256, the attachment digests) and summarised in
+`runs/arm0R/ARM0R_RESULT.json`; each file's sha256 is pinned into the keymap
+at harvest. Typed terminal: as §1's — a completed call carries a
+`finish_reason` and non-empty content; transport failures retry with backoff
+up to 4 attempts; an empty or length-truncated completion is recorded as such
+and kept. Script: `runs/arm0R.sh` → `runs/arm0R.py`, run by `chain.sh` after
+ARM R. ARM 0R's three calls are the plan, not the failure budget. Budget
+(§0): ≤ ~60 000 tokens.
+
+**Amendment 3 (same date): ARM H deferred.** §2 stands as written and ARM H
+is NOT run in this window; it remains in this document as a deferred arm for
+a later launch (its script `runs/armH.sh` and its setup line are unchanged
+under `runs/`). What moved: `runs/chain.sh` — line 14 (`mkdir -p
+$D/runs/armH $D/runs/armR` → `mkdir -p $D/runs/armR $D/runs/arm0R`), line 21
+(ARM H's `setup_and_qualify.sh … home-h plain` — removed), line 23 (`armH.sh`
+— removed), and `arm0R.sh` appended after `armR.sh`; the header comment
+rewritten to say so. `tools/judge_organiser.py harvest` treats a missing
+`runs/armH/COMPOSED.txt` as a printed notice ("ARM H deferred") and harvests
+three arms; `tools/analyse_organiser.py` prints ARM H as deferred and reports
+`R vs H` only when its unit exists, never as part of the rule.
+
+**Amendment 4 (same date): the rule, applied pairwise against the two bare arms.**
+§6 and §7 are applied exactly as written to two pairs: `R vs 0` and
+`R vs 0R`. **ARM R is MATERIALLY BETTER iff it is BETTER than ARM 0 AND
+BETTER than ARM 0R** under §7's 2-of-15 margin and §6's length rule (a BETTER
+whose unit is more than 1.5× the other's length is NULL, length-
+uncontrolled). **ARM R WORSE** iff WORSE than either. **NULL** otherwise,
+reported in that word. `0R vs 0` is reported beside the rule for the reader
+and is not part of it. **The one new reading the extra arm buys, stated in
+advance:** R BETTER than 0 but NOT BETTER than 0R means the ROOM'S CONTENT,
+not the harness, carried the gain — `tools/analyse_organiser.py` prints that
+sentence when the pattern occurs and RESULTS.md repeats it in those words.
+The judged units are unchanged: ARM 0's three essays, ARM 0R's three replies
+(each whole), ARM R's one composed result. §8's predictions gain one line:
+**no direction predicted for R vs 0R**; and one directional line: ARM 0R's
+replies are LONGER than ARM 0's (the room gives the bare model more to say).
+
+**Instruments pinned at this amendment (committed before the launch):**
+`tools/judge_organiser.py` `af4af1f1bc899f9ddda78289a8260573c44fac60c557e5f608b7173a6a8e136a`
+(its `CRITERIA` block byte-identical to D8's — the sealed `diff` re-run empty);
+`tools/analyse_organiser.py` `71e831c94941ae15eb64886ee5ca8fd853761813f09f677a5125b55153ba8237`;
+`tools/compose_result.py` unchanged, `7c2835448886465ffd07ffadc9d057ac0a83da5f58d30dbff96509b4d81b9c62`;
+`runs/arm0R.py` `78f95ae585a4436d4c3b230a68acc7b44394b7c54f7201e65655433cc399da9d`;
+`runs/arm0R.sh` `9a4f3209fa815fd370ca0542a98d22e17dc3ea7ea45d86001328bfeea85eb24b`;
+`runs/armR.sh` `99fe726e96018d47af00b3f9fa77c557b9beff53c679a8fcbaf49a0b863489c0`;
+`runs/chain.sh` `442a8ceeea96c341da4a18ed1b4c20587e12fb4be701f102a4c2cb5e7e234df5`.
+§10's order becomes: this amendment sealed → soak → the attached-evidence
+battery → ARM R → ARM 0R → harvest, score, reveal, analyse → RESULTS.md.
+Residue added to §11: ARM 0R's three calls and ARM R's one unit are n = 3 and
+n = 1; the pasted room and the attached room are the same bytes, but the bare
+model reads them as one message while the seat reads them as frozen evidence
+with a legend — the comparison isolates the harness's organising and
+criticism from the content, not the presentation.
+
+**Amendment 5 (2026-09-06, during ARM R's launch — a correction to §0's own pin, decided by measurement).**
+§0 pinned "the run's own admission at launch must print the same digest
+[`2a49cd52…`]; a different digest is a FAILED arm". The live launch printed
+`d2120e7dcb90332b0ebd4eea71996b705b895d7604fd67bbe6db8a510f04275f` with
+`sources_admitted 3`, `blocks {paragraph: 94}`, `tiers {evidence: 94}`,
+`refusals []`. **The pin was wrong, and the arm is sound.** Measured rather
+than argued: admitting the same three files twice offline, changing only the
+provenance label, gives `2fc5dde83b853f83…` under `supplied_by="dry attach"`
+and `b1c80cc7cbcf102f…` under `supplied_by="deepreason.reason.attach"`, both
+with 3 sources, 94 blocks, 0 refusals. The dossier digest therefore binds the
+PROVENANCE, the problem reference and the source locators — not the room's
+bytes alone — and `proof/DRY_ATTACH.txt` computed its value under a different
+provenance, a different problem_ref and different locators from the live
+path. No digest computed offline could ever have matched.
+
+What proves the room reached the run unchanged, and did:
+(a) `runs/armR.sh` verified the committed attachment before launching —
+`01-conjectures.txt: OK`, `02-proposals.txt: OK`, `03-objections.txt: OK`,
+`CONVERSION.json: OK` (a mismatch exits 6 and no call is made);
+(b) the admission summary's content is identical to the dry attach's: 3
+sources, 94 evidence-tier paragraph blocks, 0 refusals.
+
+§0's row is amended to read: **the launch must print 3 sources, 94 blocks,
+0 refusals, and armR.sh's digest check must pass**; the dossier digest is
+recorded as a fact of the run, not compared to an offline value. Nothing else
+in §0 moves, and the decision rule is untouched.
+
+**Also recorded, a defect in this window's own instrument, not in the run:**
+`runs/armR.sh` line 25 echoes "reason, 4 cycles, 800000 token ceiling" while
+line 26 passes `--token-budget 500000`. The sed that applied Amendment 1
+moved the command and not the banner. The RUN is correct — the live process
+line carries `--token-budget 500000` and the root's own `progress.jsonl`
+records `token_limit: 500000` — and the log line is wrong. The banner is
+fixed after ARM R terminates, never while bash is reading the script.
+
+**Amendment 6 (2026-09-06, after ARM R terminated — the disposition of a failed arm).**
+ARM R terminated `state: failed`, `stop_reason: operational_failure`,
+`V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY … route seat has terminally exhausted
+its smallest authorized contract`, at cycle 3, having spent 464 359 of the
+500 000 (root
+`runs/home-r/runs/run-36d9a22c3e2045ae1b8c7bfb9d95d092`). Under §3 that is a
+FAILED ARM, recorded as failed and NOT relaunched to get a number: the one
+relaunch §3 allows is a transport death before cycle 1 completed, and this is
+neither. Under §7 an arm with no usable unit makes the verdict INCONCLUSIVE.
+So: **ARM R's composed unit is NOT harvested and NOT judged**; the verdict for
+`R vs 0` and `R vs 0R` is INCONCLUSIVE; `0R vs 0` is judged and reported as
+Amendment 4 already provides. `tools/judge_organiser.py` now reads the arm's
+root `run-status.json` and refuses a unit whose run is not `completed`,
+printing a notice — that IMPLEMENTS §3 rather than changing it (composition
+succeeds on a partial record, so without the check a failed run's positions
+would be scored as if it had reached a terminal). Its `CRITERIA` block is
+unchanged and still byte-identical to D8's; its digest becomes
+`ea2003851dc51dc50eb9acd9f06a6cf14cd7fa60780bd45eeccc39095bd952f1`.
+The failure's cause, its evidence and its disposition are written up in
+RESULTS.md and parked as P6; nothing here changes the decision rule.

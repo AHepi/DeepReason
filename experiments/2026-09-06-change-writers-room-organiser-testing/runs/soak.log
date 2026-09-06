@@ -1,18 +1,18 @@
-[soak] stub provider on 127.0.0.1:43471 (reused from wheel_operational_smoke)
-[soak] working directory /tmp/cycle-soak-ano940w3
-[soak] built root: manifest 7099ab09fc0dfd73…  criteria ['uhi-energy-balance@v1', 'uhi-nocturnal-release@v1', 'uhi-cross-city-modulator@v1']
-[soak] qualified in 3.5s
+[soak] stub provider on 127.0.0.1:36669 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/cycle-soak-efsbzdl4
+[soak] built root: manifest 18991e96c4e63660…  criteria ['uhi-energy-balance@v1', 'uhi-nocturnal-release@v1', 'uhi-cross-city-modulator@v1']
+[soak] qualified in 4.4s
 [soak] driving 8 cycles …
 
 ========================================================================
 CYCLE SOAK -- case epoch3
 ========================================================================
-  manifest sha256        7099ab09fc0dfd73d9255697d1f104419fde531526a15341e272c2120bfa4977
+  manifest sha256        18991e96c4e636608d8f251bf58401064c9437e204b6825d708ec6679a7ee9ee
   criteria               uhi-energy-balance@v1, uhi-nocturnal-release@v1, uhi-cross-city-modulator@v1
   attached evidence      True
   cycles requested       8
-  qualification          rc=0 (3.5s)
-  drive                  248.9s, 11 progress events
+  qualification          rc=0 (4.4s)
+  drive                  318.0s, 11 progress events
 
 -- S1 run assertions ---------------------------------------------------
   [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
@@ -58,6 +58,5 @@ CYCLE SOAK -- case epoch3
       63  workflow-work-preparation-v1
       32  workflow-work-terminal-v1
 
-[soak] report /tmp/cycle-soak-ano940w3/soak-report.json
+[soak] report /tmp/cycle-soak-efsbzdl4/soak-report.json
 [soak] exit 0 (clean)
-rc=0

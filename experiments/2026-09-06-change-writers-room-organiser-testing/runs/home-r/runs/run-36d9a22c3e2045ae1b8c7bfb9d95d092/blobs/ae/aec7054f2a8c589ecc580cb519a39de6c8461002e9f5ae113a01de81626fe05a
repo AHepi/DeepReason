@@ -1,0 +1,120 @@
+{
+  "candidates": [
+    {
+      "content": "The Pragmatic Wager (SRC_005) depends on the Asymmetry of Risk (SRC_019) as its structural mechanism: the wager is rational only if the cost of rejecting a well-corroborated theory (potential loss of truth) strictly exceeds the cost of accepting a falsified one. This relation is refuted if it can be shown that the 'asymmetry' is merely a restatement of inductive expectation (that the future will resemble the past) rather than a distinct logical feature of falsification, thereby collapsing the wager into the induction it seeks to avoid.",
+      "typicality": 0.9,
+      "evidence_refs": [
+        {
+          "block": "5760eda6c518c3d1",
+          "quote": "The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim."
+        },
+        {
+          "block": "57f441db5943af87",
+          "quote": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated theory..."
+        },
+        {
+          "block": "327f6ea7cd7e8284"
+        }
+      ],
+      "neighbours": [
+        "SRC_005",
+        "SRC_019"
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "The candidate explicitly names 'dependence' as the relation kind and defines the mechanism (cost asymmetry) rather than reducing verisimilitude to a mere attitude. The 'refuted if' condition specifies a structural collapse (into induction), satisfying the requirement for a substantive link."
+        },
+        {
+          "handle": "SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate names the relation kind ('depends on') and states a specific 'refuted if' condition regarding the collapse of the asymmetry into induction, avoiding a mere narrative summary."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "The candidate proposes a specific relation ('dependence') with a clear 'refuted if' condition, avoiding the provision of a mere narrative summary."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "The 'refuted if' condition is a definitive statement ('if it can be shown that...'), not an open-ended conditional question."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The 'refuted if' condition defines the failure of the relation between the two endpoints (wager and asymmetry) via collapse into induction, rather than describing an internal failure of the risk concept alone."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate links 'The Pragmatic Wager' to 'Asymmetry of Risk' (a proxy for the decision-theoretic context) with a named relation ('depends on') and a specific refutation condition."
+        },
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "The content includes the predicate 'refuted if' and the relation keyword 'depends on', satisfying the relation-form criterion."
+        }
+      ]
+    },
+    {
+      "content": "Verisimilitude as a Regulative Ideal (SRC_005) inherits its defensive structure from Corroboration as Informational Content (SRC_006): the ideal functions only if corroboration successfully measures informational boldness without probabilistic contamination. This relation is refuted if it can be demonstrated that 'informational content' cannot be assessed independently of truth probability, forcing the regulative ideal to rely on the very inductive probabilities it claims to replace.",
+      "typicality": 0.85,
+      "evidence_refs": [
+        {
+          "block": "52cfd9c93db0465b",
+          "quote": "The conjecture predicts that a scientist acting strictly on this verisimilitude-based..."
+        },
+        {
+          "block": "34f3d4b29076900a",
+          "quote": "The preference is defensible because corroboration functions as a measure of..."
+        },
+        {
+          "block": "26d5b990b5bc8574"
+        }
+      ],
+      "neighbours": [
+        "SRC_005",
+        "SRC_006"
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "The candidate establishes a structural 'inheritance' relation between the ideal and the content measure, defining a specific mechanistic dependency rather than a mere reduction to commitment."
+        },
+        {
+          "handle": "SRC_010",
+          "kind": "rebutted",
+          "note": "The relation kind ('inherits') is named, and the 'refuted if' condition is explicitly stated as the collapse of content assessment into probability."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "The candidate provides a named relation and specific refutation condition, avoiding a narrative summary."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "The refutation condition is a direct assertion of failure conditions, not a pair of open-ended questions."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The 'refuted if' condition addresses the linkage between the two endpoints (ideal and content), not just an internal flaw of one."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate links the conjectures with a named relation ('inherits') and a clear refutation condition."
+        },
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "The content contains 'refuted if' and 'inherits', satisfying the form criteria."
+        }
+      ]
+    }
+  ]
+}

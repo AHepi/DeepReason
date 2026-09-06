@@ -23,7 +23,7 @@ export DEEPREASON_SEAT_SHELL=conjecturer=seat.conjecturer.organiser-v1,argumenta
 export DEEPREASON_ROLE_PROMPT_TEMPLATE=role-prompt.organiser-v1
 echo "selectors: DEEPREASON_SEAT_SHELL=$DEEPREASON_SEAT_SHELL DEEPREASON_ROLE_PROMPT_TEMPLATE=$DEEPREASON_ROLE_PROMPT_TEMPLATE"
 echo "--- reason, 4 cycles, 800000 token ceiling, attached $(date -u +%FT%TZ) ---"
-deepreason --config "$CFG" reason --cycles 4 --token-budget 800000 \
+deepreason --config "$CFG" reason --cycles 4 --token-budget 500000 \
   --attach "$A/01-conjectures.txt" --attach "$A/02-proposals.txt" --attach "$A/03-objections.txt" "$Q"; echo "rc=$?"
 ROOT="$(ls -dt $DEEPREASON_HOME/runs/run-* 2>/dev/null | head -1)"
 echo "root=$ROOT"

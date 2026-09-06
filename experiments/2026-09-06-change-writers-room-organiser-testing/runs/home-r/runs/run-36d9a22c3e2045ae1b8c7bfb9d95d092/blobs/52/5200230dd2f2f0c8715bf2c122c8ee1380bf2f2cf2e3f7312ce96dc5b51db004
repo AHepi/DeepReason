@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation because the 'refuted if' condition describes an internal failure of the risk asymmetry concept (failing to distinguish theories or presupposing induction) rather than defining the conditions under which the claimed 'integration' between the two specific endpoints would be false. A valid refutation condition for an integration must specify how the interaction between the two named entities breaks down, not just how one entity might fail in isolation.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

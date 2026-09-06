@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation because the 'refuted if' condition describes a collapse into induction (a meta-logical critique of validity) rather than specifying a failure of the named relation type (dependence). The prompt requires stating what the specific relation (dependence) is refuted if; instead, the target argues that the entire framework is circular. It substitutes a defense of the relation's soundness for the required definition of the relation's falsification conditions, effectively answering 'why this might be wrong generally' instead of 'under what specific condition this dependence fails'.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "A substantive relation requires naming the kind and stating the specific conditions under which that relation is refuted, not arguing that the underlying concepts are circular or invalid.",
+      "premise_evidence": null,
+      "successor_question": "Can you restate the relation by explicitly defining the condition under which the 'dependence' of the Pragmatic Wager on the Asymmetry of Risk would fail, without appealing to the general validity of induction?"
+    }
+  ]
+}

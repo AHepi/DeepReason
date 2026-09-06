@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it relies on 'verisimilitude' (truth-likeness) to justify preferring better-corroborated theories, but Popper's own formal definition of verisimilitude was proven logically incoherent by Tichý and Miller. They demonstrated that under Popper's criteria, no false theory can be closer to the truth than another false theory, and since all universal scientific theories are strictly false (having zero probability), the concept cannot rank them. Consequently, the mechanism collapses: without a coherent definition of verisimilitude, the preference for highly corroborated theories cannot be defensibly distinguished from the inductive assumption that past success predicts future truth-likeness, which is precisely what the target claims to avoid.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's formal definition of verisimilitude is logically incoherent when applied to false theories, as proven by Tichý and Miller.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot formally rank false theories, does Popper's methodology offer any non-inductive rational basis for action, or must it concede to pragmatic conventionalism?"
+    }
+  ]
+}

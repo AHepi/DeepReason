@@ -1,0 +1,30 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms as a non-inductive, critical decision to test the most informative and severely tested theory, rather than a probabilistic bet on its truth.",
+    "mechanism": "Popper distinguishes between the logical status of a theory (which remains unproven) and the critical preference for action. The mechanism is 'critical preference': we choose the theory that has survived the severest tests not because it is likely true, but because it is the best available target for further falsification and offers the highest potential content. Acting on it is a rational commitment to the method of conjecture and refutation, accepting the risk of error without assigning probability.",
+    "counterconditions": [
+      "If the preference implies an expectation of future success or higher probability of truth.",
+      "If the choice relies on an inductive principle that the future will resemble the past.",
+      "If the agent treats corroboration as a positive justification rather than a report of past critical performance."
+    ],
+    "typicality": 0.85,
+    "evidence_refs": [
+      {
+        "block": "2d4ce010144a017a",
+        "quote": "The conjecture conflates 'preference for action' with 'belief in future success.' Popper explicitly"
+      },
+      {
+        "block": "2ca80d4d2536191b",
+        "quote": "The conjecture commits a straw man fallacy by suggesting Popper advises preference based on 'past p"
+      },
+      {
+        "block": "0a4795991a7b96f3",
+        "quote": "The claim that Popper's system reduces to 'psychological habit' ignores his argument for the superi"
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

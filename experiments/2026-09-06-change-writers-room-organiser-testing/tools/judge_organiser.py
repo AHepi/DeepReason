@@ -22,6 +22,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import pathlib
 import statistics
@@ -106,21 +107,61 @@ def _arm0_texts() -> list[tuple[str, str]]:
 
 
 def _composed(arm_dir: str) -> list[tuple[str, str]]:
-    """ONE unit per harness arm: the composed result the arm script wrote."""
+    """ONE unit per harness arm: the composed result the arm script wrote.
+
+    REFUSED FOR A FAILED ARM. PREREG §3 says an `operational_failure` is a
+    FAILED arm, recorded as failed, and §7 says an arm with no usable unit
+    makes the verdict INCONCLUSIVE. Composition succeeds on a partial record,
+    so without this check a failed run's positions would be scored as if the
+    run had reached a terminal -- claiming more than the record shows. The
+    check reads the root's own `run-status.json`; a root that carries none is
+    treated as absent, not as passed.
+    """
     path = TRANCHE / "runs" / arm_dir / "COMPOSED.txt"
     if not path.exists():
         raise SystemExit(f"REFUSED: {path} does not exist; the arm has not reached its terminal")
+    composed = TRANCHE / "runs" / arm_dir / "COMPOSED.json"
+    if composed.exists():
+        root = pathlib.Path(json.loads(composed.read_text(encoding="utf-8"))["root"])
+        status_path = root / "run-status.json"
+        status = json.loads(status_path.read_text(encoding="utf-8")) if status_path.exists() else {}
+        if status.get("state") != "completed":
+            print(
+                f"notice: {arm_dir} is a FAILED arm "
+                f"(state={status.get('state')!r}, stop_reason={status.get('stop_reason')!r}); "
+                "its unit is NOT harvested (PREREG §3)"
+            )
+            return []
     return [(f"{arm_dir}/COMPOSED.txt", path.read_text(encoding="utf-8"))]
+
+
+def _arm0R_texts() -> list[tuple[str, str]]:
+    """The bare model with the room pasted in (PREREG Amendment 2): three
+    recorded calls under runs/arm0R/, each pinned by its file's sha256."""
+    out = []
+    for path in sorted((TRANCHE / "runs" / "arm0R").glob("call-*.json")):
+        rec = json.loads(path.read_text(encoding="utf-8"))
+        if rec.get("completed") and rec.get("content", "").strip():
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            out.append((f"arm0R/{path.stem}@sha256:{digest}", rec["content"]))
+    return out
 
 
 def harvest() -> int:
     BLIND.mkdir(exist_ok=True)
     rows, keymap = [], {}
-    for arm, items in (
+    arms = [
         ("ARM0-single-call", _arm0_texts()),
-        ("ARMH-harness", _composed("armH")),
+        ("ARM0R-room-bare", _arm0R_texts()),
         ("ARMR-organiser", _composed("armR")),
-    ):
+    ]
+    # ARM H is DEFERRED (PREREG Amendment 3): harvested when its unit exists,
+    # noted when it does not -- a notice, not a refusal.
+    if (TRANCHE / "runs" / "armH" / "COMPOSED.txt").exists():
+        arms.insert(2, ("ARMH-harness", _composed("armH")))
+    else:
+        print("notice: ARM H deferred -- runs/armH/COMPOSED.txt absent; harvesting three arms")
+    for arm, items in arms:
         for ident, text in items:
             bid = str(uuid.uuid4())
             rows.append({"bid": bid, "text": text})
@@ -130,7 +171,7 @@ def harvest() -> int:
         "\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8"
     )
     (BLIND / "keymap.json").write_text(json.dumps(keymap, indent=1), encoding="utf-8")
-    print(f"harvested {len(rows)} units from 3 arms")
+    print(f"harvested {len(rows)} units from {len(arms)} arms")
     print("  blind/candidates.jsonl  -> {bid, text} only")
     print("  blind/keymap.json       -> NOT to be opened until scores.json exists")
     return 0

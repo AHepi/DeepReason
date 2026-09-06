@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is defensible 'only by accepting a non-probabilistic metaphysical commitment to verisimilitude' is refuted by the third countercondition: Popper explicitly grounded the preference in a pragmatic decision rule (choosing the theory that has withstood the severest tests) without invoking any metaphysical assumption about proximity to truth. The target incorrectly presents verisimilitude as the sole defensive route, ignoring Popper's own pragmatic justification which avoids the metaphysical cost the target claims is necessary.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly grounded the preference in a pragmatic decision rule without invoking any metaphysical assumption about proximity to truth.",
+      "premise_evidence": null,
+      "successor_question": "If the preference can be defended pragmatically without metaphysical commitments to verisimilitude, does the target's entire framing of the 'cost' of acceptance collapse?"
+    }
+  ]
+}

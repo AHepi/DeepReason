@@ -1,0 +1,57 @@
+{
+  "candidates": [
+    {
+      "content": "The Pragmatic Wager (a0b919ae506615d2) depends on the rejection of inductive probability for its defense; it is refuted if preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects.",
+      "evidence_refs": [
+        {
+          "block": "5760eda6c518c3d12a90e55bb76bc7a79a2a0f9c374e3871d7a52496c7b21549",
+          "quote": "The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim."
+        },
+        {
+          "block": "07ec28399009e60bfbe500f75a1f37cc4bd6bb06fa9553e8c7fcc5ec82c4e8bd",
+          "quote": "The analogy of betting on a horse that has won every race fails under Popperian scrutiny because, u"
+        }
+      ],
+      "neighbours": [
+        "SRC_005",
+        "SRC_003"
+      ],
+      "typicality": 0.5
+    },
+    {
+      "content": "Verisimilitude as a Regulative Ideal (92968bc0cf42d965) reduces the defense of theory preference to a shift from probability to truth-likeness; it is refuted if it can be shown that the concept of 'verisimilitude' cannot be formally defined without implicitly relying on inductive probability, thereby making the shift from probability to verisimilitude merely a semantic disguise for the very induction Popper rejected.",
+      "evidence_refs": [
+        {
+          "block": "4367b2ed8c73936ee4d583ab45d7e6a2d64791c87a55870c1e91f63547e1b280",
+          "quote": "The defense lies in shifting the goal from 'probability' to 'verisimilitude' (truth-likeness)."
+        },
+        {
+          "block": "2ca79ab9e6d293c354539a4d8a571cc7c18a518b8411cb5aa5fff4a78c2cc4ee",
+          "quote": "The conjecture relies on the concept of 'verisimilitude' (truth-likeness) to bridge the gap between"
+        }
+      ],
+      "neighbours": [
+        "SRC_005",
+        "SRC_003"
+      ],
+      "typicality": 0.5
+    },
+    {
+      "content": "The Decision-Theoretic Void (20b35eec8f966227) contradicts the claim that Popper's framework offers a rational basis for single-case decisions; it is refuted if Popper explicitly argued in his published works that the 'asymmetry of risk' provides a sufficient non-probabilistic foundation for such preferences.",
+      "evidence_refs": [
+        {
+          "block": "0fc9f5b85417c7fd156e2480cd098144dadff2e4c5f4ce7bf42acba0126ddd1c",
+          "quote": "Popper's framework offers no rational basis for preference in single-case decisions, re"
+        },
+        {
+          "block": "507dda6b1ca83f3aedf83dbb90a72b52750ec1817bf06ad4fd0c084ccbbe0abf",
+          "quote": "The conjecture would be refuted if Popper explicitly argued in his published works t"
+        }
+      ],
+      "neighbours": [
+        "SRC_002"
+      ],
+      "typicality": 0.5
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to resolve the problem's core tension regarding 'acting on' a theory. While the target correctly identifies that Popper prefers bold theories for their testability, it ignores the pragmatic reality that scientists (and Popper) rely on these theories for successful prediction and engineering, not merely to falsify them. By framing the preference solely as a strategy for 'efficient path to potential falsification,' the target contradicts the prompt's observation that agents 'act on' the theory. If the goal were purely falsification, one might prefer the most fragile theory to break it quickly; instead, we rely on the corroborated theory because we tentatively trust its truth-value for practical application, which smuggles in an inductive expectation of future reliability that the target does not address.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

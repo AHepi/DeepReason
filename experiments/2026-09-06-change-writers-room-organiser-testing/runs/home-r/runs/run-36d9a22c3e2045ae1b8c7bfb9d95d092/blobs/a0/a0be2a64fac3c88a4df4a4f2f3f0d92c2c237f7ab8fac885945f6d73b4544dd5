@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "attack": true,
+      "case": "The target's defense collapses because its core mechanism—choosing the well-corroborated theory to 'minimize known unknowns' and avoid 'immediate error'—implicitly assigns a higher probabilistic weight to the future reliability of that theory based on its past survival. Popper explicitly rejects the idea that past success makes a theory more probable or a safer bet for the future; he insists corroboration is purely a report of past performance with no inductive bridge to future utility. By arguing that rejecting a well-corroborated theory increases the 'likelihood of immediate error,' the target smuggles in the very inductive assumption (that past survival predicts future success) that Popper sought to eliminate. If one withdraws the premise that past survival logically entails a lower risk of future error without invoking probability, the argument that the preference is defensible on strictly Popperian terms falls apart, leaving it as an indefensible inductive leap.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Choosing a well-corroborated theory over a poorly tested one reduces the 'likelihood of immediate error' solely based on logical deduction from current knowledge states, without implying that past survival makes future success more probable.",
+      "premise_evidence": [
+        {
+          "block": "question-ba75796c3facc7a3d0d448d6eaa09a2e",
+          "quote": "Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable."
+        },
+        {
+          "block": "SRC_001",
+          "quote": "rejecting a well-corroborated theory in favor of a poorly tested one increases the likelihood of immediate error"
+        }
+      ],
+      "successor_question": "If Popper denies that past survival increases the probability of future success, on what non-probabilistic, non-inductive basis can he claim that acting on a well-corroborated theory is less likely to lead to error than acting on a poorly tested one?",
+      "target_alias": "SRC_001"
+    }
+  ]
+}
