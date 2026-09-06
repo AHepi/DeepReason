@@ -1,0 +1,174 @@
+bringing up nodes...
+bringing up nodes...
+
+........................................................................ [  1%]
+........................................................................ [  2%]
+........................................................................ [  4%]
+..........................s..s.......................................... [  5%]
+........................................................................ [  6%]
+..................................................s..................... [  8%]
+........................................................................ [  9%]
+........................................................................ [ 11%]
+.........s.............................................................. [ 12%]
+........................................................................ [ 13%]
+........................................................................ [ 15%]
+........................................................................ [ 16%]
+........................................................................ [ 18%]
+........................................................................ [ 19%]
+........................................................................ [ 20%]
+........................................................................ [ 22%]
+........................................................................ [ 23%]
+..................................s..................................... [ 25%]
+........................................................................ [ 26%]
+........................................................................ [ 27%]
+........................................................................ [ 29%]
+........................................................................ [ 30%]
+........................................................................ [ 32%]
+........................................................................ [ 33%]
+........................................................................ [ 34%]
+........................................................................ [ 36%]
+........................................................................ [ 37%]
+........................................................................ [ 38%]
+........................................................................ [ 40%]
+........................................................................ [ 41%]
+........................................................................ [ 43%]
+........................................................................ [ 44%]
+........................................................................ [ 45%]
+........................................................................ [ 47%]
+........................................................................ [ 48%]
+........................................................................ [ 50%]
+........................................................................ [ 51%]
+........................................................................ [ 52%]
+........................................................................ [ 54%]
+........................................................................ [ 55%]
+........................................................................ [ 57%]
+........................................................................ [ 58%]
+........................................................................ [ 59%]
+........................................................................ [ 61%]
+........................................................................ [ 62%]
+........................................................................ [ 64%]
+........................................................................ [ 65%]
+........................................................................ [ 66%]
+........................................................................ [ 68%]
+........................................................................ [ 69%]
+........................................................................ [ 70%]
+...................................................................FF.F. [ 72%]
+........................................................................ [ 73%]
+........................................................................ [ 75%]
+........................................................................ [ 76%]
+........................................................................ [ 77%]
+........................................................................ [ 79%]
+........................................................................ [ 80%]
+........................................................................ [ 82%]
+........................................................................ [ 83%]
+........................................................................ [ 84%]
+........................................................................ [ 86%]
+........................................................................ [ 87%]
+........................................................................ [ 89%]
+........................................................................ [ 90%]
+........................................................................ [ 91%]
+........................................................................ [ 93%]
+........................................................................ [ 94%]
+........................................................................ [ 96%]
+........................................................................ [ 97%]
+........................................................................ [ 98%]
+..............................................................           [100%]
+=================================== FAILURES ===================================
+__________ test_the_fixture_is_the_committed_attachment_byte_for_byte __________
+[gw2] linux -- Python 3.11.15 /usr/local/bin/python
+
+    def test_the_fixture_is_the_committed_attachment_byte_for_byte():
+        for name, digest in PINNED.items():
+>           assert hashlib.sha256((FIXTURES / name).read_bytes()).hexdigest() == digest, name
+E           AssertionError: 01-conjectures.txt
+E           assert '3e41fbafb44a...f45b6b4047655' == 'feb1dc480421...9662acd4088bb'
+E             
+E             - feb1dc480421d1cdb26260223a82ea82d88d9e14ff761ad63ec9662acd4088bb
+E             + 3e41fbafb44a00d9aebfe9aba55731fd3326eac0c4359ab187ff45b6b4047655
+
+tests/test_organiser_seat.py:241: AssertionError
+________________ test_admission_mints_one_block_per_room_record ________________
+[gw2] linux -- Python 3.11.15 /usr/local/bin/python
+
+    def test_admission_mints_one_block_per_room_record():
+        """S3's whole design: a record is a paragraph is a block."""
+        from deepreason.admission.parse import AdmissionInput, admit_sources
+        from deepreason.evidence import AttachedSourceProvenanceV1
+    
+        dossier, report = admit_sources(
+            [AdmissionInput(locator=name, data=data) for name, data in _files()],
+            problem_ref="question-x",
+            provenance=AttachedSourceProvenanceV1(
+                supplied_by="organiser fixture", acquisition_method="offline construction"
+            ),
+        )
+        assert report.refusals == []
+>       assert len(_blocks_of(dossier, "01-conjectures.txt")) == 12
+E       AssertionError: assert 13 == 12
+E        +  where 13 = len([AdmissionBlockV1(schema_='admission-block.v1', id='16c4445643674d71a18354fec80cd8f67039b1c7940740cd03851b36e7272626',..._end=4948, text_sha256='525949d7d36adb2827b251b69f4cdf9f839ccee5480605a4ec2f7ec60ebc67d4', text=None, title=None), ...])
+E        +    where [AdmissionBlockV1(schema_='admission-block.v1', id='16c4445643674d71a18354fec80cd8f67039b1c7940740cd03851b36e7272626',..._end=4948, text_sha256='525949d7d36adb2827b251b69f4cdf9f839ccee5480605a4ec2f7ec60ebc67d4', text=None, title=None), ...] = _blocks_of(EvidenceDossierV2(schema_='evidence-dossier.v2', dossier_digest='7e7c7b4f91ef79a83bd87ac12ef3c19636bde2781c3414bcf01ed...ance=AttachedSourceProvenanceV1(supplied_by='organiser fixture', acquisition_method='offline construction', note=None)), '01-conjectures.txt')
+
+tests/test_organiser_seat.py:257: AssertionError
+_______ test_the_organiser_brief_shows_the_whole_room_and_the_directive ________
+[gw2] linux -- Python 3.11.15 /usr/local/bin/python
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1098/popen-gw2/test_the_organiser_brief_shows0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f0bac370290>
+
+    def test_the_organiser_brief_shows_the_whole_room_and_the_directive(tmp_path, monkeypatch):
+        from tests.test_p4_citable_evidence import _abstain
+    
+        _bind_organiser(monkeypatch)
+        harness, manifest, config, dossier, seed_id = _room_root(tmp_path)
+        prompts, _registered = _dispatch(harness, manifest, config, seed_id, _abstain())
+        (prompt,) = prompts
+    
+        # The wording and the directive are the organiser's; the legacy ones are gone.
+        assert prompt.startswith("You are the organiser seat")
+        assert "DIRECTIVE: ORGANISE, DO NOT INVENT." in prompt
+        assert "refuted if not" in prompt and "uncertainties" in prompt and "0.5" in prompt
+        assert "COMPLEMENT DIRECTIVE" not in prompt
+        assert "DIVERSITY SPECIFICATIONS" not in prompt
+        assert "Include atypical candidates" not in prompt
+        assert "conjecture operator (gamma)" not in prompt
+    
+        # All three sources' bodies are in the frozen-evidence section, uncut.
+        assert prompt.count("BEGIN UNTRUSTED SOURCE DATA") == 3
+        assert "excluded_source_ids" not in prompt
+        for name, data in _files():
+            body = data.decode("utf-8")
+            assert body.strip() in prompt, f"{name} was not rendered whole"
+    
+        # The legend shows the first 32 blocks of the dossier -- and the dossier
+        # sorts its blocks by CONTENT ID (`admission/parse.py`, `sorted(blocks,
+        # key=lambda block: block.id)`), not by file or by record order. So the
+        # citable 32 are a hash-ordered sample of the 94, measured here on the
+        # pinned bytes: 7 conjectures, 13 proposals, 12 objections. SPEC A3
+        # assumed file order and was wrong; SPEC Amendment 1 records it, and
+        # PARKED P2 carries both the cap and the order.
+        assert "CITABLE EVIDENCE BLOCKS" in prompt
+        shown = [b for b in dossier.blocks if f"[{b.id[:16]}]" in prompt]
+        assert [b.id for b in shown] == [b.id for b in dossier.blocks[:32]]
+        assert dossier.blocks == tuple(sorted(dossier.blocks, key=lambda b: b.id))
+        by_file = {
+            name: sum(1 for b in shown if b in _blocks_of(dossier, name)) for name in PINNED
+        }
+>       assert by_file == {
+            "01-conjectures.txt": 7, "02-proposals.txt": 13, "03-objections.txt": 12
+        }, by_file
+E       AssertionError: {'01-conjectures.txt': 4, '02-proposals.txt': 17, '03-objections.txt': 11}
+E       assert {'01-conjectu...ions.txt': 11} == {'01-conjectu...ions.txt': 12}
+E         
+E         Differing items:
+E         {'01-conjectures.txt': 4} != {'01-conjectures.txt': 7}
+E         {'03-objections.txt': 11} != {'03-objections.txt': 12}
+E         {'02-proposals.txt': 17} != {'02-proposals.txt': 13}
+E         Use -v to get more diff
+
+tests/test_organiser_seat.py:304: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_organiser_seat.py::test_the_fixture_is_the_committed_attachment_byte_for_byte
+FAILED tests/test_organiser_seat.py::test_admission_mints_one_block_per_room_record
+FAILED tests/test_organiser_seat.py::test_the_organiser_brief_shows_the_whole_room_and_the_directive
+3 failed, 5166 passed, 6 skipped in 1153.31s (0:19:13)
+exit=1
