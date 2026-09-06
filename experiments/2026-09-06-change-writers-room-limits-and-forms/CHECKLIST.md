@@ -1,5 +1,5 @@
 # CHECKLIST — the writer's room: limits, forms, census
-State: next=13 blockers=none. Room run COMPLETE, census recorded in RESULTS.md. Census sealed; the chain (soak, then the room run) launches next. T1-T3 committed; R4 enforced by a record-level test with a caught mutation. T1 and T2 committed; full docs_verify (1419 checks, six known rows) recorded at step 7. Steps 1-3 done (limits fixed, configurable, tested). Captured and specified 2026-09-06 on the operator's message 4 ("the limits need changing … permission to change the forms … only if the commitments exist outside conjecture artifacts"). R4 verified on the record before any step.
+State: DONE. All 13 steps checked; delivered. Parked: P1, P2. Census sealed; the chain (soak, then the room run) launches next. T1-T3 committed; R4 enforced by a record-level test with a caught mutation. T1 and T2 committed; full docs_verify (1419 checks, six known rows) recorded at step 7. Steps 1-3 done (limits fixed, configurable, tested). Captured and specified 2026-09-06 on the operator's message 4 ("the limits need changing … permission to change the forms … only if the commitments exist outside conjecture artifacts"). R4 verified on the record before any step.
 
 Re-read REQUEST.md + SPEC.md before every step. One step per invocation.
 Map ids: DR-SUB-minireason, DR-SEAM-llm-x-minireason, DR-INV-seat-section-plugins, DR-INV-seat-section-sources, DR-CON-packs-and-token-economy, DR-INV-frozen-surfaces.
@@ -165,4 +165,12 @@ Map ids: DR-SUB-minireason, DR-SEAM-llm-x-minireason, DR-INV-seat-section-plugin
         withheld 10..79 entries with the count in the brief), spend, residue, and the appendix quoting
         all 46 proposals verbatim by conjecture.
       ```
-- [ ] 13. [COMMIT] VALIDATION.md (full gate, idle) + DELIVERY.md; push; clean.
+- [x] 13. [COMMIT] VALIDATION.md (full gate, idle) + DELIVERY.md; push; clean.
+
+      ```
+      $ python -m pytest tests/ -q -n 4   -> 5085 passed, 6 skipped in 1410.52s, gate rc=0 (0 failed)
+      $ python tools/docs_verify.py --fast -> 6 failed (the six known rows) ; --links -> 0 dangling
+      $ python -m pytest mini/tests/ -q    -> 172 passed, 1 skipped
+      VALIDATION.md PASS; DELIVERY.md; PARKED.md P1, P2. $ git status --porcelain -> (empty after this commit);
+      HEAD == origin/claude/mini-isolation-t3-t5-7tsc6d (pasted below the commit).
+      ```

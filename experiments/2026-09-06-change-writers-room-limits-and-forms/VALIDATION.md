@@ -45,7 +45,12 @@ the predecessor's delivery head d9170e433 beneath it). Branch
 
 ## Full gate
 
-<<GATE>>
+    $ python -m pytest tests/ -q -n 4        (idle box, detached; the room run and the census were over)
+    5085 passed, 6 skipped in 1410.52s (0:23:30)     -> gate rc=0, 0 failed
+      (5084 before this tranche; +1 is tests/test_shallow_reason.py::test_the_provider_profile_model_profile_reaches_the_engine)
+    $ python -m pytest mini/tests/ -q                 -> 172 passed, 1 skipped
+
+: **PASS**.
 
 ## Record-behavior preservation
 
