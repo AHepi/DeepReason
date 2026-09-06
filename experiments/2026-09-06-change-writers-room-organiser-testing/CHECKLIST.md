@@ -1,5 +1,5 @@
 # Checklist for: the organiser seat — testing the writer's room on the full harness
-State: IN PROGRESS - second launch window (steps 31-40); the first window's 30 steps stay checked (VALIDATION PASS; delivered)
+State: DONE - second launch window (steps 31-40) all checked; VALIDATION PASS on the change, INCONCLUSIVE on the measure; delivered
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order. One step per dr-execute-step invocation.
 Map ids (from REQUEST.md): DR-INV-frozen-surfaces, DR-SUB-evidence, DR-INV-seat-section-plugins, DR-INV-seat-section-sources, DR-CON-warrants-and-attacks, DR-SEAM-packs-and-token-economy-x-rules, DR-CON-packs-and-token-economy, DR-SUB-llm, DR-SUB-rules, DR-CON-conjecture-source, DR-SUB-minireason, DR-SEAM-llm-x-minireason. Seam read first: DR-SEAM-packs-and-token-economy-x-rules (the nine source-computed contexts and the allocator the evidence sections live under).
 Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 insertions over `src tests docs/map`.
@@ -123,10 +123,12 @@ State: IN PROGRESS
 - [x] 37. (S41, R43) [COMMIT] PREREG Amendment 7 sealed by sha256 in the commit message; SPEC Amendment 4; the census's second count; push.
       done-when: `sha256sum PREREG.md` equals the digest in that commit's message; `git status --porcelain` empty
       output: committed as `8a579f1e6` with `PREREG.md Amendment 7 sha256 0f76eef15bc6725ae01835234d1c07cd6c06bca7e184e493da659fa93c572c25` in the message; pushed.
-- [ ] 38. (S43, R46, R47) Credential check, then launch `chain.sh` detached from the repository root with the snapshot loop armed.
+- [x] 38. (S43, R46, R47) Credential check, then launch `chain.sh` detached from the repository root with the snapshot loop armed.
       done-when: `runs/chain.log` shows `soak rc=0` and the battery started; absent env -> STOP and say so
-      output: BLOCKED. `env` is absent on this container (`ls: cannot access 'env'`), it is gitignored, and no key was improvised (R46). The offline half of the precondition is green: `python -u scripts/cycle_soak.py --case epoch3` -> `[soak] exit 0 (clean)` on this tree (`runs/soak.log`). One command launches the rest.
-- [ ] 39. (S44) Monitor to ARM R's terminal; then `tools/organiser_census.py`, then `judge_pairwise.py harvest | choose | reveal`.
+      output: DONE. The operator supplied the key; `env` written gitignored at mode 600, never committed, never echoed. Launched detached 11:04:25Z on head `d8ef0b919`; `soak rc=0`; the warm-up was a CACHE HIT (~2 s, `Qualification tier: full`), no battery respent. Earlier state: BLOCKED. `env` was absent on this container (`ls: cannot access 'env'`), it is gitignored, and no key was improvised (R46). The offline half of the precondition is green: `python -u scripts/cycle_soak.py --case epoch3` -> `[soak] exit 0 (clean)` on this tree (`runs/soak.log`). One command launches the rest.
+- [x] 39. (S44) Monitor to ARM R's terminal; then `tools/organiser_census.py`, then `judge_pairwise.py harvest | choose | reveal`.
       done-when: `run-status.json` state and stop_reason read from the record; `runs/armR/CENSUS.json` and `runs/PAIRWISE_VERDICT.json` written
-- [ ] 40. (S45) [COMMIT] RESULTS.md dated segment; VALIDATION.md and DELIVERY.md re-issued with R37–R51; push.
+      output: ARM R stopped `failed`/`operational_failure` at cycle 3 with 495362 of 500000 -- a budget denial the harness mislabelled (P8). Nothing judged; the disposition went to the operator, who ruled "Resume the run with more budget first" (PREREG Amendment 8, sealed first). The continuation reached `completed`/`budget_exhausted` at cycle 4 spending 0 tokens, but the record then failed verification over three events it never touched (P9, PREREG Amendment 9). Census: 64 verified citations, 0 failures of any kind, 10 of 12 conjectures reached, 109 commitments. `harvest` refused ARM R's unit; the control was judged, 54 readings, 0 lost.
+- [x] 40. (S45) [COMMIT] RESULTS.md dated segment; VALIDATION.md and DELIVERY.md re-issued with R37–R51; push.
       done-when: `git status --porcelain` empty; one hash from `git rev-parse HEAD origin/…`
+      output: RESULTS.md gains its fourth and fifth dated segments; VALIDATION.md the S44/S45 rows with both scope diffs empty; DELIVERY.md the R37-R51 table. Verdict: control NULL (17/27 = 0.63 against a 0.67 bar), measure INCONCLUSIVE.

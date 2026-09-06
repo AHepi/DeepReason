@@ -170,3 +170,27 @@ launch fails for a real reason rather than a stale one (a failed start costs a
 
 `deepreason status --json` names the one remaining blocker in its own words:
 `"credential_present": false`, `"qualification_state": "credential_missing"`.
+
+### The arm, the continuation and the judging (S44, S45)
+
+| item | accept | output |
+|---|---|---|
+| S44 | typed outcomes quoted from the record | launch: `state failed`, `stop_reason operational_failure`, cycle 3, `495362` of `500000`; after the ruled continuation: `state completed`, `stop_reason budget_exhausted`, cycle 4, `token_limit 1695362`, `logged_tokens_this_run 0` |
+| S44 | `deepreason results --json --verify` | **before** the continuation: `violations 0, valid true` (committed at `HEAD~2`); **after**: `violations 4, valid false`; stored `REPLAY_VALIDATION.json`: 3 × `attempt-validity` at events 142, 215, 295. Parked as P9 |
+| S44 | organiser rendered on every conjecturer call | 11 section plans name `dr.output-contract.organiser` (0 would have made the arm INVALID) |
+| S44 | `runs/armR/CENSUS.json` | written and committed; 64 verified citations, 0 failures of any kind, 4 carried / 10 reached of 12, 36 accepted positions on the seed, 109 commitments |
+| S44 | `runs/PAIRWISE_VERDICT.json` | written and committed |
+| S41 | the registered predictions | `EVIDENCE_REF_UNKNOWN_BLOCK` **0** (predicted 0, was 58); `EVIDENCE_CITATION_VERIFIED` **64** (predicted ≥ 21, was 21); quote mismatches 0 (was 7); the run ended in cycle 3 as Amendment 1 predicted |
+| S42 | the instrument enforces §3 | `harvest` refused ARM R's unit and printed the three violations; `pairs: 0 measured, 9 control`; 54 readings, 0 lost |
+| S45 | RESULTS.md segments for this window | `grep -c '^## 2026-09-06' RESULTS.md` → 5 (two from the first window, three from this one) |
+| S45 | the verdict in the rule's own words | `[control] ARM0R-room-bare vs ARM0-single-call: consistent-win share 17/27 = 0.63, no preference 5, worst length ratio 1.01x -> NULL`; `VERDICT (PREREG Amendment 7): INCONCLUSIVE -- an arm has no usable unit (PREREG §7 floor)` |
+| S45 (C17) | `git diff --stat 8093b70fa..HEAD -- src tests mini docs` | empty |
+| S45 (C18) | the rubric instrument and its scores untouched | `git diff 8093b70fa..HEAD -- tools/judge_organiser.py tools/analyse_organiser.py blind/candidates.jsonl blind/keymap.json blind/scores.json` → empty |
+
+No gate was run and none is owed: nothing under `src/` or `tests/` moved.
+
+**Verdict: PASS on the change, INCONCLUSIVE on the measure.** Every acceptance
+check that does not depend on a judged harness unit is met. The two that do —
+a verdict for `R vs 0` and `R vs 0R` — are unmet because the arm has no usable
+unit, which is the sealed rule's own outcome and is recorded as such rather
+than worked around.

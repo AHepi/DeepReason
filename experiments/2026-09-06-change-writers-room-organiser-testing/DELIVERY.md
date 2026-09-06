@@ -191,3 +191,85 @@ fix. P7 rides with it, because the same id duality is why 58 of the
 organiser's 79 citations failed. And before the next launch is judged, the
 rubric needs headroom: eighteen readings at 15 of 15 mean this one cannot see
 a difference even if there is one.
+
+---
+
+# Delivered (second launch window): the bad configuration withdrawn, the seat's citations fixed and measured, the arm INCONCLUSIVE twice over on the harness's own bookkeeping
+
+## What happened
+
+The operator said "failure again. Bad config." The bad configuration was the
+monitor's own — a critic seat asked by its form for evidence ids its brief had
+been built to hide (R14, PARKED P6). This window withdrew that pairing, gave
+the seat one id system instead of two, replaced a judging rubric measured
+saturated, relaunched, and — on the operator's ruling — continued the arm to a
+clean terminal.
+
+**What worked.** Every prediction registered before the run held, several by a
+wide margin: not one citation failed, of any kind (64 verified, 0 unknown-block
+where there had been 58, 0 quote mismatches where there had been 7); the critic
+made 53 calls and did not die; 10 of the room's 12 conjectures were reached and
+109 refutation conditions registered; the arm ran on the operator's own 500 000
+and spent 495 362 of it.
+
+**What did not.** The arm has still not been judged, and both times the reason
+was the harness's bookkeeping rather than its reasoning. First a budget denial
+at 99% of the ceiling was typed `operational_failure`, which the operator's own
+2026-08-29 law forbids (P8). Then the ruled continuation reached
+`completed`/`budget_exhausted` — and the same record that had verified clean
+verified dirty afterwards, over three events the continuation never touched
+(P9). PREREG §3 wants a clean stop AND a clean verification; the two failures
+took one each.
+
+**What was measured anyway.** The control — the bare model handed the whole
+room, against the bare model alone — under the new forced-choice instrument:
+consistent-win share 17 of 27 = 0.63 against a pre-registered bar of 0.67.
+NULL, reported as NULL. The same two arms scored eighteen identical 15s under
+the old rubric, so the new instrument discriminates where the old one could
+not.
+
+## Reconciliation (second launch window)
+
+| R | Operator's words (short) | Disposition | Proof |
+|---|---|---|---|
+| R37 | "failure again. Bad config." | done — the evidence-blind critic pairing withdrawn; the two other measured defects fixed | SPEC Amendment 4; `8a579f1e6` |
+| R38 | the default critic; state in SPEC exactly what it sees | done | SPEC Amendment 4's table; `grep -c 'argumentative_critic=' runs/armR.sh` → 0; VALIDATION S37 |
+| R39 | one id system (P7 road A); re-run, re-digest, re-prove | done | `747edc25…` converter; 0 room record ids in the attached text; VALIDATION S38, S40 |
+| R40 | change the directive only if it names record ids; else the preamble | done — the citation sentence names only legend ids and was NOT changed; the header-shape sentence lives in `src/` and was not touched; the instruction went to the preamble | SPEC Amendment 4; `grep -c 'PREAMBLE' attachment/*.txt` → 1 each |
+| R41 | register the prediction: unknown-block 0, verified ≥ 21 | done, and **held**: 0 and 64 | PREREG Amendment 7; `runs/armR/CENSUS.json` |
+| R42 | pairwise forced-choice instrument | done | `tools/judge_pairwise.py`; VALIDATION S42 |
+| R43 | pre-register share, order-consistency, length rule, decision rule | done | PREREG Amendment 7 §(c) |
+| R44 | pre-register the bare-vs-bare control; pin the sha | done, and the control is the one pair judged | PREREG Amendment 7; `runs/PAIRWISE_VERDICT.json` |
+| R45 | retire the failed root first, commit the rename | done | `783054bfd` |
+| R46 | credential discipline | done — gitignored, mode 600, never committed, never echoed | VALIDATION; `git check-ignore -q env` |
+| R47 | chain: soak → cached warm-up → ARM R → stop; detached; monitored | done — soak `exit 0`, warm-up a cache hit (~2 s), ARM R detached, snapshot loop armed | `runs/chain.log` |
+| R48 | typed outcomes only; a failed arm is not relaunched for a number | done — no relaunch; the stop-report and the record read before any claim | RESULTS fourth segment §2; VALIDATION S44 |
+| R49 | census, then harvest / choose / reveal, then the verdict | done | `runs/armR/CENSUS.json`; `blind/pairwise_*`; `runs/PAIRWISE_VERDICT.json` |
+| R50 | RESULTS segment with every listed content; a NULL recorded as a NULL | done — three dated segments; NULL and INCONCLUSIVE both in those words | RESULTS fourth and fifth segments |
+| R51 | scope; PREREG only by amendment; the rubric record untouched; no gate | done | two empty scope diffs in VALIDATION |
+
+The measure's own question — is the organiser's output materially better than
+the bare model's — is **NOT answered**, for the third time. It is not answered
+because no harness unit has ever reached a terminal the sealed rule accepts,
+and this window's two blockers (P8, P9) are both in the harness's bookkeeping.
+
+## Assumptions the operator may override (second launch window)
+
+A15 the conjecture's ordinal and angle as the target reference; A16 one
+preamble per file (three admitted blocks that are not room records); A17 the
+window base `8093b70fa`; A18 the stop-report read only because the arm failed.
+
+## Parked (not done, not promised)
+
+P1–P7 unchanged. New:
+P8 — a budget denial at 99% of the ceiling typed `operational_failure`, against the operator's own 2026-08-29 law; prompt in PARKED.md.
+P9 — the same three events verify clean before a continuation and violate after it; prompt in PARKED.md.
+
+recommended next: **P8 and P9 before any fourth launch, in that order.** Both
+are cheap to state and both are load-bearing: until a budget stop is typed
+clean and a verification verdict is stable across a resume, no ARM R will ever
+satisfy the terminal test, however well the seat performs — and this window
+showed the seat performing well. The organiser itself needs nothing: its
+citations are clean, its commitments register, and its brief renders on every
+call. What it needs is a harness that will let a finished run be called
+finished.

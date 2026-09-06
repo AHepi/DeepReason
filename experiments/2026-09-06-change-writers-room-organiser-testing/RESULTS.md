@@ -634,3 +634,120 @@ Six live calls beyond the plan. **Spent: 0.** No relaunch, no probe.
   "carried" is capped at what happens to be citable.
 - One question, one model, one room, one run; same-model judging when judging
   happens; ARM H still deferred.
+
+## 2026-09-06, fifth segment — the continuation, the record that stopped verifying, and the one thing this window did measure
+
+**The verdict is INCONCLUSIVE, and it is the instrument's second finding that
+is worth more than the verdict.** The operator ruled that ARM R should be
+resumed to a clean terminal rather than judged as it stood. It was, and it
+reached one — `completed`, `budget_exhausted`, cycle 4 — having spent nothing
+to get there. But the same record that verified clean before the continuation
+verifies dirty after it, and the sealed rule requires a clean verification as
+well as a clean stop, so the arm still has no usable unit. Meanwhile the
+control that WAS judged shows the new forced-choice instrument doing what the
+0–3 rubric could not: separating two texts the rubric scored identically.
+
+### 1. The continuation (typed outcomes only)
+
+| | |
+|---|---|
+| ruling | the operator, from three priced options: "Resume the run with more budget first". Sealed as PREREG Amendment 8 (`1635b14a…`) BEFORE the continuation ran |
+| command | `deepreason --root <root> continue --budget cycles=1 --token-budget 1200000`, same root, same manifest, same selectors, same config (`runs/armR_continue.sh`) |
+| terminal | `state: completed`, `stop_reason: budget_exhausted`, cycle 4, `token_limit 1695362` |
+| spent | **0** — `logged_tokens_this_run: 0`, `metered_tokens: 0`. The fourth cycle resumed from the checkpoint, completed, and made no model call |
+| unit | unchanged at 46 518 characters; the census is identical to the pre-continuation one |
+| cost | ARM R stands at **495 362 tokens**, under the operator's stated 500 000. The several-hundred-thousand-token cost they accepted was not incurred, and Amendment 9 withdraws Amendment 8's equal-spend disclosure as moot |
+
+### 2. The record stopped verifying, over events nothing touched
+
+| | before the continuation (epoch 0) | after it (epoch 1) |
+|---|---|---|
+| `deepreason results --json --verify` | `violations 0`, `valid true`, integrity 0 | `violations 4`, `valid false`, integrity 4 |
+| stored `REPLAY_VALIDATION.json` | valid | 3 × `attempt-validity`, events **142, 215, 295** |
+| `terminal` | `valid_typed_terminal true`, `amend_ready true` | `valid_typed_terminal false`, `amend_ready false` |
+
+All three named events are inside the ORIGINAL run. The continuation wrote no
+call and changed no log bytes at those positions. The before-verdict is
+committed at `HEAD~2` and the after-verdict is committed beside it, so the
+contradiction is on the record rather than in anyone's memory. One of the two
+verdicts is wrong and the record does not say which; that is **PARKED as P9**,
+with the note that it bears directly on the operator's 2026-08-29 law making
+continuation integrity-gated — the gate reported `continuation_authority: true`
+over a record it had just called clean.
+
+**Consequence for the arm, by the rule as sealed.** PREREG §3 requires three
+things of a COMPLETE arm: a clean state and stop reason, `--verify` reporting
+0 violations, and an equal replay digest. The continuation bought the first
+and lost the second. So ARM R's composed result is NOT harvested and NOT
+judged, and `R vs 0` and `R vs 0R` are **INCONCLUSIVE**. The judging instrument
+was made to enforce that clause the same way Amendment 6 made it enforce the
+state clause — stricter, never looser — and it refused the unit on its own,
+printing the three violations (PREREG Amendment 9, `e375dbad…`).
+
+### 3. What was measured: the control, and an instrument with headroom
+
+`0R vs 0` — the bare model handed the whole room, against the bare model alone
+— by the pre-registered forced choice: 9 pairs, 3 judges, both orders, 54
+readings, 0 lost.
+
+| treatment unit | vs control unit | judges 1 / 2 / 3 | length ratio |
+|---|---|---|---|
+| arm0R/call-1 | arm0/call-1 | room / room / room | 0.95× |
+| arm0R/call-1 | arm0/call-2 | none / none / none | 0.89× |
+| arm0R/call-1 | arm0/call-3 | room / room / none | 0.86× |
+| arm0R/call-2 | arm0/call-1 | room / room / room | 1.01× |
+| arm0R/call-2 | arm0/call-2 | none / bare / bare | 0.95× |
+| arm0R/call-2 | arm0/call-3 | room / room / room | 0.92× |
+| arm0R/call-3 | arm0/call-1 | room / room / room | 0.81× |
+| arm0R/call-3 | arm0/call-2 | bare / bare / bare | 0.76× |
+| arm0R/call-3 | arm0/call-3 | room / room / room | 0.74× |
+
+**Consistent-win share 17 of 27 = 0.63**, with 5 readings flipping when the
+texts swapped places (counted as no preference) and 5 consistent losses. The
+pre-registered bar for BETTER is 2/3 = 0.67. So the verdict on the control is
+**NULL**, and it is reported as NULL: the room moved the panel toward the
+room's side in seventeen of the twenty-two readings that held under a position
+swap, and did not clear the bar this pre-registration set before the run.
+
+No length ratio came near §6's 1.5× rule (worst 1.01×), so nothing was
+downgraded on this pair — the length ceiling registered in Amendment 7 remains
+untested, and would still bind hard on any ARM R pair at 46 518 characters
+against essays of 6 000 to 8 000.
+
+**The instrument has headroom the rubric did not.** On 2026-09-06 the 0–3
+rubric gave these same two arms eighteen readings and eighteen 15s: it could
+not tell them apart at all. The forced choice separated them 17 to 5 with 5
+abstentions. Whatever else this window failed to settle, it replaced a
+saturated instrument with one that discriminates, and it measured that on the
+same two arms the old one could not.
+
+### 4. Failure budget (R22)
+
+Six live calls beyond the plan. **Spent: 0.** The continuation is not a
+relaunch — same root, no new record, no repeated cycle — and it made no call.
+
+### 5. Verdict, in the rule's own words
+
+    [control] ARM0R-room-bare vs ARM0-single-call: consistent-win share
+              17/27 = 0.63, no preference 5, worst length ratio 1.01x -> NULL
+    VERDICT (PREREG Amendment 7): INCONCLUSIVE -- an arm has no usable unit
+              (PREREG §7 floor)
+
+### 6. Residue — what this window does NOT show
+
+- **It still shows nothing about whether the organiser's output is better.**
+  Three launches, no harness unit judged. INCONCLUSIVE is the absence of a
+  result, not a null one.
+- The control's NULL is a result, and a narrow one: 0.63 against a 0.67 bar,
+  n = 9 pairs on one question with one model. It does not show the room fails
+  to help a bare model; it shows this instrument did not clear this bar.
+- The two failures that stopped the arms are both in the harness's own
+  bookkeeping, not in its reasoning: a budget stop typed as a breakage (P8),
+  and a verification verdict that changes over unchanged events (P9). Neither
+  is fixed here; both are parked with executor prompts.
+- Same-model judging throughout; ARM H still deferred; the legend still shows
+  a hash-ordered 32 of 97 blocks (P2).
+- The organiser's own numbers stand undisturbed by all of this and are the
+  window's one clean measurement: 64 verified citations, zero failures of any
+  kind, 10 of 12 room conjectures reached, 109 commitments registered — every
+  one of them predicted in writing before the run.
