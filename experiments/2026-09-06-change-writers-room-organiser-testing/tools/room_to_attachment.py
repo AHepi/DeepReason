@@ -14,9 +14,14 @@ Why the layout is what it is:
     text/plain and no heading or table block is minted;
   * the header line has no comma, so the file can never sniff as CSV;
   * the conjectures file sorts first and the proposals file lists every
-    conjecture's refuted-if proposal before any other kind, because the
-    citable legend shows the first 32 blocks in admission order and those are
-    the ids a candidate can cite (SPEC A3; PARKED P2).
+    conjecture's refuted-if proposal before any other kind. This was written
+    to steer the citable legend, which shows the dossier's first 32 blocks;
+    it does NOT, because admission sorts blocks by content id
+    (`admission/parse.py`), so the legend's 32 are a hash-ordered sample of
+    the 94 (measured: 7 conjectures, 13 proposals, 12 objections). The order
+    is kept for the human reader of the frozen section and for the proof that
+    the room reached the seat whole; the cap and the order are PARKED (P2),
+    and SPEC Amendment 1 records the wrong assumption.
 
 Reads `mini/minireason` (import only); writes nothing under it.
 
