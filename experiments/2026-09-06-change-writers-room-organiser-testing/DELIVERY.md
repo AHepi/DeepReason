@@ -1,5 +1,5 @@
 # Delivered: the organiser seat — the writer's room carried onto the full harness, and its measure sealed but not run
-Branch: `claude/writers-room-organiser-testing-degagn` @ <HEAD> (pushed, tree clean). Validation: <VERDICT>.
+Branch: `claude/writers-room-organiser-testing-degagn` @ the delivery commit on top of `8c6d425b4` (pushed, tree clean). Validation: PASS — full gate `5106 passed, 6 skipped, 0 failed`.
 
 ## What changed
 

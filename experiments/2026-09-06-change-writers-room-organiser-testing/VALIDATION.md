@@ -33,7 +33,7 @@ S24: `## 2026-09-06` in RESULTS.md → 1 : PASS
 S25: this document; gate and map below : see verdict
 
 ## Full gate
-<GATE_LINE> : <GATE_VERDICT>
+`python -m pytest tests/ -q -n 4` (from the repository root; the first launch from the tranche directory collected nothing and was discarded) → `5106 passed, 6 skipped in 1218.39s (0:20:18)`, rc=0 — 0 failed : PASS
 
 ## Record-behavior preservation
 n/a — no reader or validator of the append-only record changed (the diff is
@@ -82,4 +82,4 @@ A10: labels stay inside the verbatim bodies; the header carries kind and label s
 A11: the organiser wording moves the conjecturer's prose alone.
 Amendment 2: the diff-budget ceiling raised 450 → 800 (fixture copy removed; the twelve-proof test file kept whole).
 
-## Verdict: <VERDICT>
+## Verdict: PASS

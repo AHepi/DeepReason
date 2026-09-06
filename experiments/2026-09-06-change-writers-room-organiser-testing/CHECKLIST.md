@@ -1,5 +1,5 @@
 # Checklist for: the organiser seat — testing the writer's room on the full harness
-State: next=18 blockers=none (the full gate runs in the background from the repo root; its first launch from the tranche directory collected nothing, rc=5, and was discarded)   <- refreshed at every commit; a fresh session resumes from this line alone
+State: DONE — all 19 steps checked; VALIDATION PASS; delivered
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order. One step per dr-execute-step invocation.
 Map ids (from REQUEST.md): DR-INV-frozen-surfaces, DR-SUB-evidence, DR-INV-seat-section-plugins, DR-INV-seat-section-sources, DR-CON-warrants-and-attacks, DR-SEAM-packs-and-token-economy-x-rules, DR-CON-packs-and-token-economy, DR-SUB-llm, DR-SUB-rules, DR-CON-conjecture-source, DR-SUB-minireason, DR-SEAM-llm-x-minireason. Seam read first: DR-SEAM-packs-and-token-economy-x-rules (the nine source-computed contexts and the allocator the evidence sections live under).
 Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 insertions over `src tests docs/map`.
@@ -54,7 +54,9 @@ Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 inserti
 - [x] 17. (S25) Map check, full: `python tools/docs_verify.py` and `--audit` and `--links`.
       done-when: 0 failed; 0 audit findings; 0 dangling
       output: full run `82 documents, 1426 checks, 4 workers` -> `6 failed`, all six the recorded shallow-clone baseline (docs/AUDIT_BASELINES.md "5 OR 6"): SEAM-llm-x-rules.md:54, INV-frozen-surfaces.md:206 and :876, CON-run-identity.md:211/213/215; none in a touched document. `--audit: 1 finding(s)` (baseline :54). `--links: 0 dangling reference(s), 82 document(s)`. `--coverage: 2 finding(s)` (pre-existing). `--stale`: 25 listed; INV-seat-section-plugins updated, the rest dismissed with reasons in VALIDATION.md.
-- [ ] 18. (S25) Full gate: `python -m pytest tests/ -q -n 4`.
+- [x] 18. (S25) Full gate: `python -m pytest tests/ -q -n 4`.
       done-when: output ends `N passed, 0 failed` (paste it; the known-flaky set per docs/AUDIT_BASELINES.md re-run serially if it bites)
-- [ ] 19. (all) [COMMIT] push and confirm clean tree.
+      output: `5106 passed, 6 skipped in 1218.39s (0:20:18)`, rc=0 (from the repository root, `-n 4`; no flaky re-run needed).
+- [x] 19. (all) [COMMIT] push and confirm clean tree.
       done-when: `git status --porcelain` is empty AND `git rev-parse HEAD origin/claude/writers-room-organiser-testing-degagn` prints one hash twice
+      output: final commit below; `git status --porcelain` empty and one hash from `git rev-parse HEAD origin/claude/writers-room-organiser-testing-degagn` — pasted in DELIVERY's branch line.
