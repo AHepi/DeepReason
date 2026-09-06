@@ -467,6 +467,79 @@ class _DiversitySpecifications(_Plugin):
         )
 
 
+_DISCHARGE_CLAUSE = (
+    " EVERY candidate must carry a `discharges` entry for EVERY handle "
+    "listed under OPEN CRITICISMS above. A submission missing any of "
+    "them is returned to you once with the open list, and then accepted "
+    "with the gap recorded."
+)
+
+
+class _OrganiserOutputContract(_Plugin):
+    """The organiser's directive: carry a writer's room onto the record.
+
+    Bound only by `seat-pack.conjecturer.organiser-v1` (llm/seat_layouts.py).
+    It replaces the conjecturer's output contract in that layout and nowhere
+    else; the seeded default brief does not change by a byte.
+
+    What it says is fixed by the tranche that commissioned it
+    (experiments/2026-09-06-change-writers-room-organiser-testing/SPEC.md,
+    S9): organise, do not invent. The room arrives through the attached-
+    evidence road as three sources whose paragraphs are the room's records,
+    each headed by its kind, id, cycle and (for a proposal or objection) the
+    conjecture it is about. Only ids in the CITABLE EVIDENCE BLOCKS legend
+    resolve; the record, not this text, refuses the rest.
+    """
+
+    plugin_id = "dr.output-contract.organiser"
+    section_id = "output-contract"
+
+    def render(self, request, params):
+        vs_k = _supplied(request, "vs_k")
+        lines = [
+            "DIRECTIVE: ORGANISE, DO NOT INVENT.",
+            "The FROZEN EVIDENCE DOSSIER above is a writer's room: three "
+            "sources whose paragraphs are the room's records. Each paragraph "
+            "opens with one header line -- CONJECTURE id=... cycle=... "
+            "angle=..., PROPOSAL id=... cycle=... about=<conjecture id> "
+            "kind=<refuted-if|forbids|must-not|predicts>, or OBJECTION "
+            "id=... cycle=... about=<conjecture id> -- and a proposal's or "
+            "objection's about= names the conjecture it is written about.",
+            f"Return one candidate per room conjecture worth carrying, at "
+            f"most {vs_k} this turn, the most worth carrying first. On a "
+            "later turn carry only room conjectures that do not already "
+            "appear under NEIGHBOURHOOD; if every one worth carrying is "
+            "already there, abstain.",
+            "For each candidate: `claim` and `mechanism` are condensed from "
+            "that conjecture's own paragraph and sharpened by the objections "
+            "written about it (an objection is read, never carried as a "
+            "claim of its own). EVERY `countercondition` is taken from that "
+            "conjecture's proposals: a refuted-if proposal as written; "
+            "\"forbids X\" or \"must not X\" becomes \"refuted if X\"; "
+            "\"predicts X\" becomes \"refuted if not X\".",
+            "`evidence_refs`: the conjecture's block id and the block ids of "
+            "the proposals you drew on, taking ONLY ids that appear in "
+            "CITABLE EVIDENCE BLOCKS; an id outside that list is recorded "
+            "as a failed citation, so cite what you can and say in "
+            "`uncertainties` which proposals you used but could not cite.",
+            "A room conjecture with no proposal about it is left out, and "
+            "named in the `uncertainties` of the candidate you carry "
+            "nearest to it. `typicality` is 0.5 unless the room itself "
+            "gives a reason for another value. Nothing that is not in the "
+            "blocks: no new claim, no new mechanism, no countercondition "
+            "the room did not propose.",
+        ]
+        if _supplied(request, "allow_no_candidate_outcome"):
+            lines.append(
+                "Abstaining is a complete answer when nothing remains to "
+                "carry; never invent a candidate to fill a quota."
+            )
+        directive = "\n".join(lines)
+        if _supplied(request, "open_criticism_context"):
+            directive += _DISCHARGE_CLAUSE
+        return SectionRenderV1(section_id=self.section_id, text=directive)
+
+
 class _ConjecturerOutputContract(_Plugin):
     plugin_id = "dr.output-contract.conjecturer"
     section_id = "output-contract"
@@ -486,12 +559,7 @@ class _ConjecturerOutputContract(_Plugin):
             "modal answer."
         )
         if _supplied(request, "open_criticism_context"):
-            directive += (
-                " EVERY candidate must carry a `discharges` entry for EVERY handle "
-                "listed under OPEN CRITICISMS above. A submission missing any of "
-                "them is returned to you once with the open list, and then accepted "
-                "with the gap recorded."
-            )
+            directive += _DISCHARGE_CLAUSE
         return SectionRenderV1(section_id=self.section_id, text=directive)
 
 
@@ -782,6 +850,9 @@ CONJECTURER_PLUGINS: tuple[type[_Plugin], ...] = (
     _ComplementDirective,
     _DiversitySpecifications,
     _ConjecturerOutputContract,
+    # Bound by the organiser layout only; the seeded default brief does not
+    # change by a byte (the goldens are the check).
+    _OrganiserOutputContract,
 )
 
 _SEEDED = False

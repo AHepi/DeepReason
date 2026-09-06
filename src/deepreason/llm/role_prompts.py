@@ -26,6 +26,29 @@ from deepreason.llm.seat_sections import SeatSectionError
 
 ROLE_PROMPT_TEMPLATE_ENV = "DEEPREASON_ROLE_PROMPT_TEMPLATE"
 LEGACY_ROLE_PROMPT_ID = "role-prompt.legacy-v0"
+ORGANISER_ROLE_PROMPT_ID = "role-prompt.organiser-v1"
+
+# The organiser's standing instruction. Selected by `seat.conjecturer.organiser-v1`
+# (llm/seat_layouts.py) through DEEPREASON_ROLE_PROMPT_TEMPLATE; every other
+# role's wording under that template is the legacy one, copied by reference.
+# The JSON-only demand and the pack placement are the legacy conjecturer's,
+# so the wrapper changes the seat's task and nothing about what a reply
+# must contain (which is the contract's business).
+_ORGANISER_STANDING = (
+    "You are the organiser seat: you carry a writer's room's conjectures onto "
+    "the record. The room -- its conjectures, the objections written about "
+    "them, and the commitment proposals written about them -- is in the pack "
+    "as frozen evidence. You invent nothing: every claim, mechanism and "
+    "refutation condition you return is condensed from those records, and "
+    "you say which. You hold no state and decide nothing; the harness "
+    "adjudicates. Give each candidate your typicality estimate in [0,1] "
+    "(0.5 unless the room gives a reason).\n\n"
+)
+_ORGANISER_COMPACT = (
+    "Organise the writer's room in the input into candidates; invent nothing. "
+    "Give claim, mechanism, refutation conditions taken from its proposals, "
+    "typicality, and the block ids you drew on."
+)
 
 
 class RolePromptTemplateV1(BaseModel):
@@ -131,6 +154,18 @@ def _ensure_seeded() -> None:
             template_id=LEGACY_ROLE_PROMPT_ID,
             standard=dict(TEMPLATES),
             compact_directive=dict(COMPACT_TEMPLATES),
+        )
+    )
+    from deepreason.llm.roles import _JSON_ONLY
+
+    register_role_prompt_template(
+        RolePromptTemplateV1(
+            template_id=ORGANISER_ROLE_PROMPT_ID,
+            standard={
+                **TEMPLATES,
+                "conjecturer": _ORGANISER_STANDING + _JSON_ONLY + "{pack}",
+            },
+            compact_directive={**COMPACT_TEMPLATES, "conjecturer": _ORGANISER_COMPACT},
         )
     )
     _SEEDED = True
