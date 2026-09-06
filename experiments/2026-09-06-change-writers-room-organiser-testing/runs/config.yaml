@@ -1,0 +1,7 @@
+# The one configuration BOTH harness arms run under (SPEC A3, A4): the pack
+# budget that lets the organiser's brief carry the whole room uncompressed
+# (the rendered brief is ~92 000 characters; proof/ORGANISER_RECEIPTS.json).
+# Nothing else moves. Loaded by `deepreason --config runs/config.yaml ...`;
+# it MOVES the qualification subject digest, so each arm's home pays one
+# battery (runs/setup_and_qualify.sh).
+PACK_TOKEN_BUDGET: 24000
