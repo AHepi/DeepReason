@@ -1,5 +1,5 @@
 # Checklist for: the organiser seat — testing the writer's room on the full harness
-State: next=14 blockers=none (steps 7-13 outputs recorded; commits land in step order once the full docs_verify of step 7 returns)   <- refreshed at every commit; a fresh session resumes from this line alone
+State: next=15 blockers=the full docs_verify started at step 7 is still running in the background (its result lands at step 17); the soak waits for it (one worker-spawning instrument at a time)   <- refreshed at every commit; a fresh session resumes from this line alone
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order. One step per dr-execute-step invocation.
 Map ids (from REQUEST.md): DR-INV-frozen-surfaces, DR-SUB-evidence, DR-INV-seat-section-plugins, DR-INV-seat-section-sources, DR-CON-warrants-and-attacks, DR-SEAM-packs-and-token-economy-x-rules, DR-CON-packs-and-token-economy, DR-SUB-llm, DR-SUB-rules, DR-CON-conjecture-source, DR-SUB-minireason, DR-SEAM-llm-x-minireason. Seam read first: DR-SEAM-packs-and-token-economy-x-rules (the nine source-computed contexts and the allocator the evidence sections live under).
 Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 insertions over `src tests docs/map`.
@@ -43,8 +43,9 @@ Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 inserti
 - [x] 13. (S2, S20, S21) [COMMIT] Write `runs/config.yaml`, `runs/setup_and_qualify.sh`, `runs/armH.sh`, `runs/armR.sh`, `runs/chain.sh`, `runs/snapshot.sh`; `chmod +x`.
       done-when: `bash -n` on every script exits 0; `deepreason --config runs/config.yaml config | grep '^PACK_TOKEN_BUDGET:'` -> `PACK_TOKEN_BUDGET: 24000`; the S2 greps hold; `git check-ignore -q env`
       output: `bash -n` ok ×5; `PACK_TOKEN_BUDGET: 24000` echoed by `deepreason --config runs/config.yaml config`; armR.sh carries the selector line and `set -a; . $D/env; set +a` once; armH.sh has no DEEPREASON_SEAT_SHELL; `git check-ignore -q env` exit 0. armR attaches the three files BY NAME (step 8's finding).
-- [ ] 14. (S15, S19) [COMMIT] Write `PREREG.md` and commit it with `sha256: <digest>` in the commit message.
+- [x] 14. (S15, S19) [COMMIT] Write `PREREG.md` and commit it with `sha256: <digest>` in the commit message.
       done-when: `sha256sum PREREG.md` equals the digest in `git log -1 --format=%B -- PREREG.md`
+      output: `sha256: 3d51b88eec4ada2dec51cad6ba63c8f73ac612043cc2c47897b217012feae4c0` in the commit body; `sha256sum PREREG.md` -> the same digest. Commits landed in step order (3-7, 8-9, 10, 11-12, 13, 14); the brief's commit precedes PREREG's (S11).
 - [ ] 15. (S20) [COMMIT] Run `python -u scripts/cycle_soak.py --case epoch3 | tee runs/soak.log` (offline; no key needed) and commit the log.
       done-when: `runs/soak.log` ends with a clean exit (`rc=0` appended by the runner line)
 - [ ] 16. (S10, S22, S23, S24) [COMMIT] Write `RESULTS.md`: the dated segment (what the record shows offline; what it does not — no arm ran; one question, one model, one room), the 12-of-12 statement, the failure-budget ledger at 0.
