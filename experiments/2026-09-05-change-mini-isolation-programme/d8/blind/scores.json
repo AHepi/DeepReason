@@ -510,5 +510,197 @@
     }
    }
   ]
+ },
+ "5b1b2259-7415-4ecb-8ca5-a4dc5300453f": {
+  "judges": 3,
+  "totals": [
+   1,
+   1,
+   4
+  ],
+  "median": 1,
+  "spread": 3,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     0,
+     1,
+     1,
+     2,
+     0
+    ],
+    "total": 4,
+    "why": {
+     "c1": "The response fails to construct the case that the preference smuggles in induction, addressing only one side.",
+     "c2": "It mentions verisimilitude but lacks specific engagement with Popper's distinction between corroboration reports and probability or the Salmon debate.",
+     "c3": "While it implies a stance by listing costs, it does not explicitly state a verdict on which of the two opposing arguments survives.",
+     "c4": "It identifies real costs (loss of certainty/metrics) but presents them somewhat generally rather than as a specific uncomfortable concession for a defender.",
+     "c5": "The response evades the core tension by immediately jumping to the costs without first wrestling with or resolving the induction objection."
+    }
+   },
+   {
+    "scores": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "total": 1,
+    "why": {
+     "c1": "The response fails to construct the case for smuggling induction, presenting only a fragment of the defense.",
+     "c2": "It mentions 'verisimilitude' but ignores the specific Popperian machinery regarding corroboration as a past-tense report versus pragmatic preference.",
+     "c3": "No explicit verdict is stated choosing between the two options; it merely describes a consequence.",
+     "c4": "A cost is named (loss of certainty), but it is generic rather than a specific concession uncomfortable to a Popperian defender.",
+     "c5": "The response evades the tension entirely by refusing to argue either side or deliver a judgment."
+    }
+   },
+   {
+    "scores": [
+     0,
+     0,
+     0,
+     1,
+     0
+    ],
+    "total": 1,
+    "why": {
+     "c1": "The response completely fails to construct the case for induction being smuggled in, addressing only one side.",
+     "c2": "It mentions 'verisimilitude' but ignores the specific Popperian machinery regarding corroboration as a past report versus pragmatic preference.",
+     "c3": "No verdict is stated; the text is a fragment describing consequences rather than choosing a survivor.",
+     "c4": "A genuine cost (loss of probabilistic certainty) is named, though it is not tied to a specific verdict.",
+     "c5": "The response evades the tension entirely by refusing to argue either side or make a choice."
+    }
+   }
+  ]
+ },
+ "9b290ead-b8ef-4131-a95a-286a5bed1c6d": {
+  "judges": 3,
+  "totals": [
+   15,
+   15,
+   15
+  ],
+  "median": 15,
+  "spread": 0,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the induction-smuggling critique and the error-elimination defense are articulated with maximum charitable strength.",
+     "c2": "Explicitly engages corroboration as a historical report, verisimilitude, and the asymmetry of falsification rather than generic philosophy.",
+     "c3": "Clearly declares Case B the survivor with a specific justification based on comparative logical status.",
+     "c4": "Identifies genuine, uncomfortable costs: the collapse of formal verisimilitude and the loss of predictive assurance.",
+     "c5": "Holds the tension between logic and pragmatics without dissolving it via redefinition or empty labeling."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the induction-smuggling critique and the error-elimination defense are articulated with maximum charitable strength, avoiding straw men.",
+     "c2": "The response explicitly deploys Popperian machinery including corroboration as a historical report, verisimilitude, and the asymmetry of falsification.",
+     "c3": "A clear verdict is rendered selecting Case B (the defense) as the survivor with specific reasoning attached.",
+     "c4": "The costs identified (loss of predictive assurance, the formal failure of verisimilitude, and the logic-pragmatics gap) are genuine, uncomfortable concessions for a Popperian.",
+     "c5": "The answer holds the tension between logical inertness and pragmatic necessity without dissolving it via redefinition or empty pragmatic labeling."
+    }
+   },
+   {
+    "scores": [
+     3,
+     3,
+     3,
+     3,
+     3
+    ],
+    "total": 15,
+    "why": {
+     "c1": "Both the induction-smuggling critique and the error-elimination defense are articulated with maximum charitable strength, avoiding straw men.",
+     "c2": "The response explicitly deploys core Popperian machinery including the asymmetry of falsification, verisimilitude, and the distinction between logical probability and rational preference.",
+     "c3": "A clear verdict is rendered selecting Case B as the survivor with a specific justification based on the asymmetry of falsification.",
+     "c4": "The costs identified (loss of predictive assurance, the formal refutation of verisimilitude, and the logic-pragmatics gap) are genuine, uncomfortable concessions for a Popperian.",
+     "c5": "The answer holds the tension firmly, refusing to dissolve the problem via redefinition or to dismiss the critique merely by labeling the solution 'pragmatic'."
+    }
+   }
+  ]
+ },
+ "f003a83c-4c9c-4d44-bda1-8ec736b95a0a": {
+  "judges": 3,
+  "totals": [
+   6,
+   7,
+   8
+  ],
+  "median": 7,
+  "spread": 2,
+  "contested": false,
+  "detail": [
+   {
+    "scores": [
+     1,
+     2,
+     2,
+     2,
+     0
+    ],
+    "total": 7,
+    "why": {
+     "c1": "Only the 'smuggles induction' side is argued; the case for defensibility on Popper's own terms is dismissed rather than strengthened.",
+     "c2": "Mentions pragmatic convention but misses specific Popperian machinery like the distinction between corroboration reports and probability or the Salmon reply.",
+     "c3": "Provides a verdict favoring the pragmatic view but lacks the comparative analysis required to show why it survives the stronger counter-case.",
+     "c4": "Identifies a real cost (loss of progressive realism) but the argument leading to it is too thin to fully justify the severity of the concession.",
+     "c5": "Takes exit (a) by claiming the dilemma 'dissolves' via redefinition rather than holding the tension and answering it directly."
+    }
+   },
+   {
+    "scores": [
+     1,
+     1,
+     2,
+     2,
+     0
+    ],
+    "total": 6,
+    "why": {
+     "c1": "Only the 'smuggles induction' side is addressed via a weak pragmatist straw man; the case for defensibility on Popper's own terms is absent.",
+     "c2": "Fails to engage with Popper's specific definitions of corroboration or his replies to Salmon, relying instead on a generic chess analogy.",
+     "c3": "Provides a verdict favoring the 'induction' critique but lacks the comparative reasoning required by the prompt's structure.",
+     "c4": "Identifies a real cost (loss of progressive realism) but frames it as a consequence of the dissolving move rather than the surviving argument.",
+     "c5": "Takes the cheap exit (a) explicitly by claiming the dilemma 'dissolves' through redefining preference as a mere convention."
+    }
+   },
+   {
+    "scores": [
+     1,
+     2,
+     2,
+     3,
+     0
+    ],
+    "total": 8,
+    "why": {
+     "c1": "Only the 'smuggles induction' side is addressed via dissolution; the case for defensibility on Popper's own terms is not made.",
+     "c2": "Mentions pragmatic convention but misses specific Popperian machinery like the distinction between corroboration reports and probability or the Salmon reply.",
+     "c3": "Commits to a survivor (the pragmatic view) but does so by dissolving the tension rather than resolving the argument.",
+     "c4": "Identifies a genuine, uncomfortable cost: the loss of science's claim to describing reality progressively.",
+     "c5": "Takes the cheap exit (a) by redefining the preference as a mere constitutive rule to dissolve the tension entirely."
+    }
+   }
+  ]
  }
 }

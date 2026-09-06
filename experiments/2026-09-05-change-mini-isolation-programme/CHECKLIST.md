@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=55 blockers=none. Step 54 DONE: ARM 0 3/3 complete, ARM M COMPLETE (8 conjectures, 24 criticisms, 14 proposals, 39577 tokens, verify 0, replay equal). Step 53 DONE: epoch3 soak green, isolation re-run PASS, probe ok. Step 52 DONE: PREREG_D8.md sealed (sha in its commit), instruments under d8/, no arm has run. T3-T6 DELIVERED; T7 runs in this window (REQUEST.md Amendment 3, "go for it jack!", credential in the gitignored env). T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=57 blockers=none. Steps 55-56 DONE: judged blind, RESULTS.md written (INDISTINGUISHABLE by the rule; null under C6). Step 54 DONE: ARM 0 3/3 complete, ARM M COMPLETE (8 conjectures, 24 criticisms, 14 proposals, 39577 tokens, verify 0, replay equal). Step 53 DONE: epoch3 soak green, isolation re-run PASS, probe ok. Step 52 DONE: PREREG_D8.md sealed (sha in its commit), instruments under d8/, no arm has run. T3-T6 DELIVERED; T7 runs in this window (REQUEST.md Amendment 3, "go for it jack!", credential in the gitignored env). T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1947,13 +1947,40 @@ tranche".
         shallow root prints; not the terminal.
       Both roots exist and are committed; the snapshot loop ran throughout (b24973fe8).
       ```
-- [ ] 55. (S12) Judge blind, length held constant; report per-seat spend.
+- [x] 55. (S12) Judge blind, length held constant; report per-seat spend.
       done-when: `RESULTS.md` carries both arms, the judging output, the
       length distributions and the spend table
-- [ ] 56. (S12) [COMMIT] Record the outcome honestly — including
+
+      ```
+      $ python d8/judge_d8.py harvest   -> 11 candidates (3 ARM 0, 8 ARM M), {bid,text} only
+      $ python d8/judge_d8.py score     (batched, resumable) -> 11 of 11, 3 judges each, 0 failed
+      $ sha256sum d8/blind/scores.json  -> ea3bc38b253af5c949bb95caf2831354a783500fbc57dd75c925ed87784c9661
+      $ python d8/judge_d8.py reveal    (keymap opened only now)
+        ARM0-single-call  n=3  mean=15.00 median=15.00 best=15.0 worst=15.0
+        ARMM-isolation    n=8  mean=5.62  median=5.00  best=10.0 worst=1.0     contested 0
+      $ python d8/analyse_d8.py
+        length: ARM0 7645 (7262-7985) vs ARMM 546 (458-628) chars, p=0.0061
+        pooled Spearman rho(chars,total) +0.716 ; total ~ log(chars) R^2 0.828
+        raw gap -9.375 (p=0.0061) ; length-adjusted +13.499 (p=0.0063) ; quintile-held -10.0 on 1 stratum
+        VERDICT (PREREG §4 rule): INDISTINGUISHABLE -- floor met and neither directional rule fired
+        spend: commitment 8 calls 24280 (61.3%) | critic 8 / 8561 (21.6%) | conjecturer 3 / 6736 (17.0%)
+               TOTAL 19 / 39577 == logged 39577 ; ARM0 3 / 5239 ; ARMM/ARM0 7.55x ; conjecturer/ARM0 1.29x
+      RESULTS.md §2-§5 carry both arms, the judging output, the length distributions, the spend table.
+      ```
+- [x] 56. (S12) [COMMIT] Record the outcome honestly — including
       "inconclusive" if that is what it is (C6; CLAUDE.md Conventions).
       done-when: `RESULTS.md` states the verdict and its residue, and no arm
       was re-run to get a number
+
+      ```
+      RESULTS.md, segment 2026-09-06: verdict INDISTINGUISHABLE by the sealed rule, read
+      plainly as a NULL result under C6 (improvement NOT shown; the length control was
+      unidentified because the arms did not overlap in length; the single call saturated
+      the rubric; the judged unit was a part against a whole). §8 residue, eight entries.
+      No arm re-run: ARM 0 3 calls, ARM M 1 root, both committed as they completed
+      (c69129453, 4f91ec43f). One exploratory pass, labelled NOT pre-registered (§7):
+      ARM M composed 8/15. Next measure parked as P11 with a ready prompt.
+      ```
 - [ ] 57. (all) [COMMIT] Deliver the programme: push and confirm clean.
       done-when: `git status --porcelain` empty AND branch head on origin
 

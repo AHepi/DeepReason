@@ -452,3 +452,50 @@ qualification subject, DESIGN AND STOP.
 
 OUT OF SCOPE: the mini isolation programme; PARKED P2/P9 (mini's manifest).
 ```
+
+## P11 — D8 compared a part against a whole; the next measure needs a unit, a budget and headroom
+
+**What.** The D8 measure (RESULTS.md, 2026-09-06) judged one mini conjecture
+(~550 characters) against one complete single-call essay (~7 600) on a rubric
+written for complete answers; the arms did not overlap in length, so the
+pre-registered length control was unidentified, and the single call
+saturated the rubric (nine 15s of 15). The verdict INDISTINGUISHABLE stands
+as the rule fired; it is not an answer to C6. Three things a measure that
+CAN answer C6 for mini needs, each priced from the record: (1) a judged UNIT
+the rubric fits — the run's composed output (the exploratory §7 pass scored
+it 8 of 15) or per-conjecture scoring of ARM 0's essay split into its own
+claims; (2) a BUDGET under which "everything so far" is everything — the
+compact profile withheld 22 of 26 and 33 of 37 entries and clipped ten
+briefs; the `standard` profile (2 500 pack tokens, 10 000-character clip)
+or an explicit `budget_chars` on the everything section; (3) HEADROOM — a
+rubric or a question the single call does not max.
+
+**Why it is not done here.** Each is a new pre-registration and at least
+one new arm; PREREG_D8 forbids re-running an arm for a number, and the
+programme's measure is delivered as it was sealed.
+
+```
+EXECUTOR WINDOW — CHANGE TRANCHE: D9, a measure for mini that can answer C6
+
+Read CLAUDE.md in full (the success law of 2026-09-03; the judge law). Load
+dr-change-orchestrator, dr-drive-harness, dr-ask-the-right-question and
+pinker-write-for-readers. Start at dr-capture-request. Base on main after
+the mini isolation programme's T7 merge.
+
+READ FIRST: experiments/2026-09-05-change-mini-isolation-programme/
+RESULTS.md (§4 the failed control, §6 the withheld entries, §7 the composed
+pass, §8 the residue) and PREREG_D8.md.
+
+SPEC must fix, before any arm: the judged UNIT (composed run output vs
+composed single call, or claim-split on both sides -- pick one and say why);
+the profile or budget under which the everything section withholds nothing
+on a 3-cycle run (measure it offline against the stub first); a rubric with
+headroom (pilot ARM 0 on three calls and REFUSE the rubric if any scores 15);
+the same length control as D8 plus a length-MATCHED design (equal completion
+caps and equal candidate counts per arm) so overlap is by construction. Keep
+D8's blinding, median-of-three, sealed sha, and no-re-run rule verbatim.
+
+OUT OF SCOPE: any change under src/ or mini/ (P10 is its own defect
+tranche); the full-harness measure of mini's content (Amendment 1's "then
+testing on the full harness" is a separate programme).
+```
