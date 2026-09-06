@@ -761,6 +761,13 @@ class Config(BaseModel):
     # 2026-08-28). It reuses TRANSPORT_DEAD_SEAT_STREAK above rather than
     # carrying a threshold of its own: one fact, one spelling.
     SEAT_RETIREMENT_POLICY: str = "retire-dead-seats.v1"
+    # What a run does with a criticism batch the token budget refuses while
+    # the budget could still afford smaller work. A SPENT ceiling is not
+    # governed here and is not switchable: it still ends the run cleanly as
+    # `budget_exhausted` (the operator's law of 2026-08-29). Resolved at the
+    # dispatch site by `runtime/criticism_budget_policy.resolve_policy`, never
+    # at compile -- an unreachable value falls back and discloses.
+    CRITICISM_BUDGET_DENIAL_POLICY: str = "shrink-the-batch.v1"
     roles: dict[
         str,
         dict[str, Any] | list[dict[str, Any]] | None,

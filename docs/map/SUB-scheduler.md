@@ -159,7 +159,13 @@ fails if a SECOND variable-headed signal appears (both mutations were run).
 `_arg_crit` files exactly one `criticism.dispatch.v1` measure per pass, at each
 of its three exits, and `_foreign_arg_crit` files one at entry. The outcome is
 `complete` only when nothing truncated the eligible list and no batch was
-dropped; otherwise `cut:budget`, `cut:seat`, `cut:call` or `cut:foreign`.
+dropped; otherwise `cut:token-budget`, `cut:budget`, `cut:seat`, `cut:call` or
+`cut:foreign`.
+
+The declaration names the targets a call ACTUALLY reached. It used to name the
+first N of the eligible list, which is the same list only while a pass
+succeeds in order — and since 2026-09-06 it need not, because a batch the
+token budget refuses is retried in halves.
 
 The declaration exists for one consumer and one consequence: a reader may treat
 the ABSENCE of a warranted attack on a target as a measurement rather than as a
@@ -171,7 +177,7 @@ lives in `DR-CON-evidence-states` and no deciding package may name it.
 Targets skipped because they were already felled by cheaper criticism are not a
 cut: the pass did everything it planned, so they are outside `planned` too.
 
-`check: python -c "import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; from deepreason.runtime.criticism_dispatch import OUTCOMES; f=lambda m: [n for n in ast.walk(ast.parse(textwrap.dedent(inspect.getsource(getattr(S, m))))) if isinstance(n, ast.Call) and getattr(n.func, 'id', '') == 'declare_criticism_dispatch']; assert len(f('_arg_crit')) == 2, len(f('_arg_crit')); assert len(f('_foreign_arg_crit')) == 1; a = inspect.getsource(S._arg_crit); assert a.index('OUTCOME_CUT_SEAT') < a.index('self._foreign_arg_crit()') < a.index('OUTCOME_CUT_CALL'); assert 'OUTCOME_COMPLETE' in a and 'OUTCOME_CUT_BUDGET' in a; assert 'OUTCOME_COMPLETE' not in inspect.getsource(S._foreign_arg_crit)" && python -m pytest tests/test_criticism_dispatch_declaration.py -q`
+`check: python -c "import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; from deepreason.runtime.criticism_dispatch import OUTCOMES; f=lambda m: [n for n in ast.walk(ast.parse(textwrap.dedent(inspect.getsource(getattr(S, m))))) if isinstance(n, ast.Call) and getattr(n.func, 'id', '') == 'declare_criticism_dispatch']; assert len(f('_arg_crit')) == 2, len(f('_arg_crit')); assert len(f('_foreign_arg_crit')) == 1; a = inspect.getsource(S._arg_crit); assert a.index('OUTCOME_CUT_SEAT') < a.index('self._foreign_arg_crit()') < a.index('OUTCOME_CUT_CALL'); assert 'OUTCOME_COMPLETE' in a and 'OUTCOME_CUT_BUDGET' in a and 'OUTCOME_CUT_TOKEN_BUDGET' in a; assert 'OUTCOME_COMPLETE' not in inspect.getsource(S._foreign_arg_crit); assert 'targets=attacked' in a" && python -m pytest tests/test_criticism_dispatch_declaration.py tests/test_criticism_budget_denial_policy.py -q`
 
 ## Where to change what
 

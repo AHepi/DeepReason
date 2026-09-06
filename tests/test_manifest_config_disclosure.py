@@ -274,6 +274,12 @@ def test_every_dropped_field_the_managed_path_can_set_round_trips():
         "TRANSPORT_RETRY_POLICY": "identical-v0",
         "TRANSPORT_STREAMING": "off",
         "SEAT_RETIREMENT_POLICY": "off",
+        # The criticism budget-denial policy (2026-09-06). Same reason as the
+        # string-valued rows above, and the same shape of update: the field is
+        # now asserted to round trip like the other 30, which is what makes
+        # the operator's "ensure config is plugged in" checkable on the
+        # MANAGED path rather than only where the scheduler reads it.
+        "CRITICISM_BUDGET_DENIAL_POLICY": "stop-the-run",
     }
     carried = 0
     for field in dropped:
@@ -301,10 +307,11 @@ def test_every_dropped_field_the_managed_path_can_set_round_trips():
     # switches landed under the 2026-08-30 frozen-surface-4 grant, then 26 (of
     # 27), then 29 (of 30) with the transport policy's three knobs under the
     # 2026-09-03 grant, then 30 (of 31) with the seat-retirement switch under
-    # the 2026-09-04 grant. The literal is kept beside the derived value on
-    # purpose: `len(dropped) - 1` alone would stay true if the drop set
-    # silently SHRANK.
-    assert carried == len(dropped) - 1 == 30
+    # the 2026-09-04 grant, then 31 (of 32) with the criticism budget-denial
+    # policy under the 2026-09-06 grant. The literal is kept beside the
+    # derived value on purpose: `len(dropped) - 1` alone would stay true if
+    # the drop set silently SHRANK.
+    assert carried == len(dropped) - 1 == 31
 
 
 def test_carriage_moves_no_qualification_subject_digest_it_did_not_already_move():

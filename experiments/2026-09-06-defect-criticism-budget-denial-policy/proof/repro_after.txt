@@ -1,0 +1,3 @@
+A. refusal with budget REMAINING, default config:   cycle continued (4 batch call(s))
+B. refusal on a SPENT ceiling, default config:      run ended: WorkBudgetDenied (1 batch call(s))
+C. Config carries a criticism budget-denial knob:   True

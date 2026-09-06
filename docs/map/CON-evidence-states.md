@@ -103,9 +103,17 @@ future road that ends a criticism pass some other way has to add a member; it
 may not inherit `complete` by silence, which would license an absence nobody
 measured. The writer refuses an outcome outside the set before it reaches the
 record.
+
+`cut:token-budget` is the rule working as intended, 2026-09-06: when the token
+budget refuses a criticism batch the run no longer dies, so a new way of
+ending a pass short came into existence and took its own member rather than
+borrowing one. It is deliberately NOT `cut:budget`, which is the per-cycle cap
+on how many targets one pass may attack — one is a ration of attention, the
+other a ration of money, and a reader that could not tell them apart would
+draw the same conclusion from two different facts.
 `check: python -c "
 from deepreason.runtime.criticism_dispatch import OUTCOMES, OUTCOME_COMPLETE
-assert set(OUTCOMES) == {'complete','cut:budget','cut:seat','cut:call','cut:foreign'}, OUTCOMES
+assert set(OUTCOMES) == {'complete','cut:budget','cut:seat','cut:call','cut:foreign','cut:token-budget'}, OUTCOMES
 assert OUTCOME_COMPLETE == 'complete'
 import tempfile, pathlib
 from deepreason.harness import Harness
