@@ -1,0 +1,32 @@
+{
+ "68932f5a-e10e-4952-9c2e-c7e3b210f730": {
+  "arm": "ARM0-single-call",
+  "source": "call-1",
+  "chars": 7262
+ },
+ "d3a9bc32-21f7-4bc0-96c6-c1f4f8d55c14": {
+  "arm": "ARM0-single-call",
+  "source": "call-2",
+  "chars": 7688
+ },
+ "b783ab2f-0960-4102-bf35-2c9984b96eb0": {
+  "arm": "ARM0-single-call",
+  "source": "call-3",
+  "chars": 7985
+ },
+ "05d57401-e52b-4a16-975f-02cf260cc3fe": {
+  "arm": "ARM0R-room-bare",
+  "source": "arm0R/call-1@sha256:effb8afea157e4ffcb69bf8ea7b8434927144c363687736068f524c6bc5a31e5",
+  "chars": 6879
+ },
+ "f273e8eb-f94b-40d4-9e25-cfe4b37b05d5": {
+  "arm": "ARM0R-room-bare",
+  "source": "arm0R/call-2@sha256:94dca7e6824a7895947c4137d66d6f3df5f0e25209ba1c32c2f37deb15b1a03f",
+  "chars": 7334
+ },
+ "38e7f5c0-5ea6-480b-8a28-a603a0d278c0": {
+  "arm": "ARM0R-room-bare",
+  "source": "arm0R/call-3@sha256:70003e8af67a74d5fc97c3bb20c7179f21c5f0fa6de14a123e1276d7b0ac66eb",
+  "chars": 5875
+ }
+}
