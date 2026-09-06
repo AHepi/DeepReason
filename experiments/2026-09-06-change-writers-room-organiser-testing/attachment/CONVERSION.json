@@ -1,0 +1,970 @@
+{
+ "chars_total": 53493,
+ "counts": {
+  "conjecture": 12,
+  "objection": 36,
+  "proposal": 46
+ },
+ "files": {
+  "01-conjectures.txt": {
+   "bytes": 9281,
+   "records": 12,
+   "sha256": "feb1dc480421d1cdb26260223a82ea82d88d9e14ff761ad63ec9662acd4088bb"
+  },
+  "02-proposals.txt": {
+   "bytes": 17566,
+   "records": 46,
+   "sha256": "cf7a4a2edcc19307e7be923623676cd7db80f8722d58f584fda30fad65062452"
+  },
+  "03-objections.txt": {
+   "bytes": 33377,
+   "records": 36,
+   "sha256": "87163fb464c30da6e06e4daf475245637aad04de8a7f92d6e482b1cb734e0ded"
+  }
+ },
+ "records": [
+  {
+   "about": null,
+   "body_sha256": "a888a3d64b0cf19caa1ef8daea89ee19dfcd098336c711996f1bdb69cd0f48bb",
+   "chars": 813,
+   "cycle": 1,
+   "file": "01-conjectures.txt",
+   "id": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "kind": "conjecture",
+   "label": "The Pragmatic Wager"
+  },
+  {
+   "about": null,
+   "body_sha256": "8cb832d30f56d322fdd0abe19b462129e8852dc1589f0fe16358aab40d781661",
+   "chars": 801,
+   "cycle": 1,
+   "file": "01-conjectures.txt",
+   "id": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "kind": "conjecture",
+   "label": "Verisimilitude as a Regulative Ideal"
+  },
+  {
+   "about": null,
+   "body_sha256": "999c6a0ab5e602f8cf3a6d708c8e80c9c30a2a2f1936d1e2f0ee66e5ef1a8d00",
+   "chars": 761,
+   "cycle": 1,
+   "file": "01-conjectures.txt",
+   "id": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "kind": "conjecture",
+   "label": "The Performative Contradiction"
+  },
+  {
+   "about": null,
+   "body_sha256": "03a6020d1d9e3ed6fca5e5e2b0f09f7f5da01a4a0c09bee34d930831b6769a10",
+   "chars": 800,
+   "cycle": 1,
+   "file": "01-conjectures.txt",
+   "id": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "kind": "conjecture",
+   "label": "Corroboration as Informational Content"
+  },
+  {
+   "about": null,
+   "body_sha256": "ee9c0ea3f3de131868a6a381d6553b3670f19a0c48dbc96b28cf043e32a3e2b8",
+   "chars": 638,
+   "cycle": 2,
+   "file": "01-conjectures.txt",
+   "id": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "kind": "conjecture",
+   "label": "The Methodological Rule Defense"
+  },
+  {
+   "about": null,
+   "body_sha256": "2a8bd59c2d79026b447979eb742e0185f822d8724989871cf61c12f649b68521",
+   "chars": 592,
+   "cycle": 2,
+   "file": "01-conjectures.txt",
+   "id": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "kind": "conjecture",
+   "label": "The Verisimilitude Gamble"
+  },
+  {
+   "about": null,
+   "body_sha256": "1891536f808afef730b59aa46820264fbcbc603deb7d4f13feea1cbe3a06919c",
+   "chars": 641,
+   "cycle": 2,
+   "file": "01-conjectures.txt",
+   "id": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "kind": "conjecture",
+   "label": "The Pragmatic Inconsistency Charge"
+  },
+  {
+   "about": null,
+   "body_sha256": "7bd3875a01657c7538b00883d51db7fdd31921e852f8eceecd479c0a48f3a687",
+   "chars": 656,
+   "cycle": 2,
+   "file": "01-conjectures.txt",
+   "id": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "kind": "conjecture",
+   "label": "The Decision-Theoretic Void"
+  },
+  {
+   "about": null,
+   "body_sha256": "31c243632dd3669ab207c534d92e845b726e6d922be7550852714737d15b3ae8",
+   "chars": 619,
+   "cycle": 3,
+   "file": "01-conjectures.txt",
+   "id": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "kind": "conjecture",
+   "label": "The Pragmatic Wager without Induction"
+  },
+  {
+   "about": null,
+   "body_sha256": "94b18dc516e40907bb1c1134dcdae2b80edc9da004e0d5f7d5ea202693dbf56d",
+   "chars": 620,
+   "cycle": 3,
+   "file": "01-conjectures.txt",
+   "id": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "kind": "conjecture",
+   "label": "The Verisimilitude Trap"
+  },
+  {
+   "about": null,
+   "body_sha256": "0d9cae48b68a9a6267a8c962225a08ef807c378866fac122a59ef461f08c58c4",
+   "chars": 680,
+   "cycle": 3,
+   "file": "01-conjectures.txt",
+   "id": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "kind": "conjecture",
+   "label": "Corroboration as a Historical Report, Not a Future Guide"
+  },
+  {
+   "about": null,
+   "body_sha256": "856f765823feca040de1f3a335b64920d1c92a142398eb53da3683f08d840fcd",
+   "chars": 708,
+   "cycle": 3,
+   "file": "01-conjectures.txt",
+   "id": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "kind": "conjecture",
+   "label": "The Asymmetry of Risk"
+  },
+  {
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "body_sha256": "b481a12d046a768648c19f8c3336d629a94a44b97e094bdfccd137e4f36f04e9",
+   "chars": 300,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "327f6ea7cd7e8284141dfa6fa3043133b9e2248f706474f7d69f304fcef66cf6",
+   "kind": "proposal",
+   "label": "refuted-if"
+  },
+  {
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "body_sha256": "77779f89e10d161b7eddd1391f1684a510696bbece8e59b2759837cca863edc9",
+   "chars": 324,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "26d5b990b5bc85741b8b72527fc8881502f412beef8b0284beae0a4e12dc3e8b",
+   "kind": "proposal",
+   "label": "refuted-if"
+  },
+  {
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "body_sha256": "9c960e39f677227d99868de1dc589b73f185eca076c068ca78aab0646beba627",
+   "chars": 364,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "6035a9c4dd99607c46e3b320f85f420981e389249260a5ac06ba476c1df7bf4d",
+   "kind": "proposal",
+   "label": "refuted-if"
+  },
+  {
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "body_sha256": "208e2c718a40f9b728328c2e9dcb2bf29fb4670d12299cf62028a1528ccaa04e",
+   "chars": 295,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "36cfcd3be6fec4dd8642a11acfdfac173f50a0d0a33eb9743adb292ac731bc3a",
+   "kind": "proposal",
+   "label": "refuted-if"
+  },
+  {
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "body_sha256": "fbd2a65fb716e15fbf99fc4304a9192a1e27d5270b911da3f210bf8d39d2d79d",
+   "chars": 335,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "1505af0e644ade006d83082635a937390c47f2ab9395e55c638f44a040d95874",
+   "kind": "proposal",
+   "label": "refuted-if"
+  },
+  {
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "body_sha256": "aa267333944c7f46a6e3a8a112d9325173da4b58853facd4a1bba1f1b00d5be0",
+   "chars": 353,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "894962a1f008e6a9f1111679e2ceede8d1785318c5a35f0e74ab58b74731da99",
+   "kind": "proposal",
+   "label": "refuted-if"
+  },
+  {
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "body_sha256": "2b83e1d82576d084da5642cfbf60c5af33a285e358a0546fad94105b63a56e46",
+   "chars": 325,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "7e9418dfffc8d0e70c08bb0512b84f8ace95740715d76f872275a0ff9ba00cd1",
+   "kind": "proposal",
+   "label": "refuted-if"
+  },
+  {
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "body_sha256": "f0d83e9d8a9490451cfff814711889dc179800223a54a6b8b6b016371c9dd258",
+   "chars": 347,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "4130c76430265dbdffc0657cccadcf4ad0dc2d720e20064c5ca2349115e2789f",
+   "kind": "proposal",
+   "label": "refuted-if"
+  },
+  {
+   "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "body_sha256": "057321fb01edbc89749febd11e23d4d75cba963570827289104ee0fe2bfeb41f",
+   "chars": 345,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "f05e2b4be3097c27936dfeefa0482e3c3d8c76b75ef959db9effec7f0d520fb1",
+   "kind": "proposal",
+   "label": "refuted-if"
+  },
+  {
+   "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "body_sha256": "d2b8641a5a7834ad488466bfb54be711c51be28481ed39aea902162b77721525",
+   "chars": 354,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "80747775872400a1f7119ab6431b337c2d941e33b7e5f9d215151282f7e0e6bb",
+   "kind": "proposal",
+   "label": "refuted-if"
+  },
+  {
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "body_sha256": "1c122fe83796798448b7ea8544accbbde0a1f6d6ce8d17d805097456713ba45a",
+   "chars": 307,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "41655a0386ab668049a1b08ca0266a67c76b58899416f96f20a11b7d759e6344",
+   "kind": "proposal",
+   "label": "refuted-if"
+  },
+  {
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "body_sha256": "a02580707f5d442e336b9d340e5e9a06d7553f6b0706ecf9586a59321fe455f7",
+   "chars": 328,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "d36cdb85a1ff82097df3ff382435e7102b46242cff1272586c3ed3f1bca4edb0",
+   "kind": "proposal",
+   "label": "refuted-if"
+  },
+  {
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "body_sha256": "8b33cc1d588eab34c24a95781d7e3a613764026347b9d5da8bf0f3014444d5d0",
+   "chars": 248,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "9f6d3e913488869cb5c50ffad7dd06c198783c3608214e2a9a695438669de4c5",
+   "kind": "proposal",
+   "label": "forbids"
+  },
+  {
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "body_sha256": "df245f5f361570168544e4930f31e0fd694cd9bcd441c247c1d447aca8aee283",
+   "chars": 292,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "0b2aecf320d7c57c886bd08a6bca0169eb6a73d4758198cc690884f2588ea2ab",
+   "kind": "proposal",
+   "label": "forbids"
+  },
+  {
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "body_sha256": "3a1d2709e5d20b8b8606b32e5cc592c8f9f532e104e6dc883f0a26e1f825a4f3",
+   "chars": 284,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "ea3ee63d9cfa224e656d5ba423d05aa37e2325cf90786ca6b4cdceb0bbb20b32",
+   "kind": "proposal",
+   "label": "forbids"
+  },
+  {
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "body_sha256": "8d7bdad498ab8abdc215fee36ac4642844254909f0aff46b4f9adf19fea7ba70",
+   "chars": 259,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "246d6bf09acaadbf2993421cdef7f22d0c041f18e649edcfed829ba95e26ad86",
+   "kind": "proposal",
+   "label": "forbids"
+  },
+  {
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "body_sha256": "0b43336cd43c48b8b33f808d2639f96dcc10e1a98dc12a228ca211fc5ceba440",
+   "chars": 275,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "f78dd7b72be6be4bb1734784988e9a2017d45b1d28a6acad228ecdea4c47562f",
+   "kind": "proposal",
+   "label": "forbids"
+  },
+  {
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "body_sha256": "b2f978cd6b3cf7d721c71dd4ea3054ea7231873d8bc5bfec7e2c7332a69a7e5c",
+   "chars": 288,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "860860e77979b7dc747ae4e91ffeb79a5d3015d800082646021f9cfd0d52f518",
+   "kind": "proposal",
+   "label": "forbids"
+  },
+  {
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "body_sha256": "b2f978cd6b3cf7d721c71dd4ea3054ea7231873d8bc5bfec7e2c7332a69a7e5c",
+   "chars": 288,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "87fd1b233fbc5cdaf91fea9fda665de17452c44b30b62844e359c59039a6b74d",
+   "kind": "proposal",
+   "label": "forbids"
+  },
+  {
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "body_sha256": "c129a5972cfca6bfcb9ead390cfc21fb0356425efe7de5deca2643279ca662f2",
+   "chars": 320,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "cfd595809bceedd456183ca3f08156fecd445d7003d2bd960f186077504572d8",
+   "kind": "proposal",
+   "label": "forbids"
+  },
+  {
+   "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "body_sha256": "50a92bf6f3458aa7aef952ac1c63b401e2769c668235d21d498dcfb6be17ff36",
+   "chars": 301,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "1b22593776a82d32d01a28e6e3fd5afadb555e843c5b6a5636a2d9ddf1a0add1",
+   "kind": "proposal",
+   "label": "forbids"
+  },
+  {
+   "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "body_sha256": "44febbea178bf3ca909ef28c0f787f214141e9b79bb2e1c5dafd6a605da2c5b7",
+   "chars": 255,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "167ae189aba74907de5f3c382567a4d5b8642af98dc3a7a181920a929b129558",
+   "kind": "proposal",
+   "label": "forbids"
+  },
+  {
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "body_sha256": "c33bad269a9e05640cee73efec971ad3823f2dc9d22418ca73c876e7aeaf9dfe",
+   "chars": 282,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "f5af1d40f91fcb34ab2ab248bdf0d9ebd8727518e2dbe17d7ce5f13e54ad47d5",
+   "kind": "proposal",
+   "label": "forbids"
+  },
+  {
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "body_sha256": "7724ed821184d5eeb93e01754885f708faa86120e050209067704912e38f73e4",
+   "chars": 308,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "892b4d95ca1fbdc277b013cd6d693265a831b86f8a4b39da62dc2e5a6f90a019",
+   "kind": "proposal",
+   "label": "forbids"
+  },
+  {
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "body_sha256": "2e4b7d347f1b7a916db9160220d51fcbbf3310a8afbbede639e069144e608968",
+   "chars": 273,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "8df03babcebe473a94bbac59e8da47f981c04f75ab8e96e1733076272793c647",
+   "kind": "proposal",
+   "label": "must-not"
+  },
+  {
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "body_sha256": "0ba527d7bffc5adb9971aae518bc80f65a425f58c7d6ff3a98d466b6cb4a4c7d",
+   "chars": 287,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "c6f64791220fad189956b395a95f7654a5715a17f5bdcd9fe88570c32fe380a5",
+   "kind": "proposal",
+   "label": "must-not"
+  },
+  {
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "body_sha256": "58f628ec74e0f94ecfa85df2840338af2d123089c49cc3e7e6bd004d3e86e1e5",
+   "chars": 306,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "e0e189524f5ca805be2264bab7fa8637456501b35f5937c1a373724991b66b33",
+   "kind": "proposal",
+   "label": "must-not"
+  },
+  {
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "body_sha256": "173d58dbfacbefe756ebcf1777f71eb43a6c3c23c1b44f85fc5cbddd04c4b97f",
+   "chars": 234,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "e5341a7146dfcce407edf02bbab448baa441227f3ef2d8b787ba66c726962336",
+   "kind": "proposal",
+   "label": "must-not"
+  },
+  {
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "body_sha256": "7eaab211a4b9c89efdb86238296b9712ee5b6841e0b1e0e9359e039a730c8f5a",
+   "chars": 277,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "bd5ea987593030ca26a6bd6e6e9449b16e6d5a74a9918ceaa716b9c00aa9a2e3",
+   "kind": "proposal",
+   "label": "must-not"
+  },
+  {
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "body_sha256": "86ba883d1a7ddafa8e979519237b8700cb78bfecf284cfbdc9f95760080d382c",
+   "chars": 281,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "3c12f1ad9f1f9663107496c0f813f768127e7b20181254b3aa59342da08ef128",
+   "kind": "proposal",
+   "label": "must-not"
+  },
+  {
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "body_sha256": "86ba883d1a7ddafa8e979519237b8700cb78bfecf284cfbdc9f95760080d382c",
+   "chars": 281,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "7bba8c754d2a49ef33548d3733253be62ae8a965df7ddad3e7c6b9a4f6a90090",
+   "kind": "proposal",
+   "label": "must-not"
+  },
+  {
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "body_sha256": "60af63b28624d248ff636a16a74e2e2c4df13db4271188d499c82c6aa3d7cee9",
+   "chars": 275,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "3a1c5fca006557778eff26b4441e600610ec920ef48879a972e9620e96869263",
+   "kind": "proposal",
+   "label": "must-not"
+  },
+  {
+   "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "body_sha256": "e3c3378c0ae89dec568bea874fe6f9b909085d89343cab40c3da13eab2bb49fe",
+   "chars": 310,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "55f7c25a486af510bab762b04a6ef22f6e6489f522c9c1b4f7f47ade216e4e8a",
+   "kind": "proposal",
+   "label": "must-not"
+  },
+  {
+   "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "body_sha256": "20295f50593f27023d1c689fd04af21efd0813e296cbe962461f72e3c6e2b7b1",
+   "chars": 332,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "c39a4baf52449b16eaa663cfb6eb022a6b2ecb3fafe9984ea2af0cb4b443c459",
+   "kind": "proposal",
+   "label": "must-not"
+  },
+  {
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "body_sha256": "21f5eea487cb3e0d32148adaaeacfbd8a1fdffe75d296613c9602befddb4c399",
+   "chars": 299,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "7dd095c5b147e13ff2576194a32767c25f3dcd54d06ca72e7e7448c4c5272594",
+   "kind": "proposal",
+   "label": "must-not"
+  },
+  {
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "body_sha256": "e656161683c706ee84f425cef403cac55655413739e3ba090ddbb555a9245f96",
+   "chars": 293,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "017c72cde89ffc1d75744c27b537cb25c4e0c4a832eb6e497d023ba682a2adcd",
+   "kind": "proposal",
+   "label": "must-not"
+  },
+  {
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "body_sha256": "a7b976b4ec298cd3f13f868ae52e2b9f09eac074578551ae1c8bd56e41834b9a",
+   "chars": 318,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "eb00f7c3429ea82ed883d9a5e8e0af184df6189352d436732e73a5f3545d56fb",
+   "kind": "proposal",
+   "label": "predicts"
+  },
+  {
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "body_sha256": "8ff5609aaf8be6d4d003d75e62a4af0a283d4b3d8df89503755f776c57dbb123",
+   "chars": 327,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "08cacb9ef7debef83b234f4245aeb9841870679e4b88750946bf557ee4b5592b",
+   "kind": "proposal",
+   "label": "predicts"
+  },
+  {
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "body_sha256": "4a41f5695dc14890ac1dd3d0d7b2315bd9c26c4ad10f94da2b6c6f431b703a08",
+   "chars": 348,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "e3374255cb01e7a3def97fe0464798efcc24fdf2c06a1f1a456cd73d042db99d",
+   "kind": "proposal",
+   "label": "predicts"
+  },
+  {
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "body_sha256": "3209edba71027d800754dfe8676f853c164fab76777932d8cabb6035a8b44cd0",
+   "chars": 289,
+   "cycle": 1,
+   "file": "02-proposals.txt",
+   "id": "c337b90ec871b60243392d9d2df9849ce46ba80800a6bc40dc4888d10e2aeacf",
+   "kind": "proposal",
+   "label": "predicts"
+  },
+  {
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "body_sha256": "a9befd081d5c7331ce6f8e7e27b53dcc599f50068611745e239345554840d08d",
+   "chars": 289,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "103f120f459fe8161491e38ec5ef1e543d1f7bcfb18aa4aa21a60e113448b1fa",
+   "kind": "proposal",
+   "label": "predicts"
+  },
+  {
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "body_sha256": "86f169010798765f636e8c1a2da2d1d629a0a398275b07472aff33f3d56e2a18",
+   "chars": 344,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "a32e11e960cf29aafe5a1664c33f8cd3e1014f9547afcdafa15e35e5e57dd66a",
+   "kind": "proposal",
+   "label": "predicts"
+  },
+  {
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "body_sha256": "86f169010798765f636e8c1a2da2d1d629a0a398275b07472aff33f3d56e2a18",
+   "chars": 344,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "79f0852177b3982bccf3bf2596a134220028560a524a924b4334f278ab8065fb",
+   "kind": "proposal",
+   "label": "predicts"
+  },
+  {
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "body_sha256": "52413dbc53a0282dfef1e75a6cb586d72a4b9a26bd89d7980c18b23a12a7f906",
+   "chars": 398,
+   "cycle": 2,
+   "file": "02-proposals.txt",
+   "id": "7dda28d49f50a5b3c260ff4042bb439894526f311e60690a539ebb6effb938ba",
+   "kind": "proposal",
+   "label": "predicts"
+  },
+  {
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "body_sha256": "dcc302ccad8d79545e26e9b129c304779456100232148128e8ef4520552af533",
+   "chars": 280,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "eebc3dcbc9288c6d82e1d792015e95f3ebc1e4a6552e0e9605df2abb196e1a24",
+   "kind": "proposal",
+   "label": "predicts"
+  },
+  {
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "body_sha256": "cd413352c3377d1b6e14ff7d0cb0a2d7a79e091215ea48d7cb9b37453f6b3b01",
+   "chars": 297,
+   "cycle": 3,
+   "file": "02-proposals.txt",
+   "id": "68235e6e2bc905b5ca72acd32c0739af24e8b31b1922e7d25a812fa776e69cd8",
+   "kind": "proposal",
+   "label": "predicts"
+  },
+  {
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "body_sha256": "2314c23ad7e4dc3d938062834e5a4f274d7ab29455373214702b1d70d9e425e7",
+   "chars": 955,
+   "cycle": 1,
+   "file": "03-objections.txt",
+   "id": "a4b4bcf31601654d66933fecfb3bf8b4c86d3b4fadf62e108c3e26ff10615350",
+   "kind": "objection",
+   "label": "A rigorous demonstration showing how to derive a preference rule from non-inductive premises without assuming any continuity between past test results and future predictive success."
+  },
+  {
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "body_sha256": "89e184ab589c6ff4c4e3f6e335e3a417ee990d4f0e873e9109d3f0ba2c98d737",
+   "chars": 1021,
+   "cycle": 1,
+   "file": "03-objections.txt",
+   "id": "b45c7e6e169fd9c48da59d55cd46726d469d757365c82a3f93453e6ffd4e11f3",
+   "kind": "objection",
+   "label": "An explanation of how 'severity' of a test can be measured and valued without invoking the inductive assumption that passing severe tests makes a theory more likely to pass future tests."
+  },
+  {
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "body_sha256": "951bd9e4adbc8e074a7b5f4dab0a1d3c383ec59ffad722f8befe63e5f43c8719",
+   "chars": 908,
+   "cycle": 1,
+   "file": "03-objections.txt",
+   "id": "ba596c8f702dbe38b9eff42ff841c300f7ba5044143e4846ccc41ac7c971112d",
+   "kind": "objection",
+   "label": "A clear distinction between 'psychological confidence' derived from testing and 'rational justification' for action that does not rely on inductive inference."
+  },
+  {
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "body_sha256": "59c2c3ac04a76e1cb4d3a9f1f0f52ec2434b4a4b19e4cb7f58108d419b5b1179",
+   "chars": 1010,
+   "cycle": 1,
+   "file": "03-objections.txt",
+   "id": "de0b18a2cb0949fbb38501aae038aeb54bf7932c6bd1ad3e487800f091f7f28b",
+   "kind": "objection",
+   "label": "A rigorous demonstration that a coherent, non-probabilistic measure of verisimilitude exists which successfully ranks theories such that higher corroboration strictly implies greater closeness to the truth, without collapsing into inductive probability."
+  },
+  {
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "body_sha256": "f4d75c6bc6c878f984464cd72e804f05df3144b13fe736d479754d98a8c00dd4",
+   "chars": 1038,
+   "cycle": 1,
+   "file": "03-objections.txt",
+   "id": "2480052e612f9dc5442180ad8dfe77c9b3a5182d60acfcef53861c01cfaad879",
+   "kind": "objection",
+   "label": "A deductive proof showing that the survival of a theory under past tests increases its fitness for future tests without invoking any assumption about the stability of natural laws or the resemblance of the future to the past."
+  },
+  {
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "body_sha256": "ac0d6af81957818b4550dcd91c30a902d515d403c6cbf333a1f3e849ddceceb5",
+   "chars": 1033,
+   "cycle": 1,
+   "file": "03-objections.txt",
+   "id": "d6821854ab37bdecb146a74cabcc7a2a37426cc0cdcb8462d76c933826a75797",
+   "kind": "objection",
+   "label": "An account of how a 'regulative ideal' that admits no logical proof can function as a rational basis for theory choice within a framework that defines rationality strictly as adherence to logical deduction and falsification."
+  },
+  {
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "body_sha256": "1a09b9d5f16d1091db85399bf36231307e3038e937140a77caf11b26b978fe22",
+   "chars": 799,
+   "cycle": 1,
+   "file": "03-objections.txt",
+   "id": "6b97cc064898b8141294adf9a22125c8f67952f6d61c59568252344f8b3edfff",
+   "kind": "objection",
+   "label": "A definitive textual analysis of Popper's distinction between 'corroboration' (a report on past tests) and 'probability' (a prediction of future success), specifically examining his arguments in 'The Logic of Scientific Discovery' regarding the rationality of acting on unfalsified theories."
+  },
+  {
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "body_sha256": "790112306a26033fe82c80040204770083d565f1061f3172b78ff65a4d7bed2b",
+   "chars": 714,
+   "cycle": 1,
+   "file": "03-objections.txt",
+   "id": "d41766b7844f9da90908a565337adf9330fdf069a6b908bba7c2c4f7e1538af5",
+   "kind": "objection",
+   "label": "Clarification on whether 'rational preference' in Popper's framework requires an assumption of the uniformity of nature, or if it relies solely on the logical asymmetry between verification and falsification."
+  },
+  {
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "body_sha256": "2bf1dcb6318f93d896b99222cb8a91d6bf00c1cee299b10ec9a0e04f78b923fa",
+   "chars": 674,
+   "cycle": 1,
+   "file": "03-objections.txt",
+   "id": "11f838436cbe414c3a475949f93f152578cc3f58e39add7f66bacde23d60018b",
+   "kind": "objection",
+   "label": "An examination of Popper's specific responses to critics who accused him of cryptic inductivism, particularly his later works where he refines the concept of verisimilitude."
+  },
+  {
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "body_sha256": "8bca9c89d8c8378cddfa51fe4c684c95c400a86881b8f8e0ee7acc4f20d3f543",
+   "chars": 932,
+   "cycle": 1,
+   "file": "03-objections.txt",
+   "id": "2d5abb2aac97e6de5c1fad44cad68a9715443f2953e6a65abb9b354b2ba90d58",
+   "kind": "objection",
+   "label": "A demonstration that Popper's criterion for 'severity' can distinguish between theories without relying on any background assumption that past performance correlates with future reliability."
+  },
+  {
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "body_sha256": "44a8880dafda59ac502a0893afaa5c3ccb7a17d23b2701021d0ab4aff62c8453",
+   "chars": 1027,
+   "cycle": 1,
+   "file": "03-objections.txt",
+   "id": "d810261257facfb4d744023c2b7c91dd8d5acd0c305e3aa4f0d79f98911fa57e",
+   "kind": "objection",
+   "label": "Evidence from scientific history showing researchers consistently choosing less established, riskier hypotheses over well-corroborated ones solely to accelerate falsification."
+  },
+  {
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "body_sha256": "970c4fe9d1373b4185b290d3211625388864bcd21640f59175563be44aa2367b",
+   "chars": 983,
+   "cycle": 1,
+   "file": "03-objections.txt",
+   "id": "854ea2a23699fbd2e9d23a19ff562f4f537eb71780a26cb8578a49e8b9a00073",
+   "kind": "objection",
+   "label": "A clear articulation of how an engineer can rationally rely on a theory for safety-critical design while simultaneously holding zero belief in its likelihood of being true or applicable to the specific case."
+  },
+  {
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "body_sha256": "5bf7b177026474920bbd4e3c094528b38543a43bb5573b292595382db308c51a",
+   "chars": 953,
+   "cycle": 2,
+   "file": "03-objections.txt",
+   "id": "d09a8079a76a22f24138a5fc0fe19d2655274148648bffbd9283c2887a80d57a",
+   "kind": "objection",
+   "label": "A demonstration of how a rational agent can consistently prefer Theory A over Theory B for life-critical decisions without assigning any higher subjective expectation of success to Theory A based on its test history."
+  },
+  {
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "body_sha256": "253ec0e056df37d3b32605250b86e62414c48982b9aa38aa3033809f6d411492",
+   "chars": 764,
+   "cycle": 2,
+   "file": "03-objections.txt",
+   "id": "33161462ad1b2b226f1ec65255764a3f96950bda2e5049480b0dc65be3317953",
+   "kind": "objection",
+   "label": null
+  },
+  {
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "body_sha256": "65f6d79555816a4f3b080f5514dec9d6088fa76390df125c177328d2f9ff2cf5",
+   "chars": 844,
+   "cycle": 2,
+   "file": "03-objections.txt",
+   "id": "a7a10cdf38006e310cbb0afc6df0233d405e938877b3357c890709d7b4aac0c8",
+   "kind": "objection",
+   "label": "Evidence showing that historically, theories with high corroboration are falsified faster than theories with low or zero corroboration when subjected to further testing."
+  },
+  {
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "body_sha256": "e0b7e769f34c974bafce8c9fd205f967919e77c313dc2eef48e5036359aa59b3",
+   "chars": 908,
+   "cycle": 2,
+   "file": "03-objections.txt",
+   "id": "c9ec7c06726681a464313b2dbd726ffccd0b868e7f4455245048b4e3f34b1030",
+   "kind": "objection",
+   "label": "A definitive textual analysis of Popper's later works (e.g., 'Conjectures and Refutations' vs. 'Objective Knowledge') clarifying whether he viewed the *preference* itself as requiring verisimilitude or merely as a rule of method."
+  },
+  {
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "body_sha256": "056a007cb92271b937afbc6c837756fc716c0effe888b1eda96b22d553642e28",
+   "chars": 659,
+   "cycle": 2,
+   "file": "03-objections.txt",
+   "id": "33cd355c7cc57d7ed573b5b68926c5459b514e46fec7f73b92abf0c5cce4828c",
+   "kind": "objection",
+   "label": null
+  },
+  {
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "body_sha256": "d496a71123e5a259d18de6875d3d6fa97fbf6a496872a31f93d28bf20be0f706",
+   "chars": 847,
+   "cycle": 2,
+   "file": "03-objections.txt",
+   "id": "ba0942964f9d92678a57737c7bba668361e06a4615c6e9a5cd9c6da2a0452366",
+   "kind": "objection",
+   "label": "Demonstration of a consistent Popperian agent who prefers high-corroboration theories solely for their falsifiability potential, explicitly denying any expectation of success or truth-likeness."
+  },
+  {
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "body_sha256": "903452286d04388bd2ab4e5ad205e69df316e5e885d0f70d669eb183e5b2ad42",
+   "chars": 872,
+   "cycle": 2,
+   "file": "03-objections.txt",
+   "id": "290325312d2be462f01aee3da76d3cfc67ed6c1cc5d96001b23b71bba42d8620",
+   "kind": "objection",
+   "label": "A definitive textual analysis of Popper's distinction between 'rational preference' based on critical scrutiny versus 'inductive inference' based on probability assignments."
+  },
+  {
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "body_sha256": "4def124ab175c2b3b312db782bc157cd3adc7e9970811211afc31bf79c0110cf",
+   "chars": 663,
+   "cycle": 2,
+   "file": "03-objections.txt",
+   "id": "4d49ef89acf9eb0f4cd77fc18cb567f22441f79a3f8fb3593e72b0f8dbfa9114",
+   "kind": "objection",
+   "label": null
+  },
+  {
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "body_sha256": "d0ff0592ff7ced8c31b6c288659c8180a05e951b58439a477e1aaf2cb66580a8",
+   "chars": 835,
+   "cycle": 2,
+   "file": "03-objections.txt",
+   "id": "59fa0adc1d79b994b0cb93d5416ed530566d191210afe2c59db66254bd351ad7",
+   "kind": "objection",
+   "label": "Clarification on whether Popper's later work on verisimilitude successfully decouples the preference for corroborated theories from any form of inductive logic."
+  },
+  {
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "body_sha256": "811caf99f9d1f2d01b0856a6b8d2857042b358ba61009222f73223fed3b38030",
+   "chars": 894,
+   "cycle": 2,
+   "file": "03-objections.txt",
+   "id": "d093cc7badeb0c11f876ec88feb698e59a2df2f4480343626b2ae9be599c87ef",
+   "kind": "objection",
+   "label": "A definitive textual analysis of Popper's distinction between 'acceptance' for practical purposes versus 'belief' in truth, specifically regarding his concept of verisimilitude (truth-likeness) as a non-probabilistic guide for preference."
+  },
+  {
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "body_sha256": "f11822847ce3df7be3b9a4c4a19efd61c84ea474be6bd48dfad7e6809f692091",
+   "chars": 863,
+   "cycle": 2,
+   "file": "03-objections.txt",
+   "id": "0ea1f35ca3dd419b0d355ea374b21e351e08156c71542bc7ceb5c007abb997ec",
+   "kind": "objection",
+   "label": "An agreed-upon definition of 'rationality' in decision theory that separates expected utility maximization (which often relies on induction) from risk-minimization based on stress-test history."
+  },
+  {
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "body_sha256": "3f490bc17aeb44f07f706826e156e34677737a23f8c5b77a3d7777f5fb51b411",
+   "chars": 904,
+   "cycle": 2,
+   "file": "03-objections.txt",
+   "id": "0236eafecf6285ec24003e35f10c538f46aab5eab8019e7025d759ed14d4637a",
+   "kind": "objection",
+   "label": "A formal demonstration showing how a decision rule based solely on past falsification attempts can yield different outcomes than a randomizer in a simulated environment of competing hypotheses."
+  },
+  {
+   "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "body_sha256": "ad0b733ac6268075f47410b3dd3a03340e98283b5df1b7c5f2f7d5b765b60685",
+   "chars": 776,
+   "cycle": 3,
+   "file": "03-objections.txt",
+   "id": "4b681fa5764306e9d0dbdce4e3b26afb3f6ac966ba022b6b82e6af97c8fc695d",
+   "kind": "objection",
+   "label": null
+  },
+  {
+   "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "body_sha256": "948ceb456f68ecfc6a4b8c7ac03117e23fe7e5fdeea5dd66ff6fdb7fb9427e2c",
+   "chars": 953,
+   "cycle": 3,
+   "file": "03-objections.txt",
+   "id": "b6c8ec279c77b0d9c42addb5b9fdc8ca560617f4f5ee392bfd6d3cb0e2a17825",
+   "kind": "objection",
+   "label": null
+  },
+  {
+   "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "body_sha256": "c3da041bc1e225f904c20142c7e2c66668ff85df05837d645f98dae4388d6a46",
+   "chars": 1007,
+   "cycle": 3,
+   "file": "03-objections.txt",
+   "id": "2518fca6b3baf806639d43566e73e10c07d03cd6445a79f1c6797e4368e64d3e",
+   "kind": "objection",
+   "label": null
+  },
+  {
+   "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "body_sha256": "f09ec9ba1b1f33ac5e5fce958b7221cb80023b07120b43bea5771f2ed6e568f2",
+   "chars": 743,
+   "cycle": 3,
+   "file": "03-objections.txt",
+   "id": "9fbb650dd414ce65e955e5af45531517b23131ac8f00ee2ee497863990a1d31f",
+   "kind": "objection",
+   "label": "A clear textual analysis of Popper's distinction between 'corroboration' as a report of past performance versus 'probability' as a prediction of future frequency."
+  },
+  {
+   "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "body_sha256": "9bc35b0ae25939a5594e38d35df0148c0ec5dea5a19654677527cba41580ae47",
+   "chars": 677,
+   "cycle": 3,
+   "file": "03-objections.txt",
+   "id": "093fcf26ba5a203000141e54e020b0c7efce3397eed435b2a48842bcac4dbd0a",
+   "kind": "objection",
+   "label": "Demonstration that verisimilitude can be defined purely logically without invoking the principle of the uniformity of nature."
+  },
+  {
+   "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "body_sha256": "657d5668b4d210375294edb6287e413060decff53ee0e4e40c23eabdd053ad2f",
+   "chars": 622,
+   "cycle": 3,
+   "file": "03-objections.txt",
+   "id": "109c6e75b7fc93d6467c7ffded630d8f980bf11e73d73c66ee45dda89dd8fdcd",
+   "kind": "objection",
+   "label": null
+  },
+  {
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "body_sha256": "9ffc89ca11e2c9691f5952f62ba0e8825a70ebbd55d538082727ac2e20e7aa40",
+   "chars": 857,
+   "cycle": 3,
+   "file": "03-objections.txt",
+   "id": "e7e81de6b2a628557a2ea2b48868b4efda3120fdd6c4128881c6748c7db982a0",
+   "kind": "objection",
+   "label": "A direct citation from Popper's later works (e.g., 'Realism and the Aim of Science') where he explicitly links the preference for corroborated theories to rational critical evaluation rather than mere psychological necessity or pragmatic survival instincts."
+  },
+  {
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "body_sha256": "9c471128a7c16014f520fe86cf9559c9090da0c8bc91a9a95b34b8ae2e76a9b8",
+   "chars": 675,
+   "cycle": 3,
+   "file": "03-objections.txt",
+   "id": "d99d8dedf8a7d30c694d2a507412701421aa659b5b336c3703462393414754bd",
+   "kind": "objection",
+   "label": null
+  },
+  {
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "body_sha256": "7c70b5da587fc633267a1b16be533d588c7858d8dc106a8a45f59a0d4315aac5",
+   "chars": 874,
+   "cycle": 3,
+   "file": "03-objections.txt",
+   "id": "87b3f27b104b18f6432ce4151bf83eb299efca5e0835c0d96bd85fee369f6f64",
+   "kind": "objection",
+   "label": "An analysis showing whether Popper considered the decision to act on a corroborated theory as part of the 'context of discovery' (psychological) or the 'context of justification' (logical)."
+  },
+  {
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "body_sha256": "b5188f6b6c2078c5a90f5e55dd77084b5366ac7e9617f32b4bd9fba1d8effc86",
+   "chars": 931,
+   "cycle": 3,
+   "file": "03-objections.txt",
+   "id": "76bb051313fd6c67dd2ff16f1f7121c4e1c26c4477bea8f6454d266822d5b0c4",
+   "kind": "objection",
+   "label": "A clear demonstration from Popper's own texts showing he endorsed acting on corroborated theories without any implicit assumption that their past success is relevant to their future performance."
+  },
+  {
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "body_sha256": "c47c1cd9b7778749d2cf9187fb94bcacb33a98499a01951c9c9d1df970ab810d",
+   "chars": 902,
+   "cycle": 3,
+   "file": "03-objections.txt",
+   "id": "2f070830cd79b5394b0f97e8450d4d2f38a293c4be3dab39257664b776a09879",
+   "kind": "objection",
+   "label": "A formal proof showing how one can quantify 'likelihood of immediate error' in a Popperian framework without invoking degrees of confirmation or probability."
+  },
+  {
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "body_sha256": "0070491210808421ec522a1bd3e0f73eac52316caa9db1cd960c2bd72d6cc1b1",
+   "chars": 988,
+   "cycle": 3,
+   "file": "03-objections.txt",
+   "id": "c5d6645219065e57ffd9a122c445b3f65f3316e7206bfdbe088bdb5af1aaf281",
+   "kind": "objection",
+   "label": "An example of a decision-making scenario where an agent prefers Theory A over Theory B solely based on corroboration, yet explicitly denies expecting Theory A to perform better in the specific upcoming application."
+  }
+ ],
+ "room_root": "../2026-09-06-change-writers-room-limits-and-forms/runs/home-room/shallow-runs/shallow-0b47bc7b090854078ddf7559",
+ "schema": "room-attachment-conversion.v1",
+ "verbatim": "94/94"
+}

@@ -1,13 +1,15 @@
 # Checklist for: the organiser seat — testing the writer's room on the full harness
-State: next=1 blockers=none   <- refreshed at every commit; a fresh session resumes from this line alone
+State: next=3 blockers=none   <- refreshed at every commit; a fresh session resumes from this line alone
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order. One step per dr-execute-step invocation.
 Map ids (from REQUEST.md): DR-INV-frozen-surfaces, DR-SUB-evidence, DR-INV-seat-section-plugins, DR-INV-seat-section-sources, DR-CON-warrants-and-attacks, DR-SEAM-packs-and-token-economy-x-rules, DR-CON-packs-and-token-economy, DR-SUB-llm, DR-SUB-rules, DR-CON-conjecture-source, DR-SUB-minireason, DR-SEAM-llm-x-minireason. Seam read first: DR-SEAM-packs-and-token-economy-x-rules (the nine source-computed contexts and the allocator the evidence sections live under).
 Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 insertions over `src tests docs/map`.
 
-- [ ] 1. (S3) Write `tools/room_to_attachment.py` and run it against the room root into `attachment/` (three plain-text files, one paragraph per record, refuted-if proposals first) with `attachment/CONVERSION.json`.
+- [x] 1. (S3) Write `tools/room_to_attachment.py` and run it against the room root into `attachment/` (three plain-text files, one paragraph per record, refuted-if proposals first) with `attachment/CONVERSION.json`.
       done-when: the tool prints `records 94 (12 conjectures, 46 proposals, 36 objections)` and `verbatim 94/94`
-- [ ] 2. (S4) [COMMIT] Write `attachment/ATTACHMENT.sha256` and commit the converter, the attachment and the digest.
+      output: `records 94 (12 conjectures, 46 proposals, 36 objections)` / `verbatim 94/94` / `chars 53493` / `01-conjectures.txt: 12 records, 9281 bytes` / `02-proposals.txt: 46 records, 17566 bytes` / `03-objections.txt: 36 records, 33377 bytes`. One deviation from the plan, recorded: a comma in a header line is folded to `;` (one angle label carried one), because the header is the one line that could change how the file is admitted; the body keeps the label verbatim.
+- [x] 2. (S4) [COMMIT] Write `attachment/ATTACHMENT.sha256` and commit the converter, the attachment and the digest.
       done-when: `sha256sum -c attachment/ATTACHMENT.sha256` -> every line OK; `git ls-files attachment | wc -l` -> 5
+      output: `01-conjectures.txt: OK / 02-proposals.txt: OK / 03-objections.txt: OK / CONVERSION.json: OK`; `git ls-files attachment | wc -l` -> 5 (in this commit)
 - [ ] 3. (S1, S7, S14) Register in `src/deepreason/llm/seat_layouts.py`: `seat-pack.conjecturer.organiser-v1` (legacy entries filtered and re-budgeted per S9), `seat-pack.critic.evidence-blind-v1` (legacy minus the two evidence entries), shells `seat.conjecturer.organiser-v1` (form `conjecturer.turn.v6`, wording `role-prompt.organiser-v1`) and `seat.critic.evidence-blind-v1`; the docstring records the compact.v2 contradiction (A1).
       done-when: SPEC S1's first accept command prints four shell ids and exits 0; S14's accept command exits 0
 - [ ] 4. (S1, S9) Add `_OrganiserOutputContract` (`dr.output-contract.organiser`, section `output-contract`) to `src/deepreason/llm/seat_plugins.py` and append it to `CONJECTURER_PLUGINS`.
