@@ -1,5 +1,5 @@
 # Checklist for: adopt h-EPI's claims mechanism for DeepReason's measures
-State: next=11 blockers=none
+State: next=17 blockers=none
 Map ids this plan was built on: `DR-INDEX`, `DR-INV-frozen-surfaces`,
 `DR-SUB-harness`, `DR-CON-evidence-states`, `DR-INV-evidence-channels`,
 `DR-SUB-evidence`, `DR-INV-reference-menu`, `DR-SUB-verification`,
@@ -60,31 +60,31 @@ One step per dr-execute-step invocation.
 - [x] 10. (S10, S12) [COMMIT] Commit the tests.
       done-when: `git status --porcelain tests/` is empty.
 
-- [ ] 11. (S11) Append the instrument section to
+- [x] 11. (S11) Append the instrument section to
       `docs/map/INV-frozen-surfaces.md` under "The instruments that prove you
       did not break anything", with a `check:` that runs the tool on the
       committed ARM R root and asserts a specific status.
       done-when: `python tools/docs_verify.py 2>&1 | tail -3` -> 0 failed.
 
-- [ ] 12. (S11) Prove the new check can fail: mutate the tool's status
+- [x] 12. (S11) Prove the new check can fail: mutate the tool's status
       derivation in a scratch copy, re-run the check, confirm non-zero exit,
       restore.
       done-when: the mutated run exits non-zero, the restored run exits 0,
       and `git diff --stat tools/record_claims.py` is empty afterwards.
 
-- [ ] 13. (S11) [COMMIT] Commit the map section.
+- [x] 13. (S11) [COMMIT] Commit the map section.
       done-when: `git status --porcelain docs/map/` is empty.
 
-- [ ] 14. (S13) Write `PARKED.md` with the appraisal-labelling entry (first
+- [x] 14. (S13) Write `PARKED.md` with the appraisal-labelling entry (first
       line: readiness is read from the record, never marked by a person) and
       its ready-to-send prompt as one fenced block.
       done-when: `python3 -c "import pathlib; t=pathlib.Path('experiments/2026-09-06-change-record-claims/PARKED.md').read_text(); assert 'appraisal.py' in t and 'P4' in t and 'never marked by a person' in t; print('ok')"` -> `ok`
 
-- [ ] 15. (S14, R18) Prove `src/deepreason/` is byte-untouched and PREREG.md
+- [x] 15. (S14, R18) Prove `src/deepreason/` is byte-untouched and PREREG.md
       is unedited.
       done-when: `git diff --stat origin/main...HEAD -- src/deepreason/ experiments/2026-09-06-change-writers-room-organiser-testing/PREREG.md` -> empty output.
 
-- [ ] 16. (all) Diff budget against SPEC's ceiling.
+- [x] 16. (all) Diff budget against SPEC's ceiling.
       done-when: `python tools/diff_budget.py origin/main --ceiling 1100 --paths tools/record_claims.py tests/test_record_claims.py docs/CLAIMS_SCHEMA.md docs/map/INV-frozen-surfaces.md experiments/2026-09-06-change-writers-room-organiser-testing/claims.json` -> verdict not EXCEEDED (paste it).
 
 - [ ] 17. (all) Map check: `python tools/docs_verify.py` and

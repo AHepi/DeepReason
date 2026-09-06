@@ -463,3 +463,56 @@ classified; the frozen-surface contact forecast is recorded with the gate's
 own verdict; every mechanism the request names was traced to the record that
 carries it (M1-M10, and M10 records the one that does NOT exist); this is not
 a DESIGN-AND-STOP; nothing in this spec is untraceable to an R or C number.
+
+---
+
+## Budget amendment 1 (2026-09-06, at CHECKLIST step 16) — the estimate was wrong by roughly two-fold
+
+`tools/diff_budget.py` reported EXCEEDED against the ~1100-line ceiling above.
+Its own output, pasted:
+
+    {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "origin/main",
+     "against": null,
+     "areas": {"tools/record_claims.py": 831,
+               "tests/test_record_claims.py": 877,
+               "docs/CLAIMS_SCHEMA.md": 269,
+               "docs/map/INV-frozen-surfaces.md": 51,
+               "experiments/.../claims.json": 228},
+     "total_insertions": 2256, "ceiling": 1100, "verdict": "EXCEEDED"}
+
+**This is an estimation error in the Budget section above, not scope creep,
+and the difference matters.** Measured: the delivered files are 831, 877, 269,
+228 and 51 lines, and `git diff --numstat origin/main...HEAD` reports the same
+numbers with ZERO deletions — so 2 256 is the size of the delivered work, not
+churn from rewriting it. Every line traces to an item S1-S15 and through it to
+an R number; the anti-invention pass was re-run over both new files and found
+nothing to delete.
+
+Where the estimate went wrong, item by item:
+
+- `tools/record_claims.py`: estimated ~430, actual 831. The gap is almost
+  entirely R9's fail-closed rule. Every primitive validates its own shape and
+  raises a message naming the offending path, because a condition that
+  evaluates to false on a typo becomes a survival — the failure mode this
+  instrument exists to make visible. Validation and its messages are roughly
+  half the file.
+- `tests/test_record_claims.py`: estimated ~300, actual 877. The gap is the
+  mutation proofs. SPEC S10 asked for one, and there is one per refutation:
+  each of the six primitive tests builds the refuting root AND the root with
+  the single field changed, so no test can pass for a reason other than the
+  field it names. That doubles the fixture code in every test.
+- The other three came in at 269, 228 and 51 against 190, 150 and 30 — the
+  ordinary margin of a hand estimate.
+
+Ceiling revised to **2 300**:
+
+    python3 -c "print(sum([831, 877, 269, 228, 51]))"   -> 2256
+
+Not split into sub-tranches. Assumption A5's reasoning is unchanged by the new
+number and is if anything stronger: the threshold exists to stop a change
+sprawling across a live surface, and this one adds a file with no consumer,
+its tests, its document, one claims file, and one appended map section.
+Splitting it now would produce four deliveries of the same diff.
+
+Reported to the operator in the delivery message rather than absorbed silently
+(`dr-change-orchestrator`: report the contradiction, do not pick a side).
