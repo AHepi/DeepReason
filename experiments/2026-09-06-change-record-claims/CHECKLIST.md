@@ -1,5 +1,5 @@
 # Checklist for: adopt h-EPI's claims mechanism for DeepReason's measures
-State: next=1 blockers=none
+State: next=3 blockers=none
 Map ids this plan was built on: `DR-INDEX`, `DR-INV-frozen-surfaces`,
 `DR-SUB-harness`, `DR-CON-evidence-states`, `DR-INV-evidence-channels`,
 `DR-SUB-evidence`, `DR-INV-reference-menu`, `DR-SUB-verification`,
@@ -9,14 +9,14 @@ subsystems.
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
-- [ ] 1. (S6) Write `docs/CLAIMS_SCHEMA.md`: the claims file's shape, the six
+- [x] 1. (S6) Write `docs/CLAIMS_SCHEMA.md`: the claims file's shape, the six
       condition keys with one worked example each, the three statuses, the
       two standings, the non-inductive limit, the "what this is not" section
       (not a gate/status/score; no readiness from a person), and the map
       citations R10 names.
       done-when: `python3 -c "import pathlib,sys; t=pathlib.Path('docs/CLAIMS_SCHEMA.md').read_text(); [sys.exit('missing '+m) for m in ['all_of','any_of','not','status','event','measure','control','object','REFUTED','UNREFUTED_FOR_DECLARED_SCOPE','NOT_TESTED','SHOWN_ABLE_TO_FAIL','NOT_SHOWN_ABLE_TO_FAIL','DR-SUB-harness','DR-CON-evidence-states','DR-INV-evidence-channels'] if m not in t]; print('ok')"` -> `ok`
 
-- [ ] 2. (S6) [COMMIT] Commit the document alone, so the shape is written
+- [x] 2. (S6) [COMMIT] Commit the document alone, so the shape is written
       down before the code that implements it.
       done-when: `git log --oneline -1` names CLAIMS_SCHEMA.md and
       `git status --porcelain docs/` is empty.
