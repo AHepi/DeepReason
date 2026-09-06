@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=53 blockers=none. Step 52 DONE: PREREG_D8.md sealed (sha in its commit), instruments under d8/, no arm has run. T3-T6 DELIVERED; T7 runs in this window (REQUEST.md Amendment 3, "go for it jack!", credential in the gitignored env). T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=54 blockers=none. Step 53 DONE: epoch3 soak green, isolation re-run PASS, probe ok. Step 52 DONE: PREREG_D8.md sealed (sha in its commit), instruments under d8/, no arm has run. T3-T6 DELIVERED; T7 runs in this window (REQUEST.md Amendment 3, "go for it jack!", credential in the gitignored env). T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1884,8 +1884,42 @@ tranche".
       the profile's `reasoning` setting; ARM M runs through the disclosed
       one-field override in d8/reasoning_endpoint.py.
       ```
-- [ ] 53. (S12) Soak before any live launch (`dr-drive-harness` §1).
+- [x] 53. (S12) Soak before any live launch (`dr-drive-harness` §1).
       done-when: `python -u scripts/cycle_soak.py --case <case>` green (paste)
+
+      ```
+      $ python -u scripts/cycle_soak.py --case epoch3        (idle box; nothing else running)
+      CYCLE SOAK -- case epoch3
+        manifest sha256        3ed3c2341aaae177e23f43489743718866448d085f1742475f77612424881cb2
+        cycles requested       8      qualification rc=0 (3.3s)     drive 245.5s, 11 progress events
+      -- S1 run assertions
+        [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+        [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+        [PASS] A3-verify-root-clean         0 violation(s)
+        [PASS] A4-cycles-reached            reached cycle 8 of 8 requested; the deepest recorded death was cycle 2
+        [PASS] A7-record-fully-read         0 record(s) under objects/ could not be parsed
+        ** 7 assertions declared, 5 EVALUATED, 2 not applicable to this case
+        [PASS] D2-route-lease  [PASS] D3-budget-auth  [PASS] D4-reservation-bound
+      [soak] exit 0 (clean)                                   -> soak rc=0   GREEN
+
+      DISCLOSED (PREREG §6 step 2): every soak case drives the managed FULL-
+      HARNESS path; none drives mini. The soak proves the box and the install.
+      ARM M's own path was proven beside it, offline and live:
+
+      $ python -u <scratchpad>/t6_record.py          (the T6 isolation run, re-run)
+      flow mini.flow.isolation.v1  stop queue-exhausted / 3 cycles  calls 15
+      records by kind {'mini.commitment-proposal.v1': 6, 'mini.criticism.v1': 6}
+      refuted 0   meter_equals_log True   verify_root violations 0
+      replay digest == live digest: True (28844463d7cb...)      RESULT: PASS
+
+      $ deepreason setup ... (runs/home-m)  rc=0 ; provider.yaml: credential by env NAME only
+      $ deepreason --root runs/input-d8 input freeze --problem d8/problem.json   rc=0
+        run_input_digest 63d2a653...  criteria []  problem question-corroboration-d8
+      $ python -u d8/probe_transport.py     (ONE throwaway call, not an arm)
+        content {"ok": true}  finish_reason stop  usage 30 tokens  1.6 s  -> rc=0
+        (reasoning field honoured; content non-empty under json mode)
+      key occurrences in PROBE.txt / provider.yaml: 0
+      ```
 - [ ] 54. (S12) Run ARM 0 and ARM M detached, with the snapshot loop armed.
       done-when: both arms' roots exist, `deepreason results <root>` prints a
       typed terminal for each (paste)
