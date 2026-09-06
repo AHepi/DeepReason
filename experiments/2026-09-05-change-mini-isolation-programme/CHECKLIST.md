@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=52 blockers=none. T3, T4, T5 and T6 DELIVERED; T7 (the measure) goes to the last window: it needs a green soak and a key. T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=52 blockers=none. T3-T6 DELIVERED; T7 runs in this window (REQUEST.md Amendment 3, "go for it jack!", credential in the gitignored env). T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
