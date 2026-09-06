@@ -1,0 +1,34 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms as a non-inductive, critical decision to test the most informative and severely tested hypothesis, rather than an expectation of future success.",
+    "mechanism": "Popper distinguishes between the logical status of a theory (which remains unproven) and the pragmatic choice of which theory to subject to further severe testing. Choosing the better-corroborated theory is rational not because it is more likely to be true (induction), but because it has withstood the strongest attempts at falsification and thus offers the best opportunity for learning through potential refutation. This aligns with the 'asymmetry of risk' where rejecting a well-corroborated theory without cause impedes scientific progress, while accepting it tentatively maximizes testability.",
+    "counterconditions": [
+      "If the preference implicitly relies on the assumption that past performance guarantees future reliability (inductive leap).",
+      "If the agent acting on the theory expects a high probability of practical success rather than viewing the action as part of an ongoing test.",
+      "If the concept of 'verisimilitude' is used as a proxy for probabilistic truth rather than a measure of informational content and falsifiability."
+    ],
+    "typicality": 0.85,
+    "evidence_refs": [
+      {
+        "block": "2d4ce010144a017a",
+        "quote": "The conjecture conflates 'preference for action' with 'belief in future success.' Popper explicitly"
+      },
+      {
+        "block": "19af0041b31d7f5c",
+        "quote": "The argument relies on the 'asymmetry of risk,' suggesting that rejecting a well-corroborated theor"
+      },
+      {
+        "block": "0a4795991a7b96f3",
+        "quote": "The claim that Popper's system reduces to 'psychological habit' ignores his argument for the superi"
+      }
+    ],
+    "discharges": [],
+    "analogy": null,
+    "checker_specs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}

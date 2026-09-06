@@ -1,0 +1,36 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms as a non-inductive, critical decision to test the most informative surviving theory, rather than an expectation of future success.",
+    "mechanism": "Popper distinguishes between 'corroboration' (a historical report of severe testing) and 'probability' (inductive likelihood). The mechanism for preference is not an inference that the theory will remain true, but a strategic choice to subject the theory with the highest empirical content and best survival record to further attempts at falsification. Choosing the better-corroborated theory maximizes the potential for learning (either by new falsification or by surviving yet another severe test), whereas choosing a less-corroborated or ad-hoc theory reduces empirical content and stalls scientific progress. This avoids induction because it makes no claim about the future truth of the theory, only about its current status as the best target for criticism.",
+    "counterconditions": [
+      "If the agent's choice implies an expectation that the theory is more likely to be true in the future.",
+      "If the preference relies on the assumption that nature is uniform or that past success guarantees future performance.",
+      "If the distinction between 'acting on' a theory and 'believing' in its probability collapses into pragmatic induction."
+    ],
+    "typicality": 0.85,
+    "evidence_refs": [
+      {
+        "block": "2d4ce010144a017a",
+        "quote": "The conjecture conflates 'preference for action' with 'belief in future success.' Popper explicitly"
+      },
+      {
+        "block": "06d89637d715691f",
+        "quote": "The argument that we choose highly corroborated theories because they are the 'most informative tar"
+      },
+      {
+        "block": "2bdcddb9c5d0480f",
+        "quote": "The conjecture forbids equating the pragmatic choice of a theory for application with a"
+      }
+    ],
+    "discharges": [],
+    "optional_refs": [
+      "SRC_006",
+      "SRC_022",
+      "SRC_025"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}
