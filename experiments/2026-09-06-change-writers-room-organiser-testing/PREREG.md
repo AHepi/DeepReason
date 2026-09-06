@@ -330,3 +330,24 @@ moved the command and not the banner. The RUN is correct — the live process
 line carries `--token-budget 500000` and the root's own `progress.jsonl`
 records `token_limit: 500000` — and the log line is wrong. The banner is
 fixed after ARM R terminates, never while bash is reading the script.
+
+**Amendment 6 (2026-09-06, after ARM R terminated — the disposition of a failed arm).**
+ARM R terminated `state: failed`, `stop_reason: operational_failure`,
+`V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY … route seat has terminally exhausted
+its smallest authorized contract`, at cycle 3, having spent 464 359 of the
+500 000 (root
+`runs/home-r/runs/run-36d9a22c3e2045ae1b8c7bfb9d95d092`). Under §3 that is a
+FAILED ARM, recorded as failed and NOT relaunched to get a number: the one
+relaunch §3 allows is a transport death before cycle 1 completed, and this is
+neither. Under §7 an arm with no usable unit makes the verdict INCONCLUSIVE.
+So: **ARM R's composed unit is NOT harvested and NOT judged**; the verdict for
+`R vs 0` and `R vs 0R` is INCONCLUSIVE; `0R vs 0` is judged and reported as
+Amendment 4 already provides. `tools/judge_organiser.py` now reads the arm's
+root `run-status.json` and refuses a unit whose run is not `completed`,
+printing a notice — that IMPLEMENTS §3 rather than changing it (composition
+succeeds on a partial record, so without the check a failed run's positions
+would be scored as if it had reached a terminal). Its `CRITERIA` block is
+unchanged and still byte-identical to D8's; its digest becomes
+`ea2003851dc51dc50eb9acd9f06a6cf14cd7fa60780bd45eeccc39095bd952f1`.
+The failure's cause, its evidence and its disposition are written up in
+RESULTS.md and parked as P6; nothing here changes the decision rule.

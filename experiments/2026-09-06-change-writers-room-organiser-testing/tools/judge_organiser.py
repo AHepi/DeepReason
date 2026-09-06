@@ -107,10 +107,31 @@ def _arm0_texts() -> list[tuple[str, str]]:
 
 
 def _composed(arm_dir: str) -> list[tuple[str, str]]:
-    """ONE unit per harness arm: the composed result the arm script wrote."""
+    """ONE unit per harness arm: the composed result the arm script wrote.
+
+    REFUSED FOR A FAILED ARM. PREREG §3 says an `operational_failure` is a
+    FAILED arm, recorded as failed, and §7 says an arm with no usable unit
+    makes the verdict INCONCLUSIVE. Composition succeeds on a partial record,
+    so without this check a failed run's positions would be scored as if the
+    run had reached a terminal -- claiming more than the record shows. The
+    check reads the root's own `run-status.json`; a root that carries none is
+    treated as absent, not as passed.
+    """
     path = TRANCHE / "runs" / arm_dir / "COMPOSED.txt"
     if not path.exists():
         raise SystemExit(f"REFUSED: {path} does not exist; the arm has not reached its terminal")
+    composed = TRANCHE / "runs" / arm_dir / "COMPOSED.json"
+    if composed.exists():
+        root = pathlib.Path(json.loads(composed.read_text(encoding="utf-8"))["root"])
+        status_path = root / "run-status.json"
+        status = json.loads(status_path.read_text(encoding="utf-8")) if status_path.exists() else {}
+        if status.get("state") != "completed":
+            print(
+                f"notice: {arm_dir} is a FAILED arm "
+                f"(state={status.get('state')!r}, stop_reason={status.get('stop_reason')!r}); "
+                "its unit is NOT harvested (PREREG §3)"
+            )
+            return []
     return [(f"{arm_dir}/COMPOSED.txt", path.read_text(encoding="utf-8"))]
 
 
