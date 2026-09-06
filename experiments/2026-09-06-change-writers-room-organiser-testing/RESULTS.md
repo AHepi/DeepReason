@@ -119,4 +119,5 @@ made from this tranche.
   own unit (PREREG §11).
 - The seat cites a third of what it reads (P2); the soak covers the managed
   shape, not the shell (PREREG §10).
+- The soak on the launch configuration's shape ran green here (`runs/soak.log`: `epoch3`, 8 cycles, `exit 0 (clean)`); it proves the box and the managed path, not the organiser shell (PREREG §10).
 - The full gate and `docs_verify` on this tree: see VALIDATION.md.

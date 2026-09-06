@@ -1,5 +1,5 @@
 # Checklist for: the organiser seat — testing the writer's room on the full harness
-State: next=15 blockers=the full docs_verify started at step 7 is still running in the background (its result lands at step 17); the soak waits for it (one worker-spawning instrument at a time)   <- refreshed at every commit; a fresh session resumes from this line alone
+State: next=16 blockers=none (the full gate of step 18 runs in the background after this commit)   <- refreshed at every commit; a fresh session resumes from this line alone
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order. One step per dr-execute-step invocation.
 Map ids (from REQUEST.md): DR-INV-frozen-surfaces, DR-SUB-evidence, DR-INV-seat-section-plugins, DR-INV-seat-section-sources, DR-CON-warrants-and-attacks, DR-SEAM-packs-and-token-economy-x-rules, DR-CON-packs-and-token-economy, DR-SUB-llm, DR-SUB-rules, DR-CON-conjecture-source, DR-SUB-minireason, DR-SEAM-llm-x-minireason. Seam read first: DR-SEAM-packs-and-token-economy-x-rules (the nine source-computed contexts and the allocator the evidence sections live under).
 Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 insertions over `src tests docs/map`.
@@ -46,8 +46,9 @@ Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 inserti
 - [x] 14. (S15, S19) [COMMIT] Write `PREREG.md` and commit it with `sha256: <digest>` in the commit message.
       done-when: `sha256sum PREREG.md` equals the digest in `git log -1 --format=%B -- PREREG.md`
       output: `sha256: 3d51b88eec4ada2dec51cad6ba63c8f73ac612043cc2c47897b217012feae4c0` in the commit body; `sha256sum PREREG.md` -> the same digest. Commits landed in step order (3-7, 8-9, 10, 11-12, 13, 14); the brief's commit precedes PREREG's (S11).
-- [ ] 15. (S20) [COMMIT] Run `python -u scripts/cycle_soak.py --case epoch3 | tee runs/soak.log` (offline; no key needed) and commit the log.
+- [x] 15. (S20) [COMMIT] Run `python -u scripts/cycle_soak.py --case epoch3 | tee runs/soak.log` (offline; no key needed) and commit the log.
       done-when: `runs/soak.log` ends with a clean exit (`rc=0` appended by the runner line)
+      output: `runs/soak.log` ends `[soak] exit 0 (clean)` / `rc=0` — epoch3, qualified in 3.5s, 8 cycles driven against the stub, 32 semantic admissions, 63 token reservations. Run after the full docs_verify returned (one worker-spawning instrument at a time).
 - [ ] 16. (S10, S22, S23, S24) [COMMIT] Write `RESULTS.md`: the dated segment (what the record shows offline; what it does not — no arm ran; one question, one model, one room), the 12-of-12 statement, the failure-budget ledger at 0.
       done-when: the S10, S22, S23 (RESULTS half), S24 greps hold
 - [ ] 17. (S25) Map check, full: `python tools/docs_verify.py` and `--audit` and `--links`.
