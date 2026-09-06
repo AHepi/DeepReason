@@ -1,5 +1,5 @@
 <!-- DR-SEAM-rules-x-scratch -->
-Verified-at: 770ea1344
+Verified-at: 696c4fd89
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/scratch/conjecture.py
 Sides: DR-SUB-rules, DR-SUB-scratch
@@ -227,16 +227,26 @@ compare it.
    for the operator as Q3. **ANSWERED 2026-08-30: ROAD B.** A reader outside
    `rules/` (`successor/reader.py`) walks what criticism already recorded and
    routes it, so THIS RULE IS NOT OVERTURNED — the criticism side was not
-   widened at all. `rules/crit.py` takes a ZERO-LINE DIFF against `main`, no
-   module under `rules/` names `deepreason.successor` at any scope, and both
-   facts are measured rather than asserted
-   (`tests/test_successor_dispatch.py::test_rules_crit_takes_a_zero_line_diff`
+   widened at all. Nothing `rules/crit.py` gains NAMES THE DESTINATION, its two
+   pinned counts do not move, and no module under `rules/` names
+   `deepreason.successor` at any scope; all of it is measured rather than
+   asserted
+   (`tests/test_successor_dispatch.py::test_no_change_to_rules_crit_reaches_the_destination`
    and `::test_no_module_under_rules_imports_the_successor_package`). Road A —
    a `_file_successor_question` helper beside `_file_attribution` in `crit.py`
    — would have passed every mechanical check on this page while being a
    workaround of this rule's letter, and was NOT taken.
+
+   The first measurement was a ZERO-LINE `git diff --stat` on `crit.py` against
+   `main`, NARROWED 2026-09-05 on the operator's decision (`docs/ERRATA.md`
+   E80). It measured road B correctly on the day and then stood as a freeze on
+   a 2 400-line module for every later tranche whatever it touched — a claim
+   strictly wider than this rule, and wider than its own tranche's PARKED.md,
+   which scoped it ("both take a zero-line diff IN THIS TRANCHE"). What is
+   forbidden is the REACH, so the reach is what is counted. The rule itself is
+   unchanged and was not overturned.
 `check: python -m pytest tests/test_successor_law_line.py::test_nothing_that_labels_ranks_or_admits_reads_a_successor_question tests/test_successor_law_line.py::test_the_channel_has_no_permitted_exception_inside_a_deciding_package tests/test_prose_refutation_boundaries.py -q && test "$(grep -c scratch src/deepreason/rules/crit.py)" -eq 2`
-`check: python -m pytest tests/test_successor_dispatch.py::test_rules_crit_takes_a_zero_line_diff tests/test_successor_dispatch.py::test_no_module_under_rules_imports_the_successor_package -q`
+`check: python -m pytest tests/test_successor_dispatch.py::test_no_change_to_rules_crit_reaches_the_destination tests/test_successor_dispatch.py::test_no_module_under_rules_imports_the_successor_package -q`
 
 What breaks first, in the order you will see it: `ConjectureContextStale` if you
 plan at the wrong fence; `"final Conj pack must contain the exact advisory
@@ -255,6 +265,17 @@ recovery), `tests/test_v6_scratch_atomicity.py` and
 `tests/test_v6_conjecture_component_atomicity.py` (partial completion).
 
 ## Traps
+
+- **A zero-line diff is a measurement of ONE tranche, not a freeze.** Rule 6's
+  first instrument asserted `git diff --stat origin/main -- rules/crit.py` was
+  empty. That is a true statement about the tranche that wrote it and a false
+  law about every tranche after it: the next change to `crit.py` for any reason
+  at all went red with a message saying rule 6 had been overturned, which it
+  had not. It cost the 2026-09-05 criticism-premise tranche a full gate and an
+  operator decision to settle. Narrowed the same day to the reach the rule
+  actually names (`docs/ERRATA.md` E80). The enduring rule: an instrument
+  written to record that a road WAS taken must be scoped to the road, or it
+  becomes a rule nobody voted for.
 
 - **A destination named on the criticism side would turn a MAP CHECK red, not
   a test.** Two counts in this document are exact: the word `scratch` appears

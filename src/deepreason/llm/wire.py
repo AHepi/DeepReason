@@ -2566,6 +2566,9 @@ class BatchCriticCaseWireV2(StrictWireModel):
         default=None, max_length=2
     )
     successor_question: str | None = None
+    # Plain array for the same reason as `CompactCritic`'s: the alias binder
+    # reaches `items`, never an `anyOf` branch.
+    essential_premise_aliases: list[str] = Field(default_factory=list, max_length=8)
 
 
 class BatchCriticWireV2(StrictWireModel):
@@ -2581,6 +2584,8 @@ class BatchCriticWireV2(StrictWireModel):
 
 class BatchCriticWireContractV2(WireContract[BatchCriticOutput]):
     """Call-local batch critic whose targets are exact SRC_### literals."""
+
+    ALIAS_ARRAY_FIELDS = ("essential_premise_aliases",)
 
     def __init__(
         self,
@@ -2686,6 +2691,11 @@ class BatchCriticWireContractV2(WireContract[BatchCriticOutput]):
                     ]
                     or None,
                     successor_question=item.successor_question,
+                    premises_essential=[
+                        self.aliases.resolve(a)
+                        for a in item.essential_premise_aliases
+                    ]
+                    or None,
                 )
                 for item in wire.cases
             ]
@@ -2697,6 +2707,11 @@ class CompactCritic(StrictWireModel):
     claim: str = ""
     grounds: str = ""
     cited_input_aliases: list[str] = Field(default_factory=list)
+    # A plain array, not `list[str] | None`: `_bind_alias_fields` writes the
+    # legal enum into this property's own `items`, and an optional field nests
+    # the array inside an `anyOf` branch the binder does not reach -- leaving
+    # the field unbound and any handle legal.
+    essential_premise_aliases: list[str] = Field(default_factory=list, max_length=8)
     counterexample: list[Any] | None = None
     premise: str | None = None
     premise_evidence: list[QuotedEvidenceWireV1] | None = Field(
@@ -2706,7 +2721,7 @@ class CompactCritic(StrictWireModel):
 
 
 class CriticWireContract(WireContract[ArgumentativeCriticOutput]):
-    ALIAS_ARRAY_FIELDS = ("cited_input_aliases",)
+    ALIAS_ARRAY_FIELDS = ("cited_input_aliases", "essential_premise_aliases")
 
     def __init__(self, aliases: AliasTable, expected_target: str) -> None:
         # Bind the target in the model-visible schema as well as checking it
@@ -2747,6 +2762,13 @@ class CriticWireContract(WireContract[ArgumentativeCriticOutput]):
             attack=wire.attack,
             case="\n".join(parts),
             counterexample=wire.counterexample,
+            # Resolved and KEPT as structure, unlike `cited_input_aliases`
+            # above: a mint site registers these on the criticism's validity
+            # node, and a value folded into prose cannot be registered.
+            premises_essential=[
+                self.aliases.resolve(a) for a in wire.essential_premise_aliases
+            ]
+            or None,
             premise=wire.premise,
             premise_evidence=[
                 QuotedEvidenceRefV1(block=ref.block, quote=ref.quote)

@@ -186,8 +186,18 @@ def test_alias_bearing_fields_name_their_legal_values_in_the_schema():
         (
             "critic",
             CriticWireContract(aliases=aliases, expected_target="art-1"),
-            {"attack": True, "target_alias": "A1", "cited_input_aliases": ["A1"]},
-            {"attack": True, "target_alias": "A1", "cited_input_aliases": ["Z9"]},
+            {
+                "attack": True,
+                "target_alias": "A1",
+                "cited_input_aliases": ["A1"],
+                "essential_premise_aliases": ["B1"],
+            },
+            {
+                "attack": True,
+                "target_alias": "A1",
+                "cited_input_aliases": ["A1"],
+                "essential_premise_aliases": ["Z9"],
+            },
         ),
         (
             "judge",

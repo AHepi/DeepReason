@@ -2628,3 +2628,34 @@ gap beside the raw one, and named the possibility that the gap "was the length
 shift wearing a merit label". The replication cashed the caveat. The error to
 avoid repeating is quoting the raw arm-level mean from this judge panel without
 its length-adjusted twin.
+
+**E80 — "rules/crit.py takes a zero-line diff" was a measurement of one tranche, published as a permanent law.**
+`docs/map/SEAM-rules-x-scratch.md` rule 6 recorded that the successor channel
+took road B by asserting a ZERO-LINE `git diff --stat` of
+`src/deepreason/rules/crit.py` against `main`
+(`tests/test_successor_dispatch.py::test_rules_crit_takes_a_zero_line_diff`,
+whose docstring read "If this goes red, the criticism side was widened after
+all and rule 6 was overturned by an implementer rather than by the operator").
+
+What the record shows: that tranche's own PARKED.md scoped the claim to itself
+— "`src/deepreason/run_manifest.py` and `src/deepreason/config.py` both take a
+zero-line diff IN THIS TRANCHE" — and rule 6 forbids one specific thing, the
+criticism side REACHING THE DESTINATION where a proposal goes. The instrument
+forbade every change to a 2 400-line module for any reason whatever. The
+2026-09-05 criticism-premise tranche added two lines threading a critic's
+declared premises to the trial that registers them — nothing to do with the
+workshop, both pinned counts unmoved — and got a full gate reporting
+`5080 passed, 1 failed` with a message asserting an operator law had been
+overturned. It had not been.
+
+**Where corrected.** The test is narrowed to the reach it names: no line a
+branch ADDS to `crit.py` may name the destination, and the two counts the seam
+pins may not move (mutation-proved both ways — a road-A `deepreason.successor`
+import goes red, and so does rewriting an existing `scratch` mention away).
+Rule 6 itself is UNCHANGED and was not overturned; the seam document says so
+and carries a Traps entry. Narrowed on the operator's decision, 2026-09-05,
+`experiments/2026-09-05-criticism-premise-declaration/`.
+
+The error to avoid repeating: an instrument written to record that a road WAS
+taken must be scoped to that road. A diff-size assertion is never scoped to
+anything — it freezes a file, and a frozen file is a rule nobody voted for.

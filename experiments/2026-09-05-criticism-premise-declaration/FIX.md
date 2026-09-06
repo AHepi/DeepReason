@@ -1,0 +1,331 @@
+# Fix: give a criticism a place to declare what it rests on, and register that declaration on its validity node as EVIDENCE
+
+Guarantee restored: **when a criticism declares an artifact essential and that
+artifact is later refuted, the criticism's attack lifts onto its validity node
+in the same fixpoint pass and its target reinstates** — the road
+`CON-warrants-and-attacks.md` already documents ("a verdict may declare what it
+rests on, and that declaration is the evidence closure's only entry point"),
+now reachable from the wire instead of only from a hand-built graph.
+
+## Frozen-surface verdict (run before any code was written)
+
+```
+$ python tools/blast_radius.py \
+    --files src/deepreason/llm/contracts.py src/deepreason/llm/wire.py \
+            src/deepreason/rules/crit.py src/deepreason/informal/trial.py \
+    --symbols ArgumentativeCriticOutput CompactCritic CriticWireContract \
+              crit_argumentative crit_argumentative_batch \
+              run_argument_trial_from_case _argument_trial_steps
+
+"frozen_surface_contacts": []
+"frozen_adjacent_contacts": []
+"frozen_surface_verdict": "CLEAR"
+"disclosure_summary": "This change touches none of the five frozen surfaces.
+ 9 test file(s) and 11 map document(s) assert on the touched targets today. ..."
+"qualification_digest": []
+"wheel_smoke_pins": []
+```
+
+NO CONTACT, as GOAL.md forecast. No grant is needed and none is requested.
+`src/deepreason/llm/roles.py` (two template sentences) was not in the
+`--files` list above; it is a prompt string with no symbol any frozen surface
+reads, and `test_role_prompt_registry.py` is its only consumer.
+
+## Change sites (exhaustive)
+
+- `src/deepreason/llm/contracts.py:112-145` — `ArgumentativeCriticOutput` gains
+  `premises_essential: list[str]`, default empty. Resolved artifact ids: the
+  artifacts this case ESSENTIALLY relies on, such that withdrawing one should
+  make the case fall. Distinct from `premise` beside it, which is a
+  presupposition of the PROBLEM and says so in its own comment.
+- `src/deepreason/llm/contracts.py:148-161` — `BatchCase` gains the same field
+  with the same semantics, exactly as `successor_question` and
+  `premise_evidence` are carried on both criticism outputs
+  (`CON-criticism-source.md`'s own check asserts that symmetry for
+  `successor_question`; the new field joins it).
+- `src/deepreason/llm/wire.py:2692-2704` — `CompactCritic` gains
+  `essential_premise_aliases: list[str]`, default empty, shaped exactly like
+  `cited_input_aliases` beside it (a plain array, so the schema binder can
+  write its `items` enum; an optional `| None` field would nest the array
+  under an `anyOf` where the binder does not reach).
+- `src/deepreason/llm/wire.py:2709` — `CriticWireContract.ALIAS_ARRAY_FIELDS`
+  gains `"essential_premise_aliases"`. **This is the whole of the
+  hallucinated-id requirement on the compact road**: `_bind_alias_fields`
+  writes the call-local alias set into the schema as an enum, so a premise
+  naming something absent from the pack is an ordinary schema violation — a
+  repair ladder and then a failed call that creates nothing, never a silent
+  drop. `tests/test_schema_carries_every_prose_rule.py::
+  test_alias_bearing_fields_name_their_legal_values_in_the_schema` already
+  proves that mechanism for `cited_input_aliases`; the new field is added to
+  its case list.
+- `src/deepreason/llm/wire.py:2733-2755` — `CriticWireContract.compile`
+  resolves the aliases to ids and carries them onto `premises_essential`.
+  Unlike `cited_input_aliases` (which is flattened into the case TEXT and lost
+  as structure — PARKED P1), the resolution survives as a list.
+- `src/deepreason/llm/wire.py:2559-2568` — `BatchCriticCaseWireV2` gains the
+  same wire field, and `BatchCriticWireContractV2` gains
+  `ALIAS_ARRAY_FIELDS = ("essential_premise_aliases",)`; its `compile` carries
+  the resolved ids onto each `BatchCase`.
+- `src/deepreason/rules/crit.py:1633-1645` — `crit_argumentative` passes
+  `output.premises_essential` into `run_argument_trial_from_case`.
+- `src/deepreason/rules/crit.py:2256-2270` — `crit_argumentative_batch` passes
+  `case.premises_essential` the same way.
+- `src/deepreason/informal/trial.py:904-949` —
+  `run_argument_trial_from_case` gains a keyword-only
+  `premises_essential: Sequence[str] = ()` and forwards it.
+- `src/deepreason/informal/trial.py:952-1076` — `_argument_trial_steps` gains
+  the same keyword. Two effects, in this order:
+  1. **Typed decline for an unknown id.** Any declared premise that is not a
+     registered artifact returns `_decline(harness, target_id,
+     "unknown-premise", diagnostics)` — the trial's existing typed
+     non-outcome, which records a `["trial-declined", target, reason]` Measure
+     and mints nothing. This is defence in depth behind the schema enum, and
+     it is what covers the DIRECT-contract path (a profile with
+     `direct_contracts` bypasses the alias table entirely, so the enum cannot
+     protect it). Placed with the other preflight declines, above any provider
+     spend.
+  2. **The registration.** ν is built with
+     `Interface(refs=[Ref(target=p, role=RefRole.EVIDENCE) for p in premises])`
+     instead of no interface — the same construction `rules/vision.py:104`
+     already uses for its screenshots, and the same role
+     `register_fail_warrant`'s `manifest_ref` mounts for demonstrative
+     verdicts. An empty declaration builds ν exactly as today (no interface
+     argument at all), so the no-declaration path is byte-unchanged.
+- `src/deepreason/llm/roles.py:36-51` — one sentence added to the
+  `argumentative_critic` and `batch_critic` templates: name the artifacts your
+  case essentially relies on, and it is complete to name none. Without this the
+  field exists and is never filled.
+- `docs/map/CON-warrants-and-attacks.md` — a new rule paragraph with a
+  `check:` that would fail if the registration regressed, a `Where to change
+  what` row, and a `Traps` entry naming this tranche. Same commit as the code,
+  per `SCHEMA.md`.
+
+## What is deliberately NOT registered
+
+**Declared premises never reach a DEMONSTRATIVE verdict's ν.**
+`rules/crit.py`'s five `register_fail_warrant` sites mint verdicts whose ground
+is an EXECUTION — a counterexample that RAN, a program that FAILED. Mounting a
+prose premise on those validity nodes would let a prose attack on a listed
+premise disable a demonstrated refutation, inverting the execution-supremacy
+line `CON-warrants-and-attacks.md` states in four separate rules. The
+declaration therefore binds only where the criticism's ground IS its case: the
+defended-trial mint site. This is a design decision, not an omission, and it is
+recorded here so a later reader does not "complete" it.
+
+Also not registered: `informal/trial.py:1405` (pairwise — rules on a rivalry,
+not on a critic's case against one target), `rules/experiment.py:391` and
+`rules/relatedness.py:153` (harness-composed rulings, no critic contract in
+the loop), `rules/vision.py:104` (already declares its ground on ν; its
+contract is not `ArgumentativeCriticOutput`).
+
+## Regression artifact
+
+Must invert / must newly hold:
+
+1. `experiments/.../repro_nu_evidence.py` — must keep printing all three arms
+   unchanged, exit 0. Arm A staying `('refuted', 'suspended_unsupported')` is
+   REQUIRED: a criticism that declares nothing keeps today's behaviour.
+2. NEW `experiments/.../s0_wire.py` — the §0 DEPENDENCE scenario driven
+   through the wire, with the critic declaring the premise essential. Must
+   print the EVIDENCE tuple `('accepted', 'refuted')`.
+3. NEW `tests/test_criticism_premises.py`, on a stub root, reusing
+   `tests/test_prose_refutation_boundaries.py`'s `_single_family_trial_adapter`
+   scaffolding rather than inventing any:
+   - a critic declares a premise; the trial mints; ν carries exactly one
+     `RefRole.EVIDENCE` ref naming it;
+   - the premise is then refuted, and the target returns to `ACCEPTED` in the
+     same pass while the criticism goes `REFUTED`;
+   - a critic that declares NOTHING produces a ν with no refs and a target
+     that stays `REFUTED` after an unrelated refutation (the formalism-optional
+     law, as a test rather than a promise);
+   - an empty declaration is not a failed call and costs the criticism nothing;
+   - a declared id absent from the graph declines typed, mints nothing, and
+     leaves the target's status untouched;
+   - the field is optional on BOTH criticism outputs (the symmetry
+     `CON-criticism-source.md` already asserts for `successor_question`).
+   Mutation proof: deleting the ν-interface construction in
+   `_argument_trial_steps` must turn the reinstatement test red. Recorded in
+   VERIFY.md with the pasted failure.
+
+## Existing tests at risk (from the blast-radius consumer list, all read)
+
+| Test | Verdict |
+|---|---|
+| `tests/test_wire_contracts.py` (critic schema/compile) | must keep passing; a new optional property with an empty default breaks no existing document |
+| `tests/test_schema_carries_every_prose_rule.py::test_alias_bearing_fields_name_their_legal_values_in_the_schema` | must keep passing; the new field is ADDED to its critic case so the enum protection is asserted for it too |
+| `tests/test_successor_law_line.py`, `tests/test_successor_wire_carry.py` | must keep passing untouched — they pin a different optional field and the law that nothing reads it |
+| `tests/test_crit_batch.py`, `tests/test_compact_role_alias_integration.py` | must keep passing; batch cases without the field compile as before |
+| `tests/test_prose_refutation_boundaries.py`, `tests/test_criticism_authority.py`, `tests/test_text_authority_policy.py`, `tests/test_judge_ensemble_boundary.py`, `tests/test_v6_defended_trial_transaction_wiring.py` | must keep passing; every one of them calls the trial with no declaration, which is the unchanged path |
+| `tests/test_crit_pack_legacy_golden.py`, `tests/test_conj_pack_legacy_golden.py` and `tests/fixtures/*_pack_legacy_v0/*.txt` | **must keep passing with the fixture files UNEDITED** — this tranche's own constraint. No reference-menu declaration is registered for the new field (a menu renders into the pack and would move the goldens); PARKED P3 carries that as its own tranche |
+| `tests/test_role_prompt_registry.py` | must keep passing; it compares `render_role_prompt` against `TEMPLATES[role]`, so a template edit moves both sides together |
+
+No test's fixture depended on the defect, so no fixture is updated.
+
+## Explicitly not changed
+
+`src/deepreason/adjudication/` — the tempting neighbour. The evidence closure
+and the pass-2 `SUSPENDED_UNSUPPORTED` rule are both correct and both proved
+so by REPRO.md's arms B and C. GOAL.md makes an adjudication edit a STOP; none
+is needed, and the reproduction is the evidence for that rather than a hope.
+
+`cited_input_aliases` — the nearest existing field. It means "I looked at
+this", not "withdraw this and my case falls", and its resolution is flattened
+into the case string. Left exactly as it is; PARKED P1.
+
+## Estimated diff
+
+~65 lines of production code across 5 files (contracts.py ~16, wire.py ~22,
+crit.py ~4, trial.py ~17, roles.py ~6), plus the new test file, the two
+experiment scripts and the map document. Production diff is well under the
+150-line budget.
+
+## Approval gate
+
+GOAL.md class is `defect`; the diff estimate is under 150 lines; the
+blast-radius verdict is CLEAR with no frozen or frozen-adjacent contact.
+Proceeding to `dr-implement-fix` without an operator stop, as the orchestrator's
+gate provides.
+
+---
+
+## Amendment 1 (2026-09-05, during implementation) — two sites FIX.md missed
+
+Recorded before the fix commit, per `dr-implement-fix` step 1. Both were found
+by instruments, not by reading, and both are stated here as corrections to the
+design above rather than as footnotes.
+
+### A1. The canonical field defaults to `None`, not `[]` — a WRITE regression
+
+**FIX.md above got this wrong** and named `default_factory=list` on both
+canonical outputs. `workflow/nonconjecture_recovery.py:335` content-addresses
+the critic output with `canonical_json(output.model_dump(mode="json",
+exclude_none=True))` and, on recovery, compares that digest against the
+admission's stored ref. A field defaulting to `[]` SURVIVES `exclude_none`, so
+every committed critic transaction's digest moved and the committed fixture
+stopped replaying:
+
+    tests/test_l1_continue_resumable_crash.py::test_committed_fixture_replays_without_crashing
+    NonConjectureRecoveryAuthorityError: critic admission differs from the
+    durable validated output
+
+That is a change to what is WRITTEN, made to fix what is READ — the exact
+inversion the orchestrator's design rules forbid. Corrected: the canonical
+field is `list[str] | None = Field(default=None, max_length=8)` on both
+outputs, which is why `successor_question` beside it says the same thing in its
+own comment. The WIRE field stays a plain array (the alias binder writes its
+`items` enum and cannot reach into an `anyOf`), and `compile` sends `None`
+when the seat declared nothing. Pinned by a new test,
+`test_an_undeclared_criticism_canonicalises_to_the_bytes_it_always_did`.
+
+### A2. `tests/test_successor_dispatch.py` — an over-broad instrument, narrowed on the operator's decision
+
+The full gate returned **5080 passed, 1 failed**, and the one failure was
+`test_rules_crit_takes_a_zero_line_diff`: it asserts `git diff --stat
+origin/main -- src/deepreason/rules/crit.py` is EMPTY, so this tranche's two
+threading lines turned it red with a message saying an operator law had been
+overturned.
+
+It had not been. `DR-SEAM-rules-x-scratch` rule 6 forbids the criticism side
+REACHING THE DESTINATION a successor proposal goes to; that tranche's own
+`PARKED.md` scoped the zero-line claim to itself ("both take a zero-line diff
+IN THIS TRANCHE"); and the seam's Traps entry names the two exact grep counts
+as the real guard — both unmoved here. But the seam also reserves overturning
+rule 6 to the operator, so this was PUT TO THEM rather than decided by this
+window. **Operator decision, 2026-09-05: narrow the test to what it guards.**
+
+What moved, and nothing else: the test now scans the lines the branch ADDS to
+`crit.py` for the destination vocabulary and re-checks the seam's two pinned
+counts; the seam document's two references follow the rename, and it gains a
+Traps entry; `docs/ERRATA.md` gains E80. Rule 6 is UNCHANGED. Mutation-proved
+in both directions — a road-A `from deepreason.successor import route` added to
+`crit.py` goes red, and so does rewriting an existing `scratch` mention away
+(which the added-line scan alone would miss, which is why the count half is
+kept).
+
+### Change sites added by this amendment
+
+- `src/deepreason/llm/contracts.py` — `| None = Field(default=None, ...)` on
+  both, with the reason in the comment.
+- `src/deepreason/llm/wire.py` — both `compile`s send `... or None`.
+- `src/deepreason/rules/crit.py` — both call sites send `... or ()`.
+- `tests/test_successor_dispatch.py` — the narrowing (A2).
+- `tests/test_schema_carries_every_prose_rule.py` — the new field added to the
+  critic case of the alias-enum test, as FIX.md promised.
+- `docs/map/SEAM-rules-x-scratch.md` — rule 6's measurement re-worded, its two
+  references renamed, one Traps entry.
+- `docs/ERRATA.md` — E80.
+
+### Budget after the amendment
+
+    python tools/diff_budget.py 323fefb53 --ceiling 150 --paths <the five source files>
+    {"total_insertions": 81, "ceiling": 150, "verdict": "WITHIN"}
+
+---
+
+## Amendment 2 (2026-09-05, monitor) — every validity-node site disposed of by name, and F2 recorded as a known gap
+
+Authority: the monitor's amendment, resting on the merged audit
+`experiments/2026-09-05-audit-ois-1-1-spec-drift/AUDIT_REPORT.md` rows 1 and 11
+(merged to `main` at `14cc5da49`, after this tranche's base `323fefb53`).
+
+### The census is the audit's, and it is nine sites, not two
+
+FIX.md above disposed of the argumentative sites by name but stopped at the
+five hand-built `Warrant(...)` constructions. The audit's census
+(`proof/check01-census.txt`, `check01-census2.txt`, `check01-mintsites.txt`)
+counts NINE sites that create a validity node, and its finding is stronger than
+this tranche's: **none of the nine can carry a critic's own declared premise**,
+and the three that already mount `EVIDENCE` mount something else. Every one is
+disposed of here, with its verdict after this fix.
+
+| site | type | ν carries today | after this fix |
+|---|---|---|---|
+| `informal/trial.py:1066` — the defended trial | ARGUMENTATIVE | nothing | **CHANGED.** Each declared premise as `RefRole.EVIDENCE`; nothing at all when the criticism declared nothing. This is the one site fed by a critic's prose case against a single target, and the only one this tranche touches. |
+| `informal/trial.py:1401` — pairwise | ARGUMENTATIVE | nothing | unchanged. It rules on a RIVALRY, not on a case against a target; there is no single criticism whose premises could be declared, and `pairwise_discriminate` receives no critic contract. Pinned by a check in `CON-warrants-and-attacks.md`. |
+| `rules/relatedness.py:145` | ARGUMENTATIVE | nothing | unchanged. The case is harness-composed from a relatedness ruling; no `ArgumentativeCriticOutput` is in the loop. |
+| `rules/experiment.py:385` — `relevance_trial` | ARGUMENTATIVE | nothing | unchanged. Same reason: a ruling that a proposed property does not follow from the problem, composed by the harness. |
+| `rules/vision.py:99` | ARGUMENTATIVE | `EVIDENCE` refs to the recorded screenshots | unchanged. It ALREADY declares its ground on ν — the precedent this fix follows — and its contract is not `ArgumentativeCriticOutput`. Widening it is a separate tranche with its own contract question. |
+| `rules/crit.py:1041,1224` (via `register_fail_warrant`) | DEMONSTRATIVE | `MENTION` refs (generator, proposed property) — inert | unchanged, DELIBERATELY. See "What is deliberately NOT registered" above: these verdicts rest on an EXECUTION, and mounting a prose premise on them would let a prose attack disable a refutation that ran. |
+| `informal/trial.py:822` — case law | DEMONSTRATIVE | `MENTION` ref to the applied standard | unchanged. The standard's own refutation already reaches this ν through the case-law closure (`RefRole.MENTION` branch in `build_att`); that is a different, working road, and the rubric verdict rests on a conforming transcript, not on declared prose premises. |
+| `rules/act.py:178` | DEMONSTRATIVE | `EVIDENCE` ref to the evidence artifact | unchanged. Already declares its ground, and its ground is the evidence artifact, not a critic's premises. |
+| `premises.py:569` | DEMONSTRATIVE | `EVIDENCE` ref to a derivation manifest | unchanged. This is `register_fail_warrant`'s `manifest_ref` road — the direct precedent for the mechanism used here, on the demonstrative side. |
+
+So: one site changed, eight disposed of, and the two reasons for leaving a site
+alone are stated rather than implied — either the site is not fed by a critic's
+case at all (pairwise, relatedness, experiment, case law), or its verdict rests
+on an execution and must not become collapsible by prose (the three
+`register_fail_warrant` families), with `vision` a third case that already does
+the right thing for its own contract.
+
+### Record evidence the audit adds, and what it costs this fix
+
+"Across all 86 committed roots, `RefRole.EVIDENCE` appears on a ν only through
+`rules/vision.py`, and no root ran a vision criticism." The correct branch has
+therefore never been exercised by any committed run. That is the strongest
+available statement of the defect and it is the audit's, not this window's — and
+it also fixes the ceiling on what this tranche may claim: after this fix the
+branch is REACHABLE, and no live run has yet taken it. RESULTS.md says so.
+
+### F2 is a different defect and is NOT fixed here
+
+The audit's fixture F2 (`proof/check11_da1_vs_harness.py`) is the case where a
+criticism's essential premise is UNDECIDED rather than refuted — K and a rival M
+attack each other, both suspend, and the criticism's target stays `refuted`.
+Spec §11.3 says an undecided essential premise should prevent its dependent from
+becoming in. Different cause: pass ORDER in `adjudication/`, which GOAL.md and
+the monitor both put outside this tranche.
+
+Per the monitor's instruction, it is RECORDED, not fixed:
+`tests/test_criticism_premises.py::
+test_an_undecided_essential_premise_leaves_its_target_refuted_today` asserts the
+harness's CURRENT labels — `A refuted, K suspended, M suspended, C
+suspended_unsupported` — as a tripwire with the gap named in its docstring, and
+PARKED.md P4 carries the ready-to-send prompt. `adjudication/` is untouched.
+
+### Change sites added by this amendment
+
+- `tests/test_criticism_premises.py` — the F2 known-gap test (assertion only;
+  no production change).
+- `experiments/.../PARKED.md` — P4.
+
+No production code moves under this amendment, so the diff budget is unchanged.

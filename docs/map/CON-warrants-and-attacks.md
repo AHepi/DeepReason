@@ -1,5 +1,5 @@
 <!-- DR-CON-warrants-and-attacks -->
-Verified-at: 03b1edf4
+Verified-at: 696c4fd89
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/warrants.py, src/deepreason/adjudication/edges.py, src/deepreason/adjudication/grounded.py, src/deepreason/adjudication/support.py, src/deepreason/ontology/warrant.py
 Seams: 
@@ -132,6 +132,48 @@ a bill is a capacity, not an obligation.
 `check: python -m pytest tests/test_proof_debt.py -k "wired_to_the_validity_node or disables_the_attack_before_pass_one" -q`
 `check: python -c "import inspect; from deepreason.rules.warrants import register_fail_warrant as r; p=inspect.signature(r).parameters['manifest_ref']; assert p.default is None and p.kind is inspect.Parameter.KEYWORD_ONLY"`
 
+**A CRITICISM may declare what its case rests on, and that declaration is
+registered on ν as `EVIDENCE` too.** The rule above gives a mechanical verdict
+that capacity through `manifest_ref`; this gives it to a prose case.
+`ArgumentativeCriticOutput.premises_essential` and `BatchCase.premises_essential`
+name resolved artifact ids, `_argument_trial_steps` mounts each one on ν as
+`RefRole.EVIDENCE`, and the base closure then disables every carrier of the
+warrant BEFORE the grounded pass — so refuting a criticism's declared premise
+reinstates the criticism's target in pass one. The field is OPTIONAL and an
+empty list is a complete answer: a criticism that declares nothing builds ν
+with no interface, exactly as it did before the field existed.
+`check: python -m pytest tests/test_criticism_premises.py -q`
+`check: python -c "
+import inspect
+from deepreason.informal import trial
+from deepreason.llm.contracts import ArgumentativeCriticOutput as O, BatchCase as B
+for model in (O, B):
+    assert 'premises_essential' in model.model_fields, sorted(model.model_fields)
+assert O(attack=False).premises_essential is None
+assert 'premises_essential' not in O(attack=True, case='c').model_dump(mode='json', exclude_none=True)
+source = inspect.getsource(trial._argument_trial_steps)
+assert 'RefRole.EVIDENCE' in source and 'unknown-premise' in source
+parameter = inspect.signature(trial.run_argument_trial_from_case).parameters['premises_essential']
+assert parameter.default == () and parameter.kind is inspect.Parameter.KEYWORD_ONLY
+"`
+
+**A declared premise never reaches a DEMONSTRATIVE verdict's ν.** That kind of
+verdict rests on an EXECUTION — a counterexample that ran, a program that
+failed — so mounting a prose premise on its validity node would let a prose
+attack on the listed premise disable a refutation that was demonstrated,
+inverting the supremacy asymmetry the rules above hold. The declaration binds
+only where a criticism's ground IS its case. It is also absent from the other
+argumentative mint sites, and for a different reason: pairwise rules on a
+rivalry, `experiment.relevance_trial` and `relatedness` carry harness-composed
+rulings, and `vision` already declares its own ground (its screenshots) on ν.
+`check: python -c "
+import inspect
+from deepreason.rules import crit
+from deepreason.informal import trial
+assert 'premises_essential' not in inspect.getsource(crit.try_counterexample)
+assert 'premises_essential' not in inspect.getsource(trial.pairwise_discriminate)
+"`
+
 **Nothing in the adjudicator knows about supremacy, and nothing is deleted.**
 The guards decide only whether an edge is CREATED; once on the graph an edge is
 adjudicated like any other, and execution can still refute later.
@@ -211,6 +253,7 @@ epistemic finding: it does not gate `valid`.
 | Change what execution protects | `oracle.py` `EXEC_PROGRAMS` — read only by `execution_backed` | `python -m pytest tests/test_prose_refutation_boundaries.py -k boundary_is_execution_backing -q` |
 | Change what counts as a formal claim | `measures/reach.py` `_STRUCTURAL_PROGRAMS` / `_substantive` — shared with the reach measure, so a change moves both | `python -m pytest tests/test_prose_refutation_boundaries.py -k "structural_program or formal_backing" -q` |
 | Change which targets prose may not refute | `informal/trial.py` `_argument_trial_steps` guard — NOT `rules/crit.py`, see the rule above | `python -m pytest tests/test_prose_refutation_boundaries.py -k "resists_prose or refused_by_type" -q` |
+| Change what a criticism may declare as its own ground | `llm/contracts.py` `premises_essential` on BOTH criticism outputs, `llm/wire.py` `ALIAS_ARRAY_FIELDS` on both critic contracts, and `informal/trial.py` `_argument_trial_steps` — never a demonstrative mint site | `python -m pytest tests/test_criticism_premises.py -q` |
 | Add a closure rule (a new way an attack propagates) | `adjudication/edges.py` `build_att` fixpoint; a new `RefRole` also touches `ontology/artifact.py` | `python -m pytest tests/test_adjudication.py tests/test_replay.py -q` |
 | Change the duplicate-verdict guard | `rules/warrants.py` `verdict_on_record` and every `skip_if_on_record=True` caller | `python -m pytest tests/test_hv.py tests/test_workload_formal.py -q` |
 | Change how a Status is derived from edges | `adjudication/grounded.py` `label0`, `adjudication/support.py` `final_labels` — this reinterprets every recorded root; DR-INV-frozen-surfaces | `python -m pytest tests/test_replay.py tests/test_persistence_invariants.py -q` |
@@ -259,6 +302,23 @@ epistemic finding: it does not gate `valid`.
   and by their own id schemes — `w:argtrial:…`, `w:pairwise:…`, `w:vision:…`,
   and the two unguarded ones, `w:prop-rel:…` (`experiment.relevance_trial`) and
   `w:import:…` (`imports.register_epistemic_import_failure`) — instead.
+- **Assuming the evidence closure has a producer just because it has a rule.**
+  From the closure's arrival until 2026-09-05 the ONLY things that ever mounted
+  an `EVIDENCE` ref on a ν were `register_fail_warrant`'s `manifest_ref` and
+  `rules/vision.py`'s screenshots. The defended trial — the one mint site fed
+  by an LLM critic's prose case — built its ν with no interface at all, and
+  `ArgumentativeCriticOutput` had no field a criticism could name its own
+  premises in, so the documented branch was unreachable from the wire and every
+  live criticism took the wrong one: refute a criticism's premise and its target
+  stayed `refuted`. The pair, over one four-artifact graph:
+  `('refuted', 'suspended_unsupported')` with the premise as a `DEPENDENCE` ref,
+  `('accepted', 'refuted')` with it as `EVIDENCE`. Neither closure nor pass 2
+  was defective; the producer was missing. Fixed 2026-09-05,
+  `experiments/2026-09-05-criticism-premise-declaration/` (REPRO.md holds the
+  three-arm isolation, `s0_wire.py` the same result through the wire). The
+  enduring rule: a closure with no producer is a rule the record can never
+  exercise — when a documented branch has never been taken live, look for the
+  field that would fill it before looking at the closure.
 - **Treating `Artifact.warrants` as the carriage relation.** It is the legacy
   encoding, kept so old roots replay unchanged. `state.carries` is what a new
   log writes and what `carried_warrant_ids` / `carrier_ids` read; `build_att`

@@ -1642,6 +1642,7 @@ def crit_argumentative(
                 llm_call,
                 authority="status",
                 critic_school_id=critic_school_id,
+                premises_essential=output.premises_essential or (),
             )
         raise RuntimeError("unreachable argumentative authority mode")
     finally:
@@ -2264,6 +2265,7 @@ def _crit_argumentative_batch_result(
                 llm_pending,
                 authority="status",
                 critic_school_id=critic_school_id,
+                premises_essential=case.premises_essential or (),
             )
             if llm_pending is not None:
                 llm_pending = None  # accounted inside the trial (trial-llm)

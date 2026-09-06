@@ -14,6 +14,7 @@ of blocks is a critic-gaming signal.
 
 import hashlib
 import json
+from collections.abc import Sequence
 from dataclasses import dataclass
 
 from deepreason.authority import TrialAuthority
@@ -36,6 +37,7 @@ from deepreason.llm.layout import (
     resolve_layout_policy,
 )
 from deepreason.ontology import Interface, Provenance, Ref, Rule, Warrant, WarrantType
+from deepreason.ontology.artifact import RefRole
 from deepreason.programs import content_text
 from deepreason.rules.warrants import (
     execution_backed,
@@ -906,6 +908,7 @@ def run_argument_trial_from_case(
     diagnostics: list | None = None, *,
     authority: TrialAuthority | str = TrialAuthority.OBSERVE_ONLY,
     critic_school_id: str | None = None,
+    premises_essential: Sequence[str] = (),
 ):
     """Defended trial over a PRECOMPUTED critic case (phase C trial_required).
 
@@ -944,6 +947,7 @@ def run_argument_trial_from_case(
             diagnostics,
             calls,
             critic_school_id=critic_school_id,
+            premises_essential=premises_essential,
         )
     finally:
         harness.record_llm_calls(calls, "trial-llm")
@@ -952,7 +956,12 @@ def run_argument_trial_from_case(
 def _argument_trial_steps(
     harness, adapter, config, target_id: str, case_text: str, diagnostics,
     calls: list, *, critic_school_id: str | None = None,
+    premises_essential: Sequence[str] = (),
 ):
+    # Order-preserving dedupe: a repeated declaration names one ground, and
+    # nu's id is computed over its interface -- a duplicate ref would mint a
+    # different validity node for the same case.
+    premises = tuple(dict.fromkeys(premises_essential))
     for role in ("defender", "judge"):
         if not adapter.has_role(role):
             return _decline(harness, target_id, f"no-{role}-role", diagnostics)
@@ -992,6 +1001,14 @@ def _argument_trial_steps(
         return _decline(harness, target_id, "execution-backed", diagnostics)
     if not case_text.strip():
         return _decline(harness, target_id, "empty-case", diagnostics)
+    if any(premise not in harness.state.artifacts for premise in premises):
+        # A declared premise naming nothing on the record mints nothing and is
+        # recorded as such. The compact contract's alias enum already refuses
+        # an unknown handle at the repair layer; this covers the direct
+        # transport, which carries raw ids and has no alias table to check
+        # them against. Silently dropping the entry is what is forbidden: it
+        # would leave a criticism claiming a ground the record cannot show.
+        return _decline(harness, target_id, "unknown-premise", diagnostics)
     target_text = content_text(target, harness.blobs)
     manifest = _v6_trial_manifest(adapter)
 
@@ -1066,6 +1083,21 @@ def _argument_trial_steps(
         f"nu: the defended trial sustaining case {case_hash} against "
         f"{target_id} is sound",
         provenance=Provenance(role="critic", school=critic_school_id),
+        # EVIDENCE and no other role: it is the evidence closure's only entry
+        # point, so refuting a declared premise lifts the attack onto this nu
+        # and disables every carrier beneath it before the grounded pass. A
+        # MENTION would be readable and inert. A criticism that declared
+        # nothing builds nu with no interface, exactly as before.
+        interface=(
+            Interface(
+                refs=[
+                    Ref(target=premise, role=RefRole.EVIDENCE)
+                    for premise in premises
+                ]
+            )
+            if premises
+            else None
+        ),
     )
     warrant = Warrant(
         id=f"w:argtrial:{case_hash}:{target_id}",
