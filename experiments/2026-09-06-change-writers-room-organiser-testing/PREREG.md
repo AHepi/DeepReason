@@ -295,3 +295,38 @@ n = 1; the pasted room and the attached room are the same bytes, but the bare
 model reads them as one message while the seat reads them as frozen evidence
 with a legend — the comparison isolates the harness's organising and
 criticism from the content, not the presentation.
+
+**Amendment 5 (2026-09-06, during ARM R's launch — a correction to §0's own pin, decided by measurement).**
+§0 pinned "the run's own admission at launch must print the same digest
+[`2a49cd52…`]; a different digest is a FAILED arm". The live launch printed
+`d2120e7dcb90332b0ebd4eea71996b705b895d7604fd67bbe6db8a510f04275f` with
+`sources_admitted 3`, `blocks {paragraph: 94}`, `tiers {evidence: 94}`,
+`refusals []`. **The pin was wrong, and the arm is sound.** Measured rather
+than argued: admitting the same three files twice offline, changing only the
+provenance label, gives `2fc5dde83b853f83…` under `supplied_by="dry attach"`
+and `b1c80cc7cbcf102f…` under `supplied_by="deepreason.reason.attach"`, both
+with 3 sources, 94 blocks, 0 refusals. The dossier digest therefore binds the
+PROVENANCE, the problem reference and the source locators — not the room's
+bytes alone — and `proof/DRY_ATTACH.txt` computed its value under a different
+provenance, a different problem_ref and different locators from the live
+path. No digest computed offline could ever have matched.
+
+What proves the room reached the run unchanged, and did:
+(a) `runs/armR.sh` verified the committed attachment before launching —
+`01-conjectures.txt: OK`, `02-proposals.txt: OK`, `03-objections.txt: OK`,
+`CONVERSION.json: OK` (a mismatch exits 6 and no call is made);
+(b) the admission summary's content is identical to the dry attach's: 3
+sources, 94 evidence-tier paragraph blocks, 0 refusals.
+
+§0's row is amended to read: **the launch must print 3 sources, 94 blocks,
+0 refusals, and armR.sh's digest check must pass**; the dossier digest is
+recorded as a fact of the run, not compared to an offline value. Nothing else
+in §0 moves, and the decision rule is untouched.
+
+**Also recorded, a defect in this window's own instrument, not in the run:**
+`runs/armR.sh` line 25 echoes "reason, 4 cycles, 800000 token ceiling" while
+line 26 passes `--token-budget 500000`. The sed that applied Amendment 1
+moved the command and not the banner. The RUN is correct — the live process
+line carries `--token-budget 500000` and the root's own `progress.jsonl`
+records `token_limit: 500000` — and the log line is wrong. The banner is
+fixed after ARM R terminates, never while bash is reading the script.
