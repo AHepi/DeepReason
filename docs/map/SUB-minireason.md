@@ -474,6 +474,15 @@ assert 'REFUTED' not in body, 'mini must not label a status itself'
 
 ## Traps
 
+- **A profile that declares no candidate count asked for "None diverse
+  candidates."** The standard and frontier `ProfileSpec`s carry `vs_k=None`;
+  the day the managed shallow path first forwarded a non-compact profile
+  (writer's-room tranche, 2026-09-06) the conjecturer's directive rendered
+  the hole verbatim. Found offline before the live run, on the stub. FIXED
+  the same day: `loop.run` falls back to the compact count (`DEFAULT_VS_K`)
+  when the profile declares none; the brief always asks for a number.
+  `check: python -m pytest mini/tests/test_mini_brief_limits.py::test_a_profile_without_a_candidate_count_still_asks_for_a_number -q`
+
 - **Mini's own tests are outside the gate every tranche runs.** `pyproject.toml`
   declares `testpaths = ["tests", "mini/tests"]`, but the documented gate is
   `pytest tests/ -q -n 4`, and an explicit path argument overrides `testpaths`.
