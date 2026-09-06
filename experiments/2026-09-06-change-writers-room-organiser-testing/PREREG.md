@@ -596,3 +596,50 @@ regress (`EVIDENCE_REF_UNKNOWN_BLOCK` stays 0, verified citations stay ≥ 64);
 and the composed unit grows, which makes §6's length rule MORE likely to
 downgrade a win, not less — the ceiling Amendment 7 registered is unchanged
 and, at 46 518 characters already, is now near-certain to bind.
+
+**Amendment 9 (2026-09-06, after the continuation terminated and BEFORE any score exists — the arm's disposition, and §3's second clause implemented).**
+The continuation ruled by Amendment 8 ran and reached a CLEAN typed terminal:
+`state: completed`, `stop_reason: budget_exhausted`, cycle 4, token_limit
+1 695 362. It resumed from the checkpoint, completed the fourth cycle and
+**spent nothing** (`logged_tokens_this_run: 0`, `metered_tokens: 0`), so the
+composed unit is unchanged at 46 518 characters and ARM R's total spend stands
+at the 495 362 of the original launch. The cost the operator accepted in
+Amendment 8 was therefore not incurred, and the equal-spend disclosure in that
+amendment is withdrawn as moot: ARM R was measured at 495 362 tokens, under
+the operator's stated ceiling.
+
+**And the arm is still not judgeable.** §3 requires THREE things of a COMPLETE
+arm — a clean state and stop_reason, `deepreason results --json --verify`
+reporting **0 violations**, and the replay digest equal. The first is now met.
+The second is not: the re-derived verification reports `valid: false`,
+`violations: 4` (integrity 4), and the stored `REPLAY_VALIDATION.json` carries
+three, `attempt-validity` at events 142, 215 and 295. The same three events
+verified CLEAN before the continuation — `violations: 0, valid: true,
+valid_typed_terminal: true`, committed at `HEAD~2` — over log bytes the
+continuation never touched. That contradiction is a defect, parked as P9; it
+is not resolved here and it is not routed around a second time.
+
+**Disposition, by the rule as sealed: the arm has no usable unit, and the
+verdict for `R vs 0` and `R vs 0R` is INCONCLUSIVE.** ARM R's composed result
+is NOT harvested and NOT judged. `0R vs 0` — the control Amendment 7
+pre-registered — IS judged and reported, because it is independent of ARM R
+and answers its own question: whether handing the bare model the whole room
+moves a forced choice.
+
+**§3's second clause implemented in the instrument.** `tools/judge_pairwise.py`
+now refuses a unit whose root's `REPLAY_VALIDATION.json` reports `valid: false`
+or any violation, and prints the violations. This is the same move Amendment 6
+made for the state clause and it changes no rule: composition succeeds on a
+record that does not replay, so without the check a run whose record fails
+validation would be scored as though it stood. The instrument is STRICTER than
+it was, never looser. Its digest becomes
+`1f6c8f9005a2b49cce5884f1404d36a1393783f17fff6d0bb23720e095e261cd`; the
+standard it judges against, the pairing, the order-consistency rule, §6's
+length rule and the decision rule are untouched.
+
+**Registered before the control is judged:** no direction is predicted for
+`0R vs 0`. The 2026-09-06 rubric judging scored both bare arms at the ceiling
+and could not separate them; a forced choice can separate them, and whether it
+does is the question. §6's length rule applies to this pair as to any other,
+and on the recorded lengths (ARM 0R 5 875–7 334 characters against ARM 0's
+7 262–7 985) the ratios are near 1, so the rule will not bind here.

@@ -144,6 +144,28 @@ def _armR_units() -> list[tuple[str, str]]:
                 "have entered is INCONCLUSIVE (§7)"
             )
             return []
+        # PREREG §3's OTHER clause, implemented here for the same reason
+        # Amendment 6 implemented the state clause: a COMPLETE arm needs
+        # `state: completed` AND a verification carrying 0 violations. A run
+        # that reaches a clean stop over a record that does not replay is not
+        # a usable unit, and composition succeeds on it regardless, so
+        # without this check its positions would be scored as if the record
+        # stood. This is stricter than the instrument was, never looser, and
+        # it changes no rule (PREREG Amendment 9).
+        validation = root / "REPLAY_VALIDATION.json"
+        if validation.exists():
+            report = json.loads(validation.read_text(encoding="utf-8"))
+            violations = report.get("verification", {}).get("violations") or []
+            if report.get("valid") is False or violations:
+                print(
+                    f"notice: armR's record does not verify "
+                    f"(valid={report.get('valid')!r}, violations={len(violations)}); "
+                    "its unit is NOT harvested (PREREG §3 requires 0 violations), "
+                    "and every pair it would have entered is INCONCLUSIVE (§7)"
+                )
+                for violation in violations:
+                    print(f"    {violation}")
+                return []
     return [("armR/COMPOSED.txt", path.read_text(encoding="utf-8"))]
 
 
