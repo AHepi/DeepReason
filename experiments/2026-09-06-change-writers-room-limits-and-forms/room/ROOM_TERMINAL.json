@@ -1,0 +1,24 @@
+{
+ "schema": "wr-room-terminal.v1",
+ "root": "/home/user/DeepReason/experiments/2026-09-06-change-writers-room-limits-and-forms/runs/home-room/shallow-runs/shallow-0b47bc7b090854078ddf7559",
+ "completed": true,
+ "stop": "queue-exhausted",
+ "cycles": 3,
+ "flow": "mini.flow.room.v1",
+ "model_profile": "standard",
+ "problems": {
+  "question-corroboration-d8": 12
+ },
+ "refuted": 0,
+ "meter_equals_log": true,
+ "logged_tokens_this_run": 70336,
+ "records_by_kind": {
+  "mini.commitment-proposal.v1": 46,
+  "mini.criticism.v1": 36
+ },
+ "events": 87,
+ "verify_root_violations": 0,
+ "replay_digest_equals_live": true,
+ "digest": "cdff88775dd3f852a1ce046e9cca8380c524ed23a2079ed40ba769ccbde6f555",
+ "TYPED_TERMINAL": "COMPLETE"
+}

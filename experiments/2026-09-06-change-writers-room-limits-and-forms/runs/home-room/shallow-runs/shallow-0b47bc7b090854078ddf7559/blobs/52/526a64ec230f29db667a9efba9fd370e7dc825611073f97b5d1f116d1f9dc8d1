@@ -1,0 +1,19 @@
+{
+  "objections": [
+    {
+      "about": "TARGET CONJECTURE 67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+      "body": "The conjecture falsely equates 'preference for action' with 'belief in future reliability.' Popper explicitly distinguishes between the logical status of a theory (which remains unproven) and the pragmatic decision to act upon it. One can prefer the better-corroborated theory as the most rational basis for action without asserting that it is probably true or that nature is uniform. The preference is a methodological rule for critical testing, not an inductive inference about the future.",
+      "would_settle": "A definitive textual analysis of Popper's distinction between 'corroboration' (a report on past tests) and 'probability' (a prediction of future success), specifically examining his arguments in 'The Logic of Scientific Discovery' regarding the rationality of acting on unfalsified theories."
+    },
+    {
+      "about": "TARGET CONJECTURE 67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+      "body": "The claim that Popper's system reduces to 'psychological habit' ignores his argument for the superiority of severe testing. Preferring a theory that has survived severe attempts at falsification is not an inductive leap but a deductive consequence of the goal to eliminate error. If Theory A has been tested more severely than Theory B and both survive, choosing A is rational because it has withstood more potential refutation, not because we expect it to hold true tomorrow by induction.",
+      "would_settle": "Clarification on whether 'rational preference' in Popper's framework requires an assumption of the uniformity of nature, or if it relies solely on the logical asymmetry between verification and falsification."
+    },
+    {
+      "about": "TARGET CONJECTURE 67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+      "body": "The conjecture commits a straw man fallacy by suggesting Popper advises preference based on 'past performance' as a guide to 'future reliability.' Popper argues that we have no choice but to act, and in the absence of certainty, the only non-arbitrary criterion is the degree of corroboration. This is not smuggling in induction but acknowledging the necessity of decision-making under uncertainty while rigorously avoiding the claim that the decision guarantees truth or probability.",
+      "would_settle": "An examination of Popper's specific responses to critics who accused him of cryptic inductivism, particularly his later works where he refines the concept of verisimilitude."
+    }
+  ]
+}

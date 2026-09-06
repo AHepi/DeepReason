@@ -203,7 +203,7 @@ def _stub_mini_run():
     """Stand in for the reduced engine: the loader runs during SETUP, before
     the first call, so a stubbed loop is enough to decide whether it ran."""
 
-    def mini_run(problems, endpoint, budget, root, max_cycles):
+    def mini_run(problems, endpoint, budget, root, max_cycles, model_profile=None):
         return {
             "engine_profile": "mini",
             "model_profile": "compact",

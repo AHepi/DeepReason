@@ -264,3 +264,56 @@ demonstrated for `mini.flow.isolation.v1` on the compact profile; the
 pre-registered verdict is INDISTINGUISHABLE on a control that could not
 discriminate; the raw panel scores favour the single call on every candidate.
 No arm was re-run. The next measure is designed, not run, in P11.
+
+## 2026-09-06, later — what the commitment seat actually wrote, and why (D8 re-read)
+
+Asked by the operator whether the commitment artifacts have anything in
+them, the record answers: **six of the fourteen do, and eight do not, and
+the record says why.**
+
+**The six.** The first two conjectures each received three proposals of the
+shape R4 asked for — "must be refuted if it can be demonstrated that …",
+"forbids claiming that …", "must not conflate 'rational decision' with
+'probabilistic inference'" — specific enough to be checked against the
+conjecture. But the three written about the second conjecture are BYTE-
+IDENTICAL to the three written about the first (proposal 1 == 4, 2 == 5,
+3 == 6): one set of commitments, filed twice.
+
+**The eight.** From the third commitment call onward every "proposal" is an
+answer to the question — the two-cases-and-a-verdict essay the single call
+writes — not a commitment about the target conjecture. Two of them share
+phrases with the conjecture they are nominally about; none states a
+refutation condition that is not already the conjecture's own conclusion.
+
+**Why, from the briefs on the record.** The directive sorts LAST in every
+mini layout ("nothing load-bearing follows the instruction"), and the call
+layer clips the assembled brief at the compact profile's 4 800 characters
+from the TAIL. The everything-so-far section was given 60 % of that clip
+for itself, so problem + target + everything + directive overran it on every
+commitment call after the first, and the clip removed the instruction:
+
+    call | seat        | directive present | its tail intact
+    seq 16 commitment    yes                 no  ("... what it forbids. Free pros")
+    seq 20, 24, 26, 36, 39, 50, 52 commitment  NO   NO   (seq 26 ends inside the
+                                             target-conjecture header itself)
+    seq 28 conjecturer   yes                 no  (cut before "Return 4 diverse candidates")
+    seq 42 conjecturer   NO                  NO
+    every critic call    yes                 yes (its brief is ~2 400 characters)
+
+So 7 of 8 commitment calls and 2 of 3 conjecture calls ran with no
+instruction at all, and the seat did the natural thing with a problem
+statement and some prior text: it answered the problem. That is also the
+recorded cause of §6's "fewer candidates as the run went on": cycles 2 and 3
+never saw "Return 4". The critic, whose brief never approached the clip,
+did exactly what its directive said all 8 times.
+
+**What this does to D8.** The measure stands as sealed and its verdict is
+unchanged, but it must be read knowing that ARM M's conjecturer ran two of
+its three calls without its instruction, so the eight judged conjectures are
+partly the output of an un-instructed seat. The residue in §8 gains this
+entry. The mechanism is a defect in mini's brief assembly (the section
+budget does not reserve room for the mandatory sections, and the clip cuts
+the end that carries the instruction), not in the retention rule, which
+withheld and disclosed exactly as designed. It is the next fix, routed to
+the defect workflow; the content measure the operator asked for is
+meaningless until every seat reads its whole brief.

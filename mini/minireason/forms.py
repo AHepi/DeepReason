@@ -102,6 +102,87 @@ class MiniCommitmentProposals(_MiniWireModel):
 
 
 # ---------------------------------------------------------------------------
+# The WRITER'S ROOM forms (operator, 2026-09-06: "permission to change the
+# forms completely to fit the writers room - content brainstorming purpose").
+#
+# Each top-level model's docstring is its JSON-schema `description`, and the
+# schema is prepended to the brief AFTER the call layer's clip -- so the
+# seat's task is on the wire even if a brief were ever cut (the D8 root lost
+# nine directives that way). Optional labels are free text, never validated
+# against a list and never required: formalism is an option, not an
+# obligation. Nothing here carries score, rank, weight, confidence, priority,
+# authority or severity; nothing here changes a status (R5: the room is not
+# the epistemology).
+# ---------------------------------------------------------------------------
+
+
+class MiniRoomCandidate(_MiniWireModel):
+    """One conjecture: a bold, criticizable explanation, in whatever shape says
+    the interesting part best. `angle` (optional, one line) names the stance
+    or move this candidate takes so the room can tell its candidates apart."""
+
+    content: str = Field(min_length=1)
+    angle: str | None = None
+
+
+class MiniRoomConjecturer(_MiniWireModel):
+    """CONJECTURE SEAT. Propose the number of candidates the brief asks for,
+    each a distinct, bold, criticizable explanation of the PROBLEM. Do not
+    restate what the brief already shows; differ from it substantively.
+    Candidates are content for criticism, not verdicts."""
+
+    candidates: list[MiniRoomCandidate] = Field(min_length=1)
+
+
+class MiniRoomObjection(_MiniWireModel):
+    """One objection to the TARGET CONJECTURE. `about` is the target's id;
+    `body` is the objection in free prose; `would_settle` (optional) says what
+    observation or argument would settle it either way."""
+
+    about: str = Field(min_length=1)
+    body: str = Field(min_length=1)
+    would_settle: str | None = None
+
+
+class MiniRoomCritic(_MiniWireModel):
+    """CRITIC SEAT. Mount the strongest specific objections to the TARGET
+    CONJECTURE named in the brief -- each about that conjecture, each stating
+    its case. You decide nothing: an objection is recorded and shown, and it
+    overturns nothing."""
+
+    objections: list[MiniRoomObjection] = Field(min_length=1)
+
+
+class MiniRoomProposal(_MiniWireModel):
+    """One proposed commitment for the TARGET CONJECTURE: what would refute
+    it, what it forbids, what it must not do, or what it predicts. `about` is
+    the target's id; `body` is the commitment in free prose; `kind`
+    (optional, free text such as refuted-if / forbids / must-not / predicts)
+    labels it. Not an answer to the problem: a hostage the conjecture gives."""
+
+    about: str = Field(min_length=1)
+    body: str = Field(min_length=1)
+    kind: str | None = None
+
+
+class MiniRoomProposals(_MiniWireModel):
+    """COMMITMENT SEAT. Read the TARGET CONJECTURE and propose the commitments
+    it should be held to: what would refute it, what it forbids, what it must
+    not do, what it predicts. Each proposal names the target. A proposal is
+    recorded, never enforced; do not answer the problem, bind the
+    conjecture."""
+
+    proposals: list[MiniRoomProposal] = Field(min_length=1)
+
+
+def _labelled(body: str, label: str | None, name: str) -> str:
+    """Keep an optional label WITH the prose it labels, appended so the prose
+    is intact; the record holds one body per output."""
+
+    return body if not label else f"{body}\n[{name}: {label}]"
+
+
+# ---------------------------------------------------------------------------
 # The registry.
 # ---------------------------------------------------------------------------
 
@@ -152,6 +233,28 @@ class _MiniRelaxedConjecturerContract(WireContract[ConjecturerOutput]):
         return ConjecturerOutput(
             candidates=[
                 ConjectureCandidate(content=item.content, typicality=item.typicality)
+                for item in wire.candidates
+            ]
+        )
+
+
+class _MiniRoomConjecturerContract(WireContract[ConjecturerOutput]):
+    def __init__(self) -> None:
+        super().__init__(
+            "mini.conjecturer.room.v1", MiniRoomConjecturer, ConjecturerOutput, variant="mini"
+        )
+
+    def compile(self, wire: MiniRoomConjecturer) -> ConjecturerOutput:
+        from deepreason.llm.contracts import ConjectureCandidate
+
+        return ConjecturerOutput(
+            candidates=[
+                # The canonical candidate carries a typicality; the room does
+                # not ask for one, so every candidate compiles at the neutral
+                # value -- no shape buys standing, and none is penalized.
+                ConjectureCandidate(
+                    content=_labelled(item.content, item.angle, "angle"), typicality=0.5
+                )
                 for item in wire.candidates
             ]
         )
@@ -291,6 +394,35 @@ register_mini_form(
             "mini.commitment.relaxed.v1", MiniCommitmentProposals
         ),
         records_of=lambda out: [(item.about, item.body) for item in out.proposals],
+    )
+)
+
+register_mini_form(
+    MiniFormV1(
+        form_id="mini.conjecturer.room.v1",
+        form_version="1.0.0",
+        contract=_MiniRoomConjecturerContract(),
+    )
+)
+register_mini_form(
+    MiniFormV1(
+        form_id="mini.critic.room.v1",
+        form_version="1.0.0",
+        contract=_MiniPassthroughContract("mini.critic.room.v1", MiniRoomCritic),
+        records_of=lambda out: [
+            (item.about, _labelled(item.body, item.would_settle, "would settle"))
+            for item in out.objections
+        ],
+    )
+)
+register_mini_form(
+    MiniFormV1(
+        form_id="mini.commitment.room.v1",
+        form_version="1.0.0",
+        contract=_MiniPassthroughContract("mini.commitment.room.v1", MiniRoomProposals),
+        records_of=lambda out: [
+            (item.about, _labelled(item.body, item.kind, "kind")) for item in out.proposals
+        ],
     )
 )
 

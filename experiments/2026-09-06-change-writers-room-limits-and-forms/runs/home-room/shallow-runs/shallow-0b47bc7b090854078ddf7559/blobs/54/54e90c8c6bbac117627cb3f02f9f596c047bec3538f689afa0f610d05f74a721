@@ -1,0 +1,16 @@
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"MiniRoomObjection": {"additionalProperties": false, "description": "One objection to the TARGET CONJECTURE. `about` is the target's id;\n`body` is the objection in free prose; `would_settle` (optional) says what\nobservation or argument would settle it either way.", "properties": {"about": {"minLength": 1, "title": "About", "type": "string"}, "body": {"minLength": 1, "title": "Body", "type": "string"}, "would_settle": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Would Settle"}}, "required": ["about", "body"], "title": "MiniRoomObjection", "type": "object"}}, "additionalProperties": false, "description": "CRITIC SEAT. Mount the strongest specific objections to the TARGET\nCONJECTURE named in the brief -- each about that conjecture, each stating\nits case. You decide nothing: an objection is recorded and shown, and it\noverturns nothing.", "properties": {"objections": {"items": {"$ref": "#/$defs/MiniRoomObjection"}, "minItems": 1, "title": "Objections", "type": "array"}}, "required": ["objections"], "title": "MiniRoomCritic", "type": "object"}
+SYNTAX EXAMPLE:
+{"objections":[{"about":"x","body":"x"}]}
+
+## problem
+PROBLEM question-corroboration-d8
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-conjecture
+TARGET CONJECTURE 92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd
+The defense lies in shifting the goal from 'probability' to 'verisimilitude' (truth-likeness). A highly corroborated theory is not more probable, but it is a better candidate for being closer to the truth because it has withstood attempts to show it is false. The preference is defensible because science aims at truth, not certainty; therefore, selecting the theory with the highest empirical content that has not yet been refuted is the only methodological move consistent with the aim of increasing verisimilitude. The cost here is the admission that we can never verify this progress; we must operate on the regulative ideal that surviving severe tests correlates with truth-likeness, a metaphysical hope that Popper admits cannot be logically proven.
+[angle: Verisimilitude as a Regulative Ideal]
+
+## directive
+You are the critic seat. Mount the strongest specific objections to the TARGET CONJECTURE above. Each objection names what it is about and states its case in free prose. You decide nothing: an objection is recorded and shown, and it overturns nothing.

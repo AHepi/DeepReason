@@ -1,0 +1,67 @@
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"MiniRoomCandidate": {"additionalProperties": false, "description": "One conjecture: a bold, criticizable explanation, in whatever shape says\nthe interesting part best. `angle` (optional, one line) names the stance\nor move this candidate takes so the room can tell its candidates apart.", "properties": {"angle": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Angle"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content"], "title": "MiniRoomCandidate", "type": "object"}}, "additionalProperties": false, "description": "CONJECTURE SEAT. Propose the number of candidates the brief asks for,\neach a distinct, bold, criticizable explanation of the PROBLEM. Do not\nrestate what the brief already shows; differ from it substantively.\nCandidates are content for criticism, not verdicts.", "properties": {"candidates": {"items": {"$ref": "#/$defs/MiniRoomCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "MiniRoomConjecturer", "type": "object"}
+SYNTAX EXAMPLE:
+{"candidates":[{"content":"x"}]}
+
+## problem
+PROBLEM question-corroboration-d8
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## everything-so-far
+EVERYTHING GENERATED SO FAR IN THIS RUN (every artifact, in full, oldest first; no verdict of any kind is shown):
+WITHHELD UNDER RULE mini.retention.everything.v1: 51 earlier entries exist in this run and are not shown here -- newest withheld: 1505af0e644ade006d83082635a937390c47f2ab9395e55c638f44a040d95874, bd5ea987593030ca26a6bd6e6e9449b16e6d5a74a9918ceaa716b9c00aa9a2e3, f78dd7b72be6be4bb1734784988e9a2017d45b1d28a6acad228ecdea4c47562f, and 48 more; every id is in the record. Treat what follows as partial; do not conclude they do not exist.
+[52] mini.commitment-proposal.v1 103f120f459fe8161491e38ec5ef1e543d1f7bcfb18aa4aa21a60e113448b1fa
+    about: da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca
+The conjecture predicts that if one were to choose a less-corroborated theory over a better-corroborated one purely for practical action, Popper would criticize this not as irrational risk-taking, but as a methodological failure to prioritize the speed of error detection.
+[kind: predicts]
+[53] mini.commitment-proposal.v1 894962a1f008e6a9f1111679e2ceede8d1785318c5a35f0e74ab58b74731da99
+    about: d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a
+The conjecture is refuted if it can be demonstrated that Popper explicitly grounded the preference for better-corroborated theories in a pragmatic decision rule (such as minimizing immediate risk or maximizing informational content) without invoking any metaphysical assumption about the theory's proximity to truth or verisimilitude.
+[kind: refuted-if]
+[54] mini.commitment-proposal.v1 3c12f1ad9f1f9663107496c0f813f768127e7b20181254b3aa59342da08ef128
+    about: d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a
+The conjecture must not conflate the methodological rule of preferring bold, testable theories with a metaphysical belief that nature is structured to reward such boldness with truth; the defense must remain agnostic regarding nature's actual response to boldness.
+[kind: must-not]
+[55] mini.commitment-proposal.v1 860860e77979b7dc747ae4e91ffeb79a5d3015d800082646021f9cfd0d52f518
+    about: d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a
+The conjecture forbids the interpretation that accepting verisimilitude as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated as a logical relation of content rather than a statistical likelihood of future success.
+[kind: forbids]
+[56] mini.commitment-proposal.v1 a32e11e960cf29aafe5a1664c33f8cd3e1014f9547afcdafa15e35e5e57dd66a
+    about: d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a
+The conjecture predicts that if the preference for corroborated theories were based solely on past performance without the 'verisimilitude gamble,' Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ in content.
+[kind: predicts]
+[57] mini.commitment-proposal.v1 7e9418dfffc8d0e70c08bb0512b84f8ace95740715d76f872275a0ff9ba00cd1
+    about: 055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87
+The conjecture is refuted if it can be demonstrated that Popper explicitly justified the preference for better-corroborated theories in practical decisions solely on the grounds of maximizing testability and information content, without invoking any expectation of future success based on past performance.
+[kind: refuted-if]
+[58] mini.commitment-proposal.v1 7bba8c754d2a49ef33548d3733253be62ae8a965df7ddad3e7c6b9a4f6a90090
+    about: 055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87
+The conjecture must not conflate the methodological rule of preferring bold, testable theories with a metaphysical belief that nature is structured to reward such boldness with truth; the defense must remain agnostic regarding nature's actual response to boldness.
+[kind: must-not]
+[59] mini.commitment-proposal.v1 87fd1b233fbc5cdaf91fea9fda665de17452c44b30b62844e359c59039a6b74d
+    about: 055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87
+The conjecture forbids the interpretation that accepting verisimilitude as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated as a logical relation of content rather than a statistical likelihood of future success.
+[kind: forbids]
+[60] mini.commitment-proposal.v1 79f0852177b3982bccf3bf2596a134220028560a524a924b4334f278ab8065fb
+    about: 055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87
+The conjecture predicts that if the preference for corroborated theories were based solely on past performance without the 'verisimilitude gamble,' Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ in content.
+[kind: predicts]
+[61] mini.commitment-proposal.v1 4130c76430265dbdffc0657cccadcf4ad0dc2d720e20064c5ca2349115e2789f
+    about: 20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0
+The conjecture is refuted if Popper can be shown to have explicitly grounded the preference for better-corroborated theories in a non-inductive decision rule, such as maximizing informational content or minimizing the risk of immediate falsification, without invoking any expectation of future success based on past performance.
+[kind: refuted-if]
+[62] mini.commitment-proposal.v1 3a1c5fca006557778eff26b4441e600610ec920ef48879a972e9620e96869263
+    about: 20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0
+The conjecture must not conflate the methodological imperative to test bold theories with a metaphysical belief that nature rewards such boldness with truth; it must remain agnostic regarding whether the universe is structured to favor high-content theories.
+[kind: must-not]
+[63] mini.commitment-proposal.v1 cfd595809bceedd456183ca3f08156fecd445d7003d2bd960f186077504572d8
+    about: 20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0
+The conjecture forbids the interpretation that accepting verisimilitude (truth-likeness) as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated strictly as a logical comparison of content rather than a statistical prediction of future reliability.
+[kind: forbids]
+[64] mini.commitment-proposal.v1 7dda28d49f50a5b3c260ff4042bb439894526f311e60690a539ebb6effb938ba
+    about: 20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0
+The conjecture predicts that if the preference for corroborated theories were based solely on past survival without a 'verisimilitude gamble' or similar non-inductive heuristic, Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ significantly in empirical content.
+[kind: predicts]
+
+## directive
+You are the conjecture seat. Propose bold, criticizable explanations for the PROBLEM above, in whatever shape says the interesting part best -- prose is welcome and no skeleton is required. Return 4 diverse candidates, each with a typicality estimate in [0,1]. Do not repeat what has already been generated; differ from it substantively.

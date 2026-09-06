@@ -1,0 +1,19 @@
+{
+  "objections": [
+    {
+      "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+      "body": "The 'pragmatic wager' defense collapses because the very act of selecting a theory based on past survival implicitly assumes that past performance is a reliable indicator of future utility. If Popper strictly rejects induction, he cannot claim that a theory's history of withstanding falsification makes it a 'better bet' for future applications without smuggling in the principle that nature is uniform or that successful methods tend to remain successful. To say one theory is 'rationally preferred' over another due to corroboration is to assign it a higher epistemic value based on past data, which is functionally identical to assigning it a higher probability, thereby contradicting the core tenet that corroboration implies no increase in likelihood.",
+      "would_settle": "A rigorous demonstration showing how to derive a preference rule from non-inductive premises without assuming any continuity between past test results and future predictive success."
+    },
+    {
+      "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+      "body": "The analogy of betting on a horse that has won every race fails under Popperian scrutiny because, unlike a horse race where physical laws govern the outcome, scientific theories face an unknown and potentially hostile reality. In Popper's framework, a theory surviving severe tests only means it has not yet been falsified; it does not demonstrate 'fitness' in any positive sense. A theory that has survived 1,000 tests is logically no closer to the truth than a theory falsified on the first try, as both are merely conjectures. Therefore, preferring the unrefuted theory over a refuted one is defensible, but preferring one unrefuted theory over another unrefuted theory based solely on the *number* or *severity* of past tests reintroduces an inductive weight to evidence that Popper explicitly sought to eliminate.",
+      "would_settle": "An explanation of how 'severity' of a test can be measured and valued without invoking the inductive assumption that passing severe tests makes a theory more likely to pass future tests."
+    },
+    {
+      "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+      "body": "The conjecture claims we must accept our actions are grounded in 'educated guesswork,' but this phrase itself is a contradiction in terms within a strictly non-inductive framework. An 'educated' guess implies that the education (past experience/tests) improves the quality of the guess. If corroboration adds no probability and implies no truth-likeness that can be relied upon, then the guess is not 'educated' by the tests; it is merely a guess that happens to follow a specific procedural history. Consequently, the preference for better-corroborated theories becomes an arbitrary psychological habit rather than a defensible rational strategy, undermining the claim that Popper offers a logical solution to the problem of action.",
+      "would_settle": "A clear distinction between 'psychological confidence' derived from testing and 'rational justification' for action that does not rely on inductive inference."
+    }
+  ]
+}

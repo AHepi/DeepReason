@@ -632,7 +632,8 @@ def _record_stage(session, out, spend, form, stage, target):
     return refs
 
 
-def _call_stage(session, kernel, endpoint, brief, form, meter, retry_max, workflow):
+def _call_stage(session, kernel, endpoint, brief, form, meter, retry_max, workflow,
+                pack_budget_tokens=None):
     """One provider call for one stage, through the ONE leased route. Returns
     `(out, spend)` or raises the call layer's typed failures for the loop to
     dispose of. The lease's role is the record's `LLMCall.role`; which SEAT
@@ -642,6 +643,7 @@ def _call_stage(session, kernel, endpoint, brief, form, meter, retry_max, workfl
         endpoint, brief, form.canonical_model, meter, session.blobs, retry_max,
         role=kernel.lease.role,
         model_profile=kernel.profile,
+        pack_budget=pack_budget_tokens,
         wire_contract=form.contract,
         endpoint_lease=kernel.lease,
         workflow_dispatch_observer=(
@@ -651,6 +653,9 @@ def _call_stage(session, kernel, endpoint, brief, form, meter, retry_max, workfl
             workflow.authorize_repair if workflow is not None else None
         ),
     )
+
+
+DEFAULT_VS_K = 4  # the compact profile's count; see run()
 
 
 def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str,
@@ -684,6 +689,13 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
     # explicit default model-facing representation.
     kernel = initialize(root, endpoint, model_profile, run_input, dossier)
     vs_k = kernel.profile.vs_k if vs_k is None else vs_k
+    if vs_k is None:
+        # The standard and frontier profiles declare no candidate count; a
+        # brief that asked for "None diverse candidates" would be an
+        # instruction with a hole in it (found the day the shallow path first
+        # forwarded a non-compact profile). The compact preset's count is the
+        # floor every profile shares.
+        vs_k = DEFAULT_VS_K
     session = Session(root)
     commitment_policy = (
         flow.commitment_policy if commitment_policy is None else commitment_policy
@@ -700,7 +712,11 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
     # The call layer clips every prompt at the profile's pack budget; the
     # stage walk keeps a brief under it by handing the everything section
     # its share, and DISCLOSES any brief that still overruns (PARKED P8).
-    prompt_limit = kernel.profile.pack_budget() * 4
+    prompt_limit = (
+        int(flow.brief_budget_chars)
+        if flow.brief_budget_chars is not None
+        else kernel.profile.pack_budget() * 4
+    )
     queue = list(problems)
     stop = "queue-exhausted"
     cycles = 0
@@ -732,12 +748,13 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
                         session, stage.seat_id, pid,
                         target_id=target,
                         shell_id=stage.shell_id,
-                        token_budget=kernel.profile.pack_budget(),
+                        token_budget=prompt_limit // 4,
                         supplied={
                             "vs_k": vs_k,
                             "stance_directive": rotation.directive,
                             "legacy_neighbourhood": _neighbourhood(session, pid, neighbourhood),
                             "brief_budget_chars": int(prompt_limit * stage.brief_share),
+                            "brief_limit_chars": prompt_limit,
                         },
                     )
                     if len(brief) > prompt_limit:
@@ -759,7 +776,8 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
                     )
                     try:
                         out, spend = _call_stage(
-                            session, kernel, endpoint, brief, form, meter, retry_max, workflow
+                            session, kernel, endpoint, brief, form, meter, retry_max, workflow,
+                            pack_budget_tokens=prompt_limit // 4,
                         )
                     except llm.BudgetExceeded as e:
                         if e.spend:  # exhaustion mid-retry still carries spend (G1)

@@ -1,0 +1,16 @@
+{
+  "objections": [
+    {
+      "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+      "body": "The conjecture claims the preference is a 'rational bet' to maximize learning potential, but this smuggles in an inductive assumption about the value of future learning. To assert that surviving severe tests makes a theory a better vehicle for *future* information gain presupposes that the future will resemble the past regarding the theory's testability and the relevance of those tests. If the universe is chaotic or if the laws change tomorrow, the 'high content' theory might yield no more learning than a weak one, or could even be misleadingly complex. By betting on high content because it has worked well so far to define 'severe tests,' Popper relies on the very uniformity of nature he explicitly rejects to justify the pragmatic utility of his methodological rule."
+    },
+    {
+      "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+      "body": "The distinction between 'predicting success' and 'making a rational bet' collapses under scrutiny when applied to action. If an agent chooses Theory A over Theory B because A is better corroborated, they are effectively acting as if A is more likely to be true or more reliable in application, regardless of the verbal disclaimer. The 'pragmatic wager' argument attempts to have it both ways: it denies that corroboration implies probability (truth-likeness) while simultaneously arguing it is the rational basis for choice. However, rationality in action is inherently tied to expected outcomes; if corroboration provides no ground for expecting better future performance, then choosing the highly corroborated theory over a randomly selected unfalsified theory is not a 'rational bet' but an arbitrary ritual. The defense fails to explain why the 'bet' is rational without implicitly assigning higher subjective probability to the corroborated theory."
+    },
+    {
+      "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+      "body": "The conjecture argues that preferring the better-corroborated theory maximizes informational content at risk, yet this metric ignores the cost of error in practical application. In scientific practice and real-world decision-making, agents often prefer theories that are robust and safe (low risk of catastrophic failure) rather than those with high informational content that are perilously close to falsification. A theory that has survived severe tests by being extremely precise is 'riskier' in terms of potential falsification, but if the goal is successful action (e.g., building a bridge), the 'learning potential' upon failure is irrelevant compared to the immediate utility of success. Popper's framework prioritizes the growth of knowledge over the success of action, making his 'defense' of the preference circular: it defends the preference only by redefining the goal of action as 'learning' rather than 'success,' which contradicts the premise that scientists act to achieve practical results."
+    }
+  ]
+}

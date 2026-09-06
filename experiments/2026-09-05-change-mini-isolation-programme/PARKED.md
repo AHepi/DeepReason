@@ -499,3 +499,19 @@ OUT OF SCOPE: any change under src/ or mini/ (P10 is its own defect
 tranche); the full-harness measure of mini's content (Amendment 1's "then
 testing on the full harness" is a separate programme).
 ```
+
+## P12 — the clip cuts the directive: 9 of 19 live calls ran without their instruction
+
+**What.** RESULTS.md (2026-09-06, later): mini layouts put the directive
+last; the call layer clips the assembled brief at the profile's pack budget
+(4 800 characters on compact) from the tail; the everything-so-far section's
+share (60 % of the clip) leaves no room for problem + target + directive
+once the run has content. In the D8 live root, 7 of 8 commitment calls and
+2 of 3 conjecture calls carried no directive; the seats answered the
+question instead of proposing commitments or four candidates. Every critic
+call, whose brief stayed near 2 400 characters, kept its directive.
+
+**Why it is not fixed here.** A defect found while reading the delivered
+measure's record; the programme is delivered. Routed to the defect workflow
+as the next tranche, taken up 2026-09-06 on the operator's "the next step
+is the fix".

@@ -1,0 +1,24 @@
+{
+  "proposals": [
+    {
+      "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+      "body": "The conjecture would be refuted if Popper explicitly argued in his published works that the preference for well-corroborated theories in practical action is a 'non-rational' or purely 'psychological' commitment, rather than a methodologically rational choice based on critical discussion.",
+      "kind": "refuted-if"
+    },
+    {
+      "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+      "body": "The conjecture forbids the interpretation that Popper considered the act of choosing the best-tested theory for action to be a logical extension of scientific rationality; it must maintain that this specific choice lies outside the bounds of strict scientific logic.",
+      "kind": "forbids"
+    },
+    {
+      "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+      "body": "The conjecture must not imply that the 'biological or pragmatic imperative' cited as the basis for action retains any epistemic weight regarding the truth-likeness or future reliability of the theory, as this would reintroduce the inductive element the conjecture claims to isolate.",
+      "kind": "must-not"
+    },
+    {
+      "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+      "body": "The conjecture predicts that any attempt to justify the preference for corroborated theories in action solely through Popperian scientific logic will fail, necessitating an appeal to extra-logical factors such as instinct, convention, or pragmatic survival needs.",
+      "kind": "predicts"
+    }
+  ]
+}

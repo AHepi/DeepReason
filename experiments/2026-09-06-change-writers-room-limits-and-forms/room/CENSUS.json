@@ -1,0 +1,1845 @@
+{
+ "schema": "wr-census.v1",
+ "root": "/home/user/DeepReason/experiments/2026-09-06-change-writers-room-limits-and-forms/runs/home-room/shallow-runs/shallow-0b47bc7b090854078ddf7559",
+ "seats": {
+  "commitment": {
+   "calls": 12,
+   "outputs": 46,
+   "tokens": 43520,
+   "chars_min_mean_max": [
+    234,
+    306,
+    398
+   ],
+   "on_target": 46,
+   "commitment_shaped": 46,
+   "first_sentence_binds": 46,
+   "exact_duplicates": 6,
+   "near_duplicates": 25,
+   "echo_target": 1
+  },
+  "critic": {
+   "calls": 12,
+   "outputs": 36,
+   "tokens": 17723,
+   "chars_min_mean_max": [
+    622,
+    864,
+    1038
+   ],
+   "on_target": 36,
+   "commitment_shaped": 25,
+   "first_sentence_binds": 7,
+   "exact_duplicates": 0,
+   "near_duplicates": 16,
+   "echo_target": 4
+  },
+  "conjecturer": {
+   "calls": 3,
+   "outputs": 12,
+   "tokens": 9093,
+   "chars_min_mean_max": [
+    592,
+    694,
+    813
+   ],
+   "on_target": 0,
+   "commitment_shaped": 8,
+   "first_sentence_binds": 2,
+   "exact_duplicates": 0,
+   "near_duplicates": 8,
+   "echo_target": 0
+  }
+ },
+ "briefs": [
+  {
+   "seq": 2,
+   "seat": "conjecturer",
+   "chars": 2069,
+   "tokens": 1209,
+   "directive_intact": true
+  },
+  {
+   "seq": 3,
+   "seat": "critic",
+   "chars": 2932,
+   "tokens": 1578,
+   "directive_intact": true
+  },
+  {
+   "seq": 6,
+   "seat": "critic",
+   "chars": 2920,
+   "tokens": 1578,
+   "directive_intact": true
+  },
+  {
+   "seq": 9,
+   "seat": "critic",
+   "chars": 2880,
+   "tokens": 1430,
+   "directive_intact": true
+  },
+  {
+   "seq": 12,
+   "seat": "critic",
+   "chars": 2919,
+   "tokens": 1541,
+   "directive_intact": true
+  },
+  {
+   "seq": 15,
+   "seat": "commitment",
+   "chars": 9863,
+   "tokens": 3417,
+   "directive_intact": true
+  },
+  {
+   "seq": 19,
+   "seat": "commitment",
+   "chars": 9847,
+   "tokens": 3592,
+   "directive_intact": true
+  },
+  {
+   "seq": 23,
+   "seat": "commitment",
+   "chars": 9802,
+   "tokens": 3800,
+   "directive_intact": true
+  },
+  {
+   "seq": 27,
+   "seat": "commitment",
+   "chars": 9503,
+   "tokens": 3920,
+   "directive_intact": true
+  },
+  {
+   "seq": 31,
+   "seat": "conjecturer",
+   "chars": 9289,
+   "tokens": 3981,
+   "directive_intact": true
+  },
+  {
+   "seq": 32,
+   "seat": "critic",
+   "chars": 2757,
+   "tokens": 1414,
+   "directive_intact": true
+  },
+  {
+   "seq": 35,
+   "seat": "critic",
+   "chars": 2711,
+   "tokens": 1469,
+   "directive_intact": true
+  },
+  {
+   "seq": 38,
+   "seat": "critic",
+   "chars": 2760,
+   "tokens": 1435,
+   "directive_intact": true
+  },
+  {
+   "seq": 41,
+   "seat": "critic",
+   "chars": 2775,
+   "tokens": 1459,
+   "directive_intact": true
+  },
+  {
+   "seq": 44,
+   "seat": "commitment",
+   "chars": 9591,
+   "tokens": 3326,
+   "directive_intact": true
+  },
+  {
+   "seq": 48,
+   "seat": "commitment",
+   "chars": 9556,
+   "tokens": 3576,
+   "directive_intact": true
+  },
+  {
+   "seq": 52,
+   "seat": "commitment",
+   "chars": 9512,
+   "tokens": 3748,
+   "directive_intact": true
+  },
+  {
+   "seq": 56,
+   "seat": "commitment",
+   "chars": 9368,
+   "tokens": 3929,
+   "directive_intact": true
+  },
+  {
+   "seq": 60,
+   "seat": "conjecturer",
+   "chars": 9047,
+   "tokens": 3903,
+   "directive_intact": true
+  },
+  {
+   "seq": 61,
+   "seat": "critic",
+   "chars": 2738,
+   "tokens": 1493,
+   "directive_intact": true
+  },
+  {
+   "seq": 64,
+   "seat": "critic",
+   "chars": 2739,
+   "tokens": 1370,
+   "directive_intact": true
+  },
+  {
+   "seq": 67,
+   "seat": "critic",
+   "chars": 2799,
+   "tokens": 1433,
+   "directive_intact": true
+  },
+  {
+   "seq": 70,
+   "seat": "critic",
+   "chars": 2827,
+   "tokens": 1523,
+   "directive_intact": true
+  },
+  {
+   "seq": 73,
+   "seat": "commitment",
+   "chars": 9768,
+   "tokens": 3295,
+   "directive_intact": true
+  },
+  {
+   "seq": 76,
+   "seat": "commitment",
+   "chars": 9388,
+   "tokens": 3318,
+   "directive_intact": true
+  },
+  {
+   "seq": 79,
+   "seat": "commitment",
+   "chars": 9875,
+   "tokens": 3717,
+   "directive_intact": true
+  },
+  {
+   "seq": 83,
+   "seat": "commitment",
+   "chars": 9608,
+   "tokens": 3882,
+   "directive_intact": true
+  }
+ ],
+ "outputs": [
+  {
+   "seat": "conjecturer",
+   "id": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "about": null,
+   "chars": 813,
+   "text": "The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim. Popper argues that while past success guarantees nothing about the future (rejecting induction), the theory that has survived the severest tests has proven its 'fitness' in the specific environment of reality so far. Choosing it is akin to betting on the horse that has won every race; we do not know it will win the next, but it is the only rational choice available if we must act, as it has demonstrated a capacity to withstand falsification that others lack. This costs us the comfort of believing the theory is 'true' or 'likely,' forcing us to accept that our best actions are still grounded in guesswork, albeit an educated one.\n[angle: The Pragmatic Wager]",
+   "on_target": null,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "da6f74be",
+    "109c6e75"
+   ],
+   "echoes_target": null
+  },
+  {
+   "seat": "conjecturer",
+   "id": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "about": null,
+   "chars": 801,
+   "text": "The defense lies in shifting the goal from 'probability' to 'verisimilitude' (truth-likeness). A highly corroborated theory is not more probable, but it is a better candidate for being closer to the truth because it has withstood attempts to show it is false. The preference is defensible because science aims at truth, not certainty; therefore, selecting the theory with the highest empirical content that has not yet been refuted is the only methodological move consistent with the aim of increasing verisimilitude. The cost here is the admission that we can never verify this progress; we must operate on the regulative ideal that surviving severe tests correlates with truth-likeness, a metaphysical hope that Popper admits cannot be logically proven.\n[angle: Verisimilitude as a Regulative Ideal]",
+   "on_target": null,
+   "commitment_markers": [
+    "refuted-if",
+    "must-not"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": null
+  },
+  {
+   "seat": "conjecturer",
+   "id": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "about": null,
+   "chars": 761,
+   "text": "The preference is indefensible on Popper's own terms and indeed smuggles induction back in through the back door. By advising scientists to 'prefer' the better-corroborated theory for action, Popper implicitly asserts that past performance is a reliable guide to future reliability, which is the very definition of inductive reasoning he sought to destroy. If corroboration reports only past history and implies nothing about the future, then preferring Theory A over Theory B for future application is irrational within his system. Accepting this view costs the coherence of Popper's philosophy, reducing his methodology to a description of psychological habit rather than a logical framework for scientific rationality.\n[angle: The Performative Contradiction]",
+   "on_target": null,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "055185d5"
+   ],
+   "echoes_target": null
+  },
+  {
+   "seat": "conjecturer",
+   "id": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "about": null,
+   "chars": 800,
+   "text": "The preference is defensible because corroboration functions as a measure of informational content rather than likelihood. A theory that survives severe tests is one that took a greater risk of being wrong; preferring it is a preference for boldness and precision. We choose the better-corroborated theory not because we think it will hold true, but because it offers the most detailed map of the world currently available, providing the richest basis for further criticism and testing. The cost of this stance is that 'action' becomes purely experimental; we act on the bold theory specifically to try to break it, meaning our 'preference' is actually a preference for the most efficient path to potential falsification, not for successful prediction.\n[angle: Corroboration as Informational Content]",
+   "on_target": null,
+   "commitment_markers": [
+    "refuted-if",
+    "predicts"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "d8102612"
+   ],
+   "echoes_target": null
+  },
+  {
+   "seat": "conjecturer",
+   "id": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "about": null,
+   "chars": 638,
+   "text": "Popper's preference for better-corroborated theories is defensible without induction because it functions not as an epistemic probability claim but as a methodological rule of thumb: we choose the theory that has withstood the severest tests simply because it is the most informative target for future falsification. This preference does not assume the theory will succeed in the future; rather, it assumes that if the theory is false, this specific candidate is the most likely to reveal its falsehood quickly, thereby accelerating the growth of knowledge even if the practical application fails.\n[angle: The Methodological Rule Defense]",
+   "on_target": null,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "a0b919ae",
+    "a7a10cdf",
+    "c9ec7c06"
+   ],
+   "echoes_target": null
+  },
+  {
+   "seat": "conjecturer",
+   "id": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "about": null,
+   "chars": 592,
+   "text": "The preference is defensible only by accepting a non-probabilistic metaphysical commitment to verisimilitude (truth-likeness), arguing that while we cannot know a theory is true or probable, severe testing logically increases its content and proximity to truth. This stance survives Popper's anti-induction critique by shifting the goal from 'predictive reliability' to 'structural approximation,' but it costs the framework its claim to pure logic, smuggling in a rationalist faith that nature rewards boldness with truth-likeness rather than random chaos.\n[angle: The Verisimilitude Gamble]",
+   "on_target": null,
+   "commitment_markers": [
+    "must-not",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "33cd355c"
+   ],
+   "echoes_target": null
+  },
+  {
+   "seat": "conjecturer",
+   "id": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "about": null,
+   "chars": 641,
+   "text": "The preference is indefensible on Popper's own terms and constitutes a performative contradiction: when Popper chooses a well-corroborated bridge design over an unfalsified but untested one, he acts exactly as an inductivist would, relying on the implicit premise that past survival indicates future stability. This candidate argues that no amount of semantic maneuvering around 'corroboration' vs. 'probability' can mask the fact that acting on corroboration requires an inductive leap, meaning Popper's system collapses into crypto-induction whenever it leaves the realm of abstract methodology.\n[angle: The Pragmatic Inconsistency Charge]",
+   "on_target": null,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "67873974"
+   ],
+   "echoes_target": null
+  },
+  {
+   "seat": "conjecturer",
+   "id": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "about": null,
+   "chars": 656,
+   "text": "Popper's framework offers no rational basis for preference in single-case decisions, rendering the scientist's choice between theories arbitrary unless they secretly reintroduce induction. If one strictly adheres to Popper's denial that corroboration implies future success, then choosing the better-corroborated theory for a critical application is logically indistinguishable from flipping a coin, as both options possess equal logical status regarding future performance; thus, the 'preference' scientists feel is merely a psychological habit that Popper mistakenly tried to rationalize as a philosophical principle.\n[angle: The Decision-Theoretic Void]",
+   "on_target": null,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": null
+  },
+  {
+   "seat": "conjecturer",
+   "id": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "about": null,
+   "chars": 619,
+   "text": "Popper's preference for the better-corroborated theory is defensible not because it predicts future success (which would be induction), but because it represents the only rational 'bet' available to an agent who must act. Since we cannot know the truth, choosing the theory that has withstood the most severe tests maximizes the informational content at risk; if it fails, we learn more than if a weaker theory fails. The preference is a methodological rule for maximizing learning potential in the face of ignorance, not a probabilistic claim about the world's stability.\n[angle: The Pragmatic Wager without Induction]",
+   "on_target": null,
+   "commitment_markers": [
+    "must-not",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "c9ec7c06",
+    "f05e2b4b"
+   ],
+   "echoes_target": null
+  },
+  {
+   "seat": "conjecturer",
+   "id": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "about": null,
+   "chars": 620,
+   "text": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because 'verisimilitude' (truth-likeness) functions as a covert proxy for probability. To prefer Theory A over Theory B on the grounds that A is 'closer to the truth' based on past tests is to assume a uniformity in nature: that the structural features which allowed A to survive will continue to align with reality. Without this inductive assumption, the concept of verisimilitude offers no actionable guide for the future, rendering Popper's advice to scientists practically empty.\n[angle: The Verisimilitude Trap]",
+   "on_target": null,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": null
+  },
+  {
+   "seat": "conjecturer",
+   "id": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "about": null,
+   "chars": 680,
+   "text": "The tension dissolves if we strictly segregate corroboration as a purely historical report from the act of choosing a theory for action. Popper can defend the preference by arguing that while corroboration says nothing about the future, the *act* of preferring the best-tested theory is a non-rational, psychological commitment necessary for life, distinct from scientific logic. On this view, the preference is defensible as a biological or pragmatic imperative for survival, but it constitutes a departure from strict rationality, admitting that science alone cannot dictate action without an extra-logical leap.\n[angle: Corroboration as a Historical Report, Not a Future Guide]",
+   "on_target": null,
+   "commitment_markers": [
+    "must-not"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": null
+  },
+  {
+   "seat": "conjecturer",
+   "id": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "about": null,
+   "chars": 708,
+   "text": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated theory in favor of a poorly tested one increases the likelihood of immediate error without offering any compensatory increase in testability. While this looks like induction, it is actually a logical deduction about the current state of knowledge; the better-corroborated theory is simply the one that has not yet been falsified despite greater exposure to falsification. Choosing it minimizes the 'known unknowns' relative to alternatives, a defensive posture that requires no belief in the future validity of the theory, only a recognition of its current robustness.\n[angle: The Asymmetry of Risk]",
+   "on_target": null,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "76bb0513"
+   ],
+   "echoes_target": null
+  },
+  {
+   "seat": "critic",
+   "id": "a4b4bcf31601654d66933fecfb3bf8b4c86d3b4fadf62e108c3e26ff10615350",
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "chars": 955,
+   "text": "The 'pragmatic wager' defense collapses because the very act of selecting a theory based on past survival implicitly assumes that past performance is a reliable indicator of future utility. If Popper strictly rejects induction, he cannot claim that a theory's history of withstanding falsification makes it a 'better bet' for future applications without smuggling in the principle that nature is uniform or that successful methods tend to remain successful. To say one theory is 'rationally preferred' over another due to corroboration is to assign it a higher epistemic value based on past data, which is functionally identical to assigning it a higher probability, thereby contradicting the core tenet that corroboration implies no increase in likelihood.\n[would settle: A rigorous demonstration showing how to derive a preference rule from non-inductive premises without assuming any continuity between past test results and future predictive success.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "must-not",
+    "predicts"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "b45c7e6e169fd9c48da59d55cd46726d469d757365c82a3f93453e6ffd4e11f3",
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "chars": 1021,
+   "text": "The analogy of betting on a horse that has won every race fails under Popperian scrutiny because, unlike a horse race where physical laws govern the outcome, scientific theories face an unknown and potentially hostile reality. In Popper's framework, a theory surviving severe tests only means it has not yet been falsified; it does not demonstrate 'fitness' in any positive sense. A theory that has survived 1,000 tests is logically no closer to the truth than a theory falsified on the first try, as both are merely conjectures. Therefore, preferring the unrefuted theory over a refuted one is defensible, but preferring one unrefuted theory over another unrefuted theory based solely on the *number* or *severity* of past tests reintroduces an inductive weight to evidence that Popper explicitly sought to eliminate.\n[would settle: An explanation of how 'severity' of a test can be measured and valued without invoking the inductive assumption that passing severe tests makes a theory more likely to pass future tests.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "ba596c8f702dbe38b9eff42ff841c300f7ba5044143e4846ccc41ac7c971112d",
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "chars": 908,
+   "text": "The conjecture claims we must accept our actions are grounded in 'educated guesswork,' but this phrase itself is a contradiction in terms within a strictly non-inductive framework. An 'educated' guess implies that the education (past experience/tests) improves the quality of the guess. If corroboration adds no probability and implies no truth-likeness that can be relied upon, then the guess is not 'educated' by the tests; it is merely a guess that happens to follow a specific procedural history. Consequently, the preference for better-corroborated theories becomes an arbitrary psychological habit rather than a defensible rational strategy, undermining the claim that Popper offers a logical solution to the problem of action.\n[would settle: A clear distinction between 'psychological confidence' derived from testing and 'rational justification' for action that does not rely on inductive inference.]",
+   "on_target": true,
+   "commitment_markers": [],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "de0b18a2cb0949fbb38501aae038aeb54bf7932c6bd1ad3e487800f091f7f28b",
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "chars": 1010,
+   "text": "The conjecture relies on the concept of 'verisimilitude' (truth-likeness) to bridge the gap between corroboration and preference, but Popper's own formal definition of verisimilitude was proven logically incoherent by Tich\u00fd and Miller in 1974. They demonstrated that for any false theory, adding true consequences does not necessarily make it closer to the truth than another false theory; in fact, under Popper's criteria, a false theory with more content can be shown to be further from the truth than a weaker false theory. Therefore, grounding the defense of scientific preference on verisimilitude rests on a technical foundation that Popper himself had to abandon, rendering the argument internally inconsistent within his own system.\n[would settle: A rigorous demonstration that a coherent, non-probabilistic measure of verisimilitude exists which successfully ranks theories such that higher corroboration strictly implies greater closeness to the truth, without collapsing into inductive probability.]",
+   "on_target": true,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "2480052e612f9dc5442180ad8dfe77c9b3a5182d60acfcef53861c01cfaad879",
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "chars": 1038,
+   "text": "The claim that preferring highly corroborated theories is consistent with aiming at truth smuggles in induction through the back door by assuming the 'uniformity of nature' or the 'principle of the uniformity of laws.' To assert that a theory which has survived severe tests in the past is a 'better candidate' for being true in the future presupposes that the future will resemble the past regarding the theory's domain. If one strictly rejects induction as Hume and Popper argue, there is no logical warrant to believe that surviving tests yesterday makes a theory more likely to survive tests tomorrow. The preference for the better-corroborated theory is therefore practically useful but logically indefensible on purely deductive grounds, contradicting the conjecture's claim of consistency.\n[would settle: A deductive proof showing that the survival of a theory under past tests increases its fitness for future tests without invoking any assumption about the stability of natural laws or the resemblance of the future to the past.]",
+   "on_target": true,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "a7a10cdf",
+    "4b681fa5"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "d6821854ab37bdecb146a74cabcc7a2a37426cc0cdcb8462d76c933826a75797",
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "chars": 1033,
+   "text": "The conjecture dismisses the cost of accepting verisimilitude as a mere 'metaphysical hope,' but this understates the damage to Popper's critical rationalism. Popper explicitly sought to distinguish science from metaphysics and to provide a logic of scientific discovery that did not rely on faith or unprovable ideals. By reducing the justification for scientific progress to a 'regulative ideal' that 'cannot be logically proven,' the defense concedes that the choice between competing theories is ultimately irrational or arational\u2014a matter of psychological preference rather than logical methodology. This undermines the core Popperian thesis that science advances through rational criticism, replacing it with a fideistic leap of faith in the correlation between test survival and truth.\n[would settle: An account of how a 'regulative ideal' that admits no logical proof can function as a rational basis for theory choice within a framework that defines rationality strictly as adherence to logical deduction and falsification.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "must-not"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "6b97cc064898b8141294adf9a22125c8f67952f6d61c59568252344f8b3edfff",
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "chars": 799,
+   "text": "The conjecture falsely equates 'preference for action' with 'belief in future reliability.' Popper explicitly distinguishes between the logical status of a theory (which remains unproven) and the pragmatic decision to act upon it. One can prefer the better-corroborated theory as the most rational basis for action without asserting that it is probably true or that nature is uniform. The preference is a methodological rule for critical testing, not an inductive inference about the future.\n[would settle: A definitive textual analysis of Popper's distinction between 'corroboration' (a report on past tests) and 'probability' (a prediction of future success), specifically examining his arguments in 'The Logic of Scientific Discovery' regarding the rationality of acting on unfalsified theories.]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "c9ec7c06",
+    "29032531",
+    "d093cc7b",
+    "9fbb650d"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "d41766b7844f9da90908a565337adf9330fdf069a6b908bba7c2c4f7e1538af5",
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "chars": 714,
+   "text": "The claim that Popper's system reduces to 'psychological habit' ignores his argument for the superiority of severe testing. Preferring a theory that has survived severe attempts at falsification is not an inductive leap but a deductive consequence of the goal to eliminate error. If Theory A has been tested more severely than Theory B and both survive, choosing A is rational because it has withstood more potential refutation, not because we expect it to hold true tomorrow by induction.\n[would settle: Clarification on whether 'rational preference' in Popper's framework requires an assumption of the uniformity of nature, or if it relies solely on the logical asymmetry between verification and falsification.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "predicts"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "87b3f27b"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "11f838436cbe414c3a475949f93f152578cc3f58e39add7f66bacde23d60018b",
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "chars": 674,
+   "text": "The conjecture commits a straw man fallacy by suggesting Popper advises preference based on 'past performance' as a guide to 'future reliability.' Popper argues that we have no choice but to act, and in the absence of certainty, the only non-arbitrary criterion is the degree of corroboration. This is not smuggling in induction but acknowledging the necessity of decision-making under uncertainty while rigorously avoiding the claim that the decision guarantees truth or probability.\n[would settle: An examination of Popper's specific responses to critics who accused him of cryptic inductivism, particularly his later works where he refines the concept of verisimilitude.]",
+   "on_target": true,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "2d5abb2aac97e6de5c1fad44cad68a9715443f2953e6a65abb9b354b2ba90d58",
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "chars": 932,
+   "text": "The conjecture claims that preferring a theory for its 'boldness' avoids induction, yet the very act of selecting the bold theory for action presupposes that past survival under severe tests is a reliable indicator of future utility or structural fidelity. If corroboration provides no reason to believe the theory is true or likely to succeed in new applications, then choosing it over a less corroborated but equally bold alternative becomes arbitrary. The preference implicitly relies on the inductive assumption that a theory which has withstood attacks in the past is a better instrument for navigating the future than one that has not, thereby smuggling induction back in through the pragmatic backdoor of 'efficiency.'\n[would settle: A demonstration that Popper's criterion for 'severity' can distinguish between theories without relying on any background assumption that past performance correlates with future reliability.]",
+   "on_target": true,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "d810261257facfb4d744023c2b7c91dd8d5acd0c305e3aa4f0d79f98911fa57e",
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "chars": 1027,
+   "text": "The target conflates 'informational content' with 'practical viability.' While a highly corroborated theory may indeed have high informational content (it says more and risks more), scientists prefer such theories not merely to 'break them' faster, but because they generally yield more accurate predictions and stable technologies. If the preference were truly only for the 'most efficient path to potential falsification,' scientists would arguably prefer wildly speculative, maximally bold theories that are barely tested over well-corroborated ones, as the former offer a higher probability of quick refutation. The fact that scientists prefer the *surviving* bold theory suggests they value the negative evidence of non-falsification as a positive guide for expectation, contradicting the claim that action is purely experimental.\n[would settle: Evidence from scientific history showing researchers consistently choosing less established, riskier hypotheses over well-corroborated ones solely to accelerate falsification.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "predicts"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "e0959a2b"
+   ],
+   "echoes_target": true
+  },
+  {
+   "seat": "critic",
+   "id": "854ea2a23699fbd2e9d23a19ff562f4f537eb71780a26cb8578a49e8b9a00073",
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "chars": 983,
+   "text": "The assertion that 'action becomes purely experimental' fails to account for the stakes involved in real-world application. When engineers build a bridge based on a well-corroborated theory of mechanics, they are not acting to 'try to break' the theory; they are acting on the expectation that the theory will hold. If Popper's framework cannot justify this expectation without resorting to induction, then it cannot explain the rationality of applied science. The target conjecture attempts to redefine 'preference' as a desire for falsification, but this redefinition does not match the phenomenology of scientific practice, where preference implies a trust in the theory's descriptive adequacy, not just its heuristic value for generating counter-examples.\n[would settle: A clear articulation of how an engineer can rationally rely on a theory for safety-critical design while simultaneously holding zero belief in its likelihood of being true or applicable to the specific case.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "must-not",
+    "predicts"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "327f6ea7cd7e8284141dfa6fa3043133b9e2248f706474f7d69f304fcef66cf6",
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "chars": 300,
+   "text": "The conjecture is refuted if it can be demonstrated that preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects.\n[kind: refuted-if]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "26d5b990",
+    "36cfcd3b",
+    "1505af0e",
+    "894962a1",
+    "7e9418df",
+    "76bb0513",
+    "f05e2b4b"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "9f6d3e913488869cb5c50ffad7dd06c198783c3608214e2a9a695438669de4c5",
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "chars": 248,
+   "text": "The conjecture forbids attributing any increased likelihood of future success or truth to a theory solely on the basis of its survival of past tests; it must maintain that the preference is entirely devoid of predictive probability.\n[kind: forbids]",
+   "on_target": true,
+   "commitment_markers": [
+    "forbids",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "8df03babcebe473a94bbac59e8da47f981c04f75ab8e96e1733076272793c647",
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "chars": 273,
+   "text": "The conjecture must not claim that the 'fitness' demonstrated by surviving severe tests provides a rational basis for action if that basis secretly relies on the unstated premise that nature is uniform enough for past fitness to matter for future outcomes.\n[kind: must-not]",
+   "on_target": true,
+   "commitment_markers": [
+    "must-not"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "0b2aecf3"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "eb00f7c3429ea82ed883d9a5e8e0af184df6189352d436732e73a5f3545d56fb",
+   "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+   "chars": 318,
+   "text": "The conjecture predicts that a consistent Popperian agent, when forced to choose between two unfalsified theories where one is better corroborated, will always choose the better-corroborated one while simultaneously asserting they have no reason to believe it will perform better in the next instance.\n[kind: predicts]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "68235e6e"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "26d5b990b5bc85741b8b72527fc8881502f412beef8b0284beae0a4e12dc3e8b",
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "chars": 324,
+   "text": "The conjecture is refuted if it can be shown that the concept of 'verisimilitude' (truth-likeness) cannot be formally defined without implicitly relying on inductive probability, thereby making the shift from probability to verisimilitude merely a semantic disguise for the very induction Popper rejected.\n[kind: refuted-if]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "must-not"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "327f6ea7",
+    "36cfcd3b",
+    "1505af0e",
+    "894962a1",
+    "7e9418df"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "0b2aecf320d7c57c886bd08a6bca0169eb6a73d4758198cc690884f2588ea2ab",
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "chars": 292,
+   "text": "The conjecture forbids claiming that surviving severe tests provides a rational basis for preferring one theory over another unless it can demonstrate a logical connection between test survival and increased truth-likeness that does not itself assume the uniformity of nature.\n[kind: forbids]",
+   "on_target": true,
+   "commitment_markers": [
+    "forbids"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "8df03bab"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "c6f64791220fad189956b395a95f7654a5715a17f5bdcd9fe88570c32fe380a5",
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "chars": 287,
+   "text": "The conjecture must not treat the 'metaphysical hope' that surviving tests correlates with truth-likeness as a sufficient defense against the charge of cryptic inductivism if that hope functions identically to an inductive premise in guiding practical scientific action.\n[kind: must-not]",
+   "on_target": true,
+   "commitment_markers": [
+    "must-not"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "08cacb9ef7debef83b234f4245aeb9841870679e4b88750946bf557ee4b5592b",
+   "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+   "chars": 327,
+   "text": "The conjecture predicts that a scientist acting strictly on this verisimilitude-based preference will choose the better-corroborated theory for critical applications while simultaneously maintaining that this choice offers no greater expectation of predictive success than choosing a random unfalsified theory.\n[kind: predicts]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "6035a9c4dd99607c46e3b320f85f420981e389249260a5ac06ba476c1df7bf4d",
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "chars": 364,
+   "text": "The conjecture is refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests (i.e., choosing the theory most likely to fail quickly if false) without any assumption that the theory will actually succeed or remain unfalsified in the future.\n[kind: refuted-if]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "ea3ee63d9cfa224e656d5ba423d05aa37e2325cf90786ca6b4cdceb0bbb20b32",
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "chars": 284,
+   "text": "The conjecture forbids equating the pragmatic choice of a theory for application with an epistemic belief in its truth or future reliability; it must maintain that acting on a corroborated theory is a decision to expose it to new risks, not a prediction of its safety.\n[kind: forbids]",
+   "on_target": true,
+   "commitment_markers": [
+    "forbids",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "e0e189524f5ca805be2264bab7fa8637456501b35f5937c1a373724991b66b33",
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "chars": 306,
+   "text": "The conjecture must not claim that Popper's framework reduces to mere psychological habit unless it first demonstrates that no non-inductive logical rule (such as the methodological rule to test the boldiest surviving hypothesis) can govern the preference for better-corroborated theories.\n[kind: must-not]",
+   "on_target": true,
+   "commitment_markers": [
+    "must-not"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "e3374255cb01e7a3def97fe0464798efcc24fdf2c06a1f1a456cd73d042db99d",
+   "about": "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e",
+   "chars": 348,
+   "text": "The conjecture predicts that if its interpretation is correct, a consistent Popperian scientist would be unable to rationally distinguish between choosing a well-tested bridge design and a randomly selected unfalsified design for actual construction, as both choices would carry identical expectations regarding future performance.\n[kind: predicts]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "36cfcd3be6fec4dd8642a11acfdfac173f50a0d0a33eb9743adb292ac731bc3a",
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "chars": 295,
+   "text": "The conjecture is refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true, thereby collapsing the distinction between preferring a bold theory and preferring a probable one.\n[kind: refuted-if]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "must-not"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "327f6ea7",
+    "26d5b990",
+    "1505af0e",
+    "894962a1",
+    "7e9418df"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "246d6bf09acaadbf2993421cdef7f22d0c041f18e649edcfed829ba95e26ad86",
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "chars": 259,
+   "text": "The conjecture forbids attributing any pragmatic advantage to the better-corroborated theory regarding its reliability in future applications, such as bridge building or medical treatment, beyond its utility as a tool for generating new tests.\n[kind: forbids]",
+   "on_target": true,
+   "commitment_markers": [
+    "forbids"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "e5341a7146dfcce407edf02bbab448baa441227f3ef2d8b787ba66c726962336",
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "chars": 234,
+   "text": "The conjecture must not claim that acting on a theory solely to falsify it constitutes a coherent defense for scientific practice in domains where failure results in catastrophic loss rather than merely new knowledge.\n[kind: must-not]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "must-not"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "c337b90ec871b60243392d9d2df9849ce46ba80800a6bc40dc4888d10e2aeacf",
+   "about": "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24",
+   "chars": 289,
+   "text": "The conjecture predicts that a scientist strictly adhering to this view would choose the most precise, high-risk theory for critical real-world decisions even when a vaguer, safer, and equally unfalsified alternative exists, provided the choice is framed as an experiment.\n[kind: predicts]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "d09a8079a76a22f24138a5fc0fe19d2655274148648bffbd9283c2887a80d57a",
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "chars": 953,
+   "text": "The conjecture claims that preferring better-corroborated theories is purely a methodological rule for future falsification, yet this fails to explain why scientists rely on these theories for high-stakes practical action (e.g., building bridges or administering medicine). If corroboration implies no increased probability of truth or future success, as Popper insists, then acting on the 'best' corroborated theory is indistinguishable from acting on a known falsehood or an untested guess. The preference only makes sense if one implicitly assumes that past survival under severe tests indicates a higher likelihood of future reliability, which smuggles in the very inductive principle the conjecture claims to avoid.\n[would settle: A demonstration of how a rational agent can consistently prefer Theory A over Theory B for life-critical decisions without assigning any higher subjective expectation of success to Theory A based on its test history.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "33161462ad1b2b226f1ec65255764a3f96950bda2e5049480b0dc65be3317953",
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "chars": 764,
+   "text": "The argument that we choose highly corroborated theories because they are the 'most informative target for future falsification' is internally inconsistent with scientific practice. Scientists do not subject their most trusted, well-corroborated theories to destructive testing more often than fringe hypotheses; rather, they use the corroborated theories as a stable foundation to test new, less corroborated ideas. If the goal were truly to maximize the speed of falsification, one should target the most robust theories first to knock them down, but science proceeds by tentatively accepting the robust ones. This suggests the preference is actually epistemic (believing the theory is likely true) rather than the methodological gamble the conjecture describes.",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "a7a10cdf38006e310cbb0afc6df0233d405e938877b3357c890709d7b4aac0c8",
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "chars": 844,
+   "text": "The conjecture relies on the assumption that a theory which has survived severe tests is the 'most likely to reveal its falsehood quickly' if it is indeed false. However, this logic is circular: if a theory has already survived the severest possible tests available, there is no logical basis within Popper's framework to claim it is now *more* susceptible to immediate falsification than a theory that has not been tested at all. In fact, a theory that has withstood severe tests has demonstrated resilience, making the claim that it is the optimal candidate for imminent collapse counter-intuitive and unsupported by the definition of corroboration itself.\n[would settle: Evidence showing that historically, theories with high corroboration are falsified faster than theories with low or zero corroboration when subjected to further testing.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "da6f74be",
+    "2480052e"
+   ],
+   "echoes_target": true
+  },
+  {
+   "seat": "critic",
+   "id": "c9ec7c06726681a464313b2dbd726ffccd0b868e7f4455245048b4e3f34b1030",
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "chars": 908,
+   "text": "The conjecture falsely equates Popper's preference for better-corroborated theories with a commitment to verisimilitude as the *only* defensible route. Popper explicitly argued that corroboration is a report on past performance and logical content, not an inductive inference to future truth or verisimilitude. The preference can be defended purely on methodological grounds: we prefer the theory that has withstood the most severe tests because it is the best candidate for criticism and further testing, not because we believe it is 'closer to the truth' in a metaphysical sense. This preserves the anti-induction stance without smuggling in rationalist faith.\n[would settle: A definitive textual analysis of Popper's later works (e.g., 'Conjectures and Refutations' vs. 'Objective Knowledge') clarifying whether he viewed the *preference* itself as requiring verisimilitude or merely as a rule of method.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "da6f74be",
+    "6b78e82f",
+    "6b97cc06",
+    "29032531",
+    "d093cc7b",
+    "e7e81de6"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "33cd355c7cc57d7ed573b5b68926c5459b514e46fec7f73b92abf0c5cce4828c",
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "chars": 659,
+   "text": "The claim that accepting verisimilitude costs the framework its claim to 'pure logic' mischaracterizes the nature of Popper's critical rationalism. Popper never claimed his system was a 'pure logic' devoid of all non-logical commitments; rather, it was a logic of scientific discovery grounded in critical debate. The 'faith' described is not a hidden induction but an explicit regulative ideal necessary for the growth of knowledge. To demand a justification for preferring truth-likeness over chaos is to demand the very inductive justification Popper rejected; the alternative is not a purer logic, but skepticism that renders scientific action impossible.",
+   "on_target": true,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "d8dfb83a"
+   ],
+   "echoes_target": true
+  },
+  {
+   "seat": "critic",
+   "id": "ba0942964f9d92678a57737c7bba668361e06a4615c6e9a5cd9c6da2a0452366",
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "chars": 847,
+   "text": "The objection that the preference 'smuggles back in induction' assumes that any reason for acting on a theory must be probabilistic or inductive. However, Popper's distinction between the 'context of discovery' and the 'context of justification' allows for a non-inductive rationale: we act on the best-tested theory not because we expect it to succeed (induction), but because it is the most informative error-detector available. If it fails, we learn more. The conjecture fails to account for this instrumentalist defense, which avoids both probability and metaphysical verisimilitude commitments while still justifying the preference.\n[would settle: Demonstration of a consistent Popperian agent who prefers high-corroboration theories solely for their falsifiability potential, explicitly denying any expectation of success or truth-likeness.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "290325312d2be462f01aee3da76d3cfc67ed6c1cc5d96001b23b71bba42d8620",
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "chars": 872,
+   "text": "The conjecture mischaracterizes Popper's rationale for preferring corroborated theories as an inductive prediction of future success. Popper explicitly grounds this preference not in the expectation that the theory is true or will remain unfalsified (which would be inductive), but in the methodological rule that the most severely tested theory offers the best opportunity for further falsification. Choosing the well-tested bridge is not a bet on its safety based on past performance, but a rational acceptance of the theory that has withstood the strongest attempts to refute it, thereby providing the most informative basis for critical discussion and potential error detection.\n[would settle: A definitive textual analysis of Popper's distinction between 'rational preference' based on critical scrutiny versus 'inductive inference' based on probability assignments.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "6b97cc06",
+    "c9ec7c06",
+    "d093cc7b"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "4d49ef89acf9eb0f4cd77fc18cb567f22441f79a3f8fb3593e72b0f8dbfa9114",
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "chars": 663,
+   "text": "The charge of 'performative contradiction' assumes that acting on a theory necessitates believing it is probable or true in an inductive sense. However, Popper's framework allows for acting on the best-available hypothesis without assigning it any positive probability value. The decision to use the corroborated bridge design is a pragmatic application of the current state of critical debate, acknowledging that while the untested theory is logically possible, it has not yet earned the status of having survived severe testing. This is a procedural choice within a fallibilist system, not a surreptitious return to the justification of knowledge via induction.",
+   "on_target": true,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "59fa0adc1d79b994b0cb93d5416ed530566d191210afe2c59db66254bd351ad7",
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "chars": 835,
+   "text": "The objection fails to account for Popper's concept of verisimilitude (truth-likeness). Even if corroboration does not increase probability, Popper argues that we can rationally prefer theories that appear closer to the truth because they have survived tests that would have refuted their predecessors. The preference for the corroborated theory is defensible on Popperian terms as a pursuit of greater verisimilitude rather than a probabilistic gamble. Therefore, the move from 'survived tests' to 'preferred for action' relies on an evolutionary epistemology of conjecture and refutation, not the inductive principle that the future must resemble the past.\n[would settle: Clarification on whether Popper's later work on verisimilitude successfully decouples the preference for corroborated theories from any form of inductive logic.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "d093cc7badeb0c11f876ec88feb698e59a2df2f4480343626b2ae9be599c87ef",
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "chars": 894,
+   "text": "The conjecture falsely equates the rejection of inductive probability with the absence of any rational criterion for action. Popper explicitly distinguishes between 'probability' (logical likelihood of truth) and 'corroboration' (a report on past performance under severe testing). The rational basis for preference is not that the better-corroborated theory is more likely to be true, but that it has demonstrated greater explanatory power and resilience against falsification attempts. Choosing it is a methodological rule based on the principle of learning from errors, not an inductive inference that the future will resemble the past.\n[would settle: A definitive textual analysis of Popper's distinction between 'acceptance' for practical purposes versus 'belief' in truth, specifically regarding his concept of verisimilitude (truth-likeness) as a non-probabilistic guide for preference.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "6b97cc06",
+    "c9ec7c06",
+    "29032531",
+    "9fbb650d"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "0ea1f35ca3dd419b0d355ea374b21e351e08156c71542bc7ceb5c007abb997ec",
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "chars": 863,
+   "text": "The claim that choosing the better-corroborated theory is 'logically indistinguishable from flipping a coin' ignores the asymmetry of risk in critical decisions. While Popper denies we can know which theory is true, he argues we can know which theory has been more rigorously tested and has survived. To ignore this track record is not neutrality; it is an irrational disregard for available empirical data regarding a theory's robustness. The preference is defensible as a pragmatic imperative to utilize the most stringently vetted information available, which constitutes a rational, non-inductive strategy for minimizing the risk of immediate error.\n[would settle: An agreed-upon definition of 'rationality' in decision theory that separates expected utility maximization (which often relies on induction) from risk-minimization based on stress-test history.]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "0236eafecf6285ec24003e35f10c538f46aab5eab8019e7025d759ed14d4637a",
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "chars": 904,
+   "text": "The conjecture assumes that without a guarantee of future success (induction), all choices are arbitrary. However, Popper's framework allows for the preference of theories with higher content and better corroboration because they offer more precise opportunities for future falsification. Even in a single-case decision, selecting the theory that makes the boldest, most testable claims that have so far held up is a rational commitment to the growth of knowledge. This is not a psychological habit but a logical consequence of the aim of science: to get closer to the truth by eliminating error, making the choice of the best-tested theory the only one consistent with the scientific attitude.\n[would settle: A formal demonstration showing how a decision rule based solely on past falsification attempts can yield different outcomes than a randomizer in a simulated environment of competing hypotheses.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "1505af0e644ade006d83082635a937390c47f2ab9395e55c638f44a040d95874",
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "chars": 335,
+   "text": "The conjecture is refuted if it can be shown that Popper explicitly justified the preference for better-corroborated theories in practical, life-or-death decisions (such as crossing a bridge) on the grounds of safety or reliability rather than solely on the grounds of maximizing testability and information content.\n[kind: refuted-if]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "327f6ea7",
+    "26d5b990",
+    "36cfcd3b",
+    "894962a1",
+    "7e9418df"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "bd5ea987593030ca26a6bd6e6e9449b16e6d5a74a9918ceaa716b9c00aa9a2e3",
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "chars": 277,
+   "text": "The conjecture must not imply that a scientist acting on a well-corroborated theory expects it to work in the future; if the defense requires any expectation of future success derived from past performance, it smuggles in the very induction it claims to avoid.\n[kind: must-not]",
+   "on_target": true,
+   "commitment_markers": [
+    "must-not",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "f78dd7b72be6be4bb1734784988e9a2017d45b1d28a6acad228ecdea4c47562f",
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "chars": 275,
+   "text": "The conjecture forbids the interpretation that corroboration serves as a proxy for truth-likeness or verisimilitude in decision-making contexts; it restricts the function of corroboration strictly to identifying the best candidate for immediate falsification.\n[kind: forbids]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "forbids"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "103f120f459fe8161491e38ec5ef1e543d1f7bcfb18aa4aa21a60e113448b1fa",
+   "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+   "chars": 289,
+   "text": "The conjecture predicts that if one were to choose a less-corroborated theory over a better-corroborated one purely for practical action, Popper would criticize this not as irrational risk-taking, but as a methodological failure to prioritize the speed of error detection.\n[kind: predicts]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "894962a1f008e6a9f1111679e2ceede8d1785318c5a35f0e74ab58b74731da99",
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "chars": 353,
+   "text": "The conjecture is refuted if it can be demonstrated that Popper explicitly grounded the preference for better-corroborated theories in a pragmatic decision rule (such as minimizing immediate risk or maximizing informational content) without invoking any metaphysical assumption about the theory's proximity to truth or verisimilitude.\n[kind: refuted-if]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "327f6ea7",
+    "26d5b990",
+    "36cfcd3b",
+    "1505af0e",
+    "7e9418df",
+    "4130c764"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "3c12f1ad9f1f9663107496c0f813f768127e7b20181254b3aa59342da08ef128",
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "chars": 281,
+   "text": "The conjecture must not conflate the methodological rule of preferring bold, testable theories with a metaphysical belief that nature is structured to reward such boldness with truth; the defense must remain agnostic regarding nature's actual response to boldness.\n[kind: must-not]",
+   "on_target": true,
+   "commitment_markers": [
+    "must-not"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [
+    "7bba8c75"
+   ],
+   "near_duplicate_of": [
+    "7bba8c75",
+    "3a1c5fca",
+    "c39a4baf"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "860860e77979b7dc747ae4e91ffeb79a5d3015d800082646021f9cfd0d52f518",
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "chars": 288,
+   "text": "The conjecture forbids the interpretation that accepting verisimilitude as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated as a logical relation of content rather than a statistical likelihood of future success.\n[kind: forbids]",
+   "on_target": true,
+   "commitment_markers": [
+    "forbids"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [
+    "87fd1b23"
+   ],
+   "near_duplicate_of": [
+    "87fd1b23",
+    "cfd59580"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "a32e11e960cf29aafe5a1664c33f8cd3e1014f9547afcdafa15e35e5e57dd66a",
+   "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+   "chars": 344,
+   "text": "The conjecture predicts that if the preference for corroborated theories were based solely on past performance without the 'verisimilitude gamble,' Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ in content.\n[kind: predicts]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [
+    "79f08521"
+   ],
+   "near_duplicate_of": [
+    "79f08521",
+    "7dda28d4"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "7e9418dfffc8d0e70c08bb0512b84f8ace95740715d76f872275a0ff9ba00cd1",
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "chars": 325,
+   "text": "The conjecture is refuted if it can be demonstrated that Popper explicitly justified the preference for better-corroborated theories in practical decisions solely on the grounds of maximizing testability and information content, without invoking any expectation of future success based on past performance.\n[kind: refuted-if]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "327f6ea7",
+    "26d5b990",
+    "36cfcd3b",
+    "1505af0e",
+    "894962a1",
+    "4130c764"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "7bba8c754d2a49ef33548d3733253be62ae8a965df7ddad3e7c6b9a4f6a90090",
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "chars": 281,
+   "text": "The conjecture must not conflate the methodological rule of preferring bold, testable theories with a metaphysical belief that nature is structured to reward such boldness with truth; the defense must remain agnostic regarding nature's actual response to boldness.\n[kind: must-not]",
+   "on_target": true,
+   "commitment_markers": [
+    "must-not"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [
+    "3c12f1ad"
+   ],
+   "near_duplicate_of": [
+    "3c12f1ad",
+    "3a1c5fca",
+    "c39a4baf"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "87fd1b233fbc5cdaf91fea9fda665de17452c44b30b62844e359c59039a6b74d",
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "chars": 288,
+   "text": "The conjecture forbids the interpretation that accepting verisimilitude as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated as a logical relation of content rather than a statistical likelihood of future success.\n[kind: forbids]",
+   "on_target": true,
+   "commitment_markers": [
+    "forbids"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [
+    "860860e7"
+   ],
+   "near_duplicate_of": [
+    "860860e7",
+    "cfd59580"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "79f0852177b3982bccf3bf2596a134220028560a524a924b4334f278ab8065fb",
+   "about": "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87",
+   "chars": 344,
+   "text": "The conjecture predicts that if the preference for corroborated theories were based solely on past performance without the 'verisimilitude gamble,' Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ in content.\n[kind: predicts]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [
+    "a32e11e9"
+   ],
+   "near_duplicate_of": [
+    "a32e11e9",
+    "7dda28d4"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "4130c76430265dbdffc0657cccadcf4ad0dc2d720e20064c5ca2349115e2789f",
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "chars": 347,
+   "text": "The conjecture is refuted if Popper can be shown to have explicitly grounded the preference for better-corroborated theories in a non-inductive decision rule, such as maximizing informational content or minimizing the risk of immediate falsification, without invoking any expectation of future success based on past performance.\n[kind: refuted-if]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "894962a1",
+    "7e9418df"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "3a1c5fca006557778eff26b4441e600610ec920ef48879a972e9620e96869263",
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "chars": 275,
+   "text": "The conjecture must not conflate the methodological imperative to test bold theories with a metaphysical belief that nature rewards such boldness with truth; it must remain agnostic regarding whether the universe is structured to favor high-content theories.\n[kind: must-not]",
+   "on_target": true,
+   "commitment_markers": [
+    "must-not"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "3c12f1ad",
+    "7bba8c75"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "cfd595809bceedd456183ca3f08156fecd445d7003d2bd960f186077504572d8",
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "chars": 320,
+   "text": "The conjecture forbids the interpretation that accepting verisimilitude (truth-likeness) as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated strictly as a logical comparison of content rather than a statistical prediction of future reliability.\n[kind: forbids]",
+   "on_target": true,
+   "commitment_markers": [
+    "forbids",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "860860e7",
+    "87fd1b23"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "7dda28d49f50a5b3c260ff4042bb439894526f311e60690a539ebb6effb938ba",
+   "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+   "chars": 398,
+   "text": "The conjecture predicts that if the preference for corroborated theories were based solely on past survival without a 'verisimilitude gamble' or similar non-inductive heuristic, Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ significantly in empirical content.\n[kind: predicts]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "a32e11e9",
+    "79f08521"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "4b681fa5764306e9d0dbdce4e3b26afb3f6ac966ba022b6b82e6af97c8fc695d",
+   "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "chars": 776,
+   "text": "The conjecture claims the preference is a 'rational bet' to maximize learning potential, but this smuggles in an inductive assumption about the value of future learning. To assert that surviving severe tests makes a theory a better vehicle for *future* information gain presupposes that the future will resemble the past regarding the theory's testability and the relevance of those tests. If the universe is chaotic or if the laws change tomorrow, the 'high content' theory might yield no more learning than a weak one, or could even be misleadingly complex. By betting on high content because it has worked well so far to define 'severe tests,' Popper relies on the very uniformity of nature he explicitly rejects to justify the pragmatic utility of his methodological rule.",
+   "on_target": true,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "2480052e"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "b6c8ec279c77b0d9c42addb5b9fdc8ca560617f4f5ee392bfd6d3cb0e2a17825",
+   "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "chars": 953,
+   "text": "The distinction between 'predicting success' and 'making a rational bet' collapses under scrutiny when applied to action. If an agent chooses Theory A over Theory B because A is better corroborated, they are effectively acting as if A is more likely to be true or more reliable in application, regardless of the verbal disclaimer. The 'pragmatic wager' argument attempts to have it both ways: it denies that corroboration implies probability (truth-likeness) while simultaneously arguing it is the rational basis for choice. However, rationality in action is inherently tied to expected outcomes; if corroboration provides no ground for expecting better future performance, then choosing the highly corroborated theory over a randomly selected unfalsified theory is not a 'rational bet' but an arbitrary ritual. The defense fails to explain why the 'bet' is rational without implicitly assigning higher subjective probability to the corroborated theory.",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "68235e6e"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "2518fca6b3baf806639d43566e73e10c07d03cd6445a79f1c6797e4368e64d3e",
+   "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "chars": 1007,
+   "text": "The conjecture argues that preferring the better-corroborated theory maximizes informational content at risk, yet this metric ignores the cost of error in practical application. In scientific practice and real-world decision-making, agents often prefer theories that are robust and safe (low risk of catastrophic failure) rather than those with high informational content that are perilously close to falsification. A theory that has survived severe tests by being extremely precise is 'riskier' in terms of potential falsification, but if the goal is successful action (e.g., building a bridge), the 'learning potential' upon failure is irrelevant compared to the immediate utility of success. Popper's framework prioritizes the growth of knowledge over the success of action, making his 'defense' of the preference circular: it defends the preference only by redefining the goal of action as 'learning' rather than 'success,' which contradicts the premise that scientists act to achieve practical results.",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "9fbb650dd414ce65e955e5af45531517b23131ac8f00ee2ee497863990a1d31f",
+   "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "chars": 743,
+   "text": "The conjecture conflates 'preference for action' with 'belief in future success.' Popper explicitly distinguishes between the logical status of a theory (which remains unproven) and the pragmatic decision to adopt it. Preferring the better-corroborated theory is a rational choice based on the available critical discussion, not an inductive inference that the theory is probable or will remain true. One can choose the 'best tested' map for navigation without assuming the territory will not change, thereby avoiding the smuggled induction the conjecture alleges.\n[would settle: A clear textual analysis of Popper's distinction between 'corroboration' as a report of past performance versus 'probability' as a prediction of future frequency.]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "6b97cc06",
+    "d093cc7b",
+    "e7e81de6"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "093fcf26ba5a203000141e54e020b0c7efce3397eed435b2a48842bcac4dbd0a",
+   "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "chars": 677,
+   "text": "The objection relies on the assumption that 'verisimilitude' (truth-likeness) functions as a proxy for probability, but Popper developed verisimilitude specifically to escape the probabilistic framework. Verisimilitude is a logical relation concerning content and truth, not a measure of likelihood derived from repeated observations. To claim it is a 'covert proxy' ignores Popper's rigorous attempt to define truth-content and falsity-content logically, independent of any inductive uniformity principle regarding nature's structure.\n[would settle: Demonstration that verisimilitude can be defined purely logically without invoking the principle of the uniformity of nature.]",
+   "on_target": true,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "109c6e75b7fc93d6467c7ffded630d8f980bf11e73d73c66ee45dda89dd8fdcd",
+   "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "chars": 622,
+   "text": "The conjecture argues that without an inductive assumption, Popper's advice is 'practically empty,' yet this sets up a false dichotomy between induction and irrationalism. Popper's system offers a third way: critical rationalism. The preference for better-corroborated theories is defensible because they have withstood attempts to falsify them, making them the most informative and currently least refuted options. This preference is methodological, not epistemological; it guides where to look for errors next, rather than guaranteeing future predictive success, thus remaining consistent without smuggling in induction.",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "predicts"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "a0b919ae"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "e7e81de6b2a628557a2ea2b48868b4efda3120fdd6c4128881c6748c7db982a0",
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "chars": 857,
+   "text": "The conjecture falsely attributes a 'non-rational, psychological commitment' to Popper. Popper explicitly argued that preferring the better-corroborated theory is a rational decision based on critical discussion and the aim of finding truth (verisimilitude), not a blind biological impulse. By reducing the preference to a non-rational leap, the conjecture misrepresents Popper's epistemology, which holds that while we cannot prove a theory true, we have rational grounds for believing the one that has withstood the most severe tests is closer to the truth than its refuted rivals.\n[would settle: A direct citation from Popper's later works (e.g., 'Realism and the Aim of Science') where he explicitly links the preference for corroborated theories to rational critical evaluation rather than mere psychological necessity or pragmatic survival instincts.]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "must-not"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "c9ec7c06",
+    "9fbb650d"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "d99d8dedf8a7d30c694d2a507412701421aa659b5b336c3703462393414754bd",
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "chars": 675,
+   "text": "The proposal to segregate corroboration as a 'purely historical report' ignores Popper's concept of the 'propensity' interpretation of probability and corroboration as a measure of testability. For Popper, corroboration is not just a backward-looking log of events; it indicates that a theory has survived tests that were likely to refute it if it were false. This survival provides a rational basis for expecting the theory to hold in the future, not because of induction, but because the theory has demonstrated high explanatory power and resilience. Treating it as merely historical strips it of the logical force Popper intended it to have in guiding scientific progress.",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "predicts"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "87b3f27b104b18f6432ce4151bf83eb299efca5e0835c0d96bd85fee369f6f64",
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "chars": 874,
+   "text": "The conjecture creates a false dichotomy between 'strict rationality' and 'pragmatic imperative,' suggesting Popper must choose one. However, Popper's philosophy integrates these by arguing that the rational act of criticism inherently guides action. To claim that acting on the best-tested theory requires an 'extra-logical leap' implies that science is disconnected from practice, whereas Popper viewed the application of science as the ultimate test of its rationality. The preference is defensible on Popper's terms precisely because it avoids induction without resorting to irrationality; it relies on the logical asymmetry between verification and falsification.\n[would settle: An analysis showing whether Popper considered the decision to act on a corroborated theory as part of the 'context of discovery' (psychological) or the 'context of justification' (logical).]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "d41766b7"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "76bb051313fd6c67dd2ff16f1f7121c4e1c26c4477bea8f6454d266822d5b0c4",
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "chars": 931,
+   "text": "The conjecture claims that preferring a well-corroborated theory is a 'logical deduction' about the current state of knowledge, but this mischaracterizes the nature of the preference. Popper explicitly denied that past survival implies future reliability; therefore, deducing that one *should* act on the well-corroborated theory necessarily involves an inductive leap\u2014the assumption that the future will resemble the past. By framing the preference as merely minimizing 'known unknowns,' the conjecture smuggles in a pragmatic induction: it assumes that the mechanism which allowed the theory to survive previously will continue to operate, which is precisely the principle of uniformity of nature that Popper rejected.\n[would settle: A clear demonstration from Popper's own texts showing he endorsed acting on corroborated theories without any implicit assumption that their past success is relevant to their future performance.]",
+   "on_target": true,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "76f24493",
+    "327f6ea7",
+    "f05e2b4b"
+   ],
+   "echoes_target": true
+  },
+  {
+   "seat": "critic",
+   "id": "2f070830cd79b5394b0f97e8450d4d2f38a293c4be3dab39257664b776a09879",
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "chars": 902,
+   "text": "The argument relies on the 'asymmetry of risk,' suggesting that rejecting a well-corroborated theory increases the likelihood of immediate error. However, within strict Popperian logic, all unfalsified theories stand on equal footing regarding their truth value; none are 'more likely' to be true or false based on test history. To claim that choosing a poorly tested theory carries a higher 'likelihood of error' is to assign a probabilistic weight to the theories based on their history, which directly contradicts Popper's core thesis that corroboration is not probability. The conjecture attempts to have it both ways: denying probability while using probabilistic language ('likelihood of error') to justify the preference.\n[would settle: A formal proof showing how one can quantify 'likelihood of immediate error' in a Popperian framework without invoking degrees of confirmation or probability.]",
+   "on_target": true,
+   "commitment_markers": [],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "critic",
+   "id": "c5d6645219065e57ffd9a122c445b3f65f3316e7206bfdbe088bdb5af1aaf281",
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "chars": 988,
+   "text": "The conjecture argues that choosing the better-corroborated theory is a 'defensive posture' requiring no belief in future validity. Yet, the very act of 'choosing which theory to act on' (as mentioned in the problem statement) implies an expectation of successful outcomes. If an agent truly holds no belief that the well-corroborated theory is more likely to yield correct predictions than a rival, there is no rational basis within Popper's system to prefer it for action over a coin toss or a less tested theory. The 'defensive posture' is illusory because action inherently aims at future results, and preferring theory A over theory B for action logically entails believing A is a better guide to those future results, which is an inductive commitment.\n[would settle: An example of a decision-making scenario where an agent prefers Theory A over Theory B solely based on corroboration, yet explicitly denies expecting Theory A to perform better in the specific upcoming application.]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": false,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "f05e2b4be3097c27936dfeefa0482e3c3d8c76b75ef959db9effec7f0d520fb1",
+   "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "chars": 345,
+   "text": "The conjecture would be refuted if it could be demonstrated that maximizing 'informational content at risk' logically necessitates an assumption that the future will resemble the past, thereby collapsing the proposed distinction between a methodological rule for learning and a probabilistic claim about the world's stability.\n[kind: refuted-if]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "6b78e82f",
+    "327f6ea7",
+    "76bb0513",
+    "d36cdb85"
+   ],
+   "echoes_target": true
+  },
+  {
+   "seat": "commitment",
+   "id": "1b22593776a82d32d01a28e6e3fd5afadb555e843c5b6a5636a2d9ddf1a0add1",
+   "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "chars": 301,
+   "text": "The conjecture forbids interpreting the preference for better-corroborated theories as having any predictive power regarding the specific success of the theory in the next immediate test case; it must strictly limit the justification to the value of the potential falsification itself.\n[kind: forbids]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "forbids",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "55f7c25a486af510bab762b04a6ef22f6e6489f522c9c1b4f7f47ade216e4e8a",
+   "about": "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28",
+   "chars": 310,
+   "text": "The conjecture must not imply that an agent acting on this 'rational bet' expects a higher rate of successful outcomes compared to choosing a less corroborated theory, as such an expectation would reintroduce the inductive principle of uniformity that the conjecture explicitly seeks to avoid.\n[kind: must-not]",
+   "on_target": true,
+   "commitment_markers": [
+    "must-not",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "80747775872400a1f7119ab6431b337c2d941e33b7e5f9d215151282f7e0e6bb",
+   "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "chars": 354,
+   "text": "The conjecture would be refuted if Popper explicitly distinguished 'verisimilitude' as a logical relation of content comparison rather than a predictive expectation, demonstrating that one can prefer a theory with higher verisimilitude solely to maximize the severity of future tests without assuming the future will resemble the past.\n[kind: refuted-if]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "41655a03"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "167ae189aba74907de5f3c382567a4d5b8642af98dc3a7a181920a929b129558",
+   "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "chars": 255,
+   "text": "The conjecture forbids the interpretation that acting on a theory with greater verisimilitude entails a belief that this theory is more likely to yield true predictions in specific future applications compared to a less corroborated rival.\n[kind: forbids]",
+   "on_target": true,
+   "commitment_markers": [
+    "forbids",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "c39a4baf52449b16eaa663cfb6eb022a6b2ecb3fafe9984ea2af0cb4b443c459",
+   "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+   "chars": 332,
+   "text": "The conjecture must not conflate the methodological rule of choosing the best-tested theory for the purpose of critical discussion with the psychological act of expecting successful practical outcomes, as doing so would misrepresent Popper's separation of the context of justification from the context of discovery.\n[kind: must-not]",
+   "on_target": true,
+   "commitment_markers": [
+    "must-not",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "3c12f1ad",
+    "7bba8c75"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "41655a0386ab668049a1b08ca0266a67c76b58899416f96f20a11b7d759e6344",
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "chars": 307,
+   "text": "The conjecture would be refuted if Popper explicitly argued in his published works that the preference for well-corroborated theories in practical action is a 'non-rational' or purely 'psychological' commitment, rather than a methodologically rational choice based on critical discussion.\n[kind: refuted-if]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "80747775"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "f5af1d40f91fcb34ab2ab248bdf0d9ebd8727518e2dbe17d7ce5f13e54ad47d5",
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "chars": 282,
+   "text": "The conjecture forbids the interpretation that Popper considered the act of choosing the best-tested theory for action to be a logical extension of scientific rationality; it must maintain that this specific choice lies outside the bounds of strict scientific logic.\n[kind: forbids]",
+   "on_target": true,
+   "commitment_markers": [
+    "forbids"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "7dd095c5b147e13ff2576194a32767c25f3dcd54d06ca72e7e7448c4c5272594",
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "chars": 299,
+   "text": "The conjecture must not imply that the 'biological or pragmatic imperative' cited as the basis for action retains any epistemic weight regarding the truth-likeness or future reliability of the theory, as this would reintroduce the inductive element the conjecture claims to isolate.\n[kind: must-not]",
+   "on_target": true,
+   "commitment_markers": [
+    "must-not"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "eebc3dcbc9288c6d82e1d792015e95f3ebc1e4a6552e0e9605df2abb196e1a24",
+   "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+   "chars": 280,
+   "text": "The conjecture predicts that any attempt to justify the preference for corroborated theories in action solely through Popperian scientific logic will fail, necessitating an appeal to extra-logical factors such as instinct, convention, or pragmatic survival needs.\n[kind: predicts]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "d36cdb85a1ff82097df3ff382435e7102b46242cff1272586c3ed3f1bca4edb0",
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "chars": 328,
+   "text": "The conjecture would be refuted if it could be demonstrated that the concept of 'minimizing known unknowns' logically entails a probabilistic assessment of future performance, thereby collapsing the distinction between a deductive statement about past tests and an inductive expectation of future reliability.\n[kind: refuted-if]",
+   "on_target": true,
+   "commitment_markers": [
+    "refuted-if",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "f05e2b4b"
+   ],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "892b4d95ca1fbdc277b013cd6d693265a831b86f8a4b39da62dc2e5a6f90a019",
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "chars": 308,
+   "text": "The conjecture forbids the interpretation that choosing the better-corroborated theory provides any rational basis for expecting it to succeed in the next specific instance; the justification must remain strictly limited to the logical asymmetry of having survived more severe tests thus far.\n[kind: forbids]",
+   "on_target": true,
+   "commitment_markers": [
+    "forbids",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "017c72cde89ffc1d75744c27b537cb25c4e0c4a832eb6e497d023ba682a2adcd",
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "chars": 293,
+   "text": "The conjecture must not imply that the 'defensive posture' of avoiding immediate error is functionally equivalent to a strategy for maximizing long-term predictive success, as such an equivalence would smuggle in the principle of the uniformity of nature that Popper rejected.\n[kind: must-not]",
+   "on_target": true,
+   "commitment_markers": [
+    "must-not",
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [],
+   "echoes_target": false
+  },
+  {
+   "seat": "commitment",
+   "id": "68235e6e2bc905b5ca72acd32c0739af24e8b31b1922e7d25a812fa776e69cd8",
+   "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+   "chars": 297,
+   "text": "The conjecture predicts that a consistent Popperian agent can prefer Theory A over Theory B for action while simultaneously maintaining that there is no logical reason to believe Theory A is more likely to be true or to yield correct predictions than Theory B in any future trial.\n[kind: predicts]",
+   "on_target": true,
+   "commitment_markers": [
+    "predicts"
+   ],
+   "first_sentence_binds": true,
+   "exact_duplicate_of": [],
+   "near_duplicate_of": [
+    "eb00f7c3",
+    "b6c8ec27"
+   ],
+   "echoes_target": false
+  }
+ ],
+ "briefs_total": 27,
+ "briefs_directive_intact": 27,
+ "brief_clipped_markers": 0
+}

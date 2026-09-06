@@ -1,0 +1,84 @@
+=== room run started 2026-09-06T06:06:54Z flow=mini.flow.room.v1 ===
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/2026-09-06-change-writers-room-limits-and-forms/runs/home-room/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+rc=0
+8:model_profile: standard
+ROOM_RESULT {
+ "schema": "deepreason-shallow-result.v1",
+ "mode": "shallow",
+ "completed": true,
+ "disclaimer": "shallow reduced-engine result: generate/check/rotate only, no V6 qualification, transactions, or terminal commitment authority",
+ "run_id": "shallow-0b47bc7b090854078ddf7559",
+ "question_problem_id": "question-corroboration-d8",
+ "provider": "ollama",
+ "model_id": "qwen3.5:397b",
+ "run_input": {
+  "source": "frozen-input",
+  "problem_id": "question-corroboration-d8",
+  "run_input_digest": "63d2a653a8ec473c8d3ddd715e19ae46feacadc20958aff49141708d28a82c60",
+  "criteria": 0,
+  "notices": []
+ },
+ "summary": {
+  "engine_profile": "mini",
+  "model_profile": "standard",
+  "run_manifest_sha256": "78359822395e0effe37f38bd942c4a80c61245b949bef27c3483c1b19bcb6c2f",
+  "flow": "mini.flow.room.v1",
+  "stop": "queue-exhausted",
+  "cycles": 3,
+  "problems": {
+   "question-corroboration-d8": 12
+  },
+  "refuted": 0,
+  "gate_blocks": 0,
+  "rotations": 0,
+  "tokens": {
+   "prompt_tokens": 52972,
+   "completion_tokens": 17364,
+   "total": 70336,
+   "budget": 400000,
+   "calls": 27
+  },
+  "meter_equals_log": true,
+  "logged_tokens_this_run": 70336,
+  "logged_tokens": 70336
+ }
+}
+ROOM_TERMINAL {
+ "schema": "wr-room-terminal.v1",
+ "root": "/home/user/DeepReason/experiments/2026-09-06-change-writers-room-limits-and-forms/runs/home-room/shallow-runs/shallow-0b47bc7b090854078ddf7559",
+ "completed": true,
+ "stop": "queue-exhausted",
+ "cycles": 3,
+ "flow": "mini.flow.room.v1",
+ "model_profile": "standard",
+ "problems": {
+  "question-corroboration-d8": 12
+ },
+ "refuted": 0,
+ "meter_equals_log": true,
+ "logged_tokens_this_run": 70336,
+ "records_by_kind": {
+  "mini.commitment-proposal.v1": 46,
+  "mini.criticism.v1": 36
+ },
+ "events": 87,
+ "verify_root_violations": 0,
+ "replay_digest_equals_live": true,
+ "digest": "cdff88775dd3f852a1ce046e9cca8380c524ed23a2079ed40ba769ccbde6f555",
+ "TYPED_TERMINAL": "COMPLETE"
+}
+WR_CENSUS_V1 shallow-0b47bc7b090854078ddf7559
+  briefs: 27  directive intact: 27  clipped markers: 0
+  seat         calls outputs  tokens  chars min/mean/max   on-target mentions binds-1st exact-dup near-dup  echo
+  commitment      12      46   43520  234/306/398                 46       46        46         6       25     1
+  critic          12      36   17723  622/864/1038                36       25         7         0       16     4
+  conjecturer      3      12    9093  592/694/813                  -        8         2         0        8     -
+rc=0
+=== room run finished 2026-09-06T06:10:34Z ===

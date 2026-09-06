@@ -1,0 +1,24 @@
+{
+  "proposals": [
+    {
+      "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+      "body": "The conjecture would be refuted if it could be demonstrated that the concept of 'minimizing known unknowns' logically entails a probabilistic assessment of future performance, thereby collapsing the distinction between a deductive statement about past tests and an inductive expectation of future reliability.",
+      "kind": "refuted-if"
+    },
+    {
+      "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+      "body": "The conjecture forbids the interpretation that choosing the better-corroborated theory provides any rational basis for expecting it to succeed in the next specific instance; the justification must remain strictly limited to the logical asymmetry of having survived more severe tests thus far.",
+      "kind": "forbids"
+    },
+    {
+      "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+      "body": "The conjecture must not imply that the 'defensive posture' of avoiding immediate error is functionally equivalent to a strategy for maximizing long-term predictive success, as such an equivalence would smuggle in the principle of the uniformity of nature that Popper rejected.",
+      "kind": "must-not"
+    },
+    {
+      "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+      "body": "The conjecture predicts that a consistent Popperian agent can prefer Theory A over Theory B for action while simultaneously maintaining that there is no logical reason to believe Theory A is more likely to be true or to yield correct predictions than Theory B in any future trial.",
+      "kind": "predicts"
+    }
+  ]
+}

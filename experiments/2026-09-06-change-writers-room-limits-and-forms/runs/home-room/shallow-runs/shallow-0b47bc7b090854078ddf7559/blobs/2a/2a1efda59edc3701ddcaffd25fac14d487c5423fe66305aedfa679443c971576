@@ -1,0 +1,20 @@
+{
+  "candidates": [
+    {
+      "angle": "The Pragmatic Wager without Induction",
+      "content": "Popper's preference for the better-corroborated theory is defensible not because it predicts future success (which would be induction), but because it represents the only rational 'bet' available to an agent who must act. Since we cannot know the truth, choosing the theory that has withstood the most severe tests maximizes the informational content at risk; if it fails, we learn more than if a weaker theory fails. The preference is a methodological rule for maximizing learning potential in the face of ignorance, not a probabilistic claim about the world's stability."
+    },
+    {
+      "angle": "The Verisimilitude Trap",
+      "content": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because 'verisimilitude' (truth-likeness) functions as a covert proxy for probability. To prefer Theory A over Theory B on the grounds that A is 'closer to the truth' based on past tests is to assume a uniformity in nature: that the structural features which allowed A to survive will continue to align with reality. Without this inductive assumption, the concept of verisimilitude offers no actionable guide for the future, rendering Popper's advice to scientists practically empty."
+    },
+    {
+      "angle": "Corroboration as a Historical Report, Not a Future Guide",
+      "content": "The tension dissolves if we strictly segregate corroboration as a purely historical report from the act of choosing a theory for action. Popper can defend the preference by arguing that while corroboration says nothing about the future, the *act* of preferring the best-tested theory is a non-rational, psychological commitment necessary for life, distinct from scientific logic. On this view, the preference is defensible as a biological or pragmatic imperative for survival, but it constitutes a departure from strict rationality, admitting that science alone cannot dictate action without an extra-logical leap."
+    },
+    {
+      "angle": "The Asymmetry of Risk",
+      "content": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated theory in favor of a poorly tested one increases the likelihood of immediate error without offering any compensatory increase in testability. While this looks like induction, it is actually a logical deduction about the current state of knowledge; the better-corroborated theory is simply the one that has not yet been falsified despite greater exposure to falsification. Choosing it minimizes the 'known unknowns' relative to alternatives, a defensive posture that requires no belief in the future validity of the theory, only a recognition of its current robustness."
+    }
+  ]
+}

@@ -284,6 +284,7 @@ def call(
     endpoint_lease: EndpointLease | None = None,
     workflow_dispatch_observer: Callable[[int], str | None] | None = None,
     workflow_repair_observer: Callable[[LLMAttempt], None] | None = None,
+    pack_budget: int | None = None,
 ) -> tuple[BaseModel, Call]:
     """Run one leased, profile-rendered call through shared wire and repair.
 
@@ -314,7 +315,10 @@ def call(
 
     schema_value = contract.model_json_schema()
     schema_json = json.dumps(schema_value, sort_keys=True)
-    rendered = clip_pack(prompt, profile)
+    # The clip follows the CALLER's figure when it states one (a flow's
+    # declared brief budget), else the profile's preset: one limit, stated
+    # once, so a brief the loop kept inside its limit is never cut here.
+    rendered = clip_pack(prompt, profile, pack_budget)
     base = (
         "Respond with ONLY a JSON object conforming to this JSON Schema — "
         f"no prose, no code fences:\n{schema_json}\n"

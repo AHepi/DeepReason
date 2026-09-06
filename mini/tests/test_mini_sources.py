@@ -344,9 +344,17 @@ def test_the_retention_rule_withholds_oldest_first_and_says_so(prose_session):
     # oldest first: everything withheld precedes everything shown
     assert ordered.index(withheld[-1]) < ordered.index(shown[0])
     assert "WITHHELD UNDER RULE mini.retention.everything.v1" in text
-    for aid in withheld:
-        assert aid in text, "a withheld entry must still be NAMED"
+    # The notice names the COUNT and the newest few withheld ids, not every
+    # id: naming all of them grew with the run and ate the budget it was
+    # disclosing (the D8 live root, writer's-room tranche S1a). Every id is
+    # in the record regardless.
     assert f"{len(withheld)} earlier entr" in text
+    for aid in withheld[-3:]:
+        assert aid in text, "the newest withheld entries must still be NAMED"
+    if len(withheld) > 3:
+        assert f"and {len(withheld) - 3} more" in text
+        assert not any(aid in text for aid in withheld[:-3])
+    assert "every id is in the record" in text
 
     # a budget smaller than any single entry still shows the newest one
     tiny = _everything(prose_session, budget_chars=1)

@@ -1,5 +1,5 @@
 <!-- DR-SEAM-llm-x-minireason -->
-Verified-at: 2b6440d28
+Verified-at: 391d5bb31
 Verify: python -m pytest mini/tests/test_mini_seat_shell.py mini/tests/test_mini_exposure.py mini/tests/test_mini_sources.py mini/tests/test_mini_forms.py -q
 Owns:
 Seams:
@@ -85,9 +85,12 @@ assert 'mini.' not in literal, literal
 **The route lease and the profile clip are `llm`'s, and mini obeys both.**
 `minireason/call.py` verifies its `EndpointLease` and fingerprints the route
 with `llm.firewall`, and clips every rendered prompt with
-`llm.profiles.clip_pack` at the profile's pack budget. The clip is a TRAP
-recorded below: it is silent, and it is a third length limit the programme's
-"not limit prose length at all" did not name.
+`llm.profiles.clip_pack` — at the caller's figure when the loop states one
+(a flow's `brief_budget_chars`, passed as `pack_budget`), else the profile's
+pack budget. The clip is a TRAP recorded below: it was silent, it was a
+third length limit the programme's "not limit prose length at all" did not
+name, and it cut the directive off 9 of 19 live briefs before the loop was
+made to keep every brief inside the same figure.
 `check: python -c "
 import ast, pathlib
 src = pathlib.Path('mini/minireason/call.py').read_text()
@@ -152,6 +155,20 @@ shown red under a mutation before it was written down.
   does not fit instead of the clip cutting it; and any brief that still
   overruns the clip is recorded as `mini:brief-clipped` with both sizes, so
   the cut is never silent in the record. The clip itself is unchanged.
+  THEN IT BIT ANYWAY (D8 live root `shallow-b4dcb1c81ea7af2e5ecd5faa`,
+  2026-09-06, predecessor PARKED P12): the everything section's withheld
+  notice named every withheld id outside its budget, the mandatory sections
+  were never reserved, and the clip cuts from the tail where the directive
+  sorts last — so 7 of 8 commitment briefs and 2 of 3 conjecture briefs
+  reached the model without their instruction, and the seats answered the
+  question instead of proposing commitments or four candidates. FIXED by the
+  writer's-room tranche (`experiments/2026-09-06-change-writers-room-limits-
+  and-forms/`, S1): the section is budgeted as rendered, the notice carries a
+  count and three ids, `render_mini_brief` reserves the mandatory sections
+  and hands the free one the remainder, the flow may declare its own limit
+  and the call layer clips at that same figure. The regression is
+  `mini/tests/test_mini_brief_limits.py`, red on the old allocation.
+  `check: python -m pytest mini/tests/test_mini_brief_limits.py -q`
 - **`LLMCall.role` names the leased route, not the seat.** Mini's manifest
   grants one canonical role, `conjecturer`, and the manifest refuses
   non-canonical roles, so every stage -- critic and commitment seats included

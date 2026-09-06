@@ -1,0 +1,20 @@
+{
+  "candidates": [
+    {
+      "angle": "The Pragmatic Wager",
+      "content": "The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim. Popper argues that while past success guarantees nothing about the future (rejecting induction), the theory that has survived the severest tests has proven its 'fitness' in the specific environment of reality so far. Choosing it is akin to betting on the horse that has won every race; we do not know it will win the next, but it is the only rational choice available if we must act, as it has demonstrated a capacity to withstand falsification that others lack. This costs us the comfort of believing the theory is 'true' or 'likely,' forcing us to accept that our best actions are still grounded in guesswork, albeit an educated one."
+    },
+    {
+      "angle": "Verisimilitude as a Regulative Ideal",
+      "content": "The defense lies in shifting the goal from 'probability' to 'verisimilitude' (truth-likeness). A highly corroborated theory is not more probable, but it is a better candidate for being closer to the truth because it has withstood attempts to show it is false. The preference is defensible because science aims at truth, not certainty; therefore, selecting the theory with the highest empirical content that has not yet been refuted is the only methodological move consistent with the aim of increasing verisimilitude. The cost here is the admission that we can never verify this progress; we must operate on the regulative ideal that surviving severe tests correlates with truth-likeness, a metaphysical hope that Popper admits cannot be logically proven."
+    },
+    {
+      "angle": "The Performative Contradiction",
+      "content": "The preference is indefensible on Popper's own terms and indeed smuggles induction back in through the back door. By advising scientists to 'prefer' the better-corroborated theory for action, Popper implicitly asserts that past performance is a reliable guide to future reliability, which is the very definition of inductive reasoning he sought to destroy. If corroboration reports only past history and implies nothing about the future, then preferring Theory A over Theory B for future application is irrational within his system. Accepting this view costs the coherence of Popper's philosophy, reducing his methodology to a description of psychological habit rather than a logical framework for scientific rationality."
+    },
+    {
+      "angle": "Corroboration as Informational Content",
+      "content": "The preference is defensible because corroboration functions as a measure of informational content rather than likelihood. A theory that survives severe tests is one that took a greater risk of being wrong; preferring it is a preference for boldness and precision. We choose the better-corroborated theory not because we think it will hold true, but because it offers the most detailed map of the world currently available, providing the richest basis for further criticism and testing. The cost of this stance is that 'action' becomes purely experimental; we act on the bold theory specifically to try to break it, meaning our 'preference' is actually a preference for the most efficient path to potential falsification, not for successful prediction."
+    }
+  ]
+}

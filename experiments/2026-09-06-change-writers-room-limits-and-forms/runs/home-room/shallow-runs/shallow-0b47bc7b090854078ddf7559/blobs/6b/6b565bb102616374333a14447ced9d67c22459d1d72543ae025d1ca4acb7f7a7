@@ -1,0 +1,19 @@
+{
+  "objections": [
+    {
+      "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+      "body": "The conjecture relies on the concept of 'verisimilitude' (truth-likeness) to bridge the gap between corroboration and preference, but Popper's own formal definition of verisimilitude was proven logically incoherent by Tichý and Miller in 1974. They demonstrated that for any false theory, adding true consequences does not necessarily make it closer to the truth than another false theory; in fact, under Popper's criteria, a false theory with more content can be shown to be further from the truth than a weaker false theory. Therefore, grounding the defense of scientific preference on verisimilitude rests on a technical foundation that Popper himself had to abandon, rendering the argument internally inconsistent within his own system.",
+      "would_settle": "A rigorous demonstration that a coherent, non-probabilistic measure of verisimilitude exists which successfully ranks theories such that higher corroboration strictly implies greater closeness to the truth, without collapsing into inductive probability."
+    },
+    {
+      "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+      "body": "The claim that preferring highly corroborated theories is consistent with aiming at truth smuggles in induction through the back door by assuming the 'uniformity of nature' or the 'principle of the uniformity of laws.' To assert that a theory which has survived severe tests in the past is a 'better candidate' for being true in the future presupposes that the future will resemble the past regarding the theory's domain. If one strictly rejects induction as Hume and Popper argue, there is no logical warrant to believe that surviving tests yesterday makes a theory more likely to survive tests tomorrow. The preference for the better-corroborated theory is therefore practically useful but logically indefensible on purely deductive grounds, contradicting the conjecture's claim of consistency.",
+      "would_settle": "A deductive proof showing that the survival of a theory under past tests increases its fitness for future tests without invoking any assumption about the stability of natural laws or the resemblance of the future to the past."
+    },
+    {
+      "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+      "body": "The conjecture dismisses the cost of accepting verisimilitude as a mere 'metaphysical hope,' but this understates the damage to Popper's critical rationalism. Popper explicitly sought to distinguish science from metaphysics and to provide a logic of scientific discovery that did not rely on faith or unprovable ideals. By reducing the justification for scientific progress to a 'regulative ideal' that 'cannot be logically proven,' the defense concedes that the choice between competing theories is ultimately irrational or arational—a matter of psychological preference rather than logical methodology. This undermines the core Popperian thesis that science advances through rational criticism, replacing it with a fideistic leap of faith in the correlation between test survival and truth.",
+      "would_settle": "An account of how a 'regulative ideal' that admits no logical proof can function as a rational basis for theory choice within a framework that defines rationality strictly as adherence to logical deduction and falsification."
+    }
+  ]
+}

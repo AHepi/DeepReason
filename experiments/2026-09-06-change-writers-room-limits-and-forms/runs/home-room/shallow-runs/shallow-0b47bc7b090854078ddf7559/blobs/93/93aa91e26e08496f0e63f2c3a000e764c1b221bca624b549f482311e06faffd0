@@ -1,0 +1,11 @@
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"MiniRoomCandidate": {"additionalProperties": false, "description": "One conjecture: a bold, criticizable explanation, in whatever shape says\nthe interesting part best. `angle` (optional, one line) names the stance\nor move this candidate takes so the room can tell its candidates apart.", "properties": {"angle": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Angle"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content"], "title": "MiniRoomCandidate", "type": "object"}}, "additionalProperties": false, "description": "CONJECTURE SEAT. Propose the number of candidates the brief asks for,\neach a distinct, bold, criticizable explanation of the PROBLEM. Do not\nrestate what the brief already shows; differ from it substantively.\nCandidates are content for criticism, not verdicts.", "properties": {"candidates": {"items": {"$ref": "#/$defs/MiniRoomCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "MiniRoomConjecturer", "type": "object"}
+SYNTAX EXAMPLE:
+{"candidates":[{"content":"x"}]}
+
+## problem
+PROBLEM question-corroboration-d8
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## directive
+You are the conjecture seat. Propose bold, criticizable explanations for the PROBLEM above, in whatever shape says the interesting part best -- prose is welcome and no skeleton is required. Return 4 diverse candidates, each with a typicality estimate in [0,1]. Do not repeat what has already been generated; differ from it substantively.

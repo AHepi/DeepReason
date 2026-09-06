@@ -250,13 +250,17 @@ def run_shallow_question(
         else f"q-{sha256_hex(canonical_json(question))[:12]}"
     )
 
-    # The frozen input is passed only when there IS one, so the bare-question
-    # path calls the engine with exactly the arguments it always did. That is
-    # the mechanical form of "the bare-question form keeps working unchanged":
-    # a stub written against the old signature still serves it.
+    # The frozen input is passed only when there IS one; the model profile is
+    # always passed, since the engine's brief limit follows it either way.
     frozen_binding = (
         {"run_input": frozen, "dossier": frozen_dossier} if frozen is not None else {}
     )
+    # The provider profile's model_profile decides the reduced engine's brief
+    # limit (compact 4 800 chars, standard 10 000, frontier 12 000). Before
+    # this, `deepreason setup`'s field never reached a mini call and every
+    # shallow run was compact whatever the profile said (the D8 live root ran
+    # compact under a profile that said standard).
+    frozen_binding["model_profile"] = profile.model_profile
     summary = mini_run(
         [(problem_id, question)],
         _endpoint(profile, environment[profile.credential_env]),

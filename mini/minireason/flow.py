@@ -36,6 +36,9 @@ from dataclasses import dataclass, field
 
 from minireason.policy import DEFAULT_MINI_COMMITMENT_POLICY, MiniCommitmentPolicyV1
 from minireason.seats import (
+    COMMITMENT_ROOM_SHELL,
+    CONJECTURER_ROOM_SHELL,
+    CRITIC_ROOM_SHELL,
     COMMITMENT_PROPOSAL_KIND,
     COMMITMENT_SEAT,
     COMMITMENT_SHELL,
@@ -95,8 +98,19 @@ class MiniFlowV1:
         default_factory=lambda: DEFAULT_MINI_COMMITMENT_POLICY
     )
     calibration_hook_id: str = DEFAULT_CALIBRATION_HOOK_ID
+    # FREE parameter (writer's-room tranche S1b): the brief limit in characters
+    # this flow runs under, or None for the model profile's preset. A room
+    # that needs to show its whole pool declares the room it needs; the call
+    # layer's clip follows this figure, so the record's `mini:brief-clipped`
+    # marker means what it says under either.
+    brief_budget_chars: int | None = None
 
     def __post_init__(self) -> None:
+        if self.brief_budget_chars is not None and int(self.brief_budget_chars) < 1:
+            raise MiniFlowError(
+                "MINI_FLOW_BRIEF_BUDGET_INVALID",
+                f"flow {self.flow_id!r}: brief_budget_chars must be positive or None",
+            )
         if not self.stages:
             raise MiniFlowError("MINI_FLOW_EMPTY", f"flow {self.flow_id!r} declares no stage")
         declared = set(self.artifact_kinds)
@@ -213,6 +227,47 @@ register_mini_flow(
         commitment_policy=MiniCommitmentPolicyV1(
             mandatory_skeleton_wf=False, model_authored_forbidden=False
         ),
+    )
+)
+
+
+ROOM_FLOW_ID = "mini.flow.room.v1"
+ROOM_BRIEF_BUDGET_CHARS = 12_000
+register_mini_flow(
+    MiniFlowV1(
+        flow_id=ROOM_FLOW_ID,
+        flow_version="1.0.0",
+        stages=(
+            MiniStageV1(
+                stage_id="mini.stage.conjecture",
+                seat_id=CONJECTURER_SEAT,
+                shell_id=CONJECTURER_ROOM_SHELL.shell_id,
+                produces_kind=CONJECTURE_KIND,
+            ),
+            MiniStageV1(
+                stage_id="mini.stage.criticism",
+                seat_id=CRITIC_SEAT,
+                shell_id=CRITIC_ROOM_SHELL.shell_id,
+                produces_kind=CRITICISM_KIND,
+                reads_kinds=(CONJECTURE_KIND,),
+                per_target=True,
+            ),
+            MiniStageV1(
+                stage_id="mini.stage.commitment",
+                seat_id=COMMITMENT_SEAT,
+                shell_id=COMMITMENT_ROOM_SHELL.shell_id,
+                produces_kind=COMMITMENT_PROPOSAL_KIND,
+                reads_kinds=(CONJECTURE_KIND,),
+                per_target=True,
+            ),
+        ),
+        artifact_kinds=(CONJECTURE_KIND, CRITICISM_KIND, COMMITMENT_PROPOSAL_KIND),
+        commitment_policy=MiniCommitmentPolicyV1(
+            mandatory_skeleton_wf=False, model_authored_forbidden=False
+        ),
+        # The room it needs: 12 000 characters, the frontier preset, so
+        # "everything so far" is everything for a three-cycle run (S1b).
+        brief_budget_chars=ROOM_BRIEF_BUDGET_CHARS,
     )
 )
 
