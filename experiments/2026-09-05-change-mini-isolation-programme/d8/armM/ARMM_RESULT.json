@@ -1,0 +1,46 @@
+{
+ "schema": "deepreason-shallow-result.v1",
+ "mode": "shallow",
+ "completed": true,
+ "disclaimer": "shallow reduced-engine result: generate/check/rotate only, no V6 qualification, transactions, or terminal commitment authority",
+ "run_id": "shallow-b4dcb1c81ea7af2e5ecd5faa",
+ "question_problem_id": "question-corroboration-d8",
+ "provider": "ollama",
+ "model_id": "qwen3.5:397b",
+ "seat_plugins": {
+  "schema": "deepreason-shallow-seat-plugins.v1",
+  "loaded": [],
+  "notices": []
+ },
+ "run_input": {
+  "source": "frozen-input",
+  "problem_id": "question-corroboration-d8",
+  "run_input_digest": "63d2a653a8ec473c8d3ddd715e19ae46feacadc20958aff49141708d28a82c60",
+  "criteria": 0,
+  "notices": []
+ },
+ "summary": {
+  "engine_profile": "mini",
+  "model_profile": "compact",
+  "run_manifest_sha256": "16aa428e4c1810343e94ab7d7c63a853ef26d6c9f519f3813fa0b28c5be2808b",
+  "flow": "mini.flow.isolation.v1",
+  "stop": "queue-exhausted",
+  "cycles": 3,
+  "problems": {
+   "question-corroboration-d8": 8
+  },
+  "refuted": 0,
+  "gate_blocks": 0,
+  "rotations": 0,
+  "tokens": {
+   "prompt_tokens": 32509,
+   "completion_tokens": 7068,
+   "total": 39577,
+   "budget": 400000,
+   "calls": 19
+  },
+  "meter_equals_log": true,
+  "logged_tokens_this_run": 39577,
+  "logged_tokens": 39577
+ }
+}

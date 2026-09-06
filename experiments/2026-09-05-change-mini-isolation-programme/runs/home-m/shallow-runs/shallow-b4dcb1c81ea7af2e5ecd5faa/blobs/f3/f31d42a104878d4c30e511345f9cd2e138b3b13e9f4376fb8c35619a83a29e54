@@ -1,0 +1,16 @@
+{
+  "objections": [
+    {
+      "about": "Mischaracterization of Popper's pragmatic preference",
+      "body": "The conjecture falsely equates preferring a better-corroborated theory for action with assuming future reliability based on past performance. Popper explicitly distinguishes between the logical status of a theory (which remains unproven) and the rational decision to act upon it based on critical discussion and severe testing. The preference is not an inductive inference that the future will resemble the past, but a methodological rule to choose the theory that has withstood the most rigorous attempts at falsification, acknowledging that it may still be false tomorrow."
+    },
+    {
+      "about": "Conflation of corroboration with probability",
+      "body": "The claim that accepting this view collapses the distinction between corroboration and probability misunderstands the nature of corroboration. Corroboration is a report on how well a theory has survived tests so far, not a measure of its likelihood of being true. One can rationally prefer the best-tested theory for practical purposes without assigning it a higher probability value, thus maintaining Popper's core solution to the problem of induction while admitting a non-inductive pragmatic basis for action."
+    },
+    {
+      "about": "Alleged pragmatic inconsistency",
+      "body": "The conjecture asserts a pragmatic inconsistency where none exists. Popper's system allows for a 'rational choice' among unfalsified theories based on their content and testability, not on an inductive guarantee of success. Acting on the best-corroborated theory is consistent with fallibilism; it does not require the assumption that past survival predicts future truth, only that it is the most critically examined option available, making the charge of smuggling induction back in a category error regarding the function of corroboration."
+    }
+  ]
+}

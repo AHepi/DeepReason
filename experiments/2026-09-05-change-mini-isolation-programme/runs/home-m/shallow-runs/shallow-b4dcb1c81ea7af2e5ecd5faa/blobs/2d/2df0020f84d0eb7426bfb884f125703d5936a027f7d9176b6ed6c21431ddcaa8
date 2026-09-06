@@ -1,0 +1,16 @@
+{
+  "proposals": [
+    {
+      "about": "fab3fe93125ba81777325fc75a4b1873217880cd612e89c5f659b2b669bb771b",
+      "body": "The conjecture must be refuted if it can be demonstrated that Popper's preference for better-corroborated theories logically entails an inductive assumption about the uniformity of nature or the likelihood of future success, rather than being a purely pragmatic decision rule based on past performance."
+    },
+    {
+      "about": "fab3fe93125ba81777325fc75a4b1873217880cd612e89c5f659b2b669bb771b",
+      "body": "The conjecture forbids claiming that selecting a highly corroborated theory provides any rational basis for believing it is true or approximately true; it must strictly maintain that such selection offers no epistemic justification beyond the report of past survival, accepting the cost that science cannot claim progressive approach to truth without smuggling in induction."
+    },
+    {
+      "about": "fab3fe93125ba81777325fc75a4b1873217880cd612e89c5f659b2b669bb771b",
+      "body": "The conjecture must not conflate 'rational decision' with 'probabilistic inference'; it is required to show exactly how acting on the best-tested theory is rational in Popper's specific sense (critical preference) without implicitly relying on the very inductive principle that past success predicts future reliability, which Popper explicitly rejected."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "objections": [
+    {
+      "about": "The conflation of probabilistic certainty with rational preference",
+      "body": "The conjecture assumes that rejecting induction necessitates the loss of all 'comfort' regarding probability, yet it fails to distinguish between logical probability (which Popper rejects as applicable to universal laws) and subjective degrees of belief or pragmatic reliability. By framing the cost as a total absence of measurable progress, the objection overlooks that Popper's framework offers a non-probabilistic metric of progress: the increase in empirical content and the severity of tests passed. The 'comfort' lost is merely the illusion of inductive validation, not the ability to rationally prefer one theory over another based on its surviving critical scrutiny."
+    },
+    {
+      "about": "The characterization of verisimilitude as purely regulative",
+      "body": "The target claims we must treat verisimilitude solely as a regulative ideal rather than a quantifiable metric, but this misrepresents the potential for comparative assessments within Popper's later work. While absolute truth-content may be unknowable, Popper attempted to define conditions under which one theory can be said to have more verisimilitude than another (e.g., explaining all previous successes plus new facts). Dismissing this as entirely non-quantifiable ignores the structural comparisons of logical content and falsity-content that allow scientists to make objective, albeit fallible, judgments about which theory is closer to the truth without invoking induction."
+    },
+    {
+      "about": "The alleged circularity of relying on evolutionary elimination",
+      "body": "The conjecture suggests that relying on 'evolutionary elimination of error' smuggles in induction or leaves us without a defensible basis for action. However, this misses Popper's core argument that the preference for better-corroborated theories is not a prediction that they will remain true (which would be inductive), but a rational choice based on the fact that they have withstood attempts to falsify them where others failed. The 'cost' described is actually the strength of the position: it admits no guarantee of future success, thereby avoiding the logical trap of induction while still providing a robust, critical rationale for why we should act on the best-tested theory available."
+    }
+  ]
+}

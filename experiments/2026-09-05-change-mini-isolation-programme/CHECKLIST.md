@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=54 blockers=none. Step 53 DONE: epoch3 soak green, isolation re-run PASS, probe ok. Step 52 DONE: PREREG_D8.md sealed (sha in its commit), instruments under d8/, no arm has run. T3-T6 DELIVERED; T7 runs in this window (REQUEST.md Amendment 3, "go for it jack!", credential in the gitignored env). T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=55 blockers=none. Step 54 DONE: ARM 0 3/3 complete, ARM M COMPLETE (8 conjectures, 24 criticisms, 14 proposals, 39577 tokens, verify 0, replay equal). Step 53 DONE: epoch3 soak green, isolation re-run PASS, probe ok. Step 52 DONE: PREREG_D8.md sealed (sha in its commit), instruments under d8/, no arm has run. T3-T6 DELIVERED; T7 runs in this window (REQUEST.md Amendment 3, "go for it jack!", credential in the gitignored env). T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1920,9 +1920,33 @@ tranche".
         (reasoning field honoured; content non-empty under json mode)
       key occurrences in PROBE.txt / provider.yaml: 0
       ```
-- [ ] 54. (S12) Run ARM 0 and ARM M detached, with the snapshot loop armed.
+- [x] 54. (S12) Run ARM 0 and ARM M detached, with the snapshot loop armed.
       done-when: both arms' roots exist, `deepreason results <root>` prints a
       typed terminal for each (paste)
+
+      ```
+      $ setsid nohup d8/run_arms.sh & disown ; setsid nohup d8/snapshot_d8.sh run_arms.sh & disown
+      === ARM 0 started 2026-09-06T04:07:42Z ===
+      call 1: completed=True chars=7262 usage={'prompt_tokens': 105, 'completion_tokens': 1526, 'total_tokens': 1631} finish=stop s=19.5
+      call 2: completed=True chars=7688 usage={'prompt_tokens': 105, 'completion_tokens': 1699, 'total_tokens': 1804} finish=stop s=21.7
+      call 3: completed=True chars=7985 usage={'prompt_tokens': 105, 'completion_tokens': 1699, 'total_tokens': 1804} finish=stop s=22.3
+      d8/arm0/ARM0_RESULT.json: completed_calls 3 of 3, total_tokens 5239   -> ARM 0 typed terminal (PREREG §1): COMPLETE
+      === ARM M started 2026-09-06T04:08:46Z flow=mini.flow.isolation.v1 ===  ... finished 04:10:33Z
+      d8/armM/ARMM_TERMINAL.json:
+        root runs/home-m/shallow-runs/shallow-b4dcb1c81ea7af2e5ecd5faa
+        completed true   stop queue-exhausted   cycles 3   flow mini.flow.isolation.v1
+        problems {question-corroboration-d8: 8}   refuted 0   events 53
+        records_by_kind {mini.commitment-proposal.v1: 14, mini.criticism.v1: 24}
+        tokens {prompt 32509, completion 7068, total 39577, budget 400000, calls 19}
+        meter_equals_log true   verify_root_violations 0   replay_digest_equals_live true
+        TYPED_TERMINAL: COMPLETE                                (PREREG §2: all five instruments)
+      $ deepreason results <root>      (pasted in full in d8/armM.log)
+        accepted / refuted / suspended: 8 / 0 / 0 ; provider health: 19 calls, 0 faults, healthy
+        state / stop_reason / cycles / verify: NOT RECORDED (NO_RUN_STATUS_JSON, NO_STOP_RECORD,
+        NO_CYCLE_RECORD, NO_REPLAY_VALIDATION_JSON ...) -- typed absences, as PREREG §2 said a
+        shallow root prints; not the terminal.
+      Both roots exist and are committed; the snapshot loop ran throughout (b24973fe8).
+      ```
 - [ ] 55. (S12) Judge blind, length held constant; report per-seat spend.
       done-when: `RESULTS.md` carries both arms, the judging output, the
       length distributions and the spend table

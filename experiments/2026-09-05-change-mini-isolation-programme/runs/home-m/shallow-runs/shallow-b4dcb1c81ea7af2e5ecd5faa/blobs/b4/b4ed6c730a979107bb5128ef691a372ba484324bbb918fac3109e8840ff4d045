@@ -1,0 +1,12 @@
+{
+  "proposals": [
+    {
+      "about": "The Defensibility of Corroboration Without Induction",
+      "body": "The preference for better-corroborated theories is defensible on Popper's own terms because corroboration reports a theory's past performance in severe tests, not its future probability. Choosing the best-tested theory is a rational, non-inductive decision based on critical scrutiny; it accepts that the theory may fail tomorrow but acknowledges it is currently the most reliable guide available. This survives by accepting the cost that we possess no logical guarantee of future success, only a record of surviving falsification attempts."
+    },
+    {
+      "about": "The Smuggling of Induction in Scientific Preference",
+      "body": "The preference for better-corroborated theories inevitably smuggles induction back in because acting on a theory implies an expectation that its past success predicts future reliability. If corroboration offers no probabilistic weight, preferring one theory over another for practical action is irrational unless one assumes the uniformity of nature (that the future will resemble the past). This view survives by accepting the cost that Popper's distinction between 'corroboration' and 'probability' collapses in practice, rendering his rejection of induction inconsistent with actual scientific methodology."
+    }
+  ]
+}
