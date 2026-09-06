@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=52 blockers=none. T3-T6 DELIVERED; T7 runs in this window (REQUEST.md Amendment 3, "go for it jack!", credential in the gitignored env). T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=53 blockers=none. Step 52 DONE: PREREG_D8.md sealed (sha in its commit), instruments under d8/, no arm has run. T3-T6 DELIVERED; T7 runs in this window (REQUEST.md Amendment 3, "go for it jack!", credential in the gitignored env). T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1840,11 +1840,50 @@ tranche".
 
 ## T7 — the measure (S12) — ~80 lines
 
-- [ ] 52. (S12) [COMMIT] Write and SEAL `PREREG_D8.md`: both arms, the
+- [x] 52. (S12) [COMMIT] Write and SEAL `PREREG_D8.md`: both arms, the
       criteria, the blind-judging protocol, the length control, the per-seat
       spend table. Record its sha256.
       done-when: `PREREG_D8.md` exists, its sha is in the commit message, and
       NO arm has run
+
+      ```
+      $ ls experiments/2026-09-05-change-mini-isolation-programme/PREREG_D8.md
+      PREREG_D8.md   (240 lines: §0 fixed for both arms, §1 ARM 0, §2 ARM M,
+                      §3 judging, §4 length held constant + decision rule +
+                      predictions, §5 per-seat spend, §6 order, §7 residue)
+      $ sha256sum PREREG_D8.md
+      fedc813eb1afc2759e55fd4ba50748b990ac2e3946a77aa7adf18858b4d2265c
+        -> in the step-52 commit message
+
+      Instruments sealed in the same commit, under d8/: reasoning_endpoint.py,
+      probe_transport.py, arm0.py, armM.sh + armM_driver.py, snapshot_d8.sh,
+      judge_d8.py (copy of the 2026-09-03 judge.py; only harvest + paths
+      changed), analyse_d8.py (port of analyse_length_bias.py + the §4 rule +
+      the §5 table). All compile (`python -m py_compile d8/*.py`).
+
+      Offline dry-runs BEFORE sealing (scratchpad copies, no network, no key):
+        DRY-RUN 1  the endpoint override: body keys ['max_tokens','messages',
+                   'model','reasoning','response_format'], reasoning
+                   {'effort': 'none'}, urllib.request.Request restored -> PASS
+        DRY-RUN 2  harvest + spend table on a stub isolation root (3 cycles,
+                   15 calls): 9 candidates, candidates.jsonl keys ['bid','text']
+                   only, keymap 6 ARMM / 3 ARM0; spend rows sum 10974 ==
+                   logged_tokens_this_run 10974, meter_equals_log True -> PASS
+        DRY-RUN 3  quality() on fabricated scores: all five sections print and
+                   the §4 rule fires (INCONCLUSIVE on the floor, as it must with
+                   6 candidates) -> PASS
+
+      NO arm has run: no request has left this tranche for the provider
+      (d8/arm0/, d8/armM/, d8/blind/, runs/ do not exist).
+
+      Two facts fixed by probe, recorded in PREREG §0: `deepreason input
+      freeze` accepts `criteria: []` (rc=0 on a scratch root); the loop's
+      typed stops are max-cycles / queue-exhausted / budget / endpoint-error.
+
+      FINDING, parked as P10 (defect, not fixed): mini's transport never sends
+      the profile's `reasoning` setting; ARM M runs through the disclosed
+      one-field override in d8/reasoning_endpoint.py.
+      ```
 - [ ] 53. (S12) Soak before any live launch (`dr-drive-harness` §1).
       done-when: `python -u scripts/cycle_soak.py --case <case>` green (paste)
 - [ ] 54. (S12) Run ARM 0 and ARM M detached, with the snapshot loop armed.
