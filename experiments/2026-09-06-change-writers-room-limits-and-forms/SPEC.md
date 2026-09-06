@@ -122,3 +122,11 @@ CLEAR. Files: `mini/minireason/{sources,seats,forms,flow,loop}.py`,
 
 Code ~260 lines, tests ~220, docs ~120, scripts ~150. Lower bounds (P7 of
 the predecessor); overrun disclosed, not absorbed.
+
+**Re-baselined 2026-09-06 at step 7.** Measured by `diff_budget` per commit:
+T1 code 110 / tests 163; T2 code 195 / tests 110 — code 305 against 260,
+tests 273 against 220, both EXCEEDED. Cause: the room forms carry the seat's
+task in their model docstrings (the schema-description mechanism S2 chose),
+about 60 lines of prose the estimate counted as zero, and T1's regression
+test drives a full three-cycle run rather than a unit. Disclosed, not
+absorbed; T3 and T4 keep their own lines.

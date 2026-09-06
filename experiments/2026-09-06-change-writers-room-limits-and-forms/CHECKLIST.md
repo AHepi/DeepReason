@@ -1,5 +1,5 @@
 # CHECKLIST — the writer's room: limits, forms, census
-State: next=5 blockers=none. T1 (limits) committed; full docs_verify result owed at step 7. Steps 1-3 done (limits fixed, configurable, tested). Captured and specified 2026-09-06 on the operator's message 4 ("the limits need changing … permission to change the forms … only if the commitments exist outside conjecture artifacts"). R4 verified on the record before any step.
+State: next=8 blockers=none. T1 and T2 committed; full docs_verify (1419 checks, six known rows) recorded at step 7. Steps 1-3 done (limits fixed, configurable, tested). Captured and specified 2026-09-06 on the operator's message 4 ("the limits need changing … permission to change the forms … only if the commitments exist outside conjecture artifacts"). R4 verified on the record before any step.
 
 Re-read REQUEST.md + SPEC.md before every step. One step per invocation.
 Map ids: DR-SUB-minireason, DR-SEAM-llm-x-minireason, DR-INV-seat-section-plugins, DR-INV-seat-section-sources, DR-CON-packs-and-token-economy, DR-INV-frozen-surfaces.
@@ -64,9 +64,45 @@ Map ids: DR-SUB-minireason, DR-SEAM-llm-x-minireason, DR-INV-seat-section-plugin
       ```
 
 ## T2 — the forms (S2)
-- [ ] 5. Register the three room forms and `mini.flow.room.v1`; the seat's task in each schema description. done-when: registry lists them; the enumeration test covers them; ring 0 failed.
-- [ ] 6. End-to-end room run against the stub: three kinds land; both goldens byte-identical. done-when: paste.
-- [ ] 7. [COMMIT] map rows, blast_radius CLEAR, diff_budget.
+- [x] 5. Register the three room forms and `mini.flow.room.v1`; the seat's task in each schema description. done-when: registry lists them; the enumeration test covers them; ring 0 failed.
+
+      ```
+      mini_form_ids(): [... 'mini.commitment.room.v1', 'mini.conjecturer.room.v1', 'mini.critic.room.v1' ...] (7)
+      resolve_mini_flow('mini.flow.room.v1'): brief_budget_chars 12000, shells seat.mini.{conjecturer,critic,commitment}.room.v1
+      schema description (commitment): "COMMITMENT SEAT. Read the TARGET CONJECTURE and propose the commitments ..."
+      $ python -m pytest mini/tests/ -q  -> 167 passed, 1 skipped   (the enumeration test iterates every
+        registered form, so the three new ones are covered without an edit)
+      ```
+- [x] 6. End-to-end room run against the stub: three kinds land; both goldens byte-identical. done-when: paste.
+
+      ```
+      mini/tests/test_mini_room_forms.py: registered beside the stored ones; the seat's task in each
+        schema (and "do not answer the problem" in the commitment seat's); required fields about+body /
+        content only, no maxLength; end to end 2 cycles: 4 conjectures, objections + proposals about
+        existing conjectures, labels appended to intact prose ([kind: refuted-if], [would settle: ...],
+        [angle: mechanism]), "SEAT." on every wire before any brief text, no brief clipped, the critic
+        shown no proposal and no objection.
+      First run hit a repair prompt (the canonical candidate requires a typicality the room does not
+        ask for) -> compile at the neutral 0.5; then:
+      $ python -m pytest mini/tests/test_mini_room_forms.py -q  -> 3 passed
+      $ python -m pytest mini/tests/ -q  -> 170 passed, 1 skipped
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py mini/tests/test_mini_flow.py -q -> 24 passed
+      ```
+- [x] 7. [COMMIT] map rows, blast_radius CLEAR, diff_budget.
+
+      ```
+      map: SUB-minireason forms section ("Seven ship", the room forms, the task-in-schema rule, +1 check);
+        flow section ("Three ship", the room flow in the existing check). Verified-at on SUB-minireason and
+        SEAM-llm-x-minireason advanced to 391d5bb31: the FULL run on that tree ->
+        docs_verify [full]: 82 documents, 1419 checks; 6 failed -- the six known rows only.
+      $ python tools/docs_verify.py --fast  -> 6 failed (the same six) ; --audit -> 1 finding (the known one)
+      $ python tools/blast_radius.py --files forms.py seats.py flow.py --symbols MiniRoomProposals
+          MiniRoomCritic MiniRoomConjecturer ROOM_FLOW_ID --against HEAD -> verdict: CLEAR, contacts [], adjacent []
+      $ python tools/diff_budget.py HEAD --paths mini/minireason -> 195 insertions (T2); T1 was 110:
+        tranche code so far 305 against SPEC's 260 -> EXCEEDED, disclosed and re-baselined in SPEC §Budget
+        (the room models carry the seat's task in their docstrings, ~60 lines the estimate did not price).
+      $ python tools/diff_budget.py HEAD --paths mini/tests -> 110 (T2); tests so far 273 against 220 -> EXCEEDED, disclosed.
+      ```
 
 ## T3 — R4 enforced (S3)
 - [ ] 8. `test_mini_room_separation.py`, mutation-proven. done-when: red under the planted write, green otherwise (paste both).

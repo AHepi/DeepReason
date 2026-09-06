@@ -1,5 +1,5 @@
 <!-- DR-SUB-minireason -->
-Verified-at: 2b6440d28
+Verified-at: 391d5bb31
 Verify: python -m pytest mini/tests/ -q
 Owns: mini/minireason/
 Seams: DR-SEAM-llm-x-minireason
@@ -112,10 +112,21 @@ trap. Rebinding the SAME one is not a refusal — it is the crash-recovery path.
 
 **A FORM is what a mini seat is ASKED FOR.** `minireason/forms.py` registers
 them by id, beside each other, so selecting one is configuration rather than a
-code edit. Four ship: the STORED conjecturer form (the shipped
+code edit. Seven ship: the STORED conjecturer form (the shipped
 `ReferenceFreeConjecturerWireContract` instance, held rather than copied, so
 "stored, not deleted" is a property of an object nobody rewrote), a relaxed
-conjecturer, a relaxed critic and a relaxed commitment proposal.
+conjecturer, a relaxed critic and a relaxed commitment proposal, and the
+three WRITER'S ROOM forms (2026-09-06, on the operator's "permission to
+change the forms completely to fit the writers room"): `mini.conjecturer.
+room.v1` (content plus an optional `angle`), `mini.critic.room.v1` (about,
+body, optional `would_settle`), `mini.commitment.room.v1` (about, body,
+optional free-text `kind`). Each room form's top-level schema description
+STATES THE SEAT'S TASK — the schema is prepended after the call layer's clip,
+so the task is on the wire whatever happens to the brief — and an optional
+label rides appended to the prose it labels, so the record holds one body
+per output. The room shells (`seat.mini.<seat>.room.v1`) bind the room forms
+to the UNCHANGED layouts: who sees what did not move.
+`check: python -m pytest mini/tests/test_mini_room_forms.py -q`
 
 Selection is argument, then `DEEPREASON_MINI_FORM` (as `<seat>=<form_id>`
 terms, because one process renders every seat), then the caller's declared
@@ -327,12 +338,14 @@ target), the SET of artifact kinds the flow may carry, its commitment policy
 its calibration hook id, and — a FREE parameter — `brief_budget_chars`, the
 brief limit the flow runs under (None = the model profile's preset; a
 non-positive figure is refused typed). A stage naming a kind the flow does
-not declare is refused at construction. Two ship: `mini.flow.legacy-v0`, the DEFAULT —
+not declare is refused at construction. Three ship: `mini.flow.legacy-v0`, the DEFAULT —
 one conjecturer stage under `seat.mini.conjecturer.legacy-v0`, which renders
 today's prompt byte for byte through the same road as every other seat (one
 section, pinned by `mini/tests/goldens/mini_legacy_prompt.txt`) and fills the
-STORED form with both commitment channels ON; and `mini.flow.isolation.v1`,
-conjecturer → critic → commitment with both channels OFF. Selection is
+STORED form with both commitment channels ON; `mini.flow.isolation.v1`,
+conjecturer → critic → commitment with both channels OFF; and
+`mini.flow.room.v1`, the same three stages under the room shells, both
+channels OFF, and its own brief limit of 12 000 characters. Selection is
 argument, then `DEEPREASON_MINI_FLOW`, then the default; never `Config`,
 never the manifest.
 `check: python -m pytest mini/tests/test_mini_flow.py -q`
@@ -347,6 +360,8 @@ assert [s.stage_id for s in iso.stages] == ['mini.stage.conjecture', 'mini.stage
 assert set(iso.artifact_kinds) == {s.produces_kind for s in iso.stages}
 assert len(iso.commitment_policy.disabled_channels) == 2
 assert legacy.brief_budget_chars is None and iso.brief_budget_chars is None
+room = resolve_mini_flow('mini.flow.room.v1')
+assert room.brief_budget_chars == 12000 and [s.shell_id for s in room.stages] == ['seat.mini.conjecturer.room.v1', 'seat.mini.critic.room.v1', 'seat.mini.commitment.room.v1']
 from minireason.flow import MiniFlowV1, MiniFlowError
 try:
     MiniFlowV1(flow_id='x', flow_version='1', stages=iso.stages, artifact_kinds=iso.artifact_kinds, brief_budget_chars=0)

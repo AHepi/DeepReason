@@ -174,6 +174,25 @@ CONJECTURER_LEGACY_SHELL = SeatShellV1(
 register_seat_shell(CONJECTURER_LEGACY_SHELL)
 CRITIC_SHELL = _shell(CRITIC_SEAT, CRITIC_LAYOUT_ID, "mini.critic.relaxed.v1")
 COMMITMENT_SHELL = _shell(COMMITMENT_SEAT, COMMITMENT_LAYOUT_ID, "mini.commitment.relaxed.v1")
+# The WRITER'S ROOM shells: the same layouts (who sees what is unchanged),
+# the room forms (S2). Registered beside the defaults, never as them.
+CONJECTURER_ROOM_SHELL = SeatShellV1(
+    shell_id="seat.mini.conjecturer.room.v1", seat_id=CONJECTURER_SEAT,
+    layout_id=CONJECTURER_LAYOUT_ID, form_id="mini.conjecturer.room.v1",
+    role_prompt_template_id="role-prompt.legacy-v0",
+)
+CRITIC_ROOM_SHELL = SeatShellV1(
+    shell_id="seat.mini.critic.room.v1", seat_id=CRITIC_SEAT,
+    layout_id=CRITIC_LAYOUT_ID, form_id="mini.critic.room.v1",
+    role_prompt_template_id="role-prompt.legacy-v0",
+)
+COMMITMENT_ROOM_SHELL = SeatShellV1(
+    shell_id="seat.mini.commitment.room.v1", seat_id=COMMITMENT_SEAT,
+    layout_id=COMMITMENT_LAYOUT_ID, form_id="mini.commitment.room.v1",
+    role_prompt_template_id="role-prompt.legacy-v0",
+)
+for _room_shell in (CONJECTURER_ROOM_SHELL, CRITIC_ROOM_SHELL, COMMITMENT_ROOM_SHELL):
+    register_seat_shell(_room_shell)
 MINI_SHELLS = {
     CONJECTURER_SEAT: CONJECTURER_SHELL,
     CRITIC_SEAT: CRITIC_SHELL,
