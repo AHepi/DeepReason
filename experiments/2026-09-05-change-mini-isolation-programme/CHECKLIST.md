@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=51 blockers=none. T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=52 blockers=none. T3, T4, T5 and T6 DELIVERED; T7 (the measure) goes to the last window: it needs a green soak and a key. T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1824,8 +1824,19 @@ tranche".
       engine and its console option. Both instruments are green on the
       programme's tree as it stands.
       ```
-- [ ] 51. (T6) [COMMIT] Deliver T6.
+- [x] 51. (T6) [COMMIT] Deliver T6.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+      ```
+      $ git status --porcelain     -> (empty)
+      $ git rev-parse HEAD origin/claude/mini-isolation-t3-t5-7tsc6d
+      (one hash; verified after this step's push)
+
+      T6/VALIDATION.md verdict PASS; T6/DELIVERY.md written. Every S10
+      instrument green at the programme's own boundary, no code changed, no
+      pin moved. T6 IS DELIVERED. T7 (steps 52-57, the measure) goes to the
+      last window: it needs a green soak and a key.
+      ```
 
 ## T7 — the measure (S12) — ~80 lines
 
