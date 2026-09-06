@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'methodological preference' with 'rational defensibility.' While the target correctly identifies that preferring high-content theories maximizes falsifiability (a methodological goal), it does not explain why a scientist should *prefer* survival over refutation if future success is not anticipated. Popper rejects induction; therefore, past severity provides no logical basis to expect a theory will *continue* to survive or be useful for action. The target asserts the choice is 'rational' but offers no non-inductive bridge between 'this theory has survived' and 'I should act on this theory rather than a newer, untested one with higher potential content.' Without smuggling in an inductive wager that the future will resemble the past (which the target explicitly tries to avoid in countercondition 2), the preference for the *better-corroborated* (older) theory over the *more informative* (newer/riskier) one remains unjustified on Popper's strict terms.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's rejection of induction severs the logical link between past test survival and future reliability, leaving no non-circular reason to prefer corroborated theories for practical action other than an implicit inductive assumption.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration is merely a historical report and implies no probability of future success, what specific non-inductive principle compels a scientist to choose a well-tested theory over a bold, untested conjecture that offers higher empirical content and thus greater opportunity for falsification?"
+    }
+  ]
+}

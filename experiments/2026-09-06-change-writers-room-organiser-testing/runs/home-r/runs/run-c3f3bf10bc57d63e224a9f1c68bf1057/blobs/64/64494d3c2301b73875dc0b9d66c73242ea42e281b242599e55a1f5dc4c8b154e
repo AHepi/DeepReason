@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim of a 'performative contradiction' fails because it conflates Popper's rejection of inductive *probability* with his acceptance of rational *preference*. The target asserts that preferring a better-corroborated theory for action implicitly assumes 'past performance is a reliable guide to future reliability.' However, one of the target's own counterconditions explicitly states the claim is refuted if preference can be justified as a method to 'maximize the severity of future tests without any assumption that the theory will actually succeed.' Popper's framework allows scientists to prefer the most severely tested theory precisely because it offers the best chance of being falsified (if false) or surviving further scrutiny (if true), which is a deductive strategy for error elimination, not an inductive leap assuming future stability. Since the target dismisses this non-inductive justification as merely 'psychological habit' without engaging with the logical argument that critical preference differs from inductive inference, the attack does not hold.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

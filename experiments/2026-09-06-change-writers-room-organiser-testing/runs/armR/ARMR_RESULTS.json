@@ -1,9 +1,7 @@
 {
   "absences": [
-    "NO_FRONTIER_RECORD",
     "NO_LIFECYCLE_REFUSAL_RECORD",
-    "NO_SEAT_RETIREMENT",
-    "NO_SURVIVOR_RECORD"
+    "NO_SEAT_RETIREMENT"
   ],
   "adjudication": {
     "judge_calls": 0,
@@ -17,27 +15,93 @@
     "epochs": 0
   },
   "artifacts": {
-    "accepted": 68,
+    "accepted": 89,
     "frontier": {
-      "artifact_ids": {
-        "absent": true,
-        "reason": "NO_FRONTIER_RECORD"
-      },
-      "count": {
-        "absent": true,
-        "reason": "NO_FRONTIER_RECORD"
-      },
-      "evidence_states": {
-        "absent": true,
-        "reason": "NO_FRONTIER_RECORD"
-      },
-      "problem_id": null
+      "artifact_ids": [
+        "05a234fe135a740bf7b9314c748309191217a817fa03acee2e0de2f9ef249b16",
+        "065e2d64178c69a3b0337d78b91349c5ed4d0f944a998a7d00792f9b0c5c7069",
+        "0e0a7f7f529174cefc56a689b31b5dc422a3778ee82a14894f2a2ebf3ac5d58e",
+        "176d28112de6da9f233639a6b479d8bd89c6c6d8139d758ab143ed5736f7e36c",
+        "1ae75024a8f3b1ea146f3e98295a90b127858ce95b088bbe4b7f9d6bef7b7a56",
+        "2b5e0ae84adc7a9a73fa8f00da7c4915d104e2390453512dab5819f8402e7989",
+        "2d858b4f673db8fda51534f97d620528e17f1ccbcbcf2cc3b6e03a55261a693a",
+        "349d716cdc7d700bc500c3e5cfc8c2891bd5f2fa8f3fe011879edb7889d2b11c",
+        "38095e64124b8ee402256c01b4464677cb619cdfff037c2a20bde5f8129bdb5c",
+        "4629cc15a8a7261d2e3a7ca2dd929a58f62fb272b90c2a6988d41856b55433e2",
+        "55fb670c243edbc6b5bc09dfc304566291fe6e336bfbf50c7942a6c29c3e3027",
+        "577a0e466bc8fb26a9df723b4049d6788eca4ddf1b96d3e39d227c9c1a771409",
+        "58f447adb4faeb1b531f904bcc782a3c0b8815c57d18f4c84b29a8b4cc9164e3",
+        "7221574fb4135a785cc18cfa9fc8bf8b82cf089332d86c353ae60afa6e8e3c38",
+        "76500db011cf29135248a89bae5515210b4bec931f15a3e618d32c180ac07923",
+        "7c0ca1094ddace9506eb5ebde275dab48d69c4f9ddace3dfc7d1dd0dcc970393",
+        "95c4c8df99ddbaacabc9940c184840b000a0ee4ac9819a643a7578655a4ef2bb",
+        "970f11dc80d92167e889d75fa07a8f12db652050c301860cccd560a4c7f2f7cd",
+        "9874127bc70edd1f72926ae8310f29e7425b4b0931ab73fe56e8919103c9aac3",
+        "a6edeb5a71c4b80ca77d9cd7ae29ed630a4343bbae22375dc7c9ee878bbca17a",
+        "a768971d9cca81199fa3e89a20b60a938a224c90ba4994ba1a503d0fc1fcef5f",
+        "a838263ffdb41ffc3317a17d87d039deb272c7a9a7e70b398c9ad492626f0587",
+        "af2f69914e54a8ebd848b431fe024c9998a32ebc31ac3c5561a44efed8668b3c",
+        "af5507d1e341a3c0aca926b8f504308f3429af7e074f5070b6d25a7090da554d",
+        "b4ea2311d93fe2e3993c1704bc61262fb2ef15fc2493cb515be6380ef5470f64",
+        "b4f86d79b684138f3244f332975c18c90378ed721d89cda9aae006f7cfd39f65",
+        "b6828d91f6531c4b30b2067eec68ed6ba6c82883d05434643096ca92b2e74a85",
+        "b8ff01465a24c496a58af942eb75b35aeccd892543a9d697c62864ebcb87aae2",
+        "bb6218725c54621a77d9a1c24bbca3ee485f1504c6be98fc2672ddcebc2389e0",
+        "c4637e081c711c90b576f98c9da165937bce1ff9becb0a1e6321f52e30cd6a11",
+        "ca278b1e65a9353d4378a4f3125edc456d707388ba7eb50ff9285a0514632a54",
+        "ce89049f95fb5521d30fc84a0f74874eb32c360eac20ec1a123df1e7b5da265d",
+        "d0dfed5667928c238188b799317fa2d69f4fabc2637e0f558f1dd0083cb26bd8",
+        "d633d2e5b8757a0080cd4660d04a053c929e890d1c27690305e62bae76cbbfc6",
+        "dcc05814db51e99cd1d7bb7be5ef75fec49932a86aa62ff342c00932c2d11dcf",
+        "f68e6b46fe2afd6920643228570ba3d96dc24765c6720c0245d6876dbd992cca",
+        "f6f2e02ef01ed427e948e771a82ab37ec91af512be2061f617bd25577af51111",
+        "f9f345f76a52fd24dc45ea31192784c648241d87065f69f767b5ffc455974818"
+      ],
+      "count": 38,
+      "evidence_states": [
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "open",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "open",
+        "open",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "open",
+        "open",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "open",
+        "supported"
+      ],
+      "problem_id": "question-ba75796c3facc7a3d0d448d6eaa09a2e"
     },
     "refuted": 1,
-    "survivor_count": {
-      "absent": true,
-      "reason": "NO_SURVIVOR_RECORD"
-    },
+    "survivor_count": 38,
     "suspended": 0
   },
   "embedder": {
@@ -51,26 +115,26 @@
   },
   "evidence_states": {
     "completeness": {
-      "complete_passes": 8,
-      "licensed_artifacts": 24,
+      "complete_passes": 7,
+      "licensed_artifacts": 32,
       "outcomes": {
-        "complete": 8
+        "complete": 7
       },
-      "passes": 8
+      "passes": 7
     },
     "counts": {
       "contested": 0,
-      "open": 42,
+      "open": 55,
       "refuted": 1,
-      "supported": 24
+      "supported": 32
     },
     "excluded_import_admissions": 9,
     "per_cycle": {
       "0": {
         "contested": 0,
-        "open": 20,
+        "open": 16,
         "refuted": 0,
-        "supported": 16
+        "supported": 18
       },
       "1": {
         "contested": 0,
@@ -80,15 +144,15 @@
       },
       "2": {
         "contested": 0,
-        "open": 16,
+        "open": 6,
         "refuted": 1,
-        "supported": 8
+        "supported": 2
       },
       "3": {
         "contested": 0,
-        "open": 1,
+        "open": 28,
         "refuted": 0,
-        "supported": 0
+        "supported": 12
       },
       "pre-cycle": {
         "contested": 0,
@@ -102,14 +166,14 @@
   "identity": {
     "manifest_present": true,
     "manifest_schema_version": 6,
-    "run_id": "0d7f086102aac868f4400c0f50bca02741c8b03b71571f968729e18db7c9c7cb"
+    "run_id": "08f0d71e3520eda33a4d568a3ac9fd265a92f9368cb7b9b97a195b68626c8c1e"
   },
   "provider_health": {
     "fault_minutes": 0.0,
     "seats": {
       "argumentative_critic": {
-        "attempts": 42,
-        "calls": 42,
+        "attempts": 53,
+        "calls": 53,
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "fault_ms": 0,
         "faults": 0,
@@ -119,8 +183,8 @@
         "zero_byte_returns": 0
       },
       "conjecturer": {
-        "attempts": 22,
-        "calls": 22,
+        "attempts": 32,
+        "calls": 32,
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "fault_ms": 0,
         "faults": 0,
@@ -130,22 +194,22 @@
         "zero_byte_returns": 0
       }
     },
-    "total_attempts": 64,
-    "total_calls": 64,
+    "total_attempts": 85,
+    "total_calls": 85,
     "total_faults": 0,
     "total_zero_byte_returns": 0,
     "worst_zero_byte_streak": 0
   },
   "question": "Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.",
   "resolved_from": "root",
-  "root": "/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-36d9a22c3e2045ae1b8c7bfb9d95d092",
+  "root": "/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-c3f3bf10bc57d63e224a9f1c68bf1057",
   "run": {
-    "cycles_completed": 3,
-    "message": "V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at /workflow/insufficient_capability_by_route_seat: route seat has terminally exhausted its smallest authorized contract",
-    "state": "failed",
-    "stop_reason": "operational_failure",
-    "token_limit": 500000,
-    "token_spend": 464359
+    "cycles_completed": 4,
+    "message": "",
+    "state": "completed",
+    "stop_reason": "budget_exhausted",
+    "token_limit": 1695362,
+    "token_spend": 495362
   },
   "schema": "deepreason-results.v1",
   "seat_retirement": {
@@ -153,7 +217,7 @@
     "reason": "NO_SEAT_RETIREMENT"
   },
   "terminal": {
-    "amend_ready": true,
+    "amend_ready": false,
     "continuation_authority": true,
     "lifecycle_refusal": {
       "absent": true,
@@ -161,19 +225,19 @@
     },
     "record_security_violations": [],
     "stop_reason_resumable": true,
-    "terminal_epoch": 0,
-    "valid_typed_terminal": true
+    "terminal_epoch": 1,
+    "valid_typed_terminal": false
   },
   "verification": {
     "families": {
-      "completion": 38,
+      "completion": 29,
       "epistemic": 0,
-      "integrity": 0,
-      "operational": 14,
+      "integrity": 4,
+      "operational": 13,
       "security": 0
     },
     "source": "rederived",
-    "valid": true,
-    "violations": 0
+    "valid": false,
+    "violations": 4
   }
 }

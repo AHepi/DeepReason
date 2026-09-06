@@ -1,0 +1,160 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is indefensible on Popper's own terms and smuggles induction back in by implicitly asserting that past performance is a reliable guide to future reliability, reducing the methodology to a description of psychological habit rather than a logical framework.",
+      "mechanism": "By advising scientists to 'prefer' the better-corroborated theory for action, Popper implicitly relies on the inductive principle that the future will resemble the past, creating a performative contradiction where the act of choosing contradicts the explicit rejection of induction.",
+      "counterconditions": [
+        "refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed or remain unfalsified in the future",
+        "refuted if Popper explicitly distinguished 'rational preference' based on critical scrutiny from 'inductive inference' based on probability assignments",
+        "refuted if it can be demonstrated that no non-inductive logical rule can govern the preference for better-corroborated theories"
+      ],
+      "evidence_refs": [
+        {
+          "block": "16c4445643674d71",
+          "quote": "The preference is indefensible on Popper's own terms and indeed smuggles induction back in through the back door. By advising scientists to 'prefer' the better-corroborated theory for action, Popper implicitly asserts that past performance is a reliable guide to future reliability, which is the very definition of inductive reasoning he sought to destroy."
+        },
+        {
+          "block": "3a5ebf3b2c2c80a0"
+        },
+        {
+          "block": "1b948fe0dcf78cd9"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate does not claim choices are 'logically indistinguishable from flipping a coin' in all contexts, but argues that within strict Popperian logic regarding future performance, the preference lacks a non-inductive warrant, making the distinction between choice and chance merely psychological unless induction is smuggled in."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate addresses this by asserting that the very act of 'preferring' for action inherently implies an expectation of future reliability, which Popper's distinction between logical status and pragmatic decision fails to sever without reintroducing induction."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "While Popper attempted other defenses, this candidate focuses on the specific mechanism of the 'Performative Contradiction' angle, arguing that those other attempts ultimately fail to escape the inductive leap required for action."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate argues that Popper's distinction between logical status and pragmatic decision is insufficient to prevent the reduction to psychological habit if no non-inductive logical rule can be found to justify the preference."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate contends that in safety-critical contexts, the 'experimental' choice explanation fails because the agent acts on an expectation of success, which constitutes the smuggled induction."
+        }
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is defensible because corroboration functions as a measure of informational content rather than likelihood; we choose the better-corroborated theory not because we think it will hold true, but because it offers the most detailed map currently available, providing the richest basis for further criticism and testing.",
+      "mechanism": "Preferring the bold, well-tested theory is a preference for the most efficient path to potential falsification. The cost is that 'action' becomes purely experimental, meaning our preference is actually for the most efficient path to learning, not for successful prediction.",
+      "counterconditions": [
+        "refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true",
+        "refuted if it can be demonstrated that acting on a theory solely to falsify it constitutes a coherent defense for scientific practice in domains where failure results in catastrophic loss",
+        "refuted if scientists consistently choose less established, riskier hypotheses over well-corroborated ones solely to accelerate falsification"
+      ],
+      "evidence_refs": [
+        {
+          "block": "182a58bdd39650d7",
+          "quote": "The preference is defensible because corroboration functions as a measure of informational content rather than likelihood. A theory that survives severe tests is one that took a greater risk of being wrong; preferring it is a preference for boldness and precision."
+        },
+        {
+          "block": "0db48ad23b546413"
+        },
+        {
+          "block": "19d7f4e301abfb17"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate avoids the 'coin flip' equivalence by positing a rational criterion based on informational content and testability, distinct from probabilistic expectation of success."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate explicitly denies that acting on corroboration implies believing the theory is true; it reframes the action as a strategic move for error detection."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "This defense relies on informational content, not verisimilitude, addressing the criticism that verisimilitude is the only or primary defense."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate provides a non-psychological, logical rule (maximize informational content at risk) to govern preference, countering the claim that it reduces to habit."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate acknowledges the tension in safety-critical domains but maintains that strictly speaking, the Popperian justification remains experimental, even if practice diverges."
+        }
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated theory in favor of a poorly tested one increases the likelihood of immediate error without offering compensatory increase in testability, minimizing 'known unknowns' relative to alternatives.",
+      "mechanism": "Choosing the better-corroborated theory is a defensive posture requiring no belief in future validity, only a recognition of its current robustness against falsification. It is a logical deduction about the current state of knowledge, not an inductive prediction.",
+      "counterconditions": [
+        "refuted if it could be demonstrated that the concept of 'minimizing known unknowns' logically entails a probabilistic assessment of future performance",
+        "refuted if it can be shown that Popper explicitly justified the preference in practical decisions on grounds of safety or reliability rather than solely on maximizing testability",
+        "refuted if a formal proof shows one cannot quantify 'likelihood of immediate error' without invoking degrees of confirmation"
+      ],
+      "evidence_refs": [
+        {
+          "block": "193e9093bea201f6",
+          "quote": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated theory in favor of a poorly tested one increases the likelihood of immediate error without offering any compensatory increase in testability."
+        },
+        {
+          "block": "07785266ae5808f5"
+        },
+        {
+          "block": "341393d2586d378a"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate argues that the asymmetry of risk provides a non-probabilistic, logical basis for preference that distinguishes it from a random choice, grounded in the history of falsification attempts."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The mechanism explicitly states that no belief in future validity is required, only a recognition of current robustness, attempting to sever the link to inductive belief."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate offers an alternative to the verisimilitude defense, relying instead on risk asymmetry and current knowledge states."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate presents a logical rule (minimize known unknowns/maximize current robustness) to avoid the charge of reducing to psychological habit."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate frames the choice as a defensive posture against immediate error, which aligns with safety concerns without necessarily invoking inductive confidence in long-term success."
+        }
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ]
+}

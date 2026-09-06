@@ -97,7 +97,9 @@ def one_render() -> dict:
         src = next(p for p in ATTACHMENT.glob("*.txt")
                    if hashlib.sha256(p.read_bytes()).hexdigest() == b.source_sha256)
         head = src.read_bytes()[b.span_start:b.span_end].decode().split("\n", 1)[0]
-        refuted_if_shown += head.endswith("kind=refuted-if")
+        # The header no longer ends with the kind (P7 road A moved the
+        # target reference to the tail); match the field itself.
+        refuted_if_shown += " kind=refuted-if" in head
     return {
         "prompt_chars": len(prompt),
         "prompt_bytes": len(prompt.encode("utf-8")),
@@ -110,7 +112,10 @@ def one_render() -> dict:
         "legend_refuted_if_shown": refuted_if_shown,
         "exposure_receipt_items": len(exposed),
         "exposure_equals_legend": set(exposed) == {b.id for b in shown},
-        "withheld_notice": "(+62 further citable blocks not shown)" in prompt,
+        "withheld_notice": (
+            f"(+{len(dossier.blocks) - len(shown)} further citable blocks not shown)"
+            in prompt
+        ),
         "organiser_directive": "DIRECTIVE: ORGANISE, DO NOT INVENT." in prompt,
         "pack_token_budget": config.PACK_TOKEN_BUDGET,
     }

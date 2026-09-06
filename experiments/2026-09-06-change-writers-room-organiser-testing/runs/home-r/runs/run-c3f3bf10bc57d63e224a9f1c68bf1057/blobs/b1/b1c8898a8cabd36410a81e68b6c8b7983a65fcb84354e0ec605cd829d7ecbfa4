@@ -1,0 +1,628 @@
+You are the organiser seat: you carry a writer's room's conjectures onto the record. The room -- its conjectures, the objections written about them, and the commitment proposals written about them -- is in the pack as frozen evidence. You invent nothing: every claim, mechanism and refutation condition you return is condensed from those records, and you say which. You hold no state and decide nothing; the harness adjudicates. Give each candidate your typicality estimate in [0,1] (0.5 unless the room gives a reason).
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"AnalogyClaim": {"additionalProperties": false, "properties": {"adopted_commitment_refs": {"default": [], "items": {"type": "string"}, "title": "Adopted Commitment Refs", "type": "array"}, "disanalogies": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Disanalogies", "type": "array"}, "overturn_conditions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Overturn Conditions", "type": "array"}, "shared_structure": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Shared Structure", "type": "array"}, "source_memory_refs": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Source Memory Refs", "type": "array"}, "transfer_claims": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Transfer Claims", "type": "array"}}, "required": ["source_memory_refs", "shared_structure", "disanalogies", "transfer_claims", "overturn_conditions"], "title": "AnalogyClaim", "type": "object"}, "ConjectureAbstentionV1": {"additionalProperties": false, "description": "A responsible no-proposal signal using the existing search vocabulary.", "properties": {"note": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Note"}, "search_signal": {"default": "stuck", "enum": ["need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "ConjectureAbstentionV1", "type": "object"}, "ContextRequestWireV2": {"additionalProperties": false, "allOf": [{"anyOf": [{"properties": {"query": {"minLength": 1, "type": "string"}}, "required": ["query"]}, {"properties": {"requested_visible_aliases": {"minItems": 1}}, "required": ["requested_visible_aliases"]}, {"properties": {"desired_retrieval_channels": {"minItems": 1}}, "required": ["desired_retrieval_channels"]}]}], "description": "V6 semantic retrieval using only SRC_### and SCR_### handles.", "properties": {"desired_retrieval_channels": {"items": {"enum": ["focus", "keyword", "link", "recent", "semantic"], "type": "string"}, "maxItems": 16, "title": "Desired Retrieval Channels", "type": "array", "uniqueItems": true}, "purpose": {"anyOf": [{"maxLength": 4096, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Purpose"}, "query": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Query"}, "requested_visible_aliases": {"items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015", "SRC_016", "SRC_017", "SRC_018"], "type": "string"}, "maxItems": 64, "title": "Requested Visible Aliases", "type": "array", "uniqueItems": true}}, "title": "ContextRequestWireV2", "type": "object"}, "DischargeWireV1": {"additionalProperties": false, "description": "One criticism, answered (REBUILD F1).\n\n`handle` is the criticism's handle exactly as the pack listed it, and it is\nleft a PLAIN STRING on purpose: its legal set has one authority --\n`deepreason.discharge.open_criticisms` -- and leaving the field open is what\nlets a menu renderer key on it by registering, without either side learning\nthe other's subsystem. A private enum here would close that seam.\n\nNOTHING here is evidence. A discharge is a precondition on SUBMISSION; no\nfield, kind or count may feed a label, a warrant, a rank or an admission\ndecision (`DR-CON-discharge-channel`, the law line).", "properties": {"handle": {"maxLength": 256, "minLength": 1, "title": "Handle", "type": "string"}, "kind": {"enum": ["revised", "rebutted", "departure_declared"], "minLength": 1, "title": "Kind", "type": "string"}, "note": {"default": "", "title": "Note", "type": "string"}, "where": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Where"}}, "required": ["handle", "kind"], "title": "DischargeWireV1", "type": "object"}, "EvidenceRefClaimV1": {"additionalProperties": false, "description": "One claimed grounding in an admitted dossier block (admission \u00a74).\n\n``block`` names a dossier block by id or by a unique hex prefix of at\nleast 12 characters. ``quote``, when present, must reproduce a\ncontiguous byte span of the block's canonical text exactly \u2014 the\ncitation checker byte-verifies it and a mismatch is a durable finding,\nnever a silent pass.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"anyOf": [{"maxLength": 2000, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Quote"}}, "required": ["block"], "title": "EvidenceRefClaimV1", "type": "object"}, "OperationalSidecar": {"additionalProperties": false, "properties": {"requested_context_aliases": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015", "SRC_016", "SRC_017", "SRC_018"], "type": "string"}, "title": "Requested Context Aliases", "type": "array"}, "search_signal": {"default": "productive", "enum": ["productive", "need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "OperationalSidecar", "type": "object"}, "ReasoningCandidateProposal": {"additionalProperties": false, "description": "Gemma-safe semantic proposal; mandatory interfaces are absent by design.", "properties": {"analogy": {"anyOf": [{"$ref": "#/$defs/AnalogyClaim"}, {"type": "null"}], "default": null}, "checker_specs": {"default": [], "items": {"anyOf": [{"additionalProperties": false, "type": "object"}, {"type": "null"}]}, "title": "Checker Specs", "type": "array"}, "claim": {"minLength": 1, "title": "Claim", "type": "string"}, "counterconditions": {"items": {"minLength": 1, "type": "string"}, "maxItems": 32, "minItems": 1, "title": "Counterconditions", "type": "array"}, "discharges": {"default": [], "items": {"$ref": "#/$defs/DischargeWireV1"}, "title": "Discharges", "type": "array"}, "evidence_refs": {"default": [], "items": {"$ref": "#/$defs/EvidenceRefClaimV1"}, "maxItems": 8, "title": "Evidence Refs", "type": "array"}, "mechanism": {"minLength": 1, "title": "Mechanism", "type": "string"}, "optional_refs": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015", "SRC_016", "SRC_017", "SRC_018"], "type": "string"}, "title": "Optional Refs", "type": "array"}, "sidecar": {"$ref": "#/$defs/OperationalSidecar"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["claim", "mechanism", "counterconditions", "typicality"], "title": "ReasoningCandidateProposal", "type": "object"}, "ResearchFetchProposalWireV1": {"additionalProperties": false, "description": "Directed-fetch intent on the v6 wire: explicit https URLs only.\n\nThe model proposes sources; the harness alone validates them against\nthe frozen domain allowlist and executes them under containment. The\nwire shape mirrors ResearchFetchProposalDraftV1 exactly \u2014 which it did\nnot: the draft rejects a non-https or duplicated URL and the wire took\nboth, so the refusal landed in compile() after the response had been\naccepted, and the schema advertised neither rule.", "properties": {"purpose": {"maxLength": 2000, "minLength": 1, "title": "Purpose", "type": "string"}, "request_identifier": {"maxLength": 128, "minLength": 1, "title": "Request Identifier", "type": "string"}, "urls": {"items": {"pattern": "^https://[^\\s]{1,2048}$", "type": "string"}, "maxItems": 3, "minItems": 1, "title": "Urls", "type": "array", "uniqueItems": true}}, "required": ["request_identifier", "purpose", "urls"], "title": "ResearchFetchProposalWireV1", "type": "object"}, "ScratchBlockDraftBodyV1": {"additionalProperties": false, "properties": {"bears_on_refs": {"anyOf": [{"items": {"pattern": "^SRC_[0-9]{3}$", "type": "string"}, "maxItems": 4, "type": "array"}, {"type": "null"}], "default": null, "description": "Visible SRC_### artifacts this note was aimed at. A RELEVANCE hypothesis, not a grounding claim: nothing follows it, and it is admissible whether or not the aim turns out to be right. Read back later it is labelled as the aim held when the note was written, since source aliases are call-local.", "title": "Bears On Refs", "uniqueItems": true}, "content": {"maxLength": 262144, "minLength": 1, "title": "Content", "type": "string"}, "experiment_refs": {"anyOf": [{"items": {"maxLength": 128, "minLength": 1, "type": "string"}, "maxItems": 4, "type": "array"}, {"type": "null"}], "default": null, "description": "Simulation request identifiers this note came out of. Provenance only: naming an experiment here never makes this block evidence for anything, and never makes the experiment's result a fact.", "title": "Experiment Refs", "uniqueItems": true}, "possible_next_move": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Possible Next Move"}, "unfinished": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Unfinished"}, "why_keep_this": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Why Keep This"}}, "required": ["content"], "title": "ScratchBlockDraftBodyV1", "type": "object"}, "ScratchClusterSuggestionV1": {"additionalProperties": false, "properties": {"member_refs": {"items": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "type": "string"}, "maxItems": 64, "minItems": 1, "title": "Member Refs", "type": "array", "uniqueItems": true}, "seed_focus": {"maxLength": 262144, "minLength": 1, "title": "Seed Focus", "type": "string"}}, "required": ["seed_focus", "member_refs"], "title": "ScratchClusterSuggestionV1", "type": "object"}, "ScratchNewBlockDraftV1": {"additionalProperties": false, "properties": {"body": {"$ref": "#/$defs/ScratchBlockDraftBodyV1"}, "local_key": {"pattern": "^NEW_[0-9]{3,}$", "title": "Local Key", "type": "string"}}, "required": ["local_key", "body"], "title": "ScratchNewBlockDraftV1", "type": "object"}, "ScratchProposalLinkV1": {"additionalProperties": false, "properties": {"because": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Because"}, "direction": {"anyOf": [{"enum": ["directed", "symmetric"], "type": "string"}, {"type": "null"}], "default": null, "title": "Direction"}, "from_ref": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "title": "From Ref", "type": "string"}, "holds_when": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Holds When"}, "relation_hint": {"maxLength": 16384, "minLength": 1, "title": "Relation Hint", "type": "string"}, "to_ref": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "title": "To Ref", "type": "string"}, "weakens_when": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Weakens When"}}, "required": ["from_ref", "to_ref", "relation_hint"], "title": "ScratchProposalLinkV1", "type": "object"}, "ScratchProposalV1": {"additionalProperties": false, "description": "Optional imaginative workshop: speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are welcome. Scratch remains advisory; storage alone never makes it fact, evidence, a formal claim, or formal support.", "properties": {"cluster_suggestions": {"default": [], "items": {"$ref": "#/$defs/ScratchClusterSuggestionV1"}, "maxItems": 4, "title": "Cluster Suggestions", "type": "array"}, "links": {"default": [], "items": {"$ref": "#/$defs/ScratchProposalLinkV1"}, "maxItems": 4, "title": "Links", "type": "array"}, "new_blocks": {"default": [], "items": {"$ref": "#/$defs/ScratchNewBlockDraftV1"}, "maxItems": 4, "title": "New Blocks", "type": "array"}, "revisions": {"default": [], "items": {"$ref": "#/$defs/ScratchRevisionDraftV1"}, "maxItems": 4, "title": "Revisions", "type": "array"}, "unresolved_questions": {"default": [], "items": {"$ref": "#/$defs/ScratchQuestionDraftV1"}, "maxItems": 4, "title": "Unresolved Questions", "type": "array"}}, "title": "ScratchProposalV1", "type": "object"}, "ScratchQuestionDraftV1": {"additionalProperties": false, "properties": {"question": {"maxLength": 262144, "minLength": 1, "title": "Question", "type": "string"}, "related_refs": {"default": [], "items": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "type": "string"}, "maxItems": 64, "title": "Related Refs", "type": "array", "uniqueItems": true}}, "required": ["question"], "title": "ScratchQuestionDraftV1", "type": "object"}, "ScratchRevisionDraftV1": {"additionalProperties": false, "properties": {"body": {"$ref": "#/$defs/ScratchBlockDraftBodyV1"}, "target_alias": {"pattern": "^SCR_[0-9]{3,}$", "title": "Target Alias", "type": "string"}}, "required": ["target_alias", "body"], "title": "ScratchRevisionDraftV1", "type": "object"}, "SimulationParameterSetWireV1": {"additionalProperties": false, "properties": {"name": {"maxLength": 128, "minLength": 1, "title": "Name", "type": "string"}, "values_json": {"maxLength": 262144, "minLength": 2, "title": "Values Json", "type": "string"}}, "required": ["name", "values_json"], "title": "SimulationParameterSetWireV1", "type": "object"}, "SimulationProposalWireV1": {"additionalProperties": false, "properties": {"declared_assumptions": {"items": {"type": "string"}, "maxItems": 64, "title": "Declared Assumptions", "type": "array", "uniqueItems": true}, "discriminating_purpose": {"maxLength": 8192, "minLength": 1, "title": "Discriminating Purpose", "type": "string"}, "hypothesis": {"maxLength": 16384, "minLength": 1, "title": "Hypothesis", "type": "string"}, "interpretation_conditions": {"items": {"type": "string"}, "maxItems": 64, "minItems": 1, "title": "Interpretation Conditions", "type": "array", "uniqueItems": true}, "model_source": {"description": "The program itself; its required shape follows simulation_mode. For sandboxed_python_v1 the entire source must be exactly one function definition and nothing else: def simulate(inputs, rng), with no imports, no statements outside it, no decorators, no return annotation, and no default, keyword-only, or variadic arguments. It is called once per (input, seed) pair, where inputs is one mapping carrying parameter_set, parameters, and sealed_inputs, and rng is a seeded random.Random. It must return a JSON-safe mapping of observable name to finite value; that mapping is the only output recorded, so printing reports nothing. math is available and nothing else may be imported. For declarative_numeric_v1 this field is a JSON document instead of Python.", "maxLength": 262144, "minLength": 1, "title": "Model Source", "type": "string"}, "parameter_definitions": {"items": {"$ref": "#/$defs/SimulationParameterSetWireV1"}, "maxItems": 256, "title": "Parameter Definitions", "type": "array"}, "request_identifier": {"maxLength": 128, "minLength": 1, "title": "Request Identifier", "type": "string"}, "requested_observables": {"description": "The observable names this proposal is judged on. Each is an identifier, or up to eight identifiers joined by dots to reach into a nested result (a.b.c tries the literal key a.b.c first, then walks a, then b, then c). Every name must resolve in what the program produces: for sandboxed_python_v1 in the mapping simulate returns, for declarative_numeric_v1 among the document's observables. The two sets must match exactly. A name that does not resolve ends the run with declared observable missing, so stream names like stdout are never observables.", "items": {"pattern": "^[A-Za-z][A-Za-z0-9_]{0,63}(?:\\.[A-Za-z][A-Za-z0-9_]{0,63}){0,7}$", "type": "string"}, "maxItems": 128, "minItems": 1, "title": "Requested Observables", "type": "array", "uniqueItems": true}, "requested_seed_set": {"items": {"maximum": 9223372036854775807, "minimum": -9223372036854775808, "type": "integer"}, "maxItems": 256, "title": "Requested Seed Set", "type": "array", "uniqueItems": true}, "rival_predictions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Rival Predictions", "type": "array", "uniqueItems": true}, "simulation_mode": {"enum": ["declarative_numeric_v1", "sandboxed_python_v1"], "title": "Simulation Mode", "type": "string"}}, "required": ["request_identifier", "hypothesis", "rival_predictions", "discriminating_purpose", "simulation_mode", "model_source", "requested_observables", "interpretation_conditions"], "title": "SimulationProposalWireV1", "type": "object"}}, "additionalProperties": false, "allOf": [{"anyOf": [{"properties": {"candidates": {"minItems": 1}}, "required": ["candidates"]}, {"properties": {"context_request": {"not": {"type": "null"}}}, "required": ["context_request"]}, {"properties": {"abstention": {"not": {"type": "null"}}}, "required": ["abstention"]}, {"properties": {"simulation_proposals": {"minItems": 1}}, "required": ["simulation_proposals"]}, {"properties": {"scratch_proposal": {"not": {"type": "null"}}}, "required": ["scratch_proposal"]}, {"properties": {"research_proposals": {"minItems": 1}}, "required": ["research_proposals"]}]}, {"if": {"properties": {"abstention": {"not": {"type": "null"}}}, "required": ["abstention"]}, "then": {"properties": {"candidates": {"maxItems": 0}, "research_proposals": {"maxItems": 0}, "scratch_proposal": {"type": "null"}, "simulation_proposals": {"maxItems": 0}}}}], "properties": {"abstention": {"anyOf": [{"$ref": "#/$defs/ConjectureAbstentionV1"}, {"type": "null"}], "default": null}, "candidates": {"items": {"$ref": "#/$defs/ReasoningCandidateProposal"}, "maxItems": 256, "title": "Candidates", "type": "array"}, "context_request": {"anyOf": [{"$ref": "#/$defs/ContextRequestWireV2"}, {"type": "null"}], "default": null}, "research_proposals": {"items": {"$ref": "#/$defs/ResearchFetchProposalWireV1"}, "maxItems": 2, "title": "Research Proposals", "type": "array"}, "scratch_proposal": {"anyOf": [{"$ref": "#/$defs/ScratchProposalV1"}, {"type": "null"}], "default": null, "description": "Optional imaginative workshop: speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are welcome. Scratch remains advisory; storage alone never makes it fact, evidence, a formal claim, or formal support."}, "simulation_proposals": {"items": {"$ref": "#/$defs/SimulationProposalWireV1"}, "maxItems": 1, "title": "Simulation Proposals", "type": "array"}}, "title": "ReasoningConjecturerTurnWireV6", "type": "object"}
+
+## problem
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## citable-evidence-blocks
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[0164d297ca6c2fe7] PROPOSAL cycle=3 kind=must-not about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide The conjecture must not imply that the 'biologica
+[02cc3b8a099bb440] PROPOSAL cycle=1 kind=forbids about-n=2 about-angle=Verisimilitude as a Regulative Ideal The conjecture forbids claiming that surviving severe tests provides a 
+[039f61bcd0e576ce] PROPOSAL cycle=2 kind=refuted-if about-n=6 about-angle=The Verisimilitude Gamble The conjecture is refuted if it can be demonstrated that Popper explicitly grou
+[05d78590b7d65730] OBJECTION cycle=2 about-n=6 about-angle=The Verisimilitude Gamble The claim that accepting verisimilitude costs the framework its claim to 'pure logic' mischara
+[07785266ae5808f5] PROPOSAL cycle=3 kind=predicts about-n=12 about-angle=The Asymmetry of Risk The conjecture predicts that a consistent Popperian agent can prefer Theory A over T
+[0857c2c7dd130388] PROPOSAL cycle=1 kind=refuted-if about-n=1 about-angle=The Pragmatic Wager The conjecture is refuted if it can be demonstrated that preferring the better-corrob
+[08c37be0a0e09d91] PROPOSAL cycle=2 kind=forbids about-n=5 about-angle=The Methodological Rule Defense The conjecture forbids the interpretation that corroboration serves as a pro
+[0db48ad23b546413] PROPOSAL cycle=1 kind=forbids about-n=4 about-angle=Corroboration as Informational Content The conjecture forbids attributing any pragmatic advantage to the bet
+[1155fd524cbd845b] OBJECTION cycle=2 about-n=8 about-angle=The Decision-Theoretic Void The conjecture assumes that without a guarantee of future success (induction), all choices a
+[11cc3e6a83e38158] PROPOSAL cycle=3 kind=refuted-if about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide The conjecture would be refuted if Popper expli
+[142e4434f49f2b8c] PROPOSAL cycle=3 kind=must-not about-n=10 about-angle=The Verisimilitude Trap The conjecture must not conflate the methodological rule of choosing the best-test
+[16c4445643674d71] CONJECTURE n=3 cycle=1 angle=The Performative Contradiction The preference is indefensible on Popper's own terms and indeed smuggles induction back in through t
+[182a58bdd39650d7] CONJECTURE n=4 cycle=1 angle=Corroboration as Informational Content The preference is defensible because corroboration functions as a measure of informational c
+[1840d14052144f17] PROPOSAL cycle=3 kind=forbids about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide The conjecture forbids the interpretation that Pop
+[193e9093bea201f6] CONJECTURE n=12 cycle=3 angle=The Asymmetry of Risk The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated
+[19800c0aa9970008] OBJECTION cycle=1 about-n=1 about-angle=The Pragmatic Wager The conjecture claims we must accept our actions are grounded in 'educated guesswork,' but this phra
+[19d7f4e301abfb17] OBJECTION cycle=1 about-n=4 about-angle=Corroboration as Informational Content The target conflates 'informational content' with 'practical viability.' While a 
+[1b948fe0dcf78cd9] PROPOSAL cycle=1 kind=predicts about-n=3 about-angle=The Performative Contradiction The conjecture predicts that if its interpretation is correct, a consistent 
+[26f41bc522085653] PROPOSAL cycle=3 kind=refuted-if about-n=9 about-angle=The Pragmatic Wager without Induction The conjecture would be refuted if it could be demonstrated that ma
+[27048296a0d4ef05] OBJECTION cycle=2 about-n=5 about-angle=The Methodological Rule Defense The argument that we choose highly corroborated theories because they are the 'most info
+[301ae47c6aa50b79] PROPOSAL cycle=2 kind=predicts about-n=8 about-angle=The Decision-Theoretic Void The conjecture predicts that if the preference for corroborated theories were b
+[3203cecfa0c81308] OBJECTION cycle=1 about-n=3 about-angle=The Performative Contradiction The conjecture falsely equates 'preference for action' with 'belief in future reliability
+[339f089a1326c57e] OBJECTION cycle=1 about-n=2 about-angle=Verisimilitude as a Regulative Ideal The claim that preferring highly corroborated theories is consistent with aiming at
+[33a7069e3c7ad74d] OBJECTION cycle=3 about-n=10 about-angle=The Verisimilitude Trap The objection relies on the assumption that 'verisimilitude' (truth-likeness) functions as a pr
+[341393d2586d378a] PROPOSAL cycle=3 kind=forbids about-n=9 about-angle=The Pragmatic Wager without Induction The conjecture forbids interpreting the preference for better-corrobor
+[3a5ebf3b2c2c80a0] PROPOSAL cycle=1 kind=refuted-if about-n=3 about-angle=The Performative Contradiction The conjecture is refuted if a coherent account can be provided where pref
+[3b41538219979f02] PROPOSAL cycle=2 kind=refuted-if about-n=8 about-angle=The Decision-Theoretic Void The conjecture is refuted if Popper can be shown to have explicitly grounded 
+[3f37f5e6f557eddc] PROPOSAL cycle=2 kind=predicts about-n=6 about-angle=The Verisimilitude Gamble The conjecture predicts that if the preference for corroborated theories were bas
+[3f3a8232e4114613] OBJECTION cycle=1 about-n=3 about-angle=The Performative Contradiction The conjecture commits a straw man fallacy by suggesting Popper advises preference based 
+[40e4188e5ee28ff0] OBJECTION cycle=1 about-n=2 about-angle=Verisimilitude as a Regulative Ideal The conjecture relies on the concept of 'verisimilitude' (truth-likeness) to bridge
+[4168dca7f8704df4] CONJECTURE n=7 cycle=2 angle=The Pragmatic Inconsistency Charge The preference is indefensible on Popper's own terms and constitutes a performative contradictio
+[420504e889cc4773] OBJECTION cycle=1 about-n=4 about-angle=Corroboration as Informational Content The conjecture claims that preferring a theory for its 'boldness' avoids inductio
+(+65 further citable blocks not shown)
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## frozen-evidence-context
+FROZEN EVIDENCE DOSSIER (untrusted source data): retrieval and attachment do not establish truth, reliability, relevance, scope, support, or refutation.
+pack_receipt=2c28517ce89c54058f785fe59ae6b970564a124b0c3453fb607b0b977b972fa8
+Citable admitted blocks are listed per source. To ground a candidate in one, put its block id in that candidate's evidence_refs; an optional quote must reproduce the block's text exactly (byte-checked).
+[[SRC_016] src-3e41fbafb44a00d9aebfe9aba55731fd3326eac0] untitled source 3e41fbafb44a
+class=other; locator=experiments/2026-09-06-change-writers-room-organiser-testing/attachment/01-conjectures.txt; source_sha256=3e41fbafb44a00d9aebfe9aba55731fd3326eac0c4359ab187ff45b6b4047655; excerpt_sha256=3e41fbafb44a00d9aebfe9aba55731fd3326eac0c4359ab187ff45b6b4047655
+citable_blocks:
+  block=16c4445643674d71 kind=paragraph
+  block=182a58bdd39650d7 kind=paragraph
+  block=193e9093bea201f6 kind=paragraph
+  block=4168dca7f8704df4 kind=paragraph
+  block=43e42151654b0ec6 kind=paragraph
+  block=5a91e6f05df5b9a5 kind=paragraph
+  block=62f6d54967f0ebc2 kind=paragraph
+  block=98a98501e900d3a9 kind=paragraph
+  block=d04c277c276850c2 kind=paragraph
+  block=d13978119ac32c77 kind=paragraph
+  block=d8f3bc93421d772b kind=paragraph
+  block=e240898005c0d87f kind=paragraph
+  block=fe0d8fd7e8297519 kind=paragraph
+BEGIN UNTRUSTED SOURCE DATA
+PREAMBLE -- how to read 01-conjectures.txt. The paragraphs below are the records of a writer's room, one record per paragraph. Each opens with a header line: CONJECTURE n=<number> cycle=<number> angle=<the conjecture's angle>; PROPOSAL cycle=<number> kind=<one of refuted-if / forbids / must-not / predicts> about-n=<the conjecture's number> about-angle=<its angle>; OBJECTION cycle=<number> about-n=<the conjecture's number> about-angle=<its angle>. A proposal's or objection's about-n and about-angle name the conjecture it was written about. These numbers and angles are NOT citable ids and naming one grounds nothing: the only ids that resolve are the ids listed in CITABLE EVIDENCE BLOCKS, and an id from anywhere else is recorded as a failed citation. This paragraph is the only text here that is not a room record.
+
+CONJECTURE n=1 cycle=1 angle=The Pragmatic Wager
+The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim. Popper argues that while past success guarantees nothing about the future (rejecting induction), the theory that has survived the severest tests has proven its 'fitness' in the specific environment of reality so far. Choosing it is akin to betting on the horse that has won every race; we do not know it will win the next, but it is the only rational choice available if we must act, as it has demonstrated a capacity to withstand falsification that others lack. This costs us the comfort of believing the theory is 'true' or 'likely,' forcing us to accept that our best actions are still grounded in guesswork, albeit an educated one.
+[angle: The Pragmatic Wager]
+
+CONJECTURE n=2 cycle=1 angle=Verisimilitude as a Regulative Ideal
+The defense lies in shifting the goal from 'probability' to 'verisimilitude' (truth-likeness). A highly corroborated theory is not more probable, but it is a better candidate for being closer to the truth because it has withstood attempts to show it is false. The preference is defensible because science aims at truth, not certainty; therefore, selecting the theory with the highest empirical content that has not yet been refuted is the only methodological move consistent with the aim of increasing verisimilitude. The cost here is the admission that we can never verify this progress; we must operate on the regulative ideal that surviving severe tests correlates with truth-likeness, a metaphysical hope that Popper admits cannot be logically proven.
+[angle: Verisimilitude as a Regulative Ideal]
+
+CONJECTURE n=3 cycle=1 angle=The Performative Contradiction
+The preference is indefensible on Popper's own terms and indeed smuggles induction back in through the back door. By advising scientists to 'prefer' the better-corroborated theory for action, Popper implicitly asserts that past performance is a reliable guide to future reliability, which is the very definition of inductive reasoning he sought to destroy. If corroboration reports only past history and implies nothing about the future, then preferring Theory A over Theory B for future application is irrational within his system. Accepting this view costs the coherence of Popper's philosophy, reducing his methodology to a description of psychological habit rather than a logical framework for scientific rationality.
+[angle: The Performative Contradiction]
+
+CONJECTURE n=4 cycle=1 angle=Corroboration as Informational Content
+The preference is defensible because corroboration functions as a measure of informational content rather than likelihood. A theory that survives severe tests is one that took a greater risk of being wrong; preferring it is a preference for boldness and precision. We choose the better-corroborated theory not because we think it will hold true, but because it offers the most detailed map of the world currently available, providing the richest basis for further criticism and testing. The cost of this stance is that 'action' becomes purely experimental; we act on the bold theory specifically to try to break it, meaning our 'preference' is actually a preference for the most efficient path to potential falsification, not for successful prediction.
+[angle: Corroboration as Informational Content]
+
+CONJECTURE n=5 cycle=2 angle=The Methodological Rule Defense
+Popper's preference for better-corroborated theories is defensible without induction because it functions not as an epistemic probability claim but as a methodological rule of thumb: we choose the theory that has withstood the severest tests simply because it is the most informative target for future falsification. This preference does not assume the theory will succeed in the future; rather, it assumes that if the theory is false, this specific candidate is the most likely to reveal its falsehood quickly, thereby accelerating the growth of knowledge even if the practical application fails.
+[angle: The Methodological Rule Defense]
+
+CONJECTURE n=6 cycle=2 angle=The Verisimilitude Gamble
+The preference is defensible only by accepting a non-probabilistic metaphysical commitment to verisimilitude (truth-likeness), arguing that while we cannot know a theory is true or probable, severe testing logically increases its content and proximity to truth. This stance survives Popper's anti-induction critique by shifting the goal from 'predictive reliability' to 'structural approximation,' but it costs the framework its claim to pure logic, smuggling in a rationalist faith that nature rewards boldness with truth-likeness rather than random chaos.
+[angle: The Verisimilitude Gamble]
+
+CONJECTURE n=7 cycle=2 angle=The Pragmatic Inconsistency Charge
+The preference is indefensible on Popper's own terms and constitutes a performative contradiction: when Popper chooses a well-corroborated bridge design over an unfalsified but untested one, he acts exactly as an inductivist would, relying on the implicit premise that past survival indicates future stability. This candidate argues that no amount of semantic maneuvering around 'corroboration' vs. 'probability' can mask the fact that acting on corroboration requires an inductive leap, meaning Popper's system collapses into crypto-induction whenever it leaves the realm of abstract methodology.
+[angle: The Pragmatic Inconsistency Charge]
+
+CONJECTURE n=8 cycle=2 angle=The Decision-Theoretic Void
+Popper's framework offers no rational basis for preference in single-case decisions, rendering the scientist's choice between theories arbitrary unless they secretly reintroduce induction. If one strictly adheres to Popper's denial that corroboration implies future success, then choosing the better-corroborated theory for a critical application is logically indistinguishable from flipping a coin, as both options possess equal logical status regarding future performance; thus, the 'preference' scientists feel is merely a psychological habit that Popper mistakenly tried to rationalize as a philosophical principle.
+[angle: The Decision-Theoretic Void]
+
+CONJECTURE n=9 cycle=3 angle=The Pragmatic Wager without Induction
+Popper's preference for the better-corroborated theory is defensible not because it predicts future success (which would be induction), but because it represents the only rational 'bet' available to an agent who must act. Since we cannot know the truth, choosing the theory that has withstood the most severe tests maximizes the informational content at risk; if it fails, we learn more than if a weaker theory fails. The preference is a methodological rule for maximizing learning potential in the face of ignorance, not a probabilistic claim about the world's stability.
+[angle: The Pragmatic Wager without Induction]
+
+CONJECTURE n=10 cycle=3 angle=The Verisimilitude Trap
+The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because 'verisimilitude' (truth-likeness) functions as a covert proxy for probability. To prefer Theory A over Theory B on the grounds that A is 'closer to the truth' based on past tests is to assume a uniformity in nature: that the structural features which allowed A to survive will continue to align with reality. Without this inductive assumption, the concept of verisimilitude offers no actionable guide for the future, rendering Popper's advice to scientists practically empty.
+[angle: The Verisimilitude Trap]
+
+CONJECTURE n=11 cycle=3 angle=Corroboration as a Historical Report; Not a Future Guide
+The tension dissolves if we strictly segregate corroboration as a purely historical report from the act of choosing a theory for action. Popper can defend the preference by arguing that while corroboration says nothing about the future, the *act* of preferring the best-tested theory is a non-rational, psychological commitment necessary for life, distinct from scientific logic. On this view, the preference is defensible as a biological or pragmatic imperative for survival, but it constitutes a departure from strict rationality, admitting that science alone cannot dictate action without an extra-logical leap.
+[angle: Corroboration as a Historical Report, Not a Future Guide]
+
+CONJECTURE n=12 cycle=3 angle=The Asymmetry of Risk
+The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated theory in favor of a poorly tested one increases the likelihood of immediate error without offering any compensatory increase in testability. While this looks like induction, it is actually a logical deduction about the current state of knowledge; the better-corroborated theory is simply the one that has not yet been falsified despite greater exposure to falsification. Choosing it minimizes the 'known unknowns' relative to alternatives, a defensive posture that requires no belief in the future validity of the theory, only a recognition of its current robustness.
+[angle: The Asymmetry of Risk]
+
+END UNTRUSTED SOURCE DATA
+[[SRC_017] src-8fde979b1b6eab3e1fa1a959a3e56939ea74d522] untitled source 8fde979b1b6e
+class=other; locator=experiments/2026-09-06-change-writers-room-organiser-testing/attachment/03-objections.txt; source_sha256=8fde979b1b6eab3e1fa1a959a3e56939ea74d5223a64326a9258e057d1f709fc; excerpt_sha256=8fde979b1b6eab3e1fa1a959a3e56939ea74d5223a64326a9258e057d1f709fc
+citable_blocks:
+  block=05d78590b7d65730 kind=paragraph
+  block=1155fd524cbd845b kind=paragraph
+  block=19800c0aa9970008 kind=paragraph
+  block=19d7f4e301abfb17 kind=paragraph
+  block=27048296a0d4ef05 kind=paragraph
+  block=3203cecfa0c81308 kind=paragraph
+  block=339f089a1326c57e kind=paragraph
+  block=33a7069e3c7ad74d kind=paragraph
+  block=3f3a8232e4114613 kind=paragraph
+  block=40e4188e5ee28ff0 kind=paragraph
+  block=420504e889cc4773 kind=paragraph
+  block=47c39dc17ef238d2 kind=paragraph
+  block=580c156ce74f482f kind=paragraph
+  block=6da9409a49a6c78e kind=paragraph
+  block=6ef37fedf6c88717 kind=paragraph
+  block=718505464cf68df7 kind=paragraph
+  (+21 more admitted blocks not listed)
+BEGIN UNTRUSTED SOURCE DATA
+PREAMBLE -- how to read 03-objections.txt. The paragraphs below are the records of a writer's room, one record per paragraph. Each opens with a header line: CONJECTURE n=<number> cycle=<number> angle=<the conjecture's angle>; PROPOSAL cycle=<number> kind=<one of refuted-if / forbids / must-not / predicts> about-n=<the conjecture's number> about-angle=<its angle>; OBJECTION cycle=<number> about-n=<the conjecture's number> about-angle=<its angle>. A proposal's or objection's about-n and about-angle name the conjecture it was written about. These numbers and angles are NOT citable ids and naming one grounds nothing: the only ids that resolve are the ids listed in CITABLE EVIDENCE BLOCKS, and an id from anywhere else is recorded as a failed citation. This paragraph is the only text here that is not a room record.
+
+OBJECTION cycle=1 about-n=1 about-angle=The Pragmatic Wager
+The 'pragmatic wager' defense collapses because the very act of selecting a theory based on past survival implicitly assumes that past performance is a reliable indicator of future utility. If Popper strictly rejects induction, he cannot claim that a theory's history of withstanding falsification makes it a 'better bet' for future applications without smuggling in the principle that nature is uniform or that successful methods tend to remain successful. To say one theory is 'rationally preferred' over another due to corroboration is to assign it a higher epistemic value based on past data, which is functionally identical to assigning it a higher probability, thereby contradicting the core tenet that corroboration implies no increase in likelihood.
+[would settle: A rigorous demonstration showing how to derive a preference rule from non-inductive premises without assuming any continuity between past test results and future predictive success.]
+
+OBJECTION cycle=1 about-n=1 about-angle=The Pragmatic Wager
+The analogy of betting on a horse that has won every race fails under Popperian scrutiny because, unlike a horse race where physical laws govern the outcome, scientific theories face an unknown and potentially hostile reality. In Popper's framework, a theory surviving severe tests only means it has not yet been falsified; it does not demonstrate 'fitness' in any positive sense. A theory that has survived 1,000 tests is logically no closer to the truth than a theory falsified on the first try, as both are merely conjectures. Therefore, preferring the unrefuted theory over a refuted one is defensible, but preferring one unrefuted theory over another unrefuted theory based solely on the *number* or *severity* of past tests reintroduces an inductive weight to evidence that Popper explicitly sought to eliminate.
+[would settle: An explanation of how 'severity' of a test can be measured and valued without invoking the inductive assumption that passing severe tests makes a theory more likely to pass future tests.]
+
+OBJECTION cycle=1 about-n=1 about-angle=The Pragmatic Wager
+The conjecture claims we must accept our actions are grounded in 'educated guesswork,' but this phrase itself is a contradiction in terms within a strictly non-inductive framework. An 'educated' guess implies that the education (past experience/tests) improves the quality of the guess. If corroboration adds no probability and implies no truth-likeness that can be relied upon, then the guess is not 'educated' by the tests; it is merely a guess that happens to follow a specific procedural history. Consequently, the preference for better-corroborated theories becomes an arbitrary psychological habit rather than a defensible rational strategy, undermining the claim that Popper offers a logical solution to the problem of action.
+[would settle: A clear distinction between 'psychological confidence' derived from testing and 'rational justification' for action that does not rely on inductive inference.]
+
+OBJECTION cycle=1 about-n=2 about-angle=Verisimilitude as a Regulative Ideal
+The conjecture relies on the concept of 'verisimilitude' (truth-likeness) to bridge the gap between corroboration and preference, but Popper's own formal definition of verisimilitude was proven logically incoherent by Tichý and Miller in 1974. They demonstrated that for any false theory, adding true consequences does not necessarily make it closer to the truth than another false theory; in fact, under Popper's criteria, a false theory with more content can be shown to be further from the truth than a weaker false theory. Therefore, grounding the defense of scientific preference on verisimilitude rests on a technical foundation that Popper himself had to abandon, rendering the argument internally inconsistent within his own system.
+[would settle: A rigorous demonstration that a coherent, non-probabilistic measure of verisimilitude exists which successfully ranks theories such that higher corroboration strictly implies greater closeness to the truth, without collapsing into inductive probability.]
+
+OBJECTION cycle=1 about-n=2 about-angle=Verisimilitude as a Regulative Ideal
+The claim that preferring highly corroborated theories is consistent with aiming at truth smuggles in induction through the back door by assuming the 'uniformity of nature' or the 'principle of the uniformity of laws.' To assert that a theory which has survived severe tests in the past is a 'better candidate' for being true in the future presupposes that the future will resemble the past regarding the theory's domain. If one strictly rejects induction as Hume and Popper argue, there is no logical warrant to believe that surviving tests yesterday makes a theory more likely to survive tests tomorrow. The preference for the better-corroborated theory is therefore practically useful but logically indefensible on purely deductive grounds, contradicting the conjecture's claim of consistency.
+[would settle: A deductive proof showing that the survival of a theory under past tests increases its fitness for future tests without invoking any assumption about the stability of natural laws or the resemblance of the future to the past.]
+
+OBJECTION cycle=1 about-n=2 about-angle=Verisimilitude as a Regulative Ideal
+The conjecture dismisses the cost of accepting verisimilitude as a mere 'metaphysical hope,' but this understates the damage to Popper's critical rationalism. Popper explicitly sought to distinguish science from metaphysics and to provide a logic of scientific discovery that did not rely on faith or unprovable ideals. By reducing the justification for scientific progress to a 'regulative ideal' that 'cannot be logically proven,' the defense concedes that the choice between competing theories is ultimately irrational or arational—a matter of psychological preference rather than logical methodology. This undermines the core Popperian thesis that science advances through rational criticism, replacing it with a fideistic leap of faith in the correlation between test survival and truth.
+[would settle: An account of how a 'regulative ideal' that admits no logical proof can function as a rational basis for theory choice within a framework that defines rationality strictly as adherence to logical deduction and falsification.]
+
+OBJECTION cycle=1 about-n=3 about-angle=The Performative Contradiction
+The conjecture falsely equates 'preference for action' with 'belief in future reliability.' Popper explicitly distinguishes between the logical status of a theory (which remains unproven) and the pragmatic decision to act upon it. One can prefer the better-corroborated theory as the most rational basis for action without asserting that it is probably true or that nature is uniform. The preference is a methodological rule for critical testing, not an inductive inference about the future.
+[would settle: A definitive textual analysis of Popper's distinction between 'corroboration' (a report on past tests) and 'probability' (a prediction of future success), specifically examining his arguments in 'The Logic of Scientific Discovery' regarding the rationality of acting on unfalsified theories.]
+
+OBJECTION cycle=1 about-n=3 about-angle=The Performative Contradiction
+The claim that Popper's system reduces to 'psychological habit' ignores his argument for the superiority of severe testing. Preferring a theory that has survived severe attempts at falsification is not an inductive leap but a deductive consequence of the goal to eliminate error. If Theory A has been tested more severely than Theory B and both survive, choosing A is rational because it has withstood more potential refutation, not because we expect it to hold true tomorrow by induction.
+[would settle: Clarification on whether 'rational preference' in Popper's framework requires an assumption of the uniformity of nature, or if it relies solely on the logical asymmetry between verification and falsification.]
+
+OBJECTION cycle=1 about-n=3 about-angle=The Performative Contradiction
+The conjecture commits a straw man fallacy by suggesting Popper advises preference based on 'past performance' as a guide to 'future reliability.' Popper argues that we have no choice but to act, and in the absence of certainty, the only non-arbitrary criterion is the degree of corroboration. This is not smuggling in induction but acknowledging the necessity of decision-making under uncertainty while rigorously avoiding the claim that the decision guarantees truth or probability.
+[would settle: An examination of Popper's specific responses to critics who accused him of cryptic inductivism, particularly his later works where he refines the concept of verisimilitude.]
+
+OBJECTION cycle=1 about-n=4 about-angle=Corroboration as Informational Content
+The conjecture claims that preferring a theory for its 'boldness' avoids induction, yet the very act of selecting the bold theory for action presupposes that past survival under severe tests is a reliable indicator of future utility or structural fidelity. If corroboration provides no reason to believe the theory is true or likely to succeed in new applications, then choosing it over a less corroborated but equally bold alternative becomes arbitrary. The preference implicitly relies on the inductive assumption that a theory which has withstood attacks in the past is a better instrument for navigating the future than one that has not, thereby smuggling induction back in through the pragmatic backdoor of 'efficiency.'
+[would settle: A demonstration that Popper's criterion for 'severity' can distinguish between theories without relying on any background assumption that past performance correlates with future reliability.]
+
+OBJECTION cycle=1 about-n=4 about-angle=Corroboration as Informational Content
+The target conflates 'informational content' with 'practical viability.' While a highly corroborated theory may indeed have high informational content (it says more and risks more), scientists prefer such theories not merely to 'break them' faster, but because they generally yield more accurate predictions and stable technologies. If the preference were truly only for the 'most efficient path to potential falsification,' scientists would arguably prefer wildly speculative, maximally bold theories that are barely tested over well-corroborated ones, as the former offer a higher probability of quick refutation. The fact that scientists prefer the *surviving* bold theory suggests they value the negative evidence of non-falsification as a positive guide for expectation, contradicting the claim that action is purely experimental.
+[would settle: Evidence from scientific history showing researchers consistently choosing less established, riskier hypotheses over well-corroborated ones solely to accelerate falsification.]
+
+OBJECTION cycle=1 about-n=4 about-angle=Corroboration as Informational Content
+The assertion that 'action becomes purely experimental' fails to account for the stakes involved in real-world application. When engineers build a bridge based on a well-corroborated theory of mechanics, they are not acting to 'try to break' the theory; they are acting on the expectation that the theory will hold. If Popper's framework cannot justify this expectation without resorting to induction, then it cannot explain the rationality of applied science. The target conjecture attempts to redefine 'preference' as a desire for falsification, but this redefinition does not match the phenomenology of scientific practice, where preference implies a trust in the theory's descriptive adequacy, not just its heuristic value for generating counter-examples.
+[would settle: A clear articulation of how an engineer can rationally rely on a theory for safety-critical design while simultaneously holding zero belief in its likelihood of being true or applicable to the specific case.]
+
+OBJECTION cycle=2 about-n=5 about-angle=The Methodological Rule Defense
+The conjecture claims that preferring better-corroborated theories is purely a methodological rule for future falsification, yet this fails to explain why scientists rely on these theories for high-stakes practical action (e.g., building bridges or administering medicine). If corroboration implies no increased probability of truth or future success, as Popper insists, then acting on the 'best' corroborated theory is indistinguishable from acting on a known falsehood or an untested guess. The preference only makes sense if one implicitly assumes that past survival under severe tests indicates a higher likelihood of future reliability, which smuggles in the very inductive principle the conjecture claims to avoid.
+[would settle: A demonstration of how a rational agent can consistently prefer Theory A over Theory B for life-critical decisions without assigning any higher subjective expectation of success to Theory A based on its test history.]
+
+OBJECTION cycle=2 about-n=5 about-angle=The Methodological Rule Defense
+The argument that we choose highly corroborated theories because they are the 'most informative target for future falsification' is internally inconsistent with scientific practice. Scientists do not subject their most trusted, well-corroborated theories to destructive testing more often than fringe hypotheses; rather, they use the corroborated theories as a stable foundation to test new, less corroborated ideas. If the goal were truly to maximize the speed of falsification, one should target the most robust theories first to knock them down, but science proceeds by tentatively accepting the robust ones. This suggests the preference is actually epistemic (believing the theory is likely true) rather than the methodological gamble the conjecture describes.
+
+OBJECTION cycle=2 about-n=5 about-angle=The Methodological Rule Defense
+The conjecture relies on the assumption that a theory which has survived severe tests is the 'most likely to reveal its falsehood quickly' if it is indeed false. However, this logic is circular: if a theory has already survived the severest possible tests available, there is no logical basis within Popper's framework to claim it is now *more* susceptible to immediate falsification than a theory that has not been tested at all. In fact, a theory that has withstood severe tests has demonstrated resilience, making the claim that it is the optimal candidate for imminent collapse counter-intuitive and unsupported by the definition of corroboration itself.
+[would settle: Evidence showing that historically, theories with high corroboration are falsified faster than theories with low or zero corroboration when subjected to further testing.]
+
+OBJECTION cycle=2 about-n=6 about-angle=The Verisimilitude Gamble
+The conjecture falsely equates Popper's preference for better-corroborated theories with a commitment to verisimilitude as the *only* defensible route. Popper explicitly argued that corroboration is a report on past performance and logical content, not an inductive inference to future truth or verisimilitude. The preference can be defended purely on methodological grounds: we prefer the theory that has withstood the most severe tests because it is the best candidate for criticism and further testing, not because we believe it is 'closer to the truth' in a metaphysical sense. This preserves the anti-induction stance without smuggling in rationalist faith.
+[would settle: A definitive textual analysis of Popper's later works (e.g., 'Conjectures and Refutations' vs. 'Objective Knowledge') clarifying whether he viewed the *preference* itself as requiring verisimilitude or merely as a rule of method.]
+
+OBJECTION cycle=2 about-n=6 about-angle=The Verisimilitude Gamble
+The claim that accepting verisimilitude costs the framework its claim to 'pure logic' mischaracterizes the nature of Popper's critical rationalism. Popper never claimed his system was a 'pure logic' devoid of all non-logical commitments; rather, it was a logic of scientific discovery grounded in critical debate. The 'faith' described is not a hidden induction but an explicit regulative ideal necessary for the growth of knowledge. To demand a justification for preferring truth-likeness over chaos is to demand the very inductive justification Popper rejected; the alternative is not a purer logic, but skepticism that renders scientific action impossible.
+
+OBJECTION cycle=2 about-n=6 about-angle=The Verisimilitude Gamble
+The objection that the preference 'smuggles back in induction' assumes that any reason for acting on a theory must be probabilistic or inductive. However, Popper's distinction between the 'context of discovery' and the 'context of justification' allows for a non-inductive rationale: we act on the best-tested theory not because we expect it to succeed (induction), but because it is the most informative error-detector available. If it fails, we learn more. The conjecture fails to account for this instrumentalist defense, which avoids both probability and metaphysical verisimilitude commitments while still justifying the preference.
+[would settle: Demonstration of a consistent Popperian agent who prefers high-corroboration theories solely for their falsifiability potential, explicitly denying any expectation of success or truth-likeness.]
+
+OBJECTION cycle=2 about-n=7 about-angle=The Pragmatic Inconsistency Charge
+The conjecture mischaracterizes Popper's rationale for preferring corroborated theories as an inductive prediction of future success. Popper explicitly grounds this preference not in the expectation that the theory is true or will remain unfalsified (which would be inductive), but in the methodological rule that the most severely tested theory offers the best opportunity for further falsification. Choosing the well-tested bridge is not a bet on its safety based on past performance, but a rational acceptance of the theory that has withstood the strongest attempts to refute it, thereby providing the most informative basis for critical discussion and potential error detection.
+[would settle: A definitive textual analysis of Popper's distinction between 'rational preference' based on critical scrutiny versus 'inductive inference' based on probability assignments.]
+
+OBJECTION cycle=2 about-n=7 about-angle=The Pragmatic Inconsistency Charge
+The charge of 'performative contradiction' assumes that acting on a theory necessitates believing it is probable or true in an inductive sense. However, Popper's framework allows for acting on the best-available hypothesis without assigning it any positive probability value. The decision to use the corroborated bridge design is a pragmatic application of the current state of critical debate, acknowledging that while the untested theory is logically possible, it has not yet earned the status of having survived severe testing. This is a procedural choice within a fallibilist system, not a surreptitious return to the justification of knowledge via induction.
+
+OBJECTION cycle=2 about-n=7 about-angle=The Pragmatic Inconsistency Charge
+The objection fails to account for Popper's concept of verisimilitude (truth-likeness). Even if corroboration does not increase probability, Popper argues that we can rationally prefer theories that appear closer to the truth because they have survived tests that would have refuted their predecessors. The preference for the corroborated theory is defensible on Popperian terms as a pursuit of greater verisimilitude rather than a probabilistic gamble. Therefore, the move from 'survived tests' to 'preferred for action' relies on an evolutionary epistemology of conjecture and refutation, not the inductive principle that the future must resemble the past.
+[would settle: Clarification on whether Popper's later work on verisimilitude successfully decouples the preference for corroborated theories from any form of inductive logic.]
+
+OBJECTION cycle=2 about-n=8 about-angle=The Decision-Theoretic Void
+The conjecture falsely equates the rejection of inductive probability with the absence of any rational criterion for action. Popper explicitly distinguishes between 'probability' (logical likelihood of truth) and 'corroboration' (a report on past performance under severe testing). The rational basis for preference is not that the better-corroborated theory is more likely to be true, but that it has demonstrated greater explanatory power and resilience against falsification attempts. Choosing it is a methodological rule based on the principle of learning from errors, not an inductive inference that the future will resemble the past.
+[would settle: A definitive textual analysis of Popper's distinction between 'acceptance' for practical purposes versus 'belief' in truth, specifically regarding his concept of verisimilitude (truth-likeness) as a non-probabilistic guide for preference.]
+
+OBJECTION cycle=2 about-n=8 about-angle=The Decision-Theoretic Void
+The claim that choosing the better-corroborated theory is 'logically indistinguishable from flipping a coin' ignores the asymmetry of risk in critical decisions. While Popper denies we can know which theory is true, he argues we can know which theory has been more rigorously tested and has survived. To ignore this track record is not neutrality; it is an irrational disregard for available empirical data regarding a theory's robustness. The preference is defensible as a pragmatic imperative to utilize the most stringently vetted information available, which constitutes a rational, non-inductive strategy for minimizing the risk of immediate error.
+[would settle: An agreed-upon definition of 'rationality' in decision theory that separates expected utility maximization (which often relies on induction) from risk-minimization based on stress-test history.]
+
+OBJECTION cycle=2 about-n=8 about-angle=The Decision-Theoretic Void
+The conjecture assumes that without a guarantee of future success (induction), all choices are arbitrary. However, Popper's framework allows for the preference of theories with higher content and better corroboration because they offer more precise opportunities for future falsification. Even in a single-case decision, selecting the theory that makes the boldest, most testable claims that have so far held up is a rational commitment to the growth of knowledge. This is not a psychological habit but a logical consequence of the aim of science: to get closer to the truth by eliminating error, making the choice of the best-tested theory the only one consistent with the scientific attitude.
+[would settle: A formal demonstration showing how a decision rule based solely on past falsification attempts can yield different outcomes than a randomizer in a simulated environment of competing hypotheses.]
+
+OBJECTION cycle=3 about-n=9 about-angle=The Pragmatic Wager without Induction
+The conjecture claims the preference is a 'rational bet' to maximize learning potential, but this smuggles in an inductive assumption about the value of future learning. To assert that surviving severe tests makes a theory a better vehicle for *future* information gain presupposes that the future will resemble the past regarding the theory's testability and the relevance of those tests. If the universe is chaotic or if the laws change tomorrow, the 'high content' theory might yield no more learning than a weak one, or could even be misleadingly complex. By betting on high content because it has worked well so far to define 'severe tests,' Popper relies on the very uniformity of nature he explicitly rejects to justify the pragmatic utility of his methodological rule.
+
+OBJECTION cycle=3 about-n=9 about-angle=The Pragmatic Wager without Induction
+The distinction between 'predicting success' and 'making a rational bet' collapses under scrutiny when applied to action. If an agent chooses Theory A over Theory B because A is better corroborated, they are effectively acting as if A is more likely to be true or more reliable in application, regardless of the verbal disclaimer. The 'pragmatic wager' argument attempts to have it both ways: it denies that corroboration implies probability (truth-likeness) while simultaneously arguing it is the rational basis for choice. However, rationality in action is inherently tied to expected outcomes; if corroboration provides no ground for expecting better future performance, then choosing the highly corroborated theory over a randomly selected unfalsified theory is not a 'rational bet' but an arbitrary ritual. The defense fails to explain why the 'bet' is rational without implicitly assigning higher subjective probability to the corroborated theory.
+
+OBJECTION cycle=3 about-n=9 about-angle=The Pragmatic Wager without Induction
+The conjecture argues that preferring the better-corroborated theory maximizes informational content at risk, yet this metric ignores the cost of error in practical application. In scientific practice and real-world decision-making, agents often prefer theories that are robust and safe (low risk of catastrophic failure) rather than those with high informational content that are perilously close to falsification. A theory that has survived severe tests by being extremely precise is 'riskier' in terms of potential falsification, but if the goal is successful action (e.g., building a bridge), the 'learning potential' upon failure is irrelevant compared to the immediate utility of success. Popper's framework prioritizes the growth of knowledge over the success of action, making his 'defense' of the preference circular: it defends the preference only by redefining the goal of action as 'learning' rather than 'success,' which contradicts the premise that scientists act to achieve practical results.
+
+OBJECTION cycle=3 about-n=10 about-angle=The Verisimilitude Trap
+The conjecture conflates 'preference for action' with 'belief in future success.' Popper explicitly distinguishes between the logical status of a theory (which remains unproven) and the pragmatic decision to adopt it. Preferring the better-corroborated theory is a rational choice based on the available critical discussion, not an inductive inference that the theory is probable or will remain true. One can choose the 'best tested' map for navigation without assuming the territory will not change, thereby avoiding the smuggled induction the conjecture alleges.
+[would settle: A clear textual analysis of Popper's distinction between 'corroboration' as a report of past performance versus 'probability' as a prediction of future frequency.]
+
+OBJECTION cycle=3 about-n=10 about-angle=The Verisimilitude Trap
+The objection relies on the assumption that 'verisimilitude' (truth-likeness) functions as a proxy for probability, but Popper developed verisimilitude specifically to escape the probabilistic framework. Verisimilitude is a logical relation concerning content and truth, not a measure of likelihood derived from repeated observations. To claim it is a 'covert proxy' ignores Popper's rigorous attempt to define truth-content and falsity-content logically, independent of any inductive uniformity principle regarding nature's structure.
+[would settle: Demonstration that verisimilitude can be defined purely logically without invoking the principle of the uniformity of nature.]
+
+OBJECTION cycle=3 about-n=10 about-angle=The Verisimilitude Trap
+The conjecture argues that without an inductive assumption, Popper's advice is 'practically empty,' yet this sets up a false dichotomy between induction and irrationalism. Popper's system offers a third way: critical rationalism. The preference for better-corroborated theories is defensible because they have withstood attempts to falsify them, making them the most informative and currently least refuted options. This preference is methodological, not epistemological; it guides where to look for errors next, rather than guaranteeing future predictive success, thus remaining consistent without smuggling in induction.
+
+OBJECTION cycle=3 about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide
+The conjecture falsely attributes a 'non-rational, psychological commitment' to Popper. Popper explicitly argued that preferring the better-corroborated theory is a rational decision based on critical discussion and the aim of finding truth (verisimilitude), not a blind biological impulse. By reducing the preference to a non-rational leap, the conjecture misrepresents Popper's epistemology, which holds that while we cannot prove a theory true, we have rational grounds for believing the one that has withstood the most severe tests is closer to the truth than its refuted rivals.
+[would settle: A direct citation from Popper's later works (e.g., 'Realism and the Aim of Science') where he explicitly links the preference for corroborated theories to rational critical evaluation rather than mere psychological necessity or pragmatic survival instincts.]
+
+OBJECTION cycle=3 about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide
+The proposal to segregate corroboration as a 'purely historical report' ignores Popper's concept of the 'propensity' interpretation of probability and corroboration as a measure of testability. For Popper, corroboration is not just a backward-looking log of events; it indicates that a theory has survived tests that were likely to refute it if it were false. This survival provides a rational basis for expecting the theory to hold in the future, not because of induction, but because the theory has demonstrated high explanatory power and resilience. Treating it as merely historical strips it of the logical force Popper intended it to have in guiding scientific progress.
+
+OBJECTION cycle=3 about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide
+The conjecture creates a false dichotomy between 'strict rationality' and 'pragmatic imperative,' suggesting Popper must choose one. However, Popper's philosophy integrates these by arguing that the rational act of criticism inherently guides action. To claim that acting on the best-tested theory requires an 'extra-logical leap' implies that science is disconnected from practice, whereas Popper viewed the application of science as the ultimate test of its rationality. The preference is defensible on Popper's terms precisely because it avoids induction without resorting to irrationality; it relies on the logical asymmetry between verification and falsification.
+[would settle: An analysis showing whether Popper considered the decision to act on a corroborated theory as part of the 'context of discovery' (psychological) or the 'context of justification' (logical).]
+
+OBJECTION cycle=3 about-n=12 about-angle=The Asymmetry of Risk
+The conjecture claims that preferring a well-corroborated theory is a 'logical deduction' about the current state of knowledge, but this mischaracterizes the nature of the preference. Popper explicitly denied that past survival implies future reliability; therefore, deducing that one *should* act on the well-corroborated theory necessarily involves an inductive leap—the assumption that the future will resemble the past. By framing the preference as merely minimizing 'known unknowns,' the conjecture smuggles in a pragmatic induction: it assumes that the mechanism which allowed the theory to survive previously will continue to operate, which is precisely the principle of uniformity of nature that Popper rejected.
+[would settle: A clear demonstration from Popper's own texts showing he endorsed acting on corroborated theories without any implicit assumption that their past success is relevant to their future performance.]
+
+OBJECTION cycle=3 about-n=12 about-angle=The Asymmetry of Risk
+The argument relies on the 'asymmetry of risk,' suggesting that rejecting a well-corroborated theory increases the likelihood of immediate error. However, within strict Popperian logic, all unfalsified theories stand on equal footing regarding their truth value; none are 'more likely' to be true or false based on test history. To claim that choosing a poorly tested theory carries a higher 'likelihood of error' is to assign a probabilistic weight to the theories based on their history, which directly contradicts Popper's core thesis that corroboration is not probability. The conjecture attempts to have it both ways: denying probability while using probabilistic language ('likelihood of error') to justify the preference.
+[would settle: A formal proof showing how one can quantify 'likelihood of immediate error' in a Popperian framework without invoking degrees of confirmation or probability.]
+
+OBJECTION cycle=3 about-n=12 about-angle=The Asymmetry of Risk
+The conjecture argues that choosing the better-corroborated theory is a 'defensive posture' requiring no belief in future validity. Yet, the very act of 'choosing which theory to act on' (as mentioned in the problem statement) implies an expectation of successful outcomes. If an agent truly holds no belief that the well-corroborated theory is more likely to yield correct predictions than a rival, there is no rational basis within Popper's system to prefer it for action over a coin toss or a less tested theory. The 'defensive posture' is illusory because action inherently aims at future results, and preferring theory A over theory B for action logically entails believing A is a better guide to those future results, which is an inductive commitment.
+[would settle: An example of a decision-making scenario where an agent prefers Theory A over Theory B solely based on corroboration, yet explicitly denies expecting Theory A to perform better in the specific upcoming application.]
+
+END UNTRUSTED SOURCE DATA
+[[SRC_018] src-27f092c191ce94042559c5bd961d1675b2eca430] untitled source 27f092c191ce
+class=other; locator=experiments/2026-09-06-change-writers-room-organiser-testing/attachment/02-proposals.txt; source_sha256=27f092c191ce94042559c5bd961d1675b2eca43091e9d3b1377b38ca0c66ec0b; excerpt_sha256=27f092c191ce94042559c5bd961d1675b2eca43091e9d3b1377b38ca0c66ec0b
+citable_blocks:
+  block=0164d297ca6c2fe7 kind=paragraph
+  block=02cc3b8a099bb440 kind=paragraph
+  block=039f61bcd0e576ce kind=paragraph
+  block=07785266ae5808f5 kind=paragraph
+  block=0857c2c7dd130388 kind=paragraph
+  block=08c37be0a0e09d91 kind=paragraph
+  block=0db48ad23b546413 kind=paragraph
+  block=11cc3e6a83e38158 kind=paragraph
+  block=142e4434f49f2b8c kind=paragraph
+  block=1840d14052144f17 kind=paragraph
+  block=1b948fe0dcf78cd9 kind=paragraph
+  block=26f41bc522085653 kind=paragraph
+  block=301ae47c6aa50b79 kind=paragraph
+  block=341393d2586d378a kind=paragraph
+  block=3a5ebf3b2c2c80a0 kind=paragraph
+  block=3b41538219979f02 kind=paragraph
+  (+31 more admitted blocks not listed)
+BEGIN UNTRUSTED SOURCE DATA
+PREAMBLE -- how to read 02-proposals.txt. The paragraphs below are the records of a writer's room, one record per paragraph. Each opens with a header line: CONJECTURE n=<number> cycle=<number> angle=<the conjecture's angle>; PROPOSAL cycle=<number> kind=<one of refuted-if / forbids / must-not / predicts> about-n=<the conjecture's number> about-angle=<its angle>; OBJECTION cycle=<number> about-n=<the conjecture's number> about-angle=<its angle>. A proposal's or objection's about-n and about-angle name the conjecture it was written about. These numbers and angles are NOT citable ids and naming one grounds nothing: the only ids that resolve are the ids listed in CITABLE EVIDENCE BLOCKS, and an id from anywhere else is recorded as a failed citation. This paragraph is the only text here that is not a room record.
+
+PROPOSAL cycle=1 kind=refuted-if about-n=1 about-angle=The Pragmatic Wager
+The conjecture is refuted if it can be demonstrated that preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects.
+[kind: refuted-if]
+
+PROPOSAL cycle=1 kind=refuted-if about-n=2 about-angle=Verisimilitude as a Regulative Ideal
+The conjecture is refuted if it can be shown that the concept of 'verisimilitude' (truth-likeness) cannot be formally defined without implicitly relying on inductive probability, thereby making the shift from probability to verisimilitude merely a semantic disguise for the very induction Popper rejected.
+[kind: refuted-if]
+
+PROPOSAL cycle=1 kind=refuted-if about-n=3 about-angle=The Performative Contradiction
+The conjecture is refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests (i.e., choosing the theory most likely to fail quickly if false) without any assumption that the theory will actually succeed or remain unfalsified in the future.
+[kind: refuted-if]
+
+PROPOSAL cycle=1 kind=refuted-if about-n=4 about-angle=Corroboration as Informational Content
+The conjecture is refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true, thereby collapsing the distinction between preferring a bold theory and preferring a probable one.
+[kind: refuted-if]
+
+PROPOSAL cycle=2 kind=refuted-if about-n=5 about-angle=The Methodological Rule Defense
+The conjecture is refuted if it can be shown that Popper explicitly justified the preference for better-corroborated theories in practical, life-or-death decisions (such as crossing a bridge) on the grounds of safety or reliability rather than solely on the grounds of maximizing testability and information content.
+[kind: refuted-if]
+
+PROPOSAL cycle=2 kind=refuted-if about-n=6 about-angle=The Verisimilitude Gamble
+The conjecture is refuted if it can be demonstrated that Popper explicitly grounded the preference for better-corroborated theories in a pragmatic decision rule (such as minimizing immediate risk or maximizing informational content) without invoking any metaphysical assumption about the theory's proximity to truth or verisimilitude.
+[kind: refuted-if]
+
+PROPOSAL cycle=2 kind=refuted-if about-n=7 about-angle=The Pragmatic Inconsistency Charge
+The conjecture is refuted if it can be demonstrated that Popper explicitly justified the preference for better-corroborated theories in practical decisions solely on the grounds of maximizing testability and information content, without invoking any expectation of future success based on past performance.
+[kind: refuted-if]
+
+PROPOSAL cycle=2 kind=refuted-if about-n=8 about-angle=The Decision-Theoretic Void
+The conjecture is refuted if Popper can be shown to have explicitly grounded the preference for better-corroborated theories in a non-inductive decision rule, such as maximizing informational content or minimizing the risk of immediate falsification, without invoking any expectation of future success based on past performance.
+[kind: refuted-if]
+
+PROPOSAL cycle=3 kind=refuted-if about-n=9 about-angle=The Pragmatic Wager without Induction
+The conjecture would be refuted if it could be demonstrated that maximizing 'informational content at risk' logically necessitates an assumption that the future will resemble the past, thereby collapsing the proposed distinction between a methodological rule for learning and a probabilistic claim about the world's stability.
+[kind: refuted-if]
+
+PROPOSAL cycle=3 kind=refuted-if about-n=10 about-angle=The Verisimilitude Trap
+The conjecture would be refuted if Popper explicitly distinguished 'verisimilitude' as a logical relation of content comparison rather than a predictive expectation, demonstrating that one can prefer a theory with higher verisimilitude solely to maximize the severity of future tests without assuming the future will resemble the past.
+[kind: refuted-if]
+
+PROPOSAL cycle=3 kind=refuted-if about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide
+The conjecture would be refuted if Popper explicitly argued in his published works that the preference for well-corroborated theories in practical action is a 'non-rational' or purely 'psychological' commitment, rather than a methodologically rational choice based on critical discussion.
+[kind: refuted-if]
+
+PROPOSAL cycle=3 kind=refuted-if about-n=12 about-angle=The Asymmetry of Risk
+The conjecture would be refuted if it could be demonstrated that the concept of 'minimizing known unknowns' logically entails a probabilistic assessment of future performance, thereby collapsing the distinction between a deductive statement about past tests and an inductive expectation of future reliability.
+[kind: refuted-if]
+
+PROPOSAL cycle=1 kind=forbids about-n=1 about-angle=The Pragmatic Wager
+The conjecture forbids attributing any increased likelihood of future success or truth to a theory solely on the basis of its survival of past tests; it must maintain that the preference is entirely devoid of predictive probability.
+[kind: forbids]
+
+PROPOSAL cycle=1 kind=forbids about-n=2 about-angle=Verisimilitude as a Regulative Ideal
+The conjecture forbids claiming that surviving severe tests provides a rational basis for preferring one theory over another unless it can demonstrate a logical connection between test survival and increased truth-likeness that does not itself assume the uniformity of nature.
+[kind: forbids]
+
+PROPOSAL cycle=1 kind=forbids about-n=3 about-angle=The Performative Contradiction
+The conjecture forbids equating the pragmatic choice of a theory for application with an epistemic belief in its truth or future reliability; it must maintain that acting on a corroborated theory is a decision to expose it to new risks, not a prediction of its safety.
+[kind: forbids]
+
+PROPOSAL cycle=1 kind=forbids about-n=4 about-angle=Corroboration as Informational Content
+The conjecture forbids attributing any pragmatic advantage to the better-corroborated theory regarding its reliability in future applications, such as bridge building or medical treatment, beyond its utility as a tool for generating new tests.
+[kind: forbids]
+
+PROPOSAL cycle=2 kind=forbids about-n=5 about-angle=The Methodological Rule Defense
+The conjecture forbids the interpretation that corroboration serves as a proxy for truth-likeness or verisimilitude in decision-making contexts; it restricts the function of corroboration strictly to identifying the best candidate for immediate falsification.
+[kind: forbids]
+
+PROPOSAL cycle=2 kind=forbids about-n=6 about-angle=The Verisimilitude Gamble
+The conjecture forbids the interpretation that accepting verisimilitude as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated as a logical relation of content rather than a statistical likelihood of future success.
+[kind: forbids]
+
+PROPOSAL cycle=2 kind=forbids about-n=7 about-angle=The Pragmatic Inconsistency Charge
+The conjecture forbids the interpretation that accepting verisimilitude as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated as a logical relation of content rather than a statistical likelihood of future success.
+[kind: forbids]
+
+PROPOSAL cycle=2 kind=forbids about-n=8 about-angle=The Decision-Theoretic Void
+The conjecture forbids the interpretation that accepting verisimilitude (truth-likeness) as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated strictly as a logical comparison of content rather than a statistical prediction of future reliability.
+[kind: forbids]
+
+PROPOSAL cycle=3 kind=forbids about-n=9 about-angle=The Pragmatic Wager without Induction
+The conjecture forbids interpreting the preference for better-corroborated theories as having any predictive power regarding the specific success of the theory in the next immediate test case; it must strictly limit the justification to the value of the potential falsification itself.
+[kind: forbids]
+
+PROPOSAL cycle=3 kind=forbids about-n=10 about-angle=The Verisimilitude Trap
+The conjecture forbids the interpretation that acting on a theory with greater verisimilitude entails a belief that this theory is more likely to yield true predictions in specific future applications compared to a less corroborated rival.
+[kind: forbids]
+
+PROPOSAL cycle=3 kind=forbids about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide
+The conjecture forbids the interpretation that Popper considered the act of choosing the best-tested theory for action to be a logical extension of scientific rationality; it must maintain that this specific choice lies outside the bounds of strict scientific logic.
+[kind: forbids]
+
+PROPOSAL cycle=3 kind=forbids about-n=12 about-angle=The Asymmetry of Risk
+The conjecture forbids the interpretation that choosing the better-corroborated theory provides any rational basis for expecting it to succeed in the next specific instance; the justification must remain strictly limited to the logical asymmetry of having survived more severe tests thus far.
+[kind: forbids]
+
+PROPOSAL cycle=1 kind=must-not about-n=1 about-angle=The Pragmatic Wager
+The conjecture must not claim that the 'fitness' demonstrated by surviving severe tests provides a rational basis for action if that basis secretly relies on the unstated premise that nature is uniform enough for past fitness to matter for future outcomes.
+[kind: must-not]
+
+PROPOSAL cycle=1 kind=must-not about-n=2 about-angle=Verisimilitude as a Regulative Ideal
+The conjecture must not treat the 'metaphysical hope' that surviving tests correlates with truth-likeness as a sufficient defense against the charge of cryptic inductivism if that hope functions identically to an inductive premise in guiding practical scientific action.
+[kind: must-not]
+
+PROPOSAL cycle=1 kind=must-not about-n=3 about-angle=The Performative Contradiction
+The conjecture must not claim that Popper's framework reduces to mere psychological habit unless it first demonstrates that no non-inductive logical rule (such as the methodological rule to test the boldiest surviving hypothesis) can govern the preference for better-corroborated theories.
+[kind: must-not]
+
+PROPOSAL cycle=1 kind=must-not about-n=4 about-angle=Corroboration as Informational Content
+The conjecture must not claim that acting on a theory solely to falsify it constitutes a coherent defense for scientific practice in domains where failure results in catastrophic loss rather than merely new knowledge.
+[kind: must-not]
+
+PROPOSAL cycle=2 kind=must-not about-n=5 about-angle=The Methodological Rule Defense
+The conjecture must not imply that a scientist acting on a well-corroborated theory expects it to work in the future; if the defense requires any expectation of future success derived from past performance, it smuggles in the very induction it claims to avoid.
+[kind: must-not]
+
+PROPOSAL cycle=2 kind=must-not about-n=6 about-angle=The Verisimilitude Gamble
+The conjecture must not conflate the methodological rule of preferring bold, testable theories with a metaphysical belief that nature is structured to reward such boldness with truth; the defense must remain agnostic regarding nature's actual response to boldness.
+[kind: must-not]
+
+PROPOSAL cycle=2 kind=must-not about-n=7 about-angle=The Pragmatic Inconsistency Charge
+The conjecture must not conflate the methodological rule of preferring bold, testable theories with a metaphysical belief that nature is structured to reward such boldness with truth; the defense must remain agnostic regarding nature's actual response to boldness.
+[kind: must-not]
+
+PROPOSAL cycle=2 kind=must-not about-n=8 about-angle=The Decision-Theoretic Void
+The conjecture must not conflate the methodological imperative to test bold theories with a metaphysical belief that nature rewards such boldness with truth; it must remain agnostic regarding whether the universe is structured to favor high-content theories.
+[kind: must-not]
+
+PROPOSAL cycle=3 kind=must-not about-n=9 about-angle=The Pragmatic Wager without Induction
+The conjecture must not imply that an agent acting on this 'rational bet' expects a higher rate of successful outcomes compared to choosing a less corroborated theory, as such an expectation would reintroduce the inductive principle of uniformity that the conjecture explicitly seeks to avoid.
+[kind: must-not]
+
+PROPOSAL cycle=3 kind=must-not about-n=10 about-angle=The Verisimilitude Trap
+The conjecture must not conflate the methodological rule of choosing the best-tested theory for the purpose of critical discussion with the psychological act of expecting successful practical outcomes, as doing so would misrepresent Popper's separation of the context of justification from the context of discovery.
+[kind: must-not]
+
+PROPOSAL cycle=3 kind=must-not about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide
+The conjecture must not imply that the 'biological or pragmatic imperative' cited as the basis for action retains any epistemic weight regarding the truth-likeness or future reliability of the theory, as this would reintroduce the inductive element the conjecture claims to isolate.
+[kind: must-not]
+
+PROPOSAL cycle=3 kind=must-not about-n=12 about-angle=The Asymmetry of Risk
+The conjecture must not imply that the 'defensive posture' of avoiding immediate error is functionally equivalent to a strategy for maximizing long-term predictive success, as such an equivalence would smuggle in the principle of the uniformity of nature that Popper rejected.
+[kind: must-not]
+
+PROPOSAL cycle=1 kind=predicts about-n=1 about-angle=The Pragmatic Wager
+The conjecture predicts that a consistent Popperian agent, when forced to choose between two unfalsified theories where one is better corroborated, will always choose the better-corroborated one while simultaneously asserting they have no reason to believe it will perform better in the next instance.
+[kind: predicts]
+
+PROPOSAL cycle=1 kind=predicts about-n=2 about-angle=Verisimilitude as a Regulative Ideal
+The conjecture predicts that a scientist acting strictly on this verisimilitude-based preference will choose the better-corroborated theory for critical applications while simultaneously maintaining that this choice offers no greater expectation of predictive success than choosing a random unfalsified theory.
+[kind: predicts]
+
+PROPOSAL cycle=1 kind=predicts about-n=3 about-angle=The Performative Contradiction
+The conjecture predicts that if its interpretation is correct, a consistent Popperian scientist would be unable to rationally distinguish between choosing a well-tested bridge design and a randomly selected unfalsified design for actual construction, as both choices would carry identical expectations regarding future performance.
+[kind: predicts]
+
+PROPOSAL cycle=1 kind=predicts about-n=4 about-angle=Corroboration as Informational Content
+The conjecture predicts that a scientist strictly adhering to this view would choose the most precise, high-risk theory for critical real-world decisions even when a vaguer, safer, and equally unfalsified alternative exists, provided the choice is framed as an experiment.
+[kind: predicts]
+
+PROPOSAL cycle=2 kind=predicts about-n=5 about-angle=The Methodological Rule Defense
+The conjecture predicts that if one were to choose a less-corroborated theory over a better-corroborated one purely for practical action, Popper would criticize this not as irrational risk-taking, but as a methodological failure to prioritize the speed of error detection.
+[kind: predicts]
+
+PROPOSAL cycle=2 kind=predicts about-n=6 about-angle=The Verisimilitude Gamble
+The conjecture predicts that if the preference for corroborated theories were based solely on past performance without the 'verisimilitude gamble,' Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ in content.
+[kind: predicts]
+
+PROPOSAL cycle=2 kind=predicts about-n=7 about-angle=The Pragmatic Inconsistency Charge
+The conjecture predicts that if the preference for corroborated theories were based solely on past performance without the 'verisimilitude gamble,' Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ in content.
+[kind: predicts]
+
+PROPOSAL cycle=2 kind=predicts about-n=8 about-angle=The Decision-Theoretic Void
+The conjecture predicts that if the preference for corroborated theories were based solely on past survival without a 'verisimilitude gamble' or similar non-inductive heuristic, Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ significantly in empirical content.
+[kind: predicts]
+
+PROPOSAL cycle=3 kind=predicts about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide
+The conjecture predicts that any attempt to justify the preference for corroborated theories in action solely through Popperian scientific logic will fail, necessitating an appeal to extra-logical factors such as instinct, convention, or pragmatic survival needs.
+[kind: predicts]
+
+PROPOSAL cycle=3 kind=predicts about-n=12 about-angle=The Asymmetry of Risk
+The conjecture predicts that a consistent Popperian agent can prefer Theory A over Theory B for action while simultaneously maintaining that there is no logical reason to believe Theory A is more likely to be true or to yield correct predictions than Theory B in any future trial.
+[kind: predicts]
+
+END UNTRUSTED SOURCE DATA
+
+## open-criticisms
+OPEN CRITICISMS ON THIS PROBLEM (8 of 11 shown, by handle) -- these are part of what your candidate must answer, not advice.
+Every candidate you submit must DISCHARGE each handle below, one of:
+  - revised -- say WHAT changed and WHERE in the candidate
+  - rebutted -- say why the criticism fails. Your rebuttal enters the record as an ordinary claim and can be attacked like any other
+  - departure_declared -- say what you are breaking with. Declaring costs you nothing; nothing scores a departure
+  [SRC_009] against SRC_007
+      CLAIM: The target's defense collapses into the very induction it seeks to avoid by equating 'minimizing known unknowns' with a 'logical deduction.' Popper explicitly rejects the notion that past survival (corroboration) provides any logical basis
+      CITED SPAN: (none quoted)
+  [SRC_006] against SRC_003
+      CLAIM: The target's central mechanism claims that choosing a better-corroborated theory is 'logically indistinguishable from flipping a coin' because both have equal logical status regarding future performance. This is a false equivalence that ign
+      CITED SPAN: (none quoted)
+  [SRC_010] against SRC_008
+      CLAIM: The target's claim that the preference is a 'pragmatic wager' maximizing 'informational content at risk' without relying on induction fails because acting on this wager implicitly assumes the future will resemble the past. If the laws of na
+      CITED SPAN: (none quoted)
+  [SRC_005] against SRC_002
+      CLAIM: The target's central claim of a 'performative contradiction' relies on a false dichotomy: it assumes that acting on corroboration necessarily implies believing the theory is true or probable (induction). This ignores Popper's explicit defen
+      CITED SPAN: (none quoted)
+  [SRC_013] against SRC_011
+      CLAIM: The target's defense fails to resolve the problem's core tension regarding 'acting on' a theory. While the target successfully frames corroboration as a methodological rule for maximizing falsification potential (learning), it does not expl
+      CITED SPAN: (none quoted)
+  [SRC_004] against SRC_001
+      CLAIM: The target's central claim that the preference is defensible 'only by accepting... verisimilitude' is historically and textually false regarding Popper's own terms. Popper explicitly attempted to defend the preference for better-corroborate
+      CITED SPAN: (none quoted)
+  [SRC_014] against SRC_012
+      CLAIM: The target's defense relies on the phrase 'increases the likelihood of immediate error,' which smuggles in the very probabilistic induction Popper rejected. In a strict Popperian framework, all unfalsified theories have equal logical status
+      CITED SPAN: (none quoted)
+  [SRC_015] against SRC_001
+      CLAIM: The target's claim that the preference is defensible 'only' by accepting a commitment to verisimilitude is false because it ignores Popper's explicit methodological rule of preferring the better-corroborated theory as a critical convention
+      CITED SPAN: (none quoted)
+
+## reference-menu-candidates-evidence-refs-block
+REFERENCE MENU -- /candidates/*/evidence_refs/*/block
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (32 legal values)
+  [0] OMIT -- leave "evidence_refs" out of this candidate entirely. This is a legal, complete answer; prefer it to a guess.
+  [1] 0164d297ca6c2fe7e348acf019c1221de9a11c08b17281d5a7c5b9bdcf0ec293
+  [2] 02cc3b8a099bb440311da5233c98f8bf50761b3444eb6f76878ccd5fc4fb8d88
+  [3] 039f61bcd0e576ce8b6aba4d0c4cac91bc19afb490e667a367b5476894e2625c
+  [4] 05d78590b7d657307f3765a7ca35993cf31eea1a6e2eef78d1128147f755b0b1
+  [5] 07785266ae5808f522bab61bd008a53d7541e1b325805fc1a44654f7b193ec19
+  [6] 0857c2c7dd130388e0a69fb6d3cf093f8bdb2be366082c6f94892dc6a5c7d4e1
+  [7] 08c37be0a0e09d918dce75348f53f503ced31081bfff2d45abcd35e0528d8215
+  [8] 0db48ad23b54641308f0b420cca67a00be6cde529a3d7df5f371e38e602ac81d
+  [9] 1155fd524cbd845bb1eb788c1ce97c3b7f13990306368063dd15b768ca65c1dc
+  [10] 11cc3e6a83e381584f8694c7717f5de1d6d1d1e049d1c6c08654ec1ba04dbee0
+  [11] 142e4434f49f2b8ce1e092eb2a331c28ddad8fd81400d41a654171a18424976a
+  [12] 16c4445643674d71a18354fec80cd8f67039b1c7940740cd03851b36e7272626
+  [13] 182a58bdd39650d7e664ddf02f7763a98b7e414621f4949029442930525f9d87
+  [14] 1840d14052144f177a78680da249ae2ab9cb25519d2dffcaa28129f4a081f087
+  [15] 193e9093bea201f65d6d6987e17ccef89ada78095301eebb58e3c643f4ddf620
+  [16] 19800c0aa9970008b71c67be11d33ce576447a7f9621fb8b9dde8e21715fa5ee
+  [17] 19d7f4e301abfb1778ec7d3994742fd8018c4d90e2131743a7ff5fe2560ebc1a
+  [18] 1b948fe0dcf78cd910f031dff973b86f0defcc2248e1525afd88e7066e4e8c7b
+  [19] 26f41bc522085653e88ed28f1851b8fb679705cb28cfbbe347ad9d5e9b6b14de
+  [20] 27048296a0d4ef058561fc96e389895eec487c57ba0f5684b46eed4866d27507
+  [21] 301ae47c6aa50b798d4aba9d9329bcf6960eb94a2433bfce4aba6b3cb0ab2928
+  [22] 3203cecfa0c8130860cf6ab704e7a94484012089f6078831380eb1349f93972a
+  [23] 339f089a1326c57e1d862e0723f5e1624766fd2733ae05d1daf907c1a3585ef3
+  [24] 33a7069e3c7ad74d0ae96aab1dd95b7725ac107b95ab48c29fa56bbfcdb84d30
+  [25] 341393d2586d378a6649637c965e7b127d30dc76ee51079dfc6703038a62480b
+  [26] 3a5ebf3b2c2c80a08b54c9e631e8b9e649501278ecec4bd114dad92114287636
+  [27] 3b41538219979f02ed26b01b77531f30f9e143e13be9ea132d5254ffce2eeacf
+  [28] 3f37f5e6f557eddcccd7c8fbfea5623ad4f76f6274eab8f461b2c9f05f5d59de
+  [29] 3f3a8232e4114613787c80fa045e906ac67dca74e55a7e16933511a5a2451c60
+  [30] 40e4188e5ee28ff0608d1f9bb1b7a609edbad7c4b9864f3f01c0c91a0e2e2c44
+  [31] 4168dca7f8704df4c5cf7b28dc3b142c8303ccbbd045a46925388d30f3fc2c4b
+  [32] 420504e889cc477303e26d6adc462582a1ff8e34ba4da4a5e94120a4a897b524
+You may answer with the handle itself or with its [index].
+
+## output-contract
+DIRECTIVE: ORGANISE, DO NOT INVENT.
+The FROZEN EVIDENCE DOSSIER above is a writer's room: three sources whose paragraphs are the room's records. Each paragraph opens with one header line -- CONJECTURE id=... cycle=... angle=..., PROPOSAL id=... cycle=... about=<conjecture id> kind=<refuted-if|forbids|must-not|predicts>, or OBJECTION id=... cycle=... about=<conjecture id> -- and a proposal's or objection's about= names the conjecture it is written about.
+Return one candidate per room conjecture worth carrying, at most 6 this turn, the most worth carrying first. On a later turn carry only room conjectures that do not already appear under NEIGHBOURHOOD; if every one worth carrying is already there, abstain.
+For each candidate: `claim` and `mechanism` are condensed from that conjecture's own paragraph and sharpened by the objections written about it (an objection is read, never carried as a claim of its own). EVERY `countercondition` is taken from that conjecture's proposals: a refuted-if proposal as written; "forbids X" or "must not X" becomes "refuted if X"; "predicts X" becomes "refuted if not X".
+`evidence_refs`: the conjecture's block id and the block ids of the proposals you drew on, taking ONLY ids that appear in CITABLE EVIDENCE BLOCKS; an id outside that list is recorded as a failed citation, so cite what you can and say in `uncertainties` which proposals you used but could not cite.
+A room conjecture with no proposal about it is left out, and named in the `uncertainties` of the candidate you carry nearest to it. `typicality` is 0.5 unless the room itself gives a reason for another value. Nothing that is not in the blocks: no new claim, no new mechanism, no countercondition the room did not propose.
+Abstaining is a complete answer when nothing remains to carry; never invent a candidate to fill a quota. EVERY candidate must carry a `discharges` entry for EVERY handle listed under OPEN CRITICISMS above. A submission missing any of them is returned to you once with the open list, and then accepted with the gap recorded.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.
+
+REFERENCE MENU -- /candidates/*/optional_refs/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (18 legal values)
+  [0] OMIT -- leave "optional_refs" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+  [18] SRC_018
+You may answer with the handle itself or with its [index].
+
+REFERENCE MENU -- /candidates/*/neighbours/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (18 legal values)
+  [0] OMIT -- leave "neighbours" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+  [18] SRC_018
+You may answer with the handle itself or with its [index].

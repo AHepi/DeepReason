@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's central claim of a 'performative contradiction' relies on a false dichotomy: it assumes that acting on corroboration necessarily implies believing the theory is true or probable (induction). This ignores Popper's explicit defense that preferring a better-corroborated theory is a rational choice based on the goal of subjecting theories to the severest possible tests, not an expectation of future success. By conflating 'acting on' with 'believing in', the target attacks a strawman of Popperian methodology rather than the actual argument that preference is justified by testability, not probability.",
+      "premise": "Acting on a theory requires an inductive belief in its future success.",
+      "premise_evidence": null,
+      "counterexample": [
+        "A scientist chooses Theory A over Theory B for a critical experiment not because they believe A is true, but because A makes a riskier prediction that, if falsified, would yield more information, thereby maximizing the severity of the test."
+      ],
+      "essential_premise_aliases": [],
+      "successor_question": "If the preference for corroboration is strictly a heuristic for maximizing test severity rather than a prediction of truth, does the charge of 'crypto-induction' still hold?"
+    }
+  ]
+}

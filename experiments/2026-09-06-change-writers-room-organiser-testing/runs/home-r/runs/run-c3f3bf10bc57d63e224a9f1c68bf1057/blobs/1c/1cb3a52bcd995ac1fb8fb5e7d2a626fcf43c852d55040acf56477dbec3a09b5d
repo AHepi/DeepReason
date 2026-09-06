@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses into the very induction it seeks to avoid by equating 'minimizing known unknowns' with a 'logical deduction.' Popper explicitly rejects the notion that past survival (corroboration) provides any logical basis for preferring a theory in terms of future reliability or error minimization. The target claims that rejecting a well-corroborated theory increases the 'likelihood of immediate error,' but within a strict Popperian framework where corroboration is not probability, one cannot logically deduce a higher 'likelihood' of error for the untested alternative without smuggling in an inductive assumption that past performance predicts future stability. By framing the preference as a 'deduction about the current state of knowledge' that yields a lower 'likelihood of error,' the target implicitly assigns a probabilistic weight to the corroborated theory's future success, which contradicts the core premise that corroboration is not probability.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper holds that corroboration is not probability and that no amount of past testing makes a theory more probable or reliable for the future; therefore, any claim that choosing a corroborated theory reduces the 'likelihood of error' compared to an alternative necessarily invokes an inductive bridge between past tests and future performance.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration provides no inductive support for future reliability, on what non-probabilistic, non-inductive grounds can one claim that rejecting a well-corroborated theory objectively increases the 'likelihood of immediate error' rather than simply exposing one to a different set of unfalsified possibilities?"
+    }
+  ]
+}

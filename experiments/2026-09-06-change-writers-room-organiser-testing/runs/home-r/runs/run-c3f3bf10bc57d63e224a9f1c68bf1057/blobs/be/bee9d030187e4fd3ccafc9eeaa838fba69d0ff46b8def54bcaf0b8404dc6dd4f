@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on the concept of minimizing 'likelihood of immediate error,' which implicitly reintroduces the probabilistic reasoning Popper rejected. By asserting that choosing a well-corroborated theory reduces the 'likelihood' of error compared to a poorly tested one, the argument assigns a higher degree of reliability or expected future performance to the former based on past survival. This contradicts Popper's strict prohibition against inferring future probability from past corroboration, as any claim about reduced 'likelihood' of error functions as a surrogate for inductive probability, thereby smuggling induction back in under the guise of 'risk asymmetry.'",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly denied that corroboration implies any increase in the probability of a theory being true or its future success, stating that corroboration is only a report of past performance without predictive weight.",
+      "premise_evidence": null,
+      "successor_question": "If 'likelihood of error' cannot be quantified without invoking degrees of confirmation, how can the target's risk asymmetry argument avoid being a disguised form of inductive probability?"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms without smuggling in induction, provided it is framed strictly as a methodological rule based on the asymmetry of risk rather than a prediction of future success.",
+    "mechanism": "Popper distinguishes between the logical status of a theory (which corroboration does not alter regarding probability) and the pragmatic decision of which theory to test or act upon. The mechanism relies on the 'asymmetry of risk': rejecting a well-corroborated theory in favor of a less tested one exposes the agent to a higher risk of immediate falsification without gaining any corresponding increase in informational content or testability. Therefore, choosing the better-corroborated theory is a rational application of the critical method to minimize the chance of error in the present moment, not an inductive inference that the theory will hold true in the future.",
+    "counterconditions": [
+      "If Popper explicitly stated that acting on corroboration requires an inductive assumption about the uniformity of nature.",
+      "If the preference for corroborated theories can only be justified by assigning them a higher subjective probability of future success.",
+      "If the 'asymmetry of risk' argument implicitly relies on the premise that past performance indicates future reliability."
+    ],
+    "typicality": 0.85,
+    "evidence_refs": [
+      {
+        "block": "193e9093bea201f6",
+        "quote": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated"
+      },
+      {
+        "block": "07785266ae5808f5",
+        "quote": "The conjecture predicts that a consistent Popperian agent can prefer Theory A over T"
+      },
+      {
+        "block": "08c37be0a0e09d91",
+        "quote": "The conjecture forbids the interpretation that corroboration serves as a pro"
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

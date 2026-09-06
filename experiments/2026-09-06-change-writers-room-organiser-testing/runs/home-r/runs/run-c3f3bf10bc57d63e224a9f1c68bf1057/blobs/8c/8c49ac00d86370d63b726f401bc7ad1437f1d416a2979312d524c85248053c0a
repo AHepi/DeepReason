@@ -1,0 +1,37 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms without smuggling in induction, provided it is framed strictly as a methodological rule for selecting the most informative theory to subject to further falsification, rather than as a prediction of future success or a measure of probability.",
+    "mechanism": "This defense operates by distinguishing between the logical status of a theory (which remains unproven) and its informational content. A highly corroborated theory has survived severe tests, meaning it has high empirical content and has not yet been falsified. Choosing it is not an inductive bet that it will remain true, but a strategic decision to test the 'best' available target (the one with the most content) to maximize the potential growth of knowledge through error elimination. The mechanism relies on the asymmetry of risk: rejecting a well-corroborated theory in favor of a less tested one offers no logical advantage and potentially reduces the severity of future tests.",
+    "counterconditions": [
+      "If Popper explicitly stated that choosing a better-corroborated theory implies an expectation of its future performance or reliability.",
+      "If the preference cannot be distinguished from a pragmatic wager that assumes the uniformity of nature.",
+      "If the framework requires a guarantee of future success to justify any action, rendering all non-inductive choice arbitrary."
+    ],
+    "typicality": 0.85,
+    "evidence_refs": [
+      {
+        "block": "193e9093bea201f6",
+        "quote": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated"
+      },
+      {
+        "block": "182a58bdd39650d7",
+        "quote": "The preference is defensible because corroboration functions as a measure of informational c"
+      },
+      {
+        "block": "08c37be0a0e09d91",
+        "quote": "The conjecture forbids the interpretation that corroboration serves as a pro"
+      }
+    ],
+    "discharges": [],
+    "analogy": null,
+    "optional_refs": [
+      "SRC_007",
+      "SRC_014",
+      "SRC_019"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}

@@ -1,0 +1,206 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's own terms through the asymmetry of risk: rejecting a well-corroborated theory in favor of a poorly tested one increases the likelihood of immediate error without offering any compensatory increase in testability.",
+      "mechanism": "Choosing the better-corroborated theory minimizes 'known unknowns' relative to alternatives, a defensive posture that requires no belief in the future validity of the theory, only a recognition of its current robustness as the one that has not yet been falsified despite greater exposure.",
+      "counterconditions": [
+        "refuted if it could be demonstrated that the concept of 'minimizing known unknowns' logically entails a probabilistic assessment of future performance, thereby collapsing the distinction between a deductive statement about past tests and an inductive expectation of future reliability",
+        "refuted if choosing the better-corroborated theory provides any rational basis for expecting it to succeed in the next specific instance; the justification must remain strictly limited to the logical asymmetry of having survived more severe tests thus far",
+        "refuted if it could be demonstrated that preferring the better-corroborated theory logically entails an assumption that the future will resemble the past"
+      ],
+      "evidence_refs": [
+        {
+          "block": "193e9093bea201f6"
+        },
+        {
+          "block": "142e4434f49f2b8c"
+        },
+        {
+          "block": "341393d2586d378a"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The mechanism does not equate minimizing known unknowns with a logical deduction of future success, but rather a logical deduction of current informational status. The 'likelihood of error' refers to the density of potential falsifiers already identified in the less-tested theory, not a probabilistic forecast."
+        },
+        {
+          "handle": "[SRC_016] against SRC_004",
+          "kind": "rebutted",
+          "note": "The term 'likelihood' is used here in the sense of logical proximity to known falsification conditions, not statistical probability. The claim explicitly denies any probabilistic assessment of future performance."
+        },
+        {
+          "handle": "[SRC_015] against SRC_014",
+          "kind": "rebutted",
+          "note": "The defense distinguishes acting to minimize immediate known risks (defensive posture) from acting to test. The preference is for the theory with fewer known vulnerabilities, which is a valid basis for action even if it implies no future reliability."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "The equivalence to flipping a coin is rejected because the two options are not symmetrical regarding 'known unknowns.' One has survived severe tests (fewer known failure modes), the other has not. This asymmetry provides a non-probabilistic rational basis for preference."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "The wager is not on future success but on the minimization of currently known risks. It does not assume the future resembles the past, only that the current state of knowledge (what has been tested and survived) is a fact."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "The claim does not assume acting implies believing the theory is true or probable. It assumes acting implies preferring the option with fewer known defects, which is a procedural rule, not an epistemic belief in truth."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The tension is resolved by defining the goal of action in this context as 'avoiding known errors' rather than 'achieving successful outcomes.' The preference is defensible as a strategy for error avoidance, not success maximization."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "This defense does not rely on verisimilitude as a metaphysical commitment but on the logical asymmetry of testing. It grounds the preference in the factual history of tests survived, not a hope for truth-likeness."
+        }
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is indefensible on Popper's own terms and constitutes a performative contradiction: when Popper chooses a well-corroborated bridge design over an unfalsified but untested one, he acts exactly as an inductivist would, relying on the implicit premise that past survival indicates future stability.",
+      "mechanism": "No amount of semantic maneuvering around 'corroboration' vs. 'probability' can mask the fact that acting on corroboration requires an inductive leap, meaning Popper's system collapses into crypto-induction whenever it leaves the realm of abstract methodology.",
+      "counterconditions": [
+        "refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed or remain unfalsified in the future",
+        "refuted if Popper explicitly distinguished 'corroboration' as a report of past performance versus 'probability' as a prediction of future frequency",
+        "refuted if a consistent Popperian scientist would be unable to rationally distinguish between choosing a well-tested bridge design and a randomly selected unfalsified design for actual construction"
+      ],
+      "evidence_refs": [
+        {
+          "block": "4168dca7f8704df4"
+        },
+        {
+          "block": "0857c2c7dd130388"
+        },
+        {
+          "block": "3a5ebf3b2c2c80a0"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The criticism targets the 'Asymmetry of Risk' defense, not this claim. This claim asserts that any such defense inevitably smuggles in induction, making the 'logical deduction' alleged by opponents actually a disguised inductive premise."
+        },
+        {
+          "handle": "[SRC_016] against SRC_004",
+          "kind": "rebutted",
+          "note": "This claim agrees that terms like 'likelihood' introduce probability. It argues that Popper's own practice forces him to use such terms, proving the contradiction."
+        },
+        {
+          "handle": "[SRC_015] against SRC_014",
+          "kind": "rebutted",
+          "note": "The claim explicitly addresses 'choosing which theory to act on,' arguing that this specific act reveals the inductive commitment that methodological rules try to hide."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "The claim argues that the distinction Popper tries to draw is false; in practice, acting on corroboration IS treating it as a guide to future reliability, making the 'coin flip' analogy the only honest representation of his logic, which he then contradicts by preferring the tested one."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "This claim supports the objection that the 'pragmatic wager' fails because the very act of betting on past performance assumes future relevance, which is induction."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "The claim rejects the dichotomy, arguing that acting on corroboration NECESSARILY implies believing it is a better guide, which is the definition of the inductive belief Popper rejects."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The claim argues that framing it as 'maximizing falsification' does not explain why one would choose the safe bridge for crossing. The act of crossing implies an expectation of safety, which is inductive."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "The claim argues that even if Popper tried to defend it without verisimilitude, the act of preference itself betrays the inductive commitment, regardless of his textual protests."
+        }
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is defensible without induction because it is a pragmatic wager, not an epistemic probability claim: choosing the theory that has survived the severest tests is the only rational choice available if we must act, as it has demonstrated a capacity to withstand falsification that others lack.",
+      "mechanism": "We accept that our best actions are still grounded in guesswork, albeit an educated one; the theory has proven its 'fitness' in the specific environment of reality so far, making it the rational bet despite no guarantee of future success.",
+      "counterconditions": [
+        "refuted if it can be demonstrated that preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects",
+        "refuted if it could be demonstrated that maximizing 'informational content at risk' logically necessitates an assumption that the future will resemble the past",
+        "refuted if the conjecture claims we must accept our actions are grounded in 'educated guesswork,' but this phrase itself is a contradiction in terms within a strictly non-inductive framework"
+      ],
+      "evidence_refs": [
+        {
+          "block": "182a58bdd39650d7"
+        },
+        {
+          "block": "0164d297ca6c2fe7"
+        },
+        {
+          "block": "26f41bc522085653"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The wager is not based on a logical deduction of future safety but on the pragmatic necessity of choosing the option with the best track record when forced to act. It admits the lack of logical guarantee."
+        },
+        {
+          "handle": "[SRC_016] against SRC_004",
+          "kind": "revised",
+          "note": "Revised to clarify that 'educated guesswork' refers to the procedural history of testing, not a probabilistic assessment. The 'education' is the process of elimination, not a measure of truth likelihood."
+        },
+        {
+          "handle": "[SRC_015] against SRC_014",
+          "kind": "rebutted",
+          "note": "The defense explicitly frames action as a 'wager' where the goal is rational choice under uncertainty, not guaranteed success. It accepts the conflation of acting and testing as a necessary feature of the wager."
+        },
+        {
+          "handle": "[SRC_007] against SRC_003",
+          "kind": "rebutted",
+          "note": "The claim argues that the choice is NOT indistinguishable from a coin flip because one option has a history of survival. While this history guarantees nothing, it provides a non-arbitrary basis for the 'bet'."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "The wager does not assume the future resembles the past in a law-like way, but simply uses the past as the only available data point for making a decision in the present. It is a heuristic, not a law."
+        },
+        {
+          "handle": "[SRC_006] against SRC_002",
+          "kind": "rebutted",
+          "note": "The claim maintains that acting on corroboration does not imply believing the theory is true, only that it is the 'best bet' among fallible options. This preserves the anti-induction stance."
+        },
+        {
+          "handle": "[SRC_013] against SRC_012",
+          "kind": "rebutted",
+          "note": "The defense resolves the tension by admitting that the preference is pragmatic and extra-logical in its ultimate justification (the need to act), while remaining methodological in its selection criteria."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "The claim does not rely on verisimilitude but on the pragmatic utility of 'fitness' demonstrated by survival. It avoids the metaphysical commitment to truth-likeness."
+        }
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

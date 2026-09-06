@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on the 'asymmetry of risk' to justify preferring better-corroborated theories without induction. However, this argument smuggles in induction because asserting that a well-corroborated theory minimizes the 'likelihood of immediate falsification' compared to an untested rival implicitly assumes that the future behavior of nature will resemble its past behavior (uniformity). If one strictly rejects induction as Popper claims, there is no logical basis within his system to assume that surviving severe tests in the past provides any rational guidance for avoiding falsification in the future; the preference thus collapses into a probabilistic expectation disguised as a methodological rule.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Asserting that past corroboration minimizes future risk requires an inductive assumption about the uniformity of nature.",
+      "premise_evidence": null,
+      "successor_question": "Can Popper formulate a non-inductive principle of action that distinguishes between 'rational preference' and 'inductive expectation' without relying on the predictive value of past survival?"
+    }
+  ]
+}

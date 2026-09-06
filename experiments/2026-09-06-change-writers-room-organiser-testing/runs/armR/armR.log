@@ -1,78 +1,63 @@
-=== ARM R started 2026-09-06T09:02:42Z home=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r ===
+=== ARM R started 2026-09-06T11:09:45Z home=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r ===
 question sha256: e8e720d251b3cab2cddd548cb5064a74575404c8ae47f347f840faa6021a19b1
 --- the attachment, by digest (bytes are committed under experiments/2026-09-06-change-writers-room-organiser-testing/attachment) ---
 01-conjectures.txt: OK
 02-proposals.txt: OK
 03-objections.txt: OK
 CONVERSION.json: OK
-selectors: DEEPREASON_SEAT_SHELL=conjecturer=seat.conjecturer.organiser-v1,argumentative_critic=seat.critic.evidence-blind-v1 DEEPREASON_ROLE_PROMPT_TEMPLATE=role-prompt.organiser-v1
---- reason, 4 cycles, 800000 token ceiling, attached 2026-09-06T09:02:42Z ---
+selectors: DEEPREASON_SEAT_SHELL=conjecturer=seat.conjecturer.organiser-v1 DEEPREASON_ROLE_PROMPT_TEMPLATE=role-prompt.organiser-v1
+--- reason, 4 cycles, 500000 token ceiling, attached 2026-09-06T11:09:45Z ---
 MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so nothing here can say whether reasoning='none' leaves hidden reasoning on. The run proceeds and sends exactly what you configured. To have this answered, write $DEEPREASON_HOME/model-profiles/<model-id>/agent.md.
 {
   "evidence": {
     "blocks": {
-      "paragraph": 94
+      "paragraph": 97
     },
-    "evidence_dossier_digest": "d2120e7dcb90332b0ebd4eea71996b705b895d7604fd67bbe6db8a510f04275f",
+    "evidence_dossier_digest": "84011ed87d401a2418d43006216cacb267b6ac11e3dc41c5fb288a8dd48388b2",
     "refusals": [],
     "sources_admitted": 3,
     "tiers": {
-      "evidence": 94
+      "evidence": 97
     }
   }
 }
 {
   "canonical_bridge_eligible": false,
   "completion_status": "incomplete",
-  "error": "V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at /workflow/insufficient_capability_by_route_seat: route seat has terminally exhausted its smallest authorized contract",
-  "error_type": "RunManifestError",
-  "evidence_dossier_digest": "d2120e7dcb90332b0ebd4eea71996b705b895d7604fd67bbe6db8a510f04275f",
+  "error": "token budget denied transactional work sha256:dcd8fa4595478085beeb41b23cd97af3c9cafe25c4f45f58316ee529e89760fd",
+  "error_type": "WorkBudgetDenied",
+  "evidence_dossier_digest": "84011ed87d401a2418d43006216cacb267b6ac11e3dc41c5fb288a8dd48388b2",
   "model_execution": {
     "base_profile": "standard",
     "contract_decompositions": [
       {
-        "admitted_effect_refs": [
-          "108c4ac5b0b6959d9d0f9688d71a408b1fd32f42cc994b9ab601e141253f4fbd"
-        ],
+        "admitted_effect_refs": [],
         "atomic_contract_id": "critic.atomic-target.v1",
         "atomic_work_attempts": [
           {
             "child_index": 0,
-            "child_key": "46a0ef71ad591063c3753b7975171488dfbff8bce1baa4650c13b694f2f71677",
+            "child_key": "349d716cdc7d700bc500c3e5cfc8c2891bd5f2fa8f3fe011879edb7889d2b11c",
             "contract_id": "critic.atomic-target.v1",
             "provider_attempt_count": 1,
             "repair_index": 0,
             "schema": "atomic-work-attempt-projection.v1",
-            "semantic_admission_ref": "sha256:ffa59e262bceff539d4e3ac77211c775444f438d280d3eee992a789a378d5f99",
-            "terminal_status": "rejected",
-            "work_id": "sha256:a79c20b406cd0b81cf6a40de57ebdcf5d0883999a963ed2c86984c070d698ac7",
-            "work_kind": "atomic_child"
-          },
-          {
-            "child_index": 0,
-            "child_key": "46a0ef71ad591063c3753b7975171488dfbff8bce1baa4650c13b694f2f71677",
-            "contract_id": "critic.atomic-target.v1",
-            "parent_work_id": "sha256:a79c20b406cd0b81cf6a40de57ebdcf5d0883999a963ed2c86984c070d698ac7",
-            "provider_attempt_count": 1,
-            "repair_index": 1,
-            "schema": "atomic-work-attempt-projection.v1",
-            "semantic_admission_ref": "sha256:a5f286a7fdec1a91cf3735f4c2c307125271b6aba78643de0ceaab8e00aab1ec",
+            "semantic_admission_ref": "sha256:5c6c75f153fa552a4a0a758e7db83bcea124ed868e09660b7fdcd783331b2483",
             "terminal_status": "completed",
-            "work_id": "sha256:cddbc0eb4f52d86c7d5df5c35db086148805e1a133e41e0d863404abc781ee5c",
-            "work_kind": "schema_repair"
+            "work_id": "sha256:701cd2d5811315c42d98aa9a1ddd12ef82a9c49a134aa28dfefe3c032ddb496a",
+            "work_kind": "atomic_child"
           }
         ],
         "child_keys": [
-          "46a0ef71ad591063c3753b7975171488dfbff8bce1baa4650c13b694f2f71677"
+          "349d716cdc7d700bc500c3e5cfc8c2891bd5f2fa8f3fe011879edb7889d2b11c"
         ],
         "child_partition": "critic_target",
         "child_semantic_admission_refs": [
-          "sha256:a5f286a7fdec1a91cf3735f4c2c307125271b6aba78643de0ceaab8e00aab1ec"
+          "sha256:5c6c75f153fa552a4a0a758e7db83bcea124ed868e09660b7fdcd783331b2483"
         ],
         "child_work_ids": [
-          "sha256:cddbc0eb4f52d86c7d5df5c35db086148805e1a133e41e0d863404abc781ee5c"
+          "sha256:701cd2d5811315c42d98aa9a1ddd12ef82a9c49a134aa28dfefe3c032ddb496a"
         ],
-        "completion_ref": "sha256:db8ed75fcf40b68a8cbc98fd63e30e8f937a739f9a748fb6808cddba66fa6c90",
+        "completion_ref": "sha256:a2cdac6be5d0b6fcb85f79d13a9c45d9404276c033bfd455231971eb3ef5b4d6",
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "role": "argumentative_critic",
         "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
@@ -80,15 +65,22 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
         "seat": 0,
         "source_contract_id": "batch-critic.v2",
         "source_failure_preserved": true,
-        "source_semantic_admission_ref": "sha256:be24556ee48331a867a003b32b702bde7884346b68879fe0dd14b0365da50564",
+        "source_semantic_admission_ref": "sha256:437797e719b5ea320b1b7d36bcea0fce05365d26cc04aad4a306e7d67e04f664",
         "source_status": "schema_exhausted",
-        "source_terminal_ref": "sha256:5127b7c20ebb020d62fa88cd4a2e0b7a785f72a8aa8682933fbfa66c4fd338e4",
-        "source_work_id": "sha256:6e12ba021f47ffb84d1a5dce41f8f86d8d131775e0a3535a67c4b05cc9483bed",
-        "transition_ref": "sha256:b91cf0523d6f9e08ed3a82d9e02f49f4966a5214d3e4697291bb1b58d082d3f5",
+        "source_terminal_ref": "sha256:7123cb426692a6fd541cf9156b4267dc28e60e00adc95a7b4c83da4e0329fdc7",
+        "source_work_id": "sha256:f7132201fce00a22f0d23d9d579cf81d99f19318074c72da54faa0e66ba2a8dc",
+        "transition_ref": "sha256:c9d2388a59fce7c60dac1c65b4094dc48930271f39f27b6a73656f02fe7b72bc",
         "trigger": "schema_exhausted"
       },
       {
-        "admitted_effect_refs": [],
+        "admitted_effect_refs": [
+          "d0dfed5667928c238188b799317fa2d69f4fabc2637e0f558f1dd0083cb26bd8",
+          "dcc05814db51e99cd1d7bb7be5ef75fec49932a86aa62ff342c00932c2d11dcf",
+          "970f11dc80d92167e889d75fa07a8f12db652050c301860cccd560a4c7f2f7cd",
+          "0e0a7f7f529174cefc56a689b31b5dc422a3778ee82a14894f2a2ebf3ac5d58e",
+          "f9f345f76a52fd24dc45ea31192784c648241d87065f69f767b5ffc455974818",
+          "2d858b4f673db8fda51534f97d620528e17f1ccbcbcf2cc3b6e03a55261a693a"
+        ],
         "atomic_contract_id": "conjecturer.atomic-candidate.v1",
         "atomic_work_attempts": [
           {
@@ -98,9 +90,9 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
             "provider_attempt_count": 1,
             "repair_index": 0,
             "schema": "atomic-work-attempt-projection.v1",
-            "semantic_admission_ref": "sha256:833890f6e970843f3b5cc2a3b4f5ca4ba41e47792a4e98b7382514402508f4fe",
+            "semantic_admission_ref": "sha256:fcf5f20ba899ccfda54edcbe2abda4c52affec5467c808d9c5be80c5927b318c",
             "terminal_status": "completed",
-            "work_id": "sha256:7c3bdc3fe07628f85bba9c1842e4891154ae1fec60e750038e1f1491da39e38a",
+            "work_id": "sha256:62eadc84ab600dfff225ec761acc06a26a7c7bdfc345f9971898df4734924f37",
             "work_kind": "atomic_child"
           },
           {
@@ -110,9 +102,9 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
             "provider_attempt_count": 1,
             "repair_index": 0,
             "schema": "atomic-work-attempt-projection.v1",
-            "semantic_admission_ref": "sha256:0052a6f3affc2a61da8d8bd15211fc0a395503ff4c170a728077e8bb4b389609",
+            "semantic_admission_ref": "sha256:2d26a264f4b6ada04b3c8e387d4b92803fb248ec0d788be02de5975cdceee3e3",
             "terminal_status": "completed",
-            "work_id": "sha256:ef0ef9b831815eecca3a62ec2a62784de1ba666e219483e99a0fc4d4b6ec9095",
+            "work_id": "sha256:5818ec1cf1c80b7b92acfcd132b24cc32128b891c6666455727ce7448d5a7458",
             "work_kind": "atomic_child"
           },
           {
@@ -122,9 +114,9 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
             "provider_attempt_count": 1,
             "repair_index": 0,
             "schema": "atomic-work-attempt-projection.v1",
-            "semantic_admission_ref": "sha256:b046112feef33600bce44d07554dd8ea5d1575985a123ab0c77c213e85a0527b",
+            "semantic_admission_ref": "sha256:18ab4f0dd0ed497cf6d48d7b05670f4ef1df227da34563fd1e1e3bd271421107",
             "terminal_status": "completed",
-            "work_id": "sha256:f83960bff308e654779169d8bd27539cd473f435de71a973b14036b5e023a992",
+            "work_id": "sha256:195ebb1f67a9b6b7a28c28e58543df9fc5904e8767d8d90d141491947f25c376",
             "work_kind": "atomic_child"
           },
           {
@@ -134,9 +126,9 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
             "provider_attempt_count": 1,
             "repair_index": 0,
             "schema": "atomic-work-attempt-projection.v1",
-            "semantic_admission_ref": "sha256:60f4b2c4d542995af3d13995254d0ed99149d1f6e25707eaff19aafa8f1bf943",
+            "semantic_admission_ref": "sha256:11a49d6c579ac04e7a59e6d062739dba48e209c836bc6b157a6ace20f1fa2e5c",
             "terminal_status": "completed",
-            "work_id": "sha256:d7408f755571f4b1241ccb8640b1f8054006c835dec0efa033aa6a900e71d0e2",
+            "work_id": "sha256:162ab6095dd5a777fe05beee538ab6dc9d860002699247ba708c7a7184038226",
             "work_kind": "atomic_child"
           },
           {
@@ -146,9 +138,9 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
             "provider_attempt_count": 1,
             "repair_index": 0,
             "schema": "atomic-work-attempt-projection.v1",
-            "semantic_admission_ref": "sha256:39fb9e21542b30bc7d52cc5ac5e0519804c4b89823d507ad58af3ab4eb74ed19",
+            "semantic_admission_ref": "sha256:5b71264142c49c216294ae616b5f71f451fad51e576803673a50df5a5f259fb0",
             "terminal_status": "completed",
-            "work_id": "sha256:0f9cfa39137309bf041f774a90d3d1b671e8b60b5c67590b047646a95f17a915",
+            "work_id": "sha256:7629c22d553edb1bb8072a44813402f345eec659135cd343d4583b6acbcab8f0",
             "work_kind": "atomic_child"
           },
           {
@@ -158,9 +150,9 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
             "provider_attempt_count": 1,
             "repair_index": 0,
             "schema": "atomic-work-attempt-projection.v1",
-            "semantic_admission_ref": "sha256:4f885b8783b0ebdff48c7586807edf528b124d5b91a86a76ff242cb775a8c854",
-            "terminal_status": "schema_exhausted",
-            "work_id": "sha256:5a7e618b45d62681c93fc5ec031d0ba6de9fa7669c0bb542d45815ebf4a890b5",
+            "semantic_admission_ref": "sha256:8669699c777037ecc12e2d1ba5de4a46b77e1099ba7ff1f666b5e5f1c791bb77",
+            "terminal_status": "completed",
+            "work_id": "sha256:e7da8fcffba5e4241468ad46f2ba0c60ac01a51d3114bced2d754147ed055259",
             "work_kind": "atomic_child"
           }
         ],
@@ -173,8 +165,23 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
           "candidate-slot-005"
         ],
         "child_partition": "conjecture_candidate_slot",
-        "child_semantic_admission_refs": [],
-        "child_work_ids": [],
+        "child_semantic_admission_refs": [
+          "sha256:fcf5f20ba899ccfda54edcbe2abda4c52affec5467c808d9c5be80c5927b318c",
+          "sha256:2d26a264f4b6ada04b3c8e387d4b92803fb248ec0d788be02de5975cdceee3e3",
+          "sha256:18ab4f0dd0ed497cf6d48d7b05670f4ef1df227da34563fd1e1e3bd271421107",
+          "sha256:11a49d6c579ac04e7a59e6d062739dba48e209c836bc6b157a6ace20f1fa2e5c",
+          "sha256:5b71264142c49c216294ae616b5f71f451fad51e576803673a50df5a5f259fb0",
+          "sha256:8669699c777037ecc12e2d1ba5de4a46b77e1099ba7ff1f666b5e5f1c791bb77"
+        ],
+        "child_work_ids": [
+          "sha256:62eadc84ab600dfff225ec761acc06a26a7c7bdfc345f9971898df4734924f37",
+          "sha256:5818ec1cf1c80b7b92acfcd132b24cc32128b891c6666455727ce7448d5a7458",
+          "sha256:195ebb1f67a9b6b7a28c28e58543df9fc5904e8767d8d90d141491947f25c376",
+          "sha256:162ab6095dd5a777fe05beee538ab6dc9d860002699247ba708c7a7184038226",
+          "sha256:7629c22d553edb1bb8072a44813402f345eec659135cd343d4583b6acbcab8f0",
+          "sha256:e7da8fcffba5e4241468ad46f2ba0c60ac01a51d3114bced2d754147ed055259"
+        ],
+        "completion_ref": "sha256:d4dc286ffc7f88bc945b689373765e8f4fe849454590b0164efea0f3cdca638a",
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "role": "conjecturer",
         "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
@@ -182,58 +189,263 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
         "seat": 0,
         "source_contract_id": "conjecturer.turn.v6",
         "source_failure_preserved": true,
-        "source_semantic_admission_ref": "sha256:8e8901a3441e62a20b73629c9cffc5669850cbdd456ebeabd62ab194ebe02150",
+        "source_semantic_admission_ref": "sha256:64cbe91c8b9ccef7eb0cec255304ebd33f712157551f16f41dd32bf24c8e66d6",
         "source_status": "schema_exhausted",
-        "source_terminal_ref": "sha256:193ef13bcde44c610dfc64704f65ed899e06b06561710087a8255876c7d5e878",
-        "source_work_id": "sha256:a7a3d6d5a11f39f52b45d3e3f6d2a5b1c37bc8214561528f01a75ac4a1c3ba3b",
-        "transition_ref": "sha256:92a988bee6617c2761430a5c5c274003f8f439e854821f98edad55f52fbf2565",
+        "source_terminal_ref": "sha256:9f48e90caed7fde6acc62bbf8f86341e5719d55d2c8b3170d2e74909436d508c",
+        "source_work_id": "sha256:8a434ec08a343cac9c12f9b70ea6be7746306b4a32ff871532a4106827f364ad",
+        "transition_ref": "sha256:73dd37858e424f73c5bbd100a9af4b058479ce5880d7db7ef5e17c088503a02d",
+        "trigger": "schema_exhausted"
+      },
+      {
+        "admitted_effect_refs": [
+          "af2f69914e54a8ebd848b431fe024c9998a32ebc31ac3c5561a44efed8668b3c",
+          "f6f2e02ef01ed427e948e771a82ab37ec91af512be2061f617bd25577af51111",
+          "ce89049f95fb5521d30fc84a0f74874eb32c360eac20ec1a123df1e7b5da265d",
+          "a838263ffdb41ffc3317a17d87d039deb272c7a9a7e70b398c9ad492626f0587",
+          "7c0ca1094ddace9506eb5ebde275dab48d69c4f9ddace3dfc7d1dd0dcc970393",
+          "ca278b1e65a9353d4378a4f3125edc456d707388ba7eb50ff9285a0514632a54"
+        ],
+        "atomic_contract_id": "conjecturer.atomic-candidate.v1",
+        "atomic_work_attempts": [
+          {
+            "child_index": 0,
+            "child_key": "candidate-slot-000",
+            "contract_id": "conjecturer.atomic-candidate.v1",
+            "provider_attempt_count": 1,
+            "repair_index": 0,
+            "schema": "atomic-work-attempt-projection.v1",
+            "semantic_admission_ref": "sha256:04ea40e342b8a2f2fbb7a03011a61c55559c9dbe2bb9fbf806a1333f25095e30",
+            "terminal_status": "completed",
+            "work_id": "sha256:8efaf2d58c46997436105d273ff0e247fbd6bfdc797e9e928451b3c4a97da3ba",
+            "work_kind": "atomic_child"
+          },
+          {
+            "child_index": 1,
+            "child_key": "candidate-slot-001",
+            "contract_id": "conjecturer.atomic-candidate.v1",
+            "provider_attempt_count": 1,
+            "repair_index": 0,
+            "schema": "atomic-work-attempt-projection.v1",
+            "semantic_admission_ref": "sha256:1e20d4b99d6d355e989a1bb09a17ee712b515d06eda34020c25b9626bae974c3",
+            "terminal_status": "completed",
+            "work_id": "sha256:b66356da91696c7e88e2629ef986d07a05d2880cd6ed20e466346a29f31b4953",
+            "work_kind": "atomic_child"
+          },
+          {
+            "child_index": 2,
+            "child_key": "candidate-slot-002",
+            "contract_id": "conjecturer.atomic-candidate.v1",
+            "provider_attempt_count": 1,
+            "repair_index": 0,
+            "schema": "atomic-work-attempt-projection.v1",
+            "semantic_admission_ref": "sha256:124ce6c8be7ab28a0be9f0aa45cc6e78720ee6ab06d4aac20068c89130cae4fc",
+            "terminal_status": "completed",
+            "work_id": "sha256:972c51c70e9b7f45247c1e41979610bbad1a985cde43df87b06b92372eb5d900",
+            "work_kind": "atomic_child"
+          },
+          {
+            "child_index": 3,
+            "child_key": "candidate-slot-003",
+            "contract_id": "conjecturer.atomic-candidate.v1",
+            "provider_attempt_count": 1,
+            "repair_index": 0,
+            "schema": "atomic-work-attempt-projection.v1",
+            "semantic_admission_ref": "sha256:6521a14b068a567044d90f3f2b0da75686f6127a2bb20fa6fc69617be3577f3c",
+            "terminal_status": "completed",
+            "work_id": "sha256:33e84413808ef41fc7c597adcc8657ae5b3bcc0a0fc81db80b945440c2bb956e",
+            "work_kind": "atomic_child"
+          },
+          {
+            "child_index": 4,
+            "child_key": "candidate-slot-004",
+            "contract_id": "conjecturer.atomic-candidate.v1",
+            "provider_attempt_count": 1,
+            "repair_index": 0,
+            "schema": "atomic-work-attempt-projection.v1",
+            "semantic_admission_ref": "sha256:2629329470e0a272335b7deed220c9e768f9d1573906c3e4ea1861e4b74aa40c",
+            "terminal_status": "completed",
+            "work_id": "sha256:27dd86926d2f37e2138bc8c09c59345ed6d8183953892e963f8e3976fbad1520",
+            "work_kind": "atomic_child"
+          },
+          {
+            "child_index": 5,
+            "child_key": "candidate-slot-005",
+            "contract_id": "conjecturer.atomic-candidate.v1",
+            "provider_attempt_count": 1,
+            "repair_index": 0,
+            "schema": "atomic-work-attempt-projection.v1",
+            "semantic_admission_ref": "sha256:85d8ddd563d5140061f8800b40390f27b48d2e0b40846d551cfec31dd8d42b32",
+            "terminal_status": "completed",
+            "work_id": "sha256:17ffcda97e05889dfb9b653ad117bb85bd9524f6369abdc85b788f7a45246a39",
+            "work_kind": "atomic_child"
+          }
+        ],
+        "child_keys": [
+          "candidate-slot-000",
+          "candidate-slot-001",
+          "candidate-slot-002",
+          "candidate-slot-003",
+          "candidate-slot-004",
+          "candidate-slot-005"
+        ],
+        "child_partition": "conjecture_candidate_slot",
+        "child_semantic_admission_refs": [
+          "sha256:04ea40e342b8a2f2fbb7a03011a61c55559c9dbe2bb9fbf806a1333f25095e30",
+          "sha256:1e20d4b99d6d355e989a1bb09a17ee712b515d06eda34020c25b9626bae974c3",
+          "sha256:124ce6c8be7ab28a0be9f0aa45cc6e78720ee6ab06d4aac20068c89130cae4fc",
+          "sha256:6521a14b068a567044d90f3f2b0da75686f6127a2bb20fa6fc69617be3577f3c",
+          "sha256:2629329470e0a272335b7deed220c9e768f9d1573906c3e4ea1861e4b74aa40c",
+          "sha256:85d8ddd563d5140061f8800b40390f27b48d2e0b40846d551cfec31dd8d42b32"
+        ],
+        "child_work_ids": [
+          "sha256:8efaf2d58c46997436105d273ff0e247fbd6bfdc797e9e928451b3c4a97da3ba",
+          "sha256:b66356da91696c7e88e2629ef986d07a05d2880cd6ed20e466346a29f31b4953",
+          "sha256:972c51c70e9b7f45247c1e41979610bbad1a985cde43df87b06b92372eb5d900",
+          "sha256:33e84413808ef41fc7c597adcc8657ae5b3bcc0a0fc81db80b945440c2bb956e",
+          "sha256:27dd86926d2f37e2138bc8c09c59345ed6d8183953892e963f8e3976fbad1520",
+          "sha256:17ffcda97e05889dfb9b653ad117bb85bd9524f6369abdc85b788f7a45246a39"
+        ],
+        "completion_ref": "sha256:245096035d365a36b576f9655a9413b856d823921f1823bee008c858fef3f0dc",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "conjecturer",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "contract-decomposition-projection.v1",
+        "seat": 0,
+        "source_contract_id": "conjecturer.turn.v6",
+        "source_failure_preserved": true,
+        "source_semantic_admission_ref": "sha256:d99f4a7e415b22053c5184b5d66073079d1f4c687cbcd56825ebbb9468cd5154",
+        "source_status": "schema_exhausted",
+        "source_terminal_ref": "sha256:a87def983b9073bf8000972d1a2bec7b7a6f591a9a36ba94d67b928d619d1d30",
+        "source_work_id": "sha256:7d27951ae997df8e26df88a006db112d173badf670cba526147afc8adf42b628",
+        "transition_ref": "sha256:ad28ced6df69019f4206e65ba365c5eb483bb58a0e9c4d0f563a58957439efb0",
+        "trigger": "schema_exhausted"
+      },
+      {
+        "admitted_effect_refs": [
+          "76500db011cf29135248a89bae5515210b4bec931f15a3e618d32c180ac07923",
+          "b4ea2311d93fe2e3993c1704bc61262fb2ef15fc2493cb515be6380ef5470f64",
+          "a6edeb5a71c4b80ca77d9cd7ae29ed630a4343bbae22375dc7c9ee878bbca17a",
+          "f68e6b46fe2afd6920643228570ba3d96dc24765c6720c0245d6876dbd992cca",
+          "4629cc15a8a7261d2e3a7ca2dd929a58f62fb272b90c2a6988d41856b55433e2",
+          "58f447adb4faeb1b531f904bcc782a3c0b8815c57d18f4c84b29a8b4cc9164e3"
+        ],
+        "atomic_contract_id": "conjecturer.atomic-candidate.v1",
+        "atomic_work_attempts": [
+          {
+            "child_index": 0,
+            "child_key": "candidate-slot-000",
+            "contract_id": "conjecturer.atomic-candidate.v1",
+            "provider_attempt_count": 1,
+            "repair_index": 0,
+            "schema": "atomic-work-attempt-projection.v1",
+            "semantic_admission_ref": "sha256:9dbf39df1baea2581fd85cd7e0ffda59c7d93aff45e632156a294d9f43e5b050",
+            "terminal_status": "completed",
+            "work_id": "sha256:1ca77dd1025a6a93dfdb3224968749f43a8617e0153915ccb5da989f3cf0d1bf",
+            "work_kind": "atomic_child"
+          },
+          {
+            "child_index": 1,
+            "child_key": "candidate-slot-001",
+            "contract_id": "conjecturer.atomic-candidate.v1",
+            "provider_attempt_count": 1,
+            "repair_index": 0,
+            "schema": "atomic-work-attempt-projection.v1",
+            "semantic_admission_ref": "sha256:2df31bf9a2654216798fe316a197ab566fb5eb509626a991f1be831d9fb67743",
+            "terminal_status": "completed",
+            "work_id": "sha256:b43bbd9b9d96abd5abdf4a5ceef4328caefe3502e59a9dd6f924743abb5541b9",
+            "work_kind": "atomic_child"
+          },
+          {
+            "child_index": 2,
+            "child_key": "candidate-slot-002",
+            "contract_id": "conjecturer.atomic-candidate.v1",
+            "provider_attempt_count": 1,
+            "repair_index": 0,
+            "schema": "atomic-work-attempt-projection.v1",
+            "semantic_admission_ref": "sha256:e73bb2eceee4000bdbd15f776bd6dce1ed834551134b068de900144118dab057",
+            "terminal_status": "completed",
+            "work_id": "sha256:c0e8eb58361e96ac2d1f7190be8a8af086a300f2c8a7d5bf5924443bdc097dd5",
+            "work_kind": "atomic_child"
+          },
+          {
+            "child_index": 3,
+            "child_key": "candidate-slot-003",
+            "contract_id": "conjecturer.atomic-candidate.v1",
+            "provider_attempt_count": 1,
+            "repair_index": 0,
+            "schema": "atomic-work-attempt-projection.v1",
+            "semantic_admission_ref": "sha256:050f76a8000514e6486e24bca65063db010f1b979f4939e6a9a326966ea3a72b",
+            "terminal_status": "completed",
+            "work_id": "sha256:d42576290cd0d72337511cbf026b5354fb2c7221f83d40ee6a0c134e3787ccea",
+            "work_kind": "atomic_child"
+          },
+          {
+            "child_index": 4,
+            "child_key": "candidate-slot-004",
+            "contract_id": "conjecturer.atomic-candidate.v1",
+            "provider_attempt_count": 1,
+            "repair_index": 0,
+            "schema": "atomic-work-attempt-projection.v1",
+            "semantic_admission_ref": "sha256:f73d2e92d6b146bf7979025249f93a76e7e6959266dca93b7216e38accea745a",
+            "terminal_status": "completed",
+            "work_id": "sha256:9f3feae3e3358400b5b2771e86df572315403e41c7a01431b10e332c1732bc31",
+            "work_kind": "atomic_child"
+          },
+          {
+            "child_index": 5,
+            "child_key": "candidate-slot-005",
+            "contract_id": "conjecturer.atomic-candidate.v1",
+            "provider_attempt_count": 1,
+            "repair_index": 0,
+            "schema": "atomic-work-attempt-projection.v1",
+            "semantic_admission_ref": "sha256:516806966f8c48c40ddf431936cd7fd54cbb172172271191df2f0d96a235c1c2",
+            "terminal_status": "completed",
+            "work_id": "sha256:2d42310b96e65d74fecf1e955f2f4c6eb3190123fe25f373663d4fe90c808b40",
+            "work_kind": "atomic_child"
+          }
+        ],
+        "child_keys": [
+          "candidate-slot-000",
+          "candidate-slot-001",
+          "candidate-slot-002",
+          "candidate-slot-003",
+          "candidate-slot-004",
+          "candidate-slot-005"
+        ],
+        "child_partition": "conjecture_candidate_slot",
+        "child_semantic_admission_refs": [
+          "sha256:9dbf39df1baea2581fd85cd7e0ffda59c7d93aff45e632156a294d9f43e5b050",
+          "sha256:2df31bf9a2654216798fe316a197ab566fb5eb509626a991f1be831d9fb67743",
+          "sha256:e73bb2eceee4000bdbd15f776bd6dce1ed834551134b068de900144118dab057",
+          "sha256:050f76a8000514e6486e24bca65063db010f1b979f4939e6a9a326966ea3a72b",
+          "sha256:f73d2e92d6b146bf7979025249f93a76e7e6959266dca93b7216e38accea745a",
+          "sha256:516806966f8c48c40ddf431936cd7fd54cbb172172271191df2f0d96a235c1c2"
+        ],
+        "child_work_ids": [
+          "sha256:1ca77dd1025a6a93dfdb3224968749f43a8617e0153915ccb5da989f3cf0d1bf",
+          "sha256:b43bbd9b9d96abd5abdf4a5ceef4328caefe3502e59a9dd6f924743abb5541b9",
+          "sha256:c0e8eb58361e96ac2d1f7190be8a8af086a300f2c8a7d5bf5924443bdc097dd5",
+          "sha256:d42576290cd0d72337511cbf026b5354fb2c7221f83d40ee6a0c134e3787ccea",
+          "sha256:9f3feae3e3358400b5b2771e86df572315403e41c7a01431b10e332c1732bc31",
+          "sha256:2d42310b96e65d74fecf1e955f2f4c6eb3190123fe25f373663d4fe90c808b40"
+        ],
+        "completion_ref": "sha256:60b2d230a98ef3a961df78baf2a47a343328e07253a65681af983020e0040a35",
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "role": "conjecturer",
+        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
+        "schema": "contract-decomposition-projection.v1",
+        "seat": 0,
+        "source_contract_id": "conjecturer.turn.v6",
+        "source_failure_preserved": true,
+        "source_semantic_admission_ref": "sha256:803eb204f94d92edd1deb23b2e52bae7a3eec8d0e7e44e5ddce9c17502daa73c",
+        "source_status": "schema_exhausted",
+        "source_terminal_ref": "sha256:8bff41afbf613ebe326956227953c012f311682165929ad71af5e1a2bd257f9d",
+        "source_work_id": "sha256:e7f48f51eb2da7e3007ee67a6ce7198a16508644de6a13b6529b05199194d4c1",
+        "transition_ref": "sha256:de973e9841144daf5ee54b8116b68d1951dd4b2300937a9c1018465d4327de9f",
         "trigger": "schema_exhausted"
       }
     ],
-    "event_horizon_seq": 974,
-    "insufficient_capability_routes": [
-      {
-        "attempted_contract_ids": [
-          "conjecturer.turn.v6",
-          "conjecturer.turn.v6",
-          "conjecturer.atomic-candidate.v1"
-        ],
-        "attempted_work_ids": [
-          "sha256:ceb081ba87964248834466e89a734960ffb2cb8eb69461d1abb2f5d10529d220",
-          "sha256:a7a3d6d5a11f39f52b45d3e3f6d2a5b1c37bc8214561528f01a75ac4a1c3ba3b",
-          "sha256:5a7e618b45d62681c93fc5ec031d0ba6de9fa7669c0bb542d45815ebf4a890b5"
-        ],
-        "behavioral_grant_sha256": "1fc755d7bbb8aacd2f68015c9d7a3d12325484315e8bcabfd33250a540eaf93e",
-        "classification_binding_ref": "sha256:75eece5ea53e2f847a8abc49778c7c3808c8acf58f77b5fb5924dcdda8461b4e",
-        "classification_plan_ref": "sha256:ff18281fba6faae0eb0b330e184410dac187bd2b25beae94b6415b26b4c94c4e",
-        "compact_recovery_transition_refs": [
-          "sha256:b67bfcd85d9e1c1ba2777711d76ce042adcf2d2f4dcc2cdefc2bf1f70f8d5846"
-        ],
-        "decomposition_transition_refs": [
-          "sha256:92a988bee6617c2761430a5c5c274003f8f439e854821f98edad55f52fbf2565"
-        ],
-        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
-        "final_contract_id": "conjecturer.atomic-candidate.v1",
-        "maximum_provider_calls": 5,
-        "maximum_schema_repairs": 4,
-        "observed_provider_calls": 1,
-        "outcome": "insufficient_capability",
-        "outcome_ref": "sha256:10e9c5a8c6ab722f2057d185dc900875cad3f637c46cdaf9870028aa71c71c58",
-        "provider_attempt_ref": "sha256:91e871d82eb8005b7c5e4e85acfa56dc5db21b12bfba7b3ef278b2acfea3381d",
-        "qualification_evidence_sha256": "b767f72785d6945c823ccfbaf5005b8f8ac14be2a61a34982b4d81711555107c",
-        "reason": "smallest_authorized_contract_schema_exhausted",
-        "retry_failed_work": false,
-        "role": "conjecturer",
-        "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
-        "schema": "route-seat-insufficient-capability-projection.v1",
-        "seat": 0,
-        "semantic_admission_ref": "sha256:4f885b8783b0ebdff48c7586807edf528b124d5b91a86a76ff242cb775a8c854",
-        "terminal_authority": "workflow.work-terminal.v1",
-        "terminal_ref": "sha256:16b60a437524d51400b16ae0551d468d922ac0fd9b9ed87797aa17d1929bf5e2",
-        "triggering_status": "schema_exhausted",
-        "work_id": "sha256:5a7e618b45d62681c93fc5ec031d0ba6de9fa7669c0bb542d45815ebf4a890b5"
-      }
-    ],
+    "event_horizon_seq": 1166,
     "mode": "route_seat_compact_recovery",
     "recovery_routes": [
       {
@@ -243,40 +455,51 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
         ],
         "applies_to": "all_subsequent_model_calls",
         "completed_compact_work_ids": [
-          "sha256:051f5c6e35f5cb534883c18da00574df38b69f16ef1eb67f9885f8c949522411",
-          "sha256:082929e8e49a56543fcd2a79d2444c459ca0e2b18e3f7b7eadfede8891bfa98a",
-          "sha256:110e85e75f0be3959b4f180a3f24d84f43ce9227fbc8ab0a85ffb0a783890b87",
-          "sha256:1ce5821fef5e749af9e1129d1829f9a2815c2374bb1551a5592f48750b7854ff",
-          "sha256:2375cb3f8b0140a0ed455bbce348562781d8c379d2c357cbda3fd0dc7634849b",
-          "sha256:23aef03d6d29adac61ada8172eb8b18f607af8124e2d97705f614cee285f216a",
-          "sha256:24c4cd1e45531f5a800416e58bf19206b97c6e6ca8e5a7366a666294af969477",
-          "sha256:27dbb60691a59a5d016867c97ae6b7b757ea1b3df111ae1a7bcbec65bc7adac5",
-          "sha256:2c3fbadf3f1389a844adbc1dec7f1c821802730996d51540ce8dd5defd75dc40",
-          "sha256:2c8e205d20ce5ea5942f810f10b461661197937a7b4e5f68c211f68dcfe33504",
-          "sha256:3841552194697c9154ea88b6d616666b00b0c96599041845cde24d66a92ba806",
-          "sha256:5158964b610db7bdbdbf34af74435a574c695fa2ed6a7743f03166ac5a81bc71",
-          "sha256:5384675055afd4ff37675604846648b7eb8ea0dad64b56d8968ed37390fb0eb9",
-          "sha256:56a94df8150d264e75c0b637945cfc8c757c5585806b815e142a59dde04dd0e2",
-          "sha256:5949bb70fdfc225ba7a905fa71a1ba0eb333e530f6213221f4aa97f2581d51c9",
-          "sha256:5ab94b8aa0a54bd7ecee9d949c41893eafd97b5011732a5617b5bc584219e42b",
-          "sha256:5dbdbc47b3b36f5b285dd4c6515a8cbd2a5ba50759f4039b5917e76a2e29e98a",
-          "sha256:74ef9887d676ddba620b48a2223a7545c30f061550f39026007f319e0a81ca7b",
-          "sha256:7aaad3bd891cb5f5d294af0aa02aa8f2f083133b2798d9fcc12b4a31f6788339",
-          "sha256:85d5230a5e2f1cc28580b81dccc427b8e744248903c28717d8a57478fcd3aa08",
-          "sha256:8d84f1809ca86135bcd8120b042556805ebc3b129e82fb1654ef8924f5fc1991",
-          "sha256:91668f0f6b32ce836a0d6f2f2721444d1e7688b0f4050b08824fe670be2f0686",
-          "sha256:9514c7c6e867e14ec6a28d747d94edf65161220cc85d2f5eb2655df14f305e98",
-          "sha256:a3bcfb7c347d4a9cceb7f1c3eb19bf345edb7f013c4c51ff3636c8c4d1365a7c",
-          "sha256:a5849ab3f6437049136b538b028b2d8a531426f74094e9355f43cdf91d515b4d",
-          "sha256:ab60ecfa234083412344b65008156e7dfeabdfa114c426e9f00372cf0d0b2ae5",
-          "sha256:ab7154d4bf5343101b9aa1df76e8aa70462d912dd46ba892aec20541f286518e",
-          "sha256:cddbc0eb4f52d86c7d5df5c35db086148805e1a133e41e0d863404abc781ee5c",
-          "sha256:dce3a46066bb1d45ace08ce1b7ca6a9f64df93d9a6ee09a01fa894f7565b364c",
-          "sha256:df2460309b169422767316694762a385dd041f8c1c3c08c2264ab80e0bc36c1a",
-          "sha256:e1b51dfcce04da529a886d47e6b30f67e9acda08a35272b0a727de750210dd1f",
-          "sha256:e245c6fd992f16be59581c75f5463a062f4340138e2a7c3d5d2ced940082f1b6",
-          "sha256:e646e2f004636a76c6b1fe9a4b80370c0acf749d63bbffa3dcb261834ecd4b4e",
-          "sha256:eb8a862713ca3a9329c1d1d600b892bf427a998188515105aa26938b0f8c9ded"
+          "sha256:16294d0f96414f55a23fc293e2ac0228fd9a61f7c6faf5b4ca07a5922888dd38",
+          "sha256:1886447790d3854794b1dcaf0a7fc56ae5763bccdd75ee0bfa027aa626688e29",
+          "sha256:1ba2c546593492c8139370a770ff01726f22ba091b5b8a41a2c6d678431fe217",
+          "sha256:1eda1909d70acb4f988481f9f7de229a637feb32a79989585a6ac1987083f2bb",
+          "sha256:288d54439f9b2c7714dba6b48cf0de403a52fb666205f04b22922b5ad23640bb",
+          "sha256:32a9ce83c3d2786a582e694bfa9f372f1d9efd0cd419b4f1ae9b5bf080904c66",
+          "sha256:32ac6b9fdabe6a30ed5057dc709774787984ccae5fb0fa8fac93d505104f3cc2",
+          "sha256:48bdea2a14ab80b2669d04dbbd39925c39e283f1c63dea1671c0554c705edf3f",
+          "sha256:49578ed994fb4e06a748245f11f3fd5acc2b3554cfb542fbf35e5c2a2eccb37e",
+          "sha256:5289571606f0c0341ed140a30209a6560875caac26a4480d50a3e30840595302",
+          "sha256:5b9269af9149289cf0c797905a21aba72f9590648fa77dd34fa9c1d20373e62f",
+          "sha256:66f747623541e63e51302c1828a129ef6c3591937cf1a3ce849573ccaefd65ea",
+          "sha256:6a995307efea8ac46fdacc18c2f19aef7e13a0633b7eba300e6085d59f2f5215",
+          "sha256:6cf474aaf90590b35f3728392be757a3eac33581d83f9e576dbb97121dd09d72",
+          "sha256:701cd2d5811315c42d98aa9a1ddd12ef82a9c49a134aa28dfefe3c032ddb496a",
+          "sha256:717724809f34a8f08ff1b21957db1e9e4fb90dfa5ac04c5e1ab08a78285e043f",
+          "sha256:79ab4ec3b5c764ceb3e3de4671c1e611f1955d055c01c86351a070f6117df6b5",
+          "sha256:7dcd17a142d2914da9b5c854e7c45b331f3a2483f6a8d9a6c30c3d7e98462e56",
+          "sha256:7e01a21c76221368db0b48456663104bbb35d8cf095a007373c6ede30f06f144",
+          "sha256:7e14fe7e726be4c2c3e275ba45a19cb06cb423927a8e9d21f9b02bd54144926c",
+          "sha256:84250126190fcb07bb9b10969241e8649e515707207f72ad23551a6b5a3a3590",
+          "sha256:883424a61131e57697a4d6578f897e6f9485b81a66f16dd339d97ae3a8af3553",
+          "sha256:8a1af58bfa79a563122bc4679646d6c0fe9c856a02f83fb5f94309fb6b1f1912",
+          "sha256:98994aaa1e6c4ff605ee185c56c460449b2834defc1c274b293dfb88b16977fd",
+          "sha256:9c8584c2365284d397f8ae0d2e5fdd6533be2a40b3585d8626350ec1ad08acf7",
+          "sha256:9f8289ebdd2bece2f5b2a34b2159b8253889adffd1a9b1ab192ea2bfcbca9a32",
+          "sha256:aa2051280c0cb46494edfdd13f7a8fc1e009fc8d71ad8867a9c478a02c83d541",
+          "sha256:ab4db0ab9655f0ba465831828d169453d19b8df007348efe1ef05a35e43d6c58",
+          "sha256:abcf339b0f754b4ad093ee19a48b3593947c7669e01c4991940277c049dbfa70",
+          "sha256:ad17c89be5976da76cd17f03472fbcd48f2082f7bc1aaaaefce2c164692c144d",
+          "sha256:b17998544dd55a5f0d04c6bd5d1108746431eef29a5f08120af4506d10357c67",
+          "sha256:b3d73594de6574b1993695d96b1c8353bf6785002b2f3e1e7b8e58dbe956073b",
+          "sha256:b92ea9da74da4992f0b0cfdbe467e3e0aa7ee4c90845afd2c97a224161c286ed",
+          "sha256:ba90646d0fa4466f1f683dcd53dfe4beea06bc7b39c0b90b285bce50dff8693d",
+          "sha256:c442407741debd1bca26b97e1048ad0f74be624966a1fcd1b6ba6c0b5a680b2d",
+          "sha256:c5ace8ea6e83baf1bf94a4d7cc1503316c0373f160092a57c9fca127cc4c4236",
+          "sha256:d57bf4ec930e974d049919a72124cf5656005d0ec33434bcd57eccb6716b60a3",
+          "sha256:d6547e475d8e84003816c38fb5cdcd9fdca513e7cb3781bf32ed249f13d2f485",
+          "sha256:e544eb10fedb22425fe00c22346f49d791dcc4168d5b31be46e875d79b98f740",
+          "sha256:efa0ef7506beb5d5cf2c4be26f6ecee8219fd2e1b982be9f57f31b44e5804d7b",
+          "sha256:f05f08f6cea9d586a597f9eef4dd550c774f5b4855fcb18fb7729784191814e2",
+          "sha256:f76e7d4fa979a0a53e4f04d98c7f06362532acd2e96269a2e549ae4afe56b81e",
+          "sha256:f9f4bb8793ab6f7037a2c68178acff39817ccede4127aeea01a32d63dc6d4958",
+          "sha256:fa0ba8e3d6d22ed516632c4c47e394552f9e8890cd530e54b98013b830e63206",
+          "sha256:fcfafd62ed1302dec56f6575efc94e601576953da05469b959ea9db908751b5b"
         ],
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "language": {
@@ -292,63 +515,87 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
         "seat": 0,
         "source_profile": "standard",
         "sticky": true,
-        "subsequent_compact_call_count": 35,
+        "subsequent_compact_call_count": 45,
         "subsequent_compact_work_ids": [
-          "sha256:051f5c6e35f5cb534883c18da00574df38b69f16ef1eb67f9885f8c949522411",
-          "sha256:082929e8e49a56543fcd2a79d2444c459ca0e2b18e3f7b7eadfede8891bfa98a",
-          "sha256:110e85e75f0be3959b4f180a3f24d84f43ce9227fbc8ab0a85ffb0a783890b87",
-          "sha256:1ce5821fef5e749af9e1129d1829f9a2815c2374bb1551a5592f48750b7854ff",
-          "sha256:2375cb3f8b0140a0ed455bbce348562781d8c379d2c357cbda3fd0dc7634849b",
-          "sha256:23aef03d6d29adac61ada8172eb8b18f607af8124e2d97705f614cee285f216a",
-          "sha256:24c4cd1e45531f5a800416e58bf19206b97c6e6ca8e5a7366a666294af969477",
-          "sha256:27dbb60691a59a5d016867c97ae6b7b757ea1b3df111ae1a7bcbec65bc7adac5",
-          "sha256:2c3fbadf3f1389a844adbc1dec7f1c821802730996d51540ce8dd5defd75dc40",
-          "sha256:2c8e205d20ce5ea5942f810f10b461661197937a7b4e5f68c211f68dcfe33504",
-          "sha256:3841552194697c9154ea88b6d616666b00b0c96599041845cde24d66a92ba806",
-          "sha256:5158964b610db7bdbdbf34af74435a574c695fa2ed6a7743f03166ac5a81bc71",
-          "sha256:5384675055afd4ff37675604846648b7eb8ea0dad64b56d8968ed37390fb0eb9",
-          "sha256:56a94df8150d264e75c0b637945cfc8c757c5585806b815e142a59dde04dd0e2",
-          "sha256:5949bb70fdfc225ba7a905fa71a1ba0eb333e530f6213221f4aa97f2581d51c9",
-          "sha256:5ab94b8aa0a54bd7ecee9d949c41893eafd97b5011732a5617b5bc584219e42b",
-          "sha256:5dbdbc47b3b36f5b285dd4c6515a8cbd2a5ba50759f4039b5917e76a2e29e98a",
-          "sha256:74ef9887d676ddba620b48a2223a7545c30f061550f39026007f319e0a81ca7b",
-          "sha256:7aaad3bd891cb5f5d294af0aa02aa8f2f083133b2798d9fcc12b4a31f6788339",
-          "sha256:85d5230a5e2f1cc28580b81dccc427b8e744248903c28717d8a57478fcd3aa08",
-          "sha256:8d84f1809ca86135bcd8120b042556805ebc3b129e82fb1654ef8924f5fc1991",
-          "sha256:91668f0f6b32ce836a0d6f2f2721444d1e7688b0f4050b08824fe670be2f0686",
-          "sha256:9514c7c6e867e14ec6a28d747d94edf65161220cc85d2f5eb2655df14f305e98",
-          "sha256:a3bcfb7c347d4a9cceb7f1c3eb19bf345edb7f013c4c51ff3636c8c4d1365a7c",
-          "sha256:a5849ab3f6437049136b538b028b2d8a531426f74094e9355f43cdf91d515b4d",
-          "sha256:a79c20b406cd0b81cf6a40de57ebdcf5d0883999a963ed2c86984c070d698ac7",
-          "sha256:ab60ecfa234083412344b65008156e7dfeabdfa114c426e9f00372cf0d0b2ae5",
-          "sha256:ab7154d4bf5343101b9aa1df76e8aa70462d912dd46ba892aec20541f286518e",
-          "sha256:cddbc0eb4f52d86c7d5df5c35db086148805e1a133e41e0d863404abc781ee5c",
-          "sha256:dce3a46066bb1d45ace08ce1b7ca6a9f64df93d9a6ee09a01fa894f7565b364c",
-          "sha256:df2460309b169422767316694762a385dd041f8c1c3c08c2264ab80e0bc36c1a",
-          "sha256:e1b51dfcce04da529a886d47e6b30f67e9acda08a35272b0a727de750210dd1f",
-          "sha256:e245c6fd992f16be59581c75f5463a062f4340138e2a7c3d5d2ced940082f1b6",
-          "sha256:e646e2f004636a76c6b1fe9a4b80370c0acf749d63bbffa3dcb261834ecd4b4e",
-          "sha256:eb8a862713ca3a9329c1d1d600b892bf427a998188515105aa26938b0f8c9ded"
+          "sha256:16294d0f96414f55a23fc293e2ac0228fd9a61f7c6faf5b4ca07a5922888dd38",
+          "sha256:1886447790d3854794b1dcaf0a7fc56ae5763bccdd75ee0bfa027aa626688e29",
+          "sha256:1ba2c546593492c8139370a770ff01726f22ba091b5b8a41a2c6d678431fe217",
+          "sha256:1eda1909d70acb4f988481f9f7de229a637feb32a79989585a6ac1987083f2bb",
+          "sha256:288d54439f9b2c7714dba6b48cf0de403a52fb666205f04b22922b5ad23640bb",
+          "sha256:32a9ce83c3d2786a582e694bfa9f372f1d9efd0cd419b4f1ae9b5bf080904c66",
+          "sha256:32ac6b9fdabe6a30ed5057dc709774787984ccae5fb0fa8fac93d505104f3cc2",
+          "sha256:48bdea2a14ab80b2669d04dbbd39925c39e283f1c63dea1671c0554c705edf3f",
+          "sha256:49578ed994fb4e06a748245f11f3fd5acc2b3554cfb542fbf35e5c2a2eccb37e",
+          "sha256:5289571606f0c0341ed140a30209a6560875caac26a4480d50a3e30840595302",
+          "sha256:5b9269af9149289cf0c797905a21aba72f9590648fa77dd34fa9c1d20373e62f",
+          "sha256:66f747623541e63e51302c1828a129ef6c3591937cf1a3ce849573ccaefd65ea",
+          "sha256:6a995307efea8ac46fdacc18c2f19aef7e13a0633b7eba300e6085d59f2f5215",
+          "sha256:6cf474aaf90590b35f3728392be757a3eac33581d83f9e576dbb97121dd09d72",
+          "sha256:701cd2d5811315c42d98aa9a1ddd12ef82a9c49a134aa28dfefe3c032ddb496a",
+          "sha256:717724809f34a8f08ff1b21957db1e9e4fb90dfa5ac04c5e1ab08a78285e043f",
+          "sha256:79ab4ec3b5c764ceb3e3de4671c1e611f1955d055c01c86351a070f6117df6b5",
+          "sha256:7dcd17a142d2914da9b5c854e7c45b331f3a2483f6a8d9a6c30c3d7e98462e56",
+          "sha256:7e01a21c76221368db0b48456663104bbb35d8cf095a007373c6ede30f06f144",
+          "sha256:7e14fe7e726be4c2c3e275ba45a19cb06cb423927a8e9d21f9b02bd54144926c",
+          "sha256:84250126190fcb07bb9b10969241e8649e515707207f72ad23551a6b5a3a3590",
+          "sha256:883424a61131e57697a4d6578f897e6f9485b81a66f16dd339d97ae3a8af3553",
+          "sha256:8a1af58bfa79a563122bc4679646d6c0fe9c856a02f83fb5f94309fb6b1f1912",
+          "sha256:98994aaa1e6c4ff605ee185c56c460449b2834defc1c274b293dfb88b16977fd",
+          "sha256:9c8584c2365284d397f8ae0d2e5fdd6533be2a40b3585d8626350ec1ad08acf7",
+          "sha256:9f8289ebdd2bece2f5b2a34b2159b8253889adffd1a9b1ab192ea2bfcbca9a32",
+          "sha256:aa2051280c0cb46494edfdd13f7a8fc1e009fc8d71ad8867a9c478a02c83d541",
+          "sha256:ab4db0ab9655f0ba465831828d169453d19b8df007348efe1ef05a35e43d6c58",
+          "sha256:abcf339b0f754b4ad093ee19a48b3593947c7669e01c4991940277c049dbfa70",
+          "sha256:ad17c89be5976da76cd17f03472fbcd48f2082f7bc1aaaaefce2c164692c144d",
+          "sha256:b17998544dd55a5f0d04c6bd5d1108746431eef29a5f08120af4506d10357c67",
+          "sha256:b3d73594de6574b1993695d96b1c8353bf6785002b2f3e1e7b8e58dbe956073b",
+          "sha256:b92ea9da74da4992f0b0cfdbe467e3e0aa7ee4c90845afd2c97a224161c286ed",
+          "sha256:ba90646d0fa4466f1f683dcd53dfe4beea06bc7b39c0b90b285bce50dff8693d",
+          "sha256:c442407741debd1bca26b97e1048ad0f74be624966a1fcd1b6ba6c0b5a680b2d",
+          "sha256:c5ace8ea6e83baf1bf94a4d7cc1503316c0373f160092a57c9fca127cc4c4236",
+          "sha256:d57bf4ec930e974d049919a72124cf5656005d0ec33434bcd57eccb6716b60a3",
+          "sha256:d6547e475d8e84003816c38fb5cdcd9fdca513e7cb3781bf32ed249f13d2f485",
+          "sha256:e544eb10fedb22425fe00c22346f49d791dcc4168d5b31be46e875d79b98f740",
+          "sha256:efa0ef7506beb5d5cf2c4be26f6ecee8219fd2e1b982be9f57f31b44e5804d7b",
+          "sha256:f05f08f6cea9d586a597f9eef4dd550c774f5b4855fcb18fb7729784191814e2",
+          "sha256:f76e7d4fa979a0a53e4f04d98c7f06362532acd2e96269a2e549ae4afe56b81e",
+          "sha256:f9f4bb8793ab6f7037a2c68178acff39817ccede4127aeea01a32d63dc6d4958",
+          "sha256:fa0ba8e3d6d22ed516632c4c47e394552f9e8890cd530e54b98013b830e63206",
+          "sha256:fcfafd62ed1302dec56f6575efc94e601576953da05469b959ea9db908751b5b"
         ],
         "target_profile": "compact",
-        "transition_ref": "sha256:dd6a68574f2a8b24fab3271ba2bdc056d6852cb741269d78b294222e4c7a21f0",
+        "transition_ref": "sha256:a4e0c5feb0a5fb3d339fa9b3e1535352da1564d18a0003e3f9753b851f4784cd",
         "trigger": "schema_exhausted",
-        "triggering_semantic_admission_ref": "sha256:be24556ee48331a867a003b32b702bde7884346b68879fe0dd14b0365da50564",
+        "triggering_semantic_admission_ref": "sha256:437797e719b5ea320b1b7d36bcea0fce05365d26cc04aad4a306e7d67e04f664",
         "triggering_status": "schema_exhausted",
-        "triggering_terminal_ref": "sha256:5127b7c20ebb020d62fa88cd4a2e0b7a785f72a8aa8682933fbfa66c4fd338e4",
-        "triggering_work_id": "sha256:6e12ba021f47ffb84d1a5dce41f8f86d8d131775e0a3535a67c4b05cc9483bed"
+        "triggering_terminal_ref": "sha256:7123cb426692a6fd541cf9156b4267dc28e60e00adc95a7b4c83da4e0329fdc7",
+        "triggering_work_id": "sha256:f7132201fce00a22f0d23d9d579cf81d99f19318074c72da54faa0e66ba2a8dc"
       },
       {
         "actual_contract_ids": [
-          "conjecturer.atomic-candidate.v1"
+          "conjecturer.atomic-candidate.v1",
+          "conjecturer.turn.v6"
         ],
         "applies_to": "all_subsequent_model_calls",
         "completed_compact_work_ids": [
-          "sha256:0f9cfa39137309bf041f774a90d3d1b671e8b60b5c67590b047646a95f17a915",
-          "sha256:7c3bdc3fe07628f85bba9c1842e4891154ae1fec60e750038e1f1491da39e38a",
-          "sha256:d7408f755571f4b1241ccb8640b1f8054006c835dec0efa033aa6a900e71d0e2",
-          "sha256:ef0ef9b831815eecca3a62ec2a62784de1ba666e219483e99a0fc4d4b6ec9095",
-          "sha256:f83960bff308e654779169d8bd27539cd473f435de71a973b14036b5e023a992"
+          "sha256:162ab6095dd5a777fe05beee538ab6dc9d860002699247ba708c7a7184038226",
+          "sha256:17ffcda97e05889dfb9b653ad117bb85bd9524f6369abdc85b788f7a45246a39",
+          "sha256:195ebb1f67a9b6b7a28c28e58543df9fc5904e8767d8d90d141491947f25c376",
+          "sha256:1ca77dd1025a6a93dfdb3224968749f43a8617e0153915ccb5da989f3cf0d1bf",
+          "sha256:27dd86926d2f37e2138bc8c09c59345ed6d8183953892e963f8e3976fbad1520",
+          "sha256:2d42310b96e65d74fecf1e955f2f4c6eb3190123fe25f373663d4fe90c808b40",
+          "sha256:33e84413808ef41fc7c597adcc8657ae5b3bcc0a0fc81db80b945440c2bb956e",
+          "sha256:5818ec1cf1c80b7b92acfcd132b24cc32128b891c6666455727ce7448d5a7458",
+          "sha256:62eadc84ab600dfff225ec761acc06a26a7c7bdfc345f9971898df4734924f37",
+          "sha256:7629c22d553edb1bb8072a44813402f345eec659135cd343d4583b6acbcab8f0",
+          "sha256:8efaf2d58c46997436105d273ff0e247fbd6bfdc797e9e928451b3c4a97da3ba",
+          "sha256:972c51c70e9b7f45247c1e41979610bbad1a985cde43df87b06b92372eb5d900",
+          "sha256:9f3feae3e3358400b5b2771e86df572315403e41c7a01431b10e332c1732bc31",
+          "sha256:b43bbd9b9d96abd5abdf4a5ceef4328caefe3502e59a9dd6f924743abb5541b9",
+          "sha256:b66356da91696c7e88e2629ef986d07a05d2880cd6ed20e466346a29f31b4953",
+          "sha256:c0e8eb58361e96ac2d1f7190be8a8af086a300f2c8a7d5bf5924443bdc097dd5",
+          "sha256:d42576290cd0d72337511cbf026b5354fb2c7221f83d40ee6a0c134e3787ccea",
+          "sha256:e7da8fcffba5e4241468ad46f2ba0c60ac01a51d3114bced2d754147ed055259"
         ],
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "language": {
@@ -364,22 +611,38 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
         "seat": 0,
         "source_profile": "standard",
         "sticky": true,
-        "subsequent_compact_call_count": 6,
+        "subsequent_compact_call_count": 22,
         "subsequent_compact_work_ids": [
-          "sha256:0f9cfa39137309bf041f774a90d3d1b671e8b60b5c67590b047646a95f17a915",
-          "sha256:5a7e618b45d62681c93fc5ec031d0ba6de9fa7669c0bb542d45815ebf4a890b5",
-          "sha256:7c3bdc3fe07628f85bba9c1842e4891154ae1fec60e750038e1f1491da39e38a",
-          "sha256:d7408f755571f4b1241ccb8640b1f8054006c835dec0efa033aa6a900e71d0e2",
-          "sha256:ef0ef9b831815eecca3a62ec2a62784de1ba666e219483e99a0fc4d4b6ec9095",
-          "sha256:f83960bff308e654779169d8bd27539cd473f435de71a973b14036b5e023a992"
+          "sha256:0c8a56fb553c86174b120bf6cf259558430c5bc43796aa96ba0eec67edebaed2",
+          "sha256:162ab6095dd5a777fe05beee538ab6dc9d860002699247ba708c7a7184038226",
+          "sha256:17ffcda97e05889dfb9b653ad117bb85bd9524f6369abdc85b788f7a45246a39",
+          "sha256:195ebb1f67a9b6b7a28c28e58543df9fc5904e8767d8d90d141491947f25c376",
+          "sha256:1ca77dd1025a6a93dfdb3224968749f43a8617e0153915ccb5da989f3cf0d1bf",
+          "sha256:27dd86926d2f37e2138bc8c09c59345ed6d8183953892e963f8e3976fbad1520",
+          "sha256:2d42310b96e65d74fecf1e955f2f4c6eb3190123fe25f373663d4fe90c808b40",
+          "sha256:33e84413808ef41fc7c597adcc8657ae5b3bcc0a0fc81db80b945440c2bb956e",
+          "sha256:44821993a787c8967974c6815f59cb17f9b6cf53a5e2f90ed034590d3877d41f",
+          "sha256:5818ec1cf1c80b7b92acfcd132b24cc32128b891c6666455727ce7448d5a7458",
+          "sha256:62eadc84ab600dfff225ec761acc06a26a7c7bdfc345f9971898df4734924f37",
+          "sha256:7629c22d553edb1bb8072a44813402f345eec659135cd343d4583b6acbcab8f0",
+          "sha256:7d27951ae997df8e26df88a006db112d173badf670cba526147afc8adf42b628",
+          "sha256:8efaf2d58c46997436105d273ff0e247fbd6bfdc797e9e928451b3c4a97da3ba",
+          "sha256:972c51c70e9b7f45247c1e41979610bbad1a985cde43df87b06b92372eb5d900",
+          "sha256:9f3feae3e3358400b5b2771e86df572315403e41c7a01431b10e332c1732bc31",
+          "sha256:b43bbd9b9d96abd5abdf4a5ceef4328caefe3502e59a9dd6f924743abb5541b9",
+          "sha256:b66356da91696c7e88e2629ef986d07a05d2880cd6ed20e466346a29f31b4953",
+          "sha256:c0e8eb58361e96ac2d1f7190be8a8af086a300f2c8a7d5bf5924443bdc097dd5",
+          "sha256:d42576290cd0d72337511cbf026b5354fb2c7221f83d40ee6a0c134e3787ccea",
+          "sha256:e7da8fcffba5e4241468ad46f2ba0c60ac01a51d3114bced2d754147ed055259",
+          "sha256:e7f48f51eb2da7e3007ee67a6ce7198a16508644de6a13b6529b05199194d4c1"
         ],
         "target_profile": "compact",
-        "transition_ref": "sha256:b67bfcd85d9e1c1ba2777711d76ce042adcf2d2f4dcc2cdefc2bf1f70f8d5846",
+        "transition_ref": "sha256:45a9ce59769134d5d44b5edd98f176e38e26649e4dac8525463423abc03cb218",
         "trigger": "schema_exhausted",
-        "triggering_semantic_admission_ref": "sha256:8e8901a3441e62a20b73629c9cffc5669850cbdd456ebeabd62ab194ebe02150",
+        "triggering_semantic_admission_ref": "sha256:64cbe91c8b9ccef7eb0cec255304ebd33f712157551f16f41dd32bf24c8e66d6",
         "triggering_status": "schema_exhausted",
-        "triggering_terminal_ref": "sha256:193ef13bcde44c610dfc64704f65ed899e06b06561710087a8255876c7d5e878",
-        "triggering_work_id": "sha256:a7a3d6d5a11f39f52b45d3e3f6d2a5b1c37bc8214561528f01a75ac4a1c3ba3b"
+        "triggering_terminal_ref": "sha256:9f48e90caed7fde6acc62bbf8f86341e5719d55d2c8b3170d2e74909436d508c",
+        "triggering_work_id": "sha256:8a434ec08a343cac9c12f9b70ea6be7746306b4a32ff871532a4106827f364ad"
       }
     ],
     "route_seat_bases": [
@@ -490,14 +753,14 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
           "critic.atomic-target.v1"
         ],
         "behavioral_grant_sha256": "a9647f6d15a37741a3b0e9ca23f4e28cbe05e1ab035f918b70c42712c4f0117a",
-        "classification_binding_ref": "sha256:75eece5ea53e2f847a8abc49778c7c3808c8acf58f77b5fb5924dcdda8461b4e",
-        "classification_plan_ref": "sha256:ff18281fba6faae0eb0b330e184410dac187bd2b25beae94b6415b26b4c94c4e",
+        "classification_binding_ref": "sha256:fca5d73acd8ac0ea601ab2911c1877925a14a99c9a3e01a1efff54baadd69c6a",
+        "classification_plan_ref": "sha256:8438feccdef28aaa7edd02ee4d42965e9d4d0b269508795959e3aeaafb395097",
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "evidence_pair_ids": [
-          "sha256:121dcd7cee0e87461fbf163a4dd2f9f8b0bcd8e7fb0e1bca17a60ac5df278ba5",
-          "sha256:1f8558ee184e12609fce1a323ade043a828d2ca5d592002cd321b15409a71d84"
+          "sha256:09048a1d21d0a7c8911dacb3f554543619933b12dc746da88475abf0c16d29c6",
+          "sha256:dffb1d56073271cce55d28d3d2471c115fee0388ab4e96638864b601b611a8ca"
         ],
-        "qualification_evidence_sha256": "b767f72785d6945c823ccfbaf5005b8f8ac14be2a61a34982b4d81711555107c",
+        "qualification_evidence_sha256": "cb92b7777751cd46ed5e7c0c191c238fa7d3dac3a1adb8bcd2e9b916d1f215f8",
         "role": "argumentative_critic",
         "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
         "schema": "route-seat-model-classification-projection.v1",
@@ -512,16 +775,16 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
           "scratch.block.minimal.v1"
         ],
         "behavioral_grant_sha256": "1fc755d7bbb8aacd2f68015c9d7a3d12325484315e8bcabfd33250a540eaf93e",
-        "classification_binding_ref": "sha256:75eece5ea53e2f847a8abc49778c7c3808c8acf58f77b5fb5924dcdda8461b4e",
-        "classification_plan_ref": "sha256:ff18281fba6faae0eb0b330e184410dac187bd2b25beae94b6415b26b4c94c4e",
+        "classification_binding_ref": "sha256:fca5d73acd8ac0ea601ab2911c1877925a14a99c9a3e01a1efff54baadd69c6a",
+        "classification_plan_ref": "sha256:8438feccdef28aaa7edd02ee4d42965e9d4d0b269508795959e3aeaafb395097",
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "evidence_pair_ids": [
-          "sha256:19a6fce83aac1b590160ffc49166e62ca6b8771552c06429099d2765c274cdc0",
-          "sha256:534998ac72b1f887557d6a61d68fa81acb3891cff8e5b60464fd398ba084c3da",
-          "sha256:9bd0c6698168bc890eb905e6d9cb734b4bf7d7632509864ca85ff414010406c8",
-          "sha256:f3585e20df6b5bc8ba46019771bf53f1ded3b223df7dd33f4b40e24091d63d9c"
+          "sha256:024e9e7d3f8cf0141531a51b4edb6dd08a61045bbd363a71e5a7f097cdac0c77",
+          "sha256:3e350ab104a52a0b41e0721da72f84f712810f5fffa9386ce72593838401c422",
+          "sha256:dd94146e306c8a8baaccd32bdeb6a7eb34d6c1575053b74467df9849c32c3c29",
+          "sha256:eadfd8e75aa24b0b592a12529f3265bcb95bc432f59d719d17c0ab5540daa59b"
         ],
-        "qualification_evidence_sha256": "b767f72785d6945c823ccfbaf5005b8f8ac14be2a61a34982b4d81711555107c",
+        "qualification_evidence_sha256": "cb92b7777751cd46ed5e7c0c191c238fa7d3dac3a1adb8bcd2e9b916d1f215f8",
         "role": "conjecturer",
         "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
         "schema": "route-seat-model-classification-projection.v1",
@@ -531,11 +794,11 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
       {
         "authorized_contract_ids": [],
         "behavioral_grant_sha256": "01828800464940bd03f5b2bc0c4e4a49987863e85990a72771f135e17380c489",
-        "classification_binding_ref": "sha256:75eece5ea53e2f847a8abc49778c7c3808c8acf58f77b5fb5924dcdda8461b4e",
-        "classification_plan_ref": "sha256:ff18281fba6faae0eb0b330e184410dac187bd2b25beae94b6415b26b4c94c4e",
+        "classification_binding_ref": "sha256:fca5d73acd8ac0ea601ab2911c1877925a14a99c9a3e01a1efff54baadd69c6a",
+        "classification_plan_ref": "sha256:8438feccdef28aaa7edd02ee4d42965e9d4d0b269508795959e3aeaafb395097",
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "evidence_pair_ids": [],
-        "qualification_evidence_sha256": "b767f72785d6945c823ccfbaf5005b8f8ac14be2a61a34982b4d81711555107c",
+        "qualification_evidence_sha256": "cb92b7777751cd46ed5e7c0c191c238fa7d3dac3a1adb8bcd2e9b916d1f215f8",
         "role": "defender",
         "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
         "schema": "route-seat-model-classification-projection.v1",
@@ -545,11 +808,11 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
       {
         "authorized_contract_ids": [],
         "behavioral_grant_sha256": "70421fa93b4db6940031f7c499a467100669fa223707d08a346d557d7c9ef08e",
-        "classification_binding_ref": "sha256:75eece5ea53e2f847a8abc49778c7c3808c8acf58f77b5fb5924dcdda8461b4e",
-        "classification_plan_ref": "sha256:ff18281fba6faae0eb0b330e184410dac187bd2b25beae94b6415b26b4c94c4e",
+        "classification_binding_ref": "sha256:fca5d73acd8ac0ea601ab2911c1877925a14a99c9a3e01a1efff54baadd69c6a",
+        "classification_plan_ref": "sha256:8438feccdef28aaa7edd02ee4d42965e9d4d0b269508795959e3aeaafb395097",
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "evidence_pair_ids": [],
-        "qualification_evidence_sha256": "b767f72785d6945c823ccfbaf5005b8f8ac14be2a61a34982b4d81711555107c",
+        "qualification_evidence_sha256": "cb92b7777751cd46ed5e7c0c191c238fa7d3dac3a1adb8bcd2e9b916d1f215f8",
         "role": "grounding_reviewer",
         "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
         "schema": "route-seat-model-classification-projection.v1",
@@ -561,13 +824,13 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
           "groundingverdictwirev1.direct.v1"
         ],
         "behavioral_grant_sha256": "76554f7f0a10fabad8b1df722fe19380b2e9e9f806b46de4ad341f1f87b65b6d",
-        "classification_binding_ref": "sha256:75eece5ea53e2f847a8abc49778c7c3808c8acf58f77b5fb5924dcdda8461b4e",
-        "classification_plan_ref": "sha256:ff18281fba6faae0eb0b330e184410dac187bd2b25beae94b6415b26b4c94c4e",
+        "classification_binding_ref": "sha256:fca5d73acd8ac0ea601ab2911c1877925a14a99c9a3e01a1efff54baadd69c6a",
+        "classification_plan_ref": "sha256:8438feccdef28aaa7edd02ee4d42965e9d4d0b269508795959e3aeaafb395097",
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "evidence_pair_ids": [
-          "sha256:013c59e4b05cfd64a276fe0aa415c3039a17693056dda1224dabd07de258414b"
+          "sha256:5e22352e9dd77558c836eb1728b4ae25040b097072f8cda2bf66c5f3c49a21a6"
         ],
-        "qualification_evidence_sha256": "b767f72785d6945c823ccfbaf5005b8f8ac14be2a61a34982b4d81711555107c",
+        "qualification_evidence_sha256": "cb92b7777751cd46ed5e7c0c191c238fa7d3dac3a1adb8bcd2e9b916d1f215f8",
         "role": "judge",
         "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
         "schema": "route-seat-model-classification-projection.v1",
@@ -577,11 +840,11 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
       {
         "authorized_contract_ids": [],
         "behavioral_grant_sha256": "8ac11822c1a39faf00e3ad890b385f309f67dd8876133824b08a0f82f63f34a9",
-        "classification_binding_ref": "sha256:75eece5ea53e2f847a8abc49778c7c3808c8acf58f77b5fb5924dcdda8461b4e",
-        "classification_plan_ref": "sha256:ff18281fba6faae0eb0b330e184410dac187bd2b25beae94b6415b26b4c94c4e",
+        "classification_binding_ref": "sha256:fca5d73acd8ac0ea601ab2911c1877925a14a99c9a3e01a1efff54baadd69c6a",
+        "classification_plan_ref": "sha256:8438feccdef28aaa7edd02ee4d42965e9d4d0b269508795959e3aeaafb395097",
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "evidence_pair_ids": [],
-        "qualification_evidence_sha256": "b767f72785d6945c823ccfbaf5005b8f8ac14be2a61a34982b4d81711555107c",
+        "qualification_evidence_sha256": "cb92b7777751cd46ed5e7c0c191c238fa7d3dac3a1adb8bcd2e9b916d1f215f8",
         "role": "property_designer",
         "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
         "schema": "route-seat-model-classification-projection.v1",
@@ -596,16 +859,16 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
           "scratch.cluster-guide.minimal.v1"
         ],
         "behavioral_grant_sha256": "9c608906d6aa382d41cb3b3d993fac43d87d08a23127388730f33899ea6ab7b4",
-        "classification_binding_ref": "sha256:75eece5ea53e2f847a8abc49778c7c3808c8acf58f77b5fb5924dcdda8461b4e",
-        "classification_plan_ref": "sha256:ff18281fba6faae0eb0b330e184410dac187bd2b25beae94b6415b26b4c94c4e",
+        "classification_binding_ref": "sha256:fca5d73acd8ac0ea601ab2911c1877925a14a99c9a3e01a1efff54baadd69c6a",
+        "classification_plan_ref": "sha256:8438feccdef28aaa7edd02ee4d42965e9d4d0b269508795959e3aeaafb395097",
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "evidence_pair_ids": [
-          "sha256:0835103767752b0f35bcda1837dcb2466f8f73abfe8545a64400c8436f902320",
-          "sha256:4b51f56e90c253b0cd4b54474955cdf2389326efad79a64cab04b3927456bbe1",
-          "sha256:587e533033c59999acb5a2819171c685a9f3631760b59a223b6d9b27305486a1",
-          "sha256:e10126780fcda6f5b99726db2fd9926dba4f72163cedb9b272df13afe0f8ceaf"
+          "sha256:289a801b29768ea82a7e61f0b56d7add423f5a3f16cb2d1d9e3121598a8f49ef",
+          "sha256:5fca81d1b11c647c202301f15b024b19d903da53dc219c9c0de673b558f1516f",
+          "sha256:a680cf6637498f66cef71cf298257ee38687222e7c6a808764e5b9a057f60ab8",
+          "sha256:e89b0c075bf83a9d283d6efb368340f3fbbd990a13b478a031b0618f5f679a9b"
         ],
-        "qualification_evidence_sha256": "b767f72785d6945c823ccfbaf5005b8f8ac14be2a61a34982b4d81711555107c",
+        "qualification_evidence_sha256": "cb92b7777751cd46ed5e7c0c191c238fa7d3dac3a1adb8bcd2e9b916d1f215f8",
         "role": "summarizer",
         "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
         "schema": "route-seat-model-classification-projection.v1",
@@ -618,14 +881,14 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
           "scratch.link.minimal.v1"
         ],
         "behavioral_grant_sha256": "3ee0afcf572496e80c0051983f3c6e18e93c34fac21c1c7da4e9a75d63714766",
-        "classification_binding_ref": "sha256:75eece5ea53e2f847a8abc49778c7c3808c8acf58f77b5fb5924dcdda8461b4e",
-        "classification_plan_ref": "sha256:ff18281fba6faae0eb0b330e184410dac187bd2b25beae94b6415b26b4c94c4e",
+        "classification_binding_ref": "sha256:fca5d73acd8ac0ea601ab2911c1877925a14a99c9a3e01a1efff54baadd69c6a",
+        "classification_plan_ref": "sha256:8438feccdef28aaa7edd02ee4d42965e9d4d0b269508795959e3aeaafb395097",
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "evidence_pair_ids": [
-          "sha256:43506bc288bcd89692332a10519ca6efa2205b01ae20e01c57fc1745d694e796",
-          "sha256:8d27dfe73d253ee289de4848667f87aa23104630e5a997f794961869e0e3c89d"
+          "sha256:aae41bdde0389f347f0cdbde5cd4a116e1d459b94c3a37eb2d30dcf5e854b3fb",
+          "sha256:bc94e56f60e0272eb7e22f539af55648b70c0811f698ee69159b46ba513cf6da"
         ],
-        "qualification_evidence_sha256": "b767f72785d6945c823ccfbaf5005b8f8ac14be2a61a34982b4d81711555107c",
+        "qualification_evidence_sha256": "cb92b7777751cd46ed5e7c0c191c238fa7d3dac3a1adb8bcd2e9b916d1f215f8",
         "role": "synthesizer",
         "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
         "schema": "route-seat-model-classification-projection.v1",
@@ -638,14 +901,14 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
           "bridge.composition.v2"
         ],
         "behavioral_grant_sha256": "52d8454ac942e5807db381458cab77b23ac639fa450deeb99fb43ca657f26a7a",
-        "classification_binding_ref": "sha256:75eece5ea53e2f847a8abc49778c7c3808c8acf58f77b5fb5924dcdda8461b4e",
-        "classification_plan_ref": "sha256:ff18281fba6faae0eb0b330e184410dac187bd2b25beae94b6415b26b4c94c4e",
+        "classification_binding_ref": "sha256:fca5d73acd8ac0ea601ab2911c1877925a14a99c9a3e01a1efff54baadd69c6a",
+        "classification_plan_ref": "sha256:8438feccdef28aaa7edd02ee4d42965e9d4d0b269508795959e3aeaafb395097",
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "evidence_pair_ids": [
-          "sha256:4ee367905277e120136448b62c6851b9a05456e9fffdedd414b57f5af0e01573",
-          "sha256:8b874a7f9a9ce55ebdd6921ccc5dc6ed88c3ecaee9321fce122483127c82d981"
+          "sha256:5923afa07abdd11293821cf0bae47d7336236698ae3bc90d286250260f9f4759",
+          "sha256:6964d0aa275f091d204996e6f1dbacd63811c1be444c049b23dd494abc825de3"
         ],
-        "qualification_evidence_sha256": "b767f72785d6945c823ccfbaf5005b8f8ac14be2a61a34982b4d81711555107c",
+        "qualification_evidence_sha256": "cb92b7777751cd46ed5e7c0c191c238fa7d3dac3a1adb8bcd2e9b916d1f215f8",
         "role": "thesis",
         "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
         "schema": "route-seat-model-classification-projection.v1",
@@ -655,11 +918,11 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
       {
         "authorized_contract_ids": [],
         "behavioral_grant_sha256": "20515ea630ff71fd453b08d2174413f32d1ab0da958b28a82b8395731433e1a9",
-        "classification_binding_ref": "sha256:75eece5ea53e2f847a8abc49778c7c3808c8acf58f77b5fb5924dcdda8461b4e",
-        "classification_plan_ref": "sha256:ff18281fba6faae0eb0b330e184410dac187bd2b25beae94b6415b26b4c94c4e",
+        "classification_binding_ref": "sha256:fca5d73acd8ac0ea601ab2911c1877925a14a99c9a3e01a1efff54baadd69c6a",
+        "classification_plan_ref": "sha256:8438feccdef28aaa7edd02ee4d42965e9d4d0b269508795959e3aeaafb395097",
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "evidence_pair_ids": [],
-        "qualification_evidence_sha256": "b767f72785d6945c823ccfbaf5005b8f8ac14be2a61a34982b4d81711555107c",
+        "qualification_evidence_sha256": "cb92b7777751cd46ed5e7c0c191c238fa7d3dac3a1adb8bcd2e9b916d1f215f8",
         "role": "variator",
         "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
         "schema": "route-seat-model-classification-projection.v1",
@@ -669,11 +932,11 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
       {
         "authorized_contract_ids": [],
         "behavioral_grant_sha256": "92c5b76f561b6138a478de98eab36f49ce3d62352fa1f1793ef278fd077af4bc",
-        "classification_binding_ref": "sha256:75eece5ea53e2f847a8abc49778c7c3808c8acf58f77b5fb5924dcdda8461b4e",
-        "classification_plan_ref": "sha256:ff18281fba6faae0eb0b330e184410dac187bd2b25beae94b6415b26b4c94c4e",
+        "classification_binding_ref": "sha256:fca5d73acd8ac0ea601ab2911c1877925a14a99c9a3e01a1efff54baadd69c6a",
+        "classification_plan_ref": "sha256:8438feccdef28aaa7edd02ee4d42965e9d4d0b269508795959e3aeaafb395097",
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "evidence_pair_ids": [],
-        "qualification_evidence_sha256": "b767f72785d6945c823ccfbaf5005b8f8ac14be2a61a34982b4d81711555107c",
+        "qualification_evidence_sha256": "cb92b7777751cd46ed5e7c0c191c238fa7d3dac3a1adb8bcd2e9b916d1f215f8",
         "role": "vision_critic",
         "route_sha256": "b3c6098ceca9d14c1be65f09ab55cf4ee2112d010df2e37bf0d098db694bf118",
         "schema": "route-seat-model-classification-projection.v1",
@@ -683,12 +946,12 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
     ],
     "schema": "model-execution-summary.v1"
   },
-  "run_id": "run-36d9a22c3e2045ae1b8c7bfb9d95d092",
+  "run_id": "run-c3f3bf10bc57d63e224a9f1c68bf1057",
   "schema": "deepreason-run-result-v2",
   "state": "failed",
   "stop": {
-    "digest": "f653fa79ee6dc1e752ec57c811a8b5fbd73d3e024d4c05614c604413684c5827",
-    "event_seq": 974,
+    "digest": "5a0a17efb85fad4ae27d09096ab8b692f702317f75002ec1a2fd93dfb8cb90b8",
+    "event_seq": 1166,
     "metrics": {
       "criticism_debt": 0.0,
       "cycle": 3,
@@ -707,15 +970,15 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
     "reason": "operational_failure",
     "schema": "deepreason-run-stop-v1"
   },
-  "terminal_commitment_ref": "sha256:00b176573dd366bd6987f8690130bf9c1ee929a58557570fe75b2494849bdf3e",
+  "terminal_commitment_ref": "sha256:ef4a9df7ed26cbf20e3a68722ef83bdf23b2e0b13f7c9e15b62cc51d1151bdd6",
   "verification": {
     "completion_satisfied": false,
     "epistemic_checks_passed": true,
     "finding_counts": {
-      "completion": 37,
+      "completion": 28,
       "epistemic": 0,
       "integrity": 0,
-      "operational": 14,
+      "operational": 13,
       "security": 0
     },
     "integrity_valid": true,
@@ -728,7 +991,7 @@ MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so no
 }
 embedder: hashing (hashing-128)
 rc=4
-root=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-36d9a22c3e2045ae1b8c7bfb9d95d092
+root=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-c3f3bf10bc57d63e224a9f1c68bf1057
 --- results (typed) ---
 {
   "absences": [
@@ -749,7 +1012,7 @@ root=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-
     "epochs": 0
   },
   "artifacts": {
-    "accepted": 68,
+    "accepted": 89,
     "frontier": {
       "artifact_ids": {
         "absent": true,
@@ -783,26 +1046,26 @@ root=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-
   },
   "evidence_states": {
     "completeness": {
-      "complete_passes": 8,
-      "licensed_artifacts": 24,
+      "complete_passes": 7,
+      "licensed_artifacts": 32,
       "outcomes": {
-        "complete": 8
+        "complete": 7
       },
-      "passes": 8
+      "passes": 7
     },
     "counts": {
       "contested": 0,
-      "open": 42,
+      "open": 55,
       "refuted": 1,
-      "supported": 24
+      "supported": 32
     },
     "excluded_import_admissions": 9,
     "per_cycle": {
       "0": {
         "contested": 0,
-        "open": 20,
+        "open": 16,
         "refuted": 0,
-        "supported": 16
+        "supported": 18
       },
       "1": {
         "contested": 0,
@@ -812,15 +1075,15 @@ root=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-
       },
       "2": {
         "contested": 0,
-        "open": 16,
+        "open": 6,
         "refuted": 1,
-        "supported": 8
+        "supported": 2
       },
       "3": {
         "contested": 0,
-        "open": 1,
+        "open": 28,
         "refuted": 0,
-        "supported": 0
+        "supported": 12
       },
       "pre-cycle": {
         "contested": 0,
@@ -834,14 +1097,14 @@ root=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-
   "identity": {
     "manifest_present": true,
     "manifest_schema_version": 6,
-    "run_id": "0d7f086102aac868f4400c0f50bca02741c8b03b71571f968729e18db7c9c7cb"
+    "run_id": "08f0d71e3520eda33a4d568a3ac9fd265a92f9368cb7b9b97a195b68626c8c1e"
   },
   "provider_health": {
     "fault_minutes": 0.0,
     "seats": {
       "argumentative_critic": {
-        "attempts": 42,
-        "calls": 42,
+        "attempts": 53,
+        "calls": 53,
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "fault_ms": 0,
         "faults": 0,
@@ -851,8 +1114,8 @@ root=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-
         "zero_byte_returns": 0
       },
       "conjecturer": {
-        "attempts": 22,
-        "calls": 22,
+        "attempts": 32,
+        "calls": 32,
         "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
         "fault_ms": 0,
         "faults": 0,
@@ -862,22 +1125,22 @@ root=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-
         "zero_byte_returns": 0
       }
     },
-    "total_attempts": 64,
-    "total_calls": 64,
+    "total_attempts": 85,
+    "total_calls": 85,
     "total_faults": 0,
     "total_zero_byte_returns": 0,
     "worst_zero_byte_streak": 0
   },
   "question": "Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.",
   "resolved_from": "root",
-  "root": "/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-36d9a22c3e2045ae1b8c7bfb9d95d092",
+  "root": "/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-c3f3bf10bc57d63e224a9f1c68bf1057",
   "run": {
     "cycles_completed": 3,
-    "message": "V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at /workflow/insufficient_capability_by_route_seat: route seat has terminally exhausted its smallest authorized contract",
+    "message": "token budget denied transactional work sha256:dcd8fa4595478085beeb41b23cd97af3c9cafe25c4f45f58316ee529e89760fd",
     "state": "failed",
     "stop_reason": "operational_failure",
     "token_limit": 500000,
-    "token_spend": 464359
+    "token_spend": 495362
   },
   "schema": "deepreason-results.v1",
   "seat_retirement": {
@@ -898,10 +1161,10 @@ root=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-
   },
   "verification": {
     "families": {
-      "completion": 38,
+      "completion": 29,
       "epistemic": 0,
       "integrity": 0,
-      "operational": 14,
+      "operational": 13,
       "security": 0
     },
     "source": "rederived",
@@ -910,8 +1173,8 @@ root=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-
   }
 }
 rc=0
-{"accepted": 16, "chars": 21396, "derived_positions": 9, "refuted": 0, "root": "/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-36d9a22c3e2045ae1b8c7bfb9d95d092", "schema": "composed-result.v1", "seed_positions": 16, "seed_problem": "question-ba75796c3facc7a3d0d448d6eaa09a2e", "suspended": 0}
+{"accepted": 36, "chars": 46518, "derived_positions": 3, "refuted": 0, "root": "/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-c3f3bf10bc57d63e224a9f1c68bf1057", "schema": "composed-result.v1", "seed_positions": 36, "seed_problem": "question-ba75796c3facc7a3d0d448d6eaa09a2e", "suspended": 0}
 compose-rc=0
 --- did the organiser render? (the section plans name the plugin) ---
-15
-=== ARM R finished 2026-09-06T09:21:52Z ===
+11
+=== ARM R finished 2026-09-06T11:31:32Z ===

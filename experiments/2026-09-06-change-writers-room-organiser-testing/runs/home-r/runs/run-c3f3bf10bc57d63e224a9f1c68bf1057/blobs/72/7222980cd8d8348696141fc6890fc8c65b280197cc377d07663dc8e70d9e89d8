@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that preferring better-corroborated theories is a 'rational guess' aimed at truth (verisimilitude) without inductive assumptions fails because Popper's own definition of verisimilitude relies on the assumption that a theory with greater empirical content which has survived severe tests is closer to the truth than one that has not. This preference implicitly assumes that the structural features of the world that allowed the theory to survive past tests will persist into the future, which is an inductive assumption about the uniformity of nature. By asserting that this choice is defensible purely on methodological grounds without smuggling in induction, the target ignores that the very concept of 'surviving severe tests' as a marker for 'closeness to truth' presupposes an inductive link between past performance and future reliability/truth-likeness.",
+      "premise": "Popper's concept of verisimilitude and the preference for corroborated theories implicitly rely on inductive assumptions about the persistence of natural structures.",
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "Can Popper formulate a notion of verisimilitude or corroboration that guides rational action without presupposing any inductive principle regarding the stability of the world's structure?"
+    }
+  ]
+}

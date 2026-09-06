@@ -1,0 +1,204 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is indefensible on Popper's own terms and smuggles induction back in by implicitly asserting that past performance is a reliable guide to future reliability, reducing the methodology to psychological habit rather than logical rationality.",
+      "mechanism": "By advising scientists to prefer the better-corroborated theory for action, Popper implicitly relies on the inductive premise that survival of severe tests indicates future stability, creating a performative contradiction where the system collapses into crypto-induction whenever it leaves abstract methodology.",
+      "counterconditions": [
+        "refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed or remain unfalsified in the future",
+        "refuted if Popper explicitly distinguishes 'corroboration' as a report of past performance versus 'probability' as a prediction of future frequency in a way that validates action without inductive inference",
+        "refuted if the claim that Popper's framework reduces to mere psychological habit fails to demonstrate that no non-inductive logical rule can govern the preference"
+      ],
+      "evidence_refs": [
+        {
+          "block": "16c4445643674d71"
+        },
+        {
+          "block": "3a5ebf3b2c2c80a0"
+        },
+        {
+          "block": "1b948fe0dcf78cd9"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate does not equate 'minimizing known unknowns' with logical deduction; rather, it argues that the act of preference itself *is* the inductive leap, regardless of how it is framed (as risk minimization or otherwise). The criticism targets a different argument (Asymmetry of Risk) than the one presented here (Performative Contradiction)."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "This criticism addresses the 'Decision-Theoretic Void' conjecture. The current candidate argues the opposite: that the choice is NOT indistinguishable from a coin toss because the agent *does* implicitly assign higher value based on past performance, which is the very induction being criticized."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "This criticism targets the 'Pragmatic Wager' and 'Asymmetry of Risk' arguments. The current candidate agrees with the criticism's core point (that acting assumes the future resembles the past) and uses it as the primary mechanism for the 'Performative Contradiction' claim."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate explicitly rejects the distinction between acting and believing as a valid defense, arguing that the act of preference *constitutes* the belief in reliability, thus maintaining the charge of performative contradiction."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate does not claim the preference is defensible 'only by accepting verisimilitude'; it claims the preference is *indefensible* and constitutes a contradiction. The criticism misidentifies the target argument."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate argues that the distinction between logical status and pragmatic decision is insufficient to avoid the charge of induction, as the pragmatic decision itself relies on an inductive premise. Thus, the 'false dichotomy' charge does not apply to this specific formulation."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "This criticism targets the 'Corroboration as Informational Content' conjecture. The current candidate focuses on the 'Performative Contradiction,' arguing that safety-critical actions *prove* the reliance on induction, rather than avoiding it."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Similar to SRC_007, this targets a different conjecture. The current candidate aligns with the observation that scientists prefer theories for success, using this fact to support the claim that Popper's system smuggles in induction."
+        }
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is defensible because corroboration functions as a measure of informational content rather than likelihood; we choose the better-corroborated theory not because we think it will hold true, but because it offers the most detailed map currently available for further criticism and testing.",
+      "mechanism": "Preferring the bold, well-tested theory is a preference for the most efficient path to potential falsification. If the theory fails, we learn more than if a weaker theory fails. This makes the preference a methodological rule for maximizing learning potential, not a probabilistic claim about the world's stability.",
+      "counterconditions": [
+        "refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true",
+        "refuted if it can be demonstrated that preferring a theory for its 'boldness' implicitly relies on the inductive assumption that a theory which has withstood attacks in the past is a better instrument for navigating the future",
+        "refuted if evidence shows researchers consistently choosing less established, riskier hypotheses over well-corroborated ones solely to accelerate falsification"
+      ],
+      "evidence_refs": [
+        {
+          "block": "182a58bdd39650d7"
+        },
+        {
+          "block": "0db48ad23b546413"
+        },
+        {
+          "block": "19d7f4e301abfb17"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate explicitly frames the preference as a methodological rule for learning, not a logical deduction about future reliability. The criticism targets a different argument structure."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate does not claim choices are arbitrary; it claims they are rationally distinct based on informational content. The criticism targets the 'Decision-Theoretic Void' conjecture."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate denies that the wager assumes the future will resemble the past; it assumes only that *if* the theory fails, the information gain is higher. The criticism challenges this denial, but the candidate's mechanism stands as a distinct non-inductive proposal."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate maintains the distinction between acting to falsify and acting based on belief in truth. The criticism claims this distinction is false, but the candidate's mechanism relies on maintaining it as a regulative ideal."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "Irrelevant to this conjecture, which does not rely on verisimilitude as the sole defense."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate argues the preference is a logical rule of method, not a psychological habit. The criticism claims this is a false dichotomy, but the candidate asserts the logical basis is the maximization of informational content."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "revised",
+          "note": "The candidate acknowledges the tension in safety-critical contexts (like bridge building) where the goal is success, not falsification. It revises the scope to apply primarily to the context of scientific discovery and testing, admitting that in pure application, the 'experimental' justification may feel counter-intuitive, though logically consistent within Popper's aim of knowledge growth."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate argues that while scientists may *feel* they are acting for success, the *rational justification* within Popper's system is the acceleration of error detection. The criticism conflates phenomenology with normative justification."
+        }
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated theory in favor of a poorly tested one increases the likelihood of immediate error without offering compensatory increase in testability.",
+      "mechanism": "Choosing the better-corroborated theory minimizes 'known unknowns' relative to alternatives. This is a defensive posture requiring no belief in the future validity of the theory, only a recognition of its current robustness having survived greater exposure to falsification.",
+      "counterconditions": [
+        "refuted if it could be demonstrated that the concept of 'minimizing known unknowns' logically entails a probabilistic assessment of future performance",
+        "refuted if it can be shown that choosing a poorly tested theory does not carry a higher 'likelihood of error' within a strict Popperian framework where all unfalsified theories stand on equal footing",
+        "refuted if the 'defensive posture' is shown to be illusory because action inherently aims at future results, entailing an inductive commitment"
+      ],
+      "evidence_refs": [
+        {
+          "block": "193e9093bea201f6"
+        },
+        {
+          "block": "07785266ae5808f5"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate explicitly states the mechanism is a 'logical deduction about the current state of knowledge,' not a probabilistic assessment. The criticism claims this entails probability, but the candidate maintains the distinction between current robustness and future probability."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate argues the choices are distinguishable based on current risk profiles (known unknowns), refuting the claim that they are indistinguishable from a coin toss."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate denies that minimizing known unknowns assumes the future will resemble the past; it assumes only that the *current* state of having survived tests is a fact, and ignoring this fact is irrational regardless of future outcomes."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate maintains that one can prefer the safer option (less known unknowns) without believing it is 'true' or 'probable' in an inductive sense."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "Irrelevant to this specific mechanism."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate posits a logical rule (minimize known unknowns) rather than a psychological habit."
+        },
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate argues that even in safety contexts, choosing the theory with fewer 'known unknowns' is rational without needing to believe it will succeed, only that the alternative is riskier in terms of unpredictability."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate accepts that scientists prefer these theories for action but reinterprets the rational basis as risk minimization regarding current knowledge states, not expectation of success."
+        }
+      ],
+      "typicality": 0.5,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "abstention": null,
+  "context_request": null,
+  "research_proposals": [],
+  "scratch_proposal": null,
+  "simulation_proposals": []
+}

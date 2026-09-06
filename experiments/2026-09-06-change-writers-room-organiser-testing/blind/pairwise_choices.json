@@ -1,0 +1,272 @@
+{
+ "159068a8-3184-45a5-81a9-9f38bd55fa6b|1|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a sharper verdict that directly addresses the tension of 'action' by identifying a performative contradiction, whereas Text B hedges with a modification and relies on the technically flawed concept of verisimilitude which weakens its defense."
+ },
+ "159068a8-3184-45a5-81a9-9f38bd55fa6b|1|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a sharper engagement with the specific tension of 'acting on' theories (the performative contradiction) and delivers a more philosophically honest verdict that accepts the genuine cost of abandoning deductive purity, whereas Text A relies on the contested and technically flawed concept of verisimilitude to defend Popper."
+ },
+ "159068a8-3184-45a5-81a9-9f38bd55fa6b|2|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a more rigorous engagement with specific Popperian texts (Objective Knowledge, Salmon) and articulates a sharper, more uncomfortable philosophical cost regarding the loss of logical purity, whereas Text B relies on the contested and formally problematic concept of verisimilitude to defend its verdict."
+ },
+ "159068a8-3184-45a5-81a9-9f38bd55fa6b|2|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a sharper engagement with the specific tension of 'acting on' theories (the performative contradiction) and delivers a more decisive, philosophically honest verdict that explicitly names the loss of 'logical purity' as the cost, whereas Text A hedges by redefining rationality to force a defense of Popper."
+ },
+ "159068a8-3184-45a5-81a9-9f38bd55fa6b|3|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a sharper verdict with a more concrete philosophical cost, whereas Text B's survival condition relies on the contested and technically flawed concept of verisimilitude which weakens its defense."
+ },
+ "159068a8-3184-45a5-81a9-9f38bd55fa6b|3|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B delivers a sharper verdict by identifying the performative contradiction in action, whereas Text A hedges by accepting Popper's solution despite acknowledging its fatal formal flaws."
+ },
+ "2186f687-aea3-49f6-b620-6b5169998ddf|1|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a sharper verdict that the preference is indefensible (smuggles induction), directly addressing the tension of 'acting' which Text B glosses over by relying on the flawed concept of verisimilitude that Popper himself struggled to formalize."
+ },
+ "2186f687-aea3-49f6-b620-6b5169998ddf|1|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a sharper, more specific engagement with Popperian machinery (framing the defense as 'maximum learnability' rather than just 'critical rationality') and delivers a more incisive verdict that identifies a genuine performative contradiction, whereas Text A's defense relies partly on the contested and technically flawed concept of verisimilitude."
+ },
+ "2186f687-aea3-49f6-b620-6b5169998ddf|2|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a sharper verdict that the preference is indefensible (smuggles induction), directly addressing the 'acting on' aspect of the prompt with a stronger engagement of the performative contradiction, whereas Text B hedges by defending Popper despite admitting fatal flaws in his verisimilitude machinery."
+ },
+ "2186f687-aea3-49f6-b620-6b5169998ddf|2|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a more precise engagement with Popperian machinery by framing the defense around 'maximum learnability' rather than generic critical rationalism, and it delivers a sharper, more philosophically honest verdict that directly confronts the performative contradiction of action without evasion."
+ },
+ "2186f687-aea3-49f6-b620-6b5169998ddf|3|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a more rigorous engagement with specific Popperian machinery (distinguishing theoretical problem selection from practical action) and identifies a sharper, more genuine philosophical cost (the collapse into pragmatic conventionalism) than Text B's somewhat defensive verdict."
+ },
+ "2186f687-aea3-49f6-b620-6b5169998ddf|3|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a more precise engagement with Popperian machinery by framing the defense around 'maximum learnability' rather than Text A's conflated discussion of verisimilitude, and it delivers a sharper verdict that identifies the specific cost of losing the claim to a purely logical solution."
+ },
+ "323c4784-f291-48da-890a-edc58abae225|1|LR": {
+  "position": "B",
+  "side": "right",
+  "why": "Text B provides a superior defense by explicitly engaging Popper's concept of verisimilitude and the asymmetry of falsification, while honestly detailing the specific formal cost (the Tich\u00fd/Miller refutation) that Text A glosses over."
+ },
+ "323c4784-f291-48da-890a-edc58abae225|1|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Answer B provides a more sophisticated and textually accurate reconstruction of the 'defensible' case via the methodological rule of maximal testability (Objective Knowledge), whereas Answer A relies on the formally refuted concept of verisimilitude, making B's subsequent verdict that the preference is indefensible in action more robust and costly."
+ },
+ "323c4784-f291-48da-890a-edc58abae225|2|LR": {
+  "position": "B",
+  "side": "right",
+  "why": "Text B correctly identifies the surviving answer as the Popperian defense (Case B) based on error elimination and comparative logical status, whereas Text A incorrectly concludes that the anti-Popperian critique survives, thereby failing to demonstrate how the preference is defensible on Popper's own terms as the prompt requires."
+ },
+ "323c4784-f291-48da-890a-edc58abae225|2|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a more sophisticated and accurate representation of the 'defensible' case by focusing on Popper's actual methodological rule of maximizing informational yield rather than relying on the formally refuted concept of verisimilitude as Text A does."
+ },
+ "323c4784-f291-48da-890a-edc58abae225|3|LR": {
+  "position": "B",
+  "side": "right",
+  "why": "Text B correctly identifies the specific Popperian machinery (verisimilitude and error elimination) required to defend the preference without induction, whereas Text A incorrectly concedes that the preference is indefensible, failing to articulate the strongest possible case for Popper's own terms as the prompt demanded."
+ },
+ "323c4784-f291-48da-890a-edc58abae225|3|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a more sophisticated 'strongest case' for the defense by framing it as a methodological rule for maximizing informational yield rather than relying on Popper's formally refuted concept of verisimilitude, and it delivers a sharper verdict that explicitly identifies the cost as the collapse of a purely deductive logic of discovery."
+ },
+ "5737ca5c-e6bd-479c-903b-79af1c73c518|1|LR": {
+  "position": "B",
+  "side": "right",
+  "why": "Text B explicitly engages with Popper's specific machinery (verisimilitude, asymmetry of falsification) and identifies the genuine technical cost (the formal refutation of verisimilitude by Tich\u00fd and Miller), whereas Text A relies on a more generic pragmatic critique that partially evades the specific Popperian defense mechanisms."
+ },
+ "5737ca5c-e6bd-479c-903b-79af1c73c518|1|RL": {
+  "position": "A",
+  "side": "right",
+  "why": "Text A fulfills all five criteria by constructing robust arguments for both sides, engaging deeply with specific Popperian concepts like verisimilitude and the Tich\u00fd/Miller refutation, delivering a clear verdict, and identifying a genuine, uncomfortable cost regarding the collapse of Popper's formal machinery."
+ },
+ "5737ca5c-e6bd-479c-903b-79af1c73c518|2|LR": {
+  "position": "B",
+  "side": "right",
+  "why": "Text B provides a stronger defense by correctly invoking verisimilitude and the asymmetry of falsification, while uniquely identifying the formal refutation of verisimilitude (Tich\u00fd/Miller) as the specific, genuine cost of the verdict."
+ },
+ "5737ca5c-e6bd-479c-903b-79af1c73c518|2|RL": {
+  "position": "A",
+  "side": "right",
+  "why": "Text A provides a more rigorous engagement with Popper's specific machinery (verisimilitude, asymmetry of falsification) and identifies a concrete, technical cost (the formal refutation of verisimilitude), whereas Text B relies on a broader pragmatic verdict that slightly mischaracterizes Popper's aim as maximizing learnability rather than truth-likeness."
+ },
+ "5737ca5c-e6bd-479c-903b-79af1c73c518|3|LR": {
+  "position": "B",
+  "side": "right",
+  "why": "Text B explicitly engages with the specific Popperian machinery of verisimilitude and the asymmetry of falsification to construct the defense, whereas Text A relies on a more generic methodological argument that misses the core logical distinction required by the prompt's criteria."
+ },
+ "5737ca5c-e6bd-479c-903b-79af1c73c518|3|RL": {
+  "position": "A",
+  "side": "right",
+  "why": "Text A fulfills all five criteria by constructing robust arguments for both sides, engaging deeply with specific Popperian concepts like verisimilitude and the Tich\u00fd/Miller refutation, delivering a clear verdict, and identifying genuine philosophical costs rather than dissolving the tension."
+ },
+ "67dd5acd-8a9c-4673-8b0d-9f0c3d141da2|1|LR": {
+  "position": "B",
+  "side": "right",
+  "why": "Text B correctly identifies the formal collapse of Popper's verisimilitude machinery as the specific cost of the verdict, whereas Text A relies on a generic psychological cost and arguably misjudges the survivor by ignoring Popper's explicit solution regarding the elimination of falsified rivals."
+ },
+ "67dd5acd-8a9c-4673-8b0d-9f0c3d141da2|1|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B wins because its verdict commits to the harder, more philosophically honest position (that induction is smuggled in) and identifies a deeper cost (the loss of logical purity), whereas Text A takes the easier route of defending Popper despite acknowledging the formal collapse of his verisimilitude machinery."
+ },
+ "67dd5acd-8a9c-4673-8b0d-9f0c3d141da2|2|LR": {
+  "position": "B",
+  "side": "right",
+  "why": "Text B explicitly engages with the specific Popperian machinery of verisimilitude and the asymmetry of falsification to construct the defense, whereas Text A relies on a more generic methodological wager that misses the formal logical distinctions required by the prompt's second criterion."
+ },
+ "67dd5acd-8a9c-4673-8b0d-9f0c3d141da2|2|RL": {
+  "position": "A",
+  "side": "right",
+  "why": "Text A provides a more rigorous engagement with Popper's specific machinery (verisimilitude, asymmetry of falsification) and identifies a concrete, high-stakes philosophical cost (the formal refutation of verisimilitude), whereas Text B relies on a broader 'methodological wager' argument and offers a verdict that feels less nuanced regarding the survival of Popper's core intent."
+ },
+ "67dd5acd-8a9c-4673-8b0d-9f0c3d141da2|3|LR": {
+  "position": "B",
+  "side": "right",
+  "why": "Text B provides a superior engagement with Popper's specific machinery (verisimilitude, asymmetry of falsification) and identifies a genuine, technical cost (the formal refutation of verisimilitude by Tich\u00fd and Miller), whereas Text A relies on a more generic pragmatic argument and concludes that Popper's position fails entirely."
+ },
+ "67dd5acd-8a9c-4673-8b0d-9f0c3d141da2|3|RL": {
+  "position": "A",
+  "side": "right",
+  "why": "Answer A provides a more precise engagement with Popper's specific machinery (verisimilitude, asymmetry of falsification) and identifies a concrete, technical cost (the formal refutation of verisimilitude), whereas Answer B relies on broader pragmatic arguments and a less specific cost analysis."
+ },
+ "7c27fffc-8851-406e-b549-45ca9f09254b|1|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a sharper verdict that directly addresses the tension of 'acting on' theories as a performative contradiction, whereas Text B hedges by allowing the defense to survive via a pragmatic redefinition that risks the evasion criterion."
+ },
+ "7c27fffc-8851-406e-b549-45ca9f09254b|1|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a more rigorous engagement with Popperian machinery (specifically the tension between methodological rules and practical action) and delivers a sharper, more committed verdict that honestly confronts the logical cost of the performative contradiction."
+ },
+ "7c27fffc-8851-406e-b549-45ca9f09254b|2|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a sharper verdict by identifying a performative contradiction in action and names a more specific, uncomfortable cost (the loss of logical purity and reclassification of Popper as a psychologist), whereas Text B hedges its verdict and lists costs that are largely inherent features of Popper's system rather than concessions."
+ },
+ "7c27fffc-8851-406e-b549-45ca9f09254b|2|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a sharper engagement with the specific tension of 'acting on' theories (the performative contradiction) and delivers a more decisive, costly verdict that directly addresses the prompt's requirement to identify a survivor rather than hedging."
+ },
+ "7c27fffc-8851-406e-b549-45ca9f09254b|3|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a more rigorous engagement with specific Popperian texts (Objective Knowledge, Salmon) and articulates a sharper, more uncomfortable cost (the collapse of logical purity) compared to Text B's somewhat defensive verdict."
+ },
+ "7c27fffc-8851-406e-b549-45ca9f09254b|3|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B delivers a sharper verdict by identifying the performative contradiction in action contexts and articulates a more profound cost (the loss of logical purity) than Text A's procedural redefinition."
+ },
+ "81082532-7267-4d03-9a3b-9c5de5f1c82a|1|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a more rigorous engagement with specific Popperian concepts like 'maximum learnability' and avoids the cheap pragmatic exit that Text B relies on, while clearly articulating the genuine cost to Popper's claim of logical purity."
+ },
+ "81082532-7267-4d03-9a3b-9c5de5f1c82a|1|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a more precise engagement with Popperian machinery by framing the defense through 'maximum learnability' rather than generic robustness, and it delivers a sharper verdict that identifies a specific performative contradiction in practical action, whereas Text A's defense relies on a slightly softer procedural rationality that risks the 'pragmatic' evasion the prompt warns against."
+ },
+ "81082532-7267-4d03-9a3b-9c5de5f1c82a|2|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a more rigorous engagement with specific Popperian concepts like 'maximum learnability' and avoids the cheap pragmatic exit that Text B relies on, while clearly articulating the genuine cost of losing logical purity."
+ },
+ "81082532-7267-4d03-9a3b-9c5de5f1c82a|2|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a more precise engagement with Popperian machinery by framing the defense around 'maximum learnability' rather than generic robustness, and it delivers a sharper verdict that explicitly identifies the cost as the collapse of Popper's claim to a purely logical solution into pragmatic conventionalism."
+ },
+ "81082532-7267-4d03-9a3b-9c5de5f1c82a|3|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A constructs stronger, more specific arguments (e.g., 'efficiency of error detection' vs. 'performative contradiction') and identifies a sharper philosophical cost (the collapse into pragmatic conventionalism) compared to Text B's more generic summary."
+ },
+ "81082532-7267-4d03-9a3b-9c5de5f1c82a|3|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a more sophisticated defense centered on 'maximum learnability' and delivers a sharper verdict on the 'performative contradiction' of action, whereas Text A's defense relies on a weaker 'best bet' argument and its cost section dilutes the tension by framing the outcome as a successful dissolution rather than a genuine loss."
+ },
+ "ec6f7e36-1734-4835-8289-9817ce94ae67|1|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a more rigorous engagement with Popper's specific machinery (distinguishing informational yield from predictive success) and identifies a deeper, more uncomfortable cost (the collapse of purely deductive logic) compared to Text B's reliance on the contested concept of verisimilitude."
+ },
+ "ec6f7e36-1734-4835-8289-9817ce94ae67|1|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a more precise engagement with Popperian machinery by framing the defense around 'maximal testability' and 'informational yield' rather than Text A's slightly confused invocation of verisimilitude, and it delivers a sharper verdict on the performative contradiction of action that directly addresses the prompt's challenge about smuggling in induction."
+ },
+ "ec6f7e36-1734-4835-8289-9817ce94ae67|2|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a more rigorous engagement with Popper's specific machinery (distinguishing informational yield from predictive success) and identifies a sharper, more genuine philosophical cost (the collapse of pure deductive demarcation) compared to Text B's somewhat softer conclusion."
+ },
+ "ec6f7e36-1734-4835-8289-9817ce94ae67|2|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a sharper engagement with Popper's specific machinery regarding empirical content and the asymmetry of learning, while delivering a more decisive verdict that honestly confronts the performative contradiction in applied science rather than attempting to dissolve it."
+ },
+ "ec6f7e36-1734-4835-8289-9817ce94ae67|3|LR": {
+  "position": "B",
+  "side": "right",
+  "why": "Text B correctly identifies that the preference is defensible on Popper's own terms (Case B survives) by distinguishing critical rationality from inductive justification, whereas Text A incorrectly concludes the preference is indefensible, failing to uphold Popper's core argument that acting on the best-tested theory is rational even without probabilistic assurance."
+ },
+ "ec6f7e36-1734-4835-8289-9817ce94ae67|3|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a stronger, more precise engagement with Popperian machinery by framing the defense around 'maximizing informational yield' rather than just 'critical rationality,' and its verdict honestly accepts the high cost of abandoning a purely deductive logic of discovery, whereas Text A's survival claim feels slightly evasive of the core tension regarding action."
+ },
+ "f562f416-164c-4da4-a8cd-18aeb18b54c8|1|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a deeper engagement with specific Popperian machinery (asymmetry of information, informational yield) and identifies a more substantive philosophical cost (the collapse of demarcation purity) compared to Text B's more generic summary."
+ },
+ "f562f416-164c-4da4-a8cd-18aeb18b54c8|1|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a stronger engagement with specific Popperian machinery (empirical content, asymmetry of information) and identifies a more precise philosophical cost (the collapse of pure deductive demarcation) while avoiding the evasion of simply labeling the solution 'pragmatic' without explaining the failure."
+ },
+ "f562f416-164c-4da4-a8cd-18aeb18b54c8|2|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a superior analysis by engaging more deeply with specific Popperian machinery (empirical content, asymmetry of information) and offering a more substantive 'cost' (the collapse of pure deductive logic) rather than Text B's somewhat defensive acceptance of Popper's procedural rationality."
+ },
+ "f562f416-164c-4da4-a8cd-18aeb18b54c8|2|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a sharper engagement with Popper's specific machinery (empirical content, asymmetry of information) and delivers a more philosophically rigorous verdict by identifying the performative contradiction in applied science, whereas Text A relies on a softer 'pragmatic' defense that arguably evades the full force of the induction problem."
+ },
+ "f562f416-164c-4da4-a8cd-18aeb18b54c8|3|LR": {
+  "position": "A",
+  "side": "left",
+  "why": "Text A provides a superior verdict by decisively siding with the 'indefensibility' case and articulating a concrete philosophical cost (the collapse of pure deductive logic), whereas Text B hedges its verdict and frames the cost as merely accepting uncertainty, which is less responsive to the prompt's demand for a specific concession."
+ },
+ "f562f416-164c-4da4-a8cd-18aeb18b54c8|3|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a more precise engagement with Popperian machinery (specifically the asymmetry of information and empirical content) and identifies a sharper, more specific philosophical cost (the collapse of purely deductive demarcation) compared to Text A's broader epistemic skepticism."
+ }
+}

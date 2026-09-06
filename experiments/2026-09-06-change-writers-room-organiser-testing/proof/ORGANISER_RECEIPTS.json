@@ -1,13 +1,13 @@
 {
  "pack_token_budget": 24000,
- "prompt_bytes": 91795,
- "prompt_chars": 91784,
+ "prompt_bytes": 95071,
+ "prompt_chars": 95060,
  "schema": "organiser-brief-receipts.v1",
  "section_plans": [
   {
    "data": {
     "attempt_index": 0,
-    "id": "sha256:58d4f7ce4fbd379d65c14e6c8f096db604c6f5ced21f5e971e853e47a0c7a51b",
+    "id": "sha256:6a8c1ba8a692989b120b3b50922aeece0e58b109c83a32adb9afc4ab9bcd5393",
     "layout_id": "seat-pack.conjecturer.organiser-v1",
     "layout_version": "1.0.0",
     "schema": "workflow.context-section-plan.v1",
@@ -80,9 +80,9 @@
       "parameters_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
       "plugin_id": "dr.evidence.frozen",
       "plugin_version": "1.0.0",
-      "rendered_bytes": 63538,
+      "rendered_bytes": 66814,
       "section_id": "frozen-evidence-context",
-      "source_bytes": 63538
+      "source_bytes": 66814
      },
      {
       "disposition": "rendered",
@@ -149,9 +149,9 @@
      }
     ],
     "shell_id": "seat.conjecturer.organiser-v1",
-    "work_id": "sha256:c235b745482eadb16c127ac2d2a7f38907fda775cdd4f86ba436369e03571969"
+    "work_id": "sha256:ba26a1b2f24a2057aaff21a0bb08aa7ea2c61984c58916ae578fc3b8056a08c8"
    },
-   "id": "sha256:58d4f7ce4fbd379d65c14e6c8f096db604c6f5ced21f5e971e853e47a0c7a51b",
+   "id": "sha256:6a8c1ba8a692989b120b3b50922aeece0e58b109c83a32adb9afc4ab9bcd5393",
    "schema": "workflow-context-section-plan-v1"
   }
  ]

@@ -413,3 +413,113 @@ none — no file under `src/` moves (R36); `tools/blast_radius.py` is not owed f
 ~0 lines under `src`/`tests`/`docs/map`; ~250 lines of tranche scripts and instrument edits; the run roots and `blind/` as evidence.
 
 Rubric: 6/6 yes — every R26–R36 has an item with an accept; no census owed (no code); no frozen contact; the named mechanisms (armR.sh, chain.sh, judge/analyse, D8's arm0.py) exist and are the files edited; not DESIGN-AND-STOP; nothing untraceable.
+
+## Amendment 4 (2026-09-06, the second launch window) — the reading of "failure again. Bad config."
+
+**The reading (R37).** The operator names the configuration, and the
+configuration is the monitor's own: R14 asked for a critic that could not see
+the room, and `seat.critic.evidence-blind-v1` delivered it by removing
+`dr.evidence.citable` and `dr.premise-invitation` from the critic's BRIEF —
+while `rules/crit.py` goes on binding the citable block menu into the critic's
+CONTRACT from its own legend, independently of the layout. A schema that asks
+for block ids in front of a brief that shows none is the bad configuration; it
+killed ARM R at cycle 3 (PARKED P6). This window WITHDRAWS the pairing rather
+than repairing it — repair is P6's own tranche — and fixes the two other
+things the failed run measured: the two id systems in front of one seat (P7),
+and a judging instrument that saturated at its ceiling on both bare arms
+(RESULTS §5).
+
+**What the default critic sees, exactly (R38).** `seat.critic.legacy-v0` binds
+`seat-pack.critic.legacy-v0`, thirteen entries
+(`src/deepreason/llm/seat_layouts.py:82-106`):
+
+| the critic WILL see | the critic will NOT see |
+|---|---|
+| `dr.premise-invitation` — the invitation to ground a premise in admitted evidence (priority 6, droppable) | `dr.evidence.frozen` — **the room whole**. That entry is not in the critic's layout at all, at any priority: the 97 blocks' bodies are never rendered to the critic |
+| `dr.evidence.citable` — the legend, gated on the invitation (`requires_invitation: True`): **32 blocks of the 97**, each a 160-character excerpt, hash-ordered (`evidence/render.py:192-198`; PARKED P2) | the 65 blocks outside the legend, which are named only as a withheld count |
+| its own eleven working sections — problem, target, target commitments, support chain and content, standing attacks, frames, counterexample recourse, the machine-evaluation boundary, its output contract | anything the organiser's brief carries: the directive, the frozen dossier, the room's ordering |
+
+So the critic is NO LONGER BLIND, and it is not sighted on the room either: it
+reads 32 excerpts totalling ~5 KB of a 53 KB room, and its form's
+`premise_evidence` menu is bound from exactly those 32 (`rules/crit.py:1306-1322`,
+fed by `batch_legend.shown`). Brief and form now agree about evidence, which
+is the whole of the change. DISCLOSED, not controlled: this is a different
+critic from the failed arm's, so the two ARM R runs differ in two places
+(critic shell, attachment headers) and neither difference is isolated. P4 (a
+critic that reads the room) and P6 (a blind brief against a sighted form) stay
+parked, unfixed.
+
+**A residual risk of the same shape, named so it is not a surprise.** Both
+`dr.premise-invitation` and `dr.evidence.citable` are DROPPABLE at priority 6.
+If the allocator drops the invitation under budget pressure the legend goes
+with it, while `crit.py` computes the menu from the legend it built
+independently — the P6 shape again, arriving by budget rather than by shell.
+It is unlikely here (the critic's pack renders no frozen dossier and is the
+small pack of the two) and it is not defended against in this window; if the
+run dies that way, the record will say so and P6 gains a second instance.
+
+**One id system (R39, R40).** `tools/room_to_attachment.py` writes no room
+record id into the attached text. Headers become `CONJECTURE n=<ordinal>
+cycle=<n> angle=<angle>`, `PROPOSAL cycle=<n> kind=<label> about-n=<ordinal>
+about-angle=<angle>`, `OBJECTION cycle=<n> about-n=<ordinal>
+about-angle=<angle>`; the record ids live in `CONVERSION.json`, which is not
+attached. The organiser directive's CITATION sentence names only "ids that
+appear in CITABLE EVIDENCE BLOCKS" and needs no change; its HEADER-SHAPE
+sentence still describes the old `id=` line and cannot be corrected without
+editing `src/`, which this window may not do (C17). R40's own fallback is
+taken: each attachment file opens with ONE preamble paragraph stating the
+header shape actually used and that the room's numbers and angles are not
+citable ids. That paragraph is the only text in the attachment that is not a
+room record, and it takes the admitted block count from 94 to 97.
+
+**Measured consequence, disclosed before the launch.** Every block's content
+id moved (the header line is inside the block), so the legend's hash-ordered
+32 is redrawn: 4 conjectures / 17 proposals / 11 objections, against 7 / 13 /
+12 before, with 6 refuted-if proposals visible against 1. Fewer conjecture
+blocks are citable, so the census's strict "room conjectures carried" count is
+capped at 4 by the legend rather than by the seat; `tools/organiser_census.py`
+therefore reports a second count beside it — conjectures REACHED, named by a
+verified citation of the conjecture's block or of a proposal or objection
+about it. The cap itself is PARKED P2 and is not touched.
+
+**Pairwise forced choice (R42–R44).** The 0–3 rubric is replaced for this
+launch by `tools/judge_pairwise.py`; `tools/judge_organiser.py`,
+`tools/analyse_organiser.py`, `blind/candidates.jsonl`, `blind/keymap.json`
+and `blind/scores.json` are the record of the ceiling and are not edited
+(C18). PREREG Amendment 7 seals the instrument, its counts, its
+order-consistency rule, its length rule and its decision rule.
+
+### Items
+
+S37 (R38): `runs/armR.sh` exports `DEEPREASON_SEAT_SHELL=conjecturer=seat.conjecturer.organiser-v1` only; the critic runs the shipped default. The banner's stale "800000" (PREREG Amendment 5's recorded instrument defect) is corrected in the same edit.
+    accept: `grep -c 'argumentative_critic=' runs/armR.sh` -> 0; `grep -c 'DEEPREASON_SEAT_SHELL=conjecturer=seat.conjecturer.organiser-v1$' runs/armR.sh` -> 1; `grep -c '500000 token ceiling' runs/armR.sh` -> 1; `bash -n runs/armR.sh` exit 0.
+S38 (R39): the converter writes no room record id; re-run against the room root; `attachment/ATTACHMENT.sha256` regenerated.
+    accept: `python tools/room_to_attachment.py <room root> attachment --json attachment/CONVERSION.json` prints `records 94 …`, `verbatim 94/94` and `header carries a room record id: False`; no record id from CONVERSION.json occurs in any attached `.txt`; every file still sniffs `text/plain`; `sha256sum -c attachment/ATTACHMENT.sha256` all OK.
+S39 (R40): the preamble paragraph in each file carries the header shape and the citable-id rule; no `src/` file moves.
+    accept: `grep -c 'PREAMBLE -- how to read' attachment/*.txt` -> 1 each; `git diff --stat <window base>..HEAD -- src tests mini docs` empty.
+S40 (R39): `proof/dry_attach.py` and `proof/render_brief.py` re-run on the new attachment; the brief committed before any live call.
+    accept: `proof/DRY_ATTACH.txt` reports 3 sources / 97 blocks / 0 refusals and `legend_shown 32`; `proof/ORGANISER_BRIEF.txt` contains the organiser directive, three preambles and zero room record ids.
+S41 (R41): the prediction registered in PREREG Amendment 7 — `EVIDENCE_REF_UNKNOWN_BLOCK` 0 (it was 58) and `EVIDENCE_CITATION_VERIFIED` >= 21.
+    accept: the amendment carries both numbers before the launch; the census reports both after it.
+S42 (R42–R44): `tools/judge_pairwise.py` exists, is blind, forces a choice, runs both orders, and refuses the keymap until the choices exist; its standard is the rubric's own five criteria read from `judge_organiser.py` at run time, not retyped.
+    accept: `python tools/judge_pairwise.py criteria-check` exits 0 and prints the five criteria; `python tools/judge_pairwise.py reveal` refuses without `blind/pairwise_choices.json`; the offline pair-building proof (15 pairs: 6 measured, 9 control; 90 readings) is pasted in VALIDATION.md.
+S43 (R45, R47): the failed root retired by rename and committed BEFORE the launch; `runs/chain.sh` runs soak -> setup+qualify -> ARM R -> `touch STOP_SNAPSHOT`, and respends no ARM 0R.
+    accept: `git log --diff-filter=R --name-status` shows the rename in its own commit; `! grep -q 'runs/arm0R.sh' runs/chain.sh` (the arm is not RUN; the header comment names it to say it is reused, not respent); `bash -n runs/chain.sh` exit 0; `runs/chain.log` shows `soak rc=0` and the battery's cache line.
+S44 (R48, R49): typed outcomes only, then the census and the pairwise instrument in that order.
+    accept: RESULTS.md quotes `state`, `stop_reason`, `deepreason results --json --verify` (violations, replay digest) and the organiser-rendered count from the record; `runs/armR/CENSUS.json` and `runs/PAIRWISE_VERDICT.json` committed.
+S45 (R50, R51): RESULTS.md dated segment with every listed content; VALIDATION.md and DELIVERY.md re-issued with the table extended to R37–R51; no gate run and none owed.
+    accept: `grep -c '^## 2026-09-06' RESULTS.md` -> 3; DELIVERY.md's table has rows R1–R51.
+
+### Assumptions (operator may override)
+A15: the conjecture's ORDINAL (`n=`, its position in the room) and its ANGLE are the target reference R39 asks for; both are chosen because neither is id-shaped and neither is mirrored in the legend, so neither can be mistaken for a citable id. Assumed, operator may override.
+A16: one preamble paragraph per file rather than one for the whole attachment, so whichever source the seat reads first carries the instruction; the cost is three admitted blocks that are not room records, disclosed everywhere the block count appears.
+A17: the window base for the scope diffs is `8093b70fa` (the merge this window started from).
+A18: `deepreason stop-report` is read only if the arm fails; it is a diagnostic on this tranche's own run, not a verification of anyone's review (CLAUDE.md's MANDATORY block).
+
+### Frozen-surface contact forecast
+none — no file under `src/` moves (C17); the two `src/` files this amendment cites (`llm/seat_layouts.py`, `llm/seat_plugins.py`) are READ, and neither is a frozen surface in any case.
+
+### Budget
+0 lines under `src`/`tests`/`mini`/`docs`; ~430 lines of tranche tooling (the pairwise instrument, the converter's headers and preamble, the census's second count); the new attachment, the new brief, the run root and `blind/` as evidence.
+
+Rubric: 6/6 yes — every R37–R51 has an item with an accept; no census owed (no code under `src/`); no frozen contact; the named mechanisms exist and are the files edited; not DESIGN-AND-STOP; nothing untraceable.

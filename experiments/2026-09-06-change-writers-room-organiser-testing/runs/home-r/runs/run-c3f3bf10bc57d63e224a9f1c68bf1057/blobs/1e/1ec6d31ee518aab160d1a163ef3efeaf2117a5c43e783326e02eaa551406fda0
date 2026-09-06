@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation as required by the problem context. Instead of naming a specific kind of relation (e.g., dependence, reduction) between 'isolated 05a234fe135a' and its 'neighbourhood', the text constructs a conditional statement about what would refute a claim regarding Popper's justification. The phrase 'a relation refuted if...' functions as part of a hypothetical condition within an argument about psychological habit versus logical framework, rather than asserting an actual ontological or logical link between the specified endpoints. Consequently, it provides a summary of a debate scenario rather than the requested substantive connection.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "The problem requires proposing a substantive relation naming its kind; the target provides a conditional clause describing a refutation scenario instead of asserting a relation.",
+      "premise_evidence": null,
+      "successor_question": "Can you explicitly state the kind of relation (e.g., reduction, contradiction) that holds between the preference for better-corroborated theories and the description of psychological habit, independent of any conditional refutation?"
+    }
+  ]
+}

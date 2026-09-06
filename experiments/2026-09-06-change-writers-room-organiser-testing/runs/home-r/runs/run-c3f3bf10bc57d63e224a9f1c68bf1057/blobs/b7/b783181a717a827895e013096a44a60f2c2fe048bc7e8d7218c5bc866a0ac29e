@@ -1,0 +1,30 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms without smuggling in induction, provided it is framed strictly as a methodological rule for selecting the most informative theory to subject to future falsification, rather than as a prediction of future success or a measure of truth probability.",
+    "mechanism": "This defense operates by distinguishing between 'corroboration' (a historical report of past test severity) and 'verisimilitude' or 'probability' (claims about future performance or truth likelihood). The mechanism relies on the asymmetry of risk: rejecting a well-corroborated theory in favor of a less tested one increases the chance of immediate error without gaining informational content, whereas choosing the better-corroborated theory maximizes informational content and exposes the agent to the severest possible future tests. This aligns with Popper's goal of rapid error elimination rather than inductive certainty.",
+    "counterconditions": [
+      "If Popper explicitly stated that acting on corroboration implies an expectation of future success equivalent to induction.",
+      "If the preference cannot be separated from a belief that the future will resemble the past.",
+      "If the 'methodological rule' defense inevitably collapses into a pragmatic wager that assumes nature's uniformity."
+    ],
+    "typicality": 0.85,
+    "evidence_refs": [
+      {
+        "block": "193e9093bea201f6",
+        "quote": null
+      },
+      {
+        "block": "07785266ae5808f5",
+        "quote": null
+      },
+      {
+        "block": "08c37be0a0e09d91",
+        "quote": null
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

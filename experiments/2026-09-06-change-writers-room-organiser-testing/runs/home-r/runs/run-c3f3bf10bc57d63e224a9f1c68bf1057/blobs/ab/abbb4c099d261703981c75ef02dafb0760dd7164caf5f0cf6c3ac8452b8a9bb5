@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is a 'pragmatic wager' maximizing 'informational content at risk' without relying on induction fails because acting on this wager implicitly assumes the future will resemble the past. If the laws of nature were to change arbitrarily tomorrow, the theory with the highest informational content (the most falsifiable/bold theory) would be the most likely to fail catastrophically, not the most rational bet for survival. Therefore, preferring the better-corroborated theory for action only makes sense if one assumes corroboration indicates a higher likelihood of future success, which smuggles in the very inductive principle Popper rejected.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Acting on the 'boldness' of a theory as a rational wager requires an assumption that the conditions making a theory 'bold' or 'informative' today will remain relevant and stable tomorrow.",
+      "premise_evidence": null,
+      "successor_question": "Can Popper distinguish between a methodological rule for learning and a practical rule for action without implicitly assigning a higher probability of future success to corroborated theories?"
+    }
+  ]
+}

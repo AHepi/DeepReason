@@ -5,7 +5,10 @@ decision rule is `analyse_organiser.py`'s alone): it reports, from the run
 root only, the facts R35 asks for --
 
   * which room conjectures were carried (a candidate's verified citations
-    resolved back to the attachment's records through CONVERSION.json);
+    resolved back to the attachment's records through CONVERSION.json), and
+    beside it which were REACHED -- named by a verified citation of the
+    conjecture's own block or of a proposal or objection about it, which the
+    legend's cap does not throttle the same way;
   * how many counterconditions became commitments the artifacts carry;
   * the citation-check measures the record holds, by code;
   * per-seat spend and the cycle the budget ended in.
@@ -19,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import hashlib
 import json
 import pathlib
 import sys
@@ -41,22 +45,27 @@ def census(root: pathlib.Path) -> dict:
     seed_id = run_input.problem.id
     dossier = load_evidence_dossier(root)
 
-    # Which admission block is which room record: the blocks' bytes are the
-    # attachment's paragraphs, so a block maps to a record by the header line
-    # its span starts with.
-    records = {r["id"][:16]: r for r in json.loads(CONVERSION.read_text())["records"]}
+    # Which admission block is which room record. The attachment's headers no
+    # longer carry a record id (P7 road A), so the map is by the BODY's own
+    # sha256 -- the paragraph under the header line, which CONVERSION.json
+    # records per room record. That is stronger than the old header match and
+    # works on either attachment: the bodies never changed.
+    conversion = json.loads(CONVERSION.read_text())
+    records = {r["body_sha256"]: r for r in conversion["records"]}
+    by_record_id = {r["id"]: r for r in conversion["records"]}
     block_record: dict[str, dict] = {}
     for block in dossier.blocks:
         try:
             body = harness.blobs.get(block.source_sha256)
         except Exception:  # noqa: BLE001 - a block whose bytes are not recoverable
             continue
-        head = body[block.span_start:block.span_end].decode("utf-8", "replace").split("\n", 1)[0]
-        for part in head.split():
-            if part.startswith("id="):
-                found = records.get(part[3:])
-                if found is not None:
-                    block_record[block.id] = found
+        text = body[block.span_start:block.span_end].decode("utf-8", "replace")
+        _, _, paragraph = text.partition("\n")
+        for candidate in (paragraph, paragraph.rstrip("\n")):
+            found = records.get(hashlib.sha256(candidate.encode("utf-8")).hexdigest())
+            if found is not None:
+                block_record[block.id] = found
+                break
     # Citation checks from the record.
     codes = collections.Counter()
     cited_blocks: dict[str, set] = collections.defaultdict(set)
@@ -72,6 +81,7 @@ def census(root: pathlib.Path) -> dict:
     for artifact_id, problem_id in state.addr:
         addressed[artifact_id].add(problem_id)
     carried_rooms: set[str] = set()
+    reached_rooms: set[str] = set()
     positions = []
     for artifact_id, artifact in state.artifacts.items():
         if artifact.provenance.role.value != "conjecturer":
@@ -83,6 +93,22 @@ def census(root: pathlib.Path) -> dict:
             if b in block_record and block_record[b]["kind"] == "conjecture"
         }
         carried_rooms |= rooms
+        # A conjecture is REACHED when any verified citation names it -- the
+        # conjecture's own block, or a proposal or objection written about it.
+        # The legend shows a hash-ordered 32 of the 97 blocks (PARKED P2), and
+        # on this attachment only 4 of the 12 conjecture blocks are in it, so
+        # the strict count above is capped by the legend rather than by the
+        # seat. This second count is not capped that way and is reported
+        # beside it, never instead of it.
+        reached = set(rooms)
+        for b in cited_blocks.get(artifact_id, ()):
+            record = block_record.get(b)
+            if record is None:
+                continue
+            target = record["id"] if record["kind"] == "conjecture" else record["about"]
+            if target in by_record_id and by_record_id[target]["kind"] == "conjecture":
+                reached.add(target[:8])
+        reached_rooms |= reached
         positions.append(
             {
                 "id": artifact_id[:12],
@@ -90,6 +116,7 @@ def census(root: pathlib.Path) -> dict:
                 "status": (state.status.get(artifact_id).value if state.status.get(artifact_id) else None),
                 "counterconditions": len(commitments),
                 "room_conjectures_cited": sorted(rooms),
+                "room_conjectures_reached": sorted(reached),
                 "verified_citations": len(cited_blocks.get(artifact_id, ())),
             }
         )
@@ -114,6 +141,7 @@ def census(root: pathlib.Path) -> dict:
         "seats": {role: dict(v) for role, v in sorted(seats.items())},
         "conjecturer_call_tokens": conjecturer_calls,
         "room_conjectures_carried": sorted(carried_rooms),
+        "room_conjectures_reached": sorted(reached_rooms),
         "room_conjectures_available": sum(1 for r in records.values() if r["kind"] == "conjecture"),
         "citation_checks": dict(codes),
         "positions_total": len(positions),

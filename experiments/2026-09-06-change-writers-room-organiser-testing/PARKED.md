@@ -192,3 +192,101 @@ source, which is PARKED P2's road). Prefer A: it is configuration under the
 tranche and touches no src/. Measure on a re-run: the unknown-block count
 must fall to 0 and the verified count must rise.
 ```
+
+## P8 — a budget denial at 99% of the ceiling is typed `operational_failure`, not `budget_exhausted`
+
+**What.** ARM R's relaunch reached cycle 3 with 495 362 of its 500 000-token
+ceiling spent — 99.07% — and the next transactional work unit was denied by
+the budget. The run terminated `state: failed`, `stop_reason:
+operational_failure`, message `token budget denied transactional work
+sha256:dcd8fa45…`. The operator's law of 2026-08-29 says exactly the
+opposite: "a budget denial on an exhausted budget terminates as
+`budget_exhausted` (clean), never `operational_failure`" (CLAUDE.md, operator
+design laws; the operator's own words: "clean stop. with an assurance that
+continuing is possible"). The assurance half HELD — the record carries
+`stop_reason_resumable: true` and `verify_root` re-derived 0 violations — so
+the checkpoint obligation is met and only the CLASSIFICATION is wrong.
+
+The cost of the misclassification is not cosmetic: PREREG §3 makes an
+`operational_failure` a FAILED arm whose unit is not judged, so a run that was
+stopped by the ceiling the operator set is disposed of as a breakage. Two
+launches in a row have now produced no verdict, the second for a labelling
+reason rather than a substantive one.
+
+Evidence: `runs/home-r/runs/run-c3f3bf10bc57d63e224a9f1c68bf1057` —
+`run-status.json`, `progress.jsonl` seq 8, `deepreason stop-report` (§4 rules
+out CONFIGURATION and ENVIRONMENT; no 429, no transport fault), and
+`runs/armR/ARMR_RESULTS.json` (`"violations": 0`, `"valid": true`,
+`"source": "rederived"`).
+
+```
+EXECUTOR WINDOW — DEFECT: a budget stop typed as a breakage
+Read CLAUDE.md, including the operator law of 2026-08-29. Load
+deepreason-orchestrator and pinker-write-for-readers.
+GOAL: a denial issued because the run's token budget has nothing left
+terminates `budget_exhausted` (clean), not `operational_failure`. Diagnose
+from the record above BEFORE reading code: the stop message is `token budget
+denied transactional work`, the spend is 495362 of 500000, and
+`stop_reason_resumable` is already true. Then find where the denial is
+classified and what distinguishes "denied because the budget is spent" from
+"denied for any other reason" — a denial with budget remaining must NOT
+become a clean stop, so the fix turns on that distinction and needs a
+regression test for both sides. Check `INV-frozen-surfaces.md` first: run
+records and their stop reasons sit close to frozen ground, and if the fix
+needs a grant, STOP in FIX.md and say so. OUT OF SCOPE: the organiser, the
+measure, and anything under experiments/.
+```
+
+## P9 — the same three events verify clean before a continuation and violate after it
+
+**What.** ARM R's root was verified twice by `deepreason results --json
+--verify`, over the same log, with the same instrument, minutes apart:
+
+| | before the continuation (terminal epoch 0) | after it (terminal epoch 1) |
+|---|---|---|
+| `verification` | `integrity 0, valid true, violations 0, source rederived` | `integrity 4, valid false, violations 4, source rederived` |
+| `terminal` | `valid_typed_terminal true, amend_ready true` | `valid_typed_terminal false, amend_ready false` |
+
+The three stored violations name events **142, 215 and 295** —
+`attempt-validity: failed call must contain no valid attempt, got [0]` — all
+of them inside the ORIGINAL run's events, none of them written by the
+continuation, which spent no tokens and added no model call
+(`logged_tokens_this_run: 0`). So the record's bytes at those three events did
+not change; only the verdict over them did. One of the two verdicts is wrong,
+and the record alone does not say which.
+
+**Why it matters beyond this tranche.** The operator's law of 2026-08-29 makes
+continuation integrity-gated — "I don't want a jailbroken run to be
+continuable" — and the gate here reported `continuation_authority: true` over a
+record it had just verified clean, then produced a continued record that does
+not verify. Whichever verdict is the wrong one, a continuation that turns a
+valid record into an invalid one (or reveals that it never was valid) is a
+hole in exactly the assurance that law is about. It also disposed of this
+tranche's arm: PREREG §3 requires 0 violations for a COMPLETE arm, so the run
+that finally reached a clean typed stop still cannot be judged.
+
+Evidence: `runs/home-r/runs/run-c3f3bf10bc57d63e224a9f1c68bf1057` —
+`REPLAY_VALIDATION.json` (stored, 3 violations), `runs/armR/ARMR_RESULTS.json`
+(re-derived, 4), the same file at `HEAD~2` in git (0), `continuations.jsonl`,
+and `progress.jsonl` seq 9-13.
+
+```
+EXECUTOR WINDOW — DEFECT: a continuation changes the verdict over unchanged events
+Read CLAUDE.md. Load deepreason-orchestrator and pinker-write-for-readers.
+GOAL: decide which of the two verdicts over events 142, 215 and 295 is
+correct, and make the two agree. Diagnose from the record above BEFORE
+reading code: the events are unchanged (compare the log bytes at those seqs
+across the two commits named), the continuation added no call, and only the
+terminal epoch moved from 0 to 1. Find what the `attempt-validity` check
+reads that depends on the terminal epoch or on the resume boundary. Then say
+which verdict is right: either the check is too strict after a resume (and
+the run was always valid), or it is too weak before one (and every
+pre-continuation clean verdict on a root carrying a failed call is
+untrustworthy, which is the more serious of the two and must be said plainly
+if it is what the record shows). Prove it with a stub root that carries one
+failed call with a valid attempt, verified before and after a no-op
+continuation. Check INV-frozen-surfaces.md FIRST: replay-validation record
+formats are a frozen surface, so a fix that changes the format needs an
+operator grant and FIX.md must STOP and ask for one. Related: P8.
+OUT OF SCOPE: the organiser and the measure.
+```
