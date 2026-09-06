@@ -1,0 +1,172 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule to maximize the severity of future falsification, not as an inductive prediction of success.",
+      "mechanism": "Choosing the theory that has withstood the severest tests provides the most informative target for error detection; if it is false, this choice reveals the error fastest, accelerating knowledge growth without assuming the theory will hold true.",
+      "counterconditions": [
+        "refuted if it can be shown that Popper explicitly justified the preference for better-corroborated theories in practical, life-or-death decisions on the grounds of safety or reliability rather than solely on the grounds of maximizing testability and information content",
+        "refuted if the argument that we choose highly corroborated theories because they are the 'most informative target for future falsification' is internally inconsistent with scientific practice where robust theories are used as stable foundations",
+        "refuted if the assumption that a theory which has survived severe tests is the 'most likely to reveal its falsehood quickly' is circular because such a theory has demonstrated resilience"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate does not rely on verisimilitude as the primary mechanism but on the methodological rule of maximizing testability, thus bypassing the Tichý and Miller refutation of verisimilitude definitions."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to explicitly frame the claim as the 'strongest case' for the defensive answer, acknowledging the opposing view (that it smuggles induction) is addressed by the counterconditions regarding practical action."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "The 'pragmatic wager' here is distinguished from induction by denying any expectation of future success; the 'fitness' cited is purely retrospective capacity to withstand falsification, not a predictor of future utility."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate argues the preference IS defensible, so the charge of 'performative contradiction' (which claims it is indefensible) is rebutted by showing the preference is a rule for criticism, not an assertion of reliability."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "The redefinition of preference as 'efficient falsification' is defended as the only consistent Popperian stance; the objection that this contradicts scientists' intent to act is met by arguing Popper's framework separates rational methodology from psychological intent."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate maintains the preference is a rational methodological decision based on critical discussion, not a non-rational psychological commitment, aligning with Popper's later works on rationality."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "block": "da6f74bed07c54a4"
+        },
+        {
+          "block": "1505af0e644ade00"
+        },
+        {
+          "block": "33161462ad1b2b22"
+        },
+        {
+          "block": "a7a10cdf38006e31"
+        }
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "The preference for better-corroborated theories is indefensible on Popper's own terms and constitutes a performative contradiction that smuggles induction back in through the pragmatic necessity of action.",
+      "mechanism": "Acting on a well-corroborated theory (e.g., building a bridge) implicitly relies on the premise that past survival indicates future stability, which is the definition of inductive reasoning; no semantic distinction between 'corroboration' and 'probability' can mask this inductive leap when leaving abstract methodology for real-world application.",
+      "counterconditions": [
+        "refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed",
+        "refuted if Popper explicitly distinguishes between 'preference for action' and 'belief in future reliability' allowing for rational choice without inductive inference",
+        "refuted if the charge of 'performative contradiction' fails because acting on a theory does not necessitate believing it is probable"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "departure_declared",
+          "note": "Departing from the verisimilitude defense entirely; this candidate argues that ANY attempt to bridge corroboration and action via verisimilitude fails due to the Tichý/Miller refutation, leaving the inductive gap open."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to ensure this represents the 'strongest case' for the negative answer, explicitly detailing how the 'smuggling' occurs in practical scenarios like bridge-building."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "This candidate agrees with the objection that the pragmatic wager collapses into induction; the rebuttal here is directed at potential counter-arguments that try to save the wager."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Rebutting the idea that Popper successfully distinguished preference from belief; this candidate asserts the distinction is illusory in the context of action."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "Arguing that redefining preference as 'falsification-seeking' is inadequate for high-stakes action, thus the contradiction remains."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Contending that even if Popper claimed rationality, the logical structure of his argument forces an irrational (inductive) leap, making his claim of rationality incorrect."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "block": "055185d569b6c415"
+        },
+        {
+          "block": "6035a9c4dd99607c"
+        },
+        {
+          "block": "6b97cc064898b814"
+        },
+        {
+          "block": "d41766b7844f9da9"
+        }
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "The preference is defensible only by accepting a non-probabilistic metaphysical commitment to verisimilitude (truth-likeness), shifting the goal from predictive reliability to structural approximation.",
+      "mechanism": "Severe testing logically increases a theory's content and proximity to truth; while we cannot know a theory is true, we can rationally prefer the one closer to truth based on test survival, provided we accept the metaphysical hope that nature rewards boldness with truth-likeness.",
+      "counterconditions": [
+        "refuted if it can be demonstrated that the concept of 'verisimilitude' cannot be formally defined without implicitly relying on inductive probability",
+        "refuted if it can be demonstrated that Popper explicitly grounded the preference in a pragmatic decision rule without invoking any metaphysical assumption about proximity to truth",
+        "refuted if the claim that accepting verisimilitude costs the framework its claim to 'pure logic' mischaracterizes critical rationalism as requiring no non-logical commitments"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_008] against SRC_002",
+          "kind": "rebutted",
+          "note": "Acknowledging the Tichý/Miller refutation but arguing that Popper's later work attempted to revise verisimilitude to survive it, or that the 'metaphysical commitment' accepts this risk as the cost of the defense."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Refined to present this as the specific 'metaphysical' defense distinct from the purely methodological one, representing the strongest case for the 'verisimilitude' angle."
+        },
+        {
+          "handle": "[SRC_007] against SRC_001",
+          "kind": "rebutted",
+          "note": "Distinguishing this from the 'pragmatic wager' by admitting the metaphysical faith required, thus avoiding the charge of secretly relying on uniformity without admission."
+        },
+        {
+          "handle": "[SRC_009] against SRC_003",
+          "kind": "rebutted",
+          "note": "Arguing that the performative contradiction is resolved by openly admitting the metaphysical commitment rather than hiding it."
+        },
+        {
+          "handle": "[SRC_010] against SRC_004",
+          "kind": "rebutted",
+          "note": "Asserting that the goal of 'truth-likeness' does justify action for Popper, contrary to the objection that it reduces to mere falsification seeking."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Confirming that this preference is rational within the expanded scope of critical rationalism that includes regulative ideals."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "block": "d8dfb83afbb1d054"
+        },
+        {
+          "block": "26d5b990b5bc8574"
+        },
+        {
+          "block": "894962a1f008e6a9"
+        },
+        {
+          "block": "de0b18a2cb0949fb"
+        }
+      ],
+      "typicality": 0.5
+    }
+  ]
+}
