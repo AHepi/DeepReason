@@ -403,3 +403,124 @@ SURVIVING POSITIONS (16):
 REFUTED POSITIONS (0):
 (Positions on 1 derived sub-questions, 9 in all, are not part of this answer.)
 ```
+
+## 2026-09-06, third segment — the second launch window: the bad configuration withdrawn, the measure re-armed, no arm run (no credential)
+
+**Nothing was measured in this window, and one thing was decided.** The
+operator's "failure again. Bad config." named the configuration, and the
+configuration was the monitor's own: the evidence-blind critic asked for by
+R14. This window WITHDRAWS it rather than repairing it, fixes the two other
+things the failed run measured, seals the new rules before any call, and then
+stops — the credential the launch needs is not on this container, and R46 says
+to stop for that rather than improvise a key. The tranche is one command from
+launching.
+
+### 1. What changed, and what each change is answerable for
+
+| change | what it is answerable for |
+|---|---|
+| ARM R selects the organiser shell for the CONJECTURER only; the critic runs the shipped `seat.critic.legacy-v0` | the death. The blind shell removed the legend from the critic's brief while `rules/crit.py` went on binding the same legend into its form; the critic filled `premise_evidence` with the only ids it could see, was rejected, exhausted its repair ladder and killed the run at cycle 3. Brief and form now agree. P6 stays parked — the defect that lets a blind brief meet a sighted form is untouched; only this tranche's use of it is withdrawn |
+| the attachment's headers carry no room record id (P7 road A) | the 58 `EVIDENCE_REF_UNKNOWN_BLOCK` measures. The seat had two id systems in front of it and mixed them 58 times to 21. Now the only ids it can see are the legend's |
+| pairwise forced choice replaces the 0–3 rubric for this launch | the ceiling. Eighteen readings, eighteen 15s: the rubric cannot rank anything above a single call on this question. The rubric instrument and its scores are untouched, because they are the record of that |
+
+**What the default critic will and will not see**, from
+`src/deepreason/llm/seat_layouts.py:82-106` and `evidence/render.py:192-198`:
+it sees the premise invitation and the citable legend — 32 of the 97 admitted
+blocks at 160 characters each — and its form's `premise_evidence` menu is
+bound from exactly those 32. It does NOT see `dr.evidence.frozen`, the room
+whole: that entry is absent from its layout at every priority, so the blocks'
+bodies never reach it, and the other 65 arrive only as a withheld count. So
+the critic is no longer blind and is not sighted on the room either. It is a
+DIFFERENT critic from the failed arm's, which means the two ARM R runs differ
+in two places at once — the critic's shell and the attachment's headers — and
+neither difference is isolated by the next launch. That is disclosed, not
+controlled.
+
+### 2. The attachment, re-measured offline
+
+The 94 room records are byte-identical to the sealed ones (`verbatim 94/94`,
+53 493 characters). Three preamble paragraphs are added — one per file,
+carrying the header shape and the rule that only the legend's ids resolve —
+because the organiser's directive still describes the old `id=` header and
+lives under `src/`, which this window may not edit; R40's own fallback says
+where the instruction goes instead. Admission therefore mints **97 blocks**
+from 3 sources with 0 refusals.
+
+Every block's content id moved with its header, so the legend's hash-ordered
+32 is redrawn: **4 conjectures / 17 proposals / 11 objections**, against 7 /
+13 / 12 before, with 6 refuted-if proposals visible where 1 was. That is a
+measured consequence with a measuring consequence: the census's strict "room
+conjectures carried" count resolves only citations of a conjecture's OWN
+block, and only 4 of the 12 are citable, so that number is now capped by the
+legend rather than by the seat. `tools/organiser_census.py` reports a second
+count beside it — conjectures REACHED, named by a verified citation of the
+conjecture's block or of a proposal or objection about it. Re-derived on the
+retired root, the rewritten census reproduces the recorded seven carried
+exactly and adds one reached, which is what proves the new mapping reads the
+same record the old one did.
+
+### 3. The predictions this window registered before the launch
+
+From PREREG Amendment 7, sealed by sha256 in commit `8a579f1e6`:
+`EVIDENCE_REF_UNKNOWN_BLOCK` **0** (it was 58); `EVIDENCE_CITATION_VERIFIED`
+**≥ 21** (it was 21); a CLEAN typed terminal where the first launch died
+`operational_failure`; and Amendment 1's cycle prediction unchanged — the
+500 000 ceiling ends the run in cycle 3. Nothing is predicted about quality.
+
+### 4. The new instrument, and the ceiling it walks into
+
+`tools/judge_pairwise.py` shows every ARM R unit against every bare unit —
+3 pairs against ARM 0, 3 against ARM 0R — to three judges in both orders: six
+readings per pair, 36 in total, 18 per bare arm. A judge whose choice flips
+when the texts swap places has NO PREFERENCE on that pair. ARM R is MATERIALLY
+BETTER only if its consistent-win share is ≥ 2/3 against both bare arms; ≤ 1/3
+is WORSE; between is NULL. The control — ARM 0R against ARM 0, 9 pairs, 54
+readings — is reported beside the rule and is not part of it.
+
+**Registered in advance, because it is foreseeable and was foreseen for the
+rubric too:** the sealed length rule (PREREG §6) reports any BETTER whose
+winning unit is more than 1.5× the other's length as NULL
+(length-uncontrolled). The first ARM R composed unit was 21 396 characters
+against bare units of 5 875–7 985 — ratios of about 2.7× to 3.6×. If this
+one is of the same order, **a 9-of-9 sweep for ARM R still reports NULL**, and
+the offline proof of the instrument shows exactly that happening. The rule was
+not changed to make the verdict reachable; instead the raw consistent-win
+share and the verdict-before-the-length-rule are printed and recorded beside
+the verdict, so the reader can see what the panel chose and what the rule did
+with it. This is the second instrument in a row that can be expected to return
+no verdict, and it is stated here before the run rather than after it.
+
+### 5. What ran, and what did not
+
+| | |
+|---|---|
+| soak | `python -u scripts/cycle_soak.py --case epoch3` → `[soak] exit 0 (clean)` on this tree (`runs/soak.log`) |
+| retirement | the failed root renamed to `runs/home-r/runs/failed-epoch1-run-36d9a22c…` and committed alone (`783054bfd`); epoch 1's arm outputs and logs moved whole to `runs/armR-epoch1/`, never overwritten |
+| sealed | REQUEST.md Amendment 2 (R37–R51), SPEC.md Amendment 4 (S37–S45), PREREG.md Amendment 7, sha256 `0f76eef1…` in `8a579f1e6`'s message |
+| ARM R | **not run** — no credential |
+| ARM 0R | not respent by design (reused by digest); its recorded calls pasted the PRE-CHANGE attachment, whose 94 record bodies are byte-identical and whose headers are not; disclosed, not controlled |
+| live calls this window | **0** |
+
+### 6. Failure budget (R22)
+
+Six live calls beyond the plan. **Spent: 0**, and none was available to spend.
+
+| # | call | reason | cost | decided |
+|---|---|---|---|---|
+| — | — | — | — | — |
+
+### 7. Residue — what this segment does NOT show
+
+- It shows nothing about the organiser. No arm ran; there is no unit, no
+  census, no verdict.
+- It does not show that the critic change fixes the death. It shows that the
+  brief and the form now ask for the same thing; whether the run survives is
+  what the launch would measure.
+- It does not show that one id system removes the 58 unknown-block citations.
+  That is a registered prediction, not a result.
+- P1–P7 stay parked. P6 in particular is untouched: a blind brief can still
+  meet a sighted form anywhere else in the harness, and both of the sections
+  this critic depends on are droppable under budget pressure, which would
+  re-create the same shape from the allocator rather than the shell.
+- ARM H is still deferred, so nothing here separates the harness from the room
+  even in principle.

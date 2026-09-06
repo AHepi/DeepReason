@@ -108,3 +108,49 @@ untouched — no `docs/map/` document moved in this window, and no behaviour und
 The window did what it was asked: it amended, sealed, launched, monitored, judged and reported. The measure's own verdict is INCONCLUSIVE, which is an outcome of the experiment, not of the work.
 
 ## Build verdict (unchanged): PASS
+
+---
+
+## Second launch window (2026-09-06) — the offline half, validated; the arm not yet run
+
+SPEC Amendment 4's items S37–S43 are provable without a provider and every
+accept command was run on the committed tree. S44 and S45 need the arm, and
+the arm needs a credential that is not on this container: `env` is absent
+(`ls: cannot access 'env': No such file or directory`), it is gitignored
+(`git check-ignore -q env` exit 0), and no key was improvised (R46). No live
+call has been made in this window.
+
+| item | accept command | output |
+|---|---|---|
+| S37 | `grep -c 'argumentative_critic=' runs/armR.sh` | `0` |
+| S37 | `grep -c 'DEEPREASON_SEAT_SHELL=conjecturer=seat.conjecturer.organiser-v1$' runs/armR.sh` | `1` |
+| S37 | `grep -c '500000 token ceiling' runs/armR.sh` | `1` |
+| S37 | `bash -n runs/armR.sh` | exit 0 |
+| S38 | `python tools/room_to_attachment.py <room root> attachment --json attachment/CONVERSION.json` | `records 94 (12 conjectures, 46 proposals, 36 objections)` / `verbatim 94/94` / `chars 53493` / `header carries a room record id: False` |
+| S38 | room record ids occurring in the attached text | `0` |
+| S38 | `sniff_media_type` on each file | `text/plain`, `text/plain`, `text/plain` |
+| S38 | `sha256sum -c attachment/ATTACHMENT.sha256` | four lines, all `OK` |
+| S39 | `grep -c 'PREAMBLE -- how to read' attachment/*.txt` | `1`, `1`, `1` |
+| S39 | `git diff --stat 8093b70fa..HEAD -- src tests mini docs` | empty |
+| S40 | `proof/DRY_ATTACH.txt` | `sources 3 blocks 97 refusals 0`; `legend shown 32 withheld 65` (4 conjectures / 17 proposals / 11 objections; 6 refuted-if) |
+| S40 | `proof/ORGANISER_BRIEF.txt` | 95 071 bytes; directive present; three preambles; `room record ids in the rendered brief: 0` |
+| S41 | the predictions registered before the launch | PREREG Amendment 7: `EVIDENCE_REF_UNKNOWN_BLOCK` 0, `EVIDENCE_CITATION_VERIFIED` >= 21, a clean typed terminal, the run ends in cycle 3 |
+| S42 | `python tools/judge_pairwise.py criteria-check` | the five rubric criteria, read from `judge_organiser.py` at run time; sha256 `fab3fde2f3a2000bd5f7415e7a7ae3be013fd8b83b4fd52395eef4b18327df28` |
+| S42 | `python tools/judge_pairwise.py reveal` with no choices | `REFUSED: blind/pairwise_choices.json does not exist. The keymap stays shut until the choices are written.` |
+| S42 | offline pair-building proof (a stub ARM R unit; no provider) | `harvested 7 units from 3 arms`; `pairs: 6 measured, 9 control`; `readings to make: 90`; `reveal` applied the length rule (a 9/9 sweep at 2.95× reported as `NULL (length-uncontrolled)`) and printed the verdict |
+| S43 | the rename in its own commit | `783054bfd`, `runs/home-r/runs/run-36d9a22c…` → `failed-epoch1-run-36d9a22c…` |
+| S43 | `! grep -q 'runs/arm0R.sh' runs/chain.sh` | holds — chain.sh does not run ARM 0R |
+| S43 | `bash -n runs/chain.sh` | exit 0 |
+| S43 | `python -u scripts/cycle_soak.py --case epoch3` | `[soak] exit 0 (clean)` on this tree (`runs/soak.log`) |
+| S44 | — | **not run**: needs the arm |
+| S45 | — | **partly run**: RESULTS.md carries a dated segment for this window; DELIVERY.md is re-issued when the arm has a terminal |
+
+Scope (C17), on the committed tree:
+
+    git diff --stat 8093b70fa..HEAD -- src tests mini docs   ->  (empty)
+
+No gate was run and none is owed: no code under `src/` or `tests/` moved.
+
+Verdict for the offline half: **PASS**. The window is sealed and one command
+from launching (`setsid nohup … runs/chain.sh …`); it stops here for want of a
+credential, which R46 says to stop for rather than improvise.

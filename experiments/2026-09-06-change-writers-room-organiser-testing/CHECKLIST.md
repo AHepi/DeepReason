@@ -120,10 +120,12 @@ State: IN PROGRESS
 - [x] 36. (S42) Write `tools/judge_pairwise.py`; prove the pair building and the reveal offline.
       done-when: S42's accept commands hold
       output: `criteria-check` prints the five criteria (sha256 fab3fde2…); the offline proof built 7 units, 15 pairs (6 measured, 9 control), 90 readings, and `reveal` applied the length rule and the decision rule.
-- [ ] 37. (S41, R43) [COMMIT] PREREG Amendment 7 sealed by sha256 in the commit message; SPEC Amendment 4; the census's second count; push.
+- [x] 37. (S41, R43) [COMMIT] PREREG Amendment 7 sealed by sha256 in the commit message; SPEC Amendment 4; the census's second count; push.
       done-when: `sha256sum PREREG.md` equals the digest in that commit's message; `git status --porcelain` empty
+      output: committed as `8a579f1e6` with `PREREG.md Amendment 7 sha256 0f76eef15bc6725ae01835234d1c07cd6c06bca7e184e493da659fa93c572c25` in the message; pushed.
 - [ ] 38. (S43, R46, R47) Credential check, then launch `chain.sh` detached from the repository root with the snapshot loop armed.
       done-when: `runs/chain.log` shows `soak rc=0` and the battery started; absent env -> STOP and say so
+      output: BLOCKED. `env` is absent on this container (`ls: cannot access 'env'`), it is gitignored, and no key was improvised (R46). The offline half of the precondition is green: `python -u scripts/cycle_soak.py --case epoch3` -> `[soak] exit 0 (clean)` on this tree (`runs/soak.log`). One command launches the rest.
 - [ ] 39. (S44) Monitor to ARM R's terminal; then `tools/organiser_census.py`, then `judge_pairwise.py harvest | choose | reveal`.
       done-when: `run-status.json` state and stop_reason read from the record; `runs/armR/CENSUS.json` and `runs/PAIRWISE_VERDICT.json` written
 - [ ] 40. (S45) [COMMIT] RESULTS.md dated segment; VALIDATION.md and DELIVERY.md re-issued with R37–R51; push.
