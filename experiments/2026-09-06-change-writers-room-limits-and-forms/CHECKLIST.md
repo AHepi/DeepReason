@@ -1,5 +1,5 @@
 # CHECKLIST — the writer's room: limits, forms, census
-State: next=8 blockers=none. T1 and T2 committed; full docs_verify (1419 checks, six known rows) recorded at step 7. Steps 1-3 done (limits fixed, configurable, tested). Captured and specified 2026-09-06 on the operator's message 4 ("the limits need changing … permission to change the forms … only if the commitments exist outside conjecture artifacts"). R4 verified on the record before any step.
+State: next=10 blockers=none. T1-T3 committed; R4 enforced by a record-level test with a caught mutation. T1 and T2 committed; full docs_verify (1419 checks, six known rows) recorded at step 7. Steps 1-3 done (limits fixed, configurable, tested). Captured and specified 2026-09-06 on the operator's message 4 ("the limits need changing … permission to change the forms … only if the commitments exist outside conjecture artifacts"). R4 verified on the record before any step.
 
 Re-read REQUEST.md + SPEC.md before every step. One step per invocation.
 Map ids: DR-SUB-minireason, DR-SEAM-llm-x-minireason, DR-INV-seat-section-plugins, DR-INV-seat-section-sources, DR-CON-packs-and-token-economy, DR-INV-frozen-surfaces.
@@ -105,8 +105,29 @@ Map ids: DR-SUB-minireason, DR-SEAM-llm-x-minireason, DR-INV-seat-section-plugin
       ```
 
 ## T3 — R4 enforced (S3)
-- [ ] 8. `test_mini_room_separation.py`, mutation-proven. done-when: red under the planted write, green otherwise (paste both).
-- [ ] 9. [COMMIT].
+- [x] 8. `test_mini_room_separation.py`, mutation-proven. done-when: red under the planted write, green otherwise (paste both).
+
+      ```
+      mini/tests/test_mini_room_separation.py::assert_separated -- five checks after a room run:
+        (1) every conjecture artifact's id recomputes from its content (nothing written into it later);
+        (2) no conjecture carries a warrant; no canonical commitment registered;
+        (3) every criticism/proposal record is about a conjecture that exists;
+        (4) no conjecture's content contains any record's body;
+        (5) every record was written after the artifact it is about.
+      $ python proof/mutation_separation.py   (planted: the commitment stage ALSO registers a conjecture-role
+        artifact carrying target + proposal, through the record, so a fresh Session replays it)
+      MUTATION CAUGHT (red as required): record 7248c1e9 text found inside a conjecture artifact
+      $ python -m pytest mini/tests/test_mini_room_separation.py -q  -> 1 passed
+      (a first mutation that edited the in-memory state was NOT caught, because a fresh Session replays the
+       log: the check reads the record, so only a record-level violation can trip it -- which is the point)
+      $ python -m pytest mini/tests/ -q  -> 171 passed, 1 skipped
+      ```
+- [x] 9. [COMMIT].
+
+      ```
+      No code under mini/minireason or src changed in T3 (a test and a proof only).
+      $ python tools/diff_budget.py HEAD --paths mini/tests -> pasted in the commit; blast_radius: no source file moved.
+      ```
 
 ## T4 — the census (S4)
 - [ ] 10. [COMMIT] `PREREG_CENSUS.md` + `census.py` sealed (sha in the message) before the run.

@@ -1,0 +1,4 @@
+$ python proof/mutation_separation.py   (planted: the commitment stage also registers a conjecture-role artifact carrying target + proposal)
+MUTATION CAUGHT (red as required): record 7248c1e9 text found inside a conjecture artifact
+$ python -m pytest mini/tests/test_mini_room_separation.py -q   (unmutated)
+1 passed in 1.07s
