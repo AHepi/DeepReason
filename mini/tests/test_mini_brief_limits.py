@@ -119,3 +119,17 @@ def test_a_non_positive_brief_budget_is_refused_typed():
     with pytest.raises(MiniFlowError, match="MINI_FLOW_BRIEF_BUDGET_INVALID"):
         MiniFlowV1(flow_id="x", flow_version="1", stages=base.stages,
                    artifact_kinds=base.artifact_kinds, brief_budget_chars=0)
+
+
+def test_a_profile_without_a_candidate_count_still_asks_for_a_number(tmp_path):
+    """The standard/frontier profiles declare no vs_k; the shallow path now
+    forwards them (S1b). The conjecturer's brief must still ask for a number,
+    never for "None diverse candidates"."""
+    import re
+
+    calls: list[str] = []
+    run([("pi-0", "why does the sky look blue?")], _long_endpoint(calls, chars=200),
+        budget=200_000, root=tmp_path / "std", max_cycles=1,
+        flow="mini.flow.isolation.v1", model_profile="standard")
+    m = re.search(r"Return (\S+) diverse candidates", calls[0])
+    assert m and m.group(1).isdigit(), m.group(0) if m else calls[0][-300:]

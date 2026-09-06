@@ -1,5 +1,5 @@
 # CHECKLIST — the writer's room: limits, forms, census
-State: next=10 blockers=none. T1-T3 committed; R4 enforced by a record-level test with a caught mutation. T1 and T2 committed; full docs_verify (1419 checks, six known rows) recorded at step 7. Steps 1-3 done (limits fixed, configurable, tested). Captured and specified 2026-09-06 on the operator's message 4 ("the limits need changing … permission to change the forms … only if the commitments exist outside conjecture artifacts"). R4 verified on the record before any step.
+State: next=11 blockers=none. Census sealed; the chain (soak, then the room run) launches next. T1-T3 committed; R4 enforced by a record-level test with a caught mutation. T1 and T2 committed; full docs_verify (1419 checks, six known rows) recorded at step 7. Steps 1-3 done (limits fixed, configurable, tested). Captured and specified 2026-09-06 on the operator's message 4 ("the limits need changing … permission to change the forms … only if the commitments exist outside conjecture artifacts"). R4 verified on the record before any step.
 
 Re-read REQUEST.md + SPEC.md before every step. One step per invocation.
 Map ids: DR-SUB-minireason, DR-SEAM-llm-x-minireason, DR-INV-seat-section-plugins, DR-INV-seat-section-sources, DR-CON-packs-and-token-economy, DR-INV-frozen-surfaces.
@@ -130,7 +130,21 @@ Map ids: DR-SUB-minireason, DR-SEAM-llm-x-minireason, DR-INV-seat-section-plugin
       ```
 
 ## T4 — the census (S4)
-- [ ] 10. [COMMIT] `PREREG_CENSUS.md` + `census.py` sealed (sha in the message) before the run.
+- [x] 10. [COMMIT] `PREREG_CENSUS.md` + `census.py` sealed (sha in the message) before the run.
+
+      ```
+      PREREG_CENSUS.md sha256 40ff8f8e8142b8e4bf806481e2fff578f4a817da2c7a3b44b96ffc534ca6c6f6
+      tools/census.py   sha256 0d871946c42fb4c8e03158bf0f5582227c9392e6971a2f972da75c0a1d92f792
+      Dry run of the instrument on the D8 root (the "before" row): briefs 19, directive intact 9, clipped 10;
+        commitment 8 calls / 14 outputs / 24280 tokens, on-target 14, mentions 12, binds-1st 8, exact-dup 6.
+      room/: room.sh (setup with the D8 profile line; DEEPREASON_MINI_FLOW=mini.flow.room.v1), room_driver.py
+        (managed shallow entry + the predecessor's reasoning-off override, P10 parked), run_chain.sh (soak, then
+        the room), snapshot_wr.sh. NO run launched before this commit.
+      ONE code fix found while preparing the run, disclosed here: under the standard/frontier profiles (which the
+        shallow path now forwards) `vs_k` is None and the conjecturer's directive read "Return None diverse
+        candidates" -- offline reproduction pasted; loop.py falls back to the compact count (4);
+        test_a_profile_without_a_candidate_count_still_asks_for_a_number. Ring: 172 passed, 1 skipped.
+      ```
 - [ ] 11. Live room run, 3 cycles, detached; typed terminal; directive intact 19/19. done-when: paste.
 - [ ] 12. [COMMIT] `census.py` → RESULTS.md, the commitment seat first, every proposal quoted.
 - [ ] 13. [COMMIT] VALIDATION.md (full gate, idle) + DELIVERY.md; push; clean.

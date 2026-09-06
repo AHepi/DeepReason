@@ -655,6 +655,9 @@ def _call_stage(session, kernel, endpoint, brief, form, meter, retry_max, workfl
     )
 
 
+DEFAULT_VS_K = 4  # the compact profile's count; see run()
+
+
 def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str,
         vs_k: int | None = None, neighbourhood: int = 8,
         stance_decay: int = rotate.STANCE_DECAY, turnover_k: int = rotate.TURNOVER_K,
@@ -686,6 +689,13 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
     # explicit default model-facing representation.
     kernel = initialize(root, endpoint, model_profile, run_input, dossier)
     vs_k = kernel.profile.vs_k if vs_k is None else vs_k
+    if vs_k is None:
+        # The standard and frontier profiles declare no candidate count; a
+        # brief that asked for "None diverse candidates" would be an
+        # instruction with a hole in it (found the day the shallow path first
+        # forwarded a non-compact profile). The compact preset's count is the
+        # floor every profile shares.
+        vs_k = DEFAULT_VS_K
     session = Session(root)
     commitment_policy = (
         flow.commitment_policy if commitment_policy is None else commitment_policy
