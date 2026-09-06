@@ -61,7 +61,7 @@ Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 inserti
       done-when: `git status --porcelain` is empty AND `git rev-parse HEAD origin/claude/writers-room-organiser-testing-degagn` prints one hash twice
       output: final commit below; `git status --porcelain` empty and one hash from `git rev-parse HEAD origin/claude/writers-room-organiser-testing-degagn` — pasted in DELIVERY's branch line.
 
-## Launch window (SPEC Amendment 3; R26–R36). State: next=23 blockers=none
+## Launch window (SPEC Amendment 3; R26–R36). State: next=25 blockers=none (the chain is running: soak -> attached-evidence battery -> ARM R -> ARM 0R)
 Pre-launch base: the commit that seals PREREG Amendments 1–4 (step 23).
 
 - [x] 20. (S30) Write `runs/arm0R.py` and `runs/arm0R.sh`; `chmod +x`.
@@ -75,8 +75,9 @@ Pre-launch base: the commit that seals PREREG Amendments 1–4 (step 23).
       output: armR.sh line 26 `--token-budget 500000` (2 diff lines: `-`/`+`); chain.sh: `! grep -q armH.sh` ok, `arm0R.sh` count 1, `bash -n` ok; diff: line 14 mkdir now `armR arm0R`, lines 21 (ARM H setup) and 23 (ARM H arm) removed, `arm0R.sh` appended after ARM R, header comment rewritten.
 - [ ] 23. (S28) [COMMIT] Append PREREG.md Amendments 1–4 with the instruments' sha256s pinned; commit with `sha256: <digest of PREREG.md>` in the message.
       done-when: `sha256sum PREREG.md` equals the digest in the commit message
-- [ ] 24. (S31, S26) Launch: `env` present, ignored, mode 600; `setsid nohup runs/chain.sh > runs/chain.log 2>&1 & disown` from the repository root.
+- [x] 24. (S31, S26) Launch: `env` present, ignored, mode 600; `setsid nohup runs/chain.sh > runs/chain.log 2>&1 & disown` from the repository root.
       done-when: `runs/chain.log` shows `soak rc=0` and the battery started; the snapshot loop's PID exists
+      output: `env ignored` / `600 73 bytes` / `no key in the record`; launched detached from the repository root at 2026-09-06T08:50:29Z on head `337fc5cc6`; `chain.log` opens `=== chain started … ===` and `--- soak: cycle_soak --case epoch3 ---`; chain PID 2185. A monitor is armed on `chain.log` for the rc lines, roots and failure signatures.
 - [ ] 25. (S32) Monitor to ARM R's terminal: `progress.jsonl` (cycle, phase, tokens) and the `rc=` lines; on `rc=0` commit the root and logs.
       done-when: `run-status.json` `state: completed`; `deepreason results --json --verify` 0 violations; organiser-rendered count > 0; dossier digest `2a49cd52…` in the admission summary
 - [ ] 26. (S30) ARM 0R's three calls complete (chain runs them); commit `runs/arm0R/`.
