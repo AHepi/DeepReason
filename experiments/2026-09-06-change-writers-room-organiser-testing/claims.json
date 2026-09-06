@@ -1,0 +1,228 @@
+{
+  "schema_version": "deepreason.record-claims.v1",
+  "title": "PREREG.md's registered predictions, re-stated as claims a record can refute. This file does NOT amend PREREG.md and is not one of its amendments: the sealed document remains the authority for what was predicted, and this restates those predictions in a form tools/record_claims.py can test. Added 2026-09-06 by experiments/2026-09-06-change-record-claims/.",
+  "claims": [
+    {
+      "claim_id": "ORG-CITE-01",
+      "statement": "The organiser seat never cites an evidence id the legend does not expose.",
+      "kind": "never",
+      "scope": null,
+      "condition": {
+        "any_of": [
+          {
+            "measure": {
+              "code": "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK"
+            }
+          },
+          {
+            "measure": {
+              "code": "evidence-citation:EVIDENCE_REF_NOT_EXPOSED"
+            }
+          },
+          {
+            "measure": {
+              "code": "evidence-citation:EVIDENCE_REF_AMBIGUOUS"
+            }
+          }
+        ]
+      },
+      "note": "The citation check is emitted from rules/conj.py, the conjecturer rule, so on a root whose only conjecturer shell is the organiser every hit is the organiser's. The three codes are the three ways a reference fails to name one exposed block: unknown to the dossier, admitted but not in the legend, or resolving to more than one block (src/deepreason/evidence/citations.py). A quote that mismatches is a different failure and is ORG-COND-01's."
+    },
+    {
+      "claim_id": "ORG-PLAN-01",
+      "statement": "Every conjecturer section plan names the organiser's own output contract as a rendered section.",
+      "kind": "always",
+      "scope": null,
+      "condition": {
+        "all_of": [
+          {
+            "object": {
+              "kind": "workflow-context-section-plan-v1",
+              "min_count": 1
+            }
+          },
+          {
+            "not": {
+              "object": {
+                "kind": "workflow-context-section-plan-v1",
+                "where": [
+                  [
+                    "layout_id",
+                    "eq",
+                    "seat-pack.conjecturer.organiser-v1"
+                  ],
+                  [
+                    "every:sections[].plugin_id",
+                    "ne",
+                    "dr.output-contract.organiser"
+                  ]
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "note": "PREREG.md section 8, the operational prediction: 'ARM R's section plans name dr.output-contract.organiser on every conjecturer call'. Two halves, both needed: the run recorded at least one section plan, and no plan of the organiser layout omits the contract. Without the first half a run that rendered no brief at all would pass this claim vacuously; without the second, a plan carrying an empty sections list would. This is the record's form of 'every seat's section plan names its directive': the directive is what the output contract section carries, and the section plan is where the record says it was rendered."
+    },
+    {
+      "claim_id": "ORG-PLAN-02",
+      "statement": "A conjecturer section plan never names the ordinary conjecturer output contract.",
+      "kind": "never",
+      "scope": null,
+      "condition": {
+        "object": {
+          "kind": "workflow-context-section-plan-v1",
+          "where": [
+            [
+              "any:sections[].plugin_id",
+              "eq",
+              "dr.output-contract.conjecturer"
+            ]
+          ]
+        }
+      },
+      "note": "PREREG.md section 8, the second half of the same prediction: 'and never dr.output-contract.conjecturer'."
+    },
+    {
+      "claim_id": "RUN-STOP-01",
+      "statement": "A run never stops operational_failure.",
+      "kind": "never",
+      "scope": null,
+      "condition": {
+        "status": {
+          "field": "stop_reason",
+          "in": [
+            "operational_failure"
+          ]
+        }
+      },
+      "note": "PREREG.md section 3: 'An operational_failure or a refused launch is a FAILED arm.'"
+    },
+    {
+      "claim_id": "CRIT-CAP-01",
+      "statement": "The argumentative critic seat never terminally exhausts its smallest authorized contract.",
+      "kind": "never",
+      "scope": null,
+      "condition": {
+        "object": {
+          "kind": "workflow-route-seat-insufficient-capability-v1",
+          "where": [
+            [
+              "route_lease.role",
+              "eq",
+              "argumentative_critic"
+            ],
+            [
+              "reason",
+              "eq",
+              "smallest_authorized_contract_schema_exhausted"
+            ]
+          ]
+        }
+      },
+      "note": "Read the standing before reading the survival. This root DOES carry a route-seat exhaustion, and it is the CONJECTURER's, not the critic's; the claim is about the critic and survives for that reason alone."
+    },
+    {
+      "claim_id": "ORG-COND-01",
+      "statement": "A candidate never registers an evidence citation that fails its check.",
+      "kind": "never",
+      "scope": null,
+      "condition": {
+        "all_of": [
+          {
+            "measure": {
+              "code_prefix": "evidence-citation:"
+            }
+          },
+          {
+            "any_of": [
+              {
+                "measure": {
+                  "code": "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK"
+                }
+              },
+              {
+                "measure": {
+                  "code": "evidence-citation:EVIDENCE_REF_NOT_EXPOSED"
+                }
+              },
+              {
+                "measure": {
+                  "code": "evidence-citation:EVIDENCE_REF_AMBIGUOUS"
+                }
+              },
+              {
+                "measure": {
+                  "code": "evidence-citation:EVIDENCE_REFS_UNBOUND"
+                }
+              },
+              {
+                "measure": {
+                  "code": "evidence-citation:EVIDENCE_REF_TIER_INELIGIBLE"
+                }
+              },
+              {
+                "measure": {
+                  "code": "evidence-citation:EVIDENCE_QUOTE_MISMATCH"
+                }
+              },
+              {
+                "measure": {
+                  "code": "evidence-citation:EVIDENCE_BLOCK_UNRECOVERABLE"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "note": "PROXY, and the record cannot do better. The prediction it re-states is 'every countercondition registered came from a room proposal', and the record types no countercondition and no proposal-provenance: 'countercondition' occurs only inside artifact content prose. What the record DOES type is whether each evidence reference a candidate made resolves to an admitted block and whether its quote matches. A citation that fails is a candidate leaning on something the room did not supply as claimed. A citation that passes does not prove the countercondition came from a proposal; this claim can be refuted, it cannot be confirmed, and it is marked a proxy for the same reason h-EPI marks its own."
+    },
+    {
+      "claim_id": "RUN-TERM-01",
+      "statement": "A run reaches a completed typed terminal.",
+      "kind": "always",
+      "scope": null,
+      "condition": {
+        "status": {
+          "field": "state",
+          "eq": "completed"
+        }
+      },
+      "note": "PREREG.md section 8, the operational prediction: 'both arms reach a clean typed terminal at cycle 4 or on budget'. An operational health check, not a success condition (CLAUDE.md, 2026-09-03)."
+    },
+    {
+      "claim_id": "EVID-EXPOSED-01",
+      "statement": "The organiser seat never cites a block that is admitted but withheld from the legend.",
+      "kind": "never",
+      "scope": null,
+      "condition": {
+        "measure": {
+          "code": "evidence-citation:EVIDENCE_REF_NOT_EXPOSED"
+        }
+      },
+      "note": "PREREG.md section 8 predicted the opposite in as many words: 'at least one EVIDENCE_REF_NOT_EXPOSED measure appears in the record', because the seat reads 94 blocks and can cite 32. Read the standing: if this claim survives with the condition never having held, the prediction did not come true and this check could not have failed."
+    },
+    {
+      "claim_id": "ARMH-STOP-01",
+      "statement": "The harness-alone arm never stops operational_failure.",
+      "kind": "never",
+      "scope": {
+        "root_names": [
+          "run-armh"
+        ],
+        "workloads": [
+          "text"
+        ]
+      },
+      "condition": {
+        "status": {
+          "field": "stop_reason",
+          "in": [
+            "operational_failure"
+          ]
+        }
+      },
+      "note": "PREREG.md Amendment 3 deferred ARM H; it was never launched, so no root satisfies this scope and the claim is NOT_TESTED. That is the honest reading of a deferred arm, and it is why the scope is declared rather than left open: an open scope would have tested this against ARM R's root and reported a refutation of a claim about a run that does not exist."
+    }
+  ]
+}

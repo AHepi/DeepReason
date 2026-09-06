@@ -1,5 +1,5 @@
 <!-- DR-INV-frozen-surfaces -->
-Verified-at: 152c7e204
+Verified-at: b865b7cbe
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capabilities/state.py, src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/run_manifest.py
 Seams: 
@@ -1196,6 +1196,57 @@ docstring, statically derivable from the tree at grant time.
 
 `check: python -c "import ast; ast.parse(open('tools/blast_radius.py').read())"`
 `check: grep -q "BLAST_RADIUS_RESULT_V1" tools/blast_radius.py`
+
+### Record claims — an instrument, and deliberately not a gate
+
+This section is where the map keeps `tools/`, so a fourth instrument lives
+here beside the three above. **It proves nothing about frozen surfaces and it
+guards nothing.** It is listed here because a reader looking for what is under
+`tools/` looks here, not because it belongs to this document's subject.
+
+`tools/record_claims.py` tests pre-registered universal statements against one
+or more run records. A `never` claim is refuted by one root where its condition
+holds; an `always` claim by one where it does not; a claim no supplied root
+refutes is `UNREFUTED_FOR_DECLARED_SCOPE`, which is not a proof. Every survival
+carries a STANDING that says whether the refuting condition held on any
+supplied root at all — a claim naming a measure code or an object kind no
+record ever carried could not have been refuted whatever the run did, and is
+reported `NOT_SHOWN_ABLE_TO_FAIL` rather than left to be misread as a test the
+harness passed. The claims file's contract is `docs/CLAIMS_SCHEMA.md`; the
+shape is adopted from the operator's other harness (h-EPI), the vocabulary is
+DeepReason's own, and no code was copied.
+
+    python tools/record_claims.py --claims <claims.json> --root <run root> [--root ...] [--json]
+
+Three properties this instrument must keep, because losing any of them turns a
+reading instrument into something that changes what it reads:
+
+1. **It writes nothing into a run root.** It imports nothing from
+   `deepreason`, so no path exists by which it could append to a record, and
+   `--markdown` refuses a destination inside any directory holding
+   `run-status.json` and `log.jsonl`.
+2. **It is not a gate.** It exits 0 whether every claim is refuted or none is;
+   non-zero only when it cannot read its inputs. No gate, ring or sweep may
+   depend on its exit code.
+3. **No readiness comes from a person.** The other harness's appraisal layer
+   takes each argument's readiness from someone who marked it; that rule is
+   not adopted (operator, 2026-09-06: "no the rule from the other harness").
+   In DeepReason whether a criticism carries authority is the harness's own
+   decision, read from the record.
+
+Its own tests are `tests/test_record_claims.py`. The check below runs it on a
+committed root and asserts the status that root's own `run-status.json`
+decides, so a change to the status derivation fails it.
+
+`check: python tools/record_claims.py --claims experiments/2026-09-06-change-writers-room-organiser-testing/claims.json --root experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-36d9a22c3e2045ae1b8c7bfb9d95d092 --json | python -c "
+import json, sys
+rows = {c['claim_id']: (c['status'], c['standing']) for c in json.load(sys.stdin)['claims']}
+assert rows['RUN-STOP-01'] == ('REFUTED', 'SHOWN_ABLE_TO_FAIL'), rows['RUN-STOP-01']
+assert rows['CRIT-CAP-01'] == ('UNREFUTED_FOR_DECLARED_SCOPE', 'NOT_SHOWN_ABLE_TO_FAIL'), rows['CRIT-CAP-01']
+assert rows['ARMH-STOP-01'][0] == 'NOT_TESTED', rows['ARMH-STOP-01']
+"`
+`check: grep -q "RECORD_CLAIMS_RESULT_V1" tools/record_claims.py`
+
 
 ## Traps
 
