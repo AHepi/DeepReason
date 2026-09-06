@@ -1,5 +1,5 @@
 # Checklist for: adopt h-EPI's claims mechanism for DeepReason's measures
-State: next=17 blockers=none
+State: done blockers=none
 Map ids this plan was built on: `DR-INDEX`, `DR-INV-frozen-surfaces`,
 `DR-SUB-harness`, `DR-CON-evidence-states`, `DR-INV-evidence-channels`,
 `DR-SUB-evidence`, `DR-INV-reference-menu`, `DR-SUB-verification`,
@@ -87,16 +87,16 @@ One step per dr-execute-step invocation.
 - [x] 16. (all) Diff budget against SPEC's ceiling.
       done-when: `python tools/diff_budget.py origin/main --ceiling 1100 --paths tools/record_claims.py tests/test_record_claims.py docs/CLAIMS_SCHEMA.md docs/map/INV-frozen-surfaces.md experiments/2026-09-06-change-writers-room-organiser-testing/claims.json` -> verdict not EXCEEDED (paste it).
 
-- [ ] 17. (all) Map check: `python tools/docs_verify.py` and
+- [x] 17. (all) Map check: `python tools/docs_verify.py` and
       `python tools/docs_verify.py --audit`.
       done-when: 0 failed, and `--audit` reports no NEW vacuous check
       attributable to this tranche (paste both tails).
 
-- [ ] 18. (all) Full gate: `python -m pytest tests/ -q -n 4`. Run ONCE, at
+- [x] 18. (all) Full gate: `python -m pytest tests/ -q -n 4`. Run ONCE, at
       this boundary, because `tests/` changed (R22).
       done-when: output ends `N passed, 0 failed` (paste it).
 
-- [ ] 19. (all) [COMMIT] Push and confirm a clean tree.
+- [x] 19. (all) [COMMIT] Push and confirm a clean tree.
       done-when: `git status --porcelain` is empty AND
       `git rev-parse HEAD origin/claude/record-claims-tool-evul4v` prints the
       same hash twice.
