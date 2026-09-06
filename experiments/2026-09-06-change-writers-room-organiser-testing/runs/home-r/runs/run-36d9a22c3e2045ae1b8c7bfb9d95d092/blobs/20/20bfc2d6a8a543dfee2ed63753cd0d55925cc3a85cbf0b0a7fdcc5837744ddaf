@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on the mechanism that selecting a highly corroborated theory is consistent with increasing verisimilitude. However, this argument fails to address the specific logical refutation raised by Tichý and Miller (listed in its own counterconditions), who proved that Popper's formal definition of verisimilitude is logically incoherent because it entails that a false theory with more content is closer to the truth than a false theory with less content, even if the latter has fewer errors. Since the formal basis for 'verisimilitude' collapses under these proofs, the claim that corroboration tracks 'truth-likeness' becomes undefined within Popper's own logical framework, rendering the preference indefensible on his strict terms without smuggling in an inductive assumption that content correlates with truth.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Popper's formal definition of verisimilitude was proven logically incoherent by Tichý and Miller.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be formally defined to avoid the Tichý-Miller paradox, does any non-inductive criterion remain to justify preferring one falsified or unfalsified theory over another?",
+      "target_alias": "SRC_001"
+    }
+  ]
+}

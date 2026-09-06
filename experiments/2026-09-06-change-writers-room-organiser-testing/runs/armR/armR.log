@@ -1,0 +1,23 @@
+=== ARM R started 2026-09-06T09:02:42Z home=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r ===
+question sha256: e8e720d251b3cab2cddd548cb5064a74575404c8ae47f347f840faa6021a19b1
+--- the attachment, by digest (bytes are committed under experiments/2026-09-06-change-writers-room-organiser-testing/attachment) ---
+01-conjectures.txt: OK
+02-proposals.txt: OK
+03-objections.txt: OK
+CONVERSION.json: OK
+selectors: DEEPREASON_SEAT_SHELL=conjecturer=seat.conjecturer.organiser-v1,argumentative_critic=seat.critic.evidence-blind-v1 DEEPREASON_ROLE_PROMPT_TEMPLATE=role-prompt.organiser-v1
+--- reason, 4 cycles, 800000 token ceiling, attached 2026-09-06T09:02:42Z ---
+MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so nothing here can say whether reasoning='none' leaves hidden reasoning on. The run proceeds and sends exactly what you configured. To have this answered, write $DEEPREASON_HOME/model-profiles/<model-id>/agent.md.
+{
+  "evidence": {
+    "blocks": {
+      "paragraph": 94
+    },
+    "evidence_dossier_digest": "d2120e7dcb90332b0ebd4eea71996b705b895d7604fd67bbe6db8a510f04275f",
+    "refusals": [],
+    "sources_admitted": 3,
+    "tiers": {
+      "evidence": 94
+    }
+  }
+}
