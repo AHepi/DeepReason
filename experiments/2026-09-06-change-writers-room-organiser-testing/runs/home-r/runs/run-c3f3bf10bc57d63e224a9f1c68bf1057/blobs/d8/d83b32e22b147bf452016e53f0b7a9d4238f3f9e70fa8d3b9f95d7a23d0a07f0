@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is defensible 'only' by accepting a commitment to verisimilitude is false because it ignores Popper's explicit methodological rule of preferring the better-corroborated theory as a critical convention rather than a metaphysical truth-approximation. Popper argued that while we cannot know if a theory is closer to the truth (verisimilitude), we can rationally prefer the one that has withstood more severe tests as the best candidate for criticism, without needing to assert it is actually 'truer' or rely on a 'rationalist faith.' The target conflates the logical status of verisimilitude (which Popper admitted was problematic) with the pragmatic methodology of corroboration, thereby constructing a straw man that forces a metaphysical commitment Popper explicitly sought to avoid.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguished between the logical concept of verisimilitude (which he admitted faced formal difficulties) and the methodological rule of preferring better-corroborated theories for further testing, which does not require believing the preferred theory is actually closer to the truth.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for better-corroborated theories is merely a methodological rule for selecting objects of criticism rather than an assertion of their truth-likeness, does the target's entire framing of a 'non-probabilistic metaphysical commitment' collapse?"
+    }
+  ]
+}

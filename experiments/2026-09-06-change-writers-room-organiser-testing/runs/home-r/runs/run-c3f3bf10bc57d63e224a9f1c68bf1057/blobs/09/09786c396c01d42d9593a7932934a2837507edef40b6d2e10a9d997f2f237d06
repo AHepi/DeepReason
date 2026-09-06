@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's central claim that the preference is defensible 'only by accepting... verisimilitude' is historically and textually false regarding Popper's own terms. Popper explicitly attempted to defend the preference for better-corroborated theories using the logic of falsification and the asymmetry between verification and falsification (surviving severe tests), not by invoking a metaphysical commitment to verisimilitude as the *sole* or *primary* justification for action. Verisimilitude was introduced later (1963) largely to address issues of truth approximation in a post-falsification context, but Popper argued that corroboration reports are purely historical summaries of test performance, which logically justify preference without needing a probabilistic or verisimilitudinous bridge to future success. By asserting that the defense relies 'only' on verisimilitude, the target constructs a straw man that ignores Popper's actual argument: that preferring the most severely tested theory is a rational decision based on critical discussion and error elimination, not a metaphysical faith in truth-likeness. This misrepresentation invalidates the target's conclusion about what 'accepting it costs,' as the cost described applies to a view Popper did not strictly hold as the exclusive basis for preference.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Popper distinguished between the logical status of corroboration (a report of past performance) and the pragmatic decision to prefer the best-tested theory, arguing the latter requires no inductive leap or verisimilitude metric to be rational within his critical rationalism framework.",
+      "premise_evidence": null,
+      "successor_question": "If Popper's defense of preference relies on the asymmetry of falsification rather than verisimilitude, how does the target's exclusion of this primary argument affect its validity?",
+      "essential_premise_aliases": []
+    }
+  ]
+}

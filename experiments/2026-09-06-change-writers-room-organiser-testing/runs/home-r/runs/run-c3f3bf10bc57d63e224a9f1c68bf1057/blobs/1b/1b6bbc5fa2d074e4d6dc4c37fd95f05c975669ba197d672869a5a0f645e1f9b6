@@ -1,0 +1,187 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's own terms through the asymmetry of risk: rejecting a well-corroborated theory in favor of a poorly tested one increases the likelihood of immediate error without offering any compensatory increase in testability.",
+      "mechanism": "Choosing the better-corroborated theory is a logical deduction about the current state of knowledge, minimizing 'known unknowns' relative to alternatives. This requires no belief in the future validity of the theory, only a recognition of its current robustness against falsification attempts.",
+      "counterconditions": [
+        "refuted if it could be demonstrated that the concept of 'minimizing known unknowns' logically entails a probabilistic assessment of future performance, thereby collapsing the distinction between a deductive statement about past tests and an inductive expectation of future reliability",
+        "refuted if choosing the better-corroborated theory provides any rational basis for expecting it to succeed in the next specific instance; the justification must remain strictly limited to the logical asymmetry of having survived more severe tests thus far",
+        "refuted if it can be demonstrated that 'minimizing known unknowns' smuggles in the principle of the uniformity of nature that Popper rejected by assuming the mechanism which allowed the theory to survive previously will continue to operate"
+      ],
+      "evidence_refs": [
+        {
+          "block": "193e9093bea201f6"
+        },
+        {
+          "block": "341393d2586d378a"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate does not equate minimizing known unknowns with a logical deduction of future success, but rather as a deductive report on the current state of critical testing. The 'likelihood of error' refers to the density of untested vulnerabilities in a poorly corroborated theory compared to a severely tested one, not a probabilistic forecast."
+        },
+        {
+          "handle": "[SRC_006] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate avoids the false equivalence by grounding the preference in the asymmetry of risk and informational content, distinguishing the choice from a coin flip based on the history of severe testing, not on an expectation of future truth."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The mechanism relies on the current robustness (past survival) as a fact, not as a predictor of future stability. It does not assume the future will resemble the past, but that acting on the most-tested theory is the only non-arbitrary choice given the goal of error elimination."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate explicitly denies that acting on corroboration implies believing the theory is true or probable. It frames the action as a methodological rule to minimize immediate error risk, consistent with Popper's separation of action from belief."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The defense resolves the tension by framing the preference as a methodological rule for maximizing falsification potential and minimizing known risks, which guides action without requiring an inductive leap regarding future success."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "This candidate does not rely on verisimilitude as the sole defense, but on the asymmetry of risk and the logical status of corroboration as a report of past severity, aligning with Popper's methodological rules."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "revised",
+          "note": "Revised mechanism to clarify that 'likelihood of immediate error' refers to the structural vulnerability of less-tested theories (more unknown flaws) rather than a probabilistic weight. The preference is for the theory with fewer 'known unknowns' due to rigorous testing."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate defends the preference via the asymmetry of risk and methodological rules, not solely through a commitment to verisimilitude, thus avoiding the claim that verisimilitude is the only defensible route."
+        }
+      ],
+      "typicality": 0.5,
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is indefensible on Popper's own terms and constitutes a performative contradiction: when Popper chooses a well-corroborated bridge design over an unfalsified but untested one, he acts exactly as an inductivist would, relying on the implicit premise that past survival indicates future stability.",
+      "mechanism": "No amount of semantic maneuvering around 'corroboration' vs. 'probability' can mask the fact that acting on corroboration requires an inductive leap. Popper's system collapses into crypto-induction whenever it leaves the realm of abstract methodology because practical action inherently demands an expectation of future reliability.",
+      "counterconditions": [
+        "refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed or remain unfalsified in the future",
+        "refuted if Popper explicitly distinguished 'rational preference' based on critical scrutiny versus 'inductive inference' based on probability assignments",
+        "refuted if a consistent Popperian scientist would be unable to rationally distinguish between choosing a well-tested bridge design and a randomly selected unfalsified design for actual construction"
+      ],
+      "evidence_refs": [
+        {
+          "block": "4168dca7f8704df4"
+        },
+        {
+          "block": "3a5ebf3b2c2c80a0"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate argues that any attempt to frame the preference as non-inductive fails because the act of choosing for action necessarily invokes an expectation of future stability, which is the definition of induction."
+        },
+        {
+          "handle": "[SRC_006] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate asserts that the distinction between logical status and practical choice is illusory in action; choosing the tested bridge is functionally identical to betting on its success, which is inductive."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate agrees that the pragmatic wager implicitly assumes the future will resemble the past, confirming the charge of smuggling in induction."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate rejects the dichotomy, arguing that acting on corroboration *does* imply believing the theory is reliable for the specific case, which is an inductive belief."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate maintains that methodological rules cannot guide life-or-death action without an underlying inductive assumption about their efficacy."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate argues that Popper's own actions betray his theoretical stance, proving the defense via methodological rules is insufficient to avoid the charge of crypto-induction."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate insists that speaking of 'risk' in this context inevitably invokes probability, confirming the smuggling of induction."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate argues that the methodological rule itself is incoherent without an inductive foundation when applied to real-world decisions."
+        }
+      ],
+      "typicality": 0.5,
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference for better-corroborated theories is defensible without induction because it functions not as an epistemic probability claim but as a methodological rule of thumb: we choose the theory that has withstood the severest tests simply because it is the most informative target for future falsification.",
+      "mechanism": "This preference does not assume the theory will succeed in the future; rather, it assumes that if the theory is false, this specific candidate is the most likely to reveal its falsehood quickly, thereby accelerating the growth of knowledge even if the practical application fails.",
+      "counterconditions": [
+        "refuted if it can be shown that Popper explicitly justified the preference for better-corroborated theories in practical, life-or-death decisions on the grounds of safety or reliability rather than solely on the grounds of maximizing testability and information content",
+        "refuted if it can be demonstrated that a theory which has survived severe tests is not more susceptible to immediate falsification than a theory that has not been tested at all",
+        "refuted if scientists consistently choose less established, riskier hypotheses over well-corroborated ones solely to accelerate falsification"
+      ],
+      "evidence_refs": [
+        {
+          "block": "08c37be0a0e09d91"
+        },
+        {
+          "block": "27048296a0d4ef05"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_009] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate distinguishes between logical deduction of future success and the methodological choice of the best target for criticism, denying any inductive assumption."
+        },
+        {
+          "handle": "[SRC_006] against SRC_003",
+          "kind": "rebutted",
+          "note": "The choice is not arbitrary like a coin flip because it is guided by the specific goal of maximizing information gain through potential falsification."
+        },
+        {
+          "handle": "[SRC_010] against SRC_008",
+          "kind": "rebutted",
+          "note": "The wager is on learning potential, not on the stability of nature. Even if nature changes, the strategy of testing the boldest surviving theory remains optimal for knowledge growth."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate strictly separates the methodological choice from any belief in future reliability or truth."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The defense explicitly frames the preference as a rule for maximizing falsification potential, addressing the core tension by redefining the goal of action as learning."
+        },
+        {
+          "handle": "[SRC_004] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate relies on methodological rules regarding testability, not on verisimilitude or metaphysical commitments."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The 'likelihood' mentioned is a heuristic for identifying high-content theories, not a probabilistic claim about future performance."
+        },
+        {
+          "handle": "[SRC_015] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate affirms that the methodological rule of preferring bold, tested theories is sufficient for defense without invoking verisimilitude."
+        }
+      ],
+      "typicality": 0.5,
+      "optional_refs": []
+    }
+  ]
+}
