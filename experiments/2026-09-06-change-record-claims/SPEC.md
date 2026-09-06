@@ -130,11 +130,22 @@ read. Nothing vendored, nothing modified.
 **S2 (R4, R14).** New file `tools/record_claims.py`. A read-only reader over
 one or more run roots. It opens `run-status.json`, `log.jsonl` and
 `objects/<kind>/*.json` for the kinds a claim actually names, and nothing
-else. It opens no file for writing anywhere, and it imports no DeepReason
+else. It writes NOTHING into any run root, and it imports no DeepReason
 module, so no code path exists by which it could append to a record.
-    accept: `grep -c "open(" tools/record_claims.py` returns only read-mode
-    opens; `python -c` asserting `"'w'" not in source` and
-    `"import deepreason" not in source`; plus S12's digest test.
+
+CORRECTION, 2026-09-06, made while executing CHECKLIST step 3 and recorded
+rather than applied silently: this item first read "It opens no file for
+writing anywhere", which contradicts S3's own `--markdown <out>` option in
+the same spec. The obligation R14 states is that the tool "writes nothing
+into any root and changes no status" — not that it cannot write a report
+where the operator asks for one. The wording above is corrected to R14's
+own scope, and the guarantee is enforced in code: `_refuse_inside_a_root`
+walks the destination's parents and refuses any path inside a directory
+holding `run-status.json` and `log.jsonl`. The digest test (S12) proves the
+roots are untouched; a separate test proves the refusal fires.
+    accept: no `import deepreason`; every write goes through the
+    `--markdown` destination and `_refuse_inside_a_root` guards it; plus
+    S12's digest test over a committed root.
 
 **S3 (R5).** CLI:
 

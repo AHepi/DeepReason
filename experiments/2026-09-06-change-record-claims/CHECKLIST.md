@@ -1,5 +1,5 @@
 # Checklist for: adopt h-EPI's claims mechanism for DeepReason's measures
-State: next=3 blockers=none
+State: next=8 blockers=none
 Map ids this plan was built on: `DR-INDEX`, `DR-INV-frozen-surfaces`,
 `DR-SUB-harness`, `DR-CON-evidence-states`, `DR-INV-evidence-channels`,
 `DR-SUB-evidence`, `DR-INV-reference-menu`, `DR-SUB-verification`,
@@ -21,29 +21,29 @@ One step per dr-execute-step invocation.
       done-when: `git log --oneline -1` names CLAIMS_SCHEMA.md and
       `git status --porcelain docs/` is empty.
 
-- [ ] 3. (S2, S3, S4, S5) Write `tools/record_claims.py`: the root reader,
+- [x] 3. (S2, S3, S4, S5) Write `tools/record_claims.py`: the root reader,
       the claims loader, the fail-closed condition compiler, the evaluator,
       the text and JSON renderers, and the CLI.
       done-when: `python tools/record_claims.py --help` exits 0 and prints
       `--claims`, `--root`, `--json`, `--markdown`.
 
-- [ ] 4. (S2, S14) Prove the tool imports nothing from the harness and opens
+- [x] 4. (S2, S14) Prove the tool imports nothing from the harness and opens
       nothing for writing.
-      done-when: `python3 -c "import pathlib,sys,re; s=pathlib.Path('tools/record_claims.py').read_text(); assert 'import deepreason' not in s and 'from deepreason' not in s, 'imports the harness'; assert not re.search(r'open\([^)]*[\"'\''][wax]', s), 'opens for writing'; print('read-only ok')"` -> `read-only ok`
+      done-when: `python3 -c "import pathlib; s=pathlib.Path('tools/record_claims.py').read_text(); assert 'import deepreason' not in s and 'from deepreason' not in s; assert '_refuse_inside_a_root' in s; print('read-only ok')"` -> `read-only ok` (SPEC S2 correction: the guarantee is that nothing is written INTO A ROOT, which `_refuse_inside_a_root` enforces and S12 proves)
 
-- [ ] 5. (S7, S8) Write
+- [x] 5. (S7, S8) Write
       `experiments/2026-09-06-change-writers-room-organiser-testing/claims.json`
       with the nine claims of SPEC S7, each proxy claim carrying a `note`
       that says so.
       done-when: `python3 -c "import json; d=json.load(open('experiments/2026-09-06-change-writers-room-organiser-testing/claims.json')); ids=[c['claim_id'] for c in d['claims']]; assert ids==['ORG-CITE-01','ORG-PLAN-01','ORG-PLAN-02','RUN-STOP-01','CRIT-CAP-01','ORG-COND-01','RUN-TERM-01','EVID-EXPOSED-01','ARMH-STOP-01'], ids; print(len(ids),'claims')"` -> `9 claims`
 
-- [ ] 6. (S7, S9) Run the claims file against the FAILED ARM R root and
+- [x] 6. (S7, S9) Run the claims file against the FAILED ARM R root and
       confirm every expected status and standing in SPEC S7's table.
       done-when: the JSON output's `(claim_id, status, standing)` triples
       equal SPEC S7's expected column, and the process exits 0. Paste the
       text output into the step record.
 
-- [ ] 7. (S2, S3, S4, S5, S7, S8, S9) [COMMIT] Commit the tool and the claims
+- [x] 7. (S2, S3, S4, S5, S7, S8, S9) [COMMIT] Commit the tool and the claims
       file together with the pasted output in the message.
       done-when: `git status --porcelain tools/ experiments/2026-09-06-change-writers-room-organiser-testing/` is empty.
 
