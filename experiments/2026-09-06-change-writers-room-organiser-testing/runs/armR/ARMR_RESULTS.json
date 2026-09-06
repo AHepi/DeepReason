@@ -1,9 +1,7 @@
 {
   "absences": [
-    "NO_FRONTIER_RECORD",
     "NO_LIFECYCLE_REFUSAL_RECORD",
-    "NO_SEAT_RETIREMENT",
-    "NO_SURVIVOR_RECORD"
+    "NO_SEAT_RETIREMENT"
   ],
   "adjudication": {
     "judge_calls": 0,
@@ -19,25 +17,91 @@
   "artifacts": {
     "accepted": 89,
     "frontier": {
-      "artifact_ids": {
-        "absent": true,
-        "reason": "NO_FRONTIER_RECORD"
-      },
-      "count": {
-        "absent": true,
-        "reason": "NO_FRONTIER_RECORD"
-      },
-      "evidence_states": {
-        "absent": true,
-        "reason": "NO_FRONTIER_RECORD"
-      },
-      "problem_id": null
+      "artifact_ids": [
+        "05a234fe135a740bf7b9314c748309191217a817fa03acee2e0de2f9ef249b16",
+        "065e2d64178c69a3b0337d78b91349c5ed4d0f944a998a7d00792f9b0c5c7069",
+        "0e0a7f7f529174cefc56a689b31b5dc422a3778ee82a14894f2a2ebf3ac5d58e",
+        "176d28112de6da9f233639a6b479d8bd89c6c6d8139d758ab143ed5736f7e36c",
+        "1ae75024a8f3b1ea146f3e98295a90b127858ce95b088bbe4b7f9d6bef7b7a56",
+        "2b5e0ae84adc7a9a73fa8f00da7c4915d104e2390453512dab5819f8402e7989",
+        "2d858b4f673db8fda51534f97d620528e17f1ccbcbcf2cc3b6e03a55261a693a",
+        "349d716cdc7d700bc500c3e5cfc8c2891bd5f2fa8f3fe011879edb7889d2b11c",
+        "38095e64124b8ee402256c01b4464677cb619cdfff037c2a20bde5f8129bdb5c",
+        "4629cc15a8a7261d2e3a7ca2dd929a58f62fb272b90c2a6988d41856b55433e2",
+        "55fb670c243edbc6b5bc09dfc304566291fe6e336bfbf50c7942a6c29c3e3027",
+        "577a0e466bc8fb26a9df723b4049d6788eca4ddf1b96d3e39d227c9c1a771409",
+        "58f447adb4faeb1b531f904bcc782a3c0b8815c57d18f4c84b29a8b4cc9164e3",
+        "7221574fb4135a785cc18cfa9fc8bf8b82cf089332d86c353ae60afa6e8e3c38",
+        "76500db011cf29135248a89bae5515210b4bec931f15a3e618d32c180ac07923",
+        "7c0ca1094ddace9506eb5ebde275dab48d69c4f9ddace3dfc7d1dd0dcc970393",
+        "95c4c8df99ddbaacabc9940c184840b000a0ee4ac9819a643a7578655a4ef2bb",
+        "970f11dc80d92167e889d75fa07a8f12db652050c301860cccd560a4c7f2f7cd",
+        "9874127bc70edd1f72926ae8310f29e7425b4b0931ab73fe56e8919103c9aac3",
+        "a6edeb5a71c4b80ca77d9cd7ae29ed630a4343bbae22375dc7c9ee878bbca17a",
+        "a768971d9cca81199fa3e89a20b60a938a224c90ba4994ba1a503d0fc1fcef5f",
+        "a838263ffdb41ffc3317a17d87d039deb272c7a9a7e70b398c9ad492626f0587",
+        "af2f69914e54a8ebd848b431fe024c9998a32ebc31ac3c5561a44efed8668b3c",
+        "af5507d1e341a3c0aca926b8f504308f3429af7e074f5070b6d25a7090da554d",
+        "b4ea2311d93fe2e3993c1704bc61262fb2ef15fc2493cb515be6380ef5470f64",
+        "b4f86d79b684138f3244f332975c18c90378ed721d89cda9aae006f7cfd39f65",
+        "b6828d91f6531c4b30b2067eec68ed6ba6c82883d05434643096ca92b2e74a85",
+        "b8ff01465a24c496a58af942eb75b35aeccd892543a9d697c62864ebcb87aae2",
+        "bb6218725c54621a77d9a1c24bbca3ee485f1504c6be98fc2672ddcebc2389e0",
+        "c4637e081c711c90b576f98c9da165937bce1ff9becb0a1e6321f52e30cd6a11",
+        "ca278b1e65a9353d4378a4f3125edc456d707388ba7eb50ff9285a0514632a54",
+        "ce89049f95fb5521d30fc84a0f74874eb32c360eac20ec1a123df1e7b5da265d",
+        "d0dfed5667928c238188b799317fa2d69f4fabc2637e0f558f1dd0083cb26bd8",
+        "d633d2e5b8757a0080cd4660d04a053c929e890d1c27690305e62bae76cbbfc6",
+        "dcc05814db51e99cd1d7bb7be5ef75fec49932a86aa62ff342c00932c2d11dcf",
+        "f68e6b46fe2afd6920643228570ba3d96dc24765c6720c0245d6876dbd992cca",
+        "f6f2e02ef01ed427e948e771a82ab37ec91af512be2061f617bd25577af51111",
+        "f9f345f76a52fd24dc45ea31192784c648241d87065f69f767b5ffc455974818"
+      ],
+      "count": 38,
+      "evidence_states": [
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "open",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "open",
+        "open",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "open",
+        "open",
+        "supported",
+        "supported",
+        "supported",
+        "supported",
+        "open",
+        "supported"
+      ],
+      "problem_id": "question-ba75796c3facc7a3d0d448d6eaa09a2e"
     },
     "refuted": 1,
-    "survivor_count": {
-      "absent": true,
-      "reason": "NO_SURVIVOR_RECORD"
-    },
+    "survivor_count": 38,
     "suspended": 0
   },
   "embedder": {
@@ -140,11 +204,11 @@
   "resolved_from": "root",
   "root": "/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-c3f3bf10bc57d63e224a9f1c68bf1057",
   "run": {
-    "cycles_completed": 3,
-    "message": "token budget denied transactional work sha256:dcd8fa4595478085beeb41b23cd97af3c9cafe25c4f45f58316ee529e89760fd",
-    "state": "failed",
-    "stop_reason": "operational_failure",
-    "token_limit": 500000,
+    "cycles_completed": 4,
+    "message": "",
+    "state": "completed",
+    "stop_reason": "budget_exhausted",
+    "token_limit": 1695362,
     "token_spend": 495362
   },
   "schema": "deepreason-results.v1",
@@ -153,7 +217,7 @@
     "reason": "NO_SEAT_RETIREMENT"
   },
   "terminal": {
-    "amend_ready": true,
+    "amend_ready": false,
     "continuation_authority": true,
     "lifecycle_refusal": {
       "absent": true,
@@ -161,19 +225,19 @@
     },
     "record_security_violations": [],
     "stop_reason_resumable": true,
-    "terminal_epoch": 0,
-    "valid_typed_terminal": true
+    "terminal_epoch": 1,
+    "valid_typed_terminal": false
   },
   "verification": {
     "families": {
       "completion": 29,
       "epistemic": 0,
-      "integrity": 0,
+      "integrity": 4,
       "operational": 13,
       "security": 0
     },
     "source": "rederived",
-    "valid": true,
-    "violations": 0
+    "valid": false,
+    "violations": 4
   }
 }
