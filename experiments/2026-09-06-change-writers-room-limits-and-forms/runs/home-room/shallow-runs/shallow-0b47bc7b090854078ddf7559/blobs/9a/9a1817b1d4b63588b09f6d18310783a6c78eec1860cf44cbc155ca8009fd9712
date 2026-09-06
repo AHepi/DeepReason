@@ -1,0 +1,19 @@
+{
+  "objections": [
+    {
+      "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+      "body": "The conjecture claims that preferring a well-corroborated theory is a 'logical deduction' about the current state of knowledge, but this mischaracterizes the nature of the preference. Popper explicitly denied that past survival implies future reliability; therefore, deducing that one *should* act on the well-corroborated theory necessarily involves an inductive leap—the assumption that the future will resemble the past. By framing the preference as merely minimizing 'known unknowns,' the conjecture smuggles in a pragmatic induction: it assumes that the mechanism which allowed the theory to survive previously will continue to operate, which is precisely the principle of uniformity of nature that Popper rejected.",
+      "would_settle": "A clear demonstration from Popper's own texts showing he endorsed acting on corroborated theories without any implicit assumption that their past success is relevant to their future performance."
+    },
+    {
+      "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+      "body": "The argument relies on the 'asymmetry of risk,' suggesting that rejecting a well-corroborated theory increases the likelihood of immediate error. However, within strict Popperian logic, all unfalsified theories stand on equal footing regarding their truth value; none are 'more likely' to be true or false based on test history. To claim that choosing a poorly tested theory carries a higher 'likelihood of error' is to assign a probabilistic weight to the theories based on their history, which directly contradicts Popper's core thesis that corroboration is not probability. The conjecture attempts to have it both ways: denying probability while using probabilistic language ('likelihood of error') to justify the preference.",
+      "would_settle": "A formal proof showing how one can quantify 'likelihood of immediate error' in a Popperian framework without invoking degrees of confirmation or probability."
+    },
+    {
+      "about": "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7",
+      "body": "The conjecture argues that choosing the better-corroborated theory is a 'defensive posture' requiring no belief in future validity. Yet, the very act of 'choosing which theory to act on' (as mentioned in the problem statement) implies an expectation of successful outcomes. If an agent truly holds no belief that the well-corroborated theory is more likely to yield correct predictions than a rival, there is no rational basis within Popper's system to prefer it for action over a coin toss or a less tested theory. The 'defensive posture' is illusory because action inherently aims at future results, and preferring theory A over theory B for action logically entails believing A is a better guide to those future results, which is an inductive commitment.",
+      "would_settle": "An example of a decision-making scenario where an agent prefers Theory A over Theory B solely based on corroboration, yet explicitly denies expecting Theory A to perform better in the specific upcoming application."
+    }
+  ]
+}

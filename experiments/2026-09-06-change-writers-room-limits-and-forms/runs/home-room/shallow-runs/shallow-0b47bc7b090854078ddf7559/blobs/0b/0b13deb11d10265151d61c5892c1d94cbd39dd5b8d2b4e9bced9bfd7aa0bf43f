@@ -1,0 +1,18 @@
+{
+  "objections": [
+    {
+      "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+      "body": "The conjecture conflates 'preference for action' with 'belief in future success.' Popper explicitly distinguishes between the logical status of a theory (which remains unproven) and the pragmatic decision to adopt it. Preferring the better-corroborated theory is a rational choice based on the available critical discussion, not an inductive inference that the theory is probable or will remain true. One can choose the 'best tested' map for navigation without assuming the territory will not change, thereby avoiding the smuggled induction the conjecture alleges.",
+      "would_settle": "A clear textual analysis of Popper's distinction between 'corroboration' as a report of past performance versus 'probability' as a prediction of future frequency."
+    },
+    {
+      "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+      "body": "The objection relies on the assumption that 'verisimilitude' (truth-likeness) functions as a proxy for probability, but Popper developed verisimilitude specifically to escape the probabilistic framework. Verisimilitude is a logical relation concerning content and truth, not a measure of likelihood derived from repeated observations. To claim it is a 'covert proxy' ignores Popper's rigorous attempt to define truth-content and falsity-content logically, independent of any inductive uniformity principle regarding nature's structure.",
+      "would_settle": "Demonstration that verisimilitude can be defined purely logically without invoking the principle of the uniformity of nature."
+    },
+    {
+      "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+      "body": "The conjecture argues that without an inductive assumption, Popper's advice is 'practically empty,' yet this sets up a false dichotomy between induction and irrationalism. Popper's system offers a third way: critical rationalism. The preference for better-corroborated theories is defensible because they have withstood attempts to falsify them, making them the most informative and currently least refuted options. This preference is methodological, not epistemological; it guides where to look for errors next, rather than guaranteeing future predictive success, thus remaining consistent without smuggling in induction."
+    }
+  ]
+}

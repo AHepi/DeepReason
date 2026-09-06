@@ -1,0 +1,19 @@
+{
+  "proposals": [
+    {
+      "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+      "body": "The conjecture would be refuted if Popper explicitly distinguished 'verisimilitude' as a logical relation of content comparison rather than a predictive expectation, demonstrating that one can prefer a theory with higher verisimilitude solely to maximize the severity of future tests without assuming the future will resemble the past.",
+      "kind": "refuted-if"
+    },
+    {
+      "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+      "body": "The conjecture forbids the interpretation that acting on a theory with greater verisimilitude entails a belief that this theory is more likely to yield true predictions in specific future applications compared to a less corroborated rival.",
+      "kind": "forbids"
+    },
+    {
+      "about": "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73",
+      "body": "The conjecture must not conflate the methodological rule of choosing the best-tested theory for the purpose of critical discussion with the psychological act of expecting successful practical outcomes, as doing so would misrepresent Popper's separation of the context of justification from the context of discovery.",
+      "kind": "must-not"
+    }
+  ]
+}

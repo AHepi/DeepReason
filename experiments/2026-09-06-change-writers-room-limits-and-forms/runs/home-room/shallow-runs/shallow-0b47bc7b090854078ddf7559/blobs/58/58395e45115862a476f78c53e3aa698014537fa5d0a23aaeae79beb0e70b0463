@@ -1,0 +1,16 @@
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"MiniRoomObjection": {"additionalProperties": false, "description": "One objection to the TARGET CONJECTURE. `about` is the target's id;\n`body` is the objection in free prose; `would_settle` (optional) says what\nobservation or argument would settle it either way.", "properties": {"about": {"minLength": 1, "title": "About", "type": "string"}, "body": {"minLength": 1, "title": "Body", "type": "string"}, "would_settle": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Would Settle"}}, "required": ["about", "body"], "title": "MiniRoomObjection", "type": "object"}}, "additionalProperties": false, "description": "CRITIC SEAT. Mount the strongest specific objections to the TARGET\nCONJECTURE named in the brief -- each about that conjecture, each stating\nits case. You decide nothing: an objection is recorded and shown, and it\noverturns nothing.", "properties": {"objections": {"items": {"$ref": "#/$defs/MiniRoomObjection"}, "minItems": 1, "title": "Objections", "type": "array"}}, "required": ["objections"], "title": "MiniRoomCritic", "type": "object"}
+SYNTAX EXAMPLE:
+{"objections":[{"about":"x","body":"x"}]}
+
+## problem
+PROBLEM question-corroboration-d8
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-conjecture
+TARGET CONJECTURE 6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73
+The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because 'verisimilitude' (truth-likeness) functions as a covert proxy for probability. To prefer Theory A over Theory B on the grounds that A is 'closer to the truth' based on past tests is to assume a uniformity in nature: that the structural features which allowed A to survive will continue to align with reality. Without this inductive assumption, the concept of verisimilitude offers no actionable guide for the future, rendering Popper's advice to scientists practically empty.
+[angle: The Verisimilitude Trap]
+
+## directive
+You are the critic seat. Mount the strongest specific objections to the TARGET CONJECTURE above. Each objection names what it is about and states its case in free prose. You decide nothing: an objection is recorded and shown, and it overturns nothing.

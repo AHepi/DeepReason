@@ -1,5 +1,5 @@
 # CHECKLIST — the writer's room: limits, forms, census
-State: next=11 blockers=none. Census sealed; the chain (soak, then the room run) launches next. T1-T3 committed; R4 enforced by a record-level test with a caught mutation. T1 and T2 committed; full docs_verify (1419 checks, six known rows) recorded at step 7. Steps 1-3 done (limits fixed, configurable, tested). Captured and specified 2026-09-06 on the operator's message 4 ("the limits need changing … permission to change the forms … only if the commitments exist outside conjecture artifacts"). R4 verified on the record before any step.
+State: next=13 blockers=none. Room run COMPLETE, census recorded in RESULTS.md. Census sealed; the chain (soak, then the room run) launches next. T1-T3 committed; R4 enforced by a record-level test with a caught mutation. T1 and T2 committed; full docs_verify (1419 checks, six known rows) recorded at step 7. Steps 1-3 done (limits fixed, configurable, tested). Captured and specified 2026-09-06 on the operator's message 4 ("the limits need changing … permission to change the forms … only if the commitments exist outside conjecture artifacts"). R4 verified on the record before any step.
 
 Re-read REQUEST.md + SPEC.md before every step. One step per invocation.
 Map ids: DR-SUB-minireason, DR-SEAM-llm-x-minireason, DR-INV-seat-section-plugins, DR-INV-seat-section-sources, DR-CON-packs-and-token-economy, DR-INV-frozen-surfaces.
@@ -145,6 +145,24 @@ Map ids: DR-SUB-minireason, DR-SEAM-llm-x-minireason, DR-INV-seat-section-plugin
         candidates" -- offline reproduction pasted; loop.py falls back to the compact count (4);
         test_a_profile_without_a_candidate_count_still_asks_for_a_number. Ring: 172 passed, 1 skipped.
       ```
-- [ ] 11. Live room run, 3 cycles, detached; typed terminal; directive intact 19/19. done-when: paste.
-- [ ] 12. [COMMIT] `census.py` → RESULTS.md, the commitment seat first, every proposal quoted.
+- [x] 11. Live room run, 3 cycles, detached; typed terminal; directive intact 19/19. done-when: paste.
+
+      ```
+      $ setsid nohup room/run_chain.sh & disown ; snapshot_wr.sh armed
+      soak: cycle_soak --case epoch3 -> exit 0 (clean), soak rc=0      (room/soak.log)
+      room: 06:06:54Z -> 06:10:34Z ; setup rc=0 ; provider.yaml model_profile: standard
+      ROOM_TERMINAL: completed true, stop queue-exhausted, cycles 3, flow mini.flow.room.v1, model_profile
+        standard, conjectures 12, refuted 0, records criticism 36 / proposal 46, tokens 70336,
+        meter_equals_log true, verify_root 0, replay digest == live -> TYPED_TERMINAL COMPLETE
+      WR_CENSUS_V1: briefs 27  directive intact 27  clipped markers 0      (the D8 run: 9 of 19, 10 clipped)
+      ```
+- [x] 12. [COMMIT] `census.py` → RESULTS.md, the commitment seat first, every proposal quoted.
+
+      ```
+      RESULTS.md: the census table after/before, the sealed rule clause by clause (3 of 4 hold; clause 3's
+        exact-dup = 0 fails on three byte-identical pairs), predictions scored (intact HELD, exact-dup 0
+        FALSIFIED, requested count HELD), the everything-so-far coverage fact (pool ~53k chars; the section
+        withheld 10..79 entries with the count in the brief), spend, residue, and the appendix quoting
+        all 46 proposals verbatim by conjecture.
+      ```
 - [ ] 13. [COMMIT] VALIDATION.md (full gate, idle) + DELIVERY.md; push; clean.

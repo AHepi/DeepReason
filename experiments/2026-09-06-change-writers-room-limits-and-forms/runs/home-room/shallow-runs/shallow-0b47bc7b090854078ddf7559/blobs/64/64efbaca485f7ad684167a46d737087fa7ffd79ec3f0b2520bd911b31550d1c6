@@ -1,0 +1,24 @@
+{
+  "proposals": [
+    {
+      "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+      "body": "The conjecture is refuted if it can be demonstrated that preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects.",
+      "kind": "refuted-if"
+    },
+    {
+      "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+      "body": "The conjecture forbids attributing any increased likelihood of future success or truth to a theory solely on the basis of its survival of past tests; it must maintain that the preference is entirely devoid of predictive probability.",
+      "kind": "forbids"
+    },
+    {
+      "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+      "body": "The conjecture must not claim that the 'fitness' demonstrated by surviving severe tests provides a rational basis for action if that basis secretly relies on the unstated premise that nature is uniform enough for past fitness to matter for future outcomes.",
+      "kind": "must-not"
+    },
+    {
+      "about": "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797",
+      "body": "The conjecture predicts that a consistent Popperian agent, when forced to choose between two unfalsified theories where one is better corroborated, will always choose the better-corroborated one while simultaneously asserting they have no reason to believe it will perform better in the next instance.",
+      "kind": "predicts"
+    }
+  ]
+}

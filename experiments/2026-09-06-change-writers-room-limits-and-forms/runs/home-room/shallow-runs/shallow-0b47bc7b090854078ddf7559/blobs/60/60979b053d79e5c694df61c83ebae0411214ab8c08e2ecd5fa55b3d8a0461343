@@ -1,0 +1,71 @@
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"MiniRoomCandidate": {"additionalProperties": false, "description": "One conjecture: a bold, criticizable explanation, in whatever shape says\nthe interesting part best. `angle` (optional, one line) names the stance\nor move this candidate takes so the room can tell its candidates apart.", "properties": {"angle": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Angle"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content"], "title": "MiniRoomCandidate", "type": "object"}}, "additionalProperties": false, "description": "CONJECTURE SEAT. Propose the number of candidates the brief asks for,\neach a distinct, bold, criticizable explanation of the PROBLEM. Do not\nrestate what the brief already shows; differ from it substantively.\nCandidates are content for criticism, not verdicts.", "properties": {"candidates": {"items": {"$ref": "#/$defs/MiniRoomCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "MiniRoomConjecturer", "type": "object"}
+SYNTAX EXAMPLE:
+{"candidates":[{"content":"x"}]}
+
+## problem
+PROBLEM question-corroboration-d8
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## everything-so-far
+EVERYTHING GENERATED SO FAR IN THIS RUN (every artifact, in full, oldest first; no verdict of any kind is shown):
+WITHHELD UNDER RULE mini.retention.everything.v1: 18 earlier entries exist in this run and are not shown here -- newest withheld: 854ea2a23699fbd2e9d23a19ff562f4f537eb71780a26cb8578a49e8b9a00073, 327f6ea7cd7e8284141dfa6fa3043133b9e2248f706474f7d69f304fcef66cf6, 9f6d3e913488869cb5c50ffad7dd06c198783c3608214e2a9a695438669de4c5, and 15 more; every id is in the record. Treat what follows as partial; do not conclude they do not exist.
+[19] mini.commitment-proposal.v1 8df03babcebe473a94bbac59e8da47f981c04f75ab8e96e1733076272793c647
+    about: a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797
+The conjecture must not claim that the 'fitness' demonstrated by surviving severe tests provides a rational basis for action if that basis secretly relies on the unstated premise that nature is uniform enough for past fitness to matter for future outcomes.
+[kind: must-not]
+[20] mini.commitment-proposal.v1 eb00f7c3429ea82ed883d9a5e8e0af184df6189352d436732e73a5f3545d56fb
+    about: a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797
+The conjecture predicts that a consistent Popperian agent, when forced to choose between two unfalsified theories where one is better corroborated, will always choose the better-corroborated one while simultaneously asserting they have no reason to believe it will perform better in the next instance.
+[kind: predicts]
+[21] mini.commitment-proposal.v1 26d5b990b5bc85741b8b72527fc8881502f412beef8b0284beae0a4e12dc3e8b
+    about: 92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd
+The conjecture is refuted if it can be shown that the concept of 'verisimilitude' (truth-likeness) cannot be formally defined without implicitly relying on inductive probability, thereby making the shift from probability to verisimilitude merely a semantic disguise for the very induction Popper rejected.
+[kind: refuted-if]
+[22] mini.commitment-proposal.v1 0b2aecf320d7c57c886bd08a6bca0169eb6a73d4758198cc690884f2588ea2ab
+    about: 92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd
+The conjecture forbids claiming that surviving severe tests provides a rational basis for preferring one theory over another unless it can demonstrate a logical connection between test survival and increased truth-likeness that does not itself assume the uniformity of nature.
+[kind: forbids]
+[23] mini.commitment-proposal.v1 c6f64791220fad189956b395a95f7654a5715a17f5bdcd9fe88570c32fe380a5
+    about: 92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd
+The conjecture must not treat the 'metaphysical hope' that surviving tests correlates with truth-likeness as a sufficient defense against the charge of cryptic inductivism if that hope functions identically to an inductive premise in guiding practical scientific action.
+[kind: must-not]
+[24] mini.commitment-proposal.v1 08cacb9ef7debef83b234f4245aeb9841870679e4b88750946bf557ee4b5592b
+    about: 92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd
+The conjecture predicts that a scientist acting strictly on this verisimilitude-based preference will choose the better-corroborated theory for critical applications while simultaneously maintaining that this choice offers no greater expectation of predictive success than choosing a random unfalsified theory.
+[kind: predicts]
+[25] mini.commitment-proposal.v1 6035a9c4dd99607c46e3b320f85f420981e389249260a5ac06ba476c1df7bf4d
+    about: 67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e
+The conjecture is refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests (i.e., choosing the theory most likely to fail quickly if false) without any assumption that the theory will actually succeed or remain unfalsified in the future.
+[kind: refuted-if]
+[26] mini.commitment-proposal.v1 ea3ee63d9cfa224e656d5ba423d05aa37e2325cf90786ca6b4cdceb0bbb20b32
+    about: 67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e
+The conjecture forbids equating the pragmatic choice of a theory for application with an epistemic belief in its truth or future reliability; it must maintain that acting on a corroborated theory is a decision to expose it to new risks, not a prediction of its safety.
+[kind: forbids]
+[27] mini.commitment-proposal.v1 e0e189524f5ca805be2264bab7fa8637456501b35f5937c1a373724991b66b33
+    about: 67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e
+The conjecture must not claim that Popper's framework reduces to mere psychological habit unless it first demonstrates that no non-inductive logical rule (such as the methodological rule to test the boldiest surviving hypothesis) can govern the preference for better-corroborated theories.
+[kind: must-not]
+[28] mini.commitment-proposal.v1 e3374255cb01e7a3def97fe0464798efcc24fdf2c06a1f1a456cd73d042db99d
+    about: 67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e
+The conjecture predicts that if its interpretation is correct, a consistent Popperian scientist would be unable to rationally distinguish between choosing a well-tested bridge design and a randomly selected unfalsified design for actual construction, as both choices would carry identical expectations regarding future performance.
+[kind: predicts]
+[29] mini.commitment-proposal.v1 36cfcd3be6fec4dd8642a11acfdfac173f50a0d0a33eb9743adb292ac731bc3a
+    about: e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24
+The conjecture is refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true, thereby collapsing the distinction between preferring a bold theory and preferring a probable one.
+[kind: refuted-if]
+[30] mini.commitment-proposal.v1 246d6bf09acaadbf2993421cdef7f22d0c041f18e649edcfed829ba95e26ad86
+    about: e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24
+The conjecture forbids attributing any pragmatic advantage to the better-corroborated theory regarding its reliability in future applications, such as bridge building or medical treatment, beyond its utility as a tool for generating new tests.
+[kind: forbids]
+[31] mini.commitment-proposal.v1 e5341a7146dfcce407edf02bbab448baa441227f3ef2d8b787ba66c726962336
+    about: e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24
+The conjecture must not claim that acting on a theory solely to falsify it constitutes a coherent defense for scientific practice in domains where failure results in catastrophic loss rather than merely new knowledge.
+[kind: must-not]
+[32] mini.commitment-proposal.v1 c337b90ec871b60243392d9d2df9849ce46ba80800a6bc40dc4888d10e2aeacf
+    about: e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24
+The conjecture predicts that a scientist strictly adhering to this view would choose the most precise, high-risk theory for critical real-world decisions even when a vaguer, safer, and equally unfalsified alternative exists, provided the choice is framed as an experiment.
+[kind: predicts]
+
+## directive
+You are the conjecture seat. Propose bold, criticizable explanations for the PROBLEM above, in whatever shape says the interesting part best -- prose is welcome and no skeleton is required. Return 4 diverse candidates, each with a typicality estimate in [0,1]. Do not repeat what has already been generated; differ from it substantively.

@@ -1,0 +1,24 @@
+{
+  "proposals": [
+    {
+      "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c8c9aeca",
+      "body": "The conjecture is refuted if it can be shown that Popper explicitly justified the preference for better-corroborated theories in practical, life-or-death decisions (such as crossing a bridge) on the grounds of safety or reliability rather than solely on the grounds of maximizing testability and information content.",
+      "kind": "refuted-if"
+    },
+    {
+      "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c8c9aeca",
+      "body": "The conjecture must not imply that a scientist acting on a well-corroborated theory expects it to work in the future; if the defense requires any expectation of future success derived from past performance, it smuggles in the very induction it claims to avoid.",
+      "kind": "must-not"
+    },
+    {
+      "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c8c9aeca",
+      "body": "The conjecture forbids the interpretation that corroboration serves as a proxy for truth-likeness or verisimilitude in decision-making contexts; it restricts the function of corroboration strictly to identifying the best candidate for immediate falsification.",
+      "kind": "forbids"
+    },
+    {
+      "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c8c9aeca",
+      "body": "The conjecture predicts that if one were to choose a less-corroborated theory over a better-corroborated one purely for practical action, Popper would criticize this not as irrational risk-taking, but as a methodological failure to prioritize the speed of error detection.",
+      "kind": "predicts"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "proposals": [
+    {
+      "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+      "body": "The conjecture is refuted if it can be demonstrated that Popper explicitly grounded the preference for better-corroborated theories in a pragmatic decision rule (such as minimizing immediate risk or maximizing informational content) without invoking any metaphysical assumption about the theory's proximity to truth or verisimilitude.",
+      "kind": "refuted-if"
+    },
+    {
+      "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+      "body": "The conjecture must not conflate the methodological rule of preferring bold, testable theories with a metaphysical belief that nature is structured to reward such boldness with truth; the defense must remain agnostic regarding nature's actual response to boldness.",
+      "kind": "must-not"
+    },
+    {
+      "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+      "body": "The conjecture forbids the interpretation that accepting verisimilitude as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated as a logical relation of content rather than a statistical likelihood of future success.",
+      "kind": "forbids"
+    },
+    {
+      "about": "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a",
+      "body": "The conjecture predicts that if the preference for corroborated theories were based solely on past performance without the 'verisimilitude gamble,' Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ in content.",
+      "kind": "predicts"
+    }
+  ]
+}

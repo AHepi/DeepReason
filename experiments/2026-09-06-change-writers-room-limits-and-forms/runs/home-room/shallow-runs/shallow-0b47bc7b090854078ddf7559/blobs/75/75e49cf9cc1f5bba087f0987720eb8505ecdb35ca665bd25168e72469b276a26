@@ -1,0 +1,19 @@
+{
+  "objections": [
+    {
+      "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+      "body": "The conjecture falsely equates the rejection of inductive probability with the absence of any rational criterion for action. Popper explicitly distinguishes between 'probability' (logical likelihood of truth) and 'corroboration' (a report on past performance under severe testing). The rational basis for preference is not that the better-corroborated theory is more likely to be true, but that it has demonstrated greater explanatory power and resilience against falsification attempts. Choosing it is a methodological rule based on the principle of learning from errors, not an inductive inference that the future will resemble the past.",
+      "would_settle": "A definitive textual analysis of Popper's distinction between 'acceptance' for practical purposes versus 'belief' in truth, specifically regarding his concept of verisimilitude (truth-likeness) as a non-probabilistic guide for preference."
+    },
+    {
+      "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+      "body": "The claim that choosing the better-corroborated theory is 'logically indistinguishable from flipping a coin' ignores the asymmetry of risk in critical decisions. While Popper denies we can know which theory is true, he argues we can know which theory has been more rigorously tested and has survived. To ignore this track record is not neutrality; it is an irrational disregard for available empirical data regarding a theory's robustness. The preference is defensible as a pragmatic imperative to utilize the most stringently vetted information available, which constitutes a rational, non-inductive strategy for minimizing the risk of immediate error.",
+      "would_settle": "An agreed-upon definition of 'rationality' in decision theory that separates expected utility maximization (which often relies on induction) from risk-minimization based on stress-test history."
+    },
+    {
+      "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+      "body": "The conjecture assumes that without a guarantee of future success (induction), all choices are arbitrary. However, Popper's framework allows for the preference of theories with higher content and better corroboration because they offer more precise opportunities for future falsification. Even in a single-case decision, selecting the theory that makes the boldest, most testable claims that have so far held up is a rational commitment to the growth of knowledge. This is not a psychological habit but a logical consequence of the aim of science: to get closer to the truth by eliminating error, making the choice of the best-tested theory the only one consistent with the scientific attitude.",
+      "would_settle": "A formal demonstration showing how a decision rule based solely on past falsification attempts can yield different outcomes than a randomizer in a simulated environment of competing hypotheses."
+    }
+  ]
+}

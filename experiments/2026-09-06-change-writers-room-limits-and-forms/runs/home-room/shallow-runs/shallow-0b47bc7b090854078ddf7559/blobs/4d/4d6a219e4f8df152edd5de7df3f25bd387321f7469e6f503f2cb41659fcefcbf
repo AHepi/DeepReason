@@ -1,0 +1,24 @@
+{
+  "proposals": [
+    {
+      "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+      "body": "The conjecture is refuted if Popper can be shown to have explicitly grounded the preference for better-corroborated theories in a non-inductive decision rule, such as maximizing informational content or minimizing the risk of immediate falsification, without invoking any expectation of future success based on past performance.",
+      "kind": "refuted-if"
+    },
+    {
+      "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+      "body": "The conjecture must not conflate the methodological imperative to test bold theories with a metaphysical belief that nature rewards such boldness with truth; it must remain agnostic regarding whether the universe is structured to favor high-content theories.",
+      "kind": "must-not"
+    },
+    {
+      "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+      "body": "The conjecture forbids the interpretation that accepting verisimilitude (truth-likeness) as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated strictly as a logical comparison of content rather than a statistical prediction of future reliability.",
+      "kind": "forbids"
+    },
+    {
+      "about": "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0",
+      "body": "The conjecture predicts that if the preference for corroborated theories were based solely on past survival without a 'verisimilitude gamble' or similar non-inductive heuristic, Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ significantly in empirical content.",
+      "kind": "predicts"
+    }
+  ]
+}

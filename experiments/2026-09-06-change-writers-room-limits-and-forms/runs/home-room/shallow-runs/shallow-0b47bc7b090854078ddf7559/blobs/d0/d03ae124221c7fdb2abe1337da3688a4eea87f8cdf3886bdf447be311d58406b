@@ -1,0 +1,20 @@
+{
+  "candidates": [
+    {
+      "angle": "The Methodological Rule Defense",
+      "content": "Popper's preference for better-corroborated theories is defensible without induction because it functions not as an epistemic probability claim but as a methodological rule of thumb: we choose the theory that has withstood the severest tests simply because it is the most informative target for future falsification. This preference does not assume the theory will succeed in the future; rather, it assumes that if the theory is false, this specific candidate is the most likely to reveal its falsehood quickly, thereby accelerating the growth of knowledge even if the practical application fails."
+    },
+    {
+      "angle": "The Verisimilitude Gamble",
+      "content": "The preference is defensible only by accepting a non-probabilistic metaphysical commitment to verisimilitude (truth-likeness), arguing that while we cannot know a theory is true or probable, severe testing logically increases its content and proximity to truth. This stance survives Popper's anti-induction critique by shifting the goal from 'predictive reliability' to 'structural approximation,' but it costs the framework its claim to pure logic, smuggling in a rationalist faith that nature rewards boldness with truth-likeness rather than random chaos."
+    },
+    {
+      "angle": "The Pragmatic Inconsistency Charge",
+      "content": "The preference is indefensible on Popper's own terms and constitutes a performative contradiction: when Popper chooses a well-corroborated bridge design over an unfalsified but untested one, he acts exactly as an inductivist would, relying on the implicit premise that past survival indicates future stability. This candidate argues that no amount of semantic maneuvering around 'corroboration' vs. 'probability' can mask the fact that acting on corroboration requires an inductive leap, meaning Popper's system collapses into crypto-induction whenever it leaves the realm of abstract methodology."
+    },
+    {
+      "angle": "The Decision-Theoretic Void",
+      "content": "Popper's framework offers no rational basis for preference in single-case decisions, rendering the scientist's choice between theories arbitrary unless they secretly reintroduce induction. If one strictly adheres to Popper's denial that corroboration implies future success, then choosing the better-corroborated theory for a critical application is logically indistinguishable from flipping a coin, as both options possess equal logical status regarding future performance; thus, the 'preference' scientists feel is merely a psychological habit that Popper mistakenly tried to rationalize as a philosophical principle."
+    }
+  ]
+}

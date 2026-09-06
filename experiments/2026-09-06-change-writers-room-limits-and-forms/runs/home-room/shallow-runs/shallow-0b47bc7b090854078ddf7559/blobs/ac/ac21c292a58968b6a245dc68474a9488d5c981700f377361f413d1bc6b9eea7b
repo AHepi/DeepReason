@@ -1,0 +1,19 @@
+{
+  "objections": [
+    {
+      "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+      "body": "The conjecture falsely attributes a 'non-rational, psychological commitment' to Popper. Popper explicitly argued that preferring the better-corroborated theory is a rational decision based on critical discussion and the aim of finding truth (verisimilitude), not a blind biological impulse. By reducing the preference to a non-rational leap, the conjecture misrepresents Popper's epistemology, which holds that while we cannot prove a theory true, we have rational grounds for believing the one that has withstood the most severe tests is closer to the truth than its refuted rivals.",
+      "would_settle": "A direct citation from Popper's later works (e.g., 'Realism and the Aim of Science') where he explicitly links the preference for corroborated theories to rational critical evaluation rather than mere psychological necessity or pragmatic survival instincts."
+    },
+    {
+      "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+      "body": "The proposal to segregate corroboration as a 'purely historical report' ignores Popper's concept of the 'propensity' interpretation of probability and corroboration as a measure of testability. For Popper, corroboration is not just a backward-looking log of events; it indicates that a theory has survived tests that were likely to refute it if it were false. This survival provides a rational basis for expecting the theory to hold in the future, not because of induction, but because the theory has demonstrated high explanatory power and resilience. Treating it as merely historical strips it of the logical force Popper intended it to have in guiding scientific progress.",
+      "would_settle": null
+    },
+    {
+      "about": "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2",
+      "body": "The conjecture creates a false dichotomy between 'strict rationality' and 'pragmatic imperative,' suggesting Popper must choose one. However, Popper's philosophy integrates these by arguing that the rational act of criticism inherently guides action. To claim that acting on the best-tested theory requires an 'extra-logical leap' implies that science is disconnected from practice, whereas Popper viewed the application of science as the ultimate test of its rationality. The preference is defensible on Popper's terms precisely because it avoids induction without resorting to irrationality; it relies on the logical asymmetry between verification and falsification.",
+      "would_settle": "An analysis showing whether Popper considered the decision to act on a corroborated theory as part of the 'context of discovery' (psychological) or the 'context of justification' (logical)."
+    }
+  ]
+}

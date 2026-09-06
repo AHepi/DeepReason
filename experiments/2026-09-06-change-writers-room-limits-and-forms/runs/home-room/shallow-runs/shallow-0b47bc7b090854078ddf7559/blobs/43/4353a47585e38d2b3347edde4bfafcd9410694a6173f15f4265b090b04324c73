@@ -1,0 +1,24 @@
+{
+  "proposals": [
+    {
+      "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+      "body": "The conjecture is refuted if it can be shown that the concept of 'verisimilitude' (truth-likeness) cannot be formally defined without implicitly relying on inductive probability, thereby making the shift from probability to verisimilitude merely a semantic disguise for the very induction Popper rejected.",
+      "kind": "refuted-if"
+    },
+    {
+      "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+      "body": "The conjecture forbids claiming that surviving severe tests provides a rational basis for preferring one theory over another unless it can demonstrate a logical connection between test survival and increased truth-likeness that does not itself assume the uniformity of nature.",
+      "kind": "forbids"
+    },
+    {
+      "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+      "body": "The conjecture must not treat the 'metaphysical hope' that surviving tests correlates with truth-likeness as a sufficient defense against the charge of cryptic inductivism if that hope functions identically to an inductive premise in guiding practical scientific action.",
+      "kind": "must-not"
+    },
+    {
+      "about": "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd",
+      "body": "The conjecture predicts that a scientist acting strictly on this verisimilitude-based preference will choose the better-corroborated theory for critical applications while simultaneously maintaining that this choice offers no greater expectation of predictive success than choosing a random unfalsified theory.",
+      "kind": "predicts"
+    }
+  ]
+}

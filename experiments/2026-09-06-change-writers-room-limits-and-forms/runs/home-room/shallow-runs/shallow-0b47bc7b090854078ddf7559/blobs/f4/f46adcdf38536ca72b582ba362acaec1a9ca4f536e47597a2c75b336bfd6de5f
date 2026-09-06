@@ -1,0 +1,19 @@
+{
+  "objections": [
+    {
+      "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+      "body": "The conjecture claims that preferring better-corroborated theories is purely a methodological rule for future falsification, yet this fails to explain why scientists rely on these theories for high-stakes practical action (e.g., building bridges or administering medicine). If corroboration implies no increased probability of truth or future success, as Popper insists, then acting on the 'best' corroborated theory is indistinguishable from acting on a known falsehood or an untested guess. The preference only makes sense if one implicitly assumes that past survival under severe tests indicates a higher likelihood of future reliability, which smuggles in the very inductive principle the conjecture claims to avoid.",
+      "would_settle": "A demonstration of how a rational agent can consistently prefer Theory A over Theory B for life-critical decisions without assigning any higher subjective expectation of success to Theory A based on its test history."
+    },
+    {
+      "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+      "body": "The argument that we choose highly corroborated theories because they are the 'most informative target for future falsification' is internally inconsistent with scientific practice. Scientists do not subject their most trusted, well-corroborated theories to destructive testing more often than fringe hypotheses; rather, they use the corroborated theories as a stable foundation to test new, less corroborated ideas. If the goal were truly to maximize the speed of falsification, one should target the most robust theories first to knock them down, but science proceeds by tentatively accepting the robust ones. This suggests the preference is actually epistemic (believing the theory is likely true) rather than the methodological gamble the conjecture describes.",
+      "would_settle": null
+    },
+    {
+      "about": "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca",
+      "body": "The conjecture relies on the assumption that a theory which has survived severe tests is the 'most likely to reveal its falsehood quickly' if it is indeed false. However, this logic is circular: if a theory has already survived the severest possible tests available, there is no logical basis within Popper's framework to claim it is now *more* susceptible to immediate falsification than a theory that has not been tested at all. In fact, a theory that has withstood severe tests has demonstrated resilience, making the claim that it is the optimal candidate for imminent collapse counter-intuitive and unsupported by the definition of corroboration itself.",
+      "would_settle": "Evidence showing that historically, theories with high corroboration are falsified faster than theories with low or zero corroboration when subjected to further testing."
+    }
+  ]
+}

@@ -10,3 +10,5 @@ soak rc=0
   [PASS] D4-reservation-bound     reservation/dispatch bounds
 [soak] exit 0 (clean)
 === room started 2026-09-06T06:06:54Z ===
+room rc=0
+=== chain finished 2026-09-06T06:10:34Z ===
