@@ -1,0 +1,338 @@
+{
+ "arms": {
+  "ARM0R-room-bare vs ARM0-single-call": {
+   "consistent_win_share": 0.6296296296296297,
+   "judge_pairs": 27,
+   "length_ratios": [
+    0.9184721352536005,
+    0.7357545397620538,
+    0.8947710718002081,
+    0.7641779396462018,
+    0.9539542143600416,
+    1.009914624070504,
+    0.8090057835307078,
+    0.8614902943018159,
+    0.9472597080694024
+   ],
+   "losses": 5,
+   "no_preference": 5,
+   "pairs": 9,
+   "role": "control",
+   "unread": 0,
+   "verdict": "NULL",
+   "verdict_before_length_rule": "NULL",
+   "wins": 17,
+   "worst_length_ratio": 1.009914624070504
+  }
+ },
+ "pairs": [
+  {
+   "control_arm": "ARM0-single-call",
+   "control_chars": 7985,
+   "control_source": "arm0/call-3@sha256:21b0c63dbd38baed41a79ca979b49d92d0099e0ec9914b070e702e2c7caaaf71",
+   "judges": [
+    {
+     "consistent": true,
+     "judge": 1,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    },
+    {
+     "consistent": true,
+     "judge": 2,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    },
+    {
+     "consistent": true,
+     "judge": 3,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    }
+   ],
+   "length_ratio": 0.9184721352536005,
+   "pair_id": "159068a8-3184-45a5-81a9-9f38bd55fa6b",
+   "role": "control",
+   "treatment_arm": "ARM0R-room-bare",
+   "treatment_chars": 7334,
+   "treatment_source": "arm0R/call-2@sha256:94dca7e6824a7895947c4137d66d6f3df5f0e25209ba1c32c2f37deb15b1a03f"
+  },
+  {
+   "control_arm": "ARM0-single-call",
+   "control_chars": 7985,
+   "control_source": "arm0/call-3@sha256:21b0c63dbd38baed41a79ca979b49d92d0099e0ec9914b070e702e2c7caaaf71",
+   "judges": [
+    {
+     "consistent": true,
+     "judge": 1,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    },
+    {
+     "consistent": true,
+     "judge": 2,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    },
+    {
+     "consistent": true,
+     "judge": 3,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    }
+   ],
+   "length_ratio": 0.7357545397620538,
+   "pair_id": "2186f687-aea3-49f6-b620-6b5169998ddf",
+   "role": "control",
+   "treatment_arm": "ARM0R-room-bare",
+   "treatment_chars": 5875,
+   "treatment_source": "arm0R/call-3@sha256:70003e8af67a74d5fc97c3bb20c7179f21c5f0fa6de14a123e1276d7b0ac66eb"
+  },
+  {
+   "control_arm": "ARM0-single-call",
+   "control_chars": 7688,
+   "control_source": "arm0/call-2@sha256:0de4306afcd807046f8365b1c1e49599ecb739d522def05a8f7e1f90b307c9e3",
+   "judges": [
+    {
+     "consistent": false,
+     "judge": 1,
+     "order_LR": "right",
+     "order_RL": "left",
+     "outcome": "no-preference"
+    },
+    {
+     "consistent": false,
+     "judge": 2,
+     "order_LR": "right",
+     "order_RL": "left",
+     "outcome": "no-preference"
+    },
+    {
+     "consistent": false,
+     "judge": 3,
+     "order_LR": "right",
+     "order_RL": "left",
+     "outcome": "no-preference"
+    }
+   ],
+   "length_ratio": 0.8947710718002081,
+   "pair_id": "323c4784-f291-48da-890a-edc58abae225",
+   "role": "control",
+   "treatment_arm": "ARM0R-room-bare",
+   "treatment_chars": 6879,
+   "treatment_source": "arm0R/call-1@sha256:effb8afea157e4ffcb69bf8ea7b8434927144c363687736068f524c6bc5a31e5"
+  },
+  {
+   "control_arm": "ARM0-single-call",
+   "control_chars": 7688,
+   "control_source": "arm0/call-2@sha256:0de4306afcd807046f8365b1c1e49599ecb739d522def05a8f7e1f90b307c9e3",
+   "judges": [
+    {
+     "consistent": true,
+     "judge": 1,
+     "order_LR": "right",
+     "order_RL": "right",
+     "outcome": "right"
+    },
+    {
+     "consistent": true,
+     "judge": 2,
+     "order_LR": "right",
+     "order_RL": "right",
+     "outcome": "right"
+    },
+    {
+     "consistent": true,
+     "judge": 3,
+     "order_LR": "right",
+     "order_RL": "right",
+     "outcome": "right"
+    }
+   ],
+   "length_ratio": 0.7641779396462018,
+   "pair_id": "5737ca5c-e6bd-479c-903b-79af1c73c518",
+   "role": "control",
+   "treatment_arm": "ARM0R-room-bare",
+   "treatment_chars": 5875,
+   "treatment_source": "arm0R/call-3@sha256:70003e8af67a74d5fc97c3bb20c7179f21c5f0fa6de14a123e1276d7b0ac66eb"
+  },
+  {
+   "control_arm": "ARM0-single-call",
+   "control_chars": 7688,
+   "control_source": "arm0/call-2@sha256:0de4306afcd807046f8365b1c1e49599ecb739d522def05a8f7e1f90b307c9e3",
+   "judges": [
+    {
+     "consistent": false,
+     "judge": 1,
+     "order_LR": "right",
+     "order_RL": "left",
+     "outcome": "no-preference"
+    },
+    {
+     "consistent": true,
+     "judge": 2,
+     "order_LR": "right",
+     "order_RL": "right",
+     "outcome": "right"
+    },
+    {
+     "consistent": true,
+     "judge": 3,
+     "order_LR": "right",
+     "order_RL": "right",
+     "outcome": "right"
+    }
+   ],
+   "length_ratio": 0.9539542143600416,
+   "pair_id": "67dd5acd-8a9c-4673-8b0d-9f0c3d141da2",
+   "role": "control",
+   "treatment_arm": "ARM0R-room-bare",
+   "treatment_chars": 7334,
+   "treatment_source": "arm0R/call-2@sha256:94dca7e6824a7895947c4137d66d6f3df5f0e25209ba1c32c2f37deb15b1a03f"
+  },
+  {
+   "control_arm": "ARM0-single-call",
+   "control_chars": 7262,
+   "control_source": "arm0/call-1@sha256:13fbff724bc51a1f55a635d928c40892f763562689959a3ef7a320c953339d08",
+   "judges": [
+    {
+     "consistent": true,
+     "judge": 1,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    },
+    {
+     "consistent": true,
+     "judge": 2,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    },
+    {
+     "consistent": true,
+     "judge": 3,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    }
+   ],
+   "length_ratio": 1.009914624070504,
+   "pair_id": "7c27fffc-8851-406e-b549-45ca9f09254b",
+   "role": "control",
+   "treatment_arm": "ARM0R-room-bare",
+   "treatment_chars": 7334,
+   "treatment_source": "arm0R/call-2@sha256:94dca7e6824a7895947c4137d66d6f3df5f0e25209ba1c32c2f37deb15b1a03f"
+  },
+  {
+   "control_arm": "ARM0-single-call",
+   "control_chars": 7262,
+   "control_source": "arm0/call-1@sha256:13fbff724bc51a1f55a635d928c40892f763562689959a3ef7a320c953339d08",
+   "judges": [
+    {
+     "consistent": true,
+     "judge": 1,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    },
+    {
+     "consistent": true,
+     "judge": 2,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    },
+    {
+     "consistent": true,
+     "judge": 3,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    }
+   ],
+   "length_ratio": 0.8090057835307078,
+   "pair_id": "81082532-7267-4d03-9a3b-9c5de5f1c82a",
+   "role": "control",
+   "treatment_arm": "ARM0R-room-bare",
+   "treatment_chars": 5875,
+   "treatment_source": "arm0R/call-3@sha256:70003e8af67a74d5fc97c3bb20c7179f21c5f0fa6de14a123e1276d7b0ac66eb"
+  },
+  {
+   "control_arm": "ARM0-single-call",
+   "control_chars": 7985,
+   "control_source": "arm0/call-3@sha256:21b0c63dbd38baed41a79ca979b49d92d0099e0ec9914b070e702e2c7caaaf71",
+   "judges": [
+    {
+     "consistent": true,
+     "judge": 1,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    },
+    {
+     "consistent": true,
+     "judge": 2,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    },
+    {
+     "consistent": false,
+     "judge": 3,
+     "order_LR": "right",
+     "order_RL": "left",
+     "outcome": "no-preference"
+    }
+   ],
+   "length_ratio": 0.8614902943018159,
+   "pair_id": "ec6f7e36-1734-4835-8289-9817ce94ae67",
+   "role": "control",
+   "treatment_arm": "ARM0R-room-bare",
+   "treatment_chars": 6879,
+   "treatment_source": "arm0R/call-1@sha256:effb8afea157e4ffcb69bf8ea7b8434927144c363687736068f524c6bc5a31e5"
+  },
+  {
+   "control_arm": "ARM0-single-call",
+   "control_chars": 7262,
+   "control_source": "arm0/call-1@sha256:13fbff724bc51a1f55a635d928c40892f763562689959a3ef7a320c953339d08",
+   "judges": [
+    {
+     "consistent": true,
+     "judge": 1,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    },
+    {
+     "consistent": true,
+     "judge": 2,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    },
+    {
+     "consistent": true,
+     "judge": 3,
+     "order_LR": "left",
+     "order_RL": "left",
+     "outcome": "left"
+    }
+   ],
+   "length_ratio": 0.9472597080694024,
+   "pair_id": "f562f416-164c-4da4-a8cd-18aeb18b54c8",
+   "role": "control",
+   "treatment_arm": "ARM0R-room-bare",
+   "treatment_chars": 6879,
+   "treatment_source": "arm0R/call-1@sha256:effb8afea157e4ffcb69bf8ea7b8434927144c363687736068f524c6bc5a31e5"
+  }
+ ],
+ "schema": "pairwise-forced-choice.v1",
+ "verdict": "INCONCLUSIVE -- an arm has no usable unit (PREREG \u00a77 floor)"
+}
