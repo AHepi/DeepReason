@@ -1,5 +1,5 @@
 # Checklist for: adopt h-EPI's claims mechanism for DeepReason's measures
-State: next=8 blockers=none
+State: next=11 blockers=none
 Map ids this plan was built on: `DR-INDEX`, `DR-INV-frozen-surfaces`,
 `DR-SUB-harness`, `DR-CON-evidence-states`, `DR-INV-evidence-channels`,
 `DR-SUB-evidence`, `DR-INV-reference-menu`, `DR-SUB-verification`,
@@ -47,17 +47,17 @@ One step per dr-execute-step invocation.
       file together with the pasted output in the message.
       done-when: `git status --porcelain tools/ experiments/2026-09-06-change-writers-room-organiser-testing/` is empty.
 
-- [ ] 8. (S10, S12) Write `tests/test_record_claims.py`: synthetic roots for
+- [x] 8. (S10, S12) Write `tests/test_record_claims.py`: synthetic roots for
       each primitive, an `always` refutation, a full survival, both
       standings, `NOT_TESTED`, the fail-closed vocabulary tests, the
       mutation proof, and the read-only proof.
       done-when: `python -m pytest tests/test_record_claims.py -q` ->
       `N passed`, 0 failed (paste the line).
 
-- [ ] 9. (S10) Ring: the test files this change could plausibly disturb.
+- [x] 9. (S10) Ring: the test files this change could plausibly disturb.
       done-when: `python -m pytest tests/test_record_claims.py tests/test_provider_transport_faults.py -q` -> 0 failed.
 
-- [ ] 10. (S10, S12) [COMMIT] Commit the tests.
+- [x] 10. (S10, S12) [COMMIT] Commit the tests.
       done-when: `git status --porcelain tests/` is empty.
 
 - [ ] 11. (S11) Append the instrument section to
