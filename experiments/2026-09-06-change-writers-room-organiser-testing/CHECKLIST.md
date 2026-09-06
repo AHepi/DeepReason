@@ -61,7 +61,7 @@ Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 inserti
       done-when: `git status --porcelain` is empty AND `git rev-parse HEAD origin/claude/writers-room-organiser-testing-degagn` prints one hash twice
       output: final commit below; `git status --porcelain` empty and one hash from `git rev-parse HEAD origin/claude/writers-room-organiser-testing-degagn` — pasted in DELIVERY's branch line.
 
-## Launch window (SPEC Amendment 3; R26–R36). State: next=25 blockers=none (the chain is running: soak -> attached-evidence battery -> ARM R -> ARM 0R)
+## Launch window (SPEC Amendment 3; R26–R36). State: DONE — all 30 steps checked; VALIDATION PASS; delivered. The measure's verdict is INCONCLUSIVE (ARM R failed; the rubric is saturated).
 Pre-launch base: the commit that seals PREREG Amendments 1–4 (step 23).
 
 - [x] 20. (S30) Write `runs/arm0R.py` and `runs/arm0R.sh`; `chmod +x`.
@@ -78,15 +78,21 @@ Pre-launch base: the commit that seals PREREG Amendments 1–4 (step 23).
 - [x] 24. (S31, S26) Launch: `env` present, ignored, mode 600; `setsid nohup runs/chain.sh > runs/chain.log 2>&1 & disown` from the repository root.
       done-when: `runs/chain.log` shows `soak rc=0` and the battery started; the snapshot loop's PID exists
       output: `env ignored` / `600 73 bytes` / `no key in the record`; launched detached from the repository root at 2026-09-06T08:50:29Z on head `337fc5cc6`; `chain.log` opens `=== chain started … ===` and `--- soak: cycle_soak --case epoch3 ---`; chain PID 2185. A monitor is armed on `chain.log` for the rc lines, roots and failure signatures.
-- [ ] 25. (S32) Monitor to ARM R's terminal: `progress.jsonl` (cycle, phase, tokens) and the `rc=` lines; on `rc=0` commit the root and logs.
+- [x] 25. (S32) Monitor to ARM R's terminal: `progress.jsonl` (cycle, phase, tokens) and the `rc=` lines; on `rc=0` commit the root and logs.
       done-when: `run-status.json` `state: completed`; `deepreason results --json --verify` 0 violations; organiser-rendered count > 0; dossier digest `2a49cd52…` in the admission summary
-- [ ] 26. (S30) ARM 0R's three calls complete (chain runs them); commit `runs/arm0R/`.
+      output: ARM R terminal: `state failed, stop_reason operational_failure, cycle 3, spend 464359 of 500000`; `verify_root` 0 violations, `/verification/valid True`; 15 section plans name `dr.output-contract.organiser` (0 would have been INVALID); admission 3 sources / 94 blocks / 0 refusals under digest `d2120e7d…` (the pin corrected by Amendment 5). A FAILED arm under PREREG §3; not relaunched.
+- [x] 26. (S30) ARM 0R's three calls complete (chain runs them); commit `runs/arm0R/`.
       done-when: `ARM0R_RESULT.json` has `completed_calls: 3`
-- [ ] 27. (S33) [COMMIT] `judge_organiser.py harvest`, then `score`, then `reveal`; commit `blind/` whole.
+      output: `completed_calls 3, total_tokens 47345`; three calls at 5875/7334/5875-plus chars, all `finish_reason: stop`; `runs/arm0R/` committed whole.
+- [x] 27. (S33) [COMMIT] `judge_organiser.py harvest`, then `score`, then `reveal`; commit `blind/` whole.
       done-when: `blind/scores.json` exists with every unit scored or marked failed; reveal output pasted
-- [ ] 28. (S29, S34) [COMMIT] `analyse_organiser.py --json runs/VERDICT.json`; RESULTS.md dated segment with every R35 content and the appendix.
+      output: harvest: `notice: armR is a FAILED arm … its unit is NOT harvested (PREREG §3)`, `notice: ARM H deferred`, `harvested 6 units from 3 arms`; score: `scored 6 candidates`; reveal: ARM0 mean 15.00, ARM0R mean 15.00, contested 0. `blind/` committed whole.
+- [x] 28. (S29, S34) [COMMIT] `analyse_organiser.py --json runs/VERDICT.json`; RESULTS.md dated segment with every R35 content and the appendix.
       done-when: S34's greps hold; the verdict is quoted in the rule's words
-- [ ] 29. (S35, S36) VALIDATION.md re-issued (every S26–S36 accept run; scope diffs pasted; no gate — say so).
+      output: `VERDICT (PREREG §7 as amended): INCONCLUSIVE -- an arm has no usable unit (§7 floor)`; RESULTS.md's second dated segment carries the terminals, the spend table, the census, the scores, the verdict in the rule's words, the appendix and the residue.
+- [x] 29. (S35, S36) VALIDATION.md re-issued (every S26–S36 accept run; scope diffs pasted; no gate — say so).
       done-when: verdict line present
-- [ ] 30. (S36) [COMMIT] DELIVERY.md re-issued with R1–R36; push; clean tree.
+      output: VALIDATION.md's launch-window section: every S26–S36 accept run with output; scope diffs empty; no gate run and none owed.
+- [x] 30. (S36) [COMMIT] DELIVERY.md re-issued with R1–R36; push; clean tree.
       done-when: `git status --porcelain` empty; one hash from `git rev-parse HEAD origin/…`
+      output: DELIVERY.md extended with R26–R36; `git status --porcelain` empty; `git rev-parse HEAD origin/…` prints `3acb0b187c0f6df05e99073a9a3efc67feefe2b4` twice.
