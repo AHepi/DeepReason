@@ -49,7 +49,7 @@ Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 inserti
 - [x] 15. (S20) [COMMIT] Run `python -u scripts/cycle_soak.py --case epoch3 | tee runs/soak.log` (offline; no key needed) and commit the log.
       done-when: `runs/soak.log` ends with a clean exit (`rc=0` appended by the runner line)
       output: `runs/soak.log` ends `[soak] exit 0 (clean)` / `rc=0` — epoch3, qualified in 3.5s, 8 cycles driven against the stub, 32 semantic admissions, 63 token reservations. Run after the full docs_verify returned (one worker-spawning instrument at a time).
-- [ ] 16. (S10, S22, S23, S24) [COMMIT] Write `RESULTS.md`: the dated segment (what the record shows offline; what it does not — no arm ran; one question, one model, one room), the 12-of-12 statement, the failure-budget ledger at 0.
+- [x] 16. (S10, S22, S23, S24) [COMMIT] Write `RESULTS.md`: the dated segment (what the record shows offline; what it does not — no arm ran; one question, one model, one room), the 12-of-12 statement, the failure-budget ledger at 0.
       done-when: the S10, S22, S23 (RESULTS half), S24 greps hold
 - [x] 17. (S25) Map check, full: `python tools/docs_verify.py` and `--audit` and `--links`.
       done-when: 0 failed; 0 audit findings; 0 dangling
@@ -73,8 +73,10 @@ Pre-launch base: the commit that seals PREREG Amendments 1–4 (step 23).
 - [x] 22. (S27, S30) [COMMIT] Edit `runs/armR.sh` line 26 (`--token-budget 500000`) and `runs/chain.sh` (drop lines 14's `armH` dir, 21, 23; append ARM 0R after ARM R); commit steps 20–22.
       done-when: `grep -c -- '--token-budget 500000' runs/armR.sh` -> 1; `! grep -q armH.sh runs/chain.sh`; `grep -c arm0R.sh runs/chain.sh` -> 1; `bash -n` on both
       output: armR.sh line 26 `--token-budget 500000` (2 diff lines: `-`/`+`); chain.sh: `! grep -q armH.sh` ok, `arm0R.sh` count 1, `bash -n` ok; diff: line 14 mkdir now `armR arm0R`, lines 21 (ARM H setup) and 23 (ARM H arm) removed, `arm0R.sh` appended after ARM R, header comment rewritten.
-- [ ] 23. (S28) [COMMIT] Append PREREG.md Amendments 1–4 with the instruments' sha256s pinned; commit with `sha256: <digest of PREREG.md>` in the message.
+      output: RESULTS.md's first dated segment written in the build window (the offline record, the 12-of-12 statement, the failure-budget ledger at 0); its accepts are VALIDATION S10, S22, S23, S24, all PASS. Box ticked late, at the launch window's close.
+- [x] 23. (S28) [COMMIT] Append PREREG.md Amendments 1–4 with the instruments' sha256s pinned; commit with `sha256: <digest of PREREG.md>` in the message.
       done-when: `sha256sum PREREG.md` equals the digest in the commit message
+      output: PREREG Amendments 1–4 appended and sealed: the commit for `PREREG.md` carries `sha256: c371b129417693257bbc47d3f8cb5f25350a6b9397d2143e66bfc352c6ecf012`, which equalled `sha256sum PREREG.md` at that commit; the instruments' digests are pinned in the amendment. (Amendments 5 and 6 were appended later, each re-sealed the same way; the current digest is `cd4b19da…`.) The first attempt at this step was interrupted before the file was written and left no trace; re-run and verified.
 - [x] 24. (S31, S26) Launch: `env` present, ignored, mode 600; `setsid nohup runs/chain.sh > runs/chain.log 2>&1 & disown` from the repository root.
       done-when: `runs/chain.log` shows `soak rc=0` and the battery started; the snapshot loop's PID exists
       output: `env ignored` / `600 73 bytes` / `no key in the record`; launched detached from the repository root at 2026-09-06T08:50:29Z on head `337fc5cc6`; `chain.log` opens `=== chain started … ===` and `--- soak: cycle_soak --case epoch3 ---`; chain PID 2185. A monitor is armed on `chain.log` for the rc lines, roots and failure signatures.
