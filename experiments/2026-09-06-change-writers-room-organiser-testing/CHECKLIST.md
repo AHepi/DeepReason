@@ -60,3 +60,32 @@ Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 inserti
 - [x] 19. (all) [COMMIT] push and confirm clean tree.
       done-when: `git status --porcelain` is empty AND `git rev-parse HEAD origin/claude/writers-room-organiser-testing-degagn` prints one hash twice
       output: final commit below; `git status --porcelain` empty and one hash from `git rev-parse HEAD origin/claude/writers-room-organiser-testing-degagn` — pasted in DELIVERY's branch line.
+
+## Launch window (SPEC Amendment 3; R26–R36). State: next=23 blockers=none
+Pre-launch base: the commit that seals PREREG Amendments 1–4 (step 23).
+
+- [x] 20. (S30) Write `runs/arm0R.py` and `runs/arm0R.sh`; `chmod +x`.
+      done-when: `python runs/arm0R.py --dry-run` prints the prompt's byte count and sha256 and makes no call; `bash -n runs/arm0R.sh` exit 0
+      output: `prompt 60675 chars, 60680 bytes, sha256 03a8280867a704459d835e9facc6d81573e7a755ea27c3bc561218732e050f5e; no call made`; `bash -n runs/arm0R.sh` exit 0.
+- [x] 21. (S29) Extend `tools/judge_organiser.py` (fourth arm; ARM H deferred as a notice) and `tools/analyse_organiser.py` (R vs 0, R vs 0R; the room-content reading).
+      done-when: CRITERIA diff against `d8/judge_d8.py` empty; both `--help` exit 0; `grep -c 'ARM0R-room-bare'` ≥ 1 in each
+      output: `CRITERIA identical`; `help ok` (both); `grep -c ARM0R-room-bare` -> 1 and 1.
+- [x] 22. (S27, S30) [COMMIT] Edit `runs/armR.sh` line 26 (`--token-budget 500000`) and `runs/chain.sh` (drop lines 14's `armH` dir, 21, 23; append ARM 0R after ARM R); commit steps 20–22.
+      done-when: `grep -c -- '--token-budget 500000' runs/armR.sh` -> 1; `! grep -q armH.sh runs/chain.sh`; `grep -c arm0R.sh runs/chain.sh` -> 1; `bash -n` on both
+      output: armR.sh line 26 `--token-budget 500000` (2 diff lines: `-`/`+`); chain.sh: `! grep -q armH.sh` ok, `arm0R.sh` count 1, `bash -n` ok; diff: line 14 mkdir now `armR arm0R`, lines 21 (ARM H setup) and 23 (ARM H arm) removed, `arm0R.sh` appended after ARM R, header comment rewritten.
+- [ ] 23. (S28) [COMMIT] Append PREREG.md Amendments 1–4 with the instruments' sha256s pinned; commit with `sha256: <digest of PREREG.md>` in the message.
+      done-when: `sha256sum PREREG.md` equals the digest in the commit message
+- [ ] 24. (S31, S26) Launch: `env` present, ignored, mode 600; `setsid nohup runs/chain.sh > runs/chain.log 2>&1 & disown` from the repository root.
+      done-when: `runs/chain.log` shows `soak rc=0` and the battery started; the snapshot loop's PID exists
+- [ ] 25. (S32) Monitor to ARM R's terminal: `progress.jsonl` (cycle, phase, tokens) and the `rc=` lines; on `rc=0` commit the root and logs.
+      done-when: `run-status.json` `state: completed`; `deepreason results --json --verify` 0 violations; organiser-rendered count > 0; dossier digest `2a49cd52…` in the admission summary
+- [ ] 26. (S30) ARM 0R's three calls complete (chain runs them); commit `runs/arm0R/`.
+      done-when: `ARM0R_RESULT.json` has `completed_calls: 3`
+- [ ] 27. (S33) [COMMIT] `judge_organiser.py harvest`, then `score`, then `reveal`; commit `blind/` whole.
+      done-when: `blind/scores.json` exists with every unit scored or marked failed; reveal output pasted
+- [ ] 28. (S29, S34) [COMMIT] `analyse_organiser.py --json runs/VERDICT.json`; RESULTS.md dated segment with every R35 content and the appendix.
+      done-when: S34's greps hold; the verdict is quoted in the rule's words
+- [ ] 29. (S35, S36) VALIDATION.md re-issued (every S26–S36 accept run; scope diffs pasted; no gate — say so).
+      done-when: verdict line present
+- [ ] 30. (S36) [COMMIT] DELIVERY.md re-issued with R1–R36; push; clean tree.
+      done-when: `git status --porcelain` empty; one hash from `git rev-parse HEAD origin/…`

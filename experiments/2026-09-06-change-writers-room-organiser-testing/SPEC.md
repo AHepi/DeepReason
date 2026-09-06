@@ -348,3 +348,68 @@ evidence, not less machinery): the ceiling for `src tests docs/map` is raised
 from 450 to 800; the re-measured total is stated in CHECKLIST step 7.
 Override any time. No scope moved: the same three source files, one test
 file, one map document.
+
+## Amendment 3 (2026-09-06, the launch window) — the reading of "It needs a test run now. Propose some for a single model run and test against bare model. 500k tokens"
+
+**The reading (R27).** ONE harness run — the sealed ARM R (`runs/armR.sh`: the
+full harness, the room attached, the organiser seat, the evidence-blind
+critic) — against the BARE model in two forms: ARM 0 as sealed (three recorded
+plain calls, reused by digest, never respent) and a NEW ARM 0R: the same
+model, the same frozen question, the room's three attachment files pasted
+verbatim into the user message after the question — no harness, no schema,
+no system prompt, reasoning off, `max_tokens` 8192 (PREREG_D8 §1's call shape
+plus the room text) — three calls. ARM H (the harness alone) is DEFERRED, not
+deleted. "500k tokens" is ARM R's ceiling: `--token-budget 500000`, cycles 4
+as sealed.
+
+**Budget prediction (R28), from the record.** The M1 control arm (same model,
+same question family, 4 cycles, pack 2 500, ceiling 600 000) spent 541 666
+tokens: 48 conjecturer calls (394 112; mean 8 210) and 88 critic calls
+(147 554) — about 135 000 per cycle, 12 conjecturer calls per cycle across the
+seed and its derived problems. ARM R's organiser brief is ~23 000 prompt
+tokens (`proof/ORGANISER_RECEIPTS.json`: 91 795 bytes) but only the SEED
+problem's calls render the frozen room (the frozen-evidence source is gated on
+the epoch problem; derived problems get the 6 113-byte legend only), so a
+cycle costs roughly 135 000 plus ~17 000 per seed-problem conjecturer call.
+At 2–4 seed calls per cycle that is ~170 000–200 000 per cycle: the 500 000
+ceiling ends the run in CYCLE 3 (registered prediction), CYCLE 2 if the seed
+problem is called more often than that, and reaching cycle 4 would falsify
+the estimate that the room costs the run at least 35 000 tokens per cycle.
+
+### Items
+
+S26 (R26, R33): the launch. `runs/chain.sh` detached from the repository root with the snapshot loop armed; soak first; ARM R then ARM 0R.
+    accept: `runs/chain.log` carries `soak rc=0`, ARM R's `rc=0` and `root=…`, ARM 0R's `rc=0`; the newest root under `runs/home-r/runs/` has `run-status.json` with `state: completed`.
+S27 (R28): `runs/armR.sh` line 26: `--token-budget 800000` → `--token-budget 500000`; nothing else in that file moves.
+    accept: `grep -c -- '--token-budget 500000' runs/armR.sh` -> 1; `git diff <pre-launch base> -- runs/armR.sh | grep -c '^[-+]' ` -> 2 (one line out, one in).
+S28 (R29): PREREG.md Amendments 1–4 appended (ceiling + prediction; ARM 0R; ARM H deferred; the pairwise rule and the room-content reading), instruments' sha256s pinned, re-sealed by sha256 in the commit message.
+    accept: `sha256sum PREREG.md` equals the digest in `git log -1 --format=%B -- PREREG.md`; `grep -c '^## Amendment' PREREG.md` -> 4 sections (one heading with four numbered amendments is accepted).
+S29 (R30): `tools/judge_organiser.py harvest` reads a fourth arm `ARM0R-room-bare` from `runs/arm0R/call-*.json` (pinning each file's sha256 into the keymap) and treats a missing ARM H as deferred (a notice, not a refusal); `tools/analyse_organiser.py` reports R vs 0 and R vs 0R, applies §7 pairwise, prints the room-content reading when R is BETTER than 0 but not BETTER than 0R; the `CRITERIA` block byte-identical to D8's.
+    accept: the sealed `diff` of the CRITERIA blocks is empty; `python tools/judge_organiser.py --help` and `python tools/analyse_organiser.py --help` exit 0; `grep -c 'ARM0R-room-bare' tools/judge_organiser.py tools/analyse_organiser.py` -> ≥1 each.
+S30 (R31): `runs/arm0R.sh` + `runs/arm0R.py` (the D8 `arm0.py` call shape; the user message = question + blank line + the three files' bytes verbatim, in name order; records `request`, `response`, `usage`, `finish_reason`, `content`, the attachment digests and the prompt's sha256 per call; writes `runs/arm0R/call-{1,2,3}.json` and `ARM0R_RESULT.json`); `runs/chain.sh`: lines 14 (mkdir), 21 (ARM H's setup) and 23 (ARM H's arm) removed, ARM 0R appended after ARM R — the amendment names the lines.
+    accept: `bash -n runs/arm0R.sh runs/chain.sh` exit 0; `python runs/arm0R.py --dry-run` prints the prompt's byte count and sha256 without a call; `! grep -q 'armH.sh' runs/chain.sh`; `grep -c 'arm0R.sh' runs/chain.sh` -> 1.
+S31 (R32): the credential. `git check-ignore -q env`; mode 600; never committed, never printed.
+    accept: `git check-ignore -q env` exit 0; `stat -c %a env` -> 600; `! git grep -n 'OLLAMA_API_KEY=[A-Za-z0-9]' -- .` exit 0 on every commit of this window.
+S32 (R33): typed outcomes only. ARM R judged on `run-status.json` (`state`, `stop_reason`), `deepreason results <root> --json --verify` (0 violations, replay digest equal), the admission summary's dossier digest `2a49cd52…`, and the organiser-rendered count armR.sh prints (0 → INVALID, not judged). ONE relaunch only for a pre-cycle-1 transport death, disclosed.
+    accept: RESULTS.md's segment quotes each of these from the record.
+S33 (R34): harvest → score → reveal → analyse, in that order; `reveal` refuses without `blind/scores.json`.
+    accept: `blind/scores.json` committed; `git log` shows the reveal output in RESULTS after the scores' commit.
+S34 (R35): RESULTS.md dated segment with every listed content; ARM R's composed unit quoted whole in an appendix; NULL in the word NULL.
+    accept: `grep -c '^## 2026-09-06' RESULTS.md` -> 2; `grep -q 'Appendix' RESULTS.md`; `grep -q 'Failure budget' RESULTS.md`.
+S35 (R36): scope. `git diff --stat <pre-launch base>..HEAD -- src mini tests` empty; `sha256sum -c attachment/ATTACHMENT.sha256` OK; no gate run.
+    accept: the two commands' outputs pasted in VALIDATION.md.
+S36 (R36, R25): VALIDATION.md and DELIVERY.md re-issued for this window with the table extended to R26–R36.
+    accept: DELIVERY.md's table has rows R1–R36.
+
+### Assumptions (operator may override)
+A12: ARM 0R's user message is the question, one blank line, then the three files' contents verbatim in name order separated by blank lines — no label, no instruction, so the bare model sees the room and nothing that tells it what the room is beyond each record's own header line. Assumed, operator may override.
+A13: ARM 0R's three calls count as the plan, not the failure budget; the attached-evidence battery is the plan and is not counted in the 500 000.
+A14: the pre-launch base for the diff checks is the commit that seals PREREG Amendments 1–4.
+
+### Frozen-surface contact forecast
+none — no file under `src/` moves (R36); `tools/blast_radius.py` is not owed for tranche artefacts.
+
+### Budget
+~0 lines under `src`/`tests`/`docs/map`; ~250 lines of tranche scripts and instrument edits; the run roots and `blind/` as evidence.
+
+Rubric: 6/6 yes — every R26–R36 has an item with an accept; no census owed (no code); no frozen contact; the named mechanisms (armR.sh, chain.sh, judge/analyse, D8's arm0.py) exist and are the files edited; not DESIGN-AND-STOP; nothing untraceable.
