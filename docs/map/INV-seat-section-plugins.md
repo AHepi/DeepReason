@@ -67,7 +67,7 @@ else:
 |---|---|
 | the protocol, the request, the render, the receipt | `llm/seat_sections.py` |
 | the registries and their resolution | `llm/seat_sections.py` |
-| the seeded plugins (20 conjecturer + 10 critic + an episode slot) | `llm/seat_plugins.py` |
+| the seeded plugins (21 conjecturer, one of them the organiser's contract, + 10 critic + an episode slot) | `llm/seat_plugins.py` |
 | the shipped layouts and shells | `llm/seat_layouts.py` |
 | formatting without code | `llm/seat_templates.py` |
 | the prose that wraps a brief | `llm/role_prompts.py` |
@@ -147,6 +147,37 @@ from minireason.seats import form_for_seat
 assert form_for_seat('mini.critic').form_id == resolve_seat_shell('mini.critic').form_id
 "`
 
+**Four shipped shells, two of them never defaults.** The organiser
+(`seat.conjecturer.organiser-v1`) is the first registered instance of "a
+conjecturer split in two": the same seat, a brief that renders a writer's
+room as frozen evidence with both evidence sections EXACT and the inventive
+sections gone, a directive that says organise and do not invent, its own
+wording, and the form the managed conjecturer already fills —
+`conjecturer.turn.v6`, whose reasoning candidate is the same
+`ReasoningCandidateProposal` that `reasoning.conjecturer.compact.v2` compiles
+to. Beside it, `seat.critic.evidence-blind-v1` is the legacy critic layout
+without the premise invitation and the citable legend, for a run whose critic
+must attack the organised candidates on its own terms. Both are selected only
+through `DEEPREASON_SEAT_SHELL`; the two defaults and both goldens do not move
+(`experiments/2026-09-06-change-writers-room-organiser-testing/`).
+`check: python -c "
+from deepreason.llm.seat_plugins import ensure_seeded; ensure_seeded()
+from deepreason.llm.seat_layouts import CONJECTURER_LEGACY_SHELL, CRITIC_LEGACY_LAYOUT, CRITIC_LEGACY_SHELL
+from deepreason.llm.seat_sections import resolve_seat_pack_layout, resolve_seat_shell
+from deepreason.llm.wire import ReasoningConjecturerTurnWireV6
+from deepreason.workloads.text import ReasoningCandidateProposal
+o = resolve_seat_shell('conjecturer', 'seat.conjecturer.organiser-v1')
+assert o.form_id == 'conjecturer.turn.v6' and o.layout_id == 'seat-pack.conjecturer.organiser-v1'
+assert ReasoningConjecturerTurnWireV6.model_fields['candidates'].annotation == list[ReasoningCandidateProposal]
+ids = {e.plugin_id: e for e in resolve_seat_pack_layout('conjecturer', o.layout_id).entries}
+assert ids['dr.output-contract.organiser'] and 'dr.output-contract.conjecturer' not in ids
+assert not ids['dr.evidence.frozen'].droppable and not ids['dr.evidence.citable'].compressible
+b = resolve_seat_pack_layout('argumentative_critic', 'seat-pack.critic.evidence-blind-v1')
+assert [e.plugin_id for e in b.entries] == [e.plugin_id for e in CRITIC_LEGACY_LAYOUT.entries if e.plugin_id not in ('dr.premise-invitation', 'dr.evidence.citable')]
+assert resolve_seat_shell('conjecturer') == CONJECTURER_LEGACY_SHELL and resolve_seat_shell('argumentative_critic') == CRITIC_LEGACY_SHELL
+"`
+`check: python -m pytest tests/test_organiser_seat.py -q`
+
 **Only the operator authors a plugin.** A `.py` plugin executes inside the
 harness; an id that does not resolve is a typed refusal, never a load-by-path.
 `check: python -m pytest tests/test_seat_section_home.py -q`
@@ -159,7 +190,7 @@ harness; an id that does not resolve is a typed refusal, never a load-by-path.
 | change what one of the nine record-backed sections CONTAINS | its SOURCE — `DR-INV-seat-section-sources` | `tests/test_seat_section_sources.py`, then the goldens |
 | add a section to a brief | register a plugin, add a layout entry — no source edit | `tests/test_seat_section_architecture.py` |
 | change where a section sits, or its budget | the layout entry | the goldens |
-| add a seat kind | register a `SeatShellV1` | `tests/test_seat_shell_swap.py` |
+| add a seat kind | register a `SeatShellV1` (worked instance: the organiser, `llm/seat_layouts.py`) | `tests/test_seat_shell_swap.py`, `tests/test_organiser_seat.py` |
 | change the prose around a brief | register a `RolePromptTemplateV1` | `tests/test_role_prompt_registry.py` |
 | loosen what a reply may look like | `wire.py::_normalise_shape` | `tests/test_wire_normalisation.py` |
 

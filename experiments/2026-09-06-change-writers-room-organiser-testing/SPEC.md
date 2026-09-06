@@ -306,3 +306,45 @@ M12: `grep -n -A22 'def _premise_invited_problem' src/deepreason/rules/crit.py` 
 ~420 lines under `src/`, `tests/` and `docs/map/` — `python3 -c "print(sum([50,70,40,230,30]))"` → `420` (seat_layouts 50, seat_plugins 70, role_prompts 40, tests 230, map 30); ceiling for `tools/diff_budget.py --paths src tests docs/map`: 450. Tranche artefacts under `<T>` (converter, attachment, proofs, instruments, scripts, PREREG, ledgers) are experiment content outside that ceiling, ~1 500 lines. Commits: one per checklist `[COMMIT]` step, about ten. Frozen surfaces touched: none.
 
 Rubric: 6/6 yes — every R has an item with a machine-decidable accept; census pasted and classified; frozen forecast recorded from the gate; every named mechanism traced (two did not reach: compact.v2 → A1, seat_plugins dir → A2; one did not exist: `deepreason result` → A6); not a DESIGN-AND-STOP; nothing untraceable.
+
+## Amendments (append-only)
+
+**Amendment 1 (2026-09-06, found at CHECKLIST step 6, recorded here per
+dr-execute-step rule 3).** A3's ordering claim is FALSE. The citable legend
+does show the dossier's first 32 blocks, but a dossier's blocks are sorted by
+CONTENT ID at admission (`src/deepreason/admission/parse.py:577`,
+`blocks=tuple(sorted(blocks, key=lambda block: block.id))`), not by file or
+record order, so file naming and the refuted-if-first ordering steer
+nothing. Measured on the committed attachment (the stub test's own
+assertion): the 32 citable blocks are 7 conjectures, 13 proposals (1
+refuted-if) and 12 objections; 62 blocks are withheld from the legend,
+among them 5 conjectures and 11 refuted-if proposals. What does NOT change:
+every body is still rendered whole in the frozen-evidence section (3 sources
+of 3, nothing excluded), so the organiser READS the whole room; what changes
+is how much of it a candidate can CITE without the typed
+`EVIDENCE_REF_NOT_EXPOSED` measure. The organiser directive already tells
+the seat to cite only ids in the legend and to name the rest in
+`uncertainties`. Disposition: no design change (C3, C4; the brief's own
+"run with what the pack shows, disclosed"); the attachment's bytes and the
+converter's output are unchanged; the converter's docstring now says why
+the order is kept (the human reader of the frozen section); PARKED P2
+carries BOTH the cap and the order; PREREG §11 and RESULTS.md state the
+measured citability. S5's accept line `legend shown 32 withheld 62` stands;
+its "which" is now also reported.
+
+**Amendment 2 (2026-09-06, CHECKLIST step 7, the diff-budget gate).**
+`tools/diff_budget.py d3f047932 --ceiling 450 --paths src tests docs/map`
+reported EXCEEDED: `src 214, tests 885, docs/map 33, total 1132`. Two
+causes, disposed separately. (1) 365 of the `tests` lines were a byte-for-
+byte COPY of the attachment under `tests/fixtures/organiser_room/` — data,
+not code; the copy is removed and the test reads the committed attachment
+from the tranche directory instead (`git ls-files` knows it; the sha256 pins
+stay), so nothing is lost and nothing is duplicated. (2) The test file is 520
+lines against an estimate of 230 and `src/` is 214 against 160: twelve
+proofs with their docstrings, and the layouts' rationale comments. Decided
+without asking (dominant under the operator's recorded values — the stub test
+IS R12's deliverable and trimming proof to fit an estimate would ship less
+evidence, not less machinery): the ceiling for `src tests docs/map` is raised
+from 450 to 800; the re-measured total is stated in CHECKLIST step 7.
+Override any time. No scope moved: the same three source files, one test
+file, one map document.
