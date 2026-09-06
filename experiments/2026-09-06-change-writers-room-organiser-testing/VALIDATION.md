@@ -154,3 +154,19 @@ No gate was run and none is owed: no code under `src/` or `tests/` moved.
 Verdict for the offline half: **PASS**. The window is sealed and one command
 from launching (`setsid nohup … runs/chain.sh …`); it stops here for want of a
 credential, which R46 says to stop for rather than improvise.
+
+### Launch readiness, checked offline while the credential is absent
+
+Four checks on the committed tree, none of them a provider call, so that a
+launch fails for a real reason rather than a stale one (a failed start costs a
+~14-minute battery):
+
+| check | output |
+|---|---|
+| `runs/chain.sh` refuses cleanly with no key | `REFUSED: no …/env (OLLAMA_API_KEY=...)`, `rc=8` — no soak, no battery, no call |
+| the configuration knob `setup_and_qualify.sh` guards on still lands | `PACK_TOKEN_BUDGET: 24000` |
+| the qualification the battery would reuse is present and complete | `runs/home-r/qualification-cache/1c204e18….json`, `status: complete`, provider profile `2d98e244…`, policy preset `deepreason.v6.engaged.v1` — the same profile `deepreason status` resolves today (`route_id provider-profile-2d98e2449d89c77c7993b59f`), so the battery is expected to CACHE; if it re-runs, the log says so and it runs (PREREG Amendment 7) |
+| no run root would collide | `ls runs/home-r/runs/` → one entry, `failed-epoch1-run-36d9a22c…`; the deterministic id is free again |
+
+`deepreason status --json` names the one remaining blocker in its own words:
+`"credential_present": false`, `"qualification_state": "credential_missing"`.
