@@ -1,0 +1,179 @@
+{
+  "absences": [
+    "NO_FRONTIER_RECORD",
+    "NO_LIFECYCLE_REFUSAL_RECORD",
+    "NO_SEAT_RETIREMENT",
+    "NO_SURVIVOR_RECORD"
+  ],
+  "adjudication": {
+    "judge_calls": 0,
+    "ran": false,
+    "trial_blocked": {},
+    "trial_declined": {},
+    "trial_observations": {}
+  },
+  "amendment": {
+    "epoch_seqs": [],
+    "epochs": 0
+  },
+  "artifacts": {
+    "accepted": 89,
+    "frontier": {
+      "artifact_ids": {
+        "absent": true,
+        "reason": "NO_FRONTIER_RECORD"
+      },
+      "count": {
+        "absent": true,
+        "reason": "NO_FRONTIER_RECORD"
+      },
+      "evidence_states": {
+        "absent": true,
+        "reason": "NO_FRONTIER_RECORD"
+      },
+      "problem_id": null
+    },
+    "refuted": 1,
+    "survivor_count": {
+      "absent": true,
+      "reason": "NO_SURVIVOR_RECORD"
+    },
+    "suspended": 0
+  },
+  "embedder": {
+    "backend": "hashing",
+    "configured_model": null,
+    "fallback": false,
+    "fallback_reason": null,
+    "fingerprint": "4226e035204776db",
+    "model": "hashing-128",
+    "version": "1"
+  },
+  "evidence_states": {
+    "completeness": {
+      "complete_passes": 7,
+      "licensed_artifacts": 32,
+      "outcomes": {
+        "complete": 7
+      },
+      "passes": 7
+    },
+    "counts": {
+      "contested": 0,
+      "open": 55,
+      "refuted": 1,
+      "supported": 32
+    },
+    "excluded_import_admissions": 9,
+    "per_cycle": {
+      "0": {
+        "contested": 0,
+        "open": 16,
+        "refuted": 0,
+        "supported": 18
+      },
+      "1": {
+        "contested": 0,
+        "open": 1,
+        "refuted": 0,
+        "supported": 0
+      },
+      "2": {
+        "contested": 0,
+        "open": 6,
+        "refuted": 1,
+        "supported": 2
+      },
+      "3": {
+        "contested": 0,
+        "open": 28,
+        "refuted": 0,
+        "supported": 12
+      },
+      "pre-cycle": {
+        "contested": 0,
+        "open": 4,
+        "refuted": 0,
+        "supported": 0
+      }
+    },
+    "schema": "deepreason-evidence-states.v1"
+  },
+  "identity": {
+    "manifest_present": true,
+    "manifest_schema_version": 6,
+    "run_id": "08f0d71e3520eda33a4d568a3ac9fd265a92f9368cb7b9b97a195b68626c8c1e"
+  },
+  "provider_health": {
+    "fault_minutes": 0.0,
+    "seats": {
+      "argumentative_critic": {
+        "attempts": 53,
+        "calls": 53,
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "fault_ms": 0,
+        "faults": 0,
+        "last_fault_kind": null,
+        "max_zero_byte_streak": 0,
+        "model": "qwen3.5:397b",
+        "zero_byte_returns": 0
+      },
+      "conjecturer": {
+        "attempts": 32,
+        "calls": 32,
+        "endpoint_id": "provider-profile-2d98e2449d89c77c7993b59f",
+        "fault_ms": 0,
+        "faults": 0,
+        "last_fault_kind": null,
+        "max_zero_byte_streak": 0,
+        "model": "qwen3.5:397b",
+        "zero_byte_returns": 0
+      }
+    },
+    "total_attempts": 85,
+    "total_calls": 85,
+    "total_faults": 0,
+    "total_zero_byte_returns": 0,
+    "worst_zero_byte_streak": 0
+  },
+  "question": "Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.",
+  "resolved_from": "root",
+  "root": "/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-c3f3bf10bc57d63e224a9f1c68bf1057",
+  "run": {
+    "cycles_completed": 3,
+    "message": "token budget denied transactional work sha256:dcd8fa4595478085beeb41b23cd97af3c9cafe25c4f45f58316ee529e89760fd",
+    "state": "failed",
+    "stop_reason": "operational_failure",
+    "token_limit": 500000,
+    "token_spend": 495362
+  },
+  "schema": "deepreason-results.v1",
+  "seat_retirement": {
+    "absent": true,
+    "reason": "NO_SEAT_RETIREMENT"
+  },
+  "terminal": {
+    "amend_ready": true,
+    "continuation_authority": true,
+    "lifecycle_refusal": {
+      "absent": true,
+      "reason": "NO_LIFECYCLE_REFUSAL_RECORD"
+    },
+    "record_security_violations": [],
+    "stop_reason_resumable": true,
+    "terminal_epoch": 0,
+    "valid_typed_terminal": true
+  },
+  "verification": {
+    "families": {
+      "completion": 29,
+      "epistemic": 0,
+      "integrity": 0,
+      "operational": 13,
+      "security": 0
+    },
+    "source": "rederived",
+    "valid": true,
+    "violations": 0
+  }
+}
