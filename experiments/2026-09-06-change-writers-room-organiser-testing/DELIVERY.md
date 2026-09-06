@@ -105,3 +105,89 @@ P5 — per-countercondition block pointers (change; prompt in PARKED.md).
 Standing from earlier tranches, untouched: the room's P1/P2, mini's P10/P11.
 
 recommended next: **run the measure** — place `env` (`OLLAMA_API_KEY=…`, `chmod 600`) and launch `runs/chain.sh` detached; it soaks, qualifies both homes, runs ARM H then ARM R, and the judge and analyser follow PREREG §10. Nothing else in the queue answers the operator's question; P2 is the first thing to fix if the run shows the seat citing too little of what it reads.
+
+
+---
+
+# Delivered (launch window): the test run — ARM R failed at cycle 3, the bare arms tied at the rubric's ceiling, verdict INCONCLUSIVE
+Branch: `claude/writers-room-organiser-testing-degagn` @ the delivery commit (pushed, tree clean). Validation: PASS (the window); the measure's own verdict: INCONCLUSIVE.
+
+## What happened
+
+**The run went off as sealed and produced no verdict.** The soak was green, the
+attached-evidence battery qualified full, and ARM R launched at the operator's
+500 000 ceiling with the room attached and the organiser seat bound. It ran
+three cycles, carried 7 of the room's 12 conjectures into 16 positions on the
+question, registered 54 refutation conditions as commitments — and then died
+in the CRITIC seat, `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY`, at 464 359 of the
+500 000. Under the sealed rule that is a failed arm: its unit is not judged and
+the verdict for both pairs involving it is INCONCLUSIVE. ARM 0R ran clean —
+three calls, the whole room pasted into the user message — and was judged
+against the three recorded plain calls. Every one of the eighteen judge
+readings scored 15 of 15.
+
+**Two findings the run bought, both worth more than the verdict would have been.**
+First, the failure is a defect in this tranche's own configuration, not in the
+harness: the evidence-blind critic shell removes the evidence legend from the
+critic's brief, but `rules/crit.py` still binds the citable block menu into the
+critic's contract, so the seat was asked by a schema for ids its brief never
+showed it. It answered with the room's own record ids, was rejected, exhausted
+its repair ladder and its atomic fallback, and the run stopped. Second, the
+rubric is saturated: with both bare arms at a perfect score on every reading,
+this instrument cannot rank anything above a single call on this question, so
+"materially better" was unreachable by construction before ARM R ever failed.
+
+**What the organiser itself did, which the record shows plainly.** It rendered
+on all 15 conjecturer plans, never the legacy contract; it read the whole room
+and cited the legend 21 times; it wrote 16 positions whose refutation
+conditions are the room's proposals in the room's words. It also cited the
+room's header ids 58 times, which the record caught as unknown blocks and
+assigned no status — the same id confusion that killed the critic, on the
+other seat.
+
+## Reconciliation (launch window)
+
+| R | Operator's words (short) | Disposition | Proof |
+|---|---|---|---|
+| R26 | "It needs a test run now." | done | chain.log; the two arms' records |
+| R27 | "Propose some for a single model run and test against bare model." | done — ARM R against ARM 0 and the new ARM 0R; ARM H deferred, not deleted | PREREG Amendments 2–3; VALIDATION S26, S30 |
+| R28 | "500k tokens" | done — ceiling 500000, cycles 4; the cycle prediction registered and held | Amendment 1; VALIDATION S27; RESULTS §4 |
+| R29 | amend PREREG before any live call, re-seal | done — six amendments, each dated and sealed by sha256 in its commit | VALIDATION S28 |
+| R30 | extend the judge and the analyser; CRITERIA byte-identical; pin digests | done | VALIDATION S29; Amendments 4 and 6 |
+| R31 | edit armR.sh and chain.sh; say which lines moved; ARM 0R's script and calls | done | VALIDATION S27, S30; Amendments 1–3 |
+| R32 | credential discipline | done — placed by the operator in chat, written to the ignored `env` at mode 600, never printed, never committed | VALIDATION S31 |
+| R33 | launch discipline; typed outcomes; the organiser-rendered count; one relaunch only | done — no relaunch was taken; the failure was not the transport case the rule allows | VALIDATION S26, S32; PREREG Amendment 6 |
+| R34 | harvest, score, reveal, analyse; keymap shut until scores | done | VALIDATION S33; RESULTS §5 |
+| R35 | RESULTS.md with terminals, spend, scores, verdicts, the appendix, what the organiser did, the residue | done | RESULTS §§1–7 and the appendix |
+| R36 | scope; commit and push at every boundary; deliver with the table | done — `src`, `mini`, `tests` byte-untouched; the attachment verified; PREREG edited only by amendment; no gate run | VALIDATION S35, S36 |
+
+R1–R25 (the build) stand as delivered above, unchanged by this window.
+
+## Assumptions the operator may override (launch window)
+A12: ARM 0R's message is the question, a blank line, then the three files verbatim, with no label or instruction.
+A13: ARM 0R's three calls are the plan, not the failure budget; the battery is not counted in the 500 000.
+A14: the pre-launch base for the diff checks is the commit that sealed Amendments 1–4.
+Amendment 5: §0's dossier-digest pin was mis-specified and is corrected to a content check; the arm was sound.
+Amendment 6: a failed arm's unit is not harvested, and the judge now enforces it.
+
+## Map delta
+No `docs/map/` document moved: no behaviour under `src/` changed in this window.
+
+## Errata
+errata: none in `docs/ERRATA.md`. The two corrections this window made are to
+this tranche's own sealed document and are recorded there as Amendments 5 and
+6, which is where a reader of the measure will look.
+
+## Parked (not done, not promised)
+P1–P5 from the build, unchanged. New:
+P6 — a seat's brief and its form must agree about evidence (the defect that killed ARM R); three roads priced, prompt in PARKED.md.
+P7 — one seat, two id systems: the room's record ids and the admission block ids; two roads priced, prompt in PARKED.md.
+
+recommended next: **P6 first, then relaunch.** The measure cannot answer the
+operator's question until a harness arm reaches a terminal, and P6 is what
+stopped it; road C in its prompt (refuse the blind pairing on an
+evidence-bound run) costs nothing and prevents the death, road A is the real
+fix. P7 rides with it, because the same id duality is why 58 of the
+organiser's 79 citations failed. And before the next launch is judged, the
+rubric needs headroom: eighteen readings at 15 of 15 mean this one cannot see
+a difference even if there is one.
