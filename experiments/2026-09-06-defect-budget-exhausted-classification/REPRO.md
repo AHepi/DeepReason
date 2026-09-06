@@ -5,14 +5,20 @@ captured verbatim at `proof/repro_before.txt`:
 
 ```
 A. TokenBudgetExceeded absorbed by the cycle loop: (True, None)
-B. WorkBudgetDenied  absorbed by the cycle loop: (False, 'WorkBudgetDenied')
+B. WorkBudgetDenied (ceiling spent) absorbed: (False, 'WorkBudgetDenied')
+B2. WorkBudgetDenied (budget remaining) absorbed: (False, 'WorkBudgetDenied')
 C. spent-ceiling denial carries budget_exhausted: ABSENT
 C. oversized-request denial carries budget_exhausted: ABSENT
 ```
 
+The same script after the fix is at `proof/repro_after.txt`; B turns True and
+B2 stays False, which is the whole change in four lines.
+
 ## What each line demonstrates
 
-**A and B are the cause.** The same event — a dispatch refused by the token
+**A and B are the cause.** (B2 is B's control: the same denial with budget
+still to spend. Before the fix both escape, which is the defect; after it,
+only B2 does, which is the guard.) The same event — a dispatch refused by the token
 meter — is absorbed by `Scheduler.run` when it arrives as
 `TokenBudgetExceeded` and escapes the whole run when it arrives as
 `WorkBudgetDenied`. The scheduler is built offline (a mock conjecturer, no

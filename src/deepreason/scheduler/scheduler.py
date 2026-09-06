@@ -18,7 +18,7 @@ from deepreason.capture import detection, ladder, schools
 from deepreason.capture import diagnostics as capture14
 from deepreason.capture.pareto import frontier
 from deepreason.llm.adapter import SchemaRepairError, WorkflowAuthorizationError
-from deepreason.llm.budget import TokenBudgetExceeded
+from deepreason.llm.budget import TokenBudgetExceeded, budget_denial_exhausted
 from deepreason.llm.endpoints import EndpointError
 from deepreason.signals import DEAD_SEAT_STREAK_SIGNAL
 from deepreason.runtime.seat_retirement import (
@@ -3578,11 +3578,22 @@ class Scheduler:
                     control_trace=control_trace,
                 )
                 raise
-            except TokenBudgetExceeded as e:
+            except (TokenBudgetExceeded, WorkBudgetDenied) as e:
+                if not budget_denial_exhausted(e):
+                    # A refusal the ceiling could still have afforded is not
+                    # the budget ending the run: one oversized request, or a
+                    # dispatch whose own bound could not be established. It
+                    # stays the operational failure the operator's law of
+                    # 2026-08-29 separates a clean stop FROM.
+                    raise
                 # Budget exhaustion is a logged stop, never a crash: state is
                 # consistent (Adj runs inside every registration). Mid-retry
                 # exhaustion carries the spent-but-uncarried attempts — and the
-                # stop REASON goes into the log for the post-hoc reader.
+                # stop REASON goes into the log for the post-hoc reader. The v6
+                # transactional path arrives here as WorkBudgetDenied, raised
+                # after its own durable budget_denied terminal; without this arm
+                # it left the run entirely and every ceiling stop on that path
+                # published as a breakage (run-c3f3bf10bc57d63e224a9f1c68bf1057).
                 spend = getattr(e, "spend", None)
                 if spend is not None:
                     self.harness.record_llm_calls([spend], "dropped-call", str(e)[:120])

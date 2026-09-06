@@ -45,23 +45,37 @@ outstanding reserves and the refused request's cap at the same instant. Every
 refusal it raises is stamped with three fields:
 
 - `budget_remaining` — `budget - total - reserved`, or `None` with no ceiling.
-- `budget_minimum_dispatch` — the smallest booking any further dispatch of
-  the refused shape needs, which is its completion cap (a prompt bound is
-  never negative), or `None` when the cap itself is unknown.
+- `budget_booking` — what the refused dispatch asked the ceiling to reserve,
+  or `None` when its size could not be established at all.
 - `budget_exhausted` — the answer, by one rule:
 
-> **The ceiling is spent when its remaining headroom cannot cover another
-> dispatch: nothing left at all, or less than the refused shape's completion
-> cap.**
+> **The ceiling is spent when the refused booking would have fitted an
+> untouched ceiling and no longer fits this one.**
+
+Then the run's own prior spend is the whole reason the call cannot be made,
+which is the ceiling ending the run. A booking no empty ceiling could ever
+have served is a dispatch too large for this run's configuration, not a budget
+with nothing left. A refusal whose size cannot be established is a plumbing
+fault, spent only when literally nothing remains.
 
 Applied to the three refusals `reserve()` can raise, and to `check()`:
 
-| refusal | `budget_minimum_dispatch` | spent? |
+| refusal | `budget_booking` | spent? |
 |---|---|---|
-| `total + reserved + amount > budget` | the request's `max_tokens` | when headroom < that cap |
-| no prompt bound | the request's `max_tokens` | same test |
-| no completion bound | `None` (unknown cap) | only if headroom ≤ 0 |
+| `total + reserved + amount > budget` | that `amount` | when `amount <= budget` |
+| no prompt bound | `None` (size unknown) | only if headroom ≤ 0 |
+| no completion bound | `None` (size unknown) | only if headroom ≤ 0 |
 | `check()` — total already at or past the ceiling | `None` | always (headroom ≤ 0) |
+
+**A first draft of this rule compared headroom against the refused shape's
+completion cap, and the committed gate refuted it in three places.**
+`tests/test_budget.py::test_scheduler_stops_gracefully_on_budget` runs a
+2 500-token ceiling until "a dispatch could no longer be reserved, then
+stopped" — 820 spent, 395 asked, 380 left. That is the ceiling ending the run
+by anyone's reading, and a headroom-versus-cap rule called it a plumbing
+refusal. Recorded here because the first rule looked more principled and was
+simply wrong, and because the tests that caught it are the reason the second
+one can be trusted.
 
 A module function reads the answer back:
 
@@ -118,9 +132,10 @@ PARKED, not fixed here: see PARKED.md.)
 Committed regression tests, in `tests/test_budget_exhausted_classification.py`:
 
 1. **The rule, at the meter.** The observed root's own numbers (ceiling
-   500 000, spend 495 362, cap 8 192) produce `budget_exhausted: True`; an
-   oversized single request against an untouched ceiling produces `False`;
-   both fail-closed shapes are covered; a denial with no metadata reads True.
+   500 000, spend 495 362, cap 8 192) produce `budget_exhausted: True`; a
+   request no empty ceiling could have served produces `False`; the rule's
+   edge is pinned on both sides; both fail-closed shapes are covered; a denial
+   with no metadata reads True.
 2. **Exhausted → clean, through the real run path.** A run driven through
    `deepreason run --run-manifest` whose cycle raises an exhausted denial
    publishes `state: completed`, `stop_reason: budget_exhausted` — and meets

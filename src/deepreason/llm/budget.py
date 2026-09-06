@@ -47,6 +47,17 @@ def conservative_prompt_bound(text: str) -> int:
     return -(-len(text) // 3) if text else 0
 
 
+def budget_denial_exhausted(error: BaseException) -> bool:
+    """Whether a budget refusal means the ceiling has nothing left to give.
+
+    Absent an explicit answer the result is True: every raise site that
+    predates ``budget_exhausted`` is a ceiling already reached, so a default
+    of False would silently reclassify stops nobody asked to change.
+    """
+
+    return bool(getattr(error, "budget_exhausted", True))
+
+
 class Reservation:
     """One call's booked upper bound; settle or release exactly once."""
 
@@ -95,14 +106,49 @@ class TokenMeter:
     def total(self) -> int:
         return self.prompt_tokens + self.completion_tokens
 
+    def _headroom(self) -> int | None:
+        """Tokens the ceiling can still book, or None when there is no ceiling."""
+
+        if self.budget is None:
+            return None
+        return self.budget - self.total - self.reserved
+
+    def _deny(self, message: str, *, booking: int | None) -> TokenBudgetExceeded:
+        """Build a refusal that says whether the ceiling is SPENT.
+
+        ``booking`` is what the refused dispatch asked the ceiling to reserve.
+        The rule: the ceiling is spent when that booking WOULD have fitted an
+        untouched ceiling and no longer fits this one.  Then the run's own
+        prior spend is the whole reason the call cannot be made, which is the
+        ceiling ending the run -- the operator's law of 2026-08-29 ("a budget
+        denial on an exhausted budget terminates as budget_exhausted
+        (clean)").  A booking no empty ceiling could ever have served is a
+        dispatch too large for this run's configuration rather than a budget
+        with nothing left; and a refusal whose size cannot be established at
+        all is a plumbing fault, spent only when literally nothing remains.
+        """
+
+        error = TokenBudgetExceeded(message)
+        remaining = self._headroom()
+        error.budget_remaining = remaining
+        error.budget_booking = booking
+        if self.budget is None:
+            error.budget_exhausted = False
+        elif booking is None:
+            error.budget_exhausted = remaining is not None and remaining <= 0
+        else:
+            error.budget_exhausted = int(booking) <= self.budget
+        return error
+
     def check(self) -> None:
         """Compatibility gate (historical semantics, unchanged): raise once
         the recorded total has reached the ceiling.  Unlike ``reserve`` this
         does not account for the upcoming call's bound."""
 
         if self.budget is not None and self.total >= self.budget:
-            raise TokenBudgetExceeded(
-                f"token budget exhausted: {self.total}/{self.budget}"
+            raise self._deny(
+                f"token budget exhausted: {self.total}/{self.budget}",
+                booking=None,
             )
 
     def add(self, usage: dict) -> None:
@@ -138,21 +184,24 @@ class TokenMeter:
                 self.reserved += amount
                 return Reservation(self, amount)
             if bound_prompt is None:
-                raise TokenBudgetExceeded(
+                raise self._deny(
                     "token budget reservation failed closed: no prompt bound "
-                    f"(ceiling {self.budget})"
+                    f"(ceiling {self.budget})",
+                    booking=None,
                 )
             if max_tokens is None:
-                raise TokenBudgetExceeded(
+                raise self._deny(
                     "token budget reservation failed closed: no completion "
-                    f"bound (max_tokens unknown; ceiling {self.budget})"
+                    f"bound (max_tokens unknown; ceiling {self.budget})",
+                    booking=None,
                 )
             amount = int(bound_prompt) + int(max_tokens)
             if self.total + self.reserved + amount > self.budget:
-                raise TokenBudgetExceeded(
+                raise self._deny(
                     f"token budget cannot cover dispatch: {self.total} spent "
                     f"+ {self.reserved} reserved + {amount} bound > "
-                    f"{self.budget}"
+                    f"{self.budget}",
+                    booking=amount,
                 )
             self.reserved += amount
             return Reservation(self, amount)

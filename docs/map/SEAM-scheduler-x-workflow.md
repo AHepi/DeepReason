@@ -297,6 +297,38 @@ assert '_record_seat_retirement' in src
   must stay ahead of the broad ones — the typed termination is the complete
   durable outcome, and a skipped advisory review must not stall the cycle.
 `check: python -c 'import inspect; from deepreason.scheduler.scheduler import Scheduler as S; r = inspect.getsource(S._maybe_config_referee); assert "except WorkBudgetDenied:" in r and r.index("except WorkBudgetDenied:") < r.index("except (SchemaRepairError, EndpointError) as error:"); g = inspect.getsource(S.step); assert "except WorkBudgetDenied as error:" in g and "budget_denied" in g' && test "$(grep -c "except WorkBudgetDenied" src/deepreason/scheduler/scheduler.py)" -eq 2 && python -m pytest tests/test_config_referee.py::test_scheduler_absorbs_budget_denied_referee tests/test_config_referee.py::test_budget_denied_referee_terminates_typed_without_second_transition -q`
+- **The cycle loop had a clean budget-stop road and the transactional denial
+  was not on it.** `Scheduler.run` absorbs `TokenBudgetExceeded`, breaks with
+  no stop decision, and `application/text_runs.py` publishes that as
+  `budget_exhausted` with a typed STOPPED receipt and a checkpoint. The v6
+  transactional path raises `WorkBudgetDenied` instead -- a plain
+  `RuntimeError`, raised `from` the `TokenBudgetExceeded` that caused it and
+  deliberately re-raised by `rules/crit.py` so nothing writes a second
+  transition after the durable terminal. Not being that type, it missed the
+  arm entirely: `_arg_crit`'s direct batch road catches only
+  `(SchemaRepairError, EndpointError)`, so the denial left the run and the
+  terminalizer's catch-all called it a breakage. Live regression
+  `run-c3f3bf10bc57d63e224a9f1c68bf1057` (organiser ARM R, epoch-0 terminal at
+  `ebdfe976e`): 495 362 of a 500 000-token ceiling spent, every seat capped at
+  8 192, `verify_root` 0 violations -- and `stop_reason: operational_failure`,
+  which the operator's law of 2026-08-29 forbids and which cost the tranche
+  its verdict (`PREREG` §3 does not judge a failed arm). FIXED 2026-09-06
+  (`experiments/2026-09-06-defect-budget-exhausted-classification/`) by
+  widening the arm to `(TokenBudgetExceeded, WorkBudgetDenied)` behind one
+  guard: the meter says whether its refusal means the ceiling is SPENT (see
+  DR-SUB-llm), and a denial the ceiling could still have afforded re-raises
+  and stays an operational failure. **The generalisation worth keeping: an
+  exception ARM is a type test, so a road that re-wraps its cause in a new
+  type silently leaves every arm that named the old one.**
+`check: python -c "
+import inspect
+from deepreason.scheduler.scheduler import Scheduler as S
+src = inspect.getsource(S.run)
+assert 'except (TokenBudgetExceeded, WorkBudgetDenied) as e:' in src
+guard = src.index('if not budget_denial_exhausted(e):')
+assert guard < src.index('spend = getattr(e')
+"`
+`check: python -m pytest tests/test_budget_exhausted_classification.py -q`
 - **The deferral marker is the scheduler's substitute for a transaction, and it
   is not in the signal registry.** `v6-model-phase-deferred.v1` is bound to a
   local variable before `record_measure`, and `tests/test_signals.py` AST-scans

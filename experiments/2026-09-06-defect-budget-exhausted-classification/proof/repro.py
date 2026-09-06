@@ -40,10 +40,18 @@ def absorbed(error):
         return True, None
 
 
-denied = WorkBudgetDenied(SimpleNamespace(work_id="sha256:" + "d" * 8))
+def _denied(exhausted):
+    terminal = SimpleNamespace(work_id="sha256:" + "d" * 8)
+    try:
+        return WorkBudgetDenied(terminal, budget_exhausted=exhausted)
+    except TypeError:          # pre-fix signature: no such keyword
+        return WorkBudgetDenied(terminal)
+
+
 print("A. TokenBudgetExceeded absorbed by the cycle loop:",
       absorbed(TokenBudgetExceeded("token budget exhausted: 500000/500000")))
-print("B. WorkBudgetDenied  absorbed by the cycle loop:", absorbed(denied))
+print("B. WorkBudgetDenied (ceiling spent) absorbed:", absorbed(_denied(True)))
+print("B2. WorkBudgetDenied (budget remaining) absorbed:", absorbed(_denied(False)))
 
 # C. The meter offers nothing that separates a spent ceiling from one
 #    oversized request.
