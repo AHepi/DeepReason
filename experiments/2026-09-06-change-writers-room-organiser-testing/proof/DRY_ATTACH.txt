@@ -1,0 +1,43 @@
+== dry attach: admission (admit_attachment_paths, the function reason --attach calls) ==
+sources 3 blocks 94 refusals 0
+{
+ "blocks": {
+  "paragraph": 94
+ },
+ "blocks_by_file": {
+  "01-conjectures.txt": 12,
+  "02-proposals.txt": 46,
+  "03-objections.txt": 36
+ },
+ "blocks_sorted_by_id": true,
+ "dossier_digest": "2a49cd527ce88f6fb18a81eede88b456d73d37388816345955ed020526e495a3",
+ "question_sha256": "e8e720d251b3cab2cddd548cb5064a74575404c8ae47f347f840faa6021a19b1",
+ "refusals": [],
+ "sources": 3,
+ "tiers": {
+  "evidence": 94
+ }
+}
+== one organiser render against the stub root (managed envelope: 16 sources, 8 per pack) ==
+legend shown 32 withheld 62
+frozen pack sources 3 excluded 0
+{
+ "excluded_source_ids_line_present": false,
+ "exposure_equals_legend": true,
+ "exposure_receipt_items": 32,
+ "frozen_pack_sources": 3,
+ "legend_refuted_if_shown": 1,
+ "legend_shown": 32,
+ "legend_shown_by_file": {
+  "01-conjectures.txt": 7,
+  "02-proposals.txt": 13,
+  "03-objections.txt": 12
+ },
+ "legend_withheld": 62,
+ "organiser_directive": true,
+ "pack_receipt_events": 0,
+ "pack_token_budget": 24000,
+ "prompt_bytes": 91795,
+ "prompt_chars": 91784,
+ "withheld_notice": true
+}
