@@ -131,3 +131,64 @@ is read by `invariants.py`'s replay authority set — if it reports CONTACT,
 stop in SPEC and ask. Prove with the organiser stub test extended by one
 case.
 ```
+
+## P6 — a seat's brief and its form must agree about evidence (the defect that killed ARM R)
+
+**What.** `seat.critic.evidence-blind-v1` removes `dr.evidence.citable` and
+`dr.premise-invitation` from the critic's BRIEF, but `rules/crit.py` binds the
+citable block menu into the critic's CONTRACT from its own legend
+(`crit.py:358`, fed by `batch_legend.shown`), independently of the layout. So
+the critic is asked by a schema for block ids that its brief never shows it.
+On the 2026-09-06 launch it filled `premise_evidence[].block` with the room's
+own record ids, was rejected at those pointers, exhausted its repair ladder,
+decomposed to `critic.atomic-target.v1`, exhausted that, and the run died
+`V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` at cycle 3 with 464 359 of 500 000
+spent. Evidence: `runs/home-r/runs/run-36d9a22c3e2045ae1b8c7bfb9d95d092`,
+its `run-status.json`, `deepreason stop-report`, the
+`workflow-semantic-admission-v1` `authorized_pointers`, and the raw replies.
+
+```
+EXECUTOR WINDOW — DEFECT: a blind brief against a sighted form
+Read CLAUDE.md. Load deepreason-orchestrator and pinker-write-for-readers.
+GOAL: a critic that is shown no evidence legend is not asked for evidence
+ids. Diagnose from the record named above BEFORE reading code. Three roads,
+price all three in FIX.md and pick the smallest: (A) the critic seat's
+SOURCE bundle supplies an empty legend when the bound layout carries no
+`dr.evidence.citable` entry, so `crit.py`'s menu is empty and the schema
+stops asking (check whether an empty menu is legal for
+`BatchCriticWireContractV2` before proposing it); (B) a registered critic
+form whose `premise_evidence` is absent, paired by the blind shell — a new
+wire contract, which is frozen by two callers, so read
+docs/map/INV-seat-section-plugins.md's "wire_contract_for's answers are
+frozen" first and STOP in FIX.md if it needs a grant; (C) declare the blind
+shell unusable with an evidence-bound run and refuse the pairing at
+resolution with a typed error, which costs nothing and prevents the death.
+Prove with a stub: the blind critic dispatched on a root with a bound
+dossier must not be able to fail this way. OUT OF SCOPE: the organiser.
+```
+
+## P7 — one seat, two id systems: the room's record ids and the admission block ids
+
+**What.** The organiser's brief shows the room whole (whose paragraph headers
+carry `id=<room record id>`) and a legend of admission BLOCK ids. On the
+2026-09-06 launch the seat cited legend ids 21 times and room header ids 58
+times (`EVIDENCE_REF_UNKNOWN_BLOCK`), and the critic died of the same
+confusion (P6). Nothing was invented and the record caught every one, but the
+seat cannot be expected to keep two id systems apart when both are in front
+of it.
+
+```
+EXECUTOR WINDOW — CHANGE: give the organiser ONE id system
+Read CLAUDE.md. Load dr-change-orchestrator and pinker-write-for-readers.
+Two roads, price both: (A) the converter stops writing `id=` into the
+attachment's header lines (the room record id moves to a trailing line the
+legend never mirrors, or goes away entirely) — a tranche-local change to
+experiments/2026-09-06-change-writers-room-organiser-testing/tools/
+room_to_attachment.py, re-run, re-digest, and the organiser directive drops
+its "cite by block id" sentence in favour of the legend's own handles;
+(B) the legend is made to show the room's record id beside each block id so
+the two are aligned rather than rival (a parametrised citable-evidence
+source, which is PARKED P2's road). Prefer A: it is configuration under the
+tranche and touches no src/. Measure on a re-run: the unknown-block count
+must fall to 0 and the verified count must rise.
+```
