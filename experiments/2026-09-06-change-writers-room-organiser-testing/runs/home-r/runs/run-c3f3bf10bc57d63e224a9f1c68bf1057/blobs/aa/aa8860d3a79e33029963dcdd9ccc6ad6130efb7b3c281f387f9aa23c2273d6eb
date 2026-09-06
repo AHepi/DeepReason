@@ -1,0 +1,36 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms as a methodological rule to maximize informational content and risk asymmetry, without smuggling in induction.",
+    "mechanism": "Popper distinguishes between the logical status of a theory (which remains unproven) and the pragmatic decision of which theory to test or act upon. Choosing the better-corroborated theory is not a prediction of future success (induction) but a commitment to the theory with the highest empirical content and severity of testing so far. This functions as a 'regulative ideal' where the agent accepts the risk of falsification in exchange for higher potential information gain, acknowledging that acting on less corroborated theories offers no such strategic advantage.",
+    "counterconditions": [
+      "If Popper explicitly stated that choosing a theory implies an expectation of its future truth or probability.",
+      "If the preference for corroboration cannot be distinguished from a probabilistic assessment of future performance.",
+      "If the framework requires a guarantee of success to justify any action, rendering 'educated guesswork' indefensible."
+    ],
+    "typicality": 0.85,
+    "evidence_refs": [
+      {
+        "block": "182a58bdd39650d7",
+        "quote": "The preference is defensible because corroboration functions as a measure of informational c"
+      },
+      {
+        "block": "193e9093bea201f6",
+        "quote": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated"
+      },
+      {
+        "block": "02cc3b8a099bb440",
+        "quote": "Verisimilitude as a Regulative Ideal The conjecture forbids claiming that surviving severe tests provides a "
+      }
+    ],
+    "discharges": [],
+    "optional_refs": [
+      "SRC_005",
+      "SRC_007",
+      "SRC_014"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}

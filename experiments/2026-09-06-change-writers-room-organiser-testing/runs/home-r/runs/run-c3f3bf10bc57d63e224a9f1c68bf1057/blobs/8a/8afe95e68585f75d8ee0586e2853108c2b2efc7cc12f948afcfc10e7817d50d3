@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because the 'asymmetry of risk' argument implicitly relies on an inductive assumption about the stability of error conditions. By claiming that acting on a severely tested theory 'avoids known error' while a poorly tested one carries a 'high risk,' the target assumes that the specific conditions which caused past failures (or the lack thereof) will remain relevant and operative in the future action. This presupposes that nature is uniform enough for past test results to be a reliable guide for future pragmatic success, which is the very principle of induction Popper sought to reject. Without this inductive bridge, the 'risk' calculation is baseless, as a theory corroborated yesterday could fail immediately tomorrow for reasons entirely unrelated to its previous testing, rendering the preference for it methodologically arbitrary rather than rationally defensible on strict Popperian terms.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "The 'asymmetry of risk' argument implicitly assumes the uniformity of nature to validate the relevance of past test results for future actions.",
+      "premise_evidence": null,
+      "successor_question": "If the uniformity of nature cannot be assumed, does Popper have any non-inductive basis for claiming that a corroborated theory is practically safer to act upon than an untested one?"
+    }
+  ]
+}

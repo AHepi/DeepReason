@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a mechanism for rational choice, but this smuggles in induction because selecting the theory with higher verisimilitude as the best guess for action implicitly assumes that past success in surviving tests is a reliable indicator of future closeness to truth. Popper explicitly rejected any principle that allows past performance to predict future reliability; therefore, using verisimilitude to justify preference for action violates his own prohibition against inferring future utility from past corroboration, effectively reinstating the uniformity of nature he sought to avoid.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper rejected any inference where past survival of tests predicts future reliability or truth-likeness.",
+      "premise_evidence": null,
+      "successor_question": "Can a non-inductive account of verisimilitude explain why we should act on the better-corroborated theory without assuming the future will resemble the past?"
+    }
+  ]
+}

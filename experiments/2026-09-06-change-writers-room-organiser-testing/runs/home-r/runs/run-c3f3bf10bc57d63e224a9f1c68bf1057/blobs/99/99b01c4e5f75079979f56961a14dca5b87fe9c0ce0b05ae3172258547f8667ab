@@ -1,0 +1,230 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is indefensible on Popper's own terms and constitutes a performative contradiction, as acting on past survival implicitly asserts that past performance is a reliable guide to future reliability, which is the very definition of inductive reasoning Popper sought to destroy.",
+      "mechanism": "By advising scientists to 'prefer' the better-corroborated theory for action, Popper implicitly relies on the premise that nature is uniform enough for past fitness to matter for future outcomes, thereby smuggling induction back in through the back door despite explicit denials.",
+      "counterconditions": [
+        "refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed or remain unfalsified in the future",
+        "refuted if Popper explicitly distinguished 'rational preference' based on critical scrutiny versus 'inductive inference' based on probability assignments",
+        "refuted if it can be demonstrated that Popper explicitly justified the preference for better-corroborated theories in practical decisions solely on the grounds of maximizing testability and information content, without invoking any expectation of future success based on past performance"
+      ],
+      "typicality": 0.5,
+      "evidence_refs": [
+        {
+          "block": "16c4445643674d71"
+        },
+        {
+          "block": "3a5ebf3b2c2c80a0"
+        },
+        {
+          "block": "3f3a8232e4114613"
+        },
+        {
+          "block": "3203cecfa0c81308"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate explicitly argues that 'minimizing known unknowns' is not a logical deduction but an inductive leap, agreeing with the criticism that the defense collapses into induction."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate accepts the criticism that terms like 'likelihood of immediate error' introduce probabilistic assessment, framing this as evidence of the unavoidable smuggling of induction."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate aligns with the criticism that methodological rules for error elimination implicitly assume the stability of error conditions (uniformity of nature)."
+        },
+        {
+          "handle": "[SRC_007] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate supports the view that verisimilitude relies on inductive assumptions about the correlation between test survival and truth-likeness."
+        },
+        {
+          "handle": "[SRC_015] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate agrees that the 'asymmetry of risk' argument fails because it assumes the stability of error conditions, which is an inductive assumption."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate concurs that the 'pragmatic wager' fails because acting to avoid future error implicitly assumes the future will resemble the past."
+        },
+        {
+          "handle": "[SRC_014] against SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate affirms that using verisimilitude as a mechanism smuggles in induction by assuming structural features allowing survival will continue to align with reality."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate addresses the 'acting on' component by asserting that any choice to act on corroboration necessarily involves an inductive leap regarding future performance."
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference for better-corroborated theories is defensible because corroboration functions as a measure of informational content rather than likelihood; we choose the bold theory not because we think it will hold true, but because it offers the most detailed map currently available for further criticism.",
+      "mechanism": "Preferring the better-corroborated theory is a preference for boldness and precision, providing the richest basis for further testing; the cost is that 'action' becomes purely experimental, aimed at breaking the theory rather than ensuring successful prediction.",
+      "counterconditions": [
+        "refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true",
+        "refuted if it can be shown that scientists consistently choose less established, riskier hypotheses over well-corroborated ones solely to accelerate falsification",
+        "refuted if it can be demonstrated that Popper explicitly justified the preference for better-corroborated theories in practical, life-or-death decisions on the grounds of safety or reliability rather than solely on the grounds of maximizing testability"
+      ],
+      "typicality": 0.5,
+      "evidence_refs": [
+        {
+          "block": "182a58bdd39650d7"
+        },
+        {
+          "block": "0db48ad23b546413"
+        },
+        {
+          "block": "19d7f4e301abfb17"
+        },
+        {
+          "block": "420504e889cc4773"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate rejects the idea that minimizing known unknowns is a logical deduction, instead framing it as a methodological choice for information gain, acknowledging the criticism that this may still hide induction."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate clarifies that 'likelihood of error' is used metaphorically for testability, not probability, though admitting the criticism that this distinction may not hold in practice."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate concedes that the methodological rule assumes some continuity in test relevance, aligning with the criticism that this smuggles in induction."
+        },
+        {
+          "handle": "[SRC_007] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate accepts the criticism that verisimilitude/informational content defenses often rely on unproven assumptions about nature rewarding boldness."
+        },
+        {
+          "handle": "[SRC_015] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate acknowledges the criticism that avoiding known error assumes stable error conditions, which is an inductive step."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate agrees that the pragmatic wager for informational content implicitly assumes the future will resemble the past regarding test severity."
+        },
+        {
+          "handle": "[SRC_014] against SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate admits that treating verisimilitude as a guide for action often smuggles in induction by assuming structural continuity."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate addresses the 'acting on' critique by noting that if action requires safety, the informational content defense fails, supporting the criticism."
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is defensible only by accepting a non-probabilistic metaphysical commitment to verisimilitude, arguing that severe testing logically increases a theory's proximity to truth, but this costs the framework its claim to pure logic by smuggling in a rationalist faith that nature rewards boldness.",
+      "mechanism": "Shifting the goal from 'predictive reliability' to 'structural approximation' allows the preference to survive anti-induction critiques, but requires a metaphysical hope that surviving severe tests correlates with truth-likeness, which cannot be logically proven.",
+      "counterconditions": [
+        "refuted if it can be shown that the concept of 'verisimilitude' cannot be formally defined without implicitly relying on inductive probability",
+        "refuted if it can be demonstrated that Popper explicitly grounded the preference for better-corroborated theories in a pragmatic decision rule without invoking any metaphysical assumption about the theory's proximity to truth",
+        "refuted if Popper explicitly distinguished 'verisimilitude' as a logical relation of content comparison rather than a predictive expectation"
+      ],
+      "typicality": 0.5,
+      "evidence_refs": [
+        {
+          "block": "039f61bcd0e576ce"
+        },
+        {
+          "block": "02cc3b8a099bb440"
+        },
+        {
+          "block": "05d78590b7d65730"
+        },
+        {
+          "block": "339f089a1326c57e"
+        },
+        {
+          "block": "40e4188e5ee28ff0"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_004] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate accepts the criticism that verisimilitude-based deductions often collapse into inductive assumptions about nature's structure."
+        },
+        {
+          "handle": "[SRC_005] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate acknowledges that claiming a theory is 'closer to truth' based on past tests introduces a probabilistic-like weight, validating the criticism."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate agrees that the verisimilitude gamble assumes the future will resemble the past regarding the correlation between boldness and truth."
+        },
+        {
+          "handle": "[SRC_007] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate directly incorporates the criticism that Popper's definition of verisimilitude relies on inductive assumptions about theory content."
+        },
+        {
+          "handle": "[SRC_015] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate concedes that the asymmetry of risk in verisimilitude arguments assumes stable error conditions."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate accepts that the verisimilitude defense implicitly assumes the future will resemble the past."
+        },
+        {
+          "handle": "[SRC_014] against SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate affirms the criticism that selecting higher verisimilitude as a best guess assumes structural continuity."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate acknowledges that acting on verisimilitude for practical purposes often reverts to inductive expectations of success."
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated theory increases the likelihood of immediate error without compensatory increase in testability, making the choice a logical deduction about the current state of knowledge rather than an inductive prediction.",
+      "mechanism": "Choosing the better-corroborated theory minimizes 'known unknowns' relative to alternatives; this is a defensive posture requiring no belief in future validity, only recognition of current robustness against falsification.",
+      "counterconditions": [
+        "refuted if it could be demonstrated that the concept of 'minimizing known unknowns' logically entails a probabilistic assessment of future performance",
+        "refuted if it could be demonstrated that Popper explicitly argued in his published works that the preference for well-corroborated theories in practical action is a 'non-rational' or purely 'psychological' commitment",
+        "refuted if a clear demonstration from Popper's own texts shows he endorsed acting on corroborated theories without any implicit assumption that their past success is relevant to their future performance"
+      ],
+      "typicality": 0.5,
+      "evidence_refs": [
+        {
+          "block": "193
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

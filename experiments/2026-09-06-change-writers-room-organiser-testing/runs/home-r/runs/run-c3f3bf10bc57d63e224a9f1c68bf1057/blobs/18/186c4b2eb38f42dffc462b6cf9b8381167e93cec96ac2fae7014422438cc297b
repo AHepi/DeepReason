@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to address the core dilemma of 'acting on' a theory. While it successfully frames corroboration as a measure of informational content for testing, it does not explain why a scientist should *prefer* this map for practical navigation (prediction/decision-making) without implicitly assuming that past survival indicates future reliability. Popper explicitly rejected the idea that corroboration makes a theory more probable or reliable for the future; therefore, preferring Theory A over Theory B for action solely because A is bolder/more corroborated smuggles in an inductive assumption about the stability of the world (that the future will resemble the past regarding falsification), which contradicts the strict 'no induction' constraint the target claims to uphold.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Preferring a theory for action requires an expectation of its future performance, which constitutes an inductive leap if not based on probability.",
+      "premise_evidence": null,
+      "successor_question": "Can a Popperian justify acting on the better-corroborated theory without making any inductive assumption about the uniformity of nature or the predictive value of past test results?"
+    }
+  ]
+}

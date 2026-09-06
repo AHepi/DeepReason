@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on the concept of 'likelihood of immediate error,' which smuggles in the very probabilistic induction Popper rejected. In a strict Popperian framework, all unfalsified theories have equal logical standing regarding future truth; asserting that one carries a higher 'likelihood' of error is an inductive claim about the future based on past performance, not a deductive consequence of corroboration.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Popper explicitly denied that corroboration implies any probability of future success or truth.",
+      "premise_evidence": null,
+      "successor_question": "If 'likelihood of error' is removed from the argument, what non-inductive reason remains for preferring the better-corroborated theory?"
+    }
+  ]
+}

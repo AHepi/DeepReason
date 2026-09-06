@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on an 'Asymmetry of Risk' that falsely equates 'absence of known defects' with 'rational preference for action,' which implicitly smuggles in the inductive assumption that a theory surviving past tests is a more reliable guide for future action than one that has not.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly rejects any logical link between past corroboration and future reliability, yet the target claims acting on the 'best available critical filter' is rational without explaining why this filter predicts better outcomes without invoking induction.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration offers no probability of future success, on what non-inductive basis does Popper claim the 'risky guess' of a corroborated theory is superior to a random guess or an untested one when lives are at stake?"
+    }
+  ]
+}

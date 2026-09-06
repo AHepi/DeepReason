@@ -1,0 +1,30 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms without smuggling in induction, provided it is framed strictly as a methodological rule for selecting the most informative theory to subject to future falsification, rather than as a pragmatic wager on future success or a measure of truth probability.",
+    "mechanism": "Popper distinguishes between the logical status of a theory (which corroboration does not alter regarding probability) and the critical discussion guiding theory choice. Corroboration acts as a historical report of severity passed, signaling high informational content. Choosing the best-corroborated theory is choosing the one that has survived the most rigorous attempts at refutation, thereby offering the greatest potential for future learning (falsification) if it is false. This avoids induction because it makes no claim that the theory will continue to succeed; it only claims that, currently, it is the best target for critical testing.",
+    "counterconditions": [
+      "If Popper explicitly grounded the choice of action on an expectation of future predictive success derived from past corroboration.",
+      "If the preference implies that corroboration increases the logical probability of the theory being true.",
+      "If the defense relies on a hidden premise that nature is uniform (the principle of induction)."
+    ],
+    "typicality": 0.85,
+    "evidence_refs": [
+      {
+        "block": "182a58bdd39650d7",
+        "quote": "The preference is defensible because corroboration functions as a measure of informational c"
+      },
+      {
+        "block": "08c37be0a0e09d91",
+        "quote": "The conjecture forbids the interpretation that corroboration serves as a pro"
+      },
+      {
+        "block": "142e4434f49f2b8c",
+        "quote": "The conjecture must not conflate the methodological rule of choosing the best-test"
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

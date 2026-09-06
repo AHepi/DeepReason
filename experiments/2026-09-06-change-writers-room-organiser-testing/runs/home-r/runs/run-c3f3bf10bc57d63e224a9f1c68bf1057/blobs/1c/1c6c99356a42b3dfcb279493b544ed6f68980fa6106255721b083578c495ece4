@@ -1,0 +1,30 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms as a methodological rule grounded in the asymmetry of risk and informational content, not as an inductive inference about future probability.",
+    "mechanism": "Popper distinguishes between the logical status of a theory (which cannot be made more probable by past tests) and the pragmatic decision of which theory to adopt for action. The mechanism relies on two pillars: first, corroboration reports the severity of tests survived, serving as a historical record rather than a predictor; second, choosing the best-tested theory minimizes the risk of acting on a theory already known to be false or less informative. By preferring the theory with higher informational content that has withstood severe attempts at falsification, the scientist acts rationally without assuming the uniformity of nature required for induction.",
+    "counterconditions": [
+      "If it can be demonstrated that Popper explicitly grounded the choice of theory in an expectation of future success derived from past performance.",
+      "If the preference for corroborated theories logically entails a belief in the probability of their truth or future reliability.",
+      "If the 'asymmetry of risk' argument itself relies on an implicit inductive assumption that the future will resemble the past regarding falsifiability."
+    ],
+    "typicality": 0.85,
+    "evidence_refs": [
+      {
+        "block": "193e9093bea201f6",
+        "quote": null
+      },
+      {
+        "block": "07785266ae5808f5",
+        "quote": null
+      },
+      {
+        "block": "182a58bdd39650d7",
+        "quote": null
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

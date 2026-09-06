@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on an unstated inductive assumption that 'minimizing the risk of immediate falsification' is a reliable heuristic for future success, which contradicts Popper's explicit rejection of any methodological rule that assumes the future will resemble the past.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper rejects induction because it assumes the uniformity of nature; therefore, any preference rule based on 'risk minimization' regarding future tests implicitly reinstates this assumption.",
+      "premise_evidence": null,
+      "successor_question": "Does Popper provide a non-inductive justification for why surviving severe tests correlates with lower risk in future applications, or does he merely assert it as a pragmatic convention?"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms as a methodological rule grounded in the asymmetry of risk, not as an inductive inference of future probability.",
+    "mechanism": "Popper distinguishes between the logical status of a theory (which cannot be made more probable by past tests) and the rational choice of which theory to adopt for action. The mechanism relies on the 'asymmetry of risk': while no amount of corroboration guarantees future success, choosing a well-corroborated theory minimizes the risk of immediate falsification compared to a poorly tested one. This is a pragmatic, non-inductive wager where the agent accepts that they are acting on a conjecture that has survived severe criticism, without claiming it is therefore 'true' or 'probable'.",
+    "counterconditions": [
+      "If Popper explicitly stated that preferring a corroborated theory implies a belief in its future reliability or probability.",
+      "If the choice of a better-corroborated theory can only be justified by assuming the uniformity of nature (the principle of induction).",
+      "If the concept of 'verisimilitude' (truth-likeness) is required to make the choice rational, and verisimilitude itself relies on inductive assumptions."
+    ],
+    "typicality": 0.85,
+    "evidence_refs": [
+      {
+        "block": "193e9093bea201f6",
+        "quote": "The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated"
+      },
+      {
+        "block": "07785266ae5808f5",
+        "quote": "The conjecture predicts that a consistent Popperian agent can prefer Theory A over T"
+      },
+      {
+        "block": "08c37be0a0e09d91",
+        "quote": "The conjecture forbids the interpretation that corroboration serves as a pro"
+      }
+    ],
+    "discharges": [],
+    "optional_refs": [
+      "SRC_007",
+      "SRC_014"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}

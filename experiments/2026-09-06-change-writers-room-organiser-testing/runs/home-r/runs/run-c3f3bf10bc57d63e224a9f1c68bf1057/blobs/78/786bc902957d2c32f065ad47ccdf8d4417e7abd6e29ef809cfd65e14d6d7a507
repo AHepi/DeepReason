@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a 'pragmatic decision' to minimize the risk of immediate falsification, but this fails to address the problem's core challenge regarding 'acting on' a theory for future outcomes. Popper's asymmetry of risk explains why we do not discard a corroborated theory yet, but it does not justify preferring it for future action (e.g., building a bridge) without implicitly assuming that past corroboration indicates future reliability. By framing the preference as a 'methodological rule' distinct from prediction, the target sidesteps the necessity of induction required when moving from 'testing' to 'acting,' thereby smuggling in the very inductive assumption it claims to avoid.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Acting on a theory for future consequences requires an assumption that past performance indicates future reliability, which is an inductive premise.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is merely a rule for what to test next rather than what to rely on for future action, how does Popper account for the rationality of engineers using well-corroborated physics to build bridges intended to stand in the future?"
+    }
+  ]
+}
