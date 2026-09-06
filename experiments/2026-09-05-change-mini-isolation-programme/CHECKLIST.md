@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=57 blockers=none. Steps 55-56 DONE: judged blind, RESULTS.md written (INDISTINGUISHABLE by the rule; null under C6). Step 54 DONE: ARM 0 3/3 complete, ARM M COMPLETE (8 conjectures, 24 criticisms, 14 proposals, 39577 tokens, verify 0, replay equal). Step 53 DONE: epoch3 soak green, isolation re-run PASS, probe ok. Step 52 DONE: PREREG_D8.md sealed (sha in its commit), instruments under d8/, no arm has run. T3-T6 DELIVERED; T7 runs in this window (REQUEST.md Amendment 3, "go for it jack!", credential in the gitignored env). T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: DONE. All 57 steps checked; T0-T7 delivered; programme complete. Parked: P1-P7, P9, P10, P11 (P8 disposed). Steps 55-56 DONE: judged blind, RESULTS.md written (INDISTINGUISHABLE by the rule; null under C6). Step 54 DONE: ARM 0 3/3 complete, ARM M COMPLETE (8 conjectures, 24 criticisms, 14 proposals, 39577 tokens, verify 0, replay equal). Step 53 DONE: epoch3 soak green, isolation re-run PASS, probe ok. Step 52 DONE: PREREG_D8.md sealed (sha in its commit), instruments under d8/, no arm has run. T3-T6 DELIVERED; T7 runs in this window (REQUEST.md Amendment 3, "go for it jack!", credential in the gitignored env). T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1981,8 +1981,17 @@ tranche".
       (c69129453, 4f91ec43f). One exploratory pass, labelled NOT pre-registered (§7):
       ARM M composed 8/15. Next measure parked as P11 with a ready prompt.
       ```
-- [ ] 57. (all) [COMMIT] Deliver the programme: push and confirm clean.
+- [x] 57. (all) [COMMIT] Deliver the programme: push and confirm clean.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+      ```
+      $ python -m pytest tests/ -q -n 4   -> 5084 passed, 6 skipped in 1205.44s, gate rc=0 (0 failed)
+      $ git diff --stat c66aad16b..HEAD -- src/ mini/ tools/ scripts/ docs/map pyproject.toml   -> (no output)
+      $ git diff --stat 14cc5da495..HEAD -- <the seven frozen paths>                           -> (no output)
+      T7/VALIDATION.md PASS; T7/DELIVERY.md written; P10, P11 parked with prompts.
+      $ git status --porcelain   -> (empty, after the step-57 commit)
+      $ git rev-parse HEAD origin/claude/mini-isolation-t3-t5-7tsc6d   -> equal (pasted below the commit)
+      ```
 
 ---
 
