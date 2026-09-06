@@ -1,0 +1,123 @@
+QUESTION: Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+SURVIVING POSITIONS (16):
+1. The preference for better-corroborated theories is defensible without induction because it functions as a pragmatic wager: while past success guarantees nothing about the future, choosing the theory that has demonstrated 'fitness' by surviving severe tests is the only rational choice available if one must act.
+   Mechanism: The mechanism distinguishes between epistemic probability (which Popper rejects as increased by corroboration) and pragmatic rationality. It argues that acting on the best-tested theory is akin to betting on a horse that has won every race; the agent does not believe the horse will win (no inductive leap), but recognizes it as the unique rational option given the constraint of necessary action.
+   Refuted if:
+   - refuted if it can be demonstrated that preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects
+   - refuted if the very act of selecting a theory based on past survival implicitly assumes that past performance is a reliable indicator of future utility
+   - refuted if the analogy of betting on a horse fails because, unlike a horse race, scientific theories face an unknown reality where survival demonstrates no positive 'fitness'
+   - refuted if the phrase 'educated guesswork' is a contradiction in terms within a strictly non-inductive framework, rendering the preference an arbitrary psychological habit
+
+2. The preference is defensible by shifting the goal from 'probability' to 'verisimilitude' (truth-likeness): a highly corroborated theory is not more probable, but is a better candidate for being closer to the truth because it has withstood attempts to show it is false.
+   Mechanism: The mechanism posits that science aims at truth rather than certainty. Therefore, selecting the theory with the highest empirical content that has not yet been refuted is the only methodological move consistent with increasing verisimilitude. This avoids induction by treating corroboration as a logical relation of content and truth rather than a statistical likelihood.
+   Refuted if:
+   - refuted if it can be shown that the concept of 'verisimilitude' cannot be formally defined without implicitly relying on inductive probability
+   - refuted if Popper's own formal definition of verisimilitude was proven logically incoherent by Tichý and Miller, rendering the argument internally inconsistent
+   - refuted if asserting that a theory which has survived severe tests is a 'better candidate' for being true presupposes the 'uniformity of nature'
+   - refuted if reducing the justification to a 'regulative ideal' that cannot be logically proven concedes that the choice is ultimately irrational or arational
+
+3. The preference is indefensible on Popper's own terms and constitutes a performative contradiction: by advising scientists to 'prefer' the better-corroborated theory for action, Popper implicitly asserts that past performance is a reliable guide to future reliability, which is the definition of inductive reasoning he sought to destroy.
+   Mechanism: The mechanism argues that if corroboration reports only past history and implies nothing about the future, then preferring Theory A over Theory B for future application is irrational within Popper's system. Accepting this view costs the coherence of Popper's philosophy, reducing his methodology to a description of psychological habit rather than a logical framework.
+   Refuted if:
+   - refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed
+   - refuted if Popper explicitly distinguishes between the logical status of a theory and the pragmatic decision to act upon it, allowing preference without belief in future reliability
+   - refuted if the claim that Popper's system reduces to 'psychological habit' ignores his argument for the superiority of severe testing as a deductive consequence of the goal to eliminate error
+   - refuted if the conjecture commits a straw man fallacy by suggesting Popper advises preference based on 'past performance' as a guide to 'future reliability' rather than acknowledging the necessity of decision-making under uncertainty
+
+4. The preference is defensible because corroboration functions as a measure of informational content rather than likelihood: we choose the better-corroborated theory not because we think it will hold true, but because it offers the most detailed map of the world currently available, providing the richest basis for further criticism.
+   Mechanism: The mechanism redefines 'action' as purely experimental. We act on the bold theory specifically to try to break it, meaning our 'preference' is actually a preference for the most efficient path to potential falsification, not for successful prediction.
+   Refuted if:
+   - refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true
+   - refuted if the assertion that 'action becomes purely experimental' fails to account for the stakes involved in real-world application where agents act on the expectation that the theory will hold
+   - refuted if the target conflates 'informational content' with 'practical viability', as scientists prefer corroborated theories for accurate predictions, not merely to 'break them' faster
+   - refuted if preferring a theory for its 'boldness' presupposes that past survival under severe tests is a reliable indicator of future utility
+
+5. The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated theory in favor of a poorly tested one increases the likelihood of immediate error without offering any compensatory increase in testability.
+   Mechanism: The mechanism frames the preference as a logical deduction about the current state of knowledge rather than an inductive prediction. The better-corroborated theory is simply the one that has not yet been falsified despite greater exposure. Choosing it minimizes 'known unknowns' relative to alternatives, a defensive posture requiring no belief in future validity.
+   Refuted if:
+   - refuted if it could be demonstrated that the concept of 'minimizing known unknowns' logically entails a probabilistic assessment of future performance
+   - refuted if claiming that choosing a poorly tested theory carries a higher 'likelihood of error' assigns a probabilistic weight to theories based on history, contradicting Popper's core thesis
+   - refuted if the 'defensive posture' is illusory because action inherently aims at future results, and preferring theory A over theory B for action logically entails believing A is a better guide to those results
+   - refuted if Popper explicitly denied that past survival implies future reliability, making any deduction that one *should* act on the well-corroborated theory an inductive leap
+
+6. The tension dissolves if we strictly segregate corroboration as a purely historical report from the act of choosing a theory for action: the preference is defensible as a non-rational, psychological commitment necessary for life, distinct from scientific logic.
+   Mechanism: The mechanism argues that while corroboration says nothing about the future, the act of preferring the best-tested theory is a biological or pragmatic imperative for survival. This admits that science alone cannot dictate action without an extra-logical leap, thus avoiding the charge of smuggling induction into the logic of science itself.
+   Refuted if:
+   - refuted if Popper explicitly argued in his published works that the preference for well-corroborated theories in practical action is a 'non-rational' or purely 'psychological' commitment, rather than a methodologically rational choice
+   - refuted if the proposal to segregate corroboration as a 'purely historical report' ignores Popper's concept of corroboration as a measure of testability and explanatory power that provides a rational basis for expectation
+   - refuted if the conjecture creates a false dichotomy between 'strict rationality' and 'pragmatic imperative', whereas Popper's philosophy integrates these via the logical asymmetry between verification and falsification
+   - refuted if Popper explicitly argued that preferring the better-corroborated theory is a rational decision based on critical discussion and the aim of finding truth, not a blind biological impulse
+
+7. The preference for better-corroborated theories is defensible on Popper's terms as a methodological rule to maximize the severity of future falsification, not as an inductive prediction of success.
+   Mechanism: Choosing the theory that has withstood the severest tests provides the most informative target for error detection; if it is false, this choice reveals the error fastest, accelerating knowledge growth without assuming the theory will hold true.
+   Refuted if:
+   - refuted if it can be shown that Popper explicitly justified the preference for better-corroborated theories in practical, life-or-death decisions on the grounds of safety or reliability rather than solely on the grounds of maximizing testability and information content
+   - refuted if the argument that we choose highly corroborated theories because they are the 'most informative target for future falsification' is internally inconsistent with scientific practice where robust theories are used as stable foundations
+   - refuted if the assumption that a theory which has survived severe tests is the 'most likely to reveal its falsehood quickly' is circular because such a theory has demonstrated resilience
+
+8. The preference for better-corroborated theories is indefensible on Popper's own terms and constitutes a performative contradiction that smuggles induction back in through the pragmatic necessity of action.
+   Mechanism: Acting on a well-corroborated theory (e.g., building a bridge) implicitly relies on the premise that past survival indicates future stability, which is the definition of inductive reasoning; no semantic distinction between 'corroboration' and 'probability' can mask this inductive leap when leaving abstract methodology for real-world application.
+   Refuted if:
+   - refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed
+   - refuted if Popper explicitly distinguishes between 'preference for action' and 'belief in future reliability' allowing for rational choice without inductive inference
+   - refuted if the charge of 'performative contradiction' fails because acting on a theory does not necessitate believing it is probable
+
+9. The preference is defensible only by accepting a non-probabilistic metaphysical commitment to verisimilitude (truth-likeness), shifting the goal from predictive reliability to structural approximation.
+   Mechanism: Severe testing logically increases a theory's content and proximity to truth; while we cannot know a theory is true, we can rationally prefer the one closer to truth based on test survival, provided we accept the metaphysical hope that nature rewards boldness with truth-likeness.
+   Refuted if:
+   - refuted if it can be demonstrated that the concept of 'verisimilitude' cannot be formally defined without implicitly relying on inductive probability
+   - refuted if it can be demonstrated that Popper explicitly grounded the preference in a pragmatic decision rule without invoking any metaphysical assumption about proximity to truth
+   - refuted if the claim that accepting verisimilitude costs the framework its claim to 'pure logic' mischaracterizes critical rationalism as requiring no non-logical commitments
+
+10. The preference for better-corroborated theories is indefensible on Popper's own terms and constitutes a performative contradiction: acting on a well-corroborated theory (e.g., bridge design) relies on the implicit premise that past survival indicates future stability, which is the very definition of inductive reasoning Popper sought to destroy.
+   Mechanism: Popper's system collapses into crypto-induction whenever it leaves abstract methodology; no semantic maneuvering around 'corroboration' vs. 'probability' can mask that acting on corroboration requires an inductive leap, reducing his methodology to a description of psychological habit rather than a logical framework.
+   Refuted if:
+   - refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed or remain unfalsified in the future
+   - refuted if Popper explicitly distinguished 'pragmatic preference for action' from 'assertion of future reliability' such that one can choose the best-tested map without assuming the territory will not change
+   - refuted if it can be demonstrated that Popper explicitly justified the preference for better-corroborated theories in practical decisions solely on the grounds of maximizing testability and information content, without invoking any expectation of future success based on past performance
+
+11. The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim: choosing the theory that has survived severe tests is the only rational choice available if we must act, as it has demonstrated a capacity to withstand falsification that others lack.
+   Mechanism: Past success guarantees nothing about the future (rejecting induction), but the theory surviving severest tests proves its 'fitness' in the specific environment of reality so far; choosing it is akin to betting on the horse that has won every race—we do not know it will win the next, but it is the only rational bet.
+   Refuted if:
+   - refuted if it can be demonstrated that preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects
+   - refuted if the analogy of betting on a horse fails because scientific theories face an unknown reality where surviving tests demonstrates no positive 'fitness'
+   - refuted if the phrase 'educated guesswork' is a contradiction in terms within a strictly non-inductive framework, rendering the preference an arbitrary psychological habit
+
+12. The preference is defensible only by accepting a non-probabilistic metaphysical commitment to verisimilitude (truth-likeness), arguing that while we cannot know a theory is true, severe testing logically increases its content and proximity to truth.
+   Mechanism: This stance survives Popper's anti-induction critique by shifting the goal from 'predictive reliability' to 'structural approximation,' positing that surviving severe tests correlates with truth-likeness.
+   Refuted if:
+   - refuted if it can be shown that the concept of 'verisimilitude' cannot be formally defined without implicitly relying on inductive probability
+   - refuted if Popper's own formal definition of verisimilitude was proven logically incoherent by Tichý and Miller, rendering the argument internally inconsistent
+   - refuted if it can be demonstrated that Popper explicitly grounded the preference in a pragmatic decision rule without invoking any metaphysical assumption about proximity to truth
+
+13. The preference is defensible because corroboration functions as a measure of informational content rather than likelihood: we choose the better-corroborated theory because it offers the most detailed map of the world currently available, providing the richest basis for further criticism and testing.
+   Mechanism: A theory that survives severe tests is one that took a greater risk of being wrong; preferring it is a preference for boldness and precision, acting specifically to try to break it, meaning our 'preference' is actually a preference for the most efficient path to potential falsification.
+   Refuted if:
+   - refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true
+   - refuted if the target conflates 'informational content' with 'practical viability', as scientists prefer corroborated theories for accurate predictions, not just to break them
+   - refuted if the assertion that 'action becomes purely experimental' fails to account for the stakes involved in real-world application where failure results in catastrophic loss
+
+14. The preference for better-corroborated theories is indefensible on Popper's own terms and constitutes a performative contradiction: acting on corroboration requires an inductive leap that smuggles the principle of uniformity back into the system, reducing the methodology to psychological habit.
+   Mechanism: The act of choosing a well-corroborated theory for action (e.g., a bridge design) implicitly asserts that past survival indicates future stability, which is the definition of inductive reasoning Popper sought to destroy; no semantic distinction between 'corroboration' and 'probability' can mask this reliance on past performance as a guide to future reliability.
+   Refuted if:
+   - refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed or remain unfalsified in the future
+   - refuted if Popper explicitly distinguished 'pragmatic preference for action' from 'assertion of future reliability' such that one can choose the best-tested map without assuming the territory will not change
+   - refuted if it can be demonstrated that no non-inductive logical rule (such as the methodological rule to test the boldest surviving hypothesis) can govern the preference for better-corroborated theories
+
+15. The preference for better-corroborated theories is defensible without induction because it functions as a methodological rule to maximize the severity of future falsification, selecting the theory that offers the most informative target for error detection rather than the one most likely to succeed.
+   Mechanism: Choosing the best-corroborated theory is not a prediction of future truth but a strategic decision to expose the boldiest surviving hypothesis to new risks; if it fails, we learn more than if a weaker theory fails, making the preference a tool for accelerating knowledge growth even if practical application fails.
+   Refuted if:
+   - refuted if it can be shown that Popper explicitly justified the preference for better-corroborated theories in practical, life-or-death decisions on the grounds of safety or reliability rather than solely on the grounds of maximizing testability
+   - refuted if the concept of 'severity' of a test cannot be measured and valued without invoking the inductive assumption that passing severe tests makes a theory more likely to pass future tests
+   - refuted if evidence shows researchers consistently choosing less established, riskier hypotheses over well-corroborated ones solely to accelerate falsification
+
+16. The preference is defensible only by accepting a non-probabilistic metaphysical commitment to verisimilitude (truth-likeness), arguing that severe testing logically increases a theory's proximity to truth, but this costs the framework its claim to pure logic by smuggling in a rationalist faith that nature rewards boldness.
+   Mechanism: Shifting the goal from 'predictive reliability' to 'structural approximation' allows the preference to survive anti-induction critiques, but it requires the metaphysical hope that surviving severe tests correlates with truth-likeness, a correlation Popper admits cannot be logically proven.
+   Refuted if:
+   - refuted if it can be demonstrated that the concept of 'verisimilitude' cannot be formally defined without implicitly relying on inductive probability
+   - refuted if it can be demonstrated that Popper explicitly grounded the preference in a pragmatic decision rule without invoking any metaphysical assumption about the theory's proximity to truth
+   - refuted if a rigorous demonstration shows that a coherent, non-probabilistic measure of verisimilitude exists which successfully ranks theories such that higher corroboration strictly implies greater closeness to the truth
+
+REFUTED POSITIONS (0):
+(Positions on 1 derived sub-questions, 9 in all, are not part of this answer.)
