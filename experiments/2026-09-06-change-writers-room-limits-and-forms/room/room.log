@@ -1,0 +1,11 @@
+=== room run started 2026-09-06T06:06:54Z flow=mini.flow.room.v1 ===
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/2026-09-06-change-writers-room-limits-and-forms/runs/home-room/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+rc=0
+8:model_profile: standard

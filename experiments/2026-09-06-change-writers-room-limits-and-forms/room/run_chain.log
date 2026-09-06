@@ -1,1 +1,12 @@
 === soak started 2026-09-06T06:02:26Z ===
+soak rc=0
+  [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+  [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+  [PASS] A3-verify-root-clean         0 violation(s)
+  [PASS] A4-cycles-reached            reached cycle 8 of 8 requested; the deepest recorded death was cycle 2
+  [PASS] A7-record-fully-read         0 record(s) under objects/ could not be parsed by this instrument's own readers
+  [PASS] D2-route-lease           lease-checked routes with tuning
+  [PASS] D3-budget-auth           budget authorization
+  [PASS] D4-reservation-bound     reservation/dispatch bounds
+[soak] exit 0 (clean)
+=== room started 2026-09-06T06:06:54Z ===

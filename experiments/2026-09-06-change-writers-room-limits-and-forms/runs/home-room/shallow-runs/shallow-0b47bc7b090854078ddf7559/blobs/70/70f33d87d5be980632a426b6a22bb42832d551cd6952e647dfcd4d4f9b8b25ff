@@ -1,0 +1,16 @@
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"MiniRoomObjection": {"additionalProperties": false, "description": "One objection to the TARGET CONJECTURE. `about` is the target's id;\n`body` is the objection in free prose; `would_settle` (optional) says what\nobservation or argument would settle it either way.", "properties": {"about": {"minLength": 1, "title": "About", "type": "string"}, "body": {"minLength": 1, "title": "Body", "type": "string"}, "would_settle": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Would Settle"}}, "required": ["about", "body"], "title": "MiniRoomObjection", "type": "object"}}, "additionalProperties": false, "description": "CRITIC SEAT. Mount the strongest specific objections to the TARGET\nCONJECTURE named in the brief -- each about that conjecture, each stating\nits case. You decide nothing: an objection is recorded and shown, and it\noverturns nothing.", "properties": {"objections": {"items": {"$ref": "#/$defs/MiniRoomObjection"}, "minItems": 1, "title": "Objections", "type": "array"}}, "required": ["objections"], "title": "MiniRoomCritic", "type": "object"}
+SYNTAX EXAMPLE:
+{"objections":[{"about":"x","body":"x"}]}
+
+## problem
+PROBLEM question-corroboration-d8
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-conjecture
+TARGET CONJECTURE a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797
+The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim. Popper argues that while past success guarantees nothing about the future (rejecting induction), the theory that has survived the severest tests has proven its 'fitness' in the specific environment of reality so far. Choosing it is akin to betting on the horse that has won every race; we do not know it will win the next, but it is the only rational choice available if we must act, as it has demonstrated a capacity to withstand falsification that others lack. This costs us the comfort of believing the theory is 'true' or 'likely,' forcing us to accept that our best actions are still grounded in guesswork, albeit an educated one.
+[angle: The Pragmatic Wager]
+
+## directive
+You are the critic seat. Mount the strongest specific objections to the TARGET CONJECTURE above. Each objection names what it is about and states its case in free prose. You decide nothing: an objection is recorded and shown, and it overturns nothing.
