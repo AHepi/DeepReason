@@ -296,7 +296,13 @@ assert '_record_seat_retirement' in src
   and gamma records a diagnostic and moves to the next school. The two handlers
   must stay ahead of the broad ones — the typed termination is the complete
   durable outcome, and a skipped advisory review must not stall the cycle.
-`check: python -c 'import inspect; from deepreason.scheduler.scheduler import Scheduler as S; r = inspect.getsource(S._maybe_config_referee); assert "except WorkBudgetDenied:" in r and r.index("except WorkBudgetDenied:") < r.index("except (SchemaRepairError, EndpointError) as error:"); g = inspect.getsource(S.step); assert "except WorkBudgetDenied as error:" in g and "budget_denied" in g' && test "$(grep -c "except WorkBudgetDenied" src/deepreason/scheduler/scheduler.py)" -eq 2 && python -m pytest tests/test_config_referee.py::test_scheduler_absorbs_budget_denied_referee tests/test_config_referee.py::test_budget_denied_referee_terminates_typed_without_second_transition -q`
+  A THIRD absorbing arm joined these two on 2026-09-06, in
+  `_dispatch_criticism_batches`: a refused criticism batch is re-planned or
+  dropped rather than ending the run, unless the ceiling is SPENT, in which
+  case it re-raises so `run`'s own arm can end the run cleanly. It is counted
+  here so the count says how many places absorb a denial rather than merely
+  that two do.
+`check: python -c 'import inspect; from deepreason.scheduler.scheduler import Scheduler as S; r = inspect.getsource(S._maybe_config_referee); assert "except WorkBudgetDenied:" in r and r.index("except WorkBudgetDenied:") < r.index("except (SchemaRepairError, EndpointError) as error:"); g = inspect.getsource(S.step); assert "except WorkBudgetDenied as error:" in g and "budget_denied" in g; d = inspect.getsource(S._dispatch_criticism_batches); assert "except WorkBudgetDenied as denial:" in d and "budget_denial_exhausted(denial)" in d' && test "$(grep -c "except WorkBudgetDenied" src/deepreason/scheduler/scheduler.py)" -eq 3 && python -m pytest tests/test_config_referee.py::test_scheduler_absorbs_budget_denied_referee tests/test_config_referee.py::test_budget_denied_referee_terminates_typed_without_second_transition tests/test_criticism_budget_denial_policy.py -q`
 - **The cycle loop had a clean budget-stop road and the transactional denial
   was not on it.** `Scheduler.run` absorbs `TokenBudgetExceeded`, breaks with
   no stop decision, and `application/text_runs.py` publishes that as
@@ -396,7 +402,7 @@ assert guard < src.index('spend = getattr(e')
   actual defect this tranche's operator request ("why were [criticism
   seats] disconnected") traced to. Argumentative criticism is now the ONLY
   local-ladder phase that never defers under v6.
-`check: python -c 'import inspect; from deepreason.scheduler.scheduler import Scheduler as S; a = inspect.getsource(S._arg_crit); assert a.index("manifest foreign criticism has no runtime critic role") < a.index("self._foreign_arg_crit()") < a.index("crit_argumentative_batch("); assert "if criticism_policy is not None:\n            self._foreign_arg_crit()\n            return" in a; assert "argumentative-criticism" not in a' && python -m pytest tests/test_v6_scheduler_model_phase_deferral.py::test_legacy_argumentative_criticism_dispatches_under_v6 tests/test_v6_scheduler_model_phase_deferral.py::test_v6_audit_vision_and_lazy_hv_defer_without_dispatch tests/test_v6_scheduler_model_phase_deferral.py::test_v6_pairwise_discrimination_never_reaches_unbound_judge -q`
+`check: python -c 'import inspect; from deepreason.scheduler.scheduler import Scheduler as S; a = inspect.getsource(S._arg_crit); assert a.index("manifest foreign criticism has no runtime critic role") < a.index("self._foreign_arg_crit()") < a.index("self._dispatch_criticism_batches("); assert "crit_argumentative_batch(" in inspect.getsource(S._dispatch_criticism_batches); assert "if criticism_policy is not None:\n            self._foreign_arg_crit()\n            return" in a; assert "argumentative-criticism" not in a' && python -m pytest tests/test_v6_scheduler_model_phase_deferral.py::test_legacy_argumentative_criticism_dispatches_under_v6 tests/test_v6_scheduler_model_phase_deferral.py::test_v6_audit_vision_and_lazy_hv_defer_without_dispatch tests/test_v6_scheduler_model_phase_deferral.py::test_v6_pairwise_discrimination_never_reaches_unbound_judge -q`
 The gate's answer is manifest data: the same phase on the same role gets a
 different answer from a granted and an ungranted seat, and the phase-to-contract
 mapping is named nowhere in the scheduler.

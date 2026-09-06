@@ -1691,7 +1691,14 @@ class Scheduler:
         tail = [policy, STOP_WARNING]
         if self._measure_recorded([STOP_SIGNAL, *tail]):
             return
-        self.harness.record_measure(inputs=[STOP_SIGNAL, *tail])
+        # The signal census (DR-SUB-scheduler) reads the LITERAL at this call
+        # site, so the name is spelled here rather than passed in a variable;
+        # a variable makes the emission invisible to the check that exists to
+        # find it. `STOP_SIGNAL` above is the same string, and the test asserts
+        # they agree.
+        self.harness.record_measure(
+            inputs=["criticism.budget-stop-the-run.v1", *tail]
+        )
 
     def _run_after_criticism_hooks(self) -> None:
         """Announce that a criticism pass finished, and run whatever listens.

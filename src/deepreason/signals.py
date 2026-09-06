@@ -513,6 +513,20 @@ _DECLARED: tuple[SignalDeclaration, ...] = (
                   "of anything about the run's content",
         staleness="permanent",
     ),
+    SignalDeclaration(
+        name="criticism.budget-stop-the-run.v1",
+        unit="event",
+        semantics="the run set its criticism budget-denial policy to stop the "
+                  "run, so one criticism batch the token budget refuses ends "
+                  "the whole run rather than being re-planned or dropped "
+                  "(inputs: [signal, policy id, warning]). Emitted once per "
+                  "run at the first criticism pass. The ungated-seats law "
+                  "(2026-08-28) requires switching a gate to a setting that "
+                  "can kill a run to produce a typed warning rather than "
+                  "silence; it is evidence of a configuration choice, never "
+                  "of anything about the run's content",
+        staleness="permanent",
+    ),
     # The successor-question channel's mint receipt (operator law, 2026-08-29).
     SignalDeclaration(
         name="successor-problem-minted",

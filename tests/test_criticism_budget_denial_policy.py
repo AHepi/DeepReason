@@ -371,6 +371,20 @@ def test_the_field_reaches_no_manifest_and_moves_no_digest():
     assert '\n    data.pop("CRITICISM_BUDGET_DENIAL_POLICY", None)\n' in source
 
 
+def test_the_warning_is_a_registered_signal_spelled_at_its_emit_site():
+    """The signal census reads the LITERAL at the call site, so the emitted
+    string is spelled there; this is what keeps the two spellings honest."""
+
+    import inspect
+
+    import deepreason.signals as signals
+
+    assert signals.is_known(STOP_SIGNAL)
+    assert STOP_SIGNAL in inspect.getsource(
+        Scheduler._record_criticism_budget_stop_warning
+    )
+
+
 def test_the_scheduler_reads_the_policy_and_hard_codes_no_behaviour():
     """The modularity law's "enforced" clause: a check that goes red when the
     customization point stops being one."""
