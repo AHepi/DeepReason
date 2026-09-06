@@ -19,7 +19,7 @@ for ARM in A1 A1P A2 A3; do
   export DEEPREASON_HOME="$PWD/$D/soak/home-$ARM"
   mkdir -p "$DEEPREASON_HOME"
   if [ "$ARM" = "A3" ]; then
-    python -c "
+    env -u DR_ARM python -c "
 import sys, pathlib, os
 sys.path.insert(0, os.environ['PYTHONPATH'].split(':')[0])
 import armrig

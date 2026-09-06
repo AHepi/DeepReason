@@ -1,0 +1,9 @@
+ARM_RECEIPT_CENSUS_V1  (from the runs' own typed section receipts)
+
+run  (run)
+  dr.history.v1            never rendered  n=   0  bytes=      0   dropped=63
+  dr.neighbourhood         never rendered  n=   0  bytes=      0   dropped=0
+  op.neighbourhood.v1      rendered        n=  63  bytes=  40670   dropped=0
+  dr.active-properties     never rendered  n=   0  bytes=      0   dropped=63
+
+every arm's record agrees with the arm it was launched as.

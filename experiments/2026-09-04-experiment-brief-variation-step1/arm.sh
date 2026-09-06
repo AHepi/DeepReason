@@ -48,7 +48,7 @@ echo "=== arm $ARM started $(date -u +%FT%TZ) ==="
 # calls the loader, but a stray file in a shared home is how a control quietly
 # becomes a treatment.
 if [ "$ARM" = "A3" ]; then
-  python -c "
+  env -u DR_ARM python -c "
 import os, pathlib, sys
 sys.path.insert(0, os.environ['PYTHONPATH'].split(':')[0])
 import armrig
