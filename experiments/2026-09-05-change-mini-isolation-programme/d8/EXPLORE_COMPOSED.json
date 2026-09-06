@@ -1,0 +1,67 @@
+{
+ "schema": "d8-explore-composed.v1",
+ "pre_registered": false,
+ "unit": "all ARM M conjectures composed oldest-first",
+ "conjectures": 8,
+ "chars": 4493,
+ "judges": 3,
+ "totals": [
+  8,
+  8,
+  8
+ ],
+ "median": 8,
+ "detail": [
+  {
+   "scores": [
+    2,
+    1,
+    2,
+    2,
+    1
+   ],
+   "total": 8,
+   "why": {
+    "c1": "Both sides are presented clearly, though the 'smuggling induction' argument relies on a standard uniformity principle rather than the more sophisticated Salmon-style critique.",
+    "c2": "Fails to name specific Popperian texts (Objective Knowledge) or the precise definition of corroboration as a non-predictive report; uses generic terms like 'methodological rule of thumb'.",
+    "c3": "Identifies a survivor in Conjecture 7 but dilutes the commitment by presenting eight separate 'conjectures' rather than a single synthesized verdict.",
+    "c4": "Names a real cost (loss of assurance/probability), but it is somewhat generic and repeated across multiple conjectures rather than deeply analyzed as a specific philosophical concession.",
+    "c5": "Partially evades by scattering the answer across eight distinct points, effectively dissolving the tension into a list of options rather than holding and resolving the contradiction in a unified argument."
+   }
+  },
+  {
+   "scores": [
+    2,
+    1,
+    2,
+    2,
+    1
+   ],
+   "total": 8,
+   "why": {
+    "c1": "Both sides are presented with reasonable strength, though the 'smuggling induction' argument relies on a standard uniformity principle rather than the more sophisticated Salmon/Watkins critiques.",
+    "c2": "Fails to engage specific Popperian machinery like the distinction between corroboration reports and probability, or the specific pragmatic moves in 'Objective Knowledge'; it remains at a generic level.",
+    "c3": "Offers a verdict in Conjecture 7, but the presentation across eight disjointed conjectures dilutes the commitment compared to a unified argument.",
+    "c4": "Identifies a real cost (loss of assurance/probabilistic certainty), but it is a standard Popperian trope rather than a deep, uncomfortable concession specific to the tension.",
+    "c5": "Partially evades by scattering the answer into multiple 'conjectures' and leaning heavily on the 'pragmatic convention' dissolve in Conjecture 4 without fully resolving the tension."
+   }
+  },
+  {
+   "scores": [
+    2,
+    1,
+    2,
+    2,
+    1
+   ],
+   "total": 8,
+   "why": {
+    "c1": "Both sides are presented with reasonable strength, though the 'smuggling induction' case relies on a standard uniformity principle rather than the more sophisticated Salmon/Watkins critiques.",
+    "c2": "Fails to engage specific Popperian machinery like the distinction between logical probability and corroboration degree, or the specific pragmatic move in 'Objective Knowledge'; uses generic terms like 'methodological rule of thumb'.",
+    "c3": "Identifies a survivor in Conjecture 7 but dilutes the commitment by presenting eight separate 'conjectures' rather than a single synthesized verdict.",
+    "c4": "Names a real cost (loss of assurance/probability), but it is somewhat generic and not deeply tied to the specific philosophical trade-off of the chosen verdict.",
+    "c5": "Partially evades by fragmenting the answer into eight disjointed conjectures, effectively dissolving the tension across multiple options rather than holding and resolving it in one coherent argument."
+   }
+  }
+ ]
+}

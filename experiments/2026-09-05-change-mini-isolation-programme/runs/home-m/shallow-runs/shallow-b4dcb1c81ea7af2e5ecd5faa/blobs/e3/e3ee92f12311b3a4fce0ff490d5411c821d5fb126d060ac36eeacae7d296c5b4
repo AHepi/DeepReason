@@ -1,0 +1,15 @@
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"MiniObjection": {"additionalProperties": false, "description": "One criticism. `about` names what it is about; `body` is free prose.\n\nIt carries NO score, rank, weight, confidence or authority field. Shape may\nnever buy standing (the formalism-optional law), and within mini a\ncriticism overturns nothing at all (operator, 2026-09-05).", "properties": {"about": {"minLength": 1, "title": "About", "type": "string"}, "body": {"minLength": 1, "title": "Body", "type": "string"}}, "required": ["about", "body"], "title": "MiniObjection", "type": "object"}}, "additionalProperties": false, "properties": {"objections": {"items": {"$ref": "#/$defs/MiniObjection"}, "minItems": 1, "title": "Objections", "type": "array"}}, "required": ["objections"], "title": "MiniCritic", "type": "object"}
+SYNTAX EXAMPLE:
+{"objections":[{"about":"x","body":"x"}]}
+
+## problem
+PROBLEM question-corroboration-d8
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-conjecture
+TARGET CONJECTURE be248e4805a64ff3ba6394f7d33da88ef38fcbfe47a3829fdf587463136ac1c3
+The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference of future success, but as a critical preference grounded in verisimilitude: we choose the theory that has survived severe tests because it possesses higher informational content and has withstood more rigorous attempts at falsification, making it logically closer to the truth than its rivals, even though its probability remains zero or undefined.
+
+## directive
+You are the critic seat. Mount the strongest specific objections to the TARGET CONJECTURE above. Each objection names what it is about and states its case in free prose. You decide nothing: an objection is recorded and shown, and it overturns nothing.

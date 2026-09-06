@@ -1,0 +1,12 @@
+{
+  "proposals": [
+    {
+      "about": "The preference for better-corroborated theories is defensible on Popper's terms without smuggling in induction.",
+      "body": "Popper distinguishes between the logical probability of a theory (which corroboration does not increase) and the rational choice of which theory to act upon. The preference is defensible because it relies on the critical method: we choose the theory that has withstood the most severe tests not because we believe it is probably true or will remain true, but because it is currently the best-tested guide available. This is a decision based on past performance under scrutiny, not an inductive inference about the future. The cost of accepting this view is the abandonment of any desire for certainty or guaranteed success; we must accept that even the best-corroborated theory may fail tomorrow, and our choice is merely the most rational one possible in the absence of truth."
+    },
+    {
+      "about": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's framework.",
+      "body": "Despite Popper's explicit denials, the act of preferring a well-corroborated theory for practical action implicitly assumes that past success is a reliable indicator of future performance. If corroboration reports only past survival and offers no logical bridge to future reliability, then preferring Theory A over Theory B for the purpose of navigation, engineering, or medicine is irrational unless one assumes the uniformity of nature—the very principle of induction Popper rejected. To say 'this theory worked before, so I will use it now' is functionally identical to inductive reasoning. The cost of admitting this is the collapse of Popper's claim to have solved the problem of induction; his system would then rest on a pragmatic form of induction he ostensibly outlawed."
+    }
+  ]
+}

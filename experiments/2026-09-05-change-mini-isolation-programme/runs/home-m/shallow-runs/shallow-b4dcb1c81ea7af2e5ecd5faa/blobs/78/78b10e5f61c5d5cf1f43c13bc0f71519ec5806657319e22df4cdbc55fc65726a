@@ -1,0 +1,16 @@
+{
+  "objections": [
+    {
+      "about": "The reliance on verisimilitude",
+      "body": "The conjecture attempts to ground the preference for corroborated theories in verisimilitude (truth-likeness), yet Popper's own formal definition of verisimilitude was proven logically untenable by Tichý and Miller in 1974. They demonstrated that within Popper's framework, no false theory can be said to be closer to the truth than another false theory based solely on logical content and falsity content. By invoking verisimilitude as the justificatory mechanism, the conjecture leans on a concept that Popper himself admitted failed to provide the rigorous logical foundation required, thereby rendering the defense circular or dependent on an intuitive notion Popper explicitly tried to formalize and failed."
+    },
+    {
+      "about": "The pragmatic contradiction of choice",
+      "body": "The conjecture claims the preference is not an inductive inference of future success, but this distinction collapses under the weight of practical application. If a scientist chooses Theory A over Theory B because A is better corroborated, the act of choice necessarily implies an expectation that A will perform better in future applications or tests than B. To deny that this expectation constitutes a belief in the reliability of the method (induction) is to engage in semantic sophistry; effectively, acting 'as if' the theory is reliable while intellectually denying any probability of its success creates a disconnect between the epistemological stance and the ontological commitment required for action, smuggling induction back in through the back door of pragmatism."
+    },
+    {
+      "about": "The status of zero probability",
+      "body": "The argument rests on the premise that universal laws have zero probability, making probability comparisons impossible. However, if all universal theories have a probability of zero, then stating that one has 'higher informational content' does not logically entail it is a 'better' candidate for truth in a way that guides action without assuming the uniformity of nature. The move from 'survived severe tests' to 'logically closer to truth' requires an assumption that the future will resemble the past regarding the severity of tests, which is precisely the principle of induction Popper sought to reject. Without this assumption, the survival of past tests is historically interesting but logically irrelevant to future truth proximity."
+    }
+  ]
+}

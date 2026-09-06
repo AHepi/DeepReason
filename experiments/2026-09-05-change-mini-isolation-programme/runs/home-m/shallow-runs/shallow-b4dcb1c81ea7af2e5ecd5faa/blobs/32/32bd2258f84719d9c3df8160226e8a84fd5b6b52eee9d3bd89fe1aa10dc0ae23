@@ -1,0 +1,16 @@
+{
+  "objections": [
+    {
+      "about": "The distinction between rational choice and inductive expectation",
+      "body": "The conjecture claims we select theories without expecting them to remain true, yet the very act of preferring one theory over another for practical action implies an expectation of superior future performance. If there is no inductive bridge, the preference becomes a purely aesthetic or arbitrary choice disguised as rationality, because 'having withstood tests in the past' cannot logically inform 'will work better in the future' without smuggling in the principle of uniformity that Popper explicitly rejected."
+    },
+    {
+      "about": "The definition of corroboration as merely negative",
+      "body": "By defining the preferred theory solely as the 'least refuted option,' the conjecture ignores that corroboration reports on the severity of tests passed, not just the absence of failure. Reducing the preference to a lack of refutation fails to explain why a theory that has survived a thousand severe tests is practically preferred over a new, untested theory that is also technically 'unrefuted.' The conjecture offers no non-inductive mechanism to weight the history of survival against the blank slate of a new hypothesis."
+    },
+    {
+      "about": "The cost of abandoning assurance of future success",
+      "body": "The conjecture accepts the cost that science offers no assurance of future success, but this renders the concept of 'rational choice' vacuous in a pragmatic context. If a scientist cannot claim that a better-corroborated theory is more likely to yield correct predictions than a worse-corroborated one, then the directive to 'choose the best-criticized' provides no actual guidance for action distinct from flipping a coin, thereby undermining the claim that this preference is defensible as a rational strategy rather than a ritualistic adherence to past forms."
+    }
+  ]
+}

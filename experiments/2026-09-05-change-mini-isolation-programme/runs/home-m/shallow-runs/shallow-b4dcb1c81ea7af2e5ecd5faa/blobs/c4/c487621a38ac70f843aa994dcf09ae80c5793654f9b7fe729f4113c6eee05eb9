@@ -1,0 +1,12 @@
+{
+  "candidates": [
+    {
+      "content": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive rational choice: we select the theory that has withstood the most severe tests not because we expect it to remain true (which would be induction), but because it is currently the best-criticized and least refuted option available. This survives as the stronger case, but the cost is accepting that science offers no assurance of future success or probability of truth, only a commitment to the most rigorously tested error-elimination strategy at hand.",
+      "typicality": 0.9
+    },
+    {
+      "content": "The preference smuggles induction back in because acting on a corroborated theory inherently assumes that past survival under testing predicts future reliability; without this assumption, preferring one unfalsified theory over another for practical action is irrational. This view survives by exposing a pragmatic inconsistency in Popper's system, but the cost is collapsing the distinction between corroboration and probability, thereby undermining Popper's core claim to have solved the problem of induction.",
+      "typicality": 0.85
+    }
+  ]
+}

@@ -192,3 +192,36 @@ deleting it.
 **Window scope (this executor window only):** T0, T1, T2. Each sub-tranche
 is its own delivery — `dr-validate-change` then `dr-deliver-change` before
 the next starts. T3-T7 go to later windows.
+
+### Amendment 2 (2026-09-06) — this window's scope extended to T6
+
+Captured from the operator's message of 2026-09-06, after T3, T4 and T5 were
+delivered on `claude/mini-isolation-t3-t5-7tsc6d`. Verbatim, in full:
+
+> Do T6
+
+**R15 (scope, binding): T6 (CHECKLIST steps 46-51, SPEC S10 — regression,
+goldens, the record) runs in THIS window**, superseding the window
+instruction's "Stop after T5's delivery; T6 and T7 go to the last window" for
+T6 alone. T7 (S12, the measure) is not named and stays with the last window.
+No requirement changes; T6 records, at the programme's own boundary, the
+instruments every delivery here already ran.
+
+### Amendment 3 (2026-09-06) — "go for it jack!": T7 runs in this window, with a credential
+
+Captured from the operator's message of 2026-09-06, after T6 was delivered.
+The message was two lines: a provider credential, and the words below. The
+credential is NOT quoted here or anywhere in the tree — it went into this
+tranche's gitignored `env` file (`experiments/*/env`, `.gitignore`), verified
+ignored before the first commit after it was written. The operator's words,
+verbatim:
+
+> go for it jack!
+
+**R16 (scope, binding): T7 (CHECKLIST steps 52-57, SPEC S12 — the measure)
+runs in THIS window, with the credential supplied**, superseding the window
+instruction's "Offline; no key" and "T6 and T7 go to the last window" for T7.
+The measure's design is SPEC S12's as written: a pre-registered blind
+comparison against the same model's single call on the same standard input,
+criteria sealed before any arm runs, length held constant, per-seat spend
+reported, and an inconclusive result recorded as inconclusive (C6).

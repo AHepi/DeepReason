@@ -1,0 +1,12 @@
+{
+  "candidates": [
+    {
+      "content": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference of future success, but as a critical preference grounded in verisimilitude: we choose the theory that has survived severe tests because it possesses higher informational content and has withstood more rigorous attempts at falsification, making it logically closer to the truth than its rivals, even though its probability remains zero or undefined.",
+      "typicality": 0.9
+    },
+    {
+      "content": "Accepting the preference for corroborated theories without smuggling in induction costs science the comfort of probabilistic certainty and a measurable algorithm for progress; it forces us to treat 'verisimilitude' as a regulative ideal rather than a quantifiable metric, relying solely on critical discussion and the evolutionary elimination of error to navigate toward truth, while acknowledging that the best-tested theory today may still be falsified tomorrow.",
+      "typicality": 0.85
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+call 1: started 2026-09-06T04:07:42Z
+call 1: completed=True chars=7262 usage={'prompt_tokens': 105, 'completion_tokens': 1526, 'total_tokens': 1631} finish=stop s=19.5
+call 2: started 2026-09-06T04:08:02Z
+call 2: completed=True chars=7688 usage={'prompt_tokens': 105, 'completion_tokens': 1699, 'total_tokens': 1804} finish=stop s=21.7
+call 3: started 2026-09-06T04:08:23Z
+call 3: completed=True chars=7985 usage={'prompt_tokens': 105, 'completion_tokens': 1699, 'total_tokens': 1804} finish=stop s=22.3
+{
+ "schema": "d8-arm0-result.v1",
+ "model": "qwen3.5:397b",
+ "k": 3,
+ "calls": [
+  {
+   "k": 1,
+   "completed": true,
+   "content_chars": 7262,
+   "usage": {
+    "prompt_tokens": 105,
+    "completion_tokens": 1526,
+    "total_tokens": 1631
+   },
+   "finish_reason": "stop",
+   "seconds": 19.5
+  },
+  {
+   "k": 2,
+   "completed": true,
+   "content_chars": 7688,
+   "usage": {
+    "prompt_tokens": 105,
+    "completion_tokens": 1699,
+    "total_tokens": 1804
+   },
+   "finish_reason": "stop",
+   "seconds": 21.7
+  },
+  {
+   "k": 3,
+   "completed": true,
+   "content_chars": 7985,
+   "usage": {
+    "prompt_tokens": 105,
+    "completion_tokens": 1699,
+    "total_tokens": 1804
+   },
+   "finish_reason": "stop",
+   "seconds": 22.3
+  }
+ ],
+ "completed_calls": 3,
+ "total_tokens": 5239
+}

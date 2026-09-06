@@ -1,0 +1,34 @@
+{
+ "quality": {
+  "verdict": "INDISTINGUISHABLE",
+  "why": "floor met and neither directional rule fired",
+  "raw_gap": -9.375,
+  "p_raw": 0.006059939400605994,
+  "adjusted": 13.499184480202999,
+  "p_adjusted": 0.006349682515874206,
+  "quintile_held": -10.0,
+  "strata": 1,
+  "rho": 0.7157400462089768,
+  "n_arm0": 3,
+  "n_armM": 8
+ },
+ "spend": {
+  "table": {
+   "conjecturer": {
+    "calls": 3,
+    "tokens": 6736
+   },
+   "critic": {
+    "calls": 8,
+    "tokens": 8561
+   },
+   "commitment": {
+    "calls": 8,
+    "tokens": 24280
+   }
+  },
+  "total": 39577,
+  "cross_check": true,
+  "arm0_total": 5239
+ }
+}

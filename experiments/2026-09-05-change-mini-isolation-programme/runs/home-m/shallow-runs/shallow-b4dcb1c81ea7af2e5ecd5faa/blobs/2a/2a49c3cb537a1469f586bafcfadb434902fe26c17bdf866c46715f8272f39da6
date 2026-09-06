@@ -1,0 +1,20 @@
+{
+  "candidates": [
+    {
+      "content": "The preference for better-corroborated theories is defensible without induction because corroboration reports a theory's past performance in surviving severe tests, not its future probability. Choosing the best-tested theory is a rational decision to act on the hypothesis that has withstood the most rigorous attempts at falsification so far, acknowledging it may still be false tomorrow. This costs us any guarantee of success or truth, leaving us with only a methodological rule of thumb rather than an epistemic justification that the theory is likely true.",
+      "typicality": 0.85
+    },
+    {
+      "content": "Popper's position smuggles in induction through the back door by relying on a hidden uniformity principle: that the future will resemble the past regarding test outcomes. If a scientist prefers Theory A over Theory B solely because A survived tests that B failed, they are implicitly assuming that the conditions which allowed A to survive will persist, which is an inductive leap. The cost of accepting this view is the collapse of Popper's distinct 'critical rationalism' into a disguised form of Bayesianism or standard inductivism, stripping his philosophy of its unique claim to solve the problem of induction.",
+      "typicality": 0.72
+    },
+    {
+      "content": "The preference is justified not by looking backward at survival rates but forward at informational content and verisimilitude (truth-likeness). Severe tests target high-content theories; surviving them suggests the theory captures more structural reality than a refuted rival, even if we cannot assign a probability to this capture. We choose the better-corroborated theory because it is our best current guess at being closer to the truth, not because it is statistically safer. This costs us the ability to quantify 'closeness to truth' precisely, forcing science to remain a qualitative journey toward an unreachable horizon.",
+      "typicality": 0.65
+    },
+    {
+      "content": "The dilemma dissolves if we view the preference as a pragmatic convention of the scientific game rather than an epistemic claim about the world. Just as a chess player prefers a move that has worked against grandmasters in the past without believing the rules of physics have changed, scientists prefer corroborated theories as a constitutive rule of the practice. This stance avoids induction entirely but costs science any claim to describing reality progressively, reducing it to a self-consistent language game where 'survival' is merely a scorecard internal to the community.",
+      "typicality": 0.45
+    }
+  ]
+}

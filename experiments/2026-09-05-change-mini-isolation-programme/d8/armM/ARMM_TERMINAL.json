@@ -1,0 +1,24 @@
+{
+ "schema": "d8-armM-terminal.v1",
+ "root": "/home/user/DeepReason/experiments/2026-09-05-change-mini-isolation-programme/runs/home-m/shallow-runs/shallow-b4dcb1c81ea7af2e5ecd5faa",
+ "completed": true,
+ "stop": "queue-exhausted",
+ "cycles": 3,
+ "flow": "mini.flow.isolation.v1",
+ "problems": {
+  "question-corroboration-d8": 8
+ },
+ "refuted": 0,
+ "meter_equals_log": true,
+ "logged_tokens_this_run": 39577,
+ "records_by_kind": {
+  "mini.commitment-proposal.v1": 14,
+  "mini.criticism.v1": 24
+ },
+ "events": 53,
+ "verify_root_violations": 0,
+ "verify_root_first": [],
+ "replay_digest_equals_live": true,
+ "digest": "3d6fa78f5ca714289502b5ddb8e04b34d0800782eff5e268436c7704e7ca269a",
+ "TYPED_TERMINAL": "COMPLETE"
+}

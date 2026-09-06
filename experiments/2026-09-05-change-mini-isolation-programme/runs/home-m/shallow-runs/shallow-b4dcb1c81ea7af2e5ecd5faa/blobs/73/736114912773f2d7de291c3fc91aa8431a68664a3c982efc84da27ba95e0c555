@@ -1,0 +1,31 @@
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"MiniCommitmentProposal": {"additionalProperties": false, "description": "One proposed commitment. Its ONLY requirement is naming its conjecture.\n\nEverything else is free prose: no required fields, no schema beyond\nnon-empty, no length bound. That is R4 in the operator's own words -- an\nartifact that \"generates commitments on conjectures, but does not force a\nstrict format\".", "properties": {"about": {"minLength": 1, "title": "About", "type": "string"}, "body": {"minLength": 1, "title": "Body", "type": "string"}}, "required": ["about", "body"], "title": "MiniCommitmentProposal", "type": "object"}}, "additionalProperties": false, "properties": {"proposals": {"items": {"$ref": "#/$defs/MiniCommitmentProposal"}, "minItems": 1, "title": "Proposals", "type": "array"}}, "required": ["proposals"], "title": "MiniCommitmentProposals", "type": "object"}
+SYNTAX EXAMPLE:
+{"proposals":[{"about":"x","body":"x"}]}
+
+## problem
+PROBLEM question-corroboration-d8
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## everything-so-far
+EVERYTHING GENERATED SO FAR IN THIS RUN (every artifact, in full, oldest first; no verdict of any kind is shown):
+WITHHELD UNDER RULE mini.retention.everything.v1: 17 earlier entries exist in this run and are not shown here -- 9843f16c55a02ce422d04eb9057d52cb554dfe0052e19a3d19653ba96e18dc92, fab3fe93125ba81777325fc75a4b1873217880cd612e89c5f659b2b669bb771b, 66df759e09c49faedd7f1b9e7ebf1d8ceeac2fed60fcd2cbf4ca3d2592289264, 9e57c04e6bea5242dba708350be852428e2dfdd82675f00e73501f9aa1cd471f, 394708460984831ff5dc7c08c22225ef1c1f9a4f9966ef6d678793e5b9d4b6a0, dea2065de9593e6c1a3650068cdf4025d9cb45610aeee58e5c3929dc61489615, f69d07b03278355d336a3a7589a92749548ab5c8e4a3a98afa74f9337a9efd38, b46de4a5f6b8d74b8af227bc3aa105e63b89aa8310b73eb903fd204cd1af8364, 3cc0fa0217a508ab6f28d8b1b89916e6e03a4785831f7baa03331b9feee16f22, c945908561b6897db77d1cddfb5266594e7bdac8e154bd4f1542c0c7cd1401a5, 8ed0dd33554fc28fc550f5ffa07009e578059ac2a8f2f3d6bfbc29ab01886776, 93275f183c03faa3210ba2dd12b0a8d469dacbae55af40e7ecaa53b6c9f3a2f2, a288895db21818ecfba26d6e1002b2108a48ec3f85ac3036c452f9a49cfa1a45, 3a7cea31e2efe8305fad471453c21d126ae900b4a365761fcfa7feadbdd88760, 8e06dbd7189a912e461e18ebe9e273685729f6ab4a2c4bcfcaff770aa4488e52, d74cd99546d37555e10c7b7535ed73e00544cc22e2403048174083e4b637efab, a3e74f3765d5e3120f0616aecad97bcbe9fee70c61865e630052b69a3ceed79c. Treat what follows as partial; do not conclude they do not exist.
+[18] mini.commitment-proposal.v1 760dd4f64523002aa2e5f564eec74cd9fd7c16e5ea901bbf75b867ac527e3946
+    about: 9843f16c55a02ce422d04eb9057d52cb554dfe0052e19a3d19653ba96e18dc92
+The conjecture forbids claiming that selecting a highly corroborated theory provides any rational basis for believing it is true or approximately true; it must strictly maintain that such selection offers no epistemic justification beyond the report of past survival, accepting the cost that science cannot claim progressive approach to truth without smuggling in induction.
+[19] mini.commitment-proposal.v1 667ee8206935233a894bd3bcdee9e2fb3b79a4e4024e1a1ef69ea97f62c8e890
+    about: 9843f16c55a02ce422d04eb9057d52cb554dfe0052e19a3d19653ba96e18dc92
+The conjecture must not conflate 'rational decision' with 'probabilistic inference'; it is required to show exactly how acting on the best-tested theory is rational in Popper's specific sense (critical preference) without implicitly relying on the very inductive principle that past success predicts future reliability, which Popper explicitly rejected.
+[20] mini.commitment-proposal.v1 5f23c723b1d1ef3e75b35a7017e3394093aa4fa33f527ee95372c919a22c3497
+    about: fab3fe93125ba81777325fc75a4b1873217880cd612e89c5f659b2b669bb771b
+The conjecture must be refuted if it can be demonstrated that Popper's preference for better-corroborated theories logically entails an inductive assumption about the uniformity of nature or the likelihood of future success, rather than being a purely pragmatic decision rule based on past performance.
+[21] mini.commitment-proposal.v1 37a99048804ba646cab5232f84fcaab3a2d56c3b72698076e1528c9603c7bd20
+    about: fab3fe93125ba81777325fc75a4b1873217880cd612e89c5f659b2b669bb771b
+The conjecture forbids claiming that selecting a highly corroborated theory provides any rational basis for believing it is true or approximately true; it must strictly maintain that such selection offers no epistemic justification beyond the report of past survival, accepting the cost that science cannot claim progressive approach to truth without smuggling in induction.
+[22] mini.commitment-proposal.v1 9f98763c16ab13057b1efab4a028c37ac04017f625b2f7b3faca8da4de2212b0
+    about: fab3fe93125ba81777325fc75a4b1873217880cd612e89c5f659b2b669bb771b
+The conjecture must not conflate 'rational decision' with 'probabilistic inference'; it is required to show exactly how acting on the best-tested theory is rational in Popper's specific sense (critical preference) without implicitly relying on the very inductive principle that past success predicts future reliability, which Popper explicitly rejected.
+
+## target-conjecture
+TARGET CONJECTURE 66df759e09c49faedd7f1b9e7ebf1d8ceeac2fed60fcd2cbf4ca3d2592289264
+The preference is justified not by looking backward at survival rates but forward at informational content and verisimilitude (trut

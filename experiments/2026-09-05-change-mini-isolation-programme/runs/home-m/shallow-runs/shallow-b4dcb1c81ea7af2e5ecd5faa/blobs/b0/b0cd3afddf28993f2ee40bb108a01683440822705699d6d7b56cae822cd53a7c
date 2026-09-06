@@ -1,0 +1,15 @@
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"MiniObjection": {"additionalProperties": false, "description": "One criticism. `about` names what it is about; `body` is free prose.\n\nIt carries NO score, rank, weight, confidence or authority field. Shape may\nnever buy standing (the formalism-optional law), and within mini a\ncriticism overturns nothing at all (operator, 2026-09-05).", "properties": {"about": {"minLength": 1, "title": "About", "type": "string"}, "body": {"minLength": 1, "title": "Body", "type": "string"}}, "required": ["about", "body"], "title": "MiniObjection", "type": "object"}}, "additionalProperties": false, "properties": {"objections": {"items": {"$ref": "#/$defs/MiniObjection"}, "minItems": 1, "title": "Objections", "type": "array"}}, "required": ["objections"], "title": "MiniCritic", "type": "object"}
+SYNTAX EXAMPLE:
+{"objections":[{"about":"x","body":"x"}]}
+
+## problem
+PROBLEM question-corroboration-d8
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-conjecture
+TARGET CONJECTURE 9e57c04e6bea5242dba708350be852428e2dfdd82675f00e73501f9aa1cd471f
+The dilemma dissolves if we view the preference as a pragmatic convention of the scientific game rather than an epistemic claim about the world. Just as a chess player prefers a move that has worked against grandmasters in the past without believing the rules of physics have changed, scientists prefer corroborated theories as a constitutive rule of the practice. This stance avoids induction entirely but costs science any claim to describing reality progressively, reducing it to a self-consistent language game where 'survival' is merely a scorecard internal to the community.
+
+## directive
+You are the critic seat. Mount the strongest specific objections to the TARGET CONJECTURE above. Each objection names what it is about and states its case in free prose. You decide nothing: an objection is recorded and shown, and it overturns nothing.

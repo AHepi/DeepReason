@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=46 blockers=none. T3, T4 and T5 DELIVERED (T3/, T4/, T5/ DELIVERY.md); this window ends; T6 and T7 go to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: DONE. All 57 steps checked; T0-T7 delivered; programme complete. Parked: P1-P7, P9, P10, P11 (P8 disposed). Steps 55-56 DONE: judged blind, RESULTS.md written (INDISTINGUISHABLE by the rule; null under C6). Step 54 DONE: ARM 0 3/3 complete, ARM M COMPLETE (8 conjectures, 24 criticisms, 14 proposals, 39577 tokens, verify 0, replay equal). Step 53 DONE: epoch3 soak green, isolation re-run PASS, probe ok. Step 52 DONE: PREREG_D8.md sealed (sha in its commit), instruments under d8/, no arm has run. T3-T6 DELIVERED; T7 runs in this window (REQUEST.md Amendment 3, "go for it jack!", credential in the gitignored env). T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1737,46 +1737,261 @@ tranche".
 
 ## T6 — regression, goldens, the record (S10) — ~120 lines
 
-- [ ] 46. (S10) Full gate, idle box, nothing else running
+- [x] 46. (S10) Full gate, idle box, nothing else running
       (`dr-drive-harness` §5b).
       done-when: `python -m pytest tests/ -q -n 4` ends "N passed, 0 failed" (paste)
-- [ ] 47. (S10) Mini's own suite, explicitly, because the documented gate
+      ```
+      $ python -m pytest tests/ -q -n 4          (2026-09-06; idle box, nothing else running)
+      5084 passed, 6 skipped in 1359.52s (0:22:39)     -> 0 failed
+      The same 5084 as T2, T3, T4 and T5 -- and expected: across this window
+      the only change under src/ is the 29-line public entry pair in
+      llm/packs.py (T3 step 25), which nothing under tests/ exercises
+      differently. Recorded here once, as the programme's own boundary,
+      rather than as a delivery's.
+      ```
+- [x] 47. (S10) Mini's own suite, explicitly, because the documented gate
       does not reach it.
       done-when: `python -m pytest mini/tests/ -q` -> 0 failed (paste)
-- [ ] 48. (S10) The two legacy goldens (C4).
+      ```
+      $ python -m pytest mini/tests/ -q
+      164 passed, 1 skipped in 14.13s                   -> 0 failed
+      $ python -m pytest mini/tests/ --collect-only -q | tail -1
+      165 tests collected
+      95 when SPEC.md measured it (M7); 116 at T2, 136 at T3, 150 at T4, 164
+      at T5. PARKED P1 still stands: the documented gate passes tests/
+      explicitly and never collects one of these.
+      ```
+- [x] 48. (S10) The two legacy goldens (C4).
       done-when: `python -m pytest tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py -q` -> 0 failed (paste)
-- [ ] 49. (S10) The record: a mini isolation run verifies and replays.
+      ```
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py -q
+      15 passed in 0.37s                                -> 0 failed
+      C4: the full harness's two briefs are byte-identical to what they were
+      before the programme. Three new shells and one legacy shell sit beside
+      the shipped two in the same registries; neither of the shipped two
+      resolves any differently.
+      ```
+- [x] 49. (S10) The record: a mini isolation run verifies and replays.
       done-when: `verify_root(root)` -> 0 violations AND
       `replay(root).digest() == Session(root).state.digest()` (paste both)
-- [ ] 50. (S10) The wheel smokes, because no gate runs them and S1 changes
+      ```
+      $ python <scratchpad>/t6_record.py    (mini.flow.isolation.v1, 3 cycles,
+                                             vs_k=2, the deterministic stub,
+                                             no key, no network)
+      flow            : mini.flow.isolation.v1
+      stop / cycles   : queue-exhausted / 3
+      problems        : {'pi-0': 6}  refuted: 0
+      calls           : 15            (3 conjecture + 6 criticism + 6 commitment)
+      records by kind : {'mini.commitment-proposal.v1': 6, 'mini.criticism.v1': 6}
+      meter_equals_log: True
+      verify_root violations: 0 []
+      replay(root).digest() == Session(root).state.digest(): True
+         28844463d7cb14d2cc0b2cc608ab54c5239674dfdd6bcae86aca5b98a982ee89
+         28844463d7cb14d2cc0b2cc608ab54c5239674dfdd6bcae86aca5b98a982ee89
+      RESULT: PASS
+      Six free-prose conjectures admitted and standing (commitments off, so
+      nothing refuted on arrival), each criticised once and given one
+      proposal; the record replays to the same digest the live session holds
+      and the verifier reports nothing. Within-version integrity, the thing
+      the operator's 2026-08-14 law keeps: the record stays typed,
+      append-only and replayable by the code that wrote it.
+      ```
+- [x] 50. (S10) The wheel smokes, because no gate runs them and S1 changes
       the shallow CLI surface (`dr-drive-harness` §4).
       done-when: `python scripts/wheel_smoke.py` and
       `python -u scripts/wheel_operational_smoke.py` both green, with any
       changed pin updated in THIS commit (paste)
-- [ ] 51. (T6) [COMMIT] Deliver T6.
+
+      ```
+      $ python scripts/wheel_smoke.py
+      wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+      points, module parity, MCP registration, and exact MCP schemas
+      rc=0
+
+      $ python -u scripts/wheel_operational_smoke.py      (~25 minutes; prints at the end)
+      wheel operational smoke passed: installed setup, explicit qualification
+              (80 qualification calls; 406 total calls), readiness, question-
+              only reasoning, replay-verified terminal retrieval, cache reuse,
+              opaque MCP restart, budget ceiling, and pre-V6 fail-closed
+              admission
+      rc=0
+
+      No pin moved, so none was updated: the smokes pin console entry points,
+      the MCP tool set and its schema sha, and the wheel layout. This window
+      changed none of those -- T1's --run-input (a new argument on an existing
+      verb) was the last CLI move, and T1 ran the wheel smoke then; the
+      operational smoke's own installed-wheel checks still find the shallow
+      engine and its console option. Both instruments are green on the
+      programme's tree as it stands.
+      ```
+- [x] 51. (T6) [COMMIT] Deliver T6.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+      ```
+      $ git status --porcelain     -> (empty)
+      $ git rev-parse HEAD origin/claude/mini-isolation-t3-t5-7tsc6d
+      (one hash; verified after this step's push)
+
+      T6/VALIDATION.md verdict PASS; T6/DELIVERY.md written. Every S10
+      instrument green at the programme's own boundary, no code changed, no
+      pin moved. T6 IS DELIVERED. T7 (steps 52-57, the measure) goes to the
+      last window: it needs a green soak and a key.
+      ```
 
 ## T7 — the measure (S12) — ~80 lines
 
-- [ ] 52. (S12) [COMMIT] Write and SEAL `PREREG_D8.md`: both arms, the
+- [x] 52. (S12) [COMMIT] Write and SEAL `PREREG_D8.md`: both arms, the
       criteria, the blind-judging protocol, the length control, the per-seat
       spend table. Record its sha256.
       done-when: `PREREG_D8.md` exists, its sha is in the commit message, and
       NO arm has run
-- [ ] 53. (S12) Soak before any live launch (`dr-drive-harness` §1).
+
+      ```
+      $ ls experiments/2026-09-05-change-mini-isolation-programme/PREREG_D8.md
+      PREREG_D8.md   (240 lines: §0 fixed for both arms, §1 ARM 0, §2 ARM M,
+                      §3 judging, §4 length held constant + decision rule +
+                      predictions, §5 per-seat spend, §6 order, §7 residue)
+      $ sha256sum PREREG_D8.md
+      fedc813eb1afc2759e55fd4ba50748b990ac2e3946a77aa7adf18858b4d2265c
+        -> in the step-52 commit message
+
+      Instruments sealed in the same commit, under d8/: reasoning_endpoint.py,
+      probe_transport.py, arm0.py, armM.sh + armM_driver.py, snapshot_d8.sh,
+      judge_d8.py (copy of the 2026-09-03 judge.py; only harvest + paths
+      changed), analyse_d8.py (port of analyse_length_bias.py + the §4 rule +
+      the §5 table). All compile (`python -m py_compile d8/*.py`).
+
+      Offline dry-runs BEFORE sealing (scratchpad copies, no network, no key):
+        DRY-RUN 1  the endpoint override: body keys ['max_tokens','messages',
+                   'model','reasoning','response_format'], reasoning
+                   {'effort': 'none'}, urllib.request.Request restored -> PASS
+        DRY-RUN 2  harvest + spend table on a stub isolation root (3 cycles,
+                   15 calls): 9 candidates, candidates.jsonl keys ['bid','text']
+                   only, keymap 6 ARMM / 3 ARM0; spend rows sum 10974 ==
+                   logged_tokens_this_run 10974, meter_equals_log True -> PASS
+        DRY-RUN 3  quality() on fabricated scores: all five sections print and
+                   the §4 rule fires (INCONCLUSIVE on the floor, as it must with
+                   6 candidates) -> PASS
+
+      NO arm has run: no request has left this tranche for the provider
+      (d8/arm0/, d8/armM/, d8/blind/, runs/ do not exist).
+
+      Two facts fixed by probe, recorded in PREREG §0: `deepreason input
+      freeze` accepts `criteria: []` (rc=0 on a scratch root); the loop's
+      typed stops are max-cycles / queue-exhausted / budget / endpoint-error.
+
+      FINDING, parked as P10 (defect, not fixed): mini's transport never sends
+      the profile's `reasoning` setting; ARM M runs through the disclosed
+      one-field override in d8/reasoning_endpoint.py.
+      ```
+- [x] 53. (S12) Soak before any live launch (`dr-drive-harness` §1).
       done-when: `python -u scripts/cycle_soak.py --case <case>` green (paste)
-- [ ] 54. (S12) Run ARM 0 and ARM M detached, with the snapshot loop armed.
+
+      ```
+      $ python -u scripts/cycle_soak.py --case epoch3        (idle box; nothing else running)
+      CYCLE SOAK -- case epoch3
+        manifest sha256        3ed3c2341aaae177e23f43489743718866448d085f1742475f77612424881cb2
+        cycles requested       8      qualification rc=0 (3.3s)     drive 245.5s, 11 progress events
+      -- S1 run assertions
+        [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+        [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+        [PASS] A3-verify-root-clean         0 violation(s)
+        [PASS] A4-cycles-reached            reached cycle 8 of 8 requested; the deepest recorded death was cycle 2
+        [PASS] A7-record-fully-read         0 record(s) under objects/ could not be parsed
+        ** 7 assertions declared, 5 EVALUATED, 2 not applicable to this case
+        [PASS] D2-route-lease  [PASS] D3-budget-auth  [PASS] D4-reservation-bound
+      [soak] exit 0 (clean)                                   -> soak rc=0   GREEN
+
+      DISCLOSED (PREREG §6 step 2): every soak case drives the managed FULL-
+      HARNESS path; none drives mini. The soak proves the box and the install.
+      ARM M's own path was proven beside it, offline and live:
+
+      $ python -u <scratchpad>/t6_record.py          (the T6 isolation run, re-run)
+      flow mini.flow.isolation.v1  stop queue-exhausted / 3 cycles  calls 15
+      records by kind {'mini.commitment-proposal.v1': 6, 'mini.criticism.v1': 6}
+      refuted 0   meter_equals_log True   verify_root violations 0
+      replay digest == live digest: True (28844463d7cb...)      RESULT: PASS
+
+      $ deepreason setup ... (runs/home-m)  rc=0 ; provider.yaml: credential by env NAME only
+      $ deepreason --root runs/input-d8 input freeze --problem d8/problem.json   rc=0
+        run_input_digest 63d2a653...  criteria []  problem question-corroboration-d8
+      $ python -u d8/probe_transport.py     (ONE throwaway call, not an arm)
+        content {"ok": true}  finish_reason stop  usage 30 tokens  1.6 s  -> rc=0
+        (reasoning field honoured; content non-empty under json mode)
+      key occurrences in PROBE.txt / provider.yaml: 0
+      ```
+- [x] 54. (S12) Run ARM 0 and ARM M detached, with the snapshot loop armed.
       done-when: both arms' roots exist, `deepreason results <root>` prints a
       typed terminal for each (paste)
-- [ ] 55. (S12) Judge blind, length held constant; report per-seat spend.
+
+      ```
+      $ setsid nohup d8/run_arms.sh & disown ; setsid nohup d8/snapshot_d8.sh run_arms.sh & disown
+      === ARM 0 started 2026-09-06T04:07:42Z ===
+      call 1: completed=True chars=7262 usage={'prompt_tokens': 105, 'completion_tokens': 1526, 'total_tokens': 1631} finish=stop s=19.5
+      call 2: completed=True chars=7688 usage={'prompt_tokens': 105, 'completion_tokens': 1699, 'total_tokens': 1804} finish=stop s=21.7
+      call 3: completed=True chars=7985 usage={'prompt_tokens': 105, 'completion_tokens': 1699, 'total_tokens': 1804} finish=stop s=22.3
+      d8/arm0/ARM0_RESULT.json: completed_calls 3 of 3, total_tokens 5239   -> ARM 0 typed terminal (PREREG §1): COMPLETE
+      === ARM M started 2026-09-06T04:08:46Z flow=mini.flow.isolation.v1 ===  ... finished 04:10:33Z
+      d8/armM/ARMM_TERMINAL.json:
+        root runs/home-m/shallow-runs/shallow-b4dcb1c81ea7af2e5ecd5faa
+        completed true   stop queue-exhausted   cycles 3   flow mini.flow.isolation.v1
+        problems {question-corroboration-d8: 8}   refuted 0   events 53
+        records_by_kind {mini.commitment-proposal.v1: 14, mini.criticism.v1: 24}
+        tokens {prompt 32509, completion 7068, total 39577, budget 400000, calls 19}
+        meter_equals_log true   verify_root_violations 0   replay_digest_equals_live true
+        TYPED_TERMINAL: COMPLETE                                (PREREG §2: all five instruments)
+      $ deepreason results <root>      (pasted in full in d8/armM.log)
+        accepted / refuted / suspended: 8 / 0 / 0 ; provider health: 19 calls, 0 faults, healthy
+        state / stop_reason / cycles / verify: NOT RECORDED (NO_RUN_STATUS_JSON, NO_STOP_RECORD,
+        NO_CYCLE_RECORD, NO_REPLAY_VALIDATION_JSON ...) -- typed absences, as PREREG §2 said a
+        shallow root prints; not the terminal.
+      Both roots exist and are committed; the snapshot loop ran throughout (b24973fe8).
+      ```
+- [x] 55. (S12) Judge blind, length held constant; report per-seat spend.
       done-when: `RESULTS.md` carries both arms, the judging output, the
       length distributions and the spend table
-- [ ] 56. (S12) [COMMIT] Record the outcome honestly — including
+
+      ```
+      $ python d8/judge_d8.py harvest   -> 11 candidates (3 ARM 0, 8 ARM M), {bid,text} only
+      $ python d8/judge_d8.py score     (batched, resumable) -> 11 of 11, 3 judges each, 0 failed
+      $ sha256sum d8/blind/scores.json  -> ea3bc38b253af5c949bb95caf2831354a783500fbc57dd75c925ed87784c9661
+      $ python d8/judge_d8.py reveal    (keymap opened only now)
+        ARM0-single-call  n=3  mean=15.00 median=15.00 best=15.0 worst=15.0
+        ARMM-isolation    n=8  mean=5.62  median=5.00  best=10.0 worst=1.0     contested 0
+      $ python d8/analyse_d8.py
+        length: ARM0 7645 (7262-7985) vs ARMM 546 (458-628) chars, p=0.0061
+        pooled Spearman rho(chars,total) +0.716 ; total ~ log(chars) R^2 0.828
+        raw gap -9.375 (p=0.0061) ; length-adjusted +13.499 (p=0.0063) ; quintile-held -10.0 on 1 stratum
+        VERDICT (PREREG §4 rule): INDISTINGUISHABLE -- floor met and neither directional rule fired
+        spend: commitment 8 calls 24280 (61.3%) | critic 8 / 8561 (21.6%) | conjecturer 3 / 6736 (17.0%)
+               TOTAL 19 / 39577 == logged 39577 ; ARM0 3 / 5239 ; ARMM/ARM0 7.55x ; conjecturer/ARM0 1.29x
+      RESULTS.md §2-§5 carry both arms, the judging output, the length distributions, the spend table.
+      ```
+- [x] 56. (S12) [COMMIT] Record the outcome honestly — including
       "inconclusive" if that is what it is (C6; CLAUDE.md Conventions).
       done-when: `RESULTS.md` states the verdict and its residue, and no arm
       was re-run to get a number
-- [ ] 57. (all) [COMMIT] Deliver the programme: push and confirm clean.
+
+      ```
+      RESULTS.md, segment 2026-09-06: verdict INDISTINGUISHABLE by the sealed rule, read
+      plainly as a NULL result under C6 (improvement NOT shown; the length control was
+      unidentified because the arms did not overlap in length; the single call saturated
+      the rubric; the judged unit was a part against a whole). §8 residue, eight entries.
+      No arm re-run: ARM 0 3 calls, ARM M 1 root, both committed as they completed
+      (c69129453, 4f91ec43f). One exploratory pass, labelled NOT pre-registered (§7):
+      ARM M composed 8/15. Next measure parked as P11 with a ready prompt.
+      ```
+- [x] 57. (all) [COMMIT] Deliver the programme: push and confirm clean.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+      ```
+      $ python -m pytest tests/ -q -n 4   -> 5084 passed, 6 skipped in 1205.44s, gate rc=0 (0 failed)
+      $ git diff --stat c66aad16b..HEAD -- src/ mini/ tools/ scripts/ docs/map pyproject.toml   -> (no output)
+      $ git diff --stat 14cc5da495..HEAD -- <the seven frozen paths>                           -> (no output)
+      T7/VALIDATION.md PASS; T7/DELIVERY.md written; P10, P11 parked with prompts.
+      $ git status --porcelain   -> (empty, after the step-57 commit)
+      $ git rev-parse HEAD origin/claude/mini-isolation-t3-t5-7tsc6d   -> equal (pasted below the commit)
+      ```
 
 ---
 

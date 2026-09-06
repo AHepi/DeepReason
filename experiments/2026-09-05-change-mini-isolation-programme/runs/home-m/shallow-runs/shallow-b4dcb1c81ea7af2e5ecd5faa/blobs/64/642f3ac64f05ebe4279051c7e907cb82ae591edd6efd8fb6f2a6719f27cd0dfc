@@ -1,0 +1,16 @@
+{
+  "objections": [
+    {
+      "about": "Mischaracterization of Popper's preference rationale",
+      "body": "The conjecture falsely claims that preferring a better-corroborated theory relies on an inductive assumption that the future will resemble the past. Popper explicitly argues that we prefer better-corroborated theories not because we expect them to be true or to succeed in the future, but because they have withstood the most severe attempts at falsification so far. The preference is a rational choice based on critical discussion and the current state of knowledge, not a prediction of future success derived from past performance."
+    },
+    {
+      "about": "False equivalence with Bayesianism",
+      "body": "The assertion that accepting a preference for corroborated theories collapses Popper's critical rationalism into Bayesianism ignores the fundamental distinction in how 'support' is conceptualized. For Bayesians, corroboration increases the logical probability of a theory; for Popper, corroboration is a report of past performance that does not increase probability (which he argues remains zero for universal laws). One can rationally choose the theory that has survived rigorous testing without assigning it a higher probability of truth, thus maintaining the non-inductive core of his philosophy."
+    },
+    {
+      "about": "Confusion of pragmatic action with inductive inference",
+      "body": "The conjecture conflates the pragmatic necessity of acting on the best-tested theory with the logical validity of inductive inference. Popper admits that scientists must act and that acting on the best-corroborated theory is the only rational course available, but he denies that this action constitutes a proof or a probabilistic guarantee. The 'hidden uniformity principle' alleged by the conjecture is not a premise in Popper's argument but a misinterpretation of the practical decision-making process which operates independently of inductive justification."
+    }
+  ]
+}

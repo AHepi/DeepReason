@@ -1,0 +1,16 @@
+{
+  "objections": [
+    {
+      "about": "Mischaracterization of Popper's realism",
+      "body": "The conjecture falsely assumes that avoiding induction requires abandoning the claim that science describes reality progressively. Popper was a critical realist who believed that surviving severe tests brings us closer to the truth (verisimilitude) without relying on inductive probability. By reducing the preference for corroborated theories to a mere 'language game' or 'scorecard,' the conjecture ignores Popper's explicit metaphysical commitment to truth as a regulative ideal, thereby attacking a straw man rather than his actual position."
+    },
+    {
+      "about": "False analogy between chess and scientific testing",
+      "body": "The analogy comparing scientific theory choice to a chess player's move fails because the constraints in chess are constitutive rules defined by humans, whereas the constraints in science (severe tests) are imposed by an independent reality. When a theory survives a severe test, it is not merely satisfying an internal community rule like a valid chess move; it has withstood an attempt by nature to falsify it. The conjecture's pragmatic framing erases this crucial asymmetry between human convention and empirical resistance, which is central to Popper's defense against irrationalism."
+    },
+    {
+      "about": "Confusion of pragmatic action with epistemic emptiness",
+      "body": "The argument posits a false dichotomy: either one accepts induction to claim progressive description of reality, or one treats science as a self-consistent game with no external reference. Popper's solution is precisely that we can act rationally on the best-tested theory (a pragmatic decision) because it is the most likely to be true (an epistemic hope grounded in critical discussion, not induction), without claiming that the tests logically prove its truth. The conjecture collapses this nuanced distinction, incorrectly concluding that a non-inductive preference must necessarily be devoid of any cognitive significance regarding the world."
+    }
+  ]
+}

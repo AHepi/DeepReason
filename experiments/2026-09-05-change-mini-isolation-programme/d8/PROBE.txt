@@ -1,0 +1,15 @@
+{
+ "schema": "d8-probe-result.v1",
+ "model": "qwen3.5:397b",
+ "reasoning_field_sent": true,
+ "content": "{\"ok\": true}",
+ "content_chars": 12,
+ "usage": {
+  "prompt_tokens": 25,
+  "completion_tokens": 5,
+  "total_tokens": 30
+ },
+ "finish_reason": "stop",
+ "transport_attempts": 1,
+ "seconds": 1.6
+}

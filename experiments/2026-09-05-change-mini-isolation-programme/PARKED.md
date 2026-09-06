@@ -399,3 +399,103 @@ STOP for the grant if (a) or (b) is chosen.
 OUT OF SCOPE: the mini isolation programme; PARKED P2 (the manifest's
 conjecturer contract), which is the same family and may be taken together.
 ```
+
+## P10 — mini's transport drops the profile's `reasoning` setting
+
+**What.** `deepreason setup --reasoning none` writes `reasoning` into the
+provider profile (`provider_profile.py:74`), and the full harness sends it on
+every call. The managed shallow entry builds mini's endpoint from the profile's
+`endpoint`, `model_id`, the key and `maximum_completion_tokens` only
+(`src/deepreason/shallow.py::_endpoint`), and `HttpEndpoint.complete`
+(`mini/minireason/call.py`) puts `model`, `messages`, `temperature`,
+`max_tokens` and `response_format` in the request body and nothing else. So a
+`deepreason reason --shallow` run against a reasoning model runs with the
+provider's reasoning DEFAULT, whatever the profile says. For qwen3.5:397b that
+is the recorded empty-content failure (`experiments/2026-09-03-change-
+provenance-history-channel/judge.py`, "REASONING OFF ... load-bearing"): the
+completion cap is spent on hidden reasoning and the content is empty, which
+mini's call layer then reports as a schema failure it retries. Found
+2026-09-06 while pre-registering D8 (`PREREG_D8.md` §0); the measure runs ARM M
+through a tranche-local endpoint subclass that adds the one field
+(`d8/reasoning_endpoint.py`), disclosed there.
+
+**Why it is not fixed here.** It is a defect in the managed shallow path, and
+this is a change tranche whose measure needs the path as it is plus one
+disclosed field; a fix belongs to the defect workflow with its own reproduction
+and gate. It touches no frozen surface on its face (`shallow.py`, `call.py`),
+but the profile's `reasoning` field is also a qualification subject input on
+the full path, so the fix's blast radius is to be measured, not assumed.
+
+```
+EXECUTOR WINDOW — DEFECT: the managed shallow path never sends the profile's
+reasoning setting
+
+Read CLAUDE.md in full. Load deepreason-orchestrator, dr-drive-harness,
+dr-ask-the-right-question and pinker-write-for-readers. Start at dr-set-goal.
+Base on main after the mini isolation programme's T7 merge.
+
+RECORD FIRST: experiments/2026-09-05-change-mini-isolation-programme/
+PREREG_D8.md §0 and d8/PROBE.txt (the one-call probe through the override),
+and the ARM M root's LLMCall receipts: every call ran through
+d8/reasoning_endpoint.py because the managed path could not send the field.
+
+REPRODUCE OFFLINE: a test that runs run_shallow_question against a fake
+endpoint capturing the request body, with a profile carrying reasoning="none",
+and asserts the body carries the field. It is RED today.
+
+FIX: forward the profile's reasoning setting from shallow._endpoint into
+HttpEndpoint and from there into the body, in the same shape the full
+harness's endpoint layer sends it (read src/deepreason/llm/endpoints.py for
+that shape first; do not invent a second one). Paste tools/blast_radius.py
+for shallow.py and mini/minireason/call.py BEFORE the change; if it names a
+qualification subject, DESIGN AND STOP.
+
+OUT OF SCOPE: the mini isolation programme; PARKED P2/P9 (mini's manifest).
+```
+
+## P11 — D8 compared a part against a whole; the next measure needs a unit, a budget and headroom
+
+**What.** The D8 measure (RESULTS.md, 2026-09-06) judged one mini conjecture
+(~550 characters) against one complete single-call essay (~7 600) on a rubric
+written for complete answers; the arms did not overlap in length, so the
+pre-registered length control was unidentified, and the single call
+saturated the rubric (nine 15s of 15). The verdict INDISTINGUISHABLE stands
+as the rule fired; it is not an answer to C6. Three things a measure that
+CAN answer C6 for mini needs, each priced from the record: (1) a judged UNIT
+the rubric fits — the run's composed output (the exploratory §7 pass scored
+it 8 of 15) or per-conjecture scoring of ARM 0's essay split into its own
+claims; (2) a BUDGET under which "everything so far" is everything — the
+compact profile withheld 22 of 26 and 33 of 37 entries and clipped ten
+briefs; the `standard` profile (2 500 pack tokens, 10 000-character clip)
+or an explicit `budget_chars` on the everything section; (3) HEADROOM — a
+rubric or a question the single call does not max.
+
+**Why it is not done here.** Each is a new pre-registration and at least
+one new arm; PREREG_D8 forbids re-running an arm for a number, and the
+programme's measure is delivered as it was sealed.
+
+```
+EXECUTOR WINDOW — CHANGE TRANCHE: D9, a measure for mini that can answer C6
+
+Read CLAUDE.md in full (the success law of 2026-09-03; the judge law). Load
+dr-change-orchestrator, dr-drive-harness, dr-ask-the-right-question and
+pinker-write-for-readers. Start at dr-capture-request. Base on main after
+the mini isolation programme's T7 merge.
+
+READ FIRST: experiments/2026-09-05-change-mini-isolation-programme/
+RESULTS.md (§4 the failed control, §6 the withheld entries, §7 the composed
+pass, §8 the residue) and PREREG_D8.md.
+
+SPEC must fix, before any arm: the judged UNIT (composed run output vs
+composed single call, or claim-split on both sides -- pick one and say why);
+the profile or budget under which the everything section withholds nothing
+on a 3-cycle run (measure it offline against the stub first); a rubric with
+headroom (pilot ARM 0 on three calls and REFUSE the rubric if any scores 15);
+the same length control as D8 plus a length-MATCHED design (equal completion
+caps and equal candidate counts per arm) so overlap is by construction. Keep
+D8's blinding, median-of-three, sealed sha, and no-re-run rule verbatim.
+
+OUT OF SCOPE: any change under src/ or mini/ (P10 is its own defect
+tranche); the full-harness measure of mini's content (Amendment 1's "then
+testing on the full harness" is a separate programme).
+```
