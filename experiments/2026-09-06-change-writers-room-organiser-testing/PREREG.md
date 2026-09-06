@@ -351,3 +351,195 @@ unchanged and still byte-identical to D8's; its digest becomes
 `ea2003851dc51dc50eb9acd9f06a6cf14cd7fa60780bd45eeccc39095bd952f1`.
 The failure's cause, its evidence and its disposition are written up in
 RESULTS.md and parked as P6; nothing here changes the decision rule.
+
+**Amendment 7 (2026-09-06, the SECOND launch window — before any live call of this window).**
+The operator: "failure again. Bad config." Three changes, all configuration or
+tranche-local tooling; nothing under `src/`, `tests/`, `mini/` or `docs/`
+moves. The document above and Amendments 1–6 are unchanged; §5's rubric
+instrument and `blind/`'s scores stay exactly as sealed, as the record of the
+ceiling §11 predicted and RESULTS.md measured.
+
+**(a) The critic is no longer blind.** §3 fixed ARM R's selectors as
+`DEEPREASON_SEAT_SHELL=conjecturer=seat.conjecturer.organiser-v1,argumentative_critic=seat.critic.evidence-blind-v1`.
+For this launch the second half is WITHDRAWN: `runs/armR.sh` selects the
+organiser for the conjecturer only and the critic runs the shipped
+`seat.critic.legacy-v0`. What that critic sees of the room, measured from
+`src/deepreason/llm/seat_layouts.py:82-106` and `evidence/render.py:192-198`:
+the premise invitation, and the CITABLE EVIDENCE BLOCKS legend — 32 of the 97
+admitted blocks, 160 characters each, hash-ordered — and its form's
+`premise_evidence` menu bound from exactly those 32
+(`rules/crit.py:1306-1322`). What it does NOT see: `dr.evidence.frozen`, the
+room whole; that entry is absent from its layout at every priority, so the
+bodies of the 97 blocks are never rendered to the critic, and the 65 blocks
+outside the legend reach it only as a withheld count. Brief and form now agree
+about evidence, which was the defect (PARKED P6). DISCLOSED: the two ARM R
+runs therefore differ in TWO places — the critic's shell and the attachment's
+headers — so neither difference is isolated by this launch, and P4 and P6 stay
+parked and unfixed. Registered as a named risk, not defended against: the
+invitation and the legend are both DROPPABLE at priority 6, so a budget that
+drops the invitation would take the legend with it and re-create P6's shape
+from the allocator instead of the shell; the critic's pack renders no frozen
+dossier and is the small pack of the two, so this is unlikely here, and if it
+happens the record will say so.
+
+**(b) One id system, and what it moved.** `tools/room_to_attachment.py` writes
+NO room record id into the attached text (PARKED P7 road A). Headers are now
+`CONJECTURE n=<ordinal> cycle=<n> angle=<angle>`, `PROPOSAL cycle=<n>
+kind=<label> about-n=<ordinal> about-angle=<angle>` and `OBJECTION cycle=<n>
+about-n=<ordinal> about-angle=<angle>`; the record ids are in
+`CONVERSION.json`, which is not attached. Each file opens with ONE preamble
+paragraph carrying the header shape and the rule that only the legend's ids
+resolve — R40's own fallback, taken because the organiser directive's
+header-shape sentence lives in `src/` and this window may not edit it (the
+directive's CITATION sentence names only legend ids and needed no change).
+
+§0's attachment row is amended. The three files and the conversion, by
+sha256: `01-conjectures.txt`
+`3e41fbafb44a00d9aebfe9aba55731fd3326eac0c4359ab187ff45b6b4047655`,
+`02-proposals.txt`
+`27f092c191ce94042559c5bd961d1675b2eca43091e9d3b1377b38ca0c66ec0b`,
+`03-objections.txt`
+`8fde979b1b6eab3e1fa1a959a3e56939ea74d5223a64326a9258e057d1f709fc`,
+`CONVERSION.json`
+`99d4f7d09a0a1c83d534e8b852c3ee682482b88d497eec0c7abb8ca3282c5851`. The room's
+94 records are byte-identical to the sealed ones (`verbatim 94/94`, 53 493
+characters); the three preambles are the only added text, and they take the
+admitted block count from 94 to **97**. The launch must print **3 sources, 97
+blocks, 0 refusals** and `armR.sh`'s digest check must pass; the dossier
+digest is recorded as a fact of the run and not compared to an offline value
+(Amendment 5's ruling, unchanged). The rendered brief, before any live call:
+`proof/ORGANISER_BRIEF.txt`
+`810163f876c6004cab9b1ebc55d3e3dd8b294140228dbaef0a555bdb8f46d4cd`, 95 071
+bytes; `proof/DRY_ATTACH.txt` re-measured.
+
+**Measured before the launch, and disclosed.** Every block's content id moved
+with its header, so the legend's hash-ordered 32 is redrawn: **4 conjectures /
+17 proposals / 11 objections**, against 7 / 13 / 12 before, with 6 refuted-if
+proposals visible where 1 was. Consequence for the census, stated now so it is
+not read as a result: the strict "room conjectures carried" count resolves
+only citations of a CONJECTURE's own block, and only 4 of the 12 are citable,
+so that count is capped at 4 by PARKED P2's legend and not by the seat.
+`tools/organiser_census.py` therefore reports a second count beside it —
+conjectures REACHED, named by a verified citation of the conjecture's block or
+of a proposal or objection written about it. Both are reported; neither
+replaces the other.
+
+**The predictions this window registers (R41), before the launch:**
+- `EVIDENCE_REF_UNKNOWN_BLOCK` count **0** (it was 58);
+- `EVIDENCE_CITATION_VERIFIED` count **>= 21** (it was 21);
+- the run reaches a CLEAN typed terminal — `completed` with `stop_reason` in
+  {`max_cycles`, `budget_exhausted`} — where the first launch died
+  `operational_failure` in the critic seat;
+- the cycle prediction of Amendment 1 stands unchanged: the 500 000 ceiling
+  ends the run in CYCLE 3.
+Nothing is predicted about quality; that is what the instrument below is for.
+
+**(c) Pairwise forced choice replaces the 0–3 rubric for this launch.**
+`tools/judge_pairwise.py`. §5's rubric measured saturated — eighteen readings,
+eighteen 15s on both bare arms — so it cannot rank anything above a single
+call on this question; it and `blind/scores.json` stay untouched as the record
+of that.
+
+*The units.* ARM R: the one composed result (`tools/compose_result.py`, §4's
+unit), REFUSED when the root's `run-status.json` is not `completed` — a FAILED
+arm has no usable unit (§3, §7, Amendment 6). The bare arms: ARM 0's three
+recorded D8 essays and ARM 0R's three recorded replies, both reused BY DIGEST
+and never respent. DISCLOSED: ARM 0R's recorded calls pasted the PRE-CHANGE
+attachment; the room's 94 record bodies in it are byte-identical to this
+window's, and the difference is confined to the header lines and the three
+preambles, so ARM 0R is reused rather than respent and the difference is
+stated rather than controlled.
+
+*The readings.* Every ARM R unit against every bare unit: 1 × 3 = 3 pairs
+against ARM 0 and 3 against ARM 0R, **6 measured pairs**; each shown to 3
+judges in BOTH orders (ARM R as Text A and as Text B), **6 readings per pair,
+36 readings in total, 18 per bare arm**. (The brief's arithmetic — "6 pairs ×
+3 judges × 2 orders = 36 readings per bare arm" — cannot hold with one ARM R
+unit and three bare units per arm; it is resolved here as 6 pairs and 36
+readings IN TOTAL, 18 per bare arm, and recorded as a resolution rather than
+a silent correction.) Same model, reasoning off, `max_tokens` 300, blind:
+units are addressed by uuid4 and `blind/pairwise_keymap.json` is not opened
+until `blind/pairwise_choices.json` exists (`reveal` refuses otherwise). The
+standard is the rubric's own five criteria, READ FROM `judge_organiser.py` at
+run time rather than retyped (`judge_pairwise.py criteria-check` prints them,
+sha256 `fab3fde2f3a2000bd5f7415e7a7ae3be013fd8b83b4fd52395eef4b18327df28`);
+the scoring sentences are replaced by ONE forced choice plus a one-line
+reason, and a tie is refused in the prompt.
+
+*Order consistency.* A judge's two readings of one pair are undone of their
+position and compared: if both name the same unit the judge has a CONSISTENT
+preference; **if the choice flips with the order it counts as NO PREFERENCE**
+and is neither a win nor a loss. The count of no-preference readings is
+reported per pairing.
+
+*The share, and the rule.* CONSISTENT-WIN SHARE of ARM R against a bare arm =
+consistent wins for ARM R ÷ all judge-pairs read for that arm (3 pairs × 3
+judges = 9); no-preference judge-pairs stay in the denominator. **ARM R is
+MATERIALLY BETTER only if its consistent-win share is >= 2/3 against BOTH ARM
+0 and ARM 0R; <= 1/3 is WORSE; between is NULL.** A failed arm is
+INCONCLUSIVE, exactly as Amendment 6 says. §6's length rule is applied to the
+verdict: the length ratio is reported per pair, and a BETTER whose winning
+unit is more than 1.5× the other's length is reported as **NULL
+(length-uncontrolled)**, the mirror for WORSE.
+
+**A ceiling registered in advance, as §11 registered the rubric's.** The first
+ARM R composed unit was 21 396 characters against bare units of 5 875–7 985.
+If this one is of the same order, every measured ratio is about 2.7×–3.6×, and
+§6's rule DOWNGRADES ANY BETTER TO NULL (length-uncontrolled) before it is
+reported. So "MATERIALLY BETTER" is very likely unreachable on this
+instrument too, and that is a property of the sealed length rule, not a
+finding about the harness. The rule is not changed to make the verdict
+reachable. To keep the signal visible under it, `reveal` prints and
+`PAIRWISE_VERDICT.json` records the raw consistent-win share and
+`verdict_before_length_rule` beside the verdict; those are REPORTED, and the
+verdict is the rule's.
+
+*The control.* ARM 0R against ARM 0 by the same instrument: 3 × 3 = **9
+pairs, 54 readings**, reported beside the rule and never part of it, so the
+reader can see whether the room alone moves a forced choice.
+
+**(d) Instruments pinned at this amendment (committed before the launch).**
+`tools/judge_pairwise.py`
+`7bdb106ef3d78307afd44e68230a1359c11fd0f807beea7ce6b6224ce88d4862`;
+`tools/room_to_attachment.py`
+`747edc25786223b8754b732fc99507d410c7d653c4b1b92154197e9fab3e7a6d`;
+`tools/organiser_census.py`
+`24548d7d62afd687aa042bf2ca469c00a8ce61647563cfd006aef677e44a606f`;
+`tools/compose_result.py` unchanged,
+`7c2835448886465ffd07ffadc9d057ac0a83da5f58d30dbff96509b4d81b9c62`;
+`runs/armR.sh` `a19a9edc8640f370040584a7c158d0138abf3f120a7e16e958b7e7663a25fdd1`;
+`runs/chain.sh` `961f3f288ef439b70ece9f12f0ccf3bc4c659184f415f0e55bea19d6619918ba`;
+`proof/dry_attach.py` `3b614bc5bf1a4444c61a17c65ff662eafea08422e209eca5327891c43b6bdf0c`;
+`proof/render_brief.py` `63b0713e60bab93810fcdd8d9261a92ec02e7f1d3b1f3499f01b480c8d615b4b`.
+`tools/judge_organiser.py` and `tools/analyse_organiser.py` keep the digests
+Amendment 6 and Amendment 4 pinned and are NOT edited.
+
+**What moved in the scripts, line by line.** `runs/armR.sh`: line 25's
+selector loses `,argumentative_critic=seat.critic.evidence-blind-v1`; line 28's
+banner "800000 token ceiling" becomes "500000" (Amendment 5 recorded that
+defect and deferred the fix to after the arm — this is that fix); the header
+comment says which critic runs and why. `runs/chain.sh`: `mkdir -p …
+$D/runs/arm0R` becomes `mkdir -p $D/runs/armR` plus `rm -f
+$D/runs/STOP_SNAPSHOT` (the committed stop file would have stopped the
+snapshot loop on its first pass), the ARM 0R line is removed, and the closing
+line names the census and the pairwise instrument. Epoch 1's outputs are moved
+whole rather than overwritten: `runs/armR/` → `runs/armR-epoch1/`, with
+`chain.log`, `soak.log` and `snapshot.log` beside them; the failed root is
+retired as `runs/home-r/runs/failed-epoch1-run-36d9a22c…`.
+
+**§10's order for this window.** this amendment sealed (its sha256 in the
+commit message) → the failed root retired and committed → the new attachment,
+brief and instruments committed → soak `epoch3` green → the attached-evidence
+battery (expected to CACHE: same home, same profile, same `runs/config.yaml`,
+same opt-ins; if it re-runs, the log says so and it runs) → ARM R at 4 cycles
+and 500 000 → `tools/organiser_census.py` → `judge_pairwise.py harvest`,
+`choose`, `reveal` → RESULTS.md. §9's failure budget is unchanged: six live
+calls beyond the plan, ledgered; the 0 spent so far carries over.
+
+**Residue this amendment adds to §11.** The critic differs between the two ARM
+R runs as well as the attachment, so a difference in outcome has two possible
+causes; the legend's redrawn sample changes which blocks are citable, so the
+citation counts are not comparable block-for-block with the first launch; the
+judges are the same model as the seats, as before; ARM H stays deferred; and
+the length rule above will very likely make "materially better" unreachable
+whatever the panel chooses.

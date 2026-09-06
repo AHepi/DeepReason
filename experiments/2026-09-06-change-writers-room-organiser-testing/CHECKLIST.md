@@ -1,5 +1,5 @@
 # Checklist for: the organiser seat — testing the writer's room on the full harness
-State: DONE — all 19 steps checked; VALIDATION PASS; delivered
+State: IN PROGRESS - second launch window (steps 31-40); the first window's 30 steps stay checked (VALIDATION PASS; delivered)
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order. One step per dr-execute-step invocation.
 Map ids (from REQUEST.md): DR-INV-frozen-surfaces, DR-SUB-evidence, DR-INV-seat-section-plugins, DR-INV-seat-section-sources, DR-CON-warrants-and-attacks, DR-SEAM-packs-and-token-economy-x-rules, DR-CON-packs-and-token-economy, DR-SUB-llm, DR-SUB-rules, DR-CON-conjecture-source, DR-SUB-minireason, DR-SEAM-llm-x-minireason. Seam read first: DR-SEAM-packs-and-token-economy-x-rules (the nine source-computed contexts and the allocator the evidence sections live under).
 Tranche base: `d3f047932` (main). Diff-budget ceiling (SPEC Budget): 450 insertions over `src tests docs/map`.
@@ -98,3 +98,33 @@ Pre-launch base: the commit that seals PREREG Amendments 1–4 (step 23).
 - [x] 30. (S36) [COMMIT] DELIVERY.md re-issued with R1–R36; push; clean tree.
       done-when: `git status --porcelain` empty; one hash from `git rev-parse HEAD origin/…`
       output: DELIVERY.md extended with R26–R36; `git status --porcelain` empty; `git rev-parse HEAD origin/…` prints `3acb0b187c0f6df05e99073a9a3efc67feefe2b4` twice.
+
+## Second launch window (2026-09-06) — SPEC Amendment 4, steps 31–40
+State: IN PROGRESS
+
+- [x] 31. (R37) [COMMIT] Append REQUEST.md Amendment 2 (the operator's words verbatim, R37–R51, C17–C18) before acting.
+      done-when: `grep -c '^R5[01]' REQUEST.md` -> 1 each; committed alone
+      output: committed as `7970c7e95`; no other file in that commit.
+- [x] 32. (S43) [COMMIT] Retire the failed root by rename; commit the rename alone.
+      done-when: `runs/home-r/runs/failed-epoch1-run-36d9a22c3e2045ae1b8c7bfb9d95d092` exists and the old name does not
+      output: committed as `783054bfd`; `ls runs/home-r/runs/` -> one entry, the retired root.
+- [x] 33. (S37) `runs/armR.sh`: the organiser shell for the conjecturer only; the banner corrected; `runs/chain.sh`: no ARM 0R, `rm -f STOP_SNAPSHOT`, epoch-1 outputs moved to `runs/armR-epoch1/`.
+      done-when: S37's and S43's accept commands hold
+      output: `grep -c 'argumentative_critic=' runs/armR.sh` -> 0; banner `500000 token ceiling`; `bash -n` clean on both; `runs/armR-epoch1/` holds the epoch-1 arm outputs and the three logs.
+- [x] 34. (S38, S39) Rewrite the converter's headers (no room record id; ordinal + angle), add the preamble, re-run against the room root, re-digest.
+      done-when: S38's accept commands hold
+      output: `records 94 (12 conjectures, 46 proposals, 36 objections)` / `verbatim 94/94` / `chars 53493` / `header carries a room record id: False`; 0 room record ids anywhere in the attached text; all three files sniff `text/plain`; `sha256sum -c` all OK.
+- [x] 35. (S40) Re-run `proof/dry_attach.py` and `proof/render_brief.py`; commit the attachment and the brief before any live call.
+      done-when: S40's accept commands hold
+      output: 3 sources / 97 blocks / 0 refusals, `legend_shown 32` (4 conjectures / 17 proposals / 11 objections, 6 refuted-if); brief 95 071 bytes, directive present, three preambles, 0 room record ids.
+- [x] 36. (S42) Write `tools/judge_pairwise.py`; prove the pair building and the reveal offline.
+      done-when: S42's accept commands hold
+      output: `criteria-check` prints the five criteria (sha256 fab3fde2…); the offline proof built 7 units, 15 pairs (6 measured, 9 control), 90 readings, and `reveal` applied the length rule and the decision rule.
+- [ ] 37. (S41, R43) [COMMIT] PREREG Amendment 7 sealed by sha256 in the commit message; SPEC Amendment 4; the census's second count; push.
+      done-when: `sha256sum PREREG.md` equals the digest in that commit's message; `git status --porcelain` empty
+- [ ] 38. (S43, R46, R47) Credential check, then launch `chain.sh` detached from the repository root with the snapshot loop armed.
+      done-when: `runs/chain.log` shows `soak rc=0` and the battery started; absent env -> STOP and say so
+- [ ] 39. (S44) Monitor to ARM R's terminal; then `tools/organiser_census.py`, then `judge_pairwise.py harvest | choose | reveal`.
+      done-when: `run-status.json` state and stop_reason read from the record; `runs/armR/CENSUS.json` and `runs/PAIRWISE_VERDICT.json` written
+- [ ] 40. (S45) [COMMIT] RESULTS.md dated segment; VALIDATION.md and DELIVERY.md re-issued with R37–R51; push.
+      done-when: `git status --porcelain` empty; one hash from `git rev-parse HEAD origin/…`

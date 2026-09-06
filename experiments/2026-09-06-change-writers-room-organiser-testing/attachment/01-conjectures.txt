@@ -1,47 +1,49 @@
-CONJECTURE id=a0b919ae506615d2 cycle=1 angle=The Pragmatic Wager
+PREAMBLE -- how to read 01-conjectures.txt. The paragraphs below are the records of a writer's room, one record per paragraph. Each opens with a header line: CONJECTURE n=<number> cycle=<number> angle=<the conjecture's angle>; PROPOSAL cycle=<number> kind=<one of refuted-if / forbids / must-not / predicts> about-n=<the conjecture's number> about-angle=<its angle>; OBJECTION cycle=<number> about-n=<the conjecture's number> about-angle=<its angle>. A proposal's or objection's about-n and about-angle name the conjecture it was written about. These numbers and angles are NOT citable ids and naming one grounds nothing: the only ids that resolve are the ids listed in CITABLE EVIDENCE BLOCKS, and an id from anywhere else is recorded as a failed citation. This paragraph is the only text here that is not a room record.
+
+CONJECTURE n=1 cycle=1 angle=The Pragmatic Wager
 The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim. Popper argues that while past success guarantees nothing about the future (rejecting induction), the theory that has survived the severest tests has proven its 'fitness' in the specific environment of reality so far. Choosing it is akin to betting on the horse that has won every race; we do not know it will win the next, but it is the only rational choice available if we must act, as it has demonstrated a capacity to withstand falsification that others lack. This costs us the comfort of believing the theory is 'true' or 'likely,' forcing us to accept that our best actions are still grounded in guesswork, albeit an educated one.
 [angle: The Pragmatic Wager]
 
-CONJECTURE id=92968bc0cf42d965 cycle=1 angle=Verisimilitude as a Regulative Ideal
+CONJECTURE n=2 cycle=1 angle=Verisimilitude as a Regulative Ideal
 The defense lies in shifting the goal from 'probability' to 'verisimilitude' (truth-likeness). A highly corroborated theory is not more probable, but it is a better candidate for being closer to the truth because it has withstood attempts to show it is false. The preference is defensible because science aims at truth, not certainty; therefore, selecting the theory with the highest empirical content that has not yet been refuted is the only methodological move consistent with the aim of increasing verisimilitude. The cost here is the admission that we can never verify this progress; we must operate on the regulative ideal that surviving severe tests correlates with truth-likeness, a metaphysical hope that Popper admits cannot be logically proven.
 [angle: Verisimilitude as a Regulative Ideal]
 
-CONJECTURE id=67873974ceb0d9a1 cycle=1 angle=The Performative Contradiction
+CONJECTURE n=3 cycle=1 angle=The Performative Contradiction
 The preference is indefensible on Popper's own terms and indeed smuggles induction back in through the back door. By advising scientists to 'prefer' the better-corroborated theory for action, Popper implicitly asserts that past performance is a reliable guide to future reliability, which is the very definition of inductive reasoning he sought to destroy. If corroboration reports only past history and implies nothing about the future, then preferring Theory A over Theory B for future application is irrational within his system. Accepting this view costs the coherence of Popper's philosophy, reducing his methodology to a description of psychological habit rather than a logical framework for scientific rationality.
 [angle: The Performative Contradiction]
 
-CONJECTURE id=e0959a2b912e796c cycle=1 angle=Corroboration as Informational Content
+CONJECTURE n=4 cycle=1 angle=Corroboration as Informational Content
 The preference is defensible because corroboration functions as a measure of informational content rather than likelihood. A theory that survives severe tests is one that took a greater risk of being wrong; preferring it is a preference for boldness and precision. We choose the better-corroborated theory not because we think it will hold true, but because it offers the most detailed map of the world currently available, providing the richest basis for further criticism and testing. The cost of this stance is that 'action' becomes purely experimental; we act on the bold theory specifically to try to break it, meaning our 'preference' is actually a preference for the most efficient path to potential falsification, not for successful prediction.
 [angle: Corroboration as Informational Content]
 
-CONJECTURE id=da6f74bed07c54a4 cycle=2 angle=The Methodological Rule Defense
+CONJECTURE n=5 cycle=2 angle=The Methodological Rule Defense
 Popper's preference for better-corroborated theories is defensible without induction because it functions not as an epistemic probability claim but as a methodological rule of thumb: we choose the theory that has withstood the severest tests simply because it is the most informative target for future falsification. This preference does not assume the theory will succeed in the future; rather, it assumes that if the theory is false, this specific candidate is the most likely to reveal its falsehood quickly, thereby accelerating the growth of knowledge even if the practical application fails.
 [angle: The Methodological Rule Defense]
 
-CONJECTURE id=d8dfb83afbb1d054 cycle=2 angle=The Verisimilitude Gamble
+CONJECTURE n=6 cycle=2 angle=The Verisimilitude Gamble
 The preference is defensible only by accepting a non-probabilistic metaphysical commitment to verisimilitude (truth-likeness), arguing that while we cannot know a theory is true or probable, severe testing logically increases its content and proximity to truth. This stance survives Popper's anti-induction critique by shifting the goal from 'predictive reliability' to 'structural approximation,' but it costs the framework its claim to pure logic, smuggling in a rationalist faith that nature rewards boldness with truth-likeness rather than random chaos.
 [angle: The Verisimilitude Gamble]
 
-CONJECTURE id=055185d569b6c415 cycle=2 angle=The Pragmatic Inconsistency Charge
+CONJECTURE n=7 cycle=2 angle=The Pragmatic Inconsistency Charge
 The preference is indefensible on Popper's own terms and constitutes a performative contradiction: when Popper chooses a well-corroborated bridge design over an unfalsified but untested one, he acts exactly as an inductivist would, relying on the implicit premise that past survival indicates future stability. This candidate argues that no amount of semantic maneuvering around 'corroboration' vs. 'probability' can mask the fact that acting on corroboration requires an inductive leap, meaning Popper's system collapses into crypto-induction whenever it leaves the realm of abstract methodology.
 [angle: The Pragmatic Inconsistency Charge]
 
-CONJECTURE id=20b35eec8f966227 cycle=2 angle=The Decision-Theoretic Void
+CONJECTURE n=8 cycle=2 angle=The Decision-Theoretic Void
 Popper's framework offers no rational basis for preference in single-case decisions, rendering the scientist's choice between theories arbitrary unless they secretly reintroduce induction. If one strictly adheres to Popper's denial that corroboration implies future success, then choosing the better-corroborated theory for a critical application is logically indistinguishable from flipping a coin, as both options possess equal logical status regarding future performance; thus, the 'preference' scientists feel is merely a psychological habit that Popper mistakenly tried to rationalize as a philosophical principle.
 [angle: The Decision-Theoretic Void]
 
-CONJECTURE id=6b78e82f822685c4 cycle=3 angle=The Pragmatic Wager without Induction
+CONJECTURE n=9 cycle=3 angle=The Pragmatic Wager without Induction
 Popper's preference for the better-corroborated theory is defensible not because it predicts future success (which would be induction), but because it represents the only rational 'bet' available to an agent who must act. Since we cannot know the truth, choosing the theory that has withstood the most severe tests maximizes the informational content at risk; if it fails, we learn more than if a weaker theory fails. The preference is a methodological rule for maximizing learning potential in the face of ignorance, not a probabilistic claim about the world's stability.
 [angle: The Pragmatic Wager without Induction]
 
-CONJECTURE id=6bdc16fc61c22003 cycle=3 angle=The Verisimilitude Trap
+CONJECTURE n=10 cycle=3 angle=The Verisimilitude Trap
 The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because 'verisimilitude' (truth-likeness) functions as a covert proxy for probability. To prefer Theory A over Theory B on the grounds that A is 'closer to the truth' based on past tests is to assume a uniformity in nature: that the structural features which allowed A to survive will continue to align with reality. Without this inductive assumption, the concept of verisimilitude offers no actionable guide for the future, rendering Popper's advice to scientists practically empty.
 [angle: The Verisimilitude Trap]
 
-CONJECTURE id=e8cdaadd3471f4ba cycle=3 angle=Corroboration as a Historical Report; Not a Future Guide
+CONJECTURE n=11 cycle=3 angle=Corroboration as a Historical Report; Not a Future Guide
 The tension dissolves if we strictly segregate corroboration as a purely historical report from the act of choosing a theory for action. Popper can defend the preference by arguing that while corroboration says nothing about the future, the *act* of preferring the best-tested theory is a non-rational, psychological commitment necessary for life, distinct from scientific logic. On this view, the preference is defensible as a biological or pragmatic imperative for survival, but it constitutes a departure from strict rationality, admitting that science alone cannot dictate action without an extra-logical leap.
 [angle: Corroboration as a Historical Report, Not a Future Guide]
 
-CONJECTURE id=76f244935b33bbf8 cycle=3 angle=The Asymmetry of Risk
+CONJECTURE n=12 cycle=3 angle=The Asymmetry of Risk
 The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a well-corroborated theory in favor of a poorly tested one increases the likelihood of immediate error without offering any compensatory increase in testability. While this looks like induction, it is actually a logical deduction about the current state of knowledge; the better-corroborated theory is simply the one that has not yet been falsified despite greater exposure to falsification. Choosing it minimizes the 'known unknowns' relative to alternatives, a defensive posture that requires no belief in the future validity of the theory, only a recognition of its current robustness.
 [angle: The Asymmetry of Risk]

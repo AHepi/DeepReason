@@ -1,5 +1,55 @@
 {
  "chars_total": 53493,
+ "conjecture_ordinals": {
+  "055185d569b6c41588ae3dbf84fd3173f665c1e8755339a3cba55b119c356f87": {
+   "angle": "The Pragmatic Inconsistency Charge",
+   "n": 7
+  },
+  "20b35eec8f966227f76f4aa3b7bd3ff43fbc8f61e67d869cfe6502d6db030ca0": {
+   "angle": "The Decision-Theoretic Void",
+   "n": 8
+  },
+  "67873974ceb0d9a148ec85758e48c5b8d855c5a4bbbf7f8b0fd2897ec557f92e": {
+   "angle": "The Performative Contradiction",
+   "n": 3
+  },
+  "6b78e82f822685c4d309409a6bc6f5d2b5f5ce30f34f7c6e189eb91c1949ad28": {
+   "angle": "The Pragmatic Wager without Induction",
+   "n": 9
+  },
+  "6bdc16fc61c220036acbccfe16be6e8f7747318e53c86d376b81b4161576af73": {
+   "angle": "The Verisimilitude Trap",
+   "n": 10
+  },
+  "76f244935b33bbf83db0551188644d263d71a3214f33e938febbbeaa42dae9a7": {
+   "angle": "The Asymmetry of Risk",
+   "n": 12
+  },
+  "92968bc0cf42d9652ea12be6542003901e790df25afa74ec9cd14fef2cd65ffd": {
+   "angle": "Verisimilitude as a Regulative Ideal",
+   "n": 2
+  },
+  "a0b919ae506615d2d7594201179ce183589fd29077a754b18dafc5214f197797": {
+   "angle": "The Pragmatic Wager",
+   "n": 1
+  },
+  "d8dfb83afbb1d0545172b84213c342e3a8711354d412f80ec34c604d1bb4a81a": {
+   "angle": "The Verisimilitude Gamble",
+   "n": 6
+  },
+  "da6f74bed07c54a4f0de22cdecdce71da65119ad40ce1aa00214ae8c81c9aeca": {
+   "angle": "The Methodological Rule Defense",
+   "n": 5
+  },
+  "e0959a2b912e796cf946820383cadac756231541281c4842450e120b92d3dc24": {
+   "angle": "Corroboration as Informational Content",
+   "n": 4
+  },
+  "e8cdaadd3471f4ba692c01a34539cbe9e587fb6075ffa3fb887ab2f3fb9404d2": {
+   "angle": "Corroboration as a Historical Report, Not a Future Guide",
+   "n": 11
+  }
+ },
  "counts": {
   "conjecture": 12,
   "objection": 36,
@@ -7,19 +57,34 @@
  },
  "files": {
   "01-conjectures.txt": {
-   "bytes": 9281,
+   "bytes": 9915,
    "records": 12,
-   "sha256": "feb1dc480421d1cdb26260223a82ea82d88d9e14ff761ad63ec9662acd4088bb"
+   "sha256": "3e41fbafb44a00d9aebfe9aba55731fd3326eac0c4359ab187ff45b6b4047655"
   },
   "02-proposals.txt": {
-   "bytes": 17566,
+   "bytes": 18926,
    "records": 46,
-   "sha256": "cf7a4a2edcc19307e7be923623676cd7db80f8722d58f584fda30fad65062452"
+   "sha256": "27f092c191ce94042559c5bd961d1675b2eca43091e9d3b1377b38ca0c66ec0b"
   },
   "03-objections.txt": {
-   "bytes": 33377,
+   "bytes": 34619,
    "records": 36,
-   "sha256": "87163fb464c30da6e06e4daf475245637aad04de8a7f92d6e482b1cb734e0ded"
+   "sha256": "8fde979b1b6eab3e1fa1a959a3e56939ea74d5223a64326a9258e057d1f709fc"
+  }
+ },
+ "header_carries_record_id": false,
+ "preamble": {
+  "01-conjectures.txt": {
+   "chars": 821,
+   "sha256": "03aa2ca9153df515038b67893ce88ab3f4147799dae71a25c15dd8808ae06fc0"
+  },
+  "02-proposals.txt": {
+   "chars": 819,
+   "sha256": "995893d04c1e13ca494e68f4250bef386fb372d3d5573058e9286d8dc20fed5a"
+  },
+  "03-objections.txt": {
+   "chars": 820,
+   "sha256": "f86bc62d9b09e785fba8a662d7efe37a2135678134619a56dab8c7516603bd56"
   }
  },
  "records": [
@@ -965,6 +1030,6 @@
   }
  ],
  "room_root": "../2026-09-06-change-writers-room-limits-and-forms/runs/home-room/shallow-runs/shallow-0b47bc7b090854078ddf7559",
- "schema": "room-attachment-conversion.v1",
+ "schema": "room-attachment-conversion.v2",
  "verbatim": "94/94"
 }

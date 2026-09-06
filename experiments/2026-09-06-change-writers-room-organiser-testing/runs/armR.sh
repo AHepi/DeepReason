@@ -1,12 +1,16 @@
 #!/bin/bash
 # ARM R: the full harness with the room attached and the organiser seat.
-# PREREG §3. Identical to ARM H except: the three attachment files bound as
-# the run's evidence, the organiser shell and wording selected for the
-# conjecturer, and the evidence-blind shell for the critic. THE THREE FILES
+# PREREG §3, amended by Amendment 7. Identical to ARM H except: the three
+# attachment files bound as the run's evidence, and the organiser shell and
+# wording selected FOR THE CONJECTURER ONLY. The critic runs the default
+# `seat.critic.legacy-v0`: the evidence-blind pairing of the first launch is
+# withdrawn, because a brief showing no evidence against a form demanding
+# evidence ids is what killed that arm (PARKED P6). THE THREE FILES
 # BY NAME, never the directory: `--attach <dir>` admits every file under it,
 # and attachment/ also holds CONVERSION.json and ATTACHMENT.sha256
 # (proof/DRY_ATTACH.txt measured 5 sources / 105 blocks for the directory
-# form against 3 / 94 for the files).
+# form against 3 / 97 for the files; the count moved from 94 to 97 when the
+# three preamble paragraphs were added, Amendment 7).
 set -u
 cd /home/user/DeepReason
 D=experiments/2026-09-06-change-writers-room-organiser-testing
@@ -19,10 +23,10 @@ echo "=== ARM R started $(date -u +%FT%TZ) home=$DEEPREASON_HOME ==="
 echo "question sha256: $(printf '%s' "$Q" | sha256sum | cut -c1-64)"
 echo "--- the attachment, by digest (bytes are committed under $A) ---"
 (cd $A && sha256sum -c ATTACHMENT.sha256) || { echo "ARM INVALID: attachment digests do not match"; exit 6; }
-export DEEPREASON_SEAT_SHELL=conjecturer=seat.conjecturer.organiser-v1,argumentative_critic=seat.critic.evidence-blind-v1
+export DEEPREASON_SEAT_SHELL=conjecturer=seat.conjecturer.organiser-v1
 export DEEPREASON_ROLE_PROMPT_TEMPLATE=role-prompt.organiser-v1
 echo "selectors: DEEPREASON_SEAT_SHELL=$DEEPREASON_SEAT_SHELL DEEPREASON_ROLE_PROMPT_TEMPLATE=$DEEPREASON_ROLE_PROMPT_TEMPLATE"
-echo "--- reason, 4 cycles, 800000 token ceiling, attached $(date -u +%FT%TZ) ---"
+echo "--- reason, 4 cycles, 500000 token ceiling, attached $(date -u +%FT%TZ) ---"
 deepreason --config "$CFG" reason --cycles 4 --token-budget 500000 \
   --attach "$A/01-conjectures.txt" --attach "$A/02-proposals.txt" --attach "$A/03-objections.txt" "$Q"; echo "rc=$?"
 ROOT="$(ls -dt $DEEPREASON_HOME/runs/run-* 2>/dev/null | head -1)"

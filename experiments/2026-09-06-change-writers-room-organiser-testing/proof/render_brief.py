@@ -26,7 +26,7 @@ sys.path.insert(0, str(REPO))
 
 def main() -> int:
     os.environ["DEEPREASON_SEAT_SHELL"] = (
-        "conjecturer=seat.conjecturer.organiser-v1,argumentative_critic=seat.critic.evidence-blind-v1"
+        "conjecturer=seat.conjecturer.organiser-v1"
     )
     os.environ["DEEPREASON_ROLE_PROMPT_TEMPLATE"] = "role-prompt.organiser-v1"
     from deepreason.llm.seat_plugins import ensure_seeded
