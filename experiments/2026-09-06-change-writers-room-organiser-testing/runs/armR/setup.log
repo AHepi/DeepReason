@@ -1,11 +1,3 @@
-=== chain started 2026-09-06T08:50:29Z head=337fc5cc6 ===
---- soak: cycle_soak --case epoch3 2026-09-06T08:50:29Z ---
-soak rc=0
-      63  workflow-work-preparation-v1
-      32  workflow-work-terminal-v1
-
-[soak] report /tmp/cycle-soak-efsbzdl4/soak-report.json
-[soak] exit 0 (clean)
 === setup+qualify home=experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r mode=attached 2026-09-06T08:56:21Z ===
 --- GUARD: the knob must land (m2_rung.sh's lesson: an env var reaches nothing) ---
 config echo: PACK_TOKEN_BUDGET=24000 (requested 24000)
