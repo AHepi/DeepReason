@@ -192,3 +192,17 @@ deleting it.
 **Window scope (this executor window only):** T0, T1, T2. Each sub-tranche
 is its own delivery — `dr-validate-change` then `dr-deliver-change` before
 the next starts. T3-T7 go to later windows.
+
+### Amendment 2 (2026-09-06) — this window's scope extended to T6
+
+Captured from the operator's message of 2026-09-06, after T3, T4 and T5 were
+delivered on `claude/mini-isolation-t3-t5-7tsc6d`. Verbatim, in full:
+
+> Do T6
+
+**R15 (scope, binding): T6 (CHECKLIST steps 46-51, SPEC S10 — regression,
+goldens, the record) runs in THIS window**, superseding the window
+instruction's "Stop after T5's delivery; T6 and T7 go to the last window" for
+T6 alone. T7 (S12, the measure) is not named and stays with the last window.
+No requirement changes; T6 records, at the programme's own boundary, the
+instruments every delivery here already ran.
