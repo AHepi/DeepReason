@@ -1,0 +1,4 @@
+A. TokenBudgetExceeded absorbed by the cycle loop: (True, None)
+B. WorkBudgetDenied  absorbed by the cycle loop: (False, 'WorkBudgetDenied')
+C. spent-ceiling denial carries budget_exhausted: ABSENT
+C. oversized-request denial carries budget_exhausted: ABSENT
