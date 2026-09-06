@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=46 blockers=none. T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=51 blockers=none. T3, T4 and T5 DELIVERED; T6 runs in this window (REQUEST.md Amendment 2, "Do T6"); T7 goes to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -1737,22 +1737,93 @@ tranche".
 
 ## T6 — regression, goldens, the record (S10) — ~120 lines
 
-- [ ] 46. (S10) Full gate, idle box, nothing else running
+- [x] 46. (S10) Full gate, idle box, nothing else running
       (`dr-drive-harness` §5b).
       done-when: `python -m pytest tests/ -q -n 4` ends "N passed, 0 failed" (paste)
-- [ ] 47. (S10) Mini's own suite, explicitly, because the documented gate
+      ```
+      $ python -m pytest tests/ -q -n 4          (2026-09-06; idle box, nothing else running)
+      5084 passed, 6 skipped in 1359.52s (0:22:39)     -> 0 failed
+      The same 5084 as T2, T3, T4 and T5 -- and expected: across this window
+      the only change under src/ is the 29-line public entry pair in
+      llm/packs.py (T3 step 25), which nothing under tests/ exercises
+      differently. Recorded here once, as the programme's own boundary,
+      rather than as a delivery's.
+      ```
+- [x] 47. (S10) Mini's own suite, explicitly, because the documented gate
       does not reach it.
       done-when: `python -m pytest mini/tests/ -q` -> 0 failed (paste)
-- [ ] 48. (S10) The two legacy goldens (C4).
+      ```
+      $ python -m pytest mini/tests/ -q
+      164 passed, 1 skipped in 14.13s                   -> 0 failed
+      $ python -m pytest mini/tests/ --collect-only -q | tail -1
+      165 tests collected
+      95 when SPEC.md measured it (M7); 116 at T2, 136 at T3, 150 at T4, 164
+      at T5. PARKED P1 still stands: the documented gate passes tests/
+      explicitly and never collects one of these.
+      ```
+- [x] 48. (S10) The two legacy goldens (C4).
       done-when: `python -m pytest tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py -q` -> 0 failed (paste)
-- [ ] 49. (S10) The record: a mini isolation run verifies and replays.
+      ```
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py -q
+      15 passed in 0.37s                                -> 0 failed
+      C4: the full harness's two briefs are byte-identical to what they were
+      before the programme. Three new shells and one legacy shell sit beside
+      the shipped two in the same registries; neither of the shipped two
+      resolves any differently.
+      ```
+- [x] 49. (S10) The record: a mini isolation run verifies and replays.
       done-when: `verify_root(root)` -> 0 violations AND
       `replay(root).digest() == Session(root).state.digest()` (paste both)
-- [ ] 50. (S10) The wheel smokes, because no gate runs them and S1 changes
+      ```
+      $ python <scratchpad>/t6_record.py    (mini.flow.isolation.v1, 3 cycles,
+                                             vs_k=2, the deterministic stub,
+                                             no key, no network)
+      flow            : mini.flow.isolation.v1
+      stop / cycles   : queue-exhausted / 3
+      problems        : {'pi-0': 6}  refuted: 0
+      calls           : 15            (3 conjecture + 6 criticism + 6 commitment)
+      records by kind : {'mini.commitment-proposal.v1': 6, 'mini.criticism.v1': 6}
+      meter_equals_log: True
+      verify_root violations: 0 []
+      replay(root).digest() == Session(root).state.digest(): True
+         28844463d7cb14d2cc0b2cc608ab54c5239674dfdd6bcae86aca5b98a982ee89
+         28844463d7cb14d2cc0b2cc608ab54c5239674dfdd6bcae86aca5b98a982ee89
+      RESULT: PASS
+      Six free-prose conjectures admitted and standing (commitments off, so
+      nothing refuted on arrival), each criticised once and given one
+      proposal; the record replays to the same digest the live session holds
+      and the verifier reports nothing. Within-version integrity, the thing
+      the operator's 2026-08-14 law keeps: the record stays typed,
+      append-only and replayable by the code that wrote it.
+      ```
+- [x] 50. (S10) The wheel smokes, because no gate runs them and S1 changes
       the shallow CLI surface (`dr-drive-harness` §4).
       done-when: `python scripts/wheel_smoke.py` and
       `python -u scripts/wheel_operational_smoke.py` both green, with any
       changed pin updated in THIS commit (paste)
+
+      ```
+      $ python scripts/wheel_smoke.py
+      wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+      points, module parity, MCP registration, and exact MCP schemas
+      rc=0
+
+      $ python -u scripts/wheel_operational_smoke.py      (~25 minutes; prints at the end)
+      wheel operational smoke passed: installed setup, explicit qualification
+              (80 qualification calls; 406 total calls), readiness, question-
+              only reasoning, replay-verified terminal retrieval, cache reuse,
+              opaque MCP restart, budget ceiling, and pre-V6 fail-closed
+              admission
+      rc=0
+
+      No pin moved, so none was updated: the smokes pin console entry points,
+      the MCP tool set and its schema sha, and the wheel layout. This window
+      changed none of those -- T1's --run-input (a new argument on an existing
+      verb) was the last CLI move, and T1 ran the wheel smoke then; the
+      operational smoke's own installed-wheel checks still find the shallow
+      engine and its console option. Both instruments are green on the
+      programme's tree as it stands.
+      ```
 - [ ] 51. (T6) [COMMIT] Deliver T6.
       done-when: `git status --porcelain` empty AND branch head on origin
 
