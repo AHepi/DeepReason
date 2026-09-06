@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on the phrase 'increases the likelihood of immediate error,' which directly contradicts Popper's explicit rejection of assigning probabilities to theories based on past survival. By framing the preference as a method to minimize 'likelihood of error,' the argument smuggles in the very inductive probability assessment Popper deemed illegitimate, failing to provide a non-probabilistic justification for action.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper held that corroboration is not probability and that surviving severe tests does not make a theory more probable.",
+      "premise_evidence": null,
+      "successor_question": "Can a preference for well-corroborated theories be justified solely by their current unfalsified status without implicitly invoking the probability of future success?"
+    }
+  ]
+}

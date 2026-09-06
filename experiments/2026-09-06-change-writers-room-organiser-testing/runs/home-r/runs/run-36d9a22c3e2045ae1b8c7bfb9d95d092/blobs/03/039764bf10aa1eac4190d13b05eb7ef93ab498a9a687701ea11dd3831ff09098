@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference for well-corroborated theories is a 'non-rational, psychological commitment' contradicts Popper's explicit argument in 'Conjectures and Refutations' that such a preference is rational because it aligns with the aim of finding truth through critical discussion. Popper distinguishes between the logical probability (which remains zero) and the rationality of the choice based on severe testing; by labeling the choice 'non-rational,' the target misrepresents Popper's resolution, which relies on the methodological rationality of preferring theories that have withstood falsification attempts, not merely a biological impulse.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly argued that preferring the better-corroborated theory is a rational decision based on critical discussion and the aim of finding truth, not a blind biological impulse.",
+      "premise_evidence": null,
+      "successor_question": "If the preference is non-rational as the target claims, does this not undermine the very basis of scientific progress Popper sought to defend by reducing it to mere psychological habit?"
+    }
+  ]
+}

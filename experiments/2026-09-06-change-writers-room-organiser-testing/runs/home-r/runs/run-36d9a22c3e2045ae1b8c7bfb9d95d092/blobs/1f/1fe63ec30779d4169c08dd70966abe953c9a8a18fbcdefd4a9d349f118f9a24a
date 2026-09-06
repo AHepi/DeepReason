@@ -1,0 +1,217 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic wager: it is a rational bet on the theory that has demonstrated 'fitness' by surviving severe tests, without asserting that this survival makes the theory more probable or true.",
+      "mechanism": "Acting on the best-tested theory is akin to betting on a horse that has won every race; while past success guarantees nothing about the future (rejecting induction), it is the only rational choice available if one must act, as it relies on demonstrated capacity to withstand falsification rather than inductive probability.",
+      "counterconditions": [
+        "refuted if it can be demonstrated that preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects",
+        "refuted if the conjecture attributes any increased likelihood of future success or truth to a theory solely on the basis of its survival of past tests",
+        "refuted if the conjecture claims that the 'fitness' demonstrated by surviving severe tests provides a rational basis for action if that basis secretly relies on the unstated premise that nature is uniform enough for past fitness to matter for future outcomes",
+        "refuted if a consistent Popperian agent, when forced to choose between two unfalsified theories where one is better corroborated, would not always choose the better-corroborated one while simultaneously asserting they have no reason to believe it will perform better in the next instance"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate does not rely on verisimilitude as the mechanism; it relies on the 'pragmatic wager' of demonstrated fitness. The Tichý and Miller refutation applies to formal definitions of verisimilitude, not to the pragmatic decision rule of choosing the most robust survivor for action."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "This candidate explicitly adopts the pragmatic justification mentioned in the criticism, distinguishing it from the metaphysical commitment to verisimilitude. It argues the preference is defensible *without* that commitment."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "revised",
+          "note": "The claim has been sharpened to explicitly frame the defense as the 'strongest case' for defensibility via the pragmatic wager, acknowledging the tension with induction as the core countercondition rather than ignoring the opposing view."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The mechanism addresses 'choosing which theory to act on' directly by framing it as a 'rational bet' necessitated by the need to act, distinct from the methodological rule of maximizing falsification severity."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate maintains the distinction that 'fitness' is a report of past survival, not a predictor of future reliability. The 'wager' is rational because it uses available data (survival) without assuming the uniformity of nature required for induction."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate distinguishes 'pragmatic preference for action' (the wager) from 'assertion of future reliability' (induction). One can prefer the horse that won every race without asserting it will win the next, only that it is the best available guess."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The mechanism defines preference as a 'rational bet' based on demonstrated capacity to withstand falsification, which aligns with acting on the theory, rather than redefining preference solely as a desire for efficient falsification."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "This candidate's defense rests on the 'pragmatic wager' of fitness, not on the concept of verisimilitude. Therefore, the logical incoherence of verisimilitude identified by Tichý and Miller does not refute this specific line of defense."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "block": "5760eda6c518c3d1",
+          "quote": "The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim. Popper argues that while past success guarantees nothing about the future (rejecting induction), the theory that has survived the severest tests has proven its 'fitness' in the specific environment of reality so far. Choosing it is akin to betting on the horse that has won every race; we do not know it will win the next, but it is the only rational choice available if we must act, as it has demonstrated a capacity to withstand falsification that others lack. This costs us the comfort of believing the theory is 'true' or 'likely,' forcing us to accept that our best actions are still grounded in guesswork, albeit an educated one."
+        },
+        {
+          "block": "327f6ea7cd7e8284"
+        },
+        {
+          "block": "9f6d3e913488869c"
+        },
+        {
+          "block": "8df03babcebe473a"
+        },
+        {
+          "block": "eb00f7c3429ea82e"
+        }
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "The preference for better-corroborated theories is indefensible on Popper's own terms and constitutes a performative contradiction: by advising scientists to 'prefer' the better-corroborated theory for action, Popper implicitly asserts that past performance is a reliable guide to future reliability, smuggling induction back in.",
+      "mechanism": "If corroboration reports only past history and implies nothing about the future, then preferring Theory A over Theory B for future application is irrational within Popper's system. Acting on corroboration requires an inductive leap that past survival indicates future stability, reducing Popper's methodology to a description of psychological habit rather than a logical framework.",
+      "counterconditions": [
+        "refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed or remain unfalsified in the future",
+        "refuted if the conjecture equates the pragmatic choice of a theory for application with an epistemic belief in its truth or future reliability",
+        "refuted if the conjecture claims that Popper's framework reduces to mere psychological habit unless it first demonstrates that no non-inductive logical rule can govern the preference for better-corroborated theories",
+        "refuted if its interpretation is correct, a consistent Popperian scientist would be unable to rationally distinguish between choosing a well-tested bridge design and a randomly selected unfalsified design for actual construction"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "departure_declared",
+          "note": "This candidate argues the preference is indefensible, whereas the criticism targets a defense relying on verisimilitude. The candidate departs from the assumption that a successful defense exists."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate argues that *any* justification for preference in action, including pragmatic ones, smuggles in induction. The existence of a pragmatic justification in Popper's text does not prove it is logically defensible on his own anti-inductive terms."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "revised",
+          "note": "The claim is framed as the 'strongest case' for the indefensibility of the preference, directly addressing the problem's requirement to argue both sides by positing that the 'smuggling' of induction is inevitable."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate contends that even if the preference is framed as a methodological rule, the *act* of choosing for application (as specified in the problem) inherently assumes future reliability, thus failing to address the tension."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate agrees that the 'pragmatic wager' is functionally indistinguishable from induction, which is precisely the point of the 'performative contradiction' charge."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate rejects the distinction between 'pragmatic preference' and 'assertion of future reliability' in the context of action, arguing that acting *is* an assertion of expected reliability, making the distinction moot for the charge of contradiction."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate argues that scientists prefer theories to act on them successfully, not merely to falsify them efficiently. Redefining preference as a desire for falsification contradicts the phenomenology of scientific practice described in the problem."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "departure_declared",
+          "note": "This candidate does not rely on verisimilitude for its argument; it argues that the very act of preference is the contradiction, regardless of the specific metaphysical gloss applied."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "block": "2c5c1b5212684c58",
+          "quote": "The preference is indefensible on Popper's own terms and constitutes a performative contradiction: when Popper chooses a well-corroborated bridge design over an unfalsified but untested one, he acts exactly as an inductivist would, relying on the implicit premise that past survival indicates future stability. This candidate argues that no amount of semantic maneuvering around 'corroboration' vs. 'probability' can mask the fact that acting on corroboration requires an inductive leap, meaning Popper's system collapses into crypto-induction whenever it leaves the realm of abstract methodology."
+        },
+        {
+          "block": "6035a9c4dd99607c"
+        },
+        {
+          "block": "ea3ee63d9cfa224e"
+        },
+        {
+          "block": "e0e189524f5ca805"
+        },
+        {
+          "block": "e3374255cb01e7a3"
+        }
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "The preference is defensible only by accepting a non-probabilistic metaphysical commitment to verisimilitude (truth-likeness), arguing that severe testing logically increases a theory's proximity to truth, shifting the goal from predictive reliability to structural approximation.",
+      "mechanism": "While we cannot know a theory is true or probable, severe testing logically increases its content and proximity to truth. This stance survives Popper's anti-induction critique by treating verisimilitude as a regulative ideal, but it costs the framework its claim to pure logic, smuggling in a rationalist faith that nature rewards boldness with truth-likeness.",
+      "counterconditions": [
+        "refuted if it can be shown that the concept of 'verisimilitude' (truth-likeness) cannot be formally defined without implicitly relying on inductive probability",
+        "refuted if it can be demonstrated that Popper explicitly grounded the preference for better-corroborated theories in a pragmatic decision rule without invoking any metaphysical assumption about the theory's proximity to truth",
+        "refuted if the conjecture treats the 'metaphysical hope' that surviving tests correlates with truth-likeness as a sufficient defense against the charge of cryptic inductivism if that hope functions identically to an inductive premise",
+        "refuted if the conjecture conflates the methodological rule of preferring bold, testable theories with a metaphysical belief that nature is structured to reward such boldness with truth"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate acknowledges the Tichý and Miller refutation of the *formal definition* but argues that Popper's *preference* still relies on this metaphysical commitment as a regulative ideal, even if formally flawed. The defense is that this commitment is necessary for the preference to be defensible at all."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate argues that pragmatic justifications alone are insufficient without the underlying metaphysical commitment to verisimilitude to explain *why* the pragmatic choice tracks truth. It rejects the false dilemma by asserting the metaphysical commitment is the primary driver."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "revised",
+          "note": "The claim presents the 'Verisimilitude Gamble' as the strongest case for defensibility that attempts to remain within Popper's broader philosophical goals, while explicitly noting the cost (loss of pure logic)."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The mechanism explains that the preference for action is derived from the goal of increasing verisimilitude, thus directly addressing the tension between methodological rules and practical choice."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate distinguishes the 'metaphysical commitment' to truth-likeness from the 'inductive principle' of uniformity. It argues one can believe in progress toward truth without believing the future will exactly resemble the past probabilistically."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate argues that the preference is not merely pragmatic but epistemic in the sense of aiming at truth (verisimilitude), thus rejecting the idea that it is only a 'pragmatic preference' devoid of truth-claims."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate asserts that scientists prefer corroborated theories because they believe them to be closer to the truth (higher verisimilitude), not just for efficient falsification, aligning with the problem's statement about acting on theories."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "revised",
+          "note": "The counterconditions now explicitly include the challenge regarding the logical incoherence of verisimilitude, framing the defense as a 'gamble' that accepts this flaw as the cost of maintaining a defensible preference."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "block": "065eed0d13a623b2",
+          "quote": "The preference is defensible only by accepting a non-probabilistic metaphysical commitment to verisimilitude (truth-likeness), arguing that while we cannot know a theory is true or probable, severe testing logically increases its content and proximity to truth. This stance survives Popper's anti-induction critique by shifting the goal from 'predictive reliability' to 'structural approximation,' but it costs the framework its claim to pure logic, smuggling in a rationalist faith that nature rewards boldness with truth-likeness rather than random chaos."
+        },
+        {
+          "block": "26d5b990b5bc8574"
+        },
+        {
+          "block": "894962a1f008e6a9"
+        },
+        {
+          "block": "c6f64791220fad18"
+        },
+        {
+          "block": "3c12f1ad9f1f9663"
+        }
+      ],
+      "typicality": 0.5
+    }
+  ]
+}

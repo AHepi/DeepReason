@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is defensible 'only by accepting a non-probabilistic metaphysical commitment to verisimilitude' fails to address the problem's requirement to make the strongest case for the opposing answer: that the preference is a pragmatic decision rule requiring no metaphysical commitment. By asserting the metaphysical route as the sole defense, the target ignores Popper's own appeals to critical preference based on informational content and test severity without invoking truth-likeness, thereby failing to engage with the 'smuggling induction' horn of the dilemma as a viable alternative interpretation.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly distinguished between the logical status of corroboration (non-inductive) and the pragmatic rationality of preferring better-tested theories for action, without necessarily committing to verisimilitude as the only justification.",
+      "premise_evidence": null,
+      "successor_question": "Does Popper's framework allow for a purely pragmatic justification for preferring corroborated theories that avoids both induction and metaphysical commitments to verisimilitude?"
+    }
+  ]
+}

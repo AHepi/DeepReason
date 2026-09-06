@@ -1,0 +1,74 @@
+{
+  "candidates": [
+    {
+      "content": "The Pragmatic Wager (SRC_005) depends on the rejection of inductive probability as a necessary condition for its validity; it is refuted if preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects.",
+      "typicality": 0.5,
+      "evidence_refs": [
+        {
+          "block": "5760eda6c518c3d1",
+          "quote": "The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim."
+        },
+        {
+          "block": "07ec28399009e60b",
+          "quote": "The analogy of betting on a horse that has won every race fails under Popperian scrutiny because, u"
+        }
+      ],
+      "neighbours": [
+        "SRC_005",
+        "SRC_003"
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate explicitly names the relation kind ('depends on') and states the specific 'refuted if' condition derived from Proposal id=327f6ea7cd7e8284 in SRC_003, satisfying the requirement for a substantive relation."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "This candidate addresses the 'Pragmatic Wager' conjecture (SRC_005) rather than 'The Decision-Theoretic Void' (SRC_008), declaring a departure from the specific linkage criticized in SRC_011 to focus on the dependency between the wager and the rejection of induction."
+        },
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "The content includes the predicate 'refuted if' and the relation phrase 'depends on', directly satisfying the relation-form@578e42df713e criterion which was reported as failed in SRC_009."
+        }
+      ]
+    },
+    {
+      "content": "Verisimilitude as a Regulative Ideal (SRC_005) inherits its defensive structure from the aim of science being truth rather than certainty; it is refuted if the concept of 'verisimilitude' cannot be formally defined without implicitly relying on inductive probability, thereby making the shift from probability to verisimilitude merely a semantic disguise for the very induction Popper rejected.",
+      "typicality": 0.5,
+      "evidence_refs": [
+        {
+          "block": "5760eda6c518c3d1",
+          "quote": "CONJECTURE id=92968bc0cf42d965 cycle=1 angle=Verisimilitude as a Regulative Ideal"
+        },
+        {
+          "block": "2ca79ab9e6d293c3",
+          "quote": "The conjecture relies on the concept of 'verisimilitude' (truth-likeness) to bridge the gap between"
+        }
+      ],
+      "neighbours": [
+        "SRC_005",
+        "SRC_003"
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate proposes a substantive relation ('inherits') and a clear 'refuted if' condition based on Proposal id=26d5b990b5bc8574, addressing the criticism that previous attempts lacked these elements."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "Departing from the 'Decision-Theoretic Void' context criticized in SRC_011 to address the 'Verisimilitude' conjecture directly."
+        },
+        {
+          "handle": "SRC_009",
+          "kind": "rebutted",
+          "note": "The text contains 'refuted if' and 'inherits', fulfilling the relation-form criteria flagged in SRC_009."
+        }
+      ]
+    }
+  ]
+}

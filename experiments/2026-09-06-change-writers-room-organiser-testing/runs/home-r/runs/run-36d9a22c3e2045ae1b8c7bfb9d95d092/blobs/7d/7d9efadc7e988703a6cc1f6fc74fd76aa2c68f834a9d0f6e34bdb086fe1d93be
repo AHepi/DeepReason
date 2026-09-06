@@ -1,0 +1,250 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is indefensible on Popper's own terms and constitutes a performative contradiction: acting on a well-corroborated theory (e.g., bridge design) relies on the implicit premise that past survival indicates future stability, which is the very definition of inductive reasoning Popper sought to destroy.",
+      "mechanism": "Popper's system collapses into crypto-induction whenever it leaves abstract methodology; no semantic maneuvering around 'corroboration' vs. 'probability' can mask that acting on corroboration requires an inductive leap, reducing his methodology to a description of psychological habit rather than a logical framework.",
+      "counterconditions": [
+        "refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests without any assumption that the theory will actually succeed or remain unfalsified in the future",
+        "refuted if Popper explicitly distinguished 'pragmatic preference for action' from 'assertion of future reliability' such that one can choose the best-tested map without assuming the territory will not change",
+        "refuted if it can be demonstrated that Popper explicitly justified the preference for better-corroborated theories in practical decisions solely on the grounds of maximizing testability and information content, without invoking any expectation of future success based on past performance"
+      ],
+      "evidence_refs": [
+        {
+          "block": "2c5c1b5212684c58"
+        },
+        {
+          "block": "6035a9c4dd99607c"
+        },
+        {
+          "block": "7e9418dfffc8d0e7"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "This candidate argues the preference is indefensible precisely because attempts to ground it in verisimilitude fail (as noted by Tichý and Miller), leaving only the inductive leap as the mechanism for action."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate contends that Popper's 'pragmatic justification' is the smuggled induction itself; ignoring it does not solve the problem but highlights the contradiction."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to explicitly frame the claim as the 'strongest case' for the 'indefensible' answer, acknowledging the opposing view (defensibility) is addressed by other candidates in the room (e.g., Pragmatic Wager)."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate addresses the tension by asserting that the methodological rule fails to justify *action* specifically, which is the core of the performative contradiction."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "This candidate agrees with the criticism that the 'pragmatic wager' is indistinguishable from induction; this supports the claim that the preference is indefensible on strict Popperian terms."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate rejects the distinction between pragmatic preference and assertion of reliability in the context of life-or-death action, arguing they are functionally identical."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate maintains that redefining preference as 'efficient falsification' contradicts the actual behavior of scientists who act for successful outcomes, thus confirming the contradiction."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate leverages the incoherence of verisimilitude (Tichý/Miller) to strengthen the argument that no non-inductive defense remains."
+        }
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim: choosing the theory that has survived severe tests is the only rational choice available if we must act, as it has demonstrated a capacity to withstand falsification that others lack.",
+      "mechanism": "Past success guarantees nothing about the future (rejecting induction), but the theory surviving severest tests proves its 'fitness' in the specific environment of reality so far; choosing it is akin to betting on the horse that has won every race—we do not know it will win the next, but it is the only rational bet.",
+      "counterconditions": [
+        "refuted if it can be demonstrated that preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects",
+        "refuted if the analogy of betting on a horse fails because scientific theories face an unknown reality where surviving tests demonstrates no positive 'fitness'",
+        "refuted if the phrase 'educated guesswork' is a contradiction in terms within a strictly non-inductive framework, rendering the preference an arbitrary psychological habit"
+      ],
+      "evidence_refs": [
+        {
+          "block": "5760eda6c518c3d1"
+        },
+        {
+          "block": "327f6ea7cd7e8284"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "This defense does not rely on verisimilitude but on pragmatic fitness and the necessity of action; the logical refutation of verisimilitude is irrelevant to this specific wager."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate explicitly embraces the pragmatic justification as the primary defense, denying it is a false dilemma."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to ensure this represents the 'strongest case' for defensibility, contrasting with the 'indefensible' case."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate argues the wager addresses the tension by separating epistemic certainty from pragmatic necessity in action."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate denies the wager is functionally indistinguishable from induction by insisting it assigns no probability, only a rational basis for choice under ignorance."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate upholds the distinction between pragmatic preference and assertion of reliability as central to the wager."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate argues the wager explains why scientists prefer corroborated theories for action without redefining preference as mere falsification."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate does not rely on verisimilitude, so the Tichý/Miller refutation does not apply."
+        }
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "The preference is defensible only by accepting a non-probabilistic metaphysical commitment to verisimilitude (truth-likeness), arguing that while we cannot know a theory is true, severe testing logically increases its content and proximity to truth.",
+      "mechanism": "This stance survives Popper's anti-induction critique by shifting the goal from 'predictive reliability' to 'structural approximation,' positing that surviving severe tests correlates with truth-likeness.",
+      "counterconditions": [
+        "refuted if it can be shown that the concept of 'verisimilitude' cannot be formally defined without implicitly relying on inductive probability",
+        "refuted if Popper's own formal definition of verisimilitude was proven logically incoherent by Tichý and Miller, rendering the argument internally inconsistent",
+        "refuted if it can be demonstrated that Popper explicitly grounded the preference in a pragmatic decision rule without invoking any metaphysical assumption about proximity to truth"
+      ],
+      "evidence_refs": [
+        {
+          "block": "065eed0d13a623b2"
+        },
+        {
+          "block": "26d5b990b5bc8574"
+        },
+        {
+          "block": "894962a1f008e6a9"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "The candidate acknowledges the Tichý/Miller objection but posits that a revised or intuitive notion of verisimilitude may still serve as a regulative ideal even if the formal definition failed."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate argues that pragmatic justification alone is insufficient without the metaphysical hope of truth-likeness to guide the preference."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to present this as a distinct 'strongest case' for defensibility via metaphysical commitment."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate claims verisimilitude bridges the gap between methodological rules and action."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate distinguishes verisimilitude from induction by defining it as a logical relation of content, not probability."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate asserts that aiming at truth-likeness justifies the preference beyond mere pragmatic habit."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "rebutted",
+          "note": "The candidate argues scientists prefer corroborated theories because they believe them closer to truth, not just for falsification."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "revised",
+          "note": "Acknowledges the Tichý/Miller refutation as a major cost but maintains the defense relies on this commitment despite its flaws."
+        }
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "The preference is defensible because corroboration functions as a measure of informational content rather than likelihood: we choose the better-corroborated theory because it offers the most detailed map of the world currently available, providing the richest basis for further criticism and testing.",
+      "mechanism": "A theory that survives severe tests is one that took a greater risk of being wrong; preferring it is a preference for boldness and precision, acting specifically to try to break it, meaning our 'preference' is actually a preference for the most efficient path to potential falsification.",
+      "counterconditions": [
+        "refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true",
+        "refuted if the target conflates 'informational content' with 'practical viability', as scientists prefer corroborated theories for accurate predictions, not just to break them",
+        "refuted if the assertion that 'action becomes purely experimental' fails to account for the stakes involved in real-world application where failure results in catastrophic loss"
+      ],
+      "evidence_refs": [
+        {
+          "block": "34f3d4b29076900a"
+        },
+        {
+          "block": "36cfcd3be6fec4dd"
+        }
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_007] against SRC_002",
+          "kind": "rebutted",
+          "note": "This defense relies on informational content, not verisimilitude, avoiding the Tichý/Miller refutation."
+        },
+        {
+          "handle": "[SRC_014] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate presents this as the primary pragmatic justification, distinct from metaphysical commitments."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to frame this as the 'strongest case' for defensibility via informational content."
+        },
+        {
+          "handle": "[SRC_013] against SRC_011",
+          "kind": "rebutted",
+          "note": "The candidate argues that maximizing falsification potential is the rational basis for action in science."
+        },
+        {
+          "handle": "[SRC_006] against SRC_001",
+          "kind": "rebutted",
+          "note": "The candidate denies this is induction, framing it as a logical deduction about current knowledge state."
+        },
+        {
+          "handle": "[SRC_008] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate maintains the distinction between preferring for falsification and believing in reliability."
+        },
+        {
+          "handle": "[SRC_009] against SRC_004",
+          "kind": "revised",
+          "note": "Acknowledges the tension with practical application but insists the Popperian defense rests on this redefinition of preference."
+        },
+        {
+          "handle": "[SRC_015] against SRC_002",
+          "kind": "rebutted",
+          "note": "Irrelevant as this defense does not rely on verisimilitude."
+        }
+      ],
+      "typicality": 0.5
+    }
+  ]
+}

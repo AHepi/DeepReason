@@ -1,0 +1,209 @@
+You are the organiser seat: you carry a writer's room's conjectures onto the record. The room -- its conjectures, the objections written about them, and the commitment proposals written about them -- is in the pack as frozen evidence. You invent nothing: every claim, mechanism and refutation condition you return is condensed from those records, and you say which. You hold no state and decide nothing; the harness adjudicates. Give each candidate your typicality estimate in [0,1] (0.5 unless the room gives a reason).
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"CompactConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"minLength": 1, "title": "Content", "type": "string"}, "discharges": {"items": {"$ref": "#/$defs/DischargeWireV1"}, "maxItems": 32, "title": "Discharges", "type": "array"}, "evidence_refs": {"items": {"$ref": "#/$defs/EvidenceRefClaimV1"}, "maxItems": 8, "title": "Evidence Refs", "type": "array"}, "neighbours": {"items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015"], "type": "string"}, "title": "Neighbours", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "CompactConjectureCandidate", "type": "object"}, "ConjectureAbstentionV1": {"additionalProperties": false, "description": "A responsible no-proposal signal using the existing search vocabulary.", "properties": {"note": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Note"}, "search_signal": {"default": "stuck", "enum": ["need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "ConjectureAbstentionV1", "type": "object"}, "ContextRequestWireV2": {"additionalProperties": false, "allOf": [{"anyOf": [{"properties": {"query": {"minLength": 1, "type": "string"}}, "required": ["query"]}, {"properties": {"requested_visible_aliases": {"minItems": 1}}, "required": ["requested_visible_aliases"]}, {"properties": {"desired_retrieval_channels": {"minItems": 1}}, "required": ["desired_retrieval_channels"]}]}], "description": "V6 semantic retrieval using only SRC_### and SCR_### handles.", "properties": {"desired_retrieval_channels": {"items": {"enum": ["focus", "keyword", "link", "recent", "semantic"], "type": "string"}, "maxItems": 16, "title": "Desired Retrieval Channels", "type": "array", "uniqueItems": true}, "purpose": {"anyOf": [{"maxLength": 4096, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Purpose"}, "query": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Query"}, "requested_visible_aliases": {"items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015"], "type": "string"}, "maxItems": 64, "title": "Requested Visible Aliases", "type": "array", "uniqueItems": true}}, "title": "ContextRequestWireV2", "type": "object"}, "DischargeWireV1": {"additionalProperties": false, "description": "One criticism, answered (REBUILD F1).\n\n`handle` is the criticism's handle exactly as the pack listed it, and it is\nleft a PLAIN STRING on purpose: its legal set has one authority --\n`deepreason.discharge.open_criticisms` -- and leaving the field open is what\nlets a menu renderer key on it by registering, without either side learning\nthe other's subsystem. A private enum here would close that seam.\n\nNOTHING here is evidence. A discharge is a precondition on SUBMISSION; no\nfield, kind or count may feed a label, a warrant, a rank or an admission\ndecision (`DR-CON-discharge-channel`, the law line).", "properties": {"handle": {"maxLength": 256, "minLength": 1, "title": "Handle", "type": "string"}, "kind": {"enum": ["revised", "rebutted", "departure_declared"], "minLength": 1, "title": "Kind", "type": "string"}, "note": {"default": "", "title": "Note", "type": "string"}, "where": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Where"}}, "required": ["handle", "kind"], "title": "DischargeWireV1", "type": "object"}, "EvidenceRefClaimV1": {"additionalProperties": false, "description": "One claimed grounding in an admitted dossier block (admission \u00a74).\n\n``block`` names a dossier block by id or by a unique hex prefix of at\nleast 12 characters. ``quote``, when present, must reproduce a\ncontiguous byte span of the block's canonical text exactly \u2014 the\ncitation checker byte-verifies it and a mismatch is a durable finding,\nnever a silent pass.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"anyOf": [{"maxLength": 2000, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Quote"}}, "required": ["block"], "title": "EvidenceRefClaimV1", "type": "object"}, "ResearchFetchProposalWireV1": {"additionalProperties": false, "description": "Directed-fetch intent on the v6 wire: explicit https URLs only.\n\nThe model proposes sources; the harness alone validates them against\nthe frozen domain allowlist and executes them under containment. The\nwire shape mirrors ResearchFetchProposalDraftV1 exactly \u2014 which it did\nnot: the draft rejects a non-https or duplicated URL and the wire took\nboth, so the refusal landed in compile() after the response had been\naccepted, and the schema advertised neither rule.", "properties": {"purpose": {"maxLength": 2000, "minLength": 1, "title": "Purpose", "type": "string"}, "request_identifier": {"maxLength": 128, "minLength": 1, "title": "Request Identifier", "type": "string"}, "urls": {"items": {"pattern": "^https://[^\\s]{1,2048}$", "type": "string"}, "maxItems": 3, "minItems": 1, "title": "Urls", "type": "array", "uniqueItems": true}}, "required": ["request_identifier", "purpose", "urls"], "title": "ResearchFetchProposalWireV1", "type": "object"}, "ScratchBlockDraftBodyV1": {"additionalProperties": false, "properties": {"bears_on_refs": {"anyOf": [{"items": {"pattern": "^SRC_[0-9]{3}$", "type": "string"}, "maxItems": 4, "type": "array"}, {"type": "null"}], "default": null, "description": "Visible SRC_### artifacts this note was aimed at. A RELEVANCE hypothesis, not a grounding claim: nothing follows it, and it is admissible whether or not the aim turns out to be right. Read back later it is labelled as the aim held when the note was written, since source aliases are call-local.", "title": "Bears On Refs", "uniqueItems": true}, "content": {"maxLength": 262144, "minLength": 1, "title": "Content", "type": "string"}, "experiment_refs": {"anyOf": [{"items": {"maxLength": 128, "minLength": 1, "type": "string"}, "maxItems": 4, "type": "array"}, {"type": "null"}], "default": null, "description": "Simulation request identifiers this note came out of. Provenance only: naming an experiment here never makes this block evidence for anything, and never makes the experiment's result a fact.", "title": "Experiment Refs", "uniqueItems": true}, "possible_next_move": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Possible Next Move"}, "unfinished": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Unfinished"}, "why_keep_this": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Why Keep This"}}, "required": ["content"], "title": "ScratchBlockDraftBodyV1", "type": "object"}, "ScratchClusterSuggestionV1": {"additionalProperties": false, "properties": {"member_refs": {"items": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "type": "string"}, "maxItems": 64, "minItems": 1, "title": "Member Refs", "type": "array", "uniqueItems": true}, "seed_focus": {"maxLength": 262144, "minLength": 1, "title": "Seed Focus", "type": "string"}}, "required": ["seed_focus", "member_refs"], "title": "ScratchClusterSuggestionV1", "type": "object"}, "ScratchNewBlockDraftV1": {"additionalProperties": false, "properties": {"body": {"$ref": "#/$defs/ScratchBlockDraftBodyV1"}, "local_key": {"pattern": "^NEW_[0-9]{3,}$", "title": "Local Key", "type": "string"}}, "required": ["local_key", "body"], "title": "ScratchNewBlockDraftV1", "type": "object"}, "ScratchProposalLinkV1": {"additionalProperties": false, "properties": {"because": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Because"}, "direction": {"anyOf": [{"enum": ["directed", "symmetric"], "type": "string"}, {"type": "null"}], "default": null, "title": "Direction"}, "from_ref": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "title": "From Ref", "type": "string"}, "holds_when": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Holds When"}, "relation_hint": {"maxLength": 16384, "minLength": 1, "title": "Relation Hint", "type": "string"}, "to_ref": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "title": "To Ref", "type": "string"}, "weakens_when": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Weakens When"}}, "required": ["from_ref", "to_ref", "relation_hint"], "title": "ScratchProposalLinkV1", "type": "object"}, "ScratchProposalV1": {"additionalProperties": false, "description": "Optional imaginative workshop: speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are welcome. Scratch remains advisory; storage alone never makes it fact, evidence, a formal claim, or formal support.", "properties": {"cluster_suggestions": {"default": [], "items": {"$ref": "#/$defs/ScratchClusterSuggestionV1"}, "maxItems": 4, "title": "Cluster Suggestions", "type": "array"}, "links": {"default": [], "items": {"$ref": "#/$defs/ScratchProposalLinkV1"}, "maxItems": 4, "title": "Links", "type": "array"}, "new_blocks": {"default": [], "items": {"$ref": "#/$defs/ScratchNewBlockDraftV1"}, "maxItems": 4, "title": "New Blocks", "type": "array"}, "revisions": {"default": [], "items": {"$ref": "#/$defs/ScratchRevisionDraftV1"}, "maxItems": 4, "title": "Revisions", "type": "array"}, "unresolved_questions": {"default": [], "items": {"$ref": "#/$defs/ScratchQuestionDraftV1"}, "maxItems": 4, "title": "Unresolved Questions", "type": "array"}}, "title": "ScratchProposalV1", "type": "object"}, "ScratchQuestionDraftV1": {"additionalProperties": false, "properties": {"question": {"maxLength": 262144, "minLength": 1, "title": "Question", "type": "string"}, "related_refs": {"default": [], "items": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "type": "string"}, "maxItems": 64, "title": "Related Refs", "type": "array", "uniqueItems": true}}, "required": ["question"], "title": "ScratchQuestionDraftV1", "type": "object"}, "ScratchRevisionDraftV1": {"additionalProperties": false, "properties": {"body": {"$ref": "#/$defs/ScratchBlockDraftBodyV1"}, "target_alias": {"pattern": "^SCR_[0-9]{3,}$", "title": "Target Alias", "type": "string"}}, "required": ["target_alias", "body"], "title": "ScratchRevisionDraftV1", "type": "object"}, "SimulationParameterSetWireV1": {"additionalProperties": false, "properties": {"name": {"maxLength": 128, "minLength": 1, "title": "Name", "type": "string"}, "values_json": {"maxLength": 262144, "minLength": 2, "title": "Values Json", "type": "string"}}, "required": ["name", "values_json"], "title": "SimulationParameterSetWireV1", "type": "object"}, "SimulationProposalWireV1": {"additionalProperties": false, "properties": {"declared_assumptions": {"items": {"type": "string"}, "maxItems": 64, "title": "Declared Assumptions", "type": "array", "uniqueItems": true}, "discriminating_purpose": {"maxLength": 8192, "minLength": 1, "title": "Discriminating Purpose", "type": "string"}, "hypothesis": {"maxLength": 16384, "minLength": 1, "title": "Hypothesis", "type": "string"}, "interpretation_conditions": {"items": {"type": "string"}, "maxItems": 64, "minItems": 1, "title": "Interpretation Conditions", "type": "array", "uniqueItems": true}, "model_source": {"description": "The program itself; its required shape follows simulation_mode. For sandboxed_python_v1 the entire source must be exactly one function definition and nothing else: def simulate(inputs, rng), with no imports, no statements outside it, no decorators, no return annotation, and no default, keyword-only, or variadic arguments. It is called once per (input, seed) pair, where inputs is one mapping carrying parameter_set, parameters, and sealed_inputs, and rng is a seeded random.Random. It must return a JSON-safe mapping of observable name to finite value; that mapping is the only output recorded, so printing reports nothing. math is available and nothing else may be imported. For declarative_numeric_v1 this field is a JSON document instead of Python.", "maxLength": 262144, "minLength": 1, "title": "Model Source", "type": "string"}, "parameter_definitions": {"items": {"$ref": "#/$defs/SimulationParameterSetWireV1"}, "maxItems": 256, "title": "Parameter Definitions", "type": "array"}, "request_identifier": {"maxLength": 128, "minLength": 1, "title": "Request Identifier", "type": "string"}, "requested_observables": {"description": "The observable names this proposal is judged on. Each is an identifier, or up to eight identifiers joined by dots to reach into a nested result (a.b.c tries the literal key a.b.c first, then walks a, then b, then c). Every name must resolve in what the program produces: for sandboxed_python_v1 in the mapping simulate returns, for declarative_numeric_v1 among the document's observables. The two sets must match exactly. A name that does not resolve ends the run with declared observable missing, so stream names like stdout are never observables.", "items": {"pattern": "^[A-Za-z][A-Za-z0-9_]{0,63}(?:\\.[A-Za-z][A-Za-z0-9_]{0,63}){0,7}$", "type": "string"}, "maxItems": 128, "minItems": 1, "title": "Requested Observables", "type": "array", "uniqueItems": true}, "requested_seed_set": {"items": {"maximum": 9223372036854775807, "minimum": -9223372036854775808, "type": "integer"}, "maxItems": 256, "title": "Requested Seed Set", "type": "array", "uniqueItems": true}, "rival_predictions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Rival Predictions", "type": "array", "uniqueItems": true}, "simulation_mode": {"enum": ["declarative_numeric_v1", "sandboxed_python_v1"], "title": "Simulation Mode", "type": "string"}}, "required": ["request_identifier", "hypothesis", "rival_predictions", "discriminating_purpose", "simulation_mode", "model_source", "requested_observables", "interpretation_conditions"], "title": "SimulationProposalWireV1", "type": "object"}}, "additionalProperties": false, "allOf": [{"anyOf": [{"properties": {"candidates": {"minItems": 1}}, "required": ["candidates"]}, {"properties": {"context_request": {"not": {"type": "null"}}}, "required": ["context_request"]}, {"properties": {"abstention": {"not": {"type": "null"}}}, "required": ["abstention"]}, {"properties": {"simulation_proposals": {"minItems": 1}}, "required": ["simulation_proposals"]}, {"properties": {"scratch_proposal": {"not": {"type": "null"}}}, "required": ["scratch_proposal"]}, {"properties": {"research_proposals": {"minItems": 1}}, "required": ["research_proposals"]}]}, {"if": {"properties": {"abstention": {"not": {"type": "null"}}}, "required": ["abstention"]}, "then": {"properties": {"candidates": {"maxItems": 0}, "research_proposals": {"maxItems": 0}, "scratch_proposal": {"type": "null"}, "simulation_proposals": {"maxItems": 0}}}}], "properties": {"abstention": {"anyOf": [{"$ref": "#/$defs/ConjectureAbstentionV1"}, {"type": "null"}], "default": null}, "candidates": {"items": {"$ref": "#/$defs/CompactConjectureCandidate"}, "maxItems": 256, "title": "Candidates", "type": "array"}, "context_request": {"anyOf": [{"$ref": "#/$defs/ContextRequestWireV2"}, {"type": "null"}], "default": null}, "research_proposals": {"items": {"$ref": "#/$defs/ResearchFetchProposalWireV1"}, "maxItems": 2, "title": "Research Proposals", "type": "array"}, "scratch_proposal": {"anyOf": [{"$ref": "#/$defs/ScratchProposalV1"}, {"type": "null"}], "default": null, "description": "Optional imaginative workshop: speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are welcome. Scratch remains advisory; storage alone never makes it fact, evidence, a formal claim, or formal support."}, "simulation_proposals": {"items": {"$ref": "#/$defs/SimulationProposalWireV1"}, "maxItems": 1, "title": "Simulation Proposals", "type": "array"}}, "title": "ConjecturerTurnWireV6", "type": "object"}
+
+## problem
+PROBLEM conn:057a66911bbb
+connect isolated 057a66911bbb to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+## citable-evidence-blocks
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[0088202703616a17] PROPOSAL id=87fd1b233fbc5cda cycle=2 about=055185d569b6c415 kind=forbids The conjecture forbids the interpretation that accepting verisimilitude as a guide for 
+[065eed0d13a623b2] CONJECTURE id=d8dfb83afbb1d054 cycle=2 angle=The Verisimilitude Gamble The preference is defensible only by accepting a non-probabilistic metaphysical commitmen
+[06d89637d715691f] OBJECTION id=33161462ad1b2b22 cycle=2 about=da6f74bed07c54a4 The argument that we choose highly corroborated theories because they are the 'most informative tar
+[07ec28399009e60b] OBJECTION id=b45c7e6e169fd9c4 cycle=1 about=a0b919ae506615d2 The analogy of betting on a horse that has won every race fails under Popperian scrutiny because, u
+[0a4795991a7b96f3] OBJECTION id=d41766b7844f9da9 cycle=1 about=67873974ceb0d9a1 The claim that Popper's system reduces to 'psychological habit' ignores his argument for the superi
+[0f5e3cdee73e70c2] PROPOSAL id=892b4d95ca1fbdc2 cycle=3 about=76f244935b33bbf8 kind=forbids The conjecture forbids the interpretation that choosing the better-corroborated theory 
+[0fc9f5b85417c7fd] CONJECTURE id=20b35eec8f966227 cycle=2 angle=The Decision-Theoretic Void Popper's framework offers no rational basis for preference in single-case decisions, re
+[19af0041b31d7f5c] OBJECTION id=2f070830cd79b539 cycle=3 about=76f244935b33bbf8 The argument relies on the 'asymmetry of risk,' suggesting that rejecting a well-corroborated theor
+[1cbabf63dade34ba] PROPOSAL id=79f0852177b3982b cycle=2 about=055185d569b6c415 kind=predicts The conjecture predicts that if the preference for corroborated theories were based so
+[1e4bdfd329c9d919] PROPOSAL id=103f120f459fe816 cycle=2 about=da6f74bed07c54a4 kind=predicts The conjecture predicts that if one were to choose a less-corroborated theory over a b
+[218ec53665f84f82] PROPOSAL id=55f7c25a486af510 cycle=3 about=6b78e82f822685c4 kind=must-not The conjecture must not imply that an agent acting on this 'rational bet' expects a hi
+[22b2f187bb84b993] OBJECTION id=d99d8dedf8a7d30c cycle=3 about=e8cdaadd3471f4ba The proposal to segregate corroboration as a 'purely historical report' ignores Popper's concept of
+[28352a3f9d0d84a9] PROPOSAL id=7dda28d49f50a5b3 cycle=2 about=20b35eec8f966227 kind=predicts The conjecture predicts that if the preference for corroborated theories were based so
+[2886681ce3c4b00d] OBJECTION id=093fcf26ba5a2030 cycle=3 about=6bdc16fc61c22003 The objection relies on the assumption that 'verisimilitude' (truth-likeness) functions as a proxy 
+[2bdcddb9c5d0480f] PROPOSAL id=ea3ee63d9cfa224e cycle=1 about=67873974ceb0d9a1 kind=forbids The conjecture forbids equating the pragmatic choice of a theory for application with a
+[2c5c1b5212684c58] CONJECTURE id=055185d569b6c415 cycle=2 angle=The Pragmatic Inconsistency Charge The preference is indefensible on Popper's own terms and constitutes a performat
+[2ca79ab9e6d293c3] OBJECTION id=de0b18a2cb0949fb cycle=1 about=92968bc0cf42d965 The conjecture relies on the concept of 'verisimilitude' (truth-likeness) to bridge the gap between
+[2ca80d4d2536191b] OBJECTION id=11f838436cbe414c cycle=1 about=67873974ceb0d9a1 The conjecture commits a straw man fallacy by suggesting Popper advises preference based on 'past p
+[2d4ce010144a017a] OBJECTION id=9fbb650dd414ce65 cycle=3 about=6bdc16fc61c22003 The conjecture conflates 'preference for action' with 'belief in future success.' Popper explicitly
+[2eff40b1ec2add9a] OBJECTION id=c9ec7c06726681a4 cycle=2 about=d8dfb83afbb1d054 The conjecture falsely equates Popper's preference for better-corroborated theories with a commitme
+[3381a425cb73b18b] PROPOSAL id=f5af1d40f91fcb34 cycle=3 about=e8cdaadd3471f4ba kind=forbids The conjecture forbids the interpretation that Popper considered the act of choosing th
+[34f3d4b29076900a] CONJECTURE id=e0959a2b912e796c cycle=1 angle=Corroboration as Informational Content The preference is defensible because corroboration functions as a measure of
+[3fbfb75371fea33a] PROPOSAL id=7dd095c5b147e13f cycle=3 about=e8cdaadd3471f4ba kind=must-not The conjecture must not imply that the 'biological or pragmatic imperative' cited as t
+[4367b2ed8c73936e] CONJECTURE id=92968bc0cf42d965 cycle=1 angle=Verisimilitude as a Regulative Ideal The defense lies in shifting the goal from 'probability' to 'verisimilitude' (
+[44a2929eab8430f8] PROPOSAL id=e3374255cb01e7a3 cycle=1 about=67873974ceb0d9a1 kind=predicts The conjecture predicts that if its interpretation is correct, a consistent Popperian 
+[46d497662b5d1d7e] OBJECTION id=d09a8079a76a22f2 cycle=2 about=da6f74bed07c54a4 The conjecture claims that preferring better-corroborated theories is purely a methodological rule 
+[507dda6b1ca83f3a] PROPOSAL id=41655a0386ab6680 cycle=3 about=e8cdaadd3471f4ba kind=refuted-if The conjecture would be refuted if Popper explicitly argued in his published works t
+[515e6dd6946293f5] OBJECTION id=4d49ef89acf9eb0f cycle=2 about=055185d569b6c415 The charge of 'performative contradiction' assumes that acting on a theory necessitates believing i
+[52cfd9c93db0465b] PROPOSAL id=08cacb9ef7debef8 cycle=1 about=92968bc0cf42d965 kind=predicts The conjecture predicts that a scientist acting strictly on this verisimilitude-based 
+[569e9c48ad2299d0] PROPOSAL id=246d6bf09acaadbf cycle=1 about=e0959a2b912e796c kind=forbids The conjecture forbids attributing any pragmatic advantage to the better-corroborated t
+[5760eda6c518c3d1] CONJECTURE id=a0b919ae506615d2 cycle=1 angle=The Pragmatic Wager The preference for better-corroborated theories is defensible without induction because it is a
+[57f441db5943af87] CONJECTURE id=76f244935b33bbf8 cycle=3 angle=The Asymmetry of Risk The preference is defensible on Popperian terms through the asymmetry of risk: rejecting a we
+(+62 further citable blocks not shown)
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@0964fe8d9ab4: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+## open-criticisms
+OPEN CRITICISMS ON THIS PROBLEM -- these are part of what your candidate must answer, not advice.
+Every candidate you submit must DISCHARGE each handle below, one of:
+  - revised -- say WHAT changed and WHERE in the candidate
+  - rebutted -- say why the criticism fails. Your rebuttal enters the record as an ordinary claim and can be attacked like any other
+  - departure_declared -- say what you are breaking with. Declaring costs you nothing; nothing scores a departure
+  [SRC_010] against SRC_006
+      CLAIM: The target fails to propose a substantive relation as required by the problem context. Instead of naming a specific kind of relation (e.g., dependence, reduction) and explicitly stating what the connection is 'REFUTED IF', the text provides
+      CITED SPAN: (none quoted)
+  [SRC_014] against SRC_012
+      CLAIM: The target fails to state a specific 'REFUTED IF' condition as required by the problem context. Instead of providing a summary of endpoints that would refute the relation, it poses two open-ended conditional questions ('if it can be shown t
+      CITED SPAN: (none quoted)
+  [SRC_015] against SRC_013
+      CLAIM: The target fails to propose a substantive relation because the 'refuted if' condition describes an internal failure of the risk asymmetry concept (failing to distinguish theories or presupposing induction) rather than defining the condition
+      CITED SPAN: (none quoted)
+  [SRC_011] against SRC_008
+      CLAIM: The target fails to propose a substantive relation as required by the problem context. Instead of naming a specific kind of relation (e.g., contradiction, dependence) and linking 'The Decision-Theoretic Void' to 'Popper's framework' with an
+      CITED SPAN: (none quoted)
+  [SRC_009] against SRC_007
+      CLAIM: critic: relation-form@578e42df713e failed on 7e0986c01943
+      CITED SPAN: (none quoted)
+
+## mandatory-interface
+FOUNDATION (adjudicated groundwork this problem builds on — your candidate MUST implement it faithfully):
+--- foundation artifact SRC_001 ---
+{"dossier_digest":"d2120e7dcb90332b0ebd4eea71996b705b895d7604fd67bbe6db8a510f04275f","epistemic_notice":"This record preserves claimed provenance and content identity only; it does not establish source reliability or factual truth.","run_input_digest":"7e4e86071c616c07235ece98f83fdba99f2699c078d9d8c78fea1025e05426b4","schema":"attached-source-record.v1","source":{"byte_count":33377,"content_ref":"87163fb464c30da6e06e4daf475245637aad04de8a7f92d6e482b1cb734e0ded","content_sha256":"87163fb464c30da6e06e4daf475245637aad04de8a7f92d6e482b1cb734e0ded","declared_entities":[],"declared_facets":[],"id":"src-87163fb464c30da6e06e4daf475245637aad04de","media_type":"text/plain","provenance":{"acquisition_method":"operator-supplied local files","supplied_by":"deepreason.reason.attach"},"schema":"attached-source.v1","source_class":"other","source_locator":"experiments/2026-09-06-change-writers-room-organiser-testing/attachment/03-objections.txt","title":"untitled source 87163fb464c3"}}
+--- foundation artifact SRC_002 ---
+{"dossier_digest":"d2120e7dcb90332b0ebd4eea71996b705b895d7604fd67bbe6db8a510f04275f","epistemic_notice":"This record preserves claimed provenance and content identity only; it does not establish source reliability or factual truth.","run_input_digest":"7e4e86071c616c07235ece98f83fdba99f2699c078d9d8c78fea1025e05426b4","schema":"attached-source-record.v1","source":{"byte_count":17566,"content_ref":"cf7a4a2edcc19307e7be923623676cd7db80f8722d58f584fda30fad65062452","content_sha256":"cf7a4a2edcc19307e7be923623676cd7db80f8722d58f584fda30fad65062452","declared_entities":[],"declared_facets":[],"id":"src-cf7a4a2edcc19307e7be923623676cd7db80f872","media_type":"text/plain","provenance":{"acquisition_method":"operator-supplied local files","supplied_by":"deepreason.reason.attach"},"schema":"attached-source.v1","source_class":"other","source_locator":"experiments/2026-09-06-change-writers-room-organiser-testing/attachment/02-proposals.txt","title":"untitled source cf7a4a2edcc1"}}
+--- foundation artifact SRC_005 ---
+CONJECTURE id=a0b919ae506615d2 cycle=1 angle=The Pragmatic Wager
+The preference for better-corroborated theories is defensible without induction because it is a pragmatic wager, not an epistemic probability claim. Popper argues that while past success guarantees nothing about the future (rejecting induction), the theory that has survived the severest tests has proven its 'fitness' in the specific environment of reality so far. Choosing it is akin to betting on the horse that has won every race; we do not know it will win the next, but it is the only rational choice available if we must act, as it has demonstrated a capacity to withstand falsification that others lack. This costs us the comfort of believing the theory is 'true' or 'likely,' forcing us to accept that our best actions are still grounded in guesswork, albeit an educated one.
+[angle: The Pragmatic Wager]
+
+CONJECTURE id=92968bc0cf42d965 cycle=1 angle=Verisimilitude as a Regulative Ideal
+The defense lies in shifting the goal from 'probability' to 'verisimilitude' (truth-likeness). A highly corroborated theory is not more probable, but it is a better candidate for being closer to the truth because it has withstood attempts to show it is false. The preference is defensible because science aims at truth, not certainty; therefore, selecting the theory with the highest empirical content that has not yet been refuted is the only methodological move consistent with the aim of increasing verisimilitude. The cost here is the admission that we can never verify this progress; we must operate on the regulative ideal that surv
+--- foundation artifact SRC_003 ---
+PROPOSAL id=327f6ea7cd7e8284 cycle=1 about=a0b919ae506615d2 kind=refuted-if
+The conjecture is refuted if it can be demonstrated that preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects.
+[kind: refuted-if]
+
+PROPOSAL id=26d5b990b5bc8574 cycle=1 about=92968bc0cf42d965 kind=refuted-if
+The conjecture is refuted if it can be shown that the concept of 'verisimilitude' (truth-likeness) cannot be formally defined without implicitly relying on inductive probability, thereby making the shift from probability to verisimilitude merely a semantic disguise for the very induction Popper rejected.
+[kind: refuted-if]
+
+PROPOSAL id=6035a9c4dd99607c cycle=1 about=67873974ceb0d9a1 kind=refuted-if
+The conjecture is refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests (i.e., choosing the theory most likely to fail quickly if false) without any assumption that the theory will actually succeed or remain unfalsified in the future.
+[kind: refuted-if]
+
+PROPOSAL id=36cfcd3be6fec4dd cycle=1 about=e0959a2b912e796c kind=refuted-if
+The conjecture is refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true, thereby collapsing the distinction between preferring a bold theory and preferring a probable one.
+[kind: refuted-if]
+
+PROPO
+--- foundation artifact SRC_004 ---
+{"dossier_digest":"d2120e7dcb90332b0ebd4eea71996b705b895d7604fd67bbe6db8a510f04275f","epistemic_notice":"This record preserves claimed provenance and content identity only; it does not establish source reliability or factual truth.","run_input_digest":"7e4e86071c616c07235ece98f83fdba99f2699c078d9d8c78fea1025e05426b4","schema":"attached-source-record.v1","source":{"byte_count":9281,"content_ref":"feb1dc480421d1cdb26260223a82ea82d88d9e14ff761ad63ec9662acd4088bb","content_sha256":"feb1dc480421d1cdb26260223a82ea82d88d9e14ff761ad63ec9662acd4088bb","declared_entities":[],"declared_facets":[],"id":"src-feb1dc480421d1cdb26260223a82ea82d88d9e14","media_type":"text/plain","provenance":{"acquisition_method":"operator-supplied local files","supplied_by":"deepreason.reason.attach"},"schema":"attached-source.v1","source_class":"other","source_locator":"experiments/2026-09-06-change-writers-room-organiser-testing/attachment/01-conjectures.txt","title":"untitled source feb1dc480421"}}
+REQUIRED: every candidate's "refs" MUST include {"target": "SRC_001", "role": "dependence"} or {"target": "SRC_002", "role": "dependence"} or {"target": "SRC_005", "role": "dependence"} or {"target": "SRC_003", "role": "dependence"} or {"target": "SRC_004", "role": "dependence"} for the foundation it builds on — candidates without this ref are refuted mechanically.
+
+## reference-menu-candidates-evidence-refs-block
+REFERENCE MENU -- /candidates/*/evidence_refs/*/block
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (32 legal values)
+  [0] OMIT -- leave "evidence_refs" out of this candidate entirely. This is a legal, complete answer; prefer it to a guess.
+  [1] 0088202703616a17528459becf0efc13d5205acd18a303081672aaef2add6f17
+  [2] 065eed0d13a623b2439af3e3f3a17d880d3ca5834b7c9bd5a023c26b529d1b45
+  [3] 06d89637d715691f3b156b84f58cb8bc60c2c40082e343e6244c62e457168e11
+  [4] 07ec28399009e60bfbe500f75a1f37cc4bd6bb06fa9553e8c7fcc5ec82c4e8bd
+  [5] 0a4795991a7b96f3b75b05c01ebaf58b22256dfee8337ec4f357b57848b1941c
+  [6] 0f5e3cdee73e70c25e94a776508b3dffac872d9d77ad13106ca9d6ea97cefd06
+  [7] 0fc9f5b85417c7fd156e2480cd098144dadff2e4c5f4ce7bf42acba0126ddd1c
+  [8] 19af0041b31d7f5ccc82b3dc6b4d474ef0c1ac718284032af3a63e8ae38582e1
+  [9] 1cbabf63dade34ba8a17118b1e479c176b73eee51364460a6bc565e990ae9166
+  [10] 1e4bdfd329c9d9192774136499f61ff8ccc1c97ffae62903dff5bad80f977a9d
+  [11] 218ec53665f84f827ab56929b1b90e62621c64a2c2eeee3e1e7fa009be9b28b7
+  [12] 22b2f187bb84b9934da62a37344d36bc3e567ebe183b5fee3b3e8600bc693171
+  [13] 28352a3f9d0d84a95e14d0280393e77e306419e4237bbdffc10bf75e9b6e9008
+  [14] 2886681ce3c4b00dffa37469777f0e2e3c8903fd80c6511b4797c6d8408b7ee3
+  [15] 2bdcddb9c5d0480f4a4ad626dda4bd81fe48169dfc498d740e06b6ab3126dba9
+  [16] 2c5c1b5212684c5823965b34ed157b94455f4e0061be4b3705404b09d5d74c65
+  [17] 2ca79ab9e6d293c354539a4d8a571cc7c18a518b8411cb5aa5fff4a78c2cc4ee
+  [18] 2ca80d4d2536191b3b6aa16a6f85e985ae5fc9d17229704f397997522184b2d8
+  [19] 2d4ce010144a017a24f999aa2317ef76d8738e557326fadc401e4d7551271c3a
+  [20] 2eff40b1ec2add9a774f41e48bbb3b32828cad58acb955eb3a3b6132705b90db
+  [21] 3381a425cb73b18bf37c8b13a62ab385a2aec2ae0ac1227db4c640ad4cca0410
+  [22] 34f3d4b29076900a73414453e5a3e9dd063578046edc4853e6f0bf9cd9a20be1
+  [23] 3fbfb75371fea33a4bcc9c8b09236587dd981b94086c58a6ccf970d25a672da0
+  [24] 4367b2ed8c73936ee4d583ab45d7e6a2d64791c87a55870c1e91f63547e1b280
+  [25] 44a2929eab8430f889f2fbeca569b4d5eab6a7f10823491247536674e10076c4
+  [26] 46d497662b5d1d7e8b827bdcb958525524affa4fd502e0d369d70e90d7152e28
+  [27] 507dda6b1ca83f3aedf83dbb90a72b52750ec1817bf06ad4fd0c084ccbbe0abf
+  [28] 515e6dd6946293f5198f390b80751a101f0fa1b2a25c07d905bd5a890c29c6f6
+  [29] 52cfd9c93db0465b51ab47977c5bb93b4f4019841549b9add11244f82de19832
+  [30] 569e9c48ad2299d0f97d63371e986bc06a74bf9192da8d69ac77cc0e76214fca
+  [31] 5760eda6c518c3d12a90e55bb76bc7a79a2a0f9c374e3871d7a52496c7b21549
+  [32] 57f441db5943af8754ac95a82ecb32c7ec293ac4e1597281ca68123de0683be7
+You may answer with the handle itself or with its [index].
+
+## output-contract
+DIRECTIVE: ORGANISE, DO NOT INVENT.
+The FROZEN EVIDENCE DOSSIER above is a writer's room: three sources whose paragraphs are the room's records. Each paragraph opens with one header line -- CONJECTURE id=... cycle=... angle=..., PROPOSAL id=... cycle=... about=<conjecture id> kind=<refuted-if|forbids|must-not|predicts>, or OBJECTION id=... cycle=... about=<conjecture id> -- and a proposal's or objection's about= names the conjecture it is written about.
+Return one candidate per room conjecture worth carrying, at most 6 this turn, the most worth carrying first. On a later turn carry only room conjectures that do not already appear under NEIGHBOURHOOD; if every one worth carrying is already there, abstain.
+For each candidate: `claim` and `mechanism` are condensed from that conjecture's own paragraph and sharpened by the objections written about it (an objection is read, never carried as a claim of its own). EVERY `countercondition` is taken from that conjecture's proposals: a refuted-if proposal as written; "forbids X" or "must not X" becomes "refuted if X"; "predicts X" becomes "refuted if not X".
+`evidence_refs`: the conjecture's block id and the block ids of the proposals you drew on, taking ONLY ids that appear in CITABLE EVIDENCE BLOCKS; an id outside that list is recorded as a failed citation, so cite what you can and say in `uncertainties` which proposals you used but could not cite.
+A room conjecture with no proposal about it is left out, and named in the `uncertainties` of the candidate you carry nearest to it. `typicality` is 0.5 unless the room itself gives a reason for another value. Nothing that is not in the blocks: no new claim, no new mechanism, no countercondition the room did not propose.
+Abstaining is a complete answer when nothing remains to carry; never invent a candidate to fill a quota. EVERY candidate must carry a `discharges` entry for EVERY handle listed under OPEN CRITICISMS above. A submission missing any of them is returned to you once with the open list, and then accepted with the gap recorded.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM conn:057a66911bbb
+connect isolated 057a66911bbb to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.
+
+REFERENCE MENU -- /candidates/*/optional_refs/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (15 legal values)
+  [0] OMIT -- leave "optional_refs" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+You may answer with the handle itself or with its [index].
+
+REFERENCE MENU -- /candidates/*/neighbours/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (15 legal values)
+  [0] OMIT -- leave "neighbours" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+You may answer with the handle itself or with its [index].
