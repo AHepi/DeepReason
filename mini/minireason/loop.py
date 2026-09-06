@@ -632,7 +632,8 @@ def _record_stage(session, out, spend, form, stage, target):
     return refs
 
 
-def _call_stage(session, kernel, endpoint, brief, form, meter, retry_max, workflow):
+def _call_stage(session, kernel, endpoint, brief, form, meter, retry_max, workflow,
+                pack_budget_tokens=None):
     """One provider call for one stage, through the ONE leased route. Returns
     `(out, spend)` or raises the call layer's typed failures for the loop to
     dispose of. The lease's role is the record's `LLMCall.role`; which SEAT
@@ -642,6 +643,7 @@ def _call_stage(session, kernel, endpoint, brief, form, meter, retry_max, workfl
         endpoint, brief, form.canonical_model, meter, session.blobs, retry_max,
         role=kernel.lease.role,
         model_profile=kernel.profile,
+        pack_budget=pack_budget_tokens,
         wire_contract=form.contract,
         endpoint_lease=kernel.lease,
         workflow_dispatch_observer=(
@@ -700,7 +702,11 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
     # The call layer clips every prompt at the profile's pack budget; the
     # stage walk keeps a brief under it by handing the everything section
     # its share, and DISCLOSES any brief that still overruns (PARKED P8).
-    prompt_limit = kernel.profile.pack_budget() * 4
+    prompt_limit = (
+        int(flow.brief_budget_chars)
+        if flow.brief_budget_chars is not None
+        else kernel.profile.pack_budget() * 4
+    )
     queue = list(problems)
     stop = "queue-exhausted"
     cycles = 0
@@ -732,12 +738,13 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
                         session, stage.seat_id, pid,
                         target_id=target,
                         shell_id=stage.shell_id,
-                        token_budget=kernel.profile.pack_budget(),
+                        token_budget=prompt_limit // 4,
                         supplied={
                             "vs_k": vs_k,
                             "stance_directive": rotation.directive,
                             "legacy_neighbourhood": _neighbourhood(session, pid, neighbourhood),
                             "brief_budget_chars": int(prompt_limit * stage.brief_share),
+                            "brief_limit_chars": prompt_limit,
                         },
                     )
                     if len(brief) > prompt_limit:
@@ -759,7 +766,8 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
                     )
                     try:
                         out, spend = _call_stage(
-                            session, kernel, endpoint, brief, form, meter, retry_max, workflow
+                            session, kernel, endpoint, brief, form, meter, retry_max, workflow,
+                            pack_budget_tokens=prompt_limit // 4,
                         )
                     except llm.BudgetExceeded as e:
                         if e.spend:  # exhaustion mid-retry still carries spend (G1)

@@ -202,6 +202,13 @@ def form_for_seat(
     return select_mini_form(seat_id, form_id, default=shell.form_id)
 
 
+# The one section whose size the retention rule decides; every other mini
+# section is mandatory and reserved first. The floor keeps the notice and the
+# newest entry renderable even when the mandatory sections leave almost nothing.
+FREE_SECTION_ID = "everything-so-far"
+FREE_SECTION_FLOOR_CHARS = 400
+
+
 def render_mini_brief(
     session,
     seat_id: str,
@@ -228,6 +235,30 @@ def render_mini_brief(
     layout = layout_id or shell.layout_id
     request = mini_section_request(
         session, problem_id, target_id=target_id, supplied=supplied
+    )
+    sections, receipts = render_seat_brief(seat_id, layout, request, receipts)
+    brief = allocate_seat_brief(seat_id, token_budget, sections, receipts)
+    limit = (supplied or {}).get("brief_limit_chars")
+    if limit is None or len(brief) <= int(limit):
+        return brief
+    # MANDATORY SECTIONS ARE RESERVED; the free section gets the remainder.
+    # Every mini layout entry is mandatory, so the allocator cuts nothing and
+    # an overrun would reach the call layer's tail clip -- which is where the
+    # directive sits. The D8 live root lost 9 of 19 directives that way. So:
+    # measure what the other sections took, hand the everything section what
+    # is left, and render once more. If no such section is in this layout
+    # the overrun is a mandatory one and is left for the loop to disclose.
+    free = next((sec for sec in sections if sec.id == FREE_SECTION_ID), None)
+    if free is None:
+        return brief
+    free_text = free.text_ref[len("inline:"):] if free.text_ref.startswith("inline:") else ""
+    remainder = int(limit) - (len(brief) - len(free_text))
+    share = (supplied or {}).get("brief_budget_chars")
+    budget = max(FREE_SECTION_FLOOR_CHARS, min(remainder, share) if share is not None else remainder)
+    resupplied = dict(supplied or {})
+    resupplied["brief_budget_chars"] = budget
+    request = mini_section_request(
+        session, problem_id, target_id=target_id, supplied=resupplied
     )
     sections, receipts = render_seat_brief(seat_id, layout, request, receipts)
     return allocate_seat_brief(seat_id, token_budget, sections, receipts)

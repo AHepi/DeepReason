@@ -25,7 +25,7 @@ from tests.test_public_v6_facade import _configure
 
 
 def _stub_mini_run(calls):
-    def mini_run(problems, endpoint, budget, root, max_cycles):
+    def mini_run(problems, endpoint, budget, root, max_cycles, model_profile):
         calls.append(
             {
                 "problems": problems,
@@ -33,6 +33,7 @@ def _stub_mini_run(calls):
                 "budget": budget,
                 "root": root,
                 "max_cycles": max_cycles,
+                "model_profile": model_profile,
             }
         )
         return {
@@ -179,7 +180,7 @@ def test_shallow_endpoint_failure_exits_nonzero_with_diagnostic_payload(
 ):
     _configure(monkeypatch, tmp_path)
 
-    def broken_mini_run(problems, endpoint, budget, root, max_cycles):
+    def broken_mini_run(problems, endpoint, budget, root, max_cycles, model_profile):
         return {
             "engine_profile": "mini",
             "stop": "endpoint-error",
@@ -287,11 +288,12 @@ def test_shallow_takes_the_standard_frozen_input(tmp_path, monkeypatch, capsys):
 def test_the_bare_question_form_is_unchanged(tmp_path, monkeypatch, capsys):
     """C1/C4: nothing regresses for the caller who does not use the new road.
 
-    The engine is called with EXACTLY the arguments it was called with before
-    --run-input existed -- the stub below takes no **kwargs, so an extra one
-    would be a TypeError rather than a silent difference.
+    The engine is called with EXACTLY the bare-question arguments plus the
+    provider profile's model_profile (writer's-room tranche S1b) -- the stub
+    below takes no **kwargs, so any other extra one would be a TypeError
+    rather than a silent difference.
     """
-    _configure(monkeypatch, tmp_path)
+    state, profile = _configure(monkeypatch, tmp_path)
     calls = []
     monkeypatch.setattr("minireason.loop.run", _stub_mini_run(calls), raising=True)
 
@@ -299,6 +301,7 @@ def test_the_bare_question_form_is_unchanged(tmp_path, monkeypatch, capsys):
     payload = json.loads(capsys.readouterr().out)
     assert payload["run_input"] == {"source": "question", "criteria": 0, "notices": []}
     assert payload["question_problem_id"].startswith("q-")
+    assert calls[0]["model_profile"] == profile.model_profile
 
 
 def test_frozen_criteria_are_bound_and_their_non_use_is_disclosed(
@@ -359,3 +362,25 @@ def test_reason_with_no_question_and_no_frozen_input_is_refused(tmp_path, monkey
     _configure(monkeypatch, tmp_path)
     assert main(["reason"]) == 1
     assert "REASON_QUESTION_REQUIRED" in capsys.readouterr().err
+
+
+
+def test_the_provider_profile_model_profile_reaches_the_engine(tmp_path, monkeypatch, capsys):
+    """Writer's-room tranche S1b: `deepreason setup`'s model_profile decides
+    the reduced engine's brief limit (compact 4 800 chars, standard 10 000,
+    frontier 12 000). Before this the field never reached a mini call: the D8
+    live root ran compact under a profile that said standard."""
+    from deepreason.provider_profile import setup_provider_profile_path, write_provider_profile
+    from tests.test_public_v6_facade import _profile
+
+    state, _ = _configure(monkeypatch, tmp_path)
+    for wanted in ("standard", "frontier", "compact"):
+        write_provider_profile(
+            _profile(model_profile=wanted),
+            setup_provider_profile_path(environ={"DEEPREASON_HOME": str(state)}),
+        )
+        calls = []
+        monkeypatch.setattr("minireason.loop.run", _stub_mini_run(calls), raising=True)
+        assert main(["reason", "why does the sky look blue?", "--shallow"]) == 0
+        capsys.readouterr()
+        assert calls[0]["model_profile"] == wanted

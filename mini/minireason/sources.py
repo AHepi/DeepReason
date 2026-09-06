@@ -357,23 +357,52 @@ class MiniEverythingSoFar(_MiniPlugin):
         if budget is None:
             budget = request.supplied.get("brief_budget_chars")
         shown, withheld = rule.select(ordered, sizes, budget, params.keep_last)
-        lines = [
-            "EVERYTHING GENERATED SO FAR IN THIS RUN (every artifact, in full, "
-            "oldest first; no verdict of any kind is shown):"
-        ]
-        if withheld:
-            lines.append(
-                f"WITHHELD UNDER RULE {rule.rule_id}: {len(withheld)} earlier "
-                f"entr{'y' if len(withheld) == 1 else 'ies'} exist in this run "
-                "and are not shown here -- " + ", ".join(withheld) + ". Treat "
-                "what follows as partial; do not conclude they do not exist."
-            )
-        lines.extend(entries[aid] for aid in shown)
+        text = _everything_text(rule.rule_id, entries, shown, withheld)
+        # The budget bounds the SECTION AS RENDERED -- header and notice
+        # included -- not the entries alone. The D8 live root showed why: the
+        # notice named every withheld id (65 chars each) outside the count,
+        # grew with the run, and pushed the brief past the call layer's clip,
+        # which cut the directive off the tail. The newest entry is never
+        # withheld: a budget that emptied the section would be a silent cut
+        # wearing a notice.
+        shown, withheld = list(shown), list(withheld)
+        while budget is not None and len(text) > budget and len(shown) > 1:
+            withheld.append(shown.pop(0))
+            text = _everything_text(rule.rule_id, entries, tuple(shown), tuple(withheld))
         return SectionRenderV1(
             section_id=self.section_id,
-            text="\n".join(lines),
-            provenance_refs=shown,
+            text=text,
+            provenance_refs=tuple(shown),
         )
+
+
+_NOTICE_IDS_SHOWN = 3
+
+
+def _everything_text(rule_id: str, entries, shown, withheld) -> str:
+    """The section's text: header, the withheld notice, then the entries.
+
+    The notice carries the COUNT and the newest few withheld ids; every id is
+    in the record already, and listing all of them was what ate the budget
+    (SEAM-llm-x-minireason Traps, the D8 root)."""
+
+    lines = [
+        "EVERYTHING GENERATED SO FAR IN THIS RUN (every artifact, in full, "
+        "oldest first; no verdict of any kind is shown):"
+    ]
+    if withheld:
+        named = list(withheld)[-_NOTICE_IDS_SHOWN:]
+        more = len(withheld) - len(named)
+        lines.append(
+            f"WITHHELD UNDER RULE {rule_id}: {len(withheld)} earlier "
+            f"entr{'y' if len(withheld) == 1 else 'ies'} exist in this run "
+            "and are not shown here -- newest withheld: " + ", ".join(named)
+            + (f", and {more} more" if more else "")
+            + "; every id is in the record. Treat what follows as partial; "
+            "do not conclude they do not exist."
+        )
+    lines.extend(entries[aid] for aid in shown)
+    return "\n".join(lines)
 
 
 class MiniTargetConjecture(_MiniPlugin):

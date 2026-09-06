@@ -95,8 +95,19 @@ class MiniFlowV1:
         default_factory=lambda: DEFAULT_MINI_COMMITMENT_POLICY
     )
     calibration_hook_id: str = DEFAULT_CALIBRATION_HOOK_ID
+    # FREE parameter (writer's-room tranche S1b): the brief limit in characters
+    # this flow runs under, or None for the model profile's preset. A room
+    # that needs to show its whole pool declares the room it needs; the call
+    # layer's clip follows this figure, so the record's `mini:brief-clipped`
+    # marker means what it says under either.
+    brief_budget_chars: int | None = None
 
     def __post_init__(self) -> None:
+        if self.brief_budget_chars is not None and int(self.brief_budget_chars) < 1:
+            raise MiniFlowError(
+                "MINI_FLOW_BRIEF_BUDGET_INVALID",
+                f"flow {self.flow_id!r}: brief_budget_chars must be positive or None",
+            )
         if not self.stages:
             raise MiniFlowError("MINI_FLOW_EMPTY", f"flow {self.flow_id!r} declares no stage")
         declared = set(self.artifact_kinds)

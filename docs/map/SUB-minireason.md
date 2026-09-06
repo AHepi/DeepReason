@@ -195,6 +195,32 @@ per seat, bound as each seat's default.
 | `mini.critic` | `seat-pack.mini.critic.v0` | problem · target-conjecture · directive |
 | `mini.commitment` | `seat-pack.mini.commitment.v0` | problem · everything-so-far · target-conjecture · directive |
 
+**The limit, and the reserve rule** (writer's-room tranche, 2026-09-06). A
+brief has ONE limit in characters: the flow's `brief_budget_chars` when it
+declares one, else the model profile's pack budget × 4 (compact 4 800,
+standard 10 000, frontier 12 000); the managed shallow path forwards the
+provider profile's `model_profile`, so `deepreason setup` decides it with no
+new knob. Inside that limit the MANDATORY sections are reserved first —
+problem, target, directive — and the everything-so-far section gets the
+remainder (`seats.render_mini_brief`, `FREE_SECTION_ID`); its retention rule
+withholds the oldest entries until the section AS RENDERED, header and
+notice included, fits, and the notice names the count and the newest three
+withheld ids, never every id. The call layer clips at the same figure, so a
+brief the loop kept inside its limit is never cut there, and the directive —
+which sorts last — is never the part that goes. Before this rule the D8 live
+root lost the directive on 9 of 19 briefs (SEAM-llm-x-minireason, Traps).
+`check: python -m pytest mini/tests/test_mini_brief_limits.py -q`
+
+`check: python -c "
+import ast, pathlib
+src = pathlib.Path('mini/minireason/seats.py').read_text()
+fn = next(n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef) and n.name == 'render_mini_brief')
+consts = {c.value for c in ast.walk(fn) if isinstance(c, ast.Constant) and isinstance(c.value, str)}
+assert {'brief_limit_chars', 'brief_budget_chars'} <= consts, sorted(consts)
+names = {n.id for n in ast.walk(fn) if isinstance(n, ast.Name)}
+assert {'FREE_SECTION_ID', 'FREE_SECTION_FLOOR_CHARS'} <= names
+"`
+
 **The critic's blinding is STRUCTURAL, not a filter** (R5, "critics see the
 conjecture artifact, not the proposed commitments"): the critic layout
 registers NO section that could carry a proposal, so there is no slot, blank
@@ -298,8 +324,10 @@ is a controller stepping in before the operator said how.
 `minireason/flow.py` registers `MiniFlowV1`s by id: a tuple of `MiniStageV1`s
 (seat, shell, the kind produced, the kinds read, once per cycle or once per
 target), the SET of artifact kinds the flow may carry, its commitment policy
-and its calibration hook id. A stage naming a kind the flow does not declare
-is refused at construction. Two ship: `mini.flow.legacy-v0`, the DEFAULT —
+its calibration hook id, and — a FREE parameter — `brief_budget_chars`, the
+brief limit the flow runs under (None = the model profile's preset; a
+non-positive figure is refused typed). A stage naming a kind the flow does
+not declare is refused at construction. Two ship: `mini.flow.legacy-v0`, the DEFAULT —
 one conjecturer stage under `seat.mini.conjecturer.legacy-v0`, which renders
 today's prompt byte for byte through the same road as every other seat (one
 section, pinned by `mini/tests/goldens/mini_legacy_prompt.txt`) and fills the
@@ -318,6 +346,14 @@ assert len(legacy.stages) == 1 and legacy.commitment_policy.disabled_channels ==
 assert [s.stage_id for s in iso.stages] == ['mini.stage.conjecture', 'mini.stage.criticism', 'mini.stage.commitment']
 assert set(iso.artifact_kinds) == {s.produces_kind for s in iso.stages}
 assert len(iso.commitment_policy.disabled_channels) == 2
+assert legacy.brief_budget_chars is None and iso.brief_budget_chars is None
+from minireason.flow import MiniFlowV1, MiniFlowError
+try:
+    MiniFlowV1(flow_id='x', flow_version='1', stages=iso.stages, artifact_kinds=iso.artifact_kinds, brief_budget_chars=0)
+except MiniFlowError as e:
+    assert 'MINI_FLOW_BRIEF_BUDGET_INVALID' in str(e)
+else:
+    raise AssertionError('a non-positive brief budget was accepted')
 "`
 
 ## Enforced, not promised: the five architecture checks
