@@ -27,3 +27,5 @@ Qualification tier: full
 Qualification state: ready
 Next action: deepreason reason "YOUR QUESTION"
 rc=0
+{"schema":"deepreason-readiness.v1","package_version":"0.1.0","product_mode":"v6-only","ready":false,"profile_source":"setup","route_identity":{"provider":"ollama","model_id":"qwen3.5:397b","model_revision":null,"route_id":"provider-profile-2d98e2449d89c77c7993b59f"},"credential_present":true,"qualification_state":"unqualified","next_action":"deepreason qualify"}
+=== setup+qualify finished 2026-09-06T11:09:45Z ===

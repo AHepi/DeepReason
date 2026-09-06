@@ -35,3 +35,28 @@ Qualification tier: full
 Qualification state: ready
 Next action: deepreason reason "YOUR QUESTION"
 rc=0
+{"schema":"deepreason-readiness.v1","package_version":"0.1.0","product_mode":"v6-only","ready":false,"profile_source":"setup","route_identity":{"provider":"ollama","model_id":"qwen3.5:397b","model_revision":null,"route_id":"provider-profile-2d98e2449d89c77c7993b59f"},"credential_present":true,"qualification_state":"unqualified","next_action":"deepreason qualify"}
+=== setup+qualify finished 2026-09-06T11:09:45Z ===
+=== ARM R started 2026-09-06T11:09:45Z home=/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r ===
+question sha256: e8e720d251b3cab2cddd548cb5064a74575404c8ae47f347f840faa6021a19b1
+--- the attachment, by digest (bytes are committed under experiments/2026-09-06-change-writers-room-organiser-testing/attachment) ---
+01-conjectures.txt: OK
+02-proposals.txt: OK
+03-objections.txt: OK
+CONVERSION.json: OK
+selectors: DEEPREASON_SEAT_SHELL=conjecturer=seat.conjecturer.organiser-v1 DEEPREASON_ROLE_PROMPT_TEMPLATE=role-prompt.organiser-v1
+--- reason, 4 cycles, 500000 token ceiling, attached 2026-09-06T11:09:45Z ---
+MODEL_PROFILE_MISSING: no model profile document describes 'qwen3.5:397b', so nothing here can say whether reasoning='none' leaves hidden reasoning on. The run proceeds and sends exactly what you configured. To have this answered, write $DEEPREASON_HOME/model-profiles/<model-id>/agent.md.
+{
+  "evidence": {
+    "blocks": {
+      "paragraph": 97
+    },
+    "evidence_dossier_digest": "84011ed87d401a2418d43006216cacb267b6ac11e3dc41c5fb288a8dd48388b2",
+    "refusals": [],
+    "sources_admitted": 3,
+    "tiers": {
+      "evidence": 97
+    }
+  }
+}

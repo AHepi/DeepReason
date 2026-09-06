@@ -1,0 +1,185 @@
+PREAMBLE -- how to read 02-proposals.txt. The paragraphs below are the records of a writer's room, one record per paragraph. Each opens with a header line: CONJECTURE n=<number> cycle=<number> angle=<the conjecture's angle>; PROPOSAL cycle=<number> kind=<one of refuted-if / forbids / must-not / predicts> about-n=<the conjecture's number> about-angle=<its angle>; OBJECTION cycle=<number> about-n=<the conjecture's number> about-angle=<its angle>. A proposal's or objection's about-n and about-angle name the conjecture it was written about. These numbers and angles are NOT citable ids and naming one grounds nothing: the only ids that resolve are the ids listed in CITABLE EVIDENCE BLOCKS, and an id from anywhere else is recorded as a failed citation. This paragraph is the only text here that is not a room record.
+
+PROPOSAL cycle=1 kind=refuted-if about-n=1 about-angle=The Pragmatic Wager
+The conjecture is refuted if it can be demonstrated that preferring the better-corroborated theory logically entails an assumption that the future will resemble the past, thereby making the 'pragmatic wager' indistinguishable from the inductive principle Popper explicitly rejects.
+[kind: refuted-if]
+
+PROPOSAL cycle=1 kind=refuted-if about-n=2 about-angle=Verisimilitude as a Regulative Ideal
+The conjecture is refuted if it can be shown that the concept of 'verisimilitude' (truth-likeness) cannot be formally defined without implicitly relying on inductive probability, thereby making the shift from probability to verisimilitude merely a semantic disguise for the very induction Popper rejected.
+[kind: refuted-if]
+
+PROPOSAL cycle=1 kind=refuted-if about-n=3 about-angle=The Performative Contradiction
+The conjecture is refuted if a coherent account can be provided where preferring a better-corroborated theory is justified solely as a method to maximize the severity of future tests (i.e., choosing the theory most likely to fail quickly if false) without any assumption that the theory will actually succeed or remain unfalsified in the future.
+[kind: refuted-if]
+
+PROPOSAL cycle=1 kind=refuted-if about-n=4 about-angle=Corroboration as Informational Content
+The conjecture is refuted if it can be demonstrated that the 'informational content' or 'boldness' of a theory cannot be assessed independently of its probability of being true, thereby collapsing the distinction between preferring a bold theory and preferring a probable one.
+[kind: refuted-if]
+
+PROPOSAL cycle=2 kind=refuted-if about-n=5 about-angle=The Methodological Rule Defense
+The conjecture is refuted if it can be shown that Popper explicitly justified the preference for better-corroborated theories in practical, life-or-death decisions (such as crossing a bridge) on the grounds of safety or reliability rather than solely on the grounds of maximizing testability and information content.
+[kind: refuted-if]
+
+PROPOSAL cycle=2 kind=refuted-if about-n=6 about-angle=The Verisimilitude Gamble
+The conjecture is refuted if it can be demonstrated that Popper explicitly grounded the preference for better-corroborated theories in a pragmatic decision rule (such as minimizing immediate risk or maximizing informational content) without invoking any metaphysical assumption about the theory's proximity to truth or verisimilitude.
+[kind: refuted-if]
+
+PROPOSAL cycle=2 kind=refuted-if about-n=7 about-angle=The Pragmatic Inconsistency Charge
+The conjecture is refuted if it can be demonstrated that Popper explicitly justified the preference for better-corroborated theories in practical decisions solely on the grounds of maximizing testability and information content, without invoking any expectation of future success based on past performance.
+[kind: refuted-if]
+
+PROPOSAL cycle=2 kind=refuted-if about-n=8 about-angle=The Decision-Theoretic Void
+The conjecture is refuted if Popper can be shown to have explicitly grounded the preference for better-corroborated theories in a non-inductive decision rule, such as maximizing informational content or minimizing the risk of immediate falsification, without invoking any expectation of future success based on past performance.
+[kind: refuted-if]
+
+PROPOSAL cycle=3 kind=refuted-if about-n=9 about-angle=The Pragmatic Wager without Induction
+The conjecture would be refuted if it could be demonstrated that maximizing 'informational content at risk' logically necessitates an assumption that the future will resemble the past, thereby collapsing the proposed distinction between a methodological rule for learning and a probabilistic claim about the world's stability.
+[kind: refuted-if]
+
+PROPOSAL cycle=3 kind=refuted-if about-n=10 about-angle=The Verisimilitude Trap
+The conjecture would be refuted if Popper explicitly distinguished 'verisimilitude' as a logical relation of content comparison rather than a predictive expectation, demonstrating that one can prefer a theory with higher verisimilitude solely to maximize the severity of future tests without assuming the future will resemble the past.
+[kind: refuted-if]
+
+PROPOSAL cycle=3 kind=refuted-if about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide
+The conjecture would be refuted if Popper explicitly argued in his published works that the preference for well-corroborated theories in practical action is a 'non-rational' or purely 'psychological' commitment, rather than a methodologically rational choice based on critical discussion.
+[kind: refuted-if]
+
+PROPOSAL cycle=3 kind=refuted-if about-n=12 about-angle=The Asymmetry of Risk
+The conjecture would be refuted if it could be demonstrated that the concept of 'minimizing known unknowns' logically entails a probabilistic assessment of future performance, thereby collapsing the distinction between a deductive statement about past tests and an inductive expectation of future reliability.
+[kind: refuted-if]
+
+PROPOSAL cycle=1 kind=forbids about-n=1 about-angle=The Pragmatic Wager
+The conjecture forbids attributing any increased likelihood of future success or truth to a theory solely on the basis of its survival of past tests; it must maintain that the preference is entirely devoid of predictive probability.
+[kind: forbids]
+
+PROPOSAL cycle=1 kind=forbids about-n=2 about-angle=Verisimilitude as a Regulative Ideal
+The conjecture forbids claiming that surviving severe tests provides a rational basis for preferring one theory over another unless it can demonstrate a logical connection between test survival and increased truth-likeness that does not itself assume the uniformity of nature.
+[kind: forbids]
+
+PROPOSAL cycle=1 kind=forbids about-n=3 about-angle=The Performative Contradiction
+The conjecture forbids equating the pragmatic choice of a theory for application with an epistemic belief in its truth or future reliability; it must maintain that acting on a corroborated theory is a decision to expose it to new risks, not a prediction of its safety.
+[kind: forbids]
+
+PROPOSAL cycle=1 kind=forbids about-n=4 about-angle=Corroboration as Informational Content
+The conjecture forbids attributing any pragmatic advantage to the better-corroborated theory regarding its reliability in future applications, such as bridge building or medical treatment, beyond its utility as a tool for generating new tests.
+[kind: forbids]
+
+PROPOSAL cycle=2 kind=forbids about-n=5 about-angle=The Methodological Rule Defense
+The conjecture forbids the interpretation that corroboration serves as a proxy for truth-likeness or verisimilitude in decision-making contexts; it restricts the function of corroboration strictly to identifying the best candidate for immediate falsification.
+[kind: forbids]
+
+PROPOSAL cycle=2 kind=forbids about-n=6 about-angle=The Verisimilitude Gamble
+The conjecture forbids the interpretation that accepting verisimilitude as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated as a logical relation of content rather than a statistical likelihood of future success.
+[kind: forbids]
+
+PROPOSAL cycle=2 kind=forbids about-n=7 about-angle=The Pragmatic Inconsistency Charge
+The conjecture forbids the interpretation that accepting verisimilitude as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated as a logical relation of content rather than a statistical likelihood of future success.
+[kind: forbids]
+
+PROPOSAL cycle=2 kind=forbids about-n=8 about-angle=The Decision-Theoretic Void
+The conjecture forbids the interpretation that accepting verisimilitude (truth-likeness) as a guide for action necessarily reintroduces probabilistic induction, provided that verisimilitude is treated strictly as a logical comparison of content rather than a statistical prediction of future reliability.
+[kind: forbids]
+
+PROPOSAL cycle=3 kind=forbids about-n=9 about-angle=The Pragmatic Wager without Induction
+The conjecture forbids interpreting the preference for better-corroborated theories as having any predictive power regarding the specific success of the theory in the next immediate test case; it must strictly limit the justification to the value of the potential falsification itself.
+[kind: forbids]
+
+PROPOSAL cycle=3 kind=forbids about-n=10 about-angle=The Verisimilitude Trap
+The conjecture forbids the interpretation that acting on a theory with greater verisimilitude entails a belief that this theory is more likely to yield true predictions in specific future applications compared to a less corroborated rival.
+[kind: forbids]
+
+PROPOSAL cycle=3 kind=forbids about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide
+The conjecture forbids the interpretation that Popper considered the act of choosing the best-tested theory for action to be a logical extension of scientific rationality; it must maintain that this specific choice lies outside the bounds of strict scientific logic.
+[kind: forbids]
+
+PROPOSAL cycle=3 kind=forbids about-n=12 about-angle=The Asymmetry of Risk
+The conjecture forbids the interpretation that choosing the better-corroborated theory provides any rational basis for expecting it to succeed in the next specific instance; the justification must remain strictly limited to the logical asymmetry of having survived more severe tests thus far.
+[kind: forbids]
+
+PROPOSAL cycle=1 kind=must-not about-n=1 about-angle=The Pragmatic Wager
+The conjecture must not claim that the 'fitness' demonstrated by surviving severe tests provides a rational basis for action if that basis secretly relies on the unstated premise that nature is uniform enough for past fitness to matter for future outcomes.
+[kind: must-not]
+
+PROPOSAL cycle=1 kind=must-not about-n=2 about-angle=Verisimilitude as a Regulative Ideal
+The conjecture must not treat the 'metaphysical hope' that surviving tests correlates with truth-likeness as a sufficient defense against the charge of cryptic inductivism if that hope functions identically to an inductive premise in guiding practical scientific action.
+[kind: must-not]
+
+PROPOSAL cycle=1 kind=must-not about-n=3 about-angle=The Performative Contradiction
+The conjecture must not claim that Popper's framework reduces to mere psychological habit unless it first demonstrates that no non-inductive logical rule (such as the methodological rule to test the boldiest surviving hypothesis) can govern the preference for better-corroborated theories.
+[kind: must-not]
+
+PROPOSAL cycle=1 kind=must-not about-n=4 about-angle=Corroboration as Informational Content
+The conjecture must not claim that acting on a theory solely to falsify it constitutes a coherent defense for scientific practice in domains where failure results in catastrophic loss rather than merely new knowledge.
+[kind: must-not]
+
+PROPOSAL cycle=2 kind=must-not about-n=5 about-angle=The Methodological Rule Defense
+The conjecture must not imply that a scientist acting on a well-corroborated theory expects it to work in the future; if the defense requires any expectation of future success derived from past performance, it smuggles in the very induction it claims to avoid.
+[kind: must-not]
+
+PROPOSAL cycle=2 kind=must-not about-n=6 about-angle=The Verisimilitude Gamble
+The conjecture must not conflate the methodological rule of preferring bold, testable theories with a metaphysical belief that nature is structured to reward such boldness with truth; the defense must remain agnostic regarding nature's actual response to boldness.
+[kind: must-not]
+
+PROPOSAL cycle=2 kind=must-not about-n=7 about-angle=The Pragmatic Inconsistency Charge
+The conjecture must not conflate the methodological rule of preferring bold, testable theories with a metaphysical belief that nature is structured to reward such boldness with truth; the defense must remain agnostic regarding nature's actual response to boldness.
+[kind: must-not]
+
+PROPOSAL cycle=2 kind=must-not about-n=8 about-angle=The Decision-Theoretic Void
+The conjecture must not conflate the methodological imperative to test bold theories with a metaphysical belief that nature rewards such boldness with truth; it must remain agnostic regarding whether the universe is structured to favor high-content theories.
+[kind: must-not]
+
+PROPOSAL cycle=3 kind=must-not about-n=9 about-angle=The Pragmatic Wager without Induction
+The conjecture must not imply that an agent acting on this 'rational bet' expects a higher rate of successful outcomes compared to choosing a less corroborated theory, as such an expectation would reintroduce the inductive principle of uniformity that the conjecture explicitly seeks to avoid.
+[kind: must-not]
+
+PROPOSAL cycle=3 kind=must-not about-n=10 about-angle=The Verisimilitude Trap
+The conjecture must not conflate the methodological rule of choosing the best-tested theory for the purpose of critical discussion with the psychological act of expecting successful practical outcomes, as doing so would misrepresent Popper's separation of the context of justification from the context of discovery.
+[kind: must-not]
+
+PROPOSAL cycle=3 kind=must-not about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide
+The conjecture must not imply that the 'biological or pragmatic imperative' cited as the basis for action retains any epistemic weight regarding the truth-likeness or future reliability of the theory, as this would reintroduce the inductive element the conjecture claims to isolate.
+[kind: must-not]
+
+PROPOSAL cycle=3 kind=must-not about-n=12 about-angle=The Asymmetry of Risk
+The conjecture must not imply that the 'defensive posture' of avoiding immediate error is functionally equivalent to a strategy for maximizing long-term predictive success, as such an equivalence would smuggle in the principle of the uniformity of nature that Popper rejected.
+[kind: must-not]
+
+PROPOSAL cycle=1 kind=predicts about-n=1 about-angle=The Pragmatic Wager
+The conjecture predicts that a consistent Popperian agent, when forced to choose between two unfalsified theories where one is better corroborated, will always choose the better-corroborated one while simultaneously asserting they have no reason to believe it will perform better in the next instance.
+[kind: predicts]
+
+PROPOSAL cycle=1 kind=predicts about-n=2 about-angle=Verisimilitude as a Regulative Ideal
+The conjecture predicts that a scientist acting strictly on this verisimilitude-based preference will choose the better-corroborated theory for critical applications while simultaneously maintaining that this choice offers no greater expectation of predictive success than choosing a random unfalsified theory.
+[kind: predicts]
+
+PROPOSAL cycle=1 kind=predicts about-n=3 about-angle=The Performative Contradiction
+The conjecture predicts that if its interpretation is correct, a consistent Popperian scientist would be unable to rationally distinguish between choosing a well-tested bridge design and a randomly selected unfalsified design for actual construction, as both choices would carry identical expectations regarding future performance.
+[kind: predicts]
+
+PROPOSAL cycle=1 kind=predicts about-n=4 about-angle=Corroboration as Informational Content
+The conjecture predicts that a scientist strictly adhering to this view would choose the most precise, high-risk theory for critical real-world decisions even when a vaguer, safer, and equally unfalsified alternative exists, provided the choice is framed as an experiment.
+[kind: predicts]
+
+PROPOSAL cycle=2 kind=predicts about-n=5 about-angle=The Methodological Rule Defense
+The conjecture predicts that if one were to choose a less-corroborated theory over a better-corroborated one purely for practical action, Popper would criticize this not as irrational risk-taking, but as a methodological failure to prioritize the speed of error detection.
+[kind: predicts]
+
+PROPOSAL cycle=2 kind=predicts about-n=6 about-angle=The Verisimilitude Gamble
+The conjecture predicts that if the preference for corroborated theories were based solely on past performance without the 'verisimilitude gamble,' Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ in content.
+[kind: predicts]
+
+PROPOSAL cycle=2 kind=predicts about-n=7 about-angle=The Pragmatic Inconsistency Charge
+The conjecture predicts that if the preference for corroborated theories were based solely on past performance without the 'verisimilitude gamble,' Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ in content.
+[kind: predicts]
+
+PROPOSAL cycle=2 kind=predicts about-n=8 about-angle=The Decision-Theoretic Void
+The conjecture predicts that if the preference for corroborated theories were based solely on past survival without a 'verisimilitude gamble' or similar non-inductive heuristic, Popper would be unable to distinguish rational scientific choice from arbitrary selection in cases where two theories have survived an equal number of tests but differ significantly in empirical content.
+[kind: predicts]
+
+PROPOSAL cycle=3 kind=predicts about-n=11 about-angle=Corroboration as a Historical Report; Not a Future Guide
+The conjecture predicts that any attempt to justify the preference for corroborated theories in action solely through Popperian scientific logic will fail, necessitating an appeal to extra-logical factors such as instinct, convention, or pragmatic survival needs.
+[kind: predicts]
+
+PROPOSAL cycle=3 kind=predicts about-n=12 about-angle=The Asymmetry of Risk
+The conjecture predicts that a consistent Popperian agent can prefer Theory A over Theory B for action while simultaneously maintaining that there is no logical reason to believe Theory A is more likely to be true or to yield correct predictions than Theory B in any future trial.
+[kind: predicts]
