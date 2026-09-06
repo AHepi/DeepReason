@@ -192,3 +192,47 @@ source, which is PARKED P2's road). Prefer A: it is configuration under the
 tranche and touches no src/. Measure on a re-run: the unknown-block count
 must fall to 0 and the verified count must rise.
 ```
+
+## P8 — a budget denial at 99% of the ceiling is typed `operational_failure`, not `budget_exhausted`
+
+**What.** ARM R's relaunch reached cycle 3 with 495 362 of its 500 000-token
+ceiling spent — 99.07% — and the next transactional work unit was denied by
+the budget. The run terminated `state: failed`, `stop_reason:
+operational_failure`, message `token budget denied transactional work
+sha256:dcd8fa45…`. The operator's law of 2026-08-29 says exactly the
+opposite: "a budget denial on an exhausted budget terminates as
+`budget_exhausted` (clean), never `operational_failure`" (CLAUDE.md, operator
+design laws; the operator's own words: "clean stop. with an assurance that
+continuing is possible"). The assurance half HELD — the record carries
+`stop_reason_resumable: true` and `verify_root` re-derived 0 violations — so
+the checkpoint obligation is met and only the CLASSIFICATION is wrong.
+
+The cost of the misclassification is not cosmetic: PREREG §3 makes an
+`operational_failure` a FAILED arm whose unit is not judged, so a run that was
+stopped by the ceiling the operator set is disposed of as a breakage. Two
+launches in a row have now produced no verdict, the second for a labelling
+reason rather than a substantive one.
+
+Evidence: `runs/home-r/runs/run-c3f3bf10bc57d63e224a9f1c68bf1057` —
+`run-status.json`, `progress.jsonl` seq 8, `deepreason stop-report` (§4 rules
+out CONFIGURATION and ENVIRONMENT; no 429, no transport fault), and
+`runs/armR/ARMR_RESULTS.json` (`"violations": 0`, `"valid": true`,
+`"source": "rederived"`).
+
+```
+EXECUTOR WINDOW — DEFECT: a budget stop typed as a breakage
+Read CLAUDE.md, including the operator law of 2026-08-29. Load
+deepreason-orchestrator and pinker-write-for-readers.
+GOAL: a denial issued because the run's token budget has nothing left
+terminates `budget_exhausted` (clean), not `operational_failure`. Diagnose
+from the record above BEFORE reading code: the stop message is `token budget
+denied transactional work`, the spend is 495362 of 500000, and
+`stop_reason_resumable` is already true. Then find where the denial is
+classified and what distinguishes "denied because the budget is spent" from
+"denied for any other reason" — a denial with budget remaining must NOT
+become a clean stop, so the fix turns on that distinction and needs a
+regression test for both sides. Check `INV-frozen-surfaces.md` first: run
+records and their stop reasons sit close to frozen ground, and if the fix
+needs a grant, STOP in FIX.md and say so. OUT OF SCOPE: the organiser, the
+measure, and anything under experiments/.
+```

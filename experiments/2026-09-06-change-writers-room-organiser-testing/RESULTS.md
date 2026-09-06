@@ -524,3 +524,113 @@ Six live calls beyond the plan. **Spent: 0**, and none was available to spend.
   re-create the same shape from the allocator rather than the shell.
 - ARM H is still deferred, so nothing here separates the harness from the room
   even in principle.
+
+## 2026-09-06, fourth segment — ARM R relaunched: the seat did what it was asked, the harness mislabelled the stop, the verdict waits on one ruling
+
+**The mechanism worked and the label did not.** ARM R ran with the withdrawn
+critic pairing and the single id system, reached cycle 3, spent 495 362 of its
+500 000-token ceiling, and was stopped when the budget denied the next unit of
+work. Every registered prediction about the seat held, several of them by a
+wide margin. But the harness typed that stop `operational_failure` rather than
+`budget_exhausted`, which the operator's own law of 2026-08-29 forbids — and
+under the sealed rule an `operational_failure` is a FAILED arm whose unit is
+not judged. So the run that the ceiling stopped is, by the letter of the
+pre-registration, disposed of as a breakage. That is a labelling defect
+(parked as P8), and the disposition is a ruling the operator owns; §5 below
+states the fork.
+
+### 1. What ran (typed outcomes only)
+
+| | |
+|---|---|
+| soak | `cycle_soak --case epoch3` → `[soak] exit 0 (clean)`, 11:04:25Z (`runs/soak.log`) |
+| warm-up | **cache hit**, 11:09:43 → 11:09:45Z: `Qualified: ollama/qwen3.5:397b`, `Qualification tier: full`. No battery respent, as PREREG Amendment 7 predicted |
+| attachment | all four digests `OK` before any call; admission printed **3 sources, 97 blocks, 0 refusals** — exactly what Amendment 7 requires — under dossier digest `84011ed8…` (recorded as a fact of the run, per Amendment 5) |
+| ARM R | root `run-c3f3bf10bc57d63e224a9f1c68bf1057`; `state: failed`, `stop_reason: operational_failure`, message `token budget denied transactional work sha256:dcd8fa45…`, cycle 3, `token_spend 495362` of `token_limit 500000` (99.07%) |
+| verification | `deepreason results --json --verify` → **0 violations**, `valid: true`, `source: rederived`; `integrity_valid: true`, `epistemic_checks_passed: true`, `operational_checks_passed: false`; `stop_reason_resumable: true` |
+| organiser rendered | 11 section plans name `dr.output-contract.organiser` (0 would have made the arm INVALID) |
+| ARM 0, ARM 0R | reused by digest, not respent; ARM H still deferred |
+| live calls beyond the plan | **0** |
+
+### 2. The critic no longer dies, which is what the withdrawn pairing was for
+
+The first launch's critic exhausted its repair ladder on evidence ids its
+brief never showed it and killed the run. This one made **53 calls with one
+rejected pointer** (`stop-report` §3: `attempts 53, invalid 1`) and carried on.
+The stop-report ruled out CONFIGURATION and ENVIRONMENT — no 429, no transport
+fault — and the critic passed qualification 20 of 20 first-pass on both its
+forms with zero repairs. P6 is untouched as a harness defect; this tranche
+simply no longer stands on it.
+
+### 3. What the organiser did with the room, against the registered predictions
+
+| measure | epoch 1 | registered prediction | this run |
+|---|---|---|---|
+| `EVIDENCE_REF_UNKNOWN_BLOCK` | 58 | **0** | **0** |
+| `EVIDENCE_QUOTE_MISMATCH` | 7 | — | 0 |
+| `EVIDENCE_CITATION_VERIFIED` | 21 | **≥ 21** | **64** |
+| room conjectures carried (strict) | 7 of 12 | — | 4 of 12 — and **4 of the 4** the redrawn legend made citable |
+| room conjectures reached | 8 | — | **10 of 12** |
+| positions on the seed question | 16 accepted, 0 refuted | — | **36 accepted, 0 refuted** (39 in all) |
+| counterconditions registered as commitments | 54 | — | **109** |
+| composed unit | 21 396 characters | — | **46 518 characters** |
+
+Every citation the seat made resolved. Not one failed, of any kind — no
+unknown block, no quote mismatch, no unexposed reference. Removing the room's
+own record labels from the text it reads did exactly what it was predicted to
+do, and the prediction was written down before the run.
+
+### 4. Spend
+
+| seat | calls | tokens | share |
+|---|---|---|---|
+| conjecturer (organiser) | 32 | 404 543 | 82% |
+| argumentative_critic | 53 | 90 819 | 18% |
+
+Organiser calls on the seed problem cost 27 635 – 33 904 tokens; on derived
+problems 3 832 – 12 063. PREREG Amendment 1 predicted "the 500 000 ceiling
+ends the run in CYCLE 3". It ended in cycle 3, at 99.07% of the ceiling — the
+prediction held on the cycle, and this time the ceiling itself is what stopped
+the run.
+
+### 5. The verdict, and the one ruling it waits on
+
+**Under the sealed rule as written, the verdict is INCONCLUSIVE.** PREREG §3
+says an `operational_failure` is a FAILED arm, §7 says an arm with no usable
+unit makes the verdict INCONCLUSIVE, and Amendment 6 implemented that as a
+refusal in the judging instrument. `tools/judge_pairwise.py` refuses ARM R's
+unit for exactly this reason, and no ARM R judging has been run.
+
+**What the record shows instead**, and why the disposition is a question and
+not a decision I may take: the stop was the ceiling. 495 362 of 500 000 spent;
+the message is a budget denial; `verify_root` re-derives clean; the run is
+resumable. PREREG Amendment 1 sealed that "a `budget_exhausted` stop is a
+CLEAN terminal and the run is judged as it stands at that stop", and the
+operator's law of 2026-08-29 says a denial on an exhausted budget IS
+`budget_exhausted`. So the arm meets the substance of the clean-terminal
+clause and fails its letter, because the harness wrote the wrong word.
+
+Re-reading a sealed rule after seeing a favourable record is the one thing a
+pre-registration exists to prevent, so nothing was judged and nothing was
+re-run. The fork is recorded here and put to the operator; whichever way it
+goes lands as a dated PREREG amendment written BEFORE any score exists.
+
+### 6. Failure budget (R22)
+
+Six live calls beyond the plan. **Spent: 0.** No relaunch, no probe.
+
+### 7. Residue — what this segment does NOT show
+
+- It shows nothing about whether the organiser's output is better. No unit has
+  been judged; there is no verdict, and INCONCLUSIVE is the absence of one.
+- It does not show the harness is broken in its reasoning. `verify_root`
+  re-derives 0 violations on this root; the defect is in how one stop is
+  classified (P8), not in what the run recorded.
+- The two ARM R runs differ in two places at once — the critic's shell and the
+  attachment's headers — so the improvement in citations cannot be attributed
+  to either alone, only to the pair. The citation numbers are the exception:
+  the critic's shell has no bearing on what the conjecturer cites.
+- The legend still shows a hash-ordered 32 of 97 blocks (PARKED P2), so
+  "carried" is capped at what happens to be citable.
+- One question, one model, one room, one run; same-model judging when judging
+  happens; ARM H still deferred.

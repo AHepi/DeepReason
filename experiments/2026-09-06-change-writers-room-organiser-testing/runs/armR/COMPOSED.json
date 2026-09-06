@@ -1,0 +1,11 @@
+{
+ "accepted": 36,
+ "chars": 46518,
+ "derived_positions": 3,
+ "refuted": 0,
+ "root": "/home/user/DeepReason/experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-c3f3bf10bc57d63e224a9f1c68bf1057",
+ "schema": "composed-result.v1",
+ "seed_positions": 36,
+ "seed_problem": "question-ba75796c3facc7a3d0d448d6eaa09a2e",
+ "suspended": 0
+}
