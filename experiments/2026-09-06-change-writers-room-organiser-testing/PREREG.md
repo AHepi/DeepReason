@@ -543,3 +543,56 @@ citation counts are not comparable block-for-block with the first launch; the
 judges are the same model as the seats, as before; ARM H stays deferred; and
 the length rule above will very likely make "materially better" unreachable
 whatever the panel chooses.
+
+**Amendment 8 (2026-09-06, after ARM R's relaunch terminated and BEFORE any score exists — the operator's ruling on a mislabelled stop).**
+ARM R's relaunch stopped at cycle 3 of the sealed 4 with 495 362 of 500 000
+spent, on a budget denial, and the harness typed that stop
+`operational_failure` rather than `budget_exhausted` — which the operator's law
+of 2026-08-29 forbids and which PARKED P8 records as a defect. Under §3 as
+sealed that makes the arm FAILED and the verdict INCONCLUSIVE. The monitor did
+NOT re-read the rule to escape that: nothing was judged, no score was computed,
+and the disposition was put to the operator as a fork with the record in front
+of them. Their ruling, chosen from three priced options: **"Resume the run with
+more budget first"** — the run is continued to a clean terminal of its own and
+judged there, rather than judged as it stands or abandoned.
+
+What this changes, and nothing else changes:
+1. **ARM R is CONTINUED, not relaunched and not re-run.** `deepreason --root
+   <root> continue --budget cycles=1 --token-budget 1200000`
+   (`runs/armR_continue.sh`, sha256
+   `3b5be7cfd2000da0522deadd64bdbb3811b47b8cc203c53546259ddbb65a6d55`), on the
+   SAME root, the same manifest, the same selectors and the same
+   `runs/config.yaml`. §10's "No arm is re-run to get a number" is untouched:
+   this mints no new root, discards no record, and repeats no cycle. The
+   record's own integrity gate is what permits it — `verify_root` re-derived 0
+   violations and `stop_reason_resumable: true` — which is the second half of
+   the same operator law whose first half P8 records as broken.
+2. **The cycle count is unchanged at four.** `--budget cycles=1` adds the
+   fourth cycle the launch already sealed if the flag is read as additional,
+   and stops immediately at a clean `max_cycles` if it is read as a total.
+   Neither reading exceeds four cycles.
+3. **The ceiling moves, and this is the cost the operator accepted.** ARM R's
+   total spend will exceed the "500k tokens" of Amendment 1. The continuation's
+   ceiling is set high (1 200 000) so that the cycle is bounded by the CYCLE
+   COUNT and not cut short by the budget a second time; the expected additional
+   spend is one cycle, about 150 000–200 000 tokens on this run's own rates.
+   **Disclosed as a limit on the comparison: ARM R is no longer measured at the
+   operator's originally stated spend, and no claim of equal spend against the
+   bare arms may be made from it.** The bare arms are unchanged and unrespent.
+4. **The judged unit is the composed result at the CONTINUED terminal**, by the
+   same `tools/compose_result.py` and the same §4 definition. `judge_pairwise.py`
+   keeps its refusal: if the continued run does not reach `completed`, the arm
+   is FAILED and the verdict is INCONCLUSIVE, exactly as before, and this
+   amendment is not an authorisation to judge a failed run.
+5. **Everything else stands**: Amendment 7's decision rule, its
+   consistent-win share, its order-consistency rule, §6's 1.5× length rule with
+   the ceiling registered against it, the control, and every prediction already
+   registered. P8 stays parked and unfixed; the mislabelling is a defect for
+   another tranche, and this ruling routes around it rather than repairing it.
+
+**Registered now, before the continuation runs:** the continued run terminates
+`completed` with `stop_reason: max_cycles`; the citation counts do not
+regress (`EVIDENCE_REF_UNKNOWN_BLOCK` stays 0, verified citations stay ≥ 64);
+and the composed unit grows, which makes §6's length rule MORE likely to
+downgrade a win, not less — the ceiling Amendment 7 registered is unchanged
+and, at 46 518 characters already, is now near-certain to bind.
