@@ -1,0 +1,15 @@
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"MiniObjection": {"additionalProperties": false, "description": "One criticism. `about` names what it is about; `body` is free prose.\n\nIt carries NO score, rank, weight, confidence or authority field. Shape may\nnever buy standing (the formalism-optional law), and within mini a\ncriticism overturns nothing at all (operator, 2026-09-05).", "properties": {"about": {"minLength": 1, "title": "About", "type": "string"}, "body": {"minLength": 1, "title": "Body", "type": "string"}}, "required": ["about", "body"], "title": "MiniObjection", "type": "object"}}, "additionalProperties": false, "properties": {"objections": {"items": {"$ref": "#/$defs/MiniObjection"}, "minItems": 1, "title": "Objections", "type": "array"}}, "required": ["objections"], "title": "MiniCritic", "type": "object"}
+SYNTAX EXAMPLE:
+{"objections":[{"about":"x","body":"x"}]}
+
+## problem
+PROBLEM question-corroboration-d8
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-conjecture
+TARGET CONJECTURE fab3fe93125ba81777325fc75a4b1873217880cd612e89c5f659b2b669bb771b
+Popper's position smuggles in induction through the back door by relying on a hidden uniformity principle: that the future will resemble the past regarding test outcomes. If a scientist prefers Theory A over Theory B solely because A survived tests that B failed, they are implicitly assuming that the conditions which allowed A to survive will persist, which is an inductive leap. The cost of accepting this view is the collapse of Popper's distinct 'critical rationalism' into a disguised form of Bayesianism or standard inductivism, stripping his philosophy of its unique claim to solve the problem of induction.
+
+## directive
+You are the critic seat. Mount the strongest specific objections to the TARGET CONJECTURE above. Each objection names what it is about and states its case in free prose. You decide nothing: an objection is recorded and shown, and it overturns nothing.

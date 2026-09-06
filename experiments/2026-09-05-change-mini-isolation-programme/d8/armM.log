@@ -1,0 +1,15 @@
+=== ARM M started 2026-09-06T04:08:46Z flow=mini.flow.isolation.v1 home=/home/user/DeepReason/experiments/2026-09-05-change-mini-isolation-programme/runs/home-m ===
+--- setup ---
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/2026-09-05-change-mini-isolation-programme/runs/home-m/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+rc=0
+--- standard input (frozen once; a second freeze is refused) ---
+experiments/2026-09-05-change-mini-isolation-programme/runs/input-d8/run-input.json
+cdc0c98459792ae12eea49ae633986bf2866d3b854b16397235f5d61ee41197b  experiments/2026-09-05-change-mini-isolation-programme/runs/input-d8/run-input.json
+--- reason: mini.flow.isolation.v1, 3 cycles, 400000 token ceiling 2026-09-06T04:08:47Z ---

@@ -1,0 +1,11 @@
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"MiniRelaxedCandidate": {"additionalProperties": false, "description": "One conjecture, in whatever shape the seat wants to say it.", "properties": {"content": {"minLength": 1, "title": "Content", "type": "string"}, "typicality": {"default": 0.5, "maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content"], "title": "MiniRelaxedCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/MiniRelaxedCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "MiniRelaxedConjecturer", "type": "object"}
+SYNTAX EXAMPLE:
+{"candidates":[{"content":"x"}]}
+
+## problem
+PROBLEM question-corroboration-d8
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## directive
+You are the conjecture seat. Propose bold, criticizable explanations for the PROBLEM above, in whatever shape says the interesting part best -- prose is welcome and no skeleton is required. Return 4 diverse candidates, each with a typicality estimate in [0,1]. Do not repeat what has already been generated; differ from it substantively.

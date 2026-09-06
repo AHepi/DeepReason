@@ -1,0 +1,16 @@
+{
+  "objections": [
+    {
+      "about": "The distinction between rational decision and inductive smuggle",
+      "body": "The conjecture claims the preference is a 'rational decision' based solely on past performance, but this fails to explain why past survival is a rational basis for future action without implicitly assuming the uniformity of nature. If corroboration reports only history and guarantees nothing about the future, then preferring the better-corroborated theory over a worse one for practical application is functionally identical to acting as if the future will resemble the past, which is the very principle of induction Popper sought to reject. The 'methodological rule of thumb' described is indistinguishable in practice from inductive inference, rendering the semantic distinction empty."
+    },
+    {
+      "about": "The cost of abandoning epistemic justification",
+      "body": "By accepting that corroboration offers no epistemic justification that a theory is likely true, the conjecture reduces scientific progress to a blind gamble where the 'best' theory is merely the one that has not yet failed, rather than the one most aligned with reality. This costs science its claim to approximate truth (verisimilitude) in any meaningful sense, as it severs the logical link between surviving tests and the likelihood of the theory being correct. If we cannot say a well-corroborated theory is more likely to be true than an untested one, the preference for it becomes an arbitrary psychological habit rather than a defensible rational stance, undermining the objective status of scientific knowledge."
+    },
+    {
+      "about": "The coherence of 'severe tests' without probability",
+      "body": "The definition of a 'severe test' inherently relies on probabilistic reasoning: a test is severe only if it is unlikely that a false theory would pass it. By rejecting probability entirely while retaining the concept of severity, the conjecture creates a logical vacuum where the metric for 'better-corroborated' loses its quantitative force. Without the notion that passing a severe test makes a theory more probable (or at least less likely to be false by chance), the ranking of theories becomes unintelligible, as there is no formal mechanism to distinguish between a theory that survived a trivial test and one that survived a severe one, other than an informal intuition that smuggles probability back in."
+    }
+  ]
+}

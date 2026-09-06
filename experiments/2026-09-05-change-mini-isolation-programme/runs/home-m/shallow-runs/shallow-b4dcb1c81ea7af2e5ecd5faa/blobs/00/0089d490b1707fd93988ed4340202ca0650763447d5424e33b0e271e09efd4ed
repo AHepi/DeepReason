@@ -1,0 +1,16 @@
+{
+  "objections": [
+    {
+      "about": "The reliance on verisimilitude",
+      "body": "The conjecture attempts to solve the problem of preference by invoking 'verisimilitude' (truth-likeness), but Popper's own formal attempt to define this concept was proven logically untenable by Tichý and Miller in 1974. They demonstrated that within Popper's framework, a false theory with more content cannot be strictly said to be closer to the truth than a false theory with less content; thus, appealing to verisimilitude does not escape the logical vacuum left by the rejection of induction, but merely papers over it with an intuitive but formally undefined notion."
+    },
+    {
+      "about": "The pragmatic contradiction in 'best current guess'",
+      "body": "By asserting we choose a theory because it is our 'best current guess at being closer to the truth,' the conjecture smuggles in a probabilistic or inductive assumption under a different name. To claim one theory is a 'better guess' than another regarding future performance or structural reality implies a judgment about the likelihood of its truth based on past success, which is precisely the inductive inference Popper sought to eliminate. If corroboration reports only past performance without implying future reliability, calling it a 'better guess' is semantically empty or logically inconsistent."
+    },
+    {
+      "about": "The cost of qualitative-only science",
+      "body": "The conjecture accepts the cost of being unable to quantify 'closeness to truth,' reducing scientific progress to a purely qualitative journey. This renders the preference for better-corroborated theories practically inert for decision-making in high-stakes environments (like engineering or medicine) where acting on a theory requires an assessment of risk and reliability. If we cannot distinguish between a theory that has survived one trivial test and one that has survived a thousand severe tests in terms of 'safety' or 'reliability,' the Popperian directive offers no rational basis for preferring the latter in action, contradicting the actual behavior of scientists the conjecture aims to justify."
+    }
+  ]
+}
