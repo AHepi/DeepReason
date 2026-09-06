@@ -73,5 +73,30 @@
   "position": "B",
   "side": "right",
   "why": "Text B correctly identifies the surviving answer as the Popperian defense (Case B) based on error elimination and comparative logical status, whereas Text A incorrectly concludes that the anti-Popperian critique survives, thereby failing to demonstrate how the preference is defensible on Popper's own terms as the prompt requires."
+ },
+ "323c4784-f291-48da-890a-edc58abae225|2|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a more sophisticated and accurate representation of the 'defensible' case by focusing on Popper's actual methodological rule of maximizing informational yield rather than relying on the formally refuted concept of verisimilitude as Text A does."
+ },
+ "323c4784-f291-48da-890a-edc58abae225|3|LR": {
+  "position": "B",
+  "side": "right",
+  "why": "Text B correctly identifies the specific Popperian machinery (verisimilitude and error elimination) required to defend the preference without induction, whereas Text A incorrectly concedes that the preference is indefensible, failing to articulate the strongest possible case for Popper's own terms as the prompt demanded."
+ },
+ "323c4784-f291-48da-890a-edc58abae225|3|RL": {
+  "position": "B",
+  "side": "left",
+  "why": "Text B provides a more sophisticated 'strongest case' for the defense by framing it as a methodological rule for maximizing informational yield rather than relying on Popper's formally refuted concept of verisimilitude, and it delivers a sharper verdict that explicitly identifies the cost as the collapse of a purely deductive logic of discovery."
+ },
+ "5737ca5c-e6bd-479c-903b-79af1c73c518|1|LR": {
+  "position": "B",
+  "side": "right",
+  "why": "Text B explicitly engages with Popper's specific machinery (verisimilitude, asymmetry of falsification) and identifies the genuine technical cost (the formal refutation of verisimilitude by Tich\u00fd and Miller), whereas Text A relies on a more generic pragmatic critique that partially evades the specific Popperian defense mechanisms."
+ },
+ "5737ca5c-e6bd-479c-903b-79af1c73c518|1|RL": {
+  "position": "A",
+  "side": "right",
+  "why": "Text A fulfills all five criteria by constructing robust arguments for both sides, engaging deeply with specific Popperian concepts like verisimilitude and the Tich\u00fd/Miller refutation, delivering a clear verdict, and identifying a genuine, uncomfortable cost regarding the collapse of Popper's formal machinery."
  }
 }
