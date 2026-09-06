@@ -25,7 +25,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any, Callable, Iterable
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -118,6 +118,11 @@ class MiniFormV1:
     form_id: str
     form_version: str
     contract: WireContract
+    #: For a form whose canonical value is a list of RECORDS rather than
+    #: conjecture candidates: how to read `(about, body)` pairs off it. None
+    #: means the canonical value is the conjecture road's (`ConjecturerOutput`),
+    #: which admission handles. The loop dispatches on this, never on a seat.
+    records_of: Callable[[Any], Iterable[tuple[str, str]]] | None = None
 
     @property
     def wire_model(self) -> type[BaseModel]:
@@ -275,6 +280,7 @@ register_mini_form(
         form_id="mini.critic.relaxed.v1",
         form_version="1.0.0",
         contract=_MiniPassthroughContract("mini.critic.relaxed.v1", MiniCritic),
+        records_of=lambda out: [(item.about, item.body) for item in out.objections],
     )
 )
 register_mini_form(
@@ -284,6 +290,7 @@ register_mini_form(
         contract=_MiniPassthroughContract(
             "mini.commitment.relaxed.v1", MiniCommitmentProposals
         ),
+        records_of=lambda out: [(item.about, item.body) for item in out.proposals],
     )
 )
 

@@ -1,5 +1,5 @@
 <!-- DR-INDEX -->
-Verified-at: f2b736b6a
+Verified-at: f8100b9b0
 Verify: python tools/docs_verify.py --links
 
 # The map — start here
@@ -149,8 +149,9 @@ traffic at all.
 | — | packs-and-token-economy × rules | `SEAM-packs-and-token-economy-x-rules.md` |
 | — | llm × model-profiles | — not yet written |
 | — | model-profiles × scheduler | — not yet written |
+| — | llm × minireason | `SEAM-llm-x-minireason.md` |
 
-The last eleven carry no import-count because at least one side is a concept
+The last twelve carry no import-count because at least one side is a concept
 rather than a package, the agreement is enforced without a direct import, or —
 the periphery × verification and calculus × rules cases — every import between
 the sides is function-local, which the coupling metric cannot see. The adjudication ×
@@ -159,6 +160,10 @@ traffic, and the measured consequence of breaking it is that committed roots
 change meaning.
 **That is exactly why they need documents**: coupling metrics cannot see them,
 so nothing but a written seam will tell the next reader they exist.
+The llm × minireason case carries no count for a different reason: the
+matrix counts imports between files under `src/deepreason/`, and one side of
+this pair lives outside it (`mini/minireason/`). Measured by the seam's own
+check, the traffic is fifty crossings one way and none the other.
 The llm × scheduler case is the newest and was the most expensive: the
 `scheduler/` package does import `deepreason.llm`, but the agreement that
 document covers — the allocation controller against the route lease — is

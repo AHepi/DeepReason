@@ -1,5 +1,5 @@
 <!-- DR-CON-packs-and-token-economy -->
-Verified-at: 0d399f748
+Verified-at: 9d87325c3
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/packs.py, src/deepreason/packs/allocate.py, src/deepreason/packs/ir.py, src/deepreason/llm/budget.py, src/deepreason/llm/profiles.py, src/deepreason/llm/adapter.py, src/deepreason/rules/crit.py
 Seams: DR-SEAM-packs-and-token-economy-x-rules
@@ -46,6 +46,8 @@ section mandatory.
 | Batch criticism pack — NOT on the IR | `src/deepreason/llm/packs.py` | `render_batch_crit_pack`, `_clip` |
 | Auxiliary packs — NOT on the IR | `src/deepreason/llm/packs.py` | `render_experiment_pack`, `render_property_pack`, `render_cx_retry_pack` |
 | "Already budgeted, do not re-clip" marker | `src/deepreason/llm/packs.py` | `AllocatedPack` |
+| The PUBLIC road a consumer outside `packs.py` takes to the same walk and allocator (the reduced engine's seats; each entry one call to its private counterpart) | `src/deepreason/llm/packs.py` | `render_seat_brief`, `allocate_seat_brief` |
+| The reduced engine's compositions and plugins — three layouts, one per mini seat, every entry mandatory; four plugins; a retention RULE deciding what "everything so far" keeps, never a verdict | `mini/minireason/seats.py`, `mini/minireason/sources.py` | `MINI_LAYOUTS`, `MINI_PLUGINS`, `register_mini_retention_rule` — `DR-SUB-minireason`, `DR-SEAM-llm-x-minireason` |
 | Section-size constants | `src/deepreason/llm/packs.py` | `NEIGHBOURHOOD_N`, `ATTACKERS_N`, `FOUNDATION_CHARS` |
 | Where a rendered prompt puts what it carries | `src/deepreason/llm/layout.py` | `RenderLayoutPolicyV1` — see `DR-INV-render-layout` |
 | The question, restated last | `src/deepreason/llm/packs.py` | `_question_section`, `_QUESTION_PRIORITY` |
@@ -282,15 +284,19 @@ epistemic one: an argument cannot be refuted on bytes the critic was never
 shown.
 `check: python -m pytest tests/test_pack_prefix.py::test_long_critic_target_arrives_whole_rather_than_excerpted -q`
 
-**Only two renderers are on the IR.** `render_conj_pack` and `render_crit_pack`
-go through `_allocate_sections`; `render_batch_crit_pack`,
+**Only two renderers are on the IR, plus the one declared public entry.**
+`render_conj_pack` and `render_crit_pack` go through `_allocate_sections`, and
+since 2026-09-05 so does `allocate_seat_brief` — not a renderer but the public
+road a consumer outside `packs.py` (the reduced engine's seats) takes to the
+same allocator, so that it neither reaches past the underscore nor builds a
+second one (`DR-INV-seat-section-plugins`, entry points). `render_batch_crit_pack`,
 `render_experiment_pack`, `render_property_pack` and `render_cx_retry_pack`
 still return a raw prefix clip at `token_budget * 4` chars and, being plain
 `str`, are clipped a second time by the profile inside the adapter. Batch
 criticism is the surprise here — the batched critic gets prefix truncation
 where the single-target critic gets section allocation.
 `check: test "$(grep -cF '_clip("' src/deepreason/llm/packs.py)" = 4`
-`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());H=sorted(n.name for n in ast.walk(T) if isinstance(n,ast.FunctionDef) and any(isinstance(c,ast.Call) and getattr(c.func,'id','')=='_allocate_sections' for c in ast.walk(n)));assert H==['render_conj_pack','render_crit_pack']"`
+`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());H=sorted(n.name for n in ast.walk(T) if isinstance(n,ast.FunctionDef) and any(isinstance(c,ast.Call) and getattr(c.func,'id','')=='_allocate_sections' for c in ast.walk(n)));assert H==['allocate_seat_brief','render_conj_pack','render_crit_pack'],H"`
 `check: grep -qF '_CHARS_PER_TOKEN = 4' src/deepreason/llm/packs.py && grep -qF 'return text[: token_budget * _CHARS_PER_TOKEN]' src/deepreason/llm/packs.py`
 
 **NEGATIVE — an allocated pack must never be re-clipped by the profile.**
@@ -377,6 +383,11 @@ NOT merged and must not be: a dropped section leaves no header, so the header's
 presence is the only signal that a section survived allocation.
 `check: python -m pytest tests/test_render_layout_rules.py -k block -q`
 
+The reduced engine is a THIRD consumer of this economy, and it keeps to the
+two public entries: no module under `mini/minireason/` names a private symbol
+of `packs.py`, builds a `PackSection` or calls `allocate_pack`.
+`check: python -m pytest mini/tests/test_mini_seat_shell.py::test_mini_renders_through_the_public_road_only -q`
+
 ## Where to change what
 
 | To change... | Edit | Test |
@@ -389,6 +400,7 @@ presence is the only signal that a section survived allocation.
 | The request-envelope bound or its typed error | `llm/adapter.py` `_enforce_request_envelope`, `RequestEnvelopeExceeded` | `tests/test_v6_request_envelope.py` |
 | The provider ceiling's reservation arithmetic | `llm/budget.py` `conservative_prompt_bound`, `TokenMeter.reserve` | `tests/test_token_reserve.py`, `tests/test_budget.py` |
 | Moving a legacy renderer onto the IR | `llm/packs.py`, replacing `_clip(...)` with `_allocate_sections(...)` | `tests/test_pack_ir.py`, `tests/test_crit_batch.py` |
+| What a MINI seat is shown, or how much of the pool it keeps | a layout in `mini/minireason/seats.py` (or a `.layout.json` under `seat_plugins/`), and the `mini.everything-so-far` entry's `retention_rule` / `budget_chars` / `keep_last` params — never `packs.py` | `mini/tests/test_mini_exposure.py`, `mini/tests/test_mini_sources.py` |
 
 
 ## The frame slice is the only pack section a controller may widen (Rung 8)

@@ -1,0 +1,10 @@
+MUTATION 5: seats.py registers a second calibration hook, 'mini.calibration.eager.v1'
+tree: mini/minireason mutated as described; tests unchanged
+
+E       AssertionError: assert ('mini.calibr...tion.noop.v1') == ('mini.calibration.noop.v1',)
+E         
+E         At index 0 diff: 'mini.calibration.eager.v1' != 'mini.calibration.noop.v1'
+E         Left contains one more item: 'mini.calibration.noop.v1'
+E         Use -v to get more diff
+FAILED mini/tests/test_mini_architecture.py::test_5_only_the_noop_calibration_hook_is_registered
+1 failed in 0.99s

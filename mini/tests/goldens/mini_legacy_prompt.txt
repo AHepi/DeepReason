@@ -1,0 +1,20 @@
+=== CASE description='why did X happen?' stance='demand a causal mechanism' neighbourhood='' vs_k=4
+You are the conjecture operator: propose bold, criticizable explanations for the PROBLEM below. Verbalized Sampling: return a DISTRIBUTION of 4 diverse candidates, each with a typicality estimate in [0,1].
+STANCE (condition your generation on it): demand a causal mechanism.
+Each candidate's content MUST be a JSON skeleton embedded as a string: {"claim": ..., "mechanism": ..., "scope": {"covers": [], "excludes": []}, "forbidden": [{"case": ..., "eval": ...}], "prose_notes": ...}. Each forbidden case states evidence that would REFUTE the candidate; eval is a known "program:<name>" for mechanically checkable cases. Inline predicates from model output are forbidden. Rubric commitments are outside this reduced engine and are dropped before registration. A candidate that forbids nothing is refuted on arrival.
+
+PROBLEM: why did X happen?
+
+=== END
+=== CASE description='why does the sky look blue?' stance='prefer mechanisms over correlations' neighbourhood='- {"claim": "claim 2", "mechanism": "mech 2"}\n- {"claim": "claim 3"}' vs_k=2
+You are the conjecture operator: propose bold, criticizable explanations for the PROBLEM below. Verbalized Sampling: return a DISTRIBUTION of 2 diverse candidates, each with a typicality estimate in [0,1].
+STANCE (condition your generation on it): prefer mechanisms over correlations.
+Each candidate's content MUST be a JSON skeleton embedded as a string: {"claim": ..., "mechanism": ..., "scope": {"covers": [], "excludes": []}, "forbidden": [{"case": ..., "eval": ...}], "prose_notes": ...}. Each forbidden case states evidence that would REFUTE the candidate; eval is a known "program:<name>" for mechanically checkable cases. Inline predicates from model output are forbidden. Rubric commitments are outside this reduced engine and are dropped before registration. A candidate that forbids nothing is refuted on arrival.
+
+PROBLEM: why does the sky look blue?
+
+RECENT SURVIVORS (do not repeat; differ substantively):
+- {"claim": "claim 2", "mechanism": "mech 2"}
+- {"claim": "claim 3"}
+
+=== END

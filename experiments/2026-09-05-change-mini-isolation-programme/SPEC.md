@@ -972,8 +972,69 @@ design sketch does not see. T3–T7's numbers were written the same way and
 should be read as lower bounds, not ceilings. Rowed in PARKED.md as P7 so the
 later windows are not surprised by it.
 | T3 | the mini source adapter and the three shells | S5+S6 | 240 |
+
+**T3's 240 is EXCEEDED, and re-baselined with every file measured (2026-09-05,
+at step 27, once the shells were in).** Against main at `14cc5da495`:
+
+| file | insertions | code / docstring / comment / blank | why |
+|---|---|---|---|
+| `mini/minireason/sources.py` | 384 | 223 / 63 / 21 / 77 | S5 priced 130 for "one adapter and three plugins". What ships is the adapter with the frozen-criteria road (R12), FOUR plugins (the directive-as-layout-data is the modularity law's customisation clause), a registered retention-rule layer with two rules and two typed refusals — a ruling the operator accepted on 2026-09-05, AFTER these numbers were written — and the never-empty, always-named withheld notice (no silent caps) |
+| `mini/minireason/seats.py` | 223 | 129 / 47 / 14 / 33 | S6 priced 110 for "three shells and a public entry". What ships is three layouts carrying their directives as data, three shells, `form_for_seat` (the first consumer of `SeatShellV1.form_id`, PARKED P3) and `render_mini_brief` — the one function that walks shell → layout → request → public walk → public allocation |
+| `src/deepreason/llm/packs.py` | 29 | — | TWO public entries, not one: a consumer given only the walk would reach past the second underscore to get text, so the allocator's entry ships beside it, each pinned as one call to its private counterpart |
+| **total** | **636** | | against 240 |
+
+**Trimmed before disclosing**: the sources module docstring (25 → 14 lines)
+and a type alias that only restated a signature, 566 → 550 at step 26. What
+remains is 352 lines of code across the two new modules and 110 of docstring,
+and the docstrings carry the constraints the code cannot show (why the
+critic's layout is short, why retention is a rule, why the shell's form_id is
+consulted, why every entry is mandatory).
+
+**T3 is therefore restated as ~640**, and the programme total moves to
+~2 100. This is the third consecutive overrun with the cause PARKED P7 already
+names — the estimates priced the mechanism, not the obligations the standing
+laws attach to it — plus one cause specific to T3: a ruling (retention as a
+rule) that arrived after the numbers did. T4 and T5's numbers stay as written
+and are read as lower bounds.
 | T4 | the commitment seat, the controller hook, the map | S4+S7+S11b | 180 |
+
+**T4's 180 is EXCEEDED, and re-baselined with every file measured (2026-09-05,
+at step 34, once the hook was in).** Against T3's delivery head `e83df7dfd`:
+
+| file | insertions | code / docstring / comment / blank | why |
+|---|---|---|---|
+| `mini/minireason/records.py` (new) | 134 | 63 / 42 / 3 / 26 | S4 priced 85 for "an artifact kind and its seat". What ships is a RECORD shape instead of an artifact — a typed event with its body in a blob, deliberately outside the one map every authority path reads — with its reader, the typed dropped road for a proposal naming nothing in the run, and the spend-lands-once rule. The artifact road was measured CONTACT on the harness surface and not taken |
+| `mini/minireason/seats.py` | +129 | code +67 / doc +17 | the seat's writer (~30), and S7's hook: the protocol, a registry with two typed refusals, the one no-op registration (~90). S7 priced 35 for "a Protocol and a no-op"; the registry and its refusals are what make "selected by id" true |
+| `mini/minireason/sources.py` | +69 (−18) | code +27 | the pool as a SOURCE value merging artifacts and records in record order, labelled by kind — the consequence of records not being artifacts |
+| **total** | **332** | | against 180 |
+
+**T4 is therefore restated as ~330**, and the programme total moves to
+~2 250. Same cause as P7 names, plus one specific to T4: the record shape was
+chosen over the artifact shape AFTER measuring the frozen-surface contact the
+SPEC's forecast did not cover (it forecast S4 as a form and a seat, not as a
+new record kind).
 | T5 | the pluggable flow and the architecture tests | S8+S9 | 240 |
+
+**T5's 240 is EXCEEDED, and re-baselined with every file measured (2026-09-05,
+at step 42, once the architecture tests were in).** Against T4's delivery head
+`d800b622b`:
+
+| file | insertions | net lines | code / docstring delta | why |
+|---|---|---|---|---|
+| `mini/minireason/flow.py` (new) | 231 | +231 | +148 / +49 | S8 priced 150 for the registry AND the loop rewrite. The registry alone is this: two dataclasses, a refusal for a stage naming an undeclared kind, a registry with three typed refusals, the three-step selection, and the two shipped flows as data |
+| `mini/minireason/loop.py` | 292 (−208) | +84 | +50 / +21 | the conjecture road LIFTED unchanged into `_conjecture_stage` (most of the 292 are moved lines the numstat counts as new), plus the stage walk, the record road, the one-lease call, the P8 disposal (brief share, typed clipped marker) and the typed skipped-stage event |
+| `mini/minireason/sources.py` | 47 (−2) | +45 | +31 / +6 | today's prompt as the `mini.legacy.prompt` plugin, verbatim, so the legacy flow renders through the same road and a golden can pin it; the everything section's default budget from the request |
+| `mini/minireason/seats.py` | 32 (−3) | +29 | +21 / 0 | the three kind ids, the legacy layout and shell |
+| `mini/minireason/forms.py` | 8 (−1) | +7 | +3 / 0 | `records_of`, the declared accessor the loop dispatches on instead of a seat name |
+| `mini/minireason/records.py` | 9 (−4) | +5 | +3 / 0 | the seat's own naming kept beside the bound target |
+| **total** | **619** | **+401** | **+256 / +76** | against 240 |
+
+**T5 is therefore restated as ~620 by the gate's count and ~400 by net
+lines**, and the programme total moves to ~2 850 by the gate's count. Same
+cause as P7 names; the T5-specific one is that S8's 150 priced a registry and
+a loop rewrite as one item, and the rewrite alone lifts 200 lines of the
+existing conjecture road into a function so the stage walk can call it — a
+move the numstat counts as insertions.
 | T6 | regression, goldens, the record | S10 | 120 |
 | T7 | the measure | S12 | 80 |
 

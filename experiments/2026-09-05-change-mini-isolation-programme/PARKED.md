@@ -279,3 +279,123 @@ T1/VALIDATION.md and T2/VALIDATION.md carry the diff_budget output.
 End state: either the later windows' overruns are disclosed the same way, or
 dr-spec-change learns to price the obligations alongside the mechanism.
 ```
+
+---
+
+## P8 — mini's call layer clips every prompt silently, a third length limit
+##      R2 did not name
+
+**What.** `mini/minireason/call.py::call` runs `rendered = clip_pack(prompt,
+profile)` on every prompt before dispatch, and `clip_pack` is
+`pack[: spec.pack_budget() * 4]` — a prefix cut with no notice in the brief,
+no receipt, and no marker in the record. Measured: compact 4 800 characters,
+standard 10 000, frontier 12 000. SPEC.md §S2(c) named the two silent cuts in
+the loop's own prompt builder (`[-k:]`, `content[:300]`) and T3 removed both
+from the shell-rendered road; this one sits one layer down, in the call the
+shell-rendered brief will pass through when T5 wires the loop to the seats.
+Found while T3 was designed (2026-09-05); recorded in
+`docs/map/SEAM-llm-x-minireason.md`'s Traps.
+
+**Why it is not fixed here.** T3's items are the adapter, the plugins, the
+layouts and the shells (S5, S6); the call layer is none of them, and a fix is a
+design choice — disclose the cut as a typed notice in the brief, raise the
+mini profile's pack budget, or make the retention rule's `budget_chars`
+default sit inside the clip — that should be priced, not typed in. A brief
+rendered under the retention rule's declared budget can be kept inside the
+clip by configuration today, so the road is not blocked; it is undisclosed.
+
+**DISPOSED by T5 (step 40), road (c) plus a typed marker — recorded here,
+the entry kept.** The loop hands the everything section its share of the
+profile's prompt budget (`MiniStageV1.brief_share`, default 0.6), so the
+retention rule withholds and NAMES what does not fit rather than the clip
+cutting it; and any brief that still overruns the profile's clip is written
+to the record as `mini:brief-clipped` with both sizes before the call, so the
+cut is never silent. The clip in `call.py` is unchanged; the prompt below
+stays valid for whoever wants the cut itself disclosed inside the brief.
+
+**Binding on T5 (as written before the disposal).** Before the isolation flow dispatches a shell-rendered brief
+through `call`, T5 must either set the everything section's `budget_chars`
+inside the profile's clip for the shipped flow, or dispose of the clip with a
+notice — and say which in its DELIVERY. A silent cut on the one road built to
+show everything is exactly the failure R2 forbids.
+
+```
+EXECUTOR WINDOW — CHANGE TRANCHE: no silent length limit on the mini call road
+
+Read CLAUDE.md in full (the all-configurations law: disclose, never die; the
+no-silent-caps rule of DR-CON-packs-and-token-economy). Load
+dr-change-orchestrator, dr-drive-harness, dr-ask-the-right-question and
+pinker-write-for-readers. Start at dr-capture-request. Base on main after the
+mini isolation programme's T3 merge.
+
+REPRODUCE FIRST: render a mini conjecturer brief over a root with more than
+~5 000 characters of standing conjectures (mini/tests/test_mini_sources.py's
+prose_session fixture is one), dispatch it through minireason.call.call with
+the compact profile against MockEndpoint, and diff the prompt blob the record
+holds against the brief: the tail is gone and nothing says so.
+
+THE FORK for SPEC.md: (a) clip_pack becomes a typed disclosure -- the cut is
+kept but the brief ends with a notice naming the bytes withheld, and the
+record's Measure event carries a marker; (b) the mini profile's pack budget
+is raised or made configurable per run so a shell-rendered brief fits; (c)
+the everything section's budget_chars defaults to sit inside the clip for
+the shipped isolation flow, so the retention rule's own notice is the
+disclosure. Price all three; (c) is configuration only and may be the right
+first step, but it leaves the clip silent for any other layout.
+
+FROZEN SURFACES: forecast NONE (llm/profiles.py and mini/minireason/call.py).
+Paste tools/blast_radius.py's rows into SPEC.md regardless.
+END STATE: no road from a mini seat's brief to the provider cuts bytes
+without a notice in the brief and a marker in the record; a test renders an
+over-budget brief and asserts the notice.
+```
+
+---
+
+## P9 — a mini call's `LLMCall.role` names the leased route, not the seat
+
+**What.** Mini's manifest grants one canonical role, `conjecturer`
+(`compat._new_manifest`, `roles={"conjecturer": …}`), and the manifest
+refuses non-canonical roles (`run_manifest.py`, "v3+ manifest contains
+non-canonical roles"), while `verify_root` checks every call's role against
+the manifest's routes (`frozen-route`). So every stage of a mini flow --
+the critic and commitment seats included -- dispatches through that one
+lease, and its calls carry `role="conjecturer"`. Which SEAT spoke is stated
+by the record the stage writes (the `kind:` on the `mini:record` event that
+carries the spend), never by the call itself. Found while T5 was designed
+(2026-09-05); recorded in `docs/map/SEAM-llm-x-minireason.md`'s Traps.
+
+**Why it is not fixed here.** A per-seat role in the call needs either a
+canonical role per mini seat (an ontology-side widening) or a mini manifest
+that grants non-canonical roles (a change inside `run_manifest.py`, frozen
+surface 4, and a qualification-subject question). Both are grants. The
+record is not silent about the seat -- the record event names the kind and
+carries the spend -- so this is a truthfulness question about ONE field,
+P2's sibling.
+
+```
+EXECUTOR WINDOW — CHANGE TRANCHE (design first): let a mini call's role name
+its seat
+
+Read CLAUDE.md in full (the frozen surfaces; the all-configurations law).
+Load dr-change-orchestrator, dr-drive-harness, dr-ask-the-right-question and
+pinker-write-for-readers. Start at dr-capture-request. Base on main after the
+mini isolation programme's T5 merge.
+
+REPRODUCE FIRST: run mini/tests/test_mini_flow.py::test_the_isolation_flow_
+runs_end_to_end and read the six LLMCall events' role field: all six say
+"conjecturer" while the record events beside them say mini.criticism.v1 and
+mini.commitment-proposal.v1.
+
+THE FORK for SPEC.md: (a) mini's manifest grants a canonical role per seat
+it uses (argumentative_critic exists; nothing canonical names a commitment
+seat -- price adding one); (b) the reduced engine's manifest is allowed
+non-canonical roles for engine_profile=mini (a change in run_manifest.py's
+v3+ validation, frozen surface 4); (c) leave the call's role as the lease and
+document the record event as the seat's name (today). Paste
+tools/blast_radius.py's rows for (a) and (b) BEFORE choosing; DESIGN AND
+STOP for the grant if (a) or (b) is chosen.
+
+OUT OF SCOPE: the mini isolation programme; PARKED P2 (the manifest's
+conjecturer contract), which is the same family and may be taken together.
+```

@@ -1,9 +1,9 @@
 <!-- DR-SUB-minireason -->
-Verified-at: 08692aab4
+Verified-at: 2b6440d28
 Verify: python -m pytest mini/tests/ -q
 Owns: mini/minireason/
-Seams:
-Seams-undocumented: llm x minireason, minireason x application, minireason x harness, minireason x manifest, minireason x verification
+Seams: DR-SEAM-llm-x-minireason
+Seams-undocumented: minireason x application, minireason x harness, minireason x manifest, minireason x verification
 
 # MiniReason — the reduced engine, and what it deliberately does not have
 
@@ -40,16 +40,20 @@ assert total * 20 < parent, (total, parent)
 
 | Called by | Entry | What it does |
 |---|---|---|
-| `deepreason reason --shallow` (via `src/deepreason/shallow.py`) | `loop.run(problems, endpoint, budget, root, …)` | drives cycles until budget death, queue exhaustion, or global dryness; returns the summary, while the log at `root` is the real output |
+| `deepreason reason --shallow` (via `src/deepreason/shallow.py`) | `loop.run(problems, endpoint, budget, root, …, flow=None)` | drives cycles until budget death, queue exhaustion, or global dryness, each cycle walking the selected flow's stages in order; returns the summary (which names the flow), while the log at `root` is the real output |
 | `loop.run`, once, before the first call | `compat.initialize(root, endpoint, model_profile, run_input, dossier)` | freezes the route, the compact wire contract and the v6 manifest |
 | anyone binding a root without running | `compat.bind_mini_root(...)` | binds (or verifies) one immutable schema-6 manifest and its run input |
 | a reader | `log.replay(root)` → `log.State` | the dict-shaped read view, projected from one canonical `Harness` |
+| a seat brief, before its walk | `sources.mini_section_request(session, problem_id, target_id=…, supplied=…)` | the ONE read-only projection from a mini session to the `SectionRequestV1` the shipped section plugins read; it appends nothing and moves no digest |
+| a mini seat's brief | `seats.render_mini_brief(session, seat_id, problem_id, target_id=…, receipts=…)` | shell → layout → request → the PUBLIC walk and allocation in `deepreason.llm.packs`; builds no section, names no private symbol |
+| the commitment seat, after its call | `seats.record_commitment_proposals(session, proposals, spend=…)` | one record per proposal; drops one that names nothing in the run, typed |
+| a mini seat's form | `seats.form_for_seat(seat_id, form_id=None, shell_id=None)` | the form resolved THROUGH the shell's `form_id` — that field's first consumer anywhere; argument and `DEEPREASON_MINI_FORM` still win |
 
 `check: python -c "
 import inspect
 from minireason import compat, loop
 run = inspect.signature(loop.run).parameters
-for name in ('problems', 'endpoint', 'budget', 'root', 'run_input', 'dossier'):
+for name in ('problems', 'endpoint', 'budget', 'root', 'run_input', 'dossier', 'flow'):
     assert name in run, (name, list(run))
 init = inspect.signature(compat.initialize).parameters
 for name in ('root', 'endpoint', 'model_profile', 'run_input', 'dossier'):
@@ -176,6 +180,186 @@ for form_id in mini_form_ids():
     assert not (fields & banned), (form_id, fields & banned)
 "`
 
+## Who sees what: the three seats' briefs
+
+**Every mini seat's brief is a registered LAYOUT walked through the one public
+road the full harness's seats share** (`deepreason.llm.packs.render_seat_brief`
+and `allocate_seat_brief`); mini builds no section and has no renderer of its
+own. `minireason/sources.py` holds the projection that feeds the walk and the
+four mini section plugins; `minireason/seats.py` holds the three layouts, one
+per seat, bound as each seat's default.
+
+| seat | layout | sections, in order |
+|---|---|---|
+| `mini.conjecturer` | `seat-pack.mini.conjecturer.v0` | problem · everything-so-far · directive |
+| `mini.critic` | `seat-pack.mini.critic.v0` | problem · target-conjecture · directive |
+| `mini.commitment` | `seat-pack.mini.commitment.v0` | problem · everything-so-far · target-conjecture · directive |
+
+**The critic's blinding is STRUCTURAL, not a filter** (R5, "critics see the
+conjecture artifact, not the proposed commitments"): the critic layout
+registers NO section that could carry a proposal, so there is no slot, blank
+or otherwise — the shape the amended judge law (2026-08-28) already required
+of provenance blinding. And no mini brief renders a status label of any kind:
+the audit of 2026-09-05 (row 3) found the full harness's default critic brief
+printing one, and mini's sources may not read a status at all, checked over
+the AST.
+`check: python -c "
+import sys; sys.path.insert(0, 'mini')
+from deepreason.llm.seat_sections import resolve_seat_pack_layout
+import minireason.seats as seats
+critic = resolve_seat_pack_layout(seats.CRITIC_SEAT, seats.CRITIC_LAYOUT_ID)
+ids = [e.plugin_id for e in critic.entries]
+assert ids == ['mini.problem', 'mini.target-conjecture', 'mini.directive'], ids
+assert not any('commitment' in i or 'everything' in i for i in ids), ids
+for seat in seats.MINI_SEATS:
+    layout = resolve_seat_pack_layout(seat)
+    assert layout.layout_id == seats.MINI_LAYOUTS[seat].layout_id, seat
+    for entry in layout.entries:
+        assert not entry.droppable and not entry.compressible, (seat, entry.plugin_id)
+"`
+
+**Three shells, and the shell's form is READ.** `seat.mini.conjecturer.v0`,
+`seat.mini.critic.v0` and `seat.mini.commitment.v0` each pair a layout with a
+relaxed form; binding another shell in a seat's place changes both what the
+seat is shown and what it is asked for, because `form_for_seat` takes the
+shell's `form_id` as its default.
+`check: python -c "
+import sys; sys.path.insert(0, 'mini')
+from deepreason.llm.seat_sections import resolve_seat_shell
+from deepreason.llm.seat_layouts import CONJECTURER_LEGACY_SHELL, CRITIC_LEGACY_SHELL
+from minireason.seats import MINI_SEATS, MINI_SHELLS, form_for_seat
+for seat in MINI_SEATS:
+    shell = resolve_seat_shell(seat)
+    assert shell == MINI_SHELLS[seat] and form_for_seat(seat).form_id == shell.form_id, seat
+assert resolve_seat_shell('conjecturer') == CONJECTURER_LEGACY_SHELL
+assert resolve_seat_shell('argumentative_critic') == CRITIC_LEGACY_SHELL
+"`
+
+**"Everything generated so far" is shown in FULL, and what stays visible as
+the pool grows is a RULE, never a verdict** (R6; monitor's recommendation the
+operator accepted 2026-09-05). `mini.everything-so-far` renders every artifact
+in the record, whole, oldest first — the legacy loop's eight-survivor window
+and 300-character cut are gone from this road — and a declared budget
+withholds the OLDEST whole entries first, naming them in the section itself
+under the rule's id. Two rules ship, `mini.retention.everything.v1` (the
+default) and `mini.retention.recency.v1`; a third is a registration.
+`check: python -m pytest mini/tests/test_mini_sources.py -q`
+
+## The commitment seat writes a RECORD, never an artifact
+
+**A commitment proposal is recorded, not registered** (R4; the ruling of
+2026-09-05 that within mini criticism overturns nothing; Q-A's E3 not built).
+`seats.record_commitment_proposals` writes each proposal through
+`records.record_mini_output`: a Measure event whose inputs name the marker
+`mini:record`, the kind `mini.commitment-proposal.v1`, the conjecture it is
+about, and a content-addressed blob holding the free-prose body. The
+proposal's ONLY requirement is that it names a conjecture present in the run;
+one that does not is DROPPED with a typed `mini:record-dropped` event, never
+written dangling. The spend lands exactly once.
+
+Why a record and not an artifact: every authority path — rank, admission,
+immunity, attack edges, refutation, status — reads `state.artifacts`, and a
+record is nowhere in that map, so "shape buys nothing" is a property of the
+record's shape rather than of anyone's restraint. The other road, an artifact
+under a new provenance role, was measured and closed: `tools/blast_radius.py`
+reads widening `Provenance` as CONTACT on the harness surface, and no grant
+exists. `records.mini_records` reads them back; `sources.everything_so_far`
+merges artifacts and records into one pool in record order, and that pool is
+what "everything generated so far" shows.
+`check: python -m pytest mini/tests/test_mini_commitment_seat.py -q`
+
+`check: python -c "
+import ast, pathlib
+src = pathlib.Path('mini/minireason/records.py').read_text()
+tree = ast.parse(src)
+names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)} | {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
+for forbidden in ('create_artifact', 'register_artifact', 'register_batch', 'register_commitment', 'register_fail_warrant', 'Artifact', 'Commitment', 'status'):
+    assert forbidden not in names, forbidden
+assert 'measure' in names and 'put' in names
+"`
+
+## The controller hook: declared, and called by nothing
+
+R7 asks that what a seat is shown be "calibrated on the fly and modifiable by
+the controller"; R8 is "Don't change the controller just yet". So
+`seats.MiniCalibrationHookV1` is the SEAM and nothing behind it: a protocol
+(`calibrate(seat_id, cycle, entries) -> entries | None`), a registry selected
+by id with typed refusals, and ONE registered implementation,
+`mini.calibration.noop.v1`, which returns `None`. The window ruling of
+2026-09-05 binds the other half — the hook has ZERO callers, asserted on the
+AST — and supersedes the programme SPEC's earlier "the loop calls it between
+cycles". Exactly two lines under `src/` and `mini/minireason/` name the
+registration function: its definition and the no-op's registration; a third
+is a controller stepping in before the operator said how.
+`check: test "$(grep -rn "register_mini_calibration_hook" src/ mini/minireason/ | wc -l)" -eq 2 && python -m pytest mini/tests/test_mini_calibration_hook.py -q`
+
+## The flow: stage order and the set of artifact kinds are data
+
+`minireason/flow.py` registers `MiniFlowV1`s by id: a tuple of `MiniStageV1`s
+(seat, shell, the kind produced, the kinds read, once per cycle or once per
+target), the SET of artifact kinds the flow may carry, its commitment policy
+and its calibration hook id. A stage naming a kind the flow does not declare
+is refused at construction. Two ship: `mini.flow.legacy-v0`, the DEFAULT —
+one conjecturer stage under `seat.mini.conjecturer.legacy-v0`, which renders
+today's prompt byte for byte through the same road as every other seat (one
+section, pinned by `mini/tests/goldens/mini_legacy_prompt.txt`) and fills the
+STORED form with both commitment channels ON; and `mini.flow.isolation.v1`,
+conjecturer → critic → commitment with both channels OFF. Selection is
+argument, then `DEEPREASON_MINI_FLOW`, then the default; never `Config`,
+never the manifest.
+`check: python -m pytest mini/tests/test_mini_flow.py -q`
+
+`check: python -c "
+import sys; sys.path.insert(0, 'mini')
+from minireason.flow import DEFAULT_MINI_FLOW_ID, resolve_mini_flow, select_mini_flow, mini_flow_ids
+assert DEFAULT_MINI_FLOW_ID == 'mini.flow.legacy-v0' and select_mini_flow().flow_id == DEFAULT_MINI_FLOW_ID
+legacy = resolve_mini_flow('mini.flow.legacy-v0'); iso = resolve_mini_flow('mini.flow.isolation.v1')
+assert len(legacy.stages) == 1 and legacy.commitment_policy.disabled_channels == ()
+assert [s.stage_id for s in iso.stages] == ['mini.stage.conjecture', 'mini.stage.criticism', 'mini.stage.commitment']
+assert set(iso.artifact_kinds) == {s.produces_kind for s in iso.stages}
+assert len(iso.commitment_policy.disabled_channels) == 2
+"`
+
+## Enforced, not promised: the five architecture checks
+
+The modularity law's "enforced" clause is a check that can FAIL when a
+consumer bypasses the interface or a customization point requires a code
+edit to use. `mini/tests/test_mini_architecture.py` is five such checks, each
+shown red under a planted bypass before it was written down
+(`experiments/2026-09-05-change-mini-isolation-programme/proof/mutation_<n>.txt`):
+(1) the loop names no seat, kind or stage — enumerated from the registries
+and matched as whole string constants on the AST; (2) no evidence-side path,
+in the full harness or in mini's own admit/register/guard/refute functions,
+reads a mini seat name or kind; (3) a section added to a mini brief needs no
+source edit; (4) a new artifact kind needs no source edit; (5) only the no-op
+calibration hook is registered.
+`check: python -m pytest mini/tests/test_mini_architecture.py -q`
+
+`check: python -c "
+import sys; sys.path.insert(0, 'mini')
+import ast, pathlib
+from deepreason.llm.seat_sections import seat_pack_layout_ids, seat_shell_ids
+import minireason.flow as flow, minireason.seats as seats
+names = set(seats.MINI_SEATS) | set(seat_shell_ids()) | set(seat_pack_layout_ids()) | set(flow.mini_flow_ids())
+for fid in flow.mini_flow_ids():
+    f = flow.resolve_mini_flow(fid); names |= set(f.artifact_kinds) | {s.stage_id for s in f.stages}
+assert len(names) >= 19, len(names)
+src = pathlib.Path('mini/minireason/loop.py').read_text()
+consts = {n.value for n in ast.walk(ast.parse(src)) if isinstance(n, ast.Constant) and isinstance(n.value, str)}
+assert not (consts & names), sorted(consts & names)
+assert 'skeleton' not in src and 'select_mini_flow' in src and 'render_mini_brief' in src
+"`
+
+**One label the substring form of that claim trips on, and why it stays.**
+`Session.guard_scope` hands the relapse guard the contract label
+`mini.conjecturer.v1`, which predates the programme and is folded into the
+relapse-domain digest the record carries; renaming it would change every
+legacy admission record. It is not a seat id, and the whole-constant check
+above does not match it.
+
+## The isolation fence
+## The isolation fence
+## The isolation fence
 ## The isolation fence
 
 R1 and R11 — "mini needs to be tested in isolation", "without the larger
@@ -227,6 +411,12 @@ assert 'REFUTED' not in body, 'mini must not label a status itself'
 | what counts as orbiting, or a gate block | `gate.orbit`, `gate.gate_blocks` | `mini/tests/test_gate.py` |
 | what a compiled commitment MEANS | NOT here: `checks.compile_checks` delegates to `deepreason.informal.skeleton`; mini owns which channels it COMPILES (the policy above), never what a commitment means | `mini/tests/test_checks.py`, `mini/tests/test_normative_kernel.py` |
 | what mini sends on the wire | NOT here: `compat.initialize` selects a parent `WireContract`; mini owns no schema | `mini/tests/test_call.py`, `tests/test_wire_contracts.py` |
+| what a mini seat's request CARRIES (a target, the frozen criteria, a caller's own keys) | `sources.mini_section_request`'s `supplied` mapping; the caller's keys win. It may READ the state and the record and may never append, and it never reads an artifact's status | `mini/tests/test_mini_sources.py` |
+| what a mini seat is SHOWN, or add a section to a mini brief | a layout in `minireason/seats.py`, or a `.layout.json` under `<DEEPREASON_HOME>/seat_plugins/` naming a registered plugin (`DR-REC-add-a-section-plugin`) — no source edit; the directive wording is a layout entry's `text` param | `mini/tests/test_mini_sources.py`, `mini/tests/test_mini_exposure.py` |
+| how much of the pool a seat sees as it grows | the `mini.everything-so-far` entry's `retention_rule`, `budget_chars`, `keep_last` params; a new rule is `sources.register_mini_retention_rule` | `mini/tests/test_mini_sources.py` |
+| what a mini seat writes when it is not a conjecture, or add a record KIND | `records.record_mini_output(session, kind, body=…, about=…)` — a typed event and a blob, never an artifact; a kind is a string a flow names as data | `mini/tests/test_mini_commitment_seat.py` |
+| how a controller would reshape what a seat is shown | NOT yet: implement `MiniCalibrationHookV1`, register it — and the operator says when (R8); today only the no-op is registered and nothing calls it | `mini/tests/test_mini_calibration_hook.py` |
+| which seats run, in what order, producing which kinds — or add a stage | a `MiniFlowV1` registered through `flow.register_mini_flow` (from any module, a test file included), selected by argument or `DEEPREASON_MINI_FLOW`; never `loop.py`, which names no seat, kind or stage | `mini/tests/test_mini_flow.py`, `mini/tests/test_mini_architecture.py` |
 | which packages a mini run may reach | `mini/tests/test_isolation_fence.py`'s `FENCED` and `ALLOWED` tuples, which quote SPEC S1 verbatim | `mini/tests/test_isolation_fence.py` |
 
 `check: python -m pytest mini/tests/test_loop.py mini/tests/test_gate.py mini/tests/test_checks.py mini/tests/test_compat.py mini/tests/test_mini_forms.py mini/tests/test_mini_commitment_policy.py -q`

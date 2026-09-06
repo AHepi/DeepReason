@@ -1,0 +1,10 @@
+MUTATION 1: loop.py tests stage.seat_id == 'mini.critic' inside the stage walk
+tree: mini/minireason mutated as described; tests unchanged
+
+E       AssertionError: ['mini.critic']
+E       assert ['mini.critic'] == []
+E         
+E         Left contains one more item: 'mini.critic'
+E         Use -v to get more diff
+FAILED mini/tests/test_mini_architecture.py::test_1_the_loop_names_no_seat_kind_or_stage
+1 failed in 0.96s

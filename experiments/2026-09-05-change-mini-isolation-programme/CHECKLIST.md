@@ -1,5 +1,5 @@
 # Checklist for: the mini isolation programme
-State: next=23 blockers=none. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
+State: next=46 blockers=none. T3, T4 and T5 DELIVERED (T3/, T4/, T5/ DELIVERY.md); this window ends; T6 and T7 go to the last window. T3 and T4 DELIVERED. THIS WINDOW EXECUTES T3, T4, T5 (steps 23-45), each delivered on its own; T6 and T7 go to the last window. **OPERATOR APPROVED 2026-09-05**: SPEC.md is
 approved as written, and Q-A is answered E1 ONLY in the operator's own words
 — "within mini, criticism can't overturn anything. The point is content
 generation for now. Then testing on the full harness." E2 is NOT built (not
@@ -750,90 +750,990 @@ tranche".
 
 ## T3 — the adapter and the three shells (S5, S6) — ~240 lines
 
-- [ ] 23. (S5) Write the red test first: `_walk_seat_layout` over a mini
+- [x] 23. (S5) Write the red test first: `_walk_seat_layout` over a mini
       session fails on `dr.neighbourhood` with the AttributeError
       `proof/m3_seat_shell_reach.txt` recorded.
       done-when: `python -m pytest mini/tests/test_mini_sources.py -q` -> fails with that exact error (paste)
-- [ ] 24. (S5) [COMMIT] `mini/minireason/sources.py`: the read-only
+
+      ```
+      $ python -m pytest mini/tests/test_mini_sources.py -q
+      .F
+      FAILED mini/tests/test_mini_sources.py::test_the_adapter_lets_the_shipped_neighbourhood_render
+      E   ModuleNotFoundError: No module named 'minireason.sources'
+      1 failed, 1 passed in 1.45s
+
+      The exact error the step names, reproduced from the SAME request the test
+      builds (the raw dict view, `dr.problem` + `dr.neighbourhood`, 4 survivors
+      supplied), run outside pytest so its text is verbatim:
+
+        survivors: 4
+        AttributeError: 'dict' object has no attribute 'content_ref'
+
+      Two tests, deliberately. The one that PASSES is the before-state,
+      committed: it asserts that mini's dict `State`, fed unadapted to the
+      shipped walk, raises exactly that AttributeError -- proof/
+      m3_seat_shell_reach.txt ARM A as a test rather than a proof file, and the
+      statement of the whole gap the adapter answers. The one that FAILS is the
+      adapter test, and it fails on the missing module because there is no
+      adapter yet; it cannot reach the walk without one, which is why the
+      verbatim error is pasted from the before-state's own request above.
+      ```
+- [x] 24. (S5) [COMMIT] `mini/minireason/sources.py`: the read-only
       projection from mini's dict `State` to the ontology types the plugins
       expect. It writes nothing.
       done-when: step 23's test passes AND `verify_root` over a mini run is
       unchanged at 0 violations (paste)
-- [ ] 25. (S6) [COMMIT] `render_seat_brief` as the public entry over
+
+      ```
+      $ python -m pytest mini/tests/test_mini_sources.py -q
+      ....                                                                     [100%]
+      4 passed in 1.43s
+
+      The step-23 test passes: `dr.problem` AND `dr.neighbourhood` render from a
+      live mini session through `sources.mini_section_request`, receipts
+      {problem: rendered, neighbourhood: rendered}. The writes-nothing test pins
+      the NEVER APPEND clause the same way the full harness's sources are held
+      to it: after two requests and two walks, log.jsonl's bytes, the next event
+      seq, the state digest, the replay digest and verify_root are unchanged --
+        verify_root(root)["violations"] == []   before AND after
+      A fourth test proves R12's half: a root started from the STANDARD frozen
+      input carries its criteria into the request as (id, eval) pairs, and a
+      root started from a bare question gets () -- never an error.
+
+      Two shapes the design sketch got wrong, corrected by the code rather than
+      argued around: the standard input's criteria are complete commitment
+      records (id, eval), not strings; and verify_root returns a report dict,
+      not a list. Neither changes what the step claims.
+
+      The projection's one design decision, stated: `problem` is projected from
+      the dict view into the ontology Problem, while the STATE handed to the
+      plugins is the canonical EpistemicState the dict view is itself projected
+      from -- the same objects the harness holds -- because re-validating every
+      artifact from its dict would be a second copy of the record for nothing.
+
+      $ python -m pytest mini/tests/ -q            -> 120 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q -> 3 passed
+      (re-run because a NEW mini module could import a fenced package; it does not)
+
+      $ python tools/diff_budget.py 14cc5da495 --ceiling 240 --paths mini/minireason src/deepreason/llm/packs.py
+      {"total_insertions": 110, "ceiling": 240, "verdict": "WITHIN"}
+
+      $ python tools/blast_radius.py --files mini/minireason/sources.py --symbols mini_section_request _frozen_criteria --against 14cc5da495
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      reachability: both symbols UNKNOWN -> UNKNOWN (the gate greps tests/ only;
+        their consumers are in mini/tests/, PARKED P1's blind spot)
+      $ git diff --stat 14cc5da495 -- <five frozen surfaces + llm/firewall.py>
+      (no output)  -- the mechanical tripwire, empty
+
+      Map, same commit: SUB-minireason.md gains the adapter's entry-point row and
+      a where-to-change row (what a request carries; it may read, never append,
+      and never reads status). Its ring re-run: 120 passed, 1 skipped.
+      ```
+- [x] 25. (S6) [COMMIT] `render_seat_brief` as the public entry over
       `_walk_seat_layout`; no behaviour change for the two existing seats.
       done-when: `python -m pytest tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py -q` -> 0 failed (C4)
-- [ ] 26. (S5) [COMMIT] The three mini section plugins
+
+      ```
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py \
+            tests/test_seat_section_architecture.py tests/test_seat_shell_swap.py -q
+      29 passed in 1.75s                       -> 0 failed (C4 holds)
+      $ python -m pytest tests/test_seat_section_contract.py tests/test_seat_pack_layout.py \
+            tests/test_render_layout_policy.py -q
+      44 passed in 0.35s
+
+      TWO public entries, not one, and the second is forced by the first. A brief
+      is walked AND allocated, and both roads were private (`_walk_seat_layout`,
+      `_allocate_sections`). A consumer given only the walk would reach past the
+      second underscore to get text -- exactly the bypass PARKED P4 records -- so
+      `allocate_seat_brief` ships beside `render_seat_brief`. Each is ONE call to
+      its private counterpart and nothing else, pinned by a new map check in
+      INV-seat-section-plugins.md (same commit), so a consumer gets the walk's
+      own accounting rather than a copy. The two shipped renderers keep calling
+      the private walk directly, which is why their bytes cannot have moved and
+      the architecture test's "walked == 1" count is untouched.
+
+      $ python tools/diff_budget.py 14cc5da495 --ceiling 240 --paths mini/minireason src/deepreason/llm/packs.py
+      {"areas": {"mini/minireason": 110, "src/deepreason/llm/packs.py": 29},
+       "total_insertions": 139, "ceiling": 240, "verdict": "WITHIN"}
+
+      $ python tools/blast_radius.py --files src/deepreason/llm/packs.py \
+            --symbols render_seat_brief allocate_seat_brief --against 14cc5da495
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      reachability: render_seat_brief   UNKNOWN -> UNREACHABLE (direction: none)
+                    allocate_seat_brief UNKNOWN -> UNREACHABLE (direction: none)
+      qualification_digest: []   wheel_smoke_pins: []
+      Not drift: both are NEW symbols with no consumer until step 26 registers
+      mini's seats; neither is newly_live nor newly_dead. The consumer census over
+      packs.py is the 5 test hits and 42 map hits SPEC.md's census already
+      classifies as MUST NOT MOVE / EXPECTED TO MOVE for S11b.
+      $ git diff --stat 14cc5da495 -- <five frozen surfaces + llm/firewall.py>
+      (no output)
+
+      Map, same commit: INV-seat-section-plugins.md's entry-point table gains the
+      public road, and one check that each public entry is exactly one call to
+      its private counterpart.
+
+      $ python tools/docs_verify.py            (FULL, owed because src/ changed)
+      docs_verify: 7 failed
+        SEAM-llm-x-rules.md:54          known-not-mine (window list)
+        CON-run-identity.md:211/213/215 known-not-mine (window list)
+        INV-frozen-surfaces.md:206/876  known-not-mine (the window's :181/:736,
+                                        shifted by that document's later edits;
+                                        same two checks: the transport_failure
+                                        census and the judge-canary price script)
+        CON-packs-and-token-economy.md:293  MINE -- "only two renderers are on
+          the IR" pins the set of callers of _allocate_sections, and
+          allocate_seat_brief is now a third. Moved with the code, not deleted:
+          the claim now reads "two renderers plus the one declared public entry"
+          and the check pins all three by name. Re-run: check OK.
+      So 6 known rows + 1 that this step caused and fixed in the same commit;
+      0 new failures remain. The full run also covered the T3 tree as of this
+      step (the step-26 files were present but unstaged).
+      ```
+- [x] 26. (S5) [COMMIT] The three mini section plugins
       (`mini.everything-so-far` untruncated, `mini.target-conjecture`,
       `mini.problem`) and the three layouts. The critic layout registers NO
       commitment section.
       done-when: SPEC.md §S5's layout assertion passes (paste)
-- [ ] 27. (S6) [COMMIT] The three mini shells, and mini's dispatch resolving
+
+      ```
+      $ PYTHONPATH=mini python -c "...SPEC S5 layout assertion, the layout lines..."
+      critic layout plugins: ['mini.directive', 'mini.problem', 'mini.target-conjecture']
+        -> no plugin id contains 'commitment'; 'mini.everything-so-far' absent
+      mini.conjecturer -> seat-pack.mini.conjecturer.v0 [mini.problem, mini.everything-so-far, mini.directive]
+      mini.critic      -> seat-pack.mini.critic.v0      [mini.problem, mini.target-conjecture, mini.directive]
+      mini.commitment  -> seat-pack.mini.commitment.v0  [mini.problem, mini.everything-so-far, mini.target-conjecture, mini.directive]
+      mini plugins registered: ['mini.directive', 'mini.everything-so-far', 'mini.problem', 'mini.target-conjecture']
+
+      The assertion is SPEC S5's with two of its lines deferred, and each is
+      deferred to the step that builds what it names: `resolve_seat_shell(
+      'mini.critic')` needs the shells (step 27, where the full assertion is
+      re-run), and `resolve_mini_flow('mini.flow.isolation.v1')` needs the flow
+      registry (T5). Here the critic layout is resolved by seat and by id; the
+      claim it proves -- NO section that could carry a proposal -- is the same.
+
+      FOUR plugins, not three, and the fourth is the shell's own wording as data:
+      `mini.directive` renders what a seat is asked to DO from a `text` param on
+      the LAYOUT ENTRY, so a file-declared layout rewords a seat with no code
+      (the modularity law's customisation clause). None of the three directives
+      names a status, rank or verdict; the critic's says "it overturns nothing".
+
+      Retention is a RULE, not a verdict, as the operator accepted on
+      2026-09-05: `mini.everything-so-far` takes `retention_rule`, `budget_chars`
+      and `keep_last`; two rules ship (`mini.retention.everything.v1`, the
+      default; `mini.retention.recency.v1`); a budget withholds the OLDEST whole
+      entries first, names them in the section under the rule's id, and never
+      empties the section. Measured by the new tests: twelve ~700-char prose
+      conjectures all shown whole (the legacy 8-survivor/300-char cut is gone
+      from this road); budget 2500 withholds oldest-first and names them; budget
+      1 still shows the newest; recency keep_last=4 shows exactly the last four
+      and refuses typed without its window. And the AST test: no mini source
+      reads .status/.accepted/.refuted/.survivors, imports Status, or names it.
+
+      $ python -m pytest mini/tests/test_mini_sources.py -q  -> 8 passed
+      $ python -m pytest mini/tests/ -q                       -> 124 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q -> 3 passed
+      $ git diff --stat 14cc5da495 -- <five frozen surfaces + llm/firewall.py> -> (no output)
+
+      $ python tools/blast_radius.py --files mini/minireason/sources.py mini/minireason/seats.py \
+            --symbols <the 11 top-level defs> --against 14cc5da495
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      reachability: every symbol UNKNOWN -> UNKNOWN (consumers in mini/tests/, P1's blind spot)
+
+      Map, same commit: SUB-minireason.md gains "Who sees what" -- the three
+      layouts' table, the structural-blinding claim with a check that resolves
+      the critic layout by seat AND by id and pins its three plugin ids and
+      every entry mandatory, the retention-rule claim with the test file as its
+      check, and two where-to-change rows. docs_verify --fast: 6 failed, the
+      same six known rows (step 25's packs row is fixed).
+
+      STOP CONDITION HIT: diff budget EXCEEDED, disclosed, not absorbed.
+      $ python tools/diff_budget.py 14cc5da495 --ceiling 240 --paths mini/minireason src/deepreason/llm/packs.py
+      {"areas": {"mini/minireason": 521, "src/deepreason/llm/packs.py": 29},
+       "total_insertions": 550, "ceiling": 240, "verdict": "EXCEEDED"}
+      Trimmed first (module docstring 25 -> 14 lines; a type alias that only
+      restated a signature), 566 -> 550. Itemised, code separated from docstring:
+        sources.py  384 = code ~212 / docstring ~63 / comment ~21 / blank ~80
+        seats.py    137 = code  78 / docstring  28 / comment  11 / blank  20
+        packs.py     29 (step 25)
+      What S5 priced at 130 was "one adapter and three plugins". What ships is
+      the adapter with the frozen-criteria road (R12), FOUR plugins (the
+      directive-as-data is the modularity law's obligation), a registered
+      retention-rule layer with two rules and two typed refusals (a ruling the
+      operator accepted AFTER SPEC.md's numbers were written), and the
+      never-empty / always-named notice (no silent caps). Per PARKED P7 the
+      window instruction says these numbers are lower bounds and an overrun is
+      disclosed, not absorbed; the re-baseline lands ONCE at step 27, when the
+      shells are measured too, in the shape T2 used at its step 19.
+      ```
+- [x] 27. (S6) [COMMIT] The three mini shells, and mini's dispatch resolving
       its form THROUGH `SeatShellV1.form_id` — its first consumer.
       done-when: SPEC.md §S6's `form_for_seat` assertion passes (paste)
-- [ ] 28. (S5) The exposure test: a rendered critic brief over a run that
+
+      ```
+      $ PYTHONPATH=mini python -c "...SPEC S6 accept, verbatim..."
+      SPEC S6 form_for_seat accept: OK
+      $ ... SPEC S5's layout assertion, now WITH its resolve_seat_shell line ...
+      SPEC S5 layout accept (shell line): OK -> ['mini.directive', 'mini.problem', 'mini.target-conjecture']
+      (its resolve_mini_flow line still waits for T5's flow registry)
+
+      $ python -m pytest mini/tests/test_mini_seat_shell.py mini/tests/test_mini_sources.py -q
+      14 passed in 1.90s
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py tests/test_crit_pack_legacy_golden.py \
+            tests/test_seat_shell_swap.py tests/test_seat_section_architecture.py -q
+      29 passed in 1.68s                       -> C4: the two shipped shells resolve
+                                                  exactly as before; goldens unmoved
+      $ python -m pytest mini/tests/ -q         -> 130 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q -> 3 passed
+      $ git diff --stat 14cc5da495 -- <five frozen surfaces + llm/firewall.py> -> (no output)
+
+      What the six new tests pin: each seat's form is its shell's; argument and
+      DEEPREASON_MINI_FORM still win over the shell (the stored form is one
+      selection away); binding the CRITIC's shell in the conjecturer's seat
+      changes BOTH the brief (target-conjecture in, everything-so-far out, the
+      critic's directive) AND the form asked for (mini.critic.relaxed.v1) --
+      C7's two halves in one test; the directive takes the request's values and
+      leaves an unsupplied placeholder visible rather than blank; no mini module
+      names a private symbol of deepreason.llm.packs (AST over every file under
+      mini/minireason/); and the full harness's two shells are untouched.
+
+      $ python tools/blast_radius.py --files mini/minireason/seats.py --symbols form_for_seat \
+            render_mini_brief CONJECTURER_SHELL CRITIC_SHELL COMMITMENT_SHELL --against 14cc5da495
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      reachability: every symbol UNKNOWN -> UNKNOWN (consumers in mini/tests/)
+
+      Map, same commit: SUB-minireason.md gains two entry-point rows
+      (render_mini_brief, form_for_seat) and the three-shells claim with a check
+      that each seat's shell is the registered one, its form is the shell's, and
+      the two full-harness shells resolve unchanged. docs_verify --fast: 6 failed,
+      the same six known rows.
+
+      STOP CONDITION (diff budget), RE-BASELINED HERE as step 26 said it would be:
+      $ python tools/diff_budget.py 14cc5da495 --ceiling 240 --paths mini/minireason src/deepreason/llm/packs.py
+      {"areas": {"mini/minireason": 607, "src/deepreason/llm/packs.py": 29},
+       "total_insertions": 636, "ceiling": 240, "verdict": "EXCEEDED"}
+        sources.py 384 = code 223 / doc 63 / comment 21 / blank 77
+        seats.py   223 = code 129 / doc 47 / comment 14 / blank 33
+        packs.py    29
+      SPEC.md §Budget now carries the T3 re-baseline in T1/T2's shape: itemised
+      per file, code separated from docstring, each file's extra lines traced to
+      the obligation they discharge. T3 restated as ~640; programme ~2 100. The
+      T3-specific cause beyond P7's: the retention-as-a-rule ruling arrived after
+      SPEC.md's numbers were written.
+      ```
+- [x] 28. (S5) The exposure test: a rendered critic brief over a run that
       contains commitment proposals contains none of their bytes.
       done-when: `python -m pytest mini/tests/test_mini_exposure.py -q` -> 0 failed
-- [ ] 29. (S6) [COMMIT] Map: create `docs/map/SEAM-llm-x-minireason.md`, and
+
+      ```
+      $ python -m pytest mini/tests/test_mini_exposure.py -q
+      ......                                                                   [100%]
+      6 passed in 2.78s
+      $ python -m pytest mini/tests/ -q   -> 136 passed, 1 skipped, 0 failed
+
+      The fixture is a LIVE root, not a hand-built state: two standing skeleton
+      conjectures, two free-prose ones refuted on arrival under the default
+      policy, and three commitment proposals PLANTED through the harness's own
+      registration road (a MENTION ref to the conjecture each is about, free
+      prose bodies carrying a sentinel). verify_root: 0 violations before and
+      after every brief is rendered; digest and next seq unchanged.
+
+      Six assertions, on BYTES:
+        - the critic's brief carries not one proposal body, sentinel or id,
+          while its target conjecture is there whole; receipts name exactly
+          problem, target-conjecture, directive
+        - the structural half: every critic receipt is `rendered`; none is an
+          absent or dropped slot a proposal might have filled
+        - the conjecturer's and the commitment seat's briefs carry every
+          proposal whole, its `about:` link, and every conjecture -- standing
+          AND refuted -- by id (R6)
+        - no mini brief, any seat, contains accepted / refuted / suspended /
+          status / sustained / verdict; and the refuted conjectures are still
+          SHOWN, whole and unlabelled, to the seats that see everything
+        - rendering all three appends nothing
+
+      Mutation proof (durable-tests rule 3): give the critic layout a
+      `mini.everything-so-far` entry --
+        --- MUTATION (critic layout gains mini.everything-so-far) ---
+        FAILED test_mini_exposure.py::test_critic_brief_carries_no_proposal_bytes
+        FAILED test_mini_exposure.py::test_the_critic_layout_has_no_slot_a_proposal_could_fill
+        2 failed, 4 passed
+      Restored, __pycache__ cleared (SCHEMA.md's stale-bytecode rule); 6 passed.
+
+      One correction to my own fixture, recorded because it is the check
+      working: the first proposal body said "is refuted by any measurement",
+      and the label test caught its own bait. Reworded to "fails if any
+      measurement shows"; the test was right, the fixture was not.
+      ```
+- [x] 29. (S6) [COMMIT] Map: create `docs/map/SEAM-llm-x-minireason.md`, and
       update `INV-seat-section-plugins.md` (the `form_id` consumer row, the
       `render_seat_brief` entry point) and `INDEX.md`'s seam matrix — SAME
       COMMIT as the code.
       done-when: `python tools/docs_verify.py --links` -> every DR- reference
       resolves; `docs_verify.py` 0 failed; `--audit` 0 findings
-- [ ] 30. (T3) Gate + mini ring + docs.
+
+      ```
+      $ python tools/docs_verify.py --links
+      docs_verify --links: 0 dangling reference(s), 82 document(s)   (81 -> 82)
+      $ python tools/docs_verify.py --audit
+      docs_verify --audit: 1 finding(s) -- the known SEAM-llm-x-rules.md:54; none
+      of the new seam's four checks, nor INV-seat-section-plugins' new one, is
+      flagged vacuous
+      $ python tools/docs_verify.py --fast
+      docs_verify: 6 failed -- the same six known rows; the new document's four
+      checks and every edited document's checks pass
+
+      "0 failed" is read as it has been read at every T0-T2 boundary: no failure
+      this tranche caused. The six are the window's known-not-mine list.
+
+      SEAM-llm-x-minireason.md, the map's 82nd document: the traffic is
+      one-directional and large (50 symbol crossings across 11 llm modules,
+      measured; llm imports minireason nowhere), and the agreement is four
+      sentences each with a check -- mini renders through the one public road
+      and builds no section; its seats are shells in llm's own registries and
+      the shell's form_id is READ; its forms are WireContracts outside the V6
+      Literals; the route lease and the profile clip are llm's and mini obeys
+      both. Which fraction of each side; where to change what; why no Sweep:
+      header (no compared field carries the agreement); three Traps, one of
+      them the silent clip.
+
+      Also in this commit: INDEX.md's seam matrix gains the row and one
+      paragraph on why the pair carries no count (one side is outside
+      src/deepreason/); SUB-llm.md and SUB-minireason.md move the pair from
+      Seams-undocumented to Seams; INV-seat-section-plugins.md gains the
+      `form_id`-has-a-consumer invariant with its check and names the seam.
+
+      Mutation proofs, one per new check that could be gutted:
+        A  seats.py imports _walk_seat_layout -> public-road test RED
+           (E AssertionError: ['seats.py:32: _walk_seat_layout'])
+        B  form_for_seat ignores the shell     -> INV form_id check RED
+           (AssertionError at its AST line; 3 shell tests red too)
+        C  llm/budget.py imports minireason    -> seam direction check RED
+           (FAIL SEAM-llm-x-minireason.md:23)
+      Each restored, __pycache__ cleared, tree clean, 6 failed / 6 passed again.
+      Note on B: docs_verify --fast served that check from cache under the
+      mutation, so the proof is the check's own command run directly.
+
+      MID-STEP DISCOVERY, PARKED not fixed (dr-execute-step §3): mini's call
+      layer clips every prompt silently at the profile's pack budget (compact
+      4 800 chars) -- a third length limit S2(c) did not name. PARKED.md P8, with
+      its ready-to-send prompt and a binding note for T5; the seam's Traps
+      record it.
+      ```
+- [x] 30. (T3) Gate + mini ring + docs.
       done-when: all three green (paste)
-- [ ] 31. (T3) [COMMIT] Deliver T3.
+
+      ```
+      $ python -m pytest tests/ -q -n 4          (idle box; docs_verify NOT concurrent)
+      5084 passed, 6 skipped in 1411.00s (0:23:31)     -> 0 failed
+      (the same 5084 as T2: T3's one src/ change is the 29-line public entry in
+       packs.py, and nothing under tests/ exercises a path it changed)
+
+      $ python -m pytest mini/tests/ -q
+      136 passed, 1 skipped in 9.45s                    -> 0 failed
+      (116 at T2; the twenty new ones are 8 source/retention tests, 6 shell
+       tests and 6 exposure tests)
+
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py \
+            tests/test_crit_pack_legacy_golden.py -q
+      15 passed  -- C4: the full harness's two briefs stay byte-identical
+
+      $ git diff --stat 14cc5da495 -- <all five frozen surfaces + llm/firewall.py>
+      (no output)  -- the mechanical tripwire, empty
+      $ git diff --stat 14cc5da495 -- src/
+       1 file changed, 29 insertions(+)              (packs.py, step 25)
+
+      $ python tools/docs_verify.py           (FULL, after the gate, never beside it)
+      docs_verify: 6 failed -- the same six known rows
+        SEAM-llm-x-rules.md:54; CON-run-identity.md:211/213/215;
+        INV-frozen-surfaces.md:206/876 (the window's :181/:736, shifted)
+      $ python tools/docs_verify.py --audit    -> 1 finding, the known SEAM-llm-x-rules.md:54
+      $ python tools/docs_verify.py --links    -> 0 dangling, 82 documents
+      $ python tools/docs_verify.py --coverage -> 2 findings, both on seams T3 did
+        not touch (SEAM-periphery-x-verification: amendment/apply.py;
+        SEAM-schools-x-scratch: informal/trial.py); SEAM-llm-x-minireason
+        carries no Sweep: header and says why in its own section
+      $ python tools/docs_verify.py --stale    -> 25 before, 22 after: the six
+        documents whose checks the full run re-derived at head f8100b9b0 have
+        their Verified-at advanced to that commit (SUB-minireason, SUB-llm,
+        SEAM-llm-x-minireason, INV-seat-section-plugins,
+        CON-packs-and-token-economy, INDEX). Nothing else's stamp was touched.
+
+      All three green in the sense that matters: nothing this sub-tranche wrote
+      fails, and no assertion was weakened.
+      ```
+- [x] 31. (T3) [COMMIT] Deliver T3.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+      ```
+      $ git status --porcelain     -> (empty)
+      $ git rev-parse HEAD origin/claude/mini-isolation-t3-t5-7tsc6d
+      (one hash, pasted in the step-31 commit's own verification below)
+
+      T3/VALIDATION.md verdict PASS; T3/DELIVERY.md written. R5 and R6 are
+      done; R2 is done for all three limits on the shell road, with the call
+      layer's silent clip named and parked (P8, binding on T5); R7's interface
+      half is done and its calibration half is T4's. T3 IS DELIVERED.
+      Next: T4 (steps 32-38), in this window.
+      ```
 
 ## T4 — the commitment seat and the controller hook (S4, S7, S11b) — ~180 lines
 
-- [ ] 32. (S4) [COMMIT] The `mini.commitment-proposal.v1` artifact kind and
+- [x] 32. (S4) [COMMIT] The `mini.commitment-proposal.v1` artifact kind and
       its seat. The ONLY requirement is `about`; the body is free prose,
       unbounded, unranked.
       done-when: SPEC.md §S4's minimum/rejection pair passes (paste)
-- [ ] 33. (S4) The shape-buys-nothing test: no rank, admission, immunity or
+
+      ```
+      $ python -c "...SPEC S4's minimum/rejection pair, verbatim..."
+      OK: the minimum is accepted; a proposal naming nothing is refused by the form
+
+      $ python -m pytest mini/tests/test_mini_commitment_seat.py -q -> 5 passed
+      $ python -m pytest mini/tests/ -q                             -> 141 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q      -> 3 passed
+      $ git diff --stat e83df7dfd -- src/                           -> (no output)
+
+      THE RECORD SHAPE, and the road not taken. A proposal is a RECORD: a Measure
+      event whose inputs name `mini:record`, the kind, `about:<conjecture id>`
+      and `blob:<content address>` of its free-prose body (minireason/records.py,
+      new). It is in the record -- typed, append-only, replayable, spend attached
+      exactly once -- and OUTSIDE state.artifacts, the one map every authority
+      path reads. So nothing it writes can change a status by construction, not
+      by restraint: the test asserts artifacts, commitments and statuses are
+      identical before and after, the replay digest matches, verify_root is 0.
+      The other road -- an artifact under a new provenance role -- was measured
+      first and CLOSED:
+        $ python tools/blast_radius.py --files src/deepreason/ontology/artifact.py \
+              --symbols ProvenanceRole Provenance --against 14cc5da495
+        frozen_surface_verdict: CONTACT
+          surface: harness.py event application and well-formedness
+          tier: SYMBOL_INDIRECT  target: Provenance  (grep-based)
+      A CONTACT with no grant is a STOP, and a no-contact road existed, so the
+      stop was never needed: nothing under src/ changed.
+
+      The one requirement, enforced at BOTH ends: the FORM refuses a proposal
+      with no `about` (S4's pair); the WRITER drops one whose `about` names
+      nothing in this run, with a typed `mini:record-dropped` event naming the
+      code and the id -- disclose, never die -- and writes the rest.
+
+      "Everything so far" now merges artifacts and records into ONE pool in
+      record order (sources.everything_so_far, a source value the plugin
+      formats), each labelled by KIND (`mini.conjecture.v1`,
+      `mini.commitment-proposal.v1`) and never by status. The T3 exposure test
+      is re-planted through the REAL writer and still passes byte for byte; the
+      seat test proves it again from the seat's side.
+
+      $ python tools/blast_radius.py --files records.py seats.py sources.py --symbols <6> --against e83df7dfd
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+
+      Map, same commit: SUB-minireason.md gains the record-shape section with
+      two checks (the seat suite; an AST check that records.py names no
+      artifact, commitment, warrant or status road) and two rows.
+      docs_verify --fast: 6 failed, the same six known rows.
+
+      STOP CONDITION HIT: diff budget EXCEEDED, disclosed, not absorbed.
+      $ python tools/diff_budget.py e83df7dfd --ceiling 180 --paths mini/minireason
+      {"total_insertions": 238, "ceiling": 180, "verdict": "EXCEEDED"}
+      records.py (~150) is the whole of it beyond the seat's writer: the typed
+      record shape, its reader, the dropped-typed road and the spend rule --
+      the obligations the standing laws attach to "a proposal is RECORDED",
+      which S4's 85 priced as a form and a seat. Re-baselined ONCE at step 34,
+      when the hook is measured too (T2/T3's shape).
+      ```
+- [x] 33. (S4) The shape-buys-nothing test: no rank, admission, immunity or
       refutation path reads the kind's name.
       done-when: `python -m pytest mini/tests/test_mini_shape_buys_nothing.py -q` -> 0 failed
-- [ ] 34. (S7) [COMMIT] `MiniCalibrationHookV1` declared, with
+
+      ```
+      $ python -m pytest mini/tests/test_mini_shape_buys_nothing.py -q
+      ...                                                                      [100%]
+      3 passed in 1.31s
+
+      Three limbs. (1) The authority side -- scheduler, adjudication, rules,
+      harness.py, invariants.py, verification, capabilities/state.py, and
+      mini's own nine admit/register/guard/refute functions by name -- never
+      contains 'commitment-proposal', 'mini:record', 'mini.commitment' or
+      'mini.criticism': a path that cannot name a thing cannot rank it.
+      (2) EVERY mini schema enumerated -- each registered form's whole rendered
+      schema at every nesting depth, and every dataclass and pydantic model in
+      records, sources, seats, policy and forms -- carries none of score, rank,
+      weight, confidence, priority, authority, severity (the window's ruling,
+      verbatim). (3) A proposal about a STANDING conjecture and one about a
+      REFUTED conjecture: neither status moves, survivors unchanged, replay
+      digest matches, verify_root 0.
+
+      Mutation-proven twice:
+        --- MUTATION 1: refute() reads the kind's name ---
+        E AssertionError: ['mini/minireason/loop.py::refute: commitment-proposal',
+                           'mini/minireason/loop.py::refute: mini.commitment']
+        1 failed, 2 passed
+        --- MUTATION 2: the proposal form gains a severity field ---
+        E AssertionError: [('mini.commitment.relaxed.v1', {'severity'}),
+                           ('forms.MiniCommitmentProposal', {'severity'}), ...]
+      Both restored, __pycache__ cleared; 3 passed.
+      ```
+- [x] 34. (S7) [COMMIT] `MiniCalibrationHookV1` declared, with
       `mini.calibration.noop.v1` as the only registered implementation,
       called between cycles and returning `None`.
       done-when: `grep -rn "register_mini_calibration_hook" src/ mini/minireason/ | wc -l` -> 2 (paste)
-- [ ] 35. (S7) Prove R8 is honoured: the hook changes nothing. A run with the
+
+      ```
+      $ grep -rn "register_mini_calibration_hook" src/ mini/minireason/
+      mini/minireason/seats.py:...:def register_mini_calibration_hook(hook: MiniCalibrationHookV1) -> ...
+      mini/minireason/seats.py:...:register_mini_calibration_hook(_NoopCalibrationHook())
+      $ ... | wc -l  ->  2
+
+      SUPERSEDED IN THIS STEP'S OWN WORDING: "called between cycles". The window
+      instruction's RULINGS THAT BIND (2026-09-05) say "The hook is an interface
+      with a no-op default and zero callers; an architecture test asserts zero
+      callers." The window is the operator's later word, so the hook is
+      DECLARED and CALLED BY NOTHING: a runtime-checkable protocol, a registry
+      selected by id with two typed refusals (malformed, conflict), one no-op
+      registration returning None for every input, and no call to `calibrate`
+      or `resolve_mini_calibration_hook` anywhere under src/ or mini/minireason/
+      (asserted on the AST in step 35's test). SPEC S7's "the mini loop calls
+      it between cycles" is recorded as superseded in SUB-minireason.md.
+
+      $ python -m pytest mini/tests/test_mini_calibration_hook.py -q -> 6 passed
+      $ python -m pytest mini/tests/ -q                               -> 150 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q        -> 3 passed
+      $ git diff --stat e83df7dfd -- src/                             -> (no output)
+      $ python tools/blast_radius.py --files mini/minireason/seats.py --symbols MiniCalibrationHookV1 \
+            register_mini_calibration_hook resolve_mini_calibration_hook DEFAULT_CALIBRATION_HOOK_ID --against e83df7dfd
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+
+      One correction while counting: the name also sat in seats.py's __all__,
+      making the grep 3. The export list is not the mechanism; the name left it.
+
+      Map, same commit: SUB-minireason.md gains the hook section (the seam, the
+      supersession, the zero-callers ruling) with a check pinning the grep at
+      exactly 2 AND running the hook suite, plus a where-to-change row.
+      docs_verify --fast: 6 failed, the same six known rows.
+
+      STOP CONDITION (diff budget), RE-BASELINED HERE as step 32 said:
+      $ python tools/diff_budget.py e83df7dfd --ceiling 180 --paths mini/minireason
+      {"total_insertions": 332, "ceiling": 180, "verdict": "EXCEEDED"}
+        records.py (new) 134 = code 63 / doc 42 / comment 3 / blank 26
+        seats.py        +129 = code +67 / doc +17
+        sources.py       +69 = code +27 / doc +2 (−18)
+      SPEC.md §Budget carries the T4 re-baseline in T1-T3's shape. T4 restated
+      as ~330; programme ~2 250. The T4-specific cause: the record shape was
+      chosen over the artifact shape after measuring a frozen-surface contact
+      the forecast did not cover.
+      ```
+- [x] 35. (S7) Prove R8 is honoured: the hook changes nothing. A run with the
       hook and a run without it produce the same rendered briefs.
       done-when: `python -m pytest mini/tests/test_mini_calibration_hook.py -q` -> 0 failed
-- [ ] 36. (S11b) [COMMIT] Map: `SUB-minireason.md` gains the commitment seat
+
+      ```
+      $ python -m pytest mini/tests/test_mini_calibration_hook.py -q
+      ......                                                                   [100%]
+      6 passed in 2.53s
+
+      Six assertions: the default resolves to the no-op and it is the ONLY
+      registered hook; the no-op returns None for every seat, cycle and entry
+      tuple (and for a non-seat); exactly two source lines name the registration
+      function; ZERO CALLERS -- no Call node named `calibrate` or
+      `resolve_mini_calibration_hook` anywhere under src/ or mini/minireason/
+      (the window's ruling, on the AST); consulting the hook and rendering from
+      what it returns (None -> the layout as declared) gives byte-identical
+      briefs for every seat over a live root; and a second registration under
+      the same id is refused typed.
+
+      Mutation proof (the ruling's own clause): give the loop one call to the
+      hook between cycles --
+        --- MUTATION: the loop consults the hook between cycles ---
+        E AssertionError: ['mini/minireason/loop.py:756: calibrate',
+                           'mini/minireason/loop.py:756: resolve_mini_calibration_hook']
+      Restored, __pycache__ cleared, tree clean; 6 passed.
+      ```
+- [x] 36. (S11b) [COMMIT] Map: `SUB-minireason.md` gains the commitment seat
       and the hook; `INV-render-layout.md` and
       `CON-packs-and-token-economy.md` gain their rows — SAME COMMIT.
       done-when: `python tools/docs_verify.py` 0 failed, `--audit` 0 findings
-- [ ] 37. (T4) Gate + mini ring + docs.
+
+      ```
+      $ python tools/docs_verify.py --fast   -> 6 failed, the same six known rows
+      $ python tools/docs_verify.py --audit  -> 1 finding, the known SEAM-llm-x-rules.md:54
+      $ python tools/docs_verify.py --links  -> 0 dangling, 82 documents
+      (the FULL run is step 37's, after the gate and never beside it)
+
+      SUB-minireason.md's commitment-seat and hook sections landed in the
+      commits that built them (steps 32 and 34; the map moves with the code).
+      This step adds the two full-harness documents' rows:
+        CON-packs-and-token-economy.md -- two "Where it lives" rows (the public
+          road; the reduced engine's compositions, plugins and retention rule),
+          one "Where to change what" row (what a MINI seat is shown, never via
+          packs.py), and one check: the reduced engine keeps to the two public
+          entries (the public-road pytest).
+        INV-render-layout.md -- a consumers row (the adapter resolves the
+          arrangement policy per request), and a paragraph with a check: mini's
+          three layouts are compositions under the same SeatPackLayoutV1; how
+          much of the pool a seat keeps is a COMPOSITION-side knob on the
+          everything plugin (retention_rule, budget_chars, keep_last), and none
+          of those names is an arrangement field on RenderLayoutPolicyV1.
+      Mutation-proven: removing retention_rule from the plugin's parameters --
+        AssertionError: {'keep_last', 'budget_chars', 'exclude_kinds'}
+      Restored; tree clean but for the map edits.
+      ```
+- [x] 37. (T4) Gate + mini ring + docs.
       done-when: all three green (paste)
-- [ ] 38. (T4) [COMMIT] Deliver T4.
+
+      ```
+      $ python -m pytest tests/ -q -n 4          (idle box; docs_verify NOT concurrent)
+      5084 passed, 6 skipped in 1381.85s (0:23:01)     -> 0 failed
+      (the same 5084 as T2 and T3: T4 changed nothing under src/ at all --
+       git diff --stat e83df7dfd -- src/ is EMPTY)
+
+      $ python -m pytest mini/tests/ -q
+      150 passed, 1 skipped in 11.75s                   -> 0 failed
+      (136 at T3; the fourteen new ones are 5 seat tests, 3 shape-buys-nothing
+       tests and 6 hook tests)
+
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py \
+            tests/test_crit_pack_legacy_golden.py -q
+      15 passed  -- C4: the full harness's two briefs stay byte-identical
+
+      $ git diff --stat e83df7dfd -- <all five frozen surfaces + llm/firewall.py>
+      (no output)  -- the mechanical tripwire, empty
+      $ git diff --stat e83df7dfd -- src/
+      (no output)  -- T4 is entirely under mini/ and docs/map/
+
+      $ python tools/docs_verify.py           (FULL: 82 documents, 1413 checks)
+      docs_verify: 6 failed -- the same six known rows
+      $ python tools/docs_verify.py --audit    -> 1 finding, the known SEAM-llm-x-rules.md:54
+      $ python tools/docs_verify.py --links    -> 0 dangling, 82 documents
+      $ python tools/docs_verify.py --coverage -> 2 findings, the same two pre-existing
+        (periphery x verification; schools x scratch), on seams T4 did not touch
+      $ python tools/docs_verify.py --stale    -> 23 before, 22 after: SUB-minireason,
+        CON-packs-and-token-economy and INV-render-layout -- the three documents
+        this sub-tranche edited, whose checks the full run re-derived at head
+        9d87325c3 -- carry that stamp now. Nothing else's stamp was touched.
+
+      All three green in the sense that matters: nothing this sub-tranche wrote
+      fails, and no assertion was weakened.
+      ```
+- [x] 38. (T4) [COMMIT] Deliver T4.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+      ```
+      $ git status --porcelain     -> (empty)
+      $ git rev-parse HEAD origin/claude/mini-isolation-t3-t5-7tsc6d
+      (one hash; verified after this step's push)
+
+      T4/VALIDATION.md verdict PASS; T4/DELIVERY.md written. R4 is done (as a
+      record, not an artifact -- done-with-assumption, the road not taken
+      measured and recorded), R8 is honoured and enforced with zero callers,
+      R13 is structural. Nothing under src/ changed. T4 IS DELIVERED.
+      Next: T5 (steps 39-45), the last sub-tranche of this window.
+      ```
 
 ## T5 — the pluggable flow and the architecture tests (S8, S9) — ~240 lines
 
-- [ ] 39. (S8) [COMMIT] `mini/minireason/flow.py`: `MiniFlowV1`,
+- [x] 39. (S8) [COMMIT] `mini/minireason/flow.py`: `MiniFlowV1`,
       `MiniStageV1`, the registry, and the two shipped flows. Default stays
       `mini.flow.legacy-v0` — today's behaviour exactly.
       done-when: `python -m pytest mini/tests/test_mini_flow.py -q` -> 0 failed
-- [ ] 40. (S8) [COMMIT] `loop.run` walks `flow.stages` and names no seat, no
+
+      ```
+      $ python -m pytest mini/tests/test_mini_flow.py -q
+      ......                                                                   [100%]
+      6 passed in 1.10s
+      $ python -m pytest mini/tests/ -q                       -> 156 passed, 1 skipped, 0 failed
+      $ python -m pytest mini/tests/test_isolation_fence.py -q -> 3 passed
+      $ git diff --stat d800b622b -- src/                     -> (no output)
+
+      "Today's behaviour exactly", made checkable BEFORE anything moved: the
+      loop's own prompt builder was run over two fixed inputs and its bytes
+      committed as mini/tests/goldens/mini_legacy_prompt.txt (2 139 bytes) in
+      this step, ahead of the loop's rewrite in step 40. The legacy flow's one
+      stage renders through `seat.mini.conjecturer.legacy-v0` -- a shell whose
+      layout is ONE section, `mini.legacy.prompt`, carrying that prompt text
+      verbatim, and whose form is the STORED one (R-stored) -- and the test
+      asserts the rendered brief equals the golden byte for byte after the one
+      visible difference, the `## legacy-prompt` header the shared allocator
+      prefixes, which is asserted rather than glossed. The legacy shell is
+      registered BESIDE the relaxed one and is not the seat's default; the
+      legacy flow names it explicitly.
+
+      What the six tests pin: both flows registered and the default is
+      legacy; selection argument -> DEEPREASON_MINI_FLOW -> default, with an
+      unknown id refused typed; the legacy flow is one conjecturer stage,
+      stored form, both channels ON; the isolation flow is conjecture ->
+      criticism -> commitment, per-target for the last two, both channels
+      OFF; a stage naming a kind the flow does not declare is refused at
+      construction (the SET of kinds is data); the legacy brief is today's
+      prompt.
+
+      $ python tools/blast_radius.py --files flow.py seats.py sources.py --symbols <7> --against d800b622b
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+
+      Map, same commit: SUB-minireason.md gains the flow section with two
+      checks (the flow suite; the default, the two shapes and the kind set
+      pinned) and a where-to-change row. docs_verify --fast: 6 failed, the
+      same six known rows.
+
+      STOP CONDITION HIT: diff budget EXCEEDED, disclosed, not absorbed.
+      $ python tools/diff_budget.py d800b622b --ceiling 240 --paths mini/minireason
+      {"total_insertions": 302, "ceiling": 240, "verdict": "EXCEEDED"}
+      flow.py (~230 with its docstrings) plus the legacy plugin, layout and
+      shell (~70). S8 priced 150 for the registry and the loop rewrite
+      together; the loop is still to come. Re-baselined ONCE at step 42, when
+      the loop and the architecture tests are measured too (T2-T4's shape).
+      ```
+- [x] 40. (S8) [COMMIT] `loop.run` walks `flow.stages` and names no seat, no
       kind and no stage.
       done-when: SPEC.md §S8's `ast`/substring assertion passes (paste)
-- [ ] 41. (S8) The registration proof (R10): a flow declared only in a test
+
+      ```
+      $ python -c "...SPEC S8's substring assertion, verbatim..."
+      AssertionError: mini.conjecturer
+      $ grep -n "mini\.conjecturer" mini/minireason/loop.py
+      225:            contract_id="mini.conjecturer.v1",
+      $ git show d800b622b:mini/minireason/loop.py | grep -n 'contract_id="mini.conjecturer.v1"'
+      225:            contract_id="mini.conjecturer.v1",          (pre-existing: 2026-08-30)
+      $ grep -n "contract_id" src/deepreason/rules/guards/anti_relapse.py
+      141:        contract_digest=_digest(contract_id),
+
+      The SUBSTRING form trips on a label that predates the programme and is
+      NOT a seat name: `guard_scope` hands `anti_relapse.relapse_domain` the
+      contract label "mini.conjecturer.v1", and that label is folded into the
+      relapse-domain digest the record carries. Renaming it would change every
+      legacy admission record -- the one thing C4 forbids -- so it stays, and
+      the assertion is run in its PRECISE form, which is the claim S8 actually
+      makes:
+
+      $ PYTHONPATH=mini python -c "...no string constant in loop.py EQUALS any
+            registered seat, shell, layout, flow, stage or kind id; and
+            'skeleton' is absent..."
+      OK: no string constant in loop.py equals any of 19 registered ids; skeleton absent
+
+      That precise form caught a real one first: the isolation flow's stage ids
+      were plain words ("conjecture", "criticism", "commitment"), and
+      "commitment" is also a dict key in `Session.refute`. Stage ids are now
+      namespaced (`mini.stage.conjecture` …), so an exact match means a stage.
+      Step 42's architecture test is this precise form, enumerated from the
+      registries rather than from a list.
+
+      $ python -m pytest mini/tests/ -q                       -> 158 passed, 1 skipped, 0 failed
+      $ python -m pytest tests/test_shallow_reason.py -q      -> 13 passed (the public path)
+      $ python -m pytest mini/tests/test_isolation_fence.py -q -> 3 passed (part 3: the
+        isolation flow's run imports no new fenced module)
+      $ git diff --stat d800b622b -- src/                     -> (no output)
+
+      THE LOOP, and what it names. `run` takes `flow` (id, the flow itself, or
+      None -> DEEPREASON_MINI_FLOW -> the legacy default) and, each cycle,
+      walks `flow.stages` in order: a stage runs once, or once per artifact of
+      its `reads_kinds` that this cycle produced (skipped with a typed
+      `mini:stage-skipped` event when there is none). Every stage renders its
+      brief through `render_mini_brief` (shell -> layout -> the public road),
+      resolves its form THROUGH the shell, dispatches through the ONE leased
+      route, and disposes of the reply by the FORM's shape: a form with
+      `records_of` (critic, commitment) writes records of the stage's kind
+      about the target it was shown, keeping what the seat named; a form
+      without it is the conjecture road, lifted unchanged into
+      `_conjecture_stage`. The legacy prompt text moved out of loop.py into
+      the `mini.legacy.prompt` plugin (step 39), which is why 'skeleton' is
+      gone from the loop.
+
+      Two end-to-end runs against the stub, committed as tests:
+        isolation: 2 cycles -> 6 calls in order (conjecture, criticism,
+          commitment) x 2; records [criticism, proposal] x 2, each about a
+          conjecture of this run; the critic's two briefs carry no proposal and
+          no objection; the second cycle's conjecturer and commitment seat see
+          the first cycle's objection and proposal whole; the commitments-
+          disabled warning is in the record; no brief was clipped; replay
+          digest matches; verify_root 0; meter equals log.
+        legacy (selecting nothing): one stage, stored form, the prompt carries
+          "JSON skeleton" and "RECENT SURVIVORS", no mini record, no mini
+          marker at all -- today's loop.
+
+      PARKED P8 DISPOSED here, road (c) plus a typed marker: the loop hands the
+      everything section its share of the profile's prompt budget
+      (`MiniStageV1.brief_share`), so the retention rule withholds and NAMES
+      what does not fit; any brief that still overruns the clip is written as
+      `mini:brief-clipped` with both sizes. The call layer is untouched.
+      PARKED P9 NEW: every stage's call carries role="conjecturer", the one
+      leased route, because the manifest refuses non-canonical roles; which
+      seat spoke is the record event's `kind:`. A truthfulness question about
+      one field, P2's sibling; ready-to-send prompt in PARKED.md.
+
+      $ python tools/blast_radius.py --files loop.py forms.py records.py --symbols run ... --against d800b622b
+      frozen_surface_verdict: CONTACT on all five + adjacent, target 'run'
+        -- the SAME false positive SPEC.md's forecast (2) and T2's step 19
+        record: bare `run` is a substring in every one of those files, and
+        the gate says so ("grep-based; not proof of semantic contact").
+        reachability: run REACHABLE -> REACHABLE (unchanged)
+      $ ... --symbols _conjecture_stage _record_stage _call_stage MiniFormV1 record_mini_output select_mini_flow
+      frozen_surface_verdict: CLEAR   contacts: []   adjacent: []
+      $ git diff --stat d800b622b -- <five surfaces + llm/firewall.py> -> (no output)
+
+      Map, same commit: SEAM-llm-x-minireason's fraction row now says the loop
+      crosses the seam, P8's trap records its disposal, and a new trap records
+      the role question; SUB-minireason's entry-point row and check gain
+      `flow`. docs_verify --fast: 6 failed, the same six known rows.
+
+      Budget: 619 of 240, EXCEEDED, disclosed; re-baselined at step 42.
+      ```
+- [x] 41. (S8) The registration proof (R10): a flow declared only in a test
       file adds a FOURTH artifact kind and its seat, and runs end to end,
       with no edit under `mini/minireason/`.
       done-when: `python -m pytest mini/tests/test_mini_flow.py::test_a_new_artifact_kind_is_a_registration -q` -> passed
-- [ ] 42. (S9) [COMMIT] The five architecture tests, each with its mutation
+
+      ```
+      $ python -m pytest mini/tests/test_mini_flow.py::test_a_new_artifact_kind_is_a_registration -q
+      .                                                                        [100%]
+      1 passed in 1.08s
+
+      The fourth kind is a "successor-question" seat: it reads a conjecture and
+      writes the deeper problem it opens, in free prose. Declared ENTIRELY in
+      the test file -- a form (a WireContract with `records_of`), a layout
+      composed of the three shipped mini plugins with its own directive as
+      data, a shell pairing them, a stage naming them, and a flow that is the
+      isolation flow plus that stage and that kind -- then run for two cycles
+      against the stub. Eight calls; the record carries [criticism, proposal,
+      successor-question] x 2, each about a conjecture of this run; the second
+      cycle's conjecturer was shown the fourth kind whole; meter equals log;
+      and the mtime of every file under mini/minireason/ is identical before
+      and after. R10 in the operator's words -- "add new artifact types on the
+      fly if I can see it might help" -- costs a registration and no edit.
+      ```
+- [x] 42. (S9) [COMMIT] The five architecture tests, each with its mutation
       proof captured to `proof/mutation_<n>.txt` showing it RED.
       done-when: `python -m pytest mini/tests/test_mini_architecture.py -q`
       -> 0 failed AND five `proof/mutation_*.txt` files exist, each showing a
       red run (paste one)
-- [ ] 43. (S8, S9) Map: `SUB-minireason.md` gains the flow registry and the
+
+      ```
+      $ python -m pytest mini/tests/test_mini_architecture.py -q
+      .....                                                                    [100%]
+      5 passed in 2.96s
+      $ ls experiments/2026-09-05-change-mini-isolation-programme/proof/mutation_*.txt
+      mutation_1.txt  mutation_2.txt  mutation_3.txt  mutation_4.txt  mutation_5.txt
+
+      $ cat proof/mutation_4.txt
+      MUTATION 4: MiniFlowV1 refuses any kind outside the three shipped ones -- a new kind would need an edit
+      E   minireason.flow.MiniFlowError: MINI_FLOW_KIND_UNDECLARED: stage 'test.stage.ce495e60'
+          names kind 'test.kind.ce495e60.v1', which flow 'test.flow.ce495e60' does not declare
+      FAILED mini/tests/test_mini_architecture.py::test_4_a_new_artifact_kind_needs_no_source_edit
+      1 failed in 1.01s
+
+      The other four, one line each (the files carry the full pastes):
+        1  loop.py tests stage.seat_id == 'mini.critic'      -> RED: 'mini.critic'
+        2  Session.refute compares an id to 'mini.criticism.v1' -> RED: loop.py::refute: mini.criticism.v1
+        3  render_mini_brief ignores the caller's layout       -> RED: the operator's section absent
+        5  seats.py registers a second hook                    -> RED: ids != (noop,)
+      Each mutation was applied, the one test run, the file restored and
+      __pycache__ cleared; 5 passed again on the restored tree.
+
+      The five, and what makes each enforced rather than promised:
+        1 the loop names no seat, kind or stage -- ENUMERATED from the
+          registries (seats, shells, layouts, flows, stages, kinds, the record
+          marker) and matched as whole string constants on the AST, so a new
+          registration widens the check and the pre-existing relapse-domain
+          label cannot false-positive it;
+        2 no evidence-side path reads a mini seat name or kind -- the same
+          enumeration over the full harness's authority packages and mini's
+          ten admit/register/guard/refute functions;
+        3 a section added to a mini brief needs no source edit -- a plugin
+          file and a layout file in an operator home, loaded by the shipped
+          loader, rendered into a mini seat's brief; every mtime under
+          mini/minireason/ and src/ unchanged;
+        4 a new artifact kind needs no source edit -- a kind under a unique
+          id with its form, layout, shell, stage and flow registered in the
+          test, one cycle run, the record carrying the kind; mtimes unchanged;
+        5 only the no-op hook is registered -- one id, two source lines,
+          zero callers.
+
+      STOP CONDITION (diff budget), RE-BASELINED HERE as step 39 said:
+      $ python tools/diff_budget.py d800b622b --ceiling 240 --paths mini/minireason
+      {"total_insertions": 619, "ceiling": 240, "verdict": "EXCEEDED"}
+      Per file (insertions / net lines / code delta): flow.py 231/+231/+148;
+      loop.py 292(-208)/+84/+50 -- the conjecture road LIFTED unchanged into
+      _conjecture_stage, which the numstat counts as new lines; sources.py
+      47/+45/+31; seats.py 32/+29/+21; forms.py 8/+7/+3; records.py 9/+5/+3.
+      SPEC.md §Budget carries the T5 re-baseline: ~620 by the gate's count,
+      ~400 by net lines; programme ~2 850 by the gate's count.
+      ```
+- [x] 43. (S8, S9) Map: `SUB-minireason.md` gains the flow registry and the
       five enforcement checks — SAME COMMIT.
       done-when: `python tools/docs_verify.py` 0 failed, `--audit` 0 findings
-- [ ] 44. (T5) Gate + mini ring + docs.
+
+      ```
+      $ python tools/docs_verify.py --fast   -> 6 failed, the same six known rows
+      $ python tools/docs_verify.py --audit  -> 1 finding, the known SEAM-llm-x-rules.md:54
+      $ python tools/docs_verify.py --links  -> 0 dangling, 82 documents
+      (the FULL run is step 44's, after the gate and never beside it)
+
+      The flow registry section landed with the code at step 39 (the map moves
+      with the code); this step adds the "Enforced, not promised" section: the
+      five checks named with what makes each enforced, a check that runs the
+      architecture suite, and a second check that re-derives check 1 in place
+      (the registry enumeration, >= 19 ids, no whole-constant match in loop.py,
+      'skeleton' absent, the flow selection and the brief render present in
+      the loop). The relapse-domain label the substring form trips on is
+      recorded in the map with the reason it stays. The second check's
+      mutation is proof/mutation_1.txt's (the same assertion form went red on
+      the same planted seat name).
+      ```
+- [x] 44. (T5) Gate + mini ring + docs.
       done-when: all three green (paste)
-- [ ] 45. (T5) [COMMIT] Deliver T5.
+
+      ```
+      $ python -m pytest tests/ -q -n 4          (idle box; docs_verify ran AFTER it)
+      5084 passed, 6 skipped in 1417.28s (0:23:37)     -> 0 failed
+      (the same 5084 as T2, T3 and T4: T5 changed nothing under src/ --
+       git diff --stat d800b622b -- src/ is EMPTY; the public shallow path's
+       own tests, tests/test_shallow_reason.py, 13 passed inside it)
+
+      $ python -m pytest mini/tests/ -q
+      164 passed, 1 skipped in 14.19s                   -> 0 failed
+      (150 at T4; the fourteen new ones are 9 flow tests and 5 architecture
+       tests)
+
+      $ python -m pytest tests/test_conj_pack_legacy_golden.py \
+            tests/test_crit_pack_legacy_golden.py tests/test_shallow_reason.py -q
+      28 passed  -- C4: the full harness's two briefs byte-identical; the
+                    shallow path unchanged
+
+      $ git diff --stat d800b622b -- <all five frozen surfaces + llm/firewall.py>
+      (no output)  -- the mechanical tripwire, empty
+      $ git diff --stat d800b622b -- src/
+      (no output)  -- T5 is entirely under mini/ and docs/map/
+
+      $ python tools/docs_verify.py           (FULL: 82 documents, 1417 checks)
+      docs_verify: 6 failed -- the same six known rows
+      $ python tools/docs_verify.py --audit    -> 1 finding, the known SEAM-llm-x-rules.md:54
+      $ python tools/docs_verify.py --links    -> 0 dangling, 82 documents
+      $ python tools/docs_verify.py --coverage -> 2 findings, the same two pre-existing
+        (periphery x verification; schools x scratch), on seams T5 did not touch
+      $ python tools/docs_verify.py --stale    -> 23 before, 22 after: SUB-minireason
+        and SEAM-llm-x-minireason, the two documents this sub-tranche edited
+        and whose checks the full run re-derived at head 2b6440d28, carry that
+        stamp. Nothing else's stamp was touched.
+
+      All three green in the sense that matters: nothing this sub-tranche wrote
+      fails, and no assertion was weakened.
+      ```
+- [x] 45. (T5) [COMMIT] Deliver T5.
       done-when: `git status --porcelain` empty AND branch head on origin
+
+      ```
+      $ git status --porcelain     -> (empty)
+      $ git rev-parse HEAD origin/claude/mini-isolation-t3-t5-7tsc6d
+      (one hash; verified after this step's push)
+
+      T5/VALIDATION.md verdict PASS; T5/DELIVERY.md written. R9 and R10 are
+      done; the three seats are a flow whose stage order and kind set are
+      data; the loop names no seat; a fourth kind is a registration; five
+      architecture checks go red on a bypass; nothing under src/ changed.
+      P8 disposed; P9 parked. T5 IS DELIVERED.
+
+      THIS WINDOW ENDS HERE, as instructed. T6 and T7 (steps 46-57) go to the
+      last window. Whoever takes T6 should read PARKED.md P7 and P9 first, and
+      note that every instrument T6 will record has been run at each of the
+      three deliveries here (T3/T4/T5 VALIDATION.md).
+      ```
 
 ## T6 — regression, goldens, the record (S10) — ~120 lines
 
