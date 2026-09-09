@@ -973,3 +973,63 @@ Rubric: 6/6 yes — traces to R41; the headline equals its own pasted arithmetic
 whose first term is a MEASURED number rather than an estimate; no acceptance
 check, census or forecast moves; the superseded caution is preserved rather
 than edited.
+
+---
+
+# Amendment 5 (2026-09-09) — the ceiling is corrected to 8 300, on the operator's word
+
+Authority: REQUEST.md Amendment 3, R42, the operator's "raise." given after the
+step-29 stop was presented with the overrun measured file by file and three
+options — a mechanism change, a second raise, or a split. The recommendation
+was the mechanism change; the operator chose the number.
+
+**Why the Amendment 4 figure was wrong, measured rather than guessed.** Four
+causes, from `git diff --numstat`:
+
+1. **Three instruments no itemization contained, 735 lines.**
+   `tools/check_vacuity.py` (205), `tools/essay_counterparts.py` (234),
+   `tools/judge_organiser.py` (296). None was chosen; each was FORCED by a
+   step's own done-criterion — R9 requires the vacuity proof, R19 requires the
+   counterpart rule, and `criteria-check` reads its criteria from
+   `judge_organiser.py` at run time rather than carrying a copy, so without
+   that file the byte-identity check cannot run at all.
+2. **Workflow documents, +851** (2 041 against 1 190). Every done-criterion's
+   output is pasted inline, and this tranche has had a lot worth pasting.
+3. **`proof/` outputs, +380** (580 against 200), for the same reason.
+4. **The generated configurations, +416** (476 against 60) — priced before it
+   was decided that each would carry all eleven canonical roles explicitly,
+   which is what makes the route-identity check meaningful.
+
+**The corrected ceiling.**
+
+    python3 -c "print(6798 + sum([40,320,250,140,220,300]))"
+    8068
+
+- measured at step 29, after the ledger amendment (not estimated) 6798
+- three `CASES` rows in `scripts/cycle_soak.py` 40
+- `PREREG.md` 320
+- `claims.json` 250
+- the tranche's remaining `tests/` 140
+- remaining `proof/` outputs 220
+- VALIDATION.md and DELIVERY.md 300
+
+**Ceiling: 8 300**, the itemized 8 068 plus a stated margin of 232 — larger
+than the previous margins because three of the last four misses were items no
+itemization contained, and a margin that has never absorbed one is not a margin.
+
+**The mechanism the operator did NOT choose, recorded so the choice is
+legible.** The alternative offered was to confine the ceiling to `tools/`,
+`tests/` and `runs/` — the executable files — and report the document total
+separately. Its argument was that counting evidence documents against a code
+ceiling pays a window to record less, which is backwards here. Its cost was
+that document sprawl would then trip nothing. The operator chose one number
+over both, so documents and code continue to share a ceiling and this window
+continues to report the split at every commit.
+
+**Unchanged:** R38's tranche-1 boundary, C9's no-live-call bound, Amendment 1's
+CLEAR frozen-surface forecast, and Amendment 3's declared false-positive class.
+If the gate trips a third time this window stops and reports again.
+
+Rubric: 6/6 yes — traces to R42; the headline equals its own pasted arithmetic
+over a measured base; the four causes are measured per file rather than
+characterised; no acceptance check, census or forecast moves.

@@ -279,3 +279,19 @@ R41 (process): "Raise." The ceiling is corrected once more rather than the
     take and is now on the record as theirs.
     R38's tranche-1 boundary is untouched — the raise buys lines, not live
     calls, and C9 (no live call in tranche 1) still binds.
+
+
+### Amendment 3 (2026-09-09) — the operator rules on the second budget stop
+
+Received after step 29 committed the second EXCEEDED verdict (6 782 of 6 500)
+and the stop was presented with three options — a mechanism change confining
+the ceiling to executable files, a second raise, or a split. Verbatim, in full:
+
+> raise.
+
+R42 (process): "raise." The ceiling is corrected a second time, to a single
+    number covering the whole declared area, rather than being narrowed to
+    executable files or the tranche split again. The recommendation offered
+    was the mechanism change; the operator chose the number, and the number is
+    what binds. R38's tranche-1 boundary and C9 are untouched: the raise buys
+    lines, not live calls.
