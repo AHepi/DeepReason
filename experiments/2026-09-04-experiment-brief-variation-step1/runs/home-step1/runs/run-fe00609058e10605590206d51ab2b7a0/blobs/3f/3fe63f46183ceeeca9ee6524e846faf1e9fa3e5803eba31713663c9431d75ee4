@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target commits a category error by conflating the evolutionary origin of a belief with its rational justification. While evolutionary epistemology may explain why scientists *do* prefer corroborated theories (a descriptive claim), the problem explicitly asks if this preference is *defensible* on Popper's terms (a normative claim). Popper's framework demands a logical rationale for acting on one theory over another without invoking induction; answering that 'we are evolved to do so' bypasses the normative requirement entirely. Furthermore, the target's own countercondition admits that if evolutionary success does not correlate with truth-likeness, the argument fails, yet provides no account within Popper's system for why we should assume such a correlation exists without resorting to the very inductive assumptions Popper rejected.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's problem requires a normative justification for preferring corroborated theories that avoids induction, not merely a descriptive explanation of why the preference exists.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is solely an evolutionary trait with no logical link to truth, how can a Popperian scientist rationally claim that acting on this preference is any more reasonable than acting on a random choice?"
+    }
+  ]
+}

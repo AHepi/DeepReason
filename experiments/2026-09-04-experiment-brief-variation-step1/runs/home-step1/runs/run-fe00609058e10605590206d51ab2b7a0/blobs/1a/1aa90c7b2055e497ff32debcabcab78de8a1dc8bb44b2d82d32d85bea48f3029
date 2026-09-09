@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's mechanism claims that preferring better-corroborated theories maximizes exposure to potential falsification (learning). However, this contradicts Popper's own definition of corroboration: a theory is well-corroborated precisely because it has WITHSTOOD severe tests and has NOT been falsified. By the target's logic, we should prefer theories that are currently failing or have low corroboration to maximize immediate falsification opportunities. If the goal is purely 'exposure to falsification,' acting on a highly corroborated theory is counter-productive because it has already proven resistant to falsification, whereas an untested or poorly corroborated theory offers a higher probability of quick falsification. Thus, the 'Information Maximization' strategy described fails to explain why scientists prefer the *better*-corroborated theory over the *worse*-corroborated one if the sole metric is accelerating learning via falsification.",
+      "premise": "Popper defines corroboration as the report that a theory has withstood severe tests; a highly corroborated theory is one that has survived attempts to falsify it.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "successor_question": "If the goal is maximizing falsification opportunities, why does Popper advocate acting on theories that have specifically demonstrated resistance to falsification?"
+    }
+  ]
+}

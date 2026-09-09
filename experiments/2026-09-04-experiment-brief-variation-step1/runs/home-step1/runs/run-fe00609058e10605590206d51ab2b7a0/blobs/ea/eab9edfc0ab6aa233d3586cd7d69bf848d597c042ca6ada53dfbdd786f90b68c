@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'Risk-Minimization Heuristic' fails to answer the specific dilemma posed in the problem context regarding the preference between multiple *unfalsified* theories. The problem asks how one justifies preferring a 'better-corroborated' theory over a 'less-corroborated' one when both are technically 'not-yet-false.' The target's mechanism only explains avoiding known falsehoods (falsified vs. unfalsified), offering no logical basis within Popper's terms for distinguishing between two unfalsified options. Therefore, it does not defend the preference for the *better* corroborated theory, leaving the charge of smuggling in induction unanswered for the actual choice scientists face.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "The problem requires defending the preference for 'better-corroborated' theories over other unfalsified ones, not merely unfalsified over falsified.",
+      "premise_evidence": [
+        {
+          "block": "question-ba75796c3facc7a3d0d448d6eaa09a2e",
+          "quote": "Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms..."
+        }
+      ],
+      "successor_question": "If the binary distinction between falsified and unfalsified is insufficient to guide choice among multiple unfalsified theories, what non-inductive principle does Popper offer to rank them?"
+    }
+  ]
+}
