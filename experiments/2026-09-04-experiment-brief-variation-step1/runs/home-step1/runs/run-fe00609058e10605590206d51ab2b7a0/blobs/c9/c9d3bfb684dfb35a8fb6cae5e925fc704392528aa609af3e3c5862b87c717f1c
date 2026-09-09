@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's own terms not as an inductive inference that the theory is true or probable, but as a critical-rational decision to act on the theory that has withstood the most severe attempts at falsification, thereby minimizing the risk of known error without assuming future regularity.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which requires induction) and 'critical preference' (which relies on negative knowledge). By treating corroboration as a report of past performance under stress rather than a predictor of future success, the agent adopts the best-tested theory because it is the only one whose errors have been actively sought and not yet found. This shifts the burden from proving the theory right to acknowledging that alternatives have been proven wrong or are less tested. The preference is a methodological rule for error avoidance, not an epistemic claim about probability.",
+    "counterconditions": [
+      "If the choice of action requires a positive guarantee of success (e.g., life-critical engineering where 'not yet falsified' is insufficient), the Popperian stance collapses into practical skepticism.",
+      "If 'severity' of tests cannot be objectively defined independent of the theory being tested, the ranking of corroboration becomes circular.",
+      "If the agent implicitly assumes that nature is uniform enough that passing past tests matters for future actions, they have smuggled in induction."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on 'verisimilitude' (truth-likeness) as a positive metric. Instead, it relies on the negative metric of 'survival of severe tests.' Popper's concession regarding the formal definition of verisimilitude applies to measuring closeness to truth, not to the logical relation of a theory surviving a specific test statement. The defense here rests solely on the asymmetry between verification and falsification, which remains intact in Popper's system."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The candidate explicitly rejects the claim that rational preference 'logically entails' an expectation of future success. The rebuttal clarifies that the preference is pragmatic and critical: we choose the better-corroborated theory because we have no good reason (no falsification) to reject it, while we may have reasons to reject others. This is a decision based on current critical status, not a logical derivation of future probability."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma. The mechanism now frames the choice as 'minimizing the risk of known error' rather than just 'testing.' When building a bridge, the engineer chooses the theory that has survived stress tests not because it guarantees the bridge won't fall, but because competing theories have failed similar tests or haven't been tested as rigorously. This is a decision procedure for action under uncertainty, distinct from inductive prediction."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'willingness to criticize' with the outcome of criticism. The candidate argues that 'practical reliance' is justified by the *outcome* (the theory has not been falsified despite severe attempts), not merely the willingness to try. Popper's preference is for the theory that is currently the best survivor, which is a rational basis for action even without inductive certainty."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is defended as consistent with his 'conventionalist' decision to accept basic statements and his methodological rule to prefer the more testable theory that has survived. It is not a contradiction for a critical rationalist to make a decision based on the best available critical discussion; the 'cost' is admitting this is a non-justificatory decision, not a logical proof of correctness."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The candidate strictly adheres to Falsificationism and the logic of corroboration as defined in 'The Logic of Scientific Discovery' and 'Conjectures and Refutations.' It does not invoke Evolutionary Epistemology or Campbell's variation-and-selection model. The argument is purely logical-methodological: the asymmetry of falsification allows for a rational preference without induction."
+      },
+      {
+        "handle": "3315f618e758449a5ec8d23e0181b710f5cc00355fe1078c633402e3c7df78fc",
+        "kind": "rebutted",
+        "note": "As with the first criticism, this candidate avoids the trap of verisimilitude. It relies on the concept of 'corroboration' as a historical report of test performance. Popper's later difficulties with defining verisimilitude formally do not invalidate the logical status of a singular test statement falsifying a universal law, which is the sole basis for the proposed preference."
+      },
+      {
+        "handle": "422c05f671684a2e0cc88e3f64a4478400fd568dd9385f2f08bf8a4c1da0efb1",
+        "kind": "rebutted",
+        "note": "The candidate does not use an evolutionary analogy. It argues that 'survival' of tests constitutes 'rational preference' precisely because it represents the elimination of error. In Popper's view, learning from mistakes is the only way we grow knowledge; therefore, preferring the theory that has survived the most attempts to show it is a mistake is the only rational strategy available, even if it doesn't guarantee biological survival or truth."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

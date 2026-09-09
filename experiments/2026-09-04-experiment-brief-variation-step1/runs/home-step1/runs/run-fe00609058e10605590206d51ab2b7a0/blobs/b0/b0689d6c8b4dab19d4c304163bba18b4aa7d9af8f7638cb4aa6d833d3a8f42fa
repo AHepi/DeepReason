@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-inductive basis for preference, but this concept was formally refuted by Miller and Tichý in the 1970s. They demonstrated that within Popper's own logical framework, if a theory is false (which all universal theories are for Popper), its degree of verisimilitude cannot be compared to another false theory without relying on inductive assumptions about the untested content. Since the target explicitly cites the Miller/Tichý objection as a countercondition yet asserts the preference is defensible *on Popper's terms* via verisimilitude, it fails to resolve the central contradiction: the mechanism proposed to avoid induction (verisimilitude) collapses into induction or indeterminacy when scrutinized logically, leaving the scientist's preference unjustified on strictly Popperian grounds.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Miller and Tichý proved that comparative verisimilitude between false theories is undefined or requires inductive assumptions within Popper's formalism.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot ground the preference without induction, does Popper's system force scientists to admit their choice of theory is ultimately irrational or based on faith rather than methodological rules?"
+    }
+  ]
+}
