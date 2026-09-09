@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a false dichotomy between 'science' and 'engineering' that contradicts Popper's explicit treatment of rational action. Popper did not relegate the preference for well-corroborated theories to a non-scientific 'engineering' domain; he argued that preferring the better-tested theory is the only *rational* course of action precisely because it has withstood severe criticism, not because it is probable. By claiming scientists 'leave the realm of pure Popperian science' when they act, the target misrepresents Popper's view that critical rationalism extends to practical decision-making without needing inductive justification. The problem asks if the preference smuggles in induction; the target answers by incorrectly asserting Popper abandoned the field of action to induction, whereas Popper's actual solution was that acting on the best-tested theory is rational *without* assuming it will succeed (induction), but simply because it is the most critically examined option available.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly discussed the rationality of action based on corroboration in works like 'The Logic of Scientific Discovery' and 'Conjectures and Refutations', rejecting the need for induction even in practical applications.",
+      "premise_evidence": null,
+      "successor_question": "If Popper's framework already accounts for rational action without induction, what specific textual evidence supports the target's claim that acting on theories requires leaving 'pure Popperian science'?"
+    }
+  ]
+}

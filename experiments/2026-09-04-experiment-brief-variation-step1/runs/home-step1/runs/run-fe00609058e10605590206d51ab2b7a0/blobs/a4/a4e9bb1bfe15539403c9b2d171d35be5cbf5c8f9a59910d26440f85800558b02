@@ -1,0 +1,248 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible as a non-inductive 'critical preference' grounded in the logical content of the theories themselves, not their history of success.",
+      "mechanism": "Popper distinguishes between the probability of a theory (which he denies increases) and its verisimilitude (truth-likeness). A theory that survives severe tests has demonstrated high empirical content and resilience. The preference is rational because it selects the theory with the highest known informational content that has not yet been falsified. This is a logical comparison of current state, not an inductive projection of future success. We prefer the theory that tells us more about the world and has withstood our best attempts to destroy it, without claiming it is therefore 'true' or 'probable'.",
+      "counterconditions": [
+        "If the definition of verisimilitude cannot be formalized without collapsing into probabilistic confirmation.",
+        "If the act of preferring based on past survival implicitly assumes the future will resemble the past.",
+        "If 'critical preference' is merely a semantic disguise for inductive expectation."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate acknowledges Popper's later concessions on formalizing verisimilitude but argues the *concept* remains valid as a comparative metric of content and falsification resistance, distinct from probability. The defense relies on the logical structure of content, not a failed formal metric."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "The preference is not based on 'causal reliability' or past success as a guarantee, but on the current logical status of the theory (high content, unfalsified). It rejects the premise that using past test results constitutes induction if no generalization about nature's uniformity is made."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "revised",
+          "note": "Revised to explicitly construct the strongest case for the 'smuggles induction' view in the counterconditions and mechanism analysis before asserting the survival of the 'defensible' view, ensuring the dialectical structure demanded by the problem is present."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate distinguishes 'preference' from 'decision' by grounding preference in the objective logical attribute of 'corroboration degree' (a report of past performance), which rationally motivates the decision without requiring an inductive leap. The preference is the recognition of the report; the decision is the action taken."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Rejects the false dichotomy. The justification is neither inductive belief nor arbitrary; it is the rational selection of the most informative surviving conjecture. One can prefer a map that has been checked against more landmarks without believing the terrain won't change, simply because it is currently the most detailed accurate map available."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference for corroborated theories inevitably smuggles induction back into Popper's system because any practical reliance on past test results presupposes the uniformity of nature.",
+      "mechanism": "To prefer Theory A over Theory B because A survived tests while B did not (or A survived more severe tests) is to act on the expectation that the properties which allowed A to survive will persist. This is Hume's problem restated. If the future does not resemble the past, corroboration is worthless. Popper's attempt to frame this as a 'decision' or 'convention' fails because the *reason* for the decision is the past success. Without an inductive bridge, the preference is arbitrary. Therefore, working scientists (and Popper in practice) are crypto-inductivists.",
+      "counterconditions": [
+        "If a non-inductive rationale for preferring past success can be formulated (e.g., purely logical content comparison).",
+        "If the 'decision' to act can be separated entirely from any expectation of similar outcomes.",
+        "If 'rationality' in science does not require a link between past evidence and future action."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate argues that even if verisimilitude is intended as non-probabilistic, the *application* of it to prefer one theory for action inherently relies on the inductive assumption that truth-likeness correlates with future predictive success."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "Supports the criticism: arguing that 'causal reliability' based on past tests is exactly the form of justification Popper rejected, and attempting to rename it does not remove the inductive core."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "revised",
+          "note": "Revised to ensure the 'defensible' case (Candidate 1's logic) is fully articulated as the opposing strong case before delivering the verdict that the 'smuggles induction' argument survives."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that the distinction between decision and preference is illusory here; the motivation for the preference *is* the inductive hope, making the decision inextricably linked to induction."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Contends that the dichotomy is not false; the only alternative to 'future resembles past' is 'no reason to prefer,' and since scientists do have a reason, they must be assuming the former."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves by reframing scientific preference as an evolutionary selection mechanism where 'rationality' is the survival trait of the methodology, not a logical proof of truth.",
+      "mechanism": "Adopting an evolutionary epistemology stance: theories compete, and those that survive severe tests are 'fit' in the current environment. Preferring them is not an inductive inference that they are true or will remain fit forever, but a pragmatic alignment with the currently surviving ecosystem of ideas. The 'cost' is abandoning the idea that science converges on absolute truth; instead, it merely eliminates the unfit. The preference is defensible as a meta-methodological rule that has itself been corroborated by the survival of science.",
+      "counterconditions": [
+        "If evolutionary success is proven uncorrelated with truth-likeness (pessimistic meta-induction).",
+        "If this view reduces scientific rationality to mere biological adaptation without normative force.",
+        "If the mechanism implicitly assumes environmental stability (induction)."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departes from the strict 'verisimilitude' debate to propose an evolutionary framework where 'fitness' replaces 'truth-likeness' as the metric, bypassing the formalization issue."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "Argues that relying on 'survival' is not induction about nature's uniformity, but an observation of the current state of the theoretical ecosystem. It is a descriptive account of why we prefer, not a justificatory claim about the future."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "revised",
+          "note": "Explicitly structures the response to first present the 'induction smuggled' argument (Candidate 2) and the 'logical content' argument (Candidate 1) as the required strong cases before selecting the evolutionary synthesis as the survivor."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Reframes 'preference' as an emergent property of the selection process, distinct from a conscious 'decision' based on induction. The preference exists because the alternatives were eliminated."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Proposes a third option beyond the dichotomy: preference based on competitive elimination rather than inductive projection or arbitrary choice."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference is a necessary 'conventional postulate' of the scientific game, akin to choosing axioms, which avoids induction by admitting its own lack of external justification.",
+      "mechanism": "Popper's system requires a foundational decision to value testability and survival. This is a convention, not a derived truth. We decide to act as if the best-tested theory is the most reliable because this rule defines the activity of science. It avoids induction by refusing to claim the rule corresponds to reality's structure. The cost is radical: scientific rationality becomes internal to the convention, offering no guarantee of truth or practical success, potentially opening the door to relativism if one chooses a different convention.",
+      "counterconditions": [
+        "If the convention itself requires an inductive justification to be considered rational.",
+        "If scientists cannot coherently maintain a stance that their actions have no expected link to truth.",
+        "If this conventionalism undermines the objective status of scientific knowledge."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Argues that verisimilitude is irrelevant here; the preference is based on adherence to the rules of the game, not a metric of truth."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "Accepts that past success doesn't justify the rule logically, but argues the rule is justified pragmatically as a definition of scientific conduct, sidestepping the induction charge."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "revised",
+          "note": "Ensures the dialectical requirement is met by treating the 'conventionalist' view as the synthesis that emerges after weighing the strong cases for both pure logic and hidden induction."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Embraces the conflation: the preference *is* the decision. The criticism fails because it demands a separation that Popper's conventionalism explicitly rejects."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Argues the dichotomy is false because the justification is neither inductive nor non-existent; it is normative/conventional."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if we accept a 'propensity' interpretation of probability where corroboration measures the objective propensity of a theory to withstand tests, distinct from subjective belief.",
+      "mechanism": "Reinterpreting Popper's later work on propensities: corroboration reports the objective tendency (propensity) of the theory's content to survive specific test conditions. This is not inductive probability (degree of belief) but an objective feature of the theory-world interaction. We prefer theories with higher surviving propensities. This avoids Humean induction because it deals with objective dispositions rather than generalizations from instances. The cost is accepting a controversial metaphysical ontology of 'propensities' as real entities.",
+      "counterconditions": [
+        "If propensities are indistinguishable from long-run frequencies (collapsing into induction).",
+        "If the measurement of propensity inevitably relies on inductive assumptions about test representativeness.",
+        "If this metaphysical commitment is too high a price for saving Popper's system."
+      ],
+      "typicality": 0.40,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "revised",
+          "note": "Shifts the defense from 'verisimilitude' to 'propensity,' addressing the formalization critique by leveraging Popper's own later developments in probability theory."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "Argues that propensity is a causal power inherent in the setup, not a justification based on past success history. The past reveals the propensity; it does not create the justification via induction."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "revised",
+          "note": "Structured to present the 'induction' and 'logic' cases strongly before proposing the propensity interpretation as the surviving resolution."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Distinguishes the preference (recognition of high propensity) from the decision (acting on it), arguing the former is an objective assessment."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Offers the propensity view as the third way that escapes the false dichotomy of 'induction vs. arbitrariness'."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The problem is a category error: 'preference' in science is not an epistemic judgment of truth but a pragmatic heuristic for resource allocation in an infinite search space.",
+      "mechanism": "In an environment of unlimited hypotheses and limited testing resources, agents must prioritize. Preferring corroborated theories is a heuristic to minimize the rate of falsification and maximize the efficiency of knowledge growth. It makes no claim about the theory's truth or the future resembling the past; it is simply the most efficient strategy for navigating the hypothesis space discovered so far. It is defensible as a bounded rationality strategy. The cost is demoting scientific preference from a mark of rationality/truth to a mere computational shortcut.",
+      "counterconditions": [
+        "If efficiency itself presupposes an inductive belief that the heuristic will continue to work.",
+        "If scientists genuinely believe their preferred theories are 'truer,' not just 'more efficient'.",
+        "If this view fails to explain the normative force scientists feel regarding corroboration."
+      ],
+      "typicality": 0.25,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departes from the truth/verisimilitude framework entirely, framing the issue as one of algorithmic efficiency and resource management."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "Argues that the 'justification' is purely pragmatic (speed/efficiency), rendering the charge of 'induction' (which concerns truth/future prediction) a category mistake."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "revised",
+          "note": "Constructs the traditional epistemic arguments (Candidates 1 & 2) as the 'strong cases' required, then dismisses them in favor of the pragmatic/heuristic survivor."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Asserts that 'preference' here is purely functional (allocation of attention), dissolving the tension between decision and epistemic motivation."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Posits that the dichotomy is false because the driver is neither induction nor truth-belief, but computational necessity."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_008"
+      ]
+    }
+  ]
+}
