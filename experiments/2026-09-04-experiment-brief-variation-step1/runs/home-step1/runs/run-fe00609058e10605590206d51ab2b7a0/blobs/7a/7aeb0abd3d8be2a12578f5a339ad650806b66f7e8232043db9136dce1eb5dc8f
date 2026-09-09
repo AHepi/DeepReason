@@ -1,0 +1,23 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's mechanism claims scientists prefer a theory because rivals are falsified or untested, leaving the corroborated theory as the 'sole viable option by default.' This fails the specific countercondition where multiple unfalsified theories exist. In such a scenario (e.g., Newtonian mechanics vs. General Relativity before 1919, or competing string theory vacua), the 'negative heuristic' of elimination cannot identify a single viable option, yet scientists still exhibit a preference for the better-corroborated one. The target's explanation relies entirely on the elimination of alternatives to justify preference, offering no account for how preference is generated when elimination leaves multiple survivors. Thus, it cannot explain the very phenomenon it seeks to defend: the preference for *better*-corroborated theories among *unfalsified* rivals.",
+      "premise": "If there are multiple unfalsified theories and scientists still prefer the one with more severe tests passed, the 'elimination of alternatives' mechanism cannot explain the preference.",
+      "premise_evidence": [
+        {
+          "block": "question-ba75796c3facc7a3d0d448d6eaa09a2e",
+          "quote": "If there are multiple unfalsified theories and scientists still prefer the one with more severe tests passed."
+        }
+      ],
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "counterexample": [
+        "Two unfalsified theories T1 and T2 exist; T1 has passed 10 severe tests, T2 has passed 2. Scientists prefer T1. Target's mechanism (elimination of falsified/untested) yields {T1, T2} as viable, failing to distinguish them."
+      ],
+      "successor_question": "If elimination of rivals is insufficient to ground preference among multiple unfalsified theories, what non-inductive principle allows Popper to rank the remaining survivors?"
+    }
+  ]
+}
