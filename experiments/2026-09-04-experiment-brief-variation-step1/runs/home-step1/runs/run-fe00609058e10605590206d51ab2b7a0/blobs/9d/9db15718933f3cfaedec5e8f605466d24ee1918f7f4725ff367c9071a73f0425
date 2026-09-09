@@ -1,0 +1,274 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'critical rationalist' decision rule that maximizes informational content without asserting future probability, but this requires accepting that action is based on the 'best available error-elimination' rather than any expectation of success.",
+      "mechanism": "Corroboration functions as a report of severity of tests passed. The mechanism selects the theory with the highest surviving empirical content. This is non-inductive because it treats the preference as a static ranking of current knowledge states, not a dynamic prediction of future performance. The 'smuggling' charge fails because no premise about the uniformity of nature is invoked; only the logical fact that Theory A has survived tests that Theory B failed.",
+      "counterconditions": [
+        "If the act of building a bridge inherently assumes the future will resemble the past.",
+        "If 'severity' of a test cannot be defined without inductive assumptions about background knowledge.",
+        "If Popper's own advice to 'act on the best tested theory' implicitly relies on a pragmatic induction."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate explicitly rejects the 'Principle of Uniformity' straw man, arguing Popper's solution relies on informational content and error elimination, not uniformity."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to avoid reliance on 'verisimilitude' as a quantitative measure, focusing instead on 'surviving informational content' which avoids the logical collapse cited."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Addresses the action problem by framing action as 'error-elimination' choice: we choose the bridge design that hasn't failed, not because it won't fail, but because it is the only one not known to be false."
+        },
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "Engages Popper's explicit defense by distinguishing between 'justification' (inductive) and 'criticism' (deductive), showing the preference is a critical outcome, not a psychological necessity."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "departure_declared",
+          "note": "Declares departure from the requirement to use 'propensity interpretation' as the sole defense, opting for the 'informational content' defense which is textually supported in 'Logic of Scientific Discovery'."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that engineering a bridge is an act of applying the 'best tested' solution to eliminate known errors, consistent with critical rationalism, even if it offers no guarantee of success."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The preference is indefensible on strict Popperian terms and does smuggle in induction; the only way to save Popper is to admit that 'acting on the best theory' is a non-rational, biological propensity or a pragmatic convention external to his logic of science.",
+      "mechanism": "The mechanism identifies a hidden premise in the move from 'Theory T has survived' to 'We should act on T'. This move requires the assumption that 'what worked before will work again' (induction). Since Popper rejects this, his system creates a gap between his epistemology (no induction) and his praxis (prefer the tested). The survival of this view costs the coherence of Popper's philosophy, forcing a dualism between 'science' (logic) and 'action' (biology/pragmatism).",
+      "counterconditions": [
+        "If Popper can define 'rational action' without referencing future success probabilities.",
+        "If the 'biological propensity' argument can be formalized within his critical framework.",
+        "If the distinction between 'context of discovery' and 'context of justification' extends to 'context of action'."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Agrees it is a straw man to say Popper uses 'Uniformity', but argues the smuggling is more subtle: it's in the definition of 'rational preference' itself."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Supports the criticism that verisimilitude fails, using it as evidence that *no* non-inductive metric works, thus strengthening the claim that induction is unavoidable."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "revised",
+          "note": "Revised to explicitly state that the 'tautological' defense fails precisely because action *is* future-oriented, making the tautology irrelevant to the engineer."
+        },
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "Counters Popper's defense by arguing that calling it 'critical' doesn't remove the inductive leap required to value the result of criticism for future action."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "rebutted",
+          "note": "Argues that even if Popper didn't use propensities for this, the *need* for them proves the system is incomplete without an inductive element."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "revised",
+          "note": "Refines the collapse argument: the collapse happens specifically when moving from 'logical status' to 'practical application', revealing the hidden induction."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_009"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves if we reinterpret 'preference' not as a belief in truth/probability, but as a 'betting commitment' in a game of error reduction, where the rules of the game (critical rationalism) dictate betting on the unrefuted.",
+      "mechanism": "Adopts a game-theoretic analogy. Science is a game where the goal is to find errors. The 'rule' is: if you must bet, bet on the horse that hasn't stumbled yet. This is not induction (predicting the horse won't stumble next time) but adherence to the game's internal logic. The 'cost' is accepting that scientific rationality is procedural and normative (how we *should* play) rather than descriptive of reality's behavior.",
+      "counterconditions": [
+        "If scientists view their bets as claims about reality, not just game moves.",
+        "If the 'rules of the game' themselves rely on inductive assumptions about what constitutes a 'severe test'.",
+        "If the stakes of real-world action (life/death) invalidate the 'game' metaphor."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Clarifies that the 'game rules' are not a 'Principle of Uniformity' but a set of methodological conventions."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Avoids verisimilitude entirely by grounding preference in procedural compliance, not truth-likeness."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "revised",
+          "note": "Addresses the 'action' critique by defining action as 'making a move in the game', which is valid even without future guarantees."
+        },
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "Reframes Popper's defense as a normative rule for rational agents, not a psychological description."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "departure_declared",
+          "note": "Departures from historical textual analysis to propose a reconstructed 'game-theoretic Popper' that solves the problem logically."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that engineering a bridge is simply a high-stakes move in the error-reduction game, fully consistent with the rules."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Popper's preference is defensible only if we accept a 'propensity' interpretation of single-case probabilities, where corroboration indicates a high propensity for the theory to be true, effectively reintroducing a form of objective probability that Popper later embraced.",
+      "mechanism": "Leverages Popper's later work on propensities. The mechanism posits that severe tests reveal the 'propensity' of a theory to withstand falsification. Preferring the corroborated theory is rational because it has a higher objective propensity to be true (or close to truth). This saves the preference from being 'smuggled induction' by making it a deduction from objective physical properties (propensities). The cost is abandoning the strict 'corroboration is not probability' slogan of the early Popper.",
+      "counterconditions": [
+        "If propensities are themselves unobservable and metaphysical.",
+        "If the link between 'surviving tests' and 'high propensity' is itself inductive.",
+        "If this contradicts Popper's explicit denial that corroboration equals probability."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Distinguishes 'propensity' from 'uniformity'; propensity is a physical property, not a logical assumption about time."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Argues that propensities solve the verisimilitude measurement problem by providing a quantitative basis for comparison."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "revised",
+          "note": "Accepts that action requires future orientation, satisfied by the forward-looking nature of propensities."
+        },
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "Uses Popper's later writings to show he did defend this, countering the claim that it's merely psychological."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "revised",
+          "note": "Corrects the historical record by citing Popper's 'Quantum Theory and the Schism in Physics' where he explicitly links corroboration to propensity."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "Claims that engineering relies on the physical propensities of materials/theories, making the preference physically grounded."
+        }
+      ],
+      "optional_refs": [
+        "SRC_010"
+      ]
+    },
+    {
+      "claim": "The preference is a 'methodological fiction' necessary for the sociology of science to function, defensible only as a social norm that coordinates community behavior, not as an epistemic truth.",
+      "mechanism": "Sociological mechanism. The 'preference' is a norm enforced by the scientific community to ensure progress. It is 'defensible' in the sense that it works to organize research, not because it is logically derived from Popper's epistemology. It smugly ignores the logical gap by filling it with social pressure. The cost is admitting that Popper's logic of science is insufficient to explain scientific practice without a sociological supplement.",
+      "counterconditions": [
+        "If individual scientists act on the preference without social pressure.",
+        "If the norm itself cannot be justified without the very induction it tries to hide.",
+        "If this reduces science to mere consensus-building."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "departure_declared",
+          "note": "Departes from analyzing Popper's internal logic to analyze the external sociological function of his ideas."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Argues the collapse of verisimilitude is irrelevant if the norm is social, not logical."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Explains action as conformity to social norms of 'rational behavior' in the scientific tribe."
+        },
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "revised",
+          "note": "Reframes 'psychological necessity' as 'sociological necessity'."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "rebutted",
+          "note": "Dismisses the textual debate as secondary to the functional role the preference plays in science."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "Engineers build bridges because the professional norm demands using 'proven' methods, regardless of logical justification."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The strongest case is that the preference is defensible as a 'non-justificatory' heuristic: we prefer the better-corroborated theory because it is the most 'testable' going forward, maximizing the rate of potential error detection, not because it is likely true.",
+      "mechanism": "Future-oriented testability mechanism. We don't choose Theory A because it's probably true; we choose it because it makes bold predictions that allow us to learn faster. If it fails, we learn more. If it survives, we have a stronger tool. This aligns with Popper's goal of 'growth of knowledge'. The 'smuggling' charge fails because the criterion is 'potential for falsification', not 'probability of truth'. The cost is accepting that we might be acting on a theory we expect to refute soon, purely for the sake of the refutation.",
+      "counterconditions": [
+        "If engineers need reliability, not just fast learning.",
+        "If 'boldness' correlates with falsehood, making the heuristic self-defeating for action.",
+        "If this shifts the goal of science from truth to mere activity."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Clarifies that 'testability' is a logical property, not an inductive assumption about uniformity."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Bypasses verisimilitude by focusing on the *process* of testing rather than the *state* of the theory."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "revised",
+          "note": "Addresses action by redefining 'acting on' as 'using as a probe for further errors', which is valid even for bridges (monitoring for failure)."
+        },
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "Defends the preference as a strategic heuristic for knowledge growth, explicitly endorsed by Popper."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "rebutted",
+          "note": "Shows this is consistent with Popper's core texts without needing the later propensity turn."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "revised",
+          "note": "Refines the bridge example: we build with the best theory *and* instrument it heavily to detect failure, aligning with the 'maximize testability' goal."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008"
+      ]
+    }
+  ]
+}
