@@ -904,3 +904,72 @@ Rubric: 6/6 yes — traces to R30/R36 (the scope this gate guards) and to the
 change workflow's own frozen-surface checkpoint; the mechanism is measured
 (the matched lines are pasted, not summarised); no acceptance check moves; the
 gate is not weakened, only its false-positive class disclosed.
+
+---
+
+# Amendment 4 (2026-09-09) — the ceiling is corrected to 6 500, on the operator's word
+
+Authority: REQUEST.md Amendment 2, R41, the operator's "Raise." given after the
+step-17 stop was presented with the overrun's two measured causes and three
+priced options.
+
+**What Amendment 2 said, and what happens to it.** Amendment 2 closed with:
+"If the tranche approaches it, that is a signal to split again, not to amend a
+third time; a third amendment to this number would be the S5 failure arriving
+one step later than usual." That was this window's own caution and it fired
+correctly — the gate tripped, the window stopped, and the decision went to the
+operator instead of being taken quietly. The operator has overruled it. The
+sentence stands in Amendment 2 unedited, because a caution that was right to
+fire is not made wrong by being overruled, and deleting it would hide the fact
+that a ceiling was raised a third time.
+
+**The two measured causes of the overrun**, from `git diff --numstat`:
+
+1. **857 lines of copied instruments that no itemization contained**:
+   `tools/w2_census.py` (519) and `tools/w2_q5.py` (338), W2's own criticism
+   census and placebo-rate instruments, copied verbatim with one line changed
+   in each. The decision to copy rather than reimplement was taken at step 4,
+   AFTER Amendment 2's itemization was written, and it was the right one: a
+   second implementation of the placebo measurement would have been a second
+   thing to keep in agreement with the first, which the modularity law exists
+   to prevent. The cost of that correctness is 857 lines this tranche commits
+   without authoring.
+2. **Workflow documents carrying their evidence inline**: SPEC.md 906 (four
+   amendments now), CHECKLIST.md 441 (every done-criterion's pasted output),
+   REQUEST.md 261, PARKED.md 186 — **1 794 against the 1 190 budgeted for
+   those four plus VALIDATION.md and DELIVERY.md**, neither yet written. This
+   is the format doing what it is for: a pasted output is what lets a later
+   reader check a claim without re-running anything.
+
+**The corrected ceiling, and its arithmetic.**
+
+    python3 -c "print(sum([4498,180,200,120,150,60,140,250,320,200,40,300]))"
+    6458
+
+- built and committed at step 17 (measured, not estimated) 4498
+- `judge_pairwise.py`'s five pairings and its two refusal tests 180
+- `tools/critic_stub.py` 200
+- `tools/make_vacuous_bank.py` 120
+- `tools/build_manifest.py` 150
+- `runs/config-{c,v,a}.yaml` 60
+- the tranche's remaining `tests/` 140
+- `claims.json` 250
+- `PREREG.md` 320
+- remaining `proof/` outputs 200
+- three `CASES` rows in `scripts/cycle_soak.py` 40
+- VALIDATION.md and DELIVERY.md 300
+
+**Ceiling: 6 500**, the itemized 6 458 plus a stated margin of 42. Declared
+areas unchanged. Frozen surfaces touched: still none — Amendment 1's CLEAR
+forecast and Amendment 3's declared false-positive class both stand.
+
+**What the raise does NOT buy.** Lines only. R38's tranche-1 boundary and C9
+are untouched: no live call is made in tranche 1, the credential stays unread,
+and the launches remain tranche 2. If the gate trips again, this window stops
+again and reports it — the rule that the window does not decide its own ceiling
+survives the operator having decided it once.
+
+Rubric: 6/6 yes — traces to R41; the headline equals its own pasted arithmetic,
+whose first term is a MEASURED number rather than an estimate; no acceptance
+check, census or forecast moves; the superseded caution is preserved rather
+than edited.

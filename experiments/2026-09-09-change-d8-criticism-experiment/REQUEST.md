@@ -259,3 +259,23 @@ C9: "no live call" (R38) is an absolute bound on tranche 1. Every instrument
     is proven against the deterministic stub, a committed root, or a fixture —
     never against the provider. The credential stays in place for tranche 2
     and is not read by anything tranche 1 runs.
+
+
+### Amendment 2 (2026-09-09) — the operator rules on the budget stop
+
+Received after step 17 committed the EXCEEDED verdict (4 498 of 4 400) and the
+stop was presented with three priced options. Verbatim, in full:
+
+> Raise.
+
+R41 (process): "Raise." The ceiling is corrected once more rather than the
+    tranche being split again or its documents trimmed. SUPERSEDES the
+    self-imposed rule this window wrote into SPEC.md Amendment 2 — "a third
+    amendment to this number would be the S5 failure arriving one step later
+    than usual". That sentence was this window's own caution, not an operator
+    law, and the operator has overruled it with the overrun's two measured
+    causes in front of them. It is recorded rather than deleted: the caution
+    was right to fire, and the decision to override it is the operator's to
+    take and is now on the record as theirs.
+    R38's tranche-1 boundary is untouched — the raise buys lines, not live
+    calls, and C9 (no live call in tranche 1) still binds.

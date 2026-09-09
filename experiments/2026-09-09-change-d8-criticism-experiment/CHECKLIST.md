@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=18 blockers=BUDGET CEILING EXCEEDED at step 17 (4498/4400). Stopped for the operator's words per dr-execute-step; SPEC Amendment 2 forbade a third raise, so this is not a decision this window may take alone. Nothing is broken: every instrument built so far is proven and pushed  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
+State: next=18 blockers=none  (budget stop RESOLVED at step 17 by the operator: "Raise." -- ceiling 6500, SPEC Amendment 4, itemized from a measured 4498 base. The raise buys lines, not live calls: C9 still binds)  (step 10a inserted: a fixture positive control for the argumentative column, because no committed root can drive it)  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
