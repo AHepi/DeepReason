@@ -7,6 +7,18 @@ history, (b) this session's operational record, (c) live operator probes
 of four engine models (transcripts: experiments/results/operator_probes.json
 — three scenarios x {deepseek-v4-flash, v4-pro, laguna-m.1, laguna-xs.2}).*
 
+**Archive note, 2026-09-09 (audit §6.1).** The result file this document cites
+(`experiments/results/operator_probes.json`) was removed from the working tree
+by the deliberate retirement recorded in
+`experiments/results/INDEX_2026-07-13.md`, and is archived at commit
+`3d839b3`, the last commit containing the complete record (`git checkout
+3d839b3 -- experiments/results/`). **A shallow clone cannot follow that
+pointer:** in a clone truncated after 2026-07-13, `git cat-file -t 3d839b3`
+returns `fatal: Not a valid object name 3d839b3`, which is how this repository
+is fetched in the cloud container. The retirement changes none of the claims
+below. Finding:
+`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.1.
+
 ## Ranked causes
 
 ### 1. Until the remediation, the pipeline was not drivable end-to-end

@@ -4,6 +4,50 @@
 committed, byte-for-byte replayable run logs, and where the evidence is
 thin I say so.*
 
+**Archive note, 2026-09-09 (audit §6.1).** The result files this document
+cites (`experiments/results/basin_live_report.json`,
+`experiments/results/mini_creativity_report.json`,
+`experiments/results/mini_smoke_report.json`) were removed from the working
+tree by the deliberate retirement recorded in
+`experiments/results/INDEX_2026-07-13.md`, and are archived at commit
+`3d839b3`, the last commit containing the complete record (`git checkout
+3d839b3 -- experiments/results/`). **A shallow clone cannot follow that
+pointer:** in a clone truncated after 2026-07-13, `git cat-file -t 3d839b3`
+returns `fatal: Not a valid object name 3d839b3`, which is how this repository
+is fetched in the cloud container. The retirement changes none of the claims
+below. Finding:
+`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.1.
+
+**Demotion notice, 2026-09-09 — read this before Result 1.** Every novelty
+number below was computed with the 128-dimension hashing embedder described
+under "Why you can't just eyeball it", and this repository has already ruled
+that instrument unverified. E0.1, a zero-token recalibration against a real
+neural embedder (`BAAI/bge-small-en-v1.5`), had **all four pre-registered
+predictions REFUTED**: the share of hash-novel ideas that a real embedder
+scores as near-duplicates was predicted at 20% or less with a falsifier at
+40%, and measured **1.0 on both roots** — under the neural embedder the
+corpus cross-problem median distance (0.26) sits below the planted-paraphrase
+median (0.32), so what hashing scored as variation is near-duplication at
+neural scale. `experiments/results/INDEX_2026-07-13.md:75-77` records the
+consequence in the project's own words: *"prior hash-based novelty numbers
+demoted to unverified; E2.3 now gates any repetition of the soft-basin
+claim."* **E2.3 was never run** — no report under `experiments/results/`, no
+tranche directory, no index line — and by that same index's standing rule,
+*"An experiment that isn't in an index does not exist."*
+
+So the honest state of Result 1 is not that it is false. It is that **the
+soft-basin finding is unverified by this repository's own ruling, and the
+experiment appointed to resolve it was never run.** E0.1's own caveat is
+n = 2 roots, both `gemma4:31b` website runs, which is a different model on a
+different workload from the basin live phase — which is exactly why E2.3 was
+made the gate rather than the demotion being called final. Nothing below has
+been deleted or reworded; the reach of the demotion, claim by claim, is stated
+at Result 1. Prediction and falsifier: `docs/EXPERIMENT_PROGRAM_2026-07.md`
+lines 135-137 and 143. Report:
+`experiments/results/e01_embedder_recalibration_report.json` — present in the
+working tree; the 2026-07-13 retirement did not reach it. Finding:
+`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.4.
+
 ## The question
 
 A language model is trained to predict likely text, so when you ask it for
@@ -52,6 +96,27 @@ spots. Real effects are, if anything, understated. Treat small differences
 with suspicion and the qualitative separations below as the signal.
 
 ## Result 1: the stall lives inside the model, not the prompt
+
+**This result is unverified by this repository's own ruling** — see the
+demotion notice at the top of this page. **How far the demotion reaches
+(2026-09-09, audit §6.4).** Stated precisely, because it decides what
+survives and what does not.
+
+- **Demoted to unverified:** every novelty *level* and every late/early
+  *ratio* on this page — 0.846, 0.888, 0.973, 0.865, 1.037, 1.12 — and every
+  echo-vs-chance figure, which locates a nearest earlier neighbour with the
+  same hashing embedder. These are hash-based novelty numbers, and the
+  registered consequence at `experiments/results/INDEX_2026-07-13.md:75-77`
+  names them.
+- **Not demoted:** the gate-block counts in Result 2 (0 in every healthy arm,
+  54 and 36 in the two orbiting arms) and the 4.3× cost figure. The
+  anti-relapse gate has three paths — hash identity against a refuted prior,
+  an embedding path, and battery equivalence over a verdict vector — and the
+  embedding path ships disarmed (`src/deepreason/config.py`,
+  `NEAR_DUP_EPS: float | None = None`), so in this era the gate was
+  hash-and-verdict-only. **Refuted-attractor orbiting does not depend on the
+  demoted instrument**, and neither does the gate-rate detector that Result 2
+  proposes.
 
 The basin study (`docs/BASIN_REPORT.md`) asked why conjecture starts
 circling. A leading suspect was the echo chamber: the harness shows the
@@ -167,6 +232,39 @@ favourite. (Fine print: the shortlist was chosen for mutual distinctness,
 not quality, so the tournament ranks which of those 5 very different
 theories the judge prefers, not which of all 27 is best. Control gate
 0.844, so the instrument was validly discriminating.)
+
+## Added 2026-09-09: the widest capability result in this repository is not on this page
+
+Everything above is one run per condition on a deliberately scale-blind
+instrument, and its central novelty numbers now carry the demotion notice at
+the top. The repository's broadest measurement of what these models can and
+cannot do sits in a report no reader-facing document has cited until now, and
+it deserves to be read beside this page.
+
+The **eleven-model judge zoo** (`experiments/results/e02_t3_judge_zoo_report.json`)
+put eleven models from six families, 27B to 675B, at temperature 0 through the
+same 120 items with ground truth by construction — **1,561 judgments**. Each
+model was asked of each item whether there was a fault in it. Items came in
+three kinds: a fault whose category the model's own checklist named, a fault
+outside that checklist, and clean work. Naming a fault you were handed the
+category for is solved: every model of eleven scored between 0.925 and 1.000.
+Finding a fault nobody named ranges from 0.150 to 0.900 across the same models
+on the same items — and it moves in lockstep with how much sound work the
+model wrongly flags. The registered prediction P3 asked whether **any single
+model of the eleven** could find half the unnamed faults while flagging at
+most 15% of sound work. **P3: REFUTED. Zero qualifying seats.** Not one could.
+Detection of an unnamed fault is bought almost one-for-one with false alarms
+on good work.
+
+That is the widest-support result in this record — eleven models, six
+families, temperature 0 — and unlike the numbers above it does not depend on
+the demoted embedder at all. **Its own limit, stated plainly:** the
+unlabelled-fault items and the clean items were all authored by a single
+model, so family effects in the results are tangled with the item author's
+family. Source: the 2026-09-08 capability audit §6.2 and §1.2
+(`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md`); index entry
+in `experiments/results/INDEX_2026-07-13.md`; pre-registration
+`experiments/e02_t3_judge_zoo_prereg.yaml`.
 
 ## What this shows, and what it doesn't
 

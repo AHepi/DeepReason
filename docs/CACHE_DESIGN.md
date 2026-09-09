@@ -8,6 +8,19 @@ without prefix caching. Five rival designs survived criticism under the
 `experiments/results/cache_design_report.json`. This note distills what
 we act on.*
 
+**Archive note, 2026-09-09 (audit §6.1).** The result files this document
+cites (`experiments/results/cache_design_report.json`,
+`experiments/results/cachebench_report.json`) were removed from the working
+tree by the deliberate retirement recorded in
+`experiments/results/INDEX_2026-07-13.md`, and are archived at commit
+`3d839b3`, the last commit containing the complete record (`git checkout
+3d839b3 -- experiments/results/`). **A shallow clone cannot follow that
+pointer:** in a clone truncated after 2026-07-13, `git cat-file -t 3d839b3`
+returns `fatal: Not a valid object name 3d839b3`, which is how this repository
+is fetched in the cloud container. The retirement changes none of the claims
+below. Finding:
+`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.1.
+
 ## The surviving design space
 
 1. **Exact pack fingerprint cache** (`ce1b3cfc`): SHA-256 of the rendered

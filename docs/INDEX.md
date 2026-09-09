@@ -76,6 +76,20 @@ one origin directory" test and failed it, or is otherwise blocked:
   (`experiments/solo_autonomics_design.md`) is one loose design file,
   not a dated experiment directory.
 
+**Archive note, 2026-09-09 (audit §6.1).** The four result files named in the
+bullets above — `experiments/results/mini_creativity_report.json`,
+`mini_smoke_report.json`, `mini_chaos_report.json` and
+`mini_gauntlet_report.json` — were removed from the working tree by the
+deliberate retirement recorded in `experiments/results/INDEX_2026-07-13.md`,
+and are archived at commit `3d839b3`, the last commit containing the complete
+record (`git checkout 3d839b3 -- experiments/results/`). **A shallow clone
+cannot follow that pointer:** in a clone truncated after 2026-07-13, `git
+cat-file -t 3d839b3` returns `fatal: Not a valid object name 3d839b3`, which
+is how this repository is fetched in the cloud container. That does not change
+the stayed-or-moved reasoning above; it changes what a reader who follows one
+of these paths finds. Finding:
+`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.1.
+
 ## Decisions — proposed, not all accepted
 
 **[`docs/proposals/`](proposals/)** — a pre-acceptance decision queue:
