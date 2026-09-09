@@ -8,6 +8,18 @@ with each component traceable to the design family that contributed it
 and to the criticism that shaped it. It is the blueprint for the code
 change; nothing here is implemented yet.*
 
+**Archive note, 2026-09-09 (audit §6.1).** The result file this document cites
+(`experiments/results/controller_ab_report.json`) was removed from the working
+tree by the deliberate retirement recorded in
+`experiments/results/INDEX_2026-07-13.md`, and is archived at commit
+`3d839b3`, the last commit containing the complete record (`git checkout
+3d839b3 -- experiments/results/`). **A shallow clone cannot follow that
+pointer:** in a clone truncated after 2026-07-13, `git cat-file -t 3d839b3`
+returns `fatal: Not a valid object name 3d839b3`, which is how this repository
+is fetched in the cloud container. The retirement changes none of the claims
+below. Finding:
+`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.1.
+
 ## The architecture (four components, one dependency direction)
 
 Dependencies run strictly: constitution → update rule → detector →

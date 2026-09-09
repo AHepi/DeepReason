@@ -7,6 +7,69 @@
 *`experiments/results/basin_offline_report.json`,*
 *`experiments/results/basin_live_report.json`, run roots `runs/basin/*`.*
 
+**Archive note, 2026-09-09 (audit §6.1).** The result files this document
+cites (`experiments/results/basin_offline_report.json`,
+`experiments/results/basin_live_report.json`) were removed from the working
+tree by the deliberate retirement recorded in
+`experiments/results/INDEX_2026-07-13.md`, and are archived at commit
+`3d839b3`, the last commit containing the complete record (`git checkout
+3d839b3 -- experiments/results/`). **A shallow clone cannot follow that
+pointer:** in a clone truncated after 2026-07-13, `git cat-file -t 3d839b3`
+returns `fatal: Not a valid object name 3d839b3`, which is how this repository
+is fetched in the cloud container. The retirement changes none of the claims
+below. Finding:
+`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.1.
+
+**Demotion notice, 2026-09-09 — read this before the abstract.** Every
+novelty number in this report was computed with the 128-dimension hashing
+embedder, and this repository has already ruled that instrument unverified.
+E0.1, a zero-token recalibration against a real neural embedder
+(`BAAI/bge-small-en-v1.5`), had **all four pre-registered predictions
+REFUTED**: the share of hash-novel conjectures that a real embedder scores as
+near-duplicates was predicted at 20% or less with a falsifier at 40%, and
+measured **1.0 on both roots** — under the neural embedder the corpus
+cross-problem median distance (0.26) sits below the planted-paraphrase median
+(0.32). What hashing scored as variation is near-duplication at neural scale.
+`experiments/results/INDEX_2026-07-13.md:75-77` records the consequence
+verbatim: *"prior hash-based novelty numbers demoted to unverified; E2.3 now
+gates any repetition of the soft-basin claim."* **E2.3 was never run** — no
+report, no tranche directory, no index line — and by that same index's
+standing rule, *"An experiment that isn't in an index does not exist."*
+
+This report's §7 already names the instrument as a threat to validity, but
+argues it in the opposite direction: that a scale-blind embedder understates
+real effects, making confirmations conservative. E0.1 measured the error
+running the other way. **Finding (1) below — the soft basin — therefore
+stands as unverified by this repository's own ruling, and the experiment
+appointed to resolve it was never run.** E0.1's own caveat is n = 2 roots,
+both `gemma4:31b` website runs, a different model on a different workload
+from this study's live phase, which is precisely why E2.3 was made the gate
+rather than the demotion being called final.
+
+**How far the demotion reaches, claim by claim (audit §6.4).**
+
+- **Demoted to unverified:** every novelty *level* and late/early *ratio* in
+  this report — 0.846, 0.888, 0.973, 0.865, 1.037 and the offline
+  0.85-0.94 band — and every echo-vs-chance figure (0.22-0.87×, 0.49×),
+  which locates a nearest earlier neighbour with the same embedder. Findings
+  (1) and (2) rest on these.
+- **NOT demoted:** finding (3), refuted-attractor orbiting, and finding (4),
+  the gate-block detector. The gate-block counts (0 in every healthy arm, 54
+  and 36 in the two orbiting arms) and the 4.3× cost-per-registered-conjecture
+  figure do not come from the embedder at all: the anti-relapse gate has three
+  paths — hash identity against a refuted prior, an embedding path, and
+  battery equivalence over a verdict vector — and the embedding path ships
+  disarmed (`src/deepreason/config.py`, `NEAR_DUP_EPS: float | None = None`),
+  so in this era the gate was hash-and-verdict-only. §8 already named these
+  two as "the novel claims worth defending"; they are also the two the
+  demotion does not reach.
+
+Nothing below has been deleted or reworded. Prediction and falsifier:
+`docs/EXPERIMENT_PROGRAM_2026-07.md` lines 135-137 and 143. Report:
+`experiments/results/e01_embedder_recalibration_report.json` — present in the
+working tree; the 2026-07-13 retirement did not reach it. Finding:
+`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.4.
+
 ## Abstract
 
 Multi-agent LLM systems that maintain persistent "schools" of conjecture
@@ -127,6 +190,11 @@ invariants verified clean after every arm.
 | G-weak-hot | laguna-m.1, t=1.0 | 8 | n/a (too few) | 0.0 | **36** |
 
 ### P1 — exhaustion vs conditioning (primary): causal core confirmed
+
+*Unverified by this repository's own ruling (2026-09-09) — the 0.888 and
+0.846 figures below are hash-based novelty numbers demoted by E0.1, and E2.3,
+the experiment appointed to gate any repetition of the soft-basin claim, was
+never run. See the demotion notice above the abstract; audit §6.4.*
 
 The blind arm, which never sees prior output, declines the same as the
 conditioned control (0.888 vs 0.846, within the pre-registered 0.15

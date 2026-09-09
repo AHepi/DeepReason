@@ -2659,3 +2659,93 @@ and carries a Traps entry. Narrowed on the operator's decision, 2026-09-05,
 The error to avoid repeating: an instrument written to record that a road WAS
 taken must be scoped to that road. A diff-size assertion is never scoped to
 anything — it freezes a file, and a frozen file is a rule nobody voted for.
+
+## 2026-09-09
+
+**E81 — `docs/CAN_LLMS_EXPLORE.md` and `docs/BASIN_REPORT.md` published the
+soft-basin claim after this repository had demoted the instrument that
+produced it, and after appointing a gate experiment that never ran.**
+Both documents argue the hashing embedder's blindness in ONE direction — that
+it understates real effects, making confirmations conservative
+(`docs/CAN_LLMS_EXPLORE.md` "Why you can't just eyeball it";
+`docs/BASIN_REPORT.md` §7). Neither mentions E0.1.
+
+What the record shows: E0.1 (zero-token recalibration against
+`BAAI/bge-small-en-v1.5`) had all four pre-registered predictions REFUTED, the
+share of hash-novel ideas that a real embedder scores as near-duplicates
+measuring 1.0 on both roots against a 0.40 falsifier — the error runs the
+other way. `experiments/results/INDEX_2026-07-13.md:75-77` records the
+consequence: *"prior hash-based novelty numbers demoted to unverified; E2.3
+now gates any repetition of the soft-basin claim."* The pre-registration set
+that gate before the numbers were seen
+(`docs/EXPERIMENT_PROGRAM_2026-07.md:135-137`). E2.3 has no report, no tranche
+directory and no index line; by the same index's standing rule it did not
+happen.
+
+**The demotion's reach, which is the part worth carrying forward.** DEMOTED:
+every novelty level and late/early ratio in both documents — 0.846, 0.888,
+0.973, 0.865, 1.037, 1.12 and the offline 0.85-0.94 band — plus every
+echo-vs-chance figure, all of which locate a nearest earlier neighbour with the
+demoted embedder. NOT DEMOTED: the gate-block counts (0 in every healthy arm,
+54 and 36 in the two orbiting arms) and the 4.3× cost-per-registered-conjecture
+figure. The anti-relapse gate has three paths and its embedding path ships
+disarmed (`src/deepreason/config.py`, `NEAR_DUP_EPS: float | None = None`), so
+in that era the gate was hash-and-verdict-only: refuted-attractor orbiting and
+the gate-rate detector — the two findings `docs/BASIN_REPORT.md` §8 itself
+names as the novel claims worth defending — do not depend on the demoted
+instrument.
+
+Not "the basin finding is false": E0.1's own caveat is n = 2 roots, both
+`gemma4:31b` website runs, a different model and workload from the basin live
+phase, which is why E2.3 was made the gate rather than the demotion being
+called final. The honest state is **unverified by this repository's own
+ruling, with the experiment appointed to resolve it never run**.
+
+**Where corrected.** Both documents gain a dated demotion notice above their
+first claim and a per-claim reach note beside the soft-basin result; no
+sentence, table row or number was deleted or reworded, per the withdrawn-claims
+pattern this index set at `INDEX_2026-07-13.md`. Corrected 2026-09-09,
+`experiments/2026-09-09-change-audit-part-6-corrections/`. Finding:
+`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.4.
+
+**E82 — CLAUDE.md's judge law compressed two instruments into one range.**
+The 2026-08-28 amended judge law read *"0-2.5% false conviction of sound
+work"*, which reads as one measured interval. The record has two separate
+measurements: 0.0 is the defended court's SUSTAIN rate on 42 clean items
+(`experiments/results/court_calibration_v1_report.json`); 0.025 is an
+unanimous judge PAIR's FLAG rate on 40 clean items with no defender present
+(`experiments/results/e02_t2_voting_report.json`). Two instruments, two units,
+two corpora. The review tranche that produced the amendment
+(`experiments/2026-08-09-change-judge-evidence-review/`) names both sources in
+one sentence and is scrupulous about it; the compression happened when the
+finding was carried into the standing law. The law's meaning is unaffected —
+judges under-convict in the frozen configuration — and the same law's 11.9%
+sensitivity is single-sourced and exact.
+
+**Where corrected.** The law's sentence now carries both sources with their
+units in place; nothing else in the entry changed. Corrected 2026-09-09,
+`experiments/2026-09-09-change-audit-part-6-corrections/`. Finding:
+`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.3.
+
+**E83 — `INDEX_2026-07-13.md`'s "Citations elsewhere" names a document that
+no longer cites, and misses two that do.** The retirement entry lists
+`README.md`, `docs/CAN_LLMS_EXPLORE.md`, `docs/BASIN_REPORT.md`,
+`docs/STATE_OF_THE_THEORY.md`, `docs/MINI_PLAN.md` "and others" as the
+documents citing retired result files, and the 2026-09-08 audit's §6.1 carried
+that list forward as its nine.
+
+What the record shows: `docs/STATE_OF_THE_THEORY.md` contains no citation to
+any of the thirteen retired files and no `experiments/results/` path at all,
+while `docs/OPERATOR_DIAGNOSIS.md` (`operator_probes.json`) and
+`docs/INDEX.md` (`mini_creativity_report`, `mini_smoke_report`,
+`mini_chaos_report`, `mini_gauntlet_report`) both cite and appear in neither
+list. The set that needed an archive note was therefore ten documents, not
+nine, and not the nine named.
+
+**Where corrected.** The archive note went to the ten documents that actually
+cite a retired file; `docs/STATE_OF_THE_THEORY.md` was left untouched, because
+a note there would assert a citation the document does not make. The
+2026-07-13 entry's own wording is NOT edited — it is a record of an act on the
+day it happened, and "and others" was never a closed list. Recorded 2026-09-09,
+`experiments/2026-09-09-change-audit-part-6-corrections/`. Related finding:
+`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.1.

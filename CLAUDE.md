@@ -578,7 +578,15 @@ before treating a green soak as full coverage
   docs/RESEARCH_JUDGE_BLINDING_2026-08-22.md). What the record shows:
   in the frozen configuration (cross-family pairing, unanimous vote)
   judges UNDER-convict — 11.9% sensitivity on planted ground-truth
-  defects, 0-2.5% false conviction of sound work; every looser
+  defects, and false conviction of sound work measured at 0.0 (the
+  defended court's SUSTAIN rate on 42 clean items,
+  `court_calibration_v1_report.json`) and at 2.5% (an unanimous judge
+  PAIR's FLAG rate on 40 clean items with no defender present,
+  `e02_t2_voting_report.json`) — two instruments, two units, two
+  corpora, never one measured interval (sourcing split 2026-09-09 on
+  the capability audit's §6.3,
+  `experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md`; the
+  finding it replaces is unchanged in meaning); every looser
   configuration measured (same-family, either-suffices) over-convicts
   at 47-60%; the indiscriminate stage is the CRITIC's raw objection
   flow, not the judge-gated conviction; and label/provenance exposure,

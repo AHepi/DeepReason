@@ -13,6 +13,19 @@ live Gemma/frontier acceptance thresholds remain uncollected; see
 system's experiment record (see `experiments/results/INDEX_2026-07-05.md`,
 `docs/BASIN_REPORT.md`). Nothing is kept on faith.*
 
+**Archive note, 2026-09-09 (audit §6.1).** The result files this document
+cites (`experiments/results/mini_smoke_report.json`,
+`experiments/results/mini_seat_certification.json`) were removed from the
+working tree by the deliberate retirement recorded in
+`experiments/results/INDEX_2026-07-13.md`, and are archived at commit
+`3d839b3`, the last commit containing the complete record (`git checkout
+3d839b3 -- experiments/results/`). **A shallow clone cannot follow that
+pointer:** in a clone truncated after 2026-07-13, `git cat-file -t 3d839b3`
+returns `fatal: Not a valid object name 3d839b3`, which is how this repository
+is fetched in the cloud container. The retirement changes none of the claims
+below. Finding:
+`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §6.1.
+
 ## 1. Thesis
 
 DeepReason's measured value lives in its **bookkeeping and gates**, not
