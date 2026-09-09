@@ -1,0 +1,232 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'methodological convention' that constitutes the game of science, distinct from a claim about future truth.",
+      "mechanism": "Conventionalist Decree: The scientific community adopts a rule to act on the best-tested theory not because it predicts future success (induction), but because this rule maximizes the rate of error elimination. It is a procedural commitment, not an epistemic probability assignment.",
+      "counterconditions": [
+        "If the adoption of the convention itself requires an inductive argument to be persuasive.",
+        "If the convention fails to explain why scientists feel justified in acting on these theories in high-stakes scenarios.",
+        "If the distinction between 'acting as if true' and 'believing it probable' collapses in practice."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "The move from 'others falsified' to 'choose this one' does not assume uniformity of nature; it assumes only the methodological rule to eliminate error. We choose the survivor not because it will survive tomorrow, but because it is the only one not yet known to be false. This is a logical status update, not a prediction."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "revised",
+          "note": "Revised to explicitly distinguish 'methodological convention' from 'pragmatic reliability.' The convention is not adopted *because* it yields reliability (which would be inductive); it is adopted as a definition of rational scientific behavior. Reliability is a hoped-for byproduct, not the justification."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departing from reliance on 'verisimilitude' as the primary defense. This candidate argues the defense rests on procedural rules, not on the metaphysical claim that surviving theories are closer to truth."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "This candidate presents the strongest case for the 'defensible' answer by framing it as a constitutive rule. The adjudication phase follows in the synthesis of the full response set, where this view is weighed against the induction charge."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Rejects the false dichotomy. One can choose a theory for action based on its current logical status (unfalsified) without assuming it will remain unfalsified. Action is taken in the present based on present knowledge, not future guarantees."
+        }
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_008"]
+    },
+    {
+      "claim": "The preference smuggles induction back in, rendering Popper's system internally inconsistent when moving from the logic of discovery to the pragmatics of action.",
+      "mechanism": "Hidden Premise Exposure: Any decision to prefer Theory A over Theory B for future action necessarily relies on the premise that 'past performance is a guide to future results.' Without this premise, the fact that A survived tests T1..Tn provides no reason to expect it to survive Tn+1 or to work in application.",
+      "counterconditions": [
+        "If Popper can define a form of 'rational action' that does not rely on expectations of future success.",
+        "If the preference is shown to be purely psychological rather than rational.",
+        "If the 'induction' identified is actually a deductive consequence of the goal to avoid known falsehoods."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "Agrees with the criticism: choosing the 'only standing candidate' for *action* (not just retention) implicitly assumes the future will resemble the past enough for the candidate to remain standing or effective. This is the uniformity of nature."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Supports the criticism that calling it a 'convention' masks the underlying inductive bet. We only adopt the convention because we believe (inductively) that it works better than random guessing."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Confirms that 'verisimilitude' cannot save Popper here because claiming a theory is 'closer to truth' based on past tests is itself an inductive inference about the relationship between test survival and truth."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "This candidate fulfills the directive by making the strongest possible case for the 'induction' side, arguing that the pragmatic necessity of action forces the reintroduction of the very principle Popper sought to eliminate."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Refutes the idea that this is a false dichotomy. The choice to act *is* a prediction. To deny this is to deny the link between belief/action and expectation, which is central to rational agency."
+        }
+      ],
+      "typicality": 0.80,
+      "optional_refs": ["SRC_006"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view scientific preference as an evolutionary selection mechanism where 'rationality' is replaced by 'survival fitness' of ideas, bypassing the need for logical justification.",
+      "mechanism": "Evolutionary Epistemology: Scientists preferring corroborated theories is a behavioral trait selected for because groups that act on well-tested theories survive longer. The 'defensibility' is biological/sociological, not logical. Popper's terms hold if science is viewed as conjecture and elimination (variation and selection).",
+      "counterconditions": [
+        "If evolutionary success does not correlate with truth-likeness (e.g., useful fictions survive better).",
+        "If the normative question ('ought we to prefer?') cannot be reduced to a descriptive one ('we do prefer').",
+        "If Popper's specific demand for a logical basis for preference overrides evolutionary explanations."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "departure_declared",
+          "note": "Departing from the assumption that the problem requires a *logical* derivation. This candidate argues the problem is misplaced; the 'preference' is a natural phenomenon, not a logical puzzle requiring an inductive bridge."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "The criticism assumes a need for justification. Evolution needs no justification, only explanation. The 'smuggling' is only visible if one insists on a foundationalist logic that evolution renders obsolete."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "revised",
+          "note": "Revised to clarify that 'verisimilitude' is an emergent property of the selection process, not a pre-existing metric used to guide it. We don't choose because it's closer to truth; it becomes closer to truth because we choose (and test) it."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "This offers a third way, satisfying the dialectic by challenging the binary premise of the original question while still addressing the core tension between Popper's logic and scientific practice."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Denies the dichotomy between 'logical necessity' and 'induction'. There is a third category: 'adaptive behavior'. The preference is neither logically necessary nor inductively derived; it is evolutionarily stable."
+        }
+      ],
+      "typicality": 0.65,
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "Popper's preference is defensible via a 'decision-theoretic' asymmetry: the cost of acting on a falsified theory is catastrophic, while the cost of acting on an unfalsified one is merely risky, creating a non-inductive rational imperative.",
+      "mechanism": "Asymmetric Loss Function: Rational agents minimize maximum regret. Since a falsified theory is known to be false (infinite cost in some domains), and an unfalsified theory is merely unknown, minimizing risk dictates choosing the unfalsified theory. This relies on the logic of avoidance, not the probability of success.",
+      "counterconditions": [
+        "If the agent has positive goals that require truth, not just avoidance of falsehood.",
+        "If the 'risk' of the unfalsified theory turning out false tomorrow is treated as equivalent to the known falsehood of the other.",
+        "If this decision rule itself presupposes that the future structure of costs resembles the past."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "The choice is not based on the expectation that the theory will hold (uniformity), but on the certainty that the alternative *has failed*. It is a choice of the 'least bad known option', which is a deductive status, not an inductive projection."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "revised",
+          "note": "Clarifies that this is not a mere convention but a derived imperative from the goal of avoiding known error. It bridges the gap between methodological rule and pragmatic reliability without invoking induction."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Does not rely on verisimilitude. It relies on the binary state of 'falsified' vs 'not yet falsified'. The preference is for the state of 'not known false', regardless of truth-likeness."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Provides the strongest case for defensibility by grounding it in standard decision theory under uncertainty, which Popper accepts, rather than in contested epistemic probabilities."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Challenges the definition of induction. Avoiding a known cliff is not assuming the ground ahead is solid; it is simply avoiding the known hole. This is deductive risk management."
+        }
+      ],
+      "typicality": 0.70,
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is a performative contradiction in Popper's system: he rejects induction logically but reinstates it pragmatically, suggesting his 'solution' is a linguistic sleight of hand rather than a philosophical resolution.",
+      "mechanism": "Pragmatic Reintroduction: Popper defines corroboration as a report of past performance. When he advises acting on it, he implicitly treats this report as a predictor. The 'cost' of accepting this view is admitting that pure non-inductive science is impossible for acting agents; we must be 'crypto-inductivists'.",
+      "counterconditions": [
+        "If Popper can articulate a form of 'expectation' that is not predictive.",
+        "If the 'performative contradiction' is resolved by separating the roles of 'critic' and 'actor'.",
+        "If the inconsistency is deemed a feature (fallibilism applied to methodology itself) rather than a bug."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "Strongly supports the criticism: the jump from 'report of past' to 'guide for action' is exactly the inductive step Popper claims to avoid. The 'standing candidate' argument fails because standing in the past does not guarantee standing in the future without the uniformity assumption."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "Agrees that the 'convention' defense is a mask for the inductive habit. We conventionally agree to be inductivists because we cannot survive otherwise."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "Affirms that verisimilitude is the placeholder Popper uses to pretend he isn't doing induction. It is an untenable concept if stripped of inductive support."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Fulfills the dialectic by ruthlessly exposing the inconsistency, providing the strongest case for the 'smuggled induction' verdict."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Defends the criticism against the 'false dichotomy' charge. The dichotomy is real: either you predict the future based on the past (induction) or you don't. Popper tries to do both, which is the inconsistency."
+        }
+      ],
+      "typicality": 0.55,
+      "optional_refs": ["SRC_006", "SRC_011"]
+    },
+    {
+      "claim": "The preference is defensible as a 'critical attitude' where acting on the best-tested theory is the only way to expose it to new, severe tests, thereby advancing knowledge regardless of the theory's truth or future survival.",
+      "mechanism": "Test-Driven Action: We choose the best-corroborated theory not because we think it will work, but because it is the most informative lever to pull. If it fails, we learn more than if a weak theory fails. Action is a form of experimentation. The goal is learning, not success.",
+      "counterconditions": [
+        "If the stakes of action (e.g., building a bridge) preclude treating the action as a mere experiment.",
+        "If scientists act to achieve practical ends (flight, cure) rather than epistemic ends (learning).",
+        "If this redefinition of 'preference' diverges too far from the common understanding of the term."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "revised",
+          "note": "Revised to clarify that the 'choice' is for the purpose of testing, not for the purpose of relying. This avoids the uniformity assumption because we are prepared for the theory to fail; indeed, we hope it might, to learn."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "This is not a convention masking induction; it is a strategic maximization of information gain. It is fully consistent with Popper's logic of falsification."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departing from the need to justify action via 'truth' or 'verisimilitude'. The justification is purely methodological: maximize test severity."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Offers a nuanced 'defensible' case that reframes the nature of scientific action, satisfying the dialectic requirement by offering a distinct perspective from the standard conventionalist or inductivist views."
+        },
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "Rejects the claim that this assumes future success. It assumes only that the *test* will yield data. Whether the theory survives is irrelevant to the rationality of the choice under this mechanism."
+        }
+      ],
+      "typicality": 0.45,
+      "optional_refs": ["SRC_005"]
+    }
+  ]
+}
