@@ -114,14 +114,37 @@ roots still report `valid: false` overall for that one derived finding.
 
 ### 4. The census — no currently-clean root changes verdict
 
-PENDING — a check-name-and-detail census over every committed root carrying a
-`log.jsonl` (94 of them) is running on both trees: the fixed tree in place, and
-the unfixed tree from a `git worktree` at this branch's pre-fix head with
-`PYTHONPATH` pointed at its own `src/`. The diff of the two is pasted here when
-it lands. What it is meant to settle: FIX.md's claim that no currently-clean
-root can become dirty, because `SEMANTIC_REJECTION` accepts
-`valid_indexes in ([], [len(trace) - 1])` where `FAILURE_REQUIRED` accepts only
-`[]`.
+`verify_root`'s violations, as a sorted list of `<check>::<detail>` strings,
+over every directory in the tree carrying a `log.jsonl` — 94 roots, zero
+unreadable. Run twice: the fixed tree in place, and the unfixed tree from a
+`git worktree` at this branch's pre-fix head with `PYTHONPATH` pointed at its
+own `src/`. Both runs read the same 94 roots; no root was written to. Script,
+both outputs and the diff recipe are committed at `census/`.
+
+    before roots: 94   after roots: 94
+    roots whose verdict MOVED: 2
+    == experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c
+      before: ['attempt-validity::event seq=17: failed call must contain no valid attempt, got [0]']
+      after : []
+    == experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-c3f3bf10bc57d63e224a9f1c68bf1057
+      before: ['attempt-validity::event seq=142: failed call must contain no valid attempt, got [0]',
+               'attempt-validity::event seq=215: failed call must contain no valid attempt, got [0]',
+               'attempt-validity::event seq=295: failed call must contain no valid attempt, got [0]']
+      after : []
+    clean before: 67 -> still clean after: 67
+    dirty before: 27
+
+Exactly two roots move, both from dirty to clean, and they are exactly the four
+calls FIX.md predicted. **All 67 roots that verified clean before verify clean
+after** — nothing moved the other way, which is what the superset argument
+predicted. The 25 roots carrying violations after carry the SAME violation
+strings they carried before.
+
+One of those 25 still names `attempt-validity`:
+`experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6`,
+"event seq=2413: successful call must have one final valid attempt, got []".
+That is the `SUCCESS_REQUIRED` clause — a different rule inside the same check,
+unchanged before and after, and not this tranche's.
 
 ## What this does NOT show
 
@@ -157,13 +180,37 @@ argument for it.
 
 ## The gate
 
-PENDING — `python -m pytest tests/ -q -n 4` is running. The brief names three
-pre-existing failures in `tests/test_organiser_seat.py` that predate this
-branch (a parallel window is fixing them); they will be reported by name and
-not counted as this tranche's. `docs/AUDIT_BASELINES.md` also names five tests
-flaky under `-n 4` (three in `tests/test_mcp_run.py`, two in
-`tests/test_mcp_scratch_bridge.py`, thread-join timing), green on a serial
-re-run.
+    python -m pytest tests/ -q -n 4
+    4 failed, 5169 passed, 6 skipped in 1871.67s (0:31:11)
+
+    FAILED tests/test_organiser_seat.py::test_the_fixture_is_the_committed_attachment_byte_for_byte
+    FAILED tests/test_organiser_seat.py::test_admission_mints_one_block_per_room_record
+    FAILED tests/test_organiser_seat.py::test_the_organiser_brief_shows_the_whole_room_and_the_directive
+    FAILED tests/test_mcp_run.py::test_start_poll_result_and_progress_notifications
+
+**None of the four is this tranche's, and both dispositions are measured, not
+asserted.**
+
+The three `test_organiser_seat.py` failures predate this branch — the brief
+names them and says a parallel window is fixing them. Reproduced on the
+pre-fix tree (the same `git worktree`, which carries main plus this tranche's
+docs-only grant commit and no code change):
+
+    cd <worktree> && PYTHONPATH=<worktree>/src python -m pytest tests/test_organiser_seat.py -q
+    3 failed, 9 passed in 4.75s
+    (the same three node ids)
+
+`test_mcp_run.py::test_start_poll_result_and_progress_notifications` is one of
+the five tests `docs/AUDIT_BASELINES.md` records as flaky under `-n 4` and
+green in a serial re-run (three in `test_mcp_run.py`, two in
+`test_mcp_scratch_bridge.py`, thread-join timing). This gate ran against two
+concurrent census processes on a 4-CPU box, which is why it took 31 minutes
+rather than the usual 14. Re-run serially:
+
+    python -m pytest tests/test_mcp_run.py::test_start_poll_result_and_progress_notifications -q
+    1 passed in 4.63s
+
+**Zero failures attributable to this change.**
 
 Rings already run green on the fixed tree, all at 0 failed:
 
@@ -186,8 +233,14 @@ all four exit 0 (`SEAM-llm-x-verification.md:173` 9.1 s, `:362` 5.0 s,
 
 ## Verdict
 
-PENDING — the criterion is met on every instrument run so far; the verdict line
-is written when the gate and the census land.
+**PASS.** GOAL.md's success criterion is met on both of its clauses. The
+regression file passes, its stub root verifies identically before and after a
+no-op continuation, and it is mutation-proven in both directions. The census
+FIX.md called for — the targeted instrument, the root sweep being retired —
+moves no committed root's verdict except the two FIX.md predicted, and moves
+neither of them the wrong way.
+
+Offline throughout. No live run was made, and GOAL.md did not ask for one.
 
 ## Residue (honest)
 

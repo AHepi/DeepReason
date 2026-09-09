@@ -293,8 +293,12 @@ The safety argument is a census, not a sweep: across every committed root,
 `SEMANTIC_REJECTION` accepts `valid_indexes in ([], [len(trace) - 1])` where
 `FAILURE_REQUIRED` accepts only `[]`, so the widened route is a strict superset
 and no root's verdict can move except from dirty to clean. Measured that way,
-not argued: a check-name-and-detail census over every committed root carrying a
-`log.jsonl`, run before and after, is pasted in that tranche's VERIFY.md.
+not argued: a check-name-and-detail census over all 94 committed roots carrying
+a `log.jsonl`, run on the fixed tree and on a worktree at the pre-fix head,
+moves exactly TWO verdicts — the two roots above, both dirty to clean — and
+leaves all 67 previously-clean roots clean. Script and both outputs are
+committed at
+`experiments/2026-09-06-defect-continuation-verification-flip/census/`.
 
 **The cost, recorded because it is real and was granted with it stated:** the
 check loses one tripwire. A record that CLAIMS a wire-valid reply was

@@ -57,7 +57,9 @@ the 2026-08-14 law makes legal rather than contradictory.
 - P1 (what an open work order should mean for `valid`, and for whether
   `continue`/`amend` may proceed) is untouched and ready to send.
 
-**Verdict: PENDING** at the time this segment was written — every instrument
-run so far is green and the two condemned roots re-derive clean; the full gate
-and the all-roots verdict census were still running. VERIFY.md carries the
-final line.
+**Verdict: PASS**, offline. The all-roots census moved exactly two verdicts,
+both from dirty to clean, and left all 67 previously-clean roots clean. The
+full gate reported 4 failed, 5169 passed; all four are other people's — three
+pre-existing `test_organiser_seat.py` failures reproduced on the pre-fix tree,
+and one documented `-n 4` thread-timing flake that passes serially. Detail and
+every pasted output live in VERIFY.md.

@@ -1,0 +1,208 @@
+{
+ ".swarm": [
+  "open::CorruptLogError(\".swarm/log.jsonl: bad line 1: 2 validation errors for Event\\nseq\\n  Field required [type=missing, input_value={'action': 'init', 'actor... '2026-08-24T03:30:55Z'}, input_type=dict]\\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\\nrule\\n  Field required [type=missing, input_value={'action': 'init', 'actor... '2026-08-24T03:30:55Z'}, input_type=dict]\\n "
+ ],
+ "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752": [],
+ "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc": [],
+ "experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829": [],
+ "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c": [],
+ "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c": [
+  "attempt-validity::event seq=17: failed call must contain no valid attempt, got [0]"
+ ],
+ "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea": [],
+ "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1": [],
+ "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7": [],
+ "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70": [],
+ "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b": [],
+ "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913": [],
+ "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008": [],
+ "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7": [],
+ "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726": [],
+ "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06": [],
+ "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949": [
+  "foreign-criticism::target 12c00042b3e5813dad4b98a3ed7c1f0886bdae9f7b01eef3022300de92fb4fe6 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 4177613a876a47bd548646c5648f214d11553911cdd8ebb12309257682ea7073 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 449fb5fcadbb6b272ac80208d0dbfd5620e26f6e3d2b7d2304d8dca37bfc33ad has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 4e5f48a573cbcf987d5d32cf2b086ab0d5d3a04a87b5515912610bd93dc3aeae has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 4f4b5e32fcf5d92db1694bc9a7819553eba95944a02481ea8b9f40261901e92c has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 60f1fabda2f965d0596649f929bc905920bc85139e731bea84f56296d42647bc has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 9090904a7be7cf1d74603ec2b2383a98049a7c9e696d0f7654e76a1fe2369cf0 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target d6d367db047fd75f87b7007a99b7ca6e29dd9a2ea08a87a60daaf5f173be61be has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target fe7b3b467ddd32dd126ccf3de48cc9f3437ec97ffdb9c62020985f5a3c50f82c has 0 foreign schools; policy requires 1"
+ ],
+ "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd": [],
+ "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484": [],
+ "experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-wiring/live_run_v7": [],
+ "experiments/2026-08-12-live-grounded-extension-expansion/run": [],
+ "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d": [],
+ "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d": [],
+ "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d": [],
+ "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4": [],
+ "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4": [],
+ "experiments/2026-08-22-change-epoch3-second-lineage/run": [],
+ "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c": [],
+ "experiments/2026-08-22-live-reach-rich-run/run": [],
+ "experiments/2026-08-24-change-rung7-wounds-falls-succession/run": [],
+ "experiments/2026-08-25-change-constructive-frontier/run": [],
+ "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6": [
+  "attempt-validity::event seq=2413: successful call must have one final valid attempt, got []"
+ ],
+ "experiments/2026-08-25-poietics-program/run": [],
+ "experiments/2026-08-26-pc2-rematch/retired-transport-timeout180-run-42ad288038dd606c": [],
+ "experiments/2026-08-26-pc2-rematch/retired-truncation-cap32768-run-58fb0d20488be869": [
+  "attempt-accounting::event seq=27: trace tokens=82499 but call tokens=43837",
+  "attempt-accounting::event seq=41: trace tokens=117286 but call tokens=77677",
+  "attempt-accounting::event seq=45: trace tokens=84865 but call tokens=45256",
+  "attempt-blobs::event seq=27 attempt=0: missing diagnostic ref",
+  "attempt-blobs::event seq=41 attempt=0: missing diagnostic ref",
+  "attempt-blobs::event seq=45 attempt=0: missing diagnostic ref",
+  "attempt-order::event seq=27 attempt=1: recorded attempt index=0",
+  "attempt-order::event seq=41 attempt=1: recorded attempt index=0",
+  "attempt-order::event seq=45 attempt=1: recorded attempt index=0",
+  "repair-metadata::event seq=27: final repair prompt does not match attempts",
+  "repair-metadata::event seq=27: repaired call lacks field diagnostic in final prompt",
+  "repair-metadata::event seq=41: final repair prompt does not match attempts",
+  "repair-metadata::event seq=41: repaired call lacks field diagnostic in final prompt",
+  "repair-metadata::event seq=45: final repair prompt does not match attempts",
+  "repair-metadata::event seq=45: repaired call lacks field diagnostic in final prompt"
+ ],
+ "experiments/2026-08-26-pc2-rematch/run": [],
+ "experiments/2026-08-26-pc2-rematch/run_h3": [],
+ "experiments/2026-08-27-pc2b-symmetric-reasoning/run": [],
+ "experiments/2026-09-01-live-all-modules-p-a1/run": [],
+ "experiments/2026-09-02-live-p-a2-corrected/failed-epoch3-run-1b89ed64e050c354": [],
+ "experiments/2026-09-02-live-p-a2-corrected/run": [
+  "foreign-criticism::target 6049eea6b9e2b1260a929389c9a97baf7b3e6af560ff2a0561179ca34ecc817d has 0 foreign schools; policy requires 1"
+ ],
+ "experiments/2026-09-03-change-provenance-history-channel/runs/home-default/runs/failed-429-run-fe00609058e10605590206d51ab2b7a0": [],
+ "experiments/2026-09-03-change-provenance-history-channel/runs/home-default/runs/retired-1cycle-run-292f964edb58e58ef0e7d957f29bac55": [],
+ "experiments/2026-09-03-change-provenance-history-channel/runs/home-default/runs/run-fe00609058e10605590206d51ab2b7a0": [],
+ "experiments/2026-09-03-change-provenance-history-channel/runs/home-h1/runs/retired-noinject-run-fe00609058e10605590206d51ab2b7a0": [],
+ "experiments/2026-09-03-change-provenance-history-channel/runs/home-h1/runs/retired-probe-contaminated-run-fe00609058e10605590206d51ab2b7a0": [],
+ "experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r2/runs/run-ad41064484366337ed61a9d5a58de58f": [],
+ "experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r2/runs/run-f23da86ddfd5ab820957221cfebe4b2e": [],
+ "experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r3/runs/run-ad41064484366337ed61a9d5a58de58f": [],
+ "experiments/2026-09-03-change-provenance-history-channel/runs/home-m1-r3/runs/run-f23da86ddfd5ab820957221cfebe4b2e": [],
+ "experiments/2026-09-03-change-provenance-history-channel/runs/home-m1/runs/run-ad41064484366337ed61a9d5a58de58f": [],
+ "experiments/2026-09-03-change-provenance-history-channel/runs/home-m1/runs/run-f23da86ddfd5ab820957221cfebe4b2e": [],
+ "experiments/2026-09-03-change-provenance-history-channel/runs/home-m3/runs/run-5565bd1ef7011e3d25fef3197bdf1cdb": [],
+ "experiments/2026-09-03-change-provenance-history-channel/runs/home-m3/runs/run-7a8fc89b33f8e055a212fafa09acd83f": [],
+ "experiments/2026-09-04-fix-provider-reasoning-contract/relaunch-home/runs/run-ecd1a8d2461eff1eddd9756b51336ce5": [],
+ "experiments/2026-09-05-change-mini-isolation-programme/runs/home-m/shallow-runs/shallow-b4dcb1c81ea7af2e5ecd5faa": [],
+ "experiments/2026-09-06-change-writers-room-limits-and-forms/runs/home-room/shallow-runs/shallow-0b47bc7b090854078ddf7559": [],
+ "experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/failed-epoch1-run-36d9a22c3e2045ae1b8c7bfb9d95d092": [],
+ "experiments/2026-09-06-change-writers-room-organiser-testing/runs/home-r/runs/run-c3f3bf10bc57d63e224a9f1c68bf1057": [
+  "attempt-validity::event seq=142: failed call must contain no valid attempt, got [0]",
+  "attempt-validity::event seq=215: failed call must contain no valid attempt, got [0]",
+  "attempt-validity::event seq=295: failed call must contain no valid attempt, got [0]"
+ ],
+ "experiments/bronze_flat_2026-07-13/deepseek-v4-pro": [],
+ "experiments/bronze_flat_2026-07-13/kimi-k2_6": [],
+ "experiments/bronze_flat_2026-07-13/qwen3_5_397b": [],
+ "experiments/bronze_pilot_2026-07-14": [
+  "open::UnsupportedRunManifestVersionError('UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted')"
+ ],
+ "experiments/gemma4_dna_unattended_2026-07-12": [
+  "open::UnsupportedRunManifestVersionError('UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted')"
+ ],
+ "experiments/gemma4_dna_unattended_3_2026-07-12": [
+  "open::UnsupportedRunManifestVersionError('UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted')"
+ ],
+ "experiments/glm_judge_2026-07-14": [
+  "open::UnsupportedRunManifestVersionError('UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted')"
+ ],
+ "experiments/jolt_architecture_2026-07-16/run": [
+  "open::UnsupportedRunManifestVersionError('UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 3 is unsupported; only schema version 6 is accepted')"
+ ],
+ "experiments/live_compare_2026-07-28/deepseek/shallow-runs/shallow-dc6fe3f9c26cede686906a16": [],
+ "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf": [
+  "foreign-criticism::target 387895a53f28ecacb8fce69ae1985d7c508f5f78f165700e320f1a88d9004df5 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 7044e31d991386ec5a8473c03ae7350e47ce980a285a12f0eb0f4d06d2280592 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 758d4b028e9d9a59cc52dac42777d06b4327988b732421275adbaa8e5366d0d9 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target d1c5dc486d4b2541561e98904f849f85d929d8522bbee7465aaf72b85d29705c has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target d75a99fefb3c9548fad373f1d891ab0e1bc0555216f1f42ed6676f2f26fb8ca4 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target efbc45de65e2c5f102fffbde9b0e0097c1f2940413def328dbb064b63dc063ce has 0 foreign schools; policy requires 1"
+ ],
+ "experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332": [
+  "foreign-criticism::target 10011f68166e5b5c39855286ed298f585343111b19ccfb3800b0bd65ad2710d3 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 575427b7c8c400ea409909fbfdcc2f58aeefa0236299d84ebb470c771a5c7991 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target c4636f5856fe9e6d6065e9ae00ee44cc8f11a796deb589518806254043aecdee has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target f94e3da69c528b1c387d2074354b7ae1a04179130161162ccd695d00794c4633 has 0 foreign schools; policy requires 1"
+ ],
+ "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5": [
+  "foreign-criticism::target 9d9a2bdd03409606e01624f462cad120f1e110641b66c1a0e8422f8c0b5d3e3d has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target b1c2df9529c31a73a8e0a1d5d3c1b71fcfb97239da1c12892fdb7c5ea30cf67a has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target b444d0e7a149c8f1ba120ac432441a5b36c4c0940350b6a79a1ba7d49ff10a50 has 0 foreign schools; policy requires 1"
+ ],
+ "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5": [],
+ "experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7": [],
+ "experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593": [],
+ "experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5": [],
+ "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00": [
+  "foreign-criticism::target 2451a0b36fa9e28d32ee851516d51244310a188054692b69548e1da1e8d71912 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 51d07bacb22009abf9478a2bef3696437fd8f145127aaae62274391ce7eb1089 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 9597e3503b78c2474269fb04253363206e2cb12fe6f6b6c32762bcc9f6169de9 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target d5dc53d8ee8502c6d54ed85b4dd39dda035ffc6357669ec520cc3fb898101c92 has 0 foreign schools; policy requires 1"
+ ],
+ "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107": [
+  "foreign-criticism::target 209da465e684a05be0a482960a57f475ca1e9f21c491beac7518f1618f87f840 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 65b8f883152d4df6965e071afa38d05ae1afb63c6c35cb818eedf24960837328 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 6e804bd3182d90d0c286e3cfc5fb0085cd3ddf7f333ca4e83c630b61def49145 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target a36798da83f221d28b6d51a444ca52aabf555c705ca5aeee2079e83cd1d934e0 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target c622fd7f954391564e984b653cc858b0bc2ff446405725fbcc53b3c942c35677 has 0 foreign schools; policy requires 1"
+ ],
+ "experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0": [],
+ "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a": [
+  "foreign-criticism::target 832c814f3cc9c4ee15ca8a8b60dddc25d65a458aad732acefce6fecb93d703f3 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target c766d195dccd49cc01b7777e5ad0b44c00f4d3370e0fd1bfb757d891aa30b255 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target d1b02b7512b644672d8b838da4895e8762646df29adb6b38a8a282670bffd749 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target eb9cfe349b17dd4278fda9209a93802e3be8d9b8b47c091b981a782a9a767fc6 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target ecc7c508583bf9cd91245419cab5f4833a27840b4e501e781749798f4af212b5 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target fd36da747793caa9f9ae199dd4d0175f470b47e2d7d6374ee793e5262a460b92 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target fe915ebbf0e8203ec6ce86ceed28771467989595ec100de21319a3b6fca0bb3a has 0 foreign schools; policy requires 1"
+ ],
+ "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a": [
+  "run-input::bound dossier exceeds frozen evidence authority"
+ ],
+ "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a": [
+  "terminal-authority::canonical terminal authority is invalid: TERMINAL_REPLAY_VALIDATION_BINDING_INVALID"
+ ],
+ "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a": [],
+ "experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a": [],
+ "experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100": [],
+ "experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be": [],
+ "experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346": [
+  "foreign-criticism::target 72c3d6b61ab91a9e676ab6a04d4554108dab1872af387240d772d26f6ab52ba7 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 918e9c064687e00fa4ab2e76123be27e98cc771d9c5a89137958e92def6ef851 has 0 foreign schools; policy requires 1"
+ ],
+ "experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847": [
+  "foreign-criticism::target 6a487727f11dccc9c9766cb535e59cb5f7e23916cd4e2c68f14d70fe74bf6ef2 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 70434566643499b249a953b9f03dcea1a7161a5556b48d20398438e716938570 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 7d27b2cc255ac31bcda3264d1ca7b86ea56c095780452298a541790c3af414c6 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 8ce8275fe2d93b1a5e45afa6783132962916e8a29213113fa89856d6f719eee9 has 0 foreign schools; policy requires 1"
+ ],
+ "experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345": [],
+ "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5": [
+  "foreign-criticism::target 1125d2505d938b2ef74d79b974a3b6b03efe5b8c1ebae6249c29b4624de13032 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 2f808c4f2b071a3f4523ba13bcd3c12245718e0cc2d3f7810f7270432a8c4653 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 77cb6a85e89c4fc3c273c473f2ecaff86371c0a44790440add077ff13510dd7b has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target 8bb983dfe0858fd4d5b979d419ae7bf18090a4ad2627f87c90a8973aa6d5b811 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target d4ac80712e18ecfa69be84d2f2d9661c13168daee211efa10eb922b69fc93c36 has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target d9d2311a00cc76cc9bc30d41b0f5fe7231d9b0f48afd23e7b1682182f6c53797 has 0 foreign schools; policy requires 1"
+ ],
+ "experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03": [],
+ "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c": [
+  "foreign-criticism::target 4899dcab998c6379802f7299af22f057a42fc90a340bcb2a4a0bed816f0a29fe has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target c89553220147716fde493f8f761b8c683ab40c919df028e522836a2c0c85a52f has 0 foreign schools; policy requires 1",
+  "foreign-criticism::target e623f53d576dc4322ecc38da48851f27fc43f116c00b51fd218c55623b73d86f has 0 foreign schools; policy requires 1"
+ ],
+ "runs/jolt_positive_headroom_v3_1/calibration/20260701": [
+  "open::UnsupportedRunManifestVersionError('UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted')"
+ ],
+ "runs/jolt_positive_headroom_v3_1/calibration/20260702": [
+  "open::UnsupportedRunManifestVersionError('UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted')"
+ ],
+ "runs/jolt_positive_headroom_v3_1/calibration/20260703": [
+  "open::UnsupportedRunManifestVersionError('UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted')"
+ ]
+}
