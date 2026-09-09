@@ -1,0 +1,9 @@
+BLIND_JUDGING_RESULT_V1  (median of 3 judges per candidate, 0-15)
+  candidates scored : 248
+  contested (>4 spread of 15): 6
+  A0    n= 46  mean= 5.35  median= 5.50  best=14.0
+  A1    n= 48  mean= 4.88  median= 5.00  best=13.0
+  A1P   n= 48  mean= 6.73  median= 7.00  best=14.0
+  A2    n= 47  mean= 6.26  median= 6.00  best=14.0
+  A3    n= 47  mean= 6.68  median= 6.00  best=14.0
+  B0    n= 12  mean=14.75  median=15.00  best=15.0

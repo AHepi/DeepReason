@@ -1,0 +1,18 @@
+ARM_COMPARISON_V1
+  candidates scored: 248   arms: A0, A1, A1P, A2, A3, B0
+
+PER ARM
+  A0    n= 46  mean= 5.35  median= 5.50  best= 14.0  chars=  357.0
+  A1    n= 48  mean= 4.88  median= 5.00  best= 13.0  chars=  346.8
+  A1P   n= 48  mean= 6.73  median= 7.00  best= 14.0  chars=  358.4
+  A2    n= 47  mean= 6.26  median= 6.00  best= 14.0  chars=  381.0
+  A3    n= 47  mean= 6.68  median= 6.00  best= 14.0  chars=  350.0
+  B0    n= 12  mean=14.75  median=15.00  best= 15.0  chars= 7775.5
+
+DOES THE PANEL PAY FOR LENGTH? (pooled, all arms)
+  Spearman rho(chars, total) = +0.825
+  total ~ -17.01 +3.92*log(chars)   R^2 = 0.485
+
+======================================================================
+NOISE FLOOR — arms whose briefs are byte-identical (PREREG §3.3)
+======================================================================
