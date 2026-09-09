@@ -1,0 +1,155 @@
+{
+  "candidates": [
+    {
+      "claim": "Adopt an existing tracker immediately if the team's primary goal is speed-to-insight and the experimental workflow fits standard 'parameter-set -> run -> log' patterns without real-time control needs.",
+      "mechanism": "Opportunity Cost Minimization: The engineering hours saved by not building a tracker are redirected into core research tool development, leveraging the mature ecosystem of existing tools for reliability and features.",
+      "counterconditions": [
+        "The team requires active learning loops where the tracker must modify parameters in real-time.",
+        "The specific causal model of the research cannot be mapped to the abstraction layers of existing tools.",
+        "Data sovereignty or privacy requirements prevent using hosted solutions, and self-hosting existing tools is as complex as building one."
+      ],
+      "typicality": 0.95,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "The 'integration tax' is acknowledged but framed as a one-time setup cost versus the recurring maintenance debt of a custom build. If the workflow is standard, the tax is near zero; if non-standard, the counterconditions trigger a custom build path, avoiding the mismatch."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to mandate a 'schema-first' configuration step before logging any data. The candidate now explicitly requires defining the experiment schema in the adopted tool on Day 1 to prevent the 'migration cliff' of unstructured noise."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Build a custom minimal tracker specifically designed to enforce a 'mechanist' causal model, ensuring every logged metric directly maps to a hypothesized cause-effect relationship defined by the team.",
+      "mechanism": "Cognitive Alignment: Existing tools often encourage 'fishing expeditions' by allowing arbitrary metric logging. A custom tracker forces discipline by only accepting data that fits the pre-defined mechanistic model, improving signal quality.",
+      "counterconditions": [
+        "The research domain is exploratory and the causal model is unknown or highly volatile.",
+        "The team lacks the engineering bandwidth to maintain even a minimal custom codebase.",
+        "The mechanistic model is simple enough to be enforced via naming conventions in an existing tool."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "departure_declared",
+          "note": "This candidate explicitly accepts the 'integration tax' as a necessary feature, not a bug. The effort to hack existing tools to fit a novel mechanistic model is deemed higher than building a tailored solution from scratch."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "A custom builder has full control over the schema evolution. The 'migration cliff' is avoided because the schema is code-defined and version-controlled alongside the tracker itself, making structural changes explicit and manageable rather than accidental."
+        }
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "Adopt a flexible existing platform but wrap it with a strict 'skeptic' validation layer that treats all tracked results as provisional until independently reproducible within the system.",
+      "mechanism": "Epistemic Hygiene: Leverages the storage and UI of existing tools while inserting a logical gate that prevents 'provisional' results from being treated as facts, countering the haste of small teams to declare victory.",
+      "counterconditions": [
+        "The existing tool's API does not support metadata tagging required for 'provisional' status.",
+        "The overhead of running independent reproducibility checks slows down the iteration cycle too severely.",
+        "The team culture already inherently treats all results as provisional without tool enforcement."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "revised",
+          "note": "The 'integration tax' is mitigated by limiting the custom code to a thin validation wrapper rather than a full tracker. The proposal specifies using webhooks or post-processing scripts to apply the skeptic layer, minimizing deep integration hacks."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "Since the underlying storage is an existing tool with a defined schema, the data is never 'unstructured noise.' The wrapper operates on structured data, so exporting or migrating later involves standard APIs, not parsing logs."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005",
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "Start with a disposable script-based tracker for the first 10 experiments, then migrate to an existing tool only if a clear, repeated schema emerges; otherwise, continue iterating on scripts.",
+      "mechanism": "Emergent Schema Discovery: Avoids premature optimization by assuming the workflow is not yet understood. Scripts offer maximum flexibility for chaos; migration happens only when stability is proven by repetition.",
+      "counterconditions": [
+        "The team cannot afford to lose or corrupt data during the manual migration phase.",
+        "Collaboration requires a shared view of data from day one, which scripts do not provide.",
+        "The '10 experiment' threshold is arbitrary and may delay necessary structure indefinitely."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "This approach rejects the premise that a tool must be chosen upfront. The 'integration tax' is deferred until the workflow stabilizes, at which point the cost of integrating a known schema into an existing tool is minimal."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "revised",
+          "note": "Acknowledges the 'migration cliff' risk. The candidate is revised to require that even disposable scripts must output JSON with a strictly enforced, versioned schema field, ensuring that if migration becomes necessary, the data is structured and parseable."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "Build a custom tracker only if the experiment involves active learning loops where the tracker must act as the controller, modifying parameters in real-time based on intermediate results.",
+      "mechanism": "Closed-Loop Control Necessity: Standard trackers are passive recorders; if the research methodology requires the tracking system to be the active agent in an optimization loop (e.g., Bayesian optimization with tight latency constraints), custom build is mandated by control theory requirements.",
+      "counterconditions": [
+        "The feedback loop can tolerate high latency (minutes/hours).",
+        "Existing tools offer plugin architectures sufficient for control logic.",
+        "The experiments are open-loop (parameter set -> run -> log)."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "In active control scenarios, 'existing tools' are fundamentally incapable without massive hacking that essentially rebuilds the tool. Thus, the 'integration tax' of adapting a passive tool exceeds the cost of building an active one from scratch."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "Active control systems require rigorous, typed interfaces by definition. The schema is inherent to the control algorithm, preventing the accumulation of unstructured noise. Migration is irrelevant as the custom tool is the operational core."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "Adopt an existing tracker but configure it to log 'negative results' and 'failed hypotheses' with equal prominence to successful ones, countering publication bias inherent in most default configurations.",
+      "mechanism": "Anti-Bias Configuration: Leverages the structural completeness of existing tools but alters the social/visual incentive structure by surfacing null results, thereby creating a more accurate posterior distribution of the research landscape.",
+      "counterconditions": [
+        "The existing tool's UI hardcodes 'success' metrics as primary visual elements.",
+        "Stakeholders explicitly demand a dashboard showing only progress/success.",
+        "The volume of negative results overwhelms the signal, making the tracker unusable."
+      ],
+      "typicality": 0.70,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_003",
+          "kind": "rebutted",
+          "note": "Configuring views and dashboards is a supported feature of most modern tools, not a 'hack.' The integration tax is low because the data model already supports arbitrary tags and statuses; only the presentation layer needs adjustment."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "By treating negative results as first-class citizens in the schema from the start, the data remains highly structured. The risk of 'unstructured noise' is reduced because failure modes are explicitly categorized rather than ignored or dumped in logs."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008"
+      ]
+    }
+  ]
+}

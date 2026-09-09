@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The 'skeptic validation layer' introduces a sequential bottleneck that contradicts the need for rapid iteration in early-stage research; requiring independent reproduction before treating results as 'provisional' (or accepted) effectively halts the feedback loop, causing the team to miss the 'survival threshold' mentioned in its own counterconditions.
+
+TARGET:
+{"analogy":null,"claim":"Adopt a flexible existing platform but wrap it with a strict 'skeptic' validation layer that treats all tracked results as provisional until independently reproduced, leveraging community standards while maintaining epistemic rigor.","counterconditions":[{"case":"The existing platform does not allow external validation hooks or raw data export.","checker_spec":null,"eval":"observation"},{"case":"The overhead of the validation layer slows down iteration beyond the team's survival threshold.","checker_spec":null,"eval":"observation"},{"case":"The research domain is so novel that no community standards for replication exist yet.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Layered Epistemic Defense: Uses the reliability of established tools (reducing maintenance risk) while overlaying a procedural mechanism that demands replication before acceptance, satisfying the skeptic stance (SRC_002) without reinventing storage infrastructure.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}

@@ -1,0 +1,4 @@
+{
+  "decisive_point": "the 'raw logs' exported to existing tools lack the semantic context encoded in the state machine",
+  "verdict": "fail"
+}

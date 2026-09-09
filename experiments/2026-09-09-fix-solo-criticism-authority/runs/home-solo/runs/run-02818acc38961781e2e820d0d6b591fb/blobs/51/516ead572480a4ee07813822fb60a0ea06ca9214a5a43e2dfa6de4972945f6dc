@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The argument assumes existing tools are purely additive to cognitive bandwidth, ignoring the 'integration tax': if no existing tool perfectly matches the novel workflow, the engineering effort required to hack, plugin, or wrap a mismatched tool can exceed the cost of building a minimal bespoke solution, while still imposing the tool's rigid mental model on the researchers.
+
+TARGET:
+{"analogy":null,"claim":"Adopt an existing tracker to preserve the team's limited cognitive bandwidth for the core research innovation, as building a tracker diverts critical engineering cycles into a solved, non-differentiating domain.","counterconditions":[{"case":"No existing tool supports the specific data modality or workflow required by the research.","checker_spec":null,"eval":"observation"},{"case":"The team possesses excess engineering capacity with no other high-value targets.","checker_spec":null,"eval":"observation"},{"case":"Data sovereignty requirements legally prohibit third-party or open-source tracker usage.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Opportunity Cost of Engineering Cycles: Every hour spent on tracker infrastructure is an hour subtracted from the unique value proposition of the research tool, delaying time-to-insight and increasing burn rate without adding competitive advantage.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}

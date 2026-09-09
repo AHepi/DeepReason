@@ -1,0 +1,17 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+{"analogy":null,"claim":"Adopt an existing tracker but configure it to log 'negative results' and 'failed hypotheses' with equal prominence to successful ones, countering publication bias inherent in most default configurations.","counterconditions":[{"case":"The existing tool's UI hardcodes 'success' metrics as primary visual elements.","checker_spec":null,"eval":"observation"},{"case":"Stakeholders explicitly demand a dashboard showing only progress/success.","checker_spec":null,"eval":"observation"},{"case":"The volume of negative results overwhelms the signal, making the tracker unusable.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Anti-Bias Configuration: Leverages the structural completeness of existing tools but alters the social/visual incentive structure by surfacing null results, thereby creating a more accurate posterior distribution of the research landscape.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+THE CASE FOR FAIL:
+Configuring an existing tool to highlight negative results often clashes with the tool's underlying data model which is optimized for 'runs' and 'metrics' as positive signals; forcing equal prominence can render the dashboard unreadable due to signal dilution, making it impossible for stakeholders to identify actual progress or pivot points quickly.
+
+THE DEFENCE:
+The critic's case relies on hypothetical extremes rather than established facts. First, the claim that existing tools inherently clash with negative result logging is unproven; most modern trackers are data-agnostic and allow customizable visualization schemas, meaning 'success' is not necessarily hardcoded but merely a default setting that can be overridden without breaking the data model. Second, the assertion that stakeholders explicitly demand success-only dashboards is an unsubstantiated generalization; many stakeholders require accurate risk assessment and failure analysis to make informed pivot decisions, which necessitates visibility into negative results. Finally, the argument that equal prominence inevitably leads to signal dilution and unreadability assumes a lack of sophisticated filtering or categorization features; configuring equal prominence does not preclude the use of filters, tags, or separate views that maintain clarity while ensuring negative results are not systematically hidden, thus countering publication bias without rendering the tool unusable.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

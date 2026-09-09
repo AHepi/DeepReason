@@ -1,0 +1,48 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. For each case, name the artifacts it essentially relies on — withdraw one and that case should fall; naming none is a complete answer. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "essential_premise_aliases": {"items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}, "maxItems": 8, "title": "Essential Premise Aliases", "type": "array"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-f8d503b930a65e1a2cf5ff81777d4786) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Should a small team building a research tool write its own experiment tracker, or adopt an existing one?
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@a6afb1375ff7e6715a800ac6: program:reasoning_observation_pending
+- reason-counter@66b40ab50c8455c5d111d584: program:reasoning_observation_pending
+- reason-counter@db0286af9a80c28ee3a830cb: program:reasoning_observation_pending
+- reason-counter@b74c2fdbf98cde628abe5cc8: program:reasoning_observation_pending
+- reason-counter@b8418d581e7cf6a5b52e3edb: program:reasoning_observation_pending
+- reason-counter@64ba16cc7b021b1d8525bf15: program:reasoning_observation_pending
+- reason-counter@b3baed3ec6e98ef8ffe944fd: program:reasoning_observation_pending
+- reason-counter@91c9240623dd808630ed1527: program:reasoning_observation_pending
+- reason-counter@32df100a3b3d81b2f43787cb: program:reasoning_observation_pending
+- reason-counter@fff9f51ef19b67f76ebd9ca0: program:reasoning_observation_pending
+- reason-counter@9b0a9105d587d67cebe35f76: program:reasoning_observation_pending
+- reason-counter@032cc87cd33cb80808283666: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Write a disposable, script-based tracker specifically for the current project phase, intending to discard it and migrate to an off-the-shelf solution once the experimental protocol stabilizes.","counterconditions":[{"case":"The team has no resources allocated for the future migration effort.","checker_spec":null,"eval":"observation"},{"case":"Data accumulated in the script-based tracker cannot be easily exported or transformed.","checker_spec":null,"eval":"observation"},{"case":"The 'stabilization' point is never reached due to perpetual pivoting.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Phase-Gated Infrastructure: Acknowledges that early-stage research requires fluidity that rigid tools prevent, while avoiding the long-term trap of maintaining bespoke software by enforcing a hard migration trigger upon protocol stabilization.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@a6afb1375ff7e6715a800ac6, reason-counter@66b40ab50c8455c5d111d584, reason-counter@db0286af9a80c28ee3a830cb
+
+TARGET SRC_002
+{"analogy":null,"claim":"Adopt an existing tracker to preserve the team's limited cognitive bandwidth for the core research innovation, as building a tracker diverts critical engineering cycles into a solved, non-differentiating domain.","counterconditions":[{"case":"No existing tool supports the specific data modality or workflow required by the research.","checker_spec":null,"eval":"observation"},{"case":"The team possesses excess engineering capacity with no other high-value targets.","checker_spec":null,"eval":"observation"},{"case":"Data sovereignty requirements legally prohibit third-party or open-source tracker usage.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Opportunity Cost of Engineering Cycles: Every hour spent on tracker infrastructure is an hour subtracted from the unique value proposition of the research tool, delaying time-to-insight and increasing burn rate without adding competitive advantage.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b74c2fdbf98cde628abe5cc8, reason-counter@b8418d581e7cf6a5b52e3edb, reason-counter@64ba16cc7b021b1d8525bf15
+
+TARGET SRC_003
+{"analogy":null,"claim":"Adopt a flexible existing platform but wrap it with a strict 'skeptic' validation layer that treats all tracked results as provisional until independently reproduced, leveraging community standards while maintaining epistemic rigor.","counterconditions":[{"case":"The existing platform does not allow external validation hooks or raw data export.","checker_spec":null,"eval":"observation"},{"case":"The overhead of the validation layer slows down iteration beyond the team's survival threshold.","checker_spec":null,"eval":"observation"},{"case":"The research domain is so novel that no community standards for replication exist yet.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Layered Epistemic Defense: Uses the reliability of established tools (reducing maintenance risk) while overlaying a procedural mechanism that demands replication before acceptance, satisfying the skeptic stance (SRC_002) without reinventing storage infrastructure.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b3baed3ec6e98ef8ffe944fd, reason-counter@91c9240623dd808630ed1527, reason-counter@32df100a3b3d81b2f43787cb
+
+TARGET SRC_004
+{"analogy":null,"claim":"Adopt an existing tracker but configure it to log 'negative results' and 'failed hypotheses' with equal prominence to successful ones, countering publication bias inherent in most default configurations.","counterconditions":[{"case":"The existing tool's UI hardcodes 'success' metrics as primary visual elements.","checker_spec":null,"eval":"observation"},{"case":"Stakeholders explicitly demand a dashboard showing only progress/success.","checker_spec":null,"eval":"observation"},{"case":"The volume of negative results overwhelms the signal, making the tracker unusable.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Anti-Bias Configuration: Leverages the structural completeness of existing tools but alters the social/visual incentive structure by surfacing null results, thereby creating a more accurate posterior distribution of the research landscape.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@fff9f51ef19b67f76ebd9ca0, reason-counter@9b0a9105d587d67cebe35f76, reason-counter@032cc87cd33cb80808283666
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
