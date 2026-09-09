@@ -19,9 +19,13 @@ file proves, against the record and never a local variable, that
 
 The room is the committed attachment the tranche's converter wrote from the
 live room root `shallow-0b47bc7b090854078ddf7559` (12 conjectures, 46
-proposals, 36 objections), read from the tranche directory and pinned here
-by sha256 so the bytes a live arm would bind are the bytes this file proves. Offline throughout: a mock
-endpoint, no key.
+proposals, 36 objections, plus one preamble paragraph per file), read from the
+tranche directory. Its digests, its block counts and its rendered legend are
+read from the attachment's OWN records -- `ATTACHMENT.sha256`,
+`CONVERSION.json` and `proof/DRY_ATTACH.txt` -- and never copied into this
+file: a later launch window is entitled to rewrite the attachment, and one did
+(that tranche's SPEC Amendment 4), while copies here sat unmoved and red.
+Offline throughout: a mock endpoint, no key.
 """
 
 from __future__ import annotations
@@ -29,27 +33,59 @@ from __future__ import annotations
 import hashlib
 import json
 import pathlib
+import re
 
 import pytest
 
 from deepreason.llm.role_prompts import ROLE_PROMPT_TEMPLATE_ENV
 from deepreason.llm.seat_sections import SEAT_SHELL_ENV
 
-# The committed attachment itself, not a copy: `git ls-files` knows it, the
-# sha256 pins below hold it to the bytes the converter wrote, and a second
-# copy under tests/ would be 365 lines of data the diff-budget gate counts
-# as code (CHECKLIST step 7).
+# The committed attachment itself, not a copy: `git ls-files` knows it, its
+# own manifest holds it to the bytes the converter wrote, and a second copy
+# under tests/ would be 365 lines of data the diff-budget gate counts as code
+# (CHECKLIST step 7).
 FIXTURES = (
     pathlib.Path(__file__).resolve().parents[1]
     / "experiments"
     / "2026-09-06-change-writers-room-organiser-testing"
     / "attachment"
 )
-PINNED = {
-    "01-conjectures.txt": "feb1dc480421d1cdb26260223a82ea82d88d9e14ff761ad63ec9662acd4088bb",
-    "02-proposals.txt": "cf7a4a2edcc19307e7be923623676cd7db80f8722d58f584fda30fad65062452",
-    "03-objections.txt": "87163fb464c30da6e06e4daf475245637aad04de8a7f92d6e482b1cb734e0ded",
-}
+
+
+def _attached_digests() -> dict[str, str]:
+    """The attachment's own digest manifest. Every window that rewrites the
+    attachment regenerates it in the same commit (that tranche's SPEC
+    Amendment 4, S38), so reading it here binds this file to whatever the
+    converter last wrote instead of to a copy nobody is obliged to update."""
+
+    lines = (FIXTURES / "ATTACHMENT.sha256").read_text().splitlines()
+    return {
+        name: digest
+        for digest, name in (line.split() for line in lines if line.strip())
+        if name.endswith(".txt")
+    }
+
+
+def _conversion() -> dict:
+    """What the converter recorded writing: per file, its room-record count,
+    its sha256, and the one preamble paragraph Amendment 4 (A16) added."""
+
+    return json.loads((FIXTURES / "CONVERSION.json").read_text())
+
+
+def _dry_attach() -> tuple[dict, dict]:
+    """The tranche's committed dry attach and organiser render
+    (`proof/DRY_ATTACH.txt`), re-run whenever the attachment moves (S40): what
+    admission minted, then what one render exposed. Two `json.dumps(indent=1)`
+    objects, each opening and closing at column 0."""
+
+    text = (FIXTURES.parent / "proof" / "DRY_ATTACH.txt").read_text()
+    objects = re.findall(r"^\{\n.*?^\}$", text, re.MULTILINE | re.DOTALL)
+    assert len(objects) == 2, f"DRY_ATTACH.txt held {len(objects)} JSON objects"
+    return json.loads(objects[0]), json.loads(objects[1])
+
+
+ATTACHED_DIGESTS = _attached_digests()
 ORGANISER_SHELL = "seat.conjecturer.organiser-v1"
 BLIND_CRITIC_SHELL = "seat.critic.evidence-blind-v1"
 ORGANISER_WORDING = "role-prompt.organiser-v1"
@@ -76,7 +112,7 @@ def seeded():
 
 
 def _files() -> list[tuple[str, bytes]]:
-    return [(name, (FIXTURES / name).read_bytes()) for name in sorted(PINNED)]
+    return [(name, (FIXTURES / name).read_bytes()) for name in sorted(ATTACHED_DIGESTS)]
 
 
 def _config():
@@ -95,7 +131,7 @@ def _config():
             }
         }
     )
-    # The tranche's launch config (runs/config.yaml): the room is ~53 000
+    # The tranche's launch config (runs/config.yaml): the room is ~56 000
     # characters and both evidence sections are exact in the organiser layout.
     config.PACK_TOKEN_BUDGET = 24_000
     return config
@@ -237,8 +273,16 @@ def _artifact_ids(registered) -> list[str]:
 
 
 def test_the_fixture_is_the_committed_attachment_byte_for_byte():
-    for name, digest in PINNED.items():
+    """`sha256sum -c attachment/ATTACHMENT.sha256`, plus the converter's own
+    second record of the same three digests: the bytes this file binds are the
+    bytes the converter recorded writing, and both records agree it."""
+    conversion = _conversion()
+    assert set(ATTACHED_DIGESTS) == set(conversion["files"]) == {
+        "01-conjectures.txt", "02-proposals.txt", "03-objections.txt"
+    }
+    for name, digest in ATTACHED_DIGESTS.items():
         assert hashlib.sha256((FIXTURES / name).read_bytes()).hexdigest() == digest, name
+        assert conversion["files"][name]["sha256"] == digest, name
 
 
 def test_admission_mints_one_block_per_room_record():
@@ -254,9 +298,21 @@ def test_admission_mints_one_block_per_room_record():
         ),
     )
     assert report.refusals == []
-    assert len(_blocks_of(dossier, "01-conjectures.txt")) == 12
-    assert len(_blocks_of(dossier, "02-proposals.txt")) == 46
-    assert len(_blocks_of(dossier, "03-objections.txt")) == 36
+    # One block per room record, plus the one preamble paragraph each file
+    # carries (SPEC Amendment 4, A16) -- taken from the converter's record of
+    # what it wrote, so a rewritten attachment moves this expectation with it.
+    conversion = _conversion()
+    expected = {
+        name: conversion["files"][name]["records"] + (1 if name in conversion["preamble"] else 0)
+        for name in ATTACHED_DIGESTS
+    }
+    minted = {name: len(_blocks_of(dossier, name)) for name in ATTACHED_DIGESTS}
+    assert minted == expected, (minted, expected)
+    # And the tranche's own committed dry attach agrees, so admission here,
+    # the converter, and the proof the launch was sealed on are one number.
+    admitted, _rendered = _dry_attach()
+    assert admitted["blocks_by_file"] == expected
+    assert len(dossier.blocks) == sum(expected.values()) == admitted["blocks"]["paragraph"]
     assert all(block.kind == "paragraph" and block.tier == "evidence" for block in dossier.blocks)
 
 
@@ -290,21 +346,27 @@ def test_the_organiser_brief_shows_the_whole_room_and_the_directive(tmp_path, mo
     # The legend shows the first 32 blocks of the dossier -- and the dossier
     # sorts its blocks by CONTENT ID (`admission/parse.py`, `sorted(blocks,
     # key=lambda block: block.id)`), not by file or by record order. So the
-    # citable 32 are a hash-ordered sample of the 94, measured here on the
-    # pinned bytes: 7 conjectures, 13 proposals, 12 objections. SPEC A3
+    # citable 32 are a hash-ordered sample of the whole room, and which files
+    # they fall in is a MEASURED consequence of the bytes: it was redrawn when
+    # Amendment 4 put a preamble line inside every block's content id. SPEC A3
     # assumed file order and was wrong; SPEC Amendment 1 records it, and
-    # PARKED P2 carries both the cap and the order.
+    # PARKED P2 carries both the cap and the order. The split and the withheld
+    # count are read from the tranche's committed render proof, which the
+    # window that moves the attachment re-runs (S40).
+    _admitted, rendered = _dry_attach()
     assert "CITABLE EVIDENCE BLOCKS" in prompt
     shown = [b for b in dossier.blocks if f"[{b.id[:16]}]" in prompt]
     assert [b.id for b in shown] == [b.id for b in dossier.blocks[:32]]
     assert dossier.blocks == tuple(sorted(dossier.blocks, key=lambda b: b.id))
     by_file = {
-        name: sum(1 for b in shown if b in _blocks_of(dossier, name)) for name in PINNED
+        name: sum(1 for b in shown if b in _blocks_of(dossier, name))
+        for name in ATTACHED_DIGESTS
     }
-    assert by_file == {
-        "01-conjectures.txt": 7, "02-proposals.txt": 13, "03-objections.txt": 12
-    }, by_file
-    assert "(+62 further citable blocks not shown)" in prompt
+    assert by_file == rendered["legend_shown_by_file"], by_file
+    assert len(shown) == sum(by_file.values()) == rendered["legend_shown"] == 32
+    withheld = rendered["legend_withheld"]
+    assert withheld == len(dossier.blocks) - len(shown)
+    assert f"(+{withheld} further citable blocks not shown)" in prompt
 
 
 def test_unbound_the_seat_renders_the_legacy_brief(tmp_path, monkeypatch):
