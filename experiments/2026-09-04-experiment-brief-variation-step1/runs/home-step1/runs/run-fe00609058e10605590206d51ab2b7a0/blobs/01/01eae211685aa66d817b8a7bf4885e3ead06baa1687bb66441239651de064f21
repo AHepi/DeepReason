@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a methodological rule of 'critical preference' rather than an inductive inference; it survives by redefining rational action as the selection of the hypothesis with the highest informational content and severest test history, accepting the cost that this preference offers no guarantee of future success or increased probability of truth, only the status of being the most rationally criticizable option currently available.",
+    "mechanism": "The argument distinguishes between 'justification' (seeking probability/induction) and 'criticism' (seeking error elimination). It posits that preferring Theory A over B is not a claim that A is more likely true, but a procedural decision that A has withstood tests that would have falsified B, making A the better target for future criticism and the only non-arbitrary choice for action in the absence of certainty. This relies on the asymmetry of falsification: while corroboration doesn't prove truth, failed falsification attempts eliminate competitors, leaving the survivor as the pragmatic choice without invoking the uniformity of nature.",
+    "counterconditions": [
+      "If the preference for the better-corroborated theory implicitly assumes that the future will resemble the past (uniformity of nature), then it smuggles in induction.",
+      "If Popper's concept of 'verisimilitude' (truth-likeness) cannot be formally defined without logical contradiction (as shown by Tichý and Miller), then the justification for preferring one theory over another collapses.",
+      "If acting on a theory inherently requires assigning it a higher subjective probability of success than its rivals, then the distinction between corroboration and probability is merely semantic."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'predictive reliance' with 'inductive assumption'. Preferring Theory A because it survived severe tests does not assume the conditions will remain identical; it acknowledges that A is the only theory not yet known to be false under those conditions. The strategy is risk-minimization via error elimination, not probability-maximization via pattern projection."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "departure_declared",
+        "note": "This candidate departs from relying on a formal logical definition of 'verisimilitude' as the sole justification. Instead, it grounds the preference in the methodological rule of critical preference itself, which operates independently of the unresolved logical problems of quantifying truth-likeness, focusing on the comparative survival of theories rather than their absolute distance from truth."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "Preferring a theory for future action does not assume it will continue to work; it accepts the possibility of immediate failure. The rationality lies in choosing the option that has been most rigorously scrutinized and not yet rejected, which is the only non-arbitrary basis for decision-making when certainty is impossible. This is a gamble, but a reasoned one based on available criticism, not an inductive certainty."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The criterion 'least error-prone known option' does not assign subjective probability. It ranks theories by the severity of tests they have survived. Assigning probability implies a measure of likelihood derived from frequency or logic, whereas Popper's ranking is ordinal and based on the logical relation of falsifiability and the historical fact of survival."
+      },
+      {
+        "handle": "38f75e15ef32982858ed94b505c7bbfe87ec9a0ebbd2867ed39855d8423771d8",
+        "kind": "revised",
+        "note": "Revised to explicitly incorporate Popper's specific concept of 'critical preference' as a third way between 'rational assurance' and 'non-rational gamble'. The defense now clarifies that rational action in Popper's view is precisely the act of choosing the best-criticized theory while fully acknowledging the lack of assurance."
+      },
+      {
+        "handle": "4cbbab057ec51a122476741bd3c2ff4172e6fa0617a24361597807f86f8c8cc7",
+        "kind": "rebutted",
+        "note": "The candidate aligns with the criticism that Popper has an explicit solution (methodological rule). The claim is strengthened by asserting that the 'paralysis' argument is indeed a false dilemma because the methodological rule provides a sufficient, albeit non-justificatory, basis for action."
+      },
+      {
+        "handle": "5367cfefcbb7e990f45e4aefa87059bd0469703b7ecb99cb937fc65222e22087",
+        "kind": "rebutted",
+        "note": "Treating past resilience as a proxy for future reliability is only inductive if one claims the future *will* resemble the past. Popper's view is that we act *as if* it might, while remaining ready to abandon the theory at the first sign of divergence. The 'proxy' is not a prediction of continuity but a record of eliminated errors."
+      },
+      {
+        "handle": "68d9af4a435acc1cd4234dc084ba218e221621e23b6343e1c10f7f2d559a8ebd",
+        "kind": "rebutted",
+        "note": "The defense does not redefine preference as static optimization. It frames preference as a dynamic commitment to the theory that currently holds the highest degree of corroboration, explicitly recognizing that action implies a future orientation. The 'informational content' is relevant because high-content theories are more easily falsifiable, making their survival more significant."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

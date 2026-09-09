@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a methodological rule of 'critical preference' rather than an inductive inference; it survives by redefining rational action as the selection of the theory that has withstood the most severe attempts at falsification, thereby minimizing known error without assuming future uniformity. The cost of accepting this is the abandonment of any claim to probable truth or predictive certainty, leaving action as a non-rational gamble guided only by the best available critical scrutiny.",
+    "mechanism": "The mechanism distinguishes between 'induction' (inferring future truth from past success) and 'corroboration' (a logical report of past test performance). By treating the preference rule as a procedural heuristic for error avoidance rather than a truth-tracking probability update, the agent avoids the uniformity of nature assumption. The agent acts on Theory A not because A is likely true tomorrow, but because A is the only theory not yet known to be false under conditions relevant to the action.",
+    "counterconditions": [
+      "If the agent implicitly assigns a higher subjective probability of future success to the corroborated theory, the distinction collapses into induction.",
+      "If the definition of 'rational action' requires any expectation of future regularity beyond the logical status of the theory, the defense fails.",
+      "If the 'cost' of paralysis (inaction) is deemed irrational, then an inductive supplement becomes necessary despite Popper's prohibitions."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism claims the distinction collapses because preferring A assumes past conditions will hold. This is rebutted: Popper's preference does not assume the *world* will remain uniform, but that the *logical situation* (A is currently unfalsified, B is falsified) is the only rational basis for choice. We do not predict A will work; we merely note B is known to fail."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "revised",
+        "note": "Revised to explicitly exclude 'verisimilitude' as the primary justification, acknowledging Tichý's critique. The defense now rests solely on 'error elimination' and 'critical preference' as a methodological rule, not on the ontological claim that the theory is closer to the truth."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "The criticism argues that acting inherently assumes future continuity. Rebuttal: Action assumes a goal, not a law. Choosing the unfalsified theory is the only move that doesn't knowingly contradict established evidence. It is a negative justification (avoiding known falsehood) rather than a positive one (expecting truth)."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The claim that 'least error-prone' implies subjective probability is rejected. In Popper's framework, 'error-prone' is an objective logical status based on failed tests, not a subjective degree of belief. The preference is categorical (choose the non-falsified), not probabilistic."
+      },
+      {
+        "handle": "38f75e15ef32982858ed94b505c7bbfe87ec9a0ebbd2867ed39855d8423771d8",
+        "kind": "rebutted",
+        "note": "The dichotomy is not false; Popper explicitly rejects 'rational assurance' (certainty/probability). The defense aligns with his specific concept of rational action as 'critical preference,' which is distinct from both assurance and blind gambling."
+      },
+      {
+        "handle": "4cbbab057ec51a122476741bd3c2ff4172e6fa0617a24361597807f86f8c8cc7",
+        "kind": "rebutted",
+        "note": "Agreed that it is not a false dilemma. The candidate affirms Popper's methodological rule as the solution, denying the need for an external inductive supplement. The 'paralysis' charge is dismissed as a category error expecting probabilistic guarantees where none are offered."
+      },
+      {
+        "handle": "5367cfefcbb7e990f45e4aefa87059bd0469703b7ecb99cb937fc65222e22087",
+        "kind": "rebutted",
+        "note": "The strategy does not treat resilience as a proxy for reliability (which would be induction). It treats resilience as a record of survived attacks. The advice is to use the map that hasn't been proven wrong, not to believe the terrain won't change."
+      },
+      {
+        "handle": "68d9af4a435acc1cd4234dc084ba218e221621e23b6343e1c10f7f2d559a8ebd",
+        "kind": "revised",
+        "note": "Revised to clarify that 'informational content' is not static optimization but dynamic survival. The preference is for the theory that solves the problem at hand while remaining open to falsification, directly addressing the 'action' context by framing action as problem-solving via error elimination."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

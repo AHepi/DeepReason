@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's terms as a non-inductive 'critical preference' that minimizes the risk of acting on known falsehoods, rather than maximizing the probability of future success; however, accepting this defense costs the agent any rational assurance that the future will resemble the past, reducing scientific action to a gamble where the only 'rationality' lies in having critically eliminated the worst available options.",
+    "mechanism": "The argument distinguishes between 'justification' (which requires induction) and 'criticism' (which relies on deduction). It posits that while corroboration reports only past performance, choosing the best-corroborated theory is a methodological rule to avoid theories already proven false or inferior in specific tests. This transforms the choice from an inductive prediction ('A will work because it did') to a risk-management strategy ('A is the least-wrong known option, so if we must act, we act on A').",
+    "counterconditions": [
+      "If the preference for corroborated theories implicitly assumes the uniformity of nature to be effective, the distinction collapses into hidden induction.",
+      "If 'verisimilitude' (truth-likeness) cannot be formally defined without inductive assumptions, the risk-minimization argument lacks a logical foundation.",
+      "If acting on a theory inherently demands a belief in its future reliability, then claiming 'no probability' is merely semantic evasion."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism claims the distinction collapses because preferring A assumes past conditions hold. This rebuttal argues that Popper's preference does not assume the *future* will match the *past*, but rather that we have no *better* information than the past failures. We prefer A not because we believe A will succeed, but because we know B has failed in ways A has not. The assumption is not 'nature is uniform,' but 'we should not ignore known errors.'"
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge Tichý's refutation of formal verisimilitude. The mechanism now relies solely on 'content' and 'severity of tests passed' rather than a formal measure of truth-likeness. The claim now frames the preference as avoiding 'known falsity' rather than approaching 'truth,' sidestepping the need for a successful formal definition of verisimilitude."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "The criticism states that preferring a theory for future action inherently assumes future continuity. This is rebutted by clarifying that the 'assumption' is pragmatic, not epistemic. Popper admits we cannot know the future; the preference is a decision rule for the present moment based on the current state of criticism, not a prediction derived from the past."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The claim that 'least error-prone' assigns higher subjective probability is rejected. In Popper's framework, 'least error-prone' means 'has survived tests that killed others,' which is a report of logical status (not yet falsified), not a probabilistic weight. Subjective probability is explicitly excluded from the mechanism."
+      },
+      {
+        "handle": "38f75e15ef32982858ed94b505c7bbfe87ec9a0ebbd2867ed39855d8423771d8",
+        "kind": "rebutted",
+        "note": "The criticism suggests a false dichotomy. The rebuttal clarifies that 'critical preference' is indeed a third way: it is rational because it follows the logic of elimination, even if it offers no guarantee of success. It is not a 'gamble' in the sense of randomness, but a calculated risk based on available negative knowledge."
+      },
+      {
+        "handle": "4cbbab057ec51a122476741bd3c2ff4172e6fa0617a24361597807f86f8c8cc7",
+        "kind": "rebutted",
+        "note": "The target does not claim paralysis or need for external induction. The candidate explicitly defends the internal consistency of Popper's methodological rule as sufficient for action, provided one accepts the cost of lacking predictive certainty."
+      },
+      {
+        "handle": "5367cfefcbb7e990f45e4aefa87059bd0469703b7ecb99cb937fc65222e22087",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate accepts that functionally, the strategy may look like induction to an observer, but insists that the *logical justification* offered by the agent is fundamentally different (elimination vs. confirmation). The defense rests on the agent's intent and logical structure, not the functional outcome."
+      },
+      {
+        "handle": "68d9af4a435acc1cd4234dc084ba218e221621e23b6343e1c10f7f2d559a8ebd",
+        "kind": "rebutted",
+        "note": "The criticism argues action implies future reliability. The rebuttal maintains that action implies a *decision*, not a belief in reliability. One can act on the 'best available' while fully believing it might fail tomorrow. The 'preference' is for the theory with the highest informational content that has not yet been refuted, which is a static property of the theory relative to current evidence."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["nav_map_crossing"],
+      "shared_structure": [
+        "Agent must choose a path despite lacking a map of the future.",
+        "Choice is based on eliminating paths known to lead to cliffs (falsification).",
+        "Surviving paths are not 'probable' to be safe, just 'not known' to be deadly."
+      ],
+      "disanalogies": [
+        "Navigation often relies on inductive habits (sun rises in east), whereas Popper forbids this.",
+        "A cliff is a permanent physical feature; a falsified theory might be revised or contextualized."
+      ],
+      "transfer_claims": [
+        "Just as a navigator chooses the un-fallen path not because it 'will' hold, but because others 'did' fall, scientists choose corroborated theories to avoid known errors.",
+        "The rationality of the crossing lies in the elimination of danger, not the prediction of safety."
+      ],
+      "overturn_conditions": [
+        "If the terrain changes unpredictably such that past cliffs become safe and safe paths become cliffs instantly, the elimination strategy fails completely.",
+        "If the agent secretly believes the safe path 'probably' won't collapse, they have smuggled induction back in."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
