@@ -1,0 +1,56 @@
+  OK   P-R1 R1_mechanical.CouplingRate: 17.7966 vs 17.7966 pp
+  OK   P-R1 R1_mechanical.PlaceboRate: 30.5085 vs 30.5085 pp
+  OK   P-R1 R1_mechanical.CouplingRate_minus_Placebo: -12.7119 vs -12.7119 pp
+  OK   P-R1 R1_mechanical.RepairRate: 38.0952 vs 38.0952 pp
+  OK   P-R1 R1_mechanical.NeglectRate: 82.2034 vs 82.2034 pp
+  OK   P-R1 R1_mechanical.denominator_measurable: 118 vs 118
+  OK   P-R1 R1_mechanical.coupled: 21 vs 21
+  OK   P-R1 R1_mechanical.helped: 8 vs 8
+  OK   P-R1 R2_prose_quote.CouplingRate: 98.1481 vs 98.1481 pp
+  OK   P-R1 R2_prose_quote.PlaceboRate: 100.0000 vs 100.0000 pp
+  OK   P-R1 R2_prose_quote.CouplingRate_minus_Placebo: -1.8519 vs -1.8519 pp
+  OK   P-R1 R2_prose_quote.RepairRate: 37.7358 vs 37.7358 pp
+  OK   P-R1 R2_prose_quote.NeglectRate: 1.8519 vs 1.8519 pp
+  OK   P-R1 R2_prose_quote.denominator_measurable: 54 vs 54
+  OK   P-R1 R2_prose_quote.coupled: 53 vs 53
+  OK   P-R1 R2_prose_quote.helped: 20 vs 20
+| Arm | Root | Operationalization | n | Coupling | Placebo | **Coupling − Placebo** (the evidence) | Repair | Neglect |
+|---|---|---|---|---|---|---|---|---|
+| P-R1 | run | R1_mechanical | 118 | 17.8% | 30.5% | **-12.7 pp** | 38.1% | 82.2% |
+| P-R1 | run | R2_prose_quote | 54 | 98.1% | 100.0% | **-1.9 pp** | 37.7% | 1.9% |
+  OK   P-C1 R1_mechanical.CouplingRate: 9.3842 vs 9.3842 pp
+  OK   P-C1 R1_mechanical.PlaceboRate: 3.5191 vs 3.5191 pp
+  OK   P-C1 R1_mechanical.CouplingRate_minus_Placebo: 5.8651 vs 5.8651 pp
+  OK   P-C1 R1_mechanical.RepairRate: 0.0000 vs 0.0000 pp
+  OK   P-C1 R1_mechanical.NeglectRate: 90.6158 vs 90.6158 pp
+  OK   P-C1 R1_mechanical.denominator_measurable: 341 vs 341
+  OK   P-C1 R1_mechanical.coupled: 32 vs 32
+  OK   P-C1 R1_mechanical.helped: 0 vs 0
+  OK   P-C1 R2_prose_quote.CouplingRate: 100.0000 vs 100.0000 pp
+  OK   P-C1 R2_prose_quote.PlaceboRate: 100.0000 vs 100.0000 pp
+  OK   P-C1 R2_prose_quote.CouplingRate_minus_Placebo: 0.0000 vs 0.0000 pp
+  OK   P-C1 R2_prose_quote.RepairRate: 0.0000 vs 0.0000 pp
+  OK   P-C1 R2_prose_quote.NeglectRate: 0.0000 vs 0.0000 pp
+  OK   P-C1 R2_prose_quote.denominator_measurable: 60 vs 60
+  OK   P-C1 R2_prose_quote.coupled: 60 vs 60
+  OK   P-C1 R2_prose_quote.helped: 0 vs 0
+| Arm | Root | Operationalization | n | Coupling | Placebo | **Coupling − Placebo** (the evidence) | Repair | Neglect |
+|---|---|---|---|---|---|---|---|---|
+| P-C1 | run | R1_mechanical | 341 | 9.4% | 3.5% | **+5.9 pp** | 0.0% | 90.6% |
+| P-C1 | run | R2_prose_quote | 60 | 100.0% | 100.0% | **+0.0 pp** | 0.0% | 0.0% |
+
+REPRODUCTION OK: every rate, denominator and count matches W2's committed output within 0.1 pp.
+
+--- W2's PUBLISHED table, for side-by-side reading ---
+(experiments/2026-08-26-run-anatomy-w2-criticism/RESULTS.md)
+
+| Root | Operationalization | n | Coupling | Placebo | **Coupling − Placebo** | Repair | Neglect |
+|---|---|---|---|---|---|---|---|
+| P-R1 | R1 mechanical | 118 | 17.8% | 30.5% | **−12.7 pp** | 38.1% | 82.2% |
+| P-R1 | R2 prose-quote | 54 | 98.1% | 100.0% | **−1.9 pp** | 37.7% | 1.9% |
+| P-C1 | R1 mechanical | 341 | 9.4% | 3.5% | **+5.9 pp** | **0.0%** | 90.6% |
+| P-C1 | R2 prose-quote | 60 | 100.0% | 100.0% | **+0.0 pp** | **0.0%** | 0.0% |
+
+Every cell above appears identically in the re-derivation, which additionally
+matched the denominators, the coupled counts and the helped counts EXACTLY --
+the 0.1 pp tolerance was never exercised.

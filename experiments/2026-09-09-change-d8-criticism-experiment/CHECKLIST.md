@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=4 blockers=none  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
+State: next=8 blockers=none  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
@@ -75,24 +75,72 @@ nor `mini/`, so R36 is not touched.
       done-when: `git status --porcelain experiments/2026-09-09-*/` empty and
       the branch head is on origin.
 
-- [ ] 4. (S9, R22) Write `tools/coupling_placebo.py`: per criticism, whether the
+- [x] 4. (S9, R22) Write `tools/coupling_placebo.py`: per criticism, whether the
       candidate AFTER it changed and whether the candidate BEFORE it changed,
       the DIFFERENCE reported as the only evidence, per root, with n.
       done-when: `python tools/coupling_placebo.py --help` exits 0 and the
       module imports no transport (`grep -c "urllib\|requests\|http" ` is 0).
+      PROOF: `--help` exits 0; the transport grep returns `0`.
+      HOW IT WAS BUILT, and this is the substance of the step: the measurement
+      is NOT reimplemented. W2's own two instruments are copied into
+      `tools/w2_census.py` and `tools/w2_q5.py` with exactly ONE line changed
+      in each — the repo-root computation, because the files sit one directory
+      deeper here — proven by `diff` against the originals after reversing that
+      line, which reports no other difference. `coupling_placebo.py` is a
+      driver over them: it adds the per-arm table and the typed empty case and
+      forms no opinion about a rate. Reimplementing W2's method would have
+      produced a second instrument to keep in agreement with the first, which
+      is the thing the repository's own modularity law exists to prevent.
+      A second, unplanned finding this step resolved: W2's `helped` measure
+      already falls back to SURVIVAL (`status == accepted`) where a root has no
+      scalar checker, which is exactly what this tranche's composition roots
+      need — so no new scoring hook was written, and none should be.
 
-- [ ] 5. (S9) Prove it against W2's own published table: run it on the two
+- [x] 5. (S9) Prove it against W2's own published table: run it on the two
       roots W2 measured and compare to
       `experiments/2026-08-26-run-anatomy-w2-criticism/RESULTS.md`.
       done-when: every reproduced coupling/placebo/difference cell matches W2's
       to 0.1 percentage point, pasted side by side into
       `proof/W2_REPRODUCTION.txt`; a mismatch is a blocker, not a rounding note.
+      PROOF (`proof/W2_REPRODUCTION.txt`, 32 fields, all OK):
+      ```
+      | P-R1 | R1_mechanical | 118 | 17.8% | 30.5% | **-12.7 pp** | 38.1% | 82.2% |
+      | P-R1 | R2_prose_quote |  54 | 98.1% | 100.0% | **-1.9 pp** | 37.7% |  1.9% |
+      | P-C1 | R1_mechanical | 341 |  9.4% |  3.5% | **+5.9 pp** |  0.0% | 90.6% |
+      | P-C1 | R2_prose_quote |  60 | 100.0% | 100.0% | **+0.0 pp** | 0.0% | 0.0% |
 
-- [ ] 6. (S9) Prove the empty case is typed, not silent: run it on a committed
+      REPRODUCTION OK: every rate, denominator and count matches W2's
+      committed output within 0.1 pp.
+      ```
+      Each of the four rows equals W2's published table cell for cell. The
+      denominators (118, 54, 341, 60), the coupled counts (21, 53, 32, 60) and
+      the helped counts (8, 20, 0, 0) matched EXACTLY, so the 0.1 pp tolerance
+      was never exercised. Both scoring paths were exercised: P-C1 through its
+      own rational checker, P-R1 through the survival fallback this tranche
+      will use.
+
+- [x] 6. (S9) Prove the empty case is typed, not silent: run it on a committed
       root with zero argumentative criticisms.
       done-when: output contains `n=0` and NO rate is printed.
+      PROOF (`proof/EMPTY_CASE_TYPED.txt`):
+      ```
+      | no-criticism control | failed-epoch1-run-8e22d0431fd2b98d | R1_mechanical | **n=0** | — | — | — | — | — |
+      | no-criticism control | failed-epoch1-run-8e22d0431fd2b98d | R2_prose_quote | **n=0** | — | — | — | — | — |
+      ```
+      The root was chosen by W2's own census rather than by inspection: its
+      `roots.json` lists the 60 committed roots that carry criticism, and this
+      is one of the 30 that do not. The proof file carries a positive control
+      beside it — the same command on a root that DOES carry criticism returns
+      n=1 and n=13 with rates — so the n=0 is a property of the root, not of
+      the tool. Why this matters downstream: an arm that dies before any
+      criticism is written must be reported as UNMEASURED, never as
+      measured-at-zero.
+      One defect in this step's own tool, found and fixed inside the step: a
+      root named both by `--label` and positionally was measured twice and
+      printed twice, which a reader counting rows would have read as two
+      independent measurements.
 
-- [ ] 7. (S9) [COMMIT] the coupling instrument and its two proofs.
+- [x] 7. (S9) [COMMIT] the coupling instrument and its two proofs.
       done-when: tree clean for the tranche, head on origin.
 
 - [ ] 8. (S10, R23) Write `tools/record_census.py`: per root, attack edges

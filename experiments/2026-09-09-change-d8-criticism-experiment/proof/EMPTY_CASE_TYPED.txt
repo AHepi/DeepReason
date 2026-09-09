@@ -1,0 +1,24 @@
+=== Step 6 proof: the empty denominator is TYPED, not silent ===
+
+The root: a committed root absent from W2's own criticism census
+(roots.json lists the 60 committed roots that carry criticism; this is
+one of the 30 that do not). Chosen by that census rather than by
+inspection, so the choice is not the author's.
+
+$ python coupling_placebo.py --label 'no-criticism control=<root>'
+| Arm | Root | Operationalization | n | Coupling | Placebo | **Coupling − Placebo** (the evidence) | Repair | Neglect |
+|---|---|---|---|---|---|---|---|---|
+| no-criticism control | failed-epoch1-run-8e22d0431fd2b98d | R1_mechanical | **n=0** | — | — | — | — | — |
+| no-criticism control | failed-epoch1-run-8e22d0431fd2b98d | R2_prose_quote | **n=0** | — | — | — | — | — |
+
+Read it plainly: n=0 and every rate column is an em dash. A rate over an
+empty denominator is not 0.0% -- it does not exist, and printing 0.0%
+would invent evidence the record does not carry. This matters for the
+tranche's own ARM V and ARM A: an arm that dies before any criticism is
+written must be reported as unmeasured, never as measured-at-zero.
+
+=== and the same command against a root that DOES carry criticism, so
+    the n=0 above is a property of the root and not of the tool ===
+|---|---|---|---|---|---|---|---|---|
+| control (has criticism) | failed-epoch1-run-36d9a22c3e2045ae1b8c7bfb9d95d092 | R1_mechanical | 1 | 100.0% | 100.0% | **+0.0 pp** | 100.0% | 0.0% |
+| control (has criticism) | failed-epoch1-run-36d9a22c3e2045ae1b8c7bfb9d95d092 | R2_prose_quote | 13 | 100.0% | 84.6% | **+15.4 pp** | 100.0% | 0.0% |
