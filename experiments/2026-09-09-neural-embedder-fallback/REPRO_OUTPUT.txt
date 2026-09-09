@@ -1,0 +1,35 @@
+========================================================================
+1. AN OPERATOR CONFIGURATION THAT NAMES THE NEURAL EMBEDDER
+========================================================================
+Config() default EMBEDDER_MODEL          : 'nomic-ai/nomic-embed-text-v1.5'
+operator's explicit EMBEDDER_MODEL       : 'nomic-ai/nomic-embed-text-v1.5'
+manifest scratch_policy.embedder_model   : None
+manifest scratch_policy.embedder_backend : 'deterministic_hashing'
+runtime Config.EMBEDDER_MODEL            : None
+compile notices, all codes               : []
+compile notices mentioning the embedder  : []
+
+  >> DEFECT: the value was dropped and NOTHING in the record says so.
+
+========================================================================
+2. WHAT THE RUN-TIME BUILDER DOES WITH THE COMPILED CONFIGURATION
+========================================================================
+make_embedder returned                   : None
+  (None means: the Scheduler constructs the zero-dependency hashing default)
+Measure records written                  : []
+
+  >> DEFECT: the geometry instrument changed and the log is silent.
+
+========================================================================
+3. THE WEIGHTS ARE IRRELEVANT — NO BACKEND IS EVER BUILT
+========================================================================
+warmed cache location                    : /tmp/fastembed_cache
+  exists on disk                         : True
+manifest byte-identical either way       : True
+
+  >> The cache hypothesis is REFUTED: the compiled configuration
+     does not depend on the weights, because it never asks for them.
+
+========================================================================
+VERDICT: defect PRESENT
+========================================================================
