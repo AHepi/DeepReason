@@ -1,0 +1,86 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule to maximize the growth of knowledge by selecting the theory with the highest empirical content and severest testability; however, accepting this defense costs the scientist any rational assurance that the chosen theory is true or even probably true, reducing the preference to a bold gamble rather than a justified expectation.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'justification' (which requires induction) and 'critical preference' (which relies on logical content). It posits that choosing the best-tested theory is akin to choosing the most informative map, not the most likely true one. The mechanism identifies the 'cost' as the abandonment of epistemic security: the scientist acts *as if* the theory will hold, without believing it *will* hold based on past performance.",
+    "counterconditions": [
+      "If the preference implies any expectation of future reliability beyond logical consistency, it smuggles in induction.",
+      "If the 'methodological rule' cannot be distinguished from a pragmatic belief in uniformity, the defense collapses into conventionalism.",
+      "If the concept of 'verisimilitude' (truth-likeness) is required to make the preference rational, and verisimilitude itself relies on inductive assumptions, the circle remains unbroken."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "shared_structure": [
+        "Selection based on survival of severe filtering rather than positive confirmation.",
+        "Distinction between acting on a hypothesis and believing its probability.",
+        "Acceptance of risk (error) as the price of progress."
+      ],
+      "disanalogies": [
+        "Evolutionary selection has no goal of 'truth', whereas Popper's science aims at verisimilitude.",
+        "A gambler chooses odds based on frequency (induction), while the Popperian chooses based on logical structure (deduction of falsifiability).",
+        "Survival in nature is retrospective; scientific preference is prospective (guiding future action)."
+      ],
+      "transfer_claims": [
+        "Just as a species survives by adapting to current constraints without guaranteeing future survival, a theory is preferred for its current robustness without guaranteeing future truth.",
+        "The 'rationality' of the choice lies in the rigor of the test, not the outcome's predictive power."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that 'severity of test' logically entails a probabilistic assessment of the theory.",
+        "If the decision to act on a theory necessarily implies a belief in its probable truth."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids evolutionary epistemology (descriptive) and focuses on Popper's normative methodological rules (prescriptive), distinguishing the origin of the habit from the logical justification of the rule."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "revised",
+        "note": "Revised to clarify that the 'non-inductive rationality' is not an arbitrary decree but a logical consequence of aiming for high informational content, addressing the false dichotomy by detailing the specific logical mechanism of 'content' over 'probability'."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "Rebutted by asserting that the move from 'others falsified' to 'choose this' does not assume nature's uniformity, but rather adopts a rule to maximize the chance of detecting error if nature is NOT uniform; it is a strategy for learning, not a prediction of stability."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "revised",
+        "note": "Clarified that 'severity' is defined by the logical improbability of the evidence given the theory, not by an inductive assumption that severe tests are reliable indicators of future performance. The revision emphasizes the logical definition of severity."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes Popper's 'critical preference' from Poincaré's conventionalism by noting that Popper's rules are tied to the goal of truth (verisimilitude) and falsifiability, whereas conventionalism treats theories as mere tools without truth-value aspirations."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "revised",
+        "note": "Explicitly separated 'methodological convention' (the rule to choose the best-tested) from 'pragmatic reliability' (the belief that it will work). The revision argues the rule is rational because it maximizes learning potential, not because it guarantees practical success."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f00606bbde5f67",
+        "kind": "revised",
+        "note": "Strengthened the case for the 'induction smuggling' view by acknowledging that without verisimilitude, the preference looks like blind faith, then resolved the conflict by arguing that verisimilitude provides a non-probabilistic bridge, satisfying the prompt's requirement for the strongest case on both sides."
+      },
+      {
+        "handle": "6a6dff5b56f376b6210260a3024b5e5ea88897b277e4d65a4a2fd99616ab6457",
+        "kind": "rebutted",
+        "note": "Defended verisimilitude as a comparative logical concept (more truth-content, less falsity-content) that does not require assigning probabilities, thus avoiding the inductive trap while still providing a rational basis for preference."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_007"
+      ]
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule to maximize the severity of future tests; accepting this costs us the assurance that science converges toward truth or practical reliability, leaving us with only a procedural commitment to error-elimination without epistemic probability.",
+    "mechanism": "The mechanism distinguishes between 'rational belief' (which Popper rejects as inductive) and 'rational action' (which he accepts as critical). By framing the preference as a decision to subject the most vulnerable (best-tested) theory to new attempts at falsification, the scientist avoids assuming nature is uniform. Instead, they adopt a convention: 'If we must choose a basis for action, choose the one that has survived the hardest attempts to kill it, because if it is false, we are most likely to find out soon.' This transforms the preference from a prediction of success into a strategy for rapid error detection.",
+    "counterconditions": [
+      "If the preference implies any increase in the logical probability of the theory being true.",
+      "If the choice relies on an implicit assumption that past test results correlate with future performance (uniformity of nature).",
+      "If the 'methodological rule' cannot be distinguished from Poincaréan conventionalism where rules are arbitrary rather than truth-seeking.",
+      "If the account fails to explain why Popper himself acted as if corroborated theories were more reliable."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_014",
+        "SRC_009"
+      ],
+      "shared_structure": [
+        "Selection based on survival of stress rather than prediction of future survival.",
+        "Distinction between descriptive history and normative rule.",
+        "Rejection of probabilistic weighting in favor of binary status (falsified/not-yet-falsified)."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of error elimination, whereas Popperian science does.",
+        "Natural selection operates on reproduction rates, while scientific selection operates on logical consistency and test severity.",
+        "Evolutionary fitness is relative to a specific environment, while scientific corroboration aims for universal scope."
+      ],
+      "transfer_claims": [
+        "Just as a species surviving a plague isn't 'probabilistically guaranteed' to survive the next, a corroborated theory isn't probable, but it is the best candidate to reveal new flaws.",
+        "The 'preference' in evolution is descriptive; in Popper, it is a prescriptive rule adopted by the critic."
+      ],
+      "overturn_conditions": [
+        "If biological survival actually implies a probabilistic increase in future survival capabilities beyond the immediate context.",
+        "If the analogy requires a teleological element that Popper explicitly forbids in methodology."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate origin with justification. It explicitly frames the preference as a normative methodological rule ('choose the most vulnerable') adopted for the specific purpose of maximizing future test severity, distinct from the descriptive fact that scientists do prefer them."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate addresses the 'false dichotomy' by articulating the specific non-inductive rationality Popper proposed: the rationality of efficient error detection. It is not an 'arbitrary decree' but a rule derived from the goal of falsificationism itself."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The move from 'others are falsified' to 'choose this one' is rebutted as relying on uniformity. The candidate argues the choice is based on the current logical status (unfalsified vs falsified) and the strategic hope that the best-tested theory will break first if it is false, requiring no assumption about the future resembling the past."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "The candidate clarifies that 'severity of tests' is a measure of how much a theory risks falsification, not a metric of reliability. Preferring the severe survivor is preferring the tool most likely to yield new knowledge (by breaking), not the one most likely to succeed."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The distinction from Poincaré is maintained: the rule is not arbitrary because it is functionally linked to the core demarcation criterion (falsifiability). An arbitrary rule would not necessarily prioritize severe tests; this rule does so by definition of the critical method."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate strictly separates 'methodological convention' (the rule to act on the best-tested) from 'pragmatic reliability' (the expectation that it will work). It admits the cost: we have no grounds for expecting reliability, only a procedural commitment to testing."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e871c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "rebutted",
+        "note": "The argument explicitly avoids 'verisimilitude' as a defined quantity. It relies solely on the binary state of 'not yet falsified' and the comparative history of test severity, which Popper allows as a reportable fact, unlike truth-likeness."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f0068bbde5f67",
+        "kind": "revised",
+        "note": "Revised to explicitly construct the 'strongest case' for the induction-smuggling view within the counterconditions and mechanism analysis, acknowledging that the 'cost' of the Popperian defense is the abandonment of convergence claims, which many find unintuitive. The conclusion now clearly weighs the defensibility against this high epistemic cost."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_014",
+      "SRC_009",
+      "SRC_003"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_014",
+        "SRC_009",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a non-inductive methodological rule of 'risk minimization' rather than a probabilistic prediction of success; however, accepting this defense costs the agent any rational assurance that the chosen theory will actually work in the future, reducing scientific action to a gamble where one simply chooses the option with the most thoroughly tested failure modes.",
+    "mechanism": "The argument distinguishes between 'expectation of truth' (inductive) and 'selection of the least-falsified option' (critical). It posits that preferring Theory A over Theory B because A has survived severe tests while B has not is not an inference that A is more likely true, but a strategic decision to avoid known errors. The mechanism relies on the asymmetry of falsification: we know B is risky (or falsified), whereas A's risks are only potential, not actual. Thus, the preference is rational not because it maximizes expected utility via probability, but because it minimizes known exposure to error.",
+    "counterconditions": [
+      "If the agent acts on the theory, they implicitly assign it a higher subjective probability of success, thereby smuggling induction back in.",
+      "If the conditions of the future differ from the past, the history of corroboration provides no logical basis for preference, making the choice arbitrary.",
+      "If 'verisimilitude' (truth-likeness) is invoked to bridge the gap, the defense fails because Popper's formal definition of verisimilitude was logically refuted by Tichý and Miller."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0aea4507c15f624018da4ca9ca280efa3ba862dc8b1dcce5cbe82f0cf873baa4",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'rational preference' with 'prediction of success.' My claim explicitly defines rational preference as 'minimizing known error' rather than 'maximizing future success probability.' The rationality lies in the avoidance of known falsehoods, which is a deductive certainty, not an inductive guess about the future."
+      },
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The strategy does not assume conditions will remain the same; it assumes that if conditions change, the unfalsified theory might still hold, whereas the falsified theory is known to fail under specific conditions. The preference is for the theory with fewer *known* points of failure, regardless of whether the future resembles the past."
+      },
+      {
+        "handle": "10d458d5ba5df5b51b41f157dbd7e3ca6a57c55a4ae84258055f2e20bab7b067",
+        "kind": "revised",
+        "note": "Revised the mechanism to clarify that 'elimination of danger' is not a prediction of safety but a logical consequence of having identified specific dangers in the competitor. The dichotomy is not false if 'prediction of safety' is strictly defined as assigning P>0.5 based on past frequency."
+      },
+      {
+        "handle": "12d85bc51c9af81516a777b5d4dc2339241479c247c63e2c28fd89918ef5ac05",
+        "kind": "rebutted",
+        "note": "The core dilemma is resolved by rejecting the premise that rational action requires a belief in future success. Rational action only requires a preference ordering based on available critical information. Choosing the less-refuted option is the only move consistent with the logic of criticism."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "departure_declared",
+        "note": "I declare a departure from using 'verisimilitude' as the primary justification. The defense rests solely on the negative heuristic of avoiding known falsifications, rendering the failures of positive verisimilitude definitions irrelevant to this specific argument."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "Preferring a theory for action does not inherently assume it will continue to succeed; it only assumes that the alternative is known to have failed. The assumption of continuity is an inductive add-on, not a requirement of the critical preference itself."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "Assigning a 'higher subjective probability' is a psychological description of the agent, not a logical requirement of the method. Popper's methodological rule prescribes action based on logical status (falsified vs. not-yet-falsified), not subjective degrees of belief."
+      },
+      {
+        "handle": "350db731d51a09f1568348da67e40e50c3417a7e7bde9c041860ce74daf212ec",
+        "kind": "revised",
+        "note": "Clarified in the 'cost' section of the claim that accepting this view means abandoning any claim to 'methodological rules' guaranteeing success. The rule is purely negative: 'do not choose the known-false option,' which survives the countercondition by admitting it offers no positive assurance."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "attack": true,
+      "case": "The target's claim that the preference is 'tautological' and makes 'no claim about the future' fails to address the core of the problem: scientists prefer better-corroborated theories specifically to *act* on them (e.g., build bridges, launch satellites), which is an inherently future-oriented endeavor. By redefining the preference as a static selection of 'informational content,' the target sidesteps the dilemma rather than solving it. If the preference does not imply an expectation of future reliability or success, it cannot justify the practical actions scientists take, rendering the 'defense' irrelevant to the actual behavior it seeks to explain. Thus, the target either smuggles in induction (by assuming high content implies future utility) or admits the preference is irrational for practical purposes, neither of which constitutes a valid defense on Popper's terms.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Scientists prefer better-corroborated theories to guide future actions and predictions, not merely to catalog past survival.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration offers no guarantee or even probabilistic expectation of future success, on what rational basis does Popper advise us to choose the better-corroborated theory for practical application?",
+      "target_alias": "SRC_001"
+    }
+  ]
+}

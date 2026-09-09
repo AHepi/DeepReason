@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is defensible 'only if' we accept a specific critical rationalist axiom creates a false dilemma by ignoring Popper's own pragmatic justification via verisimilitude (truth-likeness). Popper argued that we prefer better-corroborated theories not merely due to a deontological rule against ignoring criticism, but because such theories are conjectured to have higher verisimilitude (closer to the truth), even if probability cannot be assigned. By reducing the justification solely to a 'normative rationality' that admits circularity, the target misrepresents Popper's attempt to provide an objective, non-circular grounds for preference based on content and test severity, thereby failing to make the 'strongest case' as required by the problem context.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly distinguished between probability and verisimilitude, arguing that corroboration indicates a theory has survived tests that would have falsified it if it were false, thus making it a better candidate for being true (higher verisimilitude), which provides a non-circular, objective reason for preference beyond mere adherence to a norm.",
+      "premise_evidence": null,
+      "successor_question": "Does the target's reliance on a 'circular' normative definition overlook Popper's specific arguments regarding verisimilitude as the objective basis for preferring corroborated theories?"
+    }
+  ]
+}

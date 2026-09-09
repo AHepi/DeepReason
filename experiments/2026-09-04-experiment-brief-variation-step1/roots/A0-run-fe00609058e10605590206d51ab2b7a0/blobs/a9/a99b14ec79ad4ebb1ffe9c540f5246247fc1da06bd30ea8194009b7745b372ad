@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's terms as a non-inductive, methodological decision to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing verisimilitude without assigning probability; however, this stance costs us any logical guarantee that the preferred theory will succeed in novel domains or future applications, forcing us to accept that scientific action rests on a critical preference rather than a justified expectation of success.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which requires induction and is impossible) and 'preference' (which is a rational choice based on the aim of truth). By treating corroboration as a report of past performance rather than a predictor of future frequency, we avoid smuggling in induction. The preference is grounded in the logical asymmetry of falsification: since we cannot verify truth but can eliminate error, the theory surviving the most rigorous tests is the one currently closest to the truth (highest verisimilitude), making it the only rational candidate for action despite the lack of probabilistic assurance.",
+    "counterconditions": [
+      "If the Tichý-Miller refutation holds that verisimilitude cannot be formally defined without probabilistic assumptions, then the claim that preference maximizes verisimilitude collapses into hidden induction.",
+      "If the problem of action requires a bridge principle that the future will resemble the past (uniformity of nature) to move from 'survived tests' to 'safe to act,' then the preference smuggles in the very induction Popper rejected.",
+      "If 'rational preference' implicitly assumes that past survival increases the likelihood of future survival, then the distinction between corroboration and probability is merely verbal, not logical."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by explicitly conceding the cost: there is no guarantee of success in novelty. The defense is not that the theory *will* work, but that it is the *most critical* choice available, aligning action with the goal of truth-seeking even in the absence of predictive certainty."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The candidate defends the preference as 'logical justification' of a choice (methodological rationality) rather than 'logical justification' of a truth claim. It argues that acting on the best-tested theory is the only consistent application of Popper's epistemology, thus meeting the prompt's demand for defensibility on Popper's own terms without invoking induction."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "revised",
+        "note": "Revised to clarify that 'verisimilitude' here functions as a regulative ideal or comparative metric of content and truth-content, acknowledging the formal difficulties raised by Tichý and Miller but maintaining that the *intent* of preference is to approximate truth, not to calculate a probability score."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde090819ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Declares a departure from relying on Popper's specific failed formal definition of verisimilitude. Instead, the candidate adopts a qualitative notion of 'closeness to truth' based on informational content and survival of tests, which remains viable even if the quantitative formalization was refuted."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "rebutted",
+        "note": "The candidate affirms that the preference is rational because it aligns with the aim of science (truth), countering the claim that it is merely volitional. It specifies that the rationality lies in the consistency between the epistemic goal (truth) and the methodological action (choosing the least falsified theory)."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The candidate resolves the tension by arguing that evolutionary selection explains the *existence* of the theory, while the *preference* for action is justified by the theory's current status as the best available approximation of truth. The justification for action is not the history of selection itself, but the logical consequence of having survived severe tests."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate strictly separates the 'inductive assumption' of uniformity (rejected) from the 'methodological decision' to treat conditions as stable for testing (accepted). It argues that preferring a theory does not assume nature is uniform, but rather accepts the risk that if nature changes, the theory may fail—a risk inherent in all action."
+      },
+      {
+        "handle": "3c53ccc6097abc1e8dc882b486987fbf9904e44fc375759cbd2aa401e1e8ce37",
+        "kind": "revised",
+        "note": "Revised to explicitly structure the argument into two distinct parts: first, the strongest case for defensibility (methodological rationality), and second, the strongest case against it (the impossibility of bridging the gap to future action without induction), before concluding which survives."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["evolutionary_survival_of_species", "courtroom_verdict_based_on_evidence"],
+      "shared_structure": [
+        "Selection based on elimination of failures rather than proof of success",
+        "Preference for the survivor as the best available option despite uncertainty",
+        "Distinction between historical performance and future guarantee"
+      ],
+      "disanalogies": [
+        "Biological evolution lacks conscious intent, whereas scientific preference is a deliberate methodological choice",
+        "Courtroom verdicts aim for finality and legal truth, while scientific corroboration is always provisional and open to revision"
+      ],
+      "transfer_claims": [
+        "Just as we bet on the species best adapted to current conditions without knowing the future environment, we act on the best-corroborated theory without knowing future test results",
+        "The rationality of the choice derives from the rigor of the elimination process, not from a prediction of the outcome"
+      ],
+      "overturn_conditions": [
+        "If it is shown that biological survival implies a probabilistic advantage in future reproduction, the analogy would smuggle in induction",
+        "If legal verdicts are shown to rely on inductive generalizations about human behavior rather than strict falsification of innocence, the structural parallel fails"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

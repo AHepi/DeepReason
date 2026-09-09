@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive 'critical preference' grounded in the logic of testing rather than probability, but accepting this costs the agent any rational assurance that the preferred theory will succeed in future applications, reducing the preference to a methodological gamble without predictive warrant.",
+    "mechanism": "The mechanism distinguishes between 'corroboration' (a historical report of severe test survival) and 'probability' (a logical measure of future truth likelihood). It argues that preferring the better-corroborated theory is a rational decision rule based on the theory's higher informational content and stricter falsifiability, not an inductive inference that past success guarantees future success. The preference is justified as the most critical stance available: choosing the theory that has risked the most and survived, thereby maximizing the potential for learning even if it fails tomorrow.",
+    "counterconditions": [
+      "If the agent requires a logical guarantee of future success to act, Popper's framework offers none, rendering the preference practically inert for high-stakes decisions.",
+      "If the distinction between 'acting on the best tested theory' and 'believing it is more likely true' collapses under psychological or pragmatic pressure, the defense fails to prevent smuggling induction back in via the backdoor of action.",
+      "If verisimilitude (truth-likeness) cannot be coherently defined without probabilistic assumptions, the claim that we are getting 'closer to truth' loses its non-inductive footing."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism assumes acting requires a belief in future success. The rebuttal is that acting on a theory is simply adopting it as the current best conjecture for critical testing; the 'preference' is a commitment to expose this specific target to further falsification, not a bet on its permanence."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The defense does not conflate content with preference; it posits that high content is the *reason* for the preference. We prefer the riskier theory because it offers more opportunities for error detection, which is the sole engine of scientific growth in Popper's view."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge that the 'false dichotomy' charge holds weight if one demands pragmatic utility. The candidate now admits the cost: the preference is logically pure but pragmatically hollow if 'action' implies expecting results. The revision clarifies that Popperian action is 'testing action,' not 'utilitarian action.'"
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The claim is not that Popper uses a 'Principle of Uniformity.' Rather, he replaces uniformity with a procedural rule: always test the strongest surviving conjecture. This is a rule of game-play, not a law of nature."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "rebutted",
+        "note": "Conflation is denied. Critical preference is explicitly non-predictive. It says 'use this one to try to break,' whereas inductive prediction says 'use this one because it will work.' The mechanism relies on this sharp distinction."
+      },
+      {
+        "handle": "270fdeb19c2b45908843bde3158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "departure_declared",
+        "note": "Departing from the reliance on formal verisimilitude proofs which Popper himself struggled with. The candidate grounds the preference solely in the 'severity of tests passed' rather than a calculated distance to truth."
+      },
+      {
+        "handle": "283c021802bb4232adf1e0244e99140ec8500555bce3ce33ec8dc4b9ecc2ebdc",
+        "kind": "rebutted",
+        "note": "The criticism correctly identifies the cost (practical inertia for utilitarian goals) but incorrectly frames it as a failure. For Popper, rendering the preference 'inert' regarding certainty is the feature, not the bug; it prevents dogmatism."
+      },
+      {
+        "handle": "2b2b9f8685410277445fc083713971a8c5bf992ab5fbf0a1093b143dcfb45882",
+        "kind": "rebutted",
+        "note": "The preference is rational precisely because it is a methodological fiction in the sense of being a rule of procedure, not a statement of fact. Its rationality lies in its conduciveness to learning, not its correspondence to reality."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

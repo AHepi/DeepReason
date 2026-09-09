@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible without smuggling in induction if framed strictly as a 'critical selection rule' rather than a predictive probability assignment; however, this defense survives only by accepting the cost that rational action becomes a game of avoiding known falsifications rather than maximizing expected success, leaving the agent unable to positively justify why the future will resemble the past even in the absence of known errors.",
+    "mechanism": "Reframe the choice not as 'Theory A is more likely true' (induction) but as 'Theory B has been proven false, Theory A has not yet been proven false; therefore, to minimize immediate error, select A.' This relies on the asymmetry of falsification: while we cannot verify truth, we can identify specific falsehoods. The preference is thus a negative elimination strategy (survival of the least-refuted) rather than a positive confirmation strategy.",
+    "counterconditions": [
+      "If the agent acts on Theory A expecting it to work (e.g., building a bridge), they are implicitly assigning a high subjective probability to its success, which reintroduces induction under the guise of pragmatism.",
+      "If the 'risk minimization' strategy assumes that conditions remaining constant enough for past tests to matter implies future stability, it secretly relies on the uniformity of nature.",
+      "If Popper's notion of 'verisimilitude' (truth-likeness) is required to explain why we prefer one unfalsified theory over another, and verisimilitude cannot be formally defined without probabilistic assumptions (as shown by Tichý and Miller), the non-inductive defense collapses."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0aea4507c15f624018da4ca9ca280efa3ba862dc8b1dcce5cbe82f0cf873baa4",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'rational preference' with 'predictive confidence.' The rebuttal is that Popperian preference is purely negative: it is rational to avoid what is known to be wrong. It does not claim minimizing known errors guarantees future success, only that it avoids known failure. The rationality lies in the logical consistency of not acting on a known falsehood, not in a guide for future positive outcomes."
+      },
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "revised",
+        "note": "Revised to explicitly concede that any expectation of *success* (rather than mere avoidance of known failure) smuggles in induction. The candidate now argues that Popper's defense only holds if scientists abandon the goal of 'successful prediction' and adopt the goal of 'error avoidance,' a significant shift in the definition of rational action."
+      },
+      {
+        "handle": "10d458d5ba5df5b51b41f157dbd7e3ca6a57c55a4ae8258055f2e2e2ab7b067",
+        "kind": "rebutted",
+        "note": "The dichotomy is not false but essential. 'Prediction of safety' implies a positive claim about the future (induction). 'Elimination of danger' is a negative claim about the present state of knowledge (deduction). The defense holds only if the agent accepts they are eliminating danger, not predicting safety."
+      },
+      {
+        "handle": "12d85bc51c9af81516a777b5d4dc2339261479c247c63e2c2c2fd89918ef5ac05",
+        "kind": "departure_declared",
+        "note": "Departing from the assumption that 'rational preference for future action' must imply an expectation of success. The candidate declares that within strict Popperism, rational preference is solely a methodological rule to avoid known error, abandoning the pragmatic link to future utility unless one silently accepts induction."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "rebutted",
+        "note": "While formal verisimilitude failed, the *methodological* preference does not require a quantitative measure of truth-likeness. It only requires an ordinal ranking based on the severity of tests passed. We do not need to know *how much* closer to truth A is than B, only that B was falsified and A survived a similar test."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "revised",
+        "note": "Clarified that the defense fails if 'preferring for future action' implies an assumption of continuity. The revised stance is that Popper's terms only defend the preference as a 'current best guess' subject to immediate falsification, not as a stable basis for long-term planning without inductive leakage."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "Subjective probability is a psychological state, not a logical requirement. One can act on the 'least refuted' theory as a rule of thumb without assigning it a numerical probability > 0.5. The criticism mistakes the *feeling* of confidence for the *logical structure* of the decision rule."
+      },
+      {
+        "handle": "350db731d51a09f1568348da67e40e50c3417a7e7bde9c041860ce7daf212ec",
+        "kind": "revised",
+        "note": "Accepted that if 'acting' inherently requires expecting success, then Popper's methodological rule is insufficient for real-world action without inductive supplementation. The candidate now posits that the 'surviving' answer is that Popper's system is internally consistent only as a logic of discovery/criticism, not as a complete philosophy of action."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["medical_triage_protocol", "chess_opening_book"],
+      "shared_structure": [
+        "Selection based on elimination of known failures rather than prediction of optimal success.",
+        "Reliance on past data strictly to identify errors, not to project trends.",
+        "Decision rule is negative (avoid X) rather than positive (choose Y because it works)."
+      ],
+      "disanalogies": [
+        "Medical triage often uses probabilistic survival estimates (induction), whereas strict Popperism forbids this.",
+        "Chess openings are chosen because they have statistically led to wins in the past (inductive), not just because they haven't been refuted."
+      ],
+      "transfer_claims": [
+        "Just as a doctor might avoid a treatment known to kill (even if unsure what works), a Popperian scientist avoids falsified theories.",
+        "The rationality of the choice derives entirely from the avoidance of the known bad outcome, not the anticipation of the good one."
+      ],
+      "overturn_conditions": [
+        "If it is demonstrated that avoiding known errors logically entails an expectation of future success.",
+        "If no action can be taken without an implicit probability assignment greater than zero for success."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

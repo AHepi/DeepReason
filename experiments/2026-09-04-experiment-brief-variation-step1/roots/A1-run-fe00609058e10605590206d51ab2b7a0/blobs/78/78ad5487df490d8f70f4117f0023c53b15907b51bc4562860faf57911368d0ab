@@ -1,0 +1,62 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference that the theory is true or probable, but as a non-inductive 'conventional decision' to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing the content of our potential errors and adhering to the methodological rule of seeking truth without claiming probability.",
+    "mechanism": "The mechanism distinguishes between the logical status of a theory (which remains unproven and improbable) and the methodological rule for action (which dictates choosing the theory that offers the highest risk of falsification and has survived it). This resolves the tension by framing the preference as a rational commitment to the critical method itself rather than an expectation of future success derived from past performance.",
+    "counterconditions": [
+      "If one insists that rational action requires a probabilistic estimate of success, then Popper's framework fails to provide a basis for action.",
+      "If 'conventional decision' is interpreted as arbitrary rather than methodologically constrained by severity of tests, the defense collapses into irrationalism.",
+      "If the distinction between 'acting on' and 'believing in' the truth of a theory cannot be maintained in high-stakes practical scenarios (e.g., bridge building), the preference smuggles induction back in."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on 'verisimilitude' as a calculated metric. Instead, it grounds the preference in the methodological rule of selecting the most severely tested theory, a move Popper explicitly endorsed as a convention to avoid induction, sidestepping the formal undefinability of verisimilitude."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The rebuttal clarifies that the claim does not entail an expectation of future success via logical probability. The 'expectation' is purely methodological: we expect to learn more faster if we test the bold, corroborated theory, not that the theory is likely to hold true."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma by framing the choice of a bridge design not as a belief in its safety (induction) but as the adoption of the design that has survived the most rigorous structural criticism, aligning practical reliance with the critical method."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The candidate maintains the distinction: 'willingness to criticize' is the method, while 'practical reliance' is the outcome of applying that method. We rely on the theory because it is the best target for further criticism, not because it is proven safe."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is defended as consistent adherence to his own methodological postulate. It is not a contradiction for him to prefer the better-corroborated theory if that preference is defined as a commitment to the critical process, not a secret belief in probability."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The argument strictly remains within Popper's falsificationist framework and his specific notion of 'conventional decision,' avoiding any substitution with Evolutionary Epistemology or external biological analogies."
+      },
+      {
+        "handle": "3315f618e758449a5ec8d23e0181b710f5cc00355fe1078c633402e3c7df78fc",
+        "kind": "rebutted",
+        "note": "As with the first criticism, the defense does not invoke verisimilitude as a measurable quantity but relies on the comparative history of severe testing, which Popper accepted as a valid basis for preference without requiring a formal definition of truth-likeness."
+      },
+      {
+        "handle": "422c05f671684a2e0cc88e3f64a4478400fd568dd9385f2f08bf80c90bde4a86",
+        "kind": "rebutted",
+        "note": "The candidate rejects the evolutionary analogy entirely. The justification is purely methodological and rational (in the sense of procedural rationality), not biological. Survival of the theory in debate is analogous to, but distinct from, biological survival."
+      }
+    ],
+    "analogy": null,
+    "checker_specs": [],
+    "evidence_refs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}

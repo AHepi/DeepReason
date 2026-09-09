@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories in action is defensible on his own terms not as an inductive inference of future truth, but as a non-inductive 'conventional decision' to act on the theory that has withstood the most severe attempts at falsification, thereby minimizing the risk of known error while accepting that no probability of success is gained.",
+    "mechanism": "The mechanism distinguishes between the logical status of a theory (which remains unproven and improbable) and the pragmatic rationality of choice. By treating the selection of a theory for action as a methodological rule rather than an epistemic confirmation, one avoids induction: we choose the theory that has survived the toughest tests because it is the only one where we have actively tried and failed to find errors, not because we believe it is likely to be true. This shifts the justification from 'expectation of success' (inductive) to 'responsibility for failure' (critical).",
+    "counterconditions": [
+      "If the agent requires a positive probability assignment to justify action, the Popperian defense fails.",
+      "If 'severe testing' implicitly assumes the uniformity of nature (that the future will resemble the past), the defense collapses into hidden induction.",
+      "If the cost of acting on a falsified-but-not-yet-detected theory is infinite, the lack of probabilistic safety makes the preference irrational."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'verisimilitude' with the proposed defense. This candidate does not rely on verisimilitude (which Popper admitted was problematic) but on the asymmetry of falsification and the conventional decision to prefer the unfalsified over the falsified or less-tested. No calculation of truth-likeness is required, only a record of survival."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The candidate explicitly rejects the claim that rational preference entails an 'expectation of future success' in the probabilistic sense. The category error alleged by the critic is actually committed by those who demand probabilistic justification; the Popperian view redefines rational preference as 'choosing the best available target for criticism,' which logically entails no expectation of truth, only a commitment to the method."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma by framing action not as reliance on truth, but as the only rational way to subject the theory to practical falsification. Building a bridge on a well-tested theory is not a bet on its truth, but the most efficient way to discover if it is false under load."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The criticism assumes 'practical reliance' implies belief in reliability. The rebuttal is that Popperian reliance is purely provisional and critical; we rely on the theory only insofar as we have no better alternative that has survived stricter tests. It is a reliance born of desperation and rigor, not confidence."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is consistent with his theory if viewed as a consistent application of his own methodological rules. He prefers the better-corroborated theory because he is the most rigorous critic available to himself; his behavior demonstrates the rule, not a contradiction of it."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "This candidate strictly adheres to Falsificationism and the logic of the situation, avoiding Evolutionary Epistemology. The justification is derived solely from the asymmetry of verification/falsification and the definition of corroboration as a report of past test performance, not a biological analogy."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The pragmatic contradiction dissolves once one accepts that 'rationality' in action does not require 'probability.' It is rational to choose the path with the fewest known obstacles (failed tests), even if one assigns zero probability to the path being ultimately clear. The contradiction exists only if one smuggles in the premise that rationality equals probabilistic optimization."
+      },
+      {
+        "handle": "2bb824986a07c70a152db1deb50653be633a98497dc1a927ef76e718b290d85f",
+        "kind": "revised",
+        "note": "Clarified that 'acting on' the theory is itself the next severe test. The justification for action is that it is the necessary condition for the theory to remain scientific (exposed to potential refutation). We act not because we think it will work, but because refusing to act on the best-tested theory would be dogmatic adherence to an inferior or untested alternative."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["naval_strategy_severe_trials"],
+      "shared_structure": [
+        "Selection of a plan based on survival of simulated attacks rather than predicted success.",
+        "Acknowledgment that survival does not guarantee future victory.",
+        "Preference driven by the elimination of known weak points rather than confirmation of strength."
+      ],
+      "disanalogies": [
+        "Naval strategy often aims for probabilistic victory, whereas Popperian science aims only for non-falsification.",
+        "A naval battle has a definitive end-state (win/loss), while scientific testing is open-ended."
+      ],
+      "transfer_claims": [
+        "Just as an admiral chooses the fleet configuration that survived the harshest war games without assuming it will win, a scientist chooses the theory that survived severe tests without assuming it is true.",
+        "The rationality of the choice lies in the rigor of the prior testing process, not the outcome prediction."
+      ],
+      "overturn_conditions": [
+        "If the war games (tests) are shown to be irrelevant to actual battle conditions (nature).",
+        "If the admiral claims the surviving configuration is 'likely' to win rather than 'least likely to fail due to known flaws'."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

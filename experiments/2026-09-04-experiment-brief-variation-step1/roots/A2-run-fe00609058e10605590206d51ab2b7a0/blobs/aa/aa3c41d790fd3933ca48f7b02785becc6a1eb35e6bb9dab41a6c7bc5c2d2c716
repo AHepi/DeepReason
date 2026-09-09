@@ -1,0 +1,182 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'risk-minimization' strategy: we choose the theory that has survived severe tests not because it is more likely to be true, but because it is the only one where known errors have been eliminated, making it the safest bet for action without assuming future uniformity.",
+      "mechanism": "Deductive risk assessment: Action requires avoiding known falsehoods; corroboration identifies known falsehoods (via falsification) but does not predict truth; therefore, choosing the least-falsified option is a logical necessity for error avoidance, not a probabilistic guess.",
+      "counterconditions": [
+        "If minimizing known errors implicitly assumes that future conditions will resemble past testing conditions.",
+        "If 'safety' in action cannot be defined without reference to the probability of successful outcomes.",
+        "If the agent must assign a higher subjective confidence to the corroborated theory to act upon it."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_019",
+          "kind": "rebutted",
+          "note": "The defense does not conflate risk minimization with rational preference; it defines rational preference *as* risk minimization. Rationality here is negative: avoiding what is known to be wrong, not maximizing what is likely to be right. No assumption about future success is needed, only the desire to avoid known failure."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Preferring Theory A over B based on past tests does not assume conditions will remain identical; it assumes only that the specific falsifying conditions identified in the past remain relevant. If the context changes completely, the old tests are irrelevant, but within the current context, the unrefuted theory remains the only non-known-false option."
+        },
+        {
+          "handle": "[SRC_018] against SRC_016",
+          "kind": "rebutted",
+          "note": "There is no false dichotomy. 'Prediction of safety' is exactly 'elimination of known danger.' We do not predict the bridge will hold (induction); we predict it will not collapse *for the reasons we have already tested and failed to find*. The action is based on the absence of known defects, not the presence of guaranteed strength."
+        },
+        {
+          "handle": "[SRC_022] against SRC_020",
+          "kind": "rebutted",
+          "note": "Minimizing known falsification *is* the rational preference for future action in a Popperian framework. Rationality is bounded by knowledge: we know A is not false (yet); we know B is false (or less tested). Choosing A is not a gamble on its truth, but a refusal to act on known falsehood."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "This candidate does not rely on 'verisimilitude' or truth-likeness. It relies solely on the logical status of 'not yet falsified.' The preference is for the theory with the highest informational content that has not been refuted, regardless of its proximity to truth."
+        },
+        {
+          "handle": "[SRC_003] against SRC_002",
+          "kind": "rebutted",
+          "note": "The core challenge assumes action requires an assumption of future continuity. This candidate rejects that premise: action requires only the avoidance of known obstacles. If the world changes unpredictably, any theory fails, but the unrefuted theory was the best available map of known obstacles at the moment of decision."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "The criterion 'least error-prone known option' does not assign subjective probability. It assigns a binary status: 'known to be false' vs 'not known to be false.' Acting on the latter is not a probabilistic bet but a logical default when action is required and knowledge is negative."
+        },
+        {
+          "handle": "[SRC_017] against SRC_015",
+          "kind": "rebutted",
+          "note": "Acting on a theory does not require assigning it a higher subjective probability of success. It requires only that it is the only option not currently ruled out by evidence. The 'expectation' of success is a psychological byproduct, not a logical precondition for the methodological rule."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The preference strictly smuggles induction back in; Popper's attempt to separate 'corroboration' from 'probability' collapses under the weight of practical action, because any choice to act on one theory over another inherently treats past survival as evidence of future reliability.",
+      "mechanism": "Pragmatic contradiction: The act of preferring X over Y for future consequences logically entails the belief that X is more likely to yield desired consequences than Y, which is an inductive inference from past test results to future performance.",
+      "counterconditions": [
+        "If a purely negative justification (avoiding known errors) can motivate action without positive expectation.",
+        "If 'preference' can be interpreted as a random tie-breaker among non-falsified theories rather than a ranking of merit.",
+        "If the agent acts on the corroborated theory solely due to institutional habit rather than rational justification."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_019",
+          "kind": "rebutted",
+          "note": "The criticism holds: minimizing risk *is* a form of rational preference that implies future orientation. To say 'A is safer' is to predict 'A will cause fewer failures,' which is an inductive claim about the future stability of the conditions that made A safe in the past."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Agreed. Any strategy preferring A over B based on past results necessarily assumes the relevance of those past results to the future situation. Without this assumption, the past tests are historically interesting but practically useless."
+        },
+        {
+          "handle": "[SRC_018] against SRC_016",
+          "kind": "rebutted",
+          "note": "The distinction is indeed false. Claiming to 'eliminate danger' while ignoring the possibility that new dangers exist (which induction would try to estimate) is a semantic trick. Practical action always involves predicting safety, which is inductive."
+        },
+        {
+          "handle": "[SRC_022] against SRC_020",
+          "kind": "rebutted",
+          "note": "Correct. Conflating 'minimizing known falsification' with 'rational preference' ignores that rational preference for action demands a positive expectation of outcome, not just the absence of known negatives. We act because we think it will work, not just because we don't know it won't."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "Even if verisimilitude is abandoned, the act of preference itself reintroduces a probabilistic mindset. Scientists prefer corroborated theories because they believe them to be 'closer to the truth' or 'more reliable,' which are inductive judgments."
+        },
+        {
+          "handle": "[SRC_003] against SRC_002",
+          "kind": "rebutted",
+          "note": "The core challenge stands: preferring a theory for future action inherently assumes it will continue to perform as it did in tests. Denying this makes the preference irrational or arbitrary."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'risk-management' defense fails because defining an option as 'least error-prone' based on past data is itself an inductive generalization. It assigns a implicit probability of future error based on past frequency."
+        },
+        {
+          "handle": "[SRC_017] against SRC_015",
+          "kind": "rebutted",
+          "note": "Methodological rules cannot escape the psychology of the agent. If the rule leads to action, the agent must harbor the belief that the action is more likely to succeed, which is an inductive commitment."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if reinterpreted as a 'methodological fiction' or 'strategic self-deception': scientists must act AS IF induction were true to function, while formally maintaining that no logical justification exists, creating a necessary dual-consciousness.",
+      "mechanism": "Psychological compartmentalization: The scientist operates in two modes—logical critique (where induction is rejected) and practical engagement (where induction is simulated). The 'preference' is a pragmatic tool, not a logical conclusion.",
+      "counterconditions": [
+        "If the 'fiction' becomes indistinguishable from belief, thereby corrupting the critical stance.",
+        "If the cost of maintaining dual-consciousness leads to cognitive dissonance that undermines scientific rigor.",
+        "If the 'as if' stance inevitably slides into genuine inductive belief over time."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_019",
+          "kind": "revised",
+          "note": "Revised to acknowledge that 'risk minimization' is the *content* of the fiction. The rationality is not real in a logical sense but is a simulated narrative scientists tell themselves to bridge the gap between skepticism and action."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The criticism assumes the strategy claims logical validity. This candidate admits the strategy is illogical (smuggles induction) but argues it is *necessary* as a fiction. The collapse is features, not a bug."
+        },
+        {
+          "handle": "[SRC_018] against SRC_016",
+          "kind": "rebutted",
+          "note": "The dichotomy is accepted as false in reality but maintained as a useful heuristic. We pretend prediction of safety is possible via elimination of danger, knowing full well it isn't logically sound, because the alternative is paralysis."
+        },
+        {
+          "handle": "[SRC_022] against SRC_020",
+          "kind": "rebutted",
+          "note": "The defense fails to resolve the dilemma logically, which is the point. It resolves it psychologically. The 'conflation' is the mechanism of the fiction."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "Verisimilitude is part of the fiction. We pretend we can measure closeness to truth to justify action, even if logically we cannot."
+        },
+        {
+          "handle": "[SRC_003] against SRC_002",
+          "kind": "rebutted",
+          "note": "The core challenge is met by admitting the assumption is made, but classifying it as a voluntary, conscious illusion required for survival."
+        },
+        {
+          "handle": "[SRC_005] against SRC_004",
+          "kind": "rebutted",
+          "note": "The 'implicit assignment' of probability is the fiction. We act as if we have assigned probabilities, while formally denying we have."
+        },
+        {
+          "handle": "[SRC_017] against SRC_015",
+          "kind": "rebutted",
+          "note": "The methodological rule works precisely because it allows the scientist to bypass the third countercondition by treating the subjective probability as a temporary, instrumental variable rather than a truth claim."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's own terms; the only consistent Popperian stance is radical skepticism where NO theory is preferred for action, leading to paralysis. The fact that Popper and scientists do prefer theories proves that Popper's system is descriptively inadequate and requires an external inductive supplement to function.",
+      "mechanism": "Reductio ad absurdum: If corroboration gives no reason for preference, and probability is banned, then all non-refuted theories are equally viable for action. Since we do not act this way (we don't drink poison because it hasn't been refuted yet), Popper's system fails to account for rational action without smuggling in induction.",
+      "counterconditions": [
+        "If a non-inductive principle of preference (like risk minimization) can be found.",
+        "If 'paralysis' is avoided by defaulting to tradition or instinct rather than reason.",
+        "If the definition of 'rational action' is narrowed to exclude long-term planning."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_019",
+          "kind": "rebutted",
+          "note": "This candidate argues that 'risk minimization' IS the smuggled induction. There is no non-inductive version of it. Therefore, the target's defense collapses because it tries to dress induction in deductive clothing."
+        }

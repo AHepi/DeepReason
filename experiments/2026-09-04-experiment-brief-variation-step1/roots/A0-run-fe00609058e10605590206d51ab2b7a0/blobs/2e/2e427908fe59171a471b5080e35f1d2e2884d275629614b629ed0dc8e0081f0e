@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories in action is defensible without smuggling in induction if re-framed as a 'critical selection rule' rather than a 'probabilistic prediction': we choose the theory that has withstood the severest tests not because we expect it to succeed (induction), but because it is the only one currently authorized by our critical standards to guide action, while acknowledging that this choice carries no guarantee of future success.",
+    "mechanism": "Reinterpret 'preference' as a procedural mandate of critical rationalism: acting on the best-tested theory is the logical consequence of having eliminated its competitors via falsification, not an inference about its future truth. The 'cost' is accepting that such action is rationally mandated yet epistemically uncertain—we act because we must, not because we know we will succeed.",
+    "counterconditions": [
+      "If the agent treats corroboration as increasing the probability of future success, induction is smuggled in.",
+      "If the agent cannot distinguish between 'psychological habit' and 'critical authorization', the defense collapses into irrationalism.",
+      "If the chosen theory fails immediately after selection, the agent must admit the preference was not a justification of success but a commitment to the method."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The criticism claims elimination doesn't address action in novel domains. Rebuttal: Critical selection *is* the action protocol for novel domains; we act on the least-falsified theory precisely because no positive justification exists, making elimination the sole rational basis for decision under uncertainty."
+      },
+      {
+        "handle": "0baaf2a78ddc87e150a4bd9a2361836bc0158509dab5b8825decd20371ff9aa2",
+        "kind": "revised",
+        "note": "Revised to explicitly separate 'testing context' from 'action context'. The claim now clarifies that selecting for action based on past survival is not an inductive leap if framed as adhering to the critical method's current standing recommendation, not predicting future performance."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The distinction between psychological expectation and logical justification is central: Popper defends the *rationality* of the choice procedure (logic of situation), not the *certainty* of the outcome. Action is defensible as the output of a critical process, not as a bet on truth."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "departure_declared",
+        "note": "Departure: This candidate rejects verisimilitude as the grounding mechanism entirely, relying instead on the procedural logic of critical selection to avoid the Tichý/Miller refutation and probabilistic assumptions."
+      },
+      {
+        "handle": "14b061678dda46e4dcf8f89237df4b4a56508f06d9d5b8c5b1275dfe729cd712",
+        "kind": "rebutted",
+        "note": "Popper's requirement for rational action is met by aligning with the aim of science (truth) through critical testing, not by claiming psychological certainty. The preference is rational because it follows the method most likely to expose error, not because it guarantees success."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Departure: Avoids the failed formal account of verisimilitude entirely by grounding preference in the negative logic of falsification and critical authorization rather than positive truth-likeness metrics."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "revised",
+        "note": "Clarified that the preference is 'rational' in the sense of being methodologically consistent with critical rationalism's aims, not because it constitutes a volitional leap or non-rational guess. It is a reasoned adherence to the critical method."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "Evolutionary selection explains survival, but critical selection justifies *preference*: we prefer the best-tested theory not merely because it survived, but because it is the only one that has not been ruled out by our most severe attempts at falsification, making it the rational default for action."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["legal_verdict_procedure"],
+      "shared_structure": [
+        "Decision made under uncertainty without positive proof of correctness",
+        "Selection based on elimination of alternatives rather than confirmation of the winner",
+        "Procedural rationality substitutes for epistemic certainty"
+      ],
+      "disanalogies": [
+        "Legal verdicts often rely on probabilistic standards ('beyond reasonable doubt'), whereas Popperian selection explicitly rejects probability",
+        "Legal systems aim for finality; critical science remains permanently open to revision"
+      ],
+      "transfer_claims": [
+        "Just as a court acts on the verdict that survives cross-examination without claiming absolute truth, scientists act on corroborated theories without claiming probable truth",
+        "The rationality of the action lies in the rigor of the elimination process, not the reliability of the outcome"
+      ],
+      "overturn_conditions": [
+        "If the legal analogy requires any form of inductive confidence in the verdict's correctness to be rational",
+        "If the procedural mandate fails to compel action in cases where all theories have known flaws"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

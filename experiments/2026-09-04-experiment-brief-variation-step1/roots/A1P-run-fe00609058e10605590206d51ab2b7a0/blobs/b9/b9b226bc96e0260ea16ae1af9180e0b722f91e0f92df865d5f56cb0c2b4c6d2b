@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule to maximize the 'severity' of potential falsification; however, accepting this defense costs the scientist any rational assurance that the chosen theory is true or even probably true, reducing scientific progress to a game of eliminating error without ever confirming truth.",
+    "mechanism": "The mechanism distinguishes between 'logical probability' (which Popper rejects as increasing with corroboration) and 'methodological utility' (where preferring the most severely tested theory maximizes the chance of detecting error if it exists). By choosing the theory that has survived the hardest tests, one does not assume it will pass future tests (induction), but rather selects the hypothesis that offers the best opportunity for immediate refutation, thereby adhering to the core Popperian imperative of error elimination. The preference is a rule of conduct, not a claim about nature's uniformity.",
+    "counterconditions": [
+      "If surviving severe tests is treated as evidence of future reliability rather than merely a status report of past survival, the argument collapses into induction.",
+      "If the choice of which test counts as 'severe' relies on background assumptions about natural regularity, the circularity returns.",
+      "If the goal of science shifts from 'error elimination' to 'truth approximation' (verisimilitude) without a logical measure for the latter, the preference becomes arbitrary."
+    ],
+    "typicality": 0.72,
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates the descriptive evolutionary origin of belief from the normative methodological justification. The preference is defended as a rational rule for error detection, not a psychological inevitability or a claim about biological fitness implying truth."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "revised",
+        "note": "Revised to clarify that the 'non-inductive rationality' is strictly procedural (maximizing test severity) rather than epistemic (increasing likelihood of truth), addressing the false dichotomy by showing a third path: rational action without epistemic gain."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The move from 'others falsified' to 'choose this one' does not assume uniformity; it assumes only that the unfalsified theory is currently the only viable target for further testing. No prediction about the future is made, only a selection of the current best靶子 (target)."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "Severity is defined by the logical content and risk of falsification, not by an empirical assumption that past survival predicts future survival. A severe test is one that *would* have falsified the theory if it were false; surviving it adds no positive weight, only negative clearance."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "revised",
+        "note": "Clarified that the convention is not 'arbitrary' in the Poincaré sense (chosen for convenience) but 'critical' (chosen to maximize exposure to refutation). This distinguishes Popper's methodological rules from conventionalism by tying them to the goal of error elimination."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate maintains a strict firewall between 'methodological convention' (the rule to pick the most tested theory) and 'pragmatic reliability' (the expectation that it works). The defense admits no inductive smuggling because it explicitly renounces any claim to reliability."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e871c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "departure_declared",
+        "note": "Departing from the requirement to solve the problem via 'verisimilitude.' This candidate argues that invoking verisimilitude is precisely where Popper fails, so the strongest defense on 'Popper's own terms' must abandon verisimilitude as a rational basis and rely solely on the logic of falsification."
+      },
+      {
+        "handle": "483154416962e44c251d91e84537a698ba94e10911e0d135f5eee3ba73d05a96",
+        "kind": "rebutted",
+        "note": "The heuristic addresses the choice between multiple unfalsified theories by ranking them according to 'degree of corroboration' (past test severity), not just binary falsification status. The theory with the highest degree of corroboration is the one that has risked the most and survived, making it the preferred target for the next round of criticism."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_004"],
+      "shared_structure": [
+        "Selection based on survival of rigorous filtering rather than positive accumulation of merit.",
+        "Distinction between the status of being 'last standing' and the property of being 'correct'.",
+        "Procedural rationality vs. epistemic certainty."
+      ],
+      "disanalogies": [
+        "Natural selection has no goal of error elimination, whereas Popperian science explicitly aims at it.",
+        "Biological fitness is relative to a specific environment which changes, while logical severity is context-independent.",
+        "Evolution implies a form of adaptation (inductive success), while Popper denies any such adaptation to truth."
+      ],
+      "transfer_claims": [
+        "Just as we prefer the organism that survived a plague not because it is 'immortal' but because it is the only one left to study, we prefer the corroborated theory because it is the only one not yet eliminated.",
+        "Survival in both domains indicates resistance to specific attacks, not general invulnerability."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that 'severity' cannot be defined without assuming some regularities of nature.",
+        "If the preference for the unrefuted leads to systematically worse practical outcomes than random choice over time."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

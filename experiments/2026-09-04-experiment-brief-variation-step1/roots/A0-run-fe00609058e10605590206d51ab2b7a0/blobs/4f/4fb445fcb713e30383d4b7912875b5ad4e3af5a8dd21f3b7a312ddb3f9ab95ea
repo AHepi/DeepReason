@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory in action is defensible on his own terms as a non-inductive, critical-rational choice to act on the theory that has withstood the most severe attempts at falsification, thereby minimizing the risk of known error rather than maximizing the probability of truth; however, accepting this defense costs us the ability to claim that such action is 'justified' in the traditional sense of having positive reasons to believe the theory will succeed, reducing rational action to a volitional commitment to the best-tested available option without assurance of future performance.",
+    "mechanism": "The mechanism distinguishes between 'corroboration' (a logical report of past test severity and survival) and 'probability' (an inductive inference of future success). It argues that preferring the better-corroborated theory is not an inference that it is more likely true, but a strategic decision to avoid theories already known to be false or poorly tested. This relies on the asymmetry of falsification: while we cannot verify a theory, we can eliminate competitors. The preference is thus a negative justification (avoiding known errors) rather than a positive one (expecting success).",
+    "counterconditions": [
+      "If the agent requires a positive guarantee of future success to act rationally, Popper's framework fails.",
+      "If 'preference' logically entails an expectation of future similarity (induction), then the distinction collapses.",
+      "If the domain of action involves novel conditions where past tests are irrelevant, the preference loses its critical force."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by framing preference as 'minimizing known error' rather than 'predicting success.' In novel domains, we cannot predict success, but we can still reject theories that have failed in analogous severe tests. The defense holds that acting on the least-falsified theory is the only rational stance when positive prediction is impossible."
+      },
+      {
+        "handle": "0baaf2a78ddc87e150a4bd9a2361836bc0158509dab5b8825decd20371ff9aa2",
+        "kind": "rebutted",
+        "note": "The candidate explicitly denies that selecting for action implies an expectation of future success. The selection is based on the logical status of the theory (unfalsified vs. falsified) at the moment of decision, not on an inductive leap that past survival guarantees future survival. The 'implicit induction' charge is rejected by maintaining the strict separation between the logical report of corroboration and the psychological hope for success."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "revised",
+        "note": "Revised to clarify that 'defensible on Popper's own terms' means defensible as a critical-rational procedure, not as a justification of belief. The candidate now explicitly states that the preference is a 'volitional commitment' aligned with the aim of science (truth), addressing the gap between psychological expectation and logical justification noted in the criticism."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on 'verisimilitude' as a measurable quantity to justify preference. Instead, it relies on the comparative logical status of theories regarding falsification. We prefer Theory A over B not because we know A is closer to the truth (which Popper admitted we cannot know), but because B has been falsified or less severely tested. This avoids the Tichý/Miller refutation of quantitative verisimilitude."
+      },
+      {
+        "handle": "14b061678dda46e4dcf8f89237df4b4a56508f06d9d5b8c5b1275dfe729cd712",
+        "kind": "rebutted",
+        "note": "The candidate accepts that Popper requires 'rational action' but redefines rationality in this context as 'acting in accordance with the critical method.' Rationality is not having positive grounds for belief, but having negative grounds for rejecting alternatives. The preference is rational because it is the only action consistent with the acceptance of fallibilism and the rejection of induction."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate does not invoke 'verisimilitude' as the primary guide for preference, thereby sidestepping the Tichý/Miller refutation entirely. It relies solely on the binary status of falsification and the degree of test severity."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "revised",
+        "note": "Revised to align with Popper's specific solution that the preference is rational because it aligns with the aim of science (finding truth) through error elimination, rather than being a mere 'non-rational volitional act.' The candidate now emphasizes that the volition is constrained by critical reason."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The evolutionary analogy is not used to justify the *preference* itself, but to illustrate the *process* of error elimination. The justification for preference remains logical: we act on the theory that has survived the most severe tests because it is the only one not yet shown to be false. The 'tension' is resolved by accepting that action does not require certainty or probability, only the absence of known falsity."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_004"],
+      "shared_structure": [
+        "Selection based on survival of negative trials rather than positive confirmation.",
+        "Preference determined by the elimination of competitors rather than the intrinsic merit of the survivor.",
+        "Action taken despite lack of guarantee of future success."
+      ],
+      "disanalogies": [
+        "Biological evolution lacks the intentional 'aim of truth' present in Popperian science.",
+        "Natural selection operates over generations, while scientific preference must be decided in a single agent's timeframe.",
+        "Evolutionary fitness is relative to a specific environment, whereas Popper seeks universal explanatory power."
+      ],
+      "transfer_claims": [
+        "Just as an organism survives not because it is 'perfect' but because competitors failed, a theory is preferred not because it is 'probable' but because others were falsified.",
+        "The rationality of acting on the surviving theory is analogous to an organism exploiting a niche that hasn't killed it yet."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that survival in severe tests is purely random and uncorrelated with any form of reliability.",
+        "If the definition of 'severe test' is shown to be circular or subjective."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

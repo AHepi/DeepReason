@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a methodological rule of 'risk-minimization' rather than an inductive inference of future success; however, accepting this defense costs the agent any rational assurance that the chosen theory will actually work, reducing scientific action to a non-rational 'leap' guided only by the aesthetic of boldness.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which requires induction and is rejected) and 'methodological selection' (which relies on the logical asymmetry of falsification). By preferring the theory that has survived the most severe tests, the scientist selects the one with the highest informational content and thus the greatest exposure to falsification. If it fails next, we learn more. This is a strategy for maximizing learning potential, not a prediction of truth. The preference is a rule of conduct ('act as if the best-tested theory is true') derived from the goal of error elimination, not from a probability assignment.",
+    "counterconditions": [
+      "If the agent requires a guarantee of practical success before acting, Popper's framework offers none and the preference becomes indefensible.",
+      "If 'severe testing' implicitly assumes the uniformity of nature (that test conditions tomorrow will resemble today), then the risk-minimization strategy smuggles in induction.",
+      "If the definition of 'better-corroborated' relies on a count of past successes rather than the severity of failed attempts to falsify, the distinction collapses into enumerative induction."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism claims preferring Theory A assumes past conditions will hold. Rebuttal: Popper's preference does not assume the future will resemble the past; it assumes only that if the theory is false, we wish to find out quickly. The preference is for the theory that is currently the best target for falsification, regardless of whether it survives the next test. The assumption is about the value of error detection, not the stability of nature."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "revised",
+        "note": "Revised to explicitly decouple the defense from 'verisimilitude' as a formal logical measure (which Tichý refuted) and instead ground it solely in 'methodological rules' and 'informational content.' The claim now argues that we act on the best-corroborated theory because it is the most informative conjecture available, not because it is logically closer to the truth."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "The criticism states that acting inherently assumes future performance. Rebuttal: Acting on a map does not assume the map is correct; it assumes the map is the best guide available *until* proven wrong. Popper's preference is a decision to use the current best guide while remaining prepared to discard it immediately upon failure. This is a stance of critical readiness, not an inductive bet on continuity."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The criticism argues 'least error-prone' implies subjective probability. Rebuttal: 'Least error-prone' in Popperian terms means 'most severely tested and not yet falsified,' which is an objective historical record of attempts, not a subjective degree of belief. The rule is to choose the theory that has withstood the strongest attacks, which is a factual criterion, not a probabilistic one."
+      },
+      {
+        "handle": "4cbbab057ec51a122476741bd3c2ff4172e6fa0617a24361597807f86f8c8cc7",
+        "kind": "rebutted",
+        "note": "The criticism calls the dilemma false because Popper has a solution. Rebuttal: This candidate accepts that Popper has a solution (the methodological rule) but argues that the 'cost' of this solution is the loss of rational assurance for action. The dilemma is not between 'paralysis' and 'induction,' but between 'acting without rational hope of success' (Popper) and 'acting with inductive hope.' The candidate defends the former as consistent but costly."
+      },
+      {
+        "handle": "68d9af4a435acc1cd4234dc084ba218e221621e23b6343e1c10f7f2d559a8ebd",
+        "kind": "revised",
+        "note": "Revised to clarify that 'informational content' is not a static optimization but a dynamic criterion for action. The claim now explicitly frames the preference as a 'rule of conduct' for choosing which hypothesis to bet on in practice, acknowledging that action implies a temporal dimension, but denying that this temporal dimension requires induction."
+      },
+      {
+        "handle": "6adc6f235071652cc2478de1b6b0f052155e8bf3e3db062aaa609a806ed1a6c6",
+        "kind": "rebutted",
+        "note": "The criticism rejects evolutionary explanations as external to Popper's normative terms. Rebuttal: This candidate relies strictly on Popper's internal logic of falsification and methodological rules, not on biological evolution. The defense is that the norm 'prefer the best-tested' is derived from the aim of science (error elimination), which is a core Popperian commitment, not an external biological fact."
+      },
+      {
+        "handle": "77efe1d1a8b9cff338c677b7a94b08da082183a46242adc1917652b7c1a47798",
+        "kind": "rebutted",
+        "note": "The criticism notes that multiple theories can survive. Rebuttal: Popper's rule handles this by preferring the one that has undergone *more severe* tests or has higher *empirical content*. If two theories are identical in corroboration, Popper admits the choice may be arbitrary or based on other methodological considerations (like simplicity), but this does not reintroduce induction; it simply acknowledges underdetermination."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

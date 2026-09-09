@@ -1,0 +1,85 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule to maximize the content of our conjectures and facilitate faster error elimination; however, accepting this defense costs us any rational assurance that the preferred theory is actually closer to the truth or will survive future tests, reducing scientific progress to a game of efficient falsification without epistemic accumulation.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which Popper rejects) and 'critical preference' (which he accepts). By framing the choice of the better-corroborated theory as a strategic move to expose errors quickly (since high corroboration implies high empirical content and thus high falsifiability), the agent avoids assuming nature is uniform. The preference is for the theory that offers the best chance of being proven wrong, thereby advancing knowledge fastest, rather than the one most likely to be right.",
+    "counterconditions": [
+      "If the agent assumes that surviving past tests makes future survival more likely, the argument collapses into induction.",
+      "If the agent claims the preferred theory is 'more probable' or 'closer to truth' in a verifiable sense, it violates Popper's demarcation criteria.",
+      "If the preference is based solely on psychological comfort or convention without the specific goal of error elimination, it fails to address the rationality requirement."
+    ],
+    "typicality": 0.75,
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_pressure",
+        "stress_testing_materials",
+        "competitive_sports_strategy"
+      ],
+      "shared_structure": [
+        "Selection of the entity that has survived the harshest conditions is not a prediction it will survive forever, but a heuristic to find weaknesses fastest.",
+        "The goal is not to keep the survivor intact, but to use its survival to refine the understanding of the environment.",
+        "Preference is instrumental for the process of elimination, not evidential for the quality of the survivor."
+      ],
+      "disanalogies": [
+        "Unlike biological evolution which has no conscious goal, Popperian science explicitly aims at truth (even if unattainable), making the 'game' aspect potentially misleading.",
+        "In material stress testing, failure is destructive; in science, falsification is constructive, changing the normative weight of 'survival'.",
+        "Sports strategies often rely on inductive stats about opponents, whereas Popper strictly forbids this reliance."
+      ],
+      "transfer_claims": [
+        "Just as engineers test bridges to failure to learn limits, scientists prefer corroborated theories because they have withstood attempts to break them, revealing their structural limits.",
+        "Choosing the strongest opponent in sparring improves skills faster, analogous to choosing the most severe theory to test."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that 'severity' of a test cannot be defined without referencing past regularities (induction).",
+        "If the concept of 'verisimilitude' is proven to logically require probabilistic assumptions."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "evidence_refs": [],
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate origin with justification; it explicitly grounds the preference in a forward-looking methodological rule (maximizing error detection) rather than a backward-looking evolutionary explanation."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate acknowledges Popper's argument for non-inductive rationality but clarifies that this rationality is purely procedural (efficiency of falsification) and denies it offers any 'higher' status beyond being the best target for criticism."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The move from 'others falsified' to 'choose this' is defended as choosing the only remaining vehicle for further testing, not assuming it will pass future tests. No uniformity of nature is assumed, only the utility of having a testable theory."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "revised",
+        "note": "Revised to clarify that 'severity' is defined by logical content and testability, not by the reliability of past performance. The candidate now explicitly states that severity is a measure of how much a theory risks falsification, not how well it has performed."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes itself from arbitrary conventionalism by tying the rule to the specific aim of science (error elimination), whereas Poincaré's conventions were often pragmatic choices without such a critical imperative."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate maintains a strict separation: the convention is methodological (how we act), not pragmatic in the sense of expecting success. It explicitly denies 'pragmatic reliability' as a justification."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f0068bbde5f67",
+        "kind": "rebutted",
+        "note": "The candidate presents the strongest case for the 'smuggling induction' view by admitting the cost: the loss of any assurance of truth or progress towards it, effectively conceding that without induction, science is just a game of eliminating errors with no guarantee of getting closer to reality."
+      },
+      {
+        "handle": "6a6dff5b56f376b6210260a3024b5e5ea88897b277e4d65a4a2fd99616ab6457",
+        "kind": "departure_declared",
+        "note": "Departing from the reliance on 'verisimilitude' as a positive metric. The candidate argues that even verisimilitude is too strong a claim for Popper's framework and instead focuses solely on 'content' and 'falsifiability' as the basis for preference."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

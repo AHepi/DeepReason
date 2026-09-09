@@ -162,3 +162,24 @@ defect. It is recorded here because it is the one input this tranche
 cannot derive from the record, the framework, or the operator's recorded
 values — every other question in §2 was answered from one of those. It is
 asked once, at launch, and nowhere else.
+
+---
+
+## §4 Operator authority to run, 2026-09-09 — verbatim
+
+Appended before any action was taken in the executor window of 2026-09-09,
+per that window's own instruction ("Append them to REQUEST.md before
+acting"). The tranche was sealed on 2026-09-04 and never launched; the
+2026-09-08 capabilities audit named it the highest-value unrun experiment
+in the repository and said it "needs only a credential"
+(`experiments/2026-09-08-audit-llm-capabilities/AUDIT_REPORT.md` §5.1
+gap 6). The operator's answer, in full:
+
+> do it
+
+Nothing in those two words changes the design. R8 already reads "THE
+RECIPE IS COMMITTED AND YOU RUN IT"; this is the instruction to run it,
+and it adds no requirement and removes none. R1-R34 stand unaltered.
+The one permitted amendment — the head commit run on, and any dependency
+that moved since the seal — is `PREREG_AMENDMENT_2026-09-09.md`, sealed
+by its own digest in `SEALED.txt` before any provider call.

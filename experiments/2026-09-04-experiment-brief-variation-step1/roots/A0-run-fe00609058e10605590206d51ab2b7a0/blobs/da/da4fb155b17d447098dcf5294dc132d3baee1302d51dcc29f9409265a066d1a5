@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (closeness to truth) as a guide for preference, but this fails Popper's own terms because Popper explicitly proved that verisimilitude cannot be assessed or compared between false theories without invoking inductive assumptions. Since all scientific theories are strictly false (falsified), the claim that one false theory is 'closer to truth' than another requires an inductive leap about the structure of reality that Popper's framework forbids, rendering the preference indefensible on his own non-inductive grounds.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper demonstrated that verisimilitude comparisons between false theories are logically impossible without inductive assumptions about the world's structure.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot rationally guide choice between false theories without induction, what non-inductive criterion does Popper actually offer for preferring one falsified theory over another in practical action?"
+    }
+  ]
+}

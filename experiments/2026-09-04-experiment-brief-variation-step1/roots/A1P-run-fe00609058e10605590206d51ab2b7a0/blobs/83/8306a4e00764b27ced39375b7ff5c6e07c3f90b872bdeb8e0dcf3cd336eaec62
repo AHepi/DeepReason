@@ -1,0 +1,103 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'Methodological Wager' that requires no inductive leap: we choose the theory with higher informational content because it offers more opportunities for falsification, thereby accelerating the growth of knowledge regardless of its truth probability.",
+      "mechanism": "Informational Content Maximization. The rationality of the choice lies not in expecting the theory to be true (induction), but in selecting the hypothesis that risks the most, thus adhering to the goal of science as error elimination rather than truth accumulation.",
+      "counterconditions": [
+        "If the scientist acts on the theory expecting it to succeed in future applications (e.g., building a bridge), this implies an inductive belief in its reliability.",
+        "If 'growth of knowledge' is defined teleologically as approaching truth, the wager implicitly assumes corroboration tracks truth.",
+        "If the choice between two unfalsified theories cannot be made solely on content without appealing to past performance."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "This candidate does not rely on evolutionary origins; it relies on a logical rule of method aimed at maximizing testability, distinct from biological survival."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "It rejects the 'arbitrary decree' framing by grounding the preference in the objective metric of informational content, which is non-arbitrary within Popper's system."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "No assumption of uniformity is needed; the choice is based on the current logical structure (content) of the theories, not a prediction that the future will resemble the past."},
+        {"handle": "[SRC_017] against SRC_016", "kind": "rebutted", "note": "Severity is a measure of how much a theory forbids, not a predictor of future success; preferring high-severity survivors is preferring boldness, not reliability."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "This is not conventionalism in Poincaré's sense; the rule is derived from the demarcation criterion itself, making it internal to the logic of science, not an external convention."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "It strictly separates methodological preference (choose the bolder theory) from pragmatic reliability (expect it to work), avoiding the smuggled induction."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "rebutted", "note": "It makes no claim about verisimilitude or truth-likeness; it only claims the chosen theory is more useful for the specific goal of finding errors."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "This candidate explicitly constructs the strongest case for defensibility via informational content and acknowledges the cost: we can never claim the theory is likely true."}
+      ],
+      "optional_refs": ["SRC_006", "SRC_010"]
+    },
+    {
+      "claim": "The preference unavoidably smuggles induction back in, rendering Popper's system pragmatically inconsistent: the very act of 'preferring' one unfalsified theory over another for action entails a tacit belief that past survival indicates future efficacy, which is the definition of induction.",
+      "mechanism": "Pragmatic Inconsistency Detection. While Popper logically denies that corroboration equals probability, his prescription for action (choose the corroborated one) functionally operates as an inductive rule, betraying a hidden reliance on the principle of uniformity.",
+      "counterconditions": [
+        "If Popper can define 'action' in a way that does not imply expectation of success.",
+        "If the preference is shown to be purely aesthetic or playful with no real-world stakes.",
+        "If a non-inductive justification for action (e.g., pure convention) can be sustained without collapsing into irrationalism."
+      ],
+      "typicality": 0.9,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "The criticism targets the logical justification for action, not the evolutionary origin of the behavior; the inconsistency remains even if the behavior is evolved."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "rebutted", "note": "Popper's arguments against arbitrary decree fail to address that any rule guiding action based on past data is functionally inductive, regardless of its label."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "The move from 'others falsified' to 'choose this' necessarily assumes the remaining candidate will continue to hold, which is an inductive leap regarding nature's uniformity."},
+        {"handle": "[SRC_017] against SRC_016", "kind": "rebutted", "note": "Relying on 'severity' as a guide for choice implicitly treats severity as a reliable indicator of future robustness, which is an inductive assumption."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "Calling the rule a 'methodological convention' does not exempt it from the charge of induction if the convention itself is justified by its past success in guiding science."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "The candidate explicitly argues that the conflation is inevitable in any system that guides action based on test history."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "rebutted", "note": "Even without formal verisimilitude, the practical preference implies a belief in approximation to truth, which is an inductive stance."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "This candidate fully develops the 'smuggled induction' case and concludes that Popper's system fails to resolve the conflict without admitting this cost."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_011"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view scientific preference as an evolutionary selection mechanism where 'rationality' is replaced by 'survival fitness' of ideas; the preference is not a logical deduction nor an inductive inference, but a descriptive fact of how conjectures compete.",
+      "mechanism": "Evolutionary Epistemology Substitution. By shifting the domain from normative logic to descriptive biology/sociology of knowledge, the need for justification vanishes; we prefer corroborated theories simply because those are the ones that haven't died yet.",
+      "counterconditions": [
+        "If the prompt requires a normative justification for why we *should* prefer them, not just why we *do*.",
+        "If 'survival' of a theory is itself taken as evidence of its truth, reintroducing induction.",
+        "If Popper's own insistence on the logical asymmetry of falsification is incompatible with a symmetric evolutionary model."
+      ],
+      "typicality": 0.4,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_008", "kind": "revised", "note": "Revised to clarify that this approach accepts the category error charge but argues it is a feature, not a bug: the problem arises only if one insists on a purely logical justification where none is needed."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "departure_declared", "note": "Departing from the requirement to find a 'defensible' rational argument; instead offering a dissolution of the question via naturalism."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "No assumption of uniformity is made; the mechanism describes a process of elimination that works regardless of whether nature is uniform, until it isn't."},
+        {"handle": "[SRC_017] against SRC_016", "kind": "rebutted", "note": "Severity is reinterpreted as 'predation pressure'; surviving high pressure doesn't guarantee future survival, it just marks the current survivor."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "departure_declared", "note": "Departing from Popper's anti-conventionalist stance; this view treats methodological rules as evolved habits, not logical imperatives."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "It avoids smuggling induction by refusing to make any predictive claim; it only describes the current state of the ecosystem of ideas."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "rebutted", "note": "Verisimilitude is irrelevant; fitness is the only metric, and it is defined retrospectively."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "This provides a distinct third path that addresses the conflict by changing the frame of reference entirely."}
+      ],
+      "optional_refs": ["SRC_008"]
+    },
+    {
+      "claim": "The preference is defensible only if we accept a 'Critical Conventionalism' where the rule to prefer corroborated theories is a self-imposed, arbitrary decree of the scientific community, justified solely by its utility in organizing research, not by any link to truth or probability.",
+      "mechanism": "Arbitrary Decree Acceptance. The rationality lies in the consistency of following a chosen rule. We decide to act as if corroboration matters, acknowledging this decision has no foundation in logic or experience, thus avoiding induction by fiat.",
+      "counterconditions": [
+        "If the 'utility' of the convention is judged by its past success, which reintroduces induction.",
+        "If scientists cannot psychologically maintain the stance of following a rule they admit is groundless.",
+        "If Popper's rejection of conventionalism (vs Poincaré) makes this position historically untenable for a Popperian."
+      ],
+      "typicality": 0.6,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "This is a normative proposal for a rule, not a description of evolutionary origins."},
+        {"handle": "[SRC_014] against SRC_009", "kind": "revised", "note": "Clarified that the 'false dichotomy' charge is met by explicitly embracing the arbitrariness that Popper tried to distance himself from, arguing this is the only consistent exit."},
+        {"handle": "[SRC_005] against SRC_003", "kind": "rebutted", "note": "Since the rule is arbitrary, it assumes nothing about nature; it is a game rule we agree to play."},
+        {"handle": "[SRC_017] against SRC_016", "kind": "rebutted", "note": "Severity is part of the defined game rules, not an indicator of reality."},
+        {"handle": "[SRC_015] against SRC_002", "kind": "rebutted", "note": "Accepts the label of conventionalism but argues it is 'critical' because the convention is open to revision if it stops being useful, unlike Poincaré's geometric conventions."},
+        {"handle": "[SRC_004] against SRC_002", "kind": "rebutted", "note": "Explicitly admits the decree is arbitrary, denying any smuggled pragmatic reliability."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "rebutted", "note": "Denies any appeal to verisimilitude; the convention is about order, not truth."},
+        {"handle": "[SRC_012] against SRC_006", "kind": "rebutted", "note": "Presents the conventionalist case strongly and admits the cost: science becomes a game without a truth-goal."}
+      ],
+      "optional_refs": ["SRC_009", "SRC_018"]
+    },
+    {
+      "claim": "Popper's preference is defensible through a 'Decision-Theoretic Asymmetry': while we cannot assign probabilities, we can minimize the potential loss of choosing a falsified theory; since falsified theories are known to be false and corroborated ones are merely unknown, the latter dominates in a minimax regret framework.",
+      "mechanism": "Minimax Regret Application. The choice is not based on the probability of the corroborated theory being true, but on the certainty that the falsified ones are false. Choosing the unfalsified option avoids the guaranteed error of the falsified ones.",
+      "counterconditions": [
+        "If there are multiple unfalsified theories, this logic fails to distinguish between them.",
+        "If the 'loss' function includes missing out on truth, which requires an inductive estimate of where truth lies.",
+        "If the cost of acting on a false-but-unfalsified theory is comparable to acting on a falsified one."
+      ],
+      "typicality": 0.3,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_008", "kind": "rebutted", "note": "Relies on logical asymmetry (falsity is proven, truth is not), not evolutionary
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

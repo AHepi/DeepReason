@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses under the problem's requirement to address 'what accepting it costs' because the proposed cost ('no guarantee of future success') is insufficient to distinguish Popper's view from radical skepticism. If the preference for a better-corroborated theory offers no rational expectation of future reliability (as the target admits by denying increased probability), then the preference is pragmatically empty for a 'working scientist' who must act on the assumption that past performance indicates future results. The target fails to explain why a scientist should prefer Theory A over Theory B if both are equally unknown regarding future truth, rendering the 'critical preference' a disguised form of induction or an irrational gamble, thus failing to make the preference defensible on Popper's own terms as requested.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "A preference for action requires a rational basis for expecting future success; merely citing past survival without implying future reliability does not constitute a defensible basis for scientific choice.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration provides no inductive weight, what specific rational principle compels a scientist to choose the corroborated theory over an untested one when lives are at stake?"
+    }
+  ]
+}

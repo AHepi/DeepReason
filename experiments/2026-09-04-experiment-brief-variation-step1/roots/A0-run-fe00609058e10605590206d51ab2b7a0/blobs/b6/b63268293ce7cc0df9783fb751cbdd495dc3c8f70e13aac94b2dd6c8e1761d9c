@@ -1,0 +1,334 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, methodological decision to act on the theory that has withstood the most severe attempts at falsification, treating corroboration as a report of past performance rather than a predictor of future success.",
+      "mechanism": "Methodological Decision Rule: Preference is not a logical inference about truth probability but a pragmatic rule for action. We choose the best-tested theory because it is the only one currently 'uncensored' by error, not because we expect it to remain so. This aligns with Popper's aim of science (truth) without claiming to have found it.",
+      "counterconditions": [
+        "If the agent requires a guarantee of future success to act, this defense fails as it offers no such guarantee.",
+        "If 'severity' of tests cannot be defined without assuming the uniformity of nature."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_005",
+        "SRC_012"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_007",
+          "kind": "rebutted",
+          "note": "The claim addresses novel domains by framing preference as a 'methodological decision' to use the best available tool, not an expectation of its fitness in new contexts. It admits the risk of failure in novel domains as the cost of anti-inductivism."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "The distinction holds because Popper defines 'defensible' as 'rationally aligned with the aim of science' (finding truth), not 'logically guaranteed to succeed.' The preference is rational volition, not logical compulsion."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate does not rely on verisimilitude as a known metric but on the negative knowledge of falsification. We prefer the unfalsified over the falsified; this requires no positive assessment of truth-likeness."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "The argument bypasses the Tichý/Miller refutation by not claiming to measure verisimilitude, but merely to prefer the theory that has not yet been shown to be false."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "revised",
+          "note": "Revised to clarify that the preference is 'rational' in the sense of being consistent with the goal of error elimination, explicitly rejecting the 'non-rational/volitional' label which implies arbitrariness."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Evolutionary selection explains survival, but this candidate grounds preference in the *agent's* decision to utilize the survivor. The justification for action is the lack of a better alternative, not the evolutionary mechanism itself."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate distinguishes between assuming nature is uniform (induction) and assuming test conditions are stable for the duration of the test (methodological necessity). The latter is a precondition for testing, not an inductive leap about the future."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "This candidate presents the strongest case FOR defensibility. The opposing case (that it smuggles induction) is addressed in Candidate 2 to satisfy the problem's requirement for both sides."
+        }
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because acting on a theory implies an expectation that its past success is relevant to its future performance, which is the definition of inductive reasoning.",
+      "mechanism": "Implicit Inductive Leap: To 'prefer' a theory for action is to bet on its future reliability. This bet relies on the hidden premise that the future will resemble the past (uniformity of nature). Without this premise, the record of past corroboration is logically irrelevant to future choice, making the preference irrational or secretly inductive.",
+      "counterconditions": [
+        "If one can demonstrate a form of rational action that requires no expectation of future regularity.",
+        "If 'preference' can be redefined as something other than a betting disposition."
+      ],
+      "typicality": 0.82,
+      "optional_refs": [
+        "SRC_006",
+        "SRC_008"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_007",
+          "kind": "rebutted",
+          "note": "This candidate argues that elimination alone is insufficient for action in novel domains; acting requires a positive expectation of success, which elimination does not provide without induction."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "The criticism that the distinction fails is upheld here: if the preference leads to action, it functions as an inductive justification regardless of Popper's logical labels."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Agrees that any attempt to quantify 'better' (like verisimilitude) for the sake of action collapses into probabilistic/inductive assumptions."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "Supports the view that formal accounts of truth-likeness fail, reinforcing the idea that only induction remains as a guide for preference."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Argues that calling the preference 'rational' without induction is a contradiction; if it guides action, it must be inductive, otherwise it is arbitrary."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Evolutionary selection explains why a theory exists, but not why an agent should *trust* it for future action without assuming the environment remains stable (induction)."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Explicitly conflates the methodological assumption of stability with the inductive assumption of uniformity, arguing they are indistinguishable in practice."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "This candidate provides the strongest case FOR the 'smuggling induction' position, complementing Candidate 1."
+        }
+      ]
+    },
+    {
+      "claim": "The tension is resolved by accepting that the preference is a 'rational instinct' or psychological propensity evolved for survival, which is defensible biologically but logically unjustifiable on Popper's strict epistemological terms, forcing a departure from pure rationalism.",
+      "mechanism": "Evolutionary Pragmatism: Humans prefer corroborated theories because those who did survived. This is a biological fact, not a logical derivation. Popper's system survives by admitting this non-rational (but adaptive) element as the bridge between logic and action.",
+      "counterconditions": [
+        "If Popper's system demands a purely logical justification for all scientific conduct.",
+        "If biological survival is not a valid proxy for epistemic validity."
+      ],
+      "typicality": 0.45,
+      "optional_refs": [
+        "SRC_007",
+        "SRC_018"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_007",
+          "kind": "revised",
+          "note": "Refines the evolutionary analogy: it explains the *origin* of the preference, not its logical validity. The 'novel domain' problem is solved by noting that evolution selects for general adaptability, not specific domain knowledge."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "departure_declared",
+          "note": "Departure declared: This candidate rejects the demand for a 'logical justification' for action, substituting an evolutionary explanation."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Avoids verisimilitude entirely by grounding the preference in survival utility rather than truth approximation."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "Irrelevant to this claim since no formal verisimilitude metric is proposed."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Clarifies that the preference is 'rational' only in the broad evolutionary sense, not the narrow logical sense Popper often demanded."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Directly uses evolutionary selection to justify the preference for action as a survival strategy, addressing the core challenge."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that the 'assumption' of stability is hardwired by evolution, making the distinction between methodological and inductive moot for the acting agent."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Provides a third way (evolutionary pragmatism) that synthesizes elements of both previous arguments."
+        }
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if we reinterpret 'corroboration' not as a history of tests passed, but as a measure of 'informational content' retained; we prefer high-content theories that survive because they risk more, and their survival is more significant, even if not more probable.",
+      "mechanism": "Informational Risk Assessment: Preference is based on the boldness of the theory. A highly corroborated theory is one that made risky predictions and survived. We prefer it because it contains more empirical content (is more informative), not because it is safer or more probable.",
+      "counterconditions": [
+        "If informational content cannot be separated from probability in decision-making contexts.",
+        "If scientists prefer safe, low-content theories over bold, risky ones in critical applications."
+      ],
+      "typicality": 0.30,
+      "optional_refs": [
+        "SRC_001",
+        "SRC_005"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_007",
+          "kind": "rebutted",
+          "note": "Addresses novel domains by suggesting that high-content theories provide more detailed maps of reality, offering better guidance even in untested areas, provided they haven't been falsified."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "Defends the distinction by grounding preference in 'content' rather than 'expectation,' maintaining logical consistency."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Rejects verisimilitude in favor of 'empirical content' as the metric for preference."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "Shifts the ground from truth-likeness to informational richness, avoiding the Tichý/Miller critique."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Argues that preferring higher content is the essence of Popperian rationality."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Focuses on the logical property of the theory (content) rather than the historical process (selection) to justify action."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Claims that assessing 'risk' and 'content' is a logical operation, not an inductive assumption about stability."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Offers a distinct, content-based argument for defensibility."
+        }
+      ]
+    },
+    {
+      "claim": "The problem dissolves if we accept that Popper's system is inherently incomplete regarding action; the preference is an extra-systematic 'leap of faith' that Popper himself made but could not justify within his own logic, revealing a fatal gap in critical rationalism.",
+      "mechanism": "Systemic Incompleteness: Critical rationalism successfully critiques induction but fails to provide a positive algorithm for action. The preference for corroborated theories is a psychological crutch necessary for functioning, acknowledging that pure skepticism leads to paralysis.",
+      "counterconditions": [
+        "If a non-inductive rule for action can be formulated.",
+        "If 'paralysis' is not the inevitable result of strict anti-inductivism."
+      ],
+      "typicality": 0.25,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_006"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_007",
+          "kind": "rebutted",
+          "note": "Argues that the evolutionary analogy fails to bridge the gap because the 'leap' to action remains logically unsupported by the selection mechanism alone."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "Confirms that the distinction collapses when faced with the necessity of action, exposing the gap."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Agrees that any attempt to fill the gap with verisimilitude fails, leaving the leap of faith as the only option."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "Uses the failure of verisimilitude proofs to support the claim of systemic incompleteness."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "departure_declared",
+          "note": "Departure declared: Rejects the notion that the preference is 'rational' in any Popperian sense, labeling it a necessary irrationality."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Argues that evolutionary explanations describe the leap but do not justify it logically."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Suggests that the 'methodological decision' is just a euphemism for the inductive leap Popper tried to avoid."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Provides the strongest case for the 'failure' of Popper's system to resolve the tension."
+        }
+      ]
+    },
+    {
+      "claim": "The preference is defensible as a 'critical choice': we choose the theory that is easiest to criticize next (the most testable among survivors), thereby maximizing the rate of error elimination, which is the only rational goal.",
+      "mechanism": "Maximization of Criticizability: Preference is not for the 'best' theory in terms of truth, but for the one that offers the best opportunity for future falsification. We act on it to expose its flaws quickly, accelerating progress.",
+      "counterconditions": [
+        "If practical action (e.g., building a bridge) requires confidence in success, not just an opportunity for failure.",
+        "If the most testable theory is not the most useful for prediction."
+      ],
+      "typicality": 0.15,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_007",
+          "kind": "rebutted",
+          "note": "Reframes the 'novel domain' issue: we enter novel domains specifically to test the theory, not because we expect it to work."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "Maintains the distinction by defining the goal of action as 'testing' rather than 'succeeding,' though this is a radical reinterpretation of scientific practice."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Avoids verisimilitude by focusing on testability (logical property) rather than truth approximation."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "Relies on testability, which is logically definable, unlike verisimilitude."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Argues this is the most 'rational' approach consistent with fallibilism."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Shifts focus from survival (past) to potential falsification (future) as the driver of preference."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Claims that seeking falsification does not require assuming stability, only the possibility of variation."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "Presents a unique, forward-looking justification for preference."
+        }
+      ]
+    }
+  ]
+}

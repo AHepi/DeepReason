@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule aligned with the aim of science (truth), where 'preference' signifies the selection of the theory that has withstood the most severe attempts at falsification, thereby offering the best current approximation to truth (verisimilitude) without assigning it higher logical probability.",
+    "mechanism": "The mechanism operates by distinguishing between 'logical probability' (which remains low or undefined for universal laws) and 'corroboration' (a report of past test performance). Preference is justified pragmatically: if our goal is truth, we must act on the theory that has survived the most stringent tests, not because survival guarantees future success (induction), but because it is the only rational choice available that does not contradict the logical asymmetry of falsification. This treats preference as a decision rule rather than an evidential update.",
+    "counterconditions": [
+      "If verisimilitude cannot be defined without probabilistic assumptions (as argued by Tichý and Miller), then the claim that corroboration tracks truth-likeness collapses.",
+      "If the preference for action in novel domains implicitly assumes the uniformity of nature, then the distinction between methodological decision and inductive assumption is merely verbal.",
+      "If Popper's own writings admit that we expect the better-corroborated theory to work *because* it is likely true, then the rejection of induction is inconsistent."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The criticism claims elimination doesn't address action in novel domains. However, the candidate argues that 'preference' in novel domains is a volitional commitment to the theory with the highest verisimilitude based on past severity, not a prediction of novelty. The 'action' is justified by the aim of truth, not by an expectation derived from elimination alone."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The criticism asserts a failure to address action on Popper's terms. The candidate directly addresses this by framing preference as a 'methodological rule' required by the aim of science, which Popper explicitly endorses as rational action distinct from inductive justification."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge the Tichý/Miller refutation of formal verisimilitude. The claim now rests on 'qualitative verisimilitude' or 'potential truth-likeness' as a regulative ideal rather than a formally calculable metric, avoiding the specific probabilistic assumptions criticized."
+      },
+      {
+        "handle": "14b061678dda46e4dcf8f89237df4b4a56508f06d9d5b8c5b1275dfe729cd712",
+        "kind": "rebutted",
+        "note": "The criticism confuses 'psychological expectation' with 'rational preference.' Popper's requirement for rational action is satisfied by aligning with the aim of truth; the candidate clarifies that this alignment is the definition of rationality in this context, not a hidden justification of expectation."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "revised",
+        "note": "Revised to concede that Popper's *formal* account of verisimilitude failed. The defense now relies on the *intuitive* or *regulative* notion of verisimilitude that survives the formal critique, arguing that scientists prefer theories that appear closer to truth even if that closeness cannot be strictly proven."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "rebutted",
+        "note": "The candidate agrees that preference is rational because it aligns with the aim of science, explicitly rejecting the label 'non-rational' or purely 'volitional' in the sense of arbitrariness. It is a reasoned decision based on the history of testing."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "Evolutionary selection explains survival, but the candidate adds that 'preference for action' is the conscious application of this evolutionary result toward the specific goal of truth-seeking, bridging the gap between passive survival and active choice."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate maintains the distinction: assuming uniformity is an ontological claim (rejected), while treating test conditions as stable is a methodological necessity for any test to occur. Preference relies on the latter, not the former."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_survival_of_species",
+        "legal_presumption_of_innocence_until_proven_guilty"
+      ],
+      "shared_structure": [
+        "Survival of a candidate (theory/species/defendant) does not prove inherent superiority or truth, only that it has not yet been eliminated by specific tests (environmental pressure/evidence).",
+        "Preference for the survivor is a pragmatic heuristic for future action, not a logical guarantee of future success.",
+        "The system aims for an ideal (adaptation/truth/justice) through elimination rather than positive verification."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious 'aim' of truth, whereas Popperian science explicitly adopts truth as a regulative ideal.",
+        "Legal presumptions are procedural rules for fairness, not epistemic claims about the world, whereas scientific preference is epistemic.",
+        "Nature selects randomly via mutation; scientists actively design severe tests to eliminate theories, making the 'survival' more informative."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the species that survived ice ages to thrive in similar future conditions without assuming nature is uniform, we bet on corroborated theories.",
+        "The 'rationality' of preferring the survivor lies in the lack of a better alternative, not in the survivor's proven fitness."
+      ],
+      "overturn_conditions": [
+        "If it is shown that surviving severe tests correlates negatively with truth-likeness in the long run.",
+        "If a method exists to positively verify a theory's truth, rendering elimination obsolete."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

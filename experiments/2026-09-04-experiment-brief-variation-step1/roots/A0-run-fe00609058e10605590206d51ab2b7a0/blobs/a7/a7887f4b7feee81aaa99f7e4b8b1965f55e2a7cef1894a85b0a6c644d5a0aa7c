@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim of a 'performative contradiction' mischaracterizes Popper's rejection of induction as an inductive generalization, whereas Popper explicitly grounds this rejection in the deductive 'logical problem of induction' (the impossibility of logically deriving universal laws from singular statements), which satisfies the first countercondition and renders the alleged self-referential collapse invalid.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's rejection of induction is based on the logical asymmetry between verification and falsification, not on an empirical observation that past inductions have failed.",
+      "premise_evidence": null,
+      "successor_question": "If the rejection of induction is purely logical rather than empirical, does the preference for better-corroborated theories require any inductive assumption about the future resembling the past, or can it be justified solely as a rational choice to act on the theory that has withstood the most severe tests so far?"
+    }
+  ]
+}

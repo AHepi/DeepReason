@@ -1,0 +1,62 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference of future truth, but as a non-inductive 'conventional decision' to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing the potential for learning (verisimilitude) even if probability remains unchanged.",
+    "mechanism": "Severity-Based Conventionalism: The rational agent adopts a rule (a convention) to prefer the theory that has survived the most stringent tests because this choice maximizes the growth of knowledge (closeness to truth/verisimilitude) should the theory be false, without assigning it a higher logical probability of being true. This separates the logic of testing (falsification) from the pragmatics of action (decision based on critical scrutiny).",
+    "counterconditions": [
+      "If verisimilitude cannot be coherently defined without invoking induction or probability.",
+      "If the 'conventional decision' to prefer corroborated theories implicitly assumes that past performance predicts future success (the very principle of induction Popper rejected).",
+      "If acting on a theory for practical purposes (e.g., building a bridge) logically entails a belief in its reliability that corroboration alone cannot justify."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The criticism claims verisimilitude fails Popper's terms due to definitional issues. However, Popper explicitly framed verisimilitude as a qualitative, non-probabilistic concept intended to capture 'closeness to truth' via logical content and truth, not as a calculable metric. The defense relies on this qualitative distinction to avoid the formal calculation trap while still providing a rational basis for preference."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The claim of a category error conflating logical probability with practical expectation is addressed by strictly maintaining the separation: the mechanism does not entail an *expectation* of success derived from probability, but a *decision rule* derived from the severity of testing. The rationality lies in the method of selection (severity), not in a predicted outcome probability."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma. The mechanism now clarifies that for practical action, the agent adopts a convention to trust the most severely tested theory not because it is 'safe' (probable), but because it is the most informative and least likely to have been easily falsified if false, thus offering the best chance of avoiding catastrophic error through rigorous prior scrutiny."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The criticism suggests a conflation of willingness to criticize with practical reliance. The rebuttal is that practical reliance in Popper's framework is precisely the willingness to bet on the theory that has survived the most criticism. The 'preference' is the operationalization of critical rationality, not a surrender to dogmatism."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is consistent with his philosophy if viewed as a consistent application of his own conventional decision rule. He prefers the better-corroborated theory because he has conventionally decided that severity of testing is the rational criterion for action, not because he believes induction has been smuggled in."
+      },
+      {
+        "handle": "2116bf4d6b56c4733930a702b792937dca2166147675dc886115c8804a7b37a",
+        "kind": "revised",
+        "note": "Clarified that 'Severity Maximization' is not an inductive projection but a backward-looking assessment of test rigor. The cost accepted is that this provides no guarantee of future success, only a rational procedure for choosing which theory to subject to further risk. The defense holds that this lack of guarantee is the feature, not the bug, of anti-inductivism."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The resolution does not substitute Evolutionary Epistemology but relies on Popper's own later developments regarding verisimilitude and conventional decisions found in 'Conjectures and Refutations' and 'Objective Knowledge'. The mechanism is internal to Popper's falsificationist evolution of knowledge."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The pragmatic contradiction is resolved by denying the premise that rational action requires a belief in reliability based on past success. Instead, rational action requires a belief in the *method* of selection. One acts on the corroborated theory because the method of severe testing is the only rational way to choose, not because the past confirms the future."
+      }
+    ],
+    "analogy": null,
+    "checker_specs": [],
+    "evidence_refs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}

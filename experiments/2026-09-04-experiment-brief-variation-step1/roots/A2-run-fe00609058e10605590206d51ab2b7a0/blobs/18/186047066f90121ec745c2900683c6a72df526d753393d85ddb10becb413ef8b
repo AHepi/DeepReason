@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that Popper's preference requires a 'dual-epistemology' or 'strategic self-deception' is a false dilemma that ignores Popper's actual solution: the preference for better-corroborated theories is a rational choice based on verisimilitude (truth-likeness), not an inductive inference of probability. Popper explicitly argued that while corroboration does not increase probability, it indicates that a theory has withstood severe tests and is therefore a better candidate for truth than its rivals. The target incorrectly assumes that acting on corroboration implies believing it makes the theory probable, whereas Popper's framework allows for preferring a theory as 'closer to the truth' without assigning it a higher logical probability, thus maintaining logical consistency without needing 'practical sincerity' compromises.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguishes between logical probability (which corroboration cannot affect) and verisimilitude (which corroboration can indicate), allowing scientists to prefer better-corroborated theories as more likely to be true without violating his rejection of induction.",
+      "premise_evidence": null,
+      "successor_question": "Does Popper's concept of verisimilitude successfully resolve the tension between rejecting induction and preferring corroborated theories without resorting to a dual-epistemology?"
+    }
+  ]
+}

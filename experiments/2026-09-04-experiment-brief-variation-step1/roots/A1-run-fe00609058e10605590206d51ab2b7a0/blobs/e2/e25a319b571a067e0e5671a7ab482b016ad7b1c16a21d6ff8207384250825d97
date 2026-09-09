@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "The relation is ABSTRACTION: the 'decision postulate' (SRC_001) abstracts the evolutionary selection mechanism (SRC_003) into a normative rule for agents. It is REFUTED IF the procedural decision to prefer corroborated theories can be shown to operate independently of any underlying survival logic, rendering the evolutionary analogy merely decorative rather than structural.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_001", "SRC_003"],
+      "discharges": [
+        {"handle": "SRC_009", "kind": "revised", "note": "Explicitly named 'ABSTRACTION' as the relation kind and defined the endpoints as the decision postulate and evolutionary mechanism."},
+        {"handle": "SRC_008", "kind": "rebutted", "note": "The content now contains 'refuted if' and 'abstracts', satisfying the relation-form predicate."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "This candidate does not rely on Dual-Aspect Monism; it proposes Abstraction between procedure and evolution."},
+        {"handle": "SRC_021", "kind": "revised", "note": "The refutation condition targets the independence of the decision from survival logic, avoiding the category error of conflating descriptive failure with non-existence."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "The relation is abstraction, not integration via shared mechanism; the failure of an inductive bridge is expected and consistent with the abstraction claim."},
+        {"handle": "SRC_014", "kind": "revised", "note": "'Abstraction' is explicitly listed in the required relation kinds, replacing the vague 'procedural convention'."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "The relation-form criteria are met by the explicit use of 'abstracts' and 'refuted if'."},
+        {"handle": "SRC_013", "kind": "revised", "note": "The refutation condition no longer claims logical entailment of induction but tests for the decoupling of decision from survival logic."}
+      ]
+    },
+    {
+      "content": "The relation is CONTRADICTION: the conventionalist view (SRC_002) that science is a game with internal rules contradicts the evolutionary view (SRC_003) that scientific method survives due to external environmental fit. It is REFUTED IF one can demonstrate that the internal rules of the 'game' are themselves selected solely because they maximize external survival, making the contradiction illusory.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_002", "SRC_003"],
+      "discharges": [
+        {"handle": "SRC_009", "kind": "revised", "note": "Proposed 'CONTRADICTION' as the substantive relation between the conventionalist and evolutionary endpoints."},
+        {"handle": "SRC_008", "kind": "rebutted", "note": "Content includes 'refuted if' and 'contradicts', meeting the form criteria."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "Not applicable; this candidate does not propose compatibility or identity of reference."},
+        {"handle": "SRC_021", "kind": "revised", "note": "The refutation condition focuses on the resolution of the contradiction via selection pressure, avoiding category errors regarding mechanism existence."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "The relation is contradiction, not integration; the failure of the inductive bridge is irrelevant to the conflict between internal vs external justification."},
+        {"handle": "SRC_014", "kind": "revised", "note": "Defined the mechanism as the tension between internal rule-following and external survival selection."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "SRC_013", "kind": "revised", "note": "Refutation condition tests whether internal rules are epiphenomenal to external selection, bypassing the induction debate."}
+      ]
+    },
+    {
+      "content": "The relation is INHERITANCE: the pragmatic 'decision postulate' (SRC_005) inherits its normative force from the historical success of the evolutionary selection mechanism (SRC_003), acting as a cultural meme derived from biological adaptation. It is REFUTED IF the decision to prefer corroborated theories persists in communities that have completely lost contact with the empirical environment that originally selected for such methods.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_005", "SRC_003"],
+      "discharges": [
+        {"handle": "SRC_009", "kind": "revised", "note": "Identified 'INHERITANCE' as the relation between the decision postulate and evolutionary mechanism."},
+        {"handle": "SRC_008", "kind": "rebutted", "note": "Contains 'refuted if' and 'inherits'."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "Does not posit an identity of reference but a genealogical inheritance of norms."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Refutation condition tests the dependency of the norm on ongoing environmental contact, distinguishing mechanism existence from instance behavior."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Relation is inheritance, not integration; the lack of inductive justification is consistent with a meme-based inheritance model."},
+        {"handle": "SRC_014", "kind": "revised", "note": "Mechanism defined as cultural transmission of successful biological strategies."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Form criteria met."},
+        {"handle": "SRC_013", "kind": "revised", "note": "Refutation condition avoids logical entailment claims, focusing on empirical persistence of the norm."}
+      ]
+    },
+    {
+      "content": "The relation is REDUCTION: the 'conventional decision' described in SRC_004 reduces to a specific instance of the 'evolutionary selection' mechanism in SRC_003, where the 'voluntary commitment' is merely the phenomenological experience of a selected behavioral trait. It is REFUTED IF agents can voluntarily adopt decision rules that are demonstrably maladaptive for scientific survival, proving the decision is not reducible to selection pressure.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_004", "SRC_003"],
+      "discharges": [
+        {"handle": "SRC_009", "kind": "revised", "note": "Proposed 'REDUCTION' as the relation, linking the phenomenological decision to the evolutionary mechanism."},
+        {"handle": "SRC_008", "kind": "rebutted", "note": "Includes 'refuted if' and 'reduces to'."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "Reduction implies identity of reference through mechanism, which is explicitly defined here."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Refutation condition tests the limits of reduction by looking for maladaptive voluntary choices."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Relation is reduction, not integration; the failure of induction is explained as a feature of the reduced mechanism."},
+        {"handle": "SRC_014", "kind": "revised", "note": "Mechanism specified as the reduction of conscious choice to selected traits."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "SRC_013", "kind": "revised", "note": "Refutation condition relies on empirical observation of maladaptive choices, not logical entailment."}
+      ]
+    },
+    {
+      "content": "The relation is COMPATIBILITY: the conventionalist stance (SRC_001) and the evolutionary stance (SRC_003) are compatible only under the condition that the 'decision' is viewed as the conscious interface for the unconscious evolutionary algorithm. It is REFUTED IF the evolutionary mechanism requires deterministic adherence to successful strategies, thereby ruling out the possibility of a 'voluntary' decision that could choose otherwise.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_001", "SRC_003"],
+      "discharges": [
+        {"handle": "SRC_009", "kind": "revised", "note": "Defined 'COMPATIBILITY' as the relation, contingent on the interface role of the decision."},
+        {"handle": "SRC_008", "kind": "rebutted", "note": "Contains 'refuted if' and 'compatible with'."},
+        {"handle": "SRC_020", "kind": "revised", "note": "Specifies the 'identity of reference' as the interface between conscious volition and unconscious selection."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Refutation condition addresses the determinism vs volition conflict directly."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Compatibility allows for distinct mechanisms operating at different levels; no inductive bridge is required."},
+        {"handle": "SRC_014", "kind": "revised", "note": "Mechanism defined as the layering of conscious interface over unconscious algorithm."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Form criteria met."},
+        {"handle": "SRC_013", "kind": "revised", "note": "Refutation condition tests the logical space for volition within a deterministic evolutionary framework."}
+      ]
+    },
+    {
+      "content": "The relation is SHARED MECHANISM: both the 'decision postulate' (SRC_002) and the 'evolutionary selection' (SRC_003) rely on a shared mechanism of 'error elimination' where false paths are discarded, either by logical criticism or environmental failure. It is REFUTED IF the process of making a 'decision postulate' can occur without any prior elimination of alternatives, relying instead on arbitrary assertion.",
+      "typicality": 0.70,
+      "neighbours": ["SRC_002", "SRC_003"],
+      "discharges": [
+        {"handle": "SRC_009", "kind": "revised", "note": "Proposed 'SHARED MECHANISM' centered on error elimination."},
+        {"handle": "SRC_008", "kind": "rebutted", "note": "Includes 'refuted if' and 'shared mechanism'."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "Identity of reference is the error elimination process itself."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Refutation condition tests the necessity of error elimination for the decision postulate."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Shared mechanism explains the parallel without requiring an inductive bridge."},
+        {"handle": "SRC_014", "kind": "revised", "note": "Mechanism explicitly defined as error elimination."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Form criteria satisfied."},
+        {"handle": "SRC_013", "kind": "revised", "note": "Refutation condition focuses on the presence or absence of alternative elimination."}
+      ]
+    }
+  ]
+}

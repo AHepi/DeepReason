@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory for action is defensible on Popper's own terms not as an inductive inference that the theory is true or probable, but as a rational decision-theoretic choice to act on the hypothesis that has withstood the most severe attempts at falsification, thereby minimizing the risk of known error without asserting future success.",
+    "mechanism": "The mechanism distinguishes between 'corroboration' (a report of past test performance) and 'probability' (a prediction of future frequency). It argues that when forced to act (e.g., building a bridge), rationality dictates choosing the theory that has survived the most stringent tests because it offers the best available critical scrutiny of potential errors. This is a 'conventionalist' decision rule grounded in the logic of situational analysis: we cannot know the future, but we can know which theories have failed least badly so far. The preference is for the theory with the highest 'verisimilitude' (truth-likeness) content that has not yet been eliminated, treating the choice as a methodological postulate rather than an inductive leap.",
+    "counterconditions": [
+      "If corroboration is shown to logically entail a probability assignment about future events, the distinction collapses into induction.",
+      "If Popper's rejection of verisimilitude as a formal metric leaves no non-inductive basis for preferring one unfalsified theory over another for practical action.",
+      "If the 'decision' to prefer the better-corroborated theory is shown to be arbitrary or purely psychological rather than rationally defensible within falsificationism."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The criticism conflates the inability to *calculate* verisimilitude with the inability to *use* it as a qualitative guide. Popper admitted verisimilitude could not be formally defined for complex cases, but maintained it is still rational to prefer theories that have survived severe tests as having higher potential truth-content, without needing a precise numerical metric."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The claim does not conflate logical probability with practical preference; it explicitly separates them. The argument is that practical preference is a decision based on the *status* of the theory (survived severe tests), not a logical derivation that the theory is likely true. The category error charge fails because the proposal operates entirely within the domain of decision theory under uncertainty, not inductive logic."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma by framing the choice as a 'minimization of known error' rather than an 'expectation of success.' The text now clarifies that acting on the best-tested theory is the only rational move because acting on a poorly tested or already falsified theory is demonstrably irrational."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The defense does not conflate willingness to criticize with practical reliance. Instead, it posits that practical reliance *is* the application of critical results: we rely on what has not been criticized out of existence. The preference is a direct consequence of the testing process, not a separate psychological state."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is defensible as consistent with his methodology if viewed as a rational decision to bet on the horse that has run the cleanest race so far, not because it will win the next one, but because the others have stumbled. The 'conventional' nature of the decision does not make it arbitrary; it is constrained by the history of falsification."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The argument relies strictly on Popper's own concepts of severe testing and corroboration reports, not on Campbell's Evolutionary Epistemology. The selection mechanism is logical (survival of falsification attempts), not biological, though the structural analogy exists. The core justification remains Popperian situational logic."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "There is no pragmatic contradiction because the rationality of the action is derived from the *past* performance (which is objective) rather than a *future* guarantee (which would be inductive). Acting on the best-tested theory is the only action consistent with the knowledge that other theories have failed."
+      },
+      {
+        "handle": "2bb824986a07c70a152db1deb50653be633a98497dc1a927ef76e718b290d85f",
+        "kind": "revised",
+        "note": "Clarified that the justification for *action* is the absence of negative evidence against the preferred theory compared to alternatives. The 'methodological survival' directly translates to 'safety for action' because the alternative is acting on a theory known to be flawed or less scrutinized."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_005"],
+      "shared_structure": [
+        "Selection based on elimination of failed candidates rather than confirmation of winners.",
+        "Decision made under uncertainty where the goal is error avoidance rather than truth attainment.",
+        "Reliance on historical performance data without projecting it as a law of nature."
+      ],
+      "disanalogies": [
+        "Scientific theories are abstract and universal, whereas bridge materials are physical and particular.",
+        "Falsification in science is logical and definitive, whereas failure in engineering is often probabilistic and gradual.",
+        "The 'cost' of a wrong scientific theory is often theoretical confusion, while the cost of a wrong engineering choice is physical collapse."
+      ],
+      "transfer_claims": [
+        "Just as an engineer chooses the material with the most rigorous stress-test history, a scientist chooses the theory with the most severe test history.",
+        "In both domains, the choice is rational not because success is guaranteed, but because the alternative is knowingly selecting a weaker option."
+      ],
+      "overturn_conditions": [
+        "If it is demonstrated that past stress-test performance in engineering has zero correlation with future reliability, the analogy fails.",
+        "If Popper explicitly stated that corroboration provides *no* rational basis for action whatsoever, even as a convention."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

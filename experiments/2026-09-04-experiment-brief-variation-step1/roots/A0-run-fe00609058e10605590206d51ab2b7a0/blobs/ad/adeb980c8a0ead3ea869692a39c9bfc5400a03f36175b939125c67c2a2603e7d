@@ -1,0 +1,124 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, methodological decision to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing verisimilitude without asserting probability.",
+      "mechanism": "Methodological Decision Rule: Preference is not a logical inference about truth (induction) but a pragmatic choice aligned with the aim of science (truth). We choose the survivor because it is the only one not yet known to be false, and it has survived tests where others failed. This is a 'rational preference' based on critical discussion, not probabilistic expectation.",
+      "counterconditions": [
+        "If the definition of 'severity' implicitly relies on inductive assumptions about the stability of nature.",
+        "If the concept of verisimilitude cannot be formally defined without probabilistic metrics (as per Tichý/Miller)."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "The distinction addresses action by framing preference as a methodological rule for achieving the aim of truth, not a psychological expectation. The 'defensibility' lies in the alignment with the goal, not in predicting success."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "rebutted", "note": "Popper's later work on verisimilitude attempts a qualitative, non-probabilistic account. While formalization failed, the *concept* remains a valid non-inductive guide: we prefer the theory with more true content and less false content, assessed via criticism, not probability."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "While the quantitative definition was refuted, the qualitative intuition survives as a regulative ideal. The defense does not rely on the failed formal proof but on the logical asymmetry: falsification is definitive, corroboration is merely the absence of falsification so far."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "revised", "note": "Clarified that the preference is 'rational' in the sense of being consistent with the aim of science (critical rationalism), distinct from 'inductively rational'. The revision explicitly separates 'logical justification of truth' from 'rationality of choice given an aim'."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Evolutionary selection explains the survival, but the *preference for action* is justified by the methodological rule: if we seek truth, we must act on the best-tested candidate. The analogy supports the mechanism, but the justification is teleological (aim-based)."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "The stability of test conditions is a methodological presupposition required for any empirical test, not an inductive inference about the future. It is a rule of the game, not a claim about nature's uniformity."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "revised", "note": "Expanded to include the strongest case for the opposing view (that it smuggles induction) in the counterconditions and mechanism analysis, acknowledging the tension before resolving it in favor of the methodological decision."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "The preference is not merely a state of elimination; it is an active adoption of a strategy. Redefining it as a 'decision rule' answers the smuggling charge: decisions are not inductive inferences."}
+      ],
+      "optional_refs": ["SRC_005", "SRC_007"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because 'severe testing' and 'verisimilitude' both tacitly assume the uniformity of nature and the projectibility of past performance into the future.",
+      "mechanism": "Hidden Inductive Premise: To prefer Theory A over Theory B because A survived tests implies an expectation that A will continue to succeed or is closer to truth. This expectation rests on the unproven assumption that the conditions which made the test severe will persist and that nature behaves uniformly enough for past falsifications to be reliable guides.",
+      "counterconditions": [
+        "If severity can be defined purely logically without empirical stability assumptions.",
+        "If the preference can be framed solely as a voluntary act with no expectation of success."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "The critique argues that the 'logical justification' fails precisely because the move from 'survived' to 'prefer for action' requires an implicit bridge of expectation, which is inductive."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "rebutted", "note": "This candidate agrees with the criticism: verisimilitude assessments inherently require comparing truth contents which we cannot know without inductive leaps about unobserved consequences."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Supports the criticism that without a working formal account of verisimilitude, the preference collapses into an intuitive (and thus inductive) guess about truth-likeness."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "Argues that calling the preference 'rational' because it aligns with an aim is circular if the means to achieve that aim (preferring survivors) assumes the very induction Popper rejects."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Evolutionary selection describes what happens, but using it to *justify* preference for future action assumes the environment (nature) remains stable enough for the selection pressure to remain relevant—an inductive assumption."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Explicitly embraces the criticism: treating test conditions as stable *is* the inductive assumption Popper tried to deny. It is not just a methodological rule; it is a substantive claim about the world required for the rule to work."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "revised", "note": "This candidate represents the 'strongest case' for the 'smuggles induction' side, fulfilling the prompt's requirement to present both sides robustly."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Rejects the idea that redefining preference as 'elimination' solves the problem. Scientists act on the belief that the survivor is *better*, not just that others are dead. That 'better' implies a predictive edge, which is inductive."}
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"]
+    },
+    {
+      "claim": "The tension is resolved by accepting that the preference is a 'non-rational' volitional act (a leap of faith) necessitated by the human condition of having to act, which costs Popper the claim that science is purely rational/critical.",
+      "mechanism": "Volitional Pragmatism: Logic alone cannot dictate action when all theories are potentially false. The preference is a psychological/volitional commitment to treat the best-tested theory 'as if' it were true for practical purposes, admitting this step lies outside the scope of logical justification.",
+      "counterconditions": [
+        "If Popper can demonstrate that the preference follows logically from the aim of truth without extra premises.",
+        "If the 'leap' can be characterized as a rule of logic rather than psychology."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_017", "kind": "departure_declared", "note": "Departing from the strict separation of psychological/logical by admitting that the *act* of preference is psychological, even if the *critique* leading to it is logical."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "rebutted", "note": "Agrees that verisimilitude fails as a logical guide, hence the retreat to volition. The preference is not based on knowing verisimilitude, but on choosing to act despite ignorance."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Accepts the refutation of verisimilitude as the catalyst for viewing preference as non-logical."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "Challenges the notion that the preference is 'rational' in Popper's specific sense; it is rational only in a broad pragmatic sense, conceding the logical gap."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Evolutionary explanations describe the origin of the impulse, but the justification for *acting* on it here is admitted to be non-logical."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Concedes that the stability assumption is inductive and cannot be logically grounded, so the preference rests on accepting this assumption voluntarily."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "revised", "note": "Presents the 'volitional' case as the third way, contrasting it with the purely logical and purely inductive views."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Argues that reducing preference to 'state of elimination' ignores the active component of 'choosing to act', which requires a volitional element beyond logic."}
+      ],
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "The preference is defensible as an application of 'Evolutionary Epistemology' where corroboration is a selection signal, not a truth indicator; the cost is abandoning the idea that science converges on truth, settling instead for 'fit' falsehoods.",
+      "mechanism": "Selection Without Truth: Analogous to natural selection, theories survive not because they are true, but because they fit current constraints. Preference is simply betting on the currently adapted organism. This bypasses induction because it makes no claim about future fitness, only acknowledges current survival.",
+      "counterconditions": [
+        "If the analogy fails to explain why we expect the 'fittest' theory to work in novel domains.",
+        "If the selection pressure (testing) is not truly independent of the theory's content."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Addresses action by framing it as a biological imperative to use the currently adapted tool, devoid of logical justification regarding truth."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "rebutted", "note": "Avoids verisimilitude entirely; the preference is for 'survival capacity', not 'truth-likeness'."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Sidesteps the Tichý/Miller refutation by rejecting the premise that we need a measure of truth-content to justify preference."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "Reinterprets 'rational' as 'biologically adaptive' rather than 'logically necessitated by the aim of truth'."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "revised", "note": "Refines the evolutionary analogy to explicitly state that it justifies the *existence* of the preference mechanism, while the *normative* force comes from the lack of alternatives (no other theory has survived)."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Claims that evolutionary selection does not require the uniformity of nature, only that the current environment selects for current fitness. Future failure is expected and part of the process."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "revised", "note": "Offers the evolutionary perspective as a distinct third option, different from both pure methodological rule and hidden induction."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Extends the 'state of elimination' to an active 'selection event', arguing that in evolution, selection *is* the justification for the next generation's dominance."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_005"]
+    },
+    {
+      "claim": "The problem dissolves if we view 'corroboration' not as a property of the theory but as a report on the *tests* themselves; the preference is for the theory associated with the most informative tests, costing us the ability to rank theories by intrinsic merit.",
+      "mechanism": "Test-Centric Reporting: Corroboration reports the severity of the tests a theory has faced, not the theory's likelihood. We prefer the theory because it is linked to the most rigorous inquiry, maximizing our exposure to error. The 'preference' is actually a preference for the *process* that generated the theory.",
+      "counterconditions": [
+        "If scientists clearly prefer the theory for its predicted success, not the rigor of its testing history.",
+        "If two theories face identical tests but one survives and one doesn't, and we clearly prefer the survivor based on content."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Reframes the action: we act on the theory because it emerged from the most reliable error-detection process, not because we expect it to be true."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "rebutted", "note": "Removes the need for verisimilitude; the metric is test severity, not truth content."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Irrelevant to test severity; the refutation of verisimilitude does not impact the logical assessment of test severity."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "Redefines the 'aim of science' as maximizing test severity/error elimination, making the preference logically consistent with that aim."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Shifts focus from evolutionary survival of the theory to the survival of the *testing protocol*."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "rebutted", "note": "Argues that test severity is a logical relation between hypothesis and evidence, not an empirical assumption about stability."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "revised", "note": "Provides a structuralist interpretation of the problem, offering a unique angle on the 'strongest case'."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Clarifies that the preference is for the 'tested-ness' of the theory, which is a record of elimination, thus aligning with the criticism while reframing the implication."}
+      ],
+      "optional_refs": ["SRC_008"]
+    },
+    {
+      "claim": "Accepting that the preference smuggles in induction forces a modification of Popperism: we must admit a 'principle of limited induction' (nature is locally uniform) as a metaphysical backdrop, costing the purity of falsificationism but saving its utility.",
+      "mechanism": "Hybrid Metaphysics: Explicitly adopt a weak, metaphysical assumption of local uniformity to ground the severity of tests. This abandons Popper's strict anti-inductivism but preserves the critical method. The preference is then inductively supported by this explicit metaphysical postulate.",
+      "counterconditions": [
+        "If Popper's system can function without any such assumption (as he claimed).",
+        "If admitting this assumption destroys the logical asymmetry between verification and falsification."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_017", "kind": "departure_declared", "note": "Departing from Popper's insistence on zero induction; explicitly embracing a minimal inductive postulate."},
+        {"handle": "[SRC_021] against SRC_005", "kind": "rebutted", "note": "Agrees that verisimilitude needs help, and provides it via an explicit inductive axiom rather than hiding it."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Uses the failure of pure verisimilitude as motivation to introduce the metaphysical support."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "Argues that the 'rationality' of the preference is restored by making the hidden premise explicit and open to criticism."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Evolutionary selection works *because* of local uniformity; making this explicit strengthens the justification for action."},
+        {"handle": "[SRC_012] against SRC_008", "kind": "revised", "note": "Directly addresses the criticism by converting the 'hidden assumption' into an 'explicit postulate', changing the status of the argument from flawed to modified."},
+        {"handle": "[SRC_014] against SRC_010", "kind": "revised", "note": "Presents the 'modification' stance as the synthesis of the two opposing views."},
+        {"handle": "[SRC_011] against SRC_007", "kind": "rebutted", "note": "Accepts that the preference involves induction, but argues this is a feature of a matured Popperianism, not a bug."}
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"]
+    }
+  ]
+}

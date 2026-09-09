@@ -1,0 +1,48 @@
+{
+  "candidate": {
+    "content": "The isolated context (decision postulate) INTEGRATES with its neighbourhood (evolutionary selection of theories) via a shared mechanism of procedural rationality; this relation is REFUTED IF the decision to prefer corroborated theories is shown to logically entail an inductive justification rather than remaining a voluntary convention, or if the evolutionary selection process is proven to operate independently of any methodological decisions made by scientists.",
+    "typicality": 0.85,
+    "neighbours": [
+      "SRC_004",
+      "SRC_005"
+    ],
+    "discharges": [
+      {
+        "handle": "0b4d9d521533949983ebf9a089471762235689cdbc2df89eeb8df79bcd8b0124",
+        "kind": "revised",
+        "note": "Explicitly named the relation kind as 'INTEGRATES' and defined the endpoints as 'decision postulate' and 'evolutionary selection of theories' in the content string.",
+        "where": "content"
+      },
+      {
+        "handle": "1b0b94d1a782d96f1f858b2d5a65896934b84b34312b6e0f3be620a2375b91d5",
+        "kind": "rebutted",
+        "note": "The content now explicitly includes the phrase 'REFUTED IF' and specifies the relation kind 'INTEGRATES', satisfying the relation-form criteria.",
+        "where": "content"
+      },
+      {
+        "handle": "80eab863206ce0c8df11819709e3a5fcf99293f74ab93e85f4c6e0fbdc8e6810",
+        "kind": "departure_declared",
+        "note": "Departing from the historical critique regarding Ptolemaic astronomy; this candidate focuses strictly on the logical structure of the decision postulate vs. induction as defined in the foundation artifact, treating the preference as a convention regardless of historical truth-likeness correlations.",
+        "where": "content"
+      },
+      {
+        "handle": "94163256f07492b3245326e6eac861ccfd2f039793dac1da7af23aa4afb59f33",
+        "kind": "revised",
+        "note": "Substantively defined the relation by linking the 'decision postulate' to 'evolutionary selection' through 'procedural rationality', moving beyond vague claims of voluntarism.",
+        "where": "content"
+      },
+      {
+        "handle": "e7fbb6551168524f2d90d4a6a81e9ef6d04b2dd4fbfba506908474a7",
+        "kind": "revised",
+        "note": "Detailed the integration mechanism: the voluntary commitment to a rule of procedure (decision postulate) acts as the bridge that allows evolutionary selection to function without smuggling in induction, explicitly connecting SRC_004/SRC_005 concepts.",
+        "where": "content"
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "03f8b3f2f004",
+        "quote": "Popper explicitly frames the choice of the best-tested theory as a 'decision.' In this view, there is no logical bridge between 'survived tests' and 'should be used.' The bridge is built by a voluntary commitment to a rule of procedure"
+      }
+    ]
+  }
+}

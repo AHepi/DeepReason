@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a category error by conflating Popper's specific methodological rule for theory preference with general pragmatic utility. Popper explicitly rejected 'instrumentalism' (the view that theories are merely tools without truth claims) because it implicitly relies on the inductive assumption that what worked in the past will work in the future. By defining the preference as a heuristic of 'using the tool that hasn't broken yet,' the target smuggles in the very inductive principle Popper sought to eliminate, failing to answer how this preference is defensible *on Popper's own terms* rather than on instrumentalist terms he rejected.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguished his critical rationalism from instrumentalism precisely because instrumentalism requires an inductive leap regarding future utility based on past performance.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for better-corroborated theories cannot be justified by past success (induction), what non-inductive criterion does Popper offer for acting on one theory over another in high-stakes scenarios?"
+    }
+  ]
+}

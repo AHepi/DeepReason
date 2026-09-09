@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference rule is an 'arbitrary decree' contradicts Popper's explicit rejection of conventionalism in demarcation. Popper argued that methodological rules are not arbitrary but are chosen specifically to foster the growth of knowledge and truth-likeness (verisimilitude). By reducing the preference for corroborated theories to a mere constitutive convention akin to chess rules, the target ignores Popper's substantive argument that such rules are rationally justified by their efficacy in eliminating error and approaching truth, thereby misrepresenting his defense as a surrender to the very conventionalism he sought to avoid.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly distinguishes his critical rationalism from conventionalism by arguing that methodological rules are adopted for their ability to promote the growth of knowledge, not as arbitrary fiat.",
+      "premise_evidence": null,
+      "successor_question": "If the rule is not arbitrary, what specific non-inductive rationale does Popper provide to justify preferring better-corroborated theories over worse ones without smuggling in probability?"
+    }
+  ]
+}

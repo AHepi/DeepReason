@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses because it conflates 'logical severity' with 'practical reliability.' While the target correctly identifies that preferring a severely tested theory maximizes error-detection potential (a logical property), it fails to justify why this logical property should guide *action* (choosing which theory to bet on) without an inductive bridge. Popper rejects the idea that past survival makes a theory more likely to succeed in the future; however, the scientist's preference for action is inherently a bet on future success. By advising action based on past test results while denying those results confer any probability of future validity, the target smuggles in induction under the guise of 'risk minimization,' as minimizing risk in a practical context presupposes that the method which worked before will work again.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Practical action requires a belief in future reliability, which past corroboration cannot provide without assuming the uniformity of nature (induction).",
+      "premise_evidence": null,
+      "successor_question": "Can a non-inductive rule of preference ever rationally justify high-stakes action if it explicitly denies that the preferred option is more likely to succeed?",
+      "attack": true
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a 'decision-theoretic rule to minimize known falsity,' but this collapses into induction when applied to future action. By preferring the theory that has 'withstood the most severe tests' because it is the 'least obviously false' option for *future* decisions, the agent implicitly assumes that the property of having survived past tests is a reliable indicator of future survivability or utility. If the future does not resemble the past (the core inductive assumption), the 'best-unchallenged' theory could fail immediately upon the next test. Popper's framework forbids assigning higher probability to the corroborated theory, yet the directive to 'act on' it specifically because of its past record constitutes a pragmatic endorsement of its future reliability, which is functionally indistinguishable from the inductive inference the target claims to avoid.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Acting on a theory specifically because it has survived past tests implies an expectation that this survival predicts future success, which is an inductive assumption.",
+      "premise_evidence": null,
+      "successor_question": "Can a rational agent consistently prefer Theory A over Theory B based solely on past test results without implicitly assigning a higher subjective probability to A's future performance?"
+    }
+  ]
+}

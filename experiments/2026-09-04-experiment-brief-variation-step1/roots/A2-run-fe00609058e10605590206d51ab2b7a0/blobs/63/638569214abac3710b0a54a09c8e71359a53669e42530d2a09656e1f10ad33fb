@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that Popper's preference is defensible as a 'methodological rule' fails to address the third countercondition: if acting on a theory inherently requires assigning it a higher subjective probability of success (e.g., expecting a bridge built on the preferred theory not to collapse), then the distinction between corroboration and probability is merely semantic. The target asserts the preference offers 'no guarantee of future success,' yet rational action in science and engineering presupposes an expectation of reliability that functions identically to probabilistic induction, thereby smuggling in the very concept Popper rejected.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "If acting on a theory inherently requires assigning it a higher subjective probability of success than its rivals, then the distinction between corroboration and probability is merely semantic.",
+      "premise_evidence": null,
+      "successor_question": "Can a scientist rationally prefer Theory A over Theory B for practical application without implicitly believing A is more likely to yield successful predictions than B?"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, pragmatic decision rule based on verisimilitude (truth-likeness) rather than probability.",
+      "mechanism": "Popper distinguishes between the logical status of a theory (which remains improbable regardless of testing) and the rational basis for action. Severe tests function as a sieve; surviving them does not increase the probability of truth, but it increases the theory's content and its proximity to truth (verisimilitude). The scientist prefers the corroborated theory not because it is 'more likely' to be true in a probabilistic sense, but because it has withstood attempts to falsify it, making it the best available approximation of truth for practical application. This is a deductive preference for the theory that has not yet failed, avoiding the inductive leap that the future will resemble the past.",
+      "counterconditions": [
+        "If corroboration is shown to implicitly rely on the assumption that nature is uniform (the principle of induction).",
+        "If the concept of verisimilitude cannot be formally defined without invoking probabilistic measures.",
+        "If acting on a corroborated theory yields no better predictive success than acting on a random unrefuted theory."
+      ],
+      "typicality": 0.92,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The preference for corroborated theories smuggles induction back into Popper's system, rendering his rejection of probabilistic confirmation inconsistent with scientific practice.",
+      "mechanism": "To prefer Theory A over Theory B solely because A has survived tests that B has not (or A has survived more severe tests) logically presupposes that past performance is a reliable guide to future performance. This is the very definition of the problem of induction. If the future is not assumed to resemble the past, the fact that a theory worked yesterday provides zero logical warrant for expecting it to work tomorrow. By advising scientists to 'act' on the best-tested theory, Popper implicitly accepts an inductive principle: that corroboration indicates a higher propensity for future success, which is functionally identical to assigning it a higher probability, contradicting his core thesis.",
+      "counterconditions": [
+        "If a non-inductive justification for action (e.g., game-theoretic or evolutionary) can be rigorously demonstrated.",
+        "If the preference is framed purely as a psychological necessity rather than a rational norm.",
+        "If Popper's distinction between 'acceptance for testing' and 'acceptance for action' holds up under scrutiny."
+      ],
+      "typicality": 0.88,
+      "optional_refs": [
+        "SRC_002"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The resolution lies in reinterpreting corroboration as an evolutionary selection mechanism where 'preference' is a survival trait of the methodology, not a logical inference about the theory's truth.",
+      "mechanism": "Drawing on evolutionary epistemology, the preference for corroborated theories is not a logical deduction about the world's structure but a methodological rule that has itself been 'corroborated' by the survival of science. We prefer well-tested theories because the *method* of preferring them has allowed our scientific frameworks to survive and expand. This shifts the locus of justification from the individual theory (which remains conjectural) to the meta-methodology. It costs Popper the idea that science converges on truth in a strong sense; instead, science merely eliminates the unfit, and our 'preference' is just the current state of the surviving ecosystem of ideas.",
+      "counterconditions": [
+        "If evolutionary success is not correlated with truth-likeness (the argument from pessimistic meta-induction).",
+        "If the mechanism requires assuming that the environment (nature) is stable enough for selection to work.",
+        "If this view reduces scientific rationality to mere biological adaptation."
+      ],
+      "typicality": 0.65,
+      "optional_refs": [
+        "SRC_003"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The dilemma dissolves if we treat the preference for corroborated theories as a convention or decision postulate, similar to choosing axioms, rather than a derived logical consequence.",
+      "mechanism": "Popper explicitly frames the choice of the best-tested theory as a 'decision.' In this view, there is no logical bridge between 'survived tests' and 'should be used.' The bridge is built by a voluntary commitment to a rule of procedure: 'We decide to act as if the best-tested theory is the most reliable.' This avoids smuggling in induction because it makes no claim about the world guaranteeing the theory's success; it only establishes a normative rule for the scientific community. The cost is high: it renders the rationality of science entirely internal to the game of science, offering no external guarantee that this game leads to truth or practical success, potentially opening the door to relativism.",
+      "counterconditions": [
+        "If the decision itself requires an inductive justification to be considered rational.",
+        "If scientists cannot coherently maintain a stance that their actions have no expected link to truth.",
+        "If this conventionalism undermines the objective status of scientific knowledge."
+      ],
+      "typicality": 0.72,
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The preference is defensible only if we accept that 'probability' in Popper's denial refers to logical probability (content), while the 'preference' relies on a distinct, non-logical notion of 'reliability' grounded in causal history.",
+      "mechanism": "This candidate proposes a dual-aspect mechanism. Logical probability decreases as content increases (a hallmark of Popper). However, 'reliability for action' is a causal property generated by the history of severe testing. The testing process physically/causally filters out theories that are incompatible with reality. The survivor is not 'probable,' but it is 'causally vetted.' The preference is for the causally vetted object. This survives only if one can strictly separate logical relations from causal histories of inquiry. The cost is a fragmented epistemology where what is logically sound (high content, low probability) and what is practically useful (causally vetted) operate on different planes, requiring a leap of faith to connect them in the acting subject.",
+      "counterconditions": [
+        "If causal history cannot be distinguished from inductive inference.",
+        "If the notion of 'causal vetting' implicitly assumes the uniformity of nature.",
+        "If this dualism leads to an unbridgeable gap between theory and practice."
+      ],
+      "typicality": 0.45,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Neither side survives intact; the tension reveals that 'acting on a theory' inherently transforms the theoretical stance into an inductive one, suggesting Popper's system is incomplete regarding the transition from contemplation to action.",
+      "mechanism": "This radical critique argues that the moment a scientist moves from 'entertaining a hypothesis' to 'acting on it' (e.g., building a bridge), they have necessarily exited Popper's critical rationalism and entered the realm of induction. Popper's system works for criticism but fails for construction. The 'preference' is therefore a category error within his own framework. To make the preference defensible, one must abandon pure Popperianism and adopt a hybrid model where induction is reinstated as a necessary, albeit fallible, tool for action. The cost is the abandonment of Popper's dream of a purely deductive science of discovery and justification.",
+      "counterconditions": [
+        "If a purely deductive account of action can be formulated (e.g., via decision theory without priors).",
+        "If 'acting' can be redefined as 'testing in a high-stakes environment' rather than 'believing'.",
+        "If the hybrid model collapses into standard Bayesian confirmation theory."
+      ],
+      "typicality": 0.30,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ]
+}

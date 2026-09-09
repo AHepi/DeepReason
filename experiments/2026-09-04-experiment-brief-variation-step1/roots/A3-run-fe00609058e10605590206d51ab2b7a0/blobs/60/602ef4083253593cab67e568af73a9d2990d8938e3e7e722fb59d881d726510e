@@ -1,0 +1,271 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'critical rationalist' decision rule that maximizes informational content without assigning probability, but it costs the agent any guarantee of practical success or future reliability.",
+      "mechanism": "Adopt a decision rule where 'preference' means 'selection for testing and action based on highest surviving empirical content,' explicitly decoupling selection from expectation of truth. The mechanism is a non-inductive maximization of information: we choose the theory that tells us the most about the world because it has survived the most severe attempts to falsify it, not because we believe it will continue to hold.",
+      "counterconditions": [
+        "If the agent requires a probabilistic guarantee of safety (e.g., in bridge building) that content-maximization cannot provide.",
+        "If 'acting on' a theory logically entails an expectation of its future validity, reintroducing induction.",
+        "If the 'severity' of tests itself relies on inductive assumptions about the uniformity of nature."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate does not rely on a 'Principle of Uniformity' straw man; it explicitly grounds preference in the static assessment of surviving informational content (critical rationalism), which is Popper's actual solution to avoiding induction in action."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate avoids the collapse of verisimilitude by focusing strictly on 'surviving empirical content' rather than truth-likeness. It accepts that the preferred theory may be false, defending the choice solely on the basis of error elimination so far."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "revised",
+          "note": "Revised to explicitly address the 'act' component: the cost of this view is admitting that acting on a theory is a bold guess with no logical assurance of success, distinguishing the 'rationality of the choice' from the 'reliability of the outcome'."
+        },
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate engages Popper's explicit defense by framing preference as a methodological imperative to test the strongest available theory, rejecting the notion that it is merely a 'psychological necessity' or indefensible."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "rebutted",
+          "note": "The candidate adheres strictly to Popper's textual defense of critical rationalism without invoking propensity interpretation, showing that the preference is defensible as a rule for criticism, not a statement on objective chance."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "revised",
+          "note": "Revised to clarify the distinction between the consistency of the 'choice' (which is valid) and the 'practical act' (which carries risk). The defense holds that choosing the best-tested theory is the only rational move, even if the act itself might fail due to the theory's eventual falsification."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The preference smuggles induction back in because any 'action' based on corroboration implicitly assumes that the future will resemble the past (the Principle of Uniformity), which Popper explicitly rejected as a justification for scientific inference.",
+      "mechanism": "Analyze the pragmatic structure of 'acting on' a theory. To build a bridge or administer a vaccine is to predict a future state. If corroboration (past survival) is the sole basis for this prediction, then the agent is effectively assuming that past performance predicts future results. This is the definition of induction. Popper's denial of this link creates a gap between his epistemology and his praxis that cannot be bridged without covertly accepting uniformity.",
+      "counterconditions": [
+        "If Popper can define 'rational action' in a way that does not involve prediction.",
+        "If the 'principle of uniformity' is not required for specific engineering decisions but only for universal laws.",
+        "If the preference is viewed as a convention rather than an epistemic claim."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate argues that regardless of Popper's explicit distinctions, the *act* of preferring one theory for future application functionally operates as a Principle of Uniformity, making the distinction a semantic shield rather than a logical solution."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate bypasses the verisimilitude debate entirely, focusing instead on the pragmatic necessity of induction for action, arguing that even if verisimilitude fails, the *use* of corroboration for action still smuggles in induction."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Directly addresses the core problem: scientists act *because* they expect the theory to hold. Claiming the preference is 'tautological' ignores the temporal dimension of action, which inherently projects past data into the future."
+        },
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "Counters Popper's defense by asserting that a 'methodological rule' to prefer the best-tested theory is empty unless it carries an implicit belief that 'best-tested' correlates with 'most likely to succeed,' which is an inductive belief."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "rebutted",
+          "note": "Argues that historical/textual defenses fail if the logical structure of 'action' necessitates induction. Even if Popper didn't intend to smuggle it in, the functional requirement of acting on a theory forces it."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "Contends that the 'category error' defense collapses when the stakes are physical (bridges/vaccines). In these cases, the 'preference' is not just an acknowledgment of survival but a bet on future stability, which is inductive."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The dilemma is dissolved by reinterpreting 'preference' as a purely negative heuristic: we do not prefer the corroborated theory because it is good, but only because all known alternatives are demonstrably worse (falsified).",
+      "mechanism": "Shift the locus of value from the survivor to the eliminated rivals. The mechanism is 'survival of the fittest' in a strictly negative sense: the preferred theory is simply the one that has not yet been killed. Action is taken on it not because it is expected to work, but because there is no known reason (from current tests) why it should fail. This avoids induction by refusing to posit any positive attribute (probability, truth, reliability) to the survivor.",
+      "counterconditions": [
+        "If the set of possible theories is infinite, eliminating some does not make the survivor 'better' in any actionable sense.",
+        "If 'acting' requires a positive expectation of success, not just the absence of known failure.",
+        "If the criteria for 'severe testing' implicitly assume inductive regularities."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "This approach aligns perfectly with Popper's actual solution, avoiding the straw man by strictly adhering to the negative logic of falsification without invoking uniformity."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "By abandoning any claim to 'verisimilitude' or positive status, this candidate sidesteps the logical constraints that caused verisimilitude to collapse. It relies only on the fact of falsification of others."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "revised",
+          "note": "Revised to acknowledge that while this solves the logical problem, it struggles with the psychological/practical reality of action. Scientists do feel they are choosing the 'best,' not just the 'least worst.' The cost is a disconnect between the philosophy and the scientist's mindset."
+        },
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "Defends the preference as fully defensible on Popperian terms: it is the logical consequence of eliminating errors. It is not a psychological necessity but a logical imperative of the critical method."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "rebutted",
+          "note": "Confirms this is historically accurate to Popper's later views, where he emphasized the elimination of error over the accumulation of positive confirmation."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that even in engineering, one acts on the 'least worst' option. We use Newtonian physics not because we think it's true, but because Relativity hasn't falsified it in that domain yet, and other alternatives have been falsified."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Popper's position is sustainable only if we accept a 'propensity' interpretation of probability, where corroboration reflects the objective tendency of a theory to withstand tests, thereby allowing a non-inductive basis for preference.",
+      "mechanism": "Introduce Popper's propensity theory as the missing link. The mechanism posits that theories have an objective 'propensity' to survive tests based on their fit with reality. Corroboration is the measure of this propensity. Preferring the better-corroborated theory is thus preferring the one with the higher objective propensity to be true (or close to it), which is a factual claim about the world, not an inductive inference from past to future.",
+      "counterconditions": [
+        "If propensities are themselves unobservable and metaphysically dubious.",
+        "If measuring propensity still requires assuming the future resembles the past.",
+        "If Popper's own writings on propensity are inconsistent with his earlier rejection of probability."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Propensity offers a third way between uniformity and pure negation, grounding the preference in an objective feature of the theory-world relation, thus respecting Popper's actual solution space."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Propensity serves as a robust alternative to verisimilitude, avoiding its specific logical pitfalls while still providing a positive ground for preference."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Addresses the action problem by suggesting scientists act on the theory with the highest objective propensity, which provides a rational basis for expectation without classical induction."
+        },
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "Supports the view that Popper's defense relies on this sophisticated notion of propensity, moving beyond simple psychological necessity to a metaphysical account of scientific progress."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "revised",
+          "note": "Revised to acknowledge that while this is a strong reconstruction, it may stretch Popper's 'own terms' if one considers his primary identity as a falsificationist who was wary of probabilistic interpretations. The cost is adopting a more metaphysical framework than Popper initially intended."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "Suggests that in high-stakes acts like engineering, relying on the theory with the highest propensity is the only rational course, bridging the gap between abstract philosophy and concrete action."
+        }
+      ],
+      "optional_refs": [
+        "SRC_010"
+      ]
+    },
+    {
+      "claim": "The preference is a 'conventionalist' move disguised as critical rationalism: scientists agree to treat the best-corroborated theory as 'true for now' by social decree, acknowledging this is a pragmatic fiction necessary for coordination, not an epistemic truth.",
+      "mechanism": "Reframe the preference as a sociological convention within the scientific community. The mechanism is 'agreed-upon fiction': the community decides to act *as if* the best-corroborated theory is reliable to facilitate research and engineering, while privately maintaining the philosophical stance that it is unproven. This separates the 'context of action' (governed by convention) from the 'context of justification' (governed by strict falsification).",
+      "counterconditions": [
+        "If this concession admits that Popper's epistemology cannot guide action on its own.",
+        "If the convention itself rests on an inductive hope that the fiction usually works.",
+        "If individual scientists genuinely believe in the reliability, making the 'fiction' description inaccurate."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "departure_declared",
+          "note": "Departure: This candidate rejects the idea that Popper's internal logic solves the problem, instead positing that the solution is external (societal convention), which Popper himself might resist but which explains the phenomenon."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Avoids the verisimilitude trap by denying any claim to truth-likeness. The preference is purely pragmatic and social, not logical or semantic."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Directly addresses the action component: scientists act because of the convention. The 'core of the problem' is solved by admitting that action requires a leap that logic cannot provide, so we supply a social contract instead."
+        },
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "Reinterprets Popper's 'defense' as a description of this successful convention, rather than a rigorous logical proof. It saves the practice of science while sacrificing the purity of the epistemology."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "rebutted",
+          "note": "Challenges the historical reading by suggesting Popper's rationality is itself a form of enlightened conventionalism, where the 'rule' is a shared agreement to proceed cautiously."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "Explains the bridge/vaccine scenario: engineers follow the code (convention) derived from the best-tested theory. The 'collapse' is avoided by admitting the philosophy doesn't dictate the act, the community does."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is indefensible on strict Popperian terms, revealing a fundamental fracture in his system: one can be a consistent Popperian in the lab (falsifying), but not in the world (acting), forcing a schism between the philosopher and the citizen.",
+      "mechanism": "Embrace the contradiction as a feature, not a bug. The mechanism is 'compartmentalization': the agent maintains two disjoint operating systems. System A (Science) rejects induction and probability. System B (Life/Action) unavoidably uses induction to survive. The 'preference' is the awkward handover point where System A hands control to System B, acknowledging that System A has nothing to say about the future. The cost is the integrity of a unified worldview.",
+      "counterconditions": [
+        "If Popper successfully unified these domains in his later works.",
+        "If 'acting' can be redefined to fit within System A.",
+        "If the schism is acceptable to working scientists."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "Argues that Popper's 'actual solution' is insufficient to bridge the gap, leaving the 'straw man' accusation moot because the real problem (the schism) remains unaddressed by his distinctions."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "Agrees that verisimilitude fails, and extends this failure to the entire project of justifying preference, concluding that no non-inductive basis exists."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "Accepts the challenge: the preference for action *does* require induction, and since Popper rejects induction, his system cannot defend the preference. The 'tautology' defense is a retreat from the reality of action."
+        },
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "revised",
+          "note": "Revised to strengthen the claim: it is not just 'indefensible' but reveals a fatal flaw. The 'psychological necessity' is actually a logical necessity that Popper's system forbids, forcing the scientist to abandon Popperism when leaving the library."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "rebutted",
+          "note": "Contends that no amount of textual defense can resolve the logical incompatibility between 'no induction' and 'act on the past.' The historical record shows Popper struggling with this, not solving it."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "Concedes the collapse: when building a bridge, the Popperian must cease to be a strict Popperian. The 'category error' is on Popper's side for thinking his epistemology could cover action."
+        }
+      ],
+      "optional_refs": []
+    }
+  ]
+}

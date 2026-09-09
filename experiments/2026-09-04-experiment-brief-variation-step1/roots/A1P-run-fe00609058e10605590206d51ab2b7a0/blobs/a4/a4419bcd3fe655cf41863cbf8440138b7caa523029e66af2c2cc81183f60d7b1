@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a methodological rule for selecting the most informative target for falsification; accepting this costs us the assurance that science converges toward truth or practical reliability, leaving us with only a game of error-elimination without epistemic accumulation.",
+    "mechanism": "The mechanism distinguishes between 'rational belief' (which implies probability/induction) and 'rational action' (which implies critical selection). By framing corroboration as a report of past performance rather than a predictor of future performance, the preference becomes a rule to test the boldiest surviving conjecture. The 'strongest case' for induction smuggling argues that any choice based on past survival implicitly assumes nature's uniformity; the rebuttal is that Popper replaces the assumption of uniformity with the decision to seek refutation, making the preference a strategic move in a critical game rather than an evidential weight.",
+    "counterconditions": [
+      "If the agent requires a guarantee of practical success or truth-likeness to act, the Popperian defense fails.",
+      "If 'preferring' logically entails assigning higher subjective probability, the distinction collapses into induction.",
+      "If the severity of tests cannot be defined without assuming background theories are approximately true (inductive holdover), the metric is circular."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The criticism confuses the justification of the *choice* with the justification of the *belief*. Popper does not justify believing the theory is true (evolutionary/descriptive); he justifies the methodological decision to subject the most resilient theory to further fire, which is a normative rule of the critical game, not an evolutionary description."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge Popper's argument for 'non-inductive rationality' via verisimilitude and information content, clarifying that the 'arbitrary decree' charge was too strong; the preference is rule-bound, not arbitrary, though the rules themselves are conventional."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The move from 'others falsified' to 'choose this one' does not assume nature's uniformity; it assumes only that we should try to learn from our mistakes. Choosing the unfalsified theory is simply choosing the one that has not yet been shown to be false, requiring no assumption about the future resembling the past, only the intent to find out if it will."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "Severity of tests indicates how much a theory risks falsification, not its reliability. Preferring a severely tested theory is preferring the one that has survived the hardest attempts to kill it, which makes it the best candidate for the next attempt, not a reliable guide for engineering."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "departure_declared",
+        "note": "Departing from the strict requirement to prove Popper's convention is non-conventionalist; I accept that the methodological rules are conventions, but argue they are 'critical conventions' distinct from Poincaré's 'convenient fictions' because they aim at falsification rather than preservation."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "Methodological convention is not pragmatic reliability. The convention is: 'Act as if the best-tested theory is the one to attack next.' This does not smuggle in the assumption that it will work; it only dictates where to focus critical effort."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f00600bbde5f67",
+        "kind": "revised",
+        "note": "Revised to ensure the 'strongest case' for the induction-smuggling view is fully articulated: that any action-guiding preference inevitably relies on an implicit premise that the future will resemble the past, regardless of Popper's semantic distinctions."
+      },
+      {
+        "handle": "6a6dff5b56f376b6210260a3024b5e5ea88897b277e4d65a4a2fd99616ab6457",
+        "kind": "rebutted",
+        "note": "Verisimilitude is defended as a logical relation of content (truth-content minus falsity-content) rather than a probabilistic measure. While Tichý and Miller later critiqued the formal definition, the *concept* serves Popper's non-inductive aim by comparing logical strength, not inductive support."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

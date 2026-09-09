@@ -1,0 +1,92 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule to maximize the growth of knowledge by subjecting bold conjectures to the severest possible tests; however, accepting this defense costs us the ability to claim that science progressively approaches truth in a probabilistic sense, restricting 'progress' to the elimination of error rather than the accumulation of confirmed probability.",
+    "mechanism": "The mechanism distinguishes between the logical context of justification (where induction is rejected) and the methodological context of discovery/criticism (where preferring the most testable, best-surviving theory is a rule for efficiency). By framing the preference as a decision to expose the theory most likely to be falsified next (highest empirical content), the scientist avoids assuming the future will resemble the past, instead assuming only that if the theory is false, severe testing is the fastest way to find out.",
+    "counterconditions": [
+      "If 'severity' of a test cannot be defined without assuming regularities in nature (i.e., that past experimental conditions predict future ones), the distinction collapses into hidden induction.",
+      "If the choice to act on the best-corroborated theory implies an expectation of practical success, this expectation functions identically to probabilistic belief, regardless of Popper's semantic labeling.",
+      "If the concept of 'verisimilitude' (truth-likeness) is required to explain why we prefer one unfalsified theory over another, and verisimilitude is logically undefinable for false theories, the rationale fails."
+    ],
+    "typicality": 0.85,
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_pressure",
+        "debugging_software_via_stress_tests",
+        "legal_adversarial_system_truth_seeking"
+      ],
+      "shared_structure": [
+        "Selection operates by elimination of the weak/falsified rather than confirmation of the strong/true.",
+        "The 'fittest' or 'best' candidate is defined purely by survival of severe challenges, not by intrinsic probability.",
+        "Preference for the survivor is a heuristic for finding errors faster, not a guarantee of final correctness."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of 'truth,' whereas Popperian science explicitly aims at truth-likeness.",
+        "Software stress tests assume the environment remains stable (inductive), whereas Popper insists tests must be novel and risky.",
+        "Legal systems often rely on probabilistic standards ('beyond reasonable doubt'), which Popper explicitly rejects for scientific corroboration."
+      ],
+      "transfer_claims": [
+        "Just as stress-testing software doesn't prove it is bug-free but proves it is robust against known failure modes, corroboration doesn't prove a theory true but proves it has withstood specific attempts to kill it.",
+        "Preferring the software that passed the hardest tests is a pragmatic strategy for deployment, not a mathematical proof of its reliability, mirroring Popper's pragmatic preference."
+      ],
+      "overturn_conditions": [
+        "If it is demonstrated that defining a 'severe test' logically necessitates an inductive assumption about the uniformity of nature.",
+        "If acting on a theory without any belief in its probable truth is shown to be psychologically or practically impossible for agents."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate evolutionary origin with justification; it explicitly frames the preference as a methodological rule (justification) adopted to accelerate error elimination, distinct from any descriptive claim about why scientists psychologically feel compelled to choose."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate avoids the false dichotomy by identifying the third option: preference based on 'maximizing testability' and 'error elimination speed' rather than arbitrary decree or inductive probability."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The move from 'others falsified' to 'choose this one' is defended here not as an assumption of uniformity, but as a strategic choice to bet on the hypothesis with the highest informational content, acknowledging that this bet carries no guarantee of future success."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "Severity is defined relative to the background knowledge of what would count as a fluke, not as an inductive predictor of future performance. The candidate clarifies that surviving severity indicates high testability, not reliability."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes Popper's critical rationalism from conventionalism by noting the rule is not 'arbitrary' in the sense of being unmotivated; it is motivated by the goal of rapid error detection, which is a non-conventional aim of science."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate explicitly separates 'methodological convention' (the rule to test hard) from 'pragmatic reliability' (expecting it to work). It argues the preference is for the former, rejecting the latter as an inductive smuggle."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e871c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "rebutted",
+        "note": "The argument relies on 'testability' and 'informational content' rather than a formal definition of verisimilitude. It accepts the cost that we cannot formally measure progress toward truth, only progress away from error."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f0068bbde5f67",
+        "kind": "revised",
+        "note": "Revised to explicitly construct the strongest case for the 'smuggled induction' view within the counterconditions section, ensuring the tension is fully articulated before resolving it in favor of the methodological defense."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_012"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_012"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

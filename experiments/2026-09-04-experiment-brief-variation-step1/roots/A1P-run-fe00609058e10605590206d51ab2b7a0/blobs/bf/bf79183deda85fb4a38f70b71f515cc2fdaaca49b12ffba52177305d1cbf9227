@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is defensible 'only if' we accept a radical conventionalism severed from truth/reliability creates a false dilemma. It ignores Popper's actual argument in 'Conjectures and Refutations' that preferring better-corroborated theories is defensible as a critical rational choice based on the theory's content and severity of tests passed, without needing to posit an arbitrary convention or smuggle in induction. The target misrepresents the necessary conditions for defensibility by excluding the possibility of a non-inductive, non-conventionalist justification rooted in critical discussion.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly argues that the preference for better-corroborated theories is rational because these theories have withstood severe criticism, not because of a conventional rule or inductive probability.",
+      "premise_evidence": null,
+      "successor_question": "Does the target's exclusion of Popper's critical rationalist justification (distinct from both induction and arbitrary convention) invalidate its claim that conventionalism is the sole defensible path?"
+    }
+  ]
+}

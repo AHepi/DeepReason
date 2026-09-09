@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory in action is defensible on his own terms as a non-inductive, rational volition aligned with the aim of truth (verisimilitude), provided one accepts that 'rationality' in action does not require probabilistic certainty but only the selection of the theory that has best withstood attempts at falsification, while acknowledging this stance costs us any guarantee of future success and relies on a contested, qualitative notion of verisimilitude.",
+    "mechanism": "The mechanism distinguishes between the logical context of justification (where induction is rejected) and the pragmatic context of action. It argues that preferring the most severely tested theory is not an inference that the theory is *true* or *probable*, but a methodological rule: if our goal is truth, we must act on the theory that has survived the most rigorous attempts to eliminate it. This avoids induction because it makes no claim about the future reliability of the theory based on the past; it simply states that among available options, this one is currently the least refuted and thus the best candidate for truth-likeness.",
+    "counterconditions": [
+      "If the critic demonstrates that any appeal to 'best candidate for truth' logically entails a probabilistic assumption about the uniformity of nature.",
+      "If the definition of 'verisimilitude' used cannot be coherently defined without probabilistic metrics, as argued by Tichý and Miller.",
+      "If the distinction between 'acting on' and 'believing in' a theory collapses under the pressure of high-stakes decision making where agents effectively treat corroboration as probability."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The criticism claims elimination doesn't address action in novel domains. The rebuttal is that Popper's framework explicitly addresses novel domains by demanding severe tests in *new* areas; preference is given to the theory that has survived the widest range of novel tests, not just repeated old ones. Action in a new domain is guided by the theory with the highest content that has not yet been falsified, which is the only rational choice if truth is the aim."
+      },
+      {
+        "handle": "0baaf2a78ddc87e150a4bd9a2361836bc0158509dab5b8825decd20371ff9aa2",
+        "kind": "rebutted",
+        "note": "The criticism suggests selecting for action implies induction. The rebuttal clarifies that the selection is a convention or decision rule, not an inductive inference. We choose the better-corroborated theory not because we expect it to work (induction), but because it is the only one that hasn't failed yet. To choose a falsified or less-tested theory would be irrational relative to the goal of truth, even if no guarantee of success exists."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "revised",
+        "note": "Revised to explicitly frame the 'psychological expectation' not as a justification for the theory's truth, but as a description of the scientist's state after critical discussion. The defense now emphasizes that Popper's 'rationality' is procedural (following the method) rather than substantive (having good reasons to believe the outcome)."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate accepts a qualitative, pre-formal notion of verisimilitude as sufficient for practical action, acknowledging that while Popper's formal quantitative account was flawed (per Tichý/Miller), the intuitive concept of 'closer to truth' remains a necessary regulative ideal for science that does not strictly require the failed formalization."
+      },
+      {
+        "handle": "14b061678dda46e4dcf8f89237df4b4a56508f06d9d5b8c5b1275dfe729cd712",
+        "kind": "rebutted",
+        "note": "The criticism argues Popper requires rational action to be more than psychological. The rebuttal asserts that for Popper, rational action *is* acting in accordance with the critical method. The preference is rational because it is the output of the critical process, not because it guarantees results. The 'justification' is the absence of refutation, not the presence of positive proof."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "revised",
+        "note": "Revised to concede the failure of Popper's specific formal definition of verisimilitude. The argument now rests on 'methodological verisimilitude'—the rule to prefer theories that appear to explain more and have survived more tests—without claiming this maps to a precise logical metric."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "rebutted",
+        "note": "The criticism claims the candidate misrepresents Popper by calling the act 'non-rational' or merely 'volitional'. The candidate clarifies: the act is rational *procedurally* (it follows the rules of critical rationalism) but non-rational *foundationally* (it lacks an inductive base). It is a 'rational volition'—a decision made for good reasons (survival of tests) without logical compulsion."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The criticism states evolutionary selection doesn't justify preference for action. The rebuttal integrates the evolutionary analogy: just as natural selection explains survival without predicting future fitness, corroboration explains current status without predicting future success. The 'preference' is simply the recognition of current survival status as the only available guide, making it the default rational choice in the absence of alternatives."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["evolutionary_survival_of_species", "legal_presumption_of_innocence"],
+      "shared_structure": [
+        "Survival of a filter (tests/f predators/cross-examination) does not guarantee future survival or truth.",
+        "Preference for the survivor is rational not because they are proven safe/true, but because all competitors have been eliminated.",
+        "The decision to act on the survivor is a pragmatic necessity, not a logical deduction of safety."
+      ],
+      "disanalogies": [
+        "Biological evolution has no 'aim' of truth, whereas Popperian science explicitly aims at truth.",
+        "Legal innocence is a binary status, whereas scientific corroboration is a matter of degree and severity of tests."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the species that survived the ice age to survive the next winter (without induction), we bet on the corroborated theory.",
+        "The rationality lies in the process of elimination, not in the properties of the survivor."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that 'survival' in science is randomly distributed and uncorrelated with truth-likeness.",
+        "If a non-surviving theory consistently yields better practical results than the surviving one."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

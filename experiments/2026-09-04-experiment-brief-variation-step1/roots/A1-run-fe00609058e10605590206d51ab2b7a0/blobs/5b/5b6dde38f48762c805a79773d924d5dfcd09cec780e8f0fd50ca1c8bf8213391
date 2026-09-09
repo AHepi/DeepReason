@@ -1,0 +1,62 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference that the theory is true or probable, but as a critical-rational decision rule: acting on the theory that has withstood the severest tests maximizes the exposure of error should the theory be false, thereby adhering to the methodological imperative of falsificationism even in practical application.",
+    "mechanism": "Critical-Rational Decision Rule: The agent selects the hypothesis that offers the highest 'potential falsifiability' given current evidence. By choosing the best-corroborated theory (the one surviving the toughest attempts at refutation), the agent ensures that if their action leads to failure (e.g., a bridge collapses), the resulting falsification will be most informative and severe. This converts practical action into a continuation of the testing process rather than a retreat into induction.",
+    "counterconditions": [
+      "If the chosen theory fails, the collapse must yield a clearer, more severe falsification than any alternative would have provided.",
+      "The preference must be explicitly framed as a convention for maximizing learning potential, not as a belief in future success probability.",
+      "The agent must remain willing to abandon the theory immediately upon any contrary evidence, treating the action itself as a test."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on 'verisimilitude' (truth-likeness) as a calculable metric. Instead, it relies on 'severity of test' and 'potential informativeness of failure,' which are logical properties of the test situation, not formal measures of truth content. Thus, the criticism regarding the undefinability of verisimilitude is irrelevant to this specific defense mechanism."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The candidate explicitly denies that rational preference entails an expectation of future success (probability). It redefines rationality as the commitment to the most informative possible error. Therefore, no category error occurs because the claim rejects the premise that rational action requires probabilistic confidence."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma by framing the construction of the bridge not as reliance on truth, but as the initiation of a high-stakes test. The text now clarifies that building the bridge is the ultimate 'severe test' proposed by the mechanism."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The criticism claims a conflation of criticism and reliance. The rebuttal is that in Popper's framework, 'reliance' IS a form of criticism when the reliance is conditional on the theory's ability to survive the practical application. We do not rely because we think it will hold; we rely to see if it breaks, and we choose the one most likely to reveal a break if one exists."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is defended as consistent with his postulate of conventionalism. He chooses the bold theory not because he believes it is true, but because he accepts the convention that science progresses by risking bold conjectures. His action is a performative adherence to his own methodology, not a smuggling of induction."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The candidate strictly operates within Falsificationism and Critical Rationalism. It makes no appeal to Evolutionary Epistemology or biological survival mechanisms. The 'survival' mentioned is the logical survival of a hypothesis against deductive refutation, not evolutionary fitness."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The pragmatic contradiction is resolved by shifting the goal of action from 'success' to 'information gain.' If the bridge stands, we learn nothing new (corroboration remains); if it falls, we learn decisively. The rationality lies in maximizing the potential for the latter, which resolves the tension without invoking probability."
+      },
+      {
+        "handle": "2bb824986a07c70a152db1deb50653be633a98497dc1a927ef76e718b290d85f",
+        "kind": "revised",
+        "note": "Clarified that the justification for acting is precisely that the action serves as the next necessary severe test. The analogy of evolution was removed to focus purely on the logical structure of testing via action, directly addressing the gap between preference and justification."
+      }
+    ],
+    "analogy": null,
+    "checker_specs": [],
+    "evidence_refs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}

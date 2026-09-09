@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on the analogy of 'natural selection' to justify preferring corroborated theories without induction, but it fails to address the critical disanalogy it itself identifies: the presence of a 'conscious agent' in science. In biological evolution, survival is a blind filter; in Popperian science, the scientist's *preference* for the surviving theory to *act upon* (e.g., build a bridge) is an active prediction that the future will resemble the past (the theory will not fail). By admitting the scientist 'actively chooses' based on 'demonstrated resilience,' the target smuggles in the very inductive principle it claims to avoid: the assumption that past resistance to falsification is a reliable guide for future practical success. Without this hidden inductive step, the 'conventional decision' is arbitrary and indefensible as a rational preference for action.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "The target argues that preferring a corroborated theory is a non-inductive 'conventional decision' analogous to natural selection, yet admits the scientist is a conscious agent making an active choice based on past resilience.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for the better-corroborated theory in practical action is not based on the inductive expectation that it will continue to succeed, how does Popper distinguish this 'rational gamble' from sheer irrationalism or random choice?"
+    }
+  ]
+}

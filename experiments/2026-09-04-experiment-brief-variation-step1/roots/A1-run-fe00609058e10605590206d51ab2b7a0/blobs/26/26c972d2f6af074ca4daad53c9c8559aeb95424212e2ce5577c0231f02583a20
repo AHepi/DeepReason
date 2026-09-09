@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-inductive metric for rational choice, but this collapses because Popper himself conceded that verisimilitude cannot be formally defined or calculated for real-world theories. Without a computable metric to compare the 'content' of competing theories, the preference rule becomes empty; scientists cannot determine which theory has 'higher content' without implicitly relying on inductive assumptions about the relevance of past tests to future performance, thereby smuggling induction back in under the guise of logical comparison.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper admitted that verisimilitude is not a formally definable or operationalizable concept for actual scientific practice.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude is incalculable, what non-inductive criterion does Popper offer to practically distinguish a 'better-corroborated' theory from a worse one in real-time decision making?"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target identifies a relation of 'inheritance' but fails to substantively define the 'structural vulnerability' being inherited. It asserts that Critical Conventionalism inherits vulnerability regarding 'psychological sustainability' from methodological falsificationism, yet it does not explain the mechanism of this inheritance or how the specific structural flaw transfers between the two distinct frameworks. The statement describes a dependency claim without detailing the shared mechanism or logical reduction required to make the relation substantive rather than a mere assertion of connection.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": "What is the specific structural mechanism by which the psychological sustainability issue in methodological falsificationism transfers to Critical Conventionalism?"
+    }
+  ]
+}

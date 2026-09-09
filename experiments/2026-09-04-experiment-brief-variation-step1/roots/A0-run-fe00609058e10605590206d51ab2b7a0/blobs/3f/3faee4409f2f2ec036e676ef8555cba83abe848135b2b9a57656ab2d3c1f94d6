@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's terms as a critical-rational decision to act on the theory that has withstood the most severe attempts at falsification, without assigning it higher probability; this preference smuggles in no induction because it relies on the asymmetry of falsification and a methodological commitment to truth-likeness (verisimilitude) as a regulative ideal rather than a probabilistic assessment.",
+    "mechanism": "The mechanism operates through a three-step critical filter: (1) Elimination of falsified competitors via modus tollens (non-inductive); (2) Selection of the surviving theory with the highest empirical content and severest test history as the 'best guess' for action; (3) Justification of this selection not as a prediction of future success (which would be inductive) but as the only rational alignment with the aim of science (truth), acknowledging that the preference itself remains fallible and open to future falsification.",
+    "counterconditions": [
+      "If the preferred theory is falsified in the next immediate test, the preference was rational but the outcome false, confirming the non-probabilistic nature of the choice.",
+      "If acting on the less-corroborated theory yields better practical results, Popper would argue this is a lucky accident, not a vindication of induction, as the goal is truth, not mere utility.",
+      "If the agent cannot specify the specific severe tests the preferred theory survived that the competitor did not, the preference reduces to psychological habit, violating Popper's rationality constraint."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The claim addresses novel domains by framing preference as a 'critical guess' based on structural robustness (survival of severe tests) rather than extrapolation. Action in novelty is justified by the theory's high informational content and lack of known errors, not by an assumption that the future resembles the past."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The distinction holds because Popper's 'logical justification' is negative (we know why others are wrong) while the 'psychological expectation' is replaced by a 'critical preference.' The defense is that we act on the theory that is currently least refuted, which is a logical status, not an inductive probability."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "revised",
+        "note": "Revised to clarify that 'verisimilitude' is used strictly as a qualitative, comparative regulative ideal (Theory A is closer to truth than B because B was falsified and A was not) rather than a quantifiable metric requiring probabilistic assumptions. The reliance is on the logical relation of falsification, not a calculated degree of truth."
+      },
+      {
+        "handle": "14b061678dda46e4dcf8f89237df4b4a56508f06d9d5b8c5b1275dfe729cd712",
+        "kind": "rebutted",
+        "note": "Popper's requirement for rational action is satisfied by aligning actions with the best available critical knowledge. Rationality here means 'acting in accordance with the most severely tested hypothesis,' not 'acting on a hypothesis proven likely to succeed.' The contradiction alleged assumes rationality requires probabilistic certainty, which Popper denies."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Departing from the strict formal definition of verisimilitude attacked by Tichý and Miller. This candidate adopts a naive critical realist stance where 'survival of severe tests' is pragmatically treated as a proxy for verisimilitude for the purpose of action, acknowledging the formal difficulty but rejecting it as a blocker for practical scientific rationality."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "rebutted",
+        "note": "The claim explicitly affirms the preference is rational because it aligns with the aim of finding truth. It rejects the characterization of the act as 'non-rational' or purely 'volitional' in the existentialist sense; it is a volition constrained by critical reason."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "Evolutionary selection explains the survival of the theory, but the *preference* for action is justified by the agent's critical awareness of that survival. The justification for action is the agent's rational recognition that the unrefuted theory is the only viable candidate for truth, distinct from the blind process of elimination."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate maintains the distinction: the 'inductive assumption' (nature is uniform) is rejected as a premise for truth. However, the 'methodological decision' to treat test conditions as stable is accepted as a necessary convention for falsification to occur. Preference relies on the latter (a rule of the game), not the former (a metaphysical claim)."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_014"],
+      "shared_structure": [
+        "Selection of a tool based on past failure modes of alternatives rather than predicted success rates.",
+        "Asymmetric evaluation where failure is definitive but success is provisional.",
+        "Action taken on the basis of 'least known error' rather than 'highest known reliability'."
+      ],
+      "disanalogies": [
+        "Unlike a broken bridge which is physically incapable of holding weight, a falsified theory might still be approximately true in some domains, yet is wholly rejected for action.",
+        "Tool selection often implicitly assumes uniformity of material properties (induction), whereas Popperian preference explicitly forbids assuming uniformity of nature."
+      ],
+      "transfer_claims": [
+        "Just as an engineer avoids a bridge design that collapsed under load without needing to calculate the probability of the next bridge holding, a scientist prefers a theory that hasn't failed without assigning it high probability.",
+        "The rationality of the choice derives from the severity of the test passed, analogous to a safety certification based on stress-testing rather than statistical lifespan prediction."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that avoiding falsified theories inevitably requires an inductive assumption about the stability of test conditions.",
+        "If the 'methodological decision' to treat conditions as stable is demonstrated to be logically indistinguishable from the 'inductive assumption' of uniformity."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

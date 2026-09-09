@@ -1,0 +1,92 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive 'critical preference' grounded in the logic of testing rather than probability, but accepting this costs the agent any rational assurance that the preferred theory will succeed in future applications, reducing the preference to a methodological wager without epistemic security.",
+    "mechanism": "The mechanism distinguishes between 'inductive inference' (claiming past success increases future probability) and 'critical preference' (choosing the theory that has withstood the most severe attempts at falsification as the best available target for further criticism and action). Preference is justified not because the theory is likely true, but because it is the most informative and rigorously tested survivor, making it the rational choice for a fallibilist who must act despite lacking certainty. The cost is the abandonment of the hope that rationality guarantees practical success; one acts on the best-tested theory knowing it may still fail tomorrow, as corroboration reports only on past performance, not future reliability.",
+    "counterconditions": [
+      "If corroboration is shown to logically entail a prediction of future success, the distinction collapses into induction.",
+      "If Popper cannot explain why acting on the less-corroborated theory is irrational without invoking probability, the defense fails.",
+      "If the 'cost' of no assurance renders the preference practically indistinguishable from random choice for decision-makers, the defense is inert."
+    ],
+    "typicality": 0.85,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_003",
+        "SRC_012"
+      ],
+      "shared_structure": [
+        "Selection based on survival of severe tests rather than positive confirmation.",
+        "Distinction between retrospective assessment and prospective guarantee.",
+        "Rationality defined by adherence to critical method rather than outcome optimization."
+      ],
+      "disanalogies": [
+        "Biological natural selection has no conscious agent making a 'preference,' whereas scientific action requires a deliberate choice.",
+        "Evolutionary fitness correlates with future survival in a way Popper explicitly denies for scientific corroboration.",
+        "The stakes in scientific action (e.g., bridge building) involve immediate human safety, unlike abstract evolutionary models."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the fittest organism without guaranteeing its survival, we bet on the best-corroborated theory without guaranteeing its truth.",
+        "The rationality of the bet lies in the rigor of the test history, not the odds of winning."
+      ],
+      "overturn_conditions": [
+        "If a formal link can be established between severity of test and increased logical probability of the hypothesis.",
+        "If Popper's own writings admit that 'acting on' a theory implicitly assumes uniformity of nature."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism claims the defense fails to explain why one should act. The rebuttal is that Popper's 'why' is not predictive success but methodological consistency: we act on the best-tested theory because it is the only one that has earned the right to be taken seriously through surviving criticism. To act on a less-corroborated theory would be to ignore the results of critical testing, which is irrational for a critical rationalist, even if it offers no probability boost."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The criticism alleges conflation of informational content with defensible preference. The rebuttal clarifies that the preference is defensible precisely *because* of the high informational content survived; high content means high risk of falsification. Surviving such risk makes the theory the most worthy candidate for reliance, not because it is 'safe' (probable), but because it is the most robustly examined option available. This is a qualitative, not quantitative, justification."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'false dichotomy' charge. The candidate now acknowledges that the gap between 'psychological belief' and 'conventional action' is bridged by the concept of 'rational wager.' It is not merely psychological; it is a normative rule of critical rationality: given two theories, A (well-tested) and B (poorly tested), choosing B is methodologically irresponsible, even if neither is known to be true. This avoids the dichotomy by introducing a third category: methodological responsibility."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The criticism calls the 'Principle of Uniformity' argument a straw man. The rebuttal asserts that while Popper may not use those exact words, any justification for preferring A over B for *future* action that relies on A's *past* performance implicitly assumes some relevance of the past to the future. If the past is irrelevant to the future (no uniformity), then corroboration is useless for action. Popper tries to avoid this by saying we choose the best-tested theory to *criticize* further, but when we *act* (build a bridge), we are relying on it not to fail, which smuggles in the very uniformity he rejects."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698d79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "rebutted",
+        "note": "The criticism argues that 'critical preference' is distinct from inductive prediction. The rebuttal contends that in the context of *action*, the distinction vanishes. To prefer Theory A for building a bridge is to predict it will hold. If Popper says 'I don't predict it will hold, I just prefer it,' he is engaging in semantic sophistry that does not satisfy the engineer or the agent facing real consequences. The 'rational decision' he describes functionally identical to an inductive bet, regardless of the label."
+      },
+      {
+        "handle": "270fdeb19c12b45908843bde3f158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "rebutted",
+        "note": "The criticism cites Popper's later rejection of verisimilitude definitions. The rebuttal notes that the candidate does not rely on a formal definition of verisimilitude as a measurable quantity, but on the intuitive notion that a theory that has survived more severe tests is 'closer to the truth' in a pragmatic sense sufficient for preference. Even if formal verisimilitude failed, the *comparative* judgment that A is better tested than B remains valid and sufficient for critical preference without requiring a full metaphysical account of truth-likeness."
+      },
+      {
+        "handle": "283c021802bb4232adf1e0244e99140ec8500555bce3ce33ec8dc4b9ecc2ebdc",
+        "kind": "revised",
+        "note": "Revised to fully concede the cost: the preference *is* practically inert regarding 'assurance.' The candidate now argues that this inertness is the feature, not the bug. Popper's system demands we act without assurance. The 'cost' is the acceptance of radical fallibilism. We build the bridge on the best-tested theory knowing it might collapse, because waiting for assurance is impossible. The defense survives by embracing the anxiety of uncertainty rather than resolving it."
+      },
+      {
+        "handle": "2b2b9f8685410277445fc083713971a8c5bf992ab5fbf0a1093b143dcfb45882",
+        "kind": "rebutted",
+        "note": "The criticism claims the defense mischaracterizes the preference as a 'fiction.' The rebuttal clarifies that the preference is not a fiction but a 'regulative ideal.' It is a real, rational commitment to the method of criticism. It is not 'merely' procedural; the procedure *constitutes* the rationality. To call it a fiction implies it lacks force, but for Popper, the force of rationality comes entirely from adherence to the critical method, not from external guarantees."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_003",
+      "SRC_012"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_012"
+      ],
+      "search_signal": "productive"
+    },
+    "checker_specs": []
+  }
+}

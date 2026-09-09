@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to establish a substantive relation because it conflates 'integration' with 'functional alignment' without demonstrating the required shared mechanism. The problem demands a specific kind of relation (e.g., dependence, reduction) where the endpoints are linked by a defined process. The target asserts that the 'decision postulate' acts as an interface for an 'evolutionary filter,' but this is merely a metaphorical description of two parallel processes (logical decision-making and biological/cultural survival) happening to yield similar results. It does not show that the logical structure of the decision postulate *is* the mechanism of survival, nor that one reduces to the other. Consequently, the claim that they are 'integrated' is unsupported; they remain distinct endpoints (logic vs. survival) that are merely compatible, which contradicts the stronger claim of integration via a shared mechanism. If the decision postulate were removed, the evolutionary filter (survival of the fittest methodology) could theoretically still operate on non-rational heuristics, proving the endpoints are not integrated as claimed.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

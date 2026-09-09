@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the dilemma dissolves via 'convention' fails to address the specific cost demanded by the problem: whether this move smuggles induction back in through the back door of pragmatic rationality. By admitting the cost is that science offers 'no external guarantee' of success, the target implicitly concedes that the preference for corroborated theories is irrational from a truth-seeking perspective unless one assumes (inductively) that following conventions leads to better outcomes than not doing so. Popper's own requirement to 'choose which theory to act on' implies a goal (successful action/truth approximation); if the convention does not serve that goal better than random choice, the preference is indefensible even as a convention. The target asserts the convention avoids induction but does not demonstrate how the *preference* itself (choosing A over B) is justified without an implicit inductive bet that A is more likely to work than B, which is precisely the induction Popper rejected.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "A convention to prefer theory A over theory B is only defensible if there is a reason to believe A is preferable to B; without an inductive link between corroboration and future performance, no such reason exists, making the 'decision' arbitrary rather than rational.",
+      "premise_evidence": null,
+      "successor_question": "If the decision to prefer corroborated theories is purely conventional and lacks any inductive basis, on what grounds can a scientist criticize a colleague who conventionally prefers the *least* corroborated theory?"
+    }
+  ]
+}

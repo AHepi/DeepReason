@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim that preference 'inevitably smuggles induction' is too absolute because it ignores Popper's explicit evolutionary and pragmatic justifications (e.g., verisimilitude or the methodological rule to prefer the most testable theory) which do not rely on the inductive premise that 'past performance indicates future reliability.' Since the problem asks for the strongest case for *each* answer before deciding, asserting inevitability without addressing these non-inductive defenses fails to make the strongest case for the negative view as required by the prompt structure.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

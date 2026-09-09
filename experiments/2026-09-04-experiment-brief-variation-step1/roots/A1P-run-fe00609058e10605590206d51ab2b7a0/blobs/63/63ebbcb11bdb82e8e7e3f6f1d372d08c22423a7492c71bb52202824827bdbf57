@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation because it defines the connection between 'Critical Conventionalism' and 'methodological falsificationism' as a 'shared mechanism' of treating preferences as arbitrary decrees, which is a descriptive similarity of outcome rather than a structural relation like dependence, reduction, or integration. Furthermore, the 'REFUTED IF' condition focuses on the psychological feasibility or justificatory requirements of the convention itself, rather than identifying a specific endpoint failure that would negate the proposed (but arguably non-existent) structural link, thereby violating the requirement to name a relation kind and state what specifically refutes that link.",
+      "premise": "The problem requires proposing a substantive relation (e.g., dependence, reduction) and stating what refutes it; describing a shared attitude without establishing a structural link like 'shared mechanism' in the ontological sense, and providing refutation conditions for the attitude rather than the link, constitutes a failure to meet the prompt's relational criteria.",
+      "premise_evidence": [
+        {
+          "block": "02361cabd962",
+          "quote": "propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF"
+        },
+        {
+          "block": "src_001_block",
+          "quote": "depends on a shared mechanism of 'Constitutive Rule Adoption' ... where both treat the preference ... as an arbitrary decree ... this relation is REFUTED IF the convention itself requires an inductive justification"
+        }
+      ],
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "counterexample": null,
+      "successor_question": "Can you reformulate the relation to explicitly demonstrate a structural dependency or integration mechanism between the two theories, rather than just a parallel stance on theory preference, and specify a condition that would break that specific structural link?"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's central claim that Popper 'smuggles in' an implicit inductive principle is a mischaracterization of Popper's explicit solution to the problem of action. Popper does not rely on a hidden premise of uniformity; rather, he openly advocates for a methodological rule: when forced to act, one should prefer the best-tested theory because it has withstood the most severe attempts at falsification, not because it is probable. The target asserts this creates an 'inconsistency' or a 'gap' requiring induction, but fails to engage with Popper's distinction between theoretical justification (which remains non-inductive) and practical decision rules (which are conventions). By framing the pragmatic preference as a logical contradiction rather than a deliberate methodological choice, the target attacks a straw man of Popper's position that ignores his specific defense against the charge of crypto-induction.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Popper explicitly addresses the problem of action by proposing a methodological rule to prefer well-corroborated theories without assigning them higher probability, thereby avoiding the need for any implicit inductive principle.",
+      "premise_evidence": null,
+      "successor_question": "Does the target's assertion of 'inconsistency' hold if Popper's preference for action is interpreted strictly as a non-cognitive methodological convention rather than a logical inference about future truth?"
+    }
+  ]
+}

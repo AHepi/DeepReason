@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims the preference is defensible 'only if' we accept a propensity interpretation, which is historically and textually false. Popper explicitly defended the preference for better-corroborated theories in 'The Logic of Scientific Discovery' (1934/1959) and 'Conjectures and Refutations' (1963) based on critical rationalism and the methodological rule of choosing the theory that has withstood the severest tests, decades before he fully developed his propensity interpretation of probability in the 1980s. By making the propensity interpretation a necessary condition ('only if'), the target incorrectly implies that Popper's earlier defense of this preference was indefensible on his own terms or required a metaphysical commitment he had not yet made. The preference is defensible on Popper's terms as a non-inductive methodological decision to aim at truth, without needing to reify corroboration as an objective physical propensity.",
+      "premise": "Popper defended preferring better-corroborated theories prior to and independently of his propensity interpretation of probability.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "successor_question": "If the propensity interpretation is not the sole basis for the preference, what specific methodological rule in Popper's early work justifies acting on the better-corroborated theory without smuggling in induction?"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's reliance on an evolutionary analogy fails to address the specific Popperian dilemma of 'acting' on a theory. While the analogy explains why a theory survives (selection), it does not justify the pragmatic leap that the 'fittest' theory is the best guide for future action in novel domains without smuggling in induction. Popper explicitly rejected the idea that survival implies future success; by arguing we should act on the corroborated theory because it is 'fittest,' the target implicitly assumes that past survival correlates with future reliability, which is the very inductive principle Popper sought to eliminate. The target asserts this is a 'pragmatic necessity' but offers no non-inductive bridge between 'not yet falsified' and 'preferable for future prediction,' leaving the preference undefended on Popper's own strict terms.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper rejected the notion that past survival of a theory provides any logical basis for expecting its future success or truth, yet acting on a theory requires exactly such an expectation.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration is merely a record of past survival and not an indicator of future reliability, what non-inductive justification can Popper offer for preferring one unfalsified theory over another when making high-stakes predictions?"
+    }
+  ]
+}

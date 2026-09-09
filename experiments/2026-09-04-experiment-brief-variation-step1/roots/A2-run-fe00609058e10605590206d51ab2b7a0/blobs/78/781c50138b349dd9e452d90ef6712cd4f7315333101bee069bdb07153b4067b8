@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms not as an inductive prediction of future success, but as a methodological rule for maximizing 'verisimilitude' (truth-likeness) and minimizing known error, accepting that this offers no guarantee against future falsification but represents the most rational non-probabilistic stance available.",
+    "mechanism": "The argument distinguishes between 'justification' (which requires induction) and 'critical preference' (which relies on the logical asymmetry of falsification). By treating corroboration as a report of past performance rather than a probability score, the scientist chooses the theory that has withstood the severest tests because it contains more empirical content and has survived attempts to refute it. This choice is a bet on truth-likeness, not a calculation of future frequency. The cost of this position is the acceptance of 'rational ignorance': we act on the best theory knowing it may be false tomorrow, without the comfort of assigning it a high probability of being true.",
+    "counterconditions": [
+      "If preferring Theory A over B based on past tests logically entails assuming the future will resemble the past, then the distinction collapses into induction.",
+      "If Popper's formal definition of verisimilitude is logically incoherent (as argued by Tichý and Miller), then it cannot serve as the basis for rational preference.",
+      "If acting on a theory inherently implies an expectation of its future reliability, then any claim of avoiding induction is merely semantic."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism assumes that preferring A over B requires assuming the *conditions* making A superior will persist. Popper's rebuttal is that we prefer A not because conditions will persist, but because A has survived tests that B has not (or survived less severely). We choose the theory with higher informational content that hasn't been refuted yet; if conditions change and A fails, we learn something new. The preference is about current status, not future stability."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "departure_declared",
+        "note": "I declare a departure from relying solely on Popper's failed *formal* logical definition of verisimilitude. Instead, I rely on the *methodological* intuition of verisimilitude as a regulative ideal, which Popper maintained even after the formal difficulties were exposed. The defense holds if verisimilitude is treated as a guiding metaphor for 'closer to truth' rather than a strictly defined logical metric."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "Preferring a theory for action does not assume it will continue to work; it assumes it is the *best current guess* at the truth. Action is inevitable; doing nothing is also an action. Choosing the unrefuted, highly tested theory is the only move that respects the logical force of falsification. To demand a guarantee of future performance is to demand induction, which Popper rejects as impossible. The defense is that this is the *most rational* choice in the absence of induction, not a *guaranteed* one."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The criterion 'least error-prone known option' does not assign a subjective probability. It ranks theories by their logical content and survival record. Assigning a 'higher subjective probability' is a psychological description of the scientist's feeling, not the logical structure of Popper's argument. Popper explicitly denies that corroboration increases probability; he argues it increases our willingness to rely on the theory for critical discussion and further testing."
+      },
+      {
+        "handle": "4cbbab057ec51a122476741bd3c2ff4172e6fa0617a24361597807f86f8c8cc7",
+        "kind": "revised",
+        "note": "Revised to clarify that Popper's solution is not just a 'methodological rule' but a specific type of rule: a rule of *critical preference* that explicitly forbids treating the rule as an inductive principle. The revision emphasizes that the rule is provisional and always open to revision upon the next falsification, distinguishing it from pragmatic induction which seeks stable rules."
+      },
+      {
+        "handle": "68d9af4a435acc1cd4234dc084ba218e221621e23b6343e1c10f7f2d559a8ebd",
+        "kind": "rebutted",
+        "note": "Action does not imply a belief in future success; it implies a decision to test the theory in practice. For Popper, acting on a theory is the ultimate form of testing it. We prefer the better-corroborated theory for action precisely because it offers the most severe potential for future falsification (due to its high content), thereby advancing knowledge fastest if it survives, or teaching us the most if it fails."
+      },
+      {
+        "handle": "6adc6f235071652cc2478de1b6b0f052155e8bf3e3db062aaa609a806ed1a6c6",
+        "kind": "rebutted",
+        "note": "The evolutionary explanation is indeed insufficient for the *normative* question. However, Popper's own terms include the norm of 'rationality' defined as openness to criticism and preference for theories with greater empirical content. The defense rests on this epistemic norm, not biological evolution. The preference is defensible because it aligns with the goal of finding truth (verisimilitude), which is a core normative commitment in Popper's philosophy."
+      },
+      {
+        "handle": "77efe1d1a8b9cff333c677b7a94b08da082183a46242adc1917652b7c1a47798",
+        "kind": "rebutted",
+        "note": "When multiple theories survive, Popper prefers the one with greater empirical content (more precise, more risky predictions). Corroboration is not just survival; it is survival of severe tests. If two theories survive, the one that stuck its neck out further and wasn't cut off is preferred. This breaks the tie without invoking induction, relying instead on the logical measure of content."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

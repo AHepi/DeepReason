@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) to justify preferring better-corroborated theories without induction. However, Popper's own formal attempt to define verisimilitude failed because it logically requires comparing the truth-content and falsity-content of theories, which necessitates inductive assumptions about the structure of truth and the likelihood that a theory surviving severe tests is closer to the truth than a falsified one. By invoking verisimilitude as the grounding mechanism, the target smuggles in the very inductive logic Popper sought to reject, failing to provide a strictly non-inductive justification.",
+      "premise": "Popper's concept of verisimilitude cannot be formally defined or operationalized without relying on inductive assumptions about the relationship between surviving tests and proximity to truth.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "counterexample": null,
+      "successor_question": "If verisimilitude is rejected as an inductive concept, what specific non-inductive principle allows a Popperian to prefer one unfalsified theory over another when both have survived the same tests?"
+    }
+  ]
+}

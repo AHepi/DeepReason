@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim that acting on a theory 'necessarily assumes the uniformity of nature' conflates Popper's specific definition of induction (assigning logical probability based on past instances) with the pragmatic necessity of making a choice. Popper's defense relies on the distinction between theoretical justification (which requires induction) and critical preference (which relies on the severity of tests survived). The target fails to engage with Popper's argument that one can prefer a better-corroborated theory as the most 'testable' or 'informative' without believing it is more 'probable' to be true, thus missing the nuance of whether this preference 'smuggles back' induction in the specific sense Popper rejected.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": "Can a decision rule be formulated that selects the best-corroborated theory solely on the basis of its informational content or falsifiability, without invoking an inductive assumption about future performance?"
+    }
+  ]
+}

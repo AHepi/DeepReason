@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that accepting this view costs 'any guarantee of future success' mischaracterizes the stakes of the problem; the core issue is not the lack of a guarantee (which Popper admits) but whether the *preference itself* constitutes a covert inductive inference. By framing the choice as a 'bold conjecture' based on 'informational content,' the target fails to explain why past severity of tests provides a rational basis for preferring one conjecture over another in the absence of an inductive principle linking past performance to future utility, thereby smuggling in induction under the guise of methodological rule.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "A rational preference for action requires a link between past test results and future expectations that cannot be established by 'informational content' alone without implicitly assuming the uniformity of nature.",
+      "premise_evidence": null,
+      "successor_question": "If the preference is merely a non-inductive guess, on what grounds does Popper argue it is 'rational' or 'defensible' rather than arbitrary?"
+    }
+  ]
+}

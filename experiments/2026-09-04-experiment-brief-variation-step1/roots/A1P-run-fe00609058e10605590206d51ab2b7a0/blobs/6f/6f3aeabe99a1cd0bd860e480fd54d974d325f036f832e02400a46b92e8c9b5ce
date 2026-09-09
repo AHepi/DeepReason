@@ -1,0 +1,119 @@
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 1 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## open-criticisms
+OPEN CRITICISMS ON THIS PROBLEM (8 of 30 shown, by handle) -- these are part of what your candidate must answer, not advice.
+Every candidate you submit must DISCHARGE each handle below, one of:
+  - revised -- say WHAT changed and WHERE in the candidate
+  - rebutted -- say why the criticism fails. Your rebuttal enters the record as an ordinary claim and can be attacked like any other
+  - departure_declared -- say what you are breaking with. Declaring costs you nothing; nothing scores a departure
+  [0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7] against 8b7a268bae2fd1c2286a3080f5f60e5b45a41a555030e0c80f3b13d519a43ce3
+      CLAIM: The target commits a category error by conflating the evolutionary origin of a belief with its rational justification. While evolutionary epistemology may explain why scientists *do* prefer corroborated theories (a descriptive claim), the p
+      CITED SPAN: (none quoted)
+  [1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77] against 02361cabd962cb02d508d60735bb11818a21e767c1fb66646f76e51cc9805bf9
+      CLAIM: The target's claim that the preference is defensible ONLY via 'arbitrary decree' creates a false dichotomy by ignoring Popper's explicit argument for the non-inductive rationality of preferring better-corroborated theories based on their hi
+      CITED SPAN: (none quoted)
+  [1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177] against 8894e8a94315eb8211da75e68aa0fbf10e3882969b719481670d8a0c80da99c5
+      CLAIM: The target's claim that preferring the 'only standing candidate' avoids induction fails because the move from 'others are falsified' to 'choose this one' implicitly assumes the uniformity of nature (that future tests will resemble past ones
+      CITED SPAN: (none quoted)
+  [2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006] against 596171fca475e9f8ad46a117cf1455d9df3c0c86bdcda6be6d57099d1933f81f
+      CLAIM: The 'negative justification' fails because Popper's own criterion for preferring one unfalsified theory over another relies on 'severity of tests,' which implicitly assumes that surviving severe tests is a reliable indicator of future perfo
+      CITED SPAN: (none quoted)
+  [2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce] against 088a63a65bb31877757e27fb34c0c13c26afc521445a0c2c4b4ea77202765449
+      CLAIM: The target's defense relies on the convention being 'arbitrary though useful,' but this fails Popper's own criterion for demarcation. Popper explicitly distinguished his methodological rules from conventionalism (like Poincaré's) by arguing
+      CITED SPAN: (none quoted)
+  [31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74] against 088a63a65bb31877757e27fb34c0c13c26afc521445a0c2c4b4ea77202765449
+      CLAIM: The target's defense fails because it conflates 'methodological convention' with 'pragmatic reliability,' thereby smuggling in the very inductive assumption Popper rejected. The prompt asks if the preference for better-corroborated theories
+      CITED SPAN: (none quoted)
+  [463822f91af6cd697ce98d1e871c85c73592ea578589e3038e5d345dada5f6d1] against 9d99a48dc5f61f86a5b414a8dd479f62501994a0c5e8bc9ca1625d52e5681997
+      CLAIM: The target's defense collapses into the very induction it seeks to avoid by relying on 'verisimilitude' (truth-likeness) as the rational basis for preference. Popper explicitly acknowledged that verisimilitude cannot be formally defined or
+      CITED SPAN: (none quoted)
+  [48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f0068bbde5f67] against f78787bd7e7d6bceee833a27e7daa6b1d048b5a86d7fd479d7658a8eda84ee22
+      CLAIM: The target fails to answer the prompt because it does not make the strongest case for the view that Popper's preference smuggles in induction, nor does it resolve the conflict between the two cases as requested. Specifically, its 'binary' r
+      CITED SPAN: (none quoted)
+
+## school-stance
+SCHOOL STANCE (weight 0.40): seek the covering principle
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural) — each entry is its CLAIM, distilled; request an alias through context_request to read that artifact whole:
+- 30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81: {"school_policy": {"school": "school-2", "stance": "unifier"}}
+- f78787bd7e7d6bceee833a27e7daa6b1d048b5a86d7fd479d7658a8eda84ee22: The preference for better-corroborated theories is defensible on Popper's terms as a 'Risk-Minimization Heuristic' that operates purely logically: since falsifi …[clipped; request this alias for the whole text]
+- 63d155a281f725d03c70b10a442fc068795c4260399d971402ed7cb3e889b149: The preference unavoidably smuggles induction back in, rendering Popper's system pragmatically inconsistent: the very act of 'preferring' one unfalsified theory …[clipped; request this alias for the whole text]
+- 8b7a268bae2fd1c2286a3080f5f60e5b45a41a555030e0c80f3b13d519a43ce3: The dilemma dissolves if we view scientific preference as an evolutionary selection mechanism where 'rationality' is replaced by 'survival fitness' of ideas, re …[clipped; request this alias for the whole text]
+- 02361cabd962cb02d508d60735bb11818a21e767c1fb66646f76e51cc9805bf9: The preference is defensible only if we accept a 'Critical Conventionalism' where the rule to prefer corroborated theories is a self-imposed, arbitrary decree o …[clipped; request this alias for the whole text]
+- 8463b28e17ca99064ab3befddb09d5187bbd506b8242b4f3a4f76209270e9cb5: Popper's preference is defensible through 'Severe Testing' as a proxy for informational content: we prefer the theory that has survived the most improbable test …[clipped; request this alias for the whole text]
+
+## live-neighbourhood
+LIVE NEIGHBOURHOOD (accepted and still standing — shown whole because these are the ones to build on or beat):
+- e05373652830fcd4277b54cd9b7cb5efee2f23269834058fcc2bbd3db6c20d73: {"analogy":null,"claim":"The preference is indefensible on Popper's strict logical terms and represents a fatal inconsistency; however, it is 'saved' only by acknowledging that Popper was secretly a crypto-inductivist who relied on an unstated metaphysical belief in the reality of laws.","counterconditions":[{"case":"If Popper can be shown to have explicitly rejected such metaphysical commitments.","checker_spec":null,"eval":"observation"},{"case":"If a non-realist interpretation of 'corroboration' can sustain the preference.","checker_spec":null,"eval":"observation"},{"case":"If the 'crypto-inductivism' charge is historically inaccurate regarding Popper's intent.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Metaphysical Realism Rescue. Popper's system only functions if one accepts a hidden premise: that there are real, immutable laws of nature that theories approximate. Without this realist metaphysics, the preference for corroborated theories is indeed irrational. The 'cost' is abandoning Popper's claim to have solved Hume's problem purely logically.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+- 3271f9aefc2462feee1422ca7494cef053d088b0dd021a4f84ec1056e5880d09: The 'Critical Conventionalism' of foundation 02361cab... inherits its structural vulnerability from the broader 'methodological falsificationism' defined in 088a63a6..., specifically regarding the psychological sustainability of the convention. This relation is REFUTED IF scientists can maintain the stance of following a groundless rule without believing it yields truth, thereby decoupling the psychological countercondition from the logical arbitrariness of the decree.
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates. EVERY candidate must carry a `discharges` entry for EVERY handle listed under OPEN CRITICISMS above. A submission missing any of them is returned to you once with the open list, and then accepted with the gap recorded.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM question-ba75796c3facc7a3d0d448d6eaa09a2e
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.
+
+REFERENCE MENU -- /candidates/*/optional_refs/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (20 legal values)
+  [0] OMIT -- leave "optional_refs" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+  [18] SRC_018
+  [19] SRC_019
+  [20] SRC_020
+You may answer with the handle itself or with its [index].
+
+REFERENCE MENU -- /candidates/*/neighbours/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (20 legal values)
+  [0] OMIT -- leave "neighbours" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+  [18] SRC_018
+  [19] SRC_019
+  [20] SRC_020
+You may answer with the handle itself or with its [index].

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference costs only 'assurance of truth-likeness' understates the actual cost: it renders the preference practically inert for decision-making. By explicitly denying that corroboration predicts future success or probability (as the mechanism states: 'refusing to assign any weight to the future reliability'), the target admits the preference offers no rational basis to expect better outcomes than random guessing. If acting on Theory A over Theory B provides no expectation of superior results, the 'preference' is merely a ritualistic adherence to past test severity without pragmatic justification, failing to answer why a scientist should prefer it when stakes involve real-world consequences.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "A rational preference for action must provide some expectation of improved outcomes compared to alternatives; otherwise, it is not a guide for action but an arbitrary rule.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration implies no probability of future success, what non-inductive principle justifies betting one's life on a well-corroborated theory rather than a poorly tested one?"
+    }
+  ]
+}

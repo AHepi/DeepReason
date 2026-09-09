@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories in practical action is defensible on his own terms not as an inductive inference of future truth, but as a non-inductive 'conventionalist decision' to adopt the theory that has withstood the most severe attempts at falsification, thereby maximizing the informational content and testability of our current knowledge base while acknowledging that this preference offers no guarantee of success.",
+    "mechanism": "Severity-Based Conventionalism: The mechanism distinguishes between the logical status of corroboration (a report of past performance) and the pragmatic rule of action (a decision to prefer the theory that exposes itself most boldly to refutation). By choosing the severely tested theory, the agent maximizes the potential for learning (if the theory fails) or retains the highest content statement (if it survives), without assigning it a higher probability of being true.",
+    "counterconditions": [
+      "If the agent assigns a numerical probability greater than 0.5 to the corroborated theory based solely on its past survival.",
+      "If the preference is justified by an assumption that nature is uniform or that the future will resemble the past.",
+      "If the defense relies on 'verisimilitude' (truth-likeness) as a calculable metric rather than a regulative ideal.",
+      "If the distinction between 'acting on' a theory and 'believing' a theory collapses into an implicit inductive warrant."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on 'verisimilitude' as a formal metric or calculation. Instead, it frames the preference as a 'conventionalist decision' based on 'severity' and 'informational content,' which Popper explicitly allowed as a non-inductive basis for action (e.g., in 'The Logic of Scientific Discovery' regarding the acceptance of basic statements)."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The claim does not state that rational preference 'logically entails' an expectation of future success. It argues that the preference is a pragmatic rule to maximize testability and content, explicitly denying that it provides a logical guarantee or probabilistic expectation of the theory's future truth."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma by framing the choice of a bridge-building theory not as a belief in its safety, but as the selection of the hypothesis that has survived the most rigorous stress-tests, making it the most informative starting point for further critical scrutiny should the bridge fail."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes 'willingness to criticize' from 'practical reliance' by arguing that practical reliance *is* the willingness to stake resources on the theory that offers the best opportunity for falsification (highest severity), thus aligning practical action with the core falsificationist goal rather than conflating them."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is defended as consistent with his 'conventionalist' stance: he chooses the better-corroborated theory not because it is 'probably true,' but because it represents the boldest conjecture that has not yet been knocked down, which is the only rational stance for a critical rationalist."
+      },
+      {
+        "handle": "2116bf4d6b856c4733930a702b792937dca2166147675dc886115c8804a7b37a",
+        "kind": "revised",
+        "note": "Clarified that 'Severity Maximization' does not separate preference from induction by promising success, but by redefining the goal of action from 'achieving truth' to 'maximizing the growth of knowledge through error elimination,' even in practical contexts like bridge building."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The argument relies strictly on Popper's own concepts of 'severity,' 'corroboration,' and 'conventionalist decision' found in his primary works, avoiding any substitution with Evolutionary Epistemology or external frameworks."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The pragmatic contradiction is resolved by asserting that acting on a theory because it is 'better tested' is not an inductive leap to 'it will work,' but a strategic choice to use the theory that has proven most resilient to criticism, acknowledging that it may still fail tomorrow."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "courtroom_verdict_logic",
+        "chess_opening_selection"
+      ],
+      "shared_structure": [
+        "Selection based on past resistance to attack rather than prediction of future invincibility.",
+        "Distinction between 'best available option' and 'guaranteed winner'.",
+        "Procedural rationality vs. outcome certainty."
+      ],
+      "disanalogies": [
+        "In chess, openings are chosen partly for statistical win rates (inductive), whereas Popperian choice explicitly rejects statistical probability.",
+        "A courtroom verdict aims at finality/truth, while Popperian science aims at perpetual tentativeness."
+      ],
+      "transfer_claims": [
+        "Just as a lawyer prefers a witness who has survived cross-examination without assuming they will never lie, a scientist prefers a theory that has survived tests without assuming it is true.",
+        "The rationality lies in the rigor of the testing process endured, not in the accumulation of positive instances."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that 'surviving tests' logically increases the probability of future survival in a way that cannot be dismissed as mere convention.",
+        "If practical action inherently requires a belief in uniformity that cannot be bracketed as a mere decision."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

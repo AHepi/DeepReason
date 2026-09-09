@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future truth, but as a non-inductive, methodological rule of 'rational choice' grounded in the severity of past tests; however, accepting this defense costs the agent any objective guarantee that the preferred theory will succeed in practical application (e.g., bridge-building), reducing the preference to a critical convention rather than a logical entitlement to safety.",
+    "mechanism": "The mechanism distinguishes between 'logical probability' (which Popper rejects as inductive) and 'corroboration' (a historical report of test severity). The preference is justified via a 'decision-theoretic' move: since we must act, and we cannot know the future, the only rational basis for choice is the theory that has withstood the most severe attempts at falsification. This is not an induction that the future will resemble the past, but a methodological commitment to learn from errors. The 'cost' is acknowledging that this preference offers no probabilistic assurance of success, leaving the agent exposed to unknown falsehoods despite rational choice.",
+    "counterconditions": [
+      "If corroboration is merely a historical report with no bearing on future performance, then preferring it for action is indistinguishable from irrational habit.",
+      "If Popper admits scientists 'prefer' better-corroborated theories for action, he implicitly accepts a principle of uniformity of nature, contradicting his rejection of induction.",
+      "If the preference is purely conventional, then Popper cannot criticize those who choose less corroborated theories on aesthetic or pragmatic grounds."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'verisimilitude' (truth-likeness) with 'corroboration'. My claim explicitly avoids verisimilitude as a metric, relying instead on Popper's specific definition of corroboration as a report of test severity, which Popper maintained was definable even if verisimilitude was not."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The claim does not conflate logical probability with practical preference; it explicitly separates them. It argues that rational preference is a 'decision' based on critical history, not a logical entailment of future success, thereby avoiding the category error alleged."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised the 'mechanism' section to explicitly address the 'acting on' dilemma by framing the preference as a 'decision-theoretic move' necessitated by the obligation to act, rather than merely a testing strategy."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The rebuttal clarifies that 'willingness to criticize' is the basis for the 'practical reliance' only in the sense that we rely on the theory least likely to be known-false. It does not conflate the two but posits the former as the only rational ground for the latter in the absence of induction."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "The claim accepts that the preference is a 'conventional decision postulate' but argues this does not make it arbitrary; it is constrained by the logic of situational analysis and the aim of error elimination, resolving the tension regarding Popper's personal behavior."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The argument strictly adheres to Popper's falsificationist framework (severity of tests) and does not invoke Evolutionary Epistemology or Campbell's selectionism, staying within the requested 'Popper's own terms'."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The 'pragmatic contradiction' is resolved by denying that acting on the best-corroborated theory implies an expectation of success derived from the past. Instead, it is an acceptance of risk managed by the best available critical information, which is consistent with rejecting induction."
+      },
+      {
+        "handle": "2bb824986a07c70a152db1deb50653be633a98497dc1a927ef76e718b290d85f",
+        "kind": "revised",
+        "note": "Added explicit language in the 'claim' regarding the 'cost' of this view: the lack of justification for why acting on the theory ensures survival/success, directly addressing the failure to resolve the tension regarding *action*."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "naval_navigation_star_fixes"
+      ],
+      "shared_structure": [
+        "Agent must navigate without knowing the true map.",
+        "Past fixes (tests) do not guarantee the ship hasn't drifted (future falsehood).",
+        "Rational choice is to steer by the most recently verified fix, not because it ensures safety, but because ignoring it is methodologically suicidal."
+      ],
+      "disanalogies": [
+        "Navigation assumes a stable physical environment (uniformity), whereas Popper denies uniformity in theoretical science.",
+        "A star fix is a positive confirmation of location, whereas corroboration is merely the absence of falsification."
+      ],
+      "transfer_claims": [
+        "Just as a navigator rationally chooses the latest fix despite no guarantee of safety, a scientist rationally chooses the best-corroborated theory despite no guarantee of truth.",
+        "The rationality lies in the procedure of using the best critical data, not in the outcome."
+      ],
+      "overturn_conditions": [
+        "If navigation required a guarantee of safety to be rational, then steering by stars would be irrational.",
+        "If the star fix logically entailed the ship's future position, the analogy would collapse into induction."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

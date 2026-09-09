@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's own terms not as an inductive inference that the theory is true or probable, but as a critical-rational decision to act on the theory that has withstood the most severe attempts at falsification, thereby minimizing the risk of known error while maximizing the content of potential truth; this preference smuggles in no induction because it relies on the asymmetry between verification (impossible) and falsification (possible), treating corroboration as a report of past performance rather than a predictor of future success, though accepting this costs us the comfort of believing our actions are logically guaranteed to succeed.",
+    "mechanism": "Asymmetric Risk Management via Severe Testing: The mechanism selects the theory that has survived the most stringent tests not because survival implies truth (induction), but because the alternative theories have been positively shown to be false in specific domains. Acting on the unrefuted theory is the only course consistent with the logical prohibition against acting on known falsehoods. The 'preference' is a methodological rule for error avoidance, not an epistemic claim about probability.",
+    "counterconditions": [
+      "If corroboration is interpreted as increasing the logical probability of the theory, the defense collapses into the induction Popper rejected.",
+      "If the agent requires a guarantee of future success rather than a strategy of error minimization, Popper's framework offers no satisfaction.",
+      "If 'verisimilitude' (truth-likeness) is invoked as a measurable quantity to justify preference, the argument fails due to Popper's own later concessions on its formal undefinability."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on 'verisimilitude' as a calculated metric. Instead, it grounds preference in the negative knowledge of falsified competitors (error elimination), which remains valid within Popper's formal constraints."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The rebuttal clarifies that 'expectation of future success' is not a logical entailment of corroboration but a pragmatic hope based on the absence of known errors. The category error charge is avoided by strictly separating the logical status (no probability increase) from the practical decision rule (act on the unrefuted)."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly distinguish 'testing' from 'acting' by framing action as the application of the 'principle of error elimination.' We act on the better-corroborated theory because acting on a falsified one is irrational, not because the unrefuted one is proven safe."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The candidate addresses the 'building bridges' dilemma by asserting that engineering safety relies on eliminating known failure modes (falsified theories) rather than assuming the remaining theory is infallible. This is consistent with Popper's fallibilism."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is defended as consistent with his system if viewed as a 'conventional decision' to prioritize error avoidance. It is not a contradiction but an application of his normative methodology for rational action under uncertainty."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The argument strictly adheres to falsificationism and does not substitute Evolutionary Epistemology. It uses the logic of situational analysis (choosing the best available option among flawed ones) rather than biological survival mechanisms."
+      },
+      {
+        "handle": "3315f618e758449a5ec8d23e0181b710f5cc00355fe1078c633402e3c7df78fc",
+        "kind": "rebutted",
+        "note": "Similar to the first discharge, this candidate rejects verisimilitude as a justification. The defense rests solely on the comparative status of theories regarding falsification, not on their proximity to truth."
+      },
+      {
+        "handle": "422c05f671684a2e0cc88e3f64a4478400fd568dd9385f2f08bf8a4c1da0efb1",
+        "kind": "rebutted",
+        "note": "The distinction between 'survival' and 'rational preference' is maintained by defining rational preference as the choice to avoid known errors. The mechanism explains *why* we prefer (to avoid error) without claiming the preferred theory is biologically destined to survive."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "naval_navigation_through_known_reefs"
+      ],
+      "shared_structure": [
+        "Agent must choose a path through a field of hazards.",
+        "Some paths are known to lead to disaster (falsified theories).",
+        "One path has not yet led to disaster despite severe testing (corroborated theory).",
+        "Choosing the tested path is not a guarantee of safety, but the only rational choice given the known dangers of alternatives."
+      ],
+      "disanalogies": [
+        "In navigation, charts may eventually become complete; in science, falsification is infinite and charts are never complete.",
+        "A shipwreck is immediate and total; a scientific error may be partial or corrigible during the process."
+      ],
+      "transfer_claims": [
+        "Just as a captain avoids known reefs without claiming the open water is free of unknown dangers, a scientist prefers corroborated theories without claiming they are probably true.",
+        "The rationality of the choice derives from the avoidance of known negatives, not the affirmation of positives."
+      ],
+      "overturn_conditions": [
+        "If it were shown that the 'open water' (corroborated theory) contains hidden reefs that are systematically more dangerous than the known ones, the heuristic would fail.",
+        "If the goal shifted from 'safe passage' to 'guaranteed arrival,' the analogy would break down as Popper offers no guarantees."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

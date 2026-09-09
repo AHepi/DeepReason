@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's own terms not as an inductive inference of future truth, but as a non-inductive 'conventional decision' to act on the theory that has withstood the most severe attempts at falsification, thereby minimizing the risk of error in practical application without assigning it higher probability.",
+    "mechanism": "Severe Testing and Conventional Decision: The mechanism distinguishes between the logical status of a theory (which remains conjectural and unproven) and the pragmatic rationality of choosing the theory that has survived the most rigorous testing. By treating the choice to act as a convention rather than a logical derivation, one avoids smuggling in induction while still providing a rational basis for action that aligns with Popper's critical rationalism.",
+    "counterconditions": [
+      "If corroboration is shown to logically entail a higher probability of future success, the non-inductive defense collapses.",
+      "If Popper's own actions cannot be explained by conventional decision without contradicting his explicit rejection of all forms of probabilistic justification.",
+      "If the distinction between 'testing' and 'acting' fails to provide a coherent basis for preferring one theory over another in high-stakes scenarios."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'verisimilitude' with the proposed defense. This candidate does not rely on verisimilitude as a calculable metric but on the procedural rationality of severe testing and the conventional nature of the decision to act, which Popper explicitly allowed as a non-logical postulate."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The candidate explicitly rejects the claim that rational preference entails an expectation of future success via logical probability. Instead, it frames the expectation as a pragmatic bet based on past performance (severe testing) without asserting a logical link to future truth, thus avoiding the category error."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma by framing the choice to build a bridge not as a belief in the theory's truth, but as a responsible convention to use the best-tested available option, acknowledging that this is a decision of responsibility rather than knowledge."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The criticism assumes 'practical reliance' requires 'belief in truth.' The rebuttal is that practical reliance only requires a rational convention to minimize known risks, which severe testing provides, without needing to conflate criticism with reliance."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is consistent with his philosophy if viewed as a personal adoption of the conventional decision to act on the best-tested theory. It does not require an objective reason for preference beyond the methodological rule of severe testing."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "This candidate strictly adheres to Popper's falsificationist framework and the concept of corroboration as a report of past test performance. It does not invoke Evolutionary Epistemology or substitute frameworks."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The pragmatic contradiction is resolved by denying that acting on a theory implies believing it is probable. One can act on the best-tested theory while fully acknowledging it may be false tomorrow; the rationality lies in the process of selection, not the outcome."
+      },
+      {
+        "handle": "2bb824986a07c70a152db1deb50653be633a98497dc1a927ef76e718b290d85f",
+        "kind": "revised",
+        "note": "Clarified that the justification for *action* is the same as for *preference*: both are grounded in the conventional decision to trust the outcome of severe testing as the best available guide, even if it offers no guarantee of truth."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

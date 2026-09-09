@@ -1,0 +1,322 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'critical preference' based on verisimilitude (truth-likeness), not probability. It does not smuggle induction because it relies on the logical content of tests passed, not an assumption that the future will resemble the past.",
+      "mechanism": "Popper distinguishes between 'probability' (inductive support) and 'verisimilitude' (closeness to truth). A theory with higher corroboration has survived more severe tests, implying it has higher verisimilitude. The preference is a rational choice to act on the theory closest to truth, acknowledging it may still be false. This avoids induction by treating the preference as a methodological rule rather than an epistemic guarantee.",
+      "counterconditions": [
+        "If Popper's formal definition of verisimilitude is logically incoherent (as critics like Miller and Tichý argued).",
+        "If acting on a theory necessarily implies an expectation of its future success, which is inductive.",
+        "If 'severity' of tests cannot be defined without assuming some regularity in nature."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "The claim does not rely on a 'Principle of Uniformity' straw man; it explicitly uses Popper's concept of verisimilitude and critical preference, which Popper developed specifically to address action without induction."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "While Popper's quantitative definition of verisimilitude faced issues, the qualitative concept remains viable as a regulatory ideal for theory choice, distinct from probability."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The preference is decoupled from 'expectation of truth' in the probabilistic sense; it is an expectation of 'closeness to truth' based on logical content, which Popper argues is non-inductive."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "The failure of the formal definition does not invalidate the intuitive or qualitative use of verisimilitude as a basis for preference in scientific practice."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "Corroboration requires 'severe tests,' which distinguishes it from mere lack of falsification. An untested theory has zero corroboration."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "The argument maintains the distinction: it is a pragmatic preference based on logical status (verisimilitude), not an inductive inference about future frequencies."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "The preference is defensible as a normative rule of critical rationalism: 'Act on the best-tested theory' is a rational decree, not a fiction."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Acting on a theory does not require believing it is true or probable, only that it is the best available candidate for approximating truth given current criticism."
+        }
+      ],
+      "optional_refs": ["SRC_005"]
+    },
+    {
+      "claim": "The preference unavoidably smuggles in induction because any decision to act on a corroborated theory presupposes that the future will resemble the past (the principle of uniformity), which Popper explicitly rejected as unjustifiable.",
+      "mechanism": "Action implies prediction. To prefer Theory A over Theory B for building a bridge is to predict Theory A will hold up. This prediction relies on the assumption that the conditions under which A was corroborated will persist. Since Popper denies we can justify this assumption inductively, the preference for action is practically inductive even if theoretically denied.",
+      "counterconditions": [
+        "If one can act on a theory without making any predictions about its future success.",
+        "If 'preference' can be purely retrospective (looking at past survival) with no forward-looking component.",
+        "If Popper's 'critical preference' successfully severs the link between past survival and future expectation."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "The claim argues that *any* action-based preference implicitly assumes uniformity, regardless of Popper's explicit distinctions. The distinction is verbal, not functional."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "departure_declared",
+          "note": "This candidate departs from the verisimilitude defense entirely, arguing that the problem lies in the nature of action itself, not the definition of truth-likeness."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The claim asserts that 'choosing to act' inherently involves an expectation of success, making the decoupling impossible in practice."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departure from verisimilitude debates; focuses on the pragmatic necessity of induction for action."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "Even severe tests only cover the past. The leap to using them for future action is the inductive step."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "Rejects the category error charge: pragmatic preference *is* a form of inductive inference when it guides action."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "The normative question demands a justification for action; calling it a 'decree' admits it lacks rational foundation without induction."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Scientists act *because* they expect the theory to work. Denying this expectation contradicts the psychology and logic of engineering."
+        }
+      ],
+      "optional_refs": ["SRC_006"]
+    },
+    {
+      "claim": "The preference is defensible as a 'methodological fiction' or 'regulative ideal' that allows science to proceed without claiming epistemic justification, accepting the cost that scientific rationality is procedural rather than substantive.",
+      "mechanism": "Popper's solution is to treat the preference as a rule of the game of science. We *act as if* the best-tested theory is reliable, not because we know it is, but because this rule maximizes error detection. The 'cost' is admitting that science provides no ultimate security for action, only the most rigorous process of elimination available.",
+      "counterconditions": [
+        "If scientists require actual confidence (probability) to act, not just procedural adherence.",
+        "If the 'fiction' collapses when the stakes of action are life-or-death.",
+        "If the procedure itself secretly relies on inductive assumptions to define 'severe tests'."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to clarify that the 'fiction' is not a straw man but a conscious methodological stance adopted to bypass the need for a Principle of Uniformity."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "Verisimilitude serves as the *content* of the fiction, but the *defense* lies in the utility of the procedural rule, sidestepping the logical collapse of formal verisimilitude."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The preference is decoupled from truth expectation precisely because it is a fiction; we act *as if*, knowing it might fail."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "The formal failure is irrelevant to the pragmatic success of the regulative ideal."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "The rule prioritizes tested theories over untested ones by definition of the game, satisfying the distinction."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "Explicitly embraces the 'pragmatic preference' label, denying it is an error to separate it from inductive inference."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "The defense *is* that the preference is a social/methodological decree, which is sufficient for Popper's normative framework."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Scientists act on the best available rule. The lack of guarantee is the price of rationality in a fallible world."
+        }
+      ],
+      "optional_refs": ["SRC_007", "SRC_008"]
+    },
+    {
+      "claim": "The dilemma is a false dichotomy; Popper's 'corroboration' is a measure of 'informational content survived,' making the preference a tautological selection of the most informative surviving hypothesis, requiring no induction.",
+      "mechanism": "Corroboration reports how much empirical content a theory has risked and survived. Preferring it is simply preferring more information about the world that hasn't been proven false yet. This is a static assessment of current knowledge state, not a dynamic prediction. The cost is accepting that 'preference' offers no assurance of future utility, only maximum clarity on what is currently false.",
+      "counterconditions": [
+        "If scientists actually require predictive reliability, not just informational content.",
+        "If 'surviving' implies a future-oriented disposition.",
+        "If high content theories are consistently less useful for narrow engineering tasks."
+      ],
+      "typicality": 0.90,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "This approach avoids the 'Principle of Uniformity' entirely by grounding preference in logical content, not temporal projection."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departs from verisimilitude; focuses strictly on informational content and survival status."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The selection rule is decoupled from truth expectation; it selects for 'content survived,' which is a factual report of the past."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Does not rely on verisimilitude."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "An untested theory has low informational content regarding survival; a tested survivor has high content. The distinction is inherent."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "Reaffirms the category distinction: selecting based on past content is not inferring future probability."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "The preference is defensible as a logical consequence of valuing information, which is a core Popperian term."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Acting on the most informative theory is the rational default; demanding more is asking for justification Popper rejects."
+        }
+      ],
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict terms and represents a necessary 'pragmatic contradiction' where scientists must violate Popper's epistemology to function, suggesting Popper's system is descriptively accurate but normatively insufficient for action.",
+      "mechanism": "Popper successfully demolishes induction but fails to provide a non-inductive bridge to action. Scientists *must* assume uniformity to build bridges. Therefore, the preference is not defensible *on Popper's terms* (which forbid induction) but is defensible *despite* them, by acknowledging a pragmatic override. The cost is admitting Popper's philosophy cannot fully guide scientific practice.",
+      "counterconditions": [
+        "If Popper's 'critical preference' is sufficient for action.",
+        "If the 'pragmatic contradiction' can be resolved within critical rationalism.",
+        "If the demand for a bridge to action is itself a justificationist error."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Argues that Popper's solution is insufficient, so the 'straw man' charge misses the point that the gap remains unfilled."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "Agrees verisimilitude fails, using this as evidence that the whole system lacks a non-inductive action guide."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "Confirms that the preference *does* involve expectation, proving the decoupling failed."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Uses the failure of verisimilitude to support the claim that no non-inductive basis exists."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "Accepts the distinction but argues it doesn't help with the *action* requirement."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "Argues that in the context of action, the category error dissolves; pragmatic preference *becomes* inductive inference."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "Concedes the preference is a 'fiction' but argues this makes it indefensible as a *rational* norm, only as a psychological necessity."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Agrees scientists act on expectation, concluding this violates Popper's strictures."
+        }
+      ],
+      "optional_refs": ["SRC_006", "SRC_015"]
+    },
+    {
+      "claim": "The preference is defensible via an evolutionary analogy: theories compete like species, and 'corroboration' is simply fitness in the environment of tests. Preference is the natural selection of the fittest ideas, requiring no conscious induction.",
+      "mechanism": "Science is an evolutionary process. Corroborated theories are those that have survived the 'selection pressure' of testing. Preferring them is akin to an organism preferring traits that have ensured survival. This is a descriptive mechanism of growth, not a logical proof of future success. The cost is viewing scientific progress as blind variation and selective retention rather than a march toward certainty.",
+      "counterconditions": [
+        "If biological fitness does not guarantee future survival in changing environments.",
+        "If human agency in theory choice introduces rational elements absent in natural selection.",
+        "If 'severity' of tests cannot be equated to environmental pressure."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "Evolutionary theory does not rely on a 'Principle of Uniformity' in the Humean sense, but on mechanistic selection."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Replaces verisimilitude with evolutionary fitness as the basis for preference."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "Preference is a result of the selection process, not a decoupled rule; the 'expectation' is emergent, not assumed."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Avoids the formal problems of verisimilitude by using an evolutionary framework."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "Fitness is defined by surviving tests (pressure); untested theories have no fitness score."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "Evolutionary selection is not inductive inference; it is a causal process."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "The preference is defensible as a description of how knowledge grows, which serves as a normative guide."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Scientists act on the 'fittest' theory because it is the only one adapted to the current problem space."
+        }
+      ],
+      "optional_refs": ["SRC_008"]
+    }
+  ]
+}

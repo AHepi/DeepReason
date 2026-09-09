@@ -1,0 +1,330 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, methodological decision to act on the theory that has withstood the most severe attempts at falsification, accepting the cost that this preference offers no guarantee of future success or truth-likeness, only a record of past survival.",
+      "mechanism": "Methodological Decisionism: The preference is not a logical inference about probability but a pragmatic rule of action. We choose the corroborated theory because it is the only one not yet known to be false, and acting on a known falsehood is irrational. This avoids induction by treating the preference as a volitional commitment to the aim of science (truth) rather than a prediction derived from past regularity.",
+      "counterconditions": [
+        "If the agent requires a probabilistic guarantee of success before acting, this defense fails.",
+        "If 'severe testing' implicitly assumes the uniformity of nature to define severity, the non-inductive claim collapses."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_020] against SRC_017",
+          "kind": "rebutted",
+          "note": "The distinction addresses action by framing the preference as a rational choice between known errors and unknown possibilities, not as a psychological expectation of success. It defends the *rationality* of the act without claiming *justification* of the outcome."
+        },
+        {
+          "handle": "[SRC_021] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate does not rely on verisimilitude as a measurable quantity but on the logical status of 'not-yet-falsified.' The preference is for the survivor, not the 'truer' in a graded sense, avoiding the need for probabilistic assessment of truth-likeness."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Avoids the Tichý/Miller refutation by not invoking Popper's formal definition of verisimilitude. The argument rests solely on the binary state of falsification vs. non-falsification."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "revised",
+          "note": "Clarifies that the preference is rational as a means to an end (avoiding known error), aligning with the aim of science, but explicitly denies it provides logical justification for the theory's truth, correcting the potential misrepresentation of 'rational' as 'justified belief'."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "Does not rely on evolutionary selection as a justification for *future* fitness, but as an explanation of *current* status. The preference for action is based on the current status of being the sole survivor, not a prediction of continued survival."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Distinguishes the methodological decision to treat test conditions as stable for the specific test instance from the inductive assumption that nature is uniformly stable. The former is a prerequisite for testing; the latter is a claim about the world which Popper rejects."
+        },
+        {
+          "handle": "[SRC_014] against SRC_010",
+          "kind": "revised",
+          "note": "Explicitly constructs the strongest case for the opposing view (that it smuggles induction) in the counterconditions and mechanism analysis, ensuring both sides are presented before concluding the methodological decision survives."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Directly answers the smuggling charge by defining the preference as a logical consequence of eliminating competitors, not an inductive leap. The 'state of having eliminated competitors' is precisely the non-inductive ground for preference."
+        }
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_005",
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because the very concept of a 'severe test' presupposes the stability of test conditions and the relevance of past failures to future scenarios, which are inductive assumptions.",
+      "mechanism": "Hidden Inductive Premise: To regard a test as 'severe' and its survival as 'corroboration' requires assuming that the conditions under which the test was performed will hold in the future application of the theory. Without this assumption, past survival is irrelevant to future action, rendering the preference irrational unless based on an inductive belief in uniformity.",
+      "counterconditions": [
+        "If severity can be defined purely logically or syntactically without reference to empirical stability.",
+        "If the preference for action can be justified purely as a gamble without any expectation of success."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_020] against SRC_017",
+          "kind": "rebutted",
+          "note": "Addresses the core challenge by arguing that the 'logical justification' for action *requires* the inductive step; without it, the distinction between psychological expectation and logical justification dissolves because there is no logical reason to prefer the survivor for *future* action."
+        },
+        {
+          "handle": "[SRC_021] against SRC_005",
+          "kind": "rebutted",
+          "note": "Supports the claim that even verisimilitude arguments fail because assessing 'closeness to truth' based on past tests inherently assumes those tests are indicative of the theory's general structure, an inductive move."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Agrees that verisimilitude is problematic but argues the deeper issue is the inductive basis of corroboration itself, making the Tichý/Miller refutation secondary to the fundamental smuggling of induction."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Contends that aligning with the aim of science is insufficient if the method to achieve that aim (preferring survivors) relies on a hidden inductive premise, thus failing to be truly rational on Popper's strict terms."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "Argues that evolutionary analogies fail precisely because natural selection explains past survival, not future utility, unless one assumes the environment (test conditions) remains stable—an inductive assumption."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "revised",
+          "note": "Sharpens the conflation point: argues that Popper's 'methodological decision' to treat conditions as stable is functionally indistinguishable from the 'inductive assumption' of uniformity when it comes to justifying action, effectively smuggling induction in through the back door of methodology."
+        },
+        {
+          "handle": "[SRC_014] against SRC_010",
+          "kind": "revised",
+          "note": "Ensures the strongest case for the 'defensible' side is acknowledged in the counterconditions (i.e., the methodological decision argument) before demonstrating its failure."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Rejects the idea that 'eliminating competitors' is sufficient, arguing that choosing the survivor for *action* implies an expectation of continued survival, which is the inductive smuggle."
+        }
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_006",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The tension is resolved by viewing corroboration as a measure of informational content rather than probability; we prefer high-corroboration theories because they are more informative and thus more useful for criticism, even if they are likely false.",
+      "mechanism": "Content-Based Preference: High corroboration correlates with high empirical content (boldness). We prefer these theories not because they are probable (they are less probable) but because they offer more opportunities for learning and error elimination. The cost is accepting that we act on theories we believe are likely false, valuing their heuristic utility over their truth probability.",
+      "counterconditions": [
+        "If the goal of action is successful prediction rather than error elimination.",
+        "If high content theories are too risky to act upon in critical real-world scenarios."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_020] against SRC_017",
+          "kind": "rebutted",
+          "note": "Reframes the action problem: the preference is for the theory that teaches us the most, making the action a learning experiment rather than a bid for certainty."
+        },
+        {
+          "handle": "[SRC_021] against SRC_005",
+          "kind": "rebutted",
+          "note": "Bypasses verisimilitude entirely; the metric is content/testability, not truth-likeness."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Irrelevant to content-based arguments; Tichý/Miller refuted verisimilitude, not the preference for boldness."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Aligns with the aim of science (growth of knowledge) without claiming the preference makes the theory more likely true."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "Evolutionary analogy is replaced by an epistemic utility argument: we pick the riskiest bet because the payoff in knowledge is highest."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Severity is defined by logical improbability (content), not empirical stability, avoiding the inductive trap."
+        },
+        {
+          "handle": "[SRC_014] against SRC_010",
+          "kind": "revised",
+          "note": "Presents the 'smuggling induction' counter-argument by noting that relying on content still requires assuming that bold theories are the ones worth testing, which might be an inductive value judgment."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Clarifies that the preference is not about survival status but about the *quality* of the information gained from the survival."
+        }
+      ],
+      "typicality": 0.60,
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "Popper's system contains an unavoidable performative contradiction: the rejection of induction is itself an inductive generalization from the history of failed inductions, making any preference within the system secretly inductive.",
+      "mechanism": "Self-Referential Collapse: The principle 'induction is invalid' is derived from observing that past inductions have failed or been unnecessary. This derivation is itself an inductive inference. Therefore, the entire framework rests on the very thing it rejects, and any preference for corroborated theories is doubly inductive (once in the framework, once in the application).",
+      "counterconditions": [
+        "If the rejection of induction can be justified deductively (e.g., via the logical problem of induction).",
+        "If the preference for action can be decoupled from the meta-epistemological stance."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_020] against SRC_017",
+          "kind": "rebutted",
+          "note": "Addresses the action problem by suggesting the agent acts on a contradictory basis, which is psychologically possible but logically indefensible on Popper's own strict terms."
+        },
+        {
+          "handle": "[SRC_021] against SRC_005",
+          "kind": "rebutted",
+          "note": "Extends the smuggling charge to the foundational level, not just verisimilitude."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Argues that the failure of verisimilitude is symptomatic of the deeper self-referential flaw."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Claims the alignment with the aim of science is ironic because the aim itself is pursued via a self-undermining method."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "Evolutionary selection cannot rescue a system whose foundational logic is performatively contradictory."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Suggests the distinction between methodological decision and inductive assumption is a semantic cover for the underlying performative contradiction."
+        },
+        {
+          "handle": "[SRC_014] against SRC_010",
+          "kind": "revised",
+          "note": "Acknowledges the strong deductive arguments Popper made against induction but insists the *adoption* of those arguments relies on an inductive meta-stance."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Argues that even the 'elimination of competitors' relies on the inductive validity of the elimination process itself."
+        }
+      ],
+      "typicality": 0.30,
+      "optional_refs": [
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if we accept a 'critical rationalist' ethic where acting on the best-criticized theory is a moral duty, regardless of epistemic probability, shifting the burden from truth to responsibility.",
+      "mechanism": "Ethical Imperative: The shift is from 'what is likely true?' to 'what is the responsible thing to do?'. Acting on a refuted theory is irresponsible; acting on the best-tested available theory is the ethical maximum. This bypasses induction by changing the domain of justification from epistemology to ethics.",
+      "counterconditions": [
+        "If the problem demands an epistemic justification rather than an ethical one.",
+        "If 'responsibility' implicitly relies on an expectation of better outcomes (induction)."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_020] against SRC_017",
+          "kind": "revised",
+          "note": "Directly addresses the action component by grounding it in ethics, arguing this is the only way to satisfy Popper's demand for rational action without induction."
+        },
+        {
+          "handle": "[SRC_021] against SRC_005",
+          "kind": "rebutted",
+          "note": "Verisimilitude is irrelevant; the metric is ethical cleanliness (having done due diligence in criticism)."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Sidesteps the technical refutation of verisimilitude by abandoning truth-likeness as the criterion for action."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Reinterprets 'rational' as 'ethically consistent with the critical attitude' rather than 'logically probative'."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "Evolutionary analogies are replaced by deontological reasoning: one must act on the best available evidence, defined as the most severely tested."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Argues that the stability of test conditions is a practical necessity for ethical action, not an inductive claim about the universe."
+        },
+        {
+          "handle": "[SRC_014] against SRC_010",
+          "kind": "revised",
+          "note": "Includes the counter-case that an ethical imperative without expected good consequences (induction) is blind fanaticism, challenging the strength of this defense."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Posits that the 'state of having eliminated competitors' creates the ethical obligation to act on the survivor."
+        }
+      ],
+      "typicality": 0.45,
+      "optional_refs": [
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "The preference is a linguistic illusion; 'corroboration' is merely a report of past tests, and 'preference' is a separate psychological event. Popper's terms dissolve the link, leaving the scientist acting on instinct while using Popperian language to describe the past.",
+      "mechanism": "Semantic Decoupling: Strictly speaking, Popper's definitions sever the logical link between corroboration reports and future preference. Any perceived connection is a psychological habit (induction) that scientists retain despite their philosophy. The 'defense' is that Popper describes science as it is (psychologically inductive) while prescribing how it should be (logically deductive), accepting the cost of a permanent gap between description and prescription.",
+      "counterconditions": [
+        "If Popper successfully bridges the gap with his concept of 'verisimilitude' or 'critical preference'.",
+        "If the psychological habit can be shown to be non-inductive."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_020] against SRC_017",
+          "kind": "rebutted",
+          "note": "Accepts that the distinction fails to address the *actual* driver of action (psychology), arguing that Popper's terms only describe the *logic*, leaving the action unexplained by his system."
+        },
+        {
+          "handle": "[SRC_021] against SRC_005",
+          "kind": "rebutted",
+          "note": "Confirms that any attempt to bridge the gap (like verisimilitude) fails, supporting the decoupling thesis."
+        },
+        {
+          "handle": "[SRC_018] against SRC_015",
+          "kind": "rebutted",
+          "note": "Uses the failure of verisimilitude as evidence that the bridge cannot be built logically."
+        },
+        {
+          "handle": "[SRC_013] against SRC_009",
+          "kind": "rebutted",
+          "note": "Argues that calling the preference 'rational' is a category error if it relies on psychology; it is only rational in the negative sense of not being irrational (i.e., not acting on known falsehoods)."
+        },
+        {
+          "handle": "[SRC_019] against SRC_016",
+          "kind": "rebutted",
+          "note": "Suggests evolutionary selection explains the psychological habit, not the logical justification, reinforcing the decoupling."
+        },
+        {
+          "handle": "[SRC_012] against SRC_008",
+          "kind": "rebutted",
+          "note": "Claims the conflation is inevitable because humans cannot operate without the inductive assumption, regardless of methodological decisions."
+        },
+        {
+          "handle": "[SRC_014] against SRC_010",
+          "kind": "revised",
+          "note": "Presents the opposing view (that there is a logical link) as the 'illusion' being critiqued, satisfying the requirement to make the strongest case for the other side before dismissing it."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Asserts that the 'state of having eliminated competitors' is a historical fact, while 'preference' is a future-oriented attitude, and no logical rule connects the two in Popper's system."
+        }
+      ],
+      "typicality": 0.20,
+      "optional_refs": [
+        "SRC_004"
+      ]
+    }
+  ]
+}

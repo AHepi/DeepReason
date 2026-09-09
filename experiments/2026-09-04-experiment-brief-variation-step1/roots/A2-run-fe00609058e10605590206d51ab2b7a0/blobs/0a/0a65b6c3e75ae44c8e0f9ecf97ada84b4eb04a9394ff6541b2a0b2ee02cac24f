@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that Popper's solution is 'incomplete' relies on a false dichotomy between logical corroboration and pragmatic action. It fails to engage with Popper's actual defense: that preferring the better-corroborated theory is not an inductive inference about future truth (which would violate his logic), but a critical rational choice based on the theory's superior explanatory power and severity of tests survived so far. The target incorrectly frames the scientist's preference as a 'Humean habit' or 'psychological induction,' whereas Popper explicitly argues it is a non-inductive, rational decision rule for problem-solving. By mischaracterizing the nature of the preference as merely psychological rather than methodological, the target attacks a straw man and fails to address whether the preference is defensible *on Popper's own terms* as requested by the problem.",
+      "premise": "Popper distinguishes between the logical status of corroboration (non-probabilistic) and the methodological rule of preferring better-corroborated theories for critical discussion and action, without invoking induction.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "counterexample": null,
+      "successor_question": "How does Popper specifically justify the preference for better-corroborated theories in 'The Logic of Scientific Discovery' or 'Conjectures and Refutations' without appealing to the principle of induction?"
+    }
+  ]
+}

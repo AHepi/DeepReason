@@ -1,0 +1,199 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'Critical Rationalist Wager': it is the only choice consistent with the aim of science (truth) given that all alternatives have been logically eliminated, requiring no inductive leap about the future.",
+      "mechanism": "Eliminative Decision Theory: Preference is not a prediction of success but a logical consequence of having rejected all known-false competitors. The 'bet' is on the theory with the highest surviving content, not on its probability.",
+      "counterconditions": [
+        "If the set of possible theories is infinite and unenumerable, making 'elimination of competitors' logically insufficient to justify preference for any single survivor.",
+        "If the 'aim of science' (truth) cannot be pursued without an inductive assumption that nature is uniform enough for past falsifications to matter for future choices."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_019] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate addresses action in novel domains by framing preference as a logical necessity of the current state of criticism, not a prediction of future stability. In a novel domain, one still acts on the theory that has not yet failed, as acting on a falsified one is irrational."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "The distinction holds because the justification is logical (consistency with the aim of truth), not psychological. Popper argues we *ought* to prefer the better-corroborated theory to align with our goal, regardless of our feelings."
+        },
+        {
+          "handle": "[SRC_018] against SRC_003",
+          "kind": "revised",
+          "note": "Revised to avoid relying solely on 'verisimilitude' as a measurable quantity. Instead, it relies on 'content' and 'survival of severe tests' as qualitative markers, acknowledging Popper's later struggles with formal verisimilitude while maintaining the intuitive drive toward truth."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "While Tichý and Miller refuted the *formal definition* of verisimilitude, they did not refute the *methodological rule* of preferring theories that have withstood more severe tests. The candidate relies on the methodological rule, not the failed formal metric."
+        },
+        {
+          "handle": "[SRC_010] against SRC_007",
+          "kind": "rebutted",
+          "note": "Agrees that the preference is rational but clarifies that the rationality stems from 'critical alignment' with the goal of truth, not from a volitional leap devoid of reason. It is a reasoned choice among imperfect options."
+        },
+        {
+          "handle": "[SRC_016] against SRC_013",
+          "kind": "rebutted",
+          "note": "Evolutionary selection explains the *origin* of the preference, but the *justification* for action lies in the logical status of the theory (unfalsified) relative to the agent's goal. The analogy supports but does not replace the logical argument."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate distinguishes between assuming nature is uniform (induction) and assuming test conditions are stable *for the duration of the test* (methodological necessity). The latter is a precondition for testing, not an inductive generalization about the universe."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "revised",
+          "note": "Explicitly structured to present the strongest case for the 'smuggling induction' counter-argument in the counterconditions, ensuring the dialectic required by the prompt is present before declaring the 'Critical Rationalist Wager' as the survivor."
+        }
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference inevitably smuggles induction back into Popper's system because acting on a corroborated theory implicitly assumes that the future will resemble the past (the principle of uniformity), which is the very definition of the induction Popper sought to reject.",
+      "mechanism": "The Hidden Premise of Action: Any decision to act based on past performance contains the hidden premise 'what worked before will work again.' Without this premise, the record of corroboration is irrelevant to future action, rendering the preference irrational or purely psychological.",
+      "counterconditions": [
+        "If one can formulate a non-inductive bridge principle (e.g., 'act on the best-tested theory' as a categorical imperative) that validates action without predicting success.",
+        "If 'corroboration' is redefined strictly as a historical report with zero normative force for future action, reducing scientific preference to mere habit."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_019] against SRC_005",
+          "kind": "rebutted",
+          "note": "Evolutionary selection explains why we *do* prefer, but not why we *should* if induction is invalid. If nature changes radically, evolution offers no logical defense for the specific preference in a novel domain, only a description of past survival."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "The challenge regarding action is fatal here: if the preference is not based on expected success (induction), it is arbitrary. Popper's attempt to separate 'logical justification' from 'action' fails because action inherently seeks successful outcomes."
+        },
+        {
+          "handle": "[SRC_018] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate fully embraces the critique that verisimilitude assessments require probabilistic assumptions about the distribution of truths, which Popper cannot provide without induction."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "Leverages the Tichý/Miller refutation to argue that since we cannot formally measure closeness to truth, any claim to prefer a 'more truthful' theory is baseless without inductive hope."
+        },
+        {
+          "handle": "[SRC_010] against SRC_007",
+          "kind": "rebutted",
+          "note": "Argues that calling the preference 'rational' because it aligns with the aim of truth is circular if the method to achieve that aim (preferring the past winner) relies on the discredited inductive principle."
+        },
+        {
+          "handle": "[SRC_016] against SRC_013",
+          "kind": "rebutted",
+          "note": "Evolutionary selection is itself an inductive process (past survival predicts future fitness). Using it to justify preference admits the inductive backbone Popper tried to excise."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "Conflating the two is unavoidable in practice. To treat test conditions as stable for falsification *and* then use that result for action *is* to assume a uniformity that extends beyond the immediate test moment."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "revised",
+          "note": "This candidate represents the 'strongest case' for the 'smuggling' side as requested, explicitly detailing the hidden inductive premise that instrumentalism tries to hide."
+        }
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_004",
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only as a 'Methodological Fiction': scientists must *pretend* induction works to function, while philosophically acknowledging it doesn't. This creates a dual-state cognition where action proceeds on pragmatic grounds despite logical bankruptcy.",
+      "mechanism": "Cognitive Dissonance Resolution via Compartmentalization: The scientist operates in two modes—'Philosophical Mode' (no induction) and 'Engineering Mode' (act as if induction holds). The preference is a necessary fiction to bridge the gap.",
+      "counterconditions": [
+        "If the 'fiction' collapses under high-stakes scrutiny (e.g., climate modeling or particle physics) where the philosophical basis impacts the confidence intervals of predictions.",
+        "If Popper's system demands consistency that compartmentalization violates, rendering the 'fiction' a self-refuting admission of failure."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_019] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departing from the idea that evolutionary epistemology provides a *justification*. Here, it is merely the biological cause of the fiction we tell ourselves."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "The 'core challenge' is met by admitting there is no logical justification, only a pragmatic necessity. The preference is defensible as a survival strategy, not a logical derivation."
+        },
+        {
+          "handle": "[SRC_018] against SRC_003",
+          "kind": "rebutted",
+          "note": "Accepts that verisimilitude is unknowable without induction, arguing that we use it anyway as a regulatory ideal, not a known quantity."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "The refutation of formal verisimilitude strengthens the need for the 'fiction,' as we have no other metric to guide action."
+        },
+        {
+          "handle": "[SRC_010] against SRC_007",
+          "kind": "revised",
+          "note": "Refines the 'volitional act' to be a collective, institutionalized pretense rather than an individual irrational leap."
+        },
+        {
+          "handle": "[SRC_016] against SRC_013",
+          "kind": "rebutted",
+          "note": "Evolutionary selection explains the origin of the fiction, but the 'preference for action' is the conscious enactment of that fiction."
+        },
+        {
+          "handle": "[SRC_009] against SRC_006",
+          "kind": "rebutted",
+          "note": "The conflation is the point of the fiction: we methodologically decide to treat conditions as stable *and* project that stability forward, knowing it's a gamble."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "This candidate explicitly constructs the 'smuggling' argument as the logical reality and the 'defensibility' argument as the pragmatic necessity, satisfying the prompt's requirement for both sides."
+        }
+      ],
+      "typicality": 0.45,
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "Popper's preference is defensible via 'Verisimilitude as a Regulative Ideal' even if unmeasurable: we prefer the theory that *appears* closer to truth based on severe testing, accepting that this appearance might be wrong, but recognizing it as the only rational path toward the goal.",
+      "mechanism": "Goal-Directed Heuristics: Just as a hiker heads toward a visible peak without knowing the exact distance, scientists head toward theories with higher empirical content and survival rates. The 'smuggling' charge fails because the heuristic admits fallibility.",
+      "counterconditions": [
+        "If the 'appearance' of closeness to truth is systematically misleading in ways that severe testing cannot detect (e.g., underdetermination).",
+        "If the cost of following a misleading heuristic is catastrophic, demanding a stronger justification than 'it seems best'."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_019] against SRC_005",
+          "kind": "rebutted",
+          "note": "In novel domains, the 'regulative ideal' guides us to choose the theory with the most explanatory power tested so far, as no other guide exists. It is a risk management strategy, not a guarantee."
+        },
+        {
+          "handle": "[SRC_017] against SRC_014",
+          "kind": "rebutted",
+          "note": "The distinction holds: the justification is 'rational pursuit of a goal' (truth), not 'expectation of success'. We prefer it *because* it aims at truth, even if it fails."
+        },
+        {
+          "handle": "[SRC_018] against SRC_003",
+          "kind": "revised",
+          "note": "Clarifies that 'verisimilitude' here is not a calculated value but a qualitative judgment of 'boldness and survival', sidestepping the formal proof issues."
+        },
+        {
+          "handle": "[SRC_015] against SRC_012",
+          "kind": "rebutted",
+          "note": "Tichý and Miller showed we can't *calculate* verisim
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

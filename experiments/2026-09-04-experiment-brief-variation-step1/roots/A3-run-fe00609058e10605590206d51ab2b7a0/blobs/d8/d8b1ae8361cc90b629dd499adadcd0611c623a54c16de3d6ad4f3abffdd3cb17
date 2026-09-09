@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a methodological rule of 'critical preference' rather than an inductive inference; it survives by redefining rational action as the selection of the theory that has withstood the most severe attempts at falsification, accepting the cost that this preference offers no guarantee of future success or increased probability of truth.",
+    "mechanism": "The mechanism distinguishes between 'inductive justification' (claiming past success predicts future truth) and 'methodological selection' (choosing the best-tested available option for critical discussion and action). By treating corroboration as a report of past performance without probabilistic implications, the agent can prefer Theory A over Theory B because A has survived stricter tests, not because A is more likely to be true. This resolves the tension by framing action as a convention adopted to facilitate further testing and avoid known errors, rather than a bet on truth.",
+    "counterconditions": [
+      "If the agent requires a logical guarantee that the preferred theory will succeed in the next instance, the Popperian defense fails.",
+      "If 'preference' is defined strictly as assigning a higher subjective probability of truth, the defense collapses into the induction Popper rejected.",
+      "If the context demands a justification for why nature should remain uniform based on past tests, the non-inductive stance cannot provide it."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism assumes 'acting' requires a belief in future success. The rebuttal is that acting on the best-tested theory is a rational convention for minimizing known error, not a claim that the theory won't fail. Popper's 'acting' is consistent with expecting potential failure."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The defense does not conflate content with preference; it explicitly separates them. The preference is for the theory with higher informational content that has survived, precisely because high content makes it a better target for future falsification, which is the goal of science."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "rebutted",
+        "note": "This is not a false dichotomy but a precise categorization. The 'logical problem' cited assumes action requires inductive certainty. The rebuttal asserts that rational action only requires a rule for choosing among fallible options, which corroboration provides without invoking induction."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The candidate does not attack a straw man; it addresses the core distinction Popper made between the logic of discovery/justification and the pragmatics of action. The 'Principle of Uniformity' is indeed rejected by Popper, and the defense relies solely on the status of corroboration reports."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "rebutted",
+        "note": "The mechanism explicitly differentiates 'critical preference' from 'inductive prediction.' The preference is for the theory that is currently the best candidate for truth *and* falsification, not the one predicted to work. This aligns with Popper's specific argument in 'Conjectures and Refutations'."
+      },
+      {
+        "handle": "270fdeb19c2b45908843bde3f158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "rebutted",
+        "note": "The candidate avoids relying on 'verisimilitude' as a quantitative measure, which Popper admitted was problematic. Instead, it relies on the qualitative report of corroboration (survival of severe tests), which remains valid even if verisimilitude cannot be formally calculated."
+      },
+      {
+        "handle": "2b2b9f8685410277445fc083713971a8c5bf992ab5fbf0a1093b143dcfb45882",
+        "kind": "rebutted",
+        "note": "The defense characterizes the preference as a 'methodological rule,' which is exactly what Popper argued it was: a rational decision to prefer the theory that has been most thoroughly tested. This is not a 'fiction' but a procedural necessity for scientific progress."
+      },
+      {
+        "handle": "4685bd2f65b86b20f04d65067f8fc4526a28a4375555eb78127f0f9de465ad93",
+        "kind": "revised",
+        "note": "Revised to clarify that 'decoupled from expectation of truth' means decoupled from *probabilistic* expectation, not from the hope of finding truth. The preference is for the theory that is arguably closest to truth having survived severe tests, even if we cannot assign a probability to it."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

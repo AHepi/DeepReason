@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's terms not as an inductive inference that the theory is true or probable, but as a critical rational decision to act on the theory that has withstood the most severe attempts at falsification, thereby maximizing verisimilitude (truth-likeness) without assuming the uniformity of nature.",
+    "mechanism": "The mechanism is 'Critical Preference via Verisimilitude': Scientists adopt the theory with the highest content that has not been falsified because it represents the closest approximation to truth currently available. This preference is a methodological rule (a decision) rather than a logical derivation of probability. It avoids induction by treating the preference as a bet on the theory that has survived the most rigorous testing, acknowledging that future tests may still falsify it, but recognizing that acting on a falsified theory is irrational.",
+    "counterconditions": [
+      "If the preferred theory is later falsified, the preference was still rational at the time of action given the available critical situation.",
+      "If two theories have equal corroboration, preference shifts to the one with higher empirical content (boldness).",
+      "If the domain of action involves novel conditions where no tests have been performed, the preference relies on the assumption that the laws governing the new domain are consistent with the old, which is a metaphysical faith Popper admits but distinguishes from scientific logic."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by framing the preference as a 'critical decision' based on the best available map (verisimilitude), not a guarantee of success. The elimination of competitors justifies rejecting the false, while the survival of the best-tested justifies the provisional adoption for action, even in novelty, as the only non-arbitrary choice."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The distinction between psychological expectation and logical justification is central. The candidate argues the preference is logically justified as a methodological rule to maximize truth-content, not as a psychological habit. It answers 'on Popper's own terms' by invoking the aim of science (truth) as the normative basis for the decision to act."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "revised",
+        "note": "Revised to clarify that verisimilitude is used as a regulative ideal and comparative measure of content/falsity, not as a quantifiable probability. The candidate explicitly states we cannot 'know' which theory is closer to truth in an absolute sense, but we can critically prefer the one that has survived more severe tests as having potentially higher verisimilitude."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Departure declared: While acknowledging Tichý and Miller's refutation of Popper's *formal* definition of verisimilitude, this candidate adopts the *informal* critical usage of verisimilitude that Popper retained in his later work, arguing that the intuitive comparison of content and falsity remains a valid heuristic for preference even if the formal calculus failed."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "rebutted",
+        "note": "The candidate affirms the preference is rational because it aligns with the aim of science (truth), countering the claim that calling it 'volitional' makes it non-rational. In Critical Rationalism, rational decisions are volitional acts guided by critical arguments, not deterministic logical outputs."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "Evolutionary selection explains the survival of the theory, but the justification for *preference* is the critical argument that the surviving theory has higher verisimilitude. The candidate bridges this by stating that the evolutionary process of conjecture and refutation produces theories that are rationally preferable for action because they have been vetted against error."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate strictly separates the metaphysical belief in uniformity (which is not required for the logic of preference) from the methodological decision to treat test conditions as stable for the sake of criticism. The preference is justified by the severity of the tests passed, not by an assumption that nature will remain uniform."
+      },
+      {
+        "handle": "390289f4c8a5d1e8b2d60805600b375478729748d6dbad2f7d4fb826d8f1f369",
+        "kind": "rebutted",
+        "note": "The candidate integrates the pragmatic justification via verisimilitude as the core of the defense, rejecting the false dilemma. It argues that accepting the critical rationalist axiom (aim for truth) and using verisimilitude as a guide are not mutually exclusive but are the same move: preferring the theory that best serves the aim of truth given current critical evidence."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_003"],
+      "shared_structure": [
+        "Selection of the fittest option based on past survival trials",
+        "Absence of guarantee for future performance despite past success",
+        "Decision to act on the selected option as the only non-arbitrary strategy"
+      ],
+      "disanalogies": [
+        "Biological evolution lacks conscious intent, whereas scientific preference is a deliberate methodological choice",
+        "Biological fitness is reproductive success, while scientific corroboration is resistance to falsification",
+        "Organisms do not choose their environment, scientists actively design severe tests to challenge theories"
+      ],
+      "transfer_claims": [
+        "Just as an organism acts on its evolved traits without knowing the future, scientists act on corroborated theories without probabilistic assurance",
+        "The rationale for preference in both cases is the elimination of less fit/false alternatives, leaving the current best as the default for action"
+      ],
+      "overturn_conditions": [
+        "If a less corroborated theory consistently yields better practical results in novel domains over time",
+        "If it can be demonstrated that past survival in tests is statistically independent of future truth-likeness"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

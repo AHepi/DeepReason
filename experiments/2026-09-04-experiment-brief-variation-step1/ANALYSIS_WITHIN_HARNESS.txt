@@ -1,0 +1,39 @@
+======================================================================
+THE HISTORY DEFAULT — PREREG §7's rule, applied
+======================================================================
+  length quintile means:
+    q1: NULL n=27  1.70 | A1 n=12  2.08 | +0.38
+    q2: NULL n=29  3.07 | A1 n= 8  3.50 | +0.43
+    q3: NULL n=25  6.96 | A1 n=14  5.21 | -1.75
+    q4: NULL n=30  8.80 | A1 n= 7  5.43 | -3.37
+    q5: NULL n=30  9.67 | A1 n= 7 10.00 | +0.33
+
+A1 vs NULL  (n 48 vs 141)
+  mean judged     :  6.12 ->  4.88 of 15   best 14.0 -> 13.0
+  candidate length: 365.5 -> 346.8 chars (-5.1%)  p=0.3356
+  raw gap         : -1.246 of 15   [NEVER the verdict]
+  length-adjusted : -0.803 of 15  p=0.0573  (model R^2 0.567)   <- THE VERDICT FIGURE
+  quintile-held   : -0.792 of 15
+
+  d_hist  = -0.803 of 15   d_noise = 1.312
+  RECOMMENDATION: NO CHANGE — the evidence does not separate history from scatter
+  (a recommendation only — R33: change no default yourself)
+
+======================================================================
+A3 vs the null pool — PREREG §8 P2
+======================================================================
+  length quintile means:
+    q1: NULL n=23  1.70 | A3 n=14  2.43 | +0.73
+    q2: NULL n=29  2.90 | A3 n= 9  4.33 | +1.44
+    q3: NULL n=31  6.45 | A3 n= 7  9.57 | +3.12
+    q4: NULL n=27  8.85 | A3 n=11 10.00 | +1.15
+    q5: NULL n=31  9.71 | A3 n= 6 10.67 | +0.96
+
+A3 vs NULL  (n 47 vs 141)
+  mean judged     :  6.12 ->  6.68 of 15   best 14.0 -> 14.0
+  candidate length: 365.5 -> 350.0 chars (-4.2%)  p=0.4534
+  raw gap         : +0.560 of 15   [NEVER the verdict]
+  length-adjusted : +1.105 of 15  p=0.0114  (model R^2 0.582)   <- THE VERDICT FIGURE
+  quintile-held   : +1.486 of 15
+
+  |adjusted| 1.105 vs d_noise 1.312 -> INSIDE the floor

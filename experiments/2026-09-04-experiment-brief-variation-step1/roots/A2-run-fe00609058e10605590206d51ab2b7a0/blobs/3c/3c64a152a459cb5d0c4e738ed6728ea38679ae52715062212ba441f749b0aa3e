@@ -1,0 +1,124 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'risk-management' strategy: we prefer the theory with the highest informational content that has survived severe tests because it offers the greatest potential for learning and the most specific guidance for action, without assigning it a higher probability of truth.",
+      "mechanism": "Corroboration reports the outcome of a severe test (a failed attempt to falsify). Preferring the best-corroborated theory is preferring the boldest conjecture that has not yet been killed. This maximizes 'verisimilitude' (truth-likeness) potential without assuming the future will resemble the past; it is a decision to expose oneself to the highest possible risk of error that has so far been avoided, rather than a prediction that the risk will not materialize.",
+      "counterconditions": [
+        "If the agent prefers the theory because they believe it is 'safer' or 'more reliable' in a probabilistic sense.",
+        "If the preference relies on an implicit assumption that nature is uniform enough that surviving past tests predicts future survival."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "The defense does not rely on verisimilitude as a guaranteed metric of truth, but as a regulative ideal. The preference is for the 'boldest survivor,' which is a logical status (high content + survived), not a probabilistic forecast. The core challenge is met by reframing 'preference for action' as 'selection of the best available critical target,' not 'selection of the most likely true description.'"},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "The criterion 'least error-prone known option' is misleading; the Popperian prefers the 'most tested and surviving' option, which is often the *most* error-prone in absolute terms (highest content), but has demonstrated resilience. This does not assign subjective probability; it acknowledges that among false theories, the one that survived severe tests is the best current approximation for guiding action, without claiming it won't fail tomorrow."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Popper's own terms include the 'methodological rules' of science, which explicitly dictate preferring the better-corroborated theory for practical application. This is a normative rule of the 'context of application,' distinct from the 'context of justification.' It is defensible on his terms because it is a rule he prescribed for rational action in the absence of certainty."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "When multiple theories survive, Popper prefers the one with greater empirical content (boldness). The preference is not a tautology of survival but a lexicographical ordering: first survival, then content. This resolves the tie without invoking induction."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The distinction is maintained: we do not predict specific future events based on corroboration (which would be induction); we adopt the theory that currently withstands criticism as the basis for action. If it fails, we discard it. The preference is for the current 'champion,' not a prophecy of its future reign."},
+        {"handle": "[SRC_022] against SRC_019", "kind": "rebutted", "note": "There is no contradiction between logical status and psychological motivation. Popper allows for 'rational preferences' based on critical discussion outcomes. The preference is a methodological stance, not a psychological compulsion or self-deception. It is a conscious choice to act on the best-tested hypothesis."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "The dichotomy is not false; the defense explicitly bridges logic and pragmatics via 'methodological rules.' Preferring the better-corroborated theory is a rule of conduct derived from the logical situation (one theory survived, others didn't, or one is bolder), not an inductive leap."},
+        {"handle": "[SRC_016] against SRC_005", "kind": "rebutted", "note": "The horse betting analogy holds if the bettor chooses the horse that has won against the strongest competition (severe tests), not the one with the highest frequency of wins (induction). The preference is based on the quality of the opposition survived, not a statistical projection of future performance."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_005"]
+    },
+    {
+      "claim": "The preference smuggles induction back in because any rational decision to act on a corroborated theory necessarily assumes that the future will resemble the past (uniformity of nature), which is the very principle Popper sought to eliminate from scientific rationality.",
+      "mechanism": "Decision theory requires an expected utility calculation. To prefer Theory A over Theory B for future action, an agent must assign a higher expected utility to A. Since both are logically contingent and neither is proven true, this assignment implicitly relies on a subjective probability that A will continue to hold. This subjective probability can only be derived from past success (corroboration), which is an inductive inference.",
+      "counterconditions": [
+        "If a form of rational action can be defined that does not rely on expected utility or probability assignments.",
+        "If the preference is shown to be purely aesthetic or arbitrary, lacking rational force."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "This candidate argues that verisimilitude cannot save the position because acting on 'truth-likeness' still requires the assumption that the aspects of the theory that resemble truth will continue to function correctly in the future, which is an inductive assumption about the stability of those aspects."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "revised", "note": "Clarified that the 'risk-management' label itself is a proxy for probability. Calling it 'risk management' admits we are managing the *probability* of error, thus reintroducing the probabilistic framework Popper rejected."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "While Popper prescribed the rule, the criticism is that the rule itself is irrational on his own terms. If his philosophy rejects induction, and the rule requires induction to be rational, then the rule is indefensible *on his own terms*, even if he proposed it."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "In cases of multiple survivors, choosing the 'bolder' one still assumes that boldness (content) is a reliable guide to future success or utility, which is an inductive generalization about the value of boldness."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The distinction collapses in practice. To 'prefer for action' IS to 'predict specific future events' in the sense that one expects the action based on the theory to succeed. One cannot separate the preference from the expectation of success."},
+        {"handle": "[SRC_022] against SRC_019", "kind": "rebutted", "note": "The 'methodological fiction' is indeed a fiction if it claims to be non-inductive while functioning inductively. The criticism stands that the separation between logical and psychological contexts is artificial when the 'logical' rule drives 'psychological' action that behaves exactly like induction."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "The defense fails to engage because it asserts the bridge exists without showing how the jump is made without induction. The 'logical situation' (survival) does not entail the 'pragmatic conclusion' (prefer for future) without the hidden premise of uniformity."},
+        {"handle": "[SRC_016] against SRC_005", "kind": "rebutted", "note": "The horse betting analogy fails precisely because a rational bettor *does* use past performance to estimate future probability. If Popper forbids this, his 'preference' becomes irrational gambling, not a defensible scientific stance."}
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"]
+    },
+    {
+      "claim": "The tension is resolved by viewing the preference as an evolutionary selection mechanism within the ecosystem of ideas: scientists prefer corroborated theories not because they are 'true' or 'probable,' but because they are the 'fittest' survivors of a competitive process, analogous to natural selection where fitness does not guarantee future survival but explains current dominance.",
+      "mechanism": "Scientific knowledge grows through variation (conjecture) and selection (refutation). Corroboration is the record of selection. Preferring the corroborated theory is simply acknowledging the current outcome of the selection process. It is a descriptive report of 'who is left standing,' not a normative prediction of 'who will win next.' The 'cost' is accepting that science has no foundation other than the current state of play.",
+      "counterconditions": [
+        "If the evolutionary analogy implies a trend toward truth (progress) which would require induction.",
+        "If scientists act with a confidence that exceeds mere acknowledgment of current survival."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_010", "kind": "departure_declared", "note": "Departing from the need for a 'basis for action' grounded in truth-likeness. The basis is simply 'current survival in the critical game.'"},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Evolutionary fitness is not a probability of future survival; it is a retrospective label. Preferring the fittest is not assigning higher probability, it is betting on the only known survivor. This avoids the 'subjective probability' trap."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Popper explicitly used evolutionary epistemology. Therefore, this explanation IS on his own terms. The normative question is answered by the norm of 'survival of the fittest idea' which Popper endorsed."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "If multiple survive, the 'fittest' is the one with the highest content (most adapted to severe environments/tests). The tie-breaker is inherent in the definition of fitness in this context."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "We are not predicting the future event of the theory holding; we are selecting the organism (theory) that has proven robust. The action is 'support the survivor,' not 'expect the survivor to persist.'"},
+        {"handle": "[SRC_022] against SRC_019", "kind": "rebutted", "note": "This is not self-deception; it is a clear-eyed adoption of an evolutionary stance. The logical context (selection history) directly informs the practical context (support the selected) without needing a bridge of induction."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "The dichotomy is dissolved by the evolutionary model: the logical history of selection IS the pragmatic reason for support. No extra step is needed."},
+        {"handle": "[SRC_016] against SRC_005", "kind": "rebutted", "note": "The horse analogy is replaced by the 'last man standing' analogy. We don't bet on the horse because it won before (induction); we bet on it because the others fell down (elimination)."}
+      ],
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "The preference is a 'methodological fiction' or a 'useful myth': Popper knew strict adherence to non-induction would paralyze action, so he advocated a pragmatic inconsistency where scientists *act as if* corroboration implies reliability, while *knowing* logically it does not.",
+      "mechanism": "This is a form of 'double-think' or compartmentalization required for the functioning of science. The 'cost' is the integrity of the philosophical system, which becomes a prescriptive ideal rather than a descriptive reality of scientific practice. The mechanism is 'pragmatic suspension of disbelief.'",
+      "counterconditions": [
+        "If Popper explicitly denied holding this view.",
+        "If the 'fiction' can be shown to be unnecessary for action."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_010", "kind": "revised", "note": "Revising the claim: it's not that verisimilitude fails, but that the *appeal* to it is the fiction. We pretend it works to get out of bed in the morning."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "This candidate embraces the charge of 'inductive pragmatism.' It admits the smuggling occurs but argues it is a necessary, conscious smuggling for the sake of progress."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Popper's terms include the recognition of human fallibility and the need for heuristic rules. If the rule is 'act as if,' that is a valid Popperian heuristic, even if logically flawed."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "The fiction handles ties by arbitrary choice or convention, admitting that logic runs out and convention takes over."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The conflation is admitted! The defense is that the conflation is practically indispensable. We conflate prediction and preference because we must act."},
+        {"handle": "[SRC_022] against SRC_019", "kind": "rebutted", "note": "This candidate argues that Popper's distinction was never meant to be a rigid wall but a heuristic device. The 'strategic self-deception' is the actual mechanism of scientific progress."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "The solution is 'incomplete' by design. It accepts the gap and fills it with human will, not logic."},
+        {"handle": "[SRC_016] against SRC_005", "kind": "rebutted", "note": "The horse betting analogy is perfect: we know the odds are unknown (no induction), but we bet anyway based on past form because not betting is worse. It is a pragmatic, not logical, move."}
+      ],
+      "optional_refs": ["SRC_008"]
+    },
+    {
+      "claim": "The problem rests on a category mistake: 'preference' in Popper's system is not a doxastic attitude (belief in truth) nor a probabilistic wager, but a 'commitment to criticize.' We prefer the better-corroborated theory to subject it to even more severe tests, not to rely on it for successful engineering.",
+      "mechanism": "The 'preference' is actually a 'targeting priority.' Scientists focus their resources on the most promising (corroborated) theory because refuting it would yield the highest gain in knowledge. Action based on it is secondary and always provisional. The cost is redefining 'scientific action' away from 'technological control' toward 'experimental probing.'",
+      "counterconditions": [
+        "If scientists clearly use corroborated theories for stable technological applications (bridges, medicines) where 'testing' is not the goal.",
+        "If Popper himself endorsed the use of corroborated theories for reliable prediction in everyday life."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "Verisimilitude is irrelevant here. The preference is for the 'best target,' not the 'best map.'"},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Risk management is redefined: the risk is not 'error in application' but 'missed opportunity for learning.'"},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "This is strictly on Popper's terms: science is about growth of knowledge, not utility. The normative question is answered by the norm of 'maximizing learning potential.'"},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Ties are broken by which theory offers more testable consequences (content), aligning with the goal of learning."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "Sharp distinction maintained: we do not predict success; we predict that testing this theory will be informative."},
+        {"handle": "[SRC_022] against SRC_019", "kind": "rebutted", "note": "No self-deception: the scientist knows they are using the theory as a whetstone, not a shield."},
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "The bridge is built by redefining the destination. If the goal is criticism, corroboration logically points to the best candidate."},
+        {"handle": "[SRC_016] against SRC_005", "kind": "rebutted", "note": "The horse analogy fails because we aren't betting on the horse to win; we are studying the winning horse to understand speed. Different game entirely."}
+      ],
+      "optional_refs": ["SRC_002"]
+    },
+    {
+      "claim": "Accepting the preference requires abandoning the 'deductivist' purity of Popper's early work and adopting a 'critical rationalist' framework where 'reasonableness' replaces 'certainty.' In this view, preferring the corroborated theory is 'reasonable' (not 'rational' in the strict logical sense) because it is the result of critical scrutiny, even if it lacks logical justification.",
+      "mechanism": "Shift the standard of evaluation from 'logical validity' to 'critical reasonableness.' An action is reasonable if it survives critical debate. Preferring the corroborated theory survives such debate; preferring an ad-hoc or refuted one does not. Induction is not smuggled in; it is replaced by a broader notion of rationality that includes non-justificational criticism.",
+      "counterconditions": [
+        "If 'reasonableness' is just a codeword for 'inductive intuition'.",
+        "If this shift abandons too much of Popper's original deductive project."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "Verisimilitude is a component of reasonableness, but the core is the 'critical process.' The preference is reasonable because it honors the process."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "It distinguishes Popper's view from inductive pragmatism by grounding the preference in the *history of criticism* rather than *expectations of success*."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "Later Popper (Critical Rationalism) explicitly moved in this direction. It is defensible on his *evolved* terms."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Reasonableness handles ties through further critical discussion, not algorithmic rules."},
+        {"handle": "[SRC_009] against SRC_006", "kind": "rebutted", "note": "The conflation is avoided by defining 'preference' as 'adoption of the most critically defensible position,' which is distinct from 'prediction.'"},
+        {"handle": "[SRC_022] against SRC_019", "kind": "rebutted", "note": "Not self-deception, but a maturation of the philosophy. The distinction between contexts is bridged by the concept of 'critical responsibility.'"},
+        {"handle": "[SRC_021] against SRC_018", "kind": "rebutted", "note": "The dichotomy is false because 'critical rationality' encompasses both testing and acting under a single umbrella of 'survival of criticism.'"},
+        {"handle": "[SRC_016] against SRC_005", "kind": "rebutted", "note": "The horse analogy is updated: we choose the horse that has withstood the most rigorous veterinary inspection (criticism), which is a reasonable choice, even if not a guaranteed winner."}
+      ],
+      "optional_refs": ["SRC_003"]
+    }
+  ]
+}

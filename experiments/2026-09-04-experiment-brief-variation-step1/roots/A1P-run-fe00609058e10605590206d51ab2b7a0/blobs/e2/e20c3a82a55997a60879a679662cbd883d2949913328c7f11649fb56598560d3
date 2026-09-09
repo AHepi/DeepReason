@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that preferring the 'only standing candidate' avoids induction fails because the move from 'others are falsified' to 'choose this one' implicitly assumes the uniformity of nature (that future tests will resemble past ones). Without this inductive assumption, the fact that alternatives A, B, and C failed yesterday provides no rational basis to expect D to succeed today or to be a better bet than an unconceived alternative E. Thus, the preference smuggles in induction by treating past survival as a reliable guide for future action, contradicting the claim that it relies solely on a deductive state of 'lack of disqualification'.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Rational action requires a link between past test results and future performance, which Popper's strict separation of corroboration from probability cannot provide without covertly assuming inductive principles.",
+      "premise_evidence": null,
+      "successor_question": "If the 'betting quotient' is not based on probability, what specific non-inductive principle justifies the expectation that the 'standing candidate' will not fail the very next test?"
+    }
+  ]
+}

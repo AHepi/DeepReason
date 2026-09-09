@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation as required because it defines the relation by referencing external targets (SRC_002 and SRC_003) rather than naming the kind of relation and stating its refutation conditions independently within the response. The problem explicitly demands that 'a summary of the endpoints is not a relation,' yet the target's core claim ('REDUCES to the mechanism described in SRC_002 and SRC_003') functions as a pointer to external summaries rather than a self-contained definition of the relation's nature (e.g., dependence, reduction) and its specific refutation criteria derived from first principles.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "The problem requires proposing a substantive relation by naming its kind and stating what it is refuted if, explicitly noting that summarizing endpoints is insufficient.",
+      "premise_evidence": null,
+      "successor_question": "Can the target restate the relation of 'inevitable dependency' and its refutation condition without referencing SRC_002 or SRC_003, explicitly naming the relation kind and deriving the refutation scenario from the internal logic of the preference relation itself?"
+    }
+  ]
+}

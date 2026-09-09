@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that preference is a 'tautology' fails when multiple theories survive severe tests, a scenario the target acknowledges but dismisses as 'arbitrary.' Popper explicitly rejects arbitrariness in theory choice, advocating for the 'better-corroborated' theory. By reducing the choice among survivors to mere status reporting or arbitrary selection, the target ignores Popper's specific criterion of comparative test severity, thereby failing to explain how the preference for the *better* (not just *any*) survivor is defensible without implicitly relying on the inductive expectation that past severity predicts future reliability.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper advocates choosing the 'better-corroborated' theory among survivors, not just any survivor, and rejects arbitrary choice.",
+      "premise_evidence": null,
+      "successor_question": "If the choice among multiple surviving theories is not arbitrary, what non-inductive principle allows Popper to rank them by 'degree of corroboration' for the purpose of action?"
+    }
+  ]
+}

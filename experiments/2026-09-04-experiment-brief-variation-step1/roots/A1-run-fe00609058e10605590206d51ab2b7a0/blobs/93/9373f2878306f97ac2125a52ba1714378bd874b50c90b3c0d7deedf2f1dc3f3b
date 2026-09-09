@@ -1,0 +1,330 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, pragmatic decision rule based on verisimilitude (truth-likeness), where 'preference' signals a theory has survived severe tests and thus possesses higher content and potential truth-likeness, without assigning it logical probability.",
+      "mechanism": "Popper distinguishes between logical probability (which decreases with content) and corroboration (which increases with severity of tests passed). The rational agent prefers the theory with higher verisimilitude not because it is 'more likely true' in an inductive sense, but because it has withstood attempts to falsify it, making it the best available conjecture for action. This is a methodological rule, not an inductive inference.",
+      "counterconditions": [
+        "If verisimilitude cannot be formally defined or calculated without relying on inductive assumptions (as argued by Miller and Tichý).",
+        "If the preference for survival implicitly assumes that the future will resemble the past (the problem of induction).",
+        "If 'acting on' a theory logically entails an expectation of success that contradicts the rejection of probability."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_018] against SRC_013",
+          "kind": "rebutted",
+          "note": "The claim does not conflate logical probability with causal reliability; it explicitly rejects logical probability in favor of verisimilitude as a comparative metric of content and test survival, which is a distinct category in Popper's framework."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "While Popper conceded difficulties in formalizing verisimilitude, he maintained it as a regulative ideal. The defense here relies on the *concept* of truth-likeness as a guide for preference, not a calculable score, avoiding the formalization trap while retaining the philosophical utility."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "The mechanism avoids causal history justification by framing preference as a current state of 'best-tested-ness' rather than a prediction based on past success patterns. It is a snapshot of critical status, not an inductive projection."
+        },
+        {
+          "handle": "[SRC_022] against SRC_005",
+          "kind": "rebutted",
+          "note": "Acknowledges the Miller/Tichý critique but argues that Popper's later work treats verisimilitude as a qualitative, not quantitative, guide. The defense holds if we accept verisimilitude as a non-formalizable but necessary heuristic for scientific progress."
+        },
+        {
+          "handle": "[SRC_017] against SRC_012",
+          "kind": "rebutted",
+          "note": "Similar to SRC_022: the collapse of formal verisimilitude does not negate its utility as a conceptual tool for preferring theories with higher empirical content and fewer known errors."
+        },
+        {
+          "handle": "[SRC_021] against SRC_016",
+          "kind": "rebutted",
+          "note": "Popper's distinction between scientific logic and rational action allows for a pragmatic preference in the latter without violating the former. The 'smuggling' charge fails if the preference is viewed as a decision postulate for action, not a logical derivation."
+        },
+        {
+          "handle": "[SRC_019] against SRC_014",
+          "kind": "rebutted",
+          "note": "The cost of acting is addressed by accepting that action requires a choice among fallible conjectures. The preference is defensible as the least irrational choice available, even without a guarantee of success."
+        },
+        {
+          "handle": "[SRC_020] against SRC_015",
+          "kind": "rebutted",
+          "note": "The 'residue of criticism' provides a non-arbitrary basis for preference. It is not a guarantee of truth, but a record of error elimination, which is sufficient for rational choice in a fallibilist framework."
+        }
+      ],
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories smuggles induction back into Popper's system, rendering his rejection of probabilistic confirmation inconsistent with scientific practice, because any preference based on past test survival implicitly assumes the uniformity of nature.",
+      "mechanism": "To prefer Theory A over Theory B because A has survived tests while B has not (or survived fewer) is to assume that the property of 'having survived tests' is a reliable indicator of future performance or truth. This assumption is inductive. Without it, the survival record is merely historical data with no normative force for future action.",
+      "counterconditions": [
+        "If Popper can define a non-inductive basis for preference (e.g., purely logical content or decisionism).",
+        "If the assumption of nature's uniformity is not required for the specific type of preference Popper advocates.",
+        "If the 'smuggled' induction is of a benign, unavoidable kind that Popper implicitly accepted."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_018] against SRC_013",
+          "kind": "revised",
+          "note": "Revised to clarify that the category error charge is valid if Popper claims his preference is purely logical. If he admits it's pragmatic, the error shifts to inconsistency rather than category confusion."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The failure of verisimilitude formalization strengthens this candidate: if the proposed non-inductive metric fails, the only remaining basis for preference is inductive."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "This candidate agrees that Popper rejects causal history justification, which is precisely why the preference is indefensible on his own strict terms unless he surreptitiously relies on it."
+        },
+        {
+          "handle": "[SRC_022] against SRC_005",
+          "kind": "rebutted",
+          "note": "The Miller/Tichý result supports this view by removing the primary non-inductive candidate (verisimilitude) from the field, leaving induction as the only apparent driver of preference."
+        },
+        {
+          "handle": "[SRC_017] against SRC_012",
+          "kind": "rebutted",
+          "note": "Popper's concession on verisimilitude is taken as evidence that his system lacks a coherent non-inductive foundation for preference."
+        },
+        {
+          "handle": "[SRC_021] against SRC_016",
+          "kind": "rebutted",
+          "note": "Argues that Popper's treatment of rational action *does* rely on an implicit inductive step, contradicting his explicit denial. The dichotomy is false because the 'rational' part secretly contains induction."
+        },
+        {
+          "handle": "[SRC_019] against SRC_014",
+          "kind": "rebutted",
+          "note": "The core cost of acting is that we *must* assume some regularity to act at all. If Popper denies this assumption, he leaves action groundless; if he accepts it, he accepts induction."
+        },
+        {
+          "handle": "[SRC_020] against SRC_015",
+          "kind": "rebutted",
+          "note": "The 'residue of criticism' is only non-arbitrary if we assume that eliminating errors leads us closer to truth or success, which is itself an inductive belief about the structure of reality."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The resolution lies in reinterpreting corroboration as an evolutionary selection mechanism where 'preference' is a survival trait of the methodology, not a logical inference about the theory's truth, thereby bypassing the need for induction or probability.",
+      "mechanism": "Drawing on evolutionary epistemology, the preference for corroborated theories is not a logical deduction about the world's structure but a methodological rule that has itself been 'corroborated' by the survival of science. We prefer well-tested theories because the *method* of preferring them has allowed our scientific frameworks to survive and expand. This shifts the locus of justification from the individual theory to the meta-methodology.",
+      "counterconditions": [
+        "If evolutionary success is not correlated with truth-likeness (the argument from pessimistic meta-induction).",
+        "If the mechanism requires assuming that the environment (nature) is stable enough for selection to work.",
+        "If this view reduces scientific rationality to mere biological adaptation."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_018] against SRC_013",
+          "kind": "rebutted",
+          "note": "Evolutionary selection is a causal process, not a logical probability calculation. It avoids the category error by changing the domain of explanation from logic to biology/methodology."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departure: This approach abandons verisimilitude as the primary justification in favor of evolutionary fitness of methods, sidestepping the formalization issues of truth-likeness."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "Evolutionary explanations are inherently historical/causal, but they justify *current* fitness without needing to predict the future via induction. The preference is for what works *now* based on what worked *then*, which is descriptive, not normative in the inductive sense."
+        },
+        {
+          "handle": "[SRC_022] against SRC_005",
+          "kind": "rebutted",
+          "note": "Since this mechanism does not rely on formal verisimilitude, the Miller/Tichý critique is irrelevant to this specific defense."
+        },
+        {
+          "handle": "[SRC_017] against SRC_012",
+          "kind": "rebutted",
+          "note": "Same as above; the collapse of formal verisimilitude does not impact an evolutionary account of methodological preference."
+        },
+        {
+          "handle": "[SRC_021] against SRC_016",
+          "kind": "rebutted",
+          "note": "Popper himself engaged with evolutionary epistemology. This is not a false dichotomy but an extension of his own later thoughts on growth of knowledge."
+        },
+        {
+          "handle": "[SRC_019] against SRC_014",
+          "kind": "rebutted",
+          "note": "The cost of acting is met by acknowledging that our methods are adapted to our environment. If the environment changes radically, the method may fail, but that is a risk of evolution, not a flaw in the logic of preference."
+        },
+        {
+          "handle": "[SRC_020] against SRC_015",
+          "kind": "rebutted",
+          "note": "The 'residue of criticism' is interpreted here as the evolutionary pressure that shaped the method. It is non-arbitrary because it is the result of a selection process."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The dilemma dissolves if we treat the preference for corroborated theories as a convention or decision postulate, similar to choosing axioms, rather than a discovery of objective probability, thus preserving Popper's anti-inductivism at the cost of grounding rationality in social agreement.",
+      "mechanism": "Popper explicitly frames the choice of the best-tested theory as a 'decision.' In this view, there is no logical bridge between 'survived tests' and 'should be used.' The bridge is built by a voluntary commitment to a rule of procedure: 'We decide to act as if the best-tested theory is the most reliable.' This avoids smuggling in induction because it makes no claim about the world guaranteeing the theory's success.",
+      "counterconditions": [
+        "If the decision is arbitrary, undermining the claim of rationality.",
+        "If the convention itself requires an inductive justification to be adopted.",
+        "If this leads to relativism where any decision rule is as good as another."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_018] against SRC_013",
+          "kind": "rebutted",
+          "note": "A decision postulate is explicitly non-logical in the derivational sense, so no category error occurs. It is a pragmatic move, not a logical one."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departure: Rejects verisimilitude entirely in favor of conventionalism. The metric is social agreement on rules, not truth-likeness."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "Decisions do not require causal history justification; they require only a will to adopt a rule. The past success of the rule is irrelevant to its validity as a chosen convention."
+        },
+        {
+          "handle": "[SRC_022] against SRC_005",
+          "kind": "rebutted",
+          "note": "Irrelevant, as this approach does not use verisimilitude."
+        },
+        {
+          "handle": "[SRC_017] against SRC_012",
+          "kind": "rebutted",
+          "note": "Irrelevant, as this approach does not use verisimilitude."
+        },
+        {
+          "handle": "[SRC_021] against SRC_016",
+          "kind": "rebutted",
+          "note": "Popper's discussion of 'decision' supports this. It is not a false dichotomy but a recognition that ultimate foundations of action are volitional, not logical."
+        },
+        {
+          "handle": "[SRC_019] against SRC_014",
+          "kind": "rebutted",
+          "note": "The cost of acting is borne by the agent who makes the decision. The justification is internal to the decision-maker's commitment to the scientific game."
+        },
+        {
+          "handle": "[SRC_020] against SRC_015",
+          "kind": "rebutted",
+          "note": "The 'residue of criticism' informs the decision but does not dictate it. The non-arbitrariness comes from the shared goals of the scientific community, not from logical necessity."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if we accept a weakened form of induction ('pragmatic induction') that Popper officially rejected but practically utilized, admitting a tension in his system that reflects the human condition of needing to act despite uncertainty.",
+      "mechanism": "This candidate posits that Popper's system contains an unavoidable pragmatic contradiction. While logically rejecting induction, the act of preferring corroborated theories necessitates a 'leap of faith' that functions like induction. The defense is that this leap is psychologically and practically inevitable, even if logically unjustified. The 'cost' is admitting that Popper's strict logic cannot fully account for scientific practice without a hidden inductive engine.",
+      "counterconditions": [
+        "If a purely non-inductive account (like decisionism or evolution) can fully explain the preference.",
+        "If the 'pragmatic induction' is fundamentally different from the Humean induction Popper rejected.",
+        "If admitting this tension destroys the coherence of Critical Rationalism."
+      ],
+      "typicality": 0.40,
+      "discharges": [
+        {
+          "handle": "[SRC_018] against SRC_013",
+          "kind": "revised",
+          "note": "Revised to acknowledge that the 'category error' might actually be a 'necessary inconsistency.' The claim is that Popper conflates them because he must, to function."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The failure of verisimilitude supports this candidate: since the non-inductive metrics fail, we are forced back to a tacit induction."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "Agrees that Popper rejects causal justification, but argues he fails to live up to this rejection in practice, hence the 'smuggling' charge is correct."
+        },
+        {
+          "handle": "[SRC_022] against SRC_005",
+          "kind": "rebutted",
+          "note": "The collapse of verisimilitude leaves pragmatic induction as the only remaining explanation for why scientists actually behave as they do."
+        },
+        {
+          "handle": "[SRC_017] against SRC_012",
+          "kind": "rebutted",
+          "note": "Popper's concession on verisimilitude is seen as an admission that his non-inductive tools were insufficient, forcing reliance on pragmatic induction."
+        },
+        {
+          "handle": "[SRC_021] against SRC_016",
+          "kind": "rebutted",
+          "note": "Rejects the idea that Popper successfully separated science and engineering/action. The 'smuggling' happens precisely at the point of action."
+        },
+        {
+          "handle": "[SRC_019] against SRC_014",
+          "kind": "rebutted",
+          "note": "The cost of acting is exactly the acceptance of this pragmatic induction. We pay with logical purity to gain practical efficacy."
+        },
+        {
+          "handle": "[SRC_020] against SRC_015",
+          "kind": "rebutted",
+          "note": "The 'residue of criticism' is the trigger for the pragmatic leap, but the leap itself is inductive in nature."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is an illusion of language; 'better-corroborated' simply means 'currently preferred for action,' making the statement tautological and devoid of epistemic weight regarding truth or probability.",
+      "mechanism": "This deflationary account suggests that 'corroboration' is not a property of the theory that *leads* to preference, but is merely the label we give to theories we *have decided* to prefer for other reasons (funding, simplicity, aesthetic). The link between testing and preference is severed; testing is just one of many factors in a sociological decision process. This avoids induction by denying the premise that test survival is the *reason* for preference.",
+      "counterconditions": [
+        "If scientists genuinely cite test survival as the primary reason for preference.",
+        "If the term 'corroboration' has a specific technical meaning in Popper that exceeds mere preference.",
+        "If this view renders the concept of 'severe testing' meaningless."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {
+          "handle": "[SRC_018] against SRC_013",
+          "kind": "rebutted",
+          "note": "By dissolving the link entirely, there is no conflation of categories. The terms are just labels for social states."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "departure_declared",
+          "note": "Departure: Abandons the search for a philosophical justification (verisimilitude or otherwise) and replaces it with a sociological description."
+        },
+        {
+          "handle": "[SRC_011] against SRC_009",
+          "kind": "rebutted",
+          "note": "Since no justification based on past success is offered (only a description of current status), the charge of smuggling induction fails."
+        },
+        {
+          "handle": "[SRC_022] against SRC_005",
+          "kind": "rebutted",
+          "note": "Verisimilitude is irrelevant in a purely sociological account."
+        },
+        {
+          "handle": "[SRC_017] against SRC_012",
+          "kind": "rebutted",
+          "note": "Same as above."
+        },
+        {
+          "handle": "[SRC_021] against SRC_016",
+          "kind": "rebutted",
+          "note": "Collapses the distinction between science and engineering into a single decision-making process governed by social norms."
+        },
+        {
+          "handle": "[SRC_019] against SRC_014",
+          "kind": "rebutted",
+          "note": "The cost of acting is distributed across social consensus, not individual rationality."
+        },
+        {
+          "handle": "[SRC_020] against SRC_015",
+          "kind": "rebutted",
+          "note": "The 'residue of criticism' is just one narrative among many used to justify decisions post-hoc."
+        }
+      ],
+      "optional_refs": []
+    }
+  ]
+}

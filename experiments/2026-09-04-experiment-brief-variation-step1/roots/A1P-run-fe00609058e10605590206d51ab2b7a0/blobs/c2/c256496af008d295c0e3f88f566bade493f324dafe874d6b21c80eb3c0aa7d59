@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'methodological rule of action' grounded in verisimilitude, where the cost is accepting that 'rationality' in science is pragmatic efficacy rather than logical probability.",
+      "mechanism": "This candidate synthesizes SRC_005 and SRC_008 by reframing the preference as a decision-theoretic move within a falsificationist framework. It argues that while corroboration does not increase logical probability, it increases 'verisimilitude' (truth-likeness) in a way that justifies action without invoking induction. The mechanism is a 'pragmatic decree': we act on the best-tested theory not because it is likely true, but because it has survived the most severe attempts to falsify it, making it the most reliable guide for action available. This avoids the genetic fallacy (SRC_019) by focusing on the logical status of the rule, not the psychological origin of the belief. It rebuts the charge of arbitrary conventionalism (SRC_021, SRC_011) by grounding the rule in the objective history of testing, not mere agreement.",
+      "counterconditions": [
+        "If verisimilitude cannot be defined without reintroducing probabilistic assumptions (as per Tichý/Miller critiques).",
+        "If the distinction between 'acting as if true' and 'believing it probable' collapses in practice.",
+        "If the 'severity' of tests cannot be assessed without inductive background knowledge."
+      ],
+      "discharges": [
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "The candidate distinguishes between the evolutionary origin of the preference (descriptive) and its justification as a methodological rule (normative), avoiding the genetic fallacy."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "It explicitly leverages Popper's non-inductive rationality argument based on severity and verisimilitude, rejecting the false dichotomy of 'induction vs arbitrary decree'."},
+        {"handle": "[SRC_012] against SRC_009", "kind": "rebutted", "note": "The move from 'others falsified' to 'choose this' is framed as a logical elimination of error, not an inductive projection of uniformity; the choice is of the least refuted option, not the most likely future performer."},
+        {"handle": "[SRC_021] against SRC_008", "kind": "revised", "note": "Clarified that the 'convention' is not arbitrary like Poincaré's geometry but is constrained by the objective history of falsification attempts, thus meeting Popper's demarcation criteria."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "rebutted", "note": "Distinguished 'methodological convention' (a rule for playing the game of science) from 'pragmatic reliability' (an inductive claim about the world); the former is adopted to facilitate the latter without asserting it as truth."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "The candidate explicitly constructs the strongest case for the induction-smuggling view in its counterconditions and then resolves the conflict by defending the verisimilitude route."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Argues that verisimilitude, while difficult to formalize, remains a valid qualitative concept in Popper's later work that does not strictly require probabilistic induction."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Acknowledges the Tichý/Miller critique but posits that Popper's intuitive notion of 'content' surviving tests still holds heuristic value for preference, even if the formal definition failed."}
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_005", "SRC_008"]
+    },
+    {
+      "claim": "The preference inevitably smuggles induction back in, rendering Popper's system internally inconsistent when transitioning from logical analysis to practical application, unless one accepts a radical 'evolutionary epistemology' that abandons traditional rational justification entirely.",
+      "mechanism": "Building on SRC_006 and SRC_007, this candidate argues that any preference for the future utility of a past-successful theory is inductive by definition. The only way to save Popper is to adopt the evolutionary stance: 'rationality' is an illusion, and science is merely a biological selection process where 'truth' is irrelevant to 'survival'. The mechanism is 'selection without justification'. The cost is high: it concedes that scientists have no logical reason to prefer corroborated theories, only a causal tendency to do so, which undermines the normative force of Popper's philosophy.",
+      "counterconditions": [
+        "If evolutionary success can be shown to correlate with truth-likeness without circularity.",
+        "If the normative 'ought' of scientific practice can be fully reduced to descriptive 'is' of evolutionary fitness.",
+        "If Popper would accept abandoning the search for a logical basis for preference."
+      ],
+      "discharges": [
+        {"handle": "[SRC_019] against SRC_016", "kind": "revised", "note": "Adopts the evolutionary explanation as the primary justification, explicitly conflating origin and justification to argue that 'justification' itself is an evolutionary artifact."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Claims Popper's arguments for non-inductive rationality are unsuccessful attempts to mask the underlying inductive leap required for action."},
+        {"handle": "[SRC_012] against SRC_009", "kind": "rebutted", "note": "Agrees that the move assumes uniformity of nature; argues this assumption is unavoidable for any acting agent, thus proving the smuggling of induction."},
+        {"handle": "[SRC_021] against SRC_008", "kind": "rebutted", "note": "Argues that calling the rule a 'convention' does not escape induction if the convention itself is chosen for its expected (inductive) success."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "rebutted", "note": "Insists that 'pragmatic reliability' is inherently inductive, and thus any methodological rule aiming at it smuggles induction in."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Provides the strong case for the induction-smuggling view as the primary claim, resolving the conflict by accepting the inconsistency or the evolutionary pivot."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Asserts that verisimilitude is a covert form of probability, thus failing to escape induction."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Uses the failure of formal verisimilitude as evidence that the non-inductive path is blocked."}
+      ],
+      "typicality": 0.75,
+      "optional_refs": ["SRC_006", "SRC_007"]
+    },
+    {
+      "claim": "The dilemma is a category error: Popper's 'preference' is not a belief state (probability) nor a blind habit (evolution), but a 'critical commitment' to the theory that offers the most informative potential for future falsification.",
+      "mechanism": "This atypical candidate proposes that the preference is driven by the goal of maximizing learning speed, not truth or survival. We prefer the well-corroborated theory because it has high empirical content and has survived, making it the best 'punching bag' for new tests. Acting on it exposes us to the greatest risk of refutation, which drives progress. The mechanism is 'risk-maximization for learning'. The cost is redefining 'scientific action' not as achieving goals via reliable tools, but as setting up the most dangerous experiments possible.",
+      "counterconditions": [
+        "If scientists actually prefer safe, well-corroborated theories for engineering stability rather than risk.",
+        "If 'acting on' a theory implies trusting it for outcomes, not just testing it.",
+        "If the goal of science is truth/survival rather than rapid falsification."
+      ],
+      "discharges": [
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Reframes the issue as a strategic choice for learning efficiency, bypassing the origin/justification split."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Offers a third option beyond induction/arbitrary decree: the imperative of maximal testability."},
+        {"handle": "[SRC_012] against SRC_009", "kind": "rebutted", "note": "No assumption of uniformity is needed; the commitment is to the *process* of testing, not the *result* of future applications."},
+        {"handle": "[SRC_021] against SRC_008", "kind": "rebutted", "note": "This is a methodological rule derived from the logic of discovery, not an arbitrary convention."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "rebutted", "note": "Distinguishes 'reliability for action' (inductive) from 'utility for testing' (logical)."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Constructs a novel resolution that addresses the prompt's requirement for a decisive outcome."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Rejects verisimilitude in favor of 'testability potential' as the criterion."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Avoids the verisimilitude trap entirely by focusing on information content."}
+      ],
+      "typicality": 0.45,
+      "optional_refs": ["SRC_002"]
+    },
+    {
+      "claim": "Popper's preference is defensible only as a 'fictionalist stance': we knowingly act on theories we believe to be false, treating them as useful fictions until broken, which costs the realist interpretation of scientific progress.",
+      "mechanism": "This candidate leans into the 'arbitrary decree' criticism but radicalizes it. It argues that Popper's system forces us to be instrumentalists. We prefer the corroborated theory not because it's 'truer' or 'more probable', but because it is the current 'best tool'. The mechanism is 'conscious fictionalism'. The cost is abandoning scientific realism; we never get closer to truth, we just swap tools. This directly addresses the 'smuggling induction' charge by admitting we aren't trying to find truth, just working models.",
+      "counterconditions": [
+        "If Popper was indeed a realist (which he claimed to be).",
+        "If 'acting on' a theory requires believing it is approximately true.",
+        "If the history of science shows convergence to truth rather than just tool replacement."
+      ],
+      "discharges": [
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Accepts the descriptive evolutionary account but adds the normative layer of conscious fictionalism."},
+        {"handle": "[SRC_020] against SRC_017", "kind": "rebutted", "note": "Argues that the 'non-inductive rationality' is precisely the rationality of using the best available fiction."},
+        {"handle": "[SRC_012] against SRC_009", "kind": "rebutted", "note": "No uniformity assumed; only the assumption that the current tool works for now."},
+        {"handle": "[SRC_021] against SRC_008", "kind": "revised", "note": "Embraces the 'arbitrary' label but redefines it as 'pragmatically necessary fictionalism', distinguishing it from Poincaré's geometric conventionalism."},
+        {"handle": "[SRC_011] against SRC_008", "kind": "rebutted", "note": "Separates 'pragmatic reliability' (using the tool) from 'inductive belief' (thinking the tool mirrors reality)."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Presents the fictionalist case as the survivor of the conflict."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Denies verisimilitude is needed; utility is sufficient."},
+        {"handle": "[SRC_014] against SRC_013", "kind": "rebutted", "note": "Aligns with the rejection of formal verisimilitude to support instrumentalism."}
+      ],
+      "typicality": 0.60,
+      "optional_refs": ["SRC_008", "SRC_006"]
+    }
+  ]
+}

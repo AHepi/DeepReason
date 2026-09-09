@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'risk-management' defense fails to distinguish Popper's preference from inductive pragmatism because the criterion 'least error-prone known option' implicitly assigns a higher subjective probability of future success to the corroborated theory. If a theory is preferred for action specifically because it is deemed 'less likely to fail' in the immediate future based on past survival, this constitutes an inductive inference about the uniformity of nature (that past test conditions predict future ones), which contradicts the claim that the preference is purely non-inductive.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Preferring a theory because it is the 'least error-prone known option' based on past survival is functionally equivalent to believing it has a higher probability of future reliability.",
+      "premise_evidence": null,
+      "successor_question": "Can a preference for action be justified solely by logical content and past falsification history without implicitly relying on the assumption that the future will resemble the past?"
+    }
+  ]
+}

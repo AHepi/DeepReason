@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation because it asserts that 'Critical Conventionalism' and 'methodological falsificationism' share the mechanism of 'constitutive rule adoption,' which is historically and theoretically incorrect. Methodological falsificationism (Popper) explicitly rejects constitutive rules or conventions as the basis for scientific demarcation, relying instead on the logical asymmetry between verification and falsification and the decision to accept basic statements, not the adoption of arbitrary game-like rules. By grounding the relation in a mechanism ('constitutive rule adoption') that one of the endpoints (falsificationism) fundamentally opposes, the target describes a non-existent shared mechanism, thereby failing to establish a valid 'integration' or 'shared mechanism' relation as required by the problem context.",
+      "premise": "Methodological falsificationism rejects constitutive rule adoption as a foundation for scientific methodology.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "successor_question": "If constitutive rule adoption is not shared, what specific operational mechanism actually links Critical Conventionalism and methodological falsificationism without collapsing their distinct epistemological foundations?"
+    }
+  ]
+}

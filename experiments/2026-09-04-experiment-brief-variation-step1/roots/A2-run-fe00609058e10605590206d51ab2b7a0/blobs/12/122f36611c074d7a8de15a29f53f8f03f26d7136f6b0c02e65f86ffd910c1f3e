@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms not as an inductive inference that the theory is more likely true, but as a non-inductive methodological rule of 'risk minimization' where one chooses the theory that has withstood the most severe attempts at falsification because it contains the most content and thus offers the greatest opportunity for future error detection, whereas choosing a less tested theory would be an arbitrary leap into the unknown without the benefit of prior critical scrutiny.",
+    "mechanism": "The mechanism is the asymmetry between verification and falsification combined with the concept of verisimilitude (truth-likeness) as a regulative ideal; by selecting the theory that has survived the most rigorous testing, the scientist maximizes the informational content of their current position and minimizes the risk of acting on a theory known to be false or poorly tested, without assigning any probabilistic weight to its future success.",
+    "counterconditions": [
+      "If the preference for the better-corroborated theory implicitly assumes that the conditions which made it superior in the past will hold in the future, then it smuggles in induction.",
+      "If acting on a theory requires assigning it a higher subjective probability of success for practical purposes, then the distinction between corroboration and probability collapses.",
+      "If Popper's formal attempt to define verisimilitude failed logically, then it cannot serve as a rational basis for preferring one theory over another for action."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0aea4507c15f624018da4ca9ca280efa3ba862dc8b1dcce5cbe82f0cf873baa4",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'rational guide for future action' with 'prediction of future success.' Popper's rationality is negative: we choose the best-tested theory not because we expect it to succeed, but because it is the least irrational option available, having eliminated known errors. Minimizing known errors is rational precisely because it avoids what we know to be wrong, regardless of future outcomes."
+      },
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "Preferring Theory A based on past tests does not assume the future will resemble the past; it assumes only that Theory A has been subjected to more severe criticism and has not yet failed. The preference is based on the logical status of the theories (one has survived severe tests, the other has not), not on an inductive projection of past performance."
+      },
+      {
+        "handle": "10d458d5ba5df5b51b41f157dbd7e3ca6a57c55a4ae8258055f2e2ab7b067",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly distinguish between 'prediction of safety' and 'elimination of known danger.' The defense is not that the chosen theory is safe, but that it is the only one where known dangers have been actively sought and excluded through severe testing."
+      },
+      {
+        "handle": "12d85bc51c9af81516a777b5d4dc2339261479c247c63e2c28fd89918ef5ac05",
+        "kind": "rebutted",
+        "note": "The criticism fails to recognize that 'minimizing known falsification' is the only rational criterion available in a world without induction. We cannot know the future, but we can know what has failed in the past. Choosing the theory that has not failed is a logical necessity for critical rationalism, not a hidden probabilistic bet."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "departure_declared",
+        "note": "Departing from reliance on Popper's specific formal definition of verisimilitude. The argument rests instead on the methodological principle of severity: the theory that has passed more severe tests is preferred because it has been more thoroughly criticized, independent of a formal metric of truth-likeness."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "Preferring a theory for action does not inherently assume it will continue to work; it assumes only that it is the best candidate for criticism going forward. If it fails tomorrow, the method works by revealing the error. The assumption is that critical testing is the best way to learn, not that the current theory is true."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The criterion 'least error-prone known option' does not assign subjective probability. It is a comparative logical assessment: Theory A has been tested and not refuted; Theory B has not been tested as severely. Choosing A is a decision to act on the basis of more information (the results of the tests), not a probabilistic guess."
+      },
+      {
+        "handle": "350db731d51a09f1568348da67e40e50c3417a7e7bde9c041860ce7daf212ec",
+        "kind": "rebutted",
+        "note": "Acting on a theory as a methodological rule does not require assigning subjective probability of success. It requires only the acceptance of the rule: 'Always act on the best-tested theory to maximize the chance of detecting error.' This is a rule of conduct, not a belief about the world's regularity."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["bridge_engineering_safety_protocols"],
+      "shared_structure": [
+        "Selection of a design based on surviving stress tests rather than predicted longevity",
+        "Preference for the structure with known failure modes excluded over one untested",
+        "Action taken without certainty of future performance but with maximized critical scrutiny"
+      ],
+      "disanalogies": [
+        "Engineering often uses probabilistic risk assessment which Popper rejects",
+        "Bridges are static while scientific theories evolve dynamically",
+        "Safety factors in engineering imply a margin of error calculation akin to probability"
+      ],
+      "transfer_claims": [
+        "Just as engineers prefer bridges that passed load tests not because they believe they won't collapse, but because they know less about the untested ones, scientists prefer corroborated theories.",
+        "The rationality lies in the process of elimination of known weaknesses, not in the prediction of indefinite stability."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that choosing the tested bridge implicitly assumes the future loads will resemble past test loads.",
+        "If the decision to cross the bridge requires a subjective belief in its safety equivalent to probability."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

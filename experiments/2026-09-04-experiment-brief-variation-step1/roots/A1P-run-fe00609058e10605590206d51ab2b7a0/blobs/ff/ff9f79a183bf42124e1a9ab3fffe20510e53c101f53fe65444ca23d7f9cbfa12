@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that Popper was a 'crypto-inductivist' relying on 'metaphysical realism' to save his system is historically inaccurate and contradicts Popper's explicit rejection of such commitments. Popper defended the preference for better-corroborated theories not via hidden induction or realist metaphysics, but through the non-inductive logic of verisimilitude (truth-likeness) and the methodological rule that preferring severely tested theories maximizes the chance of eliminating error. The target fails to engage with Popper's actual solution (verisimilitude) and instead attacks a strawman version of Popper that relies on the very metaphysical assumptions he explicitly argued against.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly rejected metaphysical realism as a basis for scientific preference and proposed verisimilitude as the non-inductive justification for preferring corroborated theories.",
+      "premise_evidence": null,
+      "successor_question": "How does the target's assertion of 'crypto-inductivism' reconcile with Popper's detailed arguments in 'Conjectures and Refutations' regarding verisimilitude as a non-probabilistic, non-inductive measure of theoretical progress?"
+    }
+  ]
+}

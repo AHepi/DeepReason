@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation between the isolated context and its neighbourhood as required. Instead of defining a relation kind (e.g., dependence, reduction) between the specific endpoints provided in the problem context, the target constructs a conditional logical argument about the relationship between external entities (SRC_002, SRC_005, SRC_003) and the nature of scientific games. The 'REFUTED IF' clause describes a condition for the internal logic of that argument rather than refuting a proposed relation between the required context and neighbourhood.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

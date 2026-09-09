@@ -1,0 +1,35 @@
+## problem-context
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@72873b238a1a654e0e4c5709: program:reasoning_observation_pending
+- reason-counter@6e7604900f5fa42133261844: program:reasoning_observation_pending
+- reason-counter@56321c341ee389c18254af0d: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 35ea03bc8a3e0bb8134ef4012b354116494571639af52566f0f05cd1f439b133
+{"analogy":null,"claim":"The dilemma dissolves if we view scientific preference not as a logical justification or an inductive inference, but as an evolutionary selection mechanism where 'rationality' is replaced by the 'survival fitness' of ideas and the groups holding them.","counterconditions":[{"case":"If evolutionary success does not correlate with truth-likeness (e.g., useful fictions survive better than true theories).","checker_spec":null,"eval":"observation"},{"case":"If the normative question ('ought we to prefer?') cannot be reduced to a descriptive one ('we do prefer').","checker_spec":null,"eval":"observation"},{"case":"If Popper's specific demand for a logical basis for preference overrides evolutionary explanations.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Evolutionary Epistemology Shift: This mechanism reframes the problem. Scientists preferring corroborated theories is a behavioral trait selected for because groups that act on well-tested theories survive longer. The 'defensibility' is biological and sociological, not logical. Popper's terms hold if we accept science progresses via conjecture and elimination (variation and selection), and 'preference' is simply the retention phase of the algorithm.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- 370aeb54c8669434a376f57e32f985cfae5ed514915aad6f7b8a34fb50e7b8a3 [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- 370aeb54c8669434a376f57e32f985cfae5ed514915aad6f7b8a34fb50e7b8a3: {"analogy":null,"claim":"The dilemma dissolves if we view scientific preference as an evolutionary selection mechanism where 'rationality' is replaced by 'survi
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+DIRECTIVE: mount the strongest NEW specific case against TARGET 35ea03bc8a3e0bb8134ef4012b354116494571639af52566f0f05cd1f439b133, or attack=false if you find no genuine fault.

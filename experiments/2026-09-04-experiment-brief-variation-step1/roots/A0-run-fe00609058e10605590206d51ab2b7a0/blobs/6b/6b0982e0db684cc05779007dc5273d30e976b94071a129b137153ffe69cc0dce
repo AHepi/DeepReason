@@ -1,0 +1,177 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive, methodological decision to act on the theory that has withstood the most severe tests, accepting that this offers no guarantee of future success but represents the most rational course available to a critical rationalist.",
+      "mechanism": "Critical Preference as Methodological Rule: The preference is not an inductive inference about truth probability, but a procedural rule derived from the aim of science (finding truth). Since we cannot know the future, acting on the theory that has survived the toughest attempts at falsification is the only strategy consistent with the goal of eliminating error.",
+      "counterconditions": [
+        "If the concept of 'severe test' implicitly relies on inductive assumptions about the uniformity of nature.",
+        "If the choice to act on the best-tested theory requires a hidden belief that past performance predicts future reliability."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_003",
+          "kind": "rebutted",
+          "note": "The candidate addresses action in novel domains by framing the preference as a methodological rule for error elimination rather than a prediction of success. In novel domains, the rule remains: choose the theory that has best survived criticism, as it contains the least known error, even if the domain is new."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "The distinction between psychological expectation and logical justification is central. The defense argues that Popper's 'preference' is a logical commitment to a method (critical rationalism), not a psychological habit. It is defensible because it aligns with the normative aim of science, regardless of psychological states."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "revised",
+          "note": "Revised to clarify that the defense does not rely on 'verisimilitude' as a measurable quantity (which Popper struggled with), but on the comparative status of having survived more severe tests. The preference is for the theory with higher corroboration, defined strictly by test severity and number, avoiding probabilistic assessment of truth-likeness."
+        },
+        {
+          "handle": "[SRC_023] against SRC_010",
+          "kind": "rebutted",
+          "note": "Popper's requirement for rational action is satisfied by the consistency of the action with the aim of truth-seeking. Rationality here is defined as adherence to the critical method, not as maximizing expected utility via induction. Thus, preferring the best-corroborated theory is rational on Popper's specific definition of rationality."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate explicitly avoids using 'verisimilitude' as a formal metric to guide preference, sidestepping the Tichý/Miller refutation. Instead, it relies on the binary status of 'falsified' vs 'not yet falsified' and the ordinal ranking of 'severity of tests survived'."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "Agrees that the preference is rational because it aligns with the aim of science. Clarifies that this rationality is procedural and normative, not epistemic in the sense of granting higher probability. The 'volitional act' is guided by reason (the critical method), making it non-arbitrary."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "The evolutionary analogy supports the mechanism of survival (error elimination) but the justification for *preference* comes from the conscious adoption of the critical method as a rational standard for action, not merely from the fact of survival."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "Distinguishes clearly between the metaphysical assumption of uniformity (rejected) and the methodological decision to treat test conditions as stable for the purpose of testing (accepted). The preference relies only on the latter, which is a pragmatic necessity for testing, not an inductive leap."
+        }
+      ],
+      "optional_refs": [
+        "SRC_015"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because the very concept of a 'severe test' presupposes that the future will resemble the past, rendering the distinction between corroboration and probability illusory in practice.",
+      "mechanism": "Hidden Inductive Premise: Any claim that a theory surviving past tests is 'preferable' for future action logically entails the premise that the conditions under which it was tested will hold in the future. This premise is inductive. Without it, the report of past survival is irrelevant to future choice.",
+      "counterconditions": [
+        "If Popper can define 'severity' without referencing the probability of the evidence given the theory.",
+        "If the preference can be justified purely as a convention without any implicit claim about future reliability."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate argues that elimination alone is insufficient for action in novel domains precisely because the move from 'eliminated competitors' to 'choose this one' requires an inductive bridge. The criticism is addressed by showing that the target's attempt to avoid induction fails."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "The distinction between psychological and logical fails because the logical structure of the argument for preference *requires* an inductive step. If the preference is defensible, it must be because we expect the future to mirror the past; otherwise, the preference is arbitrary."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "Supports the criticism that verisimilitude smuggles in induction. Adds that even without verisimilitude, the act of preferring based on past tests assumes the relevance of those tests to the future, which is the core inductive assumption."
+        },
+        {
+          "handle": "[SRC_023] against SRC_010",
+          "kind": "rebutted",
+          "note": "Argues that Popper's own requirement for rational action cannot be met without induction. If rational action requires expecting some outcome, and the only basis for that expectation is past tests, then induction is unavoidable. Popper's denial is therefore self-defeating."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "departed_declared",
+          "note": "Departure declared: This candidate does not rely on the failure of verisimilitude specifically, but on the broader failure of any non-inductive link between past tests and future preference. The Tichý/Miller point is secondary to the fundamental structural flaw."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "Contests the idea that aligning with the aim of science is sufficient for rationality if the means to that aim (preferring tested theories) relies on a false or unjustified premise (induction). A rational aim pursued via irrational means is not fully rational."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Evolutionary selection explains survival, but scientists' *preference* implies a forward-looking judgment. If that judgment isn't inductive, it is groundless. The tension remains unresolved by evolutionary analogies."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "Argues that the 'methodological decision' to treat conditions as stable is itself an inductive gamble. One cannot simply decide nature is uniform for the sake of testing; if nature is not uniform, the test results are worthless for future action. The decision presupposes the very thing it tries to avoid assuming."
+        }
+      ],
+      "optional_refs": [
+        "SRC_016"
+      ]
+    },
+    {
+      "claim": "The tension is resolved by viewing corroboration as a measure of informational content rather than probability; we prefer high-corroboration theories because they are more informative and thus more falsifiable, making them better tools for learning, regardless of their truth probability.",
+      "mechanism": "Informational Content Heuristic: Preference is driven by the desire to learn quickly. Highly corroborated theories (in Popper's sense) are those that made bold, precise predictions and survived. They have high empirical content. Preferring them maximizes the potential for future falsification and learning, not the probability of being right.",
+      "counterconditions": [
+        "If scientists actually prefer safe, low-content theories that are hard to falsify.",
+        "If the link between 'surviving tests' and 'high content' breaks down in complex domains."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_003",
+          "kind": "rebutted",
+          "note": "In novel domains, high-content theories are still preferable because they risk more and thus teach more. Even if they fail, the learning gain is higher. The preference is for the best learning engine, not the safest bet."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "The defense is logical, not psychological. It justifies preference based on the structural property of the theory (high content/falsifiability) which is objectively determinable, bypassing the need for inductive justification of future truth."
+        },
+        {
+          "handle": "[SRC_014] against SRC_002",
+          "kind": "rebutted",
+          "note": "This approach sidesteps verisimilitude entirely. It does not claim the theory is closer to truth, only that it is a more efficient vehicle for testing. No probabilistic assessment of truth-likeness is needed."
+        },
+        {
+          "handle": "[SRC_023] against SRC_010",
+          "kind": "rebutted",
+          "note": "Rational action is defined here as action that maximizes the rate of error elimination. Preferring high-content theories is rational because it optimizes this metric, satisfying Popper's criteria without induction."
+        },
+        {
+          "handle": "[SRC_011] against SRC_008",
+          "kind": "rebutted",
+          "note": "Does not use verisimilitude. Uses 'empirical content' and 'degree of falsifiability', concepts that remain robust despite the collapse of formal verisimilitude."
+        },
+        {
+          "handle": "[SRC_007] against SRC_005",
+          "kind": "rebutted",
+          "note": "Aligns with the aim of science (truth) by maximizing the speed of convergence via bold conjectures. The preference is rational because it serves the aim most effectively."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Evolutionary selection favors survival, but the scientist's preference for high-content theories is a strategic choice to accelerate the evolutionary process of knowledge growth, justifying the active preference."
+        },
+        {
+          "handle": "[SRC_006] against SRC_004",
+          "kind": "rebutted",
+          "note": "The methodological decision to test high-content theories assumes only that testing is possible, not that nature is uniform. It exploits the logical structure of the theory, not patterns in nature."
+        }
+      ],
+      "optional_refs": [
+        "SRC_017"
+      ]
+    },
+    {
+      "claim": "The preference is a linguistic illusion; 'corroboration' is merely a report of past tests, and 'preference' is a separate psychological event. Popper's terms dissolve the link, leaving the scientist acting on instinct while using Popperian language to describe the past.",
+      "mechanism": "Semantic Decoupling: Strictly speaking, Popper's definitions sever the logical link between corroboration reports and future preference. Any perceived connection is a psychological habit (induction) that scientists retain despite their philosophy. The 'defense' is that Popper describes science as it is (psychologically inductive) while prescribing how it should be (logically deductive), accepting the cost of a permanent gap between description and prescription.",
+      "counterconditions": [
+        "If Popper successfully bridges the gap with his concept of 'verisimilitude' or 'critical preference'.",
+        "If the psychological habit can be shown to be non-inductive."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_021] against SRC_003",
+          "kind": "rebutted",
+          "note": "This candidate agrees that elimination doesn't justify action in novel domains logically. It posits that scientists *do* act on instinct."

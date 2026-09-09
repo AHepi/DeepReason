@@ -1,0 +1,268 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a rational, non-inductive methodological decision to prefer the theory with the highest verisimilitude (truth-likeness) among surviving competitors, without asserting its probability.",
+      "mechanism": "Verisimilitude-based selection: Corroboration reports past survival against severe tests. While this does not increase logical probability (which remains zero or low for universal laws), it provides the only available indicator that a theory has greater content and has withstood attempts to falsify it. Preferring it is a rational bet on truth-likeness, grounded in the aim of science (finding truth) rather than an inductive inference that the future will resemble the past.",
+      "counterconditions": [
+        "If verisimilitude cannot be empirically estimated without relying on inductive assumptions about the representativeness of past tests.",
+        "If the definition of 'severe test' implicitly requires the assumption that nature is uniform."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate explicitly defends the preference as 'rational' and aligned with the 'aim of science,' directly addressing the claim that calling it 'non-rational' misrepresents Popper. It clarifies that rationality here stems from methodological alignment with truth-seeking, not probabilistic calculation."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate distinguishes between the 'inductive assumption' of nature's uniformity (rejected) and the 'methodological decision' to treat test conditions as stable for the sake of falsification (accepted). It argues the latter is a rule of the game, not an ontological claim."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "revised",
+          "note": "REVISED: The original draft focused heavily on the defense. This version explicitly structures the argument to first present the strongest case FOR defensibility (verisimilitude) and then acknowledges the opposing view (smuggling induction) in the counterconditions and mechanism analysis, ensuring both sides are represented before concluding."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate argues that redefining preference as a 'state of having eliminated competitors' is precisely the non-inductive move required. It does not claim the survivor is true, only that it is the best available option given the elimination of others, thus answering the smuggling charge by denying the need for positive inductive support."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate accepts the criticism that verisimilitude is hard to measure but argues that Popper's framework relies on it as a regulative ideal. The 'smuggling' charge fails because the preference is based on the logical relation of content and falsification, not an empirical induction that high verisimilitude in the past guarantees it in the future."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate rejects the false dichotomy. It posits a third option: a critical rationalist justification where preference is based on the comparative success in error elimination, which is neither arbitrary nor inductive."
+        }
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_005"
+      ]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because the very concept of a 'severe test' presupposes the stability of natural laws and experimental conditions, an inductive assumption Popper explicitly sought to avoid.",
+      "mechanism": "Hidden Induction via Severity: A test is only 'severe' if the outcome was improbable given the background knowledge. However, assessing this improbability requires assuming that the background knowledge (and the conditions under which it was established) holds true for the current test instance. This reliance on the uniformity of nature across time instances is the core of Humean induction. Thus, corroboration rests on an unacknowledged inductive foundation.",
+      "counterconditions": [
+        "If severity can be defined purely syntactically or logically without reference to empirical stability.",
+        "If the failure of a test can be treated as a timeless logical contradiction independent of temporal context."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "While Popper claims the preference is rational, this candidate argues that his specific justification fails because the underlying mechanism (severity) is covertly inductive. Therefore, calling it 'rational' on his own terms is inconsistent if those terms forbid induction."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate argues that the distinction between 'methodological decision' and 'inductive assumption' is semantic. Deciding to treat conditions as stable *for the purpose of testing* effectively functions as an inductive assumption in practice, as it licenses predictions based on past performance."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "revised",
+          "note": "REVISED: This candidate now explicitly frames the argument as the 'strongest case' for the 'smuggling' position, detailing exactly how induction enters through the back door of 'severity,' thereby satisfying the requirement to make the strongest case for each answer."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate contends that merely stating preference is a 'state of elimination' does not solve the problem. The act of expecting the eliminated-theory's successor to work in the future (which scientists do) still requires an inductive leap that the elimination process itself cannot justify without assuming the stability of the testing environment."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate supports the criticism that verisimilitude smuggles induction. It argues that judging a theory as 'closer to the truth' based on past tests assumes that the aspects of reality tested so far are representative of the whole, an inductive generalization."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate argues that the alternative to induction is indeed arbitrariness *if* one demands predictive reliability. Since Popper wants predictive reliability (via bold conjectures) without induction, he faces a dilemma: either accept arbitrariness or admit the inductive premise hidden in 'severity'."
+        }
+      ],
+      "typicality": 0.80,
+      "optional_refs": [
+        "SRC_006",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The resolution lies in an evolutionary epistemology where corroboration functions as a selection mechanism analogous to natural selection; the preference is defensible not as an inductive inference of truth, but as a pragmatic necessity to act on the currently 'fittest' hypothesis.",
+      "mechanism": "Evolutionary Selection: Theories are conjectures (mutations). Severe tests are environmental pressures. Corroboration is the record of survival. We prefer the corroborated theory not because we induce it is true or probable, but because it is the only one that has not been eliminated by the environment. This is a non-inductive, biological analogy: we don't induce a gazelle will survive tomorrow because it survived yesterday; we simply note it is currently the fittest available. The cost is abandoning the idea that science converges on truth in a probabilistic sense, accepting instead a progression of error elimination.",
+      "counterconditions": [
+        "If the evolutionary analogy fails to explain why we expect the 'fittest' theory to work in novel domains (the problem of projectibility).",
+        "If the selection pressure (testing) is not truly independent of the theory's content."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate reframes 'rationality' as 'adaptive rationality.' The preference is rational because it aligns with the survival goal of the cognitive agent, fitting Popper's aim of science without needing probabilistic justification."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "In an evolutionary context, assuming stability is not an inductive belief but a precondition for the selection process to operate. If the environment changes wildly, no theory survives; if it is stable enough for life, the 'fittest' survives. This bypasses the philosophical burden of justifying the stability."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "revised",
+          "note": "REVISED: The candidate now explicitly contrasts the evolutionary defense with the inductive critique, presenting the evolutionary view as the synthesis that survives the critique by changing the definition of 'preference' from 'expectation of truth' to 'selection of the survivor'."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate embraces the redefinition. It argues that 'smuggling induction' only applies if one insists on a justificatory link to future truth. By severing that link and replacing it with a descriptive link to current fitness, the smuggling charge dissolves."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "departure_declared",
+          "note": "DEPARTURE: This candidate departs from the strict reliance on 'verisimilitude' as a measurable quantity, treating it instead as an emergent property of the selection process, thus sidestepping the technical difficulties of measuring truth-likeness that the criticism highlights."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate offers the evolutionary model as the specific 'non-inductive justification' that the criticism claims is missing. It shows the choice is not between induction and arbitrariness, but between induction and evolutionary pragmatism."
+        }
+      ],
+      "typicality": 0.65,
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if we accept a 'critical rationalist' axiom: that it is rational to prefer the theory that has best withstood criticism, even if this preference yields no probability boost, because the alternative (ignoring criticism) is irrational.",
+      "mechanism": "Normative Rationality: The justification is deontological, not epistemic. It is a rule of conduct: 'Do not ignore negative evidence; do not ignore positive survival.' To prefer a falsified theory over a corroborated one is to violate the norms of critical discussion. This norm does not guarantee truth (induction) but defines what it means to be a rational agent in a scientific community. The cost is admitting that this rationality is circular—it defines rationality in terms of the very practice it seeks to justify.",
+      "counterconditions": [
+        "If the norm of 'preferring the survivor' can be shown to lead systematically to worse outcomes than random choice.",
+        "If the definition of 'criticism' itself relies on inductive premises."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate affirms the preference is rational, but grounds it in normative ethics of inquiry rather than epistemic probability, correcting the misrepresentation that Popper viewed it as merely volitional or non-rational."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate argues that the 'methodological decision' is the primary rational act. The stability of conditions is a working hypothesis required to apply the norm, not a foundational belief. The norm stands even if the hypothesis fails (we just update our tests)."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "revised",
+          "note": "REVISED: The candidate now explicitly constructs the 'strongest case' for defensibility by framing it as a moral/normative imperative of rationality, contrasting it sharply with the inductive critique which focuses on epistemic justification."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate agrees that the preference is a 'state of having eliminated competitors' but adds that recognizing this state imposes a rational obligation to act accordingly. This bridges the gap between description and prescription without induction."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "By shifting the ground from 'verisimilitude' (an epistemic claim) to 'critical adherence' (a normative claim), the candidate avoids the trap of trying to measure truth-likeness, thus neutralizing the criticism that verisimilitude smuggles induction."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate identifies 'critical rationalism' as the third way. It is not arbitrary (it follows rules) and not inductive (it makes no predictions about nature's uniformity), thus defeating the false dichotomy."
+        }
+      ],
+      "typicality": 0.75,
+      "optional_refs": []
+    },
+    {
+      "claim": "The problem reveals a fatal flaw in Popper's system: the 'preference' is functionally indistinguishable from induction in practice, rendering the theoretical rejection of induction a mere verbal maneuver that offers no practical advantage.",
+      "mechanism": "Pragmatic Equivalence: Whether one calls it 'corroboration' or 'probability,' the behavioral output is identical: act on the theory that worked before. If the output is the same, the internal justification (inductive vs. non-inductive) is irrelevant to the practice of science. Popper's system therefore fails to provide a genuinely distinct alternative to induction; it merely relabels the inductive habit. The cost of accepting this is acknowledging that Popper's solution to the problem of induction is a linguistic illusion.",
+      "counterconditions": [
+        "If there exists a scenario where a Popperian and an Inductivist would make different choices based on the same data.",
+        "If the 'verbal maneuver' leads to different methodological practices (e.g., seeking falsification vs. seeking verification)."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate argues that if the preference is functionally inductive, then Popper's claim that it is 'rational' on non-inductive terms is false. The 'misrepresentation' charge is rebutted by showing the practical equivalence undermines the theoretical distinction."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate asserts that the 'methodological decision' is indistinguishable from an 'inductive assumption' in its effects. If it walks like induction and quacks like induction, calling it a 'decision' doesn't save the system from the charge of smuggling."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "revised",
+          "note": "REVISED: This candidate serves as the 'strongest case' for the negative answer (that it smuggles induction/is flawed). It aggressively argues that the distinction is illusory, fulfilling the prompt's requirement to make the strongest case for the 'smuggling' side."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate argues that redefining preference as 'elimination' doesn't change the fact that scientists *use* this elimination to predict future success. That usage is inductive. The redefinition fails to stop the smuggling because the smuggling happens in the application, not the definition."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate agrees that verisimilitude is the weak point. It argues that without a robust, non-inductive measure of verisimilitude, the preference collapses into simple enumerative induction disguised as sophisticated philosophy."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate challenges the existence of the 'non-inductive justification.' It argues that Popper's proposed justifications (severity, verisimilitude, evolutionary analogy) all secretly rely on inductive premises, meaning the 'third way' does not actually exist."
+        }
+      ],
+      "typicality": 0.45,
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "Accepting the preference costs us the comfort of knowing our theories are likely true, but saves us from the logical impossibility of justifying induction; the surviving view is that science is a risky adventure where we choose the best map we have, knowing it may be wrong, rather than a cumulative ascent to certainty.",
+      "mechanism": "Existential Cost-Benefit: The 'surviving' answer is a qualified defensibility. Yes, it smugles in a *psychological* expectation of continuity (which humans cannot shed), but *logically* it remains non-inductive because it claims no justification for that expectation. The preference is defensible as an honest admission of our predicament: we must act, we have no guarantee, so we act on the least-refuted option. The cost is the loss of 'scientific confidence' in the traditional sense, replaced by 'critical hope'.",
+      "counterconditions": [
+        "If the 'psychological expectation' turns out to be logically necessary for the formulation of any testable hypothesis.",
+        "If the 'risky adventure' metaphor fails to account for the technological success of science, which suggests more than just luck."
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_015] against SRC_009",
+          "kind": "rebutted",
+          "note": "The candidate clarifies that Popper's 'rationality' is the rationality of honesty about uncertainty. It is not a misrepresentation to call it volitional; it is a voluntary acceptance of risk, which is the only rational stance in the absence of induction."
+        },
+        {
+          "handle": "[SRC_014] against SRC_008",
+          "kind": "rebutted",
+          "note": "The candidate concedes that we psychologically assume stability but insists that *logically* the system does not depend on it. If nature changes, the theory is falsified. The system is robust because it allows for falsification, unlike induction which breaks when nature changes."
+        },
+        {
+          "handle": "[SRC_016] against SRC_010",
+          "kind": "revised",
+          "note": "REVISED: This candidate synthesizes the previous arguments. It presents the strongest case for defensibility (honesty/risk management) and the strongest case against (loss of certainty/psychological smuggling), then concludes with the 'cost' as requested by the problem statement."
+        },
+        {
+          "handle": "[SRC_013] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate argues that the 'state of elimination' is sufficient for action. We don't need to believe the survivor is true; we just need to know the others are false. This answers the smuggling charge by lowering the bar for 'justification' to mere consistency with negative evidence."
+        },
+        {
+          "handle": "[SRC_011] against SRC_005",
+          "kind": "rebutted",
+          "note": "The candidate suggests that verisimilitude is not a metric we calculate, but a hope we harbor. The preference is defensible even without a precise measure, as long as we acknowledge the measure is missing. The criticism fails because it demands a precision Popper never promised."
+        },
+        {
+          "handle": "[SRC_012] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate defines the non-inductive justification as 'consistency with critical reason.' It is not arbitrary because it follows the logic of falsification; it is not inductive because it predicts nothing. This occupies the middle ground the criticism claimed was empty."
+        }
+      ],
+      "typicality": 0.90,
+      "optional_refs": [
+        "SRC_007",
+        "SRC_008"
+      ]
+    }
+  ]
+}

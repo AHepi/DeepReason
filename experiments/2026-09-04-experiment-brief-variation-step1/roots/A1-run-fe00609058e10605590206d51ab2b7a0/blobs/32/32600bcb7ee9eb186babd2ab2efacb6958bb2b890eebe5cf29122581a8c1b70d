@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims the preference for corroborated theories survives because it correlates with truth-likeness, but this is refuted by historical instances where corroboration entrenched false paradigms (e.g., Ptolemaic astronomy or Phlogiston theory) while suppressing true alternatives, demonstrating that the evolutionary selection mechanism described can be orthogonal to verisimilitude rather than aligned with it.",
+      "premise": "Historical scientific methodology has frequently retained false theories through corroboration while eliminating true ones.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "successor_question": "Can you identify a specific historical period where the strict application of corroboration delayed the acceptance of a now-accepted true theory?"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Integration via Procedural Convergence. The isolated context (03f8b3f2f004) integrates with the neighbourhood by converging on a shared procedural mechanism: the 'decision postulate' acts as the evolutionary filter's normative interface. REFUTED IF: The decision to prefer corroborated theories is shown to be logically distinct from, rather than integrated with, the evolutionary survival of the methodology, such that one can survive without the other (e.g., irrational methods surviving or rational decisions failing to propagate).",
+      "typicality": 0.45,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "SRC_011", "kind": "revised", "note": "Explicitly named 'Integration' and defined the endpoints as the decision postulate and evolutionary filter."},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "The content now includes 'refuted if' and 'integrates', satisfying relation-form@578e42df713e."},
+        {"handle": "SRC_020", "kind": "revised", "note": "Clarified that the integration fails if the decision and survival are logically distinct, addressing the inductive bridge concern."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Defined 'procedural convention' specifically as the normative interface for the evolutionary mechanism."},
+        {"handle": "SRC_018", "kind": "rebutted", "note": "The refutation condition targets logical distinctness, not just entailment, avoiding the Popperian contradiction."},
+        {"handle": "SRC_013", "kind": "revised", "note": "The refutation condition now accounts for historical entrenchment of false paradigms as a failure mode of the integration."},
+        {"handle": "SRC_012", "kind": "revised", "note": "Named the relation kind 'Integration' and specified the endpoints clearly."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Established the counter-scenario where the decision and mechanism decouple as the specific refutation condition."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Contradiction via Normative-Biological Tension. The isolated context contradicts the neighbourhood's evolutionary explanation because the 'decision postulate' implies a voluntary, rational agency that is incompatible with the blind, deterministic nature of evolutionary selection. REFUTED IF: It is demonstrated that rational decision-making can be fully reduced to or emerge naturally from blind evolutionary processes without remainder or tension.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_003", "SRC_001"],
+      "discharges": [
+        {"handle": "SRC_011", "kind": "revised", "note": "Proposed 'Contradiction' as the substantive relation between the specific endpoints."},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Content contains 'contradicts' and 'refuted if'."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "This candidate argues against integration, so the failure of an inductive bridge supports the contradiction rather than refuting the claim."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Defined the relation as a tension between voluntary agency and blind selection."},
+        {"handle": "SRC_018", "kind": "revised", "note": "The refutation condition addresses the reduction of rationality to biology."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Historical false paradigms support the tension between rational choice and blind survival, reinforcing the contradiction."},
+        {"handle": "SRC_012", "kind": "revised", "note": "Named 'Contradiction' and specified the decision postulate vs evolutionary selection."},
+        {"handle": "SRC_021", "kind": "revised", "note": "The refutation condition explicitly requires the successful reduction of agency to biology."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Abstraction of Mechanism. The isolated context serves as a high-level abstraction of the neighbourhood's concrete evolutionary mechanism; the 'decision postulate' is the formal rule describing the same functional outcome (survival of the fittest theory) that the evolutionary process enforces materially. REFUTED IF: The decision postulate prescribes actions or outcomes that diverge from those produced by pure evolutionary selection (e.g., preserving a falsified theory for heuristic reasons).",
+      "typicality": 0.60,
+      "neighbours": ["SRC_003", "SRC_002"],
+      "discharges": [
+        {"handle": "SRC_011", "kind": "revised", "note": "Identified 'Abstraction' as the relation between the formal rule and the material process."},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Includes 'abstracts' and 'refuted if'."},
+        {"handle": "SRC_020", "kind": "revised", "note": "Refutation condition specifies divergence between the abstract rule and concrete mechanism."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Defined the mechanism as the functional equivalence of formal rules and material selection."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Addresses the gap between logical entailment and functional description."},
+        {"handle": "SRC_013", "kind": "revised", "note": "Allows for divergence in cases of false paradigm retention, satisfying the historical critique."},
+        {"handle": "SRC_012", "kind": "revised", "note": "Named 'Abstraction' and linked the decision postulate to evolutionary selection."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Counter-scenarios involve divergence between the abstract and concrete layers."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Dependence (Normative Grounding). The isolated context depends on the neighbourhood for its pragmatic validity; the 'decision postulate' is only rationally defensible if the evolutionary mechanism has historically yielded truth-likeness, making the normative rule dependent on the empirical success of the biological analogy. REFUTED IF: The decision postulate remains rationally binding even in a hypothetical universe where the evolutionary method consistently selects for falsehoods (demonstrating independence from empirical success).",
+      "typicality": 0.55,
+      "neighbours": ["SRC_003", "SRC_004"],
+      "discharges": [
+        {"handle": "SRC_011", "kind": "revised", "note": "Stated 'Dependence' between the normative rule and empirical mechanism."},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Contains 'depends on' and 'refuted if'."},
+        {"handle": "SRC_020", "kind": "revised", "note": "Refutation condition tests independence from inductive/truth-linked success."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Defined dependence as the requirement of historical success for rational binding."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Addresses the link between corroboration and justification via the dependence claim."},
+        {"handle": "SRC_013", "kind": "revised", "note": "Acknowledges that consistent selection of falsehoods would refute the dependence."},
+        {"handle": "SRC_012", "kind": "revised", "note": "Named 'Dependence' and specified the endpoints."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Counter-scenario explicitly posits a world where evolution fails to track truth."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Reduction of Normativity to Description. The isolated context reduces to the neighbourhood; the apparent 'decision' to prefer theories is nothing more than a descriptive label for the psychological and sociological effects of evolutionary selection on scientists, eliminating the normative layer entirely. REFUTED IF: Scientists can and do consciously violate the evolutionary imperative (e.g., clinging to falsified theories despite social pressure), proving the decision is a distinct normative act not reducible to description.",
+      "typicality": 0.30,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "SRC_011", "kind": "revised", "note": "Proposed 'Reduction' as the relation between the decision and the mechanism."},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Includes 'reduces to' and 'refuted if'."},
+        {"handle": "SRC_020", "kind": "revised", "note": "Refutation condition relies on the ability to act against evolutionary pressure."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Defined the reduction as eliminating the normative layer in favor of description."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Challenges the logical entailment by asserting the distinctness of normative violation."},
+        {"handle": "SRC_013", "kind": "revised", "note": "Uses historical adherence to false paradigms as evidence of non-reducibility."},
+        {"handle": "SRC_012", "kind": "revised", "note": "Named 'Reduction' and linked the specific endpoints."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Counter-scenario involves conscious violation of the evolutionary imperative."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Compatibility via Dual-Aspect Monism. The isolated context is compatible with the neighbourhood as two aspects of a single phenomenon: the 'decision postulate' is the first-person experience of the third-person 'evolutionary selection' process, requiring no causal bridge but only an identity of reference. REFUTED IF: A case is found where the first-person decision systematically misaligns with the third-person evolutionary outcome in a way that cannot be explained by error or lag (suggesting they are distinct phenomena).",
+      "typicality": 0.15,
+      "neighbours": ["SRC_003", "SRC_001"],
+      "discharges": [
+        {"handle": "SRC_011", "kind": "revised", "note": "Proposed 'Compatibility' via dual-aspect theory."},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Includes 'compatible with' and 'refuted if'."},
+        {"handle": "SRC_020", "kind": "revised", "note": "Refutation condition targets systematic misalignment between aspects."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Defined the mechanism as identity of reference between first and third person views."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Avoids logical entailment issues by positing identity rather than derivation."},
+        {"handle": "SRC_013", "kind": "revised", "note": "Systematic misalignment in history would refute the compatibility."},
+        {"handle": "SRC_012", "kind": "revised", "note": "Named 'Compatibility' and specified the endpoints."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Counter-scenario involves irreconcilable misalignment between decision and selection."}
+      ]
+    }
+  ]
+}

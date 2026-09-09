@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's central claim that Popper smuggles in induction via a 'Principle of Uniformity' is a straw man that misrepresents Popper's actual solution to the problem of action. Popper explicitly addresses this by distinguishing between the logical status of a theory (which remains unproven) and the pragmatic decision to act on the best-tested theory as a basis for critical discussion. The target asserts that preferring Theory A because it survived tests 'yesterday' implies an expectation it will work 'tomorrow,' equating this pragmatic preference with an inductive inference about nature's uniformity. However, Popper argues that we choose the better-corroborated theory not because we believe it is more likely to be true or that nature is uniform, but because it has withstood the most severe attempts at falsification so far, making it the most rational basis for *critical* action. If we act on it and it fails, we learn something new; if we act on a worse-corroborated theory, we gain less potential knowledge. The target fails to engage with this specific Popperian distinction between 'corroboration as a report of past performance' and 'induction as a prediction of future truth,' instead imposing an external requirement for a 'logical link' to future success that Popper explicitly rejects as unnecessary for rational action. The argument collapses if one accepts Popper's definition of rational action as choosing the theory that offers the best opportunity for falsification (and thus growth of knowledge), rather than the theory most likely to succeed.",
+      "premise": "Popper's preference for better-corroborated theories is based on their status as the best candidates for falsification and knowledge growth, not on an inductive assumption that they will continue to succeed.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "successor_question": "Does the target's reliance on the 'Principle of Uniformity' ignore Popper's explicit argument that acting on the best-tested theory is a methodological rule for maximizing learning, not a probabilistic bet on the future?"
+    }
+  ]
+}

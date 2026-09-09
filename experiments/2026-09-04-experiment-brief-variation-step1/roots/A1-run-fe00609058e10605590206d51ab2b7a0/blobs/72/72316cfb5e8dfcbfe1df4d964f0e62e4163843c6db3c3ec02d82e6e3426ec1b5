@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's distinction between 'logical probability' and 'causal reliability' fails to resolve the problem because Popper explicitly rejects any form of justification based on past success (causal history) as a form of induction. By arguing that a theory is preferred because it is 'causally vetted' by surviving tests, the target implicitly assigns a higher degree of trustworthiness to the theory based on its past performance. This smuggles induction back in under the label of 'causal history,' violating Popper's core prohibition against inferring future reliability from past survival. The 'cost' described (a fragmented epistemology) is not merely a side effect but a fatal flaw: if the acting subject cannot logically connect the 'causally vetted' status to a reason for preference without invoking induction, the preference remains indefensible on Popper's own terms.",
+      "premise": "Popper rejects any inference from past survival to future reliability as inductive, regardless of whether it is framed as 'probability' or 'causal vetting'.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "successor_question": "Can a preference for a 'causally vetted' theory be articulated without implying that past survival increases the rational expectation of future success?"
+    }
+  ]
+}

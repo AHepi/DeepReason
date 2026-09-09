@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive methodological rule aimed at maximizing falsifiability (testability), not probability; however, accepting this defense costs the scientist any rational assurance that the preferred theory is true or will survive future tests, reducing scientific progress to a game of surviving increasingly severe attempts at refutation without cumulative epistemic gain.",
+    "mechanism": "The mechanism distinguishes between 'corroboration' (a report on past test performance) and 'probability' (a prediction of future truth). Popper argues we prefer highly corroborated theories not because they are likely true (induction), but because they have withstood the most severe tests, meaning they possess high empirical content and falsifiability. Choosing them keeps the game of science going by targeting the most vulnerable points in our knowledge. The preference is a procedural rule to maximize learning potential, not an evidential warrant for truth.",
+    "counterconditions": [
+      "If 'severity of test' implicitly assumes nature's uniformity (that what worked before will work again), the distinction collapses into induction.",
+      "If scientists act on corroborated theories expecting them to work (pragmatic success), they are functionally relying on inductive inference regardless of Popper's semantic labeling.",
+      "If the goal is merely 'keeping the game going' rather than approaching truth, the defense fails to explain why scientists reject falsified theories in favor of unfalsified ones for practical application."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate evolutionary origin with justification; it explicitly frames the preference as a conscious methodological rule chosen to maximize falsifiability, distinct from any psychological or evolutionary explanation of why scientists *do* prefer them."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate addresses the 'false dichotomy' by detailing Popper's specific argument: preference is based on 'empirical content' and 'falsifiability' rather than 'arbitrary decree' or 'inductive probability', thereby occupying the middle ground the criticism claims was ignored."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "revised",
+        "note": "Revised the 'mechanism' to explicitly state that the move from 'others falsified' to 'choose this one' relies on the logical status of the remaining theory (its high content) rather than an assumption of uniformity, while acknowledging in 'counterconditions' that this remains the weakest link if uniformity is required for practical action."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "The rebuttal clarifies that 'severity' in Popper's sense is defined by the logical improbability of the theory (high content), not by a statistical reliability of survival. Surviving a severe test shows the theory is resilient, not that it is a reliable indicator of future performance in an inductive sense."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes Popper's 'methodological rules' from Poincaré's 'conventionalism' by noting that Popper's rules are critical and aim at truth approximation via error elimination, whereas conventionalism treats theories as mere tools without truth-value. The 'arbitrariness' cited is limited to the decision to play the game of science, not the internal evaluation of theories."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "revised",
+        "note": "Refined the 'claim' to explicitly separate 'methodological convention' (the rule to prefer high content) from 'pragmatic reliability' (expecting the theory to work). The cost section now admits that if pragmatic reliability is needed, the defense fails, thus directly addressing the smuggling charge."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e871c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "rebutted",
+        "note": "The candidate avoids relying on 'verisimilitude' as a defined metric. Instead, it relies on 'falsifiability' and 'empirical content,' which Popper held were logically definable, unlike verisimilitude. The preference is for the theory that says more and risks more, not necessarily the one 'closer to truth' in a measurable degree."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f006bbde5f67",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for the 'smuggling induction' view within the 'counterconditions' (specifically the second and third points) and resolves the conflict in the 'claim' by concluding that the preference is defensible only if one accepts the cost of losing rational assurance of practical success."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_003"],
+      "shared_structure": [
+        "Selection based on survival of stress tests rather than prediction of future stability.",
+        "Distinction between 'fitness for current environment' and 'guarantee of future survival'.",
+        "Procedural rule vs. evidential warrant."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal, whereas Popper's methodology is deliberately aimed at truth-seeking.",
+        "Organisms do not 'prefer' other organisms; scientists actively choose theories.",
+        "Evolutionary fitness is reproductive success; corroboration is logical resilience."
+      ],
+      "transfer_claims": [
+        "Just as we cannot infer an organism will survive a new predator because it survived old ones, we cannot infer a theory is true because it passed old tests.",
+        "Preference for the 'fittest' organism is a description of nature, not a rational justification for betting on its immortality; similarly for theories."
+      ],
+      "overturn_conditions": [
+        "If biological fitness actually implied a probabilistic guarantee of future survival.",
+        "If scientists chose theories randomly rather than by test severity."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

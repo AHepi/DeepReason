@@ -1,0 +1,92 @@
+{
+  "candidate": {
+    "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'methodological rule of risk-minimization' rather than an epistemic probability claim; it survives by accepting the cost that this preference offers no guarantee of future success, only a commitment to the most informative error-elimination strategy available.",
+    "mechanism": "Reframe the choice not as 'which theory is likely true?' (inductive) but as 'which theory offers the best chance of detecting error if false?' (deductive/critical). A severely tested theory has survived attempts to falsify it where others have not; preferring it maximizes the informational content of our current stance without asserting its truth-probability. This aligns with Popper's view of science as evolutionary error elimination.",
+    "counterconditions": [
+      "If 'severity of test' implicitly assumes nature's uniformity (that past survival predicts future survival), the distinction collapses into induction.",
+      "If the practical utility of the preference relies on an unconscious inductive bet that the future will resemble the past, the defense is pragmatic smuggling.",
+      "If Popper's own advice to 'act on the best tested theory' cannot be separated from a belief in its reliability, the category error charge holds."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_004",
+        "SRC_012"
+      ],
+      "shared_structure": [
+        "Selection based on survival of stress tests rather than positive confirmation",
+        "Distinction between 'fitness for purpose' and 'probability of truth'",
+        "Operational preference without ontological commitment"
+      ],
+      "disanalogies": [
+        "Biological evolution has no goal of truth, whereas scientific methodology explicitly aims at truth-likeness (verisimilitude)",
+        "Natural selection acts on reproduction, while critical rationalism acts on logical falsification",
+        "Evolutionary fitness is retrospective, while scientific preference is prospective (guiding action)"
+      ],
+      "transfer_claims": [
+        "Just as we prefer organisms that survived harsh environments for breeding without claiming they are 'perfect', we prefer corroborated theories for action without claiming they are 'probable'.",
+        "The 'risk' in both domains is managed by eliminating the weakest links, not by certifying the strongest."
+      ],
+      "overturn_conditions": [
+        "If biological fitness is shown to rely on inductive regularities of the environment that do not hold for logical theories.",
+        "If the analogy fails to account for the agent's conscious intent in scientific choice versus the blind mechanism of natural selection."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "evidence_refs": [],
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate origin with justification. It explicitly grounds the preference in a normative methodological rule (risk minimization) derived from the logic of falsification, not an evolutionary description of scientist behavior."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dichotomy. It argues the preference is neither 'arbitrary decree' nor 'inductive probability' but a third category: a strategic rule for maximizing error-detection potential, which Popper explicitly endorsed as rational."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "Choosing the 'only standing candidate' or the 'best tested' does not assume nature's uniformity. It assumes only that if a theory is false, severe testing is the best way to find out. The move is about the quality of the test, not the stability of the world."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a5a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "Severity is defined by the logical improbability of the prediction and the sincerity of the attempt to refute, not by an inductive assumption that passing implies future success. The 'reliability' cited is reliability in exposing error, not reliability in predicting truth."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "Popper distinguished his methodological rules from conventionalism precisely because they are guided by the aim of truth (verisimilitude) and the logic of criticism, not mere convenience. This candidate's 'risk-minimization' is tied to the growth of knowledge, satisfying Popper's demarcation."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate strictly separates 'methodological convention' (the rule to prefer severe tests) from 'pragmatic reliability' (the hope that it works). The defense rests on the logical superiority of severe tests for error elimination, not on an inductive bet on their pragmatic success."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e871c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "rebutted",
+        "note": "The argument does not rely on a formal definition of verisimilitude as a measurable quantity. It relies on the comparative judgment that a theory surviving severe tests is a better candidate for truth than one refuted or untested, which is a qualitative, logical assessment consistent with Popper's later views."
+      },
+      {
+        "handle": "483154416962e44c251d91e84537a698ba94e10911e0d135f5eee3ba73d05a96",
+        "kind": "rebutted",
+        "note": "The 'Risk-Minimization Heuristic' directly addresses the choice between multiple unfalsified theories by ranking them based on the severity of tests they have survived. It provides a criterion for preference (degree of corroboration/test severity) rather than just refusing known falsehoods."
+      }
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_012"
+      ],
+      "search_signal": "productive"
+    },
+    "checker_specs": [],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_012"
+    ]
+  }
+}

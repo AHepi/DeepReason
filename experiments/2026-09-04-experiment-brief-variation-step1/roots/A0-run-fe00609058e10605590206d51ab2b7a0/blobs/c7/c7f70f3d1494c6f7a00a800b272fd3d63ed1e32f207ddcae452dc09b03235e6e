@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-inductive guide for preference, but this fails Popper's own terms because verisimilitude cannot be empirically estimated without inductive assumptions. Popper explicitly acknowledged that while we can compare theories based on content and corroboration, we can never know if a theory is closer to the truth (has higher verisimilitude) unless we assume that passing severe tests in the past indicates a higher likelihood of surviving future tests or being true. This assumption—that past survival correlates with truth-likeness—is precisely the inductive principle Popper rejected. Therefore, preferring a theory based on its supposed verisimilitude smuggles induction back in by treating corroboration as a proxy for truth-content, which requires an inductive leap to justify.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper rejected induction and held that corroboration does not increase probability; however, he also admitted that verisimilitude cannot be known or measured without assuming that past test success indicates future reliability or truth proximity.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be assessed without inductive assumptions, what non-inductive criterion does Popper actually offer for preferring one corroborated theory over another in practice?"
+    }
+  ]
+}

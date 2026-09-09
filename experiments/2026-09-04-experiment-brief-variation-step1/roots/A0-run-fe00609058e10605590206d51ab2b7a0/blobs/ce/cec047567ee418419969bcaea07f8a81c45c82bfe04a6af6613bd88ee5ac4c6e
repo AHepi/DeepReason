@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's terms as a non-inductive, methodological decision to act on the theory that has withstood the most severe attempts at falsification, provided one accepts that this preference guarantees no future success and incurs the cost of abandoning any claim to rational expectation of truth or predictive reliability.",
+    "mechanism": "The mechanism is 'Critical Preferential Volition': scientists voluntarily adopt the best-tested theory not because it is probable or likely true (which would be induction), but because it is the only one that has not yet been eliminated by logic. This transforms preference from an epistemic judgment about the future into a logical status report about the past, where acting on the unrefuted is the only rational move consistent with the aim of finding truth, even if the link between past survival and future performance remains logically unjustified.",
+    "counterconditions": [
+      "If the agent requires a guarantee or even a probabilistic likelihood that the preferred theory will succeed in novel domains, the Popperian defense fails.",
+      "If the definition of 'rational action' inherently requires an inductive bridge between past tests and future applications, the preference smuggles in induction.",
+      "If the agent cannot accept the cost of acting without expectation (i.e., treating the choice as a blind guess that happens to be the least-bad option), the defense collapses."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by explicitly framing the preference as a 'volitional act' devoid of predictive expectation. It argues that while elimination does not justify *success* in novel domains, it justifies the *choice* to act because all competitors are known false, making the unrefuted theory the only logical candidate for trial, not a predicted winner."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes psychological expectation from logical justification by defining the preference as a 'methodological decision' rather than a belief in probability. It meets the 'defensible on Popper's own terms' criterion by relying solely on the logical asymmetry of falsification (one counterexample kills, infinite confirmations do not save) rather than any inductive principle."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "rebutted",
+        "note": "The candidate explicitly rejects verisimilitude as a measurable guide to avoid the induction trap. Instead, it relies on the negative logic of elimination: we prefer Theory A over B not because A is closer to truth (positive claim), but because B has been falsified and A has not (negative status). This avoids the need to assess degrees of truth-likeness."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "The candidate departs from using 'verisimilitude' as a formal metric due to the Tichý/Miller refutation cited. It substitutes the concept with 'survival status,' arguing that the preference is based on the binary state of 'not-yet-falsified' rather than a graded measure of truth-content."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "revised",
+        "note": "Revised the characterization of the preference from merely 'non-rational' to 'rationally volitional.' The candidate now clarifies that while the preference lacks inductive justification, it is rational in the specific Popperian sense of aligning with the critical method: choosing the path that keeps the search for truth open, whereas choosing a falsified theory closes it."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The candidate addresses the 'preference for action' tension by arguing that evolutionary selection explains the *existence* of theories, but the *preference* for action is a conscious methodological rule. We act on the survivor not because nature selected it, but because logic demands we discard the dead; the justification for action is the absence of alternatives, not the presence of adaptive fitness."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate strictly separates the 'inductive assumption' of uniform nature (rejected) from the 'methodological decision' to treat test conditions as stable for the immediate purpose of falsification. It argues that preferring the corroborated theory assumes only that the test was valid, not that the future will resemble the past, thereby avoiding the conflation."
+      },
+      {
+        "handle": "3c53ccc6097abc1e8dc882b486987fbf9904e44fc375759cbd2aa401e1e8ce37",
+        "kind": "revised",
+        "note": "Revised the claim structure to explicitly present the 'strongest case' for the opposing view (that it smuggles induction) within the counterconditions and mechanism analysis. The candidate now acknowledges that if one defines rationality as requiring predictive confidence, the Popperian position fails, thus satisfying the directive to make the strongest case for both sides before concluding."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it conflates 'methodological preference' with 'rational action.' Popper argues we prefer the best-corroborated theory to maximize falsifiability (critical scrutiny), but the problem context explicitly asks about preferring a theory 'to act on.' Acting on a theory (e.g., building a bridge or administering medicine) inherently relies on an expectation of future reliability/success. By admitting the cost is the 'abandonment of any rational expectation that the preferred theory will yield successful predictions,' the target concedes that Popper's framework cannot rationally justify the very scientific practice (acting on theories) it seeks to defend. Thus, the preference either smuggles in induction (to justify action) or renders scientific action irrational, failing to provide a defensible middle ground.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Acting on a theory logically entails an assumption about its future reliability, which Popper's non-inductive framework explicitly forbids as a rational expectation.",
+      "premise_evidence": null,
+      "successor_question": "If Popper cannot justify the expectation of success required for action, does his philosophy reduce scientific practice to blind faith rather than rational choice?"
+    }
+  ]
+}

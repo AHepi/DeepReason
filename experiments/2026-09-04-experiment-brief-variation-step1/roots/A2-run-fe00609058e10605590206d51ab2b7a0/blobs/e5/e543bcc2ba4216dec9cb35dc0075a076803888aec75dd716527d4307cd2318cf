@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a non-inductive methodological rule of 'critical preference,' which selects the theory that has withstood the most severe attempts at falsification, not because it is more likely to be true, but because it is the most rationally acceptable option given our current ignorance; however, accepting this defense costs us the ability to claim any rational assurance of future success, reducing scientific action to a non-justifiable gamble that merely avoids known errors rather than pursuing probable truths.",
+    "mechanism": "The argument distinguishes between 'logical probability' (which Popper rejects as increasing with corroboration) and 'methodological choice' (which relies on the severity of past tests). It posits that choosing the best-corroborated theory is akin to choosing the safest known path in a minefield: one does not assume the path is safe (induction), but only that it has not yet exploded (falsification). The mechanism fails if the act of 'choosing' inherently implies an expectation of future performance, which would reintroduce induction by the back door.",
+    "counterconditions": [
+      "If the agent acts on the theory, they must implicitly assign it a higher subjective probability of success than untested theories, thereby smuggling in induction.",
+      "If Popper's formal definition of verisimilitude (truth-likeness) is logically incoherent (as argued by Tichý and Miller), then the basis for preferring one unfalsified theory over another collapses.",
+      "If the distinction between 'risk minimization' and 'inductive prediction' is merely semantic, such that avoiding known falsehoods functionally equates to betting on truth."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism claims the distinction collapses because preferring Theory A assumes past conditions will hold. This is rebutted by clarifying that Popperian preference does not assume the *future* will resemble the *past* (induction), but rather adopts the *current* state of knowledge (A is unfalsified, B is falsified or less tested) as the only rational basis for action. The assumption is not about nature's uniformity, but about the logical status of the theories at time t."
+      },
+      {
+        "handle": "10d458d5ba5df5b51b41f157dbd7e3ca6a57c55a4ae84258055f2e20bab7b067",
+        "kind": "rebutted",
+        "note": "The claim of a false dichotomy between 'prediction of safety' and 'elimination of danger' is rejected. Popper's framework explicitly denies we can predict safety (positive justification); it only allows us to eliminate known dangers (falsified theories). The choice is not between two positive predictions, but between a known error and an unknown possibility."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "departure_declared",
+        "note": "I declare a departure from relying on Popper's formal 'verisimilitude' metric. Instead, I ground the preference solely in the methodological rule of selecting the theory with the highest 'corroboration' (survival of severe tests), sidestepping the logical failures of the formal verisimilitude definition while retaining the practical imperative to prefer the most rigorously tested option."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "The criticism argues that preferring a theory for future action assumes it will continue to succeed. This conflates 'expectation' with 'assumption.' A Popperian acts on the best-corroborated theory without assuming it will succeed; they merely acknowledge it is the only one not yet shown to fail. If it fails tomorrow, the preference was still rational today based on available evidence."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The claim that 'least error-prone known option' assigns higher subjective probability is rejected. In Popper's view, 'subjective probability' is a psychological state, not a logical measure. The methodological rule dictates action based on objective test history, regardless of the agent's internal degree of belief. One can follow the rule without believing the theory is probable."
+      },
+      {
+        "handle": "350db731d51a09f1568348da67e40e50c3417a7e7bde9c041860ce74daf212ec",
+        "kind": "rebutted",
+        "note": "Acting on a theory does not require assigning it a higher subjective probability of success in the Bayesian sense. It requires only the acceptance of a methodological convention: 'When forced to choose, choose the theory that has survived the most severe tests.' This is a rule of conduct, not a probabilistic assertion."
+      },
+      {
+        "handle": "38f75e15ef32982858ed94b505c7bbfe87ec9a0ebbd2867ed39855d8423771d8",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly incorporate Popper's concept of 'rational action based on critical preference' rather than a simple dichotomy between 'rational assurance' and 'non-rational gamble.' The revision clarifies that the action is rational because it is critical (based on testing), even if it offers no assurance of truth."
+      },
+      {
+        "handle": "46dcad061a396079ae006feb765ad05c214a8b686266e3ca68d45ddff6e5b102",
+        "kind": "rebutted",
+        "note": "The criticism conflates the logical status of the theory with the pragmatic rule. Popper explicitly separates them: the logical status (unfalsified) does not imply high probability, but the pragmatic rule (choose the unfalsified) is justified by the goal of error elimination, not by an expectation of truth. The rule is consistent with his rejection of induction."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

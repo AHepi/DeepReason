@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a non-inductive methodological rule of 'critical preference' aimed at maximizing truth-content (verisimilitude) rather than predicting future success, though accepting this costs the agent any rational assurance that the chosen theory will not fail in the next instance.",
+    "mechanism": "The argument distinguishes between 'inductive inference' (assigning higher probability of truth based on past instances) and 'methodological selection' (choosing the theory that has withstood the most severe tests as the best current candidate for truth). It posits that while we cannot know the future will resemble the past, we can rationally prefer the theory that offers the highest explanatory power and has survived the most rigorous attempts at falsification, treating this preference as a gamble on truth-likeness rather than a calculation of safety.",
+    "counterconditions": [
+      "If preferring a theory for action implicitly assumes it will work in the future, the distinction between risk-minimization and induction collapses.",
+      "If Popper's formal definition of verisimilitude is logically untenable (as per Tichý and Miller), the justification for preferring the better-corroborated theory loses its objective basis.",
+      "If the 'choice to act' inherently requires a probabilistic assessment of outcomes, then refusing to assign probability renders action irrational within Popper's framework."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0ea9dae5aebcc5e775e8682f83d996e7ecc7adc25ed79671e088c57ee321d184",
+        "kind": "rebutted",
+        "note": "The criticism conflates 'assuming conditions will remain the same' with 'selecting the best current explanation.' Popper's strategy does not assume the future resembles the past; it admits the future might differ but argues that if we must act, we should act on the theory that has best withstood attempts to show it false, without claiming this guarantees future performance."
+      },
+      {
+        "handle": "2484dcce823c69d9a7629a74976ffc2e014274004400981b669b53df6b37483f",
+        "kind": "revised",
+        "note": "Revised to acknowledge the failure of Popper's quantitative verisimilitude. The defense now rests on the qualitative methodological rule: even without a formal metric, the scientific community adopts the convention that surviving severe tests makes a theory a 'better candidate' for truth, distinct from assigning it a probability."
+      },
+      {
+        "handle": "2b9769e65d28f9f48ad5637e127ba364c486251e19454d1604736e1385eef47e",
+        "kind": "rebutted",
+        "note": "Preferring a theory for action does not assume it will continue to succeed; it only asserts it is the most reasonable guess available. The assumption of future success is an inductive leap Popper rejects; the 'critical preference' is simply the acknowledgment that among known errors, the unfalsified one is the least bad option."
+      },
+      {
+        "handle": "30c6899caacfbcc0bae28d53335aef7641e33b3075152647ddf63332e8eae6e9",
+        "kind": "rebutted",
+        "note": "The criterion 'least error-prone known option' is not a subjective probability assignment but a logical status report: Theory A has been tested and not refuted; Theory B has been refuted. Choosing A is not betting on its future success, but avoiding a known falsehood."
+      },
+      {
+        "handle": "38f75e15ef32982858ed94b505c7bbfe87ec9a0ebbd2867ed39855d8423771d8",
+        "kind": "rebutted",
+        "note": "The dichotomy is not false; Popper explicitly defines rational action as acting on the best-tested theory while remaining fully aware that it may be falsified tomorrow. This is distinct from 'rational assurance' which implies certainty or high probability."
+      },
+      {
+        "handle": "4cbbab057ec51a122476741bd3c2ff4172e6fa0617a24361597807f86f8c8cc7",
+        "kind": "rebutted",
+        "note": "The dilemma is avoided by recognizing the methodological rule itself as the solution. One does not need an 'external inductive supplement'; the rule 'prefer the better-corroborated' is internal to the logic of falsificationism as a guide for critical discussion and tentative acceptance."
+      },
+      {
+        "handle": "5367cfefcbb7e990f45e4aefa87059bd0469703b7ecb99cb937fc65222e22087",
+        "kind": "rebutted",
+        "note": "Treating past resilience as a proxy for future reliability is indeed inductive. However, Popper treats past resilience as a marker of 'truth-content' or 'verisimilitude' in the present moment, not as a predictor. The preference is for the theory closest to the truth now, regardless of whether it holds tomorrow."
+      },
+      {
+        "handle": "68d9af4a435acc1cd4234dc084ba218e221621e23b6343e1c10f7f2d559a8ebd",
+        "kind": "rebutted",
+        "note": "Action does not require a guarantee of success, only a basis for choice. Optimizing for 'informational content' (which correlates with testability and corroboration) provides a rational basis for action without needing to predict the future. We act on the best map we have, knowing it might be wrong."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["naval_navigation_strategies"],
+      "shared_structure": [
+        "Selection of a path based on the most recent and severe chart updates rather than a belief that the sea will remain calm.",
+        "Acknowledgment that the chosen path may still lead to disaster (unforeseen reef), but it is the most rational choice given current information.",
+        "Distinction between predicting safe arrival (induction) and choosing the best available route (critical preference)."
+      ],
+      "disanalogies": [
+        "Scientific theories aim at universal truth, whereas navigation charts are local and pragmatic.",
+        "Falsification in science is logical and final for that specific hypothesis, whereas a navigation error is often just a physical obstacle to be circumvented."
+      ],
+      "transfer_claims": [
+        "Just as a captain prefers the updated chart without assuming the ocean won't change, a scientist prefers the corroborated theory without assuming nature is uniform.",
+        "The rationality of the action lies in the quality of the selection process, not the certainty of the outcome."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that navigating by the best chart necessarily implies a belief in the stability of the seabed.",
+        "If the concept of 'best available route' collapses into 'most probable route' under scrutiny."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

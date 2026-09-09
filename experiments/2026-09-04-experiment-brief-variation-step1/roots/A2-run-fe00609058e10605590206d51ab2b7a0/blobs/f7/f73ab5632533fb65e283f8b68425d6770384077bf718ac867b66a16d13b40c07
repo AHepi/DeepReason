@@ -1,0 +1,96 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic, non-inductive rule of action akin to betting on the horse with the best track record without believing it will win next time.",
+      "mechanism": "Corroboration functions as a selection filter for 'fitness' in an evolutionary epistemology; choosing the fittest theory is a survival strategy, not a probability assignment. The mechanism is 'conjecture and refutation' acting as a sieve, where the remaining theory is simply the last one standing, not the most likely true one.",
+      "counterconditions": [
+        "If the choice implies an expectation of future success based on past performance, it surrenders to induction.",
+        "If 'acting on' a theory requires believing it is approximately true or reliable, the distinction collapses."
+      ],
+      "typicality": 0.92,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The preference smuggles induction back in because any decision-theoretic justification for preferring corroborated theories inevitably relies on the uniformity of nature (the assumption that the future will resemble the past).",
+      "mechanism": "The act of 'preferring' entails a prediction of utility. To assert that a corroborated theory yields better practical results than an uncorroborated one is to make an inductive inference about the stability of the world's laws. Popper's 'pragmatic' defense is a semantic shield hiding an inductive core.",
+      "counterconditions": [
+        "If one can formulate a purely logical or methodological rule for action that does not entail a prediction of future regularity.",
+        "If the preference is framed strictly as avoiding known falsehoods rather than seeking probable truths."
+      ],
+      "typicality": 0.88,
+      "optional_refs": [
+        "SRC_002"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The tension dissolves if corroboration is reinterpreted not as a measure of truth-likeness but as a measure of 'informational content survived'; the preference is for high-content theories that have not yet failed, which is a rational risk-management strategy.",
+      "mechanism": "Popper equates informational content with improbability. A highly corroborated theory is one that took a huge risk (high content) and survived. Preferring it is preferring the boldest conjecture that hasn't been killed yet, maximizing potential learning while minimizing the chance of immediate error. This is a causal mechanism of 'risk exposure and survival'.",
+      "counterconditions": [
+        "If scientists prefer corroborated theories because they are 'safe' or 'reliable' rather than 'bold and surviving'.",
+        "If the history of science shows that highly corroborated theories are often replaced by less bold but more accurate ones."
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_003"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "Popper's position is inconsistent: he rejects induction for theory acceptance but implicitly accepts it for theory application, creating a dual-epistemology that fails to solve the problem of induction for the practicing scientist.",
+      "mechanism": "The cognitive dissonance arises from the separation of 'logical status' (no induction) and 'psychological/practical status' (inductive habit). The mechanism is a 'compartmentalized rationality' where the scientist acts as a Popperian in the lab (testing) but as a Humean in the field (acting), rendering the philosophical stance practically inert.",
+      "counterconditions": [
+        "If a unified account of scientific rationality can be constructed that treats testing and acting under the same non-inductive principle.",
+        "If the 'habit' of preferring corroborated theories can be explained evolutionarily without invoking normative induction."
+      ],
+      "typicality": 0.65,
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The preference is defensible only if we accept that 'rational action' does not require 'justified belief' in the theory's truth, but only a justified belief in the theory's current unfalsified status relative to rivals.",
+      "mechanism": "This operates via a 'negative heuristic': we do not choose Theory A because it is likely true, but because Theory B has been falsified and Theory C is untested. The causal driver is the elimination of alternatives, leaving the corroborated theory as the sole viable option for action by default, not by positive merit.",
+      "counterconditions": [
+        "If there are multiple unfalsified theories and scientists still prefer the one with more severe tests passed.",
+        "If the cost of acting on a false but unfalsified theory is deemed acceptable without further corroboration."
+      ],
+      "typicality": 0.55,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The debate rests on a category error: Popper defines 'probability' logically (static relation), while scientists use it pragmatically (dynamic frequency); the 'smuggling' is actually a necessary translation between logical formalism and biological survival.",
+      "mechanism": "The mechanism is 'semantic drift under pressure'. In the abstract logic of science, probability is static. In the causal reality of survival, 'probability' means 'propensity to keep us alive'. Popper's system breaks when forced to bridge these two domains, requiring a meta-rule that effectively reinstates induction as a biological imperative rather than a logical one.",
+      "counterconditions": [
+        "If Popper can provide a logical derivation of action guidelines that strictly avoids any notion of future propensity.",
+        "If the concept of 'verisimilitude' (truth-likeness) can successfully replace probability without inheriting its inductive baggage."
+      ],
+      "typicality": 0.40,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ]
+}

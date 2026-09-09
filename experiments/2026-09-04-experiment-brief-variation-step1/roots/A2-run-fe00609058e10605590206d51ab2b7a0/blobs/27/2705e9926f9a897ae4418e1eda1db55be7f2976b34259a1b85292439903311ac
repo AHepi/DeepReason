@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is a 'methodological fiction' contradicts Popper's explicit distinction between the logical status of corroboration and the rational basis for action. Popper argues that preferring the better-corroborated theory is not a fictional self-deception but a rational decision based on the theory's superior critical track record (verisimilitude), even if this does not imply future probability. By framing it as a 'useful myth' or 'strategic self-deception,' the target misrepresents Popper's solution as irrationalist, failing to account for his argument that acting on the best-tested theory is the only rational course available to a critical rationalist, thus creating a strawman that collapses under Popper's own defense of non-inductive rational choice.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly rejects the idea that scientific practice relies on fiction or induction, arguing instead that rational action is based on the logical appraisal of past critical tests without inferring future probabilities.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is not a fiction, how does Popper justify the rationality of acting on them without invoking inductive principles?"
+    }
+  ]
+}

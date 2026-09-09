@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Inheritance. The isolated context (decision postulate) inherits its normative force from the neighbourhood (evolutionary selection of methodology). It is REFUTED IF the survival of a methodological rule in history does not correlate with its truth-likeness or practical success, rendering the inheritance merely biological adaptation without epistemic value.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_003", "SRC_013"],
+      "discharges": [
+        {"handle": "SRC_011", "kind": "revised", "note": "Explicitly named 'Inheritance' as the relation kind between the decision postulate and evolutionary selection."},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "The candidate now contains the phrase 'refuted if' and explicitly names the relation kind 'Inheritance', satisfying relation-form@578e42df713e."},
+        {"handle": "SRC_020", "kind": "revised", "note": "Clarified that the refutation condition targets the correlation between survival and truth-likeness, addressing the inductive bridge concern."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Defined the mechanism specifically as 'inheritance of normative force' rather than vague procedural convention."},
+        {"handle": "SRC_018", "kind": "rebutted", "note": "The refutation condition is framed around the failure of correlation (pessimistic meta-induction), not logical entailment of justification."},
+        {"handle": "SRC_013", "kind": "revised", "note": "Directly incorporated the historical counter-example (entrenched false paradigms) into the 'REFUTED IF' clause."},
+        {"handle": "SRC_012", "kind": "revised", "note": "Explicitly linked the 'decision postulate' to 'evolutionary selection' via the 'Inheritance' relation."},
+        {"handle": "SRC_021", "kind": "revised", "note": "The 'REFUTED IF' clause now explicitly covers the scenario where historical instances break the link between corroboration and validity."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Contradiction. The isolated context (conventional decision) stands in contradiction to the neighbourhood (objective probability claims) because it denies any logical bridge while the neighbourhood assumes one exists. It is REFUTED IF Popper's writings can be interpreted as asserting a non-logical but objective reason for preference that exceeds mere arbitrary convention, thereby reconciling the two.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_001", "SRC_004"],
+      "discharges": [
+        {"handle": "SRC_011", "kind": "revised", "note": "Proposed 'Contradiction' as the substantive relation between the conventional decision and objective probability claims."},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Contains 'refuted if' and names 'Contradiction' as the relation kind."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "This candidate does not claim integration; it claims contradiction, so the criticism regarding shared mechanism failure is moot."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Specifically defined the relation as 'Contradiction' regarding the source of rationality (convention vs. objective reason)."},
+        {"handle": "SRC_018", "kind": "revised", "note": "The refutation condition targets the interpretability of Popper's work, directly addressing the logical entailment critique."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "The contradiction holds regardless of historical paradigm shifts; it is a structural conflict in the definition of rationality."},
+        {"handle": "SRC_012", "kind": "revised", "note": "Named the endpoints clearly: 'conventional decision' and 'objective probability claims'."},
+        {"handle": "SRC_021", "kind": "revised", "note": "The 'REFUTED IF' clause addresses the specific counter-scenario of Popper asserting objective reasons beyond convention."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Abstraction. The isolated context (preference for corroborated theories) is an abstraction of the neighbourhood (survival of scientific frameworks), treating specific methodological successes as a general rule. It is REFUTED IF the specific mechanisms of survival in different scientific eras are too heterogeneous to support a single abstract rule of preference.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_003", "SRC_005"],
+      "discharges": [
+        {"handle": "SRC_011", "kind": "revised", "note": "Identified 'Abstraction' as the relation connecting specific survival instances to the general preference rule."},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Satisfies relation-form requirements with explicit kind and refutation condition."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "Does not claim integration or shared mechanism; claims abstraction."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Defined the mechanism as 'abstraction of heterogeneous survival instances into a general rule'."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Refutation depends on the heterogeneity of historical mechanisms, bypassing the inductive justification debate."},
+        {"handle": "SRC_013", "kind": "revised", "note": "The 'REFUTED IF' clause explicitly cites the heterogeneity of scientific eras as the breaking point."},
+        {"handle": "SRC_012", "kind": "revised", "note": "Connected 'preference rule' to 'survival instances' via 'Abstraction'."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Addresses the failure of abstraction if specific counter-scenarios show irreconcilable differences in survival mechanisms."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Compatibility. The isolated context (decision postulate) is compatible with the neighbourhood (critical rationalism) only under the strict condition that no claim to truth is made. It is REFUTED IF any actor within the system implicitly or explicitly treats the decision postulate as a probabilistic indicator of future truth, collapsing the distinction.",
+      "typicality": 0.75,
+      "neighbours": ["SRC_002", "SRC_018"],
+      "discharges": [
+        {"handle": "SRC_011", "kind": "revised", "note": "Proposed 'Compatibility' as the relation, conditional on the absence of truth claims."},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Meets all formatting and content criteria for relation-form."},
+        {"handle": "SRC_020", "kind": "revised", "note": "Clarifies that compatibility fails precisely when an inductive bridge to truth is assumed."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Defines the mechanism as 'conditional compatibility based on the suspension of truth claims'."},
+        {"handle": "SRC_018", "kind": "revised", "note": "The refutation condition directly mirrors the criticism: if the preference entails inductive justification, compatibility breaks."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Compatibility is a structural claim about the current stance, not a historical prediction of success."},
+        {"handle": "SRC_012", "kind": "revised", "note": "Links 'decision postulate' and 'critical rationalism' via 'Compatibility'."},
+        {"handle": "SRC_021", "kind": "revised", "note": "The 'REFUTED IF' clause specifies the exact scenario where the distinction collapses."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Reduction. The isolated context (rational preference) reduces to the neighbourhood (social agreement on axioms), meaning the former is nothing more than the latter described in epistemic language. It is REFUTED IF there exists any component of scientific rationality that cannot be fully explained by social convention and requires an external, mind-independent anchor.",
+      "typicality": 0.30,
+      "neighbours": ["SRC_001", "SRC_004"],
+      "discharges": [
+        {"handle": "SRC_011", "kind": "revised", "note": "Asserts 'Reduction' of rational preference to social agreement."},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Contains required keywords and structure."},
+        {"handle": "SRC_020", "kind": "revised", "note": "The reduction claim is refuted if an external anchor is necessary, directly addressing the inductive bridge issue."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Defines the mechanism as 'ontological reduction of epistemic terms to sociological facts'."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Refutation hinges on the existence of non-conventional elements in rationality."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Reduction is a claim about the nature of the preference, not its historical track record."},
+        {"handle": "SRC_012", "kind": "revised", "note": "Connects 'rational preference' to 'social agreement' via 'Reduction'."},
+        {"handle": "SRC_021", "kind": "revised", "note": "The 'REFUTED IF' clause targets the necessity of a mind-independent anchor."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Shared Mechanism. Both the isolated context (preference for tested theories) and the neighbourhood (biological evolution) operate via a shared mechanism of blind variation and selective retention. It is REFUTED IF the selection pressure in science (criticism) is fundamentally teleological or guided by human intent in a way that biological natural selection is not.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_003", "SRC_012"],
+      "discharges": [
+        {"handle": "SRC_011", "kind": "revised", "note": "Identifies 'Shared Mechanism' (blind variation and selective retention) as the link."},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Complies with relation-form constraints."},
+        {"handle": "SRC_020", "kind": "revised", "note": "The shared mechanism fails if scientific selection is teleological, addressing the inductive/intent gap."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Specifies the mechanism as 'blind variation and selective retention'."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Refutation condition focuses on the presence of teleology in science vs. biology."},
+        {"handle": "SRC_013", "kind": "revised", "note": "Acknowledges that if selection is guided by false paradigms intentionally, the mechanism diverges."},
+        {"handle": "SRC_012", "kind": "revised", "note": "Links 'preference' and 'evolutionary selection' via the specific shared mechanism."},
+        {"handle": "SRC_021", "kind": "revised", "note": "The 'REFUTED IF' clause explicitly tests the non-teleological nature of the shared mechanism."}
+      ]
+    }
+  ]
+}

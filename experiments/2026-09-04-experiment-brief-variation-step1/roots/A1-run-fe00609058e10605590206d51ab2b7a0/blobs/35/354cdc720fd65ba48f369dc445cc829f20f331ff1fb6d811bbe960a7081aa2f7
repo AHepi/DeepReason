@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'Critical-Rational Decision Rule' fails to distinguish between 'severe testing' and 'high corroboration' in a way that avoids induction. Popper defines corroboration as a report of past performance, whereas severe testing requires future risk. By preferring the 'better-corroborated' theory for action, the agent implicitly assumes that past survival is a reliable guide for future selection (i.e., that the theory will continue to be the most falsifiable or useful). This smuggles in the very inductive principle (the uniformity of nature or the reliability of past tests for future choices) that Popper explicitly rejected, rendering the preference indefensible on his own strict terms without accepting an inductive cost.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly stated that corroboration has no inductive force and cannot make a theory more probable or reliable for future prediction.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration is merely a historical report with no bearing on future reliability, what non-inductive justification allows an agent to prefer Theory A over Theory B for a critical future action?"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, methodological decision to act on the theory that has withstood the most severe attempts at falsification, provided one accepts the cost of abandoning any claim that this preference increases the theory's likelihood of being true or successful in novel domains.",
+    "mechanism": "The argument proceeds by distinguishing between 'justification' (which implies probability or truth) and 'preference' (a volitional alignment with the aim of science). Popper's solution relies on the concept of verisimilitude (truth-likeness) not as a measurable quantity, but as a regulative ideal: we prefer the theory that appears closer to the truth because it has survived tests that killed its competitors. This preference is rational because it aligns with the goal of finding truth, even if it offers no inductive guarantee that the theory will work in the future. The defense explicitly rejects the idea that corroboration transfers probability, instead framing the choice as a critical preference for the 'best tested' option among currently unfalsified rivals, thereby avoiding the smuggling of induction while accepting that action involves an unavoidable risk that cannot be logically eliminated.",
+    "counterconditions": [
+      "If verisimilitude cannot be coherently defined without probabilistic assumptions (as argued by Tichý and Miller), then the appeal to 'closeness to truth' collapses back into induction.",
+      "If the preference for action requires an assumption that the future will resemble the past (uniformity of nature) to be rational, then Popper has failed to escape Hume's problem.",
+      "If scientists actually rely on inductive expectations rather than methodological decisions when choosing theories, then Popper's account is descriptive fiction rather than a normative defense."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by framing preference as a 'critical guess' aligned with the aim of truth, explicitly denying that elimination guarantees success in new domains but arguing it is the only rational non-inductive stance available."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "rebutted",
+        "note": "The distinction is maintained by defining 'defensible on Popper's terms' strictly as consistency with his anti-inductive methodology, not as providing a logical proof of future success."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "revised",
+        "note": "Revised to clarify that verisimilitude is treated as a qualitative, regulative ideal rather than a quantifiable metric, acknowledging Popper's later struggles with its formal definition while retaining its heuristic value for preference."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate accepts the Tichý/Miller refutation of Popper's *formal* definition of verisimilitude but argues that a *qualitative* notion of 'surviving severe tests' remains sufficient for methodological preference without needing the refuted formal calculus."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "rebutted",
+        "note": "The candidate affirms the preference is rational in Popper's specific sense (alignment with the aim of science) while maintaining it is 'non-justificatory' regarding truth probability, correcting the misrepresentation that 'non-rational' implies arbitrary."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The evolutionary analogy is refined to explain the selection mechanism (elimination of error) while grounding the *preference* in the conscious methodological decision to back the survivor, bridging the gap between survival and active choice."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate explicitly distinguishes the metaphysical assumption of uniformity (rejected) from the methodological decision to assume stability for testing purposes (accepted), resolving the conflation."
+      },
+      {
+        "handle": "3c53ccc6097abc1e8dc882b486987fbf9904e44fc375759cbd2aa401e1e8ce37",
+        "kind": "revised",
+        "note": "Revised to explicitly structure the response around making the strongest case for the 'smuggling induction' objection (via the verisimilitude critique) before presenting the defense, ensuring both sides are aired as required."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_003"],
+      "shared_structure": [
+        "Selection via elimination of unfit candidates",
+        "Preference for the survivor without guarantee of future fitness",
+        "Distinction between descriptive survival and normative choice"
+      ],
+      "disanalogies": [
+        "Biological evolution lacks conscious intent; scientific preference is a deliberate methodological act",
+        "Natural selection has no 'aim' of truth; science explicitly adopts truth as a regulative ideal",
+        "Organisms do not choose to act on their own fitness; scientists must voluntarily bet on theories"
+      ],
+      "transfer_claims": [
+        "Just as we bet on the fittest organism despite no guarantee of future survival, we act on the best-corroborated theory despite no inductive guarantee",
+        "The rationality of the bet lies in the rigor of the selection process, not the certainty of the outcome"
+      ],
+      "overturn_conditions": [
+        "If the selection process (testing) is shown to be systematically biased against true theories",
+        "If the concept of 'fitness' in science is proven to be entirely disconnected from 'truth-likeness'"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

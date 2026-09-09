@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'risk-management' defense fails to address the specific pragmatic dilemma in the prompt: acting on a theory implies expecting it to work in the future. Popper explicitly denies that past survival (corroboration) increases the probability of future success. By redefining preference as merely selecting 'bold survivors,' the target sidesteps the necessity of justifying why a scientist should *expect* the bold survivor to yield better practical results than a less bold one. Without bridging the gap between 'survived so far' and 'will work next,' the preference remains an unjustified leap indistinguishable from the induction Popper rejected, rendering the 'dissolution' of tension incomplete.",
+      "premise": "Popper's rejection of induction entails that past corroboration provides no logical basis for predicting future performance, yet scientific action requires such a prediction.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "counterexample": null,
+      "successor_question": "If corroboration offers no guarantee of future success, what non-inductive principle allows a Popperian to claim that preferring a corroborated theory is more rational than flipping a coin when lives are at stake?"
+    }
+  ]
+}

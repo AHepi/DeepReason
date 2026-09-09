@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation as required by the problem context. Instead of defining a specific logical or structural link (e.g., dependence, reduction) between the problem and its neighborhood, it merely asserts a 'shared mechanism' by summarizing the content of three items (conn:092ff932d717, SRC_007, SRC_004) under a thematic label ('Pragmatic Collapse'). The problem explicitly states that 'a summary of the endpoints is not a relation.' By offering a thematic summary rather than a functional or structural relation with defined endpoints and directionality, the target violates the core constraint of the prompt.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "The problem context requires proposing a SUBSTANTIVE relation and explicitly warns that 'a summary of the endpoints is not a relation'.",
+      "premise_evidence": null,
+      "successor_question": "Can you reformulate the connection between conn:092ff932d717 and the other sources as a specific dependency or contradiction rather than a thematic summary?"
+    }
+  ]
+}

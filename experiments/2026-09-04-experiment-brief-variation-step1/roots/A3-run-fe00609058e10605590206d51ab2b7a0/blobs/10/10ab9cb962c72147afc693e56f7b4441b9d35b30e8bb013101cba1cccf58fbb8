@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses because it defines the 'preference' for a theory as a selection rule explicitly 'decoupled from expectation of truth,' yet the problem context states that scientists (and Popper) prefer theories when 'choosing which theory to act on.' In practical action (e.g., building a bridge or administering medicine), to 'act on' a theory is logically equivalent to expecting it to yield reliable results in the immediate future. By admitting the agent gets 'any guarantee of practical success,' the target concedes that the chosen theory offers no rational basis for expecting future performance over a falsified one. This renders the 'preference' empty for the very purpose specified in the prompt (action), failing to answer how the preference is defensible without smuggling in the induction required to bridge the gap between past survival and future utility.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Acting on a theory necessitates an expectation of its future validity, which the target explicitly renounces.",
+      "premise_evidence": null,
+      "successor_question": "If the preference provides no expectation of future reliability, in what sense can it be called a rational basis for 'acting on' a theory rather than a random guess?"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "essential_premise_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "maxItems": 8, "title": "Essential Premise Aliases", "type": "array"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@db6c1e045123c75a00761ae5: program:reasoning_observation_pending
+- reason-counter@b0bdd0bf313ffb072c0f6479: program:reasoning_observation_pending
+- reason-counter@91758ae64d8216a7749be2ac: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The preference is defensible through a 'betting quotient' model where corroboration functions not as probability but as a measure of risk exposure; preferring the corroborated theory is simply minimizing the known risk of immediate falsification, not maximizing the chance of future truth.","counterconditions":[{"case":"If avoiding known falsehoods implicitly assumes that the remaining options are safer, which is an inductive jump.","checker_spec":null,"eval":"observation"},{"case":"If 'risk' in this context cannot be defined without reference to future outcomes (probabilities).","checker_spec":null,"eval":"observation"},{"case":"If the 'unknown risk' of the corroborated theory is effectively treated as lower than the 'known risk' of the falsified one via an implicit inductive weighting.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Risk-Minimization Heuristic: This mechanism treats scientific action as a series of bets. A falsified theory has a risk of 1.0 (it is known wrong). A corroborated theory has an unknown risk. Rational agency dictates minimizing known risks. Therefore, preferring the corroborated theory is a deduction from the axiom 'avoid known falsehoods,' requiring no inductive assumption about the future success of the chosen theory, only the logical avoidance of the refuted ones.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@db6c1e045123c75a00761ae5, reason-counter@b0bdd0bf313ffb072c0f6479, reason-counter@91758ae64d8216a7749be2ac
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

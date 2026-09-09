@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a false dichotomy between 'logical inference about probability' and 'pragmatic rule of action,' failing to address the core problem: whether the *selection criterion* itself ('choose the theory that survived severe tests') implicitly assumes the uniformity of nature. If 'severity' is defined by the capacity of a test to detect falsehoods based on past regularities, then preferring the survivor of such tests smuggles in the very inductive assumption (that the future will resemble the past regarding test outcomes) that Popper explicitly rejected. The target asserts the preference is 'non-inductive' but provides no account of how 'severity' is established without inductive premises, leaving the defense vulnerable to the charge that it merely renames induction as 'methodology.'",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's rejection of induction requires that no step in scientific methodology, including the definition of 'severe testing' and the preference for survivors, relies on the assumption that the future will resemble the past.",
+      "premise_evidence": null,
+      "successor_question": "How can 'severity' of a test be defined in Popperian terms without implicitly assuming that patterns observed in past tests (which made the test 'severe') will hold for future instances of the same test?"
+    }
+  ]
+}

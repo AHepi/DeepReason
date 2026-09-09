@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that accepting Popper's view requires 'abandoning the intuition that corroboration offers any rational expectation of future predictive success' misrepresents the defensible position. A robust defense on Popper's terms argues that while corroboration yields no logical probability, it provides a rational basis for expectation precisely because we prefer theories that have withstood our best attempts to falsify them; the 'cost' is not the abandonment of rational expectation, but merely the abandonment of the guarantee that such expectation will be fulfilled. By conflating 'rational expectation' with 'justified true belief' or 'probabilistic certainty,' the target constructs a straw man of the Popperian defense, falsely concluding that scientific action reduces to a 'non-justifiable existential choice' when it is actually a justifiable critical preference.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguishes between the logical impossibility of validating induction and the methodological rationality of preferring theories that have survived severe tests.",
+      "premise_evidence": null,
+      "successor_question": "Can a preference based solely on past survival against falsification be considered 'rational' in a practical decision-making context without implicitly relying on an inductive assumption that the future will resemble the past?"
+    }
+  ]
+}

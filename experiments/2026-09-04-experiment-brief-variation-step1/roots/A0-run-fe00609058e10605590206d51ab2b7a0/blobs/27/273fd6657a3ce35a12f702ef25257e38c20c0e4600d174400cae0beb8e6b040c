@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories in action is defensible without smuggling in induction if framed as a methodological rule for maximizing testability (severity) rather than a probabilistic prediction of success; however, this defense costs the agent any rational assurance that the chosen theory will actually work in novel domains, reducing the preference to a 'rational gamble' aligned with the aim of truth rather than a justification of expected utility.",
+    "mechanism": "The mechanism distinguishes between 'justification for belief' (which Popper rejects as inductive) and 'justification for action' (which he accepts as a critical choice). By selecting the theory that has survived the severest tests, the scientist selects the one with the highest empirical content and thus the greatest potential for future falsification. This aligns action with the logical aim of science (truth-seeking) without asserting that past survival increases the probability of future survival. The preference is a volitional commitment to the most informative conjecture, not an inference that it is likely true.",
+    "counterconditions": [
+      "If the agent requires a guarantee or even a probabilistic likelihood that the theory will succeed in a novel domain to act rationally, then Popper's view fails, and induction is unavoidable.",
+      "If 'verisimilitude' (truth-likeness) is invoked as the guide for action, the Tichý-Miller refutation demonstrates that comparing verisimilitude without probabilistic assumptions is logically impossible, collapsing the defense.",
+      "If the distinction between 'psychological expectation' and 'logical justification' is deemed insufficient to bridge the gap to practical action (e.g., building a bridge), the preference remains irrational for pragmatic purposes."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by redefining the goal of action: the aim is not 'success' (which implies induction) but 'maximizing the chance of learning from failure.' In a novel domain, choosing the best-corroborated theory is the only way to ensure that if we are wrong, we find out quickly (high severity). This answers the challenge by shifting the metric of 'defensibility' from predictive reliability to informational efficiency."
+      },
+      {
+        "handle": "0baaf2a78ddc87e150a4bd9a2361836bc0158509dab5b8825decd20371ff9aa2",
+        "kind": "rebutted",
+        "note": "The candidate explicitly denies that selecting for action relies on the implicit premise that past survival predicts future success. Instead, it posits the selection is based on the theory's current status as the 'best available target for criticism.' The act of action is a commitment to test the theory further in the new domain, not a bet on its truth based on history."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "revised",
+        "note": "Revised to clarify that Popper's 'own terms' include the normative aim of science (finding truth). The defense is not merely psychological; it is logically derived from the definition of scientific rationality as critical testing. If one accepts the aim of truth, preferring the most severely tested theory is the only consistent action, making it defensible on logical, not just psychological, grounds."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate abandons the attempt to save Popper via 'verisimilitude' comparisons, acknowledging the Tichý-Miller refutation makes formal verisimilitude unusable as a decision criterion. Instead, it relies solely on 'corroboration' as a report of past test severity, decoupling it entirely from truth-likeness metrics."
+      },
+      {
+        "handle": "14b061678dda46e4dcf8f89237df4b4a56508f06d9d5b8c5b1275dfe729cd712",
+        "kind": "rebutted",
+        "note": "The candidate argues that Popper's requirement for rational action is satisfied by consistency with the aim of science, not by providing a guarantee of success. Rationality, for Popper, is critical consistency, not instrumental optimization based on probable outcomes. Therefore, claiming 'no justification' for success while maintaining 'justification' for the choice based on critical alignment is not a contradiction but the core of his epistemology."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde09019ae03ec8c17",
+        "kind": "rebutted",
+        "note": "Accepted that formal verisimilitude is refuted. However, the candidate rebuts the claim that this destroys the preference for action. The preference does not require measuring verisimilitude; it only requires identifying which theory has undergone and survived the most severe tests. This is a historical fact about the testing process, not a calculated measure of truth-content, thus avoiding the Tichý-Miller trap."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "revised",
+        "note": "Revised to incorporate Popper's specific argument that the preference is rational because it aligns with the aim of finding truth. The candidate now explicitly frames the 'volitional act' as a 'rationally constrained choice' dictated by the logic of falsificationism, correcting the misrepresentation that it is purely non-rational."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The evolutionary analogy is not used to justify the *preference* itself but to explain the *survival* of theories. The justification for the preference in action is derived from the methodological rule: 'Always choose the theory that offers the most opportunities for being proven wrong.' This resolves the tension by focusing on the structure of the test in the novel domain, not the history of the organism/theory."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

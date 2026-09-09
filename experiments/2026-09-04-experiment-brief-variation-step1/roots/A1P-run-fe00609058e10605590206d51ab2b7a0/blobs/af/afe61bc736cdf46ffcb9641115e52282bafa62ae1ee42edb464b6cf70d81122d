@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule to maximize the severity of future tests (falsifiability), accepting the cost that this preference offers no rational guarantee of practical success or truth approximation.",
+    "mechanism": "The mechanism reinterprets 'preference' strictly as a decision-rule for theory selection aimed at accelerating error elimination. By choosing the theory that has survived the most severe tests (highest empirical content), scientists select the theory that is currently most vulnerable to falsification. This does not assume the theory is true or probable; it assumes only that testing this theory yields the highest potential information gain. The preference is thus a strategic move within the game of science to expose errors faster, consistent with the goal of falsification rather than verification.",
+    "counterconditions": [
+      "If the chosen 'better-corroborated' theory fails a new test while a less-corroborated rival survives, the methodological rule must still be considered valid because the goal was rapid error exposure, not finding the surviving theory.",
+      "If a scientist prefers a theory because they believe it will work in practice (pragmatic success), they have left Popper's framework and smuggled in induction.",
+      "If the definition of 'severity' relies on past regularities to predict future test outcomes, the argument collapses into induction."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate evolutionary origin with justification. It explicitly frames the preference as a normative methodological rule ('decision-rule') adopted to serve the specific aim of science (error elimination), distinct from any descriptive claim about why scientists psychologically prefer such theories."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate avoids the false dichotomy by neither claiming the preference is an 'arbitrary decree' nor that it implies 'non-inductive rationality' in the sense of logical probability. Instead, it defines the rationality as instrumental to the goal of maximizing test severity, which is a core Popperian commitment."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The move from 'others are falsified' to 'choose this one' here does not assume uniformity of nature. It assumes only that the unfalsified theory is the only one currently eligible for further testing. The choice is based on the logical status (not yet falsified) and empirical content (high severity potential), not on an expectation that the future will resemble the past."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a50a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "The candidate clarifies that 'severity' is defined by the logical improbability and boldness of the prediction relative to background knowledge, not by a statistical reliability derived from past survival. Surviving a severe test indicates high informative content, not reliable future performance."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The proposal distinguishes itself from Poincaré's conventionalism by grounding the rule in the objective aim of science (truth via error elimination) rather than mere convenience. The rule is 'methodological' but not 'arbitrary' in the pejorative sense; it is necessitated by the logic of falsificationism itself."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c594f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate explicitly rejects 'pragmatic reliability' as the basis for preference. The preference is for the theory that allows the most rigorous attempt at falsification, regardless of whether it 'works' pragmatically. This avoids smuggling in inductive assumptions about utility."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e81c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "rebutted",
+        "note": "The argument does not rely on 'verisimilitude' (truth-likeness) as a measurable quantity to justify preference. It relies solely on the logical attribute of 'empirical content' and the historical fact of 'survival of severe tests' as a marker for where to direct critical efforts next."
+      },
+      {
+        "handle": "483154416962e44c251d91e84537a698ba94e10911e0d135f5eee3ba73d05a96",
+        "kind": "rebutted",
+        "note": "The candidate addresses the dilemma of multiple unfalsified theories by introducing the criterion of 'severity of tests passed.' Preference is not just for 'any standing candidate' but specifically for the one that has subjected itself to the riskiest tests and survived, thereby offering the best opportunity for future refutation."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["bridge_stress_testing_protocol"],
+      "shared_structure": [
+        "Selection of the component under highest stress for continued monitoring",
+        "Goal is to find failure points quickly, not to prove the component will never fail",
+        "Preference for the 'tested' component is strategic, not a belief in its invincibility"
+      ],
+      "disanalogies": [
+        "Bridges are physical objects subject to material fatigue; theories are logical constructs subject to logical falsification",
+        "Bridge testing aims for safety assurance; theory testing aims for knowledge growth via error elimination"
+      ],
+      "transfer_claims": [
+        "Just as engineers monitor the most stressed bridge part to learn its limits fastest, scientists should adopt the most tested theory to learn its flaws fastest",
+        "Preferring the stressed part does not imply believing it won't break; preferring the corroborated theory does not imply believing it is true"
+      ],
+      "overturn_conditions": [
+        "If the goal of science were defined as 'practical success' rather than 'error elimination', the analogy would fail",
+        "If 'severity' could not be objectively determined without referencing past success rates"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

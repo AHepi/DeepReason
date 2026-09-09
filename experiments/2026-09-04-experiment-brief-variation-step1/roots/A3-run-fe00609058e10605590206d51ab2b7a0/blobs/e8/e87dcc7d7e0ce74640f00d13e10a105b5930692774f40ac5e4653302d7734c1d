@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's mechanism claims to 'decouple selection from expectation of truth,' yet simultaneously justifies this selection by stating we choose the theory because it 'has survived the most severe attempts to falsify it.' This creates a performative contradiction: citing past survival as the rational basis for present preference is functionally identical to an inductive inference that past success indicates future reliability (or at least non-falsity). If the agent truly holds no expectation that a theory which survived severe tests is more likely to hold than one that did not, the citation of those tests becomes irrelevant to the decision. The target attempts to have it both ways: rejecting the logical force of induction while relying on its psychological or pragmatic force to make the 'critical rationalist' rule defensible.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Citing past survival as the reason for current preference logically entails an expectation of future validity, contradicting the claim of decoupling selection from expectation.",
+      "premise_evidence": [
+        {
+          "block": "reasoning-envelope-wf",
+          "quote": "we choose the theory that tells us the most about the world because it has survived the most severe attempts to falsify it, not because we believe it will continue to hold."
+        }
+      ],
+      "successor_question": "If past survival provides no grounds for expecting future validity, on what non-inductive basis does 'severity' render a theory preferable for action rather than mere archival interest?"
+    }
+  ]
+}

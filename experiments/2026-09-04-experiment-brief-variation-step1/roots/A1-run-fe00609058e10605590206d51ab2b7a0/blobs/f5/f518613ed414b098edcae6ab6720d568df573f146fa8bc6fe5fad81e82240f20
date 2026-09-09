@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's evolutionary analogy fails to resolve the specific tension in Popper's framework regarding 'acting on' a theory. While the target argues that preferring corroborated theories is a survival-enhancing 'habit,' it does not explain why a scientist should bet their career or life on a theory known to be false (as all are for Popper) merely because the habit of picking such theories helped the species survive. This reduces the rationality of the individual scientist's choice to a biological impulse, effectively smuggling in induction by assuming that past survival success guarantees future predictive reliability in the specific environment being tested, which is precisely the inductive leap Popper rejected.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": "If the preference for corroborated theories is merely a biological adaptation rather than a rational justification, how can Popper distinguish between a scientist acting rationally and a gambler acting on a superstition that happened to be evolutionarily neutral?"
+    }
+  ]
+}

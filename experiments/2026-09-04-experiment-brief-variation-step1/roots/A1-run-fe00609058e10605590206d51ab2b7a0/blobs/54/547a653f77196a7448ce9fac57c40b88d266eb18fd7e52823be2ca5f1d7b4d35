@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's own terms not as an inductive inference that the theory is true or probable, but as a critical preference for the theory with the highest 'potential falsifiability' and 'informational content' that has withstood the most severe tests. This preference avoids smuggling in induction by treating corroboration as a report of past performance under risk, not a predictor of future success; the cost of this stance is the abandonment of any guarantee that the preferred theory will work in practice, accepting instead a rational gamble based on the severity of failed attempts to refute it.",
+    "mechanism": "Critical Preference via Severity Reporting: The mechanism distinguishes between 'acting on' a theory (a pragmatic decision) and 'believing' it is probable. When scientists choose a well-corroborated theory for action (e.g., building a bridge), they are not inferring its truth from past success (induction). Rather, they are selecting the theory that has survived the most stringent attempts at falsification, thereby maximizing the informational content of their current knowledge base. If the theory fails later, the loss is high-information (a major discovery); if it succeeds, it remains conjectural. The preference is rational because it maximizes the growth of knowledge and minimizes the risk of relying on a theory already known to be false or weakly tested.",
+    "counterconditions": [
+      "If corroboration is merely a historical report with no bearing on future reliability, then preferring it for practical action (like bridge building) becomes indistinguishable from irrational habit or blind custom.",
+      "If Popper admits that we must act, and acting requires an expectation of success, then denying that corroboration provides *any* reason to expect success contradicts the rationality of the agent making the choice.",
+      "If the preference relies on 'verisimilitude' (truth-likeness) as the metric, the defense collapses because Popper conceded verisimilitude cannot be formally defined or calculated for false theories."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on 'verisimilitude' as a calculable metric. Instead, it grounds the preference in 'severity of tests' and 'informational content,' which are definable within Popper's framework without requiring a formal measure of truth-likeness."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The candidate clarifies that it does not conflate logical probability with rational expectation. It argues that the 'expectation' is not a logical entailment of truth, but a pragmatic wager on the theory with the highest surviving informational content, distinguishing the category of 'logical confirmation' from 'critical preference'."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma by framing practical reliance as a 'rational gamble' on severity rather than a deduction of safety. The mechanism now specifies that acting on a corroborated theory is choosing the option where potential failure yields the highest information gain, distinguishing it from mere testing."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The rebuttal asserts that 'willingness to criticize' is precisely what constitutes 'practical reliance' in this framework: one relies on the theory that has been most thoroughly criticized and survived, not on one that is uncritically accepted. The distinction is maintained by emphasizing that reliance is provisional and risky."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is defended not as a contradiction but as an adherence to his own methodological rule: always prefer the bold, highly testable theory that has survived. This is consistent with his rejection of induction because the preference is based on the *structure* of the test (severity), not the *outcome* (success implying truth)."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The candidate strictly adheres to Falsificationism and the Logic of Scientific Discovery, avoiding any appeal to Evolutionary Epistemology. The justification rests solely on the logical asymmetry between verification and falsification and the concept of severity."
+      },
+      {
+        "handle": "3315f618e758449a5ec8d23e0181b710f5cc00355fe1078c633402e3c7df78fc",
+        "kind": "rebutted",
+        "note": "As with the first discharge, the argument sidesteps the verisimilitude trap by focusing on 'corroboration as a report of severity' rather than 'corroboration as a proxy for truth-likeness.' No calculation of verisimilitude is claimed or required."
+      },
+      {
+        "handle": "422c05f671684a2e0cc88e3f64a4478400fd568dd9385f2f08bf8a4c1da0efb1",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes 'survival' (a biological/descriptive fact) from 'rational preference' (a normative methodological rule). The preference is rational not because the theory survived, but because the *process* of severe testing it survived is the only non-inductive way to critically select among conjectures."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["SRC_004"],
+      "shared_structure": [
+        "Selection based on survival of severe stress tests rather than positive accumulation of confirming instances.",
+        "Distinction between the structural integrity proven by load-testing and the probability of future loads.",
+        "Preference for the component with the highest known failure threshold despite no guarantee of infinite durability."
+      ],
+      "disanalogies": [
+        "Engineering materials have physical limits that can be approached asymptotically, whereas scientific theories are logically universal and can be falsified by a single instance.",
+        "Bridge safety standards often rely on probabilistic risk assessment (induction), which Popper explicitly rejects for theory choice.",
+        "A material's past performance under stress is often used inductively to predict future performance in engineering, whereas Popper forbids this move for theories."
+      ],
+      "transfer_claims": [
+        "Just as engineers prefer materials that have passed the most severe load tests without assuming they will never fail, scientists should prefer theories that have passed severe tests without assuming they are true.",
+        "The rationality of the preference lies in the severity of the test design, not in the outcome's predictive power."
+      ],
+      "overturn_conditions": [
+        "If it is shown that severe testing inevitably selects for theories that are less likely to succeed in novel domains (anti-correlation).",
+        "If practical action inherently requires a degree of belief (probability > 0.5) that cannot be satisfied by mere lack of falsification."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

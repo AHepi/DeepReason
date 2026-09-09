@@ -1,0 +1,91 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive methodological rule of 'critical rationality,' but accepting this defense costs the scientist any claim to predictive reliability or increased truth-probability, reducing the preference to a purely procedural commitment to keep the game of science going rather than a guide to nature's behavior.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which implies induction/probability) and 'rational choice' (which implies selecting the best available target for criticism). By framing the preference as a rule to maximize the severity of future potential falsifications, the choice becomes logical (choose the theory with more empirical content) rather than inductive (choose the theory likely to be true).",
+    "counterconditions": [
+      "If surviving severe tests is treated as evidence of future success, the argument collapses into induction.",
+      "If the preference relies on an undefined notion of 'verisimilitude' that cannot be formally assessed, the rationality claim becomes empty.",
+      "If the 'methodological rule' is shown to be functionally identical to inductive practice in guiding action, the distinction is merely verbal."
+    ],
+    "typicality": 0.75,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_003",
+        "SRC_012"
+      ],
+      "shared_structure": [
+        "Selection based on elimination of competitors rather than positive confirmation.",
+        "Procedural rules governing a game vs. ontological claims about the game pieces.",
+        "Preference for the 'fittest' survivor without assuming the environment remains static."
+      ],
+      "disanalogies": [
+        "Evolutionary survival implies adaptation to a real environment; Popperian corroboration explicitly denies implication of truth.",
+        "Sports淘汰 (elimination) aims to find a winner; scientific falsification aims to keep the contest open indefinitely.",
+        "Legal 'innocent until proven guilty' is a moral safeguard; Popper's rule is an epistemic accelerator."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the undefeated boxer not because they are invincible but because they are the only remaining viable candidate, we act on corroborated theories because they are the only ones not yet eliminated.",
+        "The rationality of the choice lies in the structure of the competition (severe testing), not in the properties of the survivor."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that 'severity' itself presupposes an inductive assumption about the uniformity of nature.",
+        "If acting on a theory logically entails believing it will succeed, making the 'non-belief' stance performative nonsense."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate origin with justification; it explicitly grounds the preference in a forward-looking methodological rule (maximizing testability) rather than a backward-looking evolutionary explanation of why scientists behave as they do."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate accepts Popper's argument for non-inductive rationality but clarifies that this rationality is strictly limited to 'critical selection,' rejecting the idea that it offers a 'positive' reason to believe the theory is true, thus avoiding the false dichotomy by narrowing the scope of 'defensibility'."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "revised",
+        "note": "Revised to explicitly state that the move from 'others falsified' to 'choose this one' does NOT assume uniformity of nature, but rather assumes the 'rule of the game' that one must act on the best available error-free option, even if nature changes tomorrow."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "The candidate argues that 'severity' is defined by logical improbability and testability, not by a track record of success implying future reliability. The preference is for the theory that risks the most, not the one that has 'proven' itself."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "departure_declared",
+        "note": "Departing from the strict requirement to prove the convention is 'non-arbitrary' in a foundational sense; the candidate declares the convention arbitrary but rationally necessary for the existence of science as a critical enterprise, aligning with a pragmatic conventionalism Popper might reject but which saves the system."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The distinction is maintained by defining 'pragmatic reliability' strictly as 'capacity to be falsified if false,' not 'likelihood of being true.' The smuggling charge fails if the goal is error-elimination, not truth-accumulation."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e871c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "revised",
+        "note": "Revised to remove reliance on 'verisimilitude' as a knowable metric. The preference is based solely on 'corroboration' (past performance in tests) as a marker of 'testability,' explicitly acknowledging we cannot know if we are closer to the truth."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f0068bbde5f67",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for the 'smuggling induction' view in the counterconditions and overturn conditions, arguing that the 'cost' of the Popperian defense is the loss of predictive confidence, thereby resolving the conflict by showing the defense survives only at a high price."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_003",
+      "SRC_012"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_012"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

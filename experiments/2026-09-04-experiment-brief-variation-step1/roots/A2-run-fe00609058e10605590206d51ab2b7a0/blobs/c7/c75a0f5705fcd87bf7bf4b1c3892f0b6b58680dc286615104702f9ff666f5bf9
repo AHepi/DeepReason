@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a distinction between 'rational choice' and 'rational expectation' that collapses under the problem's specific constraint of 'choosing which theory to act on.' If acting on Theory A over Theory B is justified because A has survived severe tests, this action implicitly assigns a higher pragmatic weight or reliability to A regarding future outcomes. The target claims this avoids induction by offering 'no guarantee,' but the very act of preferring one theory for action based on past performance constitutes an inductive inference (that past test survival is a reliable guide for future utility). By framing this as merely a 'methodological rule' without addressing why this rule yields better practical results than random selection if not for some assumed uniformity in nature, the target fails to demonstrate how the preference is defensible *without* smuggling in the inductive assumption it explicitly denies.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Acting on a theory based on past corroboration inherently assumes that past performance is a relevant predictor of future success, which is the definition of the inductive principle Popper sought to reject.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for the better-corroborated theory does not rely on the assumption that the future will resemble the past, what non-inductive justification explains why acting on it is superior to acting on a falsified or untested theory?"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "candidate": {
+    "claim": "Preferring the better-corroborated theory is defensible on Popper's own terms not as an inductive inference that the theory is true or probable, but as a non-inductive, critical decision to act on the theory that has withstood the most severe attempts at falsification, thereby minimizing the risk of known error while maximizing the potential for discovering new errors.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which implies adding probability/truth via induction) and 'critical preference' (a pragmatic choice based on the current state of criticism). It argues that acting on the best-tested theory is the only rational way to expose it to further potential falsification in high-stakes environments, aligning with the goal of verisimilitude without requiring its formal calculation. The preference is a methodological rule for action, not a logical proof of future success.",
+    "counterconditions": [
+      "If the agent requires a guarantee of future success or a probabilistic measure of truth to act, this defense fails.",
+      "If 'preference' is defined strictly as an assignment of higher logical probability, the defense collapses into the induction Popper rejected.",
+      "If the context demands a formal metric of verisimilitude to compare theories rather than a qualitative assessment of test severity, the argument cannot proceed."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on verisimilitude as a calculated metric or formal definition. Instead, it relies on the qualitative history of severe testing (corroboration) as a basis for a critical decision. Popper's concession on the formal definability of verisimilitude does not invalidate the methodological preference for theories that have survived more rigorous tests, as this preference is about risk management, not truth approximation metrics."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids conflating logical probability with expectation. It frames 'expectation of future success' not as a logical entailment of truth, but as the strategic outcome of choosing the theory least likely to fail *known* tests, leaving it open to *new* tests. This is a category of practical rationality, not logical probability."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma by framing the choice of theory for bridge-building as a risk-minimization strategy. The claim now specifies that preferring the corroborated theory is the only way to ensure that if the bridge falls, it falls due to a new, previously unknown flaw, rather than a known, tested one."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes 'willingness to criticize' from 'practical reliance' by arguing that practical reliance *is* the ultimate form of criticism in Popper's view: by staking lives/resources on a theory, we subject it to the most severe test possible. Thus, the preference is consistent with the willingness to criticize."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is defended not as a contradiction, but as an adherence to his own methodological rule: when forced to choose, choose the theory that has best resisted falsification. This is a 'conventional' decision only in the sense that it is a rule of the game of science, not an arbitrary whim; it is the rule that maximizes learning."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The candidate strictly operates within Falsificationism and Corroboration, making no appeal to Evolutionary Epistemology or Campbell's variation-selection model. The argument rests solely on the logic of testing and the definition of corroboration as a report of past test performance."
+      },
+      {
+        "handle": "3315f618e758449a5ec8d23e0181b710f5cc00355fe1078c633402e3c7df78fc",
+        "kind": "rebutted",
+        "note": "Similar to the first discharge, the candidate rejects the premise that the defense requires a formal metric of verisimilitude. It substitutes the impossible calculation of truth-likeness with the observable record of test severity and survival, which Popper accepts as valid grounds for preference."
+      },
+      {
+        "handle": "422c05f671684a2e0cc88e3f64a4478400fd568dd9385f2f08bf80c90bde4a86",
+        "kind": "rebutted",
+        "note": "The candidate does not use an evolutionary analogy. It argues that 'survival' of tests constitutes 'rational preference' because the goal of science is error elimination. A theory that has survived severe tests has eliminated more potential errors than one that hasn't; preferring it is rational because it represents a state of greater ignorance reduction, not biological fitness."
+      }
+    ],
+    "analogy": null,
+    "evidence_refs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "checker_specs": []
+  }
+}

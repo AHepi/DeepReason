@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target conflates the 'inductive assumption' that nature is uniform (which Popper explicitly rejects as a justification for theory truth) with the 'methodological decision' to treat test conditions as stable for the purpose of falsification. Popper's framework does not require believing the future *will* resemble the past; it only requires acting *as if* test conditions are controlled to allow a logical contradiction to stand. The target claims this methodological necessity 'smuggles in' induction in a way that collapses the distinction between corroboration and probability, but it fails to demonstrate how this practical assumption assigns a higher logical probability to the theory, which is the specific charge required by the problem context. The argument attacks a straw man of 'hidden belief' rather than the logical structure of corroboration.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguishes between a metaphysical belief in uniformity (induction) and a methodological rule to accept test results as valid until overturned.",
+      "premise_evidence": null,
+      "successor_question": "If the stability of test conditions is merely a methodological postulate rather than an inductive inference about the world, does the preference for corroborated theories still imply they are more probable?",
+      "target_alias": "SRC_001"
+    }
+  ]
+}

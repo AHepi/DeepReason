@@ -1,0 +1,82 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive 'critical preference' grounded in the logical asymmetry of falsification and the goal of verisimilitude, rather than an expectation of future success; however, accepting this defense costs the agent any rational assurance that the preferred theory will actually work in practice, reducing the preference to a methodological wager without epistemic probability.",
+    "mechanism": "The mechanism distinguishes between 'inductive inference' (predicting future truth from past success) and 'critical preference' (selecting the theory that has withstood the most severe tests as the best current candidate for truth-content). By framing action not as a bet on probability but as a commitment to the theory with the highest surviving informational content, Popper avoids smuggling in induction. The preference is rational because it aligns with the aim of science (truth), even if it cannot guarantee practical success.",
+    "counterconditions": [
+      "If the agent requires a probabilistic guarantee of success before acting, Popper's framework fails to provide it.",
+      "If 'verisimilitude' cannot be logically defined without invoking inductive assumptions about the structure of reality, the defense collapses.",
+      "If the distinction between 'psychological expectation' and 'rational preference' is merely semantic and does not alter the actual decision-making calculus, the induction remains smuggled."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "shared_structure": [
+        "Selection based on survival of severe testing rather than accumulation of positive instances.",
+        "Distinction between the logic of justification (probability) and the context of discovery/action (preference).",
+        "Acceptance of uncertainty regarding future performance despite past resilience."
+      ],
+      "disanalogies": [
+        "Unlike biological natural selection which has no 'goal', Popper's critical preference explicitly aims at verisimilitude (truth-likeness).",
+        "Unlike a gambler relying on the 'hot hand' fallacy, the Popperian agent explicitly denies that past success increases the probability of future success.",
+        "Scientific action often involves high-stakes engineering where 'wagering' without probability calculations is practically untenable, unlike theoretical conjecture."
+      ],
+      "transfer_claims": [
+        "Just as we select the fittest organism not because it guarantees future survival but because it is the best current evidence of adaptation, we select the best-corroborated theory.",
+        "The rationality of the choice lies in the rigor of the test procedure, not in the statistical frequency of past outcomes."
+      ],
+      "overturn_conditions": [
+        "If it can be shown that 'severity' of a test implicitly relies on inductive assumptions about the uniformity of nature.",
+        "If the concept of 'verisimilitude' is proven logically incoherent within a falsificationist framework."
+      ]
+    },
+    "discharges": [
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism claims the defense fails to explain why one should act. The rebuttal is that Popper defines 'acting' not as following a probable outcome, but as adopting the most seriously tested hypothesis as the provisional basis for action. The 'why' is the alignment with the goal of truth (verisimilitude), not the expectation of safety."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The criticism conflates informational content with defensible preference. The rebuttal clarifies that for Popper, high informational content (which entails high falsifiability) combined with survival IS the sole criterion for rational preference. No extra 'defensibility' beyond logical consistency with the aim of science is required or possible."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'false dichotomy' charge. The candidate now acknowledges that the gap between 'past success' and 'future truth' is real and unbridged by logic, arguing that Popper's solution is to leap this gap via a non-cognitive 'decision' or 'wager' rather than claiming a logical bridge exists. This concedes the logical problem while defending the pragmatic rationality."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The criticism calls the 'Principle of Uniformity' argument a straw man. The rebuttal asserts that while Popper may not use those exact words, any justification for acting on past results WITHOUT assuming some regularity functions effectively as such a principle. The candidate maintains that exposing this implicit assumption is valid, even if Popper tries to frame it as a 'methodological rule'."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "rebutted",
+        "note": "The criticism argues that 'critical preference' is distinct from 'inductive prediction'. The candidate rebuts by agreeing they are distinct concepts but arguing that in the context of 'action', the functional difference vanishes: both lead to the same behavior. If the behavior is identical, the claim that one is non-inductive is a semantic shield, not a substantive solution."
+      },
+      {
+        "handle": "270fdeb19c12b45908843bde3f158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "departure_declared",
+        "note": "Departing from the strict Popperian line that verisimilitude is fully formalizable. The candidate accepts the criticism that verisimilitude faces logical hurdles but argues that as a *regulative ideal* (rather than a calculated metric), it still serves the function of justifying preference without needing full logical formalization."
+      },
+      {
+        "handle": "2b2b9f8685410277445fc083713971a8c5bf992ab5fbf0a1093b43dcfb45882",
+        "kind": "rebutted",
+        "note": "The criticism states the preference is rational not because of a fiction but because of something else. The rebuttal clarifies that the candidate views the 'rationality' precisely AS a methodological fiction or convention. To call it anything more robust is to reintroduce induction. The defense holds ONLY if we accept this limited, conventional notion of rationality."
+      },
+      {
+        "handle": "4685bd2f65b86b20f04d65067f8fc4526a28a4375555eb78127f0f9de465ad93",
+        "kind": "revised",
+        "note": "Revised to clarify the definition of 'preference'. The candidate now explicitly states that the preference is decoupled from 'expectation of truth' in the probabilistic sense, but coupled with 'hope for truth-content'. This nuance addresses the criticism that scientists expect their theories to work; Popper would say they hope they do, but act as if they will based on the best available error-elimination."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

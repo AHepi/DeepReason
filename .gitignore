@@ -65,3 +65,5 @@ tools/treadle/src/treadle.egg-info/
 .treadle/
 zoo/reviews/*.transcript.tmp
 .preflight_models_shim.py
+experiments/2026-09-04-experiment-brief-variation-step1/soak/work-*/
+experiments/2026-09-04-experiment-brief-variation-step1/soak/home-*/

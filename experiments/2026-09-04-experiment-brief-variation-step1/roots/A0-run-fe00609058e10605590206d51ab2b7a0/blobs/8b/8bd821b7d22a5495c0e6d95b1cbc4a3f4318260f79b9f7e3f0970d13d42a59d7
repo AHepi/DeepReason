@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on the claim that acting on a falsified theory is 'irrational,' but this presupposes that past falsification is a reliable guide to future error. If the preference for the non-falsified theory is based solely on its current logical status (not yet false), it offers no reason to prefer it over an equally un-falsified but absurd alternative (e.g., 'gravity works until tomorrow'). To distinguish the 'better-corroborated' theory from merely 'not yet falsified' ones, Popper must implicitly rely on the inductive assumption that theories surviving severe tests are more likely to survive future ones, which contradicts his explicit rejection of probability and induction.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Popper rejects induction and probability as bases for theory choice, yet distinguishes 'better-corroborated' theories from merely 'unfalsified' ones to justify preference.",
+      "premise_evidence": null,
+      "successor_question": "Can Popper define 'severity' of a test without implicitly assuming that nature is uniform enough for past severe tests to predict future performance?"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories in action is defensible on his own terms not as an inductive inference of future truth, but as a non-inductive, methodological decision to subject the most vulnerable (and thus most informative) conjecture to the severest possible test via practical application; however, accepting this defense costs Popper the ability to claim that such action is 'rational' in the sense of maximizing expected success, reducing it instead to a bold gamble consistent with his anti-justificationist stance.",
+    "mechanism": "Reinterpret 'acting on a theory' not as relying on its probable truth, but as using the high-stakes practical arena as the ultimate 'severe test.' Choosing the best-corroborated theory for action is choosing the theory that has survived the hardest tests so far to face the hardest test yet (reality). If it fails, we learn the most. This avoids induction because we do not expect it to succeed; we merely accept that if any theory will reveal its falsity quickly, this one is the best candidate to do so.",
+    "counterconditions": [
+      "If Popper explicitly endorsed acting on corroboration because it increases the *likelihood* of successful outcomes, this mechanism fails.",
+      "If the definition of 'rational action' inherently requires an expectation of future performance based on past data, this mechanism fails.",
+      "If Popper's own writings on verisimilitude imply a calculable metric for choosing theories for action rather than a conventional decision, this mechanism fails."
+    ],
+    "typicality": 0.35,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on 'verisimilitude' as a calculated metric. It relies on the logical status of 'corroboration' as a report of past severe testing, using the action itself as the next severe test, bypassing the need for a formal definition of truth-likeness."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The candidate explicitly denies that rational preference entails an 'expectation of future success.' It redefines the rationality of the choice as the efficiency of potential falsification, not the probability of verification, thus avoiding the category error."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly frame 'acting on' a theory (e.g., building a bridge) as the deployment of the theory into a high-stakes testing environment, directly addressing the dilemma by equating practical reliance with the ultimate form of severe testing."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes 'practical reliance' from 'willingness to criticize' by arguing that practical reliance IS the method of criticism in the real world. The preference is for the theory most likely to crash and burn if false, which is the most corroborated one."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is defended as consistent with his 'conventional decision' postulate. He chooses the bold conjecture for action not because he believes it will work, but because it is the most interesting one to risk, aligning his personal behavior with his methodological rules."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The argument remains strictly within Falsificationism. It does not invoke Evolutionary Epistemology to justify the choice, but rather uses the internal logic of 'severe testing' applied to the domain of practice."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "rebutted",
+        "note": "The pragmatic contradiction is resolved by denying the premise that acting on a theory implies believing it will succeed. One can act on a theory to see if it fails, which is consistent with surviving severe tests so far."
+      },
+      {
+        "handle": "2bb824986a07c70a152db1deb50653be633a98497dc1a927ef76e718b290d85f",
+        "kind": "rebutted",
+        "note": "The tension regarding action is resolved by positing that the justification for acting on the best-corroborated theory is precisely that it offers the highest informational yield upon failure, not that it guarantees survival."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "mountaineering_route_selection"
+      ],
+      "shared_structure": [
+        "Selection of the most difficult path not because it is safest, but because it provides the most definitive test of the climber's skill.",
+        "Past success on easier paths (corroboration) informs the choice to attempt the harder path (action), without guaranteeing success.",
+        "The goal is not guaranteed arrival (truth/survival) but the maximization of learning through potential failure."
+      ],
+      "disanalogies": [
+        "In mountaineering, failure often means death, whereas in scientific action, failure means knowledge gain without necessarily ending the scientist.",
+        "Mountaineers usually hope to succeed; the Popperian scientist acting on a theory should logically be prepared for it to fail immediately."
+      ],
+      "transfer_claims": [
+        "Just as a climber chooses the hardest route to test their limits, a scientist chooses the best-corroborated theory to test its limits in reality.",
+        "The 'rationality' of the climb is in the severity of the test, not the probability of reaching the summit."
+      ],
+      "overturn_conditions": [
+        "If mountaineers typically choose routes based on calculated probabilities of safety rather than difficulty, the analogy collapses.",
+        "If the primary goal of mountaineering is proven to be safe arrival rather than testing limits, the structural mapping fails."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

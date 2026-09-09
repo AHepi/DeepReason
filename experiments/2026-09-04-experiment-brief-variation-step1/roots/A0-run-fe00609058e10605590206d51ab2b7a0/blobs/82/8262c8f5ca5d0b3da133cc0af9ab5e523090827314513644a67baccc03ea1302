@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that preference is merely 'the state of having eliminated competitors' fails to address the problem's core challenge regarding action in novel domains. While elimination explains why we reject falsified theories, it does not justify the positive expectation that the surviving theory will succeed in *new* tests or applications (projectibility). Popper's own admission that scientists 'prefer' better-corroborated theories for action implies a reliance on the theory's future performance, which the evolutionary analogy alone cannot secure without smuggling in an inductive assumption that past survival correlates with future success.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper acknowledges that scientists prefer better-corroborated theories when choosing which theory to act on.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration is only a record of past survival and not a guide to future reliability, on what non-inductive basis does Popper justify acting on the 'fittest' theory when facing a genuinely novel situation?"
+    }
+  ]
+}

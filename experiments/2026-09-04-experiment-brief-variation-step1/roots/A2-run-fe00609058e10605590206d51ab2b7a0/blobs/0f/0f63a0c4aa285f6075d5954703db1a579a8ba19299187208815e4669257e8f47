@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-inductive basis for action, but this fails to address the problem's core challenge: that preferring a theory for future action inherently assumes it will continue to perform well, which is an inductive inference. Popper explicitly rejected verisimilitude as a formalizable concept after Tichý and Miller demonstrated logical contradictions in its definition; therefore, using it as the linchpin for a 'rational choice' smuggles in the very inductive assumption (that the structure of reality allows for such approximation) that Popper sought to avoid. The target claims we act without predicting future success, yet the definition of 'acting on a theory' implies an expectation of its utility, creating a performative contradiction.",
+      "premise": "Popper abandoned the formal concept of verisimilitude due to logical refutations, and acting on a theory necessarily implies an inductive expectation of future reliability.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "counterexample": null,
+      "successor_question": "If verisimilitude cannot be formally defined without induction, what specific non-inductive metric does Popper offer to justify the practical preference for one theory over another in the absence of predictive confidence?"
+    }
+  ]
+}

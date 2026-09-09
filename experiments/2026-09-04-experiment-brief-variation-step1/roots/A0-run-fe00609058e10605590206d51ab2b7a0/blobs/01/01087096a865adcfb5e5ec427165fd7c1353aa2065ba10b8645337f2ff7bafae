@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim that Popper's distinction collapses confuses the pragmatic necessity of assuming stability for action with the logical definition of corroboration. Popper explicitly acknowledges that acting on the best-corroborated theory requires a 'rational preference' based on the aim of finding truth, not an inductive proof that the future will resemble the past. The target asserts that severe testing 'implicitly relies' on inductive assumptions about stability, but fails to demonstrate that Popper's logic requires these assumptions to be true for the concept of severity to hold; rather, Popper treats the assumption as a methodological rule or a bold conjecture, not an inductive premise. Since the target does not refute Popper's specific defense against the charge of smuggling in induction (that the preference is non-inductive and aimed at verisimilitude), the argument that the distinction 'collapses' is unsupported.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

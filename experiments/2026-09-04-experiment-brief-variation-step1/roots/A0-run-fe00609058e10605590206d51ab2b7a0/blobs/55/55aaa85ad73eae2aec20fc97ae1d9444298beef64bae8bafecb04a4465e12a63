@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a false dichotomy between 'inductive probability' and 'blind guess,' ignoring Popper's specific concept of 'verisimilitude' (truth-likeness). Popper argued that better-corroborated theories are preferred not merely as a voluntary methodological rule, but because they possess higher verisimilitude, offering a rational (though non-probabilistic) ground to expect them to perform better in future tests. By reducing the preference to a 'logical status report about the past' and characterizing the choice as a 'blind guess,' the target misrepresents Popper's solution, failing to explain how the preference is defensible *on his own terms* without smuggling in induction or admitting irrationality.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper explicitly distinguished corroboration from probability but maintained it indicates a theory's closeness to the truth (verisimilitude), providing a rational basis for preference that is neither inductive nor a blind guess.",
+      "premise_evidence": null,
+      "successor_question": "How does the target reconcile its claim that the choice is a 'blind guess' with Popper's assertion that corroboration provides a rational indication of verisimilitude?"
+    }
+  ]
+}

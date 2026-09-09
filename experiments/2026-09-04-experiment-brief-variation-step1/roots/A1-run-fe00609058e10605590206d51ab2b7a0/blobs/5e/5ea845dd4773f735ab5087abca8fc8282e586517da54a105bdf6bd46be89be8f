@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails to address the specific dilemma of 'acting on' a theory versus merely 'testing' it. Popper's problem highlights that scientists must choose which theory to rely on for practical decisions (e.g., building a bridge), not just which to subject to further tests. The target argues that preferring the best-corroborated theory optimizes the rate of falsification by exposing us to high risk. However, if the goal is rapid falsification, one should logically prefer the *boldest*, *least* corroborated, or *most novel* theory, as these are statistically more likely to fail quickly. A theory that has already survived severe tests is, by definition, harder to falsify than an untested bold conjecture. Therefore, the strategic preference for the 'best-tested' theory contradicts the stated goal of maximizing the speed of falsification; it instead suggests a pragmatic reliance on reliability, which smuggles in an inductive assumption that past survival indicates future stability.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "If the goal is rapid error elimination via falsification, the optimal strategy is to test the most vulnerable (least corroborated) theories, not the ones that have already proven resilient.",
+      "premise_evidence": null,
+      "successor_question": "Does Popper have a non-inductive justification for why a theory that survived past tests is a better candidate for *practical action* than a bolder, untested alternative, given that the latter would be easier to falsify?"
+    }
+  ]
+}

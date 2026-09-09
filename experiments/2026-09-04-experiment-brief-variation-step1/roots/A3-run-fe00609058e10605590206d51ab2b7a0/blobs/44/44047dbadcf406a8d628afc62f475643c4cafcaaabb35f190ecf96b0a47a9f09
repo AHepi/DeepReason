@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The argument commits a category error by conflating 'inductive inference' (an epistemic claim that the future *will* resemble the past, increasing probability) with 'pragmatic preference' (a decision rule to act *as if* the best-tested theory is true). Popper explicitly defends the latter: choosing the best-corroborated theory is rational not because it predicts success (which would require induction), but because it represents the most severe test of truth-content available. The target's mechanism asserts that acting on a theory 'implicitly assumes' uniformity; however, one can adopt a strategy based on past performance without believing that past performance guarantees future results, much like a gambler might bet on the horse with the best track record while fully acknowledging that the next race is independent. By defining any action based on past data as 'induction,' the target renders Popper's distinction between justification (epistemology) and choice (praxis) unintelligible, rather than demonstrating a genuine contradiction in his system.",
+      "premise": "Acting on the best-corroborated theory is a pragmatic decision rule distinct from an inductive inference about future probabilities.",
+      "premise_evidence": null,
+      "counterexample": [
+        "A doctor administers a vaccine that has survived severe trials, not because they believe the trials prove it will work tomorrow (inductive certainty), but because it is the most critically tested option available, acknowledging it might still fail."
+      ],
+      "essential_premise_aliases": [],
+      "successor_question": "If acting on corroboration does not require believing the future resembles the past, what specific rational basis does Popper offer for preferring the better-tested theory other than its proximity to truth?"
+    }
+  ]
+}

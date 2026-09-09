@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (proximity to truth) as the justification for preferring better-corroborated theories, but this smuggles in induction because Popper's own formal definition of verisimilitude was refuted by Tichý and Miller, leaving no non-inductive logical basis to claim one theory is 'closer to truth' than another based solely on past survival.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper attempted to ground the preference for corroborated theories in verisimilitude, but the Tichý-Miller theorem demonstrated that within Popper's own logical framework, no false theory can be closer to the truth than any other, collapsing the distinction required for the target's argument.",
+      "premise_evidence": null,
+      "successor_question": "Given the collapse of Popper's quantitative verisimilitude, can a purely pragmatic 'critical methodological decision' be defended without implicitly assuming that past survival indicates future reliability?"
+    }
+  ]
+}

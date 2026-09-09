@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'Conventionalist Decree' fails to solve the problem because it severs the link between corroboration and future reliability so completely that it cannot explain why scientists prefer better-corroborated theories for *action* (e.g., building bridges) rather than flipping a coin. Popper explicitly rejected such arbitrary conventionalism, insisting that severe testing provides a non-inductive reason to prefer one theory over another as closer to the truth (verisimilitude). By reducing the preference to a mere rule of a 'game,' the target ignores Popper's actual defense based on critical rationality and verisimilitude, thereby failing to make the strongest case for defensibility on Popper's own terms.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Popper argued that while corroboration does not increase probability, it indicates a theory has withstood serious attempts at falsification, making it a better candidate for truth (verisimilitude) than untested rivals, which is a rational basis for preference distinct from both induction and arbitrary convention.",
+      "premise_evidence": null,
+      "successor_question": "How does the target reconcile its claim of 'arbitrary rules' with Popper's explicit insistence that the choice of a corroborated theory is rationally motivated by its survival of severe tests, rather than being a mere definitional stipulation?"
+    }
+  ]
+}

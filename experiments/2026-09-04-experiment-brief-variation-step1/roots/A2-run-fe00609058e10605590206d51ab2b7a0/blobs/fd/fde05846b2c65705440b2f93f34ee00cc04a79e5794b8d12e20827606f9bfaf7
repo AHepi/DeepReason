@@ -1,0 +1,230 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive methodological rule of 'risk minimization' rather than 'truth maximization'.",
+      "mechanism": "Decision-Theoretic Asymmetry: Acting on the best-tested theory minimizes the known error surface. We do not assume the future will resemble the past (induction); we assume that until a theory fails, it is the only one with a known track record of surviving severe tests. Choosing an untested or less-tested theory introduces unknown risks without epistemic gain.",
+      "counterconditions": [
+        "If the agent's goal is strictly truth-approximation rather than error-avoidance.",
+        "If the environment changes in a way that invalidates the specific conditions of the previous severe tests."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_020] against SRC_017",
+          "kind": "rebutted",
+          "note": "The distinction holds because risk-minimization relies on the *current* state of knowledge (which theory has failed vs. which has not), not a prediction that the *cause* of survival will persist. It is a static assessment of available options, not a dynamic prophecy."
+        },
+        {
+          "handle": "[SRC_023] against SRC_009",
+          "kind": "rebutted",
+          "note": "This defense does not rely on verisimilitude (truth-likeness) but on the logical asymmetry of falsification. We prefer the theory that has not yet been falsified, regardless of its 'truth content'."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Preferring a theory for action assumes nothing about its future performance other than it is the least-bad option currently known. It is a choice among imperfect alternatives, not an endorsement of future success."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "Assigning a 'higher subjective probability' is a psychological description, not the logical justification. The justification is purely negative: Theory A has no known defects in domain X; Theory B has unknown defects. Choosing A is not probabilistic; it is the elimination of known losers."
+        },
+        {
+          "handle": "[SRC_022] against SRC_019",
+          "kind": "revised",
+          "note": "Revised to clarify that this is not a 'solution' to paralysis but a definition of rational action within a fallibilist framework. The methodological rule is not an inductive supplement but a procedural constraint."
+        },
+        {
+          "handle": "[SRC_021] against SRC_018",
+          "kind": "rebutted",
+          "note": "Action implies future orientation, but the *basis* for the action is past failure/success records. The mechanism is 'selection by elimination', which is logically valid even if the future is opaque."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "The normative question is answered by defining 'rationality' in Popperian terms as 'critical scrutiny', not biological fitness. The defense is internal to his epistemology."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "When multiple theories survive, the preference goes to the one that has survived *more severe* or *more numerous* tests. The status report is graded by test severity, not binary."
+        }
+      ]
+    },
+    {
+      "claim": "The preference smuggles induction back in because any decision to act on a corroborated theory necessarily presupposes the uniformity of nature regarding the theory's domain.",
+      "mechanism": "Hidden Premise of Uniformity: To say 'Theory T worked before, so I will use it now' is logically equivalent to 'Nature is uniform enough that T will work again.' Without this premise, the corroboration report is merely a historical fact with no bearing on future utility.",
+      "counterconditions": [
+        "If Popper can define 'rational action' without any reference to expected outcomes.",
+        "If the agent acts solely to express allegiance to the theory rather than to achieve a result."
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_004",
+        "SRC_006"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_020] against SRC_017",
+          "kind": "rebutted",
+          "note": "The criticism is correct: the distinction collapses. Any strategy preferring A over B based on past results *does* assume the conditions making A superior will persist, which is the definition of induction."
+        },
+        {
+          "handle": "[SRC_023] against SRC_009",
+          "kind": "rebutted",
+          "note": "Even if verisimilitude fails, the core charge stands: acting on corroboration requires an inductive leap from 'has survived' to 'will survive'."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Agreed. The core challenge is met by admitting that 'preference for action' is inherently inductive, contradicting Popper's claim of a purely deductive logic of science."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "The 'least error-prone' criterion implicitly assigns higher probability to future success. Denying this is semantic gymnastics."
+        },
+        {
+          "handle": "[SRC_022] against SRC_019",
+          "kind": "rebutted",
+          "note": "Popper's 'methodological rule' is precisely the inductive supplement he claimed to reject. Calling it a 'rule' doesn't change its logical structure."
+        },
+        {
+          "handle": "[SRC_021] against SRC_018",
+          "kind": "rebutted",
+          "note": "Action inherently implies a belief in future efficacy. Redefining preference as 'informational content' ignores the pragmatic context of 'choosing to act'."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "While Popper rejects biological explanations, the normative force of his own system crumbles if it cannot justify action, forcing him into the very induction he banned."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "If multiple theories stand, choosing one still requires an inductive guess that the chosen one is 'better' in a way that matters for the future."
+        }
+      ]
+    },
+    {
+      "claim": "The tension dissolves if corroboration is viewed as a measure of 'informational content survived' rather than probability, making the preference a tautological selection of the most informative surviving option.",
+      "mechanism": "Informational Filtering: Science progresses by increasing empirical content. The 'better' theory is simply the one with more content that has not yet been refuted. Preference is not a bet on the future, but a commitment to the highest current information density.",
+      "counterconditions": [
+        "If the goal of action is safety rather than information growth.",
+        "If two theories have equal content but different test histories."
+      ],
+      "typicality": 0.60,
+      "optional_refs": [
+        "SRC_005"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_020] against SRC_017",
+          "kind": "rebutted",
+          "note": "No assumption of future conditions is needed; we simply select the artifact with the highest verified content. Future utility is a separate concern."
+        },
+        {
+          "handle": "[SRC_023] against SRC_009",
+          "kind": "rebutted",
+          "note": "This approach bypasses verisimilitude entirely, relying only on the logical metric of content and falsification."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "departure_declared",
+          "note": "Departure: This view accepts that acting on high-content theories might fail, but argues the *preference* itself is justified by the aim of science (truth/content), not successful application."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "It does not assign probability; it ranks by content. The 'error-prone' label is a mischaracterization of 'high-content'."
+        },
+        {
+          "handle": "[SRC_022] against SRC_019",
+          "kind": "rebutted",
+          "note": "It is not a false dilemma; it is a third way where preference is defined by content maximization, avoiding both paralysis and induction."
+        },
+        {
+          "handle": "[SRC_021] against SRC_018",
+          "kind": "rebutted",
+          "note": "Action in science is often exploratory. Preferring high-content theories is consistent with the goal of learning, even if it risks failure."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "This is a strictly normative, epistemic argument based on Popper's definition of scientific progress, not biology."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "If multiple theories stand, the one with greater content is preferred. If content is equal, preference is arbitrary, which is acceptable."
+        }
+      ]
+    },
+    {
+      "claim": "Popper's system leads to practical paralysis unless supplemented by an external, pragmatic induction, revealing a dual-epistemology where logic forbids what practice demands.",
+      "mechanism": "Systemic Inconsistency: The logical framework (no induction) contradicts the pragmatic requirement (act on the best). The 'preference' is therefore an ad-hoc patch, not a derived feature, exposing a fatal flaw in strict falsificationism.",
+      "counterconditions": [
+        "If a coherent bridge between logic and action can be formulated without induction.",
+        "If scientists can operate effectively without preferring corroborated theories."
+      ],
+      "typicality": 0.55,
+      "optional_refs": [
+        "SRC_006",
+        "SRC_008"
+      ],
+      "discharges": [
+        {
+          "handle": "[SRC_020] against SRC_017",
+          "kind": "rebutted",
+          "note": "The collapse is real. The attempt to distinguish them fails because the practical necessity forces the induction back in."
+        },
+        {
+          "handle": "[SRC_023] against SRC_009",
+          "kind": "rebutted",
+          "note": "Verisimilitude was Popper's failed attempt to fix this. Its failure confirms the inconsistency."
+        },
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Correct. The core challenge reveals that action *requires* the assumption Popper forbade."
+        },
+        {
+          "handle": "[SRC_016] against SRC_015",
+          "kind": "rebutted",
+          "note": "The 'risk-management' defense is just induction rebranded. The inconsistency remains."
+        },
+        {
+          "handle": "[SRC_022] against SRC_019",
+          "kind": "rebutted",
+          "note": "Calling it a 'methodological rule' admits it is not logical, thus confirming the need for an external supplement."
+        },
+        {
+          "handle": "[SRC_021] against SRC_018",
+          "kind": "rebutted",
+          "note": "Redefining preference doesn't solve the paralysis. Scientists must act, and acting requires induction."
+        },
+        {
+          "handle": "[SRC_013] against SRC_010",
+          "kind": "rebutted",
+          "note": "The normative failure is the point: Popper's terms *cannot* defend the preference, hence the need for external pragmatism."
+        },
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "The tautology breaks down when action is required, proving the system's inadequacy for real-world decision making."
+        }
+      ]
+    },
+    {
+      "claim": "The preference is a 'bet' in a game where the rules are defined by critical rationality, not a prediction of outcome, thereby sidestepping the need for induction by changing the definition of 'rationality'.",
+
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

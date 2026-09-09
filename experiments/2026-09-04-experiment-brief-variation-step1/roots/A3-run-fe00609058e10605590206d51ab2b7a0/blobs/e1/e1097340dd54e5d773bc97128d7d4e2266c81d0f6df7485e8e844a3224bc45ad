@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction if interpreted as a critical-rational decision rule rather than an inductive probability assignment; the cost is abandoning the intuition that past success provides any logical warrant for expecting future predictive accuracy, reducing scientific action to a non-justifiable but critically screened commitment.",
+    "mechanism": "The argument reconstructs Popper's distinction between the logical status of a theory (which remains unfalsified) and the pragmatic rationality of choosing it for action based on its survival of severe tests. It posits that 'corroboration' reports a historical fact of testing, not a future probability. The preference is justified as the only rational outcome of critical discussion where alternatives have been eliminated, functioning as a 'conventionalist' decision to act on the best-tested hypothesis while explicitly denying that this choice increases its truth likelihood.",
+    "counterconditions": [
+      "If it can be shown that acting on a theory logically entails an assumption that the future will resemble the past (the Principle of Uniformity), then the preference smuggles in induction.",
+      "If 'rational preference' cannot be coherently defined without reference to expected utility or probability, then Popper's non-probabilistic account of action fails.",
+      "If scientists actually require a belief in future success to act, rather than just a decision rule, then Popper's description of scientific practice is psychologically inaccurate."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0247998b9f0426956c8d0ef420daae0ecb43121c370bf31bd5ca9328a00d058d",
+        "kind": "rebutted",
+        "note": "The candidate does not rely on 'verisimilitude' (truth-likeness) to justify the preference. Instead, it relies on the elimination of competitors through critical testing. The objection assumes verisimilitude is the only non-inductive bridge, ignoring Popper's alternative of rational decision-making based on critical preference."
+      },
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The candidate explains action not by claiming the theory is 'true' or 'probable', but by framing the choice as a critical imperative: having rejected all other known options via severe tests, the remaining option is the only one rationally available for action, even without assurance of success."
+      },
+      {
+        "handle": "0adb3edd4258581107a99742865c538d498f109f3691f5b5018688135c01a694",
+        "kind": "departure_declared",
+        "note": "This candidate explicitly departs from using 'verisimilitude' as the primary justification mechanism, acknowledging the logical difficulties in comparing verisimilitude of false theories, and instead grounds the defense in the logic of critical preference and decision theory."
+      },
+      {
+        "handle": "1b2552d33d55591ca7f103b9ef6ebf34db311437d30c176088055707d875315b",
+        "kind": "revised",
+        "note": "Revised to clarify that the position does not abandon the 'intuition' of predictive success as a psychological driver, but abandons the 'logical warrant' for it. The defense argues that rationality in Popper's sense is about criticism, not about satisfying intuitions of expectation."
+      },
+      {
+        "handle": "1bd83288bc9ab8f9b04811f4e67bb8ca9d49c4f09aa66f010b8a229bd75d6fc3",
+        "kind": "rebutted",
+        "note": "The term 'pragmatic fiction' was potentially misleading; the candidate clarifies that the preference is a 'rational decision' grounded in the negative result of critical discussion (others failed), which aligns with Popper's view of rationality as critical rather than justificatory."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes 'informational content survived' (corroboration) from 'defensible preference' by arguing the latter is a normative leap authorized by the failure of alternatives, not a direct inference from the former. This avoids conflating the measure with the decision rule."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "rebutted",
+        "note": "The candidate addresses the core logical problem by asserting that Popper's solution is precisely to deny that 'acting' requires a logical guarantee or probabilistic expectation. Action is a voluntary commitment made in the absence of such guarantees, guided only by critical scrutiny."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The candidate agrees that attributing a 'Principle of Uniformity' to Popper is a straw man. The defense explicitly rejects uniformity and instead relies on the asymmetry of falsification and the rationality of preferring the unrefuted over the refuted."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

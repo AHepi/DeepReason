@@ -1,0 +1,62 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a 'critical preference' grounded in the logic of testing rather than induction, but accepting this costs the agent any rational assurance that the preferred theory will succeed in the future or approximate truth more closely than its rivals.",
+    "mechanism": "The mechanism distinguishes between 'inductive inference' (claiming past success raises future probability) and 'critical preference' (choosing the theory that has withstood the most severe attempts at falsification as the best available target for further criticism and action). Preference is justified not by expected utility derived from probability, but by the methodological rule that acting on the most severely tested theory maximizes the potential for learning if the theory fails, and represents the current state of critical discussion if it holds. The preference is a decision to treat the unrefuted, high-content theory as the provisional basis for action because it is the only one that has survived the specific risks designed to kill it.",
+    "counterconditions": [
+      "If corroboration is shown to logically entail a prediction of future success (even probabilistic), the distinction collapses into induction.",
+      "If Popper cannot explain why acting on a less-corroborated theory is irrational without invoking the principle that past performance indicates future reliability.",
+      "If the 'cost' of no assurance renders the preference practically indistinguishable from random choice for decision-makers requiring risk assessment."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism assumes 'acting' requires a belief in future success. The rebuttal is that acting on Theory A is a methodological commitment to test Theory A in practice; if it fails, we learn more than if we acted on a already-falsified or less-tested theory. The justification is epistemic growth, not predictive security."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The conflation charge is rejected. 'Informational content survived' defines the status of the theory within the critical discourse. The 'defensible preference' is simply the alignment of action with the current frontier of that discourse. No extra step to 'future success' is taken; the preference is for the theory that currently best embodies the scientific method."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "revised",
+        "note": "Revised to explicitly concede that the 'logical problem' remains unsolved in terms of guaranteeing future truth. The defense now rests entirely on the pragmatic/methodological ground that rejecting the better-corroborated theory would be an arbitrary abandonment of the critical process, not a logical derivation of safety."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "Agrees it is not a straw man to say Popper rejects the 'Principle of Uniformity'. The criticism claims the target misrepresents Popper; the target actually aligns with Popper's explicit distinction. The preference is rational *because* it avoids the uniformity principle, relying instead on the asymmetry of falsification."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "rebutted",
+        "note": "The conflation charge is denied. The mechanism explicitly separates 'critical preference' (a rule of procedure) from 'inductive prediction' (a claim about nature). Preferring the better-tested theory is a rule for how to proceed, not a prophecy that it will work."
+      },
+      {
+        "handle": "270fdeb19c2b45908843bde3f158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "departure_declared",
+        "note": "Departing from the reliance on 'verisimilitude' as a measurable quantity. The candidate argues that even if verisimilitude cannot be formally defined (as Popper later admitted), the *preference* for theories that have survived severe tests remains valid as a procedural heuristic without needing the metaphysical baggage of truth-likeness measures."
+      },
+      {
+        "handle": "283c021802bb4232adf1e0244e99140ec8500555bce3ce33ec8dc4b9ecc2ebdc",
+        "kind": "rebutted",
+        "note": "The claim that the preference is 'practically inert' is rejected. It is not inert; it directs resources toward the most informative experiments and the most robust technologies currently available. The cost is 'assurance,' not 'utility.' One can act rationally without assurance, provided one acknowledges the risk."
+      },
+      {
+        "handle": "2b2b9f8685410277445fc083713971a8c5bf992ab5fbf0a1093b143dcfb45882",
+        "kind": "rebutted",
+        "note": "The criticism insists the preference must be 'rational' in a strong sense. The rebuttal clarifies that for Popper, 'rational' means 'consistent with the critical method,' not 'justified by positive evidence.' The preference is rational because it is the only one that does not violate the prohibition on induction."
+      }
+    ],
+    "analogy": null,
+    "checker_specs": [],
+    "evidence_refs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) to justify acting on the best-corroborated theory without induction. However, Popper's own formal attempt to define verisimilitude logically failed (as demonstrated by Tichý and Miller in 1974), who proved that under Popper's definitions, a false theory with more content cannot be compared to another false theory in terms of closeness to truth. Without a coherent, non-inductive definition of verisimilitude, the claim that we act on the 'best approximation to truth' collapses into an inductive assumption that the structure of the world allows such approximations to be identified via past tests. The target asserts verisimilitude functions as a marker but fails to address how this marker is validated without smuggling in the very inductive principle (that nature is uniform enough for past severe tests to indicate future reliability or truth-content) that Popper rejected.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's logical definition of verisimilitude was proven inconsistent for comparing false theories, leaving no non-inductive basis to claim a corroborated theory is 'closer to truth'.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be formally defined without inductive assumptions, does Popper's preference for corroborated theories ultimately rest on a pragmatic guess rather than a rational rule derived from his falsificationist logic?"
+    }
+  ]
+}

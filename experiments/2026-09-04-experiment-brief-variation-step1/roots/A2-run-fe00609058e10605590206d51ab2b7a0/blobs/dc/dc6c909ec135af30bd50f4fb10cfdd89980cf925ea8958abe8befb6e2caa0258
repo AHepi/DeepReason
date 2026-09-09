@@ -1,0 +1,152 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'rule of action' based on verisimilitude (truth-likeness) rather than probability; we prefer the theory that has survived the severest tests because it is the best candidate for truth, not because it is statistically likely to succeed in the future.",
+      "mechanism": "Corroboration reports the history of severe testing, not the probability of future success. The preference is a rational decision to act on the hypothesis that currently possesses the highest degree of verisimilitude, acknowledging that this choice carries no guarantee of future predictive accuracy, thus avoiding the inductive leap.",
+      "counterconditions": [
+        "If acting on a theory necessarily implies an expectation of its future success equivalent to assigning it high probability.",
+        "If Popper cannot distinguish between 'acting as if true' and 'believing it is probably true' without collapsing into pragmatism."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "rebutted",
+          "note": "The claim distinguishes 'predicting future events with certainty' (induction) from 'preferring the best current explanatory candidate for action' (verisimilitude). The preference does not assume the future will resemble the past, but that the surviving theory is the most informative guess available now."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The 'betting on the horse' analogy is misleading if interpreted as relying on past performance to predict future wins probabilistically. In Popper's view, we bet on the horse that has run the hardest race and survived, not because it will win next time, but because it is the only one known to be robust. The premise is not reliability, but survival of severity."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "This is not a pragmatic justification in the sense of 'usefulness equals truth.' It is an epistemic strategy: preferring high-content theories maximizes the potential for learning (falsification) and minimizes the risk of acting on something already known to be false. This aligns with Popper's goal of error elimination, not pragmatic success."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "The mechanism does not redefine the conflict as a category error but resolves it by clarifying the logical status of corroboration. It directly answers the induction charge by showing the preference relies on the logical relation of 'survival of tests,' not an inductive inference to future uniformity."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "There is no 'dual-epistemology.' The scientist acts on the theory with the highest verisimilitude consistently in both lab and field. The logical status (not probable) remains unchanged; the practical action (prefer the best tested) is a consequence of that logical status, not a separate inductive habit."
+        }
+      ],
+      "optional_refs": ["SRC_005", "SRC_007"]
+    },
+    {
+      "claim": "The preference smuggles induction back in because any decision-theoretic justification for preferring corroborated theories inevitably relies on the implicit meta-inductive premise that the method of severe testing is a reliable guide to future utility or truth approximation.",
+      "mechanism": "To choose Theory A over Theory B because A survived tests while B did not requires the hidden assumption that 'survival of past tests' is a relevant property for 'future performance.' Without this inductive bridge, the history of testing is logically irrelevant to the choice, rendering the preference irrational on strictly deductive grounds.",
+      "counterconditions": [
+        "If one can formulate a rule of preference that references only the logical content of the theories and their current test status without implying future reliability.",
+        "If Popper can demonstrate that 'rationality' in action does not require any expectation of success."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to emphasize that even distinguishing 'prediction' from 'preference' fails if the preference itself is guided by the expectation that the preferred theory will work better. The conflation is deeper: the act of preferring *is* the inductive step."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The rebuttal holds: the 'horse with the best track record' analogy explicitly reveals the inductive structure. Popper tries to deny the premise that past performance matters, yet his entire system of 'severe testing' is built on the idea that passing such tests matters. This is a performative contradiction."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Calling it 'risk management' is a pragmatic justification. If Popper rejects pragmatic justifications for truth, he must also reject them for action unless he admits that 'managing risk' implies assuming some regularity in nature (i.e., that risks identified in the past persist)."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "The criticism stands: redefining corroboration as 'informational content survived' does not escape induction if the *value* placed on that content assumes it correlates with future validity. The 'category error' defense masks the underlying inductive reliance."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "The 'inconsistency' charge is robust. Popper demands a logical separation that human rationality cannot sustain. To act is to induce. The 'dual-epistemology' is not a bug in Popper's system but a necessary fiction to maintain the anti-inductive stance while allowing science to function."
+        }
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"]
+    },
+    {
+      "claim": "The tension dissolves if we accept that Popper's 'preference' is purely evolutionary and psychological, not logical: scientists prefer corroborated theories because they are biologically or culturally selected to do so, not because this preference is logically defensible on Popper's strict deductive terms.",
+      "mechanism": "Evolutionary epistemology: organisms (and scientific communities) that act on hypotheses that have survived environmental (experimental) pressure survive themselves. The 'preference' is a causal outcome of selection, not a normative rule derived from logic. This bypasses the need for induction or logical justification entirely.",
+      "counterconditions": [
+        "If Popper explicitly claims his methodology provides a normative logic of discovery and action, not just a description of psychological habits.",
+        "If the evolutionary explanation itself relies on an inductive assumption that past survival predicts future survival."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "departure_declared",
+          "note": "Departing from the frame that the preference must be 'defensible on Popper's own terms' logically. Instead, the preference is explained as a natural phenomenon outside the scope of Popper's logical criteria, rendering the 'smuggling' charge moot."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The 'betting' is not a rational calculation based on past performance but an instinctual or culturally ingrained behavior shaped by evolution. The 'implicit premise' is biological, not logical, so it doesn't count as 'smuggling induction' into the logic of science."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "Risk management here is not a conscious pragmatic strategy but an emergent property of evolutionary selection. Popper's rejection of pragmatic *justification* stands, but this offers a pragmatic *explanation* that doesn't require logical defense."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "This approach accepts the 'category error' but locates it in the question itself, which assumes a logical justification exists where only a causal explanation is possible. It answers the induction question by dissolving the requirement for a logical answer."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "The 'dual-epistemology' is resolved by recognizing one layer is logical (Popper's falsification) and the other is biological/psychological (the preference). They operate in different domains, so there is no inconsistency, only a multi-level description of science."
+        }
+      ],
+      "optional_refs": ["SRC_002"]
+    },
+    {
+      "claim": "The strongest case is that the preference is defensible but costs Popper the claim that science aims at 'truth'; instead, science aims at 'survival of the fittest ideas,' making corroboration a measure of fitness, not truth-likeness, thereby accepting a form of instrumentalism.",
+      "mechanism": "Redefining the telos of science from 'verisimilitude' to 'adaptive fitness.' A corroborated theory is one that fits the current environment of data. Preferring it is rational for navigating that environment, but we must abandon the realist claim that it brings us closer to the ultimate nature of reality.",
+      "counterconditions": [
+        "If Popper insists that verisimilitude is the primary goal of science, making this instrumentalist shift a betrayal of his core philosophy.",
+        "If 'fitness' implicitly assumes a stable environment, reintroducing induction via the back door of environmental uniformity."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_011] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to clarify that 'predicting future events' is replaced by 'navigating current constraints.' The distinction is between forecasting (inductive) and adapting (non-inductive functionalism)."
+        },
+        {
+          "handle": "[SRC_010] against SRC_005",
+          "kind": "rebutted",
+          "note": "The 'track record' matters only insofar as it defines the current fitness landscape. We don't bet on the horse to win the next race because it's fast, but because it's the only one left standing in the current stable. No induction about the future track conditions is required, only acceptance of the present state."
+        },
+        {
+          "handle": "[SRC_012] against SRC_007",
+          "kind": "rebutted",
+          "note": "This IS a pragmatic justification, but the cost is admitting instrumentalism. The criticism claims this contradicts Popper; the candidate accepts this contradiction as the necessary 'cost' of saving the preference, arguing Popper's realism was the weak link, not his anti-inductivism."
+        },
+        {
+          "handle": "[SRC_014] against SRC_009",
+          "kind": "rebutted",
+          "note": "The mechanism addresses the induction charge by changing the definition of 'rational preference' from 'likely true' to 'currently viable.' This shifts the semantic ground enough to block the inductive inference while preserving the scientific practice."
+        },
+        {
+          "handle": "[SRC_013] against SRC_008",
+          "kind": "rebutted",
+          "note": "The inconsistency vanishes if we drop the realist aspiration. The scientist acts on the fittest theory (instrumentalism) while testing for falsity (critical rationalism). These are compatible if 'truth' is removed as the immediate object of action."
+        }
+      ],
+      "optional_refs": ["SRC_004"]
+    }
+  ]
+}

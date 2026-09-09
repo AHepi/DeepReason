@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future truth, but as a methodological rule to maximize the severity of future tests; accepting this costs us the comfort of believing our chosen theory is likely true, restricting 'preference' to a procedural mandate for risk-taking rather than a guide to probable success.",
+    "mechanism": "Critical Preference as Test-Severity Maximization: The agent selects the theory with the highest corroboration because it has survived the most severe tests (highest informational content), making it the best target for further falsification attempts. Acting on it is not betting on its truth, but betting on its capacity to reveal error quickly if it is false.",
+    "counterconditions": [
+      "If the agent acts expecting the theory to succeed practically rather than expecting it to potentially fail informatively.",
+      "If corroboration is interpreted as a probability metric rather than a historical report of test severity.",
+      "If the preference leads to dogmatic adherence rather than continued attempts to falsify the preferred theory."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism assumes 'acting' requires a belief in future success. The rebuttal is that Popperian action is 'critical action': we use the best-tested theory precisely because its high content makes it the most efficient tool for exposing errors, even if we expect it might fail tomorrow."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The distinction is not conflated; 'informational content survived' IS the only defensible basis for action. We prefer the high-content theory not because it is 'safe' (induction) but because it is 'sharp' (critical rationalism)."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "rebutted",
+        "note": "This is not a false dichotomy. The core logical problem is dissolved by redefining 'rational preference' away from 'expectation of truth' toward 'readiness to learn.' Past success guarantees nothing about future truth, but it does identify the theory currently offering the most leverage for knowledge growth."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The candidate explicitly rejects the 'Principle of Uniformity' straw man. The mechanism relies solely on the logical asymmetry between verification and falsification, not on any assumption that nature is uniform."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes 'critical preference' from 'inductive prediction' by grounding the former in the goal of error elimination. It is rational to choose the theory that has withstood the hardest attacks, not because it will win the next round, but because it is the strongest sparring partner."
+      },
+      {
+        "handle": "270fdeb19c12b45908843bde3f158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "rebutted",
+        "note": "The argument does not rely on verisimilitude as a measurable quantity (which Popper admitted was problematic). It relies on corroboration as a report of past performance in severe tests, which remains logically valid even without a formal measure of truth-likeness."
+      },
+      {
+        "handle": "2b2b9f8685410277445fc083713971a8c5bf992ab5fbf0a1093b143dcfb45882",
+        "kind": "rebutted",
+        "note": "The preference is rational precisely because it is a procedural rule for learning, not a claim about the world's structure. The criticism fails by demanding an ontological justification where only a methodological one is offered."
+      },
+      {
+        "handle": "4685bd2f65b86b20f04d65067f8fc4526a28a4375555eb78127f0f9de465ad93",
+        "kind": "revised",
+        "note": "Revised the definition of 'preference' in the claim to explicitly state it is decoupled from the expectation of practical success, aligning strictly with Popper's view that we act on the best-tested theory to facilitate falsification, not because we expect it to work."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

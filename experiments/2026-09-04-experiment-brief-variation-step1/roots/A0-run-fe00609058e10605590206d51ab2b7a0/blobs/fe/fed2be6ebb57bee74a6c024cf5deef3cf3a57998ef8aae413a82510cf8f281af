@@ -1,0 +1,29 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "essential_premise_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "maxItems": 8, "title": "Essential Premise Aliases", "type": "array"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@90b3864aef85ee945860836a: program:reasoning_observation_pending
+- reason-counter@c99f4f1129d290ce26caffc2: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The preference is defensible only if we accept a 'critical rationalist' axiom: that it is rational to prefer the theory that has best withstood criticism, even if this preference yields no probability boost, because the alternative (ignoring criticism) is irrational.","counterconditions":[{"case":"If the norm of 'preferring the survivor' can be shown to lead systematically to worse outcomes than random choice.","checker_spec":null,"eval":"observation"},{"case":"If the definition of 'criticism' itself relies on inductive premises.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Normative Rationality: The justification is deontological, not epistemic. It is a rule of conduct: 'Do not ignore negative evidence; do not ignore positive survival.' To prefer a falsified theory over a corroborated one is to violate the norms of critical discussion. This norm does not guarantee truth (induction) but defines what it means to be a rational agent in a scientific community. The cost is admitting that this rationality is circular\u2014it defines rationality in terms of the very practice it seeks to justify.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@90b3864aef85ee945860836a, reason-counter@c99f4f1129d290ce26caffc2
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

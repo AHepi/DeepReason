@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-probabilistic guide for action, but this concept is incoherent without probabilistic assumptions when dealing with universal laws. Popper explicitly rejected assigning probabilities to theories, yet to claim a theory is 'closer to the truth' based on past tests requires an inductive assumption that the untested consequences of the theory will also hold true. Without this inductive leap, the preference for the better-corroborated theory is merely a psychological habit or a guess, not a 'rational choice' or 'defensible' methodological rule as claimed. The target fails to explain how one can rationally prefer Theory A over Theory B for future action based solely on past survival without implicitly assuming the future will resemble the past, which is the very induction Popper sought to reject.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Rational preference for future action based on past performance logically entails an inductive assumption about the uniformity of nature.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be assessed without induction, does Popper's methodology collapse into irrationalism or crypto-induction?"
+    }
+  ]
+}

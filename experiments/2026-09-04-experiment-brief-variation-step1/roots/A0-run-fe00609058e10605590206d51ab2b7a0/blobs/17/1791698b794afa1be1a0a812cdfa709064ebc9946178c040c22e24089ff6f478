@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's argument that preferring better-corroborated theories 'inevitably smuggles induction back' is too absolute and fails to engage with Popper's specific distinction between the logical status of corroboration (which is not probabilistic) and the pragmatic rationality of preference. Popper defends the preference for severe tests not as an inductive inference that the future will resemble the past, but as a methodological rule for error elimination; a theory that has survived severe tests has demonstrated a higher capacity to withstand falsification attempts so far, making it the most critical target for future testing, regardless of whether natural laws are stable. The target conflates the *presupposition* of stability required to design a test with the *inductive justification* of the theory itself, ignoring Popper's argument that we act on the best-tested theory because it is the most informative and risky, not because we believe it is probably true or will continue to hold.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule to maximize the content of our conjectures and the severity of potential falsification; accepting this costs us any rational assurance that the preferred theory is true or will survive future tests, reducing scientific rationality to a critical game rather than a truth-tracking engine.",
+    "mechanism": "The mechanism distinguishes between 'rational justification' (which implies probability/truth) and 'rational preference' (which implies strategic selection for critical testing). By framing the choice of the best-corroborated theory as the selection of the hypothesis that has withstood the most severe attempts to destroy it, we prefer it not because it is likely true, but because it is the most informative target for future criticism. If it fails, we learn more; if it stands, we have a bolder conjecture. This avoids induction by refusing to project past survival into future probability, treating the preference instead as a rule for optimizing the growth of knowledge through error elimination.",
+    "counterconditions": [
+      "If 'severity of test' implicitly assumes the uniformity of nature (that future conditions will resemble past ones), the mechanism collapses into induction.",
+      "If the preference cannot be distinguished from a pragmatic bet on reliability without smuggling in probabilistic assumptions, the defense fails.",
+      "If Popper's own admission that we act on the best theory implies a belief in its verisimilitude that cannot be formally defined, the distinction between preference and justification dissolves."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate evolutionary origin with justification; it explicitly frames the preference as a methodological rule for maximizing informational content and critical potential, which is a normative claim about how scientists *ought* to choose to facilitate learning, not a descriptive claim about why they *do* choose."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dichotomy by articulating a third path: preference based on 'severity of falsification' and 'informational content' rather than 'arbitrary decree' or 'inductive probability.' This aligns with Popper's explicit argument for non-inductive rationality."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The move from 'others are falsified' to 'choose this one' does not assume uniformity; it assumes only that the unfalsified theory is currently the least refuted and thus the best available target for further testing. No prediction of future resemblance is made, only a statement of current logical status."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "Surviving severe tests is not treated as a reliable indicator of future performance (which would be induction), but as a marker of high empirical content. The 'reliability' sought is the reliability of the method to expose error, not the reliability of the theory to predict truth."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes Popper's methodological rules from Poincaré's conventionalism by grounding the rule in 'critical potential' and 'error elimination' rather than mere convenience. It is arbitrary only in the sense that it is a chosen rule of the game, but it is justified by its efficacy in growing knowledge, not by utility alone."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate strictly separates 'methodological convention' (the rule to pick the best-tested) from 'pragmatic reliability' (the expectation that it will work). The cost admitted in the claim ('no rational assurance') explicitly denies pragmatic reliability to avoid smuggling in induction."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e81c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "rebutted",
+        "note": "The defense does not rely on 'verisimilitude' as a known quantity or formal definition. It relies on the logical asymmetry between falsification and verification. We prefer the theory that has survived more because it has not yet been shown false, not because we know it is closer to the truth."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f0068bbde5f67",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for the 'smuggling induction' view via the counterconditions (e.g., if severity assumes uniformity) and resolves the conflict by arguing that the non-inductive interpretation survives only if one accepts the high cost of abandoning truth-assurance, thereby fulfilling the prompt's requirement for resolution."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_pressure",
+        "legal_adversarial_system"
+      ],
+      "shared_structure": [
+        "Selection of a survivor based on resistance to attack rather than proven innocence.",
+        "The goal is process integrity (finding errors/truth) rather than guaranteeing a specific outcome.",
+        "Past survival increases the stakes of future testing, not the probability of success."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of knowledge growth, whereas Popperian science does.",
+        "Legal systems often aim for a final verdict (truth), whereas Popperian science aims for perpetual conjecture."
+      ],
+      "transfer_claims": [
+        "Just as we trust the organism that survived the harshest environment to be the fittest *so far* without predicting it will survive forever, we trust the corroborated theory to be the best *so far* without predicting its future truth.",
+        "The adversarial legal process selects the most robust argument through cross-examination, similar to how severe tests select robust theories, without claiming the winner is absolutely true."
+      ],
+      "overturn_conditions": [
+        "If the selection of the survivor in evolution or law implicitly relies on an inductive bet that the future environment/court will resemble the past, the analogy supports the critic's view that induction is smuggled in.",
+        "If the 'fitness' or 'robustness' identified by past survival is causally linked to future survival in a way that exceeds logical consistency, the analogy collapses into induction."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

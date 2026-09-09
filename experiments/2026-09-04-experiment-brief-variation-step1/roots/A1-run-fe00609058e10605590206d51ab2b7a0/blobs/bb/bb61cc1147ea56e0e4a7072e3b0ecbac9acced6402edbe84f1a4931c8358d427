@@ -1,0 +1,130 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a pragmatic decision to minimize the risk of error, not an inductive inference of truth. By choosing the theory that has withstood the most severe tests, we are not claiming it is probable, but that it is the 'safest bet' available because its failure conditions are known and have not yet obtained. This avoids induction by treating the choice as a strategic move in a game of error-elimination rather than a logical derivation of future success.",
+      "mechanism": "Pragmatic Risk Minimization: The agent selects the theory with the highest 'severity score' (most rigorous testing survived) not because severity predicts truth, but because acting on a falsified theory guarantees error, while acting on a corroborated one only risks unknown error. The preference is a heuristic for error avoidance, consistent with negative logic.",
+      "counterconditions": [
+        "If the environment changes such that past severe tests become irrelevant to future performance (the problem of shifting baselines).",
+        "If 'safety' implicitly relies on an assumption that nature is uniform enough for past errors to predict future ones.",
+        "If the cost of acting on a false but well-corroborated theory is catastrophic, rendering the 'safest bet' irrational."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "The rebuttal clarifies that 'logical entailment of success' is not claimed; rather, the preference entails a minimization of *known* error, which is a deductive consequence of the test history, not an inductive leap to probability."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "revised", "note": "Revised to remove reliance on 'verisimilitude' as a formal metric, substituting it with 'severity of tests survived' as a procedural marker for error avoidance."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Distinguishes 'causal reliability' (inductive) from 'procedural safety' (deductive strategy). The preference is based on the logical fact that the theory has not failed *yet*, not on a causal law that it won't fail."},
+        {"handle": "[SRC_022] against SRC_005", "kind": "revised", "note": "Explicitly abandons verisimilitude in favor of a decision-theoretic framework that requires no formal definition of truth-likeness, only a ranking of test severity."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "revised", "note": "Aligns with the revision above: the mechanism does not calculate verisimilitude but uses test severity as a proxy for 'least likely to be known-false'."},
+        {"handle": "[SRC_021] against SRC_016", "kind": "rebutted", "note": "Argues that Popper's distinction between scientific justification and rational action allows for this pragmatic preference without collapsing science into engineering; the preference is rational *for* action, not a claim *of* science."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "Addresses the cost of action by framing the preference as a loss-function minimization: acting on a falsified theory incurs infinite loss (logical contradiction), while acting on a corroborated one incurs finite risk."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "Clarifies that 'non-arbitrary' means 'guided by the logic of falsification' (avoiding known falsehoods), which provides a normative constraint distinct from mere habit or biological survival."}
+      ],
+      "optional_refs": ["SRC_007", "SRC_008"]
+    },
+    {
+      "claim": "The preference smuggles induction back into Popper's system because any rationale for preferring corroborated theories over non-corroborated ones for *future* action necessarily assumes that the future will resemble the past in relevant respects. Even if labeled 'pragmatic' or 'conventional,' the act of betting on past success is the definition of induction, making Popper's rejection of probabilistic confirmation inconsistent with his advice on rational action.",
+      "mechanism": "The Inductive Leak: Any decision rule that weights options based on historical performance (survival of tests) implicitly assigns a higher subjective probability of future success to those options. This assignment is inductive by definition, regardless of whether the agent verbally disavows 'probability.' The 'decision' is not free; it is constrained by the hidden premise that nature is uniform.",
+      "counterconditions": [
+        "If a non-inductive justification for temporal preference can be constructed (e.g., purely logical consistency).",
+        "If the 'preference' is shown to be arbitrary or random, thus not actually guiding action rationally.",
+        "If Popper's system is interpreted as purely skeptical, offering no guidance for action whatsoever."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "Agrees that conflating logical probability with pragmatic expectation is the error, but argues that the pragmatic expectation *itself* is an inductive stance, thus the smuggling occurs at the level of action, not logic."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Supports the criticism that verisimilitude fails, arguing that this failure leaves no non-inductive bridge, confirming that induction is the only remaining option."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Confirms that rejecting 'causal reliability' doesn't help if the *choice* implies an expectation of reliability, which is inductive."},
+        {"handle": "[SRC_022] against SRC_005", "kind": "rebutted", "note": "Uses the collapse of verisimilitude to strengthen the claim that no non-inductive metric exists, forcing the admission of induction."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "rebutted", "note": "Concurs that without verisimilitude, the preference lacks a non-inductive foundation."},
+        {"handle": "[SRC_021] against SRC_016", "kind": "rebutted", "note": "Rejects the false dichotomy; argues that even within Popper's view of rational action, the underlying engine is inductive hope."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "Counters that explaining the *origin* of the preference (evolution) doesn't justify it; the justification still relies on the inductive assumption that evolution tracks truth."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "Argues that defining rationality as 'error avoidance' still requires an inductive step to believe that avoiding past errors avoids future ones."}
+      ],
+      "optional_refs": ["SRC_006"]
+    },
+    {
+      "claim": "The dilemma dissolves if we view the preference as a 'convention' or 'decision postulate' analogous to choosing axioms in mathematics. Scientists decide to act *as if* the best-tested theory is true, not because they believe it probably is, but because this rule constitutes the 'game of science.' This makes the preference defensible as a internal norm of the methodology, avoiding induction by refusing to make any claim about the external world's behavior.",
+      "mechanism": "Conventionalist Decision Postulate: The preference is a self-imposed rule of procedure. Just as a chess player moves the bishop diagonally not because nature forces it, but because that is the rule of chess, the scientist chooses the corroborated theory because that is the rule of science. The 'cost' is that science loses its claim to external rationality beyond its own defined boundaries.",
+      "counterconditions": [
+        "If the convention itself requires an inductive justification to be adopted (why play this game?).",
+        "If the 'game' of science claims to describe reality, making the convention self-defeating.",
+        "If agents cannot psychologically separate the 'decision to act' from the 'belief in success'."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "Clarifies that the decision postulate does not entail an expectation of success logically, but establishes a norm for behavior, sidestepping the category error."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "revised", "note": "Shifts ground from verisimilitude to conventionalism, avoiding the formalization problem entirely."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Argues that a convention is not a justification based on past success, but a voluntary adoption of a rule, thus escaping the charge of induction."},
+        {"handle": "[SRC_022] against SRC_005", "kind": "revised", "note": "Adopts the critique of verisimilitude to motivate the shift to conventionalism."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "revised", "note": "Same as above; the mechanism no longer depends on calculating truth-likeness."},
+        {"handle": "[SRC_021] against SRC_016", "kind": "rebutted", "note": "Defends the distinction: Popper allows for rational action based on rules (conventions) even if those rules don't guarantee truth."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "Addresses the cost of action by stating the cost is accepted as part of the 'buy-in' to the scientific method."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "Asserts that the residue of criticism defines the *content* of the convention, making it non-arbitrary within the system."}
+      ],
+      "optional_refs": ["SRC_008"]
+    },
+    {
+      "claim": "The preference is an evolutionary adaptation of the scientific community, where 'rationality' is redefined as 'survival fitness' of ideas. We prefer corroborated theories because the methodology of selecting them has allowed the scientific ecosystem to survive and expand. This is defensible on Popper's terms if we accept that 'truth' is replaced by 'fitness,' but it costs the realist claim that science converges on an objective description of reality.",
+      "mechanism": "Evolutionary Epistemology: The preference is a trait of the surviving meta-methodology. Theories are selected via variation and elimination; the 'preference' is simply the current state of the surviving population. It is not a logical inference but a descriptive fact of what works for survival. Induction is bypassed because there is no inference, only selection.",
+      "counterconditions": [
+        "If evolutionary fitness does not correlate with truth-likeness (pessimistic meta-induction).",
+        "If the environment changes faster than the selection mechanism can adapt.",
+        "If reducing science to biology undermines its normative force (the 'is-ought' gap)."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "Reframes 'expectation of success' as 'statistical likelihood of survival,' which is a descriptive claim about the ecosystem, not a logical entailment."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "revised", "note": "Replaces verisimilitude with 'fitness,' avoiding the formalization issue."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Denies that this is 'justification based on past success' in the inductive sense; it is an explanation of current status via selection history."},
+        {"handle": "[SRC_022] against SRC_005", "kind": "revised", "note": "Discards verisimilitude for fitness metrics."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "revised", "note": "Same as above."},
+        {"handle": "[SRC_021] against SRC_016", "kind": "rebutted", "note": "Argues that Popper's own later work leans towards evolutionary epistemology, bridging the science/engineering gap."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "Addresses the cost of action by noting that 'acting on' is simply the behavioral output of the surviving cognitive organism."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "Redefines 'non-arbitrary' as 'selected for,' which is a naturalistic criterion."}
+      ],
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict terms and represents a fatal inconsistency: Popper wants to have his cake (no induction) and eat it too (rational action). The only coherent position is radical skepticism: if corroboration implies nothing about the future, then there is *no* rational basis for preferring one theory over another for action, leading to paralysis or pure irrationalism.",
+      "mechanism": "Radical Skeptical Collapse: Demonstrates that removing induction removes the link between past data and future utility. Without this link, 'preference' is merely psychological habit or whim. Popper's attempt to patch this with 'corroboration' is a semantic sleight of hand that fails under logical scrutiny.",
+      "counterconditions": [
+        "If a non-inductive bridge (like pragmatism or convention) can be successfully defended.",
+        "If 'rational action' can be defined without reference to future outcomes.",
+        "If Popper's system is intended only for context of discovery, not justification of action."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "Insists that any 'category error' defense is just masking the fundamental lack of logical connection."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Embraces the failure of verisimilitude as proof of the system's collapse."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Agrees that rejecting causal reliability leads to no justification, confirming the skeptical conclusion."},
+        {"handle": "[SRC_022] against SRC_005", "kind": "rebutted", "note": "Uses the Miller/Tichý result as the death knell for Popper's project."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "rebutted", "note": "Same as above."},
+        {"handle": "[SRC_021] against SRC_016", "kind": "rebutted", "note": "Argues that the distinction between science and engineering cannot save the core logical inconsistency."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "States that evolutionary explanations describe why we *do* act, not why we *should*, leaving the normative gap open."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "Claims that 'error avoidance' is empty if we cannot predict which path contains errors."}
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is defensible if we reinterpret 'corroboration' not as a measure of the theory, but as a measure of the *test*. A theory is preferred because it has been subjected to, and survived, the most informative tests. This informational content (boldness) is a static property. Acting on the boldest theory maximizes the potential for learning (falsification), which is the goal of science. Thus, the preference is for maximum learnability, not maximum truth-probability.",
+      "mechanism": "Informational Boldness Maximization: The agent chooses the theory that offers the highest 'informational yield' or 'risk of falsification.' Since the goal is error elimination, one should always pick the hypothesis that puts the most at stake. If it survives, we learn more; if it fails, we learn more. This is a deductive strategy for maximizing knowledge growth, independent of induction.",
+      "counterconditions": [
+        "If the goal of action is practical success (building a bridge) rather than knowledge growth.",
+        "If 'boldness' correlates inversely with reliability in high-stakes engineering contexts.",
+        "If the informational content of a theory cannot be separated from its probability."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_018] against SRC_013", "kind": "rebutted", "note": "Clarifies that the entailment is about 'potential for learning,' not 'success,' avoiding the category error."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "revised", "note": "Substitutes 'verisimilitude' with 'informational content/boldness,' which is formally definable in Popper's logic."},
+        {"handle": "[SRC_011] against SRC_009", "kind": "rebutted", "note": "Distinguishes 'causal reliability' from 'logical boldness.' The preference is for the latter."},
+        {"handle": "[SRC_022] against SRC_005", "kind": "revised", "note": "Avoids the verisimilitude trap by focusing on test severity and content."},
+        {"handle": "[SRC_017] against SRC_012", "kind": "revised", "note": "Same as above."},
+        {"handle": "[SRC_021] against SRC_016", "kind": "rebutted", "note": "Argues that this approach unifies science and engineering by framing engineering as a domain of high-stakes testing."},
+        {"handle": "[SRC_019] against SRC_014", "kind": "rebutted", "note": "Addresses the cost of action by reframing the cost as an investment in knowledge acquisition."},
+        {"handle": "[SRC_020] against SRC_015", "kind": "rebutted", "note": "Defines 'non-arbitrary' as 'maximizing the rate of falsification,' a clear normative metric."}
+      ],
+      "optional_refs": ["SRC_005"]
+    }
+  ]
+}

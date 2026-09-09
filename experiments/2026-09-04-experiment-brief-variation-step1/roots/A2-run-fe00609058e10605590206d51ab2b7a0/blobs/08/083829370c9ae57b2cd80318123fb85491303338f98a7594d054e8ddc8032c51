@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target commits a category error by conflating Popper's specific rejection of logical probability with a general pragmatic utility. Popper explicitly defended the preference for better-corroborated theories via 'verisimilitude' (truth-likeness) and the methodological rule to seek truth, not by smuggling in induction or biological survival imperatives. The claim that Popper's system 'breaks' without a 'meta-rule reinstating induction' ignores his actual solution: the non-inductive argument that preferring the more severely tested theory is rational because it has withstood attempts at falsification, not because it is probabilistically likely to be true or biologically necessary. The target's mechanism ('semantic drift') mischaracterizes the debate as a failure of translation between logic and biology, whereas Popper framed it as a distinction between logical justification (impossible for universal laws) and critical preference (rational without induction).",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's preference for better-corroborated theories is based on verisimilitude and critical rationalism, not on hidden inductive assumptions or biological survival needs.",
+      "premise_evidence": null,
+      "successor_question": "How does the target's appeal to 'biological survival' address Popper's explicit argument that we prefer corroborated theories because they have survived severe tests, not because they ensure survival?"
+    }
+  ]
+}

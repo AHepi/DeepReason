@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a 'critical preference' rooted in the logic of falsifiability rather than inductive probability, but accepting this requires abandoning the intuition that corroboration offers any rational expectation of future predictive success, reducing scientific action to a non-justifiable existential choice.",
+    "mechanism": "The mechanism distinguishes between 'inductive inference' (which Popper rejects) and 'critical preference' (which he accepts). A theory with higher empirical content that has survived severe tests is preferred not because it is more likely to be true, but because it has been more thoroughly tested and not yet eliminated. The preference is a methodological rule for selecting the most informative surviving hypothesis for critical discussion and tentative application, acknowledging that this selection carries no guarantee against future falsification.",
+    "counterconditions": [
+      "If the agent requires a probabilistic guarantee of future success to act, Popper's framework cannot provide it without smuggling in induction.",
+      "If 'critical preference' is indistinguishable in practice from believing a theory is probably true, the distinction collapses into hidden induction.",
+      "If the cost of acting on a falsified theory is catastrophic, the lack of inductive support makes the preference irrational for practical decision-making."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0247998b9f0426956c8d0ef420daae0ecb43121c370bf31bd5ca9328a00d058d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on 'verisimilitude' as a positive measure of truth-likeness to justify preference. Instead, it grounds the preference solely in the negative logic of survival (not yet falsified) and informational content, sidestepping the formal objections to quantifying verisimilitude."
+      },
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "revised",
+        "note": "Revised to clarify that 'acting' on a theory in Popper's sense does not imply an expectation of success derived from the past, but is a voluntary adoption of the best-available error-corrected map for the specific purpose of further testing or immediate utility, acknowledging the risk of error."
+      },
+      {
+        "handle": "1bd83288bc9ab8f9b04811f4e67bb8ca9d49c4f09aa66f010b8a229bd75d6fc3",
+        "kind": "rebutted",
+        "note": "The candidate maintains that 'critical preference' is rational within Popper's system precisely because it is NOT a 'pragmatic fiction' or social convention, but a logical consequence of the goal to eliminate error; however, this rationality is internal to the critical method and does not extend to external pragmatic justification."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The distinction is maintained: 'informational content survived' is the objective status of the theory, while 'defensible preference' is the subjective/methodological stance of the scientist. The defense argues these are linked by the rule 'prefer the most testable survivor,' not by an inductive bridge."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate accepts the criticism that if one demands a logical guarantee that past success predicts future truth, Popper's system fails. The candidate departs from the assumption that such a guarantee is necessary for a 'defensible' preference, redefining defensibility as consistency with the critical method rather than predictive security."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The candidate agrees it is not a straw man to say Popper rejects induction, but clarifies that the 'smuggling' charge holds only if one insists that 'preference for action' logically entails 'expectation of future validity.' The candidate argues Popper severs this link."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "revised",
+        "note": "Refined the definition of 'action' to ensure it is not conflated with 'inductive prediction.' Action is framed as 'tentative application pending further falsification,' distinct from predicting the theory will hold true indefinitely."
+      },
+      {
+        "handle": "270fdeb19c12b45908843bde3f158d4abba53b777755e30009b2dc5a5e96ac4aa",
+        "kind": "rebutted",
+        "note": "The argument does not rely on verisimilitude as a measurable quantity (which Popper showed was problematic), but on the comparative logical status of theories regarding their falsifiability and survival record."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

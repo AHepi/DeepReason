@@ -1,0 +1,46 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "essential_premise_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "maxItems": 8, "title": "Essential Premise Aliases", "type": "array"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"const": "SRC_001", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+{"attack":false,"target_alias":"SRC_001"}
+
+INPUT:
+## problem-context
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@39c839ae5b7fc96ef4e6e8b5: program:reasoning_observation_pending
+- reason-counter@0ff68e0d6d7a2bee7b7e7e02: program:reasoning_observation_pending
+- reason-counter@4e4275695dd06216ff0f327d: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET 54bde62bb6294d2e722f47df73e66c367a88c4c13e5eb773db4b1a004b24e854
+{"analogy":null,"claim":"The preference for better-corroborated theories is defensible on Popper's terms as a 'critical rationalist' decision rule that maximizes informational content without assigning probability, but it costs the agent any guarantee of practical success or future reliability.","counterconditions":[{"case":"If the agent requires a probabilistic guarantee of safety (e.g., in bridge building) that content-maximization cannot provide.","checker_spec":null,"eval":"observation"},{"case":"If 'acting on' a theory logically entails an expectation of its future validity, reintroducing induction.","checker_spec":null,"eval":"observation"},{"case":"If the 'severity' of tests itself relies on inductive assumptions about the uniformity of nature.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Adopt a decision rule where 'preference' means 'selection for testing and action based on highest surviving empirical content,' explicitly decoupling selection from expectation of truth. The mechanism is a non-inductive maximization of information: we choose the theory that tells us the most about the world because it has survived the most severe attempts to falsify it, not because we believe it will continue to hold.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- 98effe7a8569cdf52812948906e55ba5ea5ead7c155fa8ea6439b3bb444bdbb4 [mention]
+- 108690f4d483ff5fd93b6328a7481e23b0347da3519e52acc7b145634ed90465 [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- 98effe7a8569cdf52812948906e55ba5ea5ead7c155fa8ea6439b3bb444bdbb4: {"analogy":null,"claim":"The dilemma dissolves if we view corroboration as a measure of 'informational content' survived, making the preference a tautological s
+- 108690f4d483ff5fd93b6328a7481e23b0347da3519e52acc7b145634ed90465: {"analogy":null,"claim":"Popper's preference is a 'critical rationalist' commitment that rejects the justificationist framework entirely, rendering the charge o
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM CONTEXT (question-ba75796c3facc7a3d0d448d6eaa09a2e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Popper held that corroboration is not probability: a theory that has survived severe tests is not thereby made more probable. Yet working scientists, and Popper himself when choosing which theory to act on, prefer the better-corroborated theory. Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs.
+
+DIRECTIVE: mount the strongest NEW specific case against TARGET 54bde62bb6294d2e722f47df73e66c367a88c4c13e5eb773d

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense collapses because it relies on 'verisimilitude' (closeness to truth) to justify preference, yet explicitly admits this offers no 'rational assurance of future success.' If the preference yields no rational expectation that the chosen theory will perform better than rivals in future applications, the act of preferring it for practical action is indistinguishable from an arbitrary guess, thereby failing to provide the 'defensible' rational basis the prompt requires and secretly relying on the very inductive hope it disavows.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "A rational preference for action must imply a reasoned expectation of superior future performance; without this, the preference is merely a gamble, not a defensible scientific strategy.",
+      "premise_evidence": null,
+      "successor_question": "Can a methodology that explicitly denies any rational basis for expecting future success truly claim to solve the problem of induction, or does it simply rename the gamble?"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to establish a substantive relation because the 'REFUTED IF' condition describes an epistemic capability (empirical estimation without induction) rather than a logical contradiction of the proposed abstraction. Even if verisimilitude could be rigorously estimated as claimed, this would not refute the existence of the 'linguistic illusion' where scientists use deductive language for inductive habits; both the rigorous tool and the psychological phenomenon could coexist. Therefore, the stated refutation condition does not logically negate the specific relation kind (Abstraction) defined in the proposal.",
+      "premise": null,
+      "premise_evidence": null,
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "successor_question": "What specific observation of scientific discourse would demonstrate that the use of deductive language for inductive habits is NOT occurring, thereby refuting the abstraction itself?"
+    }
+  ]
+}

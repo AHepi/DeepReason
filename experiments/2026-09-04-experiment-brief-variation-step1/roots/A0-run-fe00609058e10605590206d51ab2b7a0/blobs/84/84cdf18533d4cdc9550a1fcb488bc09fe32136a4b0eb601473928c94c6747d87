@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target's claim of a 'performative contradiction' fails because it mischaracterizes Popper's rejection of induction as an inductive generalization. Popper's argument against induction is deductive (based on the logical problem of induction and the asymmetry between verification and falsification), not an empirical summary of past failures. Therefore, the premise that the framework rests on the very thing it rejects is factually incorrect regarding Popper's actual philosophy, and the preference for corroborated theories can be defended as a rational decision under uncertainty without smuggling in induction.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

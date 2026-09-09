@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to propose a substantive relation as required; instead of naming a specific kind (e.g., contradiction, dependence) and linking the endpoints 'conn:092ff932d717' and 'SRC_009', it provides a conditional refutation scenario ('REFUTED IF...') that describes a potential counter-argument rather than asserting the actual relation between the two entities.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "The problem requires proposing a SUBSTANTIVE relation by naming its kind and stating what it is, whereas the target only offers a conditional statement about when a relation would be refuted.",
+      "premise_evidence": null,
+      "successor_question": "What is the specific named relation (e.g., contradiction, inheritance) that holds between conn:092ff932d717 and SRC_009 according to your analysis?"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's reliance on 'verisimilitude' (truth-likeness) to justify preference smuggles in induction because Popper explicitly proved that verisimilitude cannot be assessed without probabilistic assumptions. If we cannot know which theory is closer to the truth (as Popper argued against naive verisimilitude), then preferring one based on 'potential' verisimilitude is an inductive guess that the future will resemble the past performance, violating the core prohibition on assigning likelihood to theories.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Popper's own later admission that his definition of verisimilitude failed to provide a non-probabilistic method for comparing the truth-content of false theories.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be measured without induction, what non-circular mechanism does Popper offer to distinguish 'critical preference' from simple inductive habit?"
+    }
+  ]
+}

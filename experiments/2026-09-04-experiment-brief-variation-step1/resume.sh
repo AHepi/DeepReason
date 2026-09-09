@@ -53,13 +53,42 @@ def find(node, key):
                 return got
     return None
 
-done = find(status, "cycles_completed") or 0
-spent = find(status, "metered_tokens") or find(status, "logged_tokens_this_run") or 0
+# The key names this script was written against are NOT the ones this
+# version's run-status.json carries: `cycles_completed`, `metered_tokens`
+# and `logged_tokens_this_run` are all absent from it, and `cycle` /
+# `token_spend` are what that file actually writes. The names are not
+# fictional -- `deepreason reason` prints `metered_tokens` and
+# `logged_tokens_this_run` in its own result payload (arm A2, 429,432) --
+# they were simply read from the wrong artifact. Measured on arm A0's root,
+# 2026-09-09: the old reading returned "4 cycles left, 600000 tokens left"
+# for a run that had already completed 4 cycles and spent 417,053 -- a
+# resumed arm would have been granted a full fresh budget, which is the one
+# thing this script's own header forbids.
+#
+# So the record's own names are read FIRST, the old ones stay as fallbacks,
+# and a status that answers neither REFUSES rather than defaulting: a silent
+# full budget is the failure, not the missing key.
+done = find(status, "cycle")
+if done is None:
+    done = find(status, "cycles_completed")
+spent = find(status, "token_spend")
+if spent is None:
+    spent = find(status, "metered_tokens") or find(status, "logged_tokens_this_run")
 state = find(status, "state") or "unknown"
+if done is None or spent is None:
+    print("REFUSE REFUSE", state)
+    raise SystemExit(0)
 print(max(0, 4 - int(done)), max(0, 600000 - int(spent)), state)
 PY
 )
 echo "already spent: state=$STATE  cycles left=$CYCLES  tokens left=$TOKENS"
+if [ "$CYCLES" = "REFUSE" ]; then
+  echo "RESUME INVALID: this root's run-status.json carries neither the"
+  echo "record's cycle/token_spend nor the older names, so what is LEFT of"
+  echo "the budget cannot be read. Resuming on a guessed budget would let a"
+  echo "resumed arm outspend an uninterrupted one; read the root by hand."
+  exit 4
+fi
 if [ "$CYCLES" -le 0 ] || [ "$TOKENS" -le 0 ]; then
   echo "nothing left to resume; this arm is budget-complete."
   exit 0

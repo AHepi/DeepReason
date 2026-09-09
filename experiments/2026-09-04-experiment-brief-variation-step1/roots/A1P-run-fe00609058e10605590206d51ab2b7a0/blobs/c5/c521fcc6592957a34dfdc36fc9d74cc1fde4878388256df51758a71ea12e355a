@@ -1,0 +1,20 @@
+{
+  "candidate": {
+    "content": "The 'Critical Conventionalism' of foundation 02361cab... inherits its structural vulnerability from the broader 'methodological falsificationism' defined in 088a63a6..., specifically regarding the psychological sustainability of the convention. This relation is REFUTED IF scientists can maintain the stance of following a groundless rule without believing it yields truth, thereby decoupling the psychological countercondition from the logical arbitrariness of the decree.",
+    "typicality": 0.78,
+    "neighbours": [
+      "SRC_002",
+      "SRC_003"
+    ],
+    "evidence_refs": [
+      {
+        "block": "02361cabd962",
+        "quote": "If scientists cannot psychologically maintain the stance of following a rule they know is groundless."
+      },
+      {
+        "block": "088a63a65bb3",
+        "quote": "The cost is that the foundation of scientific action becomes arbitrary (though useful) rather than grounded in reality."
+      }
+    ]
+  }
+}

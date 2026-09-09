@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that rational preference 'inevitably' smuggles in induction relies on a false dichotomy: it assumes the only alternative to probabilistic expectation is 'blind' choice. It fails to address Popper's actual solution—the metaphysical decision or rule of method to prefer the better-tested theory *without* assigning it higher probability of truth. By ignoring this specific non-inductive basis for action (the willingness to act on the best available criticism-resistant theory while admitting it may fail), the target attacks a straw man rather than Popper's actual position on the defensible nature of scientific preference.",
+      "premise": "Popper distinguishes between the logical status of a theory (which cannot be made probable) and the pragmatic rule of action (prefer the best tested), grounding the latter in a critical attitude rather than an inductive expectation of success.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "counterexample": null,
+      "successor_question": "If the preference is based on a metaphysical decision rather than an expectation of success, does this successfully avoid the charge of smuggling in induction, or does the decision itself rely on an implicit inductive hope?"
+    }
+  ]
+}

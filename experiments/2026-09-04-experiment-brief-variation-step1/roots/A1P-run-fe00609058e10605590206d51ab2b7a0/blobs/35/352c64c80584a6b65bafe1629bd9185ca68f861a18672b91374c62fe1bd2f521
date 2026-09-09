@@ -1,0 +1,20 @@
+{
+  "candidate": {
+    "content": "The 'Critical Conventionalism' described in the foundation integrates with the concept of 'methodological falsificationism' by sharing the mechanism of constitutive rule adoption; this relation is REFUTED IF the arbitrary decree required to sustain the convention itself demands an inductive justification to be rationally adopted by agents, thereby collapsing the distinction between a pragmatic game rule and a truth-claim.",
+    "typicality": 0.85,
+    "neighbours": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "evidence_refs": [
+      {
+        "block": "02361cabd962",
+        "quote": "The preference is defensible only if we accept a 'Critical Conventionalism' where the rule to prefer corroborated theories is a self-imposed, arbitrary decree"
+      },
+      {
+        "block": "088a63a65bb3",
+        "quote": "The mechanism is 'conventionalist decree'. Popper's system survives by positing that the scientific community agrees to a set of methodological rules."
+      }
+    ]
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'critical preference' grounded in the logical asymmetry of falsification, requiring no inductive leap because it selects the theory that has withstood the most severe attempts at refutation, not the one most likely to be true.",
+      "mechanism": "Logical Asymmetry and Critical Preference: The decision rule is purely negative (avoiding known falsehoods) rather than positive (seeking probable truths). We prefer Theory A over B not because A is 'more likely' to succeed in the future, but because B has been logically eliminated or A has survived tests that would have killed B.",
+      "counterconditions": [
+        "If the agent requires a positive probability assignment to act rationally, this mechanism fails.",
+        "If 'severe testing' implicitly assumes the uniformity of nature (that future tests will resemble past ones), the non-inductive claim collapses.",
+        "If the choice is for practical action (e.g., building a bridge) rather than scientific inquiry, the lack of probabilistic assurance may be deemed irrational by pragmatic standards."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_006", "kind": "rebutted", "note": "The criticism claims elimination doesn't address action in novel domains. Rebuttal: Elimination *is* the only rational guide in novel domains where positive knowledge is impossible; acting on the un-falsified is the only non-arbitrary choice available, even if it offers no guarantee."},
+        {"handle": "[SRC_023] against SRC_022", "kind": "rebutted", "note": "The criticism argues selecting for action implies induction. Rebuttal: Selecting the 'best tested' theory for action is a methodological rule, not an inductive inference about the future. It is a decision to bet on the horse that hasn't stumbled, without claiming it won't stumble next time."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "The criticism conflates psychological expectation with logical justification. Rebuttal: Popper's defense is explicitly logical/methodological, not psychological. The 'preference' is a rule of procedure, not a feeling of confidence."},
+        {"handle": "[SRC_015] against SRC_005", "kind": "rebutted", "note": "The criticism cites verisimilitude issues. Rebuttal: This candidate does not rely on verisimilitude (truth-likeness) as a measurable quantity, but on the binary state of 'not yet falsified' combined with test severity."},
+        {"handle": "[SRC_021] against SRC_011", "kind": "rebutted", "note": "The criticism claims this contradicts Popper's requirement for rational action. Rebuttal: For Popper, rational action is action guided by criticism, not by justification. Preferring the un-refuted is the epitome of critical rationality."},
+        {"handle": "[SRC_012] against SRC_009", "kind": "rebutted", "note": "The criticism relies on the Tichý/Miller refutation of verisimilitude. Rebuttal: Irrelevant here as the mechanism avoids quantitative verisimilitude claims entirely, focusing on comparative survival."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "The criticism says calling it 'non-rational' misrepresents Popper. Rebuttal: This candidate affirms it IS rational (critically so), aligning with the aim of science, thus agreeing with the critic that it is not merely volitional."},
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "The criticism says evolutionary selection doesn't justify preference. Rebuttal: Evolutionary selection explains the *existence* of robust theories; the *preference* is justified by the logical fact that they are the only survivors of the selection process."}
+      ],
+      "optional_refs": ["SRC_017", "SRC_019"]
+    },
+    {
+      "claim": "The preference for better-corroborated theories inevitably smuggles induction back into Popper's system because the very concept of 'survival' and 'severity' presupposes that the future will resemble the past, which is the core of the inductive principle Popper sought to reject.",
+      "mechanism": "Hidden Inductive Premise: To value 'survival' of past tests as a marker for future utility assumes the uniformity of nature. Without this assumption, a theory surviving 1,000 tests provides zero logical information about its performance in test 1,001.",
+      "counterconditions": [
+        "If one accepts Popper's distinction between 'psychological habit' and 'logical necessity', this charge might be deflected as merely describing human psychology rather than logical structure.",
+        "If 'corroboration' is redefined strictly as a historical report with no predictive import, the inductive smuggling charge weakens, though it renders the preference useless for action.",
+        "If the agent adopts a pragmatic definition of rationality that allows for 'animal faith' in uniformity, the strict logical critique loses its force in practical contexts."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_006", "kind": "revised", "note": "Revised to clarify that the failure to address action in novel domains is precisely because the 'elimination' strategy silently relies on an inductive bridge to apply past eliminations to future novel cases."},
+        {"handle": "[SRC_023] against SRC_022", "kind": "rebutted", "note": "This candidate fully supports the criticism: selecting for action based on past survival IS the inductive step. The 'smuggling' is the fatal flaw."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "The distinction between psychological and logical fails because the *act* of preferring for action logically entails an expectation of future success, which is inductive regardless of the label."},
+        {"handle": "[SRC_015] against SRC_005", "kind": "departure_declared", "note": "Departing from the specific 'verisimilitude' argument to focus on the more fundamental 'uniformity of nature' assumption inherent in 'severity'."},
+        {"handle": "[SRC_021] against SRC_011", "kind": "rebutted", "note": "Agrees with the critic: Popper's requirement for rational action cannot be met by a system that forbids the very inductive inference required to make action rational."},
+        {"handle": "[SRC_012] against SRC_009", "kind": "revised", "note": "Revised to acknowledge that while verisimilitude is problematic, the deeper issue is the temporal projection of 'survival'."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "Rejects the idea that aligning with the 'aim of science' solves the logical gap; an aim cannot bridge the is-ought or past-future divide without induction."},
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "Evolutionary selection describes a process, but justifying *preference* based on it requires assuming the environment (future) resembles the past selection pressure."}
+      ],
+      "optional_refs": ["SRC_018"]
+    },
+    {
+      "claim": "The tension dissolves if we view corroboration reports not as guides for theory choice or truth-probability, but purely as historical records of criticism; the 'preference' is actually a procedural error or a category mistake when applied to action outside the context of further testing.",
+      "mechanism": "Category Dissolution: Corroboration statements are backward-looking summaries ('Theory X survived test Y'). They have no forward-looking modal force. Preferring them for action is a misuse of the concept, conflating 'reporting history' with 'guiding practice'.",
+      "counterconditions": [
+        "If scientists must act (e.g., administer medicine), refusing to use corroboration as a guide leads to paralysis or random choice, which is practically untenable.",
+        "If Popper himself endorsed using corroboration for action, this interpretation contradicts the primary source material.",
+        "If 'rationality' includes pragmatic efficiency, ignoring the best-tested theory is itself irrational."
+      ],
+      "typicality": 0.40,
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_006", "kind": "rebutted", "note": "The criticism assumes preference must address action. This candidate argues that within strict Popperian logic, corroboration *cannot* address action, and trying to make it do so is the error."},
+        {"handle": "[SRC_023] against SRC_022", "kind": "rebutted", "note": "Agrees that action implies induction, but concludes therefore that Popperian corroboration cannot legitimately ground action without breaking its own rules."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "The distinction holds: logically, there is no justification. The 'problem' arises only if we demand corroboration do something it isn't designed to do."},
+        {"handle": "[SRC_015] against SRC_005", "kind": "omitted_in_rebuttal", "note": "Not applicable as this candidate rejects the premise that corroboration guides preference at all."},
+        {"handle": "[SRC_021] against SRC_011", "kind": "rebutted", "note": "Popper's own 'requirement' for rational action might be the inconsistency in his system, not a feature this candidate must preserve."},
+        {"handle": "[SRC_012] against SRC_009", "kind": "omitted_in_rebuttal", "note": "Irrelevant to the category mistake argument."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "rebutted", "note": "Argues that calling it 'rational' to align with the aim of science is a rhetorical move, not a logical derivation from the definition of corroboration."},
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "Evolutionary selection explains survival, but this candidate argues that translating survival to 'preference for action' is the unjustified leap."}
+      ],
+      "optional_refs": ["SRC_020"]
+    },
+    {
+      "claim": "The preference is defensible not as an inductive inference nor a logical necessity, but as a 'volitional act' or 'decisionism': we choose the better-corroborated theory because we decide to adopt the methodology of critical rationalism, accepting the risk of error without the comfort of probability.",
+      "mechanism": "Decisionist Voluntarism: The gap between 'is' (survived tests) and 'ought' (prefer this) is bridged by a fundamental decision to value truth-seeking over safety or certainty. It is a non-rational (but not irrational) commitment to the game of science.",
+      "counterconditions": [
+        "If 'rationality' is defined broadly to include instrumental consistency with chosen goals, this decision can be called rational, challenging the 'non-rational' label.",
+        "If the stakes of action are high (life/death), a mere 'volitional act' without probabilistic backing may be ethically indefensible.",
+        "If Popper explicitly argued the preference was rational (not just voluntary), this contradicts his explicit texts."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {"handle": "[SRC_016] against SRC_006", "kind": "rebutted", "note": "In novel domains, where logic fails, only a volitional commitment to a method can guide action. Elimination alone is insufficient without the will to act on the remainder."},
+        {"handle": "[SRC_023] against SRC_022", "kind": "rebutted", "note": "The 'smuggling' charge fails because the move is openly declared as a decision/volition, not a hidden inductive inference."},
+        {"handle": "[SRC_014] against SRC_011", "kind": "rebutted", "note": "The psychological/logical distinction is bypassed: the preference is neither a feeling nor a deduction, but a chosen stance."},
+        {"handle": "[SRC_015] against SRC_005", "kind": "omitted_in_rebuttal", "note": "Does not rely on verisimilitude."},
+        {"handle": "[SRC_021] against SRC_011", "kind": "rebutted", "note": "Challenges the critic's definition of 'rational action'. If rational action requires induction, then Popperian action is non-rational but still defensible as a consistent ethical stance."},
+        {"handle": "[SRC_012] against SRC_009", "kind": "omitted_in_rebuttal", "note": "Irrelevant."},
+        {"handle": "[SRC_008] against SRC_007", "kind": "revised", "note": "Revised to concede that while Popper called it 'rational', the strongest philosophical defense rests on its status as a foundational decision (decisionism) rather than a derived logical truth."},
+        {"handle": "[SRC_013] against SRC_010", "kind": "rebutted", "note": "Evolutionary selection is descriptive;

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails because it redefines 'preference' as a static optimization of 'informational content,' which contradicts the problem's explicit context of scientists 'choosing which theory to act on.' Action inherently implies a temporal orientation toward future consequences (T+1), whereas the target's mechanism explicitly strips away all 'temporal or predictive implications.' By removing the very element (predictive utility) that motivates action, the target does not defend the preference on Popper's terms but rather dissolves the phenomenon it was asked to explain.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Action requires prediction; a theory preferred for action must be preferred for its expected future performance, not just its past logical compatibility.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration cannot ground prediction, what non-inductive principle allows a scientist to bridge the gap between 'best tested so far' and 'most likely to succeed next'?"
+    }
+  ]
+}

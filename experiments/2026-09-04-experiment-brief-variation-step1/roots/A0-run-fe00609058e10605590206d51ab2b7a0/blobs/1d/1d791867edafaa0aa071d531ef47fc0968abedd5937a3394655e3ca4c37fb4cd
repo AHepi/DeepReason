@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-inductive guide for preference, but Popper's own formal account of verisimilitude was refuted by Tichý and Miller (1974), who demonstrated that under Popper's definitions, no false theory can be closer to the truth than another. Consequently, preferring a theory based on its verisimilitude is not a defensible 'rational bet' on Popper's terms because the metric itself collapses; without a valid measure of truth-likeness, the preference for the better-corroborated theory inevitably smuggles in an inductive assumption that past survival indicates future reliability or proximity to truth, which is precisely what the target claims to avoid.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's formal definition of verisimilitude is logically inconsistent and cannot distinguish between false theories, rendering it useless as a non-inductive basis for theory preference.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot serve as the non-inductive bridge, does any remaining Popperian argument for preferring corroborated theories avoid collapsing into pragmatic instrumentalism or covert induction?"
+    }
+  ]
+}

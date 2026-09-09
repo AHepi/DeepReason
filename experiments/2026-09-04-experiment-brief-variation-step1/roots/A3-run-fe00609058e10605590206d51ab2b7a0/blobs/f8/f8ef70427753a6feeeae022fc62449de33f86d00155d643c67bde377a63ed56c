@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible without smuggling in induction by framing it as a non-inductive, critical decision rule: we prefer the theory that has withstood the most severe tests not because we expect it to be true or probable in the future, but because it is currently the best available target for further criticism and has the highest empirical content. The 'cost' of this position is the abandonment of any rational expectation that the preferred theory will yield successful predictions; success remains a hopeful accident, not a justified inference.",
+    "mechanism": "The mechanism distinguishes between the logical status of a theory (which cannot be made probable by past tests) and the methodological rule for action (which dictates choosing the theory with the highest surviving empirical content to maximize the opportunity for falsification). This resolves the tension by redefining 'preference' as a commitment to the most informative error-prone hypothesis rather than a belief in its likelihood of truth.",
+    "counterconditions": [
+      "If one can demonstrate that acting on a theory logically entails an assumption about its future reliability, then the preference smuggles in induction.",
+      "If Popper's concept of 'verisimilitude' (truth-likeness) is required to justify the preference but is itself logically incoherent when comparing false theories, the defense collapses.",
+      "If the distinction between 'critical preference' and 'inductive expectation' is merely semantic and fails to guide actual scientific practice where prediction is key, the solution is pragmatic fiction."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0247998b9f0426956c8d0ef420daae0ecb43121c370bf31bd5ca9328a00d058d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on 'verisimilitude' as a comparative metric between false theories. Instead, it grounds the preference solely in 'empirical content' and 'severity of tests survived,' which are definable without comparing degrees of truth-likeness. The fatal objection regarding verisimilitude comparisons is sidestepped by shifting the justification to information content."
+      },
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The candidate addresses the 'acting' requirement by redefining the rationale for action. One acts on Theory A not because it is likely to succeed, but because it is the most informative conjecture currently available. The 'why' is methodological efficiency (maximizing learning potential), not predictive confidence."
+      },
+      {
+        "handle": "0adb3edd4258581107a99742865c538d498f109f3691f5b5018688135c01a694",
+        "kind": "rebutted",
+        "note": "Similar to the first discharge, this candidate does not use verisimilitude as the basis for choice. It relies on the logical notion of empirical content (informativeness), which remains valid even if all theories are strictly false, thus avoiding the incoherence of comparing verisimilitude among falsehoods."
+      },
+      {
+        "handle": "1b2552d33d55591ca7f103b9ef6ebf34db311437d30c176088055707d875315b",
+        "kind": "revised",
+        "note": "Revised to clarify that while the position abandons 'rational expectation of predictive success' as a logical justification, it does not deny that scientists hope for success. The revision sharpens the cost: the defense holds only if we accept that rational action does not require an expectation of success, a counter-intuitive but logically consistent stance."
+      },
+      {
+        "handle": "1bd83288bc9ab8f9b04811f4e67bb8ca9d49c4f09aa66f010b8a229bd75d6fc3",
+        "kind": "rebutted",
+        "note": "The candidate argues that preferring the best-target-for-criticism IS a rational decision based on critical discussion, distinct from social convention. It is not a 'pragmatic fiction' but a rigorous application of the logic of falsification: to learn fastest, one must test the boldest claims."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The candidate maintains that 'informational content survived' IS the defensible basis for preference for action in Popper's framework. The conflation alleged by the critic is rejected; for Popper, acting on the high-content theory is the only way to potentially discover its falsity, which is the goal of science."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "rebutted",
+        "note": "The candidate explicitly accepts the core logical problem: past success does not guarantee future truth. It solves the dichotomy by asserting that rational action does NOT require a guarantee or even a probabilistic expectation of future truth, only a methodological rule for selecting the next test case."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The candidate agrees it is not a straw man but clarifies that Popper's solution is not a 'Principle of Uniformity.' Instead, it is a decision to treat the unrefuted theory with the highest content as the working hypothesis, purely for the sake of further testing, without assuming nature is uniform."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

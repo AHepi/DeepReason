@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that Popper's solution is 'incomplete' relies on a false dichotomy between 'logical non-induction' and 'psychological induction.' It ignores Popper's explicit pragmatic argument in 'Conjectures and Refutations' that preferring the better-corroborated theory is rational not because it is more likely true (induction), but because it has withstood more severe tests, making it the most informative and critically examined option available for action. The target mischaracterizes this pragmatic preference as a 'Humean habit' or 'irrational induction,' whereas Popper defines it as a critical choice based on past performance without inferring future probability.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper distinguishes between the logical status of corroboration (non-probabilistic) and the pragmatic rationality of acting on the best-tested theory (critical preference), rejecting the need for any form of induction, psychological or otherwise.",
+      "premise_evidence": null,
+      "successor_question": "Does the target's assertion that scientists must revert to 'Humean psychology' contradict Popper's own explanation that acting on the best-tested theory is a fully rational, critical decision consistent with his anti-inductivist framework?"
+    }
+  ]
+}

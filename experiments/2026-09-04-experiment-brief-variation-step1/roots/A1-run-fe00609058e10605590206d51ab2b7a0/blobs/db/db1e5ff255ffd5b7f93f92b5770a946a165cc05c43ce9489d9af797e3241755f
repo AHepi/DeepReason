@@ -1,0 +1,101 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms not as an inductive inference, but as a non-rational 'conventional decision' to treat the most severely tested theory as the best available basis for action, accepting that this choice carries no guarantee of future success.",
+      "mechanism": "Decision-Theoretic Convention: The agent adopts a rule (a convention) to act 'as if' the best-tested theory is true for practical purposes, while maintaining the theoretical stance that its truth probability remains unknown. This separates the logic of discovery/testing from the pragmatics of action.",
+      "counterconditions": [
+        "If Popper explicitly rejected conventions as a basis for rational action in favor of purely logical derivations.",
+        "If the 'convention' implicitly relies on an inductive assumption that past success predicts future reliability.",
+        "If the distinction between 'acting as if' and 'believing' collapses under the pressure of high-stakes decisions (e.g., bridge building)."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_009", "kind": "rebutted", "note": "The candidate does not rely on verisimilitude as a calculated metric but on a conventional decision rule, bypassing the need for formal definition of truth-likeness."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "The claim explicitly distinguishes between logical probability (rejected) and pragmatic convention (adopted), avoiding the category error."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "The mechanism directly addresses 'acting on' by defining it as a conventional adoption of the theory for practical use, distinct from testing."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Clarifies that 'willingness to criticize' applies to the theoretical status, while 'practical reliance' is a separate conventional layer."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "Popper's personal preference is explained as his own adherence to this rational convention, not a lapse into induction."},
+        {"handle": "[SRC_013] against SRC_004", "kind": "rebutted", "note": "The solution stays within Popper's falsificationist framework via convention, without invoking Evolutionary Epistemology."},
+        {"handle": "[SRC_008] against SRC_002", "kind": "rebutted", "note": "No appeal to verisimilitude is made; the justification is purely conventional/pragmatic."},
+        {"handle": "[SRC_021] against SRC_011", "kind": "rebutted", "note": "The preference is framed as a rational convention, not a biological survival trait, resolving the conflation."}
+      ],
+      "optional_refs": ["SRC_005"]
+    },
+    {
+      "claim": "The preference smuggles induction back in; Popper's system is internally inconsistent because any rational preference for one theory over another for the purpose of action necessarily implies an expectation of future performance, which is an inductive leap.",
+      "mechanism": "Implicit Induction Trap: The act of choosing Theory A over Theory B for action entails a belief that A is more likely to succeed than B in the future. Since Popper denies that past tests confer any such likelihood, the choice becomes irrational within his system unless an inductive premise is silently added.",
+      "counterconditions": [
+        "If a form of rational choice can be demonstrated that requires no expectation of future success (e.g., random selection or aesthetic preference).",
+        "If 'preference' can be redefined solely as 'current informational content' without reference to future outcomes.",
+        "If Popper successfully delineates a 'critical preference' that is logically distinct from 'inductive expectation'."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_009", "kind": "rebutted", "note": "This candidate argues that *any* non-inductive metric (including verisimilitude) fails to justify action, rendering the specific failure of verisimilitude moot to the core inconsistency."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Argues that the distinction between logical probability and practical expectation is illusory when action is involved; the latter *is* an inductive commitment."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Directly supports the claim that the dilemma of 'acting on' exposes the fatal flaw, rather than failing to address it."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Confirms that conflating criticism with reliance is exactly where the system breaks down."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "Interprets Popper's personal behavior as evidence of the system's inability to sustain itself without covert induction."},
+        {"handle": "[SRC_013] against SRC_004", "kind": "rebutted", "note": "Asserts that evolutionary analogies are merely attempts to hide the inductive premise, not resolve it."},
+        {"handle": "[SRC_008] against SRC_002", "kind": "rebutted", "note": "Agrees that verisimilitude fails, extending the critique to show that *no* non-inductive metric can work."},
+        {"handle": "[SRC_021] against SRC_011", "kind": "rebutted", "note": "Argues that even if the mechanism explains the behavior (survival), it fails to justify it rationally within Popper's strictures."}
+      ],
+      "optional_refs": ["SRC_003"]
+    },
+    {
+      "claim": "The tension is resolved by viewing corroboration as a proxy for 'propensity' (objective chance) rather than subjective belief; preferring the better-corroborated theory is rational because it identifies the theory with the highest objective propensity to withstand future tests, a physical property, not an inductive inference.",
+      "mechanism": "Objective Propensity Mapping: Corroboration reports on the theory's structural fit with reality (its propensity to be true/false). Action is guided by selecting the theory with the highest measured propensity, treating 'probability' as a physical feature of the world (like weight) rather than a degree of belief.",
+      "counterconditions": [
+        "If Popper explicitly denied that corroboration measures any kind of propensity relevant to future tests.",
+        "If 'propensity' cannot be distinguished from 'inductive probability' in its application to decision making.",
+        "If the measurement of propensity itself requires an inductive assumption about the stability of natural laws."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_009", "kind": "rebutted", "note": "Shifts the ground from 'verisimilitude' (truth-likeness) to 'propensity' (physical chance), avoiding the specific formalization issues of the former."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Distinguishes 'logical probability' (inductive confirmation) from 'physical propensity' (objective chance), claiming the latter is compatible with Popper."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Provides a mechanism for 'acting on' based on objective physical properties, bridging the gap between testing and reliance."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Reframes 'practical reliance' as reliance on objective propensities, distinct from mere criticism."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "Explains Popper's preference as a recognition of objective propensities revealed by severe tests."},
+        {"handle": "[SRC_013] against SRC_004", "kind": "rebutted", "note": "Offers a physicalist interpretation rather than an evolutionary one."},
+        {"handle": "[SRC_008] against SRC_002", "kind": "rebutted", "note": "Avoids verisimilitude entirely in favor of propensity."},
+        {"handle": "[SRC_021] against SRC_011", "kind": "rebutted", "note": "Grounds the preference in physics (propensity) rather than biology (survival)."}
+      ],
+      "optional_refs": ["SRC_006"]
+    },
+    {
+      "claim": "The preference is defensible only by abandoning the requirement for 'justification' entirely; science is a game of bold conjectures where 'preference' is merely the temporary retention of the last surviving player, with no deeper rational foundation needed or possible.",
+      "mechanism": "Radical Fallibilist Game Theory: Scientific progress is modeled as an elimination tournament. 'Preference' is simply the state of being the current survivor. No further justification (inductive or otherwise) is required; the 'cost' is accepting that rationality ends at the boundary of falsification.",
+      "counterconditions": [
+        "If scientists require a positive reason (beyond mere survival) to invest resources in a theory.",
+        "If the 'game' metaphor fails to account for the cumulative nature of scientific knowledge.",
+        "If Popper himself demanded a stronger account of rational preference than mere survival."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_009", "kind": "departure_declared", "note": "Departure: Rejects the need for *any* metric like verisimilitude; survival alone is sufficient."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Denies that 'rational preference' entails 'expectation of success'; it only entails 'current non-falsification'."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Defines 'acting on' as betting on the current survivor, a valid move in a fallibilist game."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Equates 'practical reliance' with 'betting on the survivor', dissolving the conflation charge."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "Views Popper's behavior as consistent with a player sticking to the last standing conjecture."},
+        {"handle": "[SRC_013] against SRC_004", "kind": "rebutted", "note": "Strips away evolutionary *explanation* to leave only the logical *structure* of elimination."},
+        {"handle": "[SRC_008] against SRC_002", "kind": "rebutted", "note": "Rejects verisimilitude as unnecessary clutter."},
+        {"handle": "[SRC_021] against SRC_011", "kind": "rebutted", "note": "Separates the descriptive fact of survival from the normative claim of preference, reducing the latter to a rule of the game."}
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The conflict arises from a category mistake: 'corroboration' evaluates the *history* of a theory, while 'action' targets its *future*. The preference is defensible if viewed as a heuristic policy to minimize the risk of immediate falsification, not to maximize truth probability.",
+      "mechanism": "Risk-Minimization Heuristic: Agents prefer corroborated theories not because they are likely true, but because they have proven robust against specific known errors. This minimizes the risk of *immediate* failure in application, a pragmatic goal distinct from inductive truth-seeking.",
+      "counterconditions": [
+        "If minimizing immediate risk logically entails an assumption about the uniformity of nature (induction).",
+        "If Popper considered risk-minimization insufficient for rational scientific action.",
+        "If the 'heuristic' cannot be distinguished from a weak form of inductive inference."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_009", "kind": "rebutted", "note": "Uses 'risk minimization' instead of 'verisimilitude', avoiding the formalization problem."},
+        {"handle": "[SRC_012] against SRC_010", "kind": "rebutted", "note": "Clarifies that the expectation is of 'non-immediate-falsification' (a negative claim), not 'success' (a positive inductive claim)."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Directly addresses the 'acting on' dilemma by framing action as risk management."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Distinguishes 'reliance for safety' from 'reliance for truth'."},
+        {"handle": "[SRC_

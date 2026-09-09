@@ -1,0 +1,83 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule to maximize the severity of future tests; accepting this costs us the assurance that our chosen theory is likely true or will survive, restricting rationality to the procedural virtue of keeping error-elimination active.",
+    "mechanism": "The mechanism distinguishes between 'justification' (which Popper rejects) and 'critical preference.' By defining corroboration as a report of past test severity rather than a probability metric, the preference for the best-corroborated theory becomes a strategic choice to subject the most vulnerable (and thus most informative) survivor to the next attempt at falsification. This avoids induction because it makes no claim about the future reliability of the theory, only about the current optimality of the testing situation.",
+    "counterconditions": [
+      "If 'severity' implicitly assumes that nature is uniform enough for past harsh tests to matter for future ones, the distinction collapses into hidden induction.",
+      "If scientists actually act on the belief that corroborated theories will work (pragmatic success), then Popper's reconstruction fails to describe actual rational agency.",
+      "If the choice of which theory to test next cannot be made without assigning some likelihood of failure, the 'non-inductive' label is merely semantic."
+    ],
+    "typicality": 0.72,
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The criticism conflates explaining the psychological origin of preference with justifying the methodological rule. The candidate does not rely on evolutionary epistemology but on the logical structure of falsification: preferring the severely tested theory maximizes the chance of finding errors, regardless of why scientists feel drawn to it."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate explicitly adopts Popper's argument for non-inductive rationality based on test severity, rejecting the false dichotomy that one must either use induction or make an arbitrary decree. The 'decree' is constrained by the logical goal of error elimination."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "Choosing the 'only standing candidate' or the 'best tested' does not assume nature's uniformity; it assumes only that if the theory is false, it is more likely to have been detected already if it survived severe tests. The move is about maximizing the efficiency of the search for falsehood, not predicting truth."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "Severity is defined by the logical improbability of the evidence given the theory, not by an empirical assumption that surviving tests indicates future performance. The criticism mistakes the definition of severity for an inductive bet."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "revised",
+        "note": "Revised to clarify that the methodological rule is not 'arbitrary' in the conventionalist sense (like Poincaré's geometry choices) because it is uniquely tied to the aim of science (error elimination). Arbitrary conventions are interchangeable; this rule is functionally necessary for the specific goal of critical rationalism."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate strictly separates 'methodological convention' (the rule to test the hardest-hit survivor) from 'pragmatic reliability' (the expectation that it will work). The defense holds only if we abandon the demand for pragmatic reliability as a condition of rationality."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e871c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "rebutted",
+        "note": "The argument deliberately avoids verisimilitude. It relies solely on the status of 'not yet falsified despite severe attempts.' No claim is made that the theory is closer to the truth, only that it is the most informative target for the next test."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f0068bbde5f67",
+        "kind": "rebutted",
+        "note": "The candidate presents the strongest case for the 'smuggling induction' view in the counterconditions (specifically the first two), acknowledging that if severity implies uniformity, the defense fails. The resolution favors the non-inductive view but explicitly lists the cost: the loss of any guarantee of practical success."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "chess-grandmaster-heuristic",
+        "firebreak-forestry-strategy"
+      ],
+      "shared_structure": [
+        "Selection of an option based on its history of surviving stressors, not on a prediction of future safety.",
+        "The goal is to keep the system (science/forest/game) in a state where catastrophic failure can be quickly identified and contained.",
+        "Preference is procedural (maximizing information flow) rather than predictive (maximizing win/survival probability)."
+      ],
+      "disanalogies": [
+        "In chess, the heuristic often relies on statistical patterns of human play (inductive), whereas Popper insists on logical severity.",
+        "A firebreak is a physical barrier, while corroboration is an informational status.",
+        "Scientists often act as if the theory is true (betting lives/money), unlike a chess player who knows the heuristic might fail against a novel strategy."
+      ],
+      "transfer_claims": [
+        "Just as a forester chooses the oldest burn scar for a new firebreak not because it won't burn again, but because it has proven most resistant so far, scientists choose corroborated theories to maximize the informational yield of the next test.",
+        "The rationality lies in the maintenance of the critical process, not in the outcome of the specific instance."
+      ],
+      "overturn_conditions": [
+        "If it is shown that 'severity' cannot be assessed without assuming the uniformity of natural laws.",
+        "If acting on a theory logically entails believing it will succeed in the immediate future."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

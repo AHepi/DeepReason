@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's central claim that Popper's position is 'sustainable only if' we accept a propensity interpretation creates a false dilemma that ignores Popper's actual solution: the preference for better-corroborated theories is a critical-rational decision based on the logic of testing (severity), not a probabilistic calculation of truth. By framing the defense exclusively through 'propensity' as an 'objective tendency... to be true,' the target conflates corroboration with a form of probabilistic likelihood (even if objective), which directly contradicts Popper's explicit rejection that corroboration says anything about a theory's truth probability. Popper argued we prefer severe testers because they have risked more and survived, not because they possess a metaphysical 'propensity' property that makes them likely true; thus, the target misrepresents the non-inductive basis of Popperian preference by smuggling in a quasi-probabilistic ontology he explicitly sought to avoid.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": "If Popper's preference is based on the severity of tests rather than an objective propensity for truth, does the target's reliance on propensity theory actually undermine the very non-inductive stance it claims to defend?"
+    }
+  ]
+}

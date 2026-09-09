@@ -1,0 +1,124 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a non-inductive 'rule of method' grounded in verisimilitude (truth-likeness) rather than probability; we prefer the theory that has withstood severe tests because it is logically closer to the truth, not because it is more likely to be true or to succeed in the future.",
+      "mechanism": "Verisimilitude acts as a logical proxy for truth content. Severe testing eliminates false content. The surviving theory has higher verisimilitude. Preference is a logical imperative to choose the 'less false' option, avoiding the inductive leap that the future will resemble the past.",
+      "counterconditions": [
+        "If Popper's own later admission that verisimilitude cannot be formally defined without probabilistic assumptions holds.",
+        "If the choice of which test is 'severe' implicitly relies on inductive expectations about nature's uniformity."
+      ],
+      "discharges": [
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "The rebuttal clarifies that verisimilitude is a logical comparison of content, not a prediction of future performance. It addresses the core challenge by shifting the ground from 'future reliability' (inductive) to 'current truth-content' (logical)."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "This is not an evolutionary or psychological explanation but a normative logical rule derived from Popper's definition of scientific progress. It stays strictly within Popper's logical framework."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "When multiple theories survive, the preference goes to the one with higher informational content (boldness) that survived, breaking the tie via logical structure, not status quo bias."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "The distinction is maintained: we prefer the theory for its current verisimilitude, not for its predictive power. Prediction is a byproduct, not the justification."},
+        {"handle": "[SRC_020] against SRC_005", "kind": "rebutted", "note": "Unlike betting on a horse based on past wins (induction), this is betting on the horse with the strongest constitution (logical content) proven by surviving obstacles. The mechanism is structural, not statistical."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Past performance is only evidence of logical content survived, not a guide to future utility. The premise is logical, not empirical."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "This is not a pragmatic risk-management strategy but a logical duty to pursue truth. Popper rejects pragmatism as a basis for truth, but accepts it as a basis for methodological rules."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "The mechanism directly answers the smuggling charge by providing a non-inductive logical category (verisimilitude) that justifies preference without invoking future uniformity."}
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_005", "SRC_007"]
+    },
+    {
+      "claim": "The preference inevitably smuggles induction back in; any decision to act on a corroborated theory assumes the 'Principle of Uniformity of Nature' (that the future will resemble the past), which Popper explicitly rejected, rendering his position practically inconsistent even if logically pure.",
+      "mechanism": "Decision-theoretic necessity. To act is to predict. To predict based on past survival is to assume the causal mechanisms tested will persist. This assumption is the definition of induction. Popper's 'logical' distinction collapses under the weight of practical application.",
+      "counterconditions": [
+        "If a form of rational action can be demonstrated that requires no assumption of future regularity.",
+        "If Popper's 'critical preference' can be shown to be a purely negative elimination of the known-false without positive expectation of the surviving."
+      ],
+      "discharges": [
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "The criticism is upheld: verisimilitude fails because acting on it *requires* assuming the truth-like theory will continue to work, which is an inductive bet."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "revised", "note": "Revised to acknowledge that while Popper rejected biological explanations, the *structure* of the problem forces a normative gap that only an inductive habit (psychological or otherwise) can fill."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "The tautology claim is weak; the real issue is that choosing between survivors requires an inductive criterion of 'likeness to future success'."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "The conflation is unavoidable. One cannot prefer a theory for 'explanatory power' in a way that guides action without implying it explains *future* events correctly."},
+        {"handle": "[SRC_020] against SRC_005", "kind": "rebutted", "note": "The horse analogy holds: past performance is the only data. Ignoring the inductive link between past and future makes the preference irrational, not non-inductive."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Agreed. The implicit premise of uniformity is necessary for the preference to be rational, thus smuggling induction in."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Popper's rejection of pragmatic justification is exactly why this fails. If he allows pragmatic preference, he admits induction by the back door."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "Redefining the conflict doesn't solve it. The smuggling occurs in the agent's mind when they decide to act."}
+      ],
+      "typicality": 0.75,
+      "optional_refs": ["SRC_006", "SRC_008"]
+    },
+    {
+      "claim": "The preference is defensible not as induction nor as verisimilitude, but as a 'critical preference' for the theory with the highest informational content that has not yet been falsified; this is a logical ordering of available options, not a prediction of their future success.",
+      "mechanism": "Informational Content Ordering. Popper equates content with improbability. A theory that survives a severe test (low probability event) demonstrates high content. We prefer it because it tells us more about the world, not because we expect it to last. It is a static comparison of current knowledge states.",
+      "counterconditions": [
+        "If scientists actually care about future success rather than current information content.",
+        "If 'severity' of a test cannot be defined without reference to future probabilities."
+      ],
+      "discharges": [
+        {"handle": "[SRC_017] against SRC_014", "kind": "departure_declared", "note": "Departing from the need to justify 'future action'. The preference is for the best *current* conjecture. Action follows logically from having the best current map, regardless of future validity."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "This is a logical norm internal to Popper's system, not an external biological or psychological account."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Ties are broken by content magnitude. The theory saying more and surviving is preferred over the theory saying less and surviving."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Strictly separates 'preferring for content' (logical) from 'predicting events' (inductive). One can do the former without the latter."},
+        {"handle": "[SRC_020] against SRC_005", "kind": "rebutted", "note": "Distinguishes from the horse analogy: we don't bet on the horse because it won before, but because it carried the heaviest load (content) and didn't collapse."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Past performance indicates content survived, not future reliability. The premise is about logical structure, not temporal continuity."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "revised", "note": "Refined: It is a 'logical risk-management' where 'risk' refers to the boldness of the claim, not the pragmatic danger of being wrong in the future."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "It answers the smuggling charge by showing the preference is a deduction from the definition of corroboration, not an inductive inference."}
+      ],
+      "typicality": 0.65,
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "The dilemma is a category error arising from conflating 'justification of belief' (which Popper rejects) with 'justification of action' (which he accepts as pragmatic); the preference is a pragmatic convention necessary for life, which Popper admits is distinct from scientific logic, thus saving his system from inconsistency at the cost of dualism.",
+      "mechanism": "Epistemic Dualism. Science operates in the realm of logic (no induction). Life/Action operates in the realm of pragmatics (induction allowed as a habit). Popper defends the preference as a rational *habit*, not a logical *truth*. This saves the logic of science by isolating it from the messiness of action.",
+      "counterconditions": [
+        "If Popper claims his philosophy governs action as well as logic.",
+        "If the 'pragmatic convention' itself requires an inductive justification to be considered rational."
+      ],
+      "discharges": [
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "The defense doesn't rely on verisimilitude for action, but on a separate pragmatic track. The core challenge is met by bifurcating the domains."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "This explicitly addresses the normative question by defining the norm as 'pragmatic rationality' distinct from 'logical validity', fitting Popper's own distinctions."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "The status report is irrelevant; the choice is a pragmatic convention. If multiple survive, we pick one arbitrarily or by content, but the *act* of picking is pragmatic, not logical."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "The conflation is the error of the critic. Popper separates them. Predicting events is pragmatic; explanatory power is logical. They are different games."},
+        {"handle": "[SRC_020] against SRC_005", "kind": "rebutted", "note": "The horse analogy is valid for the pragmatic domain. Popper admits we must bet. He only denies that the bet proves the horse is 'true'."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Induction is smuggled into the *pragmatic* domain, which Popper allows. It is not smuggled into the *logical* domain, which he protects."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Popper explicitly accepts pragmatic justification for action, just not for theory acceptance. This candidate leverages that specific allowance."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "The 'semantic drift' is actually a precise boundary drawing between logic and pragmatics."}
+      ],
+      "typicality": 0.55,
+      "optional_refs": ["SRC_008"]
+    },
+    {
+      "claim": "The preference is an evolutionary adaptation of the scientific community, not a logical derivation; theories that are preferred happen to survive longer because the preference rule selects for robustness, making the 'smuggling' of induction a functional feature of science's evolution rather than a logical bug.",
+      "mechanism": "Evolutionary Epistemology. The preference rule is a meme that survives because it helps the host (science) survive. It looks like induction, but it's actually natural selection operating on methodologies. Popper's 'terms' include an evolutionary view of knowledge growth.",
+      "counterconditions": [
+        "If Popper's 'own terms' strictly exclude biological analogies for normative questions.",
+        "If the evolutionary explanation fails to provide a normative reason for an individual scientist to prefer a theory today."
+      ],
+      "discharges": [
+        {"handle": "[SRC_017] against SRC_014", "kind": "departure_declared", "note": "Departing from the requirement for a purely logical basis. The defense is meta-logical: the preference works because it evolved, not because it deduces truth."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Popper frequently used evolutionary analogies (variation and selection). This fits his broader philosophy of knowledge growth, even if it sidesteps the strict logical normative question."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "The status report is an snapshot of an ongoing evolutionary process. Ties are broken by random variation or minor fitness differences."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "It reframes 'prediction' as 'adaptive fit'. The preference is for the theory that fits the current environment, not one that predicts the future via induction."},
+        {"handle": "[SRC_020] against SRC_005", "kind": "rebutted", "note": "The horse analogy is replaced by the 'fit organism' analogy. Past survival indicates genetic (theoretical) fitness, not a guarantee of future weather."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "It admits the reliance on past performance but reinterprets it as evidence of fitness, not a law of uniformity."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Risk management is evolutionary risk management. Popper's rejection of pragmatic justification applies to truth claims, not to the survival strategies of the scientific ecosystem."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "The mechanism explains *why* the preference exists without needing to justify it logically, thus dissolving the 'smuggling' accusation by changing the category of explanation."}
+      ],
+      "typicality": 0.40,
+      "optional_refs": ["SRC_007", "SRC_008"]
+    },
+    {
+      "claim": "The preference is indefensible on Popper's strict logical terms and represents a fatal fissure in his system; the only honest conclusion is that Popper was a crypto-inductivist who masked his reliance on the uniformity of nature with complex terminology about severity and content.",
+      "mechanism": "Systemic Collapse. The tension is not resolvable. Every attempt to defend the preference either invokes verisimilitude (undefined), pragmatics (dualism), or evolution (naturalism), all of which violate the strict anti-inductive logical core. The 'preference' is the crack where induction floods back in.",
+      "counterconditions": [
+        "If a coherent reconstruction of Popper's work can be found that avoids all three traps.",
+        "If 'crypto-inductivism' is a coherent philosophical position that saves the phenomena better than Popper's explicit denial."
+      ],
+      "discharges": [
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "Agrees with the criticism: verisimilitude fails. The defense concludes that this failure is fatal to Popper's project."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Agrees: the evolutionary/psychological explanations are admissions of defeat for the logical project. The normative question is answered with 'No, it is not defensible logically.'"},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "The tautology claim is a symptom of the deeper rot. The system cannot handle multiple survivors without arbitrary (inductive) choice."},
+        {"handle": "[SRC_011] against SRC_006", "kind": "rebutted", "note": "Confirms the conflation. Popper tried to separate them but failed in practice. The preference *is* inductive."},
+        {"handle": "[SRC_020] against SRC_005", "kind": "rebutted", "note": "The horse analogy is the truth. Popper tried to deny it, but the logic forces him back to the bookie."},
+        {"handle": "[SRC_010] against SRC_005", "kind": "rebutted", "note": "Explicitly states that the implicit premise of uniformity is present and indispensable, making Popper a closet Humean."},
+        {"handle": "[SRC_012] against SRC_007", "kind": "rebutted", "note": "Confirms that the 'risk-management' strategy is pragmatic and therefore inductive, contradicting Popper's logical purism."},
+        {"handle": "[SRC_013] against SRC_009", "kind": "rebutted", "note": "The 'category error' is Popper's own. He tried to redefine the conflict away, but the smuggling is real and undeniable."}
+      ],
+      "typicality": 0.30,
+      "optional_refs": ["SRC_006", "SRC_008"]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that preferring corroboration is a 'tautological selection' fails because it conflates 'informational content' with 'empirical survival.' Popper explicitly states that higher content makes a theory *more* falsifiable (easier to kill), not easier to survive. Therefore, selecting the 'best-corroborated' theory is not tautologically selecting the 'highest content' one (as high-content theories often fail tests); it is selecting the one that has surprisingly survived despite its high risk. This selection of the 'survivor' over the 'non-survivor' or 'lower-content survivor' implicitly relies on the inductive assumption that past survival is a marker of future reliability, which is exactly the induction Popper sought to reject.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper defines corroboration as a report on how severely a theory has been tested and how well it has stood up to those tests, distinguishing it from probability or content alone.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration is not an inductive guide to truth or future success, what rational basis other than psychological habit distinguishes choosing a highly corroborated theory over a refuted one for practical action?"
+    }
+  ]
+}

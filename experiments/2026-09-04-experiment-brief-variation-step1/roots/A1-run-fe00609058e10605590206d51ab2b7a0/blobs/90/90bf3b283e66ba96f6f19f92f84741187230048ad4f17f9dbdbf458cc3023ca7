@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is 'non-arbitrary' because it is the 'residue of criticism' fails to address the problem's core challenge regarding action. While the target successfully redefines rationality as error-avoidance, it does not explain why a scientist should *act* on the 'last man standing' if they cannot assign it any higher probability of success than the eliminated theories. Popper explicitly rejected the idea that survival makes a theory more probable; therefore, choosing the survivor for practical application (e.g., building a bridge) implicitly assumes that past performance (survival) is a reliable guide to future performance. This assumption is precisely the inductive principle the target claims to avoid. The 'non-arbitrary' label masks an unstated pragmatic induction: that the method of elimination itself will continue to be effective in the future.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper held that corroboration is not probability and rejected induction, yet scientists prefer better-corroborated theories for action.",
+      "premise_evidence": null,
+      "successor_question": "If the preference for the 'last man standing' relies on the hope that the elimination method works tomorrow as it did today, isn't that hope itself an inductive leap that violates Popper's strict prohibition?"
+    }
+  ]
+}

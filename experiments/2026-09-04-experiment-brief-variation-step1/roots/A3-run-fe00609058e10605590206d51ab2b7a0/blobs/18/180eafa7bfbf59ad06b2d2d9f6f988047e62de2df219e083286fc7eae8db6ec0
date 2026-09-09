@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense fails on Popper's own terms because it conflates a descriptive metaphor (evolutionary selection) with the normative justification required for scientific preference. Popper explicitly rejected the idea that survival of tests implies future success or 'fitness' in a predictive sense; he maintained that corroboration is purely a report of past performance without inductive weight. By arguing that preference is defensible *because* corroborated theories are 'fitter' (analogous to species survival), the target smuggles in an inductive assumption: that past survival in tests is a reliable indicator of future viability or truth-likeness. This directly contradicts the problem's constraint to avoid induction. If the analogy holds only descriptively (as the target admits in the 'mechanism' field), it cannot serve as a *defense* for the rationality of preferring one theory over another for action, which requires a normative claim. The target offers no non-inductive bridge from 'has survived' to 'ought to be preferred for future action' other than the evolutionary analogy itself, which presupposes the very continuity of nature that Popper deemed unjustifiable.",
+      "premise": "Popper's strict separation between the descriptive history of testing and the logical impossibility of inferring future success from past survival means any argument relying on 'fitness' or 'selection' to justify future preference implicitly assumes the uniformity of nature (induction).",
+      "premise_evidence": null,
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "successor_question": "If the evolutionary analogy is merely descriptive and not justificatory, what specific non-inductive logical principle does Popper offer to explain why a scientist should act on the better-corroborated theory rather than flipping a coin?"
+    }
+  ]
+}

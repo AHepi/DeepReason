@@ -1,0 +1,97 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'critical preference' rooted in verisimilitude (truth-likeness), not induction. We prefer the theory that has withstood more severe tests because it is logically closer to the truth, even if we cannot assign it a higher probability of being true.",
+      "mechanism": "Verisimilitude-based Critical Preference: Action is guided by the conjecture that the theory surviving the most stringent attempts at falsification possesses greater content and is thus a better approximation of reality. This avoids induction by relying on the logical relation of content rather than probabilistic extrapolation from past to future.",
+      "counterconditions": [
+        "If Popper's own proof against the definability of verisimilitude for false theories holds universally.",
+        "If 'acting on a theory' inherently requires a probabilistic assessment of future success.",
+        "If the distinction between 'logical closeness to truth' and 'probability of truth' collapses under decision-theoretic pressure."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_005", "kind": "rebutted", "note": "The defense does not claim the theory is 'proven false yet' but that it is the best available approximation of truth (verisimilitude). Acting on the best approximation is rational without assuming it will succeed."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Corroboration measures past survival of high-content theories; the preference for action is based on the hypothesis that high content correlates with truth-likeness, not that past survival guarantees future success."},
+        {"handle": "[SRC_022] against SRC_021", "kind": "rebutted", "note": "The mechanism distinguishes between psychological belief (inductive) and critical preference (conjectural). One can act on the best conjecture without believing it is probable."},
+        {"handle": "[SRC_007] against SRC_004", "kind": "rebutted", "note": "This is not a straw man; Popper explicitly invoked verisimilitude to solve the problem of action, distinguishing it from a 'Principle of Uniformity'."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "Critical preference is explicitly non-inductive; it is a methodological rule to test the boldest conjectures, not a prediction of their success."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "While Popper struggled with formalizing verisimilitude, the intuitive concept remains the only non-inductive basis for preference he offered. The candidate accepts the cost of formal difficulty."},
+        {"handle": "[SRC_024] against SRC_023", "kind": "rebutted", "note": "The preference is not inert; it guides which theory to subject to further testing and which to use tentatively. The cost is admitting we act on guesses, not certainties."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Popper argued the preference is rational because it aligns with the goal of finding truth, not because it is a mere fiction. It is a substantive methodological commitment."}
+      ],
+      "optional_refs": ["SRC_013"]
+    },
+    {
+      "claim": "The preference is indefensible on strict Popperian terms and indeed smuggles in induction. Any rational choice to act on one theory over another necessarily implies an expectation of future success, which is an inductive leap that Popper's system cannot logically support without contradiction.",
+      "mechanism": "The Inductive Smuggle Argument: To 'prefer' Theory A for action is to assert 'A is more likely to work than B.' Since Popper denies that past corroboration increases likelihood, this assertion relies on an unstated inductive principle (the future will resemble the past regarding test outcomes).",
+      "counterconditions": [
+        "If 'preference' can be redefined as a purely arbitrary or aesthetic choice unrelated to expected outcomes.",
+        "If Popper successfully separates the logic of discovery from the pragmatics of action entirely.",
+        "If a non-probabilistic decision theory can justify action without expectations of success."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_005", "kind": "revised", "note": "Revised to emphasize that 'acting' inherently involves an expectation of success, which the target's previous definition of 'acknowledging non-falsity' failed to address."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "The dilemma is not false; conflating informational content with defensible preference is exactly where the smuggling occurs. Content alone does not justify action."},
+        {"handle": "[SRC_022] against SRC_021", "kind": "rebutted", "note": "The core logical problem stands: rejecting induction while acting on past success is contradictory unless one admits an implicit inductive premise."},
+        {"handle": "[SRC_007] against SRC_004", "kind": "rebutted", "note": "Popper's distinction between contexts fails to resolve the logical inconsistency of acting on a theory one claims has no higher probability of success."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "'Critical preference' is merely a label for the inductive leap; calling it rational does not make it so within a strictly deductive framework."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "Verisimilitude fails as a solution because it cannot be operationalized for action without assuming the more verisimilar theory is more likely to succeed."},
+        {"handle": "[SRC_024] against SRC_023", "kind": "rebutted", "note": "The cost is not just inertness but the collapse of the system's claim to rationality in practical affairs."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Calling the preference a 'methodological rule' does not exempt it from the requirement of logical consistency; the rule itself rests on an inductive assumption."}
+      ],
+      "optional_refs": ["SRC_001"]
+    },
+    {
+      "claim": "The preference is defensible as a 'methodological fiction' or procedural rule necessary for the game of science, akin to accepting the rules of chess. It is not a claim about truth or probability, but a constitutive rule of the scientific practice Popper describes.",
+      "mechanism": "Constitutive Rule Mechanism: Just as a chess player moves the knight in an L-shape not because it is 'true' but because it is the rule of the game, scientists prefer corroborated theories because it is the rule of science. This bypasses the need for inductive justification.",
+      "counterconditions": [
+        "If the 'game' of science aims at truth, making the rules instrumental rather than constitutive.",
+        "If agents cannot psychologically separate procedural rules from beliefs about efficacy.",
+        "If Popper explicitly rejected conventionalism in favor of realism."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_005", "kind": "departure_declared", "note": "Departing from the idea that action requires a truth-based justification; here action is justified by adherence to the methodological convention."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "The distinction is maintained: corroboration is a score in the game, and preference is the move dictated by the rules, not a claim about the physical world's behavior."},
+        {"handle": "[SRC_022] against SRC_021", "kind": "rebutted", "note": "The logical problem dissolves if the preference is viewed as a rule of conduct within a specific institutional framework, not a universal logical imperative."},
+        {"handle": "[SRC_007] against SRC_004", "kind": "rebutted", "note": "This interprets Popper's solution as a form of critical rationalism that accepts conventions for the sake of progress, avoiding the straw man of a 'Principle of Uniformity'."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "Critical preference is the name of the rule, not a disguised prediction. It predicts nothing; it prescribes a move."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "Verisimilitude is irrelevant here; the mechanism relies on convention, not truth-likeness."},
+        {"handle": "[SRC_024] against SRC_023", "kind": "rebutted", "note": "The preference is highly active; it drives the entire engine of scientific testing. The cost is abandoning the claim that science tracks truth in a strong realist sense."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Popper's argument for rationality is reinterpreted as the rationality of adhering to a system that maximizes error elimination, even if the steps are conventional."}
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "The preference is defensible through an evolutionary epistemology: theories survive tests not because they are probable, but because they are fit. Preferring them is analogous to an organism preferring behaviors that have led to survival, a biological imperative rather than a logical deduction.",
+      "mechanism": "Evolutionary Selection Mechanism: Corroboration is a signal of fitness in the environment of problems. Action on corroborated theories is an evolved heuristic. Induction is rejected as a logical foundation but accepted as a biological fact of how learning organisms operate.",
+      "counterconditions": [
+        "If Popper strictly separated logical validity from biological psychology.",
+        "If 'fitness' in problem-solving space does not correlate with truth or utility in the physical world.",
+        "If the evolutionary account itself relies on inductive assumptions about the stability of the environment."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_005", "kind": "rebutted", "note": "The defense explains action as a biological response to fitness signals, not a logical deduction about truth. Popper acted because he was an evolved organism."},
+        {"handle": "[SRC_019] against SRC_016", "kind": "rebutted", "note": "Informational content survived is a proxy for fitness. The preference is defensible as a survival strategy, distinct from a logical proof of future success."},
+        {"handle": "[SRC_022] against SRC_021", "kind": "rebutted", "note": "The core logical problem is sidestepped by shifting the domain from pure logic to evolutionary biology. The 'smuggling' is natural, not logical."},
+        {"handle": "[SRC_007] against SRC_004", "kind": "rebutted", "note": "This avoids the 'Principle of Uniformity' straw man by grounding the preference in the contingent fact of evolution, not a universal law."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "Critical preference is recast as an evolved cognitive disposition to trust what has worked, compatible with Popper's fallibilism."},
+        {"handle": "[SRC_006] against SRC_003", "kind": "rebutted", "note": "Verisimilitude is replaced by 'adaptive fit'. The collapse of formal verisimilitude does not affect the evolutionary argument."},
+        {"handle": "[SRC_024] against SRC_023", "kind": "rebutted", "note": "The preference is practically potent; it is the driver of human survival. The cost is accepting that our rationality is bounded by our biology."},
+        {"handle": "[SRC_018] against SRC_015", "kind": "rebutted", "note": "Popper's later works on evolutionary epistemology support this view, making it more than a 'fiction'."}
+      ],
+      "optional_refs": ["SRC_002"]
+    },
+    {
+      "claim": "The preference is indefensible, and the only consistent Popperian stance is radical skepticism leading to paralysis in action. Any attempt to justify action reintroduces induction, proving that Popper's system is internally coherent only as a theory of criticism, not a guide for living.",
+      "mechanism": "The Paralysis Thesis: Strict adherence to 'corroboration is not probability' leaves the agent with no rational basis to choose between unfalsified theories. The 'preference' is therefore an irrational leap, and the system demands we admit we cannot know what to do next.",
+      "counterconditions": [
+        "If Popper allows for non-rational (e.g., intuitive or pragmatic) bases for action.",
+        "If 'paralysis' is avoided by defaulting to the status quo without justification.",
+        "If the system is intended only for theory selection, not individual action."
+      ],
+      "typicality": 0.20,
+      "discharges": [
+        {"handle": "[SRC_020] against SRC_005", "kind": "rebutted

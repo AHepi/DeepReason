@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-probabilistic metric to justify preferring corroborated theories, but this fails Popper's own terms because Popper later conceded that verisimilitude cannot be formally defined for false theories without collapsing into probabilistic measures. Since all scientific theories are technically false (having been falsified or being falsifiable), the claim that one false theory is 'closer to truth' than another lacks the rigorous logical footing Popper demands, effectively smuggling in an inductive assumption that past survival indicates future proximity to truth.",
+      "premise": "Verisimilitude cannot be coherently defined for false theories without invoking probability, undermining its use as a strictly non-inductive decision rule.",
+      "premise_evidence": null,
+      "essential_premise_aliases": [],
+      "counterexample": null,
+      "successor_question": "If verisimilitude is logically undefinable for the very theories scientists must choose between, does Popper's system offer any rational basis for action other than arbitrary preference?"
+    }
+  ]
+}

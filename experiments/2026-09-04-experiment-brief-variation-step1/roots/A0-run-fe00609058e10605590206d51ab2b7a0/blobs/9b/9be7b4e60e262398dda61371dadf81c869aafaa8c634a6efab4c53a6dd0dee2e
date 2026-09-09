@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive, methodological decision to act on the theory that has withstood the most severe attempts at falsification, provided one accepts that 'rationality' in action refers to adherence to the aim of science (truth) rather than probabilistic calculation of success; however, this defense costs Popper the ability to guarantee that acting on the best-corroborated theory is more likely to succeed in novel domains than acting on a refuted one, leaving the preference as a rational gamble rather than a logically secured bet.",
+    "mechanism": "The argument proceeds by distinguishing between the logical status of a theory (which remains unproven) and the methodological rule for action (which selects the theory that currently best satisfies the aim of science). It posits that preferring the better-corroborated theory is not an inference that the theory is true or probable (induction), but a volitional commitment to the strategy that has historically eliminated error most effectively. The mechanism relies on the concept of 'verisimilitude' (truth-likeness) as a regulative ideal: while we cannot measure it, we rationally assume the theory that survives severe tests is closer to the truth than one that has failed, without assigning a probability to this assumption. This avoids smuggling in induction by treating the preference as a definition of rational action within the critical framework, not as a prediction derived from past uniformity.",
+    "counterconditions": [
+      "If the critic demonstrates that any appeal to 'past survival' as a guide for 'future action' necessarily entails a uniformity-of-nature premise that Popper explicitly rejects.",
+      "If the Tichý-Miller refutation of verisimilitude proves that no coherent non-probabilistic ordering of theories by truth-likeness is possible, rendering the 'closer to truth' justification incoherent.",
+      "If the distinction between 'psychological expectation' and 'logical justification' collapses when the agent must bet resources on a specific outcome in a novel domain."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "054b0be42a0f294a278ecc2f3bb908b08548ecd423ab8959945d546f654effc4",
+        "kind": "rebutted",
+        "note": "The candidate addresses action in novel domains by framing the preference not as a prediction of success based on elimination, but as a methodological alignment with the aim of truth. The rebuttal argues that in novel domains, the only rational guide is the theory that has survived the most severe tests of similar structures, not because it guarantees success, but because it is the only one not yet known to be false. This shifts the justification from 'elimination explains rejection' to 'survival guides tentative adoption' without claiming predictive certainty."
+      },
+      {
+        "handle": "0f2d223791988848c0549edf4b4fedd1cb242ed207716269870c206152b34c65",
+        "kind": "revised",
+        "note": "Revised to explicitly separate 'psychological expectation' (which Popper admits exists) from 'logical justification' (the core of the problem). The candidate now clarifies that the defense rests on the logical consistency of the methodological rule: it is logically consistent to prefer the unfalsified over the falsified as a rule of conduct, even if one has no logical ground to expect the unfalsified to work. The revision adds that Popper's 'own terms' include the acceptance of fallibilism, where acting without certainty is the default state."
+      },
+      {
+        "handle": "104ee875a009827a28be95ce21d49a3c1e226a775c6efe682899056131f1b5eb",
+        "kind": "rebutted",
+        "note": "The candidate rebuts the claim that verisimilitude smuggles in induction by arguing that Popper's use of verisimilitude is purely qualitative and comparative, not quantitative. One does not need to know the probability of a theory being true to judge that Theory A (which entails all successes of Theory B plus new successful predictions) is closer to the truth than Theory B. This comparison relies on logical content and falsification status, not probabilistic assumptions about the world's uniformity."
+      },
+      {
+        "handle": "19e51f2e850e539311abfc15339a4a85810f661afb90cecde090819ae03ec8c17",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate acknowledges the Tichý-Miller refutation of Popper's *formal* definition of verisimilitude but departs from the criticism's implication that this destroys the *intuitive* or *methodological* utility of the concept. The candidate adopts a revised notion of verisimilitude as a heuristic guide rather than a formally definable metric, arguing that Popper's broader philosophical project can survive the loss of the specific formalization if the intuitive drive toward truth-likeness remains intact as a regulative ideal."
+      },
+      {
+        "handle": "1da20c8528cb96efcdb315de18ed584bfed95d4e74109bbbde9522acbff3d465",
+        "kind": "revised",
+        "note": "Revised to clarify that the preference is 'rational' in the sense of being consistent with the aim of science (finding truth), correcting the misrepresentation that it is merely a 'non-rational volitional act.' The candidate now explicitly states that for Popper, rationality is defined by critical scrutiny and alignment with truth-seeking goals, not by the possession of positive justification or probability. Thus, the preference is rational because it is the only stance compatible with the critical attitude."
+      },
+      {
+        "handle": "24454c5b7256e011ce1a0352e18115f68a9d150f63624b0036e926f54986d50c",
+        "kind": "rebutted",
+        "note": "The candidate rebuts the evolutionary analogy criticism by clarifying that the analogy is not meant to justify the *preference* itself but to explain the *selection mechanism* of theories. The justification for preference comes from the logical asymmetry of falsification: we prefer the surviving theory not because evolution made it fit, but because it is the only one left standing after rigorous testing. The evolutionary parallel illustrates how error elimination works, but the normative force comes from the logical imperative to avoid known falsehoods."
+      },
+      {
+        "handle": "326650783200c6bbf0c79378d04503d4194823e916806e87e284dd62e0c113f5",
+        "kind": "rebutted",
+        "note": "The candidate rebuts the conflation charge by strictly maintaining the distinction between assuming nature is uniform (an inductive metaphysical claim Popper rejects) and assuming test conditions are stable for the purpose of falsification (a methodological necessity). The preference for corroborated theories relies on the latter: we assume the test situation was severe and the result valid, but we do not assume the future will resemble the past in a way that makes the theory probable. We only assume that until falsified, the theory stands as our best guess."
+      },
+      {
+        "handle": "3c53ccc6097abc1e8dc882b486987fbf9904e44fc375759cbd2aa401e1e8ce37",
+        "kind": "revised",
+        "note": "Revised to explicitly construct the strongest case for the opposing view: that the preference *does* smuggle in induction. The candidate now argues that any agent who prefers Theory A over Theory B for practical action is implicitly betting that the future will resemble the past (i.e., that the factors which allowed A to survive will continue to operate), which is the very principle of induction Popper sought to eliminate. The candidate then weighs this against the Popperian defense, concluding that while the inductive charge is strong, the Popperian response survives by redefining 'rational action' as 'acting on the least-error-prone option available' rather than 'acting on the most-likely-to-succeed option'."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

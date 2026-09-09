@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on 'verisimilitude' (truth-likeness) as a non-probabilistic basis for preference, but this concept fails to solve the problem because Popper's own formal definition of verisimilitude was proven logically untenable (by Tichý and Miller in 1974) without invoking probabilistic measures. Consequently, the claim that scientists can rationally prefer better-corroborated theories based on verisimilitude 'on Popper's own terms' collapses: either one accepts the refuted definition (which yields counter-intuitive results where a false theory can be closer to truth than another regardless of testing), or one must smuggle in probabilistic assumptions to define 'closeness to truth,' thereby violating the core constraint of avoiding induction.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper's formal account of verisimilitude is logically incoherent without probabilistic assumptions, as demonstrated by the Tichý-Miller refutation.",
+      "premise_evidence": null,
+      "successor_question": "If verisimilitude cannot be defined non-probabilistically, does Popper's system leave working scientists with no rational basis for theory preference other than the inductive inference he explicitly rejected?"
+    }
+  ]
+}

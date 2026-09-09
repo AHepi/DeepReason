@@ -1,0 +1,77 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference to truth or probability, but as a non-inductive methodological rule grounded in the logic of situational analysis: acting on the best-tested theory is the only rational strategy for error elimination, even if it offers no guarantee of future success. This survives the charge of smuggling induction only by accepting the cost that 'rationality' here means 'consistency with the goal of error elimination' rather than 'justified expectation of predictive accuracy'.",
+    "mechanism": "The argument reconstructs Popper's preference as a decision-theoretic move within a critical rationalist framework: since all theories are equally unproven (probability zero), the choice cannot be epistemic (about likelihood) but must be strategic (about maximizing the chance of detecting error). The 'strongest case' for induction-smuggling highlights that 'severity' implicitly assumes nature's uniformity; the 'strongest case' for defense argues that this assumption is not a premise but a necessary condition for the game of science to proceed, akin to accepting the rules of chess. The surviving view is the defensive one, but it costs Popper the ability to claim science gets us closer to truth in a probabilistic sense, restricting him to a procedural notion of progress.",
+    "counterconditions": [
+      "If 'severity' cannot be defined without assuming the uniformity of nature, then the preference is inductive.",
+      "If the agent acts expecting the theory to hold tomorrow, they are making an inductive leap regardless of verbal disclaimers.",
+      "If the 'methodological rule' is arbitrary, it fails to distinguish science from pseudo-science better than conventionalism."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate evolutionary origin with justification; it explicitly frames the preference as a normative methodological rule derived from the logic of error elimination, not a descriptive account of psychological habit."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "revised",
+        "note": "Revised to clarify that the defense is not based on 'arbitrary decree' alone but on the specific structural requirement of the critical method: choosing the most vulnerable (best-tested) target maximizes the rate of potential error detection."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The move from 'others falsified' to 'choose this one' does not assume uniformity; it assumes only that if a theory has survived tests where others failed, it is the current best candidate for criticism. No prediction of future resemblance is made, only a statement of current logical status."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "revised",
+        "note": "Clarified that 'severity' is defined by the logical improbability of the test outcome given background knowledge, not by an empirical assumption of reliability. The rebuttal now explicitly separates the definition of severity from the pragmatic hope of success."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "rebutted",
+        "note": "The rule is not arbitrary in Poincaré's sense (convenience); it is constitutive of the critical attitude. Arbitrariness implies any rule works; here, only the rule 'prefer the best-tested' serves the specific aim of rapid error elimination."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "revised",
+        "note": "Explicitly distinguished 'methodological convention' (the rule we adopt to play the game) from 'pragmatic reliability' (the belief that the game yields truth). The defense rests solely on the former."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e871c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "rebutted",
+        "note": "The argument does not rely on verisimilitude as a measurable quantity or formal basis. It relies on the comparative logical status of theories regarding their exposure to falsification, which remains valid even if verisimilitude is undefined."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f0068bbde5f67",
+        "kind": "revised",
+        "note": "Expanded the 'strongest case' for the induction-smuggling position to fully articulate the charge that 'severity' presupposes uniformity, ensuring the conflict is resolved by showing why the non-inductive interpretation of severity is logically prior."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["chess_strategy_heuristic"],
+      "shared_structure": [
+        "Preference for a move is based on past survival against strong opposition, not probability of winning.",
+        "Choosing the most tested option maximizes the chance of finding a flaw if one exists.",
+        "No assumption that the opponent will play the same way next time is required to make the move rational."
+      ],
+      "disanalogies": [
+        "Chess has a defined end-state (checkmate); science has no final truth.",
+        "Chess rules are fixed; scientific methodological rules are open to revision."
+      ],
+      "transfer_claims": [
+        "Rationality in both domains is procedural (following the best strategy for the goal) rather than predictive (knowing the outcome)."
+      ],
+      "overturn_conditions": [
+        "If chess players actually choose moves based on statistical win-rates rather than tactical soundness, the analogy fails.",
+        "If 'survival' in science is shown to correlate with falsehood more often than truth, the strategic value collapses."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

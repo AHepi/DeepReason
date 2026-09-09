@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive 'critical preference' grounded in the logic of situational analysis, but accepting this defense costs the scientist any claim to probable truth or predictive reliability, reducing rational action to a methodological wager on the theory with the highest surviving informational content.",
+    "mechanism": "The mechanism distinguishes between 'inductive inference' (claiming future success based on past success) and 'critical preference' (choosing the theory that has withstood the most severe tests as the best current candidate for criticism). Preference is not a belief in higher probability but a decision rule derived from the aim of science: to find true theories. Since we cannot know which theory is true, we rationally act on the one that has survived the most rigorous attempts at falsification, as it offers the most specific guidance (highest empirical content) without asserting it will remain unfalsified.",
+    "counterconditions": [
+      "If corroboration is shown to implicitly rely on an assumption of the uniformity of nature (that the future will resemble the past), the preference becomes inductive.",
+      "If acting on a theory necessarily entails believing it is more likely to succeed than untested alternatives, the distinction between preference and probability collapses.",
+      "If Popper's concept of verisimilitude (truth-likeness) is logically incoherent or impossible to assess, the basis for preferring one unfalsified theory over another vanishes."
+    ],
+    "typicality": 0.85,
+    "discharges": [
+      {
+        "handle": "0247998b9f0426956c8d0ef420daae0ecb43121c370bf31bd5ca9328a00d058d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on 'verisimilitude' as a measurable quantity. Instead, it grounds preference in 'empirical content' and 'survival of severe tests,' sidestepping the formal impossibility of defining verisimilitude while retaining the functional role of choosing the boldest surviving theory."
+      },
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The candidate addresses the 'acting' requirement by reframing action not as betting on success, but as selecting the most informative target for potential error. We act on Theory A because if it is false, we learn more quickly than if we acted on a vaguer theory; the justification is epistemic efficiency, not predictive confidence."
+      },
+      {
+        "handle": "1bd83288bc9ab8f9b04811f4e67bb8ca9d49c4f09aa66f010b8a229bd75d6fc3",
+        "kind": "revised",
+        "note": "Revised the characterization of preference from a 'pragmatic fiction' to a 'rational decision rule based on critical discussion.' This aligns with Popper's view that the choice is objective within the context of the problem situation, not merely a social convention."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The candidate maintains the distinction between 'informational content survived' and 'defensible preference' by arguing that the latter is a direct consequence of the former: the theory with higher content that survives is the only rational choice for further testing and application, precisely because it risks more."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dichotomy by introducing a third category: 'methodological commitment.' One can reject induction (past guarantees future) while still committing to the theory that has best resisted falsification as the current best instrument for inquiry, without assigning it a probability value."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The candidate clarifies that it does not accuse Popper of using a 'Principle of Uniformity.' Instead, it argues that Popper's solution relies on a 'Principle of Criticism': always test the boldiest claim. The preference is for the theory that allows the most severe criticism, not the one assumed to be uniform with the past."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "rebutted",
+        "note": "The candidate agrees that 'Action implies prediction' but distinguishes the *basis* of that prediction. Inductive prediction assumes reliability; Popperian critical preference accepts fallibility but chooses the theory that has proven most resilient to attempts to break it, making the prediction a tentative conjecture rather than an inductive certainty."
+      },
+      {
+        "handle": "270fdeb19c12b45908843bde3f158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "departure_declared",
+        "note": "Departing from interpretations that require a successful definition of verisimilitude to save Popper. This candidate argues that 'corroboration' functions adequately as a report of past test performance without needing to map to a degree of truth-likeness."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["medical_triage_protocol"],
+      "shared_structure": [
+        "Selection under uncertainty without probability estimates",
+        "Preference based on survival of severe stress tests",
+        "Goal-oriented decision making (saving lives / finding truth) rather than truth-tracking"
+      ],
+      "disanalogies": [
+        "Medical triage often uses statistical probabilities of survival, whereas Popper explicitly forbids this for theories",
+        "Triage categories are static, while scientific theories evolve through modification"
+      ],
+      "transfer_claims": [
+        "Just as a medic chooses the patient most likely to survive *given immediate intervention* based on current signs (not past statistics), a scientist chooses the theory most robust to current criticism",
+        "The rationality of the choice lies in the procedure (triage protocol/critical discussion), not in the guaranteed outcome"
+      ],
+      "overturn_conditions": [
+        "If medical triage is shown to be fundamentally inductive in a way that cannot be stripped away, the analogy fails to support non-inductive preference",
+        "If the goal of science is redefined as 'instrumental control' rather than 'truth', the triage analogy becomes less relevant than an engineering safety factor analogy"
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

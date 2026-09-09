@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for the better-corroborated theory is defensible on his own terms as a 'critical preference' grounded in the logic of testing rather than inductive probability; it costs us the assurance that this preference tracks truth-likeness (verisimilitude) or future success, reducing the rationale to a procedural commitment to the most severely tested error-elimination path available.",
+    "mechanism": "The mechanism distinguishes between 'inductive support' (which Popper rejects as logically invalid) and 'corroboration' (a report on past test severity). The preference for action is not a prediction that the theory is true or probable, but a methodological rule: since we cannot know the future, we must act on the theory that has withstood the most rigorous attempts at falsification, as this represents the current state of critical discussion. This avoids smuggling in induction by refusing to assign any weight to the *future* reliability of the method based on its *past* success; instead, it treats the choice as the only rational move in a game of error elimination where untested theories are known to be inferior candidates for truth.",
+    "counterconditions": [
+      "If the preference implicitly assumes the 'Principle of Uniformity' (that nature is uniform enough that past survival predicts future survival), then it smuggles in induction.",
+      "If the preference relies on 'verisimilitude' (truth-likeness) as a measurable quantity to justify action, it fails because Popper later showed verisimilitude cannot be formally defined for false theories.",
+      "If the scientist acts with an expectation of success higher than chance based solely on corroboration, they have reverted to probabilistic induction."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism claims the defense fails to explain why one should act. The rebuttal is that Popper's 'why' is not predictive but comparative: we act on Theory A not because we expect it to succeed, but because Theory B (less corroborated) has already failed tests that A survived, making B a worse candidate for action in a critical framework. The justification is the elimination of known errors, not the anticipation of truth."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The criticism conflates informational content with defensible preference. The rebuttal clarifies that 'defensible preference' in Popper's system is precisely defined as choosing the theory with higher informational content that has survived severe tests. The 'dilemma' is not false; the solution is that the preference is rational *because* of the severity of the tests, not because of an inductive leap from survival to future utility."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'psychological vs. conventional' gap. The claim now emphasizes that the preference is a 'conventional' rule of the scientific game, not a psychological belief in future success. By framing it as a rule of procedure (act on the best-tested), we avoid the logical problem of induction entirely, as no claim about the future is made, only a statement about current critical status."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The criticism alleges a straw man regarding the 'Principle of Uniformity.' The rebuttal asserts that the candidate does not attribute this principle to Popper; rather, it argues that Popper's solution *avoids* needing this principle by decoupling action from prediction. The preference is a decision rule, not an inductive inference, so the charge of misrepresentation is unfounded."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "rebutted",
+        "note": "The criticism claims conflation of 'critical preference' with 'inductive prediction.' The rebuttal maintains the distinction: 'critical preference' is a judgment on the *past* logical relation between theory and evidence (survival of severe tests), whereas 'inductive prediction' asserts a *future* probability. Popper's agent acts on the former without assuming the latter."
+      },
+      {
+        "handle": "270fdeb19c2b45908843bde3f158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "departure_declared",
+        "note": "Departure declared: This candidate accepts the cost that 'verisimilitude' cannot serve as the ultimate justification, as per Popper's own later admissions. Instead of relying on verisimilitude as a positive metric, the candidate grounds the preference strictly in the negative logic of falsification (i.e., the other options are known to be worse)."
+      },
+      {
+        "handle": "2b2b9f8685410277445fc083713971a8c5bf992ab5fbf0a1093b143dcfb45882",
+        "kind": "rebutted",
+        "note": "The criticism argues the defense reduces preference to a 'fiction.' The rebuttal contends that a 'methodological rule' is not a fiction but a normative standard for rational action in the absence of certainty. It is rational to prefer the best-tested map even if one admits the map might still be wrong; this is not a fictional belief in the map's accuracy, but a practical stance."
+      },
+      {
+        "handle": "4685bd2f65b86b20f04d65067f8fc4526a28a4375555eb78127f0f9de465ad93",
+        "kind": "revised",
+        "note": "Revised to clarify the definition of 'preference.' The text now explicitly states that 'choosing which theory to act on' in Popper's view means selecting the one that offers the most informative potential for falsification if wrong, and the highest survival score if right, without equating this choice to an 'expectation of truth.' The cost is accepting that the choice might still lead to failure, but it is the *most rational* choice available."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

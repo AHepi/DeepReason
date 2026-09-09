@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that Popper's position is sustainable via 'propensity' fails because it misidentifies the core problem: the preference for better-corroborated theories in action. Even if corroboration measures an objective propensity to survive tests, this does not logically entail a higher propensity to be true or yield successful future predictions without assuming the uniformity of nature (induction). Popper explicitly rejected the idea that surviving tests makes a theory more probable or likely to be true; introducing 'propensity' as a bridge to justify practical preference smuggles in the very inductive assumption (that past test performance predicts future success/truth) that the prompt asks if can be avoided. The mechanism describes preferring the theory with higher propensity to be true, which contradicts Popper's strict separation of corroboration from probability/truth likelihood.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": null
+    }
+  ]
+}

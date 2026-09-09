@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that preferring high-content surviving theories is a 'rational risk-management strategy' contradicts Popper's explicit rejection of pragmatic justification for theory choice. Popper argues that we prefer better-corroborated theories not because they are 'safer' or offer better 'risk management' (which implies a probability of success in future application), but solely because they have withstood the most severe tests so far. By reframing the preference as 'risk-management,' the target smuggles in an inductive expectation that past survival predicts future reliability or safety, which is precisely the inductive principle Popper sought to eliminate. The target fails to explain how one can rationally manage 'risk' without assigning some degree of likelihood to future outcomes, thereby failing to answer the prompt's challenge on Popper's own terms.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Popper explicitly rejects pragmatic or instrumentalist justifications for theory preference that rely on the assumption that what worked in the past will work in the future.",
+      "premise_evidence": null,
+      "successor_question": "If corroboration offers no guide to future reliability or safety, in what specific sense can preferring it be called a 'risk-management strategy' rather than merely a record of past performance?"
+    }
+  ]
+}

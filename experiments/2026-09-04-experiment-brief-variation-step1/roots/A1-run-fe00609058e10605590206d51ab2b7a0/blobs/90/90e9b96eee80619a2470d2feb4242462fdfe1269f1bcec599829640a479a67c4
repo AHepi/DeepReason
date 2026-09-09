@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a distinction between 'logical probability' and 'practical preference' that fails to address the core pragmatic contradiction: if acting on the better-corroborated theory is rational because it has survived severe tests, this action implicitly assumes that past survival is a reliable guide for future success. Popper explicitly rejected any principle (like the uniformity of nature) that would justify this assumption without induction. By admitting the preference offers the 'best available basis for action,' the target concedes a predictive utility to corroboration that Popper's strict logic cannot support without smuggling in an inductive premise—that what worked before will work again. The 'cost' admitted (no guarantee) is insufficient; the fault is that the *reason* for the preference itself becomes inductive if it claims rationality beyond mere convention or guesswork.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "Popper rejected any inference from past success to future reliability as inductive, yet rational action requires such an inference to be more than a blind guess.",
+      "premise_evidence": null,
+      "successor_question": "Can a critical preference be considered rational on Popperian terms if it lacks a non-inductive justification for why past test survival should influence future action?"
+    }
+  ]
+}

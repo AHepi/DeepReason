@@ -1,0 +1,94 @@
+{
+  "candidates": [
+    {
+      "content": "Relation Kind: Abstraction. The isolated context (03f8b3f2f004) is an abstraction of the procedural conventions found in SRC_001, SRC_002, and SRC_004, stripping away the specific Popperian 'decision postulate' to reveal a generic structure of 'normative closure without ontological commitment.' REFUTED IF: The isolated context retains any specific dependency on the uniformity of nature or requires a truth-link that the source conventions explicitly deny, thereby failing to be a pure abstraction and instead becoming a contradictory hybrid.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_001", "SRC_002", "SRC_004"],
+      "discharges": [
+        {"handle": "SRC_009", "kind": "rebutted", "note": "The candidate explicitly defines the relation kind as 'Abstraction' and details the endpoints (isolated context vs. procedural conventions), satisfying the substantive relation requirement."},
+        {"handle": "SRC_008", "kind": "rebutted", "note": "The content includes 'REFUTED IF' and names the kind 'Abstraction', fulfilling the relation-form@578e42df713e criteria."},
+        {"handle": "SRC_020", "kind": "revised", "note": "Unlike previous attempts at monism, this candidate avoids defining an 'identity of reference' between decision and selection, instead positing a structural abstraction that does not require such binding."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "The refutation condition targets the retention of truth-links, not the failure of a descriptive mechanism, avoiding the category error of conflating mechanism failure with non-existence."},
+        {"handle": "SRC_015", "kind": "revised", "note": "The 'REFUTED IF' clause here tests for the presence of forbidden dependencies (truth-links) rather than admitting the failure of the mechanism itself; if the link exists, the abstraction fails, which is consistent."},
+        {"handle": "SRC_014", "kind": "rebutted", "note": "'Abstraction' is explicitly named as the relation kind, and the mechanism is defined as 'stripping away specific postulates to reveal normative closure,' meeting the definition requirements."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "The candidate strictly adheres to the required format: naming a kind ('Abstraction') and providing a 'REFUTED IF' summary."},
+        {"handle": "SRC_013", "kind": "revised", "note": "The refutation condition is framed around the structural integrity of the abstraction (retaining truth-links) rather than claiming logical entailment of induction, sidestepping the Popperian contradiction regarding corroboration."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Contradiction. The isolated context (03f8b3f2f004) stands in direct contradiction to the evolutionary selection mechanism proposed in SRC_003. While SRC_003 grounds preference in survival traits and meta-methodological success, the isolated context asserts a static, axiomatic convention devoid of evolutionary feedback. REFUTED IF: The isolated context can be shown to implicitly rely on the stability of the environment or the correlation between survival and truth-likeness, which would make it compatible with, rather than contradictory to, the evolutionary view.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_003"],
+      "discharges": [
+        {"handle": "SRC_009", "kind": "rebutted", "note": "The relation 'Contradiction' is explicitly named and the opposing endpoints (static convention vs. evolutionary feedback) are clearly defined."},
+        {"handle": "SRC_008", "kind": "rebutted", "note": "Contains 'REFUTED IF' and the keyword 'contradiction', passing the form check."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "No attempt is made to bind first-person decision to third-person selection via identity; instead, their incompatibility is the core claim."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "The refutation condition focuses on hidden compatibilities (environmental stability) rather than confusing mechanism failure with non-existence."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "The candidate does not claim integration or shared mechanism; it claims contradiction, so the criticism regarding the failure of an integrative bridge is inapplicable."},
+        {"handle": "SRC_014", "kind": "rebutted", "note": "'Contradiction' is a valid relation kind listed in the problem statement, and the specific nature of the conflict (static vs. dynamic) is defined."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Format compliance confirmed: Kind named, Refuted If stated."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "The argument does not hinge on whether preference 'logically entails' induction, but on whether the context secretly accepts evolutionary premises, avoiding the specific logical trap cited."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Shared Mechanism (Negative Instantiation). The isolated context (03f8b3f2f004) and the decision postulates in SRC_005 share the mechanism of 'voluntary commitment to a rule of procedure,' but the isolated context instantiates this mechanism negatively by refusing to name the rule, whereas SRC_005 names it as 'acting as if the best-tested theory is reliable.' REFUTED IF: The isolated context contains any positive assertion of a specific rule or outcome, which would transform it from a negative instantiation into a standard positive claim, breaking the proposed relational symmetry.",
+      "typicality": 0.30,
+      "neighbours": ["SRC_005"],
+      "discharges": [
+        {"handle": "SRC_009", "kind": "rebutted", "note": "Proposes 'Shared Mechanism' with a specific twist (negative instantiation), clearly defining the relation between the unnamed isolated context and the named source."},
+        {"handle": "SRC_008", "kind": "rebutted", "note": "Includes 'shared mechanism' and 'REFUTED IF' in the text."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "Does not attempt to define an identity of reference between decision and selection; it focuses on the presence/absence of a specific rule name within a shared mechanism."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "The refutation condition tests for the presence of positive assertions, avoiding the category error of evaluating the mechanism's descriptive power."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "The relation is 'Shared Mechanism,' not 'Integration.' The refutation condition protects the 'negative' status of the instantiation, which is consistent with the claim."},
+        {"handle": "SRC_014", "kind": "rebutted", "note": "Explicitly names 'Shared Mechanism' and defines the specific variation (naming the rule vs. refusing to name it)."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Adheres to the required syntax and semantic constraints."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Avoids the issue of logical entailment of induction by focusing on the structural difference in how the rule is presented (named vs. unnamed)."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Reduction (Failed). The isolated context (03f8b3f2f004) attempts to reduce the complex social agreement described in SRC_004 to a solitary cognitive act, but this reduction fails because the 'convention' in SRC_004 is inherently intersubjective. REFUTED IF: The isolated context can be demonstrated to include intersubjective validation steps or references to a community, which would validate the reduction attempt and turn it into a successful 'Reduction' rather than a 'Failed Reduction' relation.",
+      "typicality": 0.60,
+      "neighbours": ["SRC_004"],
+      "discharges": [
+        {"handle": "SRC_009", "kind": "rebutted", "note": "Names 'Reduction (Failed)' as the relation and specifies the endpoints (solitary act vs. social agreement)."},
+        {"handle": "SRC_008", "kind": "rebutted", "note": "Contains 'reduction' and 'REFUTED IF'."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "Does not posit an identity between decision and selection; it analyzes the scope of the 'convention' (individual vs. social)."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "The refutation condition checks for intersubjective elements, avoiding the confusion between mechanism failure and non-existence."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "The claim is about the failure of a reduction, not the success of an integration; the refutation condition is tailored to this specific failure mode."},
+        {"handle": "SRC_014", "kind": "rebutted", "note": "'Reduction' is a valid kind, and the specific nature of the failure (lack of intersubjectivity) is defined."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Format compliant."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Sidesteps the induction/logic dilemma by focusing on the sociological dimension of the convention."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Inheritance (Distorted). The isolated context (03f8b3f2f004) inherits the 'anti-inductivist' stance from SRC_002 but distorts the 'cost' associated with it; while SRC_002 accepts relativism as the cost, the isolated context treats this cost as a feature (a liberation from truth-tracking). REFUTED IF: The isolated context explicitly acknowledges relativism as a negative consequence or a problem to be solved, which would align it with SRC_002's original framing and negate the 'distortion' aspect of the inheritance relation.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_002"],
+      "discharges": [
+        {"handle": "SRC_009", "kind": "rebutted", "note": "Defines 'Inheritance (Distorted)' and contrasts the treatment of 'cost' between the two endpoints."},
+        {"handle": "SRC_008", "kind": "rebutted", "note": "Includes 'inherits' and 'REFUTED IF'."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "Focuses on the valuation of 'relativism' rather than binding decision to selection."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Refutation condition tests the attitude toward relativism, avoiding category errors regarding mechanism existence."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Relation is 'Inheritance,' not 'Integration.' The refutation condition addresses the consistency of the inherited trait's valuation."},
+        {"handle": "SRC_014", "kind": "rebutted", "note": "'Inheritance' is named, and the distortion (feature vs. bug) is specified."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Syntax and semantics match requirements."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Addresses the interpretation of the 'cost' of anti-inductivism rather than the logical entailment of preference."}
+      ]
+    },
+    {
+      "content": "Relation Kind: Compatibility (Conditional on Ignorance). The isolated context (03f8b3f2f004) is compatible with the evolutionary epistemology of SRC_003 only under the condition that the agents involved are ignorant of the evolutionary mechanism itself. REFUTED IF: The isolated context assumes or requires that agents possess knowledge of the evolutionary selection process driving their methodology, which would create a reflexive loop incompatible with the simple 'survival trait' model of SRC_003.",
+      "typicality": 0.20,
+      "neighbours": ["SRC_003"],
+      "discharges": [
+        {"handle": "SRC_009", "kind": "rebutted", "note": "Proposes 'Compatibility (Conditional on Ignorance)' and defines the specific condition linking the endpoints."},
+        {"handle": "SRC_008", "kind": "rebutted", "note": "Contains 'compatible with' and 'REFUTED IF'."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "Does not define an identity of reference; it sets an epistemic boundary condition for compatibility."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Refutation condition tests for agent knowledge, avoiding the mechanism existence/conflation error."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Relation is 'Compatibility,' not 'Integration.' The refutation condition specifies the breakdown of compatibility due to reflexivity."},
+        {"handle": "SRC_014", "kind": "rebutted", "note": "'Compatibility' is named, and the specific condition (ignorance) is defined."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Compliant with all formatting rules."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Shifts the debate from logical entailment to epistemic conditions of the agents, bypassing the cited criticism."}
+      ]
+    }
+  ]
+}

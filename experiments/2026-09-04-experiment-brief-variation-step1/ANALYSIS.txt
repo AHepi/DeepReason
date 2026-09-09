@@ -1,0 +1,52 @@
+ARM_COMPARISON_V1
+  candidates scored: 248   arms: A0, A1, A1P, A2, A3, B0
+
+PER ARM
+  A0    n= 46  mean= 5.35  median= 5.50  best= 14.0  chars=  357.0
+  A1    n= 48  mean= 4.88  median= 5.00  best= 13.0  chars=  346.8
+  A1P   n= 48  mean= 6.73  median= 7.00  best= 14.0  chars=  358.4
+  A2    n= 47  mean= 6.26  median= 6.00  best= 14.0  chars=  381.0
+  A3    n= 47  mean= 6.68  median= 6.00  best= 14.0  chars=  350.0
+  B0    n= 12  mean=14.75  median=15.00  best= 15.0  chars= 7775.5
+
+DOES THE PANEL PAY FOR LENGTH? (pooled, all arms)
+  Spearman rho(chars, total) = +0.825
+  total ~ -17.01 +3.92*log(chars)   R^2 = 0.485
+
+======================================================================
+NOISE FLOOR — arms whose briefs are byte-identical (PREREG §3.3)
+======================================================================
+  A1P vs A0: adjusted +1.312 (p=0.012)  raw +1.381
+  A2 vs A0: adjusted +0.193 (p=0.724)  raw +0.907
+  A2 vs A1P: adjusted -1.212 (p=0.033)  raw -0.474
+
+  d_noise = 1.312 of 15  — no gap below this is called real
+
+======================================================================
+EVERY ARM AGAINST B0 (the no-harness floor) — PREREG §1, §4
+======================================================================
+  length quintile means:
+    q4: B0 n= 1 14.00 | A0 n=11  8.45 | -5.55
+
+A0 vs B0  (n 46 vs 12)
+  mean judged     : 14.75 ->  5.35 of 15   best 15.0 -> 14.0
+  candidate length: 7775.5 -> 357.0 chars (-95.4%)  p=0.0000
+  raw gap         : -9.402 of 15   [NEVER the verdict]
+  length-adjusted : +14.536 of 15  p=0.0000  (model R^2 0.821)   <- THE VERDICT FIGURE
+  quintile-held   : -5.545 of 15
+  VERDICT vs B0   : BETTER than the single call
+  length quintile means:
+Traceback (most recent call last):
+  File "/home/user/DeepReason/experiments/2026-09-04-experiment-brief-variation-step1/analyse_arms.py", line 278, in <module>
+    raise SystemExit(main(sys.argv))
+                     ^^^^^^^^^^^^^^
+  File "/home/user/DeepReason/experiments/2026-09-04-experiment-brief-variation-step1/analyse_arms.py", line 229, in main
+    result = compare(lb, data, "B0", arm)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/DeepReason/experiments/2026-09-04-experiment-brief-variation-step1/analyse_arms.py", line 106, in compare
+    quint = lb.stratified(pair, control, treat)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/DeepReason/experiments/2026-09-03-change-provenance-history-channel/analyse_length_bias.py", line 136, in stratified
+    return num / den
+           ~~~~^~~~~
+ZeroDivisionError: float division by zero

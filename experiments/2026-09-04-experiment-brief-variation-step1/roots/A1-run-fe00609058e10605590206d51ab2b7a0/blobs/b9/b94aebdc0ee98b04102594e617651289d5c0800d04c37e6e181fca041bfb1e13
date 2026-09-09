@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target proposes a 'shared mechanism' of voluntarism but fails to substantively define the relation's endpoints or how the mechanism operates across them. Instead of detailing the dependence or integration between SRC_005/SRC_004 and SRC_003, it merely asserts they 'share a mechanism' and immediately pivots to a conditional refutation scenario. This violates the problem context requirement to 'propose a SUBSTANTIVE relation... naming its kind and stating what it is,' as the statement functions as a hypothesis summary rather than a defined relational structure with clear operational logic.",
+      "premise": "A substantive relation requires defining the specific nature of the connection (e.g., how the mechanism is shared) rather than just naming the category and listing conditions for failure.",
+      "premise_evidence": [
+        {
+          "block": "03f8b3f2f004",
+          "quote": "propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is"
+        }
+      ],
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "counterexample": null,
+      "successor_question": "Can you explicitly define the operational steps by which the 'voluntarism' mechanism in SRC_005/004 interacts with the determinism in SRC_003, rather than just stating they share it?"
+    }
+  ]
+}

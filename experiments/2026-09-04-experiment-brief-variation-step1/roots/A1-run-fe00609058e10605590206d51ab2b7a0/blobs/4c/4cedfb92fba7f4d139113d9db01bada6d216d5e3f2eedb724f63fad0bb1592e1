@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future truth, but as a non-inductive, methodological rule of 'critical rationality' that maximizes the potential for error detection; accepting this costs us the comfort of believing our actions are probabilistically safe, forcing us to acknowledge that acting on the best-tested theory is a responsible gamble where failure remains logically possible and indeed desired for progress.",
+    "mechanism": "The mechanism distinguishes between 'justification of belief' (which Popper rejects) and 'justification of action' (which he accepts via critical preference). It posits that choosing the most severely tested theory is rational because it has withstood the strongest attempts at falsification, thereby offering the most informative basis for action. If it fails, we learn more than if a weakly tested theory fails. This preference does not assume the future will resemble the past (induction) but rather adopts a rule: 'Act on the hypothesis that has survived the most stringent criticism so far,' which is a deductive consequence of the goal to eliminate error, not a prediction of success.",
+    "counterconditions": [
+      "If corroboration is shown to implicitly rely on the uniformity of nature assumption.",
+      "If Popper's distinction between acting and believing collapses under pragmatic pressure (e.g., building a bridge requires belief in safety, not just error detection).",
+      "If the 'gamble' analogy fails to explain why scientists feel justified in expecting success rather than just hoping for informative failure."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c2e7fb4565bd9187b08c0dc61da3d7dad7012d57573d88da39bcff387e9669e",
+        "kind": "rebutted",
+        "note": "The candidate explicitly avoids relying on 'verisimilitude' or truth-likeness as a metric. Instead, it grounds preference in 'error detection potential' and 'informational content,' which are formalizable within Popper's falsificationist framework without needing a definition of approximate truth."
+      },
+      {
+        "handle": "0f15677f4995667a78779694f8ef012703a79e9f6b141bf0e702fd5b9a058255",
+        "kind": "rebutted",
+        "note": "The rebuttal clarifies that the claim does not entail an 'expectation of future success' in the probabilistic sense. It entails an expectation of 'maximal learning' regardless of outcome. The category error is avoided by redefining rationality as adherence to critical method, not predictive accuracy."
+      },
+      {
+        "handle": "1a3735042b31717330b9af3620a611e8e4c2ad236586d2fcb2e51fe77dd35d79",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'acting on' dilemma by framing action as a 'critical test' itself. Building a bridge is not an endorsement of the theory's truth, but the ultimate severe test; if it stands, the theory survives another round; if it falls, we have learned decisively. This aligns practical reliance with the testing imperative."
+      },
+      {
+        "handle": "1b878f73d954f0daca90ee614c55f167d90cd19857bc3f76e762be338a926d9f",
+        "kind": "rebutted",
+        "note": "The candidate argues that 'willingness to criticize' and 'practical reliance' are not conflated but are two sides of the same coin: we rely on the theory precisely because it is the one we are most willing to subject to further criticism (via action). Reliance is the act of putting the theory at risk."
+      },
+      {
+        "handle": "1e4ad412c9a42d142821bc95e066c4cc5827c7fb43d76a0ebdfef71331d320cd",
+        "kind": "rebutted",
+        "note": "Popper's personal preference is defended as consistent with his 'conventional decision' to adopt critical rationality as a way of life. It is not a smuggled induction but a consistent application of the rule: 'Always choose the path that allows for the most rigorous testing,' even in personal action."
+      },
+      {
+        "handle": "254e4b2b8dcb86a24da2b791bb37959d00ac6e25f819fb991f43440d7e83b471",
+        "kind": "rebutted",
+        "note": "The argument strictly adheres to falsificationism and critical rationality, avoiding Evolutionary Epistemology. The 'survival' mentioned is the survival of the theory through tests, not an evolutionary selection mechanism external to Popper's logic."
+      },
+      {
+        "handle": "2983397b98b93b2226eb3d3a9e55bc2e6285ba9b00ae911d7079a3ce2edf6686",
+        "kind": "revised",
+        "note": "Clarified the distinction: the contradiction is resolved by denying that acting on a theory implies believing it is probable. One acts on it because it is the 'best bet' for learning, acknowledging that it may well be false. The 'pragmatic contradiction' dissolves if the goal of action is viewed as testing rather than securing safety."
+      },
+      {
+        "handle": "2bb824986a07c70a152db1deb50653be633a98497dc1a927ef76e718b290d85f",
+        "kind": "rebutted",
+        "note": "The tension regarding action is resolved by asserting that the justification for acting on the best-corroborated theory is that it offers the highest 'content' and thus the highest potential for falsification. Action is the continuation of testing by other means; it does not require a guarantee of success, only a commitment to the critical method."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's defense relies on a false dichotomy between 'probabilistic prediction' and 'strategic risk minimization.' It claims that choosing the better-corroborated theory is merely avoiding known errors (falsified theories) without implying future success. However, the problem context explicitly notes that scientists prefer these theories 'when choosing which theory to act on.' Action inherently aims at successful outcomes in the future. If the choice is not based on an expectation that the past performance of Theory A makes it a more reliable guide for future action than Theory B, then the preference is irrational gambling, not 'risk minimization.' To call it 'risk minimization' implies that surviving tests correlates with lower future risk. Asserting this correlation while denying it constitutes an inductive inference smuggles induction back in under the label of 'methodology.' The target fails to explain how one can rationally minimize future risk based on past tests without assuming the uniformity of nature (induction), rendering the defense internally inconsistent rather than a viable non-inductive alternative.",
+      "premise": "Rational action aimed at future success requires an expectation that past indicators correlate with future outcomes; denying this correlation while claiming to 'minimize risk' based on those same indicators is contradictory.",
+      "premise_evidence": null,
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "successor_question": "Can you formulate a definition of 'risk minimization' in this context that does not implicitly rely on the assumption that unrefuted theories are more likely to succeed in the future than refuted ones?"
+    }
+  ]
+}

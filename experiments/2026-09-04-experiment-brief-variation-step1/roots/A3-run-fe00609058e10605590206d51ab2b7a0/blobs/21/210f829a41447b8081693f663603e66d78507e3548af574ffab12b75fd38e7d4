@@ -1,0 +1,92 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms as a non-inductive 'critical preference' grounded in the logic of testing rather than probability, but accepting this costs the agent any rational assurance that the preferred theory will succeed in future applications.",
+    "mechanism": "The mechanism distinguishes between 'justification of belief' (which requires induction) and 'justification of action' (which relies on the current status of error elimination). By treating corroboration as a report of past severe testing rather than a predictor of future truth, the scientist acts on the theory that has best withstood attempts at falsification, not because it is likely true, but because it is the only one not yet known to be false. This shifts the rational basis from 'expectation of success' to 'avoidance of known error'.",
+    "counterconditions": [
+      "If the agent requires a positive reason to believe the theory will work (beyond 'not yet failed'), the Popperian defense collapses into induction.",
+      "If the definition of 'severe test' implicitly assumes uniformity of nature, the circularity returns.",
+      "If practical decision-making inherently demands probabilistic assessment, Popper's binary (falsified/not-falsified) framework is insufficient for action."
+    ],
+    "typicality": 0.85,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_003",
+        "SRC_012"
+      ],
+      "shared_structure": [
+        "Selection based on survival of stress tests rather than prediction of future performance.",
+        "Distinction between operational utility and ontological truth.",
+        "Rejection of probabilistic weighting in favor of binary elimination."
+      ],
+      "disanalogies": [
+        "Biological evolution has no 'agent' choosing to act; Popper's scientist must consciously choose a theory for application.",
+        "Survival in nature implies fitness for reproduction; survival of a theory in testing does not logically imply fitness for future prediction.",
+        "Evolutionary selection is blind; scientific preference is argued by Popper to be rational."
+      ],
+      "transfer_claims": [
+        "Just as we trust a bridge design that survived wind tunnel tests not because it 'probably' won't collapse, but because it hasn't been shown to fail, we prefer corroborated theories.",
+        "The rationality lies in the rigor of the attempt to destroy the candidate, not in the candidate's inherent likelihood of truth."
+      ],
+      "overturn_conditions": [
+        "If the wind tunnel conditions do not map to real-world physics (problem of induction in test design), the analogy fails.",
+        "If acting on the bridge design requires an estimate of failure probability which the test cannot provide, the non-probabilistic stance is practically inert."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "evidence_refs": [],
+    "discharges": [
+      {
+        "handle": "04498369582281ac0738b39cd797b625b619937bfed3bc623be2aabf77ca5205",
+        "kind": "rebutted",
+        "note": "The criticism claims the defense fails to explain why one should act. The rebuttal is that Popper's 'why' is negative: we act on Theory A not because it is probable, but because Theory B has been proven false and Theory A has not. The preference is a default position in the absence of falsification, not a positive endorsement of future success."
+      },
+      {
+        "handle": "1eaab5aa6b2cc65e3cd8add1a6e9761cc1aa95697a67bcd4035c5ea8606bdf36",
+        "kind": "rebutted",
+        "note": "The criticism conflates informational content with defensible preference. The rebuttal clarifies that the 'defensibility' comes from the methodological rule to prefer the most informative theory that has not yet been refuted. It is a rule of procedure, not a claim about the world's behavior."
+      },
+      {
+        "handle": "2027d354a32cd59751f5186cec8551c70b026e411c0d908f3d0352c33c974c6a",
+        "kind": "departure_declared",
+        "note": "I declare a departure from the assumption that 'rational action' requires 'logical guarantee of future success.' Popper's system redefines rational action as acting on the best-available error-free knowledge, explicitly accepting that this offers no logical guarantee."
+      },
+      {
+        "handle": "2272c9810c2d9f4f408db051db0e08eb9712fc195b7bb57bd3ba0a71c07a4635",
+        "kind": "rebutted",
+        "note": "The criticism calls the 'Principle of Uniformity' charge a straw man. The rebuttal maintains that any move from 'survived past tests' to 'useful for future action' implicitly relies on a meta-assumption that the future will resemble the past regarding the theory's domain, which is precisely what induction is. Popper denies this is induction only by semantic fiat."
+      },
+      {
+        "handle": "237f711b392ded2b96da9f8d698f79f9fa0e5f21bc17f0de76197766feb8d6dd",
+        "kind": "revised",
+        "note": "Revised the mechanism to explicitly separate 'critical preference' from 'prediction.' The original phrasing risked conflating the two. The revision emphasizes that critical preference is a stance toward the current state of knowledge, whereas prediction is a claim about the future."
+      },
+      {
+        "handle": "270fdeb19c2b45908843bde3f158d4abba53b77755e30009b2dc5a5e96ac4aa",
+        "kind": "rebutted",
+        "note": "While verisimilitude faced logical issues, the defense here does not rely on verisimilitude as a measurable quantity but on the comparative status of 'not-yet-falsified.' The preference is for the theory with higher content that survives, not necessarily the one 'closer to truth' in a measurable sense."
+      },
+      {
+        "handle": "283c021802bb4232adf1e0244e99140ec8500555bce3ce33ec8dc4b9ecc2ebdc",
+        "kind": "rebutted",
+        "note": "The criticism states the preference is practically inert. The rebuttal argues it is not inert; it provides a clear tie-breaker between competing theories. It is only 'inert' if one demands certainty or probability, which Popper explicitly rejects as impossible standards."
+      },
+      {
+        "handle": "2b2b9f8685410277445fc083713971a8c5bf992ab5fbf0a1093b143dcfb45882",
+        "kind": "rebutted",
+        "note": "The criticism argues the preference is rational, not fictional. The rebuttal agrees it is rational within Popper's specific epistemological framework but maintains that this rationality is procedural and negative (avoiding error) rather than substantive (predicting truth), which is the core cost identified in the claim."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_003",
+        "SRC_012"
+      ]
+    },
+    "optional_refs": [
+      "SRC_003",
+      "SRC_012"
+    ],
+    "checker_specs": []
+  }
+}

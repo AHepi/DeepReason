@@ -1,18 +1,18 @@
-[soak] stub provider on 127.0.0.1:44999 (reused from wheel_operational_smoke)
-[soak] working directory /tmp/cycle-soak-2yz9k1wk
-[soak] built root: manifest 7734a55efb6a442b…  criteria ['uhi-energy-balance@v1', 'uhi-nocturnal-release@v1', 'uhi-cross-city-modulator@v1']
-[soak] qualified in 4.2s
+[soak] stub provider on 127.0.0.1:43925 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/cycle-soak-9lyw1x7v
+[soak] built root: manifest e37a4af88445a5e8…  criteria ['uhi-energy-balance@v1', 'uhi-nocturnal-release@v1', 'uhi-cross-city-modulator@v1']
+[soak] qualified in 3.5s
 [soak] driving 8 cycles …
 
 ========================================================================
 CYCLE SOAK -- case reach-rich
 ========================================================================
-  manifest sha256        7734a55efb6a442b55e78a0ec136c5751cd549226f9a6df3a4b70de00b9ab2eb
+  manifest sha256        e37a4af88445a5e899a4e868964371f0855cf9bcf6952408a25dcc7734b6b0bd
   criteria               uhi-energy-balance@v1, uhi-nocturnal-release@v1, uhi-cross-city-modulator@v1
   attached evidence      False
   cycles requested       8
-  qualification          rc=0 (4.2s)
-  drive                  318.1s, 11 progress events
+  qualification          rc=0 (3.5s)
+  drive                  232.1s, 11 progress events
 
 -- S1 run assertions ---------------------------------------------------
   [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
@@ -58,5 +58,5 @@ CYCLE SOAK -- case reach-rich
       63  workflow-work-preparation-v1
       32  workflow-work-terminal-v1
 
-[soak] report /tmp/cycle-soak-2yz9k1wk/soak-report.json
+[soak] report /tmp/cycle-soak-9lyw1x7v/soak-report.json
 [soak] exit 0 (clean)
