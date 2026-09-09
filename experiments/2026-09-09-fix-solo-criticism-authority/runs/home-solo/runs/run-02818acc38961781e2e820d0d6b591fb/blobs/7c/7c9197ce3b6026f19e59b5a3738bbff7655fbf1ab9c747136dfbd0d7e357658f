@@ -1,0 +1,77 @@
+{
+  "candidate": {
+    "claim": "A small research team should adopt an existing experiment tracker only if their workflow is purely observational; however, if the research involves active learning loops where the tracker must function as a real-time controller to modify experimental parameters, they must build a custom minimal tracker to avoid the 'integration tax' of hacking a passive tool into an active agent.",
+    "mechanism": "Control Theory Boundary: Existing tools are architected as passive data sinks (observational), whereas active learning requires a closed-loop control system (causal). Forcing a passive architecture to perform active control introduces high-latency feedback and fragile 'hack' layers that obscure the causal chain between hypothesis and parameter adjustment. A custom builder enforces the causal model by making the control logic the primary schema, not an afterthought.",
+    "counterconditions": [
+      "The team lacks the engineering bandwidth to maintain even a minimal custom state machine.",
+      "The active learning loop can be fully encapsulated in an external script that treats the existing tracker purely as a log, avoiding direct integration.",
+      "The research timeline is too short to justify the upfront cost of defining a custom schema before data collection begins."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The causal mechanism is explicitly defined as the 'Control Theory Boundary': passive tools cannot safely execute active control without introducing latency and obscurity that break the causal link required for valid active learning. The claim now specifies that the tracker must act as the controller, necessitating a custom build."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised to acknowledge that the 'integration tax' is the deciding factor. The claim now explicitly states that hacking a passive tool creates fragile layers, and adopts the custom build specifically to avoid this tax when active control is needed."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "rebutted",
+        "note": "The proposal advocates for a 'minimal custom tracker' with the control logic as the primary schema from day one, directly preventing the accumulation of unstructured noise. The migration cliff only exists if one starts with a disposable script; this candidate mandates a structured custom build from the start."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "departure_declared",
+        "note": "Departing from the fear of single-point failure. In a small team doing active learning, the 'custom state machine' IS the causal model. Relying on a general-purpose tool that mismatches this model creates a deeper fragility (hidden control logic) than owning the simple state machine explicitly."
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "f0a7fdb1573a11c5f3064989fd549eaaaafda316476c85270e892ed4058bef0b",
+        "quote": "Build a custom tracker only if the experiment involves active learning loops where the tracker must act as the controller"
+      },
+      {
+        "block": "b1642d037422b51c0be00c872d50beb7dbcd5a47b2733f33a65b653bf158ecb0",
+        "quote": "enforcing a 'mechanist' causal model of experimentation that existing tools abstract away"
+      }
+    ],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    },
+    "analogy": {
+      "source_memory_refs": [
+        "building a custom racing transmission vs adapting a consumer car gearbox"
+      ],
+      "shared_structure": [
+        "Consumer gearboxes (existing tools) are designed for stability and broad use, not high-frequency shifting under load.",
+        "Racing transmissions (custom trackers) are built around the specific torque curve and shift logic of the engine (active learning loop).",
+        "Adapting a consumer gearbox for racing introduces lag and failure points (integration tax) that obscure the driver's control."
+      ],
+      "disanalogies": [
+        "Software can be refactored more easily than physical gears, reducing the permanent cost of a wrong choice.",
+        "A custom software tracker can remain minimal, whereas a racing transmission is inherently complex."
+      ],
+      "transfer_claims": [
+        "Just as a racer needs a transmission designed for control rather than comfort, an active learning researcher needs a tracker designed for causality rather than just logging.",
+        "The 'lag' in a mismatched gearbox corresponds to the latency in a hacked software feedback loop, invalidating the experiment."
+      ],
+      "overturn_conditions": [
+        "If the 'engine' (research algorithm) changes its fundamental operating principles mid-experiment, requiring a total transmission rebuild.",
+        "If the team is only doing 'cruising' (observational studies) and never 'racing' (active control)."
+      ]
+    }
+  }
+}

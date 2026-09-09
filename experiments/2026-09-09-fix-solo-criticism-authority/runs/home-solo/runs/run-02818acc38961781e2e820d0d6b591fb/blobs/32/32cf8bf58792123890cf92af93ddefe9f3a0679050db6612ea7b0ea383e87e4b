@@ -1,0 +1,4 @@
+{
+  "decisive_point": "ignores the prevalence of event-driven architectures in modern experiment trackers (e.g., webhooks, streaming APIs) that can trigger external controllers without requiring the tracker itself to be the controller",
+  "verdict": "fail"
+}

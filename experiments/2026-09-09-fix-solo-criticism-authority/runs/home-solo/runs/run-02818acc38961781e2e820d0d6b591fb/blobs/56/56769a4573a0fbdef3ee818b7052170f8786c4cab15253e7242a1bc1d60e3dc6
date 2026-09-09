@@ -1,0 +1,64 @@
+{
+  "candidate": {
+    "claim": "The team should adopt an existing experiment tracker but enforce a 'Schema-First' contract where no data is logged until a formal schema is defined, while simultaneously running a 'Shadow Mode' period where a disposable script mirrors the formal tool's intake to validate the schema against active learning loop requirements before full migration.",
+    "mechanism": "Hybrid Validation via Schema-First Contract and Shadow Mode Parallelism: This mechanism satisfies the need for active control by allowing the disposable script (in Shadow Mode) to handle novel, unstructured active learning signals that existing tools cannot yet parse, while the formal schema evolves iteratively. Once the schema captures the causal structure of the active loops, the team migrates fully to the existing tool, eliminating the 'integration tax' through gradual alignment rather than immediate custom build or rigid adoption.",
+    "counterconditions": [
+      "If the active learning loops require sub-millisecond feedback latency that existing tools' webhook architectures cannot guarantee even with schema optimization.",
+      "If the team lacks the engineering bandwidth to maintain two parallel tracking systems (script and formal tool) during the Shadow Mode period.",
+      "If the domain novelty is so high that no existing schema language (JSON Schema/Protobuf) can express the required state transitions without becoming Turing-complete and thus unverifiable."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The criticism claims a lack of causal mechanism for why active learning necessitates custom builds. The proposed 'Shadow Mode' mechanism directly addresses this: it allows the custom script to act as the causal controller for novel loops while the existing tool serves as the passive observer. The transition to the existing tool occurs only when the schema (derived from the script's successful operations) proves sufficient, demonstrating that custom builds are temporary scaffolding, not permanent necessities."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge the 'integration tax'. The candidate now incorporates 'Shadow Mode' (SRC_007) specifically to pay this tax incrementally. Instead of hacking a mismatched tool immediately, the team runs a disposable script that defines the ideal workflow; the 'tax' is the effort to map this script's output to the formal schema, which is lower than building a whole new tracker."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "The criticism argues that event-driven architectures in existing tools already solve the control issue. This rebuttal stands: while webhooks exist, they often assume a pre-defined event structure. Active learning loops frequently generate *novel* event structures dynamically. The 'Schema-First' approach forces the definition of these novel structures before they enter the formal system, bridging the gap between static event drivers and dynamic research needs."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "revised",
+        "note": "Revised to address the 'migration cliff'. By enforcing a 'Schema-First' contract (SRC_006) from day one—even within the disposable script—the data generated during the Shadow Mode is never unstructured noise. It is structured according to the evolving schema, making the eventual migration to the formal tool a trivial format conversion rather than a complex data rescue operation."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The criticism fears the custom script becomes a single point of failure for the causal model. In this proposal, the script is ephemeral and strictly bounded by the 'Shadow Mode' duration. The 'causal model' is captured in the *schema* (which is versioned and stored in the formal tool), not in the script's code. The script is merely a probe; if it fails, the schema remains intact, and the team retries the probe with a modified script, preserving the causal model's integrity."
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "4e4e9dcbcafb2b6d828f5d05a420396c12dd2354c85f57420230caa045a0b419",
+        "quote": "Adopt an existing tracker but enforce a 'Schema-First' contract: no data is logged until a formal schema (JSON Schema or Protobuf) is defined and versioned"
+      },
+      {
+        "block": "0a5bd84458b8d1b8a2aae76319e4adaf0cffa9c60b2e788c9e29a24631924ec8",
+        "quote": "Adopt a flexible existing platform but implement a 'Shadow Mode' period where the team runs both a disposable script and the formal tool in parallel for 2 weeks"
+      }
+    ],
+    "optional_refs": [
+      "SRC_006",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    },
+    "analogy": null,
+    "checker_specs": []
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "candidate": {
+    "claim": "A small research team should build a custom experiment tracker only when the experimental design requires the tracker to function as an active controller in a closed-loop system (e.g., active learning or Bayesian optimization), where the latency and schema rigidity of existing tools would break the causal chain of the experiment; otherwise, they must adopt an existing tool to avoid the 'integration tax' and 'migration cliff'.",
+    "mechanism": "Causal Control Boundary: The decision boundary is defined by whether the tracker must write back to the experimental apparatus in real-time. If the tracker is purely observational (read-only log), existing tools maximize bandwidth. If the tracker is actuatory (read-write control loop), custom software is required to maintain the causal mechanism's integrity, as off-the-shelf tools abstract away the specific state-transition logic needed for novel active learning loops.",
+    "counterconditions": [
+      "The team lacks the engineering bandwidth to maintain a custom state machine without halting research progress.",
+      "The active learning loop can be simulated via external scripts that interface with an existing tracker's API without requiring the tracker itself to be the controller.",
+      "The experimental schema is stable enough that a rigid existing tool does not force data distortion."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The causal mechanism is explicitly defined as the 'Causal Control Boundary': active learning loops necessitate a custom build because the tracker becomes the controller, requiring direct mutation of experimental parameters based on immediate inference, a capability existing tools abstract away or latency-bind."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised the claim to explicitly acknowledge the 'integration tax' as the default cost of adoption, but argue that this tax is preferable to the 'causal fragility' of a poorly maintained custom tool unless the control loop requirement is met. The mechanism now positions the integration tax as the barrier to entry that is only overcome by the necessity of real-time control."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "rebutted",
+        "note": "The proposal mitigates the 'migration cliff' by restricting custom builds to cases where the schema is dictated by the control algorithm itself. In these cases, the schema is not 'unstructured noise' but a rigorous definition of the state space required for the controller to function, making early schema definition inherent to the custom build's purpose."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "departure_declared",
+        "note": "Departing from the assumption that a custom tracker is inherently a 'single point of failure.' In the specific context of active learning, the *logic* of the experiment is the single point of failure; encapsulating this logic in a custom tracker centralizes the causal model intentionally, whereas splitting it between an external script and a generic tracker introduces synchronization failures that are more fragile."
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "f0a7fdb1573a11c5f3064989fd549eaaaafda316476c85270e892ed4058bef0b",
+        "quote": "Build a custom tracker only if the experiment involves active learning loops where the tracker must act as the controller"
+      },
+      {
+        "block": "b1642d037422b51c0be00c872d50beb7dbcd5a47b2733f33a65b653bf158ecb0",
+        "quote": "enforcing a 'mechanist' causal model of experimentation"
+      }
+    ],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

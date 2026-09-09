@@ -1,0 +1,80 @@
+{
+  "candidate": {
+    "claim": "For a small team building a novel research tool with active learning loops, the optimal path is to adopt an existing experiment tracker but enforce a 'Schema-First' contract via a lightweight adapter layer, rather than building a custom tracker from scratch or using the tool without constraints.",
+    "mechanism": "The mechanism is 'Constrained Integration': by defining a strict, versioned data schema (JSON Schema/Protobuf) before any logging occurs, the team creates a stable interface that decouples the volatile experimental logic (active learning loops) from the persistent storage engine. This allows the team to leverage the reliability and collaboration features of existing tools (addressing the 'migration cliff') while retaining the flexibility to hack the local adapter for novel workflow needs (addressing the 'integration tax'). The adapter acts as a causal buffer, translating custom control signals into the standardized schema, thereby preventing the custom logic from becoming a single point of failure for the data model.",
+    "counterconditions": [
+      "If the active learning loop requires sub-millisecond latency feedback that no existing tool's API can support even with an adapter.",
+      "If the research methodology changes so frequently that defining a stable schema upfront halts progress for more than 48 hours.",
+      "If the team lacks the engineering bandwidth to maintain even a lightweight adapter layer alongside their core research code."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The criticism claims a lack of causal mechanism for why active learning necessitates a custom build. The rebuttal is that active learning does NOT necessitate a custom *tracker*, but rather a custom *control loop*. The proposed 'Constrained Integration' mechanism separates these: the control loop remains custom (in the adapter/research code), while the tracker remains standard. The causal necessity is for agility in the loop, not the storage backend; the schema-first adapter provides this agility without rebuilding the wheel."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised to explicitly acknowledge the 'integration tax'. The candidate now posits that the tax is paid not by hacking the core tool, but by building a disposable, local 'adapter layer'. This shifts the integration burden from the critical path of the tool adoption to a modular component that can be discarded or rewritten without affecting the historical record."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "The criticism argues that modern tools already support event-driven architectures. This is true, but often insufficient for tightly coupled active learning where the 'experiment' definition itself mutates dynamically. Webhooks trigger external actions, but they don't necessarily allow the external controller to redefine the experiment's parameter space on the fly within the tool's UI. The adapter pattern handles this mutation locally before committing the result, bypassing the rigidity of the tool's native event model."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "revised",
+        "note": "Revised to incorporate the 'Schema-First' constraint as the primary solution to the 'migration cliff'. By enforcing a schema before day one, even if the initial implementation is a disposable script, the data output is structured. This ensures that if/when the team migrates to a formal tool, the data is not unstructured noise but a valid stream ready for ingestion."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The criticism suggests the custom state machine becomes a single point of failure. In the proposed 'Constrained Integration' model, the 'custom' element is the adapter, which is stateless regarding the long-term record; it only translates. The 'single point of failure' for the causal model is actually reduced because the schema acts as a contract. If the adapter breaks, the research pauses, but the historical data and the definition of the experiment (the schema) remain intact and interpretable, unlike a monolithic custom tracker where code and data are often entangled."
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "4e4e9dcbcafb2b6d828f5d05a420396c12dd2354c85f57420230caa045a0b419",
+        "quote": "Adopt an existing tracker but enforce a 'Schema-First' contract: no data is logged until a formal schema (JSON Schema or Protobuf) is defined and versioned"
+      }
+    ],
+    "optional_refs": [
+      "SRC_006",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    },
+    "analogy": {
+      "source_memory_refs": [
+        "Civil Engineering: Building codes vs. Architectural innovation"
+      ],
+      "shared_structure": [
+        "Innovation happens in the design (architecture/research loop), not the foundation (building codes/data schema).",
+        "Strict adherence to a foundational standard (schema/code) enables safer and faster iteration on the variable components.",
+        "Attempting to rewrite the foundation for every new design leads to collapse (data loss/fragility)."
+      ],
+      "disanalogies": [
+        "Software schemas can be versioned and evolved much faster than physical building codes.",
+        "A failed software adapter can be rolled back instantly, whereas a structural error in a building is catastrophic."
+      ],
+      "transfer_claims": [
+        "Just as architects use standard materials to build unique structures, researchers should use standard schemas to log unique experiments.",
+        "The 'integration tax' of adhering to code is lower than the risk of structural failure from ignoring it."
+      ],
+      "overturn_conditions": [
+        "If the 'building' (experiment) is so novel that no existing 'materials' (schema types) can describe it.",
+        "If the regulatory body (existing tool) forbids the specific 'design' (active learning pattern) entirely."
+      ]
+    }
+  }
+}

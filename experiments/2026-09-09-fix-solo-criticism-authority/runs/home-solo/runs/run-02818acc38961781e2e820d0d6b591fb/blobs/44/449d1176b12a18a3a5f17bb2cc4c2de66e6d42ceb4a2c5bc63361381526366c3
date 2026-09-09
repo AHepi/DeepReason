@@ -1,0 +1,196 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "Adopt an existing tracker but enforce a 'Schema-First' contract where no data is logged until a formal schema is defined, treating the schema definition as the primary engineering artifact rather than the tracker software itself.",
+      "mechanism": "Procedural Friction: Intentionally introducing overhead in the logging pipeline to force structural clarity before data accumulation, preventing the 'migration cliff' by ensuring early data is already structured.",
+      "counterconditions": [
+        "The team lacks domain expertise to define a stable schema upfront.",
+        "The research questions are too exploratory to permit any fixed schema.",
+        "The chosen existing tool does not support strict schema validation plugins."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Rebuttal: The mechanism does not rely on 'active learning loops' necessitating a custom build. Instead, it uses the existing tool's validation hooks to enforce a static contract. The causal need is for data integrity, which is achieved by blocking ingestion without a schema, not by building a custom control loop."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "revised",
+          "note": "Revision: Acknowledges the 'integration tax'. The candidate changes the scope: instead of hacking the tool, the team writes a lightweight local validator (the 'contract enforcer') that sits between the script and the tool. If the local validator passes, the tool accepts; if not, the data is rejected. This shifts the engineering effort from 'wrapping a mismatched tool' to 'writing a strict gatekeeper', which is a simpler, more bounded task."
+        },
+        {
+          "handle": "[SRC_018] against SRC_017",
+          "kind": "rebutted",
+          "note": "Rebuttal: The dichotomy is not between 'passive observation' and 'active control' of the experiment, but between 'unstructured dumping' and 'structured ingestion'. Event-driven architectures in existing tools are sufficient for this; the 'control' being exercised is over the data format, not the experimental procedure, so modern webhooks suffice."
+        },
+        {
+          "handle": "[SRC_004] against SRC_003",
+          "kind": "rebutted",
+          "note": "Rebuttal: This candidate specifically solves the 'migration cliff'. By enforcing the schema at day one, there is no unstructured noise to migrate. The cost of exporting is zero because the data was born in the target format."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Rebuttal: The custom component is a stateless validator, not a state machine holding the team's causal model. The 'single point of failure' risk is minimized because the validator is simple logic (schema check), whereas the causal model remains in the researchers' minds and scripts. The existing tool remains the system of record."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_015"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Build a disposable, purpose-specific tracker script for the first 2 weeks ('Shadow Mode') while simultaneously configuring an existing enterprise tool, then migrate only after the script's output stabilizes into a de-facto schema.",
+      "mechanism": "Schema Mining via Disposable Prototyping: Using a low-cost, throw-away custom implementation to discover the true data requirements of the novel workflow before committing to the rigidity of an existing platform.",
+      "counterconditions": [
+        "The team cannot afford to maintain two parallel tracking systems even for 2 weeks.",
+        "The 'disposable' script accidentally becomes production critical due to early success.",
+        "The existing tool's import mechanisms are incompatible with the script's evolving output format."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "departure_declared",
+          "note": "Departure: This approach rejects the premise that one must choose between 'custom' and 'existing' as a binary state. It declares a temporal hybrid: Custom first for discovery, Existing later for scale. The 'active learning' is human-in-the-loop schema refinement, not an automated loop requiring custom software architecture."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "Rebuttal: The 'integration tax' is accepted as a necessary R&D cost. However, by building the custom piece as a disposable script with no expectation of longevity, the long-term maintenance tax is avoided. The effort is front-loaded and finite."
+        },
+        {
+          "handle": "[SRC_018] against SRC_017",
+          "kind": "rebutted",
+          "note": "Rebuttal: The 'Shadow Mode' does not ignore event-driven architectures. The disposable script can emit events that the existing tool consumes via webhooks during the trial. The distinction is that the script controls the *emission logic* (the novel workflow), while the existing tool handles *storage and visualization*."
+        },
+        {
+          "handle": "[SRC_004] against SRC_003",
+          "kind": "revised",
+          "note": "Revision: To address the 'migration cliff', the candidate mandates that the disposable script must output to a standard interchange format (e.g., NDJSON) from day one, even if the fields change. This ensures that when the schema stabilizes, the historical data is structurally consistent enough to be ingested by the formal tool with minor transformation."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Rebuttal: The custom script is explicitly 'disposable'. It is not intended to be the single point of failure for the long term. Its failure only loses the prototype data, which is an acceptable risk during the shadow phase. The causal model is not encoded in the script's permanence but in the lessons learned from its use."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008",
+        "SRC_016"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Adopt an existing tool strictly in 'Read-Only' archive mode; all active experimentation and state management occurs in local, version-controlled scripts that push final snapshots to the tool only for compliance and sharing.",
+      "mechanism": "Decoupled State Management: Separating the 'control plane' (local scripts running experiments) from the 'observation plane' (existing tool storing results), thereby eliminating integration friction by refusing to integrate the control logic.",
+      "counterconditions": [
+        "Collaborators need real-time visibility into running experiments, not just final snapshots.",
+        "The volume of intermediate data required for debugging exceeds local storage capabilities.",
+        "Regulatory requirements mandate that every step of the process be logged in the central system, not just the outcome."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Rebuttal: This approach renders the 'active learning loop' argument moot. The loop exists entirely in the local scripts (custom). The existing tool is passive. Therefore, no custom build is needed to support active loops in the tracker; the tracker doesn't do the looping."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "rebutted",
+          "note": "Rebuttal: There is zero 'integration tax' regarding workflow mismatch because the workflow is not integrated. The existing tool is treated as a dumb bucket. The only engineering effort is writing a 'dump-to-bucket' script, which is trivial compared to wrapping a complex API."
+        },
+        {
+          "handle": "[SRC_018] against SRC_017",
+          "kind": "rebutted",
+          "note": "Rebuttal: The criticism assumes the tracker must drive the architecture. Here, the architecture drives the tracker usage. Event-driven features of the tracker are unused; the system relies on the robustness of local version control (git) for state management."
+        },
+        {
+          "handle": "[SRC_004] against SRC_003",
+          "kind": "revised",
+          "note": "Revision: To prevent the 'migration cliff' where local data becomes unstructured noise, the local scripts must adhere to a rigid internal schema enforced by linting tools within the repository. The 'formal tool' is just a mirror; the real schema enforcement happens in the CI/CD pipeline of the local scripts."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Rebuttal: The 'custom state machine' is simply the collection of python/bash scripts under git. This is a distributed, resilient failure model (every researcher has the code), not a single point of failure. If one script breaks, others continue. The causal model is explicit in the codebase."
+        }
+      ],
+      "optional_refs": [
+        "SRC_010",
+        "SRC_014"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Write a minimal custom tracker that implements only a 'State Machine' for the specific novel workflow, and bridge it to an existing tool via a one-way adapter that translates state transitions into generic log entries.",
+      "mechanism": "Targeted Customization with Generic Bridging: Building only the missing causal logic (the state machine) while offloading storage, UI, and collaboration to an existing platform via a simplified, lossy translation layer.",
+      "counterconditions": [
+        "The translation layer loses critical metadata required for reproducibility.",
+        "The existing tool's generic log entries are insufficient for the statistical analysis required.",
+        "Maintaining the synchronization between the custom state machine and the external log becomes a burden."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC_009",
+          "kind": "rebutted",
+          "note": "Rebuttal: This directly addresses the 'causal mechanism' demand. The 'active learning loop' requires specific state transitions that existing tools cannot configure. Therefore, a custom state machine is built. The 'custom build' is justified specifically for this causal logic, not for general tracking."
+        },
+        {
+          "handle": "[SRC_005] against SRC_002",
+          "kind": "revised",
+          "note": "Revision: The 'integration tax' is acknowledged. The candidate reduces this tax by making the bridge 'one-way' and 'lossy'. We accept that the existing tool will see a simplified view. This trade-off explicitly buys us the custom workflow capability while minimizing the hacking effort required to force the existing tool to understand our complex states."
+        },
+        {
+          "handle": "[SRC_018] against SRC_017",
+          "kind": "rebutted",
+          "note": "Rebuttal: While modern trackers have event-driven architectures, they rarely allow users to define *custom state machines* with guard conditions and transition logic via configuration alone. This candidate argues that 'event triggering' is not the same as 'state machine execution', justifying the custom build for the latter."
+        },
+        {
+          "handle": "[SRC_004] against SRC_003",
+          "kind": "rebutted",
+          "note": "Rebuttal: The 'migration cliff' is avoided because the custom tracker writes to the existing tool continuously via the adapter. There is no 'later migration'; the data flow is live, albeit simplified. The raw detailed state remains in the custom tool's local logs if deep audit is ever needed."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Rebuttal: The custom tracker is indeed a single point of failure for the *causal model*, but this is a feature, not a bug. It forces the team to explicitly codify their causal assumptions. If the state machine breaks, it reveals a flaw in the team's understanding of their own workflow, which is a valuable failure mode."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_011"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Reject both options: Use a collaborative notebook environment (e.g., Jupyter/Colab) with standardized cell-tags as the experiment tracker, leveraging the narrative structure of notebooks to capture both code and experimental state.",
+      "mechanism": "Narrative Tracking: Embedding experimental metadata directly into the executable narrative (code cells + markdown) using standardized tagging conventions, eliminating the need for a separate tracking system or custom builder.",
+      "counterconditions": [
+        "Notebooks are notoriously difficult to version control and diff.",
+        "Automated extraction of tagged metrics from notebooks is fragile and error-prone.",
+        "The approach does not scale beyond individual researchers to team-wide coordination."
+      ],
+      "typicality": 0.15,
+      "discharges": [
+        {
+          "handle": "[SRC_012] against SRC
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

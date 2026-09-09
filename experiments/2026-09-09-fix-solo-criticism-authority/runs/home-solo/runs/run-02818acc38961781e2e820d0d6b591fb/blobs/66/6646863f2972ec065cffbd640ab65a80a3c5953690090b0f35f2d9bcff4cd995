@@ -1,0 +1,81 @@
+{
+  "candidate": {
+    "claim": "For a small team building a research tool with active learning loops, the optimal path is to adopt an existing experiment tracker but enforce a 'Schema-First' contract via a lightweight adapter layer, rather than building a custom tracker from scratch.",
+    "mechanism": "The mechanism is 'Constrained Integration': by defining a strict JSON Schema or Protobuf definition before any data is logged (the 'Schema-First' contract), the team eliminates the 'integration tax' of mismatched workflows and prevents the 'migration cliff' of unstructured noise. The adapter layer acts as a causal firewall, translating the specific requirements of the active learning loop into the generic events of the existing tool, thereby preserving the 'Separation of Concerns' without introducing a fragile custom state machine as a single point of failure.",
+    "counterconditions": [
+      "The active learning loop requires sub-second latency feedback that no existing tool's API can support without custom kernel modifications.",
+      "The research workflow is so novel that no existing schema ontology can represent the state transitions without losing causal fidelity.",
+      "The team possesses unique domain expertise in building distributed state machines but lacks the bandwidth to maintain compatibility with evolving third-party tracker APIs."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The criticism claims a lack of causal mechanism for why active learning necessitates a custom build. This candidate rebuts that by asserting the causal necessity lies not in the tracker itself, but in the 'adapter layer' which translates active learning signals. The 'Control Theory Boundary' is respected by keeping the control logic in the research code and using the tracker only for immutable observation, rendered safe by the Schema-First contract."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised to explicitly address the 'integration tax'. The candidate now posits that the tax is paid upfront in defining the 'Schema-First' contract (SRC_006) rather than continuously in hacking plugins. The 'lightweight adapter layer' is the specific revision that absorbs the mismatch, preventing the engineering effort from bloating the core research tool."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "The criticism argues that modern trackers already support event-driven architectures. This candidate agrees but rebuts the implication that this negates the need for a custom approach. The rebuttal is that while webhooks exist, they rarely support the bidirectional, stateful negotiation required by active learning loops without significant customization. The 'adapter layer' provides this missing bidirectional capability without rebuilding the entire tracker."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "revised",
+        "note": "Revised to incorporate the 'Schema-First' contract as the direct solution to the 'migration cliff'. By mandating a formal schema before day one (as seen in SRC_006), the data is never 'unstructured noise,' rendering the migration cost negligible since the data structure is already compatible with formal tools."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The criticism fears the custom tracker becomes a single point of failure. This candidate rebuts by clarifying that we are NOT building a custom tracker, but a 'lightweight adapter'. The existing tool remains the system of record (reducing fragility), while the adapter is a stateless translation layer. If the adapter fails, the research pauses, but the causal model and historical data in the existing tool remain intact and uncorrupted."
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "4e4e9dcbcafb2b6d828f5d05a420396c12dd2354c85f57420230caa045a0b419",
+        "quote": "Adopt an existing tracker but enforce a 'Schema-First' contract: no data is logged until a formal schema (JSON Schema or Protobuf) is defined and versioned"
+      }
+    ],
+    "optional_refs": [
+      "SRC_006",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    },
+    "analogy": {
+      "source_memory_refs": [
+        "Civil Engineering: Building codes vs. Custom Foundations"
+      ],
+      "shared_structure": [
+        "Both domains face a choice between adopting a standardized framework (building codes/existing trackers) with strict compliance (schema-first) versus designing a bespoke solution from scratch.",
+        "In both cases, the 'custom' route introduces high maintenance liability and risk of structural failure (fragility) for small teams.",
+        "The 'adapter' in software corresponds to 'pre-fabricated components' in construction: they allow custom designs to fit within standard safety frameworks."
+      ],
+      "disanalogies": [
+        "Software schemas can be iterated and versioned instantly, whereas changing building codes requires legislative processes.",
+        "A software adapter failure results in data loss or pause, whereas a building code failure can result in physical catastrophe."
+      ],
+      "transfer_claims": [
+        "Just as small architecture firms rarely write their own structural physics engines, small research teams should not write their own persistence layers.",
+        "The 'Schema-First' contract offers the same liability protection in data science that building codes offer in civil engineering."
+      ],
+      "overturn_conditions": [
+        "If the research involves physically dangerous experiments where software latency directly correlates to human safety, custom real-time systems may override standard protocols.",
+        "If the 'standard building codes' (existing trackers) are proven to be fundamentally incompatible with the laws of physics governing the new domain (novel AI paradigms)."
+      ],
+      "adopted_commitment_refs": []
+    }
+  }
+}
