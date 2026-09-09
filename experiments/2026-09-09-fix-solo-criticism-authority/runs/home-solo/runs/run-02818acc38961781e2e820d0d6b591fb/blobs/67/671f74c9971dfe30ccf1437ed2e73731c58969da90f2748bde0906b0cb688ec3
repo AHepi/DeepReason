@@ -1,0 +1,60 @@
+{
+  "candidate": {
+    "claim": "A small team building a research tool with active learning loops should build a custom, minimal experiment tracker where the tracker acts as the causal controller, rather than adopting an existing tool which treats experimentation as passive observation.",
+    "mechanism": "Control Theory Boundary: Existing tools abstract the experiment loop into a 'log-and-observe' workflow, severing the causal link between metric evaluation and parameter adjustment. A custom tracker enforces a state machine where the 'experiment' object is an active agent that consumes its own output to mutate its next input, a topology impossible to retrofit onto passive logging schemas without introducing prohibitive integration latency and race conditions.",
+    "counterconditions": [
+      "The team's research does not involve real-time parameter mutation based on intermediate results (i.e., it is purely observational).",
+      "An existing platform offers a native, low-latency webhook or streaming API that allows external controllers to modify running experiments without schema violation.",
+      "The team lacks the engineering bandwidth to maintain the correctness of the custom state machine, risking data integrity more than using a flawed wrapper."
+    ],
+    "typicality": 0.35,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The causal mechanism is the 'Control Theory Boundary': passive tools assume a DAG of execution where data flows one way; active learning requires a feedback loop where the tracker is part of the critical path. Configuring an existing tool to be the controller forces the tool to violate its own consistency model (logging vs. acting), creating race conditions that only a custom state machine can resolve by design."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "rebutted",
+        "note": "The 'integration tax' of wrapping a mismatched tool is higher than the build cost because the mismatch is ontological, not syntactic. Wrapping a passive logger to act as a controller requires complex synchronization logic to prevent stale reads, effectively rebuilding a state machine on top of a log store. Building the state machine directly avoids this double-work."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "revised",
+        "note": "Revised to acknowledge event-driven architectures but distinguish between 'notification' and 'control'. While webhooks can trigger external scripts, they do not provide the atomic transactionality required for the tracker to safely update the experiment state before the next step begins. The custom build ensures the 'read-evaluate-act' cycle is a single atomic transaction within the tracker's domain."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "rebutted",
+        "note": "The 'migration cliff' is avoided by designing the custom tracker with a strict, versioned schema from day one, specifically mirroring the mechanist model. Since the scope is limited to the active learning loop, the data volume is structured by definition, unlike a disposable script that logs unstructured print statements."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The custom tracker is not a single point of failure for the causal model; it is the *enforcer* of the causal model. Relying on an existing tool introduces fragility because the tool's internal state is opaque and not designed for control feedback. The custom build makes the failure modes explicit and testable within the team's domain, whereas a wrapper hides them."
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "f0a7fdb1573a11c5f3064989fd549eaaaafda316476c85270e892ed4058bef0b",
+        "quote": "Build a custom tracker only if the experiment involves active learning loops where the tracker must act as the controller"
+      },
+      {
+        "block": "b1642d037422b51c0be00c872d50beb7dbcd5a47b2733f33a65b653bf158ecb0",
+        "quote": "Build a custom minimal tracker to enforce a 'mechanist' causal model of experimentation"
+      }
+    ],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

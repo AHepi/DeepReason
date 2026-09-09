@@ -1,0 +1,60 @@
+{
+  "candidate": {
+    "claim": "A small research team should adopt an existing experiment tracker and wrap it with a lightweight, custom 'orchestration layer' only if active learning loops are required; otherwise, the integration tax of building a full tracker outweighs the benefits, provided the existing tool supports event-driven hooks to avoid the migration cliff.",
+    "mechanism": "The decision hinges on the 'Control Coupling Coefficient': if the experiment requires the tracker to synchronously modify parameters (high coupling), a custom build or deep fork is necessary to maintain causal integrity. If the interaction is asynchronous (low coupling), existing tools with webhook capabilities suffice. This avoids the 'integration tax' by limiting custom code to the orchestration logic rather than data storage, while preventing the 'migration cliff' by enforcing a strict schema via the wrapper from day one.",
+    "counterconditions": [
+      "If no existing tool supports the specific low-latency event stream required for the active learning loop.",
+      "If the team's definition of 'experiment' evolves to require complex state machine transitions not supported by standard trackers.",
+      "If the 'orchestration layer' becomes so complex that it effectively duplicates the functionality of a custom tracker, negating the time savings."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The candidate explicitly defines the 'Control Coupling Coefficient' as the causal mechanism. It argues that active learning loops necessitate custom builds ONLY when synchronous control is required; otherwise, event-driven architectures in existing tools satisfy the need without a full custom build."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised to acknowledge the 'integration tax' by proposing a 'wrapper' pattern. Instead of hacking the core tool, the custom code is isolated in an orchestration layer that enforces the workflow, reducing the surface area for integration friction."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "The candidate does not ignore event-driven architectures; it leverages them as the primary condition for ADOPTING existing tools. The dichotomy is refined to 'synchronous control' vs 'asynchronous events', validating the critic's point about modern webhooks."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "revised",
+        "note": "Added the requirement for a 'strict schema via the wrapper from day one' to specifically address the migration cliff. This ensures that even disposable scripts feed into a structured format, making future migration trivial."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The 'orchestration layer' is stateless regarding the causal model; it delegates state persistence to the robust existing tracker. Thus, the custom code is not a single point of failure for the causal model, but merely a router, preserving the separation of concerns without introducing fragility."
+      }
+    ],
+    "evidence_refs": [
+      {
+        "block": "f0a7fdb1573a11c5f3064989fd549eaaaafda316476c85270e892ed4058bef0b",
+        "quote": "Build a custom tracker only if the experiment involves active learning loops where the tracker must act as the controller"
+      },
+      {
+        "block": "56a44ca1e5c4aa4266afb7e4e41e35b76747722c563bef7026ea9975839cbe90",
+        "quote": "Adopt a flexible existing platform but wrap it with a strict 'skeptic' validation layer"
+      }
+    ],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_003"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

@@ -1,0 +1,138 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "Build a custom tracker only if the experiment requires the tracker to be the active controller in a low-latency closed loop; otherwise, adopt an existing tool and wrap it with a validation layer.",
+      "mechanism": "Causal Control Boundary: The decision hinges on whether the tracker must write back to the apparatus in real-time. Read-only logging is served by existing tools; actuation requires custom state machines to preserve causal integrity.",
+      "counterconditions": [
+        "The team lacks engineering bandwidth to maintain a custom state machine without halting research.",
+        "The active learning loop can be simulated via external scripts interfacing with an existing tracker's API.",
+        "The experimental schema is stable enough that a rigid existing tool does not force data distortion."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "rebutted",
+          "note": "The mechanism is explicitly defined as 'Causal Control Boundary': existing tools abstract away state-transition logic required for novel active learning loops, making them logically incapable of acting as low-latency controllers without violating the causal chain. This is not an assertion of passivity but a derivation from the abstraction layer inherent in general-purpose tools."
+        },
+        {
+          "handle": "[SRC_009] against SRC_002",
+          "kind": "revised",
+          "note": "Revised to explicitly include the 'wrap it with a validation layer' strategy (referencing SRC_004) to mitigate integration tax when adopting existing tools, acknowledging that perfect matches are rare."
+        },
+        {
+          "handle": "[SRC_017] against SRC_015",
+          "kind": "rebutted",
+          "note": "Event-driven architectures (webhooks) introduce latency and indirection incompatible with tight control loops requiring deterministic state transitions. The claim distinguishes between 'triggering external controllers' (possible with existing tools) and the tracker 'being the controller' (requires custom build)."
+        },
+        {
+          "handle": "[SRC_008] against SRC_005",
+          "kind": "revised",
+          "note": "Added a countercondition regarding schema stability and emphasized that custom builds must enforce a defined schema from day one to avoid the 'migration cliff' of unstructured noise."
+        },
+        {
+          "handle": "[SRC_012] against SRC_010",
+          "kind": "rebutted",
+          "note": "The custom tracker is a single point of failure only if the team lacks the mechanist understanding to build it. The proposal mandates building it *only* when the team possesses the specific causal model knowledge that existing tools abstract away, thereby aligning the failure mode with the team's core competency."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_004",
+        "SRC_006",
+        "SRC_016"
+      ]
+    },
+    {
+      "claim": "Always adopt an existing tool and treat the 'integration tax' as a necessary R&D cost to validate the novelty of the workflow before committing to custom infrastructure.",
+      "mechanism": "Validation-First Heuristic: Novelty is often illusory. By forcing the team to hack an existing tool, they prove the uniqueness of their requirements. If the hack becomes too complex, the need for a custom tool is empirically demonstrated rather than theoretically assumed.",
+      "counterconditions": [
+        "The initial hacking effort consumes more time than building a minimal custom solution would have.",
+        "The existing tool's data model fundamentally misrepresents the causal structure of the experiment, leading to invalid conclusions.",
+        "The team has prior confirmed experience with this specific class of active learning loops."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "departure_declared",
+          "note": "Departing from the requirement to pre-define the causal mechanism. This candidate argues the mechanism emerges *from* the struggle with existing tools, not before it."
+        },
+        {
+          "handle": "[SRC_009] against SRC_002",
+          "kind": "rebutted",
+          "note": "The 'integration tax' is re-framed not as a loss but as the primary value proposition: it is the cost of proving novelty. If no tax is paid, the workflow wasn't novel enough to justify custom software."
+        },
+        {
+          "handle": "[SRC_017] against SRC_015",
+          "kind": "rebutted",
+          "note": "Agrees that event-driven architectures exist but argues they are insufficient for *novel* causal models. The friction of adapting them is the test."
+        },
+        {
+          "handle": "[SRC_008] against SRC_005",
+          "kind": "revised",
+          "note": "Acknowledges the migration cliff risk but proposes a 'disposable prototype' phase where data schema is ignored initially, with a hard gate to formalize schema only after the workflow is validated."
+        },
+        {
+          "handle": "[SRC_012] against SRC_010",
+          "kind": "rebutted",
+          "note": "Adopting an existing tool distributes failure risk across the vendor's maintenance, whereas a custom state machine concentrates it on the small team. The 'fragility' of a custom build is higher, not lower."
+        }
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_007",
+        "SRC_009"
+      ]
+    },
+    {
+      "claim": "Build a 'hybrid' tracker: a minimal custom state machine that owns the causal logic, which delegates all storage, visualization, and history to an existing robust platform via a strict adapter.",
+      "mechanism": "Separation of Concerns via Adapter Pattern: The custom component handles only the 'active control' loop (high frequency, low latency), while the existing tool handles 'passive observation' (high volume, complex querying). This isolates the causal fragility to a small, testable module.",
+      "counterconditions": [
+        "The latency introduced by the adapter layer breaks the control loop timing requirements.",
+        "The existing tool's API does not support the transactional consistency needed for the hybrid state.",
+        "The team cannot maintain the synchronization logic between the custom controller and the external logger."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_014] against SRC_011",
+          "kind": "revised",
+          "note": "Refined the mechanism to specify that the 'custom build' is strictly the state machine/adapter, not the whole tracker. This addresses the 'Control Theory Boundary' by isolating the active control logic physically and logically."
+        },
+        {
+          "handle": "[SRC_009] against SRC_002",
+          "kind": "rebutted",
+          "note": "The integration tax is minimized because the custom component is tiny (only the controller), and the heavy lifting is done by the existing tool. The 'hack' is formalized as an adapter."
+        },
+        {
+          "handle": "[SRC_017] against SRC_015",
+          "kind": "rebutted",
+          "note": "This approach leverages event-driven architectures precisely as the bridge. The custom module emits events that the existing tool consumes, satisfying the 'active control' need without replacing the whole stack."
+        },
+        {
+          "handle": "[SRC_008] against SRC_005",
+          "kind": "rebutted",
+          "note": "Since the existing tool handles storage from Day 1 via the adapter, there is no 'disposable script' phase, thus no migration cliff. The schema is defined in the adapter."
+        },
+        {
+          "handle": "[SRC_012] against SRC_010",
+          "kind": "revised",
+          "note": "Acknowledges the single point of failure risk in the custom adapter but argues it is narrower in scope than a full custom tracker, reducing the surface area of causal fragility."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_006",
+        "SRC_012"
+      ]
+    },
+    {
+      "claim": "Do not build or buy a tracker yet; instead, run the experiment manually with rigorous notebook documentation until the protocol stabilizes, then choose a tool based on the recorded pain points.",
+
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

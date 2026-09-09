@@ -1,0 +1,8 @@
+TARGET CONTENT:
+The claim in SRC_001 that schemas prevent unstructured noise CONTRADICTS the reality of high-latency active learning loops if the schema enforcement creates a bottleneck that distorts the experimental model; it is REFUTED IF the overhead of versioned schemas for disposable runs exceeds the cost of later data cleaning.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

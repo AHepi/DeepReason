@@ -1,0 +1,8 @@
+TARGET CONTENT:
+The 'Schema-First' approach in SRC_001 is INCOMPATIBLE with sub-millisecond feedback latency requirements; it is REFUTED IF existing tools' webhook architectures cannot guarantee such latency even with schema optimization, forcing a custom real-time system that bypasses the schema contract.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

@@ -1,0 +1,69 @@
+{
+  "candidate": {
+    "claim": "A small research team should adopt an existing experiment tracker and wrap it with a lightweight 'integration shim' rather than building a custom tool, unless their workflow requires real-time, sub-second causal intervention (active control loops) that existing APIs cannot support; for standard iterative research, the 'integration tax' of wrapping is strictly lower than the long-term maintenance debt and single-point-of-failure risk of a bespoke state machine.",
+    "mechanism": "The decision hinges on the 'Latency-Coupling Threshold': if the experiment's feedback loop requires the tracker to act as the controller with latency constraints tighter than what external API polling/webhooks allow (typically <200ms), a custom build is mandated by physics. Otherwise, the mechanism is 'Composable Abstraction,' where a thin shim layer absorbs the 'integration tax' by translating the team's specific causal model into the generic schema of the adopted tool, thereby avoiding the fragility of a monolithic custom state machine while preserving the semantic integrity of the data.",
+    "counterconditions": [
+      "The team's active learning loop requires parameter updates faster than the round-trip latency of the adopted tool's API.",
+      "The adopted tool's data model is so rigid that mapping the team's novel causal variables results in irreversible information loss.",
+      "The team possesses unique, sustained engineering capacity dedicated solely to maintaining the custom tracker's lifecycle."
+    ],
+    "typicality": 0.75,
+    "discharges": [
+      {
+        "handle": "04564f61826cca249a6c79c2899086ca83ec72524e71cc04001f88d07d1a101d",
+        "kind": "rebutted",
+        "note": "The criticism claims a missing causal mechanism for why active learning necessitates custom builds. The candidate explicitly provides this via the 'Latency-Coupling Threshold': when the tracker must function as the controller within a tight feedback loop (sub-second), the overhead of external API negotiation in existing tools breaks the causal chain, necessitating a custom, co-located state machine."
+      },
+      {
+        "handle": "1e7b9016ae4f1e6b113f16ae1c01e0e90d55e6e3d4fd5e9d2986736c63753538",
+        "kind": "revised",
+        "note": "Revised the claim to acknowledge the 'integration tax' not as an ignored factor but as the primary cost driver. The proposal now explicitly positions the 'integration shim' as the mechanism to pay this tax upfront in a bounded way, contrasting it against the unbounded, compounding interest of maintaining a full custom application."
+      },
+      {
+        "handle": "7da5e2771bd7676ec3077e39e5cfc9a2d1d44c0986f73aeaebc95a10fcf1cbb7",
+        "kind": "rebutted",
+        "note": "The criticism argues that event-driven architectures in modern tools negate the need for custom controllers. This rebuttal clarifies that while webhooks handle 'reaction,' they rarely support the deterministic, low-latency 'intervention' required for active learning loops where the next step depends on the immediate processing of the current result, a distinction the candidate's mechanism relies upon."
+      },
+      {
+        "handle": "7ec797a7bd69c7e6afc1cc3b35d82a719bd3d7323ca34719d432ded12fa496f5",
+        "kind": "revised",
+        "note": "Addressed the 'migration cliff' by specifying that the 'integration shim' must enforce a defined schema from day one. This ensures that even if the team switches tools later, the data remains structured and portable, preventing the accumulation of unstructured noise."
+      },
+      {
+        "handle": "b214e0f5904c9a8215b57af154061ae880a5a7ccdd2ac77608ccffbe2e53a406",
+        "kind": "rebutted",
+        "note": "The criticism suggests custom trackers introduce a single point of failure. The candidate rebuts this by arguing that a custom tracker for a small team *is* inherently a single point of failure due to limited bus-factor, whereas adopting an established tool distributes that risk to the vendor/community. The 'shim' approach isolates the team's specific logic from the core storage engine, reducing causal fragility."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "buy-vs-build-cloud-infrastructure",
+        "custom-cms-vs-headless-wrapper"
+      ],
+      "shared_structure": [
+        "Core utility vs. differentiating logic separation",
+        "Upfront integration cost vs. long-term maintenance debt",
+        "Latency requirements dictating architectural coupling"
+      ],
+      "disanalogies": [
+        "Experiment data schemas are more fluid and hypothesis-driven than standard cloud infrastructure or CMS content models.",
+        "The 'controller' role in active learning introduces a real-time physical constraint absent in typical web publishing or static hosting."
+      ],
+      "transfer_claims": [
+        "Just as teams wrap headless CMSs to enforce editorial workflows without rebuilding the database, research teams should wrap trackers to enforce causal models.",
+        "The threshold for building custom cloud infrastructure (extreme scale/latency needs) parallels the threshold for building custom experiment trackers (active control loops)."
+      ],
+      "overturn_conditions": [
+        "If an existing tracker releases a native plugin architecture that supports sub-50ms local execution hooks.",
+        "If the research domain shifts entirely to passive observation, eliminating the need for active control loops."
+      ]
+    },
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_002",
+        "SRC_004"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

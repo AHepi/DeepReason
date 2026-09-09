@@ -1,0 +1,70 @@
+{
+  "candidates": [
+    {
+      "content": "The 'Schema-First' contract in SRC_004 DEPENDS ON the 'Shadow Mode' parallelism mechanism; it is REFUTED IF the disposable script fails to validate the schema against active learning requirements before migration, rendering the formal contract unverifiable.",
+      "typicality": 0.92,
+      "neighbours": ["SRC_004"],
+      "evidence_refs": [
+        {
+          "block": "093afb20ca52",
+          "quote": "Hybrid Validation via Schema-First Contract and Shadow Mode Parallelism"
+        }
+      ]
+    },
+    {
+      "content": "The claim in SRC_001 that schemas prevent unstructured noise CONTRADICTS the reality of high-latency active learning loops if the schema enforcement creates a bottleneck that distorts the experimental model; it is REFUTED IF the overhead of versioned schemas for disposable runs exceeds the cost of later data cleaning.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_001"],
+      "evidence_refs": [
+        {
+          "block": "093afb20ca52",
+          "quote": "If the overhead of maintaining versioned schemas for rapid, disposable exploratory runs exceeds the cost of later data cleaning"
+        }
+      ]
+    },
+    {
+      "content": "The 'adapter' concept in SRC_002 SHARES MECHANISM with 'pre-fabricated components' in civil engineering; it is REFUTED IF the software domain novelty is so high that no existing schema language can express required state transitions without becoming Turing-complete, breaking the analogy to standard building codes.",
+      "typicality": 0.78,
+      "neighbours": ["SRC_002"],
+      "evidence_refs": [
+        {
+          "block": "093afb20ca52",
+          "quote": "If the domain novelty is so high that no existing schema language (JSON Schema/Protobuf) can express the required state transitions without becoming Turing-complete"
+        }
+      ]
+    },
+    {
+      "content": "The 'Shadow Mode' strategy in SRC_005 INTEGRATES with the 'Schema-First' contract by acting as a causal bridge; it is REFUTED IF the team lacks the engineering bandwidth to maintain two parallel tracking systems even for a short validation period, causing the integration tax to outweigh the benefits.",
+      "typicality": 0.88,
+      "neighbours": ["SRC_005"],
+      "evidence_refs": [
+        {
+          "block": "093afb20ca52",
+          "quote": "If the team lacks the bandwidth to maintain two parallel tracking systems even for a short 2-week period"
+        }
+      ]
+    },
+    {
+      "content": "The architectural stance in SRC_003 ABSTRACTS the problem of data fragility into a regulatory compliance issue; it is REFUTED IF the 'regulatory body' (existing tool) forbids the specific 'design' (active learning pattern) entirely, making adherence to the foundation impossible rather than protective.",
+      "typicality": 0.62,
+      "neighbours": ["SRC_003"],
+      "evidence_refs": [
+        {
+          "block": "093afb20ca52",
+          "quote": "If the regulatory body (existing tool) forbids the specific 'design' (active learning pattern) entirely"
+        }
+      ]
+    },
+    {
+      "content": "The 'Schema-First' approach in SRC_001 is INCOMPATIBLE with sub-millisecond feedback latency requirements; it is REFUTED IF existing tools' webhook architectures cannot guarantee such latency even with schema optimization, forcing a custom real-time system that bypasses the schema contract.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_001"],
+      "evidence_refs": [
+        {
+          "block": "093afb20ca52",
+          "quote": "If the research workflow requires real-time bidirectional control loops (active learning) that existing tools only support via high-latency webhooks"
+        }
+      ]
+    }
+  ]
+}

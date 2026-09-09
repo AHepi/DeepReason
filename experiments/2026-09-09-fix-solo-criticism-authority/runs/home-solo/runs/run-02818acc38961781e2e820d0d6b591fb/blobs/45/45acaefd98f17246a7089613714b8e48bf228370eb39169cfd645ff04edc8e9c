@@ -1,0 +1,12 @@
+TARGET CONTENT:
+{"analogy":null,"claim":"Adopt an existing tracker but configure it to log 'negative results' and 'failed hypotheses' with equal prominence to successful ones, countering publication bias inherent in most default configurations.","counterconditions":[{"case":"The existing tool's UI hardcodes 'success' metrics as primary visual elements.","checker_spec":null,"eval":"observation"},{"case":"Stakeholders explicitly demand a dashboard showing only progress/success.","checker_spec":null,"eval":"observation"},{"case":"The volume of negative results overwhelms the signal, making the tracker unusable.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Anti-Bias Configuration: Leverages the structural completeness of existing tools but alters the social/visual incentive structure by surfacing null results, thereby creating a more accurate posterior distribution of the research landscape.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+BATTERY THE EDITS WILL FACE:
+- program:reasoning_observation_pending
+- program:reasoning_observation_pending
+- program:reasoning_observation_pending
+- program:reasoning-envelope-wf
+
+KERNEL mu_struct (§10.7): the target is a skeleton — substitute at role level. Swap the mechanism, the causal link, the scope. Each edit must be a complete valid skeleton JSON. Do NOT merely reword.
+
+DIRECTIVE: produce exactly 8 bounded edits.

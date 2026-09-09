@@ -1,0 +1,8 @@
+TARGET CONTENT:
+The architectural stance in SRC_003 ABSTRACTS the problem of data fragility into a regulatory compliance issue; it is REFUTED IF the 'regulatory body' (existing tool) forbids the specific 'design' (active learning pattern) entirely, making adherence to the foundation impossible rather than protective.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

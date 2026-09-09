@@ -1,0 +1,39 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "essential_premise_aliases": {"items": {"enum": ["SRC_001", "SRC_002"], "type": "string"}, "maxItems": 8, "title": "Essential Premise Aliases", "type": "array"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-f8d503b930a65e1a2cf5ff81777d4786) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Should a small team building a research tool write its own experiment tracker, or adopt an existing one?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@4dc6a7517fcfdbeb7398615c: program:reasoning_observation_pending
+- reason-counter@ad1249e532772856e39e5b36: program:reasoning_observation_pending
+- reason-counter@a1f629217a74d6ad21199023: program:reasoning_observation_pending
+- reason-counter@b7ccd54062ecc013f4a379c3: program:reasoning_observation_pending
+- reason-counter@a5b62b94aaf2f7dfc4753a0a: program:reasoning_observation_pending
+- reason-counter@d1fe33b25f00fa0552023b43: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Research tools have lower safety-critical stakes than aviation","Iteration cycles in research are much faster than aircraft certification","Data schemas in research evolve more frequently than flight protocols"],"overturn_conditions":["If the research domain changes so rapidly that schema definition slows iteration below viable speeds.","If the overhead of maintaining dual systems exceeds the team's total capacity."],"shared_structure":["Dual-system verification during development phases","Strict schema/protocol definition before operational deployment","Fallback to manual/local controls if automated systems fail validation"],"source_memory_refs":["Aviation Industry Certification Processes"],"transfer_claims":["Just as test flights use independent telemetry alongside cockpit instruments, research should use local scripts alongside formal trackers.","Defining data structures before collection prevents irrecoverable data loss similar to how flight logs prevent accident ambiguity."]},"claim":"For a small team building a research tool with active learning loops, the optimal path is to adopt an existing experiment tracker but enforce a 'Schema-First' contract coupled with a 'Shadow Mode' validation period, rather than building a custom tracker or using the tool naively.","counterconditions":[{"case":"The active learning loop requires sub-millisecond latency control that no existing tracker's webhook or streaming API can guarantee.","checker_spec":null,"eval":"observation"},{"case":"The team lacks the bandwidth to maintain dual logging systems (local script + external tool) even for a short 2-week period.","checker_spec":null,"eval":"observation"},{"case":"The research domain is so novel that no existing schema ontology can be adapted, requiring a completely new data model that existing tools cannot extend.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The mechanism combines 'Structural Guardrails' (Schema-First) to prevent unstructured data accumulation and 'Parallel Validation' (Shadow Mode) to quantify the integration tax before full commitment. By defining a strict JSON Schema or Protobuf contract before logging any data, the team ensures that even if the external tool's native fields are imperfect, the core experimental state remains machine-readable and migratable. Simultaneously, running a dispo
+commitments: reasoning-envelope-wf, reason-counter@4dc6a7517fcfdbeb7398615c, reason-counter@ad1249e532772856e39e5b36, reason-counter@a1f629217a74d6ad21199023
+
+TARGET SRC_002
+{"analogy":null,"claim":"The team should adopt an existing experiment tracker but enforce a 'Schema-First' contract where no data is logged until a formal schema is defined, while simultaneously running a 'Shadow Mode' period where a disposable script mirrors the formal tool's expected inputs to validate the workflow before full migration.","counterconditions":[{"case":"The team lacks the bandwidth to maintain two parallel tracking systems even for a short 2-week period.","checker_spec":null,"eval":"observation"},{"case":"The research domain is so novel that no existi

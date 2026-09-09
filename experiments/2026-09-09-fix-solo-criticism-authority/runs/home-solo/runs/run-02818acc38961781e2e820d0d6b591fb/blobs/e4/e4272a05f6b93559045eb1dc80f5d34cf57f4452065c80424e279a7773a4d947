@@ -1,0 +1,46 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "essential_premise_aliases": {"items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}, "maxItems": 8, "title": "Essential Premise Aliases", "type": "array"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "successor_question": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Successor Question"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+SRC_001
+SRC_002
+
+ONE SYNTAX EXAMPLE:
+{}
+
+INPUT:
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-f8d503b930a65e1a2cf5ff81777d4786) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Should a small team building a research tool write its own experiment tracker, or adopt an existing one?
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@ad17070bff3dc0181445d168: program:reasoning_observation_pending
+- reason-counter@fdec5ec15c241cb48768880c: program:reasoning_observation_pending
+- reason-counter@75c6dcb75b2259240c58bcf7: program:reasoning_observation_pending
+- reason-counter@2730e0ded8fb58953f439eff: program:reasoning_observation_pending
+- reason-counter@f995ea47049b2ac04ee2bd7a: program:reasoning_observation_pending
+- reason-counter@3c697d0bc299dde582a4a822: program:reasoning_observation_pending
+- reason-counter@cadaef7f478a2a7e687cd44a: program:reasoning_observation_pending
+- reason-counter@8250cbec04a5a9a39faea2b8: program:reasoning_observation_pending
+- reason-counter@f1b22608ae748873335f00d3: program:reasoning_observation_pending
+- reason-counter@eaa1badbf05ba5a29a596f7c: program:reasoning_observation_pending
+- reason-counter@5952709053ebc4ed98c09647: program:reasoning_observation_pending
+- reason-counter@43970072f4eb212a70af37e5: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The team should adopt an existing experiment tracker but enforce a 'Schema-First' contract where no data is logged until a formal schema is defined, while simultaneously running a 'Shadow Mode' period where a disposable script mirrors the formal tool's intake to validate the schema against active learning loop requirements before full migration.","counterconditions":[{"case":"If the active learning loops require sub-millisecond feedback latency that existing tools' webhook architectures cannot guarantee even with schema optimization.","checker_spec":null,"eval":"observation"},{"case":"If the team lacks the engineering bandwidth to maintain two parallel tracking systems (script and formal tool) during the Shadow Mode period.","checker_spec":null,"eval":"observation"},{"case":"If the domain novelty is so high that no existing schema language (JSON Schema/Protobuf) can express the required state transitions without becoming Turing-complete and thus unverifiable.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Hybrid Validation via Schema-First Contract and Shadow Mode Parallelism: This mechanism satisfies the need for active 
+commitments: reasoning-envelope-wf, reason-counter@ad17070bff3dc0181445d168, reason-counter@fdec5ec15c241cb48768880c, reason-counter@75c6dcb75b2259240c58bcf7
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Software schemas can be iterated and versioned instantly, whereas changing building codes requires legislative processes.","A software adapter failure results in data loss or pause, whereas a building code failure can result in physical catastrophe."],"overturn_conditions":["If the research involves physically dangerous experiments where software latency directly correlates to human safety, custom real-time systems may override standard protocols.","If the 'standard building codes' (existing trackers) are proven to be fundamentally incompatible with the laws of physics governing the new domain (novel AI paradigms)."],"shared_structure":["Both domains face a choice between adopting a standardized framework (building codes/existing trackers) with strict compliance (schema-first) versus designing a bespoke solution from scratch.","In both cases, the 'custom' route introduces high maintenance liability and risk of structural failure (fragility) for small teams.","The 'adapter' in software corresponds to 'pre-fabricated components' in construction: they allow custom designs to fit within standard safety frameworks."],"source_memory_refs":["Civil Engineering: B
+commitments: reasoning-envelope-wf, reason-counter@2730e0ded8fb58953f439eff, reason-coun
