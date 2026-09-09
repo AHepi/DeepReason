@@ -79,7 +79,7 @@ exists and the document it supersedes was never updated.
 
 128 dated tranches plus a dozen earlier campaigns; 63 results documents; 415
 test files; 41 report files under `experiments/results/`. The measurement
-spine of this audit is six bodies of evidence, all Tier 1:
+spine of this audit is nine bodies of evidence, all Tier 1:
 
 | body | date | volume | what it measured |
 |---|---|---|---|
@@ -89,6 +89,9 @@ spine of this audit is six bodies of evidence, all Tier 1:
 | `2026-08-25-change-constructive-frontier` | 2026-08-25 | 1.4M tokens, 2 arms + 1 void | construction against an exact checker, harness vs plain sampling |
 | `2026-08-28-diversity-generation` | 2026-08-28 | 2,243,500 tokens, 12,794 candidates | how many distinct ideas four ways of asking produce |
 | `2026-09-04-experiment-blind-critic` | 2026-09-04 | 480 criticism calls | planted-fault detection under four exposures |
+| `2026-08-27-pc2b-symmetric-reasoning` | 2026-08-27 | 2 arms, reasoning on both | the construction rematch, and the record's sharpest self-scoring instance |
+| `2026-09-01-live-all-modules-p-a1` | 2026-09-01 | 24 modules, live census | which channels a model used when every channel was armed |
+| `2026-08-26-run-anatomy-w2` / `-w3` | 2026-08-26 | 196 attacks, 623 evidence blocks | whether criticism and evidence ever reached the model at all |
 
 Two more bodies carry a lot of weight and sit lower: the basin/exploration
 study (Tier 2) and the grounding comparison in `docs/REPORT.md` (Tier 3).
@@ -899,7 +902,7 @@ It is one run, it is prose, and the audit records it as the clearest instance
 in the corpus of a model producing a criticism worth having — which is a
 different and lesser claim than origination.
 
-### 3.5 Sense five — better than the same model without the harness: MEASURED TWICE, NULL BOTH TIMES
+### 3.5 Sense five — better than the same model without the harness: MEASURED FOUR TIMES, NEVER SHOWN
 
 This is the project's own success criterion (the operator's law of
 2026-09-03: the condition of success is something materially better than what
