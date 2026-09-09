@@ -1,6 +1,6 @@
 # Checklist for: does criticism, once connected and allowed to bite, make the harness's output materially better than the plain model? — TRANCHE 1 (instruments, offline proofs, sealed pre-registration; NO LIVE CALL)
 
-State: next=1 blockers=none
+State: next=4 blockers=none  (SPEC Amendment 2 at step 3: the diff ceiling is 4400, itemized; the earlier 2010 counted only authored lines and would have tripped on accounting, not scope)
 Re-read REQUEST.md (with Amendment 1) + SPEC.md (with Amendment 1) before every
 step. Execute strictly in order. One step per dr-execute-step invocation.
 
@@ -32,12 +32,20 @@ nor `mini/`, so R36 is not touched.
 
 ---
 
-- [ ] 1. (S16) Create the tranche's working directories: `tools/`, `runs/`,
+- [x] 1. (S16) Create the tranche's working directories: `tools/`, `runs/`,
       `tests/`, `proof/`.
       done-when: `ls -d experiments/2026-09-09-change-d8-criticism-experiment/{tools,runs,tests,proof}`
       lists four directories, exit 0.
+      PROOF:
+      ```
+      experiments/2026-09-09-change-d8-criticism-experiment/proof
+      experiments/2026-09-09-change-d8-criticism-experiment/runs
+      experiments/2026-09-09-change-d8-criticism-experiment/tests
+      experiments/2026-09-09-change-d8-criticism-experiment/tools
+      exit=0
+      ```
 
-- [ ] 2. (S8, S9) Copy the three source instruments BYTE-FOR-BYTE, no edits in
+- [x] 2. (S8, S9) Copy the three source instruments BYTE-FOR-BYTE, no edits in
       this step: `compose_result.py` and `judge_pairwise.py` from
       `experiments/2026-09-06-change-writers-room-organiser-testing/tools/`,
       `arm0.py` from
@@ -45,6 +53,22 @@ nor `mini/`, so R36 is not touched.
       done-when: `proof/COPIES.sha256` records all three digests and
       `sha256sum -c proof/COPIES.sha256` exits 0 against BOTH the sources and
       the copies (identical digests, pasted).
+      PROOF:
+      ```
+      $ cd tools && sha256sum -c ../proof/COPIES.sha256
+      compose_result.py: OK
+      judge_pairwise.py: OK
+      arm0.py: OK
+
+      $ sha256sum <the three sources>
+      7c2835448886465ffd07ffadc9d057ac0a83da5f58d30dbff96509b4d81b9c62  .../organiser-testing/tools/compose_result.py
+      1f6c8f9005a2b49cce5884f1404d36a1393783f17fff6d0bb23720e095e261cd  .../organiser-testing/tools/judge_pairwise.py
+      c33b87a90ff496dcf50a0c01624fdf5246e791729d49f4d19951112c25c20ccb  .../mini-isolation-programme/d8/arm0.py
+      ```
+      The judge instrument's digest equals the one the organiser tranche's
+      PREREG Amendment 9 sealed, so the copy is the STRICTER post-Amendment-9
+      instrument (it refuses a unit whose root does not replay), not an
+      earlier one.
 
 - [ ] 3. (S8, S9) [COMMIT] the directories and the untouched copies, with the
       three digests in the message.

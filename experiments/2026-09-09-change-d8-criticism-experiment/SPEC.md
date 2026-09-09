@@ -788,3 +788,62 @@ this amendment names is traced to committed code or a committed configuration
 whether a trial needs `JUDGE_SEATS_ENABLED` — is written down as an open
 done-criterion instead of an assumption; nothing here is untraceable to an R
 or C number.
+
+---
+
+# Amendment 2 (2026-09-09) — the budget ceiling counted the wrong thing
+
+Found at step 3, before any instrument was written, by running the gate that
+enforces it. Recorded as a correction rather than quietly raised, because
+"raise the ceiling until it fits" is the exact failure the change workflow's
+S5 precedent names.
+
+**What was wrong.** Amendment 1's `~2 010 lines` itemized only the lines this
+tranche WRITES — the delta on a copied instrument, not the instrument. The gate
+(`tools/diff_budget.py <base> --paths <declared areas>`) counts every inserted
+line in the declared areas against `origin/main`, which includes (a) the three
+instruments copied verbatim, whose 784 lines this tranche commits without
+authoring, and (b) the workflow's own artifacts — REQUEST.md, SPEC.md,
+CHECKLIST.md, PARKED.md, and the VALIDATION.md and DELIVERY.md still to come —
+which no earlier itemization listed at all. At step 3 the gate already read
+1 486 of a 2 010 ceiling with zero instruments written, so the ceiling would
+have tripped mid-tranche on an accounting mismatch rather than on scope.
+
+**The complete itemization, and its arithmetic.**
+
+    python3 -c "print('itemized total =', sum([1190,784,310,250,200,200,120,150,60,140,250,320,200,40]))"
+    itemized total = 4214
+
+- workflow artifacts (REQUEST + SPEC with both amendments + CHECKLIST with its
+  pasted proofs + PARKED + VALIDATION + DELIVERY) 1190
+- the three instruments copied verbatim (`arm0.py` 107, `compose_result.py`
+  179, `judge_pairwise.py` 498 — measured, not estimated) 784
+- edits to those three (`--per-position`, the five pairings, `K` as an
+  argument) 310
+- `tools/coupling_placebo.py` 250
+- `tools/record_census.py` 200
+- `tools/critic_stub.py` 200
+- `tools/make_vacuous_bank.py` 120
+- `tools/build_manifest.py` 150
+- `runs/config-{c,v,a}.yaml` 60
+- the tranche's own `tests/` 140
+- `claims.json` 250
+- `PREREG.md` 320
+- `proof/` outputs 200
+- three `CASES` rows in `scripts/cycle_soak.py` 40
+
+**Ceiling: 4 400**, which is the itemized 4 214 plus a stated 4% margin for
+proof outputs whose length is not knowable before the commands run. Declared
+areas, unchanged: `experiments/2026-09-09-change-d8-criticism-experiment` and
+`scripts`. Frozen surfaces touched: still **none** — this amendment moves an
+accounting number and nothing else, and the CLEAR forecast of Amendment 1
+stands.
+
+**What this does NOT license.** The ceiling is not a target. If the tranche
+approaches it, that is a signal to split again, not to amend a third time; a
+third amendment to this number would be the S5 failure arriving one step later
+than usual.
+
+Rubric: 6/6 yes — the correction traces to R38's tranche-1 scope and to the
+change workflow's own budget rule; the headline now equals its own pasted
+arithmetic; no census, forecast or acceptance check moves.
