@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is a 'pragmatic fiction' and 'social decree' fails to answer the specific normative question posed in the problem context: 'Is that preference defensible on Popper's own terms?'. By reducing the preference to a sociological convention or an 'agreed-upon fiction', the target sidesteps the requirement to provide a rational justification grounded in Popper's epistemology (e.g., verisimilitude or the logic of situational analysis). Instead of demonstrating how the preference is defensible *within* the system, it asserts that the system cannot guide action without an external, non-epistemic 'conventionalist' patch. This concedes the very point the problem asks to be defended or refuted on internal grounds, effectively answering 'No, it is not defensible on his own terms, so we must invent a fiction' without rigorously establishing why no internal defense (such as acting on the theory with the highest content that has withstood tests being the most rational choice for truth-likeness) is possible. The argument assumes the impossibility of an internal defense rather than proving it against the strongest internal counter-arguments.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": null,
+      "premise_evidence": null,
+      "successor_question": "If the preference is merely a social convention, does this not imply that Popper's critical rationalism is practically inert for individual decision-making until a collective agreement is reached?"
+    }
+  ]
+}

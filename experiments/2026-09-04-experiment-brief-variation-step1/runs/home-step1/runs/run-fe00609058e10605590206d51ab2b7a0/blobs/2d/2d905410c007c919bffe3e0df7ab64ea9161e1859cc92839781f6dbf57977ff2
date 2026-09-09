@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's mechanism fails to distinguish between a theory that has survived severe tests and one that has never been tested at all. If preference is based solely on the absence of known falsification ('not yet killed'), then an untested, ad-hoc conjecture stands on equal footing with a rigorously corroborated theory, provided neither has been falsified. This contradicts the problem's premise that scientists (and Popper) specifically prefer the *better-corroborated* theory. The target dissolves the dilemma by eliminating the very distinction (corroboration vs. mere survival) that generates it, rendering the 'preference' irrational under its own definition because it offers no reason to choose the tested theory over the untested one.",
+      "premise": "Preference requires a differentiator between surviving theories, not just the absence of falsification.",
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "counterexample": null,
+      "premise_evidence": null,
+      "successor_question": "If an untested theory and a severely tested theory are both unfalsified, does your negative heuristic provide any rational basis for preferring the tested one?"
+    }
+  ]
+}

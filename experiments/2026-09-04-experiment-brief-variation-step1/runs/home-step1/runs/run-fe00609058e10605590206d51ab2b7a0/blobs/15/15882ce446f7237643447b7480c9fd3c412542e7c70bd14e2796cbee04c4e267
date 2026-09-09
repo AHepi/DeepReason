@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's claim that the preference is 'indefensible on strict Popperian terms' and reveals a 'fundamental fracture' is factually incorrect regarding Popper's own solution. Popper explicitly defended the preference for better-corroborated theories not as an inductive inference (which would smuggle in probability), but as a critical rational choice based on the theory's content and its survival of severe tests. He argued that we prefer the better-corroborated theory because it has withstood more attempts at falsification, making it the best candidate for truth *currently*, without assigning it a higher logical probability. The target falsely equates 'preference' with 'inductive probability,' ignoring Popper's distinction between the logical status of a theory (unchanged by corroboration) and the pragmatic rationality of choosing the one that has survived the most severe criticism. Therefore, the 'schism' described is not a failure of Popper's system but a misreading of his concept of 'rational preference' which operates entirely within System A (critical rationalism) without needing to hand over to an inductive System B.",
+      "counterexample": null,
+      "essential_premise_aliases": [],
+      "premise": "Popper distinguishes between logical probability (which corroboration does not increase) and rational preference (which justifies choosing the better-corroborated theory without induction).",
+      "premise_evidence": null,
+      "successor_question": "If Popper's defense of rational preference without induction holds, does the alleged 'schism' between the philosopher and the citizen dissolve entirely?"
+    }
+  ]
+}

@@ -1,0 +1,332 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'methodological rule of action' rather than an epistemic probability claim; it smuggles no induction because it explicitly renounces the expectation that the future will resemble the past, accepting instead the risk of acting on the best-tested error-free theory available.",
+      "mechanism": "Distinction between 'epistemic justification' (which requires induction) and 'pragmatic selection' (which requires only the absence of falsification). The mechanism is a decision-theoretic pivot: since we must act, and we cannot know truth, we select the theory that has withstood the most severe attempts at falsification, not because it is likely true, but because it is the most rational bet given our ignorance. The cost is the acceptance that our actions may still be based on false theories, with no probabilistic safety net.",
+      "counterconditions": [
+        "If the agent implicitly assumes that surviving tests increases the likelihood of future survival.",
+        "If the definition of 'severe test' secretly relies on inductive assumptions about background knowledge.",
+        "If the 'preference' leads to actions that are indistinguishable from those taken under an inductive framework."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "The candidate does not rely on a 'Principle of Uniformity' straw man; it explicitly grounds the preference in a methodological rule of action that rejects uniformity assumptions, aligning with Popper's actual distinction between acting and knowing."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "This proposal avoids verisimilitude entirely, relying instead on the binary status of 'not yet falsified' and the severity of tests, thus bypassing the logical collapse of quantitative verisimilitude."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate clarifies that 'preference' here is a selection rule for action decoupled from truth expectation, directly addressing the critique that it must imply an expectation of truth to be useful for action."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "By eschewing verisimilitude in favor of a purely methodological rule based on test severity, the candidate sidesteps the failure of Popper's formal verisimilitude definitions."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "The mechanism explicitly requires 'severe tests' (attempts to falsify), distinguishing the corroborated theory from an untested one which has not faced such attempts."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "The candidate leans into this category error distinction, arguing that the preference is precisely a pragmatic decision rule, not an inductive inference, thereby validating the critique's framing as the solution."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "The proposal defends the preference as defensible on Popper's own terms (critical rationalism) without reducing it to a mere social decree, grounding it in the logic of error elimination."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate addresses the core problem by asserting that acting on the best-tested theory is the only rational option in the absence of certainty, even if it makes no claim about future success, thus answering why scientists prefer it for action."
+        }
+      ],
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The preference inevitably smuggles in induction because any 'preference' for action logically entails an expectation of future performance, which is an inductive leap that Popper's prohibition on corroboration-as-probability cannot sustain without contradiction.",
+      "mechanism": "Analysis of the semantic content of 'preference'. To prefer X for action Y implies believing X is more likely to succeed in Y than not-X. Since Popper denies that corroboration increases probability, the act of preferring based on corroboration creates a performative contradiction: the scientist acts as an inductions while claiming to be a deductivist. The cost is admitting that Popper's system is descriptively inadequate for actual scientific practice or internally inconsistent regarding action.",
+      "counterconditions": [
+        "If 'preference' can be rigorously defined without any probabilistic or future-oriented expectation.",
+        "If Popper provides a non-inductive account of rational action that satisfies the criteria for 'preference'.",
+        "If the 'contradiction' is merely verbal and dissolves under a specific decision-theoretic formalism."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "The argument does not attack a straw man; it targets the inherent implication of 'action' which necessitates an expectation of regularity, regardless of Popper's explicit denials."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "This candidate argues that *any* basis for preference (including verisimilitude or survival) collapses into induction when applied to action, making the specific failure of verisimilitude just one instance of a broader problem."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The candidate asserts that decoupling preference from truth expectation renders the concept of 'preference for action' meaningless, thus the target's defense fails to address the normative requirement of the problem."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "While agreeing verisimilitude failed, this candidate extends the failure to the entire project of non-inductive preference, arguing the problem is structural, not just definitional."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "The argument concedes the distinction between tested and untested but insists that preferring the tested for *future* action still requires the inductive step that the test results are relevant to the future."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "The candidate challenges the 'category error' defense by arguing that pragmatic preference *is* a form of inductive inference in disguise, as it assigns higher weight to past performance for future decisions."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "It argues that reducing preference to a 'fiction' admits the indefensibility on strict Popperian terms, confirming the charge of smuggling induction rather than refuting it."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "The candidate directly addresses the 'acting' component by stating that acting on a theory *requires* an inductive belief in its reliability, which Popper's framework forbids, thus the preference is indefensible on his own terms."
+        }
+      ],
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The preference is defensible only if reconceived as an evolutionary selection mechanism where 'corroboration' marks fitness for survival in a specific environment, not truth; this avoids induction by treating science as a blind variation and selective retention process analogous to biological evolution.",
+      "mechanism": "Evolutionary Epistemology analogy. Theories are mutations; tests are environmental pressures. Preferencing the corroborated theory is like an organism preferring a trait that has kept it alive so far—not because it guarantees future survival (induction), but because it is the only variant currently adapted to the known environment. The cost is abandoning the idea that science converges on truth, viewing it instead as an adaptation to local problems.",
+      "counterconditions": [
+        "If the environment (nature) changes in ways unrelated to past tests.",
+        "If the analogy breaks down because theories are chosen consciously, not blindly.",
+        "If 'fitness' implicitly assumes a stable nature (induction)."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "This approach uses an evolutionary model rather than a 'Principle of Uniformity', aligning with Popper's later evolutionary epistemology which explicitly rejects uniformity in favor of propensities and selection."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "Fitness is not verisimilitude; it is relational and contextual. A theory can be 'fit' (corroborated) without being 'true-like', avoiding the logical constraints cited."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The preference is for 'current fitness', which is sufficient for action in the current context without implying a general expectation of truth or future permanence."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Evolutionary fitness does not require the quantitative definition of verisimilitude that failed; it relies on the binary outcome of survival/non-survival."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "In evolution, 'tested' means 'exposed to selection pressure'. An untested theory is like a neutral mutation; a corroborated one has proven its fitness against specific pressures, distinguishing them clearly."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "The evolutionary view treats the preference as a biological/pragmatic imperative (survive), not an epistemic inference, fully embracing the category distinction."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "This provides a robust normative basis (evolutionary success) for the preference, moving beyond 'social decree' to a naturalized epistemology consistent with Popper's later views."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Scientists act on the 'fittest' theory because it is the only one known to work in the current environment, satisfying the need for action without requiring a guarantee of future success."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "The dilemma is a false dichotomy arising from a linguistic confusion: 'preference' in Popper's system is a shorthand for 'provisional acceptance for the sake of criticism', meaning we adopt the theory not to act successfully, but to expose it to new, harder tests where it might finally break.",
+      "mechanism": "Reframing 'action' as 'experimental deployment'. We build the bridge using the best theory not because we expect it to hold (induction), but because if it fails, the failure will be more informative (severe test). The preference is for the theory that offers the best opportunity for learning, not the highest probability of success. The cost is a radical reinterpretation of scientific engineering as primarily a truth-seeking experiment rather than a utility-maximizing endeavor.",
+      "counterconditions": [
+        "If the cost of failure (e.g., bridge collapse) is unacceptable, implying we do expect success.",
+        "If scientists genuinely believe the theory will work, not just that it will teach them something if it doesn't.",
+        "If 'provisional acceptance' functionally behaves identical to 'belief in probability'."
+      ],
+      "typicality": 0.30,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "This interpretation relies on the core Popperian concept of 'severity' and 'learning from errors', not a misrepresentation of uniformity."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "The basis for preference is 'potential for informative falsification', which is logically distinct from and immune to the critiques of verisimilitude."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The preference is explicitly decoupled from truth expectation; it is coupled with 'expectation of information gain', even (especially) from failure."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Avoids verisimilitude entirely by focusing on the informational yield of the theory's potential death."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "An untested theory offers unknown informational potential; a corroborated one has defined boundaries of survival, making it a better candidate for targeted, severe testing."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "This fully embraces the category error defense, redefining the 'pragmatic preference' as a strategic move in the game of criticism, not a bet on reality."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "It answers the normative question by defining the goal of science as error elimination, making the preference defensible within that specific normative framework."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "It addresses the 'acting' component by suggesting that for a critical rationalist, building the bridge *is* the act of testing, and the preference is for the most rigorous test bed."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "Popper's preference is defensible only by invoking a metaphysical 'propensity' of nature to be structured such that severe tests are meaningful, which functions as a hidden inductive principle, thereby confirming that he smuggled induction back in under the guise of ontology.",
+      "mechanism": "Ontological critique. Popper's later appeal to 'propensities' (objective probabilities) as real features of the world attempts to ground corroboration. However, assuming nature has propensities that align with our tests is itself an inductive assumption about the structure of reality. The mechanism is the exposure of this ontological commitment as a surrogate for the rejected epistemic induction. The cost is acknowledging that Popper's system rests on an unprovable metaphysical faith in the intelligibility and stability of nature.",
+      "counterconditions": [
+        "If propensities are interpreted purely logically and not ontologically.",
+        "If the 'faith' in nature's structure is a prerequisite for any inquiry, not a specific inductive claim.",
+        "If Popper explicitly distinguishes metaphysical faith from methodological rules."
+      ],
+      "typicality": 0.55,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "revised",
+          "note": "Revised to specify that the 'smuggled induction' is not a 'Principle of Uniformity' per se, but a deeper ontological commitment to 'propensities' which serves the same functional role, refining the target of the critique."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "The critique targets the metaphysical foundation (propensities) required to make sense of corroboration, rather than the failed logical definition of verisimilitude."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "Argues that the 'preference' relies on the metaphysical belief that the propensity revealed by tests persists, which is an expectation of truth/stability, contradicting the 'decoupled' claim."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "Suggests that the failure of verisimilitude forced Popper toward propensities, which are equally problematic but in a different (ontological) domain."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "The distinction holds only if propensities are stable; if they are not, the tested/untested distinction collapses, revealing the hidden inductive assumption of stability."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "Contends that the 'pragmatic preference' is underpinned by the metaphysical belief in propensities, blurring the line between pragmatics and ontology/induction."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "Asserts that the preference is defensible only if one accepts the metaphysical postulate, which goes beyond a mere 'social decree' but reintroduces the very thing Popper sought to eliminate."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Scientists act on the theory because they implicitly trust the propensities (induction); Popper's system makes this explicit, showing the smuggling."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The preference is a 'rational convention' akin to the rules of a game: it is defensible because it is constitutive of the practice of science itself, and asking for its justification outside the game (via induction) is a category mistake that misunderstands the normative force of conventions.",
+      "mechanism": "Wittgensteinian/Conventionalist turn. The 'rules' of critical rationalism (prefer the tested) are not derived from nature or logic but are agreed-upon norms that define what it means to do science. They are self-justifying within the form of life of the scientific community. The cost is relativism: the preference is only valid for those who choose to play the 'science game', with no transcendent claim to rationality for outsiders.",
+      "counterconditions": [
+        "If the conventions themselves are chosen because they 'work' (inductive justification).",
+        "If there are objective reasons for these specific conventions over others.",
+        "If Popper claimed universal rationality rather than local conventional validity."
+      ],
+      "typicality": 0.25,
+      "discharges": [
+        {
+          "handle": "[SRC_010] against SRC_006",
+          "kind": "rebutted",
+          "note": "This view bypasses the 'Principle of Uniformity' debate entirely by grounding the preference in social/normative convention rather than metaphysical or empirical principles."
+        },
+        {
+          "handle": "[SRC_009] against SRC_005",
+          "kind": "rebutted",
+          "note": "Conventions do not require logical definitions like verisimilitude; they require only agreement, rendering the logical collapse irrelevant."
+        },
+        {
+          "handle": "[SRC_016] against SRC_012",
+          "kind": "rebutted",
+          "note": "The preference is a rule of the game, not a prediction of truth. It guides action within the game by definition, satisfying the problem's context without smuggling induction."
+        },
+        {
+          "handle": "[SRC_020] against SRC_005",
+          "kind": "rebutted",
+          "note": "As a convention, it needs no formal definition of truth-likeness, only a shared understanding of the rule 'play the corroborated theory'."
+        },
+        {
+          "handle": "[SRC_018] against SRC_014",
+          "kind": "rebutted",
+          "note": "The rules of the game dictate that only moves (theories) that have survived previous rounds (tests) are eligible for play, clearly distinguishing them from untested moves."
+        },
+        {
+          "handle": "[SRC_017] against SRC_013",
+          "kind": "rebutted",
+          "note": "This candidate fully endorses the 'category error' argument, positing that the demand for inductive justification is the actual error, as conventions are justified by their adoption, not their correspondence to reality."
+        },
+        {
+          "handle": "[SRC_019] against SRC_015",
+          "kind": "rebutted",
+          "note": "It reframes 'social decree' not as a failure of defense, but as the *only* possible defense, making the preference defensible as a constitutive norm."
+        },
+        {
+          "handle": "[SRC_011] against SRC_007",
+          "kind": "rebutted",
+          "note": "Scientists act on the theory because they are participants in the convention; the 'preference' is the rulebook, not a hypothesis about the world."
+        }
+      ],
+      "optional_refs": [
+        "SRC_004"
+      ]
+    }
+  ]
+}
