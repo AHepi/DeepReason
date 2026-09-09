@@ -1,5 +1,5 @@
 <!-- DR-SEAM-llm-x-verification -->
-Verified-at: 152c7e204
+Verified-at: a36fc8abb
 Verify: python -m pytest tests/test_split_leg_recording.py tests/test_split_budget_protocol.py -q
 Owns:
 Seams:

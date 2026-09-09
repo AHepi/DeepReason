@@ -212,6 +212,37 @@ rather than the usual 14. Re-run serially:
 
 **Zero failures attributable to this change.**
 
+### The map's own instrument
+
+    python tools/docs_verify.py
+    docs_verify [full]: 82 documents, 1437 checks, 4 workers
+    docs_verify: 8 failed
+
+Six are the rows `docs/AUDIT_BASELINES.md` records for a SHALLOW clone that has
+not fetched every branch a check reads — `SEAM-llm-x-rules.md:54` (the
+malformed check, parked), `INV-frozen-surfaces.md`'s transport_failure census
+and its judge-canary row (which does `git show origin/claude/…` for a ref this
+container lacks), and `CON-run-identity.md:211/:213/:215` (git history).
+
+The other two belong to the organiser work, not to this tranche, and both were
+reproduced identically on the pre-fix worktree:
+
+- `INV-seat-section-plugins.md:179` runs `pytest tests/test_organiser_seat.py`
+  — the same three failures the gate reports, which the brief names as
+  pre-existing.
+- `INV-frozen-surfaces.md:1361` runs `tools/record_claims.py` against
+  `run-36d9a22c3e2045ae1b8c7bfb9d95d092`, which prints
+  "no run-status.json (not a run root)" — byte-identical on both trees.
+
+**All four checks this tranche added are green**, executed through
+`docs_verify`'s own runner: `SEAM-llm-x-verification.md:173` (9.1 s) and `:362`
+(5.0 s), `INV-frozen-surfaces.md:322` (37.9 s) and `:330` (0.7 s). Neither
+changed document's other checks regressed —
+`SEAM-llm-x-verification.md`'s crossing check, which
+`AUDIT_BASELINES.md` marks as repaired and therefore a REGRESSION if it fails,
+passes. Both documents' `Verified-at:` stamps are advanced to `a36fc8abb`, the
+commit their checks were re-derived at.
+
 Rings already run green on the fixed tree, all at 0 failed:
 
     tests/test_attempt_validity_semantic_rejection.py              4 passed
