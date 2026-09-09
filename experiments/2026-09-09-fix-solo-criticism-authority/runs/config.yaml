@@ -1,0 +1,27 @@
+# The live solo-road configuration. Every value here is one the operator's
+# laws put in play, and nothing else moves.
+#
+# ADJUDICATION_STATUS_AUTHORITY_ENABLED  the master gate; without it every
+#                                        authority below is observe_only.
+# ARGUMENTATIVE_AUTHORITY                the value this tranche made reach a
+#                                        run. Compiles to the manifest's own
+#                                        defended_trial.
+# LEGACY_CRITICISM_ENABLED: False        criticism must be school-routed for a
+#                                        critic school to exist at all; the
+#                                        trial's solo branch asks for one.
+# N_SCHOOLS: 2                           the minimum that gives a target a
+#                                        FOREIGN critic. One school cannot
+#                                        criticise its own work.
+# SINGLE_JUDGE_SEAT_PERMITTED: True      the managed path puts ONE judge seat
+#                                        on a single-model run (run_manifest
+#                                        copies one exact route per role, and
+#                                        the two-seat shape needs
+#                                        --blind-same-model-judges). Operator,
+#                                        2026-09-09: "The judge must remain
+#                                        optional. One seat, two seats, no
+#                                        seats." This run is the one-seat case.
+ADJUDICATION_STATUS_AUTHORITY_ENABLED: true
+ARGUMENTATIVE_AUTHORITY: single_family_trial
+LEGACY_CRITICISM_ENABLED: false
+N_SCHOOLS: 2
+SINGLE_JUDGE_SEAT_PERMITTED: true
