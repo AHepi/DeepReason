@@ -113,3 +113,66 @@ this tranche's PREREG.md §3.1, which had to establish it by reading source.
 End state: docs/ERRATA.md carries the correction, and the SPEC's S10 heading
 says SPECIFIED, NOT SHIPPED.
 ```
+
+## F5 — `analyse_arms.py` cannot compute its own primary comparison, and dies rather than declining
+
+**What.** The pre-registered primary measure is each arm against B0 with length
+held constant. On the data this tranche produced, that comparison is undefined:
+B0's answers are 6,853-8,873 characters and harness candidates 128-843, with
+ZERO overlap, so `total ~ 1 + log(chars) + arm` has nothing to separate an arm
+effect from a length effect. The instrument does not say so. It prints
+"length-adjusted +14.536 ... THE VERDICT FIGURE, BETTER than the single call" —
+a number larger than the whole 0-15 scale, pointing opposite to both the raw
+(−9.402) and quintile (−5.545) views of the same rows — and then dies inside
+`analyse_length_bias.stratified` with `ZeroDivisionError`, taking the §7 and §8
+comparisons that follow it in `main()` down with it.
+
+Two failures, and the silent one is worse: a reader who took the printed
+verdict at face value would have recorded that the harness beat the plain model
+call by fourteen and a half points of fifteen.
+
+```
+Route: dr-change-orchestrator.
+Goal: a length-adjusted comparison either reports a figure that means something
+or REFUSES with a typed reason naming the overlap it lacks — never an
+extrapolated number labelled "THE VERDICT FIGURE", and never a crash that takes
+the remaining comparisons with it.
+Evidence: experiments/2026-09-04-experiment-brief-variation-step1/ANALYSIS.txt
+(the +14.536 and the traceback), LENGTH_OVERLAP.txt (12 B0 rows 6,853-8,873
+chars against 236 harness rows 128-843, zero overlap, 8.1x separation), and
+RESULTS.md §2.6.
+Watch: analyse_length_bias.py is a COMMITTED instrument reused across tranches
+by import; changing its estimators changes what earlier results mean. The
+likely shape is a precondition check in front of them (common support, minimum
+members per stratum) that returns a typed refusal, not a rewrite of ols or
+stratified. Check whether the parent tranche's own published figures were
+computed on overlapping groups before touching anything.
+End state: a test that feeds two non-overlapping length groups and asserts a
+typed refusal naming the missing overlap; and a test that feeds overlapping
+groups and asserts the estimators are byte-unchanged in what they return.
+```
+
+## F6 — the neural embedder was fetched, warmed and then not used
+
+**What.** `deepreason embedder-warmup` fetched the weights at session start and
+returned its fingerprint; `fastembed` imports; the cache directory exists. Every
+one of the five live arms nonetheless reports `embedder: hashing (hashing-128)`.
+Not diagnosed here — the arms were mid-flight and changing the measurement
+instrument between arms would have been worse than running them all on the
+fallback, which is what was done.
+
+```
+Route: deepreason-orchestrator (something is broken).
+Goal: a run whose container has warmed the embedder uses it, or says in the
+record WHY it fell back.
+Evidence: experiments/2026-09-04-experiment-brief-variation-step1/RUNLOG.md
+(conditions section) and any of the five roots' `deepreason results` output.
+`deepreason embedder-warmup` on the same container printed
+{"model": "nomic-ai/nomic-embed-text-v1.5", "sentinel": "d6e3599ce0377000"}.
+Watch: CLAUDE.md says a run whose backend cannot build falls back to hashing
+"and says so" — check whether the fallback REASON reaches the record or only
+the printed line, because a fallback without a recorded cause is a measurement
+scale changing silently between runs.
+End state: the record carries the embedder decision and, on fallback, the typed
+reason; a test proves a warmed cache is used.
+```
