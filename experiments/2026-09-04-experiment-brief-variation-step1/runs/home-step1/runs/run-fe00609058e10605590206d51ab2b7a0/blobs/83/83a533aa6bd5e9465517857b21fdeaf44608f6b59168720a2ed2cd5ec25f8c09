@@ -1,0 +1,80 @@
+{
+  "candidates": [
+    {
+      "claim": "The preference for better-corroborated theories is defensible on Popper's terms as a 'critical preference' rooted in the logic of situational analysis, not induction. It costs us the intuitive comfort of believing the preferred theory is likely true; we must accept it as the most rational bet among known errors, without any guarantee of future success.",
+      "mechanism": "Popper distinguishes between 'justification' (which requires induction) and 'critical preference' (which relies on the asymmetry of falsification). We prefer Theory A over B not because A is probable, but because A has survived tests that would have killed B if B were false. This is a comparative assessment of error-elimination status. The mechanism is purely negative: we act on the theory that has least been shown to be wrong in the relevant domain. The cost is that this preference offers no positive reason to expect the theory to work tomorrow, only that it hasn't failed yet.",
+      "counterconditions": [
+        "If the agent requires a positive probability > 0.5 to act rationally.",
+        "If 'acting on' a theory logically entails an expectation of its truth.",
+        "If the history of survival provides no logical basis for distinguishing between two unfalsified theories."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "[SRC_018] against SRC_005", "kind": "rebutted", "note": "The defense does not claim preference is merely 'acknowledging non-falsification'; it claims preference is a rational selection rule based on the severity of tests passed. Acting on A is rational because A has withstood severe attempts to kill it, whereas B has not (or has failed). This is a decision-theoretic move, not an inductive one."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "The distinction is maintained: 'informational content survived' IS the basis for 'defensible preference.' Popper argues that high content + survival = high corroboration, which is the ONLY rational guide for action in the absence of truth guarantees. Conflating them is not a failure; it is the core of Critical Rationalism."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "rebutted", "note": "The dichotomy is not false. The 'core logical problem' assumes action requires an expectation of future truth. Popper rejects this premise. Action requires a choice; the choice is guided by critical discussion (which theory is best tested), not by an inductive leap. The cost is accepting that rational action does not imply rational belief in truth."},
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "The claim is not a straw man. The criticism correctly identifies that Popper avoids a 'Principle of Uniformity.' The defense here explicitly relies on the absence of such a principle, substituting it with the methodological rule of preferring the best-tested theory."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "The mechanism explicitly separates 'critical preference' from 'inductive prediction.' Preferring A is a statement about A's current standing in the critical debate, not a prediction that A will remain true. The cost is that this preference might lead to acting on a theory that fails immediately after selection."},
+        {"handle": "[SRC_008] against SRC_002", "kind": "rebutted", "note": "This candidate does NOT rely on verisimilitude. It relies solely on the binary status of 'corroborated' vs 'not corroborated' (or falsified). Verisimilitude is indeed problematic in Popper's system, but critical preference does not require it; it only requires the asymmetry of falsification."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "The preference is characterized here as a 'methodological rule' or 'rational convention,' exactly as Popper intended. It is not a 'fiction' in the sense of being fake, but a normative rule for conduct. The criticism mistakes the lack of ontological grounding for a lack of rational justification."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "The definition of preference IS decoupled from expectation of truth. Scientists prefer A because it is the best available instrument for solving problems, not because they expect it to be true. The 'choosing which theory to act on' is a pragmatic choice, not an epistemic endorsement of truth."}
+      ],
+      "optional_refs": ["SRC_002"]
+    },
+    {
+      "claim": "The preference smuggles induction back in. Popper's attempt to separate corroboration from probability fails because the very act of 'preferring' a theory for future action implicitly assigns it a higher subjective probability of success, violating his own prohibition on inductive inference.",
+      "mechanism": "Human agency is inherently inductive. To 'prefer' X for future action Y is to assert 'X is more likely to succeed in Y than Z.' Even if Popper labels this 'critical preference,' the functional role it plays in decision-making is identical to assigning a higher probability. The mechanism is psychological and pragmatic: agents cannot act without some expectation of regularity. By endorsing action on corroborated theories, Popper tacitly accepts the Principle of Uniformity he formally rejects.",
+      "counterconditions": [
+        "If an agent can demonstrate a mode of action that relies on zero expectation of future regularity.",
+        "If 'preference' can be defined purely as a retrospective label with no prospective force.",
+        "If Popper's 'propensity' interpretation successfully decouples objective chance from subjective expectation."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "[SRC_018] against SRC_005", "kind": "revised", "note": "Revised to emphasize that the 'collapse' occurs in the agent's psychology, not necessarily in the formal logic. The target's defense fails because it ignores the pragmatic necessity of expectation in action."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "The conflation is real because 'survival of high-content theories' is only useful for action IF one assumes past survival predicts future utility. Without that assumption, survival is merely historical trivia."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "rebutted", "note": "The defense fails to address the core problem: if past success doesn't guarantee future truth, why act on it? The answer 'because it's the best we have' still implies 'it's the most likely to work,' which is inductive."},
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "Popper's distinction between belief and action is verbal, not substantive. Acting 'as if' a theory is true while denying belief in its truth is a self-deceptive fiction that masks underlying inductive habits."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Critical preference IS inductive prediction in disguise. Calling it 'rational' doesn't change the fact that it projects past performance into the future."},
+        {"handle": "[SRC_008] against SRC_002", "kind": "departure_declared", "note": "Departing from the reliance on verisimilitude; this argument rests on the pragmatics of action and the psychology of expectation, not on truth-likeness metrics."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "Calling it a 'methodological fiction' admits the lack of logical foundation. If it's a fiction, then the preference is not rationally defensible on strict logical terms, only on pragmatic ones which admit induction."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "Decoupling preference from truth expectation is impossible for a rational agent. To choose A over B for action is to judge A superior for that purpose, which entails a probabilistic judgment of outcome."}
+      ],
+      "optional_refs": ["SRC_003"]
+    },
+    {
+      "claim": "The preference is defensible via an evolutionary epistemology mechanism: theories are selected like organisms. Corroboration indicates fitness, not truth. We prefer fit theories because they are the only ones left alive, not because we predict they will survive forever.",
+      "mechanism": "Evolutionary analogy: Theories undergo variation and selection (falsification). Corroborated theories are survivors. Preferring them is akin to a predator preferring prey species that haven't gone extinct yet—not because they are 'true' or 'probable' in an abstract sense, but because they are the currently available resources. The cost is a shift from a truth-seeking mission to a survival-seeking mission; science becomes about finding working models, not revealing reality.",
+      "counterconditions": [
+        "If the environment (nature) changes discontinuously, rendering past fitness irrelevant.",
+        "If the selection pressure (tests) does not map to the application environment.",
+        "If 'fitness' cannot be distinguished from 'luck' without inductive assumptions."
+      ],
+      "typicality": 0.60,
+      "discharges": [
+        {"handle": "[SRC_018] against SRC_005", "kind": "rebutted", "note": "Acting on Theory A is like eating a mushroom that hasn't killed anyone yet. It's a risk management strategy based on available data, not an inductive proof of safety."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "Informational content survived IS fitness. Defensible preference is simply the recognition of who is still standing in the arena."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "rebutted", "note": "The logical problem dissolves if we view action as biological adaptation rather than logical deduction. We act on what works until it doesn't."},
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "No Principle of Uniformity is needed, only the assumption that the immediate future resembles the immediate past enough for the survivor to function temporarily."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Critical preference is redefined as 'selection of the fittest.' This is distinct from inductive prediction of eternal truth."},
+        {"handle": "[SRC_008] against SRC_002", "kind": "rebutted", "note": "Verisimilitude is replaced by 'survival value.' The mechanism avoids the logical issues of truth-likeness."},
+        {"handle": "[SRC_016] against SRC_013", "kind": "rebutted", "note": "It is a procedural rule of natural selection applied to ideas. Rationality here is ecological, not foundationalist."},
+        {"handle": "[SRC_011] against SRC_010", "kind": "rebutted", "note": "Preference is decoupled from truth expectation; it is coupled to 'current viability.'"}
+      ],
+      "optional_refs": ["SRC_007"]
+    },
+    {
+      "claim": "The dilemma is a category error generated by language. 'Preference' in science is not a doxastic state (belief) nor a probabilistic calculation, but a speech act within a regulatory framework. It is defensible as a constitutive rule of the scientific game.",
+      "mechanism": "Wittgensteinian/Language Game approach: Science is a practice with rules. One rule is 'act on the best-tested theory.' This rule defines what it means to be a scientist. Asking if this rule is 'inductively justified' is like asking if the rules of chess are 'true.' They are constitutive. The cost is relativizing scientific rationality to the internal norms of the scientific community, abandoning the hope of an external, trans-historical justification.",
+      "counterconditions": [
+        "If the scientific community adopts a different rule (e.g., 'act on the most beautiful theory').",
+        "If the stakes of action (e.g., nuclear war) demand an external justification beyond internal rules.",
+        "If the 'game' metaphor fails to capture the life-or-death urgency of scientific application."
+      ],
+      "typicality": 0.45,
+      "discharges": [
+        {"handle": "[SRC_018] against SRC_005", "kind": "rebutted", "note": "The defense explains action as compliance with a social/normative rule. One acts on A because the rules of science say so, not because A is probable."},
+        {"handle": "[SRC_017] against SRC_014", "kind": "rebutted", "note": "The conflation is avoided by shifting the domain from logic to sociology/linguistics. Survival measures adherence to the game's standards."},
+        {"handle": "[SRC_020] against SRC_019", "kind": "rebutted", "note": "The core logical problem presupposes a foundationalist view of justification. Rejecting foundationalism dissolves the problem."},
+        {"handle": "[SRC_009] against SRC_003", "kind": "rebutted", "note": "Popper's solution is interpreted as establishing a new language game where 'corroboration' functions as a normative operator, not a descriptive one."},
+        {"handle": "[SRC_015] against SRC_012", "kind": "rebutted", "note": "Critical preference is a move in the game,

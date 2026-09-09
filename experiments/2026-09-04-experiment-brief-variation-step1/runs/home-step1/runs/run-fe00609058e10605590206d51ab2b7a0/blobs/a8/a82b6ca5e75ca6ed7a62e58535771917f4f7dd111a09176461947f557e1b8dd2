@@ -1,0 +1,10 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "",
+      "essential_premise_aliases": []
+    }
+  ]
+}
