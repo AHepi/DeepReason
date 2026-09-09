@@ -75,7 +75,37 @@ entries — and the retirement and withdrawal notes in
 number, it says so, and §6.4 is what happens when a superseding measurement
 exists and the document it supersedes was never updated.
 
-### 0.2 The corpus
+### 0.2 What this audit read, and what it did not
+
+Stated because the operator asked for unsupported things to be named, and
+coverage is one of them.
+
+**Read closely, and every load-bearing number in this report re-derived from the
+committed artifact rather than taken from a narrative:** the judge and critic
+calibration corpus in full (the 2026-07-13 red-team including its 480-row
+judgment blob, the eleven-model zoo including its 1,561-row blob, the court
+calibration corpus item by item, critic specificity, the defended trial, the
+clean-item re-adjudication, the cross-family court, the schema comparator, the
+detector calibration, the liability index); the construction tranche and its
+rematch including their raw score files; the diversity experiment; the
+blind-critic tranche; the reach and attack censuses; the run-anatomy criticism
+and evidence censuses; the live module census; the mini isolation measure; the
+history channel including its replication; the poietics run; the July live
+research campaign; the record-claims instrument; the exploration and basin
+documents and the embedder recalibration that bears on them; the errata ledger;
+the two experiment-record indexes; and the pre-registrations of all of the above.
+
+**Not read closely, and therefore not represented here:** the oldest cross-model
+generator campaigns (gemma, bronze, the jolt series, the schema comparator's
+sibling runs) beyond the report files quoted; the July live campaigns other than
+the research one; the form-compliance defect tranches beyond their headlines; the
+channel and two-call tranches; and the prior audits' own reports. A fan-out over
+those was started and stopped when it became clear it would take hours for
+material with less bearing on the four questions than what is above. If a claim
+in this report is wrong, that is where the correction is most likely to come
+from.
+
+### 0.3 The corpus
 
 128 dated tranches plus a dozen earlier campaigns; 63 results documents; 415
 test files; 41 report files under `experiments/results/`. The measurement
