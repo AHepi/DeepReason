@@ -1,0 +1,79 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference that the theory is true or probable, but as a non-inductive methodological rule to select the theory with the highest 'verisimilitude' (truth-likeness) among those not yet falsified; this survives the charge of smuggling induction only if one accepts the cost of abandoning the guarantee of future success and admitting that the preference is a bold conjecture about which theory is closer to the truth, rather than a logical derivation from past test results.",
+    "mechanism": "The argument reconstructs Popper's distinction between 'probability' (logical likelihood based on evidence) and 'corroboration' (a report on how well a theory has withstood severe tests). It posits that preferring the better-corroborated theory is rational because severe testing maximizes the chance of eliminating error, thereby leaving the surviving theory as the best current candidate for verisimilitude. This avoids induction by refusing to claim the future will resemble the past; instead, it claims we should act on the theory that has survived the most rigorous attempts to destroy it, acknowledging that it too may fail tomorrow.",
+    "counterconditions": [
+      "If 'severity of tests' implicitly assumes the uniformity of nature (that what worked before will work again), then the mechanism collapses into induction.",
+      "If 'verisimilitude' cannot be formally defined or assessed without inductive assumptions, then the preference lacks a rational basis distinct from probability.",
+      "If the choice is merely a 'convention' without epistemic weight, it fails to explain why scientists rationally prefer one theory over another beyond arbitrary decree."
+    ],
+    "typicality": 0.65,
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate evolutionary origin with justification; it explicitly grounds the preference in a normative methodological rule (select for verisimilitude via severe testing) rather than a descriptive claim about why scientists happen to prefer them."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "revised",
+        "note": "Revised to clarify that the 'non-inductive rationality' is not a proof of reliability but a strategic rule for error elimination, avoiding the false dichotomy of 'arbitrary decree' vs 'inductive proof' by introducing 'methodological rationality' as a third category."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "rebutted",
+        "note": "The move from 'others falsified' to 'choose this one' does not assume uniformity; it assumes only that the falsified theories are false. The preference is for the remaining candidate not because it is guaranteed to hold, but because it is the only one not known to be false."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "Severity indicates reliability of the *test*, not the *theory*. Preferring a theory that passed a severe test is rational because the test was capable of detecting error; this is a deductive point about the test's power, not an inductive leap about the theory's future performance."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "revised",
+        "note": "Clarified that the 'convention' is not arbitrary in the Poincaré sense (mere convenience) but is tied to the goal of truth-seeking; it is a rule adopted *because* it serves the aim of increasing verisimilitude, distinguishing it from pure conventionalism."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c5950f9ad341331ead79470ad43b318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate distinguishes 'methodological convention' (a rule we adopt to seek truth) from 'pragmatic reliability' (a claim that the rule guarantees success). The preference is defended as the former, explicitly rejecting the latter to avoid smuggling in induction."
+      },
+      {
+        "handle": "463822f91af6cd697ce98d1e871c85c73592ea578589e3038e5d345dada5f6d1",
+        "kind": "revised",
+        "note": "Refined the use of 'verisimilitude' to acknowledge Popper's later doubts about its formal definability, framing it instead as a regulative ideal that guides the selection of theories with higher content and better test survival, without claiming a calculable measure."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f0068bbde5f67",
+        "kind": "rebutted",
+        "note": "The candidate explicitly constructs the strongest case for the 'smuggling induction' view in the counterconditions (e.g., severity assuming uniformity) and resolves the conflict by arguing the methodological interpretation survives if one accepts the cost of no future guarantees."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": ["evolutionary_selection_process"],
+      "shared_structure": [
+        "Selection operates by elimination of the unfit rather than confirmation of the fit.",
+        "Survival indicates resistance to specific challenges, not inherent superiority or future invincibility.",
+        "Preference for the survivor is a heuristic for finding robustness, not a prediction of eternal dominance."
+      ],
+      "disanalogies": [
+        "Biological evolution has no conscious goal of 'truth', whereas Popperian science explicitly aims at verisimilitude.",
+        "Natural selection is blind and gradual, while scientific testing is designed, severe, and can be revolutionary.",
+        "Organisms do not propose conjectures; scientists actively construct bold theories to invite falsification."
+      ],
+      "transfer_claims": [
+        "Just as we bet on the organism that survived a plague to be robust (not immortal), we bet on the theory that survived severe tests to be close to truth (not proven).",
+        "The rationality of the preference lies in the rigor of the elimination process, not in the properties of the survivor itself."
+      ],
+      "overturn_conditions": [
+        "If the 'severe tests' are shown to be biased against true theories systematically.",
+        "If survival correlates negatively with truth-likeness in the long run."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}

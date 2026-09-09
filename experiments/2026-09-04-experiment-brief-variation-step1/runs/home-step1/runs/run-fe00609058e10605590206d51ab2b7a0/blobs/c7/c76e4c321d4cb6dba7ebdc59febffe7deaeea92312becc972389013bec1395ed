@@ -1,0 +1,92 @@
+{
+  "candidate": {
+    "claim": "Popper's preference for better-corroborated theories is defensible on his own terms not as an inductive inference of future success, but as a non-inductive methodological rule for selecting the most informative target for falsification; however, accepting this defense costs the scientist any rational assurance that the chosen theory is practically reliable or likely to be true, reducing scientific progress to a game of eliminating error without positive gain.",
+    "mechanism": "The argument proceeds by distinguishing between 'justification' (which implies probability/truth) and 'preferability' (which implies informational content). It posits that preferring a severely tested theory is equivalent to preferring the theory that has survived the hardest attempts to kill it, thereby offering the best chance to learn something new if it finally fails. This avoids induction because it makes no claim about the future; it only claims that among current options, this one is the most 'exposed' and thus the most valuable for critical testing. The cost is acknowledged as the inability to justify acting on the theory as if it were true or reliable for engineering purposes without smuggling in an inductive assumption.",
+    "counterconditions": [
+      "If Popper explicitly claimed that corroboration indicates a higher likelihood of future predictive success, the non-inductive defense collapses.",
+      "If the preference for the 'most informative' theory cannot be distinguished from a pragmatic bet on its truth, the distinction is merely verbal.",
+      "If scientists actually act on corroborated theories because they believe them to be reliable (inductive belief) rather than as test targets, the methodological rule does not describe actual practice."
+    ],
+    "typicality": 0.65,
+    "analogy": {
+      "source_memory_refs": [
+        "evolutionary_selection_pressure",
+        "stress_testing_engineering_prototypes",
+        "survivorship_bias_investment_strategies"
+      ],
+      "shared_structure": [
+        "Selection based on survival of severe trials rather than prediction of future performance.",
+        "The survivor is chosen not because it is 'good' but because it is the only one left standing or the most rigorously examined.",
+        "No guarantee that past survival ensures future survival, only that the selection criterion was rigorous."
+      ],
+      "disanalogies": [
+        "Evolution has no goal of truth, whereas science aims at verisimilitude.",
+        "Engineering stress tests are designed to predict real-world failure rates (inductive), whereas Popperian tests aim solely to refute.",
+        "Investment strategies often rely on statistical mean reversion (inductive), unlike the singular historical narrative of theory testing."
+      ],
+      "transfer_claims": [
+        "Just as a bridge that survived extreme wind tunnel tests is preferred for further testing not because it won't fail, but because it has proven robust against known stresses, a corroborated theory is preferred for its informational density.",
+        "Survivorship bias warns us not to assume the survivor is inherently superior in all respects, mirroring Popper's warning not to assume corroboration equals truth."
+      ],
+      "overturn_conditions": [
+        "If the 'survivor' in the analogy is subsequently used for load-bearing purposes based solely on its survival, the analogy supports the induction charge.",
+        "If the selection mechanism in the source domain relies on probabilistic forecasting, the analogy fails to support non-inductive preference."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "discharges": [
+      {
+        "handle": "0c9f7a0cbf1ef324f52a43ab7d3862e1bb1e9445ab389acd940bf55f90f3a7a7",
+        "kind": "rebutted",
+        "note": "The candidate does not conflate origin with justification. It explicitly frames the preference as a forward-looking methodological rule for maximizing information gain (critical testing), not a backward-looking explanation of why scientists feel confident. The justification offered is logical (maximize exposure to falsification), not evolutionary/psychological."
+      },
+      {
+        "handle": "1a4e51ae678d799c063a06c4d996a884b00a8519c11c193fbd3522a7b89c8c77",
+        "kind": "rebutted",
+        "note": "The candidate rejects the false dichotomy by proposing a third option: preference based on 'informational content' and 'testability' rather than 'arbitrary decree' or 'inductive probability.' This aligns with Popper's explicit arguments in 'Conjectures and Refutations' regarding the logic of situation."
+      },
+      {
+        "handle": "1b29522f07f593131a7a01d5327b650b4447f5e6a656bebfd916e16035889177",
+        "kind": "revised",
+        "note": "Revised to clarify that the move from 'others falsified' to 'choose this one' is a decision to subject the remaining theory to the next round of severe testing, not a prediction that it will pass. The assumption of uniformity is explicitly rejected as a cost; the candidate admits we have no rational basis to expect future resemblance, only a methodological stance to act as if we can learn from error."
+      },
+      {
+        "handle": "2118fcfb857250406462fc29532a52a9e59c367611d0d806e79c7e600e9d1006",
+        "kind": "rebutted",
+        "note": "The severity of tests is defined by the logical improbability of the theory surviving them, not by an empirical assumption that survival indicates reliability. The candidate maintains that 'severity' is a measure of risk taken in testing, not a proxy for truth probability."
+      },
+      {
+        "handle": "2a1d181e2a5d88654304bf4c64ff7ddc481d99c2798e9b7e8ad874fd64de92ce",
+        "kind": "departure_declared",
+        "note": "Departure declared: The candidate accepts that this view edges close to conventionalism but argues Popper's specific convention (prefer the bold, testable theory) is distinct from Poincaré's convenience-based conventions because it is driven by the goal of truth-content (verisimilitude) via error elimination, not mere descriptive simplicity."
+      },
+      {
+        "handle": "31fa1dc8cdffa0d6e1a253c59318ba45d3aaf74",
+        "kind": "rebutted",
+        "note": "The candidate strictly separates 'methodological convention' (the rule to pick the bold theory) from 'pragmatic reliability' (the belief it will work). It argues the prompt's demand for defensibility 'on Popper's own terms' requires abandoning pragmatic reliability as a justification, thus avoiding the smuggling of induction."
+      },
+      {
+        "handle": "48beb42152136a8e047c5f93d681c5d8e9862a573960b35c2c4f0068bbde5f67",
+        "kind": "revised",
+        "note": "Revised to explicitly articulate the 'strongest case' for the induction charge in the 'cost' section: that without inductive assurance, the preference is rationally hollow for practical action. The resolution is now clearly stated: the non-inductive defense survives logically but fails pragmatically, forcing a choice between logical purity and practical confidence."
+      },
+      {
+        "handle": "6a6dff5b56f376b6210260a3024b5e5ea88897b277e4d65a4a2fd99616ab6457",
+        "kind": "rebutted",
+        "note": "The candidate uses 'verisimilitude' carefully, defining it as a comparative logical measure of content minus error, not a probabilistic estimate. It acknowledges the criticism that this concept is difficult to formalize without induction but maintains it is the only non-probabilistic metric Popper offered for progress."
+      }
+    ],
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_004",
+      "SRC_012"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_004",
+        "SRC_012"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

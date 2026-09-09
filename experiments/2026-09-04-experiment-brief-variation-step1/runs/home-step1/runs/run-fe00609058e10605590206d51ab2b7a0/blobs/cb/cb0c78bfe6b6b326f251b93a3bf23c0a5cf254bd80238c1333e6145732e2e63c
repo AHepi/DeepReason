@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's 'Evolutionary Epistemology Shift' fails to answer the specific normative question posed in the problem context. The prompt asks if the preference for better-corroborated theories is defensible on Popper's own terms, specifically regarding whether it 'smuggles back in induction.' Popper's philosophy rigorously distinguishes between the logical status of a theory (which cannot be made probable) and the pragmatic decision to act. By reducing the 'defensibility' of this preference to a descriptive biological fact ('groups... survive longer'), the target commits the naturalistic fallacy, answering 'we do prefer' instead of 'ought we to prefer.' This sidesteps the core philosophical dilemma: providing a *logical* or *rational* basis for action without invoking probability or induction. Consequently, the target does not make the strongest case for either side of the dilemma but rather dissolves the question into a category error, failing to address the cost of accepting an evolutionary explanation over a logical one as requested.",
+      "counterexample": null,
+      "essential_premise_aliases": [
+        "SRC_001"
+      ],
+      "premise": "The problem explicitly demands a defense of scientific preference on 'Popper's own terms' and asks whether such preference smuggles in induction, requiring a normative logical argument rather than a descriptive evolutionary explanation.",
+      "premise_evidence": [
+        {
+          "block": "question-ba75796c3facc7a3d0d448d6eaa09a2e",
+          "quote": "Is that preference defensible on Popper's own terms, or does it smuggle back in the induction he rejected? Make the strongest case for each answer, then say which one survives and what accepting it costs."
+        }
+      ],
+      "successor_question": "If the preference for corroborated theories is merely an evolutionary survival trait and not a rational choice based on logical grounds, how can a scientist claim their action is 'rational' in any sense distinct from blind instinct, and does this not undermine the very concept of critical rationalism Popper championed?"
+    }
+  ]
+}
